@@ -1,0 +1,49 @@
+/**
+ * Created by twi18192 on 17/09/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher');
+var appConstants = require('../constants/appConstants');
+
+var paneActions = {
+
+  addTab: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_TAB,
+      item: item
+    })
+  },
+  removeTab: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.REMOVE_TAB,
+      item: item
+    })
+  },
+  redBlockTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.REDBLOCKTAB_OPEN,
+      item: item
+    })
+  },
+  blueBlockTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.BLUEBLOCKTAB_OPEN,
+      item: item
+    })
+  },
+  greenBlockTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.GREENBLOCKTAB_OPEN,
+      item: item
+    })
+  },
+  dropdownMenuSelect: function(tab, ReactComponent){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DROPDOWN_SELECT,
+      item: {item: tab, component: ReactComponent}
+    })
+  }
+
+};
+
+module.exports = paneActions;

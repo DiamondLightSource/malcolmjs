@@ -1,0 +1,103 @@
+html {
+  background-color: black;
+  margin: 0;
+  /*padding: 0 84px;*/
+  height: 100%;
+  width: 100%;
+}
+body {
+  background-color: transparent;
+  font-family: Verdana, "Lucida Grande", sans-serif;
+  min-width: 550px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#container {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#blockDock {
+  height: 100px
+}
+
+#buttonContainer {
+  display: flex;
+  /*flex-direction: row;*/
+  /*align-items: center;*/
+}
+
+#config {
+  /*position: relative;*/
+  /*margin-left: 100px;*/
+  /*margin-top: 18px;*/
+  margin-top: 39px;
+  margin-left: 10px;
+}
+
+#fav {
+  position: relative;
+  margin-top: 39px;
+}
+
+.border {
+  background-color: green;
+  border: 2px solid black;
+  height: 100px;
+  width: 100px;
+}
+
+#redBlock {
+  background-color: red;
+  height: 100px;
+  width: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#redBlock:hover {
+  cursor: pointer;
+}
+
+#blueBlock {
+  background-color: blue;
+  height: 100px;
+  width: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#blueBlock:hover {
+  cursor: pointer;
+}
+
+#greenBlock {
+  background-color: green;
+  height: 100px;
+  width: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#greenBlock:hover {
+  cursor: pointer;
+}
+
+#check {
+  height: 100%;
+  width: 100%;
+}
