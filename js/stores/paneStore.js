@@ -11,7 +11,21 @@ var CHANGE_EVENT = 'change';
 
 var _stuff = {
   tabState: [],
-  selectedTabIndex: 0
+  selectedTabIndex: 0,
+  //passSidePane: null
+};
+
+var _handles = {
+  passSidePane: null
+};
+
+var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
+  console.log(ReactComponent);
+  console.log(_handles.passSidePane);
+  _handles.passSidePane = ReactComponent;
+  console.log(_handles.passSidePane);
+
+  //selectBlockOnClick(ReactComponent)
 };
 
 var allBlockContent = {
@@ -41,7 +55,8 @@ var allBlockTabProperties = {
 var changeRedBlockTabState = function(){
   if(allBlockTabProperties.redBlockTabOpen === false) {
     allBlockTabProperties.redBlockTabOpen = true;
-    checkWhichBlockTabsOpen()
+    checkWhichBlockTabsOpen();
+    console.log(_handles.passSidePane)
   }
   else{
 
@@ -149,6 +164,8 @@ var checkWhichBlockTabsOpen = function(){
 
   //return updatedBlockTabsOpen;
 
+  selectBlockOnClick()
+
 };
 
 
@@ -195,14 +212,14 @@ var removeTab = function(item){
 
 
 
-var dropdownMenuSelect = function(tab, ReactComponent){
+var dropdownMenuSelect = function(tab){
   //var findTheIndex = _stuff.tabState.indexOf(item);
   ////this.props.changeTab(findTheIndex)
   //_stuff.selectedTabIndex = findTheIndex;
 
   var test = tab;
   console.log(tab);
-  console.log(ReactComponent);
+  console.log(_handles.passSidePane);
   //var keepingSidePane = ReactComponent;
   //keepSidePane(ReactComponent);
   //console.log(keepingSidePane);
@@ -214,8 +231,14 @@ var dropdownMenuSelect = function(tab, ReactComponent){
   }
   //
   //var findTheIndex = this.props.list.indexOf(item);
-  ReactComponent.refs.panel.setSelectedIndex(findTheIndex);
+  _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
   //keepSidePane(ReactComponent)
+};
+
+var selectBlockOnClick = function(){
+  console.log(_handles.passSidePane);
+  var tabStateLength = _stuff.tabState.length;
+  _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
 
 
@@ -253,6 +276,13 @@ AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
   switch(action.actionType){
+
+    case appConstants.PASS_SIDEPANE:
+      console.log(payload);
+      console.log(action);
+      console.log(item);
+      passSidePane(item);
+          break;
 
     case appConstants.ADD_TAB:
       console.log(payload);
@@ -298,12 +328,12 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.DROPDOWN_SELECT:
-      var tab = item.item;
-      var component = item.component;
+      //var tab = item.item;
+      //var component = item.component;
 
       console.log(payload);
       console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
-      dropdownMenuSelect(tab, component);
+      dropdownMenuSelect(item);
       paneStore.emitChange();
       break;
 

@@ -40,6 +40,10 @@ var SidePane = React.createClass({
     UPDATE: actually it doesn't work, selected tab content jumps about!*/
   },
 
+  handleActionPassSidePane: function(){
+    paneActions.passSidePane(this)
+  },
+
   handleActionAddTab: function(){
     paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
   },
@@ -63,6 +67,7 @@ var SidePane = React.createClass({
   componentDidMount: function(){
     sidePaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
+    this.handleActionPassSidePane();
     //this.handleActionPassingSidePaneOnMount()
   },
 

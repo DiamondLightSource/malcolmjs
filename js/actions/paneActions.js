@@ -37,10 +37,16 @@ var paneActions = {
       item: item
     })
   },
-  dropdownMenuSelect: function(tab, ReactComponent){
+  dropdownMenuSelect: function(tab){
     AppDispatcher.handleAction({
       actionType: appConstants.DROPDOWN_SELECT,
-      item: {item: tab, component: ReactComponent}
+      item:tab
+    })
+  },
+  passSidePane: function(ReactComponent){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PASS_SIDEPANE,
+      item: ReactComponent
     })
   }
 
