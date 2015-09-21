@@ -85,8 +85,11 @@ var SidePane = React.createClass({
       var tabIndex = i + 1;
       var tabContent = function(){
         var content = [];
-        for (var key in item.info){                      /*can't use .map since item.info is an object, not an array*/
-          content.push(<p>{key}: {item.info[key]}</p>)
+        for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+          content.push(<br/>);
+          content.push(<p>{outerkey}</p>);
+          for (var key in item.info[outerkey])
+            content.push(<p>{key}: {item.info[outerkey][key]}</p>)
         }
         return {content}
       };

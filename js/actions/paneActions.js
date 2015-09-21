@@ -48,6 +48,18 @@ var paneActions = {
       actionType: appConstants.PASS_SIDEPANE,
       item: ReactComponent
     })
+  },
+  favTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.FAVTAB_OPEN,
+      item: item
+    })
+  },
+  configTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CONFIGTAB_OPEN,
+      item: item
+    })
   }
 
 };

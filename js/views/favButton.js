@@ -45,7 +45,8 @@ var FavButton = React.createClass({
   },
 
   handleActionFavToggle: function(){
-    mainPaneActions.toggleFavPanel("this is the item")
+    //mainPaneActions.toggleFavPanel("this is the item");
+    this.props.favTabOpen()
   },
 
   componentDidMount: function(){

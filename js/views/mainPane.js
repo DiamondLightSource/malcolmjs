@@ -33,8 +33,10 @@ function getMainPaneState(){
     configPanelOpen: mainPaneStore.getConfigPanelState(),
     favPanelOpen: mainPaneStore.getFavPanelState(),
     redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
-    blueBlockPropertiesClicked:paneStore.getBlueBlockTabClicked(),
-    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked()
+    blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
+    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
+    favTabOpen: paneStore.getFavTabOpen(),
+    configTabOpen: paneStore.getConfigTabOpen()
   }
 }
 
@@ -66,6 +68,16 @@ var MainPane = React.createClass({
 
   handleActionGreenBlockPropertiesClicked: function(){
     paneActions.greenBlockTabOpen("this is the item")
+  },
+
+  handleActionFavTabOpen: function(){
+    console.log('favTabOpen is a go');
+    paneActions.favTabOpen("this is the item")
+  },
+
+  handleActionConfigTabOpen: function(){
+    console.log('configTabOpen is a go');
+    paneActions.configTabOpen('this is the item')
   },
 
   //handleActionTabChangeViaOtherMeans: function(tab){
@@ -181,8 +193,8 @@ var MainPane = React.createClass({
 
           <Footer><div id="blockDock">
             <div id="buttonContainer">
-              <FavButton/>
-              <ConfigButton/>
+              <FavButton favTabOpen={this.handleActionFavTabOpen}/>
+              <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
             </div>
           </div>
           </Footer>
@@ -191,17 +203,17 @@ var MainPane = React.createClass({
         <Tab title="Design" showFooter={this.state.footers}>
           <Content>Secondary main view - graph of position data <br/>
             Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
-            <p>Config panel is {this.state.configPanelOpen ? 'open' : 'closed'}</p>
+            <p>Config panel is {this.state.configTabOpen ? 'open' : 'closed'}</p>
 
-            <div className={this.state.configPanelOpen ? "border" : ""}></div>
+            <div className={this.state.configTabOpen ? "border" : ""}></div>
 
-            <p>Fav panel is {this.state.favPanelOpen ? 'open' : 'closed'}</p>
+            <p>Fav panel is {this.state.favTabOpen ? 'open' : 'closed'}</p>
 
           </Content>
           <Footer><div id="blockDock">
             <div id="buttonContainer">
-              <FavButton/>
-              <ConfigButton/>
+              <FavButton favTabOpen={this.handleActionFavTabOpen}/>
+              <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
             </div>
           </div>
           </Footer>

@@ -45,7 +45,8 @@ var ConfigButton = React.createClass({
   },
 
   handleActionConfigToggle:function(){
-    mainPaneActions.toggleConfigPanel("this is the item")
+    mainPaneActions.toggleConfigPanel("this is the item");
+    this.props.configTabOpen()
   },
 
   componentDidMount: function(){

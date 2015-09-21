@@ -84,6 +84,18 @@ var paneActions = {
       actionType: appConstants.PASS_SIDEPANE,
       item: ReactComponent
     })
+  },
+  favTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.FAVTAB_OPEN,
+      item: item
+    })
+  },
+  configTabOpen: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CONFIGTAB_OPEN,
+      item: item
+    })
   }
 
 };
@@ -248,6 +260,8 @@ var appConstants = {
   REDBLOCKTAB_OPEN: "REDBLOCKTAB_OPEN",
   BLUEBLOCKTAB_OPEN: "BLUEBLOCKTAB_OPEN",
   GREENBLOCKTAB_OPEN: "GREENBLOCKTAB_OPEN",
+  FAVTAB_OPEN: "FAVTAB_OPEN",
+  CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
 
   DROPDOWN_SHOW: "DROPDOWN_SHOW", /*sidePaneStore use*/
   DROPDOWN_HIDE: "DROPDOWN_HIDE",
@@ -411,25 +425,67 @@ var allBlockContent = {
   redBlockContent: {
     name: "Red block",
     hack: "redBlockTabOpen",
-    info: {height: "100 pixels", width: "100 pixels"}
+    info: {work: {height: "100 pixels", width: "100 pixels"}}
   },
   blueBlockContent: {
     name: "Blue block",
     hack: "blueBlockTabOpen",
-    info: {height: "100 pixels", width: "100 pixels"}
+    info: {
+      work: {height: "100 pixels", width: "100 pixels"}
+    }
   },
   greenBlockContent: {
     name: "Green block",
     hack: "greenBlockTabOpen",
-    info: {height: "100 pixels", width: "100 pixels"}
+    info: {work: {height: "100 pixels", width: "100 pixels"}
+    }
   }
 };
+
+
+var favContent = [{
+  name: "Favourites tab",
+  hack: "favTabOpen",
+  info: {
+    block1: {
+      name: "Block 1",
+      stuff1: "meh",
+      stuff2: "bleh"
+      },
+    block2: {
+      name: "Block 2",
+      stuff1: "mah",
+      stuff2: "blah"
+    }
+  }
+}];
+
+var configContent = [{
+  name: "Configuration tab",
+  hack: "configTabOpen",
+  info: {
+    Configurations: {
+      config1: "config1",
+      config2: "config2"
+    },
+    SystemInformation: {
+      firmwareVersion: "numbers & letters"
+    }
+  }
+}];
 
 var allBlockTabProperties = {
   redBlockTabOpen: false,
   blueBlockTabOpen: false,
-  greenBlockTabOpen: false
+  greenBlockTabOpen: false,
+  favTabOpen: false,
+  configTabOpen: false
 };
+
+//var favAndConfigTabProperties = {
+//  favTabOpen: false,
+//  configTabOpen: false
+//};
 
 var changeRedBlockTabState = function(){
   if(allBlockTabProperties.redBlockTabOpen === false) {
@@ -462,10 +518,95 @@ var changeGreenBlockTabState = function(){
   }
 };
 
+var changeFavTabState = function(){
+  console.log(allBlockTabProperties.favTabOpen);
+  if(allBlockTabProperties.favTabOpen === false) {
+    allBlockTabProperties.favTabOpen = true;
+    console.log(allBlockTabProperties.favTabOpen);
+    checkWhichBlockTabsOpen();
+    /* function that checks if fav tab or config are already open*/
+  }
+  else {
+
+  }
+};
+
+var changeConfigTabState = function(){
+  console.log(allBlockTabProperties.configTabOpen);
+  if(allBlockTabProperties.configTabOpen === false) {
+    allBlockTabProperties.configTabOpen = true;
+    console.log(allBlockTabProperties.configTabOpen);
+    checkWhichBlockTabsOpen()
+  }
+};
+
+//var checkFavAndConfigTabsOpen = function() {
+//  for (var key in favAndConfigTabProperties) {
+//    console.log(key);
+//    console.log(favAndConfigTabProperties[key]);
+//    if (favAndConfigTabProperties[key] === true) {
+//      console.log("just before starting the tabState checker loop");
+//      if (_stuff.tabState.length === 0) {
+//        console.log("tabState was empty, tab is now open");
+//        var blockTabsOpen = [];
+//        switch (key) {
+//          case 'favTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//            break;
+//          case 'configTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat();
+//            break;
+//          default:
+//            return 'default'
+//        }
+//        console.log(updatedBlockTabsOpen);
+//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//      }
+//      else {
+//        for (var i = 0; i < _stuff.tabState.length; i++) {
+//          console.log('in the non-empty tabState checker loop');
+//          console.log(_stuff.tabState.length);
+//          console.log(i);
+//          if (_stuff.tabState[i].hack === key) {
+//            console.log("tab is already open from before, don't add, break statement occurring");
+//            break
+//          }
+//          else if (_stuff.tabState[i].hack !== key) {
+//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+//            console.log(_stuff.tabState.length);
+//            console.log(i);
+//            if (i === _stuff.tabState.length - 1) {
+//              console.log('tabState didnt have this tab, tab is now open');
+//              var blockTabsOpen = [];
+//              switch (key) {
+//                case 'favTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//                  break;
+//                case 'configTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
+//                  break;
+//                default:
+//                  return 'default'
+//              }
+//              console.log(updatedBlockTabsOpen);
+//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//            }
+//          }
+//        }
+//        console.log('finished the tabState checker loop')
+//      }
+//    }
+//    else {
+//      console.log('tab is not open');
+//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
+//    }
+//  }
+//};
+
 var checkWhichBlockTabsOpen = function(){
   var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
   for (var key in allBlockTabProperties){
-    console.log(key)
+    console.log(key);
     console.log(allBlockTabProperties[key]);
     if(allBlockTabProperties[key] === true) {
       console.log('just before starting the tabState checker loop');
@@ -481,6 +622,14 @@ var checkWhichBlockTabsOpen = function(){
             break;
           case 'greenBlockTabOpen':
             var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
+            break;
+          case 'favTabOpen':
+            console.log('concatenating favContent now');
+            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+            break;
+          case 'configTabOpen':
+            console.log('concatenating configContent now');
+            var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
             break;
           default:
             return 'default'
@@ -515,6 +664,14 @@ var checkWhichBlockTabsOpen = function(){
                   break;
                 case 'greenBlockTabOpen':
                   var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
+                  break;
+                case 'favTabOpen':
+                  console.log('concatenating favContent now');
+                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+                  break;
+                case 'configTabOpen':
+                  console.log('concatenating configContent now');
+                  var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
                   break;
                 default:
                   return 'default'
@@ -577,6 +734,16 @@ var removeTab = function(item){
       allBlockTabProperties.greenBlockTabOpen = false;
       console.log(allBlockTabProperties.greenBlockTabOpen);
       break;
+
+    case 'favTabOpen':
+      allBlockTabProperties.favTabOpen = false;
+      console.log(allBlockTabProperties.favTabOpen);
+          break;
+
+    case 'configTabOpen':
+      allBlockTabProperties.configTabOpen = false;
+      console.log(allBlockTabProperties.configTabOpen);
+          break;
 
     default:
       console.log('default');
@@ -643,6 +810,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   },
   getGreenBlockTabClicked: function(){
     return allBlockTabProperties.greenBlockTabOpen;
+  },
+  getFavTabOpen:function(){
+    return allBlockTabProperties.favTabOpen;
+  },
+  getConfigTabOpen: function(){
+    return allBlockTabProperties.configTabOpen;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
@@ -713,6 +886,22 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
       dropdownMenuSelect(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.FAVTAB_OPEN:
+      console.log(payload);
+      console.log(item);
+      changeFavTabState();
+      console.log(allBlockTabProperties.favTabOpen);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.CONFIGTAB_OPEN:
+      console.log(payload);
+      console.log(item);
+      changeConfigTabState();
+      console.log(allBlockTabProperties.configTabOpen);
       paneStore.emitChange();
       break;
 
@@ -1217,7 +1406,8 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
   },
 
   handleActionConfigToggle:function(){
-    mainPaneActions.toggleConfigPanel("this is the item")
+    mainPaneActions.toggleConfigPanel("this is the item");
+    this.props.configTabOpen()
   },
 
   componentDidMount: function(){
@@ -1399,7 +1589,8 @@ var FavButton = React.createClass({displayName: "FavButton",
   },
 
   handleActionFavToggle: function(){
-    mainPaneActions.toggleFavPanel("this is the item")
+    //mainPaneActions.toggleFavPanel("this is the item");
+    this.props.favTabOpen()
   },
 
   componentDidMount: function(){
@@ -1480,8 +1671,10 @@ function getMainPaneState(){
     configPanelOpen: mainPaneStore.getConfigPanelState(),
     favPanelOpen: mainPaneStore.getFavPanelState(),
     redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
-    blueBlockPropertiesClicked:paneStore.getBlueBlockTabClicked(),
-    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked()
+    blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
+    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
+    favTabOpen: paneStore.getFavTabOpen(),
+    configTabOpen: paneStore.getConfigTabOpen()
   }
 }
 
@@ -1513,6 +1706,16 @@ var MainPane = React.createClass({displayName: "MainPane",
 
   handleActionGreenBlockPropertiesClicked: function(){
     paneActions.greenBlockTabOpen("this is the item")
+  },
+
+  handleActionFavTabOpen: function(){
+    console.log('favTabOpen is a go');
+    paneActions.favTabOpen("this is the item")
+  },
+
+  handleActionConfigTabOpen: function(){
+    console.log('configTabOpen is a go');
+    paneActions.configTabOpen('this is the item')
   },
 
   //handleActionTabChangeViaOtherMeans: function(tab){
@@ -1628,8 +1831,8 @@ var MainPane = React.createClass({displayName: "MainPane",
 
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
             React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, null), 
-              React.createElement(ConfigButton, null)
+              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
             )
           )
           )
@@ -1638,17 +1841,17 @@ var MainPane = React.createClass({displayName: "MainPane",
         React.createElement(Tab, {title: "Design", showFooter: this.state.footers}, 
           React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
             "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null), 
-            React.createElement("p", null, "Config panel is ", this.state.configPanelOpen ? 'open' : 'closed'), 
+            React.createElement("p", null, "Config panel is ", this.state.configTabOpen ? 'open' : 'closed'), 
 
-            React.createElement("div", {className: this.state.configPanelOpen ? "border" : ""}), 
+            React.createElement("div", {className: this.state.configTabOpen ? "border" : ""}), 
 
-            React.createElement("p", null, "Fav panel is ", this.state.favPanelOpen ? 'open' : 'closed')
+            React.createElement("p", null, "Fav panel is ", this.state.favTabOpen ? 'open' : 'closed')
 
           ), 
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
             React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, null), 
-              React.createElement(ConfigButton, null)
+              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
             )
           )
           )
@@ -1793,8 +1996,11 @@ var SidePane = React.createClass({displayName: "SidePane",
       var tabIndex = i + 1;
       var tabContent = function(){
         var content = [];
-        for (var key in item.info){                      /*can't use .map since item.info is an object, not an array*/
-          content.push(React.createElement("p", null, key, ": ", item.info[key]))
+        for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+          content.push(React.createElement("br", null));
+          content.push(React.createElement("p", null, outerkey));
+          for (var key in item.info[outerkey])
+            content.push(React.createElement("p", null, key, ": ", item.info[outerkey][key]))
         }
         return {content}
       };
