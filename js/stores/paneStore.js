@@ -13,6 +13,7 @@ var _stuff = {
   tabState: [],
   selectedTabIndex: 0,
   //passSidePane: null
+  updatedBlockContent: null
 };
 
 var _handles = {
@@ -46,6 +47,34 @@ var allBlockContent = {
     hack: "greenBlockTabOpen",
     info: {work: {height: "100 pixels", width: "100 pixels"}
     }
+  }
+};
+
+var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
+  for(var key in allBlockContent){
+    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
+      for(var subKey in allBlockContent[key].info.work){
+        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
+          /* Do nothing*/
+          console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+        }
+        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
+          console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
+        }
+      }
+    }
+    else{
+      /* Do nothing */
+    }
+  }
+};
+
+var appendToAllBlockContent = function(dispatchMarker){
+  allBlockContent[dispatchMarker] = {
+    name: "Whatever",
+    hack: dispatchMarker,
+    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
   }
 };
 
@@ -89,41 +118,14 @@ var allBlockTabProperties = {
   configTabOpen: false
 };
 
-//var favAndConfigTabProperties = {
-//  favTabOpen: false,
-//  configTabOpen: false
-//};
-
-var changeRedBlockTabState = function(){
-  if(allBlockTabProperties.redBlockTabOpen === false) {
-    allBlockTabProperties.redBlockTabOpen = true;
-    checkWhichBlockTabsOpen();
-    console.log(_handles.passSidePane)
-  }
-  else{
-
-  }
+var appendToAllBlockTabProperties = function(dispatchMarker){
+  console.log('appending to allBlockTabProperties');
+  console.log(allBlockTabProperties);
+  allBlockTabProperties[dispatchMarker] = false;
+  console.log(allBlockTabProperties)
 };
 
-var changeBlueBlockTabState = function(){
-  if(allBlockTabProperties.blueBlockTabOpen === false){
-    allBlockTabProperties.blueBlockTabOpen = true;
-    checkWhichBlockTabsOpen()
-  }
-  else{
 
-  }
-};
-
-var changeGreenBlockTabState = function(){
-  if(allBlockTabProperties.greenBlockTabOpen === false){
-    allBlockTabProperties.greenBlockTabOpen = true;
-    checkWhichBlockTabsOpen()
-  }
-  else{
-
-  }
-};
 
 var changeFavTabState = function(){
   console.log(allBlockTabProperties.favTabOpen);
@@ -220,31 +222,12 @@ var checkWhichBlockTabsOpen = function(){
       if(_stuff.tabState.length === 0){
         console.log('tabState was empty, tab is now open');
         var blockTabsOpen = [];
-        switch(key){
-          case 'redBlockTabOpen':
-            var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-            break;
-          case 'blueBlockTabOpen':
-            var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-            break;
-          case 'greenBlockTabOpen':
-            var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-            break;
-          case 'favTabOpen':
-            console.log('concatenating favContent now');
-            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-            break;
-          case 'configTabOpen':
-            console.log('concatenating configContent now');
-            var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
-            break;
-          default:
-            return 'default'
-        }
+        lookupWhichTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
+
         //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-        console.log(updatedBlockTabsOpen);
+        console.log(lookupWhichTabToOpen(key));
         console.log(blockTabsOpen);
-        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+        _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
@@ -262,31 +245,12 @@ var checkWhichBlockTabsOpen = function(){
             if(i === _stuff.tabState.length - 1){
               console.log('tabState didnt have this tab, tab is now open');
               var blockTabsOpen = [];
-              switch(key){
-                case 'redBlockTabOpen':
-                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-                  break;
-                case 'blueBlockTabOpen':
-                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-                  break;
-                case 'greenBlockTabOpen':
-                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-                  break;
-                case 'favTabOpen':
-                  console.log('concatenating favContent now');
-                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-                  break;
-                case 'configTabOpen':
-                  console.log('concatenating configContent now');
-                  var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
-                  break;
-                default:
-                  return 'default'
-              }
+              lookupWhichTabToOpen(key);
+
               //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-              console.log(updatedBlockTabsOpen);
+              console.log(lookupWhichTabToOpen(key));
               console.log(blockTabsOpen);
-              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+              _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
             }
           }
         }
@@ -299,7 +263,7 @@ var checkWhichBlockTabsOpen = function(){
   }
 
   console.log(blockTabsOpen);
-  console.log(updatedBlockTabsOpen);
+  console.log(lookupWhichTabToOpen(key));
   console.log(_stuff.tabState);
 
   //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
@@ -310,6 +274,52 @@ var checkWhichBlockTabsOpen = function(){
   selectBlockOnClick()
 
 };
+
+var possibleTabsToOpen = {
+  'redBlockTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent); /*not sure if blockTabsOpen will get passed through... :/*/
+    return updatedBlockTabsOpen
+  },
+  'blueBlockTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
+    return updatedBlockTabsOpen
+  },
+  'greenBlockTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
+    return updatedBlockTabsOpen
+  },
+  'favTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+    return updatedBlockTabsOpen
+  },
+  'configTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
+    return updatedBlockTabsOpen
+  }
+};
+
+var appendToPossibleTabsToOpen = function(dispatchMarker){
+  possibleTabsToOpen[dispatchMarker] = function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent[dispatchMarker]);
+    return updatedBlockTabsOpen
+  }
+};
+
+
+function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
+/* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
+  if(typeof possibleTabsToOpen[key] !== 'function'){
+    throw new Error('Invalid key');
+  }
+  console.log('deciding which tab to open lookup is working!');
+  return possibleTabsToOpen[key](key)
+}
 
 
 
@@ -325,43 +335,52 @@ var addTab = function(newtab){
 var removeTab = function(item){
 
   var tabName = _stuff.tabState[item].hack;
-  switch(tabName){
-
-    case 'redBlockTabOpen':
-      allBlockTabProperties.redBlockTabOpen = false;
-      console.log(allBlockTabProperties.redBlockTabOpen);
-      break;
-
-    case 'blueBlockTabOpen':
-      allBlockTabProperties.blueBlockTabOpen = false;
-      console.log(allBlockTabProperties.blueBlockTabOpen);
-      break;
-
-    case 'greenBlockTabOpen':
-      allBlockTabProperties.greenBlockTabOpen = false;
-      console.log(allBlockTabProperties.greenBlockTabOpen);
-      break;
-
-    case 'favTabOpen':
-      allBlockTabProperties.favTabOpen = false;
-      console.log(allBlockTabProperties.favTabOpen);
-          break;
-
-    case 'configTabOpen':
-      allBlockTabProperties.configTabOpen = false;
-      console.log(allBlockTabProperties.configTabOpen);
-          break;
-
-    default:
-      console.log('default');
-      return 'default'
-  }
+  console.log(tabName);
+  lookupRemoveTab(tabName); /* Again, switch statement replaced by the lookup function to allow adding more items after initial render*/
   /* code for removing tabs*/
   console.log(tabName);
   var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
   newTabs.splice(item, 1);
   _stuff.tabState = newTabs;
 };
+
+var possibleTabsToRemove = {
+  'redBlockTabOpen': function(){
+    allBlockTabProperties.redBlockTabOpen = false;
+    console.log(allBlockTabProperties.redBlockTabOpen);
+  },
+  'blueBlockTabOpen': function(){
+    allBlockTabProperties.blueBlockTabOpen = false;
+    console.log(allBlockTabProperties.blueBlockTabOpen);
+  },
+  'greenBlockTabOpen': function(){
+    allBlockTabProperties.greenBlockTabOpen = false;
+    console.log(allBlockTabProperties.greenBlockTabOpen);
+  },
+  'favTabOpen': function(){
+    allBlockTabProperties.favTabOpen = false;
+    console.log(allBlockTabProperties.favTabOpen);
+  },
+  'configTabOpen': function(){
+    allBlockTabProperties.configTabOpen = false;
+    console.log(allBlockTabProperties.configTabOpen);
+  }
+};
+
+var appendToPossibleTabsToRemove = function(dispatchMarker){
+  possibleTabsToRemove[dispatchMarker] = function(){
+    allBlockTabProperties[dispatchMarker] = false;
+    console.log(allBlockTabProperties[dispatchMarker]);
+  }
+};
+
+function lookupRemoveTab(item){
+  if(typeof possibleTabsToRemove[item] !== 'function'){
+    throw new Error('Invalid tab to remove')
+  }
+  console.log('remove tab lookup is working!');
+  return possibleTabsToRemove[item](item)
+}
 
 
 
@@ -393,6 +412,74 @@ var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
+
+
+
+var possibleBlockCases = {
+  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1': function(){
+    if(allBlockTabProperties.redBlockTabOpen === false) {
+      allBlockTabProperties.redBlockTabOpen = true;
+      checkWhichBlockTabsOpen();
+      console.log(_handles.passSidePane)
+    }
+    else{
+
+    }
+  },
+  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2': function(){
+    if(allBlockTabProperties.blueBlockTabOpen === false){
+      allBlockTabProperties.blueBlockTabOpen = true;
+      checkWhichBlockTabsOpen()
+    }
+    else{
+
+    }
+  },
+  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3': function(){
+    if(allBlockTabProperties.greenBlockTabOpen === false){
+      allBlockTabProperties.greenBlockTabOpen = true;
+      checkWhichBlockTabsOpen()
+    }
+    else{
+
+    }
+  }
+};
+
+var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this works... :P*/
+  //dispatchMarker = function () { I think this part was uneeded, I was just making it harder for myself!
+  possibleBlockCases[dispatchMarker] = function () {
+    if (allBlockTabProperties[dispatchMarker] === false) {
+      allBlockTabProperties[dispatchMarker] = true;
+      checkWhichBlockTabsOpen()
+    }
+    else {
+
+    }
+  }
+  console.log('appended to possibleBlockCases')
+  console.log(possibleBlockCases[dispatchMarker]);
+};
+
+function checkWhichBlockClicked(dispatchMarker){
+  if(typeof possibleBlockCases[dispatchMarker] !== 'function'){ /* need a better condition for an error :P*/
+    throw new Error('Invalid dispatch marker')
+  }
+  console.log('dispatch marker method lookup is working!!');
+  return possibleBlockCases[dispatchMarker](dispatchMarker);
+}
+
+var changeSomeInfo = function(){
+  allBlockContent.redBlockContent.info.work.height = "500 pixels";
+  allBlockContent.redBlockContent.info.work.width = "250 pixels";
+  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
+};
+
+var updatePaneStoreAllBlockContent = function(newBlockContent){
+  console.log(newBlockContent);
+  allBlockContent = newBlockContent;
+};
+
 
 
 
@@ -461,31 +548,6 @@ AppDispatcher.register(function(payload){
       console.log(allBlockTabProperties.redBlockTabOpen);
       break;
 
-    case appConstants.REDBLOCKTAB_OPEN:
-      console.log(payload);
-      console.log(action);
-      changeRedBlockTabState();
-      console.log(allBlockTabProperties.redBlockTabOpen);
-      //checkWhichBlockTabsOpen();
-      paneStore.emitChange();
-      break;
-
-    case appConstants.BLUEBLOCKTAB_OPEN:
-      console.log(payload);
-      console.log(action);
-      changeBlueBlockTabState();
-      console.log(allBlockTabProperties.blueBlockTabOpen);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.GREENBLOCKTAB_OPEN:
-      console.log(payload);
-      console.log(action);
-      changeGreenBlockTabState();
-      console.log(allBlockTabProperties.greenBlockTabOpen);
-      paneStore.emitChange();
-      break;
-
     case appConstants.DROPDOWN_SELECT:
       //var tab = item.item;
       //var component = item.component;
@@ -512,9 +574,112 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.PASS_DISPATCHMARKER:
+      console.log(payload);
+      console.log(item);
+      checkWhichBlockClicked(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.APPENDSTUFF_FORNEWBLOCK:
+      console.log(payload);
+      console.log(item);
+      /*functions that append to the various objects I need to append*/
+      appendToAllBlockTabProperties(item);
+      paneStore.emitChange();
+      appendToAllBlockContent(item);
+      paneStore.emitChange();
+      appendToPossibleTabsToOpen(item);
+      paneStore.emitChange();
+      appendToPossibleTabsToRemove(item);
+      paneStore.emitChange();
+      appendToPossibleBlockCases(item);
+      paneStore.emitChange();
+      checkWhichBlockClicked(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.CHANGE_INFO:
+      console.log(payload);
+      console.log(item);
+      changeSomeInfo();
+      paneStore.emitChange();
+      break;
+
+    case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
+      console.log(payload);
+      console.log(item);
+      _stuff["updatedBlockContent"] = item;
+      console.log(_stuff.updatedBlockContent);
+      compareCurrentPaneStoreBlockContentAndDeviceStore();
+      paneStore.emitChange();
+      break;
+
+    //case appConstants.REDBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //  changeRedBlockTabState();
+    //  console.log(allBlockTabProperties.redBlockTabOpen);
+    //  //checkWhichBlockTabsOpen();
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.BLUEBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //  changeBlueBlockTabState();
+    //  console.log(allBlockTabProperties.blueBlockTabOpen);
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.GREENBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //  changeGreenBlockTabState();
+    //  console.log(allBlockTabProperties.greenBlockTabOpen);
+    //  paneStore.emitChange();
+    //  break;
+
     default:
           return true
   }
 });
 
 module.exports = paneStore;
+
+
+//var favAndConfigTabProperties = {
+//  favTabOpen: false,
+//  configTabOpen: false
+//};
+
+//var changeRedBlockTabState = function(){
+//  if(allBlockTabProperties.redBlockTabOpen === false) {
+//    allBlockTabProperties.redBlockTabOpen = true;
+//    checkWhichBlockTabsOpen();
+//    console.log(_handles.passSidePane)
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeBlueBlockTabState = function(){
+//  if(allBlockTabProperties.blueBlockTabOpen === false){
+//    allBlockTabProperties.blueBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeGreenBlockTabState = function(){
+//  if(allBlockTabProperties.greenBlockTabOpen === false){
+//    allBlockTabProperties.greenBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};

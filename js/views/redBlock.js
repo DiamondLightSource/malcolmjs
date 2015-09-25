@@ -14,12 +14,18 @@ var RedBlockInfo = {
   }
 };
 
-var RedBlock = {
+var RedBlock = React.createClass({
 
   getRedBlockInfo: function(){
     return RedBlockInfo;
+  },
+  render: function(){
+    return(
+      <div/>
+    )
+
   }
 
-};
+});
 
 module.exports = RedBlock;

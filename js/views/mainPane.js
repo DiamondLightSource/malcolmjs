@@ -19,6 +19,9 @@ var GreenBlock = require('./greenBlock');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
+var deviceStore = require('../stores/deviceStore');
+var deviceActions = require('../actions/deviceActions');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;
@@ -36,7 +39,9 @@ function getMainPaneState(){
     blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
     greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
     favTabOpen: paneStore.getFavTabOpen(),
-    configTabOpen: paneStore.getConfigTabOpen()
+    configTabOpen: paneStore.getConfigTabOpen(),
+
+    updatedRedBlockContentFromServer: deviceStore.getRedBlockContent()
   }
 }
 
@@ -58,16 +63,25 @@ var MainPane = React.createClass({
     paneActions.addTab(stuff)
   },
 
-  handleActionRedBlockPropertiesClicked: function(){
-    paneActions.redBlockTabOpen("this is the item")
+  handleActionPassDispatchMarker: function(selectedObject){
+    var selectedObject = selectedObject;
+    var selectedDispatchMarker = selectedObject.dispatchMarker;
+    console.log(selectedDispatchMarker);
+    paneActions.passDispatchMarker(selectedDispatchMarker)
   },
 
-  handleActionBlueBlockPropertiesClicked: function(){
-    paneActions.blueBlockTabOpen("this is the item")
+  handleActionAppendStuffForNewBlock: function(selectedObject){
+
   },
 
-  handleActionGreenBlockPropertiesClicked: function(){
-    paneActions.greenBlockTabOpen("this is the item")
+  handleActionChangeSomeInfo: function(){
+    paneActions.changeSomeInfo('this is the item')
+  },
+
+  handleActionMockServerRequest: function(){
+    deviceActions.mockServerRequest('this is the item');
+    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer)
   },
 
   handleActionFavTabOpen: function(){
@@ -94,52 +108,61 @@ var MainPane = React.createClass({
     paneStore.removeChangeListener(this._onChange);
   },
 
-  changeClickedObjectProperties: function(selectedObject){
+  addDivToContent: function(selectedObject){
     var selectedObject = selectedObject;
-    var selectedDiv = selectedObject.target;
     var selectedDispatchMarker = selectedObject.dispatchMarker;
     console.log(selectedObject);
-    console.log(selectedDiv);
-    console.log(selectedDispatchMarker);
+    console.log(selectedObject.dispatchMarker);
 
-    switch(selectedDispatchMarker){
-      case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1':
-            //this.setState({redBlockPropertiesClicked: true}); /*need a separate handleAction for each block most likely*/
-        this.handleActionRedBlockPropertiesClicked();
-        //this.handleActionTabChangeViaOtherMeans('Red block');
-        var tabToAdd = "RedBlock";
-        //sidePaneActions.redBlockTabOpen();
-            break;
-      case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2':
-            //this.setState({blueBlockPropertiesClicked: true});
-        this.handleActionBlueBlockPropertiesClicked();
-        //this.handleActionTabChangeViaOtherMeans('Blue block');
-        var tabToAdd = "BlueBlock";
-            break;
-      case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3':
-            //this.setState({greenBlockPropertiesClicked: true});
-        this.handleActionGreenBlockPropertiesClicked();
-        //this.handleActionTabChangeViaOtherMeans('Green block');
-        var tabToAdd = "GreenBlock";
-            break;
-
-      default:
-            return 'default'
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF'.split('');
+      var color = '#';
+      for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     }
 
-    //this.handleActionAddTab(tabToAdd);
+    var YES = document.createElement('DIV');
 
-    console.log(tabToAdd);
-    //console.log(this.state.redBlockPropertiesClicked);
+    YES.addEventListener("click", function(){
+      console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
+      console.log(selectedObject.dispatchMarker);
+      //var selectedObject = selectedObject;
+      //var selectedDispatchMarker = selectedObject.dispatchMarker;
+      console.log(selectedDispatchMarker);
+      paneActions.appendStuffForNewBlock(selectedDispatchMarker);
+    });
+    YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
+    YES.style.backgroundColor = getRandomColor();
+    //YES.setAttribute('draggable', 'true'); No need for this anymore!
+    //YES.id = selectedObject;
 
-    //this.setState({objectPropertiesClicked: true});
-
-    //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
-    //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
+    var testDivStyling = {
+      float: 'right',
+      backgroundColor: "magenta",
+      height: 100,
+      width: 100,
+      marginTop: 10,
+      marginBottom: 10
+    };
+    var ComeOn = React.createClass({render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
+      return(
+        <div></div>
+      )
+    }});
+    //ComeOn.id = "meh";
+    //document.getElementById('TEST').appendChild(comeOn)
+    React.render(<ComeOn style={testDivStyling}/>, document.getElementById('TEST').appendChild(YES));
+    console.log(ComeOn)
   },
 
-
   render: function() {
+    var TESTStyling = {
+      height: 1000,
+      width: 1000,
+      //backgroundColor: 'darkmagenta'
+    };
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle Footer" onChange={this.handleActionFooterToggle}>
@@ -147,46 +170,19 @@ var MainPane = React.createClass({
           </ToggleButton>
         ]}>
         <Tab title="View" showFooter={this.state.footers}>
-          <Content><p>Content of View Tab</p>
-            <div id="redBlock" onClick={this.changeClickedObjectProperties}>
+          <Content>
+            <p>Content of View Tab</p>
+            <div id="redBlock" onClick={this.handleActionPassDispatchMarker} >
+              <RedBlock/>
             </div>
-            <div id="blueBlock" onClick={this.changeClickedObjectProperties}>
+            <div id="blueBlock" onClick={this.handleActionPassDispatchMarker}>
             </div>
-            <div id="greenBlock" onClick={this.changeClickedObjectProperties}>
+            <div id="greenBlock" onClick={this.handleActionPassDispatchMarker}>
             </div>
+            <div style={TESTStyling}id="TEST"></div>
 
-          <p>
-            {(() => {
-              var RedBlockInfo = RedBlock.getRedBlockInfo();
-              switch (this.state.redBlockPropertiesClicked) {
-                case true: return RedBlockInfo;
-                case false: return "nada";
-                default: return "default";
-              }
-            })()}
-          </p>
 
-            <p>
-              {(() => {
-                var BlueBlockInfo = BlueBlock.getBlueBlockInfo();
-                switch (this.state.blueBlockPropertiesClicked) {
-                  case true: return BlueBlockInfo;
-                  case false: return "nada";
-                  default: return "default";
-                }
-              })()}
-            </p>
 
-            <p>
-              {(() => {
-                var GreenBlockInfo = GreenBlock.getGreenBlockInfo();
-                switch (this.state.greenBlockPropertiesClicked) {
-                  case true: return GreenBlockInfo;
-                  case false: return "nada";
-                  default: return "default";
-                }
-              })()}
-            </p>
 
 
           </Content>
@@ -195,6 +191,8 @@ var MainPane = React.createClass({
             <div id="buttonContainer">
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
+              <button type="button" onClick={this.addDivToContent}>Add block</button>
+              <button type="button"  onClick={this.handleActionMockServerRequest}>Change info</button>
             </div>
           </div>
           </Footer>
@@ -241,4 +239,60 @@ module.exports = MainPane;
 //    console.log("else statement");
 //    return "uihy"
 //  }
+//},
+
+//changeClickedObjectProperties: function(selectedObject){ /*replaced by handleActionPassDispatchMarker*/
+//  var selectedObject = selectedObject;
+//  var selectedDiv = selectedObject.target;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedObject);
+//  console.log(selectedDiv);
+//  console.log(selectedDispatchMarker);
+//
+//  switch(selectedDispatchMarker){
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1':
+//          //this.setState({redBlockPropertiesClicked: true}); /*need a separate handleAction for each block most likely*/
+//      this.handleActionRedBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Red block');
+//      var tabToAdd = "RedBlock";
+//      //sidePaneActions.redBlockTabOpen();
+//          break;
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2':
+//          //this.setState({blueBlockPropertiesClicked: true});
+//      this.handleActionBlueBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Blue block');
+//      var tabToAdd = "BlueBlock";
+//          break;
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3':
+//          //this.setState({greenBlockPropertiesClicked: true});
+//      this.handleActionGreenBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Green block');
+//      var tabToAdd = "GreenBlock";
+//          break;
+//
+//    default:
+//          return 'default'
+//  }
+//
+//  //this.handleActionAddTab(tabToAdd);
+//
+//  console.log(tabToAdd);
+//  //console.log(this.state.redBlockPropertiesClicked);
+//
+//  //this.setState({objectPropertiesClicked: true});
+//
+//  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
+//  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
+//},
+
+//handleActionRedBlockPropertiesClicked: function(){
+//  paneActions.redBlockTabOpen("this is the item")
+//},
+//
+//handleActionBlueBlockPropertiesClicked: function(){
+//  paneActions.blueBlockTabOpen("this is the item")
+//},
+//
+//handleActionGreenBlockPropertiesClicked: function(){
+//  paneActions.greenBlockTabOpen("this is the item")
 //},

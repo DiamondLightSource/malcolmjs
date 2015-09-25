@@ -19,24 +19,6 @@ var paneActions = {
       item: item
     })
   },
-  redBlockTabOpen: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.REDBLOCKTAB_OPEN,
-      item: item
-    })
-  },
-  blueBlockTabOpen: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.BLUEBLOCKTAB_OPEN,
-      item: item
-    })
-  },
-  greenBlockTabOpen: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.GREENBLOCKTAB_OPEN,
-      item: item
-    })
-  },
   dropdownMenuSelect: function(tab){
     AppDispatcher.handleAction({
       actionType: appConstants.DROPDOWN_SELECT,
@@ -60,8 +42,52 @@ var paneActions = {
       actionType: appConstants.CONFIGTAB_OPEN,
       item: item
     })
+  },
+  passDispatchMarker: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PASS_DISPATCHMARKER,
+      item: item
+    })
+  },
+  appendStuffForNewBlock: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
+      item: item
+    })
+  },
+  changeSomeInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CHANGE_INFO,
+      item: item
+    })
+  },
+  updatePaneStoreBlockContentViaDeviceStore: function(blockContentObject){
+    AppDispatcher.handleAction({
+      actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
+      item: blockContentObject
+    })
   }
 
 };
 
 module.exports = paneActions;
+
+
+//redBlockTabOpen: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.REDBLOCKTAB_OPEN,
+//    item: item
+//  })
+//},
+//blueBlockTabOpen: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.BLUEBLOCKTAB_OPEN,
+//    item: item
+//  })
+//},
+//greenBlockTabOpen: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.GREENBLOCKTAB_OPEN,
+//    item: item
+//  })
+//},
