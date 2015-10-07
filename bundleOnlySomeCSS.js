@@ -158,6 +158,8 @@ module.exports = paneActions;
 var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
+//var paneActions = require('./paneActions');
+
 var serverActions = {
   passingUpdatedChannelValue: function(item){
     AppDispatcher.handleServerAction({
@@ -170,7 +172,11 @@ var serverActions = {
     AppDispatcher.handleServerAction({
       actionType: appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED,
       item:item
-    })
+    });
+    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   }
 
 };
@@ -192,20 +198,21 @@ var WebSocketClient = require('../websocketClientTEST');
 
 var sessionActions = {
 
-  fetchUpdatedChannelValue: function(item){
-   AppDispatcher.handleViewAction({   /* Notifies the dispatcher, not sure why you do it, but stuff on the internet says you should, maybe I'll see the reason later :P */
-     actionType: appConstants.FETCHNEWCHANNEL_VALUE,
-     item: item
-   });
-   WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
-  },
+  //fetchUpdatedChannelValue: function(item){
+  // AppDispatcher.handleViewAction({   /* Notifies the dispatcher, not sure why you do it, but stuff on the internet says you should, maybe I'll see the reason later :P */
+  //   actionType: appConstants.FETCHNEWCHANNEL_VALUE,
+  //   item: item
+  // });
+  // WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
+  //},
 
   properServerRequestToAddChannelChangeInfoTest: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO,
       item: item
     });
-    WebSocketClient.subscribeChannel("Test channel", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
+    WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
+    WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
   }
 
 };
@@ -552,22 +559,37 @@ AppDispatcher.register(function(payload){
           console.log(action);
           break;
 
+
+
+
+
     case appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO:
           console.log(payload);
           console.log(action);
           deviceStore.emitChange();
           break;
 
-    case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
-          console.log(payload);
-          console.log(action);
-          simpleChangeChannelName(item);
-          deviceStore.emitChange();
-          break;
+    //case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
+    //      console.log(payload);
+    //      console.log(action);
+    //      simpleChangeChannelName(item);
+    //      deviceStore.emitChange();
+    //      break;
 
 
     default:
           return 'deviceStore: default'
+  }
+});
+
+/* Testing waitFor() to update the Channel value in RedBlock BEFORE PaneStore fetches the block object and runs its fucntion to check which attrubute values have changed */
+
+deviceStore.dispatchToken = AppDispatcher.register(function(payload){
+  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+    console.log(payload);
+    console.log(payload.action.item);
+    simpleChangeChannelName(payload.action.item);
+    deviceStore.emitChange();
   }
 });
 
@@ -1307,6 +1329,27 @@ AppDispatcher.register(function(payload){
   }
 });
 
+/* Importing a store into another store is the only way to use the dispatchToken of another store in order to use waitFor, so it must be ok! */
+
+var deviceStore = require('./deviceStore');
+
+var getBlockContentFromDeviceStore = function(){
+  _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
+};
+
+paneStore.dispatchToken = AppDispatcher.register(function(payload){
+  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+
+    AppDispatcher.waitFor([deviceStore.dispatchToken]);
+
+    console.log(payload);
+    console.log(payload.action.item);
+    getBlockContentFromDeviceStore();
+    compareCurrentPaneStoreBlockContentAndDeviceStore();
+    paneStore.emitChange();
+  }
+});
+
 module.exports = paneStore;
 
 
@@ -1346,7 +1389,7 @@ module.exports = paneStore;
 //  }
 //};
 
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":24,"object-assign":29}],13:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"./deviceStore":10,"events":24,"object-assign":29}],13:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -2240,51 +2283,51 @@ var MainPane = React.createClass({displayName: "MainPane",
 
 
 
-  testingChannelUnsubscription: function(){
-    //console.log("checking state of websocket connection:");
-    //WebSocketClient.checkStateOfWebSocketConnection();
-    //console.log("seeing what WebSocket.getchannel(0) returns");
-    //console.log(WebSocketClient.getChannel(0));
-    //console.log("getting channel 0, seeing if it's undefined");
-    WebSocketClient.getChannel(0).unsubscribe();
-
-    //WebSocketClient.getAllChannels()
-
-  },
-
-  testingChannelResubscription: function(){
-    WebSocketClient.resubscribeChannel(0);
-  },
-
-  testingChannelValueType: function(){
-    var testChannel = WebSocketClient.getChannel(0);
-    testChannel.setValue({test: "Test"});
-    console.log(testChannel.getValue());
-    testChannel.channelValueType()
-  },
-
-  testingChannelPause: function(){
-    var testChannel = WebSocketClient.getChannel(0);
-    console.log("Attempting to pause the channel");
-    testChannel.pause()
-  },
-
-  testingChannelSetValue: function(){
-    var testChannel = WebSocketClient.getChannel(0);
-    console.log("Attempting to use Channel.setValue");
-    testChannel.setValue(2);
-    //console.log("Hopefully the value of the Channel has changed, let's see:");
-    //console.log(testChannel.getValue())
-    //Doesn't work, it runs before the server responds!
-
-  },
+  //testingChannelUnsubscription: function(){
+  //  //console.log("checking state of websocket connection:");
+  //  //WebSocketClient.checkStateOfWebSocketConnection();
+  //  //console.log("seeing what WebSocket.getchannel(0) returns");
+  //  //console.log(WebSocketClient.getChannel(0));
+  //  //console.log("getting channel 0, seeing if it's undefined");
+  //  WebSocketClient.getChannel(0).unsubscribe();
+  //
+  //  //WebSocketClient.getAllChannels()
+  //
+  //},
+  //
+  //testingChannelResubscription: function(){
+  //  WebSocketClient.resubscribeChannel(0);
+  //},
+  //
+  //testingChannelValueType: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  testChannel.setValue({test: "Test"});
+  //  console.log(testChannel.getValue());
+  //  testChannel.channelValueType()
+  //},
+  //
+  //testingChannelPause: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  console.log("Attempting to pause the channel");
+  //  testChannel.pause()
+  //},
+  //
+  //testingChannelSetValue: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  console.log("Attempting to use Channel.setValue");
+  //  testChannel.setValue(2);
+  //  //console.log("Hopefully the value of the Channel has changed, let's see:");
+  //  //console.log(testChannel.getValue())
+  //  //Doesn't work, it runs before the server responds!
+  //
+  //},
 
   testingAddChannelChangeInfoViaProperServerRequest: function(){
     sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
-    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
 
 
@@ -2598,12 +2641,12 @@ console.log("trying to show all channels");
 console.log(WebSocketClient.getAllChannels());
 /* This works correctly! :) */
 
-//WebSocketClient.close();
-//WebSocketClient.sendText("Hello");
-
 WebSocketClient.addWebSocketOnErrorCallback(function(){
   console.log("just a simple error")
 });
+
+//WebSocketClient.close();
+//WebSocketClient.sendText("Hello");
 
 //console.log(WebSocketClient.getSentMessages());
 
@@ -2625,6 +2668,7 @@ module.exports = WebSocketClient;
  */
 
 var serverActions = require('./actions/serverActions');
+var paneActions = require('./actions/paneActions');
 
 function Client(url, debug, maxRate, username, password){
 
@@ -3121,6 +3165,7 @@ function Client(url, debug, maxRate, username, password){
 
     serverActions.passingNameOfChannelThatsBeenAdded(json.channel)
 
+
   }
 
   function fireOnOpen(evt){
@@ -3341,7 +3386,7 @@ module.exports = Client;
 
 //var ReactClient = new Client("wss://echo.websocket.org", null, 10, null, null);
 
-},{"./actions/serverActions":4}],24:[function(require,module,exports){
+},{"./actions/paneActions":3,"./actions/serverActions":4}],24:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a

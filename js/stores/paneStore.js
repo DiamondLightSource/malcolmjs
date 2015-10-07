@@ -645,6 +645,27 @@ AppDispatcher.register(function(payload){
   }
 });
 
+/* Importing a store into another store is the only way to use the dispatchToken of another store in order to use waitFor, so it must be ok! */
+
+var deviceStore = require('./deviceStore');
+
+var getBlockContentFromDeviceStore = function(){
+  _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
+};
+
+paneStore.dispatchToken = AppDispatcher.register(function(payload){
+  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+
+    AppDispatcher.waitFor([deviceStore.dispatchToken]);
+
+    console.log(payload);
+    console.log(payload.action.item);
+    getBlockContentFromDeviceStore();
+    compareCurrentPaneStoreBlockContentAndDeviceStore();
+    paneStore.emitChange();
+  }
+});
+
 module.exports = paneStore;
 
 

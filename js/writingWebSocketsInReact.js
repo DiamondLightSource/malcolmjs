@@ -3,6 +3,7 @@
  */
 
 var serverActions = require('./actions/serverActions');
+var paneActions = require('./actions/paneActions');
 
 function Client(url, debug, maxRate, username, password){
 
@@ -498,6 +499,7 @@ function Client(url, debug, maxRate, username, password){
      Not sure if I'm meant to out this function into WebAPIUtils, but for now I'll just try and get this working before I start to get fancy :P */
 
     serverActions.passingNameOfChannelThatsBeenAdded(json.channel)
+
 
   }
 

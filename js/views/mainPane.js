@@ -209,10 +209,10 @@ var MainPane = React.createClass({
 
   testingAddChannelChangeInfoViaProperServerRequest: function(){
     sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
-    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
 
 
@@ -232,7 +232,7 @@ var MainPane = React.createClass({
         <Tab title="View" showFooter={this.state.footers}>
           <Content>
             <p>Content of View Tab</p>
-            <div id="redBlock" onClick={this.handleActionPassDispatchMarker} >
+            <div id="redBlock" onClick={this.handleActionPassDispatchMarker}>
               <RedBlock/>
             </div>
             <div id="blueBlock" onClick={this.handleActionPassDispatchMarker}>

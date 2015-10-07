@@ -12,20 +12,21 @@ var WebSocketClient = require('../websocketClientTEST');
 
 var sessionActions = {
 
-  fetchUpdatedChannelValue: function(item){
-   AppDispatcher.handleViewAction({   /* Notifies the dispatcher, not sure why you do it, but stuff on the internet says you should, maybe I'll see the reason later :P */
-     actionType: appConstants.FETCHNEWCHANNEL_VALUE,
-     item: item
-   });
-   WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
-  },
+  //fetchUpdatedChannelValue: function(item){
+  // AppDispatcher.handleViewAction({   /* Notifies the dispatcher, not sure why you do it, but stuff on the internet says you should, maybe I'll see the reason later :P */
+  //   actionType: appConstants.FETCHNEWCHANNEL_VALUE,
+  //   item: item
+  // });
+  // WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
+  //},
 
   properServerRequestToAddChannelChangeInfoTest: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO,
       item: item
     });
-    WebSocketClient.subscribeChannel("Test channel", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
+    WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
+    WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
   }
 
 };

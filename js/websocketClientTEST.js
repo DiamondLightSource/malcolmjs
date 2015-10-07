@@ -10,12 +10,12 @@ console.log("trying to show all channels");
 console.log(WebSocketClient.getAllChannels());
 /* This works correctly! :) */
 
-//WebSocketClient.close();
-//WebSocketClient.sendText("Hello");
-
 WebSocketClient.addWebSocketOnErrorCallback(function(){
   console.log("just a simple error")
 });
+
+//WebSocketClient.close();
+//WebSocketClient.sendText("Hello");
 
 //console.log(WebSocketClient.getSentMessages());
 

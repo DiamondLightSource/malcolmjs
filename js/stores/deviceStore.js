@@ -115,16 +115,27 @@ AppDispatcher.register(function(payload){
           deviceStore.emitChange();
           break;
 
-    case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
-          console.log(payload);
-          console.log(action);
-          simpleChangeChannelName(item);
-          deviceStore.emitChange();
-          break;
+    //case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
+    //      console.log(payload);
+    //      console.log(action);
+    //      simpleChangeChannelName(item);
+    //      deviceStore.emitChange();
+    //      break;
 
 
     default:
           return 'deviceStore: default'
+  }
+});
+
+/* Testing waitFor() to update the Channel value in RedBlock BEFORE PaneStore fetches the block object and runs its fucntion to check which attrubute values have changed */
+
+deviceStore.dispatchToken = AppDispatcher.register(function(payload){
+  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+    console.log(payload);
+    console.log(payload.action.item);
+    simpleChangeChannelName(payload.action.item);
+    deviceStore.emitChange();
   }
 });
 
