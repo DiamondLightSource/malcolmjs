@@ -8,13 +8,13 @@ var appConstants = require('../constants/appConstants');
 var sidePaneActions = {
 
   dropdownMenuShow: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.DROPDOWN_SHOW,
       item: item
     })
   },
   dropdownMenuHide: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.DROPDOWN_HIDE,
       item: item
     })

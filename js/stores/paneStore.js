@@ -33,7 +33,7 @@ var allBlockContent = {
   redBlockContent: {
     name: "Red block",
     hack: "redBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels"}}
+    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
   },
   blueBlockContent: {
     name: "Blue block",

@@ -22,6 +22,9 @@ var paneActions = require('../actions/paneActions');
 var deviceStore = require('../stores/deviceStore');
 var deviceActions = require('../actions/deviceActions');
 
+var WebSocketClient = require('../websocketClientTEST');
+var sessionActions = require('../actions/sessionActions');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;
@@ -41,7 +44,9 @@ function getMainPaneState(){
     favTabOpen: paneStore.getFavTabOpen(),
     configTabOpen: paneStore.getConfigTabOpen(),
 
-    updatedRedBlockContentFromServer: deviceStore.getRedBlockContent()
+    updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
+    updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
+    updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent()
   }
 }
 
@@ -70,9 +75,9 @@ var MainPane = React.createClass({
     paneActions.passDispatchMarker(selectedDispatchMarker)
   },
 
-  handleActionAppendStuffForNewBlock: function(selectedObject){
-
-  },
+  //handleActionAppendStuffForNewBlock: function(selectedObject){
+  //
+  //},
 
   handleActionChangeSomeInfo: function(){
     paneActions.changeSomeInfo('this is the item')
@@ -81,7 +86,9 @@ var MainPane = React.createClass({
   handleActionMockServerRequest: function(){
     deviceActions.mockServerRequest('this is the item');
     console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer)
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
 
   handleActionFavTabOpen: function(){
@@ -157,6 +164,59 @@ var MainPane = React.createClass({
     console.log(ComeOn)
   },
 
+
+
+
+
+  //testingChannelUnsubscription: function(){
+  //  //console.log("checking state of websocket connection:");
+  //  //WebSocketClient.checkStateOfWebSocketConnection();
+  //  //console.log("seeing what WebSocket.getchannel(0) returns");
+  //  //console.log(WebSocketClient.getChannel(0));
+  //  //console.log("getting channel 0, seeing if it's undefined");
+  //  WebSocketClient.getChannel(0).unsubscribe();
+  //
+  //  //WebSocketClient.getAllChannels()
+  //
+  //},
+  //
+  //testingChannelResubscription: function(){
+  //  WebSocketClient.resubscribeChannel(0);
+  //},
+  //
+  //testingChannelValueType: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  testChannel.setValue({test: "Test"});
+  //  console.log(testChannel.getValue());
+  //  testChannel.channelValueType()
+  //},
+  //
+  //testingChannelPause: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  console.log("Attempting to pause the channel");
+  //  testChannel.pause()
+  //},
+  //
+  //testingChannelSetValue: function(){
+  //  var testChannel = WebSocketClient.getChannel(0);
+  //  console.log("Attempting to use Channel.setValue");
+  //  testChannel.setValue(2);
+  //  //console.log("Hopefully the value of the Channel has changed, let's see:");
+  //  //console.log(testChannel.getValue())
+  //  //Doesn't work, it runs before the server responds!
+  //
+  //},
+
+  testingAddChannelChangeInfoViaProperServerRequest: function(){
+    sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
+    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+  },
+
+
+
   render: function() {
     var TESTStyling = {
       height: 1000,
@@ -192,7 +252,8 @@ var MainPane = React.createClass({
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
               <button type="button" onClick={this.addDivToContent}>Add block</button>
-              <button type="button"  onClick={this.handleActionMockServerRequest}>Change info</button>
+              <button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+
             </div>
           </div>
           </Footer>
@@ -285,14 +346,4 @@ module.exports = MainPane;
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
 
-//handleActionRedBlockPropertiesClicked: function(){
-//  paneActions.redBlockTabOpen("this is the item")
-//},
-//
-//handleActionBlueBlockPropertiesClicked: function(){
-//  paneActions.blueBlockTabOpen("this is the item")
-//},
-//
-//handleActionGreenBlockPropertiesClicked: function(){
-//  paneActions.greenBlockTabOpen("this is the item")
-//},
+

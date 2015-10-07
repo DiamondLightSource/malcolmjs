@@ -4,6 +4,7 @@
 
 var React = require('react');
 var ReactPanels = require('react-panels');
+var WebSocketClient = require('./websocketClientTEST');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');
@@ -37,7 +38,6 @@ var App = React.createClass({
       <div id="appContainer" style={AppContainerStyle}>
         <div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
         <div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
-
       </div>
     )
   }

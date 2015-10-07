@@ -8,37 +8,37 @@ var appConstants = require('../constants/appConstants');
 var paneActions = {
 
   addTab: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.ADD_TAB,
       item: item
     })
   },
   removeTab: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.REMOVE_TAB,
       item: item
     })
   },
   dropdownMenuSelect: function(tab){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.DROPDOWN_SELECT,
       item:tab
     })
   },
   passSidePane: function(ReactComponent){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.PASS_SIDEPANE,
       item: ReactComponent
     })
   },
   favTabOpen: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.FAVTAB_OPEN,
       item: item
     })
   },
   configTabOpen: function(item){
-    AppDispatcher.handleAction({
+    AppDispatcher.handleViewAction({
       actionType: appConstants.CONFIGTAB_OPEN,
       item: item
     })

@@ -36,3 +36,21 @@
   </p>
 
 /* BTW,onClick={this.handleActionChangeSomeInfo} use to be here :P*/
+
+  handleActionRedBlockPropertiesClicked: function(){
+  paneActions.redBlockTabOpen("this is the item")
+},
+
+  handleActionBlueBlockPropertiesClicked: function(){
+  paneActions.blueBlockTabOpen("this is the item")
+},
+
+  handleActionGreenBlockPropertiesClicked: function(){
+  paneActions.greenBlockTabOpen("this is the item")
+},
+
+
+
+  <button type="button"  onClick={this.handleActionMockServerRequest}>Change info</button>
+  <button type="button"  onClick={this.testingChannelUnsubscription}>Get all channels</button>
+  <button type="button" onClick={this.testingChannelSetValue}>Set value of channel</button>
