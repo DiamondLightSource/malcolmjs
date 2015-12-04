@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
 var WebSocketClient = require('./websocketClientTEST');
 
@@ -43,7 +44,7 @@ var App = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <App/>,
   document.getElementById('container')
 );

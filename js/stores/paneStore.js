@@ -416,7 +416,7 @@ var selectBlockOnClick = function(){
 
 
 var possibleBlockCases = {
-  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1': function(){
+  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.1': function(){
     if(allBlockTabProperties.redBlockTabOpen === false) {
       allBlockTabProperties.redBlockTabOpen = true;
       checkWhichBlockTabsOpen();
@@ -426,7 +426,7 @@ var possibleBlockCases = {
 
     }
   },
-  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2': function(){
+  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.2': function(){
     if(allBlockTabProperties.blueBlockTabOpen === false){
       allBlockTabProperties.blueBlockTabOpen = true;
       checkWhichBlockTabsOpen()
@@ -435,7 +435,7 @@ var possibleBlockCases = {
 
     }
   },
-  '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3': function(){
+  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.3': function(){
     if(allBlockTabProperties.greenBlockTabOpen === false){
       allBlockTabProperties.greenBlockTabOpen = true;
       checkWhichBlockTabsOpen()
