@@ -226,8 +226,8 @@ var checkWhichBlockTabsOpen = function(){
 
         //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
         console.log(lookupWhichTabToOpen(key));
-        console.log(blockTabsOpen);
         _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
+        console.log(_stuff.tabState);
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
@@ -262,8 +262,8 @@ var checkWhichBlockTabsOpen = function(){
     }
   }
 
-  console.log(blockTabsOpen);
-  console.log(lookupWhichTabToOpen(key));
+  //console.log(blockTabsOpen);
+  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
   console.log(_stuff.tabState);
 
   //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened

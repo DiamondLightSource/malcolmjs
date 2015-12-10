@@ -91,7 +91,7 @@ var SidePane = React.createClass({
           for (var key in item.info[outerkey])
             content.push(<p>{key}: {item.info[outerkey][key]}</p>)
         }
-        return {content}
+        return content
       };
       return (
         <Tab key={item.name} title={tabTitle}>

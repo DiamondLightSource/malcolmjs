@@ -1,0 +1,7 @@
+#nodeContainer{
+    display: flex;
+}
+
+#edgeContainer{
+    display: inline-block;
+}

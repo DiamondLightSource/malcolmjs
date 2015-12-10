@@ -25,6 +25,9 @@ var deviceActions = require('../actions/deviceActions');
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
 
+var TheGraphDiamond = require('./theGraphDiamond.js');
+//var TheGraphDiamond = require('../the-graph-diamond/js/app.js');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;
@@ -223,6 +226,11 @@ var MainPane = React.createClass({
       width: 1000,
       //backgroundColor: 'darkmagenta'
     };
+
+    var contentStyling = {
+      'height': '1466',
+      'width': '1479'
+    };
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle Footer" onChange={this.handleActionFooterToggle}>
@@ -230,16 +238,10 @@ var MainPane = React.createClass({
           </ToggleButton>
         ]}>
         <Tab title="View" showFooter={this.state.footers}>
-          <Content>
-            <p>Content of View Tab</p>
-            <div id="redBlock" onClick={this.handleActionPassDispatchMarker}>
-              <RedBlock/>
+          <Content  >
+            <div style={contentStyling} >
+              <TheGraphDiamond/>
             </div>
-            <div id="blueBlock" onClick={this.handleActionPassDispatchMarker}>
-            </div>
-            <div id="greenBlock" onClick={this.handleActionPassDispatchMarker}>
-            </div>
-            <div style={TESTStyling}id="TEST"></div>
 
 
 
