@@ -56,6 +56,13 @@ var nodeActions = {
       actionType: appConstants.CHANGE_GRAPHPOSITION,
       item: item
     })
+  },
+
+  graphZoom: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.GRAPH_ZOOM,
+      item: item
+    })
   }
 };
 

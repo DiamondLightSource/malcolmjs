@@ -228,8 +228,8 @@ var MainPane = React.createClass({
     };
 
     var contentStyling = {
-      'height': '1466',
-      'width': '1479'
+      'height': '1476',
+      'width': '1494'
     };
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[

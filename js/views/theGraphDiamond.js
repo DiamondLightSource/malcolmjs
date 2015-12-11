@@ -62,18 +62,19 @@ function getAppState(){
     TGen1Position: NodeStore.getTGen1Position(),
     PComp1Position: NodeStore.getPComp1Position(),
     draggedElement: NodeStore.getDraggedElement(),
-    graphPosition: NodeStore.getGraphPosition()
+    graphPosition: NodeStore.getGraphPosition(),
+    graphZoomScale: NodeStore.getGraphZoomScale()
   }
 }
 
 var App = React.createClass({
-  getInitialState: function(){
+  getInitialState: function () {
     return getAppState();
   },
-  _onChange: function(){
+  _onChange: function () {
     this.setState(getAppState());
   },
-  componentDidMount: function(){
+  componentDidMount: function () {
     NodeStore.addChangeListener(this._onChange);
     //console.log(document.getElementById('appContainer'));
     //console.log(document.getElementById('Gate1'));
@@ -82,7 +83,7 @@ var App = React.createClass({
     this.setState({panMoveFunction: this.defaultMoveFunction});
 
   },
-  componentWillUnmount: function(){
+  componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
   },
 
@@ -103,7 +104,7 @@ var App = React.createClass({
   },
 
 
-  mouseDownSelectElement: function(evt){
+  mouseDownSelectElement: function (evt) {
     console.log("mouseDown");
     console.log(evt);
     console.log(evt.currentTarget);
@@ -120,11 +121,12 @@ var App = React.createClass({
     //nodeActions.deselectAllNodes("deselect all nodes");
 
 
-    if(this.state.draggedElement === evt.currentTarget){
+    if (this.state.draggedElement === evt.currentTarget) {
       console.log("the draggedElement is equal to the selected element, so don't run deselect!");
     }
-    else{
-      nodeActions.deselectAllNodes("deselect all nodes"); /* Don't want to deselect a node if you move around other nodes whilst having another node selected */
+    else {
+      nodeActions.deselectAllNodes("deselect all nodes");
+      /* Don't want to deselect a node if you move around other nodes whilst having another node selected */
 
     }
 
@@ -142,7 +144,8 @@ var App = React.createClass({
 
     this.setState({beforeDrag: startCoordinates});
     //this.setState({moveFunction: this.anotherMoveFunction}); /* Seeing if I can do this in the default mouse move to check the distance of movement to be a click or drag */
-    this.setState({afterDrag: startCoordinates}); /* This is just in case no movement occurs, if there is movement then this will be overwritten */
+    this.setState({afterDrag: startCoordinates});
+    /* This is just in case no movement occurs, if there is movement then this will be overwritten */
 
   },
 
@@ -150,7 +153,7 @@ var App = React.createClass({
 
   },
 
-  moveElement: function(evt){
+  moveElement: function (evt) {
     //this.setState({draggedElement: evt.currentTarget}); /* Need to send to store */
     //nodeActions.draggedElement(evt.currentTarget.id);
 
@@ -158,7 +161,7 @@ var App = React.createClass({
     var mouseMovementX = evt.nativeEvent.clientX - this.state.mouseDownX;
     var mouseMovementY = evt.nativeEvent.clientY - this.state.mouseDownY;
 
-    if((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4) ){
+    if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
       console.log("we have a click, not a drag!");
       /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
       /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
@@ -177,12 +180,12 @@ var App = React.createClass({
       //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
       //this.deselect();
     }
-    else{
+    else {
       console.log("mouseMovementX & Y are big enough, is probably a drag!");
       this.setState({moveFunction: this.anotherMoveFunction});
     }
   },
-  anotherMoveFunction: function(e){
+  anotherMoveFunction: function (e) {
     //console.log("now move is different!");
 
     /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
@@ -194,9 +197,9 @@ var App = React.createClass({
       y: e.nativeEvent.clientY
     };
 
-    if(!this.state.afterDrag){
+    if (!this.state.afterDrag) {
       this.setState({afterDrag: updatedCoordinates},
-        function(){
+        function () {
           this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag)
         })
     }
@@ -209,16 +212,16 @@ var App = React.createClass({
     //                })
     //        })
     //}
-    else{
+    else {
       this.setState({beforeDrag: this.state.afterDrag},
-        function(){
+        function () {
           this.setState({afterDrag: updatedCoordinates});
           this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
         })
     }
   },
 
-  mouseUp: function(e){
+  mouseUp: function (e) {
     console.log("mouseUp");
     console.log(e);
     console.log(this.state.afterDrag);
@@ -227,54 +230,65 @@ var App = React.createClass({
     console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
 
 
-
-    if(this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y){
+    if (this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y) {
       console.log("zero movement between mouseUp and mouseDown, so it's a click!");
-      this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+      this.state.draggedElement.dispatchEvent(NodeSelect);
+      /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
       this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null}); /* Stops the cursor from jumping back to where it previously was on the last drag */
+      this.setState({beforeDrag: null});
+      /* Stops the cursor from jumping back to where it previously was on the last drag */
       this.setState({afterDrag: null});
     }
     /* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
-    else if(Math.abs(this.state.afterDrag.x - this.state.mouseDownX) > 4 && Math.abs(this.state.afterDrag.y - this.state.mouseDownY) > 4){
+    else if (Math.abs(this.state.afterDrag.x - this.state.mouseDownX) > 4 && Math.abs(this.state.afterDrag.y - this.state.mouseDownY) > 4) {
       console.log("the mouse moved far enough to be a drag");
       this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null}); /* Stops the cursor from jumping back to where it previously was on the last drag */
+      this.setState({beforeDrag: null});
+      /* Stops the cursor from jumping back to where it previously was on the last drag */
       this.setState({afterDrag: null});
     }
     /* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
-    else if((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) > 4) ||
-      (Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)){
+    else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) > 4) ||
+      (Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
       console.log("> 4 movement in one axis but < 4 movement in the other");
       this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null}); /* Stops the cursor from jumping back to where it previously was on the last drag */
+      this.setState({beforeDrag: null});
+      /* Stops the cursor from jumping back to where it previously was on the last drag */
       this.setState({afterDrag: null});
     }
-    else if((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4) ){
+    else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
       console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click!");
-      this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+      this.state.draggedElement.dispatchEvent(NodeSelect);
+      /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
       this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null}); /* Stops the cursor from jumping back to where it previously was on the last drag */
+      this.setState({beforeDrag: null});
+      /* Stops the cursor from jumping back to where it previously was on the last drag */
       this.setState({afterDrag: null});
     }
-
-
 
 
   },
 
-  differenceBetweenMouseDownAndMouseUp: function(start, end){
+  differenceBetweenMouseDownAndMouseUp: function (start, end) {
     //console.log(start);
     //console.log(end);
-    var differenceInCoordinates = {
-      x: end.x - start.x,
-      y: end.y - start.y
-    };
-    //nodeActions.changeGateNodePosition(differenceInCoordinates);
-    nodeActions.changeNodePosition(differenceInCoordinates);
+
+    var zoomScale = this.state.graphZoomScale;
+    if(zoomScale === 0){
+      console.log("zoomScale is zero, can't divide by it!");
+    }
+    else{
+      var differenceInCoordinates = {
+        x: (1/zoomScale) * (end.x - start.x),
+        y: (1/zoomScale) * (end.y - start.y)
+      };
+      //nodeActions.changeGateNodePosition(differenceInCoordinates);
+      nodeActions.changeNodePosition(differenceInCoordinates);
+    }
+
   },
 
-  mouseLeave: function(e){
+  mouseLeave: function (e) {
     console.log("mouseLeave, left the window, emulate a mouseUp event!");
     this.setState({moveFunction: this.defaultMoveFunction});
     this.setState({panMoveFunction: this.defaultMoveFunction()});
@@ -282,16 +296,16 @@ var App = React.createClass({
     this.setState({afterDrag: null});
   },
 
-  deselect: function(){
+  deselect: function () {
     //console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
   },
 
-  debounce: function(func, wait, immediate) {
+  debounce: function (func, wait, immediate) {
     var timeout;
-    return function() {
+    return function () {
       var context = this, args = arguments;
-      var later = function() {
+      var later = function () {
         timeout = null;
         if (!immediate) func.apply(context, args);
       };
@@ -302,16 +316,11 @@ var App = React.createClass({
     };
   },
 
-  setOpacity: function(){
+  setOpacity: function () {
     window.NodeContainerStyle[opacity] = 0.5
   },
 
-  wheelZoom: function(e){
-    console.log("wheel!");
-    console.log(e);
-  },
-
-  panMouseDown: function(e){
+  panMouseDown: function (e) {
     console.log("panMouseDown");
     this.setState({panMoveFunction: this.panMouseMove});
     this.dragging = true;
@@ -323,7 +332,7 @@ var App = React.createClass({
 
   },
 
-  panMouseUp: function(e){
+  panMouseUp: function (e) {
     console.log("panMouseUp");
     this.setState({panMoveFunction: this.defaultMoveFunction});
     this.dragging = false;
@@ -331,8 +340,8 @@ var App = React.createClass({
     this.coords = {};
   },
 
-  panMouseMove: function(e){
-    if(this.dragging){
+  panMouseMove: function (e) {
+    if (this.dragging) {
       e.preventDefault();
     }
 
@@ -353,21 +362,180 @@ var App = React.createClass({
     nodeActions.changeGraphPosition(newCoords);
   },
 
+  wheelZoom: function (e) {
+    console.log("wheel!");
+    console.log(e);
+
+    ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
+    //var differenceBetweenMouseAndZoomOrigin = {
+    //  //x: Math.abs(this.state.graphPosition.x - mouseOnZoom.x),
+    //  //y: Math.abs(this.state.graphPosition.y - mouseOnZoom.y)
+    //  x: Math.abs(10 - mouseOnZoom.x),
+    //  y: Math.abs(40 - mouseOnZoom.y)
+    //};
+
+    //console.log(differenceBetweenMouseAndZoomOrigin);
+
+    //var panWhenZoomingMultiplier = 0.1;
+
+    //if (mouseOnZoom.x > this.state.graphPosition.x) {
+    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
+    //    var panningWhenZooming = {
+    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+    //    };
+    //    nodeActions.changeGraphPosition(panningWhenZooming);
+    //  }
+    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+    //    var panningWhenZooming = {
+    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+    //    };
+    //    nodeActions.changeGraphPosition(panningWhenZooming);
+    //  }
+    //
+    //}
+    //else if(mouseOnZoom.x < this.state.graphPosition.x){
+    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
+    //    var panningWhenZooming = {
+    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+    //    };
+    //    nodeActions.changeGraphPosition(panningWhenZooming);
+    //  }
+    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+    //    var panningWhenZooming = {
+    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+    //    };
+    //    nodeActions.changeGraphPosition(panningWhenZooming);
+    //  }
+    //}
+
+    var currentZoomScale = this.state.graphZoomScale;
+    var currentGraphPositionX = this.state.graphPosition.x;
+    var currentGraphPositionY = this.state.graphPosition.y;
+
+
+    var ZOOM_STEP = 0.03;
+    var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
+
+    if(zoomDirection === 'up'){
+      var newZoomScale = this.state.graphZoomScale + ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+    else{
+      var newZoomScale = this.state.graphZoomScale - ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+
+    var zoomFactor = newZoomScale / -50;
+    var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
+
+    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+    this.lastScale = newZoomScale;
+
+    var scale = scaleDelta * currentZoomScale;
+
+    var mouseOnZoomX = e.nativeEvent.clientX;
+    var mouseOnZoomY = e.nativeEvent.clientY;
+
+   if(!this.state.lastMouseOnZoomX){
+     console.log("first zoom, so lastMouseOnZoom doesn't exist yet, set it here!");
+     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY}, function(){
+       var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
+       var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
+
+       var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
+       var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
+
+       var newGraphPosition = {
+         x: newGraphPositionX,
+         y: newGraphPositionY
+       };
+
+       nodeActions.graphZoom(scale);
+       nodeActions.changeGraphPosition(newGraphPosition);
+
+     });
+     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
+
+
+   }
+    else{
+     console.log("lastMouseOnZoomX & Y exist, so we've zoomed previously");
+     var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
+     var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
+
+     console.log(differenceBetweenMouseOnZoomX);
+
+     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
+     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
+
+     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
+
+     var newGraphPosition = {
+       x: newGraphPositionX,
+       y: newGraphPositionY
+     };
+
+     nodeActions.graphZoom(scale);
+     nodeActions.changeGraphPosition(newGraphPosition);
+   }
+
+    //var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
+    //var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
+    //
+    //console.log(differenceBetweenMouseOnZoomX);
+    //
+    //var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX + differenceBetweenMouseOnZoomX;
+    //var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY + differenceBetweenMouseOnZoomY;
+    //
+    //this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+    //this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
+    //
+    //var newGraphPosition = {
+    //  x: newGraphPositionX,
+    //  y: newGraphPositionY
+    //};
+    //
+    //nodeActions.graphZoom(scale);
+    //nodeActions.changeGraphPosition(newGraphPosition);
+
+
+
+
+    /* Next bit takes care of if the scale factor is zero I think */
+  },
+
+  isZoomNegative: function(n){
+    return ((n =+n) || 1/n) < 0;
+  },
+
 
 
   render: function(){
-    var transform = "translate(" + this.state.graphPosition.x + "," + this.state.graphPosition.y + ")";
+    var x = this.state.graphPosition.x;
+    var y = this.state.graphPosition.y;
+    var scale = this.state.graphZoomScale;
+    var transform = "translate(" + x + "," + y + ")";
+    var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
     return(
       <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
-              onClick={this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp}
+              onClick={this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onWheel={this.wheelZoom}
               onMouseMove={this.state.panMoveFunction}
         ></rect>
-        <svg id="appContainer" style={AppContainerStyle}  onWheel={this.wheelZoom}
+        <svg id="appContainer" style={AppContainerStyle}
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
-          <g id="testPanGroup" transform={transform} >
+          <g id="testPanGroup"
+             transform={matrixTransform}
+             onWheel={this.wheelZoom}  >
 
 
             <g id="EdgesGroup" >

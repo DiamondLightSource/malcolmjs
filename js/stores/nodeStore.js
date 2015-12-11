@@ -81,16 +81,16 @@ var allNodeInfo = {
 
 var nodePositions = {
   Gate1: {
-    x: 400,
+    x: 50,
     y: 100
   },
 
   TGen1: {
-    x: 600,
+    x: 250,
     y: 10
   },
   PComp1: {
-    x: 800,
+    x: 450,
     y: 200
   }
 };
@@ -307,6 +307,8 @@ var graphPosition = {
   y: 0
 };
 
+var graphZoomScale = 1;
+
 var nodeStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
@@ -383,6 +385,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getGraphPosition: function(){
     return graphPosition;
+  },
+  getGraphZoomScale: function(){
+    return graphZoomScale;
   }
 });
 
@@ -455,6 +460,12 @@ AppDispatcher.register(function(payload){
     //    nodeStore.emitChange();
     //    break;
 
+    case appConstants.GRAPH_ZOOM:
+      console.log(payload);
+      console.log(item);
+      graphZoomScale = item;
+      nodeStore.emitChange();
+      break;
 
     default:
       return true
