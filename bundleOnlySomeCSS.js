@@ -787,6 +787,14 @@ var nodeSelectedStates = {
   PComp1: false
 };
 
+function appendToNodeSelectedStates(NodeId){
+  console.log("nodeSelectedStates before adding a new node:");
+  console.log(nodeSelectedStates);
+  nodeSelectedStates[NodeId] = false;
+  console.log("nodeSelectedStates after adding a new node:");
+  console.log(nodeSelectedStates);
+}
+
 function selectNode(Node){
   nodeSelectedStates[Node] = true;
 }
@@ -1378,14 +1386,25 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return tgenNodeInports.ena;
   },
 
-  getGate1SelectedState: function(){
-    return nodeSelectedStates.Gate1;
-  },
-  getTGen1SelectedState: function(){
-    return nodeSelectedStates.TGen1;
-  },
+  //getGate1SelectedState: function(){
+  //  return nodeSelectedStates.Gate1;
+  //},
+  //getTGen1SelectedState: function(){
+  //  return nodeSelectedStates.TGen1;
+  //},
   getPComp1SelectedState: function(){
     return nodeSelectedStates.PComp1;
+  },
+  getAnyNodeSelectedState:function(NodeId){
+    if(nodeSelectedStates[NodeId] === undefined || null){
+      console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      console.log(nodeSelectedStates[NodeId]);
+    }
+    else{
+      console.log("the state of that nod exists, passing it now");
+      console.log(nodeSelectedStates[NodeId]);
+      return nodeSelectedStates[NodeId];
+    }
   },
 
   getIfAnyNodesAreSelected: function(){
@@ -3036,7 +3055,7 @@ function getGateNodeState(){
     //position: NodeStore.getGateNodePosition(),
     //inports: NodeStore.getGateNodeInportsState(),
     //outports: NodeStore.getGateNodeOutportsState()
-    selected: NodeStore.getGate1SelectedState(),
+    //selected: NodeStore.getGate1SelectedState(),
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
@@ -3050,7 +3069,8 @@ var GateNode = React.createClass({displayName: "GateNode",
   },
 
   _onChange: function(){
-    this.setState(getGateNodeState())
+    this.setState(getGateNodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
   },
 
   componentDidMount: function(){
@@ -3058,6 +3078,7 @@ var GateNode = React.createClass({displayName: "GateNode",
     console.log(this.props);
     console.log(this.state);
     this.setState({moveFunction: this.moveElement});
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
   },
 
@@ -3929,7 +3950,7 @@ var nodeActions = require('../actions/nodeActions.js');
 
 function getPComp1NodeState(){
   return {
-    selected: NodeStore.getPComp1SelectedState(),
+    //selected: NodeStore.getPComp1SelectedState(),
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
@@ -3943,11 +3964,13 @@ var PCompNode = React.createClass({displayName: "PCompNode",
   },
 
   _onChange: function(){
-    this.setState(getPComp1NodeState())
+    this.setState(getPComp1NodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
   },
 
   componentDidMount: function(){
     NodeStore.addChangeListener(this._onChange);
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
   },
 
@@ -4343,10 +4366,10 @@ function getTGenNodeState(){
     //position: NodeStore.getTGenNodePosition(),
     //inports: NodeStore.getTGenNodeInportsState(),
     //outports: NodeStore.getTGenNodeOutportsState()
-    selected: NodeStore.getTGen1SelectedState(),
+    //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getTGenNodeStyling(),
-    selectedStyling: NodeStore.getSelectedTGenNodeStyling()
+    selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
   }
 }
 
@@ -4356,7 +4379,8 @@ var TGenNode = React.createClass({displayName: "TGenNode",
   },
 
   _onChange: function(){
-    this.setState(getTGenNodeState())
+    this.setState(getTGenNodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))})
   },
 
   componentDidMount: function(){
@@ -4365,7 +4389,9 @@ var TGenNode = React.createClass({displayName: "TGenNode",
     console.log(this.state);
 
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
+      console.log(this.state.selected);
+    });
   },
 
   componentWillUnmount: function(){

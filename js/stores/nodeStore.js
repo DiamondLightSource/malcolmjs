@@ -18,6 +18,14 @@ var nodeSelectedStates = {
   PComp1: false
 };
 
+function appendToNodeSelectedStates(NodeId){
+  console.log("nodeSelectedStates before adding a new node:");
+  console.log(nodeSelectedStates);
+  nodeSelectedStates[NodeId] = false;
+  console.log("nodeSelectedStates after adding a new node:");
+  console.log(nodeSelectedStates);
+}
+
 function selectNode(Node){
   nodeSelectedStates[Node] = true;
 }
@@ -609,14 +617,16 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return tgenNodeInports.ena;
   },
 
-  getGate1SelectedState: function(){
-    return nodeSelectedStates.Gate1;
-  },
-  getTGen1SelectedState: function(){
-    return nodeSelectedStates.TGen1;
-  },
-  getPComp1SelectedState: function(){
-    return nodeSelectedStates.PComp1;
+  getAnyNodeSelectedState:function(NodeId){
+    if(nodeSelectedStates[NodeId] === undefined || null){
+      console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      console.log(nodeSelectedStates[NodeId]);
+    }
+    else{
+      console.log("the state of that nod exists, passing it now");
+      console.log(nodeSelectedStates[NodeId]);
+      return nodeSelectedStates[NodeId];
+    }
   },
 
   getIfAnyNodesAreSelected: function(){
@@ -634,9 +644,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getSelectedGateNodeStyling: function(){
     return SelectedGateNodeStyling;
   },
-  //getGate1CurrentStyling: function(){
-  //  return checkGate1Styling();
-  //},
   getTGenNodeStyling: function(){
     return TGenNodeStyling;
   },
@@ -783,3 +790,17 @@ module.exports = nodeStore;
 //    }
 //
 //};
+
+//getGate1SelectedState: function(){
+//  return nodeSelectedStates.Gate1;
+//},
+//getTGen1SelectedState: function(){
+//  return nodeSelectedStates.TGen1;
+//},
+//getPComp1SelectedState: function(){
+//  return nodeSelectedStates.PComp1;
+//},
+
+//getGate1CurrentStyling: function(){
+//  return checkGate1Styling();
+//},

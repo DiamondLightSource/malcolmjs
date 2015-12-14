@@ -12,7 +12,7 @@ function getGateNodeState(){
     //position: NodeStore.getGateNodePosition(),
     //inports: NodeStore.getGateNodeInportsState(),
     //outports: NodeStore.getGateNodeOutportsState()
-    selected: NodeStore.getGate1SelectedState(),
+    //selected: NodeStore.getGate1SelectedState(),
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
@@ -26,7 +26,8 @@ var GateNode = React.createClass({
   },
 
   _onChange: function(){
-    this.setState(getGateNodeState())
+    this.setState(getGateNodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
   },
 
   componentDidMount: function(){
@@ -34,6 +35,7 @@ var GateNode = React.createClass({
     console.log(this.props);
     console.log(this.state);
     this.setState({moveFunction: this.moveElement});
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
   },
 

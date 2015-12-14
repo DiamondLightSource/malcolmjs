@@ -9,7 +9,7 @@ var nodeActions = require('../actions/nodeActions.js');
 
 function getPComp1NodeState(){
   return {
-    selected: NodeStore.getPComp1SelectedState(),
+    //selected: NodeStore.getPComp1SelectedState(),
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
@@ -23,11 +23,13 @@ var PCompNode = React.createClass({
   },
 
   _onChange: function(){
-    this.setState(getPComp1NodeState())
+    this.setState(getPComp1NodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
   },
 
   componentDidMount: function(){
     NodeStore.addChangeListener(this._onChange);
+    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
   },
 

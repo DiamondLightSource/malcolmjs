@@ -12,10 +12,10 @@ function getTGenNodeState(){
     //position: NodeStore.getTGenNodePosition(),
     //inports: NodeStore.getTGenNodeInportsState(),
     //outports: NodeStore.getTGenNodeOutportsState()
-    selected: NodeStore.getTGen1SelectedState(),
+    //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getTGenNodeStyling(),
-    selectedStyling: NodeStore.getSelectedTGenNodeStyling()
+    selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
   }
 }
 
@@ -25,7 +25,8 @@ var TGenNode = React.createClass({
   },
 
   _onChange: function(){
-    this.setState(getTGenNodeState())
+    this.setState(getTGenNodeState());
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))})
   },
 
   componentDidMount: function(){
@@ -34,7 +35,9 @@ var TGenNode = React.createClass({
     console.log(this.state);
 
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
+      console.log(this.state.selected);
+    });
   },
 
   componentWillUnmount: function(){
