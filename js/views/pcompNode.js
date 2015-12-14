@@ -3,38 +3,116 @@
  */
 
 var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
 
+function getPComp1NodeState(){
+  return {
+    selected: NodeStore.getPComp1SelectedState(),
+    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    defaultStyling: NodeStore.getPCompNodeStyling(),
+    selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
+  }
+}
+
 var PCompNode = React.createClass({
+
+  getInitialState: function(){
+    return getPComp1NodeState();
+  },
+
+  _onChange: function(){
+    this.setState(getPComp1NodeState())
+  },
+
+  componentDidMount: function(){
+    NodeStore.addChangeListener(this._onChange);
+    ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+  },
+
+  componentWillUnmount: function(){
+    NodeStore.removeChangeListener(this._onChange)
+  },
+
+  mouseOver: function(){
+    //console.log("mouseOver");
+    var test = document.getElementById('PCompRectangle');
+    test.style.stroke = '#797979'
+  },
+
+  mouseLeave: function(){
+    //console.log("mouseLeave");
+    var test = document.getElementById('PCompRectangle');
+
+    if(this.state.selected === true){
+      console.log("this.state.selected is true, so don't reset the border colour");
+    }
+    else{
+      test.style.stroke = 'black'
+    }
+  },
+
+  nodeSelect: function(){
+    console.log("PComp1 has been selected");
+    //nodeActions.deselectAllNodes("deselect all nodes");
+    nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+    console.log(this.state.selected);
+  },
+
+  mouseDown: function(e){
+    console.log("TGen1 mouseDown");
+    console.log(e.currentTarget);
+    console.log(e.currentTarget.parentNode);
+    nodeActions.draggedElement(e.currentTarget.parentNode);
+  },
+
+
   render: function(){
+
+    if(this.state.selected === true){
+      var currentStyling = this.state.selectedStyling;
+    }
+    else{
+      var currentStyling = this.state.defaultStyling;
+    }
+
+    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
+    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
+    var inportPositions = currentStyling.ports.portPositions.inportPositions;
+    var portStyling = currentStyling.ports.portStyling;
+    var outportPositions = currentStyling.ports.portPositions.outportPositions;
+    var textPosition = currentStyling.text.textPositions;
+    console.log(inportPositions);
+
+
     return(
-      <svg {...this.props} >
-        <g style={{MozUserSelect: 'none'}}  >
+      <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}  >
+        <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown}  >
           <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
-          <Rectangle id="rectangle" height={NodeStylingProperties.height} width={NodeStylingProperties.width} x="3" y="2" rx={NodeStylingProperties.rx} ry={NodeStylingProperties.ry}
-                     style={{fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65}}
+          <Rectangle id="PCompRectangle" height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
+                     style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 
 
           />
 
-          <Port cx={PCompNodePortStyling.inportPositions.ena.x} cy={PCompNodePortStyling.inportPositions.ena.y} r={PCompNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
-          <Port cx={PCompNodePortStyling.inportPositions.posn.x} cy={PCompNodePortStyling.inportPositions.posn.y} r={PCompNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
+          <Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={inportPositions.posn.x} cy={inportPositions.posn.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={outportPositions.act.x } cy={outportPositions.act.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={outportPositions.pulse.x} cy={outportPositions.pulse.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
 
-          <Port cx={PCompNodePortStyling.outportPositions.act.x } cy={PCompNodePortStyling.outportPositions.act.y} r={PCompNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}
-          />
-
-          <Port cx={PCompNodePortStyling.outportPositions.out.x} cy={PCompNodePortStyling.outportPositions.out.y} r={PCompNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
-
-          <Port cx={PCompNodePortStyling.outportPositions.pulse.x} cy={PCompNodePortStyling.outportPositions.pulse.y} r={PCompNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
-
-
+          <InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}}  />
+          <InportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
+          <OutportActText x={textPosition.act.x} y={textPosition.act.y} style={{MozUserSelect: 'none'}} />
+          <OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
+          <OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
 
           <NodeName x="0" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}}  />
           <NodeType x="22" y={NodeStylingProperties.height + 33} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}}  />

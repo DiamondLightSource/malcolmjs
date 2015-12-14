@@ -11,6 +11,7 @@ var nodeActions = require('../actions/nodeActions.js');
 var GateNode = require('./gateNode.js');
 var TGenNode = require('./tgenNode.js');
 var PCompNode = require('./pcompNode.js');
+var LUTNode = require('./lutNode.js');
 var Edge = require('./edge.js');
 
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
@@ -61,6 +62,7 @@ function getAppState(){
     Gate1Position: NodeStore.getGate1Position(),
     TGen1Position: NodeStore.getTGen1Position(),
     PComp1Position: NodeStore.getPComp1Position(),
+    LUT1Position: NodeStore.getLUT1Position(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale()
@@ -365,6 +367,47 @@ var App = React.createClass({
   wheelZoom: function (e) {
     console.log("wheel!");
     console.log(e);
+    e.preventDefault();
+    e.stopPropagation();
+
+    var currentZoomScale = this.state.graphZoomScale;
+    var currentGraphPositionX = this.state.graphPosition.x;
+    var currentGraphPositionY = this.state.graphPosition.y;
+
+
+    var ZOOM_STEP = 0.03;
+    var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
+
+    if(zoomDirection === 'up'){
+      var newZoomScale = this.state.graphZoomScale + ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+    else{
+      var newZoomScale = this.state.graphZoomScale - ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+
+    var zoomFactor = newZoomScale / -50;
+    var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
+
+    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+    this.lastScale = newZoomScale;
+
+    var scale = scaleDelta * currentZoomScale;
+
+    var mouseOnZoomX = e.nativeEvent.clientX;
+    var mouseOnZoomY = e.nativeEvent.clientY;
+
+     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
+     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
+
+     var newGraphPosition = {
+       x: newGraphPositionX,
+       y: newGraphPositionY
+     };
+
+     nodeActions.graphZoom(scale);
+     nodeActions.changeGraphPosition(newGraphPosition);
 
     ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
     //var differenceBetweenMouseAndZoomOrigin = {
@@ -411,80 +454,6 @@ var App = React.createClass({
     //    nodeActions.changeGraphPosition(panningWhenZooming);
     //  }
     //}
-
-    var currentZoomScale = this.state.graphZoomScale;
-    var currentGraphPositionX = this.state.graphPosition.x;
-    var currentGraphPositionY = this.state.graphPosition.y;
-
-
-    var ZOOM_STEP = 0.03;
-    var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
-
-    if(zoomDirection === 'up'){
-      var newZoomScale = this.state.graphZoomScale + ZOOM_STEP;
-      //nodeActions.graphZoom(newScaleFactor);
-    }
-    else{
-      var newZoomScale = this.state.graphZoomScale - ZOOM_STEP;
-      //nodeActions.graphZoom(newScaleFactor);
-    }
-
-    var zoomFactor = newZoomScale / -50;
-    var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
-
-    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
-    this.lastScale = newZoomScale;
-
-    var scale = scaleDelta * currentZoomScale;
-
-    var mouseOnZoomX = e.nativeEvent.clientX;
-    var mouseOnZoomY = e.nativeEvent.clientY;
-
-   if(!this.state.lastMouseOnZoomX){
-     console.log("first zoom, so lastMouseOnZoom doesn't exist yet, set it here!");
-     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
-     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY}, function(){
-       var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
-       var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
-
-       var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
-       var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
-
-       var newGraphPosition = {
-         x: newGraphPositionX,
-         y: newGraphPositionY
-       };
-
-       nodeActions.graphZoom(scale);
-       nodeActions.changeGraphPosition(newGraphPosition);
-
-     });
-     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
-     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
-
-
-   }
-    else{
-     console.log("lastMouseOnZoomX & Y exist, so we've zoomed previously");
-     var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
-     var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
-
-     console.log(differenceBetweenMouseOnZoomX);
-
-     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
-     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
-
-     this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
-     this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
-
-     var newGraphPosition = {
-       x: newGraphPositionX,
-       y: newGraphPositionY
-     };
-
-     nodeActions.graphZoom(scale);
-     nodeActions.changeGraphPosition(newGraphPosition);
-   }
 
     //var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
     //var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
@@ -552,15 +521,16 @@ var App = React.createClass({
 
               />
               <TGenNode id="TGen1"
-                        height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.TGen1Position.x} y={this.state.TGen1Position.y}
+                        height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.TGen1Position.x} y={this.state.TGen1Position.y}
 
                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
               />
 
               <PCompNode id="PComp1" style={window.NodeContainerStyle}
-                         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
+                         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
               />
+
             </g>
 
 
@@ -579,3 +549,8 @@ var App = React.createClass({
 //);
 
 module.exports = App;
+
+//<LUTNode id="LUT1"
+//         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}
+//         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>

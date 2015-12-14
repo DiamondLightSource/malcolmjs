@@ -28,6 +28,8 @@ var sessionActions = require('../actions/sessionActions');
 var TheGraphDiamond = require('./theGraphDiamond.js');
 //var TheGraphDiamond = require('../the-graph-diamond/js/app.js');
 
+//var FlexboxTheme = require('./reactPanelsCustomTheme.js');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;

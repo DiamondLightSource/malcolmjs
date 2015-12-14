@@ -13,7 +13,9 @@ function getTGenNodeState(){
     //inports: NodeStore.getTGenNodeInportsState(),
     //outports: NodeStore.getTGenNodeOutportsState()
     selected: NodeStore.getTGen1SelectedState(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected()
+    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    defaultStyling: NodeStore.getTGenNodeStyling(),
+    selectedStyling: NodeStore.getSelectedTGenNodeStyling()
   }
 }
 
@@ -73,29 +75,44 @@ var TGenNode = React.createClass({
   },
 
   mouseDown: function(e){
-    console.log("Gate1 mouseDown");
+    console.log("TGen1 mouseDown");
     console.log(e.currentTarget);
     console.log(e.currentTarget.parentNode);
     nodeActions.draggedElement(e.currentTarget.parentNode);
   },
 
   render: function(){
+
+    if(this.state.selected === true){
+      var currentStyling = this.state.selectedStyling;
+    }
+    else{
+      var currentStyling = this.state.defaultStyling;
+    }
+
+    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
+    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
+    var inportPositions = currentStyling.ports.portPositions.inportPositions;
+    var portStyling = currentStyling.ports.portStyling;
+    var outportPositions = currentStyling.ports.portPositions.outportPositions;
+    var textPosition = currentStyling.text.textPositions;
+
     return (
       <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle} >
 
         <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown} >
           <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
 
-          <Rectangle id="TGenRectangle" height={NodeStylingProperties.height} width={NodeStylingProperties.width} x="3" y="2" rx={NodeStylingProperties.rx} ry={NodeStylingProperties.ry}
+          <Rectangle id="TGenRectangle" height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
           />
-          <Port cx={TGenNodePortStyling.inportPositions.ena.x} cy={TGenNodePortStyling.inportPositions.ena.y} r={TGenNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
-          <Port cx={TGenNodePortStyling.outportPositions.posn.x} cy={TGenNodePortStyling.outportPositions.posn.y} r={TGenNodePortStyling.portRadius}
-                style={{fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}/>
-          <InportEnaText x="10" y={NodeStylingProperties.height / 2 + 3} style={{MozUserSelect: 'none'}} />
-          <OutportPosnText x={NodeStylingProperties.width - 27} y={NodeStylingProperties.height / 2 + 3} style={{MozUserSelect: 'none'}} />
+          <Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius}
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}} />
+          <OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
 
           <NodeName x="17" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} />
         </g>

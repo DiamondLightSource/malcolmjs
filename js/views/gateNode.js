@@ -16,7 +16,7 @@ function getGateNodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
-    currentStyling: NodeStore.getGate1CurrentStyling()
+    //currentStyling: NodeStore.getGate1CurrentStyling()
   }
 }
 
@@ -174,12 +174,27 @@ var GateNode = React.createClass({
   },
 
   render: function(){
-    var rectangleStyling = this.state.currentStyling.rectangle.rectangleStyling;
-    var rectanglePosition = this.state.currentStyling.rectangle.rectanglePosition;
-    var inportPositions = this.state.currentStyling.ports.portPositions.inportPositions;
-    var portStyling = this.state.currentStyling.ports.portStyling;
-    var outportPositions = this.state.currentStyling.ports.portPositions.outportPositions;
-    var textPosition = this.state.currentStyling.text.textPositions;
+
+    if(this.state.selected === true){
+      var currentStyling = this.state.selectedStyling;
+    }
+    else{
+      var currentStyling = this.state.defaultStyling;
+    }
+
+    //var rectangleStyling = this.state.currentStyling.rectangle.rectangleStyling;
+    //var rectanglePosition = this.state.currentStyling.rectangle.rectanglePosition;
+    //var inportPositions = this.state.currentStyling.ports.portPositions.inportPositions;
+    //var portStyling = this.state.currentStyling.ports.portStyling;
+    //var outportPositions = this.state.currentStyling.ports.portPositions.outportPositions;
+    //var textPosition = this.state.currentStyling.text.textPositions;
+
+    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
+    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
+    var inportPositions = currentStyling.ports.portPositions.inportPositions;
+    var portStyling = currentStyling.ports.portStyling;
+    var outportPositions = currentStyling.ports.portPositions.outportPositions;
+    var textPosition = currentStyling.text.textPositions;
 
     return (
       <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}

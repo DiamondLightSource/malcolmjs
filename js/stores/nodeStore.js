@@ -14,7 +14,8 @@ var draggedElementID = null;
 
 var nodeSelectedStates = {
   Gate1: false,
-  TGen1: false
+  TGen1: false,
+  PComp1: false
 };
 
 function selectNode(Node){
@@ -92,6 +93,10 @@ var nodePositions = {
   PComp1: {
     x: 450,
     y: 200
+  },
+  LUT1: {
+    x: 250,
+    y: 150
   }
 };
 
@@ -120,13 +125,13 @@ var portPositionsForNodes = {
   TGenNodePortStyling: {
     inportPositions: {
       ena: {
-        x: 3,
+        x: 6,
         y: 33
       }
     },
     outportPositions: {
       posn: {
-        x: 65 + 3,
+        x: 68 + 3,
         y: 33
       }
     }
@@ -290,17 +295,261 @@ var SelectedGateNodeStyling = {
   }
 };
 
-var Gate1CurrentStyling = GateNodeStyling;
+//var Gate1CurrentStyling = GateNodeStyling;
+//
+//function checkGate1Styling(){
+//  if(nodeSelectedStates.Gate1 === true){
+//    Gate1CurrentStyling = SelectedGateNodeStyling;
+//  }
+//  else{
+//    Gate1CurrentStyling = GateNodeStyling
+//  }
+//  return Gate1CurrentStyling
+//}
 
-function checkGate1Styling(){
-  if(nodeSelectedStates.Gate1 === true){
-    Gate1CurrentStyling = SelectedGateNodeStyling;
+var TGenNodeStyling = {
+  rectangle: {
+    rectanglePosition: {
+      x : 6,
+      y : 2
+    },
+    rectangleStyling: {
+      height: 65,
+      width: 65,
+      rx: 7,
+      ry: 7
+    }
+  },
+  ports: {
+    portPositions: {
+      inportPositions: {
+        ena: {
+          x: 6,
+          y: 33
+        }
+      },
+      outportPositions: {
+        posn: {
+          x: 71,
+          y: 33
+        }
+      }
+    },
+    portStyling: {
+      portRadius: 2,
+      fill: 'black',
+      stroke: 'black',
+      strokeWidth: 1.65
+    }
+  },
+  text: {
+    textPositions: {
+      ena: {
+        x : 10,
+        y: 35.5
+      },
+      posn: {
+        x: 43,
+        y: 35.5
+      }
+    }
   }
-  else{
-    Gate1CurrentStyling = GateNodeStyling
+};
+
+var SelectedTGenNodeStyling = {
+  rectangle: {
+    rectanglePosition: {
+      x : 6,
+      y : 2
+    },
+    rectangleStyling: {
+      height: 65,
+      width: 65,
+      rx: 7,
+      ry: 7
+    }
+  },
+  ports: {
+    portPositions: {
+      inportPositions: {
+        ena: {
+          x: 6,
+          y: 33
+        }
+      },
+      outportPositions: {
+        posn: {
+          x: 71,
+          y: 33
+        }
+      }
+    },
+    portStyling: {
+      portRadius: 4,
+      fill: 'lightgrey',
+      stroke: 'black',
+      strokeWidth: 1.65
+    }
+  },
+  text: {
+    textPositions: {
+      ena: {
+        x : 12,
+        y: 35.5
+      },
+      posn: {
+        x: 41,
+        y: 35.5
+      }
+    }
   }
-  return Gate1CurrentStyling
-}
+};
+
+var PCompNodeStyling = {
+  rectangle: {
+    rectanglePosition: {
+      x : 6,
+      y : 2
+    },
+    rectangleStyling: {
+      height: 65,
+      width: 65,
+      rx: 7,
+      ry: 7
+    }
+  },
+  ports: {
+    portPositions: {
+      inportPositions: {
+        ena: {
+          x: 6,
+          y: 25
+        },
+        posn: {
+          x: 6,
+          y: 40
+        }
+      },
+      outportPositions: {
+        act: {
+          x: 71,
+          y: 25
+        },
+        out: {
+          x: 71,
+          y: 33
+        },
+        pulse: {
+          x: 71,
+          y: 40
+        }
+      },
+    },
+    portStyling: {
+      portRadius: 2,
+      fill: 'black',
+      stroke: 'black',
+      strokeWidth: 1.65
+    }
+  },
+  text: {
+    textPositions: {
+      ena: {
+        x : 13,
+        y: 26.5
+      },
+      posn: {
+        x : 13,
+        y: 44.5
+      },
+      act: {
+        x: 48,
+        y: 25
+      },
+      out: {
+        x: 48,
+        y: 35.5
+      },
+      pulse: {
+        x: 41,
+        y: 45
+      }
+    }
+  }
+};
+
+var SelectedPCompNodeStyling = {
+  rectangle: {
+    rectanglePosition: {
+      x : 6,
+      y : 2
+    },
+    rectangleStyling: {
+      height: 65,
+      width: 65,
+      rx: 7,
+      ry: 7
+    }
+  },
+  ports: {
+    portPositions: {
+      inportPositions: {
+        ena: {
+          x: 6,
+          y: 25
+        },
+        posn: {
+          x: 6,
+          y: 40
+        }
+      },
+      outportPositions: {
+        act: {
+          x: 71,
+          y: 25
+        },
+        out: {
+          x: 71,
+          y: 33
+        },
+        pulse: {
+          x: 71,
+          y: 40
+        }
+      },
+    },
+    portStyling: {
+      portRadius: 4,
+      fill: 'lightgrey',
+      stroke: 'black',
+      strokeWidth: 1.65
+    }
+  },
+  text: {
+    textPositions: {
+      ena: {
+        x : 15,
+        y: 26.5
+      },
+      posn: {
+        x : 15,
+        y: 44.5
+      },
+      act: {
+        x: 46,
+        y: 25
+      },
+      out: {
+        x: 46,
+        y: 35.5
+      },
+      pulse: {
+        x: 39,
+        y: 45
+      }
+    }
+  }
+};
 
 var graphPosition = {
   x: 0,
@@ -342,6 +591,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getPComp1Position: function(){
     return nodePositions.PComp1;
   },
+  getLUT1Position: function(){
+    return nodePositions.LUT1;
+  },
 
   /* For edge use */
   //getGateNodeOutPort: function(){
@@ -363,6 +615,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getTGen1SelectedState: function(){
     return nodeSelectedStates.TGen1;
   },
+  getPComp1SelectedState: function(){
+    return nodeSelectedStates.PComp1;
+  },
 
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
@@ -379,8 +634,21 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getSelectedGateNodeStyling: function(){
     return SelectedGateNodeStyling;
   },
-  getGate1CurrentStyling: function(){
-    return checkGate1Styling();
+  //getGate1CurrentStyling: function(){
+  //  return checkGate1Styling();
+  //},
+  getTGenNodeStyling: function(){
+    return TGenNodeStyling;
+  },
+  getSelectedTGenNodeStyling: function(){
+    return SelectedTGenNodeStyling;
+  },
+
+  getPCompNodeStyling: function(){
+    return PCompNodeStyling;
+  },
+  getSelectedPCompNodeStyling: function(){
+    return SelectedPCompNodeStyling;
   },
 
   getGraphPosition: function(){
@@ -447,8 +715,8 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.CHANGE_GRAPHPOSITION:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       graphPosition = item;
       nodeStore.emitChange();
       break;
@@ -461,8 +729,8 @@ AppDispatcher.register(function(payload){
     //    break;
 
     case appConstants.GRAPH_ZOOM:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       graphZoomScale = item;
       nodeStore.emitChange();
       break;
