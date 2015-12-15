@@ -134,7 +134,8 @@ var GateNode = React.createClass({
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('GateRectangle');
+    //var stringVersionOfRectangleName = String(this.props.RectangleName);
+    var test = document.getElementById(this.props.RectangleName);
     if(this.state.selected === true){
 
     }
@@ -145,7 +146,9 @@ var GateNode = React.createClass({
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('GateRectangle');
+    //console.log(this.props.RectangleName);
+    //var stringVersionOfRectangleName = String(this.props.RectangleName);
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -198,6 +201,8 @@ var GateNode = React.createClass({
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
+    console.log(this.props);
+
     return (
       <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
         //onMouseDown={this.mouseDown} onMouseUp={this.mouseUp} onMouseLeave={this.mouseLeave} onMouseMove={this.mouseMove}
@@ -211,7 +216,7 @@ var GateNode = React.createClass({
           <rect id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}} /* To allow the cursor to change when hovering over the entire node container */
           />
 
-          <Rectangle id="GateRectangle" height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y}
+          <Rectangle id={this.props.RectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y}
                      rx={7} ry={7}
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
@@ -231,7 +236,7 @@ var GateNode = React.createClass({
 
           <OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}}  />
 
-          <NodeName x="20" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} />
+          <NodeName x="20" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}}  NodeName={this.props.NodeName} />
           <NodeType x="25" y={NodeStylingProperties.height + 33} style={{MozUserSelect: 'none'}} />
 
         </g>
@@ -304,7 +309,7 @@ var OutportOutText = React.createClass({
 var NodeName = React.createClass({
   render: function(){
     return(
-      <text {...this.props} fontSize="15px" fontFamily="Verdana">Arm</text>
+      <text {...this.props} fontSize="15px" fontFamily="Verdana">{this.props.NodeName}</text>
     )
   }
 });

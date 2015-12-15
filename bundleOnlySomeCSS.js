@@ -859,23 +859,43 @@ var allNodeInfo = {
 
 var nodePositions = {
   Gate1: {
-    x: 50,
-    y: 100
+    position: {
+      x: 50,
+      y: 100,
+    },
+    name: "Arm"
   },
 
   TGen1: {
-    x: 250,
-    y: 10
+    position: {
+      x: 250,
+      y: 10
+    }
   },
   PComp1: {
-    x: 450,
-    y: 200
+    position: {
+      x: 450,
+      y: 200,
+    },
+    name: "LinePulse"
   },
-  LUT1: {
-    x: 250,
-    y: 150
-  }
+  //LUT1: {
+  //  x: 250,
+  //  y: 150
+  //}
+  //PComp2: {
+  //  x: 70,
+  //  y: 200,
+  //  name: "FwdLineGate"
+  //}
 };
+
+function appendToNodePositions(NodeInfo){
+  var nodePropertyName = function(){
+    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
+  };
+  //nodePositions[nodePropertyName()] = NodeInfo;
+}
 
 var portPositionsForNodes = {
   portRadius: 2,
@@ -939,21 +959,21 @@ function updateNodePosition(NodeInfo){
 var allPossibleNodes = {
 
   'Gate1': function(NodeInfo){
-    nodePositions.Gate1 = {
-      x: nodePositions.Gate1.x + NodeInfo.x,
-      y: nodePositions.Gate1.y + NodeInfo.y
+    nodePositions.Gate1.position = {
+      x: nodePositions.Gate1.position.x + NodeInfo.x,
+      y: nodePositions.Gate1.position.y + NodeInfo.y
     };
   },
   'TGen1': function(NodeInfo){
-    nodePositions.TGen1 = {
-      x: nodePositions.TGen1.x + NodeInfo.x,
-      y: nodePositions.TGen1.y + NodeInfo.y
+    nodePositions.TGen1.position = {
+      x: nodePositions.TGen1.position.x + NodeInfo.x,
+      y: nodePositions.TGen1.position.y + NodeInfo.y
     }
   },
   'PComp1': function(NodeInfo){
-    nodePositions.PComp1 = {
-      x: nodePositions.PComp1.x + NodeInfo.x,
-      y: nodePositions.PComp1.y + NodeInfo.y
+    nodePositions.PComp1.position = {
+      x: nodePositions.PComp1.position.x + NodeInfo.x,
+      y: nodePositions.PComp1.position.y + NodeInfo.y
     }
   }
 };
@@ -1360,17 +1380,31 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
 
   getGate1Position: function(){
-    return nodePositions.Gate1;
+    return nodePositions.Gate1.position;
   },
   getTGen1Position: function(){
-    return nodePositions.TGen1;
+    return nodePositions.TGen1.position;
   },
   getPComp1Position: function(){
-    return nodePositions.PComp1;
+    return nodePositions.PComp1.position;
   },
   getLUT1Position: function(){
     return nodePositions.LUT1;
   },
+  getAllNodePositions: function(){
+    return nodePositions;
+  },
+  //getAnyNodePosition: function(NodeId){
+  //  if(nodePositions[NodeId] === undefined || null){
+  //    console.log("that node's position isn't here, something's gone wrong...");
+  //    console.log(nodePositions);
+  //  }
+  //  else{
+  //    console.log("here's that node's position!");
+  //    console.log(nodePositions[NodeId]);
+  //    return nodePositions[NodeId];
+  //  }
+  //},
 
   /* For edge use */
   //getGateNodeOutPort: function(){
@@ -1386,18 +1420,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return tgenNodeInports.ena;
   },
 
-  //getGate1SelectedState: function(){
-  //  return nodeSelectedStates.Gate1;
-  //},
-  //getTGen1SelectedState: function(){
-  //  return nodeSelectedStates.TGen1;
-  //},
-  getPComp1SelectedState: function(){
-    return nodeSelectedStates.PComp1;
-  },
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
       console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      console.log(NodeId);
       console.log(nodeSelectedStates[NodeId]);
     }
     else{
@@ -1406,7 +1432,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
       return nodeSelectedStates[NodeId];
     }
   },
-
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
   },
@@ -1422,16 +1447,12 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getSelectedGateNodeStyling: function(){
     return SelectedGateNodeStyling;
   },
-  //getGate1CurrentStyling: function(){
-  //  return checkGate1Styling();
-  //},
   getTGenNodeStyling: function(){
     return TGenNodeStyling;
   },
   getSelectedTGenNodeStyling: function(){
     return SelectedTGenNodeStyling;
   },
-
   getPCompNodeStyling: function(){
     return PCompNodeStyling;
   },
@@ -1571,6 +1592,20 @@ module.exports = nodeStore;
 //    }
 //
 //};
+
+//getGate1SelectedState: function(){
+//  return nodeSelectedStates.Gate1;
+//},
+//getTGen1SelectedState: function(){
+//  return nodeSelectedStates.TGen1;
+//},
+//getPComp1SelectedState: function(){
+//  return nodeSelectedStates.PComp1;
+//},
+
+//getGate1CurrentStyling: function(){
+//  return checkGate1Styling();
+//},
 
 },{"../../node_modules/object-assign/index.js":37,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":32}],14:[function(require,module,exports){
 /**
@@ -3177,7 +3212,8 @@ var GateNode = React.createClass({displayName: "GateNode",
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('GateRectangle');
+    //var stringVersionOfRectangleName = String(this.props.RectangleName);
+    var test = document.getElementById(this.props.RectangleName);
     if(this.state.selected === true){
 
     }
@@ -3188,7 +3224,9 @@ var GateNode = React.createClass({displayName: "GateNode",
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('GateRectangle');
+    //console.log(this.props.RectangleName);
+    //var stringVersionOfRectangleName = String(this.props.RectangleName);
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -3241,6 +3279,8 @@ var GateNode = React.createClass({displayName: "GateNode",
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
+    console.log(this.props);
+
     return (
       React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle
         //onMouseDown={this.mouseDown} onMouseUp={this.mouseUp} onMouseLeave={this.mouseLeave} onMouseMove={this.mouseMove}
@@ -3254,7 +3294,7 @@ var GateNode = React.createClass({displayName: "GateNode",
           React.createElement("rect", {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
           ), 
 
-          React.createElement(Rectangle, {id: "GateRectangle", height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
+          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
                      rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
@@ -3274,7 +3314,7 @@ var GateNode = React.createClass({displayName: "GateNode",
 
           React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
 
-          React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}}), 
+          React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, NodeName: this.props.NodeName}), 
           React.createElement(NodeType, {x: "25", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
 
         )
@@ -3347,7 +3387,7 @@ var OutportOutText = React.createClass({displayName: "OutportOutText",
 var NodeName = React.createClass({displayName: "NodeName",
   render: function(){
     return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), "Arm")
+      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), this.props.NodeName)
     )
   }
 });
@@ -3980,13 +4020,13 @@ var PCompNode = React.createClass({displayName: "PCompNode",
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('PCompRectangle');
+    var test = document.getElementById(this.props.RectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('PCompRectangle');
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -4033,7 +4073,7 @@ var PCompNode = React.createClass({displayName: "PCompNode",
       React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}), 
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
           React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-          React.createElement(Rectangle, {id: "PCompRectangle", height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
+          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 
@@ -4057,7 +4097,7 @@ var PCompNode = React.createClass({displayName: "PCompNode",
           React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
           React.createElement(OutportPulseText, {x: textPosition.pulse.x, y: textPosition.pulse.y, style: {MozUserSelect: 'none'}}), 
 
-          React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}}), 
+          React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}, NodeName: this.props.NodeName}), 
           React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}})
 
         )
@@ -4152,7 +4192,7 @@ var OutportPulseText = React.createClass({displayName: "OutportPulseText",
 var NodeName = React.createClass({displayName: "NodeName",
   render: function(){
     return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), "LinePulse")
+      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), this.props.NodeName)
     )
   }
 });
@@ -4380,7 +4420,9 @@ var TGenNode = React.createClass({displayName: "TGenNode",
 
   _onChange: function(){
     this.setState(getTGenNodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))})
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
+
   },
 
   componentDidMount: function(){
@@ -4391,7 +4433,11 @@ var TGenNode = React.createClass({displayName: "TGenNode",
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
     this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
       console.log(this.state.selected);
-    });
+
+    console.log("Tgen has been mounted"); });
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.nodePosition);
+    //});
   },
 
   componentWillUnmount: function(){
@@ -4408,13 +4454,13 @@ var TGenNode = React.createClass({displayName: "TGenNode",
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('TGenRectangle');
+    var test = document.getElementById(this.props.RectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('TGenRectangle');
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -4455,12 +4501,13 @@ var TGenNode = React.createClass({displayName: "TGenNode",
     var textPosition = currentStyling.text.textPositions;
 
     return (
-      React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}), 
+      React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle
+            }), 
 
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
           React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
 
-          React.createElement(Rectangle, {id: "TGenRectangle", height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
+          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
           ), 
@@ -4622,10 +4669,11 @@ var AppContainerStyle = {
 
 function getAppState(){
   return{
-    Gate1Position: NodeStore.getGate1Position(),
-    TGen1Position: NodeStore.getTGen1Position(),
-    PComp1Position: NodeStore.getPComp1Position(),
-    LUT1Position: NodeStore.getLUT1Position(),
+    //Gate1Position: NodeStore.getGate1Position(),
+    //TGen1Position: NodeStore.getTGen1Position(),
+    //PComp1Position: NodeStore.getPComp1Position(),
+    //LUT1Position: NodeStore.getLUT1Position(),
+    allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale()
@@ -5055,6 +5103,54 @@ var App = React.createClass({displayName: "App",
     var scale = this.state.graphZoomScale;
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
+
+    //var regExpTest = /abc/;
+    //var testString = "I know my abc's";
+    //var anotherTestString = "Grab crab";
+    //console.log(regExpTest.test(testString));
+    //console.log(regExpTest.test(anotherTestString));
+
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var allNodePositions = this.state.allNodePositions;
+    var nodes = [];
+
+    for(var node in allNodePositions){
+      console.log("we have a gate node!");
+      var nodeName = allNodePositions[node].name;
+      var rectangleString = "Rectangle";
+      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+      console.log(rectangleName);
+      if(gateNodeRegExp.test(node) === true){
+        nodes.push(React.createElement(GateNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
+                             NodeName: nodeName, RectangleName: rectangleName, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(tgenNodeRegExp.test(node) === true){
+        console.log("we have a tgen node!");
+        nodes.push(React.createElement(TGenNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
+                             RectangleName: rectangleName, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(pcompNodeRegExp.test(node) === true){
+        console.log("we have a pcomp node!");
+        nodes.push(React.createElement(PCompNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
+                              NodeName: nodeName, RectangleName: rectangleName, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(lutNodeRegExp.test(node) === true){
+        console.log("we have an lut node!");
+        nodes.push(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else{
+        console.log("no match to any node type, something's wrong?");
+      }
+    }
+
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
         React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
@@ -5075,24 +5171,8 @@ var App = React.createClass({displayName: "App",
             ), 
 
             React.createElement("g", {id: "NodesGroup"}, 
-              React.createElement(GateNode, {id: "Gate1", 
-                        height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: this.state.Gate1Position.x, y: this.state.Gate1Position.y, 
-                //onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
 
-                        onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
-                //onMouseMove={this.state.moveFunction}
-
-              ), 
-              React.createElement(TGenNode, {id: "TGen1", 
-                        height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: this.state.TGen1Position.x, y: this.state.TGen1Position.y, 
-
-                        onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
-              ), 
-
-              React.createElement(PCompNode, {id: "PComp1", style: window.NodeContainerStyle, 
-                         height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: this.state.PComp1Position.x, y: this.state.PComp1Position.y, 
-                         onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
-              )
+              nodes
 
             )
 
@@ -5116,6 +5196,25 @@ module.exports = App;
 //<LUTNode id="LUT1"
 //         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}
 //         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
+
+//<GateNode id="Gate1"
+//          height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.Gate1Position.x} y={this.state.Gate1Position.y}
+//  //onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
+//
+//          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//  //onMouseMove={this.state.moveFunction}
+//
+///>
+//<TGenNode id="TGen1"
+//height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.TGen1Position.x} y={this.state.TGen1Position.y}
+//
+//onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
+//
+//<PCompNode id="PComp1" style={window.NodeContainerStyle}
+//height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
+//onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
 
 },{"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":19,"./gateNode.js":21,"./lutNode.js":23,"./pcompNode.js":25,"./tgenNode.js":28,"react":215}],30:[function(require,module,exports){

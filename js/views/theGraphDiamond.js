@@ -59,10 +59,11 @@ var AppContainerStyle = {
 
 function getAppState(){
   return{
-    Gate1Position: NodeStore.getGate1Position(),
-    TGen1Position: NodeStore.getTGen1Position(),
-    PComp1Position: NodeStore.getPComp1Position(),
-    LUT1Position: NodeStore.getLUT1Position(),
+    //Gate1Position: NodeStore.getGate1Position(),
+    //TGen1Position: NodeStore.getTGen1Position(),
+    //PComp1Position: NodeStore.getPComp1Position(),
+    //LUT1Position: NodeStore.getLUT1Position(),
+    allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale()
@@ -492,6 +493,55 @@ var App = React.createClass({
     var scale = this.state.graphZoomScale;
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
+
+    //var regExpTest = /abc/;
+    //var testString = "I know my abc's";
+    //var anotherTestString = "Grab crab";
+    //console.log(regExpTest.test(testString));
+    //console.log(regExpTest.test(anotherTestString));
+
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var allNodePositions = this.state.allNodePositions;
+    var nodes = [];
+
+    for(var node in allNodePositions){
+      console.log("we have a gate node!");
+      var nodeName = allNodePositions[node].name;
+      var rectangleString = "Rectangle";
+      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+      console.log(rectangleName);
+      if(gateNodeRegExp.test(node) === true){
+        nodes.push(<GateNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
+                             NodeName={nodeName} RectangleName={rectangleName}
+                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(tgenNodeRegExp.test(node) === true){
+        console.log("we have a tgen node!");
+        nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
+                             RectangleName={rectangleName}
+                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(pcompNodeRegExp.test(node) === true){
+        console.log("we have a pcomp node!");
+        nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
+                              NodeName={nodeName} RectangleName={rectangleName}
+                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(lutNodeRegExp.test(node) === true){
+        console.log("we have an lut node!");
+        nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
+                            NodeName={nodeName} RectangleName={rectangleName}
+                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else{
+        console.log("no match to any node type, something's wrong?");
+      }
+    }
+
     return(
       <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
@@ -512,24 +562,8 @@ var App = React.createClass({
             </g>
 
             <g id="NodesGroup" >
-              <GateNode id="Gate1"
-                        height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.Gate1Position.x} y={this.state.Gate1Position.y}
-                //onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
 
-                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-                //onMouseMove={this.state.moveFunction}
-
-              />
-              <TGenNode id="TGen1"
-                        height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.TGen1Position.x} y={this.state.TGen1Position.y}
-
-                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-              />
-
-              <PCompNode id="PComp1" style={window.NodeContainerStyle}
-                         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
-                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-              />
+              {nodes}
 
             </g>
 
@@ -553,4 +587,23 @@ module.exports = App;
 //<LUTNode id="LUT1"
 //         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}
 //         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
+
+//<GateNode id="Gate1"
+//          height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.Gate1Position.x} y={this.state.Gate1Position.y}
+//  //onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
+//
+//          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//  //onMouseMove={this.state.moveFunction}
+//
+///>
+//<TGenNode id="TGen1"
+//height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.TGen1Position.x} y={this.state.TGen1Position.y}
+//
+//onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
+//
+//<PCompNode id="PComp1" style={window.NodeContainerStyle}
+//height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
+//onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>

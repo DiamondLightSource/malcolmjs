@@ -26,7 +26,9 @@ var TGenNode = React.createClass({
 
   _onChange: function(){
     this.setState(getTGenNodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))})
+    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
+
   },
 
   componentDidMount: function(){
@@ -37,7 +39,11 @@ var TGenNode = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
     this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
       console.log(this.state.selected);
-    });
+
+    console.log("Tgen has been mounted"); });
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.nodePosition);
+    //});
   },
 
   componentWillUnmount: function(){
@@ -54,13 +60,13 @@ var TGenNode = React.createClass({
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('TGenRectangle');
+    var test = document.getElementById(this.props.RectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('TGenRectangle');
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -101,12 +107,13 @@ var TGenNode = React.createClass({
     var textPosition = currentStyling.text.textPositions;
 
     return (
-      <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle} >
+      <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
+            >
 
         <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown} >
           <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
 
-          <Rectangle id="TGenRectangle" height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
+          <Rectangle id={this.props.RectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
           />

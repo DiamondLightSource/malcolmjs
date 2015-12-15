@@ -90,23 +90,43 @@ var allNodeInfo = {
 
 var nodePositions = {
   Gate1: {
-    x: 50,
-    y: 100
+    position: {
+      x: 50,
+      y: 100,
+    },
+    name: "Arm"
   },
 
   TGen1: {
-    x: 250,
-    y: 10
+    position: {
+      x: 250,
+      y: 10
+    }
   },
   PComp1: {
-    x: 450,
-    y: 200
+    position: {
+      x: 450,
+      y: 200,
+    },
+    name: "LinePulse"
   },
-  LUT1: {
-    x: 250,
-    y: 150
-  }
+  //LUT1: {
+  //  x: 250,
+  //  y: 150
+  //}
+  //PComp2: {
+  //  x: 70,
+  //  y: 200,
+  //  name: "FwdLineGate"
+  //}
 };
+
+function appendToNodePositions(NodeInfo){
+  var nodePropertyName = function(){
+    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
+  };
+  //nodePositions[nodePropertyName()] = NodeInfo;
+}
 
 var portPositionsForNodes = {
   portRadius: 2,
@@ -170,21 +190,21 @@ function updateNodePosition(NodeInfo){
 var allPossibleNodes = {
 
   'Gate1': function(NodeInfo){
-    nodePositions.Gate1 = {
-      x: nodePositions.Gate1.x + NodeInfo.x,
-      y: nodePositions.Gate1.y + NodeInfo.y
+    nodePositions.Gate1.position = {
+      x: nodePositions.Gate1.position.x + NodeInfo.x,
+      y: nodePositions.Gate1.position.y + NodeInfo.y
     };
   },
   'TGen1': function(NodeInfo){
-    nodePositions.TGen1 = {
-      x: nodePositions.TGen1.x + NodeInfo.x,
-      y: nodePositions.TGen1.y + NodeInfo.y
+    nodePositions.TGen1.position = {
+      x: nodePositions.TGen1.position.x + NodeInfo.x,
+      y: nodePositions.TGen1.position.y + NodeInfo.y
     }
   },
   'PComp1': function(NodeInfo){
-    nodePositions.PComp1 = {
-      x: nodePositions.PComp1.x + NodeInfo.x,
-      y: nodePositions.PComp1.y + NodeInfo.y
+    nodePositions.PComp1.position = {
+      x: nodePositions.PComp1.position.x + NodeInfo.x,
+      y: nodePositions.PComp1.position.y + NodeInfo.y
     }
   }
 };
@@ -591,17 +611,31 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
 
   getGate1Position: function(){
-    return nodePositions.Gate1;
+    return nodePositions.Gate1.position;
   },
   getTGen1Position: function(){
-    return nodePositions.TGen1;
+    return nodePositions.TGen1.position;
   },
   getPComp1Position: function(){
-    return nodePositions.PComp1;
+    return nodePositions.PComp1.position;
   },
   getLUT1Position: function(){
     return nodePositions.LUT1;
   },
+  getAllNodePositions: function(){
+    return nodePositions;
+  },
+  //getAnyNodePosition: function(NodeId){
+  //  if(nodePositions[NodeId] === undefined || null){
+  //    console.log("that node's position isn't here, something's gone wrong...");
+  //    console.log(nodePositions);
+  //  }
+  //  else{
+  //    console.log("here's that node's position!");
+  //    console.log(nodePositions[NodeId]);
+  //    return nodePositions[NodeId];
+  //  }
+  //},
 
   /* For edge use */
   //getGateNodeOutPort: function(){
@@ -620,6 +654,7 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
       console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      console.log(NodeId);
       console.log(nodeSelectedStates[NodeId]);
     }
     else{
@@ -628,7 +663,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
       return nodeSelectedStates[NodeId];
     }
   },
-
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
   },
@@ -650,7 +684,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getSelectedTGenNodeStyling: function(){
     return SelectedTGenNodeStyling;
   },
-
   getPCompNodeStyling: function(){
     return PCompNodeStyling;
   },

@@ -39,13 +39,13 @@ var PCompNode = React.createClass({
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById('PCompRectangle');
+    var test = document.getElementById(this.props.RectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById('PCompRectangle');
+    var test = document.getElementById(this.props.RectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -92,7 +92,7 @@ var PCompNode = React.createClass({
       <svg {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}  >
         <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown}  >
           <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
-          <Rectangle id="PCompRectangle" height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
+          <Rectangle id={this.props.RectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 
@@ -116,7 +116,7 @@ var PCompNode = React.createClass({
           <OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
           <OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
 
-          <NodeName x="0" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}}  />
+          <NodeName x="0" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}} NodeName={this.props.NodeName} />
           <NodeType x="22" y={NodeStylingProperties.height + 33} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}}  />
 
         </g>
@@ -211,7 +211,7 @@ var OutportPulseText = React.createClass({
 var NodeName = React.createClass({
   render: function(){
     return(
-      <text {...this.props} fontSize="15px" fontFamily="Verdana">LinePulse</text>
+      <text {...this.props} fontSize="15px" fontFamily="Verdana">{this.props.NodeName}</text>
     )
   }
 });
