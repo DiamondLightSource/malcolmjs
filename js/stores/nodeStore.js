@@ -66,6 +66,37 @@ function checkIfAnyNodesAreSelected(){
   return areAnyNodesSelected;
 }
 
+var edgeSelectedStates = {
+  Gate1OutTGen1Ena: false
+};
+
+function selectEdge(Edge){
+  edgeSelectedStates[Edge] = true;
+}
+
+function checkIfAnyEdgesAreSelected(){
+  var areAnyEdgesSelected = null;
+  for(var edge in edgeSelectedStates){
+    if(edgeSelectedStates[edge] === true){
+      console.log(edgeSelectedStates[edge]);
+      areAnyEdgesSelected = true;
+      break;
+    }
+    else{
+      areAnyEdgesSelected = false;
+    }
+  }
+  console.log(areAnyEdgesSelected);
+  return areAnyEdgesSelected;
+}
+
+function deselectAllEdges(){
+  for(var edge in edgeSelectedStates){
+    edgeSelectedStates[edge] = false
+  }
+  console.log(edgeSelectedStates);
+}
+
 var allNodeInfo = {
 
   Gate1: {
@@ -654,17 +685,20 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
       console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
-      console.log(NodeId);
-      console.log(nodeSelectedStates[NodeId]);
+      //console.log(NodeId);
+      //console.log(nodeSelectedStates[NodeId]);
     }
     else{
-      console.log("the state of that nod exists, passing it now");
-      console.log(nodeSelectedStates[NodeId]);
+      //console.log("the state of that nod exists, passing it now");
+      //console.log(nodeSelectedStates[NodeId]);
       return nodeSelectedStates[NodeId];
     }
   },
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
+  },
+  getIfEdgeIsSelected: function(){
+    return edgeSelectedStates.Gate1OutTGen1Ena;
   },
 
   getDraggedElement: function(){
@@ -751,6 +785,21 @@ AppDispatcher.register(function(payload){
       deselectAllNodes();
       console.log(nodeSelectedStates.Gate1);
       console.log(nodeSelectedStates.TGen1);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.SELECT_EDGE:
+      console.log(payload);
+      console.log(item);
+      selectEdge(item);
+      console.log(edgeSelectedStates);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLEDGES:
+      console.log(payload);
+      console.log(item);
+      deselectAllEdges();
       nodeStore.emitChange();
       break;
 

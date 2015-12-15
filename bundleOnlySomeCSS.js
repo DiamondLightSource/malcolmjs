@@ -99,6 +99,18 @@ var nodeActions = {
       item: item
     })
   },
+  selectEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.SELECT_EDGE,
+      item: item
+    })
+  },
+  deselectAllEdges: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLEDGES,
+      item: item
+    })
+  },
 
   //changeGate1Styling: function(item){
   //    AppDispatcher.handleAction({
@@ -484,6 +496,8 @@ var appConstants = {
 
   SELECT_NODE: "SELECT_NODE",
   DESELECT_ALLNODES: "DESELECT_ALLNODES",
+  SELECT_EDGE: "SELECT_EDGE",
+  DESELECT_ALLEDGES: "DESELECT_ALLEDGES",
   //CHANGE_GATE1STYLING: "CHANGE_GATE1STYLING"
   CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
   GRAPH_ZOOM: "GRAPH_ZOOM"
@@ -833,6 +847,37 @@ function checkIfAnyNodesAreSelected(){
   }
   //console.log(areAnyNodesSelected);
   return areAnyNodesSelected;
+}
+
+var edgeSelectedStates = {
+  Gate1OutTGen1Ena: false
+};
+
+function selectEdge(Edge){
+  edgeSelectedStates[Edge] = true;
+}
+
+function checkIfAnyEdgesAreSelected(){
+  var areAnyEdgesSelected = null;
+  for(var edge in edgeSelectedStates){
+    if(edgeSelectedStates[edge] === true){
+      console.log(edgeSelectedStates[edge]);
+      areAnyEdgesSelected = true;
+      break;
+    }
+    else{
+      areAnyEdgesSelected = false;
+    }
+  }
+  console.log(areAnyEdgesSelected);
+  return areAnyEdgesSelected;
+}
+
+function deselectAllEdges(){
+  for(var edge in edgeSelectedStates){
+    edgeSelectedStates[edge] = false
+  }
+  console.log(edgeSelectedStates);
 }
 
 var allNodeInfo = {
@@ -1423,17 +1468,20 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
       console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
-      console.log(NodeId);
-      console.log(nodeSelectedStates[NodeId]);
+      //console.log(NodeId);
+      //console.log(nodeSelectedStates[NodeId]);
     }
     else{
-      console.log("the state of that nod exists, passing it now");
-      console.log(nodeSelectedStates[NodeId]);
+      //console.log("the state of that nod exists, passing it now");
+      //console.log(nodeSelectedStates[NodeId]);
       return nodeSelectedStates[NodeId];
     }
   },
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
+  },
+  getIfEdgeIsSelected: function(){
+    return edgeSelectedStates.Gate1OutTGen1Ena;
   },
 
   getDraggedElement: function(){
@@ -1520,6 +1568,21 @@ AppDispatcher.register(function(payload){
       deselectAllNodes();
       console.log(nodeSelectedStates.Gate1);
       console.log(nodeSelectedStates.TGen1);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.SELECT_EDGE:
+      console.log(payload);
+      console.log(item);
+      selectEdge(item);
+      console.log(edgeSelectedStates);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLEDGES:
+      console.log(payload);
+      console.log(item);
+      deselectAllEdges();
       nodeStore.emitChange();
       break;
 
@@ -2950,7 +3013,9 @@ module.exports = Dropdown;
  */
 
 var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
 
 function getEdgeState(){
   return {
@@ -2960,7 +3025,8 @@ function getEdgeState(){
     Gate1Position: NodeStore.getGate1Position(),
     TGen1Position: NodeStore.getTGen1Position(),
     gateNodeOut: NodeStore.getGateNodeOutportOut(),
-    tgenNodeEna: NodeStore.getTGenNodeInportEna()
+    tgenNodeEna: NodeStore.getTGenNodeInportEna(),
+    selected: NodeStore.getIfEdgeIsSelected()
   }
 }
 
@@ -2973,18 +3039,51 @@ var Edge = React.createClass({displayName: "Edge",
   },
   componentDidMount: function(){
     NodeStore.addChangeListener(this._onChange);
+    ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
   },
   componentWillUnmount: function(){
     NodeStore.removeChangeListener(this._onChange);
   },
+  mouseOver: function(){
+    var test = document.getElementById('outerLine');
+    if(this.state.selected === true){
+
+    }
+    else{
+      test.style.stroke = '#797979'
+    }
+  },
+  mouseLeave: function(){
+    var test = document.getElementById('outerLine');
+    if(this.state.selected === true){
+      console.log("this.state.selected is true, so don't reset the border colour");
+    }
+    else{
+      console.log("this.state.selected is false");
+      test.style.stroke = 'lightgrey'
+    }
+  },
+  edgeSelect: function(){
+    console.log("edge has been selected");
+    nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
+  },
+
   render:function(){
     return(
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
-        React.createElement(Line, {height: "100", width: "100", 
+
+        React.createElement(Line, {id: "outerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+              x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y, 
+              x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y, 
+              style: {strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
+
+        React.createElement(Line, {id: "innerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
               x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y, 
               x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y, 
               style: {strokeWidth: '5', stroke:"orange"}})
+
+
       )
     )
   }
@@ -3000,7 +3099,7 @@ var Line = React.createClass({displayName: "Line",
 
 module.exports = Edge;
 
-},{"../../node_modules/react/react":215,"../stores/nodeStore.js":13}],20:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/react":215,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4912,6 +5011,7 @@ var App = React.createClass({displayName: "App",
   deselect: function () {
     //console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
+    nodeActions.deselectAllEdges("deselect all edges");
   },
 
   debounce: function (func, wait, immediate) {
@@ -5019,80 +5119,23 @@ var App = React.createClass({displayName: "App",
 
      nodeActions.graphZoom(scale);
      nodeActions.changeGraphPosition(newGraphPosition);
-
-    ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
-    //var differenceBetweenMouseAndZoomOrigin = {
-    //  //x: Math.abs(this.state.graphPosition.x - mouseOnZoom.x),
-    //  //y: Math.abs(this.state.graphPosition.y - mouseOnZoom.y)
-    //  x: Math.abs(10 - mouseOnZoom.x),
-    //  y: Math.abs(40 - mouseOnZoom.y)
-    //};
-
-    //console.log(differenceBetweenMouseAndZoomOrigin);
-
-    //var panWhenZoomingMultiplier = 0.1;
-
-    //if (mouseOnZoom.x > this.state.graphPosition.x) {
-    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //
-    //}
-    //else if(mouseOnZoom.x < this.state.graphPosition.x){
-    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //}
-
-    //var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
-    //var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
-    //
-    //console.log(differenceBetweenMouseOnZoomX);
-    //
-    //var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX + differenceBetweenMouseOnZoomX;
-    //var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY + differenceBetweenMouseOnZoomY;
-    //
-    //this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
-    //this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
-    //
-    //var newGraphPosition = {
-    //  x: newGraphPositionX,
-    //  y: newGraphPositionY
-    //};
-    //
-    //nodeActions.graphZoom(scale);
-    //nodeActions.changeGraphPosition(newGraphPosition);
-
-
-
-
-    /* Next bit takes care of if the scale factor is zero I think */
   },
 
   isZoomNegative: function(n){
     return ((n =+n) || 1/n) < 0;
+  },
+
+  edgeMouseDown: function(e){
+    console.log("mouseDown on an edge!");
+  },
+  edgeMouseUp: function(e){
+    console.log("mouseUp on an edge!");
+    nodeActions.selectEdge(e.currentTarget.id); /* Really simple way to select an edge, but when the mous events get more comples I'm probably gonna have to use events */
+    this.setState({selectedEdge: e.currentTarget}, function(){
+      console.log(this.state.selectedEdge);
+      this.state.selectedEdge.dispatchEvent(EdgeSelect);
+    })
+
   },
 
 
@@ -5119,32 +5162,33 @@ var App = React.createClass({displayName: "App",
     var nodes = [];
 
     for(var node in allNodePositions){
-      console.log("we have a gate node!");
+      //console.log("we have a gate node!");
       var nodeName = allNodePositions[node].name;
       var rectangleString = "Rectangle";
       var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      console.log(rectangleName);
+      //console.log(rectangleName);
       if(gateNodeRegExp.test(node) === true){
         nodes.push(React.createElement(GateNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
                              NodeName: nodeName, RectangleName: rectangleName, 
                              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
       }
       else if(tgenNodeRegExp.test(node) === true){
-        console.log("we have a tgen node!");
+        //console.log("we have a tgen node!");
         nodes.push(React.createElement(TGenNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
                              RectangleName: rectangleName, 
                              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
       }
       else if(pcompNodeRegExp.test(node) === true){
-        console.log("we have a pcomp node!");
+        //console.log("we have a pcomp node!");
         nodes.push(React.createElement(PCompNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
                               NodeName: nodeName, RectangleName: rectangleName, 
                              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
       }
       else if(lutNodeRegExp.test(node) === true){
-        console.log("we have an lut node!");
+        //console.log("we have an lut node!");
         nodes.push(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+                            NodeName: nodeName, RectangleName: rectangleName, 
+                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
       }
       else{
         console.log("no match to any node type, something's wrong?");
@@ -5155,8 +5199,8 @@ var App = React.createClass({displayName: "App",
       React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
         React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
               onClick: this.deselect, onMouseDown: this.panMouseDown, onMouseUp: this.panMouseUp, onWheel: this.wheelZoom, 
-              onMouseMove: this.state.panMoveFunction
-        }), 
+              onMouseMove: this.state.panMoveFunction}
+        ), 
         React.createElement("svg", {id: "appContainer", style: AppContainerStyle
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
@@ -5167,7 +5211,8 @@ var App = React.createClass({displayName: "App",
 
 
             React.createElement("g", {id: "EdgesGroup"}, 
-              React.createElement(Edge, null)
+              React.createElement(Edge, {id: "Gate1OutTGen1Ena", 
+              onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp})
             ), 
 
             React.createElement("g", {id: "NodesGroup"}, 
@@ -5216,6 +5261,76 @@ module.exports = App;
 //height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
 //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
+//var differenceBetweenMouseAndZoomOrigin = {
+//  //x: Math.abs(this.state.graphPosition.x - mouseOnZoom.x),
+//  //y: Math.abs(this.state.graphPosition.y - mouseOnZoom.y)
+//  x: Math.abs(10 - mouseOnZoom.x),
+//  y: Math.abs(40 - mouseOnZoom.y)
+//};
+
+//console.log(differenceBetweenMouseAndZoomOrigin);
+
+//var panWhenZoomingMultiplier = 0.1;
+
+//if (mouseOnZoom.x > this.state.graphPosition.x) {
+//  if (mouseOnZoom.y > this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//
+//}
+//else if(mouseOnZoom.x < this.state.graphPosition.x){
+//  if (mouseOnZoom.y > this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//}
+
+//var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
+//var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
+//
+//console.log(differenceBetweenMouseOnZoomX);
+//
+//var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX + differenceBetweenMouseOnZoomX;
+//var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY + differenceBetweenMouseOnZoomY;
+//
+//this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+//this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
+//
+//var newGraphPosition = {
+//  x: newGraphPositionX,
+//  y: newGraphPositionY
+//};
+//
+//nodeActions.graphZoom(scale);
+//nodeActions.changeGraphPosition(newGraphPosition);
+
+
+
+
+/* Next bit takes care of if the scale factor is zero I think */
 
 },{"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":19,"./gateNode.js":21,"./lutNode.js":23,"./pcompNode.js":25,"./tgenNode.js":28,"react":215}],30:[function(require,module,exports){
 /**

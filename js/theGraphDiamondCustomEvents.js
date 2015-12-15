@@ -3,3 +3,4 @@
  */
 
 var NodeSelect = new Event('NodeSelect');
+var EdgeSelect = new Event('EdgeSelect');

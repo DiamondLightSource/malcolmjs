@@ -302,6 +302,7 @@ var App = React.createClass({
   deselect: function () {
     //console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
+    nodeActions.deselectAllEdges("deselect all edges");
   },
 
   debounce: function (func, wait, immediate) {
@@ -409,80 +410,23 @@ var App = React.createClass({
 
      nodeActions.graphZoom(scale);
      nodeActions.changeGraphPosition(newGraphPosition);
-
-    ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
-    //var differenceBetweenMouseAndZoomOrigin = {
-    //  //x: Math.abs(this.state.graphPosition.x - mouseOnZoom.x),
-    //  //y: Math.abs(this.state.graphPosition.y - mouseOnZoom.y)
-    //  x: Math.abs(10 - mouseOnZoom.x),
-    //  y: Math.abs(40 - mouseOnZoom.y)
-    //};
-
-    //console.log(differenceBetweenMouseAndZoomOrigin);
-
-    //var panWhenZoomingMultiplier = 0.1;
-
-    //if (mouseOnZoom.x > this.state.graphPosition.x) {
-    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //
-    //}
-    //else if(mouseOnZoom.x < this.state.graphPosition.x){
-    //  if (mouseOnZoom.y > this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //  else if (mouseOnZoom.y < this.state.graphPosition.y) {
-    //    var panningWhenZooming = {
-    //      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
-    //      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
-    //    };
-    //    nodeActions.changeGraphPosition(panningWhenZooming);
-    //  }
-    //}
-
-    //var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
-    //var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
-    //
-    //console.log(differenceBetweenMouseOnZoomX);
-    //
-    //var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX + differenceBetweenMouseOnZoomX;
-    //var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY + differenceBetweenMouseOnZoomY;
-    //
-    //this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
-    //this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
-    //
-    //var newGraphPosition = {
-    //  x: newGraphPositionX,
-    //  y: newGraphPositionY
-    //};
-    //
-    //nodeActions.graphZoom(scale);
-    //nodeActions.changeGraphPosition(newGraphPosition);
-
-
-
-
-    /* Next bit takes care of if the scale factor is zero I think */
   },
 
   isZoomNegative: function(n){
     return ((n =+n) || 1/n) < 0;
+  },
+
+  edgeMouseDown: function(e){
+    console.log("mouseDown on an edge!");
+  },
+  edgeMouseUp: function(e){
+    console.log("mouseUp on an edge!");
+    nodeActions.selectEdge(e.currentTarget.id); /* Really simple way to select an edge, but when the mous events get more comples I'm probably gonna have to use events */
+    this.setState({selectedEdge: e.currentTarget}, function(){
+      console.log(this.state.selectedEdge);
+      this.state.selectedEdge.dispatchEvent(EdgeSelect);
+    })
+
   },
 
 
@@ -509,30 +453,30 @@ var App = React.createClass({
     var nodes = [];
 
     for(var node in allNodePositions){
-      console.log("we have a gate node!");
+      //console.log("we have a gate node!");
       var nodeName = allNodePositions[node].name;
       var rectangleString = "Rectangle";
       var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      console.log(rectangleName);
+      //console.log(rectangleName);
       if(gateNodeRegExp.test(node) === true){
         nodes.push(<GateNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
                              NodeName={nodeName} RectangleName={rectangleName}
                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
       }
       else if(tgenNodeRegExp.test(node) === true){
-        console.log("we have a tgen node!");
+        //console.log("we have a tgen node!");
         nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
                              RectangleName={rectangleName}
                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
       }
       else if(pcompNodeRegExp.test(node) === true){
-        console.log("we have a pcomp node!");
+        //console.log("we have a pcomp node!");
         nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
                               NodeName={nodeName} RectangleName={rectangleName}
                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
       }
       else if(lutNodeRegExp.test(node) === true){
-        console.log("we have an lut node!");
+        //console.log("we have an lut node!");
         nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
                             NodeName={nodeName} RectangleName={rectangleName}
                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
@@ -547,7 +491,7 @@ var App = React.createClass({
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
               onClick={this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onWheel={this.wheelZoom}
               onMouseMove={this.state.panMoveFunction}
-        ></rect>
+        />
         <svg id="appContainer" style={AppContainerStyle}
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
@@ -558,7 +502,8 @@ var App = React.createClass({
 
 
             <g id="EdgesGroup" >
-              <Edge  />
+              <Edge id="Gate1OutTGen1Ena"
+              onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp} />
             </g>
 
             <g id="NodesGroup" >
@@ -607,3 +552,73 @@ module.exports = App;
 //height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
 //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
+//var differenceBetweenMouseAndZoomOrigin = {
+//  //x: Math.abs(this.state.graphPosition.x - mouseOnZoom.x),
+//  //y: Math.abs(this.state.graphPosition.y - mouseOnZoom.y)
+//  x: Math.abs(10 - mouseOnZoom.x),
+//  y: Math.abs(40 - mouseOnZoom.y)
+//};
+
+//console.log(differenceBetweenMouseAndZoomOrigin);
+
+//var panWhenZoomingMultiplier = 0.1;
+
+//if (mouseOnZoom.x > this.state.graphPosition.x) {
+//  if (mouseOnZoom.y > this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//
+//}
+//else if(mouseOnZoom.x < this.state.graphPosition.x){
+//  if (mouseOnZoom.y > this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y + panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//  else if (mouseOnZoom.y < this.state.graphPosition.y) {
+//    var panningWhenZooming = {
+//      x: this.state.graphPosition.x - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.x,
+//      y: this.state.graphPosition.y - panWhenZoomingMultiplier * differenceBetweenMouseAndZoomOrigin.y
+//    };
+//    nodeActions.changeGraphPosition(panningWhenZooming);
+//  }
+//}
+
+//var differenceBetweenMouseOnZoomX = mouseOnZoomX - this.state.lastMouseOnZoomX;
+//var differenceBetweenMouseOnZoomY = mouseOnZoomY - this.state.lastMouseOnZoomY;
+//
+//console.log(differenceBetweenMouseOnZoomX);
+//
+//var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX + differenceBetweenMouseOnZoomX;
+//var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY + differenceBetweenMouseOnZoomY;
+//
+//this.setState({lastMouseOnZoomX: e.nativeEvent.clientX});
+//this.setState({lastMouseOnZoomY: e.nativeEvent.clientY});
+//
+//var newGraphPosition = {
+//  x: newGraphPositionX,
+//  y: newGraphPositionY
+//};
+//
+//nodeActions.graphZoom(scale);
+//nodeActions.changeGraphPosition(newGraphPosition);
+
+
+
+
+/* Next bit takes care of if the scale factor is zero I think */

@@ -43,6 +43,18 @@ var nodeActions = {
       item: item
     })
   },
+  selectEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.SELECT_EDGE,
+      item: item
+    })
+  },
+  deselectAllEdges: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLEDGES,
+      item: item
+    })
+  },
 
   //changeGate1Styling: function(item){
   //    AppDispatcher.handleAction({
