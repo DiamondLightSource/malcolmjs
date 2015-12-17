@@ -899,28 +899,36 @@ function deselectAllEdges(){
 var edges = {
   Gate1OutTGen1Ena: {
     fromNode: 'Gate1',
+    fromNodeType: 'Gate',
     fromNodePort: 'out',
     toNode: 'TGen1',
+    toNodeType: 'TGen',
     toNodePort: 'ena'
   },
   TGen1PosnPComp1Posn: {
     fromNode: 'TGen1',
+    fromNodeType: 'TGen',
     fromNodePort: 'posn',
     toNode: 'PComp1',
+    toNodeType: 'PComp',
     toNodePort: 'posn'
   },
   TGen1PosnPComp1Ena: {
     fromNode: 'TGen1',
+    fromNodeType: 'TGen',
     fromNodePort: 'posn',
     toNode: 'PComp1',
+    toNodeType: 'PComp',
     toNodePort: 'ena'
   },
-  Gate1OutPComp2Ena: {
-    fromNode: 'Gate1',
-    fromNodePort: 'out',
-    toNode: 'PComp2',
-    toNodePort: 'ena'
-  }
+  //Gate1OutPComp2Ena: {
+  //  fromNode: 'Gate1',
+  //  fromNodeType: 'Gate',
+  //  fromNodePort: 'out',
+  //  toNode: 'PComp2',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'ena'
+  //}
 };
 
 var allNodeInfo = {
@@ -3263,67 +3271,32 @@ var Edge = React.createClass({displayName: "Edge",
     //console.log(toNode);
     var fromNodePort = edgeInfo.fromNodePort;
     var toNodePort = edgeInfo.toNodePort;
+
+    var allNodeTypesPortStyling = this.state.allNodeTypesPortStyling;
+
+    var fromNodeType = this.state.allNodeInfo[fromNode].type;
+    var toNodeType = this.state.allNodeInfo[toNode].type;
+
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.state.allNodePositions[toNode].position);
+
     var fromNodePositionX = this.state.allNodeInfo[fromNode].position.x;
     var fromNodePositionY = this.state.allNodeInfo[fromNode].position.y;
     var toNodePositionX = this.state.allNodeInfo[toNode].position.x;
     var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
+    
+    var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
+    var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
+    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
 
-    /* fromNodes */
-    if(gateNodeRegExp.test(fromNode) === true){
-      var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
-      var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
-      //console.log(startOfEdgePortOffsetX);
-      //console.log(startOfEdgePortOffsetY);
-      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-      //console.log(startOfEdgeX);
-      //console.log(startOfEdgeY);
-    }
-    else if(tgenNodeRegExp.test(fromNode) === true){
-      var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
-      var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
-      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-    }
-    else if(pcompNodeRegExp.test(fromNode) === true){
-      var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
-      var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
-      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-    }
-
-    /* toNodes */
-    if(tgenNodeRegExp.test(toNode) === true){
-      var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
-      var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
-      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-      //console.log(endOfEdgeX);
-      //console.log(endOfEdgeY);
-    }
-    else if(gateNodeRegExp.test(toNode) === true){
-      var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
-      var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
-      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-    }
-    else if(pcompNodeRegExp.test(toNode) === true){
-      var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
-      var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
-      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-    }
-
-    //edges.push(<Edge id={edge}
-    //                 x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-    //                 onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-    ///>)
-
+    var endOfEdgePortOffsetX = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].x;
+    var endOfEdgePortOffsetY = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].y;
+    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 
 
     return(
@@ -3355,6 +3328,52 @@ var Line = React.createClass({displayName: "Line",
 });
 
 module.exports = Edge;
+
+/* fromNodes */
+//if(gateNodeRegExp.test(fromNode) === true){
+//  var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+//  var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+//  //console.log(startOfEdgePortOffsetX);
+//  //console.log(startOfEdgePortOffsetY);
+//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//  //console.log(startOfEdgeX);
+//  //console.log(startOfEdgeY);
+//}
+//else if(tgenNodeRegExp.test(fromNode) === true){
+//  var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+//  var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//}
+//else if(pcompNodeRegExp.test(fromNode) === true){
+//  var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+//  var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//}
+//
+///* toNodes */
+//if(tgenNodeRegExp.test(toNode) === true){
+//  var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+//  var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//  //console.log(endOfEdgeX);
+//  //console.log(endOfEdgeY);
+//}
+//else if(gateNodeRegExp.test(toNode) === true){
+//  var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+//  var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//}
+//else if(pcompNodeRegExp.test(toNode) === true){
+//  var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+//  var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//}
 
 },{"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/react":215,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],20:[function(require,module,exports){
 /**
@@ -5767,7 +5786,9 @@ var App = React.createClass({displayName: "App",
              onWheel: this.wheelZoom}, 
 
 
-            React.createElement("g", {id: "EdgesGroup"}
+            React.createElement("g", {id: "EdgesGroup"}, 
+
+              this.state.edgesToRender
 
             ), 
 

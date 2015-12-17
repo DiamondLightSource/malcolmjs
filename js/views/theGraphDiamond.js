@@ -761,6 +761,8 @@ var App = React.createClass({
 
             <g id="EdgesGroup" >
 
+              {this.state.edgesToRender}
+
             </g>
 
             <g id="NodesGroup" >

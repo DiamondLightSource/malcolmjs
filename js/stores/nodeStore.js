@@ -102,28 +102,36 @@ function deselectAllEdges(){
 var edges = {
   Gate1OutTGen1Ena: {
     fromNode: 'Gate1',
+    fromNodeType: 'Gate',
     fromNodePort: 'out',
     toNode: 'TGen1',
+    toNodeType: 'TGen',
     toNodePort: 'ena'
   },
   TGen1PosnPComp1Posn: {
     fromNode: 'TGen1',
+    fromNodeType: 'TGen',
     fromNodePort: 'posn',
     toNode: 'PComp1',
+    toNodeType: 'PComp',
     toNodePort: 'posn'
   },
   TGen1PosnPComp1Ena: {
     fromNode: 'TGen1',
+    fromNodeType: 'TGen',
     fromNodePort: 'posn',
     toNode: 'PComp1',
+    toNodeType: 'PComp',
     toNodePort: 'ena'
   },
-  Gate1OutPComp2Ena: {
-    fromNode: 'Gate1',
-    fromNodePort: 'out',
-    toNode: 'PComp2',
-    toNodePort: 'ena'
-  }
+  //Gate1OutPComp2Ena: {
+  //  fromNode: 'Gate1',
+  //  fromNodeType: 'Gate',
+  //  fromNodePort: 'out',
+  //  toNode: 'PComp2',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'ena'
+  //}
 };
 
 var allNodeInfo = {
