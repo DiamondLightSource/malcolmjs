@@ -16,7 +16,12 @@ function getEdgeState(){
     TGen1Position: NodeStore.getTGen1Position(),
     gateNodeOut: NodeStore.getGateNodeOutportOut(),
     tgenNodeEna: NodeStore.getTGenNodeInportEna(),
-    selected: NodeStore.getIfEdgeIsSelected()
+    selected: NodeStore.getIfEdgeIsSelected(),
+    allEdges: NodeStore.getAllEdges(),
+    gateNodeStyling: NodeStore.getGateNodeStyling(),
+    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    allNodePositions: NodeStore.getAllNodePositions()
   }
 }
 
@@ -59,18 +64,107 @@ var Edge = React.createClass({
   },
 
   render:function(){
+
+    var edgeInfo = this.state.allEdges[this.props.id];
+    console.log(this.props.id);
+    console.log(edgeInfo);
+
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+    var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+    var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+    var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+    var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+    var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
+
+    var allEdges = this.state.allEdges;
+    console.log(allEdges);
+
+    var fromNode = edgeInfo.fromNode;
+    var toNode = edgeInfo.toNode;
+    //console.log(fromNode);
+    //console.log(toNode);
+    var fromNodePort = edgeInfo.fromNodePort;
+    var toNodePort = edgeInfo.toNodePort;
+    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+    //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
+    //console.log(this.state.allNodePositions[toNode].position);
+    var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
+    var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
+    var toNodePositionX = this.state.allNodePositions[toNode].position.x;
+    var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+    //console.log(fromNodePositionX);
+    //console.log(fromNodePositionY);
+
+    /* fromNodes */
+    if(gateNodeRegExp.test(fromNode) === true){
+      var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+      var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+      //console.log(startOfEdgePortOffsetX);
+      //console.log(startOfEdgePortOffsetY);
+      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+      //console.log(startOfEdgeX);
+      //console.log(startOfEdgeY);
+    }
+    else if(tgenNodeRegExp.test(fromNode) === true){
+      var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+      var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    }
+    else if(pcompNodeRegExp.test(fromNode) === true){
+      var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+      var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+      var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    }
+
+    /* toNodes */
+    if(tgenNodeRegExp.test(toNode) === true){
+      var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+      var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+      //console.log(endOfEdgeX);
+      //console.log(endOfEdgeY);
+    }
+    else if(gateNodeRegExp.test(toNode) === true){
+      var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+      var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    }
+    else if(pcompNodeRegExp.test(toNode) === true){
+      var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+      var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+      var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    }
+
+    //edges.push(<Edge id={edge}
+    //                 x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+    //                 onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+    ///>)
+
+
+
     return(
       <g id="edgeContainer" {...this.props}>
 
         <Line id="outerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-              x1={this.props.x1} y1={this.props.y1}
-              x2={this.props.x2} y2={this.props.y2}
+              //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
               style={{strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
 
         <Line id="innerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
-              x1={this.props.x1} y1={this.props.y1}
-              x2={this.props.x2} y2={this.props.y2}
+          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
               style={{strokeWidth: '5', stroke:"orange"}} />
 
 

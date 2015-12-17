@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundleOnlySomeCSS.js" afterPath="$PROJECT_DIR$/bundleOnlySomeCSS.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/actions/nodeActions.js" afterPath="$PROJECT_DIR$/js/actions/nodeActions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/constants/appConstants.js" afterPath="$PROJECT_DIR$/js/constants/appConstants.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/nodeStore.js" afterPath="$PROJECT_DIR$/js/stores/nodeStore.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/edge.js" afterPath="$PROJECT_DIR$/js/views/edge.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/gateNode.js" afterPath="$PROJECT_DIR$/js/views/gateNode.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/pcompNode.js" afterPath="$PROJECT_DIR$/js/views/pcompNode.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/tgenNode.js" afterPath="$PROJECT_DIR$/js/views/tgenNode.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/theGraphDiamond.js" afterPath="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
     </list>
     <ignored path="StartingFlux.iws" />
@@ -34,20 +32,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="edge.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/edge.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-25.928572">
-              <caret line="71" column="51" selection-start-line="71" selection-start-column="51" selection-end-line="71" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gateNode.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gateNode.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.010274">
+            <state vertical-scroll-proportion="-56.464287">
               <caret line="152" column="4" selection-start-line="152" selection-start-column="4" selection-end-line="153" selection-end-column="54" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
@@ -59,7 +47,7 @@
       <file leaf-file-name="tgenNode.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/tgenNode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.642858">
+            <state vertical-scroll-proportion="38.57143">
               <caret line="18" column="41" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding />
             </state>
@@ -70,20 +58,18 @@
         <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-8.035714">
-              <caret line="15" column="53" selection-start-line="15" selection-start-column="53" selection-end-line="15" selection-end-column="53" />
+              <caret line="15" column="36" selection-start-line="15" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="lutNode.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/lutNode.js">
+      <file leaf-file-name="edge.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/views/edge.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.6785715">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#43#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="-0.73630136">
+              <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -91,15 +77,15 @@
       <file leaf-file-name="nodeStore.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="94.48276">
-              <caret line="198" column="29" selection-start-line="198" selection-start-column="29" selection-end-line="198" selection-end-column="29" />
+            <state vertical-scroll-proportion="-9.051724">
+              <caret line="142" column="50" selection-start-line="142" selection-start-column="50" selection-end-line="142" selection-end-column="50" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#7423#8202#0" expanded="false" />
-                <element signature="e#8505#9165#0" expanded="false" />
-                <element signature="e#9198#9862#0" expanded="false" />
-                <element signature="e#9888#10885#0" expanded="false" />
-                <element signature="e#10919#11920#0" expanded="false" />
+                <element signature="e#7411#8190#0" expanded="false" />
+                <element signature="e#8493#9153#0" expanded="false" />
+                <element signature="e#9186#9850#0" expanded="false" />
+                <element signature="e#9876#10873#0" expanded="false" />
+                <element signature="e#10907#11908#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -108,8 +94,8 @@
       <file leaf-file-name="theGraphDiamond.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="29.189655">
-              <caret line="497" column="56" selection-start-line="497" selection-start-column="56" selection-end-line="497" selection-end-column="56" />
+            <state vertical-scroll-proportion="-12.844828">
+              <caret line="505" column="70" selection-start-line="505" selection-start-column="0" selection-end-line="506" selection-end-column="0" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
               </folding>
@@ -120,8 +106,8 @@
       <file leaf-file-name="appConstants.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-28.535715">
-              <caret line="55" column="21" selection-start-line="55" selection-start-column="21" selection-end-line="55" selection-end-column="21" />
+            <state vertical-scroll-proportion="-27.464285">
+              <caret line="56" column="37" selection-start-line="56" selection-start-column="37" selection-end-line="56" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -130,8 +116,8 @@
       <file leaf-file-name="nodeActions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-39.857143">
-              <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+            <state vertical-scroll-proportion="-28.607143">
+              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
               </folding>
@@ -209,14 +195,14 @@
         <option value="$PROJECT_DIR$/js/views/mainPane.js" />
         <option value="$PROJECT_DIR$/js/views/lutNode.js" />
         <option value="$PROJECT_DIR$/js/theGraphDiamondCustomEvents.js" />
-        <option value="$PROJECT_DIR$/js/views/edge.js" />
-        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
-        <option value="$PROJECT_DIR$/js/actions/nodeActions.js" />
         <option value="$PROJECT_DIR$/js/views/gateNode.js" />
         <option value="$PROJECT_DIR$/js/views/tgenNode.js" />
         <option value="$PROJECT_DIR$/js/views/pcompNode.js" />
-        <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
+        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
+        <option value="$PROJECT_DIR$/js/actions/nodeActions.js" />
+        <option value="$PROJECT_DIR$/js/views/edge.js" />
         <option value="$PROJECT_DIR$/js/stores/nodeStore.js" />
+        <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
       </list>
     </option>
   </component>
@@ -841,26 +827,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/edge.js">
+    <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-25.928572">
-          <caret line="71" column="51" selection-start-line="71" selection-start-column="51" selection-end-line="71" selection-end-column="51" />
-          <folding />
+        <state vertical-scroll-proportion="-56.464287">
+          <caret line="152" column="4" selection-start-line="152" selection-start-column="4" selection-end-line="153" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
+    <entry file="file://$PROJECT_DIR$/js/views/lutNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-28.535715">
-          <caret line="55" column="21" selection-start-line="55" selection-start-column="21" selection-end-line="55" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-39.857143">
-          <caret line="82" column="0" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.08561644">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
           </folding>
@@ -869,23 +849,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/tgenNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.642858">
+        <state vertical-scroll-proportion="38.57143">
           <caret line="18" column="41" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
+    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="94.48276">
-          <caret line="198" column="29" selection-start-line="198" selection-start-column="29" selection-end-line="198" selection-end-column="29" />
+        <state vertical-scroll-proportion="-27.464285">
+          <caret line="56" column="37" selection-start-line="56" selection-start-column="37" selection-end-line="56" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-28.607143">
+          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#7423#8202#0" expanded="false" />
-            <element signature="e#8505#9165#0" expanded="false" />
-            <element signature="e#9198#9862#0" expanded="false" />
-            <element signature="e#9888#10885#0" expanded="false" />
-            <element signature="e#10919#11920#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -893,38 +876,41 @@
     <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.035714">
-          <caret line="15" column="53" selection-start-line="15" selection-start-column="53" selection-end-line="15" selection-end-column="53" />
+          <caret line="15" column="36" selection-start-line="15" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/lutNode.js">
+    <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.6785715">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state vertical-scroll-proportion="-9.051724">
+          <caret line="142" column="50" selection-start-line="142" selection-start-column="50" selection-end-line="142" selection-end-column="50" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#7411#8190#0" expanded="false" />
+            <element signature="e#8493#9153#0" expanded="false" />
+            <element signature="e#9186#9850#0" expanded="false" />
+            <element signature="e#9876#10873#0" expanded="false" />
+            <element signature="e#10907#11908#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="29.189655">
-          <caret line="497" column="56" selection-start-line="497" selection-start-column="56" selection-end-line="497" selection-end-column="56" />
+        <state vertical-scroll-proportion="-12.844828">
+          <caret line="505" column="70" selection-start-line="505" selection-start-column="0" selection-end-line="506" selection-end-column="0" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
+    <entry file="file://$PROJECT_DIR$/js/views/edge.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.010274">
-          <caret line="152" column="4" selection-start-line="152" selection-start-column="4" selection-end-line="153" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="-0.73630136">
+          <caret line="23" column="53" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="53" />
+          <folding />
         </state>
       </provider>
     </entry>

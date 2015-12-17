@@ -81,6 +81,12 @@ var nodeActions = {
       actionType: appConstants.PUSH_NODETOARRAY,
       item: item
     })
+  },
+  pushEdgeToArray: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PUSH_EDGETOARRAY,
+      item: item
+    })
   }
 };
 

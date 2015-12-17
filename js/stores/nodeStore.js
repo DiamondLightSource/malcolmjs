@@ -12,6 +12,7 @@ var CHANGE_EVENT = 'change';
 var draggedElement = null;
 var draggedElementID = null;
 var nodesToRender = [];
+var edgesToRender = [];
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -105,24 +106,24 @@ var edges = {
     toNode: 'TGen1',
     toNodePort: 'ena'
   },
-  //TGen1PosnPComp1Posn: {
-  //  fromNode: 'TGen1',
-  //  fromNodePort: 'posn',
-  //  toNode: 'PComp1',
-  //  toNodePort: 'posn'
-  //},
-  //TGen1PosnPComp1Ena: {
-  //  fromNode: 'TGen1',
-  //  fromNodePort: 'posn',
-  //  toNode: 'PComp1',
-  //  toNodePort: 'ena'
-  //},
-  //Gate1OutPComp2Ena: {
-  //  fromNode: 'Gate1',
-  //  fromNodePort: 'out',
-  //  toNode: 'PComp2',
-  //  toNodePort: 'ena'
-  //}
+  TGen1PosnPComp1Posn: {
+    fromNode: 'TGen1',
+    fromNodePort: 'posn',
+    toNode: 'PComp1',
+    toNodePort: 'posn'
+  },
+  TGen1PosnPComp1Ena: {
+    fromNode: 'TGen1',
+    fromNodePort: 'posn',
+    toNode: 'PComp1',
+    toNodePort: 'ena'
+  },
+  Gate1OutPComp2Ena: {
+    fromNode: 'Gate1',
+    fromNodePort: 'out',
+    toNode: 'PComp2',
+    toNodePort: 'ena'
+  }
 };
 
 var allNodeInfo = {
@@ -786,6 +787,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getNodesToRenderArray: function(){
     return nodesToRender;
+  },
+  getEdgesToRenderArray: function(){
+    return edgesToRender;
   }
 });
 
@@ -885,6 +889,14 @@ AppDispatcher.register(function(payload){
       console.log(item);
       nodesToRender.push(item);
       console.log(nodesToRender);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.PUSH_EDGETOARRAY:
+      console.log(payload);
+      console.log(item);
+      edgesToRender.push(item);
+      console.log(edgesToRender);
       nodeStore.emitChange();
       break;
 

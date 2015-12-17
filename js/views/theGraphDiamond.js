@@ -71,7 +71,8 @@ function getAppState(){
     gateNodeStyling: NodeStore.getGateNodeStyling(),
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
-    nodesToRender: NodeStore.getNodesToRenderArray()
+    nodesToRender: NodeStore.getNodesToRenderArray(),
+    edgesToRender: NodeStore.getEdgesToRenderArray()
   }
 }
 
@@ -92,6 +93,7 @@ var App = React.createClass({
     this.setState({self: this});
 
     this.setState({wait: false});
+    this.addEdgeToEdgesArray();
     this.addNodeToNodesArray();
 
   },
@@ -475,14 +477,14 @@ var App = React.createClass({
 
     for(var node in allNodePositions){
       //console.log("we have a gate node!");
-      var nodeName = allNodePositions[node].name;
-      var rectangleString = "Rectangle";
-      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      //console.log(rectangleName);
-
-      var nodeX = allNodePositions[node].position.x;
-      var nodeY = allNodePositions[node].position.y;
-      var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+      //var nodeName = allNodePositions[node].name;
+      //var rectangleString = "Rectangle";
+      //var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+      ////console.log(rectangleName);
+      //
+      //var nodeX = allNodePositions[node].position.x;
+      //var nodeY = allNodePositions[node].position.y;
+      //var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
 
       if(gateNodeRegExp.test(node) === true){
         nodeActions.pushNodeToArray(<GateNode id={node}
@@ -501,12 +503,99 @@ var App = React.createClass({
       else if(lutNodeRegExp.test(node) === true){
         //console.log("we have an lut node!");
         nodeActions.pushNodeToArray(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-                            NodeName={nodeName} RectangleName={rectangleName}
+                            //NodeName={nodeName} RectangleName={rectangleName}
                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
       }
       else{
         console.log("no match to any node type, something's wrong?");
       }
+    }
+  },
+
+  addEdgeToEdgesArray: function(){
+    //var gateNodeRegExp = /Gate/;
+    //var tgenNodeRegExp = /TGen/;
+    //var pcompNodeRegExp = /PComp/;
+    //var lutNodeRegExp = /LUT/;
+
+    //var allNodePositions = this.state.allNodePositions;
+    var allEdges = this.state.allEdges;
+
+    //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+    //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+    //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+    //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+    //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+    //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
+
+    for(var edge in allEdges){
+      //var fromNode = allEdges[edge].fromNode;
+      //var toNode = allEdges[edge].toNode;
+      ////console.log(fromNode);
+      ////console.log(toNode);
+      //var fromNodePort = allEdges[edge].fromNodePort;
+      //var toNodePort = allEdges[edge].toNodePort;
+      ////console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+      ////console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
+      ////console.log(this.state.allNodePositions[toNode].position);
+      //var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
+      //var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
+      //var toNodePositionX = this.state.allNodePositions[toNode].position.x;
+      //var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+      ////console.log(fromNodePositionX);
+      ////console.log(fromNodePositionY);
+      //
+      ///* fromNodes */
+      //if(gateNodeRegExp.test(fromNode) === true){
+      //  var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+      //  var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+      //  //console.log(startOfEdgePortOffsetX);
+      //  //console.log(startOfEdgePortOffsetY);
+      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+      //  //console.log(startOfEdgeX);
+      //  //console.log(startOfEdgeY);
+      //}
+      //else if(tgenNodeRegExp.test(fromNode) === true){
+      //  var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+      //  var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+      //}
+      //else if(pcompNodeRegExp.test(fromNode) === true){
+      //  var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+      //  var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+      //}
+      //
+      ///* toNodes */
+      //if(tgenNodeRegExp.test(toNode) === true){
+      //  var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+      //  var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+      //  //console.log(endOfEdgeX);
+      //  //console.log(endOfEdgeY);
+      //}
+      //else if(gateNodeRegExp.test(toNode) === true){
+      //  var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+      //  var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+      //}
+      //else if(pcompNodeRegExp.test(toNode) === true){
+      //  var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+      //  var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+      //}
+
+      nodeActions.pushEdgeToArray(<Edge id={edge}
+                       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                       onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+      />)
+
     }
   },
 
@@ -671,7 +760,7 @@ var App = React.createClass({
 
 
             <g id="EdgesGroup" >
-
+              {this.state.edgesToRender}
 
             </g>
 
