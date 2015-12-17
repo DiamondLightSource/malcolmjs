@@ -13,6 +13,7 @@ var draggedElement = null;
 var draggedElementID = null;
 var nodesToRender = [];
 var edgesToRender = [];
+var clickedEdge = null;
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -69,11 +70,23 @@ function checkIfAnyNodesAreSelected(){
 }
 
 var edgeSelectedStates = {
-  Gate1OutTGen1Ena: false
+  Gate1OutTGen1Ena: false,
+  TGen1PosnPComp1Posn: false,
+  TGen1PosnPComp1Ena: false
 };
 
 function selectEdge(Edge){
   edgeSelectedStates[Edge] = true;
+}
+
+function getAnyEdgeSelectedState(EdgeId){
+  if(edgeSelectedStates[EdgeId] === undefined || null){
+    console.log("edge selected state is underfined or null, best check it out...");
+  }
+  else{
+    console.log("that edge's state exists, hooray!");
+    return edgeSelectedStates[EdgeId];
+  }
 }
 
 function checkIfAnyEdgesAreSelected(){
@@ -823,8 +836,11 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
   },
-  getIfEdgeIsSelected: function(){
-    return edgeSelectedStates.Gate1OutTGen1Ena;
+  getIfEdgeIsSelected: function(EdgeId){
+    return getAnyEdgeSelectedState(EdgeId);
+  },
+  getIfAnyEdgesAreSelected: function(){
+    return checkIfAnyEdgesAreSelected();
   },
 
   getDraggedElement: function(){
@@ -930,7 +946,16 @@ AppDispatcher.register(function(payload){
     case appConstants.SELECT_EDGE:
       console.log(payload);
       console.log(item);
-      selectEdge(item);
+      var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
+      console.log(areAnyEdgesSelected);
+      console.log(clickedEdge);
+      if(areAnyEdgesSelected === true && item !== clickedEdge){
+        deselectAllEdges();
+        selectEdge(item);
+      }
+      else if(areAnyEdgesSelected === false){
+        selectEdge(item);
+      }
       console.log(edgeSelectedStates);
       nodeStore.emitChange();
       break;
@@ -976,6 +1001,22 @@ AppDispatcher.register(function(payload){
       console.log(item);
       edgesToRender.push(item);
       console.log(edgesToRender);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.GETANY_EDGESELECTEDSTATE:
+      console.log(payload);
+      console.log(item);
+      getAnyEdgeSelectedState(item);
+      console.log(edgeSelectedStates[item]);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.CLICKED_EDGE:
+      console.log(payload);
+      console.log(item);
+      clickedEdge = item;
+      console.log(clickedEdge);
       nodeStore.emitChange();
       break;
 

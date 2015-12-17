@@ -437,7 +437,9 @@ var App = React.createClass({
     this.setState({selectedEdge: e.currentTarget}, function(){
       console.log(this.state.selectedEdge);
       this.state.selectedEdge.dispatchEvent(EdgeSelect);
-    })
+    });
+    nodeActions.clickedEdge(e.currentTarget.id);
+
 
   },
 

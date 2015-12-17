@@ -87,6 +87,19 @@ var nodeActions = {
       actionType: appConstants.PUSH_EDGETOARRAY,
       item: item
     })
+  },
+
+  getAnyEdgeSelectedState: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.GETANY_EDGESELECTEDSTATE,
+      item: item
+    })
+  },
+  clickedEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CLICKED_EDGE,
+      item: item
+    })
   }
 };
 

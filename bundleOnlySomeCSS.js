@@ -143,6 +143,19 @@ var nodeActions = {
       actionType: appConstants.PUSH_EDGETOARRAY,
       item: item
     })
+  },
+
+  getAnyEdgeSelectedState: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.GETANY_EDGESELECTEDSTATE,
+      item: item
+    })
+  },
+  clickedEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CLICKED_EDGE,
+      item: item
+    })
   }
 };
 
@@ -514,7 +527,9 @@ var appConstants = {
   CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
   GRAPH_ZOOM: "GRAPH_ZOOM",
   PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
-  PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY"
+  PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY",
+  GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
+  CLICKED_EDGE: "CLICKED_EDGE"
 };
 
 module.exports = appConstants;
@@ -810,6 +825,7 @@ var draggedElement = null;
 var draggedElementID = null;
 var nodesToRender = [];
 var edgesToRender = [];
+var clickedEdge = null;
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -866,11 +882,23 @@ function checkIfAnyNodesAreSelected(){
 }
 
 var edgeSelectedStates = {
-  Gate1OutTGen1Ena: false
+  Gate1OutTGen1Ena: false,
+  TGen1PosnPComp1Posn: false,
+  TGen1PosnPComp1Ena: false
 };
 
 function selectEdge(Edge){
   edgeSelectedStates[Edge] = true;
+}
+
+function getAnyEdgeSelectedState(EdgeId){
+  if(edgeSelectedStates[EdgeId] === undefined || null){
+    console.log("edge selected state is underfined or null, best check it out...");
+  }
+  else{
+    console.log("that edge's state exists, hooray!");
+    return edgeSelectedStates[EdgeId];
+  }
 }
 
 function checkIfAnyEdgesAreSelected(){
@@ -1620,8 +1648,11 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getIfAnyNodesAreSelected: function(){
     return checkIfAnyNodesAreSelected();
   },
-  getIfEdgeIsSelected: function(){
-    return edgeSelectedStates.Gate1OutTGen1Ena;
+  getIfEdgeIsSelected: function(EdgeId){
+    return getAnyEdgeSelectedState(EdgeId);
+  },
+  getIfAnyEdgesAreSelected: function(){
+    return checkIfAnyEdgesAreSelected();
   },
 
   getDraggedElement: function(){
@@ -1727,7 +1758,16 @@ AppDispatcher.register(function(payload){
     case appConstants.SELECT_EDGE:
       console.log(payload);
       console.log(item);
-      selectEdge(item);
+      var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
+      console.log(areAnyEdgesSelected);
+      console.log(clickedEdge);
+      if(areAnyEdgesSelected === true && item !== clickedEdge){
+        deselectAllEdges();
+        selectEdge(item);
+      }
+      else if(areAnyEdgesSelected === false){
+        selectEdge(item);
+      }
       console.log(edgeSelectedStates);
       nodeStore.emitChange();
       break;
@@ -1773,6 +1813,22 @@ AppDispatcher.register(function(payload){
       console.log(item);
       edgesToRender.push(item);
       console.log(edgesToRender);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.GETANY_EDGESELECTEDSTATE:
+      console.log(payload);
+      console.log(item);
+      getAnyEdgeSelectedState(item);
+      console.log(edgeSelectedStates[item]);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.CLICKED_EDGE:
+      console.log(payload);
+      console.log(item);
+      clickedEdge = item;
+      console.log(clickedEdge);
       nodeStore.emitChange();
       break;
 
@@ -3195,14 +3251,15 @@ function getEdgeState(){
     TGen1Position: NodeStore.getTGen1Position(),
     gateNodeOut: NodeStore.getGateNodeOutportOut(),
     tgenNodeEna: NodeStore.getTGenNodeInportEna(),
-    selected: NodeStore.getIfEdgeIsSelected(),
+    //selected: NodeStore.getIfEdgeIsSelected(),
     allEdges: NodeStore.getAllEdges(),
     gateNodeStyling: NodeStore.getGateNodeStyling(),
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
   }
 }
 
@@ -3212,16 +3269,21 @@ var Edge = React.createClass({displayName: "Edge",
   },
   _onChange: function(){
     this.setState(getEdgeState());
+    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
     NodeStore.addChangeListener(this._onChange);
+    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
+      console.log(this.state.selected);
+    });
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
   },
   componentWillUnmount: function(){
     NodeStore.removeChangeListener(this._onChange);
   },
   mouseOver: function(){
-    var test = document.getElementById('outerLine');
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
     if(this.state.selected === true){
 
     }
@@ -3230,7 +3292,8 @@ var Edge = React.createClass({displayName: "Edge",
     }
   },
   mouseLeave: function(){
-    var test = document.getElementById('outerLine');
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
     }
@@ -3241,6 +3304,7 @@ var Edge = React.createClass({displayName: "Edge",
   },
   edgeSelect: function(){
     console.log("edge has been selected");
+    console.log(ReactDOM.findDOMNode(this).id);
     nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
   },
 
@@ -3249,18 +3313,6 @@ var Edge = React.createClass({displayName: "Edge",
     var edgeInfo = this.state.allEdges[this.props.id];
     console.log(this.props.id);
     console.log(edgeInfo);
-
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
-
-    var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
-    var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
-    var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
-    var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
-    var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
-    var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
 
     var allEdges = this.state.allEdges;
     console.log(allEdges);
@@ -3287,7 +3339,7 @@ var Edge = React.createClass({displayName: "Edge",
     var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
-    
+
     var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
     var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
     var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
@@ -3298,16 +3350,21 @@ var Edge = React.createClass({displayName: "Edge",
     var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 
+    var innerLineString = "-innerline";
+    var outerLineString = "-outerline";
+    var innerLineName = this.props.id.concat(innerLineString);
+    var outerLineName = this.props.id.concat(outerLineString);
+
 
     return(
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
-        React.createElement(Line, {id: "outerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+        React.createElement(Line, {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
               style: {strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
 
-        React.createElement(Line, {id: "innerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+        React.createElement(Line, {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
@@ -3328,6 +3385,18 @@ var Line = React.createClass({displayName: "Line",
 });
 
 module.exports = Edge;
+
+//var gateNodeRegExp = /Gate/;
+//var tgenNodeRegExp = /TGen/;
+//var pcompNodeRegExp = /PComp/;
+//var lutNodeRegExp = /LUT/;
+//
+//var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+//var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+//var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+//var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+//var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+//var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
 
 /* fromNodes */
 //if(gateNodeRegExp.test(fromNode) === true){
@@ -5464,7 +5533,9 @@ var App = React.createClass({displayName: "App",
     this.setState({selectedEdge: e.currentTarget}, function(){
       console.log(this.state.selectedEdge);
       this.state.selectedEdge.dispatchEvent(EdgeSelect);
-    })
+    });
+    nodeActions.clickedEdge(e.currentTarget.id);
+
 
   },
 

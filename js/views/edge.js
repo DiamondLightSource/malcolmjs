@@ -16,14 +16,15 @@ function getEdgeState(){
     TGen1Position: NodeStore.getTGen1Position(),
     gateNodeOut: NodeStore.getGateNodeOutportOut(),
     tgenNodeEna: NodeStore.getTGenNodeInportEna(),
-    selected: NodeStore.getIfEdgeIsSelected(),
+    //selected: NodeStore.getIfEdgeIsSelected(),
     allEdges: NodeStore.getAllEdges(),
     gateNodeStyling: NodeStore.getGateNodeStyling(),
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
   }
 }
 
@@ -33,16 +34,21 @@ var Edge = React.createClass({
   },
   _onChange: function(){
     this.setState(getEdgeState());
+    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
     NodeStore.addChangeListener(this._onChange);
+    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
+      console.log(this.state.selected);
+    });
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
   },
   componentWillUnmount: function(){
     NodeStore.removeChangeListener(this._onChange);
   },
   mouseOver: function(){
-    var test = document.getElementById('outerLine');
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
     if(this.state.selected === true){
 
     }
@@ -51,7 +57,8 @@ var Edge = React.createClass({
     }
   },
   mouseLeave: function(){
-    var test = document.getElementById('outerLine');
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
     }
@@ -62,6 +69,7 @@ var Edge = React.createClass({
   },
   edgeSelect: function(){
     console.log("edge has been selected");
+    console.log(ReactDOM.findDOMNode(this).id);
     nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
   },
 
@@ -107,16 +115,21 @@ var Edge = React.createClass({
     var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 
+    var innerLineString = "-innerline";
+    var outerLineString = "-outerline";
+    var innerLineName = this.props.id.concat(innerLineString);
+    var outerLineName = this.props.id.concat(outerLineString);
+
 
     return(
       <g id="edgeContainer" {...this.props}>
 
-        <Line id="outerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+        <Line id={outerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
               style={{strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
 
-        <Line id="innerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+        <Line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
