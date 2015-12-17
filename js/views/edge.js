@@ -63,14 +63,14 @@ var Edge = React.createClass({
       <g id="edgeContainer" {...this.props}>
 
         <Line id="outerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-              x1={this.state.Gate1Position.x + this.state.gateNodeOut.x} y1={this.state.Gate1Position.y + this.state.gateNodeOut.y}
-              x2={this.state.TGen1Position.x + this.state.tgenNodeEna.x} y2={this.state.TGen1Position.y + this.state.tgenNodeEna.y}
+              x1={this.props.x1} y1={this.props.y1}
+              x2={this.props.x2} y2={this.props.y2}
               style={{strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
 
         <Line id="innerLine" onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
-              x1={this.state.Gate1Position.x + this.state.gateNodeOut.x} y1={this.state.Gate1Position.y + this.state.gateNodeOut.y}
-              x2={this.state.TGen1Position.x + this.state.tgenNodeEna.x} y2={this.state.TGen1Position.y + this.state.tgenNodeEna.y}
+              x1={this.props.x1} y1={this.props.y1}
+              x2={this.props.x2} y2={this.props.y2}
               style={{strokeWidth: '5', stroke:"orange"}} />
 
 

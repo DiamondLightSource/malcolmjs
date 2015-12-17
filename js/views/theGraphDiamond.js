@@ -66,7 +66,12 @@ function getAppState(){
     allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
-    graphZoomScale: NodeStore.getGraphZoomScale()
+    graphZoomScale: NodeStore.getGraphZoomScale(),
+    allEdges: NodeStore.getAllEdges(),
+    gateNodeStyling: NodeStore.getGateNodeStyling(),
+    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    nodesToRender: NodeStore.getNodesToRenderArray()
   }
 }
 
@@ -84,6 +89,10 @@ var App = React.createClass({
 
     this.setState({moveFunction: this.defaultMoveFunction});
     this.setState({panMoveFunction: this.defaultMoveFunction});
+    this.setState({self: this});
+
+    this.setState({wait: false});
+    this.addNodeToNodesArray();
 
   },
   componentWillUnmount: function () {
@@ -194,6 +203,7 @@ var App = React.createClass({
     /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
 
     //console.log(e);
+    //console.log(Math.floor(Date.now() / 1000));
 
     var updatedCoordinates = {
       x: e.nativeEvent.clientX,
@@ -226,11 +236,11 @@ var App = React.createClass({
 
   mouseUp: function (e) {
     console.log("mouseUp");
-    console.log(e);
-    console.log(this.state.afterDrag);
-    console.log(this.state.mouseDownX);
-    console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
-    console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
+    //console.log(e);
+    //console.log(this.state.afterDrag);
+    //console.log(this.state.mouseDownX);
+    //console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
+    //console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
 
 
     if (this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y) {
@@ -429,9 +439,82 @@ var App = React.createClass({
 
   },
 
+  //throttle: function(limit, e){
+  //
+  //  //this.test(this, e);
+  //  if(this.state.wait === false || this.state.wait === undefined){
+  //    console.log("wait is false, so do the thing");
+  //    this.setState({wait: true});
+  //    console.log(this.state.wait);
+  //    setTimeout.bind(this, [this.test(this, e), 40])
+  //  }
+  //  else if(this.state.wait === true){
+  //    console.log("we are still waiting, so don't run the move function again just yet");
+  //  }
+  //
+  //
+  //},
+  //throttleMoveFunction(e){
+  //  //console.count("Throttled");
+  //  //console.log(e);
+  //  this.throttle(100, e);
+  //},
+  //test: function(Component, e){
+  //  console.log("inside throttle return function");
+  //  this.setState({wait: false});
+  //  Component.anotherMoveFunction(e);
+  //  console.log(this.state.wait);
+  //},
+  addNodeToNodesArray: function(){
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var allNodePositions = this.state.allNodePositions;
+
+    for(var node in allNodePositions){
+      //console.log("we have a gate node!");
+      var nodeName = allNodePositions[node].name;
+      var rectangleString = "Rectangle";
+      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+      //console.log(rectangleName);
+
+      var nodeX = allNodePositions[node].position.x;
+      var nodeY = allNodePositions[node].position.y;
+      var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+
+      if(gateNodeRegExp.test(node) === true){
+        nodeActions.pushNodeToArray(<GateNode id={node}
+                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(tgenNodeRegExp.test(node) === true){
+        //console.log("we have a tgen node!");
+        nodeActions.pushNodeToArray(<TGenNode id={node}
+                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(pcompNodeRegExp.test(node) === true){
+        //console.log("we have a pcomp node!");
+        nodeActions.pushNodeToArray(<PCompNode id={node}
+                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else if(lutNodeRegExp.test(node) === true){
+        //console.log("we have an lut node!");
+        nodeActions.pushNodeToArray(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+                            NodeName={nodeName} RectangleName={rectangleName}
+                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+      }
+      else{
+        console.log("no match to any node type, something's wrong?");
+      }
+    }
+  },
+
 
 
   render: function(){
+    //console.log("inside theGraphDiamond's render function");
+
     var x = this.state.graphPosition.x;
     var y = this.state.graphPosition.y;
     var scale = this.state.graphZoomScale;
@@ -444,47 +527,133 @@ var App = React.createClass({
     //console.log(regExpTest.test(testString));
     //console.log(regExpTest.test(anotherTestString));
 
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
+    //var gateNodeRegExp = /Gate/;
+    //var tgenNodeRegExp = /TGen/;
+    //var pcompNodeRegExp = /PComp/;
+    //var lutNodeRegExp = /LUT/;
+    //
+    //var allNodePositions = this.state.allNodePositions;
+    //var nodes = [];
 
-    var allNodePositions = this.state.allNodePositions;
-    var nodes = [];
+    //var allEdges = this.state.allEdges;
+    //var edges = [];
+    //
+    //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+    //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+    //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+    //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+    //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+    //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
 
-    for(var node in allNodePositions){
-      //console.log("we have a gate node!");
-      var nodeName = allNodePositions[node].name;
-      var rectangleString = "Rectangle";
-      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      //console.log(rectangleName);
-      if(gateNodeRegExp.test(node) === true){
-        nodes.push(<GateNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
-                             NodeName={nodeName} RectangleName={rectangleName}
-                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-      }
-      else if(tgenNodeRegExp.test(node) === true){
-        //console.log("we have a tgen node!");
-        nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
-                             RectangleName={rectangleName}
-                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-      }
-      else if(pcompNodeRegExp.test(node) === true){
-        //console.log("we have a pcomp node!");
-        nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
-                              NodeName={nodeName} RectangleName={rectangleName}
-                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-      }
-      else if(lutNodeRegExp.test(node) === true){
-        //console.log("we have an lut node!");
-        nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={allNodePositions[node].position.x}  y={allNodePositions[node].position.y}
-                            NodeName={nodeName} RectangleName={rectangleName}
-                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-      }
-      else{
-        console.log("no match to any node type, something's wrong?");
-      }
-    }
+
+
+    //for(var edge in allEdges){
+    //  var fromNode = allEdges[edge].fromNode;
+    //  var toNode = allEdges[edge].toNode;
+    //  //console.log(fromNode);
+    //  //console.log(toNode);
+    //  var fromNodePort = allEdges[edge].fromNodePort;
+    //  var toNodePort = allEdges[edge].toNodePort;
+    //  //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+    //  //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
+    //  //console.log(this.state.allNodePositions[toNode].position);
+    //  var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
+    //  var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
+    //  var toNodePositionX = this.state.allNodePositions[toNode].position.x;
+    //  var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+    //  //console.log(fromNodePositionX);
+    //  //console.log(fromNodePositionY);
+    //
+    //  /* fromNodes */
+    //  if(gateNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+    //    //console.log(startOfEdgePortOffsetX);
+    //    //console.log(startOfEdgePortOffsetY);
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //    //console.log(startOfEdgeX);
+    //    //console.log(startOfEdgeY);
+    //  }
+    //  else if(tgenNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //  }
+    //  else if(pcompNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //  }
+    //
+    //  /* toNodes */
+    //  if(tgenNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //    //console.log(endOfEdgeX);
+    //    //console.log(endOfEdgeY);
+    //  }
+    //  else if(gateNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //  }
+    //  else if(pcompNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //  }
+    //
+    //  edges.push(<Edge id={edge}
+    //                   x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+    //                   onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+    //  />)
+    //
+    //}
+
+    //for(var node in allNodePositions){
+    //  //console.log("we have a gate node!");
+    //  var nodeName = allNodePositions[node].name;
+    //  var rectangleString = "Rectangle";
+    //  var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+    //  //console.log(rectangleName);
+    //
+    //  var nodeX = allNodePositions[node].position.x;
+    //  var nodeY = allNodePositions[node].position.y;
+    //  var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+    //
+    //  if(gateNodeRegExp.test(node) === true){
+    //    nodes.push(<GateNode id={node}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(tgenNodeRegExp.test(node) === true){
+    //    //console.log("we have a tgen node!");
+    //    nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                         RectangleName={rectangleName}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(pcompNodeRegExp.test(node) === true){
+    //    //console.log("we have a pcomp node!");
+    //    nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                          NodeName={nodeName} RectangleName={rectangleName}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(lutNodeRegExp.test(node) === true){
+    //    //console.log("we have an lut node!");
+    //    nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                        NodeName={nodeName} RectangleName={rectangleName}
+    //                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else{
+    //    console.log("no match to any node type, something's wrong?");
+    //  }
+    //}
 
     return(
       <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
@@ -502,13 +671,13 @@ var App = React.createClass({
 
 
             <g id="EdgesGroup" >
-              <Edge id="Gate1OutTGen1Ena"
-              onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp} />
+
+
             </g>
 
             <g id="NodesGroup" >
 
-              {nodes}
+              {this.state.nodesToRender}
 
             </g>
 
@@ -552,6 +721,11 @@ module.exports = App;
 //height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
 //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+
+//<Edge id="Gate1OutTGen1Ena"
+//      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp} />
+
 
 ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
 //var differenceBetweenMouseAndZoomOrigin = {

@@ -75,6 +75,12 @@ var nodeActions = {
       actionType: appConstants.GRAPH_ZOOM,
       item: item
     })
+  },
+  pushNodeToArray: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PUSH_NODETOARRAY,
+      item: item
+    })
   }
 };
 

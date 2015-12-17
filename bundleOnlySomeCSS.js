@@ -131,6 +131,12 @@ var nodeActions = {
       actionType: appConstants.GRAPH_ZOOM,
       item: item
     })
+  },
+  pushNodeToArray: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PUSH_NODETOARRAY,
+      item: item
+    })
   }
 };
 
@@ -500,7 +506,8 @@ var appConstants = {
   DESELECT_ALLEDGES: "DESELECT_ALLEDGES",
   //CHANGE_GATE1STYLING: "CHANGE_GATE1STYLING"
   CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
-  GRAPH_ZOOM: "GRAPH_ZOOM"
+  GRAPH_ZOOM: "GRAPH_ZOOM",
+  PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
 };
 
 module.exports = appConstants;
@@ -794,6 +801,7 @@ var CHANGE_EVENT = 'change';
 
 var draggedElement = null;
 var draggedElementID = null;
+var nodesToRender = [];
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -880,6 +888,33 @@ function deselectAllEdges(){
   console.log(edgeSelectedStates);
 }
 
+var edges = {
+  Gate1OutTGen1Ena: {
+    fromNode: 'Gate1',
+    fromNodePort: 'out',
+    toNode: 'TGen1',
+    toNodePort: 'ena'
+  },
+  //TGen1PosnPComp1Posn: {
+  //  fromNode: 'TGen1',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodePort: 'posn'
+  //},
+  //TGen1PosnPComp1Ena: {
+  //  fromNode: 'TGen1',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodePort: 'ena'
+  //},
+  //Gate1OutPComp2Ena: {
+  //  fromNode: 'Gate1',
+  //  fromNodePort: 'out',
+  //  toNode: 'PComp2',
+  //  toNodePort: 'ena'
+  //}
+};
+
 var allNodeInfo = {
 
   Gate1: {
@@ -913,26 +948,35 @@ var nodePositions = {
 
   TGen1: {
     position: {
-      x: 250,
+      x: 450,
       y: 10
     }
   },
   PComp1: {
     position: {
-      x: 450,
-      y: 200,
+      x: 650,
+      y: 250,
     },
     name: "LinePulse"
   },
-  //LUT1: {
-  //  x: 250,
-  //  y: 150
-  //}
-  //PComp2: {
-  //  x: 70,
-  //  y: 200,
-  //  name: "FwdLineGate"
-  //}
+  ////LUT1: {
+  ////  x: 250,
+  ////  y: 150
+  ////}
+  PComp2: {
+    position: {
+      x: 250,
+      y: 150
+    },
+    name: "FwdLineGate"
+  },
+  PComp3: {
+    position: {
+      x: 250,
+      y: 350
+    },
+    name: "BwdLineGate"
+  }
 };
 
 function appendToNodePositions(NodeInfo){
@@ -1019,6 +1063,18 @@ var allPossibleNodes = {
     nodePositions.PComp1.position = {
       x: nodePositions.PComp1.position.x + NodeInfo.x,
       y: nodePositions.PComp1.position.y + NodeInfo.y
+    }
+  },
+  'PComp2': function(NodeInfo) {
+    nodePositions.PComp2.position = {
+      x: nodePositions.PComp2.position.x + NodeInfo.x,
+      y: nodePositions.PComp2.position.y + NodeInfo.y
+    }
+  },
+  'PComp3': function(NodeInfo) {
+    nodePositions.PComp3.position = {
+      x: nodePositions.PComp3.position.x + NodeInfo.x,
+      y: nodePositions.PComp3.position.y + NodeInfo.y
     }
   }
 };
@@ -1467,7 +1523,7 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
-      console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
       //console.log(NodeId);
       //console.log(nodeSelectedStates[NodeId]);
     }
@@ -1513,6 +1569,13 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getGraphZoomScale: function(){
     return graphZoomScale;
+  },
+
+  getAllEdges: function(){
+    return edges;
+  },
+  getNodesToRenderArray: function(){
+    return nodesToRender;
   }
 });
 
@@ -1530,19 +1593,19 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.DRAGGED_ELEMENT:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       draggedElement = item;
-      console.log(draggedElement);
+      //console.log(draggedElement);
       nodeStore.emitChange();
       break;
 
 
     case appConstants.DRAGGED_ELEMENTID:
-      console.log(payload);
-      console.log(action);
+      //console.log(payload);
+      //console.log(action);
       draggedElementID = item;
-      console.log(draggedElementID);
+      //console.log(draggedElementID);
       nodeStore.emitChange();
       break;
 
@@ -1604,6 +1667,14 @@ AppDispatcher.register(function(payload){
       //console.log(payload);
       //console.log(item);
       graphZoomScale = item;
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.PUSH_NODETOARRAY:
+      console.log(payload);
+      console.log(item);
+      nodesToRender.push(item);
+      console.log(nodesToRender);
       nodeStore.emitChange();
       break;
 
@@ -3073,14 +3144,14 @@ var Edge = React.createClass({displayName: "Edge",
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
         React.createElement(Line, {id: "outerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-              x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y, 
-              x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y, 
+              x1: this.props.x1, y1: this.props.y1, 
+              x2: this.props.x2, y2: this.props.y2, 
               style: {strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
 
         React.createElement(Line, {id: "innerLine", onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
           //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
-              x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y, 
-              x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y, 
+              x1: this.props.x1, y1: this.props.y1, 
+              x2: this.props.x2, y2: this.props.y2, 
               style: {strokeWidth: '5', stroke:"orange"}})
 
 
@@ -3194,6 +3265,7 @@ function getGateNodeState(){
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
     //currentStyling: NodeStore.getGate1CurrentStyling()
+    allNodePositions: NodeStore.getAllNodePositions()
   }
 }
 
@@ -3312,7 +3384,8 @@ var GateNode = React.createClass({displayName: "GateNode",
   mouseOver: function(){
     //console.log("mouseOver");
     //var stringVersionOfRectangleName = String(this.props.RectangleName);
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
     if(this.state.selected === true){
 
     }
@@ -3325,7 +3398,8 @@ var GateNode = React.createClass({displayName: "GateNode",
     //console.log("mouseLeave");
     //console.log(this.props.RectangleName);
     //var stringVersionOfRectangleName = String(this.props.RectangleName);
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -3356,6 +3430,7 @@ var GateNode = React.createClass({displayName: "GateNode",
   },
 
   render: function(){
+    //console.log("inside gateNode's render function");
 
     if(this.state.selected === true){
       var currentStyling = this.state.selectedStyling;
@@ -3378,12 +3453,21 @@ var GateNode = React.createClass({displayName: "GateNode",
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
-    console.log(this.props);
+    var nodeInfo = this.state.allNodePositions[this.props.id];
+    //console.log(nodeInfo);
+    var nodePositionX = nodeInfo.position.x;
+    var nodePositionY = nodeInfo.position.y;
+    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
+
+    var nodeName = nodeInfo.name;
+    var rectangleString = "Rectangle";
+    var rectangleName = this.props.id.concat(rectangleString);
 
     return (
-      React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle
+      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
         //onMouseDown={this.mouseDown} onMouseUp={this.mouseUp} onMouseLeave={this.mouseLeave} onMouseMove={this.mouseMove}
         //                 onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
+        transform: nodeTranslate
 
         //onMouseDown={this.mouseDownSelectElement} onMouseMove={this.state.moveFunction} onMouseUp={this.mouseUp}
 
@@ -3393,7 +3477,7 @@ var GateNode = React.createClass({displayName: "GateNode",
           React.createElement("rect", {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
           ), 
 
-          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
+          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
                      rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
@@ -3413,7 +3497,7 @@ var GateNode = React.createClass({displayName: "GateNode",
 
           React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
 
-          React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, NodeName: this.props.NodeName}), 
+          React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, NodeName: nodeName}), 
           React.createElement(NodeType, {x: "25", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
 
         )
@@ -4093,6 +4177,7 @@ function getPComp1NodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
+    allNodePositions: NodeStore.getAllNodePositions()
   }
 }
 
@@ -4119,13 +4204,15 @@ var PCompNode = React.createClass({displayName: "PCompNode",
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -4165,14 +4252,24 @@ var PCompNode = React.createClass({displayName: "PCompNode",
     var portStyling = currentStyling.ports.portStyling;
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
-    console.log(inportPositions);
+    //console.log(inportPositions);
 
+    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodePositionX = nodeInfo.position.x;
+    var nodePositionY = nodeInfo.position.y;
+    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
+
+    var nodeName = nodeInfo.name;
+    var rectangleString = "Rectangle";
+    var rectangleName = this.props.id.concat(rectangleString);
 
     return(
-      React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}), 
+      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
+         transform: nodeTranslate}), 
+
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
           React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
+          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 
@@ -4196,7 +4293,7 @@ var PCompNode = React.createClass({displayName: "PCompNode",
           React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
           React.createElement(OutportPulseText, {x: textPosition.pulse.x, y: textPosition.pulse.y, style: {MozUserSelect: 'none'}}), 
 
-          React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}, NodeName: this.props.NodeName}), 
+          React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}, NodeName: nodeName}), 
           React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}})
 
         )
@@ -4509,6 +4606,7 @@ function getTGenNodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getTGenNodeStyling(),
     selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
+    allNodePositions: NodeStore.getAllNodePositions()
   }
 }
 
@@ -4553,13 +4651,15 @@ var TGenNode = React.createClass({displayName: "TGenNode",
 
   mouseOver: function(){
     //console.log("mouseOver");
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
     test.style.stroke = '#797979'
   },
 
   mouseLeave: function(){
     //console.log("mouseLeave");
-    var test = document.getElementById(this.props.RectangleName);
+    var rectangleName = this.props.id.concat("Rectangle");
+    var test = document.getElementById(rectangleName);
 
     if(this.state.selected === true){
       console.log("this.state.selected is true, so don't reset the border colour");
@@ -4599,14 +4699,24 @@ var TGenNode = React.createClass({displayName: "TGenNode",
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
+    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodePositionX = nodeInfo.position.x;
+    var nodePositionY = nodeInfo.position.y;
+    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
+
+    //var nodeName = nodeInfo.name;
+    var rectangleString = "Rectangle";
+    var rectangleName = this.props.id.concat(rectangleString);
+
     return (
-      React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle
+      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
+           transform: nodeTranslate
             }), 
 
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
           React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
 
-          React.createElement(Rectangle, {id: this.props.RectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
+          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
           ), 
@@ -4775,7 +4885,12 @@ function getAppState(){
     allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
-    graphZoomScale: NodeStore.getGraphZoomScale()
+    graphZoomScale: NodeStore.getGraphZoomScale(),
+    allEdges: NodeStore.getAllEdges(),
+    gateNodeStyling: NodeStore.getGateNodeStyling(),
+    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    nodesToRender: NodeStore.getNodesToRenderArray()
   }
 }
 
@@ -4793,6 +4908,10 @@ var App = React.createClass({displayName: "App",
 
     this.setState({moveFunction: this.defaultMoveFunction});
     this.setState({panMoveFunction: this.defaultMoveFunction});
+    this.setState({self: this});
+
+    this.setState({wait: false});
+    this.addNodeToNodesArray();
 
   },
   componentWillUnmount: function () {
@@ -4903,6 +5022,7 @@ var App = React.createClass({displayName: "App",
     /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
 
     //console.log(e);
+    //console.log(Math.floor(Date.now() / 1000));
 
     var updatedCoordinates = {
       x: e.nativeEvent.clientX,
@@ -4935,11 +5055,11 @@ var App = React.createClass({displayName: "App",
 
   mouseUp: function (e) {
     console.log("mouseUp");
-    console.log(e);
-    console.log(this.state.afterDrag);
-    console.log(this.state.mouseDownX);
-    console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
-    console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
+    //console.log(e);
+    //console.log(this.state.afterDrag);
+    //console.log(this.state.mouseDownX);
+    //console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
+    //console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
 
 
     if (this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y) {
@@ -5138,9 +5258,82 @@ var App = React.createClass({displayName: "App",
 
   },
 
+  //throttle: function(limit, e){
+  //
+  //  //this.test(this, e);
+  //  if(this.state.wait === false || this.state.wait === undefined){
+  //    console.log("wait is false, so do the thing");
+  //    this.setState({wait: true});
+  //    console.log(this.state.wait);
+  //    setTimeout.bind(this, [this.test(this, e), 40])
+  //  }
+  //  else if(this.state.wait === true){
+  //    console.log("we are still waiting, so don't run the move function again just yet");
+  //  }
+  //
+  //
+  //},
+  //throttleMoveFunction(e){
+  //  //console.count("Throttled");
+  //  //console.log(e);
+  //  this.throttle(100, e);
+  //},
+  //test: function(Component, e){
+  //  console.log("inside throttle return function");
+  //  this.setState({wait: false});
+  //  Component.anotherMoveFunction(e);
+  //  console.log(this.state.wait);
+  //},
+  addNodeToNodesArray: function(){
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var allNodePositions = this.state.allNodePositions;
+
+    for(var node in allNodePositions){
+      //console.log("we have a gate node!");
+      var nodeName = allNodePositions[node].name;
+      var rectangleString = "Rectangle";
+      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+      //console.log(rectangleName);
+
+      var nodeX = allNodePositions[node].position.x;
+      var nodeY = allNodePositions[node].position.y;
+      var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+
+      if(gateNodeRegExp.test(node) === true){
+        nodeActions.pushNodeToArray(React.createElement(GateNode, {id: node, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(tgenNodeRegExp.test(node) === true){
+        //console.log("we have a tgen node!");
+        nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: node, 
+                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(pcompNodeRegExp.test(node) === true){
+        //console.log("we have a pcomp node!");
+        nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: node, 
+                              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else if(lutNodeRegExp.test(node) === true){
+        //console.log("we have an lut node!");
+        nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, 
+                            NodeName: nodeName, RectangleName: rectangleName, 
+                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+      }
+      else{
+        console.log("no match to any node type, something's wrong?");
+      }
+    }
+  },
+
 
 
   render: function(){
+    //console.log("inside theGraphDiamond's render function");
+
     var x = this.state.graphPosition.x;
     var y = this.state.graphPosition.y;
     var scale = this.state.graphZoomScale;
@@ -5153,47 +5346,133 @@ var App = React.createClass({displayName: "App",
     //console.log(regExpTest.test(testString));
     //console.log(regExpTest.test(anotherTestString));
 
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
+    //var gateNodeRegExp = /Gate/;
+    //var tgenNodeRegExp = /TGen/;
+    //var pcompNodeRegExp = /PComp/;
+    //var lutNodeRegExp = /LUT/;
+    //
+    //var allNodePositions = this.state.allNodePositions;
+    //var nodes = [];
 
-    var allNodePositions = this.state.allNodePositions;
-    var nodes = [];
+    //var allEdges = this.state.allEdges;
+    //var edges = [];
+    //
+    //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+    //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+    //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+    //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+    //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+    //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
 
-    for(var node in allNodePositions){
-      //console.log("we have a gate node!");
-      var nodeName = allNodePositions[node].name;
-      var rectangleString = "Rectangle";
-      var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      //console.log(rectangleName);
-      if(gateNodeRegExp.test(node) === true){
-        nodes.push(React.createElement(GateNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
-                             NodeName: nodeName, RectangleName: rectangleName, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-      }
-      else if(tgenNodeRegExp.test(node) === true){
-        //console.log("we have a tgen node!");
-        nodes.push(React.createElement(TGenNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
-                             RectangleName: rectangleName, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-      }
-      else if(pcompNodeRegExp.test(node) === true){
-        //console.log("we have a pcomp node!");
-        nodes.push(React.createElement(PCompNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
-                              NodeName: nodeName, RectangleName: rectangleName, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-      }
-      else if(lutNodeRegExp.test(node) === true){
-        //console.log("we have an lut node!");
-        nodes.push(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, x: allNodePositions[node].position.x, y: allNodePositions[node].position.y, 
-                            NodeName: nodeName, RectangleName: rectangleName, 
-                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-      }
-      else{
-        console.log("no match to any node type, something's wrong?");
-      }
-    }
+
+
+    //for(var edge in allEdges){
+    //  var fromNode = allEdges[edge].fromNode;
+    //  var toNode = allEdges[edge].toNode;
+    //  //console.log(fromNode);
+    //  //console.log(toNode);
+    //  var fromNodePort = allEdges[edge].fromNodePort;
+    //  var toNodePort = allEdges[edge].toNodePort;
+    //  //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+    //  //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
+    //  //console.log(this.state.allNodePositions[toNode].position);
+    //  var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
+    //  var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
+    //  var toNodePositionX = this.state.allNodePositions[toNode].position.x;
+    //  var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+    //  //console.log(fromNodePositionX);
+    //  //console.log(fromNodePositionY);
+    //
+    //  /* fromNodes */
+    //  if(gateNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+    //    //console.log(startOfEdgePortOffsetX);
+    //    //console.log(startOfEdgePortOffsetY);
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //    //console.log(startOfEdgeX);
+    //    //console.log(startOfEdgeY);
+    //  }
+    //  else if(tgenNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //  }
+    //  else if(pcompNodeRegExp.test(fromNode) === true){
+    //    var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+    //    var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    //  }
+    //
+    //  /* toNodes */
+    //  if(tgenNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //    //console.log(endOfEdgeX);
+    //    //console.log(endOfEdgeY);
+    //  }
+    //  else if(gateNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //  }
+    //  else if(pcompNodeRegExp.test(toNode) === true){
+    //    var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+    //    var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    //  }
+    //
+    //  edges.push(<Edge id={edge}
+    //                   x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+    //                   onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+    //  />)
+    //
+    //}
+
+    //for(var node in allNodePositions){
+    //  //console.log("we have a gate node!");
+    //  var nodeName = allNodePositions[node].name;
+    //  var rectangleString = "Rectangle";
+    //  var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+    //  //console.log(rectangleName);
+    //
+    //  var nodeX = allNodePositions[node].position.x;
+    //  var nodeY = allNodePositions[node].position.y;
+    //  var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+    //
+    //  if(gateNodeRegExp.test(node) === true){
+    //    nodes.push(<GateNode id={node}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(tgenNodeRegExp.test(node) === true){
+    //    //console.log("we have a tgen node!");
+    //    nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                         RectangleName={rectangleName}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(pcompNodeRegExp.test(node) === true){
+    //    //console.log("we have a pcomp node!");
+    //    nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                          NodeName={nodeName} RectangleName={rectangleName}
+    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else if(lutNodeRegExp.test(node) === true){
+    //    //console.log("we have an lut node!");
+    //    nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //                        NodeName={nodeName} RectangleName={rectangleName}
+    //                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //  }
+    //  else{
+    //    console.log("no match to any node type, something's wrong?");
+    //  }
+    //}
 
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
@@ -5210,14 +5489,14 @@ var App = React.createClass({displayName: "App",
              onWheel: this.wheelZoom}, 
 
 
-            React.createElement("g", {id: "EdgesGroup"}, 
-              React.createElement(Edge, {id: "Gate1OutTGen1Ena", 
-              onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp})
+            React.createElement("g", {id: "EdgesGroup"}
+
+
             ), 
 
             React.createElement("g", {id: "NodesGroup"}, 
 
-              nodes
+              this.state.nodesToRender
 
             )
 
@@ -5261,6 +5540,11 @@ module.exports = App;
 //height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} x={this.state.PComp1Position.x} y={this.state.PComp1Position.y}
 //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+
+//<Edge id="Gate1OutTGen1Ena"
+//      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp} />
+
 
 ///* The 'zoom origin' is the origin of the <g id="testPanGroup"> element */
 //var differenceBetweenMouseAndZoomOrigin = {

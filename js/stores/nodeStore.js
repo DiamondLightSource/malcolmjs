@@ -11,6 +11,7 @@ var CHANGE_EVENT = 'change';
 
 var draggedElement = null;
 var draggedElementID = null;
+var nodesToRender = [];
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -97,6 +98,33 @@ function deselectAllEdges(){
   console.log(edgeSelectedStates);
 }
 
+var edges = {
+  Gate1OutTGen1Ena: {
+    fromNode: 'Gate1',
+    fromNodePort: 'out',
+    toNode: 'TGen1',
+    toNodePort: 'ena'
+  },
+  //TGen1PosnPComp1Posn: {
+  //  fromNode: 'TGen1',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodePort: 'posn'
+  //},
+  //TGen1PosnPComp1Ena: {
+  //  fromNode: 'TGen1',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodePort: 'ena'
+  //},
+  //Gate1OutPComp2Ena: {
+  //  fromNode: 'Gate1',
+  //  fromNodePort: 'out',
+  //  toNode: 'PComp2',
+  //  toNodePort: 'ena'
+  //}
+};
+
 var allNodeInfo = {
 
   Gate1: {
@@ -130,26 +158,35 @@ var nodePositions = {
 
   TGen1: {
     position: {
-      x: 250,
+      x: 450,
       y: 10
     }
   },
   PComp1: {
     position: {
-      x: 450,
-      y: 200,
+      x: 650,
+      y: 250,
     },
     name: "LinePulse"
   },
-  //LUT1: {
-  //  x: 250,
-  //  y: 150
-  //}
-  //PComp2: {
-  //  x: 70,
-  //  y: 200,
-  //  name: "FwdLineGate"
-  //}
+  ////LUT1: {
+  ////  x: 250,
+  ////  y: 150
+  ////}
+  PComp2: {
+    position: {
+      x: 250,
+      y: 150
+    },
+    name: "FwdLineGate"
+  },
+  PComp3: {
+    position: {
+      x: 250,
+      y: 350
+    },
+    name: "BwdLineGate"
+  }
 };
 
 function appendToNodePositions(NodeInfo){
@@ -236,6 +273,18 @@ var allPossibleNodes = {
     nodePositions.PComp1.position = {
       x: nodePositions.PComp1.position.x + NodeInfo.x,
       y: nodePositions.PComp1.position.y + NodeInfo.y
+    }
+  },
+  'PComp2': function(NodeInfo) {
+    nodePositions.PComp2.position = {
+      x: nodePositions.PComp2.position.x + NodeInfo.x,
+      y: nodePositions.PComp2.position.y + NodeInfo.y
+    }
+  },
+  'PComp3': function(NodeInfo) {
+    nodePositions.PComp3.position = {
+      x: nodePositions.PComp3.position.x + NodeInfo.x,
+      y: nodePositions.PComp3.position.y + NodeInfo.y
     }
   }
 };
@@ -684,7 +733,7 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
-      console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
       //console.log(NodeId);
       //console.log(nodeSelectedStates[NodeId]);
     }
@@ -730,6 +779,13 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getGraphZoomScale: function(){
     return graphZoomScale;
+  },
+
+  getAllEdges: function(){
+    return edges;
+  },
+  getNodesToRenderArray: function(){
+    return nodesToRender;
   }
 });
 
@@ -747,19 +803,19 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.DRAGGED_ELEMENT:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       draggedElement = item;
-      console.log(draggedElement);
+      //console.log(draggedElement);
       nodeStore.emitChange();
       break;
 
 
     case appConstants.DRAGGED_ELEMENTID:
-      console.log(payload);
-      console.log(action);
+      //console.log(payload);
+      //console.log(action);
       draggedElementID = item;
-      console.log(draggedElementID);
+      //console.log(draggedElementID);
       nodeStore.emitChange();
       break;
 
@@ -821,6 +877,14 @@ AppDispatcher.register(function(payload){
       //console.log(payload);
       //console.log(item);
       graphZoomScale = item;
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.PUSH_NODETOARRAY:
+      console.log(payload);
+      console.log(item);
+      nodesToRender.push(item);
+      console.log(nodesToRender);
       nodeStore.emitChange();
       break;
 
