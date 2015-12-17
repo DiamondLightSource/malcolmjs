@@ -13,7 +13,8 @@ function getPComp1NodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -90,7 +91,7 @@ var PCompNode = React.createClass({
     var textPosition = currentStyling.text.textPositions;
     //console.log(inportPositions);
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;
     var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";

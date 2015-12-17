@@ -16,7 +16,8 @@ function getTGenNodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getTGenNodeStyling(),
     selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -109,7 +110,7 @@ var TGenNode = React.createClass({
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;
     var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";

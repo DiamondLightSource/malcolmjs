@@ -17,7 +17,8 @@ function getGateNodeState(){
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
     //currentStyling: NodeStore.getGate1CurrentStyling()
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -205,7 +206,7 @@ var GateNode = React.createClass({
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     //console.log(nodeInfo);
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;

@@ -128,24 +128,83 @@ var edges = {
 
 var allNodeInfo = {
 
-  Gate1: {
+  'Gate1': {
+    type: 'Gate',
+    name: "Arm",
+    position: {
+      x: 50,
+      y: 100,
+    },
     inports: {
-      "set": {connected: false, connectedTo: null}, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {connected: false, connectedTo: null}
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
     },
     outports: {
-      "out": {connected: false, connectedTo: null}
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
     }
   },
 
-  TGen1: {
+  'TGen1': {
+    type: 'TGen',
+    name: '',
+    position: {
+      x: 450,
+      y: 10
+    },
     inports: {
-      "ena": {connected: false, connectedTo: null}
+      "ena": {
+        connected: false,
+        connectedTo: null
+      }
     },
     outports: {
-      "posn": {connected: false, connectedTo: null}
+      "posn": {
+        connected: false,
+        connectedTo: null
+      }
     }
-  }
+  },
+  'PComp1': {
+    type: 'PComp',
+    name: "LinePulse",
+    position: {
+      x: 650,
+      y: 250,
+    },
+    inports: {
+      'ena': {
+        connected: false,
+        connectedTo: null
+      },
+      'posn': {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      'act': {
+        connected: false,
+        connectedTo: null
+      },
+      'out': {
+        connected: false,
+        connectedTo: null
+      },
+      'pulse': {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
 };
 
 var nodePositions = {
@@ -174,20 +233,20 @@ var nodePositions = {
   ////  x: 250,
   ////  y: 150
   ////}
-  PComp2: {
-    position: {
-      x: 250,
-      y: 150
-    },
-    name: "FwdLineGate"
-  },
-  PComp3: {
-    position: {
-      x: 250,
-      y: 350
-    },
-    name: "BwdLineGate"
-  }
+  //PComp2: {
+  //  position: {
+  //    x: 250,
+  //    y: 150
+  //  },
+  //  name: "FwdLineGate"
+  //},
+  //PComp3: {
+  //  position: {
+  //    x: 250,
+  //    y: 350
+  //  },
+  //  name: "BwdLineGate"
+  //}
 };
 
 function appendToNodePositions(NodeInfo){
@@ -259,35 +318,35 @@ function updateNodePosition(NodeInfo){
 var allPossibleNodes = {
 
   'Gate1': function(NodeInfo){
-    nodePositions.Gate1.position = {
-      x: nodePositions.Gate1.position.x + NodeInfo.x,
-      y: nodePositions.Gate1.position.y + NodeInfo.y
+    allNodeInfo.Gate1.position = {
+      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
+      y: allNodeInfo.Gate1.position.y + NodeInfo.y
     };
   },
   'TGen1': function(NodeInfo){
-    nodePositions.TGen1.position = {
-      x: nodePositions.TGen1.position.x + NodeInfo.x,
-      y: nodePositions.TGen1.position.y + NodeInfo.y
+    allNodeInfo.TGen1.position = {
+      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
+      y: allNodeInfo.TGen1.position.y + NodeInfo.y
     }
   },
   'PComp1': function(NodeInfo){
-    nodePositions.PComp1.position = {
-      x: nodePositions.PComp1.position.x + NodeInfo.x,
-      y: nodePositions.PComp1.position.y + NodeInfo.y
+    allNodeInfo.PComp1.position = {
+      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
+      y: allNodeInfo.PComp1.position.y + NodeInfo.y
     }
   },
-  'PComp2': function(NodeInfo) {
-    nodePositions.PComp2.position = {
-      x: nodePositions.PComp2.position.x + NodeInfo.x,
-      y: nodePositions.PComp2.position.y + NodeInfo.y
-    }
-  },
-  'PComp3': function(NodeInfo) {
-    nodePositions.PComp3.position = {
-      x: nodePositions.PComp3.position.x + NodeInfo.x,
-      y: nodePositions.PComp3.position.y + NodeInfo.y
-    }
-  }
+  //'PComp2': function(NodeInfo) {
+  //  allNodeInfo.PComp2.position = {
+  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
+  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
+  //  }
+  //},
+  //'PComp3': function(NodeInfo) {
+  //  allNodeInfo.PComp3.position = {
+  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
+  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
+  //  }
+  //}
 };
 
 var GateNodeStyling = {
@@ -660,6 +719,12 @@ var SelectedPCompNodeStyling = {
   }
 };
 
+var allNodeTypesPortStyling = {
+  'Gate': GateNodeStyling.ports.portPositions,
+  'TGen': TGenNodeStyling.ports.portPositions,
+  'PComp': PCompNodeStyling.ports.portPositions
+};
+
 var graphPosition = {
   x: 0,
   y: 0
@@ -705,6 +770,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getAllNodePositions: function(){
     return nodePositions;
+  },
+  getAllNodeInfo: function(){
+    return allNodeInfo;
   },
   //getAnyNodePosition: function(NodeId){
   //  if(nodePositions[NodeId] === undefined || null){
@@ -773,6 +841,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getSelectedPCompNodeStyling: function(){
     return SelectedPCompNodeStyling;
+  },
+  getAllNodeTypesPortStyling: function(){
+    return allNodeTypesPortStyling;
   },
 
   getGraphPosition: function(){

@@ -925,24 +925,83 @@ var edges = {
 
 var allNodeInfo = {
 
-  Gate1: {
+  'Gate1': {
+    type: 'Gate',
+    name: "Arm",
+    position: {
+      x: 50,
+      y: 100,
+    },
     inports: {
-      "set": {connected: false, connectedTo: null}, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {connected: false, connectedTo: null}
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
     },
     outports: {
-      "out": {connected: false, connectedTo: null}
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
     }
   },
 
-  TGen1: {
+  'TGen1': {
+    type: 'TGen',
+    name: '',
+    position: {
+      x: 450,
+      y: 10
+    },
     inports: {
-      "ena": {connected: false, connectedTo: null}
+      "ena": {
+        connected: false,
+        connectedTo: null
+      }
     },
     outports: {
-      "posn": {connected: false, connectedTo: null}
+      "posn": {
+        connected: false,
+        connectedTo: null
+      }
     }
-  }
+  },
+  'PComp1': {
+    type: 'PComp',
+    name: "LinePulse",
+    position: {
+      x: 650,
+      y: 250,
+    },
+    inports: {
+      'ena': {
+        connected: false,
+        connectedTo: null
+      },
+      'posn': {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      'act': {
+        connected: false,
+        connectedTo: null
+      },
+      'out': {
+        connected: false,
+        connectedTo: null
+      },
+      'pulse': {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
 };
 
 var nodePositions = {
@@ -971,20 +1030,20 @@ var nodePositions = {
   ////  x: 250,
   ////  y: 150
   ////}
-  PComp2: {
-    position: {
-      x: 250,
-      y: 150
-    },
-    name: "FwdLineGate"
-  },
-  PComp3: {
-    position: {
-      x: 250,
-      y: 350
-    },
-    name: "BwdLineGate"
-  }
+  //PComp2: {
+  //  position: {
+  //    x: 250,
+  //    y: 150
+  //  },
+  //  name: "FwdLineGate"
+  //},
+  //PComp3: {
+  //  position: {
+  //    x: 250,
+  //    y: 350
+  //  },
+  //  name: "BwdLineGate"
+  //}
 };
 
 function appendToNodePositions(NodeInfo){
@@ -1056,35 +1115,35 @@ function updateNodePosition(NodeInfo){
 var allPossibleNodes = {
 
   'Gate1': function(NodeInfo){
-    nodePositions.Gate1.position = {
-      x: nodePositions.Gate1.position.x + NodeInfo.x,
-      y: nodePositions.Gate1.position.y + NodeInfo.y
+    allNodeInfo.Gate1.position = {
+      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
+      y: allNodeInfo.Gate1.position.y + NodeInfo.y
     };
   },
   'TGen1': function(NodeInfo){
-    nodePositions.TGen1.position = {
-      x: nodePositions.TGen1.position.x + NodeInfo.x,
-      y: nodePositions.TGen1.position.y + NodeInfo.y
+    allNodeInfo.TGen1.position = {
+      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
+      y: allNodeInfo.TGen1.position.y + NodeInfo.y
     }
   },
   'PComp1': function(NodeInfo){
-    nodePositions.PComp1.position = {
-      x: nodePositions.PComp1.position.x + NodeInfo.x,
-      y: nodePositions.PComp1.position.y + NodeInfo.y
+    allNodeInfo.PComp1.position = {
+      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
+      y: allNodeInfo.PComp1.position.y + NodeInfo.y
     }
   },
-  'PComp2': function(NodeInfo) {
-    nodePositions.PComp2.position = {
-      x: nodePositions.PComp2.position.x + NodeInfo.x,
-      y: nodePositions.PComp2.position.y + NodeInfo.y
-    }
-  },
-  'PComp3': function(NodeInfo) {
-    nodePositions.PComp3.position = {
-      x: nodePositions.PComp3.position.x + NodeInfo.x,
-      y: nodePositions.PComp3.position.y + NodeInfo.y
-    }
-  }
+  //'PComp2': function(NodeInfo) {
+  //  allNodeInfo.PComp2.position = {
+  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
+  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
+  //  }
+  //},
+  //'PComp3': function(NodeInfo) {
+  //  allNodeInfo.PComp3.position = {
+  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
+  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
+  //  }
+  //}
 };
 
 var GateNodeStyling = {
@@ -1457,6 +1516,12 @@ var SelectedPCompNodeStyling = {
   }
 };
 
+var allNodeTypesPortStyling = {
+  'Gate': GateNodeStyling.ports.portPositions,
+  'TGen': TGenNodeStyling.ports.portPositions,
+  'PComp': PCompNodeStyling.ports.portPositions
+};
+
 var graphPosition = {
   x: 0,
   y: 0
@@ -1502,6 +1567,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getAllNodePositions: function(){
     return nodePositions;
+  },
+  getAllNodeInfo: function(){
+    return allNodeInfo;
   },
   //getAnyNodePosition: function(NodeId){
   //  if(nodePositions[NodeId] === undefined || null){
@@ -1570,6 +1638,9 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getSelectedPCompNodeStyling: function(){
     return SelectedPCompNodeStyling;
+  },
+  getAllNodeTypesPortStyling: function(){
+    return allNodeTypesPortStyling;
   },
 
   getGraphPosition: function(){
@@ -3121,7 +3192,9 @@ function getEdgeState(){
     gateNodeStyling: NodeStore.getGateNodeStyling(),
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -3193,10 +3266,10 @@ var Edge = React.createClass({displayName: "Edge",
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.state.allNodePositions[toNode].position);
-    var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
-    var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
-    var toNodePositionX = this.state.allNodePositions[toNode].position.x;
-    var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+    var fromNodePositionX = this.state.allNodeInfo[fromNode].position.x;
+    var fromNodePositionY = this.state.allNodeInfo[fromNode].position.y;
+    var toNodePositionX = this.state.allNodeInfo[toNode].position.x;
+    var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
 
@@ -3378,7 +3451,8 @@ function getGateNodeState(){
     defaultStyling: NodeStore.getGateNodeStyling(),
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
     //currentStyling: NodeStore.getGate1CurrentStyling()
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -3566,7 +3640,7 @@ var GateNode = React.createClass({displayName: "GateNode",
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     //console.log(nodeInfo);
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;
@@ -4290,7 +4364,8 @@ function getPComp1NodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -4367,7 +4442,7 @@ var PCompNode = React.createClass({displayName: "PCompNode",
     var textPosition = currentStyling.text.textPositions;
     //console.log(inportPositions);
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;
     var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
@@ -4719,7 +4794,8 @@ function getTGenNodeState(){
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
     defaultStyling: NodeStore.getTGenNodeStyling(),
     selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -4812,7 +4888,7 @@ var TGenNode = React.createClass({displayName: "TGenNode",
     var outportPositions = currentStyling.ports.portPositions.outportPositions;
     var textPosition = currentStyling.text.textPositions;
 
-    var nodeInfo = this.state.allNodePositions[this.props.id];
+    var nodeInfo = this.state.allNodeInfo[this.props.id];
     var nodePositionX = nodeInfo.position.x;
     var nodePositionY = nodeInfo.position.y;
     var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
@@ -5435,7 +5511,7 @@ var App = React.createClass({displayName: "App",
       else if(lutNodeRegExp.test(node) === true){
         //console.log("we have an lut node!");
         nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, 
-                            NodeName: nodeName, RectangleName: rectangleName, 
+                            //NodeName={nodeName} RectangleName={rectangleName}
                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
       }
       else{
@@ -5691,8 +5767,7 @@ var App = React.createClass({displayName: "App",
              onWheel: this.wheelZoom}, 
 
 
-            React.createElement("g", {id: "EdgesGroup"}, 
-              this.state.edgesToRender
+            React.createElement("g", {id: "EdgesGroup"}
 
             ), 
 

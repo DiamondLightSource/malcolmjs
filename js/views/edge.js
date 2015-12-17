@@ -21,7 +21,9 @@ function getEdgeState(){
     gateNodeStyling: NodeStore.getGateNodeStyling(),
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
-    allNodePositions: NodeStore.getAllNodePositions()
+    //allNodePositions: NodeStore.getAllNodePositions(),
+    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
+    allNodeInfo: NodeStore.getAllNodeInfo()
   }
 }
 
@@ -93,10 +95,10 @@ var Edge = React.createClass({
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.state.allNodePositions[toNode].position);
-    var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
-    var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
-    var toNodePositionX = this.state.allNodePositions[toNode].position.x;
-    var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+    var fromNodePositionX = this.state.allNodeInfo[fromNode].position.x;
+    var fromNodePositionY = this.state.allNodeInfo[fromNode].position.y;
+    var toNodePositionX = this.state.allNodeInfo[toNode].position.x;
+    var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
 
