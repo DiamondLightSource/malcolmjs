@@ -28,6 +28,9 @@ var sessionActions = require('../actions/sessionActions');
 var TheGraphDiamond = require('./theGraphDiamond.js');
 //var TheGraphDiamond = require('../the-graph-diamond/js/app.js');
 
+var nodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
+
 //var FlexboxTheme = require('./reactPanelsCustomTheme.js');
 
 var Panel = ReactPanels.Panel;
@@ -220,6 +223,10 @@ var MainPane = React.createClass({
     //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
 
+  addGateNode: function(){
+    nodeActions.addToAllNodeInfo("adding gate node");
+  },
+
 
 
   render: function() {
@@ -257,6 +264,7 @@ var MainPane = React.createClass({
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
               <button type="button" onClick={this.addDivToContent}>Add block</button>
               <button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+              <button type="button" onClick={this.addGateNode}>Add node</button>
 
             </div>
           </div>

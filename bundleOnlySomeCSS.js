@@ -156,6 +156,13 @@ var nodeActions = {
       actionType: appConstants.CLICKED_EDGE,
       item: item
     })
+  },
+
+  addToAllNodeInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDTO_ALLNODEINFO,
+      item: item
+    })
   }
 };
 
@@ -529,7 +536,9 @@ var appConstants = {
   PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
   PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY",
   GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
-  CLICKED_EDGE: "CLICKED_EDGE"
+  CLICKED_EDGE: "CLICKED_EDGE",
+
+  ADDTO_ALLNODEINFO: "ADDTO_ALLNODEINFO"
 };
 
 module.exports = appConstants;
@@ -826,6 +835,7 @@ var draggedElementID = null;
 var nodesToRender = [];
 var edgesToRender = [];
 var clickedEdge = null;
+var newlyAddedNode = null;
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -1039,6 +1049,119 @@ var allNodeInfo = {
     }
   },
 };
+
+var nodeInfoTemplates = {
+  'Gate': {
+    type: 'Gate',
+    name: "",
+    position: {
+      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    inports: {
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'PComp': {
+    type: 'PComp',
+    name: "",
+    position: {
+      x: null,
+      y: null,
+    },
+    inports: {
+      'ena': {
+        connected: false,
+        connectedTo: null
+      },
+      'posn': {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      'act': {
+        connected: false,
+        connectedTo: null
+      },
+      'out': {
+        connected: false,
+        connectedTo: null
+      },
+      'pulse': {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'TGen': {
+    type: 'TGen',
+    name: '',
+    position: {
+      x: null,
+      y: null
+    },
+    inports: {
+      "ena": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "posn": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'LUT': {
+
+  },
+  'Pulse': {
+
+  },
+  'TTLOut': {
+
+  },
+  'EncIn': {
+
+  }
+};
+
+function appendToAllNodeInfo(NodeInfo){
+  //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
+  //
+  //}
+  var newGateId = generateNewNodeId();
+  console.log(newGateId);
+  allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  console.log(allNodeInfo);
+  newlyAddedNode = allNodeInfo[newGateId];
+  console.log(newlyAddedNode);
+}
+
+var nodeIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+
+function generateNewNodeId(){
+  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+  nodeIdCounter += 1;
+  var newGateId = "Gate" + nodeIdCounter;
+  console.log(newGateId);
+  return newGateId;
+}
 
 var nodePositions = {
   Gate1: {
@@ -1563,7 +1686,7 @@ var graphPosition = {
   y: 0
 };
 
-var graphZoomScale = 1;
+var graphZoomScale = 1.2;
 
 var nodeStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -1697,6 +1820,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getEdgesToRenderArray: function(){
     return edgesToRender;
+  },
+
+  getNewlyAddedNode: function(){
+    return newlyAddedNode;
   }
 });
 
@@ -1829,6 +1956,13 @@ AppDispatcher.register(function(payload){
       console.log(item);
       clickedEdge = item;
       console.log(clickedEdge);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.ADDTO_ALLNODEINFO:
+      console.log(payload);
+      console.log(item);
+      appendToAllNodeInfo();
       nodeStore.emitChange();
       break;
 
@@ -4114,6 +4248,9 @@ var sessionActions = require('../actions/sessionActions');
 var TheGraphDiamond = require('./theGraphDiamond.js');
 //var TheGraphDiamond = require('../the-graph-diamond/js/app.js');
 
+var nodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
+
 //var FlexboxTheme = require('./reactPanelsCustomTheme.js');
 
 var Panel = ReactPanels.Panel;
@@ -4306,6 +4443,10 @@ var MainPane = React.createClass({displayName: "MainPane",
     //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
 
+  addGateNode: function(){
+    nodeActions.addToAllNodeInfo("adding gate node");
+  },
+
 
 
   render: function() {
@@ -4342,7 +4483,8 @@ var MainPane = React.createClass({displayName: "MainPane",
               React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
               React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
               React.createElement("button", {type: "button", onClick: this.addDivToContent}, "Add block"), 
-              React.createElement("button", {type: "button", onClick: this.testingAddChannelChangeInfoViaProperServerRequest}, "Proper server request")
+              React.createElement("button", {type: "button", onClick: this.testingAddChannelChangeInfoViaProperServerRequest}, "Proper server request"), 
+              React.createElement("button", {type: "button", onClick: this.addGateNode}, "Add node")
 
             )
           )
@@ -4436,7 +4578,7 @@ module.exports = MainPane;
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
 
-},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/paneStore":14,"../websocketClientTEST":30,"./blueBlock":16,"./configButton":17,"./favButton":20,"./greenBlock":22,"./redBlock":26,"./theGraphDiamond.js":29,"react":215,"react-panels":40}],25:[function(require,module,exports){
+},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":30,"./blueBlock":16,"./configButton":17,"./favButton":20,"./greenBlock":22,"./redBlock":26,"./theGraphDiamond.js":29,"react":215,"react-panels":40}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -5168,7 +5310,9 @@ function getAppState(){
     tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     nodesToRender: NodeStore.getNodesToRenderArray(),
-    edgesToRender: NodeStore.getEdgesToRenderArray()
+    edgesToRender: NodeStore.getEdgesToRenderArray(),
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    newlyAddedNode: NodeStore.getNewlyAddedNode()
   }
 }
 
@@ -5442,6 +5586,61 @@ var App = React.createClass({displayName: "App",
       y: e.nativeEvent.clientY
     };
 
+    /* Enabling a minimum movement threshold to check if a click was intended but the mouse moved a tiny bit between mouseDown and mouseUp */
+
+    //this.setState({
+    //  panGraphMouseDown: {
+    //    x: e.nativeEvent.clientX,
+    //    y: e.nativeEvent.clientY
+    //  }
+    //});
+    //
+    //this.setState({
+    //  panGraphBeforeDrag: {
+    //    x: e.nativeEvent.clientX,
+    //    y: e.nativeEvent.clientY
+    //  }
+    //});
+    //
+    ///* Will get rewritten if there is graph movement, and will stay the same if there's no movement */
+    //this.setState({
+    //  panGraphAfterDrag: {
+    //    x: e.nativeEvent.clientX,
+    //    y: e.nativeEvent.clientY
+    //  }
+    //});
+    //
+    //this.setState({panMoveFunction: this.panCheckIfClickOrDrag});
+
+  },
+
+  panCheckIfClickOrDrag: function(e){
+    //var mouseMovementX = e.nativeEvent.clientX - this.state.panGraphMouseDown.x;
+    //var mouseMovementY = e.nativeEvent.clientY - this.state.panGraphMouseDown.y;
+    //
+    //if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
+    //  console.log("we have a click, not a drag!");
+    //  /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
+    //  /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
+    //  /* Then I suppose I could have the select style be dependent on if that state is true or false */
+    //
+    //  /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
+    //
+    //  var smallChangeInCoords = {
+    //    x: e.nativeEvent.clientX,
+    //    y: e.nativeEvent.clientY
+    //  };
+    //  this.setState({afterPanDrag: smallChangeInCoords});
+    //
+    //  /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
+    //  /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
+    //  //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+    //  //this.deselect();
+    //}
+    //else {
+    //  console.log("mouseMovementX & Y are big enough, is probably a drag!");
+    //  this.setState({moveFunction: this.panMouseMove});
+    //}
   },
 
   panMouseUp: function (e) {
@@ -5450,6 +5649,44 @@ var App = React.createClass({displayName: "App",
     this.dragging = false;
 
     this.coords = {};
+
+    /* Implementing minimum movement for panning */
+
+    //if (this.state.panGraphBeforeDrag.x === this.state.panGraphAfterDrag.x && this.state.panGraphBeforeDrag.y === this.state.panGraphAfterDrag.y) {
+    //  console.log("zero movement between mouseUp and mouseDown, so it's a click, so we're deselecting everything!");
+    //  this.deselect();
+    //
+    //  this.setState({panMoveFunction: this.defaultMoveFunction});
+    //  this.setState({panGraphBeforeDrag: null});
+    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+    //  this.setState({panGraphAfterDrag: null});
+    //}
+    ///* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
+    //else if (Math.abs(this.state.afterDrag.x - this.state.panGraphMouseDown.x) > 4 && Math.abs(this.state.afterDrag.y - this.state.panGraphMouseDown.y) > 4) {
+    //  console.log("the mouse moved far enough to be a drag");
+    //  this.setState({panMoveFunction: this.defaultMoveFunction});
+    //  this.setState({panGraphBeforeDrag: null});
+    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+    //  this.setState({panGraphAfterDrag: null});
+    //}
+    ///* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
+    //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) > 4) ||
+    //  (Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) <= 4)) {
+    //  console.log("> 4 movement in one axis but < 4 movement in the other");
+    //  this.setState({panMoveFunction: this.defaultMoveFunction});
+    //  this.setState({panGraphBeforeDrag: null});
+    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+    //  this.setState({panGraphAfterDrag: null});
+    //}
+    //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
+    //  console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click, so deselect everything!");
+    //  this.deselect();
+    //  this.setState({panMoveFunction: this.defaultMoveFunction});
+    //  this.setState({panGraphBeforeDrag: null});
+    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+    //  this.setState({panGraphAfterDrag: null});
+    //}
+
   },
 
   panMouseMove: function (e) {
@@ -5472,6 +5709,38 @@ var App = React.createClass({displayName: "App",
     };
 
     nodeActions.changeGraphPosition(newCoords);
+
+    /* Implementing a minimum mouse movement */
+
+    //var updatedCoordinates = {
+    //  x: e.nativeEvent.clientX,
+    //  y: e.nativeEvent.clientY
+    //};
+    //
+    //if (!this.state.panGraphAfterDrag) {
+    //  this.setState({panGraphAfterDrag: updatedCoordinates},
+    //    function () {
+    //
+    //
+    //    })
+    //}
+    ////else{
+    ////    this.setState({beforeDrag: this.state.afterDrag},
+    ////        function(){
+    ////            this.setState({afterDrag: updatedCoordinates},
+    ////                function(){
+    ////                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
+    ////                })
+    ////        })
+    ////}
+    //else {
+    //  this.setState({beforeDrag: this.state.afterDrag},
+    //    function () {
+    //      this.setState({afterDrag: updatedCoordinates});
+    //      this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
+    //    })
+    //}
+
   },
 
   wheelZoom: function (e) {
@@ -5571,9 +5840,10 @@ var App = React.createClass({displayName: "App",
     var pcompNodeRegExp = /PComp/;
     var lutNodeRegExp = /LUT/;
 
-    var allNodePositions = this.state.allNodePositions;
+    var allNodeInfo = this.state.allNodeInfo;
 
-    for(var node in allNodePositions){
+    /* Seems like this could be for adding all the initla nodes on startup, perhaps have another fucion for adding one node at a time? */
+    for(var node in allNodeInfo){
       //console.log("we have a gate node!");
       //var nodeName = allNodePositions[node].name;
       //var rectangleString = "Rectangle";
@@ -5608,6 +5878,46 @@ var App = React.createClass({displayName: "App",
         console.log("no match to any node type, something's wrong?");
       }
     }
+  },
+
+  addNode: function(){
+    console.log("addNode");
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    nodeActions.addToAllNodeInfo("adding gate node");
+
+    var newNode = this.state.newlyAddedNode;
+    console.log(newNode);
+
+    if(gateNodeRegExp.test(newNode) === true){
+      nodeActions.pushNodeToArray(React.createElement(GateNode, {id: newNode, 
+                                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+    }
+    else if(tgenNodeRegExp.test(newNode) === true){
+      //console.log("we have a tgen node!");
+      nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: newNode, 
+                                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+    }
+    else if(pcompNodeRegExp.test(newNode) === true){
+      //console.log("we have a pcomp node!");
+      nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: newNode, 
+                                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+    }
+    else if(lutNodeRegExp.test(newNode) === true){
+      //console.log("we have an lut node!");
+      nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: newNode, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, 
+        //NodeName={nodeName} RectangleName={rectangleName}
+                                           onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+    }
+    else{
+      console.log("no match to any node type, something's wrong?");
+    }
+    console.log(this.state.nodesToRender);
+
+
   },
 
   addEdgeToEdgesArray: function(){
@@ -5701,12 +6011,15 @@ var App = React.createClass({displayName: "App",
 
   render: function(){
     //console.log("inside theGraphDiamond's render function");
+    console.log(this.state.newlyAddedNode);
 
     var x = this.state.graphPosition.x;
     var y = this.state.graphPosition.y;
     var scale = this.state.graphZoomScale;
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
+
+    console.log(this.state.nodesToRender);
 
     //var regExpTest = /abc/;
     //var testString = "I know my abc's";
@@ -5844,6 +6157,7 @@ var App = React.createClass({displayName: "App",
 
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
+
         React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
               onClick: this.deselect, onMouseDown: this.panMouseDown, onMouseUp: this.panMouseUp, onWheel: this.wheelZoom, 
               onMouseMove: this.state.panMoveFunction}
@@ -5852,6 +6166,8 @@ var App = React.createClass({displayName: "App",
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         }, 
+          React.createElement("g", null, React.createElement("rect", {onClick: this.addNode, height: "50", width: "50"})), 
+
           React.createElement("g", {id: "testPanGroup", 
              transform: matrixTransform, 
              onWheel: this.wheelZoom}, 

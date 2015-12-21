@@ -100,6 +100,13 @@ var nodeActions = {
       actionType: appConstants.CLICKED_EDGE,
       item: item
     })
+  },
+
+  addToAllNodeInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDTO_ALLNODEINFO,
+      item: item
+    })
   }
 };
 

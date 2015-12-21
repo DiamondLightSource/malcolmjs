@@ -14,6 +14,7 @@ var draggedElementID = null;
 var nodesToRender = [];
 var edgesToRender = [];
 var clickedEdge = null;
+var newlyAddedNode = null;
 
 var nodeSelectedStates = {
   Gate1: false,
@@ -227,6 +228,119 @@ var allNodeInfo = {
     }
   },
 };
+
+var nodeInfoTemplates = {
+  'Gate': {
+    type: 'Gate',
+    name: "",
+    position: {
+      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    inports: {
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'PComp': {
+    type: 'PComp',
+    name: "",
+    position: {
+      x: null,
+      y: null,
+    },
+    inports: {
+      'ena': {
+        connected: false,
+        connectedTo: null
+      },
+      'posn': {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      'act': {
+        connected: false,
+        connectedTo: null
+      },
+      'out': {
+        connected: false,
+        connectedTo: null
+      },
+      'pulse': {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'TGen': {
+    type: 'TGen',
+    name: '',
+    position: {
+      x: null,
+      y: null
+    },
+    inports: {
+      "ena": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "posn": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'LUT': {
+
+  },
+  'Pulse': {
+
+  },
+  'TTLOut': {
+
+  },
+  'EncIn': {
+
+  }
+};
+
+function appendToAllNodeInfo(NodeInfo){
+  //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
+  //
+  //}
+  var newGateId = generateNewNodeId();
+  console.log(newGateId);
+  allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  console.log(allNodeInfo);
+  newlyAddedNode = allNodeInfo[newGateId];
+  console.log(newlyAddedNode);
+}
+
+var nodeIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+
+function generateNewNodeId(){
+  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+  nodeIdCounter += 1;
+  var newGateId = "Gate" + nodeIdCounter;
+  console.log(newGateId);
+  return newGateId;
+}
 
 var nodePositions = {
   Gate1: {
@@ -751,7 +865,7 @@ var graphPosition = {
   y: 0
 };
 
-var graphZoomScale = 1;
+var graphZoomScale = 1.2;
 
 var nodeStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -885,6 +999,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getEdgesToRenderArray: function(){
     return edgesToRender;
+  },
+
+  getNewlyAddedNode: function(){
+    return newlyAddedNode;
   }
 });
 
@@ -1017,6 +1135,13 @@ AppDispatcher.register(function(payload){
       console.log(item);
       clickedEdge = item;
       console.log(clickedEdge);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.ADDTO_ALLNODEINFO:
+      console.log(payload);
+      console.log(item);
+      appendToAllNodeInfo();
       nodeStore.emitChange();
       break;
 
