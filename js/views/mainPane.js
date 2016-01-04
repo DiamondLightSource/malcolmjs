@@ -54,7 +54,7 @@ function getMainPaneState(){
 
     updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
     updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
-    updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent()
+    updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
   }
 }
 
@@ -65,7 +65,9 @@ var MainPane = React.createClass({
   },
 
   _onChange: function(){
-    this.setState(getMainPaneState())
+    this.setState(getMainPaneState(), function(){
+      console.log("mainpane's state has been mutated");
+    })
   },
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
@@ -225,6 +227,7 @@ var MainPane = React.createClass({
 
   addGateNode: function(){
     nodeActions.addToAllNodeInfo("adding gate node");
+
   },
 
 
@@ -240,6 +243,8 @@ var MainPane = React.createClass({
       'height': '1476',
       'width': '1494'
     };
+    //console.log(this.state.newlyAddedNode);
+    //console.log(this.state);
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle Footer" onChange={this.handleActionFooterToggle}>
@@ -249,7 +254,7 @@ var MainPane = React.createClass({
         <Tab title="View" showFooter={this.state.footers}>
           <Content  >
             <div style={contentStyling} >
-              <TheGraphDiamond/>
+              <TheGraphDiamond />
             </div>
 
 

@@ -107,7 +107,7 @@ var nodeActions = {
       actionType: appConstants.ADDTO_ALLNODEINFO,
       item: item
     })
-  }
+  },
 };
 
 module.exports = nodeActions;

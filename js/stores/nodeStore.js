@@ -94,7 +94,7 @@ function checkIfAnyEdgesAreSelected(){
   var areAnyEdgesSelected = null;
   for(var edge in edgeSelectedStates){
     if(edgeSelectedStates[edge] === true){
-      console.log(edgeSelectedStates[edge]);
+      //console.log(edgeSelectedStates[edge]);
       areAnyEdgesSelected = true;
       break;
     }
@@ -102,7 +102,7 @@ function checkIfAnyEdgesAreSelected(){
       areAnyEdgesSelected = false;
     }
   }
-  console.log(areAnyEdgesSelected);
+  //console.log(areAnyEdgesSelected);
   return areAnyEdgesSelected;
 }
 
@@ -320,16 +320,62 @@ var nodeInfoTemplates = {
   }
 };
 
+function randomNodePositionGenerator(){
+  console.log("random number is being generated");
+  return (Math.random() * 1000) % 500;
+}
+
 function appendToAllNodeInfo(NodeInfo){
   //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
   //
   //}
-  var newGateId = generateNewNodeId();
-  console.log(newGateId);
-  allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  /* This was for when I was generating the new gateNode id in the store rather than in theGraphDiamond */
+  //var newGateId = generateNewNodeId();
+  //console.log(newGateId);
+  //allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  //console.log(allNodeInfo);
+  //newlyAddedNode = allNodeInfo[newGateId];
+  //console.log(newlyAddedNode);
+  console.log(NodeInfo);
+  //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
+  allNodeInfo[NodeInfo] = {
+    type: 'Gate',
+    name: "",
+    position: {
+      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    inports: {
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  };
+
+  /* Trying to use a for loop to copy over the template */
+  //for(var property in nodeInfoTemplates.Gate){
+  //  console.log(NodeInfo);
+  //  console.log(allNodeInfo);
+  //
+  //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
+  //}
+  console.log(nodeInfoTemplates.Gate);
+  //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
+  //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
+  //console.log(randomNodePositionGenerator());
+  //console.log(randomNodePositionGenerator());
   console.log(allNodeInfo);
-  newlyAddedNode = allNodeInfo[newGateId];
-  console.log(newlyAddedNode);
 }
 
 var nodeIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
@@ -482,6 +528,21 @@ var allPossibleNodes = {
   //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
   //  }
   //}
+};
+
+var appendToAllPossibleNodes = function(Node){
+  allPossibleNodes[Node] = function(NodeInfo){
+    console.log(nodeInfoTemplates.Gate);
+    allNodeInfo[Node].position = {
+      x: allNodeInfo[Node].position.x + NodeInfo.x,
+      y: allNodeInfo[Node].position.y + NodeInfo.y
+    }
+  };
+  console.log("appended to allPossibleNodes");
+  console.log(Node);
+  console.log(allPossibleNodes);
+  console.log(allPossibleNodes[Node]);
+  console.log(allNodeInfo[Node]);
 };
 
 var GateNodeStyling = {
@@ -1065,7 +1126,7 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
-      console.log(areAnyEdgesSelected);
+      //console.log(areAnyEdgesSelected);
       console.log(clickedEdge);
       if(areAnyEdgesSelected === true && item !== clickedEdge){
         deselectAllEdges();
@@ -1115,8 +1176,8 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.PUSH_EDGETOARRAY:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       edgesToRender.push(item);
       console.log(edgesToRender);
       nodeStore.emitChange();
@@ -1141,7 +1202,9 @@ AppDispatcher.register(function(payload){
     case appConstants.ADDTO_ALLNODEINFO:
       console.log(payload);
       console.log(item);
-      appendToAllNodeInfo();
+      appendToAllNodeInfo(item);
+      appendToAllPossibleNodes(item);
+      appendToNodeSelectedStates(item);
       nodeStore.emitChange();
       break;
 

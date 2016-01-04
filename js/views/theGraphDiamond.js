@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-//var ReactDOM = require('../node_modules/react-dom/dist/react-dom.js');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
@@ -58,6 +58,7 @@ var AppContainerStyle = {
 /* This should really fetch the node's x & y coordinates from the store somehow */
 
 function getAppState(){
+  console.log("fetching app state");
   return{
     //Gate1Position: NodeStore.getGate1Position(),
     //TGen1Position: NodeStore.getTGen1Position(),
@@ -74,7 +75,7 @@ function getAppState(){
     nodesToRender: NodeStore.getNodesToRenderArray(),
     edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
-    newlyAddedNode: NodeStore.getNewlyAddedNode()
+    //newlyAddedNode: NodeStore.getNewlyAddedNode()
   }
 }
 
@@ -83,7 +84,9 @@ var App = React.createClass({
     return getAppState();
   },
   _onChange: function () {
-    this.setState(getAppState());
+    this.setState(getAppState(), function(){
+      console.log("app state has been mutated now!");
+    });
   },
   componentDidMount: function () {
     NodeStore.addChangeListener(this._onChange);
@@ -97,7 +100,8 @@ var App = React.createClass({
     this.setState({wait: false});
     this.addEdgeToEdgesArray();
     this.addNodeToNodesArray();
-
+    console.log(ReactDOM.findDOMNode(this));
+    this.setState({gateNodeIdCounter: 1});
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -642,35 +646,42 @@ var App = React.createClass({
     }
   },
 
-  addNode: function(){
-    console.log("addNode");
+  addNodeInfo: function(){
+    console.log("addNodeInfo");
     var gateNodeRegExp = /Gate/;
     var tgenNodeRegExp = /TGen/;
     var pcompNodeRegExp = /PComp/;
     var lutNodeRegExp = /LUT/;
 
-    nodeActions.addToAllNodeInfo("adding gate node");
+    var newGateNodeId = this.generateNewNodeId();
+    console.log(newGateNodeId);
 
-    var newNode = this.state.newlyAddedNode;
-    console.log(newNode);
+    nodeActions.addToAllNodeInfo(newGateNodeId);
 
-    if(gateNodeRegExp.test(newNode) === true){
-      nodeActions.pushNodeToArray(<GateNode id={newNode}
+    //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
+
+    //var newNode = this.state.newlyAddedNode;
+    //console.log(newNode);
+    //console.log(this.state.newlyAddedNode);
+    //newNode = "Gate2";
+
+    if(gateNodeRegExp.test(newGateNodeId) === true){
+      nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
                                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
     }
-    else if(tgenNodeRegExp.test(newNode) === true){
+    else if(tgenNodeRegExp.test(newGateNodeId) === true){
       //console.log("we have a tgen node!");
-      nodeActions.pushNodeToArray(<TGenNode id={newNode}
+      nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
                                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
     }
-    else if(pcompNodeRegExp.test(newNode) === true){
+    else if(pcompNodeRegExp.test(newGateNodeId) === true){
       //console.log("we have a pcomp node!");
-      nodeActions.pushNodeToArray(<PCompNode id={newNode}
+      nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
                                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
     }
-    else if(lutNodeRegExp.test(newNode) === true){
+    else if(lutNodeRegExp.test(newGateNodeId) === true){
       //console.log("we have an lut node!");
-      nodeActions.pushNodeToArray(<LUTNode id={newNode} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+      nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
         //NodeName={nodeName} RectangleName={rectangleName}
                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
     }
@@ -681,6 +692,18 @@ var App = React.createClass({
 
 
   },
+
+  generateNewNodeId: function(){
+  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+  var gateNodeIdCounter = this.state.gateNodeIdCounter;
+  gateNodeIdCounter += 1;
+  var newGateId = "Gate" + gateNodeIdCounter;
+  console.log(newGateId);
+  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+  return newGateId;
+
+  },
+
 
   addEdgeToEdgesArray: function(){
     //var gateNodeRegExp = /Gate/;
@@ -773,7 +796,8 @@ var App = React.createClass({
 
   render: function(){
     //console.log("inside theGraphDiamond's render function");
-    console.log(this.state.newlyAddedNode);
+    //console.log(this.props.newlyAddedNode);
+    //console.log(this.props);
 
     var x = this.state.graphPosition.x;
     var y = this.state.graphPosition.y;
@@ -928,7 +952,7 @@ var App = React.createClass({
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
-          <g><rect onClick={this.addNode} height="50" width="50" /></g>
+          <g><rect onClick={this.addNodeInfo} height="50" width="50" /></g>
 
           <g id="testPanGroup"
              transform={matrixTransform}
