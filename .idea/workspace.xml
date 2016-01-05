@@ -8,14 +8,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundleOnlySomeCSS.js" afterPath="$PROJECT_DIR$/bundleOnlySomeCSS.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/actions/paneActions.js" afterPath="$PROJECT_DIR$/js/actions/paneActions.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/constants/appConstants.js" afterPath="$PROJECT_DIR$/js/constants/appConstants.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/nodeStore.js" afterPath="$PROJECT_DIR$/js/stores/nodeStore.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/paneStore.js" afterPath="$PROJECT_DIR$/js/stores/paneStore.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/dropdownMenu.js" afterPath="$PROJECT_DIR$/js/views/dropdownMenu.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/gateNode.js" afterPath="$PROJECT_DIR$/js/views/gateNode.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/mainPane.js" afterPath="$PROJECT_DIR$/js/views/mainPane.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/pcompNode.js" afterPath="$PROJECT_DIR$/js/views/pcompNode.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/sidePane.js" afterPath="$PROJECT_DIR$/js/views/sidePane.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/tgenNode.js" afterPath="$PROJECT_DIR$/js/views/tgenNode.js" />
     </list>
     <ignored path="StartingFlux.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,8 +55,8 @@
       <file leaf-file-name="sidePane.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.5">
-              <caret line="57" column="30" selection-start-line="57" selection-start-column="30" selection-end-line="57" selection-end-column="30" />
+            <state vertical-scroll-proportion="-5.37931">
+              <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -71,7 +65,7 @@
       <file leaf-file-name="dropdownMenu.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/dropdownMenu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.785714">
+            <state vertical-scroll-proportion="-19.821428">
               <caret line="52" column="45" selection-start-line="52" selection-start-column="45" selection-end-line="52" selection-end-column="45" />
               <folding />
             </state>
@@ -81,8 +75,8 @@
       <file leaf-file-name="paneStore.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.67021275">
-              <caret line="406" column="66" selection-start-line="406" selection-start-column="66" selection-end-line="406" selection-end-column="66" />
+            <state vertical-scroll-proportion="1.5212766">
+              <caret line="800" column="101" selection-start-line="800" selection-start-column="101" selection-end-line="800" selection-end-column="101" />
               <folding>
                 <element signature="e#497#754#0" expanded="false" />
                 <element signature="e#779#1256#0" expanded="false" />
@@ -96,8 +90,8 @@
       <file leaf-file-name="paneActions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.428572">
-              <caret line="21" column="2" selection-start-line="21" selection-start-column="2" selection-end-line="21" selection-end-column="2" />
+            <state vertical-scroll-proportion="-12.0">
+              <caret line="82" column="2" selection-start-line="82" selection-start-column="2" selection-end-line="82" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -138,8 +132,8 @@
       <file leaf-file-name="appConstants.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-30.0">
-              <caret line="62" column="29" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
+            <state vertical-scroll-proportion="-26.464285">
+              <caret line="63" column="33" selection-start-line="63" selection-start-column="33" selection-end-line="63" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -214,14 +208,14 @@
         <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
         <option value="$PROJECT_DIR$/js/views/edge.js" />
         <option value="$PROJECT_DIR$/js/views/mainPane.js" />
-        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
-        <option value="$PROJECT_DIR$/js/actions/paneActions.js" />
         <option value="$PROJECT_DIR$/js/views/gateNode.js" />
         <option value="$PROJECT_DIR$/js/views/tgenNode.js" />
         <option value="$PROJECT_DIR$/js/views/pcompNode.js" />
-        <option value="$PROJECT_DIR$/js/views/sidePane.js" />
         <option value="$PROJECT_DIR$/js/stores/nodeStore.js" />
         <option value="$PROJECT_DIR$/js/views/dropdownMenu.js" />
+        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
+        <option value="$PROJECT_DIR$/js/actions/paneActions.js" />
+        <option value="$PROJECT_DIR$/js/views/sidePane.js" />
         <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
       </list>
     </option>
@@ -880,14 +874,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-30.0">
-          <caret line="62" column="29" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6335617">
@@ -944,9 +930,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-26.464285">
+          <caret line="63" column="33" selection-start-line="63" selection-start-column="33" selection-end-line="63" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/dropdownMenu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.785714">
+        <state vertical-scroll-proportion="-19.821428">
           <caret line="52" column="45" selection-start-line="52" selection-start-column="45" selection-end-line="52" selection-end-column="45" />
           <folding />
         </state>
@@ -954,24 +948,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.5">
-          <caret line="57" column="30" selection-start-line="57" selection-start-column="30" selection-end-line="57" selection-end-column="30" />
+        <state vertical-scroll-proportion="-5.37931">
+          <caret line="66" column="24" selection-start-line="66" selection-start-column="24" selection-end-line="66" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.428572">
-          <caret line="21" column="2" selection-start-line="21" selection-start-column="2" selection-end-line="21" selection-end-column="2" />
+        <state vertical-scroll-proportion="-12.0">
+          <caret line="82" column="2" selection-start-line="82" selection-start-column="2" selection-end-line="82" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67021275">
-          <caret line="406" column="66" selection-start-line="406" selection-start-column="66" selection-end-line="406" selection-end-column="66" />
+        <state vertical-scroll-proportion="1.5212766">
+          <caret line="800" column="101" selection-start-line="800" selection-start-column="101" selection-end-line="800" selection-end-column="101" />
           <folding>
             <element signature="e#497#754#0" expanded="false" />
             <element signature="e#779#1256#0" expanded="false" />

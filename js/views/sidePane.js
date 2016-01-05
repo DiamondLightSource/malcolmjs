@@ -59,8 +59,12 @@ var SidePane = React.createClass({
     console.log("action function for changing tab via other means ran correctly");
   },
 
-  handleActionIntialFetchOfNodeData: function(){
+  handleActionInitialFetchOfNodeData: function(){
     paneActions.initialFetchOfNodeDataFromNodeStore("fetch the initial node data!");
+  },
+  handleActionRemoveNodeTab: function(){
+    var selectedIndex = this.refs.panel.getSelectedIndex();
+    paneActions.removeNodeTab(selectedIndex);
   },
 
   //handleActionPassingSidePaneOnMount: function(){
@@ -72,7 +76,7 @@ var SidePane = React.createClass({
     sidePaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    this.handleActionIntialFetchOfNodeData();
+    this.handleActionInitialFetchOfNodeData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
@@ -113,7 +117,7 @@ var SidePane = React.createClass({
     //}.bind(this));
 
     var tabs = this.state.tabState.map(function(item, i){
-      var tabTitle = item.type;
+      var tabTitle = item.label;
       var tabIndex = i + 1;
       var tabContent = function(){
         console.log("inside tabContent function now");
@@ -145,7 +149,7 @@ var SidePane = React.createClass({
           //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
           //  <i className="fa fa-plus"></i>
           //</Button>,
-          <Button title="Remove active tab" onButtonClick={this.handleActionRemoveTab}>
+          <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
             <i className="fa fa-times"></i>
           </Button>,
           <Button title="Drop down menu">

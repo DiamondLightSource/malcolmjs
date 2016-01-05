@@ -636,6 +636,14 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.REMOVE_NODETAB:
+      console.log(payload);
+      console.log(item);
+      removeNodeTab(item);
+      console.log(_stuff.tabState);
+      paneStore.emitChange();
+      break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -712,7 +720,6 @@ var setNodeTabStateTrue = function(NodeId){
 };
 
 var checkWhichNodeTabsOpen = function(){
-  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
   for (var key in allNodeTabProperties){
     console.log(key);
     console.log(allNodeTabProperties[key]);
@@ -720,12 +727,16 @@ var checkWhichNodeTabsOpen = function(){
       console.log('just before starting the tabState checker loop');
       if(_stuff.tabState.length === 0){
         console.log('tabState was empty, tab is now open');
-        var blockTabsOpen = [];
-        lookupWhichNodeTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
 
-        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-        console.log(lookupWhichNodeTabToOpen(key));
-        _stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
+        /* Not sure if there's a need for a lookup table, just go straight to allNodeTabInfo using key? */
+
+        //lookupWhichNodeTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
+        //
+        ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+        //console.log(lookupWhichNodeTabToOpen(key));
+        //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
+
+        _stuff.tabState.push(allNodeTabInfo[key]);
         console.log(_stuff.tabState);
       }
       else{
@@ -749,14 +760,15 @@ var checkWhichNodeTabsOpen = function(){
             if(i === _stuff.tabState.length - 1){
               console.log('tabState didnt have this tab, tab is now open');
               console.log(key);
-              var blockTabsOpen = [];
               console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
-              console.log(lookupWhichNodeTabToOpen(key));
+              //console.log(lookupWhichNodeTabToOpen(key));
               //
               ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
               //console.log(lookupWhichNodeTabToOpen(key));
               //console.log(blockTabsOpen);
-              _stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
+              //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
+
+              _stuff.tabState.push(allNodeTabInfo[key]);
               console.log(_stuff.tabState);
             }
           }
@@ -782,33 +794,43 @@ var checkWhichNodeTabsOpen = function(){
 
 };
 
-var possibleNodeTabsToOpen = {
-  'Gate1': function(NodeId){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]); /*not sure if blockTabsOpen will get passed through... :/*/
-    return updatedBlockTabsOpen
-  },
-  'TGen1': function(NodeId){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
-    return updatedBlockTabsOpen
-  },
-  'PComp1': function(NodeId){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
-    return updatedBlockTabsOpen
-  },
-  'favTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-    return updatedBlockTabsOpen
-  },
-  'configTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
-    return updatedBlockTabsOpen
-  }
+var removeNodeTab = function(selectedTabIndex){
+
+  var tabName = _stuff.tabState[selectedTabIndex].label;
+  console.log(tabName);
+  allNodeTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+  newTabs.splice(selectedTabIndex, 1);
+  _stuff.tabState = newTabs;
 };
+
+//var possibleNodeTabsToOpen = {
+//  'Gate1': function(NodeId){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]); /*not sure if blockTabsOpen will get passed through... :/*/
+//    return updatedBlockTabsOpen
+//  },
+//  'TGen1': function(NodeId){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
+//    return updatedBlockTabsOpen
+//  },
+//  'PComp1': function(NodeId){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
+//    return updatedBlockTabsOpen
+//  },
+//  'favTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//    return updatedBlockTabsOpen
+//  },
+//  'configTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
+//    return updatedBlockTabsOpen
+//  }
+//};
 
 //var appendToPossibleNodeTabsToOpen = function(dispatchMarker){
 //  possibleTabsToOpen[dispatchMarker] = function(){
@@ -819,14 +841,14 @@ var possibleNodeTabsToOpen = {
 //};
 
 
-function lookupWhichNodeTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
-  /* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
-  if(typeof possibleNodeTabsToOpen[key] !== 'function'){
-    throw new Error('Invalid key');
-  }
-  console.log('deciding which tab to open lookup is working!');
-  return possibleNodeTabsToOpen[key](key)
-}
+//function lookupWhichNodeTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
+//  /* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
+//  if(typeof possibleNodeTabsToOpen[key] !== 'function'){
+//    throw new Error('Invalid key');
+//  }
+//  console.log('deciding which tab to open lookup is working!');
+//  return possibleNodeTabsToOpen[key](key)
+//}
 
 var getInitialNodeDataFromNodeStore = function(){
   allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();

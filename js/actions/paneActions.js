@@ -79,6 +79,12 @@ var paneActions = {
       actionType: appConstants.OPEN_NODETAB,
       item: NodeId
     })
+  },
+  removeNodeTab: function(SelectedNodeTabIndex){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.REMOVE_NODETAB,
+      item: SelectedNodeTabIndex
+    })
   }
 
 };
