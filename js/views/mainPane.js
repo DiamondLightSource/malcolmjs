@@ -33,6 +33,11 @@ var nodeActions = require('../actions/nodeActions.js');
 
 //var FlexboxTheme = require('./reactPanelsCustomTheme.js');
 
+var GateNode = require('./gateNode.js');
+var TGenNode = require('./tgenNode.js');
+var PCompNode = require('./pcompNode.js');
+var LUTNode = require('./lutNode.js');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;
@@ -118,6 +123,7 @@ var MainPane = React.createClass({
   componentDidMount: function(){
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
+    this.setState({gateNodeIdCounter: 1});
   },
 
   componentWillUnmount: function(){
@@ -230,6 +236,64 @@ var MainPane = React.createClass({
 
   },
 
+  generateNewNodeId: function(){
+    /* Do it for just a Gate node for now, remember, small steps before big steps! */
+    var gateNodeIdCounter = this.state.gateNodeIdCounter;
+    gateNodeIdCounter += 1;
+    var newGateId = "Gate" + gateNodeIdCounter;
+    console.log(newGateId);
+    this.setState({gateNodeIdCounter: gateNodeIdCounter});
+    return newGateId;
+
+  },
+
+  addNodeInfo: function(){
+    console.log("addNodeInfo");
+    var gateNodeRegExp = /Gate/;
+    var tgenNodeRegExp = /TGen/;
+    var pcompNodeRegExp = /PComp/;
+    var lutNodeRegExp = /LUT/;
+
+    var newGateNodeId = this.generateNewNodeId();
+    console.log(newGateNodeId);
+
+    nodeActions.addToAllNodeInfo(newGateNodeId);
+
+    //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
+
+    //var newNode = this.state.newlyAddedNode;
+    //console.log(newNode);
+    //console.log(this.state.newlyAddedNode);
+    //newNode = "Gate2";
+
+    if(gateNodeRegExp.test(newGateNodeId) === true){
+      nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    }
+    else if(tgenNodeRegExp.test(newGateNodeId) === true){
+      //console.log("we have a tgen node!");
+      nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    }
+    else if(pcompNodeRegExp.test(newGateNodeId) === true){
+      //console.log("we have a pcomp node!");
+      nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+                                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    }
+    else if(lutNodeRegExp.test(newGateNodeId) === true){
+      //console.log("we have an lut node!");
+      nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+        //NodeName={nodeName} RectangleName={rectangleName}
+                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    }
+    else{
+      console.log("no match to any node type, something's wrong?");
+    }
+    console.log(this.state.nodesToRender);
+
+
+  },
+
 
 
   render: function() {
@@ -269,7 +333,7 @@ var MainPane = React.createClass({
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
               <button type="button" onClick={this.addDivToContent}>Add block</button>
               <button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
-              <button type="button" onClick={this.addGateNode}>Add node</button>
+              <button type="button" onClick={this.addNodeInfo}>Add node</button>
 
             </div>
           </div>

@@ -13,7 +13,8 @@ var _stuff = {
   tabState: [],
   selectedTabIndex: 0,
   //passSidePane: null
-  updatedBlockContent: null
+  updatedBlockContent: null,
+  nodeTabState: []
 };
 
 var _handles = {
@@ -397,7 +398,7 @@ var dropdownMenuSelect = function(tab){
   //console.log(keepingSidePane);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
-    if(_stuff.tabState[i].name === tab){
+    if(_stuff.tabState[i].label === tab){              /* Changed from .name to .label */
       var findTheIndex = i
     }
   }
@@ -615,6 +616,26 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.FETCHINITIAL_NODEDATA:
+      console.log(payload);
+      console.log(item);
+      getInitialNodeDataFromNodeStore();
+      console.log(allNodeTabInfo);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.OPEN_NODETAB:
+      console.log(payload);
+      console.log(item);
+      console.log(allNodeTabInfo[item]);
+      setNodeTabStateTrue(item);
+      //_stuff.tabState.push(allNodeTabInfo[item]);
+      checkWhichNodeTabsOpen();
+      selectBlockOnClick();
+      console.log(_stuff.tabState);
+      paneStore.emitChange();
+      break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -665,6 +686,151 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     paneStore.emitChange();
   }
 });
+
+/* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
+
+var nodeStore = require('./nodeStore');
+
+var allNodeTabInfo;
+
+/* This will need an append function at some point */
+var allNodeTabProperties = {
+  'Gate1': false,
+  'TGen1': false,
+  'PComp1': false
+};
+
+var setNodeTabStateTrue = function(NodeId){
+  if(allNodeTabProperties[NodeId] === false) {
+    allNodeTabProperties[NodeId] = true;
+    console.log(allNodeTabProperties[NodeId]);
+    /* Now need to run the function to check which tabs should be open */
+ }
+  else{
+    console.log("tab state was already true, so don't bother changing it to true");
+  }
+};
+
+var checkWhichNodeTabsOpen = function(){
+  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
+  for (var key in allNodeTabProperties){
+    console.log(key);
+    console.log(allNodeTabProperties[key]);
+    if(allNodeTabProperties[key] === true) {
+      console.log('just before starting the tabState checker loop');
+      if(_stuff.tabState.length === 0){
+        console.log('tabState was empty, tab is now open');
+        var blockTabsOpen = [];
+        lookupWhichNodeTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
+
+        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+        console.log(lookupWhichNodeTabToOpen(key));
+        _stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
+        console.log(_stuff.tabState);
+      }
+      else{
+        for (var i = 0; i < _stuff.tabState.length; i++) {
+          console.log('in the non-empty tabState checker loop');
+          console.log(_stuff.tabState.length);
+          console.log(i);
+          console.log(_stuff.tabState[i].label);
+          console.log(key);
+          //console.log(key[label]);
+          if (_stuff.tabState[i].label === key) {
+            console.log(_stuff.tabState[i].label);
+            //console.log(key.label);
+            console.log("tab is already open from before, don't add, break statement occurring");
+            break
+          }
+          else if(_stuff.tabState[i].label !== key){
+            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+            console.log(_stuff.tabState.length);
+            console.log(i);
+            if(i === _stuff.tabState.length - 1){
+              console.log('tabState didnt have this tab, tab is now open');
+              console.log(key);
+              var blockTabsOpen = [];
+              console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
+              console.log(lookupWhichNodeTabToOpen(key));
+              //
+              ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+              //console.log(lookupWhichNodeTabToOpen(key));
+              //console.log(blockTabsOpen);
+              _stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
+              console.log(_stuff.tabState);
+            }
+          }
+        }
+        console.log('finished the tabState checker loop')
+      }
+    }
+    else{
+      console.log('tab is not open')
+    }
+  }
+
+  //console.log(blockTabsOpen);
+  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
+  console.log(_stuff.tabState);
+
+  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
+  // Actually, no need since at the start of the function it is reset*/
+
+  //return updatedBlockTabsOpen;
+
+  selectBlockOnClick()
+
+};
+
+var possibleNodeTabsToOpen = {
+  'Gate1': function(NodeId){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]); /*not sure if blockTabsOpen will get passed through... :/*/
+    return updatedBlockTabsOpen
+  },
+  'TGen1': function(NodeId){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
+    return updatedBlockTabsOpen
+  },
+  'PComp1': function(NodeId){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(allNodeTabInfo[NodeId]);
+    return updatedBlockTabsOpen
+  },
+  'favTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+    return updatedBlockTabsOpen
+  },
+  'configTabOpen': function(){
+    var blockTabsOpen = [];
+    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
+    return updatedBlockTabsOpen
+  }
+};
+
+//var appendToPossibleNodeTabsToOpen = function(dispatchMarker){
+//  possibleTabsToOpen[dispatchMarker] = function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent[dispatchMarker]);
+//    return updatedBlockTabsOpen
+//  }
+//};
+
+
+function lookupWhichNodeTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
+  /* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
+  if(typeof possibleNodeTabsToOpen[key] !== 'function'){
+    throw new Error('Invalid key');
+  }
+  console.log('deciding which tab to open lookup is working!');
+  return possibleNodeTabsToOpen[key](key)
+}
+
+var getInitialNodeDataFromNodeStore = function(){
+  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
+};
 
 module.exports = paneStore;
 

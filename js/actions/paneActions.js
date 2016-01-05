@@ -66,6 +66,19 @@ var paneActions = {
       actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
       item: blockContentObject
     })
+  },
+
+  initialFetchOfNodeDataFromNodeStore: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.FETCHINITIAL_NODEDATA,
+      item: item
+    })
+  },
+  openNodeTab: function(NodeId){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.OPEN_NODETAB,
+      item: NodeId
+    })
   }
 
 };

@@ -50,7 +50,7 @@ var Dropdown = React.createClass({
   renderListItems: function() {
     var items = [];
     for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].name;
+      var item = this.state.tabState[i].label;
       items.push(<div onClick={this.testSelectInvokeSidePane.bind(null, item)}>
         <span >{item}</span>
       </div>);

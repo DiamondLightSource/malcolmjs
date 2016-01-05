@@ -6,6 +6,7 @@ var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
+var paneActions = require('../actions/paneActions');
 
 function getTGenNodeState(){
   return{
@@ -84,6 +85,7 @@ var TGenNode = React.createClass({
     console.log("TGen1 has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
     console.log(this.state.selected);
   },
 

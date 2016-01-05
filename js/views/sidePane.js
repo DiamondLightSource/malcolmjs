@@ -59,6 +59,10 @@ var SidePane = React.createClass({
     console.log("action function for changing tab via other means ran correctly");
   },
 
+  handleActionIntialFetchOfNodeData: function(){
+    paneActions.initialFetchOfNodeDataFromNodeStore("fetch the initial node data!");
+  },
+
   //handleActionPassingSidePaneOnMount: function(){
   //  console.log(this);
   //  //sidePaneActions.passingSidePane(this)
@@ -68,6 +72,7 @@ var SidePane = React.createClass({
     sidePaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
+    this.handleActionIntialFetchOfNodeData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
@@ -80,21 +85,51 @@ var SidePane = React.createClass({
   render: function () {
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-    var tabs = this.state.tabState.map(function(item, i) {
-      var tabTitle = "Tab " + item.name;
+
+    /* This was for the tabs when I had coloured blocks instead of nodes */
+
+    //var tabs = this.state.tabState.map(function(item, i) {
+    //  var tabTitle = "Tab " + item.name;
+    //  var tabIndex = i + 1;
+    //  var tabContent = function(){
+    //    var content = [];
+    //    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+    //      content.push(<br/>);
+    //      content.push(<p>{outerkey}</p>);
+    //      for (var key in item.info[outerkey])
+    //        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
+    //    }
+    //    return content
+    //  };
+    //  return (
+    //    <Tab key={item.name} title={tabTitle}>
+    //
+    //      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
+    //        {tabContent()}
+    //      </Content>
+    //
+    //    </Tab>
+    //  );
+    //}.bind(this));
+
+    var tabs = this.state.tabState.map(function(item, i){
+      var tabTitle = item.type;
       var tabIndex = i + 1;
       var tabContent = function(){
+        console.log("inside tabContent function now");
         var content = [];
-        for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+          //content.push(<p>stuff</p>);
+
           content.push(<br/>);
-          content.push(<p>{outerkey}</p>);
-          for (var key in item.info[outerkey])
-            content.push(<p>{key}: {item.info[outerkey][key]}</p>)
-        }
-        return content
+          content.push(<p>{tabTitle}</p>);
+          for(var attribute in item){
+            content.push(<p>{attribute}: {String(item[attribute])}</p>)
+          }
+        console.log(content);
+          return content
       };
       return (
-        <Tab key={item.name} title={tabTitle}>
+        <Tab title={tabTitle}>
 
           <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
             {tabContent()}
@@ -102,7 +137,8 @@ var SidePane = React.createClass({
 
         </Tab>
       );
-    }.bind(this));
+    });
+
     return (
       <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 

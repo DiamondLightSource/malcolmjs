@@ -16,6 +16,45 @@ var edgesToRender = [];
 var clickedEdge = null;
 var newlyAddedNode = null;
 
+var allNodeTabInfo = {
+  'Gate1': {
+    type: 'Gate',
+    label: 'Gate1',
+    description: 'SR Gate block',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  'TGen1': {
+    type: 'TGen',
+    label: 'TGen1',
+    description: 'Time Generator block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  'PComp1': {
+    type: 'PComp',
+    label: 'PComp1',
+    description: 'Position compare block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  }
+};
+
 var nodeSelectedStates = {
   Gate1: false,
   TGen1: false,
@@ -152,6 +191,7 @@ var allNodeInfo = {
 
   'Gate1': {
     type: 'Gate',
+    label: 'Gate1',
     name: "Arm",
     position: {
       x: 50,
@@ -177,6 +217,7 @@ var allNodeInfo = {
 
   'TGen1': {
     type: 'TGen',
+    label: 'TGen1',
     name: '',
     position: {
       x: 450,
@@ -197,6 +238,7 @@ var allNodeInfo = {
   },
   'PComp1': {
     type: 'PComp',
+    label: 'PComp1',
     name: "LinePulse",
     position: {
       x: 650,
@@ -1064,6 +1106,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getNewlyAddedNode: function(){
     return newlyAddedNode;
+  },
+
+  getAllNodeInfoForInitialNodeData: function(){
+    return allNodeInfo;
   }
 });
 

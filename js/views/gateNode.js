@@ -6,6 +6,7 @@ var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
+var paneActions = require('../actions/paneActions');
 
 function getGateNodeState(){
   return{
@@ -167,6 +168,7 @@ var GateNode = React.createClass({
     console.log("Gate1 has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes"); /* Node deselection occurs on mouseDown instaed of in here, since if it's here the border doesn't change until dragging starts, instead of on mouseDown */
     nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
     console.log(this.state.selected);
     console.log(this.state.areAnyNodesSelected);
     //nodeActions.changeGate1Styling("check Gate1's state!");
