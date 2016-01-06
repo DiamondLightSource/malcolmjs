@@ -40,6 +40,7 @@ var GateNode = React.createClass({
     this.setState({moveFunction: this.moveElement});
     this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    ReactDOM.findDOMNode(this).addEventListener('contextmenu', this.portRightClick);
   },
 
   componentWillUnmount: function(){
@@ -177,11 +178,67 @@ var GateNode = React.createClass({
     //console.log(ReactDOM.findDOMNode(this).id);
     //this.setState({selected: true});
   },
-  mouseDown: function(e){
+  mouseDown: function(e) {
     console.log("Gate1 mouseDown");
     console.log(e.currentTarget);
     console.log(e.currentTarget.parentNode);
+    //if (this.portMouseDownBool === true) { /* Doesn't stop the dragging of a node even when mouseDown on a port, need to somehow propagate it to theGraphDiamond I guess */
+    //}
+    //else {
+    //nodeActions.draggedElement(e.currentTarget.parentNode);
+    //}
     nodeActions.draggedElement(e.currentTarget.parentNode);
+
+  },
+
+  portHover: function(e){
+    console.log("hovering over a port!");
+    console.log(e);
+    console.log(e.currentTarget);
+    var port = e.currentTarget;
+    if(this.state.selected === true){
+      port.style.fill = "yellow";
+      port.style.stroke = "yellow";
+      port.style.cursor = "default";
+    }
+    else{
+      port.style.fill = "yellow";
+      port.style.stroke = "yellow";
+      port.style.cursor = "default";
+    }
+  },
+
+  portExitHover: function(e){
+    console.log("exited hovering over a port!");
+    console.log(e);
+    console.log(e.currentTarget);
+    var port = e.currentTarget;
+    port.style.fill = "black";
+
+    if(this.state.selected === true){
+      port.style.fill = "lightgrey";
+      port.style.stroke = "black";
+    }
+    else{
+      port.style.fill = "black";
+      port.style.stroke = "black";
+    }
+  },
+  portMouseDown: function(e){
+    console.log("mousedowen on a port!");
+    console.log(e.currentTarget.id);
+    console.log(e.currentTarget.parentNode.parentNode.id);
+    this.portMouseDownBool = true;
+  },
+  portMouseUp: function(e){
+    console.log("mouseUp on a port!");
+    this.portMouseDownBool = false;
+  },
+  portRightClick: function(e){
+    console.log(e);
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("right click on port");
   },
 
   render: function(){
@@ -237,13 +294,14 @@ var GateNode = React.createClass({
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
           />
-          <Port cx={inportPositions.set.x} cy={inportPositions.set.y} r={portStyling.portRadius}
+          <Port cx={inportPositions.set.x} cy={inportPositions.set.y} r={portStyling.portRadius} id="set"
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}
+                onMouseOver={this.portHover} onMouseLeave={this.portExitHover} onMouseDown={this.portMouseDown} />
+
+          <Port cx={inportPositions.reset.x} cy={inportPositions.reset.y} r={portStyling.portRadius} id="reset"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}/>
 
-          <Port cx={inportPositions.reset.x} cy={inportPositions.reset.y} r={portStyling.portRadius}
-                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}/>
-
-          <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius}
+          <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius} id="out"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}/>
 
           <InportSetText x={textPosition.set.x} y={textPosition.set.y} style={{MozUserSelect: 'none'}}  />

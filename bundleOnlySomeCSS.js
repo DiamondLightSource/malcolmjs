@@ -164,6 +164,12 @@ var nodeActions = {
       item: item
     })
   },
+  addEdgeToAllNodeInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDEDGE_TOALLNODEINFO,
+      item: item
+    })
+  }
 };
 
 module.exports = nodeActions;
@@ -560,7 +566,8 @@ var appConstants = {
   ADDTO_ALLNODEINFO: "ADDTO_ALLNODEINFO",
   FETCHINITIAL_NODEDATA: "FETCHINITIAL_NODEDATA",
   OPEN_NODETAB: "OPEN_NODETAB",
-  REMOVE_NODETAB: "REMOVE_NODETAB"
+  REMOVE_NODETAB: "REMOVE_NODETAB",
+  ADDEDGE_TOALLNODEINFO: "ADDEDGE_TOALLNODEINFO"
 };
 
 module.exports = appConstants;
@@ -1004,22 +1011,22 @@ var edges = {
     toNodeType: 'TGen',
     toNodePort: 'ena'
   },
-  TGen1PosnPComp1Posn: {
-    fromNode: 'TGen1',
-    fromNodeType: 'TGen',
-    fromNodePort: 'posn',
-    toNode: 'PComp1',
-    toNodeType: 'PComp',
-    toNodePort: 'posn'
-  },
-  TGen1PosnPComp1Ena: {
-    fromNode: 'TGen1',
-    fromNodeType: 'TGen',
-    fromNodePort: 'posn',
-    toNode: 'PComp1',
-    toNodeType: 'PComp',
-    toNodePort: 'ena'
-  },
+  //TGen1PosnPComp1Posn: {
+  //  fromNode: 'TGen1',
+  //  fromNodeType: 'TGen',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'posn'
+  //},
+  //TGen1PosnPComp1Ena: {
+  //  fromNode: 'TGen1',
+  //  fromNodeType: 'TGen',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'ena'
+  //},
   //Gate1OutPComp2Ena: {
   //  fromNode: 'Gate1',
   //  fromNodeType: 'Gate',
@@ -1029,6 +1036,43 @@ var edges = {
   //  toNodePort: 'ena'
   //}
 };
+
+/* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
+
+function addToEdgesObject(){
+  for(var node in allNodeInfo){
+    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
+    for(i = 0; i < allNodeInfo[node].outports.length; i++){
+      console.log(i);
+      console.log(allNodeInfo[node].outports[i]);
+      if(allNodeInfo[node].outports[i].connected === true){
+        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
+        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
+          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
+          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
+          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
+          var newEdge = {
+            fromNode: node,
+            fromNodeType: allNodeInfo[node].type,
+            fromNodePort: allNodeInfo[node].outports[i].name,
+            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
+            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
+            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
+          };
+          console.log(newEdge);
+          /* Then here I need to add this new edge to the edges object */
+          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+          console.log("The newEdge's label is " + newEdgeLabel);
+          edges[newEdgeLabel] = newEdge
+          console.log(edges);
+        }
+      }
+      else{
+        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
+      }
+    }
+  }
+}
 
 var allNodeInfo = {
 
@@ -1040,22 +1084,46 @@ var allNodeInfo = {
       x: 50,
       y: 100,
     },
-    inports: {
-      "set": {
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
         connected: false,
         connectedTo: null
-      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {
+      },
+      {
+        name: 'reset',
         connected: false,
         connectedTo: null
       }
-    },
-    outports: {
-      "out": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'out',
+        connected: true,
+        connectedTo: [
+          {
+            node: 'TGen1',
+            port: 'ena'
+          }
+        ]
       }
-    }
+    ]
   },
 
   'TGen1': {
@@ -1066,18 +1134,40 @@ var allNodeInfo = {
       x: 450,
       y: 10
     },
-    inports: {
-      "ena": {
-        connected: false,
-        connectedTo: null
+    //inports: {
+    //  "ena": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "posn": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'ena',
+        connected: true,
+        connectedTo: {
+          node: 'Gate1',
+          port: 'out'
+        }
       }
-    },
-    outports: {
-      "posn": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'posn',
+        connected: true,
+        connectedTo:[
+          {
+            node: 'PComp1',
+            port: 'posn'
+          }
+        ]
       }
-    }
+    ]
   },
   'PComp1': {
     type: 'PComp',
@@ -1087,32 +1177,94 @@ var allNodeInfo = {
       x: 650,
       y: 250,
     },
-    inports: {
-      'ena': {
+    //inports: {
+    //  'ena': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'posn': {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  'act': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'out': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'pulse': {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'ena',
         connected: false,
         connectedTo: null
       },
-      'posn': {
-        connected: false,
-        connectedTo: null
+      {
+        name: 'posn',
+        connected: true,
+        connectedTo: {
+          node: 'TGen1',
+          port: 'posn'
+        }
       }
-    },
-    outports: {
-      'act': {
+    ],
+    outports: [
+      {
+        name: 'act',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       },
-      'out': {
+      {
+        name: 'out',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       },
-      'pulse': {
+      {
+        name: 'pulse',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       }
-    }
+    ]
   },
 };
+
+function addEdgeToAllNodeInfo(Info){
+  for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
+    if(allNodeInfo[Info.fromNode].outports[i].name === Info.fromNodePort){
+      var newEdgeToFromNode = {
+        node: Info.toNode,
+        port: Info.toNodePort
+      };
+      console.log(newEdgeToFromNode);
+      allNodeInfo[Info.fromNode].outports[i].connected = true;
+      console.log(allNodeInfo[Info.fromNode].outports[i]);
+      allNodeInfo[Info.fromNode].outports[i].connectedTo.push(newEdgeToFromNode);
+    }
+  }
+  /* Also need to add to the node whose inport we've connected that outport to! */
+
+  for(j = 0; j < allNodeInfo[Info.toNode].inports.length; j++){
+    if(allNodeInfo[Info.toNode].inports[j].name === Info.toNodePort){
+      var newEdgeToToNode = {
+        node: Info.fromNode,
+        port: Info.fromNodePort
+      };
+      console.log(newEdgeToToNode);
+      allNodeInfo[Info.toNode].inports[j].connected = true;
+
+      /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
+      allNodeInfo[Info.toNode].inports[j].connectedTo = newEdgeToToNode;
+    }
+  }
+}
 
 var nodeInfoTemplates = {
   'Gate': {
@@ -2094,6 +2246,16 @@ AppDispatcher.register(function(payload){
       appendToAllNodeInfo(item);
       appendToAllPossibleNodes(item);
       appendToNodeSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.ADDEDGE_TOALLNODEINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllNodeInfo(item);
+      addToEdgesObject();
+      console.log(allNodeInfo);
       nodeStore.emitChange();
       break;
 
@@ -2245,6 +2407,7 @@ var appendToAllBlockContent = function(dispatchMarker){
 
 var favContent = [{
   name: "Favourites tab",
+  label: 'Favourites',
   hack: "favTabOpen",
   info: {
     block1: {
@@ -2262,6 +2425,7 @@ var favContent = [{
 
 var configContent = [{
   name: "Configuration tab",
+  label: 'Config',
   hack: "configTabOpen",
   info: {
     Configurations: {
@@ -2794,7 +2958,7 @@ AppDispatcher.register(function(payload){
       setNodeTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
       checkWhichNodeTabsOpen();
-      selectBlockOnClick();
+      //selectBlockOnClick();
       console.log(_stuff.tabState);
       paneStore.emitChange();
       break;
@@ -2866,6 +3030,8 @@ var allNodeTabInfo;
 
 /* This will need an append function at some point */
 var allNodeTabProperties = {
+  'Favourites': false,
+  'Configuration': false,
   'Gate1': false,
   'TGen1': false,
   'PComp1': false
@@ -2881,6 +3047,8 @@ var setNodeTabStateTrue = function(NodeId){
     console.log("tab state was already true, so don't bother changing it to true");
   }
 };
+
+/* Note that this function also adds the tabs to SidePane */
 
 var checkWhichNodeTabsOpen = function(){
   for (var key in allNodeTabProperties){
@@ -2961,11 +3129,54 @@ var removeNodeTab = function(selectedTabIndex){
 
   var tabName = _stuff.tabState[selectedTabIndex].label;
   console.log(tabName);
-  allNodeTabProperties[tabName] = false;
+  allNodeTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
   newTabs.splice(selectedTabIndex, 1);
   _stuff.tabState = newTabs;
 };
+
+var getInitialNodeDataFromNodeStore = function(){
+  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
+};
+
+module.exports = paneStore;
+
+
+//var favAndConfigTabProperties = {
+//  favTabOpen: false,
+//  configTabOpen: false
+//};
+
+//var changeRedBlockTabState = function(){
+//  if(allBlockTabProperties.redBlockTabOpen === false) {
+//    allBlockTabProperties.redBlockTabOpen = true;
+//    checkWhichBlockTabsOpen();
+//    console.log(_handles.passSidePane)
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeBlueBlockTabState = function(){
+//  if(allBlockTabProperties.blueBlockTabOpen === false){
+//    allBlockTabProperties.blueBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeGreenBlockTabState = function(){
+//  if(allBlockTabProperties.greenBlockTabOpen === false){
+//    allBlockTabProperties.greenBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};
 
 //var possibleNodeTabsToOpen = {
 //  'Gate1': function(NodeId){
@@ -3012,49 +3223,6 @@ var removeNodeTab = function(selectedTabIndex){
 //  console.log('deciding which tab to open lookup is working!');
 //  return possibleNodeTabsToOpen[key](key)
 //}
-
-var getInitialNodeDataFromNodeStore = function(){
-  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
-};
-
-module.exports = paneStore;
-
-
-//var favAndConfigTabProperties = {
-//  favTabOpen: false,
-//  configTabOpen: false
-//};
-
-//var changeRedBlockTabState = function(){
-//  if(allBlockTabProperties.redBlockTabOpen === false) {
-//    allBlockTabProperties.redBlockTabOpen = true;
-//    checkWhichBlockTabsOpen();
-//    console.log(_handles.passSidePane)
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeBlueBlockTabState = function(){
-//  if(allBlockTabProperties.blueBlockTabOpen === false){
-//    allBlockTabProperties.blueBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeGreenBlockTabState = function(){
-//  if(allBlockTabProperties.greenBlockTabOpen === false){
-//    allBlockTabProperties.greenBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
 
 },{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./deviceStore":11,"./nodeStore":13,"events":32,"object-assign":37}],15:[function(require,module,exports){
 /**
@@ -4015,6 +4183,7 @@ var GateNode = React.createClass({displayName: "GateNode",
     this.setState({moveFunction: this.moveElement});
     this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    ReactDOM.findDOMNode(this).addEventListener('contextmenu', this.portRightClick);
   },
 
   componentWillUnmount: function(){
@@ -4152,11 +4321,67 @@ var GateNode = React.createClass({displayName: "GateNode",
     //console.log(ReactDOM.findDOMNode(this).id);
     //this.setState({selected: true});
   },
-  mouseDown: function(e){
+  mouseDown: function(e) {
     console.log("Gate1 mouseDown");
     console.log(e.currentTarget);
     console.log(e.currentTarget.parentNode);
+    //if (this.portMouseDownBool === true) { /* Doesn't stop the dragging of a node even when mouseDown on a port, need to somehow propagate it to theGraphDiamond I guess */
+    //}
+    //else {
+    //nodeActions.draggedElement(e.currentTarget.parentNode);
+    //}
     nodeActions.draggedElement(e.currentTarget.parentNode);
+
+  },
+
+  portHover: function(e){
+    console.log("hovering over a port!");
+    console.log(e);
+    console.log(e.currentTarget);
+    var port = e.currentTarget;
+    if(this.state.selected === true){
+      port.style.fill = "yellow";
+      port.style.stroke = "yellow";
+      port.style.cursor = "default";
+    }
+    else{
+      port.style.fill = "yellow";
+      port.style.stroke = "yellow";
+      port.style.cursor = "default";
+    }
+  },
+
+  portExitHover: function(e){
+    console.log("exited hovering over a port!");
+    console.log(e);
+    console.log(e.currentTarget);
+    var port = e.currentTarget;
+    port.style.fill = "black";
+
+    if(this.state.selected === true){
+      port.style.fill = "lightgrey";
+      port.style.stroke = "black";
+    }
+    else{
+      port.style.fill = "black";
+      port.style.stroke = "black";
+    }
+  },
+  portMouseDown: function(e){
+    console.log("mousedowen on a port!");
+    console.log(e.currentTarget.id);
+    console.log(e.currentTarget.parentNode.parentNode.id);
+    this.portMouseDownBool = true;
+  },
+  portMouseUp: function(e){
+    console.log("mouseUp on a port!");
+    this.portMouseDownBool = false;
+  },
+  portRightClick: function(e){
+    console.log(e);
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("right click on port");
   },
 
   render: function(){
@@ -4212,13 +4437,14 @@ var GateNode = React.createClass({displayName: "GateNode",
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
           ), 
-          React.createElement(Port, {cx: inportPositions.set.x, cy: inportPositions.set.y, r: portStyling.portRadius, 
+          React.createElement(Port, {cx: inportPositions.set.x, cy: inportPositions.set.y, r: portStyling.portRadius, id: "set", 
+                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}, 
+                onMouseOver: this.portHover, onMouseLeave: this.portExitHover, onMouseDown: this.portMouseDown}), 
+
+          React.createElement(Port, {cx: inportPositions.reset.x, cy: inportPositions.reset.y, r: portStyling.portRadius, id: "reset", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
 
-          React.createElement(Port, {cx: inportPositions.reset.x, cy: inportPositions.reset.y, r: portStyling.portRadius, 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
-
-          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, 
+          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, id: "out", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
 
           React.createElement(InportSetText, {x: textPosition.set.x, y: textPosition.set.y, style: {MozUserSelect: 'none'}}), 
@@ -4871,10 +5097,8 @@ var MainPane = React.createClass({displayName: "MainPane",
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
             React.createElement("div", {id: "buttonContainer"}, 
               React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
-              React.createElement("button", {type: "button", onClick: this.addDivToContent}, "Add block"), 
-              React.createElement("button", {type: "button", onClick: this.testingAddChannelChangeInfoViaProperServerRequest}, "Proper server request"), 
-              React.createElement("button", {type: "button", onClick: this.addNodeInfo}, "Add node")
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
+
 
             )
           )
@@ -4967,6 +5191,10 @@ module.exports = MainPane;
 //  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
+
+//<button type="button" onClick={this.addDivToContent}>Add block</button>
+//<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+//<button type="button" onClick={this.addNodeInfo}>Add node</button>
 
 },{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":30,"./blueBlock":16,"./configButton":17,"./favButton":20,"./gateNode.js":21,"./greenBlock":22,"./lutNode.js":23,"./pcompNode.js":25,"./redBlock":26,"./tgenNode.js":28,"./theGraphDiamond.js":29,"react":215,"react-panels":40}],25:[function(require,module,exports){
 /**
@@ -5401,7 +5629,7 @@ var SidePane = React.createClass({displayName: "SidePane",
       return (
         React.createElement(Tab, {title: tabTitle}, 
 
-          React.createElement(Content, null, "Content of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
+          React.createElement(Content, null, "Attributes of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
             tabContent()
           )
 
@@ -6272,6 +6500,9 @@ var App = React.createClass({displayName: "App",
   //  Component.anotherMoveFunction(e);
   //  console.log(this.state.wait);
   //},
+
+  /* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
+
   addNodeToNodesArray: function(){
     var gateNodeRegExp = /Gate/;
     var tgenNodeRegExp = /TGen/;
@@ -6376,6 +6607,23 @@ var App = React.createClass({displayName: "App",
 
   },
 
+  addEdgeInfo: function(){
+    nodeActions.addEdgeToAllNodeInfo({
+      fromNode: 'TGen1',
+      fromNodePort: 'posn',
+      toNode: 'PComp1',
+      toNodePort: 'posn'
+    });
+
+    var newEdge = this.state.allEdges['TGen1posn -> PComp1posn'];
+    console.log(newEdge);
+
+
+    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: "TGen1posn -> PComp1posn", 
+      //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                                      onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
+    ))
+  },
 
   addEdgeToEdgesArray: function(){
     //var gateNodeRegExp = /Gate/;
@@ -6625,6 +6873,9 @@ var App = React.createClass({displayName: "App",
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         }, 
           React.createElement("g", null, React.createElement("rect", {onClick: this.addNodeInfo, height: "50", width: "50"})), 
+
+          React.createElement("g", null, React.createElement("rect", {onClick: this.addEdgeInfo, height: "50", width: "50", transform: "translate(100, 0)"})), 
+
 
           React.createElement("g", {id: "testPanGroup", 
              transform: matrixTransform, 

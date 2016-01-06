@@ -8,9 +8,6 @@ var mainPaneStore = require('../stores/mainPaneStore');
 var mainPaneActions = require('../actions/mainPaneActions');
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
-var RedBlock = require('./redBlock');
-var BlueBlock = require('./blueBlock');
-var GreenBlock = require('./greenBlock');
 
 //var SidePane = require('./sidePane');
 //var sidePaneActions = require('../actions/sidePaneActions');
@@ -331,9 +328,7 @@ var MainPane = React.createClass({
             <div id="buttonContainer">
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
-              <button type="button" onClick={this.addDivToContent}>Add block</button>
-              <button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
-              <button type="button" onClick={this.addNodeInfo}>Add node</button>
+
 
             </div>
           </div>
@@ -427,4 +422,10 @@ module.exports = MainPane;
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
 
+//<button type="button" onClick={this.addDivToContent}>Add block</button>
+//<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+//<button type="button" onClick={this.addNodeInfo}>Add node</button>
 
+//var RedBlock = require('./redBlock');
+//var BlueBlock = require('./blueBlock');
+//var GreenBlock = require('./greenBlock');

@@ -108,6 +108,12 @@ var nodeActions = {
       item: item
     })
   },
+  addEdgeToAllNodeInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDEDGE_TOALLNODEINFO,
+      item: item
+    })
+  }
 };
 
 module.exports = nodeActions;

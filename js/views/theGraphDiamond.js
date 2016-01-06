@@ -600,6 +600,9 @@ var App = React.createClass({
   //  Component.anotherMoveFunction(e);
   //  console.log(this.state.wait);
   //},
+
+  /* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
+
   addNodeToNodesArray: function(){
     var gateNodeRegExp = /Gate/;
     var tgenNodeRegExp = /TGen/;
@@ -704,6 +707,23 @@ var App = React.createClass({
 
   },
 
+  addEdgeInfo: function(){
+    nodeActions.addEdgeToAllNodeInfo({
+      fromNode: 'TGen1',
+      fromNodePort: 'posn',
+      toNode: 'PComp1',
+      toNodePort: 'posn'
+    });
+
+    var newEdge = this.state.allEdges['TGen1posn -> PComp1posn'];
+    console.log(newEdge);
+
+
+    nodeActions.pushEdgeToArray(<Edge id='TGen1posn -> PComp1posn'
+      //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                                      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+    />)
+  },
 
   addEdgeToEdgesArray: function(){
     //var gateNodeRegExp = /Gate/;
@@ -953,6 +973,9 @@ var App = React.createClass({
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
           <g><rect onClick={this.addNodeInfo} height="50" width="50" /></g>
+
+          <g><rect onClick={this.addEdgeInfo} height="50" width="50" transform="translate(100, 0)" /></g>
+
 
           <g id="testPanGroup"
              transform={matrixTransform}

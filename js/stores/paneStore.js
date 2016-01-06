@@ -82,6 +82,7 @@ var appendToAllBlockContent = function(dispatchMarker){
 
 var favContent = [{
   name: "Favourites tab",
+  label: 'Favourites',
   hack: "favTabOpen",
   info: {
     block1: {
@@ -99,6 +100,7 @@ var favContent = [{
 
 var configContent = [{
   name: "Configuration tab",
+  label: 'Config',
   hack: "configTabOpen",
   info: {
     Configurations: {
@@ -631,7 +633,7 @@ AppDispatcher.register(function(payload){
       setNodeTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
       checkWhichNodeTabsOpen();
-      selectBlockOnClick();
+      //selectBlockOnClick();
       console.log(_stuff.tabState);
       paneStore.emitChange();
       break;
@@ -703,6 +705,8 @@ var allNodeTabInfo;
 
 /* This will need an append function at some point */
 var allNodeTabProperties = {
+  'Favourites': false,
+  'Configuration': false,
   'Gate1': false,
   'TGen1': false,
   'PComp1': false
@@ -718,6 +722,8 @@ var setNodeTabStateTrue = function(NodeId){
     console.log("tab state was already true, so don't bother changing it to true");
   }
 };
+
+/* Note that this function also adds the tabs to SidePane */
 
 var checkWhichNodeTabsOpen = function(){
   for (var key in allNodeTabProperties){
@@ -804,6 +810,49 @@ var removeNodeTab = function(selectedTabIndex){
   _stuff.tabState = newTabs;
 };
 
+var getInitialNodeDataFromNodeStore = function(){
+  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
+};
+
+module.exports = paneStore;
+
+
+//var favAndConfigTabProperties = {
+//  favTabOpen: false,
+//  configTabOpen: false
+//};
+
+//var changeRedBlockTabState = function(){
+//  if(allBlockTabProperties.redBlockTabOpen === false) {
+//    allBlockTabProperties.redBlockTabOpen = true;
+//    checkWhichBlockTabsOpen();
+//    console.log(_handles.passSidePane)
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeBlueBlockTabState = function(){
+//  if(allBlockTabProperties.blueBlockTabOpen === false){
+//    allBlockTabProperties.blueBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};
+//
+//var changeGreenBlockTabState = function(){
+//  if(allBlockTabProperties.greenBlockTabOpen === false){
+//    allBlockTabProperties.greenBlockTabOpen = true;
+//    checkWhichBlockTabsOpen()
+//  }
+//  else{
+//
+//  }
+//};
+
 //var possibleNodeTabsToOpen = {
 //  'Gate1': function(NodeId){
 //    var blockTabsOpen = [];
@@ -849,46 +898,3 @@ var removeNodeTab = function(selectedTabIndex){
 //  console.log('deciding which tab to open lookup is working!');
 //  return possibleNodeTabsToOpen[key](key)
 //}
-
-var getInitialNodeDataFromNodeStore = function(){
-  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
-};
-
-module.exports = paneStore;
-
-
-//var favAndConfigTabProperties = {
-//  favTabOpen: false,
-//  configTabOpen: false
-//};
-
-//var changeRedBlockTabState = function(){
-//  if(allBlockTabProperties.redBlockTabOpen === false) {
-//    allBlockTabProperties.redBlockTabOpen = true;
-//    checkWhichBlockTabsOpen();
-//    console.log(_handles.passSidePane)
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeBlueBlockTabState = function(){
-//  if(allBlockTabProperties.blueBlockTabOpen === false){
-//    allBlockTabProperties.blueBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeGreenBlockTabState = function(){
-//  if(allBlockTabProperties.greenBlockTabOpen === false){
-//    allBlockTabProperties.greenBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};

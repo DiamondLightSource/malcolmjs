@@ -135,7 +135,7 @@ var SidePane = React.createClass({
       return (
         <Tab title={tabTitle}>
 
-          <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
+          <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
             {tabContent()}
           </Content>
 

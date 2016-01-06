@@ -161,22 +161,22 @@ var edges = {
     toNodeType: 'TGen',
     toNodePort: 'ena'
   },
-  TGen1PosnPComp1Posn: {
-    fromNode: 'TGen1',
-    fromNodeType: 'TGen',
-    fromNodePort: 'posn',
-    toNode: 'PComp1',
-    toNodeType: 'PComp',
-    toNodePort: 'posn'
-  },
-  TGen1PosnPComp1Ena: {
-    fromNode: 'TGen1',
-    fromNodeType: 'TGen',
-    fromNodePort: 'posn',
-    toNode: 'PComp1',
-    toNodeType: 'PComp',
-    toNodePort: 'ena'
-  },
+  //TGen1PosnPComp1Posn: {
+  //  fromNode: 'TGen1',
+  //  fromNodeType: 'TGen',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'posn'
+  //},
+  //TGen1PosnPComp1Ena: {
+  //  fromNode: 'TGen1',
+  //  fromNodeType: 'TGen',
+  //  fromNodePort: 'posn',
+  //  toNode: 'PComp1',
+  //  toNodeType: 'PComp',
+  //  toNodePort: 'ena'
+  //},
   //Gate1OutPComp2Ena: {
   //  fromNode: 'Gate1',
   //  fromNodeType: 'Gate',
@@ -186,6 +186,43 @@ var edges = {
   //  toNodePort: 'ena'
   //}
 };
+
+/* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
+
+function addToEdgesObject(){
+  for(var node in allNodeInfo){
+    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
+    for(i = 0; i < allNodeInfo[node].outports.length; i++){
+      console.log(i);
+      console.log(allNodeInfo[node].outports[i]);
+      if(allNodeInfo[node].outports[i].connected === true){
+        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
+        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
+          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
+          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
+          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
+          var newEdge = {
+            fromNode: node,
+            fromNodeType: allNodeInfo[node].type,
+            fromNodePort: allNodeInfo[node].outports[i].name,
+            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
+            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
+            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
+          };
+          console.log(newEdge);
+          /* Then here I need to add this new edge to the edges object */
+          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+          console.log("The newEdge's label is " + newEdgeLabel);
+          edges[newEdgeLabel] = newEdge
+          console.log(edges);
+        }
+      }
+      else{
+        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
+      }
+    }
+  }
+}
 
 var allNodeInfo = {
 
@@ -197,22 +234,46 @@ var allNodeInfo = {
       x: 50,
       y: 100,
     },
-    inports: {
-      "set": {
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
         connected: false,
         connectedTo: null
-      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {
+      },
+      {
+        name: 'reset',
         connected: false,
         connectedTo: null
       }
-    },
-    outports: {
-      "out": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'out',
+        connected: true,
+        connectedTo: [
+          {
+            node: 'TGen1',
+            port: 'ena'
+          }
+        ]
       }
-    }
+    ]
   },
 
   'TGen1': {
@@ -223,18 +284,40 @@ var allNodeInfo = {
       x: 450,
       y: 10
     },
-    inports: {
-      "ena": {
-        connected: false,
-        connectedTo: null
+    //inports: {
+    //  "ena": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "posn": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'ena',
+        connected: true,
+        connectedTo: {
+          node: 'Gate1',
+          port: 'out'
+        }
       }
-    },
-    outports: {
-      "posn": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'posn',
+        connected: true,
+        connectedTo:[
+          {
+            node: 'PComp1',
+            port: 'posn'
+          }
+        ]
       }
-    }
+    ]
   },
   'PComp1': {
     type: 'PComp',
@@ -244,32 +327,94 @@ var allNodeInfo = {
       x: 650,
       y: 250,
     },
-    inports: {
-      'ena': {
+    //inports: {
+    //  'ena': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'posn': {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  'act': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'out': {
+    //    connected: false,
+    //    connectedTo: null
+    //  },
+    //  'pulse': {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'ena',
         connected: false,
         connectedTo: null
       },
-      'posn': {
-        connected: false,
-        connectedTo: null
+      {
+        name: 'posn',
+        connected: true,
+        connectedTo: {
+          node: 'TGen1',
+          port: 'posn'
+        }
       }
-    },
-    outports: {
-      'act': {
+    ],
+    outports: [
+      {
+        name: 'act',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       },
-      'out': {
+      {
+        name: 'out',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       },
-      'pulse': {
+      {
+        name: 'pulse',
         connected: false,
-        connectedTo: null
+        connectedTo: []
       }
-    }
+    ]
   },
 };
+
+function addEdgeToAllNodeInfo(Info){
+  for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
+    if(allNodeInfo[Info.fromNode].outports[i].name === Info.fromNodePort){
+      var newEdgeToFromNode = {
+        node: Info.toNode,
+        port: Info.toNodePort
+      };
+      console.log(newEdgeToFromNode);
+      allNodeInfo[Info.fromNode].outports[i].connected = true;
+      console.log(allNodeInfo[Info.fromNode].outports[i]);
+      allNodeInfo[Info.fromNode].outports[i].connectedTo.push(newEdgeToFromNode);
+    }
+  }
+  /* Also need to add to the node whose inport we've connected that outport to! */
+
+  for(j = 0; j < allNodeInfo[Info.toNode].inports.length; j++){
+    if(allNodeInfo[Info.toNode].inports[j].name === Info.toNodePort){
+      var newEdgeToToNode = {
+        node: Info.fromNode,
+        port: Info.fromNodePort
+      };
+      console.log(newEdgeToToNode);
+      allNodeInfo[Info.toNode].inports[j].connected = true;
+
+      /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
+      allNodeInfo[Info.toNode].inports[j].connectedTo = newEdgeToToNode;
+    }
+  }
+}
 
 var nodeInfoTemplates = {
   'Gate': {
@@ -1251,6 +1396,16 @@ AppDispatcher.register(function(payload){
       appendToAllNodeInfo(item);
       appendToAllPossibleNodes(item);
       appendToNodeSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.ADDEDGE_TOALLNODEINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllNodeInfo(item);
+      addToEdgesObject();
+      console.log(allNodeInfo);
       nodeStore.emitChange();
       break;
 
