@@ -113,9 +113,9 @@ function checkIfAnyNodesAreSelected(){
 }
 
 var edgeSelectedStates = {
-  Gate1OutTGen1Ena: false,
-  TGen1PosnPComp1Posn: false,
-  TGen1PosnPComp1Ena: false
+  //Gate1OutTGen1Ena: false,
+  //TGen1PosnPComp1Posn: false,
+  //TGen1PosnPComp1Ena: false
 };
 
 function appendToEdgeSelectedStates(EdgeId){
@@ -1740,6 +1740,14 @@ AppDispatcher.register(function(payload){
       addOneSingleEdge(item.edgeLabel, item.edgeInfo);
       nodeStore.emitChange();
       console.log(edges);
+      break;
+
+    case appConstants.APPEND_EDGESELECTEDSTATE:
+      console.log(payload);
+      console.log(item);
+      edgeSelectedStates[item] = false;
+      nodeStore.emitChange();
+      console.log(edgeSelectedStates);
       break;
 
     default:

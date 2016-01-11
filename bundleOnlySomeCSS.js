@@ -211,6 +211,12 @@ var nodeActions = {
       actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
       item: item
     })
+  },
+  appendToEdgeSelectedState: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.APPEND_EDGESELECTEDSTATE,
+      item: item
+    })
   }
 };
 
@@ -616,7 +622,8 @@ var appConstants = {
   ADD_ONESINGLEEDGE: "ADD_ONESINGLEEDGE",
   CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
   ADD_ONESINGLEEDGETOALLNODEINFO: "ADD_ONESINGLEEDGETOALLNODEINFO",
-  ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT"
+  ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
+  APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE"
 };
 
 module.exports = appConstants;
@@ -1012,9 +1019,9 @@ function checkIfAnyNodesAreSelected(){
 }
 
 var edgeSelectedStates = {
-  Gate1OutTGen1Ena: false,
-  TGen1PosnPComp1Posn: false,
-  TGen1PosnPComp1Ena: false
+  //Gate1OutTGen1Ena: false,
+  //TGen1PosnPComp1Posn: false,
+  //TGen1PosnPComp1Ena: false
 };
 
 function appendToEdgeSelectedStates(EdgeId){
@@ -2639,6 +2646,14 @@ AppDispatcher.register(function(payload){
       addOneSingleEdge(item.edgeLabel, item.edgeInfo);
       nodeStore.emitChange();
       console.log(edges);
+      break;
+
+    case appConstants.APPEND_EDGESELECTEDSTATE:
+      console.log(payload);
+      console.log(item);
+      edgeSelectedStates[item] = false;
+      nodeStore.emitChange();
+      console.log(edgeSelectedStates);
       break;
 
     default:
@@ -7258,24 +7273,34 @@ var App = React.createClass({displayName: "App",
 
   edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
 
-  console.log("The newEdge's label is " + edgeLabel);
+  /* Checking if the edge already exists, if it does don't bother adding another edge */
 
-  /* Need an action to do this */
-  //edges[edgeLabel] = newEdge;
-  //console.log(edges);
+  if(this.state.allEdges[edgeLabel] === undefined){
+    console.log("The newEdge's label is " + edgeLabel);
 
-  var edgeStuff = {
-    edgeLabel: edgeLabel,
-    edgeInfo: newEdge
-  };
-  nodeActions.addOneSingleEdgeToEdgesObject(edgeStuff);
+    /* Need an action to do this */
+    //edges[edgeLabel] = newEdge;
+    //console.log(edges);
 
-  /* Also need to add the selected states to edgeSelectedStates! */
-  /* Can have an action do this */
+    var edgeStuff = {
+      edgeLabel: edgeLabel,
+      edgeInfo: newEdge
+    };
+    nodeActions.addOneSingleEdgeToEdgesObject(edgeStuff);
 
-  //edgeSelectedStates[edgeLabel] = false;
+    /* Also need to add the selected states to edgeSelectedStates! */
+    /* Can have an action do this */
 
-  this.createNewEdge(edgeLabel)
+    //edgeSelectedStates[edgeLabel] = false;
+    nodeActions.appendToEdgeSelectedState(edgeLabel);
+
+    this.createNewEdge(edgeLabel)
+  }
+  else{
+    console.log("That edge already exists, so don't add another one");
+  }
+
+
 
   },
 

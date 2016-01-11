@@ -155,6 +155,12 @@ var nodeActions = {
       actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
       item: item
     })
+  },
+  appendToEdgeSelectedState: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.APPEND_EDGESELECTEDSTATE,
+      item: item
+    })
   }
 };
 
