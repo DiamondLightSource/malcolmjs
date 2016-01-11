@@ -113,6 +113,48 @@ var nodeActions = {
       actionType: appConstants.ADDEDGE_TOALLNODEINFO,
       item: item
     })
+  },
+  passPortMouseDown: function(port){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PASS_PORTMOUSEDOWN,
+      item: port
+    })
+  },
+  deselectAllPorts: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLPORTS,
+      item: item
+    })
+  },
+  storingFirstPortClicked: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.STORING_FIRSTPORTCLICKED,
+      item: item
+    })
+  },
+  addOneSingleEdge: function(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGE,
+      item: edgeInfo
+    })
+  },
+  createNewEdgeLabel: function(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CREATENEW_EDGELABEL,
+      item: edgeInfo
+    })
+  },
+  addOneSingleEdgeToAllNodeInfo(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLNODEINFO,
+      item: edgeInfo
+    })
+  },
+  addOneSingleEdgeToEdgesObject(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
+      item: item
+    })
   }
 };
 

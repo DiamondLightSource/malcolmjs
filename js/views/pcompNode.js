@@ -15,7 +15,9 @@ function getPComp1NodeState(){
     defaultStyling: NodeStore.getPCompNodeStyling(),
     selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
   }
 }
 
@@ -75,6 +77,45 @@ var PCompNode = React.createClass({
     nodeActions.draggedElement(e.currentTarget.parentNode);
   },
 
+  portMouseDown: function(e){
+    console.log("PComp1 portMouseDown");
+    nodeActions.passPortMouseDown(e.currentTarget);
+
+    var connectToPortMouseDownCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    this.setState({connectToPortMouseDownCoords: connectToPortMouseDownCoords})
+  },
+  portMouseUp: function(e){
+    var connectToPortMouseUpCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+
+    if(this.state.connectToPortMouseDownCoords.x === connectToPortMouseUpCoords.x && this.state.connectToPortMouseDownCoords.y === connectToPortMouseUpCoords.y){
+      console.log("zero movement between portMouseDown & portMouseUp, hence a portClick!");
+      this.portClick();
+    }
+    else{
+      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+    }
+  },
+  portClick: function(){
+    console.log("PComp1 portClick");
+
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    //var passingEvent = e;
+    if(this.state.storingFirstPortClicked === null){
+      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.state.storingFirstPortClicked !== null){
+      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
+  },
+
 
   render: function(){
 
@@ -117,8 +158,9 @@ var PCompNode = React.createClass({
 
           <Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius}
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
-          <Port cx={inportPositions.posn.x} cy={inportPositions.posn.y} r={portStyling.portRadius}
-                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+          <Port cx={inportPositions.posn.x} cy={inportPositions.posn.y} r={portStyling.portRadius} className="posn"
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
+                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} />
           <Port cx={outportPositions.act.x } cy={outportPositions.act.y} r={portStyling.portRadius}
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
           <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius}

@@ -6,3 +6,7 @@ var NodeSelect = new Event('NodeSelect');
 var EdgeSelect = new Event('EdgeSelect');
 
 var AddNode = new Event('AddNode');
+
+var EdgePreview = new Event('EdgePreview');
+var PortSelect = new Event('PortSelect');
+var TwoPortClicks = new Event('TwoPortClicks');

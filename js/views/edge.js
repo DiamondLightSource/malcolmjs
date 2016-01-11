@@ -76,16 +76,16 @@ var Edge = React.createClass({
   render:function(){
 
     var edgeInfo = this.state.allEdges[this.props.id];
-    //console.log(this.props.id);
-    //console.log(edgeInfo);
+    console.log(this.props.id);
+    console.log(edgeInfo);
 
     var allEdges = this.state.allEdges;
     //console.log(allEdges);
 
     var fromNode = edgeInfo.fromNode;
     var toNode = edgeInfo.toNode;
-    //console.log(fromNode);
-    //console.log(toNode);
+    console.log(fromNode);
+    console.log(toNode);
     var fromNodePort = edgeInfo.fromNodePort;
     var toNodePort = edgeInfo.toNodePort;
 

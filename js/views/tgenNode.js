@@ -18,7 +18,9 @@ function getTGenNodeState(){
     defaultStyling: NodeStore.getTGenNodeStyling(),
     selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
   }
 }
 
@@ -96,7 +98,58 @@ var TGenNode = React.createClass({
     nodeActions.draggedElement(e.currentTarget.parentNode);
   },
 
+  portMouseDown: function(e){
+    console.log("portMouseDown");
+    console.log(e);
+    nodeActions.passPortMouseDown(e.currentTarget);
+
+    var portMouseDownCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    this.setState({portMouseDownCoords: portMouseDownCoords});
+    var whichPort = e.currentTarget;
+    console.log(whichPort);
+  },
+  portMouseUp: function(e){
+    console.log("portMouseUp");
+    console.log(e);
+    var portMouseUpCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
+      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
+      this.portClick(e);
+    }
+    else{
+      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+    }
+  },
+  portClick: function(e){
+    console.log("portClick");
+    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
+    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    var passingEvent = e;
+    if(this.state.storingFirstPortClicked === null){
+      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.state.storingFirstPortClicked !== null){
+      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
+    //theGraphDiamondHandle.dispatchEvent(PortSelect);
+  },
+  //portSelect: function(){
+  //  console.log("portClick has occured, so a port has been selected");
+  //
+  //},
+
   render: function(){
+
+    console.log("portThatHasBeenClicked is: " + this.state.portThatHasBeenClicked);
 
     if(this.state.selected === true){
       var currentStyling = this.state.selectedStyling;
@@ -127,20 +180,21 @@ var TGenNode = React.createClass({
             >
 
         <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown} >
-          <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
+          <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}/> /* To allow the cursor to change when hovering over the entire node container */
 
           <Rectangle id={rectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
-                     style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
+                     style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
           />
-          <Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius}
+          <Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius} id="ena"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
-          <Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius}
-                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
-          <InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}} />
-          <OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
+          <Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius} className="posn"
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
+                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} />
+          <InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
+          <OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
 
-          <NodeName x="17" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} />
+          <NodeName x="17" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
         </g>
 
       </g>

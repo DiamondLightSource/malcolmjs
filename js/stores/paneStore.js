@@ -527,9 +527,9 @@ AppDispatcher.register(function(payload){
   switch(action.actionType){
 
     case appConstants.PASS_SIDEPANE:
-      console.log(payload);
-      console.log(action);
-      console.log(item);
+      //console.log(payload);
+      //console.log(action);
+      //console.log(item);
       passSidePane(item);
           break;
 
@@ -727,8 +727,8 @@ var setNodeTabStateTrue = function(NodeId){
 
 var checkWhichNodeTabsOpen = function(){
   for (var key in allNodeTabProperties){
-    console.log(key);
-    console.log(allNodeTabProperties[key]);
+    //console.log(key);
+    //console.log(allNodeTabProperties[key]);
     if(allNodeTabProperties[key] === true) {
       console.log('just before starting the tabState checker loop');
       if(_stuff.tabState.length === 0){
@@ -743,30 +743,30 @@ var checkWhichNodeTabsOpen = function(){
         //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
 
         _stuff.tabState.push(allNodeTabInfo[key]);
-        console.log(_stuff.tabState);
+        //console.log(_stuff.tabState);
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
           console.log('in the non-empty tabState checker loop');
-          console.log(_stuff.tabState.length);
-          console.log(i);
-          console.log(_stuff.tabState[i].label);
-          console.log(key);
+          //console.log(_stuff.tabState.length);
+          //console.log(i);
+          //console.log(_stuff.tabState[i].label);
+          //console.log(key);
           //console.log(key[label]);
           if (_stuff.tabState[i].label === key) {
-            console.log(_stuff.tabState[i].label);
+            //console.log(_stuff.tabState[i].label);
             //console.log(key.label);
             console.log("tab is already open from before, don't add, break statement occurring");
             break
           }
           else if(_stuff.tabState[i].label !== key){
             console.log('key isnt equal to the ith position, move onto the next value in tabState');
-            console.log(_stuff.tabState.length);
-            console.log(i);
+            //console.log(_stuff.tabState.length);
+            //console.log(i);
             if(i === _stuff.tabState.length - 1){
               console.log('tabState didnt have this tab, tab is now open');
-              console.log(key);
-              console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
+              //console.log(key);
+              //console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
               //console.log(lookupWhichNodeTabToOpen(key));
               //
               ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
@@ -775,7 +775,7 @@ var checkWhichNodeTabsOpen = function(){
               //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
 
               _stuff.tabState.push(allNodeTabInfo[key]);
-              console.log(_stuff.tabState);
+              //console.log(_stuff.tabState);
             }
           }
         }
@@ -783,7 +783,7 @@ var checkWhichNodeTabsOpen = function(){
       }
     }
     else{
-      console.log('tab is not open')
+      //console.log('tab is not open')
     }
   }
 

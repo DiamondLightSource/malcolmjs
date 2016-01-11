@@ -15,6 +15,9 @@ var nodesToRender = [];
 var edgesToRender = [];
 var clickedEdge = null;
 var newlyAddedNode = null;
+var portThatHasBeenClicked = null;
+var storingFirstPortClicked = null;
+var newlyCreatedEdgeLabel = null;
 
 var allNodeTabInfo = {
   'Gate1': {
@@ -115,6 +118,12 @@ var edgeSelectedStates = {
   TGen1PosnPComp1Ena: false
 };
 
+function appendToEdgeSelectedStates(EdgeId){
+  edgeSelectedStates[EdgeId] = false;
+  console.log("edgeSelectedStates is now:");
+  console.log(edgeSelectedStates);
+}
+
 function selectEdge(Edge){
   edgeSelectedStates[Edge] = true;
 }
@@ -125,6 +134,7 @@ function getAnyEdgeSelectedState(EdgeId){
   }
   else{
     console.log("that edge's state exists, hooray!");
+    console.log(edgeSelectedStates[EdgeId]);
     return edgeSelectedStates[EdgeId];
   }
 }
@@ -153,14 +163,14 @@ function deselectAllEdges(){
 }
 
 var edges = {
-  Gate1OutTGen1Ena: {
-    fromNode: 'Gate1',
-    fromNodeType: 'Gate',
-    fromNodePort: 'out',
-    toNode: 'TGen1',
-    toNodeType: 'TGen',
-    toNodePort: 'ena'
-  },
+  //Gate1OutTGen1Ena: {
+  //  fromNode: 'Gate1',
+  //  fromNodeType: 'Gate',
+  //  fromNodePort: 'out',
+  //  toNode: 'TGen1',
+  //  toNodeType: 'TGen',
+  //  toNodePort: 'ena'
+  //},
   //TGen1PosnPComp1Posn: {
   //  fromNode: 'TGen1',
   //  fromNodeType: 'TGen',
@@ -212,9 +222,15 @@ function addToEdgesObject(){
           console.log(newEdge);
           /* Then here I need to add this new edge to the edges object */
           var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+          newlyCreatedEdgeLabel = newEdgeLabel;
+          console.log(newlyCreatedEdgeLabel);
           console.log("The newEdge's label is " + newEdgeLabel);
-          edges[newEdgeLabel] = newEdge
+          edges[newEdgeLabel] = newEdge;
           console.log(edges);
+          /* Also need to add the selected states to edgeSelectedStates! */
+
+          edgeSelectedStates[newEdgeLabel] = false;
+          console.log(edgeSelectedStates);
         }
       }
       else{
@@ -222,6 +238,254 @@ function addToEdgesObject(){
       }
     }
   }
+}
+
+var nodeLibrary = {
+  Gate: {
+    name: 'Gate',
+    description: 'SR Gate block',
+    icon: 'play-circle',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  EncIn: {
+    name: 'EncIn',
+    description: 'Encoder Input block',
+    icon: 'cogs',
+    inports: [
+    ],
+    outports: [
+      {'name': 'a', 'type': 'boolean'},
+      {'name': 'b', 'type': 'boolean'},
+      {'name': 'z', 'type': 'boolean'},
+      {'name': 'conn', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  PComp: {
+    name: 'PComp',
+    description: 'Position compare block',
+    icon: 'compass',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  },
+  TGen: {
+    name: 'TGen',
+    description: 'Time Generator block',
+    icon: 'clock-o',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  LUT: {
+    name: 'LUT',
+    description: 'Look up Table block',
+    icon: 'stop',
+    inports: [
+      {'name': 'inpa', 'type': 'boolean'},
+      {'name': 'inpb', 'type': 'boolean'},
+      {'name': 'inpc', 'type': 'boolean'},
+      {'name': 'inpd', 'type': 'boolean'},
+      {'name': 'inpe', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  Pulse: {
+    name: 'Pulse',
+    description: 'Pulse Generator block',
+    icon: 'bolt',
+    inports: [
+      {'name': 'inp', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'},
+      {'name': 'err', 'type': 'boolean'}
+    ]
+  },
+  TTLOut: {
+    name: 'TTLOut',
+    description: 'TTL Output block',
+    icon: 'toggle-on',
+    inports: [
+      {'name': 'val', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  },
+  PCap: {
+    name: 'PCap',
+    description: 'Position capture block',
+    icon: 'bar-chart',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'trig', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  }
+};
+
+function addOneSingleEdge(edgeLabel, edgeInfo){
+  edges[edgeLabel] = edgeInfo;
+}
+
+function addOneEdgeToEdgesObject(edgeInfo, portTypes){
+  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+
+  var startNode;
+  var startNodePort;
+  var endNode;
+  var endNodePort;
+  var newEdge;
+  var edgeLabel;
+  if(portTypes.fromNodePortType === "outport"){
+    console.log("outport to inport, so edge labelling is normal");
+    startNode = edgeInfo.fromNode;
+    startNodePort = edgeInfo.fromNodePort;
+    endNode = edgeInfo.toNode;
+    endNodePort = edgeInfo.toNodePort;
+    //newEdge = {
+    //  fromNode: startNode,
+    //  fromNodePort: startNodePort,
+    //  toNode: endNode,
+    //  toNodePort: endNodePort
+    //}
+  }
+  else if(portTypes.fromNodePortType === "inport"){
+    console.log("inport to outport, so have to flip the edge labelling direction");
+    /* Note that you must also flip the ports too! */
+    startNode = edgeInfo.toNode;
+    startNodePort = edgeInfo.toNode;
+    endNode = edgeInfo.fromNode;
+    endNodePort = edgeInfo.fromNodePort;
+    /* Don't need this in both loops, can just set this after the loops have completed! */
+    //newEdge = {
+    //  fromNode: startNode,
+    //  fromNodePort: startNodePort,
+    //  toNode: endNode,
+    //  toNodePort: endNodePort
+    //}
+  }
+
+  newEdge = {
+    fromNode: startNode,
+    fromNodePort: startNodePort,
+    toNode: endNode,
+    toNodePort: endNodePort
+  };
+
+  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+
+  console.log("The newEdge's label is " + edgeLabel);
+  newlyCreatedEdgeLabel = edgeLabel;
+  edges[edgeLabel] = newEdge;
+  console.log(edges);
+
+  /* Also need to add the selected states to edgeSelectedStates! */
+
+  edgeSelectedStates[edgeLabel] = false;
+
+
+}
+
+function checkPortCompatibility(edgeInfo){
+  /* First need to check we have an inport and an outport */
+  /* Find both port types, then compare them somehow */
+
+  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
+  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
+
+  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
+  var toNodeLibraryInfo = nodeLibrary[toNodeType];
+
+  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
+    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
+      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
+      var fromNodePortType = "inport";
+    }
+    else{
+      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
+      var fromNodePortType = "outport";
+    }
+  }
+
+  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
+    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
+      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
+      var toNodePortType = "inport";
+    }
+    else{
+      console.log("The toNode isn't an inport, so it's an outport!");
+      var toNodePortType = "outport";
+    }
+  }
+
+  /* Time to compare the fromNodePortType and toNodePortType */
+
+  if(fromNodeType === toNodePortType){
+    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
+    window.alert("Incompatible ports");
+    /* Hence, don't add anything to allNodeInfo */
+  }
+  else if(fromNodePortType !== toNodePortType){
+    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+    addEdgeToAllNodeInfo(edgeInfo);
+
+    /* Also need the equivalent of addToEdgesObject for single edges here! */
+    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+    if it's an outport then it's a normal connection from an out to an in,
+    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+     */
+
+    var portTypes = {
+      fromNodePortType: fromNodePortType,
+      toNodePortType: toNodePortType
+    };
+
+    addOneEdgeToEdgesObject(edgeInfo, portTypes);
+  }
+
+}
+
+function createNewEdgeLabel(edgeInfo){
+  var newEdge = edgeInfo;
+  var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+  newlyCreatedEdgeLabel = newEdgeLabel;
+}
+
+function addNewEdge(EdgeInfo){
+  var newEdge = EdgeInfo;
+  var fromNode = newEdge.fromNode;
+  var toNode = newEdge.toNode;
+  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
+  newEdge['toNodeType'] = allNodeInfo[toNode].type;
+  console.log(newEdge);
+
+  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+
+  //newlyCreatedEdgeLabel = newEdgeLabel;
+  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
+  edges[newlyCreatedEdgeLabel] = newEdge;
+  console.log(edges);
+
 }
 
 var allNodeInfo = {
@@ -309,13 +573,8 @@ var allNodeInfo = {
     outports: [
       {
         name: 'posn',
-        connected: true,
-        connectedTo:[
-          {
-            node: 'PComp1',
-            port: 'posn'
-          }
-        ]
+        connected: false,
+        connectedTo:[]
       }
     ]
   },
@@ -359,11 +618,8 @@ var allNodeInfo = {
       },
       {
         name: 'posn',
-        connected: true,
-        connectedTo: {
-          node: 'TGen1',
-          port: 'posn'
-        }
+        connected: false,
+        connectedTo: null
       }
     ],
     outports: [
@@ -387,6 +643,9 @@ var allNodeInfo = {
 };
 
 function addEdgeToAllNodeInfo(Info){
+
+  /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
+
   for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
     if(allNodeInfo[Info.fromNode].outports[i].name === Info.fromNodePort){
       var newEdgeToFromNode = {
@@ -1255,6 +1514,18 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getAllNodeInfoForInitialNodeData: function(){
     return allNodeInfo;
+  },
+  getPortThatHasBeenClicked: function(){
+    return portThatHasBeenClicked;
+  },
+  getStoringFirstPortClicked: function(){
+    return storingFirstPortClicked;
+  },
+  getNewlyCreatedEdgeLabel: function(){
+    return newlyCreatedEdgeLabel;
+  },
+  getNodeLibrary: function(){
+    return nodeLibrary;
   }
 });
 
@@ -1403,10 +1674,72 @@ AppDispatcher.register(function(payload){
     case appConstants.ADDEDGE_TOALLNODEINFO:
       console.log(payload);
       console.log(item);
-      addEdgeToAllNodeInfo(item);
+      //addEdgeToAllNodeInfo(item);
       addToEdgesObject();
       console.log(allNodeInfo);
+      console.log(newlyCreatedEdgeLabel);
       nodeStore.emitChange();
+      break;
+
+    case appConstants.PASS_PORTMOUSEDOWN:
+      console.log(payload);
+      console.log(item);
+      portThatHasBeenClicked = item;
+      console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.className.animVal);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLPORTS:
+      portThatHasBeenClicked = null;
+      console.log("portThatHasBeenClicked has been reset");
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.STORING_FIRSTPORTCLICKED:
+      console.log(payload);
+      console.log(item);
+      storingFirstPortClicked = item;
+      console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.className.animVal);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.ADD_ONESINGLEEDGE:
+      console.log(payload);
+      console.log(item);
+      /* Let's try replacing with my function that checks port compatibility */
+      //addEdgeToAllNodeInfo(item);
+      //addNewEdge(item);
+
+      /* Try putting port compatibility checker in theGraphDiamond */
+      //checkPortCompatibility(item);
+
+      console.log(edges);
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.CREATENEW_EDGELABEL:
+      console.log(payload);
+      console.log(item);
+      createNewEdgeLabel(item);
+      appendToEdgeSelectedStates(newlyCreatedEdgeLabel);
+      nodeStore.emitChange();
+      console.log(newlyCreatedEdgeLabel);
+      break;
+
+    case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllNodeInfo(item);
+      nodeStore.emitChange();
+      console.log(allNodeInfo);
+      break;
+
+    case appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT:
+      console.log(payload);
+      console.log(item);
+      addOneSingleEdge(item.edgeLabel, item.edgeInfo);
+      nodeStore.emitChange();
+      console.log(edges);
       break;
 
     default:

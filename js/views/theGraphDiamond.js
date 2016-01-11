@@ -75,6 +75,10 @@ function getAppState(){
     nodesToRender: NodeStore.getNodesToRenderArray(),
     edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
+    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
+    nodeLibrary: NodeStore.getNodeLibrary()
     //newlyAddedNode: NodeStore.getNewlyAddedNode()
   }
 }
@@ -98,10 +102,21 @@ var App = React.createClass({
     this.setState({self: this});
 
     this.setState({wait: false});
+
+    //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
+    nodeActions.addEdgeToAllNodeInfo();
+    /* Still need to somehow invoke the function to push all the initial edges to the edges array... */
+    /* Just use this.addEdgeToEdgesArray for now =P */
     this.addEdgeToEdgesArray();
+
     this.addNodeToNodesArray();
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
+
+    //this.setState({storingFirstPortClicked: null});
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -321,6 +336,15 @@ var App = React.createClass({
     //console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.deselectAllEdges("deselect all edges");
+
+    if(this.state.portThatHasBeenClicked !== null){
+      this.portDeselectRemoveHighlight();
+      nodeActions.deselectAllPorts("deselect all ports");
+    }
+    else{
+      console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
+    }
+
   },
 
   debounce: function (func, wait, immediate) {
@@ -458,6 +482,7 @@ var App = React.createClass({
   panMouseMove: function (e) {
     if (this.dragging) {
       e.preventDefault();
+      console.log("dragging");
     }
 
     var dx = this.coords.x - e.nativeEvent.clientX;
@@ -707,6 +732,282 @@ var App = React.createClass({
 
   },
 
+  addEdgePreview: function(){
+    console.log("addEdgePreview in theGraphDiamond has been invoked!");
+  },
+
+  portSelectHighlight: function(){
+    console.log("portSelectHighlight");
+    /* This was all pointless, I already have the specific port in this.state.portThatHasBeenSelected! */
+    //var portClassName = this.state.portThatHasBeenClicked.className.animVal;
+    //var nodeId = this.state.portThatHasBeenClicked.parentNode.parentNode.id;
+    //console.log("portThatHasBeenClicked className is: " + portClassName);
+    //console.log("portThatHasBeenClicked parent is: " + nodeId);
+    //var node = document.getElementById(nodeId);
+    //var port = node.querySelector("." + portClassName);
+    //console.log(node);
+    //console.log(port);
+
+    console.log(this.state.portThatHasBeenClicked);
+    //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
+    nodeActions.storingFirstPortClicked(this.state.portThatHasBeenClicked);
+
+    var port = this.state.portThatHasBeenClicked;
+    /* Need an if loop to check if we're hovering the port already
+    Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
+     */
+    port.style.cursor = "default";
+    port.style.fill = "yellow";
+    port.style.stroke = "yellow";
+    //console.log(port.style.fill);
+    //console.log(port.style.stroke);
+    /* Node select is also messing with the port styling... */
+  },
+  portDeselectRemoveHighlight: function(){
+    console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
+    var port = this.state.portThatHasBeenClicked;
+    /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
+    Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
+    */
+    /* Problem is now that if you have clicked a port and have it selected, if you hover over a node it'll go back to being a hand...
+    Need some way of checking that if a port is selected, don't override the cursor until a drop or deselection occurs
+     */
+    port.style.cursor = "move";
+    port.style.fill = "black";
+    port.style.stroke = "black";
+  },
+
+  checkBothClickedPorts: function(){
+    /* This function will run whenever we have dispatched a PortSelect event
+    An if loop will check if this.state.portThatHasBeenClicked is null:
+    if it is null we simply do a highlight of the port we have selected, then edgePreview should occur.
+    if it ISN'T null and it isn't the same port you already clicked, then you run the addEdgeInfo function, passing in the relevant nodes and ports
+    To check if portThatHasBeenClicked has a different value, how about I store the value of it in a separate state when the first port click comes in,
+    so then you can compare the two in some form or another?
+     */
+    /* Wait, this.state.portThatHasBeenClicked will never be null when portClick() is run, since we set it in the node to be something in the node file? */
+    console.log("checkBothClickedPorts has been called");
+    //if(this.state.storingFirstPortClicked !== null){
+    //  var firstPort = this.state.storingFirstPortClicked;
+    //  var secondPort = this.state.portThatHasBeenClicked;
+    //  console.log(firstPort);
+    //  console.log(secondPort);
+    //
+    //  if(firstPort.parentNode.id === secondPort.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
+    //    console.log("the two clicked ports are the same port, you clicked on the same port twice!");
+    //  }
+    //  else{
+    //    console.log("something else is afoot! =P");
+    //  }
+    //}
+    //else if(this.state.storingFirstPortClicked === null){
+    //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
+    //}
+    var firstPort = this.state.storingFirstPortClicked;
+    var secondPort = this.state.portThatHasBeenClicked;
+    console.log(firstPort);
+    console.log(secondPort);
+    console.log(firstPort.parentNode.parentNode.id);
+    console.log(secondPort.parentNode.parentNode.id);
+
+    if(firstPort.parentNode.parentNode.id === secondPort.parentNode.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
+      console.log("the two clicked ports are the same port, you clicked on the same port twice!");
+    }
+    else{
+      console.log("something else is afoot, time to look at adding the edge! =P");
+      var edge = {
+        fromNode: firstPort.parentNode.parentNode.id,
+        fromNodePort: firstPort.className.animVal,
+        toNode: secondPort.parentNode.parentNode.id,
+        toNodePort: secondPort.className.animVal
+      };
+      /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
+      //this.createNewEdge(edge);
+
+      this.checkPortCompatibility(edge);
+    }
+
+  },
+
+  checkPortCompatibility: function(edgeInfo){
+  /* First need to check we have an inport and an outport */
+  /* Find both port types, then compare them somehow */
+
+  var fromNodeType = this.state.allNodeInfo[edgeInfo.fromNode].type;
+  var toNodeType = this.state.allNodeInfo[edgeInfo.toNode].type;
+
+  /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
+  var nodeTypes = {
+    fromNodeType: fromNodeType,
+    toNodeType: toNodeType
+  };
+
+  var fromNodeLibraryInfo = this.state.nodeLibrary[fromNodeType];
+  var toNodeLibraryInfo = this.state.nodeLibrary[toNodeType];
+
+  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
+    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
+      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
+      var fromNodePortType = "inport";
+    }
+    else{
+      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
+      var fromNodePortType = "outport";
+    }
+  }
+
+  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
+    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
+      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
+      var toNodePortType = "inport";
+    }
+    else{
+      console.log("The toNode isn't an inport, so it's an outport!");
+      var toNodePortType = "outport";
+    }
+  }
+
+  /* Time to compare the fromNodePortType and toNodePortType */
+
+  if(fromNodePortType === toNodePortType){
+    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
+    window.alert("Incompatible ports");
+    /* Hence, don't add anything to allNodeInfo */
+  }
+  else if(fromNodePortType !== toNodePortType){
+    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+    nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+
+    /* Also need the equivalent of addToEdgesObject for single edges here! */
+    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+     if it's an outport then it's a normal connection from an out to an in,
+     but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+     */
+
+    var portTypes = {
+      fromNodePortType: fromNodePortType,
+      toNodePortType: toNodePortType
+    };
+
+    this.addOneEdgeToEdgesObject(edgeInfo, portTypes, nodeTypes);
+  }
+
+  },
+
+  addOneEdgeToEdgesObject: function(edgeInfo, portTypes, nodeTypes){
+  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+
+  var startNode;
+  var startNodeType;
+  var startNodePort;
+  var endNode;
+  var endNodeType;
+  var endNodePort;
+  var newEdge;
+  var edgeLabel;
+  if(portTypes.fromNodePortType === "outport"){
+    console.log("outport to inport, so edge labelling is normal");
+    startNode = edgeInfo.fromNode;
+    startNodeType = nodeTypes.fromNodeType;
+    startNodePort = edgeInfo.fromNodePort;
+    endNode = edgeInfo.toNode;
+    endNodeType = nodeTypes.toNodeType;
+    endNodePort = edgeInfo.toNodePort;
+    //newEdge = {
+    //  fromNode: startNode,
+    //  fromNodePort: startNodePort,
+    //  toNode: endNode,
+    //  toNodePort: endNodePort
+    //}
+  }
+  else if(portTypes.fromNodePortType === "inport"){
+    console.log("inport to outport, so have to flip the edge labelling direction");
+    /* Note that you must also flip the ports too! */
+    startNode = edgeInfo.toNode;
+    startNodeType = nodeTypes.toNodeType;
+    startNodePort = edgeInfo.toNodePort;
+    endNode = edgeInfo.fromNode;
+    endNodeType = nodeTypes.fromNodeType;
+    endNodePort = edgeInfo.fromNodePort;
+    /* Don't need this in both loops, can just set this after the loops have completed! */
+    //newEdge = {
+    //  fromNode: startNode,
+    //  fromNodePort: startNodePort,
+    //  toNode: endNode,
+    //  toNodePort: endNodePort
+    //}
+  }
+
+  newEdge = {
+    fromNode: startNode,
+    fromNodeType: startNodeType,
+    fromNodePort: startNodePort,
+    toNode: endNode,
+    toNodeType: endNodeType,
+    toNodePort: endNodePort
+  };
+
+  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+
+  console.log("The newEdge's label is " + edgeLabel);
+
+  /* Need an action to do this */
+  //edges[edgeLabel] = newEdge;
+  //console.log(edges);
+
+  var edgeStuff = {
+    edgeLabel: edgeLabel,
+    edgeInfo: newEdge
+  };
+  nodeActions.addOneSingleEdgeToEdgesObject(edgeStuff);
+
+  /* Also need to add the selected states to edgeSelectedStates! */
+  /* Can have an action do this */
+
+  //edgeSelectedStates[edgeLabel] = false;
+
+  this.createNewEdge(edgeLabel)
+
+  },
+
+  createNewEdge: function(edgeLabel){
+    console.log("edgeLabel is: " +  edgeLabel);
+    /* This aciton is for adding ALL INITIAL EDGES, not for adding one signle edge! */
+    //nodeActions.addEdgeToAllNodeInfo(edge);
+
+
+    /* Trying to replace with my port compatibility checker function*/
+    //console.log(this.state.allEdges);
+    //console.log(this.state.newlyCreatedEdgeLabel);
+    //nodeActions.createNewEdgeLabel(edge);
+    //console.log("between createNewEdgeLabel and addOneSingleEdge nodeActions");
+    //console.log(this.state.allEdges);
+    //console.log(this.state.newlyCreatedEdgeLabel);
+    //nodeActions.addOneSingleEdge(edge);
+    //console.log("after both nodeActions");
+    //console.log(this.state.allEdges);
+    //console.log(this.state.newlyCreatedEdgeLabel);
+
+    //var newEdgeLabel = edge.fromNode + edge.fromNodePort + " -> " + edge.toNode + edge.toNodePort;
+    //console.log(newEdgeLabel);
+
+
+    //nodeActions.addOneSingleEdge(edge);
+    //
+    //var newlyCreatedEdgeLabel = this.state.newlyCreatedEdgeLabel;
+    ////console.log(this.state.allEdges);
+    ////console.log(this.state.newlyCreatedEdgeLabel);
+    ////console.log(newlyCreatedEdgeLabel);
+    //var newEdge = this.state.allEdges[newlyCreatedEdgeLabel];
+    //console.log(newEdge);
+
+    nodeActions.pushEdgeToArray(<Edge id={edgeLabel}
+      //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                                      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+    />)
+  },
+
   addEdgeInfo: function(){
     nodeActions.addEdgeToAllNodeInfo({
       fromNode: 'TGen1',
@@ -826,6 +1127,8 @@ var App = React.createClass({
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
     console.log(this.state.nodesToRender);
+    console.log("this.dragging is:" + this.dragging);
+    console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
 
     //var regExpTest = /abc/;
     //var testString = "I know my abc's";
@@ -965,7 +1268,7 @@ var App = React.createClass({
       <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
 
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
-              onClick={this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onWheel={this.wheelZoom}
+              onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onWheel={this.wheelZoom}
               onMouseMove={this.state.panMoveFunction}
         />
         <svg id="appContainer" style={AppContainerStyle}
