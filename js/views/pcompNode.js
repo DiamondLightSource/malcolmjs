@@ -17,7 +17,8 @@ function getPComp1NodeState(){
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -116,6 +117,22 @@ var PCompNode = React.createClass({
     }
   },
 
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+
 
   render: function(){
 
@@ -160,7 +177,7 @@ var PCompNode = React.createClass({
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
           <Port cx={inportPositions.posn.x} cy={inportPositions.posn.y} r={portStyling.portRadius} className="posn"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
-                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} />
+                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} onMouseOver={this.portMouseOver} oneMouseLeave={this.portMouseLeave} />
           <Port cx={outportPositions.act.x } cy={outportPositions.act.y} r={portStyling.portRadius}
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
           <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius}

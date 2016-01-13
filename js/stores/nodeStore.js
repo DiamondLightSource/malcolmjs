@@ -18,6 +18,19 @@ var newlyAddedNode = null;
 var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
 var newlyCreatedEdgeLabel = null;
+var portMouseOver = false;
+
+function portMouseOverLeaveToggle(){
+  if(portMouseOver === false){
+    portMouseOver = true;
+  }
+  else if(portMouseOver === true){
+    portMouseOver = false;
+  }
+  else{
+    console.log("portMouseOver is neither true nor false, so something is up");
+  }
+}
 
 var allNodeTabInfo = {
   'Gate1': {
@@ -346,124 +359,124 @@ function addOneSingleEdge(edgeLabel, edgeInfo){
   edges[edgeLabel] = edgeInfo;
 }
 
-function addOneEdgeToEdgesObject(edgeInfo, portTypes){
-  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
+//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//
+//  var startNode;
+//  var startNodePort;
+//  var endNode;
+//  var endNodePort;
+//  var newEdge;
+//  var edgeLabel;
+//  if(portTypes.fromNodePortType === "outport"){
+//    console.log("outport to inport, so edge labelling is normal");
+//    startNode = edgeInfo.fromNode;
+//    startNodePort = edgeInfo.fromNodePort;
+//    endNode = edgeInfo.toNode;
+//    endNodePort = edgeInfo.toNodePort;
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//  else if(portTypes.fromNodePortType === "inport"){
+//    console.log("inport to outport, so have to flip the edge labelling direction");
+//    /* Note that you must also flip the ports too! */
+//    startNode = edgeInfo.toNode;
+//    startNodePort = edgeInfo.toNode;
+//    endNode = edgeInfo.fromNode;
+//    endNodePort = edgeInfo.fromNodePort;
+//    /* Don't need this in both loops, can just set this after the loops have completed! */
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//
+//  newEdge = {
+//    fromNode: startNode,
+//    fromNodePort: startNodePort,
+//    toNode: endNode,
+//    toNodePort: endNodePort
+//  };
+//
+//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  console.log("The newEdge's label is " + edgeLabel);
+//  newlyCreatedEdgeLabel = edgeLabel;
+//  edges[edgeLabel] = newEdge;
+//  console.log(edges);
+//
+//  /* Also need to add the selected states to edgeSelectedStates! */
+//
+//  edgeSelectedStates[edgeLabel] = false;
+//
+//
+//}
 
-  var startNode;
-  var startNodePort;
-  var endNode;
-  var endNodePort;
-  var newEdge;
-  var edgeLabel;
-  if(portTypes.fromNodePortType === "outport"){
-    console.log("outport to inport, so edge labelling is normal");
-    startNode = edgeInfo.fromNode;
-    startNodePort = edgeInfo.fromNodePort;
-    endNode = edgeInfo.toNode;
-    endNodePort = edgeInfo.toNodePort;
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-  else if(portTypes.fromNodePortType === "inport"){
-    console.log("inport to outport, so have to flip the edge labelling direction");
-    /* Note that you must also flip the ports too! */
-    startNode = edgeInfo.toNode;
-    startNodePort = edgeInfo.toNode;
-    endNode = edgeInfo.fromNode;
-    endNodePort = edgeInfo.fromNodePort;
-    /* Don't need this in both loops, can just set this after the loops have completed! */
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-
-  newEdge = {
-    fromNode: startNode,
-    fromNodePort: startNodePort,
-    toNode: endNode,
-    toNodePort: endNodePort
-  };
-
-  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-
-  console.log("The newEdge's label is " + edgeLabel);
-  newlyCreatedEdgeLabel = edgeLabel;
-  edges[edgeLabel] = newEdge;
-  console.log(edges);
-
-  /* Also need to add the selected states to edgeSelectedStates! */
-
-  edgeSelectedStates[edgeLabel] = false;
-
-
-}
-
-function checkPortCompatibility(edgeInfo){
-  /* First need to check we have an inport and an outport */
-  /* Find both port types, then compare them somehow */
-
-  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
-  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
-
-  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
-  var toNodeLibraryInfo = nodeLibrary[toNodeType];
-
-  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-      var fromNodePortType = "inport";
-    }
-    else{
-      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromNodePortType = "outport";
-    }
-  }
-
-  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-      var toNodePortType = "inport";
-    }
-    else{
-      console.log("The toNode isn't an inport, so it's an outport!");
-      var toNodePortType = "outport";
-    }
-  }
-
-  /* Time to compare the fromNodePortType and toNodePortType */
-
-  if(fromNodeType === toNodePortType){
-    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-    window.alert("Incompatible ports");
-    /* Hence, don't add anything to allNodeInfo */
-  }
-  else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
-    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    addEdgeToAllNodeInfo(edgeInfo);
-
-    /* Also need the equivalent of addToEdgesObject for single edges here! */
-    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-    if it's an outport then it's a normal connection from an out to an in,
-    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
-     */
-
-    var portTypes = {
-      fromNodePortType: fromNodePortType,
-      toNodePortType: toNodePortType
-    };
-
-    addOneEdgeToEdgesObject(edgeInfo, portTypes);
-  }
-
-}
+//function checkPortCompatibility(edgeInfo){
+//  /* First need to check we have an inport and an outport */
+//  /* Find both port types, then compare them somehow */
+//
+//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
+//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
+//
+//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
+//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
+//
+//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
+//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
+//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
+//      var fromNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
+//      var fromNodePortType = "outport";
+//    }
+//  }
+//
+//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
+//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
+//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
+//      var toNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The toNode isn't an inport, so it's an outport!");
+//      var toNodePortType = "outport";
+//    }
+//  }
+//
+//  /* Time to compare the fromNodePortType and toNodePortType */
+//
+//  if(fromNodeType === toNodePortType){
+//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
+//    window.alert("Incompatible ports");
+//    /* Hence, don't add anything to allNodeInfo */
+//  }
+//  else if(fromNodePortType !== toNodePortType){
+//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+//    addEdgeToAllNodeInfo(edgeInfo);
+//
+//    /* Also need the equivalent of addToEdgesObject for single edges here! */
+//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+//    if it's an outport then it's a normal connection from an out to an in,
+//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+//     */
+//
+//    var portTypes = {
+//      fromNodePortType: fromNodePortType,
+//      toNodePortType: toNodePortType
+//    };
+//
+//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
+//  }
+//
+//}
 
 function createNewEdgeLabel(edgeInfo){
   var newEdge = edgeInfo;
@@ -471,22 +484,22 @@ function createNewEdgeLabel(edgeInfo){
   newlyCreatedEdgeLabel = newEdgeLabel;
 }
 
-function addNewEdge(EdgeInfo){
-  var newEdge = EdgeInfo;
-  var fromNode = newEdge.fromNode;
-  var toNode = newEdge.toNode;
-  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
-  newEdge['toNodeType'] = allNodeInfo[toNode].type;
-  console.log(newEdge);
-
-  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-
-  //newlyCreatedEdgeLabel = newEdgeLabel;
-  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
-  edges[newlyCreatedEdgeLabel] = newEdge;
-  console.log(edges);
-
-}
+//function addNewEdge(EdgeInfo){
+//  var newEdge = EdgeInfo;
+//  var fromNode = newEdge.fromNode;
+//  var toNode = newEdge.toNode;
+//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
+//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
+//  console.log(newEdge);
+//
+//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  //newlyCreatedEdgeLabel = newEdgeLabel;
+//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
+//  edges[newlyCreatedEdgeLabel] = newEdge;
+//  console.log(edges);
+//
+//}
 
 var allNodeInfo = {
 
@@ -545,7 +558,7 @@ var allNodeInfo = {
     label: 'TGen1',
     name: '',
     position: {
-      x: 450,
+      x: 250,
       y: 10
     },
     //inports: {
@@ -583,8 +596,8 @@ var allNodeInfo = {
     label: 'PComp1',
     name: "LinePulse",
     position: {
-      x: 650,
-      y: 250,
+      x: 450,
+      y: 150,
     },
     //inports: {
     //  'ena': {
@@ -1368,11 +1381,11 @@ var allNodeTypesPortStyling = {
 };
 
 var graphPosition = {
-  x: 0,
+  x: 100,
   y: 0
 };
 
-var graphZoomScale = 1.2;
+var graphZoomScale = 2.0;
 
 var nodeStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -1526,6 +1539,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getNodeLibrary: function(){
     return nodeLibrary;
+  },
+
+  getPortMouseOver: function(){
+    return portMouseOver;
   }
 });
 
@@ -1748,6 +1765,13 @@ AppDispatcher.register(function(payload){
       edgeSelectedStates[item] = false;
       nodeStore.emitChange();
       console.log(edgeSelectedStates);
+      break;
+
+    case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
+      //console.log(payload);
+      //console.log(item);
+      portMouseOverLeaveToggle();
+      nodeStore.emitChange();
       break;
 
     default:

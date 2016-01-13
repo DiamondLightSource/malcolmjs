@@ -20,7 +20,8 @@ function getTGenNodeState(){
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -86,9 +87,15 @@ var TGenNode = React.createClass({
   nodeSelect: function(){
     console.log("TGen1 has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
-    nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-    console.log(this.state.selected);
+    if(this.state.portMouseOver === true){
+      console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
+    }
+    else if(this.state.portMouseOver === false){
+      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+      console.log(this.state.selected);
+    }
+
   },
 
   mouseDown: function(e){
@@ -147,6 +154,22 @@ var TGenNode = React.createClass({
   //
   //},
 
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+
   render: function(){
 
     console.log("portThatHasBeenClicked is: " + this.state.portThatHasBeenClicked);
@@ -190,7 +213,7 @@ var TGenNode = React.createClass({
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
           <Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius} className="posn"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
-                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} />
+                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} onMouseOver={this.portMouseOver} onMouseLeave={this.portMouseLeave} />
           <InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
           <OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
 

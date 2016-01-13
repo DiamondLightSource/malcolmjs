@@ -340,6 +340,7 @@ var App = React.createClass({
     if(this.state.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
       nodeActions.deselectAllPorts("deselect all ports");
+      //this.resetPortClickStorage();
     }
     else{
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -823,6 +824,7 @@ var App = React.createClass({
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
+      console.log(edge);
 
       this.checkPortCompatibility(edge);
     }
@@ -832,6 +834,7 @@ var App = React.createClass({
   checkPortCompatibility: function(edgeInfo){
   /* First need to check we have an inport and an outport */
   /* Find both port types, then compare them somehow */
+    console.log(edgeInfo);
 
   var fromNodeType = this.state.allNodeInfo[edgeInfo.fromNode].type;
   var toNodeType = this.state.allNodeInfo[edgeInfo.toNode].type;
@@ -849,6 +852,7 @@ var App = React.createClass({
     if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
       console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
       var fromNodePortType = "inport";
+      var inportIndex = i;
     }
     else{
       console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
@@ -860,6 +864,7 @@ var App = React.createClass({
     if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
       console.log("The toNode is an inport: " + edgeInfo.toNodePort);
       var toNodePortType = "inport";
+      var inportIndex = j;
     }
     else{
       console.log("The toNode isn't an inport, so it's an outport!");
@@ -867,17 +872,38 @@ var App = React.createClass({
     }
   }
 
+  var portTypes = {
+    fromNodePortType: fromNodePortType,
+    toNodePortType: toNodePortType
+  };
+
+  var types = {
+    nodeTypes: nodeTypes,
+    portTypes: portTypes
+  };
+
   /* Time to compare the fromNodePortType and toNodePortType */
 
   if(fromNodePortType === toNodePortType){
     console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
     window.alert("Incompatible ports");
+    this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
   }
   else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports and their respective nodes are compatible.");
     /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+    if(fromNodePortType === "inport"){
+      this.isInportConnected(edgeInfo.fromNodePort, inportIndex, edgeInfo.fromNode, edgeInfo, types);
+    }
+    else if(toNodePortType === "inport"){
+      this.isInportConnected(edgeInfo.toNodePort, inportIndex, edgeInfo.toNode, edgeInfo, types);
+    }
+    else{
+      console.log("fromNodePortType and toNodePortType are apparently different, yet neither are an inport, so something is up...");
+    }
+    /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
+    //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
 
     /* Also need the equivalent of addToEdgesObject for single edges here! */
     /* Now, the point of this was also to find if the fromNode was an inport or outport:
@@ -885,14 +911,30 @@ var App = React.createClass({
      but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
      */
 
-    var portTypes = {
-      fromNodePortType: fromNodePortType,
-      toNodePortType: toNodePortType
-    };
-
-    this.addOneEdgeToEdgesObject(edgeInfo, portTypes, nodeTypes);
   }
 
+  },
+
+  isInportConnected: function(inport, inportIndex, node, edgeInfo, types){
+    console.log("The inport " + inport + " of the node " + node + " is " + this.state.allNodeInfo[node].inports[inportIndex].connected);
+    if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
+      //console.log("That inport is already connected, so another connection cannot be made");
+      window.alert("That inport is already connected, so another connection cannot be made")
+      this.resetPortClickStorage();
+    }
+    else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){
+      console.log("That inport isn't connected to anything, so proceed with the port connection process");
+      console.log(edgeInfo);
+      nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+      this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
+    }
+  },
+
+  resetPortClickStorage: function(){
+    /* The same as what I would expect a portDeselect function to do I think */
+    console.log("Resetting port click storage");
+    nodeActions.storingFirstPortClicked(null);
+    nodeActions.passPortMouseDown(null);
   },
 
   addOneEdgeToEdgesObject: function(edgeInfo, portTypes, nodeTypes){
@@ -1015,7 +1057,11 @@ var App = React.createClass({
     nodeActions.pushEdgeToArray(<Edge id={edgeLabel}
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
                                       onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-    />)
+    />);
+
+    /* Now that a new edge component instance has been added, reset the port storage info */
+    this.resetPortClickStorage();
+
   },
 
   addEdgeInfo: function(){

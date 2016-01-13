@@ -217,6 +217,13 @@ var nodeActions = {
       actionType: appConstants.APPEND_EDGESELECTEDSTATE,
       item: item
     })
+  },
+
+  portMouseOverLeaveToggle: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
+      item: item
+    })
   }
 };
 
@@ -623,7 +630,8 @@ var appConstants = {
   CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
   ADD_ONESINGLEEDGETOALLNODEINFO: "ADD_ONESINGLEEDGETOALLNODEINFO",
   ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
-  APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE"
+  APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
+  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE"
 };
 
 module.exports = appConstants;
@@ -924,6 +932,19 @@ var newlyAddedNode = null;
 var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
 var newlyCreatedEdgeLabel = null;
+var portMouseOver = false;
+
+function portMouseOverLeaveToggle(){
+  if(portMouseOver === false){
+    portMouseOver = true;
+  }
+  else if(portMouseOver === true){
+    portMouseOver = false;
+  }
+  else{
+    console.log("portMouseOver is neither true nor false, so something is up");
+  }
+}
 
 var allNodeTabInfo = {
   'Gate1': {
@@ -1252,124 +1273,124 @@ function addOneSingleEdge(edgeLabel, edgeInfo){
   edges[edgeLabel] = edgeInfo;
 }
 
-function addOneEdgeToEdgesObject(edgeInfo, portTypes){
-  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
+//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//
+//  var startNode;
+//  var startNodePort;
+//  var endNode;
+//  var endNodePort;
+//  var newEdge;
+//  var edgeLabel;
+//  if(portTypes.fromNodePortType === "outport"){
+//    console.log("outport to inport, so edge labelling is normal");
+//    startNode = edgeInfo.fromNode;
+//    startNodePort = edgeInfo.fromNodePort;
+//    endNode = edgeInfo.toNode;
+//    endNodePort = edgeInfo.toNodePort;
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//  else if(portTypes.fromNodePortType === "inport"){
+//    console.log("inport to outport, so have to flip the edge labelling direction");
+//    /* Note that you must also flip the ports too! */
+//    startNode = edgeInfo.toNode;
+//    startNodePort = edgeInfo.toNode;
+//    endNode = edgeInfo.fromNode;
+//    endNodePort = edgeInfo.fromNodePort;
+//    /* Don't need this in both loops, can just set this after the loops have completed! */
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//
+//  newEdge = {
+//    fromNode: startNode,
+//    fromNodePort: startNodePort,
+//    toNode: endNode,
+//    toNodePort: endNodePort
+//  };
+//
+//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  console.log("The newEdge's label is " + edgeLabel);
+//  newlyCreatedEdgeLabel = edgeLabel;
+//  edges[edgeLabel] = newEdge;
+//  console.log(edges);
+//
+//  /* Also need to add the selected states to edgeSelectedStates! */
+//
+//  edgeSelectedStates[edgeLabel] = false;
+//
+//
+//}
 
-  var startNode;
-  var startNodePort;
-  var endNode;
-  var endNodePort;
-  var newEdge;
-  var edgeLabel;
-  if(portTypes.fromNodePortType === "outport"){
-    console.log("outport to inport, so edge labelling is normal");
-    startNode = edgeInfo.fromNode;
-    startNodePort = edgeInfo.fromNodePort;
-    endNode = edgeInfo.toNode;
-    endNodePort = edgeInfo.toNodePort;
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-  else if(portTypes.fromNodePortType === "inport"){
-    console.log("inport to outport, so have to flip the edge labelling direction");
-    /* Note that you must also flip the ports too! */
-    startNode = edgeInfo.toNode;
-    startNodePort = edgeInfo.toNode;
-    endNode = edgeInfo.fromNode;
-    endNodePort = edgeInfo.fromNodePort;
-    /* Don't need this in both loops, can just set this after the loops have completed! */
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-
-  newEdge = {
-    fromNode: startNode,
-    fromNodePort: startNodePort,
-    toNode: endNode,
-    toNodePort: endNodePort
-  };
-
-  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-
-  console.log("The newEdge's label is " + edgeLabel);
-  newlyCreatedEdgeLabel = edgeLabel;
-  edges[edgeLabel] = newEdge;
-  console.log(edges);
-
-  /* Also need to add the selected states to edgeSelectedStates! */
-
-  edgeSelectedStates[edgeLabel] = false;
-
-
-}
-
-function checkPortCompatibility(edgeInfo){
-  /* First need to check we have an inport and an outport */
-  /* Find both port types, then compare them somehow */
-
-  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
-  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
-
-  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
-  var toNodeLibraryInfo = nodeLibrary[toNodeType];
-
-  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-      var fromNodePortType = "inport";
-    }
-    else{
-      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromNodePortType = "outport";
-    }
-  }
-
-  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-      var toNodePortType = "inport";
-    }
-    else{
-      console.log("The toNode isn't an inport, so it's an outport!");
-      var toNodePortType = "outport";
-    }
-  }
-
-  /* Time to compare the fromNodePortType and toNodePortType */
-
-  if(fromNodeType === toNodePortType){
-    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-    window.alert("Incompatible ports");
-    /* Hence, don't add anything to allNodeInfo */
-  }
-  else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
-    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    addEdgeToAllNodeInfo(edgeInfo);
-
-    /* Also need the equivalent of addToEdgesObject for single edges here! */
-    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-    if it's an outport then it's a normal connection from an out to an in,
-    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
-     */
-
-    var portTypes = {
-      fromNodePortType: fromNodePortType,
-      toNodePortType: toNodePortType
-    };
-
-    addOneEdgeToEdgesObject(edgeInfo, portTypes);
-  }
-
-}
+//function checkPortCompatibility(edgeInfo){
+//  /* First need to check we have an inport and an outport */
+//  /* Find both port types, then compare them somehow */
+//
+//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
+//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
+//
+//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
+//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
+//
+//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
+//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
+//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
+//      var fromNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
+//      var fromNodePortType = "outport";
+//    }
+//  }
+//
+//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
+//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
+//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
+//      var toNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The toNode isn't an inport, so it's an outport!");
+//      var toNodePortType = "outport";
+//    }
+//  }
+//
+//  /* Time to compare the fromNodePortType and toNodePortType */
+//
+//  if(fromNodeType === toNodePortType){
+//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
+//    window.alert("Incompatible ports");
+//    /* Hence, don't add anything to allNodeInfo */
+//  }
+//  else if(fromNodePortType !== toNodePortType){
+//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+//    addEdgeToAllNodeInfo(edgeInfo);
+//
+//    /* Also need the equivalent of addToEdgesObject for single edges here! */
+//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+//    if it's an outport then it's a normal connection from an out to an in,
+//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+//     */
+//
+//    var portTypes = {
+//      fromNodePortType: fromNodePortType,
+//      toNodePortType: toNodePortType
+//    };
+//
+//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
+//  }
+//
+//}
 
 function createNewEdgeLabel(edgeInfo){
   var newEdge = edgeInfo;
@@ -1377,22 +1398,22 @@ function createNewEdgeLabel(edgeInfo){
   newlyCreatedEdgeLabel = newEdgeLabel;
 }
 
-function addNewEdge(EdgeInfo){
-  var newEdge = EdgeInfo;
-  var fromNode = newEdge.fromNode;
-  var toNode = newEdge.toNode;
-  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
-  newEdge['toNodeType'] = allNodeInfo[toNode].type;
-  console.log(newEdge);
-
-  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-
-  //newlyCreatedEdgeLabel = newEdgeLabel;
-  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
-  edges[newlyCreatedEdgeLabel] = newEdge;
-  console.log(edges);
-
-}
+//function addNewEdge(EdgeInfo){
+//  var newEdge = EdgeInfo;
+//  var fromNode = newEdge.fromNode;
+//  var toNode = newEdge.toNode;
+//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
+//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
+//  console.log(newEdge);
+//
+//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  //newlyCreatedEdgeLabel = newEdgeLabel;
+//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
+//  edges[newlyCreatedEdgeLabel] = newEdge;
+//  console.log(edges);
+//
+//}
 
 var allNodeInfo = {
 
@@ -1451,7 +1472,7 @@ var allNodeInfo = {
     label: 'TGen1',
     name: '',
     position: {
-      x: 450,
+      x: 250,
       y: 10
     },
     //inports: {
@@ -1489,8 +1510,8 @@ var allNodeInfo = {
     label: 'PComp1',
     name: "LinePulse",
     position: {
-      x: 650,
-      y: 250,
+      x: 450,
+      y: 150,
     },
     //inports: {
     //  'ena': {
@@ -2274,11 +2295,11 @@ var allNodeTypesPortStyling = {
 };
 
 var graphPosition = {
-  x: 0,
+  x: 100,
   y: 0
 };
 
-var graphZoomScale = 1.2;
+var graphZoomScale = 2.0;
 
 var nodeStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -2432,6 +2453,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getNodeLibrary: function(){
     return nodeLibrary;
+  },
+
+  getPortMouseOver: function(){
+    return portMouseOver;
   }
 });
 
@@ -2654,6 +2679,13 @@ AppDispatcher.register(function(payload){
       edgeSelectedStates[item] = false;
       nodeStore.emitChange();
       console.log(edgeSelectedStates);
+      break;
+
+    case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
+      //console.log(payload);
+      //console.log(item);
+      portMouseOverLeaveToggle();
+      nodeStore.emitChange();
       break;
 
     default:
@@ -4540,7 +4572,9 @@ function getGateNodeState(){
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
     //currentStyling: NodeStore.getGate1CurrentStyling()
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -4745,21 +4779,74 @@ var GateNode = React.createClass({displayName: "GateNode",
       port.style.stroke = "black";
     }
   },
+  //portMouseDown: function(e){
+  //  console.log("mousedowen on a port!");
+  //  console.log(e.currentTarget.id);
+  //  console.log(e.currentTarget.parentNode.parentNode.id);
+  //  this.portMouseDownBool = true;
+  //},
+  //portMouseUp: function(e){
+  //  console.log("mouseUp on a port!");
+  //  this.portMouseDownBool = false;
+  //},
+  //portRightClick: function(e){
+  //  console.log(e);
+  //  e.preventDefault();
+  //  e.stopPropagation();
+  //  console.log("right click on port");
+  //},
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
   portMouseDown: function(e){
-    console.log("mousedowen on a port!");
-    console.log(e.currentTarget.id);
-    console.log(e.currentTarget.parentNode.parentNode.id);
-    this.portMouseDownBool = true;
+    console.log("Gate1 portMouseDown");
+    nodeActions.passPortMouseDown(e.currentTarget);
+
+    var connectToPortMouseDownCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    this.setState({connectToPortMouseDownCoords: connectToPortMouseDownCoords})
   },
   portMouseUp: function(e){
-    console.log("mouseUp on a port!");
-    this.portMouseDownBool = false;
+    var connectToPortMouseUpCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+
+    if(this.state.connectToPortMouseDownCoords.x === connectToPortMouseUpCoords.x && this.state.connectToPortMouseDownCoords.y === connectToPortMouseUpCoords.y){
+      console.log("zero movement between portMouseDown & portMouseUp, hence a portClick!");
+      this.portClick();
+    }
+    else{
+      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+    }
   },
-  portRightClick: function(e){
-    console.log(e);
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("right click on port");
+  portClick: function(){
+    console.log("Gate1 portClick");
+
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    //var passingEvent = e;
+    if(this.state.storingFirstPortClicked === null){
+      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.state.storingFirstPortClicked !== null){
+      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
   },
 
   render: function(){
@@ -4815,15 +4902,16 @@ var GateNode = React.createClass({displayName: "GateNode",
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
           ), 
-          React.createElement(Port, {cx: inportPositions.set.x, cy: inportPositions.set.y, r: portStyling.portRadius, id: "set", 
+          React.createElement(Port, {cx: inportPositions.set.x, cy: inportPositions.set.y, r: portStyling.portRadius, className: "set", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}, 
                 onMouseOver: this.portHover, onMouseLeave: this.portExitHover, onMouseDown: this.portMouseDown}), 
 
-          React.createElement(Port, {cx: inportPositions.reset.x, cy: inportPositions.reset.y, r: portStyling.portRadius, id: "reset", 
+          React.createElement(Port, {cx: inportPositions.reset.x, cy: inportPositions.reset.y, r: portStyling.portRadius, className: "reset", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
 
-          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, id: "out", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
+          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, className: "out", 
+                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}, 
+                onMouseOver: this.portMouseOver, onMouseLeave: this.portMouseLeave, onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}), 
 
           React.createElement(InportSetText, {x: textPosition.set.x, y: textPosition.set.y, style: {MozUserSelect: 'none'}}), 
 
@@ -5576,7 +5664,8 @@ function getPComp1NodeState(){
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -5675,6 +5764,22 @@ var PCompNode = React.createClass({displayName: "PCompNode",
     }
   },
 
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+
 
   render: function(){
 
@@ -5719,7 +5824,7 @@ var PCompNode = React.createClass({displayName: "PCompNode",
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
           React.createElement(Port, {cx: inportPositions.posn.x, cy: inportPositions.posn.y, r: portStyling.portRadius, className: "posn", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}, 
-                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}), 
+                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp, onMouseOver: this.portMouseOver, oneMouseLeave: this.portMouseLeave}), 
           React.createElement(Port, {cx: outportPositions.act.x, cy: outportPositions.act.y, r: portStyling.portRadius, 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
           React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, 
@@ -6057,7 +6162,8 @@ function getTGenNodeState(){
     //allNodePositions: NodeStore.getAllNodePositions(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked()
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -6123,9 +6229,15 @@ var TGenNode = React.createClass({displayName: "TGenNode",
   nodeSelect: function(){
     console.log("TGen1 has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
-    nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-    console.log(this.state.selected);
+    if(this.state.portMouseOver === true){
+      console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
+    }
+    else if(this.state.portMouseOver === false){
+      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+      console.log(this.state.selected);
+    }
+
   },
 
   mouseDown: function(e){
@@ -6184,6 +6296,22 @@ var TGenNode = React.createClass({displayName: "TGenNode",
   //
   //},
 
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+
   render: function(){
 
     console.log("portThatHasBeenClicked is: " + this.state.portThatHasBeenClicked);
@@ -6227,7 +6355,7 @@ var TGenNode = React.createClass({displayName: "TGenNode",
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
           React.createElement(Port, {cx: outportPositions.posn.x, cy: outportPositions.posn.y, r: portStyling.portRadius, className: "posn", 
                 style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}, 
-                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}), 
+                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp, onMouseOver: this.portMouseOver, onMouseLeave: this.portMouseLeave}), 
           React.createElement(InportEnaText, {x: textPosition.ena.x, y: textPosition.ena.y, style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), 
           React.createElement(OutportPosnText, {x: textPosition.posn.x, y: textPosition.posn.y, style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), 
 
@@ -6663,6 +6791,7 @@ var App = React.createClass({displayName: "App",
     if(this.state.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
       nodeActions.deselectAllPorts("deselect all ports");
+      //this.resetPortClickStorage();
     }
     else{
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -7146,6 +7275,7 @@ var App = React.createClass({displayName: "App",
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
+      console.log(edge);
 
       this.checkPortCompatibility(edge);
     }
@@ -7155,6 +7285,7 @@ var App = React.createClass({displayName: "App",
   checkPortCompatibility: function(edgeInfo){
   /* First need to check we have an inport and an outport */
   /* Find both port types, then compare them somehow */
+    console.log(edgeInfo);
 
   var fromNodeType = this.state.allNodeInfo[edgeInfo.fromNode].type;
   var toNodeType = this.state.allNodeInfo[edgeInfo.toNode].type;
@@ -7172,6 +7303,7 @@ var App = React.createClass({displayName: "App",
     if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
       console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
       var fromNodePortType = "inport";
+      var inportIndex = i;
     }
     else{
       console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
@@ -7183,6 +7315,7 @@ var App = React.createClass({displayName: "App",
     if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
       console.log("The toNode is an inport: " + edgeInfo.toNodePort);
       var toNodePortType = "inport";
+      var inportIndex = j;
     }
     else{
       console.log("The toNode isn't an inport, so it's an outport!");
@@ -7190,17 +7323,38 @@ var App = React.createClass({displayName: "App",
     }
   }
 
+  var portTypes = {
+    fromNodePortType: fromNodePortType,
+    toNodePortType: toNodePortType
+  };
+
+  var types = {
+    nodeTypes: nodeTypes,
+    portTypes: portTypes
+  };
+
   /* Time to compare the fromNodePortType and toNodePortType */
 
   if(fromNodePortType === toNodePortType){
     console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
     window.alert("Incompatible ports");
+    this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
   }
   else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports and their respective nodes are compatible.");
     /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+    if(fromNodePortType === "inport"){
+      this.isInportConnected(edgeInfo.fromNodePort, inportIndex, edgeInfo.fromNode, edgeInfo, types);
+    }
+    else if(toNodePortType === "inport"){
+      this.isInportConnected(edgeInfo.toNodePort, inportIndex, edgeInfo.toNode, edgeInfo, types);
+    }
+    else{
+      console.log("fromNodePortType and toNodePortType are apparently different, yet neither are an inport, so something is up...");
+    }
+    /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
+    //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
 
     /* Also need the equivalent of addToEdgesObject for single edges here! */
     /* Now, the point of this was also to find if the fromNode was an inport or outport:
@@ -7208,14 +7362,30 @@ var App = React.createClass({displayName: "App",
      but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
      */
 
-    var portTypes = {
-      fromNodePortType: fromNodePortType,
-      toNodePortType: toNodePortType
-    };
-
-    this.addOneEdgeToEdgesObject(edgeInfo, portTypes, nodeTypes);
   }
 
+  },
+
+  isInportConnected: function(inport, inportIndex, node, edgeInfo, types){
+    console.log("The inport " + inport + " of the node " + node + " is " + this.state.allNodeInfo[node].inports[inportIndex].connected);
+    if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
+      //console.log("That inport is already connected, so another connection cannot be made");
+      window.alert("That inport is already connected, so another connection cannot be made")
+      this.resetPortClickStorage();
+    }
+    else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){
+      console.log("That inport isn't connected to anything, so proceed with the port connection process");
+      console.log(edgeInfo);
+      nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+      this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
+    }
+  },
+
+  resetPortClickStorage: function(){
+    /* The same as what I would expect a portDeselect function to do I think */
+    console.log("Resetting port click storage");
+    nodeActions.storingFirstPortClicked(null);
+    nodeActions.passPortMouseDown(null);
   },
 
   addOneEdgeToEdgesObject: function(edgeInfo, portTypes, nodeTypes){
@@ -7338,7 +7508,11 @@ var App = React.createClass({displayName: "App",
     nodeActions.pushEdgeToArray(React.createElement(Edge, {id: edgeLabel, 
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
                                       onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
-    ))
+    ));
+
+    /* Now that a new edge component instance has been added, reset the port storage info */
+    this.resetPortClickStorage();
+
   },
 
   addEdgeInfo: function(){

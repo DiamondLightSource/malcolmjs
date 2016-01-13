@@ -161,6 +161,13 @@ var nodeActions = {
       actionType: appConstants.APPEND_EDGESELECTEDSTATE,
       item: item
     })
+  },
+
+  portMouseOverLeaveToggle: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
+      item: item
+    })
   }
 };
 

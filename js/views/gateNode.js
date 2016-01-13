@@ -19,7 +19,9 @@ function getGateNodeState(){
     selectedStyling: NodeStore.getSelectedGateNodeStyling(),
     //currentStyling: NodeStore.getGate1CurrentStyling()
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo()
+    allNodeInfo: NodeStore.getAllNodeInfo(),
+    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    portMouseOver: NodeStore.getPortMouseOver()
   }
 }
 
@@ -224,21 +226,74 @@ var GateNode = React.createClass({
       port.style.stroke = "black";
     }
   },
+  //portMouseDown: function(e){
+  //  console.log("mousedowen on a port!");
+  //  console.log(e.currentTarget.id);
+  //  console.log(e.currentTarget.parentNode.parentNode.id);
+  //  this.portMouseDownBool = true;
+  //},
+  //portMouseUp: function(e){
+  //  console.log("mouseUp on a port!");
+  //  this.portMouseDownBool = false;
+  //},
+  //portRightClick: function(e){
+  //  console.log(e);
+  //  e.preventDefault();
+  //  e.stopPropagation();
+  //  console.log("right click on port");
+  //},
+  portMouseOver: function(e){
+    console.log("portMouseOver");
+    console.log(e.currentTarget);
+    var target = e.currentTarget;
+    target.style.cursor = "pointer";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
+  portMouseLeave: function(e){
+    console.log("portMouseLeave");
+    var target = e.currentTarget;
+    target.style.cursor = "default";
+    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
+    console.log(this.state.portMouseOver);
+  },
   portMouseDown: function(e){
-    console.log("mousedowen on a port!");
-    console.log(e.currentTarget.id);
-    console.log(e.currentTarget.parentNode.parentNode.id);
-    this.portMouseDownBool = true;
+    console.log("Gate1 portMouseDown");
+    nodeActions.passPortMouseDown(e.currentTarget);
+
+    var connectToPortMouseDownCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    this.setState({connectToPortMouseDownCoords: connectToPortMouseDownCoords})
   },
   portMouseUp: function(e){
-    console.log("mouseUp on a port!");
-    this.portMouseDownBool = false;
+    var connectToPortMouseUpCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+
+    if(this.state.connectToPortMouseDownCoords.x === connectToPortMouseUpCoords.x && this.state.connectToPortMouseDownCoords.y === connectToPortMouseUpCoords.y){
+      console.log("zero movement between portMouseDown & portMouseUp, hence a portClick!");
+      this.portClick();
+    }
+    else{
+      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+    }
   },
-  portRightClick: function(e){
-    console.log(e);
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("right click on port");
+  portClick: function(){
+    console.log("Gate1 portClick");
+
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    //var passingEvent = e;
+    if(this.state.storingFirstPortClicked === null){
+      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.state.storingFirstPortClicked !== null){
+      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
   },
 
   render: function(){
@@ -294,15 +349,16 @@ var GateNode = React.createClass({
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
             //onDragStart={this.rectangleDrag}
           />
-          <Port cx={inportPositions.set.x} cy={inportPositions.set.y} r={portStyling.portRadius} id="set"
+          <Port cx={inportPositions.set.x} cy={inportPositions.set.y} r={portStyling.portRadius} className="set"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}
                 onMouseOver={this.portHover} onMouseLeave={this.portExitHover} onMouseDown={this.portMouseDown} />
 
-          <Port cx={inportPositions.reset.x} cy={inportPositions.reset.y} r={portStyling.portRadius} id="reset"
+          <Port cx={inportPositions.reset.x} cy={inportPositions.reset.y} r={portStyling.portRadius} className="reset"
                 style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}/>
 
-          <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius} id="out"
-                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}/>
+          <Port cx={outportPositions.out.x} cy={outportPositions.out.y} r={portStyling.portRadius} className="out"
+                style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}
+                onMouseOver={this.portMouseOver} onMouseLeave={this.portMouseLeave} onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} />
 
           <InportSetText x={textPosition.set.x} y={textPosition.set.y} style={{MozUserSelect: 'none'}}  />
 
