@@ -340,7 +340,7 @@ var App = React.createClass({
     if(this.state.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
       nodeActions.deselectAllPorts("deselect all ports");
-      //this.resetPortClickStorage();
+      this.resetPortClickStorage();
     }
     else{
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -908,7 +908,7 @@ var App = React.createClass({
     /* Also need the equivalent of addToEdgesObject for single edges here! */
     /* Now, the point of this was also to find if the fromNode was an inport or outport:
      if it's an outport then it's a normal connection from an out to an in,
-     but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+     but if it's an inport, then it's a connection from an in to an out (ie, the other way around), so somehow need to compensate for that!
      */
 
   }
@@ -919,7 +919,7 @@ var App = React.createClass({
     console.log("The inport " + inport + " of the node " + node + " is " + this.state.allNodeInfo[node].inports[inportIndex].connected);
     if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
-      window.alert("That inport is already connected, so another connection cannot be made")
+      window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
       this.resetPortClickStorage();
     }
     else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){

@@ -1007,8 +1007,8 @@ var appendToAllPossibleNodes = function(Node){
 var GateNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1021,18 +1021,18 @@ var GateNodeStyling = {
     portPositions: {
       inportPositions: {
         set: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         reset: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       },
     },
@@ -1046,16 +1046,16 @@ var GateNodeStyling = {
   text: {
     textPositions: {
       set: {
-        x : 13,
-        y: 26.5
+        x : 7,
+        y: 24.5
       },
       reset: {
-        x : 13,
-        y: 44.5
+        x : 7,
+        y: 42.5
       },
       out: {
-        x: 48,
-        y: 35.5
+        x: 42,
+        y: 33.5
       }
     }
   }
@@ -1064,8 +1064,8 @@ var GateNodeStyling = {
 var SelectedGateNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1078,18 +1078,18 @@ var SelectedGateNodeStyling = {
     portPositions: {
       inportPositions: {
         set: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         reset: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       },
     },
@@ -1103,16 +1103,16 @@ var SelectedGateNodeStyling = {
   text: {
     textPositions: {
       set: {
-        x : 15,
-        y: 26.5
+        x : 9,
+        y: 24.5
       },
       reset: {
-        x : 15,
-        y: 44.5
+        x : 9,
+        y: 42.5
       },
       out: {
-        x: 45,
-        y: 35.5
+        x: 39,
+        y: 33.5
       }
     }
   }
@@ -1133,8 +1133,8 @@ var SelectedGateNodeStyling = {
 var TGenNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1147,14 +1147,14 @@ var TGenNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 33
+          x: 0,
+          y: 31
         }
       },
       outportPositions: {
         posn: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       }
     },
@@ -1168,12 +1168,12 @@ var TGenNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 10,
-        y: 35.5
+        x : 4,
+        y: 33.5
       },
       posn: {
-        x: 43,
-        y: 35.5
+        x: 37,
+        y: 33.5
       }
     }
   }
@@ -1182,8 +1182,8 @@ var TGenNodeStyling = {
 var SelectedTGenNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1196,14 +1196,14 @@ var SelectedTGenNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 33
+          x: 0,
+          y: 31
         }
       },
       outportPositions: {
         posn: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       }
     },
@@ -1217,22 +1217,25 @@ var SelectedTGenNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 12,
-        y: 35.5
+        x : 6,
+        y: 33.5
       },
       posn: {
-        x: 41,
-        y: 35.5
+        x: 35,
+        y: 33.5
       }
     }
   }
 };
 
 var PCompNodeStyling = {
+  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
+  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
+   */
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1245,26 +1248,26 @@ var PCompNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         posn: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         act: {
-          x: 71,
-          y: 25
+          x: 65,
+          y: 23
         },
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         },
         pulse: {
-          x: 71,
-          y: 40
+          x: 65,
+          y: 38
         }
       },
     },
@@ -1278,24 +1281,24 @@ var PCompNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 13,
-        y: 26.5
+        x : 7,
+        y: 24.5
       },
       posn: {
-        x : 13,
-        y: 44.5
+        x : 7,
+        y: 42.5
       },
       act: {
-        x: 48,
-        y: 25
+        x: 42,
+        y: 23
       },
       out: {
-        x: 48,
-        y: 35.5
+        x: 42,
+        y: 33.5
       },
       pulse: {
-        x: 41,
-        y: 45
+        x: 35,
+        y: 43
       }
     }
   }
@@ -1304,8 +1307,8 @@ var PCompNodeStyling = {
 var SelectedPCompNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1318,26 +1321,26 @@ var SelectedPCompNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         posn: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         act: {
-          x: 71,
-          y: 25
+          x: 65,
+          y: 23
         },
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         },
         pulse: {
-          x: 71,
-          y: 40
+          x: 65,
+          y: 38
         }
       },
     },
@@ -1351,24 +1354,24 @@ var SelectedPCompNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 15,
-        y: 26.5
+        x : 9,
+        y: 24.5
       },
       posn: {
-        x : 15,
-        y: 44.5
+        x : 9,
+        y: 42.5
       },
       act: {
-        x: 46,
-        y: 25
+        x: 40,
+        y: 23
       },
       out: {
-        x: 46,
-        y: 35.5
+        x: 40,
+        y: 33.5
       },
       pulse: {
-        x: 39,
-        y: 45
+        x: 33,
+        y: 43
       }
     }
   }

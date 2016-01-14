@@ -18,7 +18,7 @@ function getPComp1NodeState(){
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver()
+    portMouseOver: NodeStore.getPortMouseOver(),
   }
 }
 
@@ -37,6 +37,9 @@ var PCompNode = React.createClass({
     NodeStore.addChangeListener(this._onChange);
     this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    var nodeNameTextPixelLength = document.getElementById("LinePulseText");
+    console.log(nodeNameTextPixelLength.getComputedTextLength());
+    this.setState({textLength: nodeNameTextPixelLength.getComputedTextLength()})
   },
 
   componentWillUnmount: function(){
@@ -160,12 +163,15 @@ var PCompNode = React.createClass({
     var rectangleString = "Rectangle";
     var rectangleName = this.props.id.concat(rectangleString);
 
+    var nodeNameCoords = "translate(32.5" + ",80)";
+    console.log("textLength is: " + this.state.textLength);
+
     return(
       <g {...this.props} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave} style={this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
          transform={nodeTranslate} >
 
-        <g style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown}  >
-          <Rectangle id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
+        <g style={{MozUserSelect: 'none', position: 'relative'}} onMouseDown={this.mouseDown} overflow="visible" >
+          <Rectangle id="nodeBackground" height="105" width="65" style={{fill: 'transparent', cursor: 'move'}}/> /* To allow the cursor to change when hovering over the entire node container */
           <Rectangle id={rectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y} rx={7} ry={7}
                      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
@@ -191,14 +197,23 @@ var PCompNode = React.createClass({
           <OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
           <OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
 
-          <NodeName x="0" y={NodeStylingProperties.height + 22} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}} NodeName={nodeName} />
-          <NodeType x="22" y={NodeStylingProperties.height + 33} style={{MozUserSelect: 'none'}} style={{MozUserSelect: 'none'}}  />
+          <NodeName style={{MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}} NodeName={"LinePulse"} id={nodeName + "Text"} transform={nodeNameCoords} />
+
+          <NodeType x="22" y={NodeStylingProperties.height + 33} style={{MozUserSelect: 'none'}} />
 
         </g>
       </g>
     )
   }
 });
+
+//<InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}}  />
+//<InportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
+//<OutportActText x={textPosition.act.x} y={textPosition.act.y} style={{MozUserSelect: 'none'}} />
+//<OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
+//<OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
+//
+//<NodeName style={{MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}} NodeName={"LinePulse"} id={nodeName + "Text"} transform={nodeNameCoords} />
 
 var NodeStylingProperties = {
   height: 65,

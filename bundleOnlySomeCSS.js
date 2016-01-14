@@ -1921,8 +1921,8 @@ var appendToAllPossibleNodes = function(Node){
 var GateNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1935,18 +1935,18 @@ var GateNodeStyling = {
     portPositions: {
       inportPositions: {
         set: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         reset: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       },
     },
@@ -1960,16 +1960,16 @@ var GateNodeStyling = {
   text: {
     textPositions: {
       set: {
-        x : 13,
-        y: 26.5
+        x : 7,
+        y: 24.5
       },
       reset: {
-        x : 13,
-        y: 44.5
+        x : 7,
+        y: 42.5
       },
       out: {
-        x: 48,
-        y: 35.5
+        x: 42,
+        y: 33.5
       }
     }
   }
@@ -1978,8 +1978,8 @@ var GateNodeStyling = {
 var SelectedGateNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -1992,18 +1992,18 @@ var SelectedGateNodeStyling = {
     portPositions: {
       inportPositions: {
         set: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         reset: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       },
     },
@@ -2017,16 +2017,16 @@ var SelectedGateNodeStyling = {
   text: {
     textPositions: {
       set: {
-        x : 15,
-        y: 26.5
+        x : 9,
+        y: 24.5
       },
       reset: {
-        x : 15,
-        y: 44.5
+        x : 9,
+        y: 42.5
       },
       out: {
-        x: 45,
-        y: 35.5
+        x: 39,
+        y: 33.5
       }
     }
   }
@@ -2047,8 +2047,8 @@ var SelectedGateNodeStyling = {
 var TGenNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -2061,14 +2061,14 @@ var TGenNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 33
+          x: 0,
+          y: 31
         }
       },
       outportPositions: {
         posn: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       }
     },
@@ -2082,12 +2082,12 @@ var TGenNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 10,
-        y: 35.5
+        x : 4,
+        y: 33.5
       },
       posn: {
-        x: 43,
-        y: 35.5
+        x: 37,
+        y: 33.5
       }
     }
   }
@@ -2096,8 +2096,8 @@ var TGenNodeStyling = {
 var SelectedTGenNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -2110,14 +2110,14 @@ var SelectedTGenNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 33
+          x: 0,
+          y: 31
         }
       },
       outportPositions: {
         posn: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         }
       }
     },
@@ -2131,22 +2131,25 @@ var SelectedTGenNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 12,
-        y: 35.5
+        x : 6,
+        y: 33.5
       },
       posn: {
-        x: 41,
-        y: 35.5
+        x: 35,
+        y: 33.5
       }
     }
   }
 };
 
 var PCompNodeStyling = {
+  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
+  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
+   */
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -2159,26 +2162,26 @@ var PCompNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         posn: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         act: {
-          x: 71,
-          y: 25
+          x: 65,
+          y: 23
         },
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         },
         pulse: {
-          x: 71,
-          y: 40
+          x: 65,
+          y: 38
         }
       },
     },
@@ -2192,24 +2195,24 @@ var PCompNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 13,
-        y: 26.5
+        x : 7,
+        y: 24.5
       },
       posn: {
-        x : 13,
-        y: 44.5
+        x : 7,
+        y: 42.5
       },
       act: {
-        x: 48,
-        y: 25
+        x: 42,
+        y: 23
       },
       out: {
-        x: 48,
-        y: 35.5
+        x: 42,
+        y: 33.5
       },
       pulse: {
-        x: 41,
-        y: 45
+        x: 35,
+        y: 43
       }
     }
   }
@@ -2218,8 +2221,8 @@ var PCompNodeStyling = {
 var SelectedPCompNodeStyling = {
   rectangle: {
     rectanglePosition: {
-      x : 6,
-      y : 2
+      x : 0,
+      y : 0
     },
     rectangleStyling: {
       height: 65,
@@ -2232,26 +2235,26 @@ var SelectedPCompNodeStyling = {
     portPositions: {
       inportPositions: {
         ena: {
-          x: 6,
-          y: 25
+          x: 0,
+          y: 23
         },
         posn: {
-          x: 6,
-          y: 40
+          x: 0,
+          y: 38
         }
       },
       outportPositions: {
         act: {
-          x: 71,
-          y: 25
+          x: 65,
+          y: 23
         },
         out: {
-          x: 71,
-          y: 33
+          x: 65,
+          y: 31
         },
         pulse: {
-          x: 71,
-          y: 40
+          x: 65,
+          y: 38
         }
       },
     },
@@ -2265,24 +2268,24 @@ var SelectedPCompNodeStyling = {
   text: {
     textPositions: {
       ena: {
-        x : 15,
-        y: 26.5
+        x : 9,
+        y: 24.5
       },
       posn: {
-        x : 15,
-        y: 44.5
+        x : 9,
+        y: 42.5
       },
       act: {
-        x: 46,
-        y: 25
+        x: 40,
+        y: 23
       },
       out: {
-        x: 46,
-        y: 35.5
+        x: 40,
+        y: 33.5
       },
       pulse: {
-        x: 39,
-        y: 45
+        x: 33,
+        y: 43
       }
     }
   }
@@ -4894,7 +4897,7 @@ var GateNode = React.createClass({displayName: "GateNode",
       }), 
 
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement("rect", {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
+          React.createElement("rect", {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
           ), 
 
           React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
@@ -5665,7 +5668,7 @@ function getPComp1NodeState(){
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver()
+    portMouseOver: NodeStore.getPortMouseOver(),
   }
 }
 
@@ -5684,6 +5687,9 @@ var PCompNode = React.createClass({displayName: "PCompNode",
     NodeStore.addChangeListener(this._onChange);
     this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
     ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    var nodeNameTextPixelLength = document.getElementById("LinePulseText");
+    console.log(nodeNameTextPixelLength.getComputedTextLength());
+    this.setState({textLength: nodeNameTextPixelLength.getComputedTextLength()})
   },
 
   componentWillUnmount: function(){
@@ -5807,12 +5813,15 @@ var PCompNode = React.createClass({displayName: "PCompNode",
     var rectangleString = "Rectangle";
     var rectangleName = this.props.id.concat(rectangleString);
 
+    var nodeNameCoords = "translate(32.5" + ",80)";
+    console.log("textLength is: " + this.state.textLength);
+
     return(
       React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
          transform: nodeTranslate}), 
 
-        React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
+        React.createElement("g", {style: {MozUserSelect: 'none', position: 'relative'}, onMouseDown: this.mouseDown, overflow: "visible"}, 
+          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
           React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
             //onClick={this.nodeClick} onDragStart={this.nodeDrag}
@@ -5838,14 +5847,23 @@ var PCompNode = React.createClass({displayName: "PCompNode",
           React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
           React.createElement(OutportPulseText, {x: textPosition.pulse.x, y: textPosition.pulse.y, style: {MozUserSelect: 'none'}}), 
 
-          React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}, NodeName: nodeName}), 
-          React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}})
+          React.createElement(NodeName, {style: {MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}, NodeName: "LinePulse", id: nodeName + "Text", transform: nodeNameCoords}), 
+
+          React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
 
         )
       )
     )
   }
 });
+
+//<InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}}  />
+//<InportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
+//<OutportActText x={textPosition.act.x} y={textPosition.act.y} style={{MozUserSelect: 'none'}} />
+//<OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
+//<OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
+//
+//<NodeName style={{MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}} NodeName={"LinePulse"} id={nodeName + "Text"} transform={nodeNameCoords} />
 
 var NodeStylingProperties = {
   height: 65,
@@ -6345,7 +6363,7 @@ var TGenNode = React.createClass({displayName: "TGenNode",
             }), 
 
         React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
+          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
 
           React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
                      style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
@@ -6791,7 +6809,7 @@ var App = React.createClass({displayName: "App",
     if(this.state.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
       nodeActions.deselectAllPorts("deselect all ports");
-      //this.resetPortClickStorage();
+      this.resetPortClickStorage();
     }
     else{
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -7359,7 +7377,7 @@ var App = React.createClass({displayName: "App",
     /* Also need the equivalent of addToEdgesObject for single edges here! */
     /* Now, the point of this was also to find if the fromNode was an inport or outport:
      if it's an outport then it's a normal connection from an out to an in,
-     but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+     but if it's an inport, then it's a connection from an in to an out (ie, the other way around), so somehow need to compensate for that!
      */
 
   }
@@ -7370,7 +7388,7 @@ var App = React.createClass({displayName: "App",
     console.log("The inport " + inport + " of the node " + node + " is " + this.state.allNodeInfo[node].inports[inportIndex].connected);
     if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
-      window.alert("That inport is already connected, so another connection cannot be made")
+      window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
       this.resetPortClickStorage();
     }
     else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){

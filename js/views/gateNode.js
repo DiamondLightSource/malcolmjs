@@ -341,7 +341,7 @@ var GateNode = React.createClass({
       >
 
         <g  style={{MozUserSelect: 'none'}} onMouseDown={this.mouseDown} >
-          <rect id="nodeBackground" height="105" width="71" style={{fill: 'transparent', cursor: 'move'}} /* To allow the cursor to change when hovering over the entire node container */
+          <rect id="nodeBackground" height="105" width="65" style={{fill: 'transparent', cursor: 'move'}} /* To allow the cursor to change when hovering over the entire node container */
           />
 
           <Rectangle id={rectangleName} height={rectangleStyling.height} width={rectangleStyling.width} x={rectanglePosition.x} y={rectanglePosition.y}
