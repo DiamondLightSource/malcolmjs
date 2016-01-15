@@ -1383,6 +1383,12 @@ var allNodeTypesPortStyling = {
   'PComp': PCompNodeStyling.ports.portPositions
 };
 
+var allNodeTypesStyling = {
+  'Gate': GateNodeStyling,
+  'TGen': TGenNodeStyling,
+  'PComp': PCompNodeStyling
+};
+
 var graphPosition = {
   x: 100,
   y: 0
@@ -1546,6 +1552,10 @@ var nodeStore = assign({}, EventEmitter.prototype, {
 
   getPortMouseOver: function(){
     return portMouseOver;
+  },
+
+  getAllNodeTypesStyling: function(){
+    return allNodeTypesStyling;
   }
 });
 
@@ -1580,8 +1590,8 @@ AppDispatcher.register(function(payload){
       break;
 
     case appConstants.CHANGE_NODEPOSITION:
-      //console.log(payload);
-      //console.log(item);
+      console.log(payload);
+      console.log(item);
       updateNodePosition(item);
       nodeStore.emitChange();
       break;

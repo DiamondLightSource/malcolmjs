@@ -14,6 +14,8 @@ var PCompNode = require('./pcompNode.js');
 var LUTNode = require('./lutNode.js');
 var Edge = require('./edge.js');
 
+var Node = require('./nodes.js');
+
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
   width: 65,
@@ -109,7 +111,10 @@ var App = React.createClass({
     /* Just use this.addEdgeToEdgesArray for now =P */
     this.addEdgeToEdgesArray();
 
-    this.addNodeToNodesArray();
+    /* Let's try using my refactored nodes.js file instead! */
+    //this.addNodeToNodesArray();
+    this.refactoredAddNodeToNodesArray();
+
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
 
@@ -675,6 +680,16 @@ var App = React.createClass({
     }
   },
 
+  refactoredAddNodeToNodesArray: function(){
+    for(var node in this.state.allNodeInfo){
+      nodeActions.pushNodeToArray(
+        <Node id={node}
+              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+              />
+      )
+    }
+  },
+
   addNodeInfo: function(){
     console.log("addNodeInfo");
     var gateNodeRegExp = /Gate/;
@@ -811,15 +826,19 @@ var App = React.createClass({
     console.log(firstPort.parentNode.parentNode.id);
     console.log(secondPort.parentNode.parentNode.id);
 
-    if(firstPort.parentNode.parentNode.id === secondPort.parentNode.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
+    /* For my refactored nodes.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
+     Or I could simply remove those <g> containers for the time being =P */
+    /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
+
+    if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
       console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
-        fromNode: firstPort.parentNode.parentNode.id,
+        fromNode: firstPort.parentNode.parentNode.parentNode.id,
         fromNodePort: firstPort.className.animVal,
-        toNode: secondPort.parentNode.parentNode.id,
+        toNode: secondPort.parentNode.parentNode.parentNode.id,
         toNodePort: secondPort.className.animVal
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
