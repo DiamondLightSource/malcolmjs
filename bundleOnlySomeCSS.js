@@ -224,6 +224,12 @@ var nodeActions = {
       actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
       item: item
     })
+  },
+  interactJsDrag: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.INTERACTJS_DRAG,
+      item: item
+    })
   }
 };
 
@@ -414,7 +420,7 @@ var sessionActions = {
 
 module.exports = sessionActions;
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"../websocketClientTEST":29}],7:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"../websocketClientTEST":30}],7:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -557,7 +563,7 @@ ReactDOM.render(
   document.getElementById('container')
 );
 
-},{"./views/mainPane":22,"./views/sidePane":26,"./websocketClientTEST":29,"react":214,"react-dom":38,"react-panels":39}],9:[function(require,module,exports){
+},{"./views/mainPane":22,"./views/sidePane":27,"./websocketClientTEST":30,"react":216,"react-dom":40,"react-panels":41}],9:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -631,7 +637,8 @@ var appConstants = {
   ADD_ONESINGLEEDGETOALLNODEINFO: "ADD_ONESINGLEEDGETOALLNODEINFO",
   ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
   APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
-  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE"
+  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
+  INTERACTJS_DRAG: "INTERACTJS_DRAG"
 };
 
 module.exports = appConstants;
@@ -681,7 +688,7 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":33,"object-assign":36}],11:[function(require,module,exports){
+},{"flux":34,"object-assign":38}],11:[function(require,module,exports){
 /**
  * Created by twi18192 on 24/09/15.
  */
@@ -825,7 +832,7 @@ deviceStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = deviceStore;
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":31,"object-assign":36}],12:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":32,"object-assign":38}],12:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -911,7 +918,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = mainPaneStore;
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":31,"object-assign":36}],13:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":32,"object-assign":38}],13:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -1510,7 +1517,7 @@ var allNodeInfo = {
     label: 'PComp1',
     name: "LinePulse",
     position: {
-      x: 450,
+      x: 350,
       y: 150,
     },
     //inports: {
@@ -1715,7 +1722,7 @@ function appendToAllNodeInfo(NodeInfo){
     type: 'Gate',
     name: "",
     position: {
-      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
       y: 50,
     },
     inports: {
@@ -1860,6 +1867,17 @@ function updateGate1Position(newCoordinates){
     y: nodePositions.Gate1.y + newCoordinates.y
   };
   /* Also need to update the port positions somehow! */
+}
+
+function interactJsDrag(NodeInfo){
+  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+  //console.log(allNodeInfo[NodeInfo.target].position);
+
+  allNodeInfo[NodeInfo.target].position = {
+    x: allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale),
+    y: allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale)
+  }
 }
 
 function updateNodePosition(NodeInfo){
@@ -2320,35 +2338,35 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   emitChange: function(){
     this.emit(CHANGE_EVENT)
   },
-  getGate1InportsState: function(){
-    return allNodeInfo.Gate1.inports
-  },
-  getGate1OutportsState: function(){
-    return allNodeInfo.Gate1.outports
-  },
-  getTGen1InportsState: function(){
-    return allNodeInfo.TGen1.inports
-  },
-  getTGen1OutportsState: function(){
-    return allNodeInfo.TGen1.outports
-  },
+  //getGate1InportsState: function(){
+  //  return allNodeInfo.Gate1.inports
+  //},
+  //getGate1OutportsState: function(){
+  //  return allNodeInfo.Gate1.outports
+  //},
+  //getTGen1InportsState: function(){
+  //  return allNodeInfo.TGen1.inports
+  //},
+  //getTGen1OutportsState: function(){
+  //  return allNodeInfo.TGen1.outports
+  //},
 
 
-  getGate1Position: function(){
-    return nodePositions.Gate1.position;
-  },
-  getTGen1Position: function(){
-    return nodePositions.TGen1.position;
-  },
-  getPComp1Position: function(){
-    return nodePositions.PComp1.position;
-  },
-  getLUT1Position: function(){
-    return nodePositions.LUT1;
-  },
-  getAllNodePositions: function(){
-    return nodePositions;
-  },
+  //getGate1Position: function(){
+  //  return nodePositions.Gate1.position;
+  //},
+  //getTGen1Position: function(){
+  //  return nodePositions.TGen1.position;
+  //},
+  //getPComp1Position: function(){
+  //  return nodePositions.PComp1.position;
+  //},
+  //getLUT1Position: function(){
+  //  return nodePositions.LUT1;
+  //},
+  //getAllNodePositions: function(){
+  //  return nodePositions;
+  //},
   getAllNodeInfo: function(){
     return allNodeInfo;
   },
@@ -2371,12 +2389,12 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGenNodeEnaPort: function(){
   //    return portPositionsForEdges.tgenNode.inports.ena;
   //},
-  getGateNodeOutportOut: function(){
-    return gateNodeOutports.out;
-  },
-  getTGenNodeInportEna: function(){
-    return tgenNodeInports.ena;
-  },
+  //getGateNodeOutportOut: function(){
+  //  return gateNodeOutports.out;
+  //},
+  //getTGenNodeInportEna: function(){
+  //  return tgenNodeInports.ena;
+  //},
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
@@ -2405,24 +2423,24 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
 
 
-  getGateNodeStyling: function(){
-    return GateNodeStyling;
-  },
-  getSelectedGateNodeStyling: function(){
-    return SelectedGateNodeStyling;
-  },
-  getTGenNodeStyling: function(){
-    return TGenNodeStyling;
-  },
-  getSelectedTGenNodeStyling: function(){
-    return SelectedTGenNodeStyling;
-  },
-  getPCompNodeStyling: function(){
-    return PCompNodeStyling;
-  },
-  getSelectedPCompNodeStyling: function(){
-    return SelectedPCompNodeStyling;
-  },
+  //getGateNodeStyling: function(){
+  //  return GateNodeStyling;
+  //},
+  //getSelectedGateNodeStyling: function(){
+  //  return SelectedGateNodeStyling;
+  //},
+  //getTGenNodeStyling: function(){
+  //  return TGenNodeStyling;
+  //},
+  //getSelectedTGenNodeStyling: function(){
+  //  return SelectedTGenNodeStyling;
+  //},
+  //getPCompNodeStyling: function(){
+  //  return PCompNodeStyling;
+  //},
+  //getSelectedPCompNodeStyling: function(){
+  //  return SelectedPCompNodeStyling;
+  //},
   getAllNodeTypesPortStyling: function(){
     return allNodeTypesPortStyling;
   },
@@ -2701,6 +2719,13 @@ AppDispatcher.register(function(payload){
       nodeStore.emitChange();
       break;
 
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
+      nodeStore.emitChange();
+      break;
+
     default:
       return true
   }
@@ -2764,7 +2789,7 @@ module.exports = nodeStore;
 //  return checkGate1Styling();
 //},
 
-},{"../../node_modules/object-assign/index.js":36,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":31}],14:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":38,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":32}],14:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -3666,7 +3691,7 @@ module.exports = paneStore;
 //  return possibleNodeTabsToOpen[key](key)
 //}
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./deviceStore":11,"./nodeStore":13,"events":31,"object-assign":36}],15:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./deviceStore":11,"./nodeStore":13,"events":32,"object-assign":38}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -4093,7 +4118,7 @@ module.exports = sidePaneStore;
 //  })
 //};
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":31,"object-assign":36}],16:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":32,"object-assign":38}],16:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4167,7 +4192,7 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
 
 module.exports = ConfigButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":214}],17:[function(require,module,exports){
+},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":216}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -4276,7 +4301,7 @@ module.exports = Dropdown;
 //  this.props.changeTab(findTheIndex)
 //},
 
-},{"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":214}],18:[function(require,module,exports){
+},{"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":216}],18:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -4291,19 +4316,19 @@ function getEdgeState(){
     //startNode: NodeStore.getGateNodeOutPort(),
     //endNode: NodeStore.getTGenNodeEnaPort(),
 
-    Gate1Position: NodeStore.getGate1Position(),
-    TGen1Position: NodeStore.getTGen1Position(),
-    gateNodeOut: NodeStore.getGateNodeOutportOut(),
-    tgenNodeEna: NodeStore.getTGenNodeInportEna(),
+    //Gate1Position: NodeStore.getGate1Position(),
+    //TGen1Position: NodeStore.getTGen1Position(),
+    //gateNodeOut: NodeStore.getGateNodeOutportOut(),
+    //tgenNodeEna: NodeStore.getTGenNodeInportEna(),
     //selected: NodeStore.getIfEdgeIsSelected(),
-    allEdges: NodeStore.getAllEdges(),
-    gateNodeStyling: NodeStore.getGateNodeStyling(),
-    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    //allEdges: NodeStore.getAllEdges(),
+    //gateNodeStyling: NodeStore.getGateNodeStyling(),
+    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
+    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
   }
 }
 
@@ -4312,23 +4337,23 @@ var Edge = React.createClass({displayName: "Edge",
     return getEdgeState();
   },
   _onChange: function(){
-    this.setState(getEdgeState());
-    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
+    //this.setState(getEdgeState());
+    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
-      console.log(this.state.selected);
-    });
+    //NodeStore.addChangeListener(this._onChange);
+    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.selected);
+    //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
   },
   componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
+    //NodeStore.removeChangeListener(this._onChange);
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
-    if(this.state.selected === true){
+    if(this.props.selected === true){
 
     }
     else{
@@ -4338,11 +4363,11 @@ var Edge = React.createClass({displayName: "Edge",
   mouseLeave: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
+    if(this.props.selected === true){
+      console.log("this.props.selected is true, so don't reset the border colour");
     }
     else{
-      console.log("this.state.selected is false");
+      console.log("this.props.selected is false");
       test.style.stroke = 'lightgrey'
     }
   },
@@ -4354,11 +4379,11 @@ var Edge = React.createClass({displayName: "Edge",
 
   render:function(){
 
-    var edgeInfo = this.state.allEdges[this.props.id];
+    var edgeInfo = this.props.allEdges[this.props.id];
     console.log(this.props.id);
     console.log(edgeInfo);
 
-    var allEdges = this.state.allEdges;
+    var allEdges = this.props.allEdges;
     //console.log(allEdges);
 
     var fromNode = edgeInfo.fromNode;
@@ -4368,19 +4393,19 @@ var Edge = React.createClass({displayName: "Edge",
     var fromNodePort = edgeInfo.fromNodePort;
     var toNodePort = edgeInfo.toNodePort;
 
-    var allNodeTypesPortStyling = this.state.allNodeTypesPortStyling;
+    var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
 
-    var fromNodeType = this.state.allNodeInfo[fromNode].type;
-    var toNodeType = this.state.allNodeInfo[toNode].type;
+    var fromNodeType = this.props.allNodeInfo[fromNode].type;
+    var toNodeType = this.props.allNodeInfo[toNode].type;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.state.allNodePositions[toNode].position);
+    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
+    //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromNodePositionX = this.state.allNodeInfo[fromNode].position.x;
-    var fromNodePositionY = this.state.allNodeInfo[fromNode].position.y;
-    var toNodePositionX = this.state.allNodeInfo[toNode].position.x;
-    var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
+    var fromNodePositionX = this.props.allNodeInfo[fromNode].position.x;
+    var fromNodePositionY = this.props.allNodeInfo[fromNode].position.y;
+    var toNodePositionX = this.props.allNodeInfo[toNode].position.x;
+    var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
 
@@ -4403,13 +4428,13 @@ var Edge = React.createClass({displayName: "Edge",
     return(
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
-        React.createElement(Line, {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+        React.createElement("line", {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
+              style: {strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
 
-        React.createElement(Line, {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-          //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
+        React.createElement("line", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+          //x1={this.props.startNode.x} y1={this.props.startNode.y} x2={this.props.endNode.x} y2={this.props.endNode.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
               style: {strokeWidth: '5', stroke:"orange"}})
@@ -4420,13 +4445,13 @@ var Edge = React.createClass({displayName: "Edge",
   }
 });
 
-var Line = React.createClass({displayName: "Line",
-  render: function(){
-    return(
-      React.createElement("line", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
+//var Line = React.createClass({
+//  render: function(){
+//    return(
+//      <line {...this.props}>{this.props.children}</line>
+//    )
+//  }
+//});
 
 module.exports = Edge;
 
@@ -4488,7 +4513,7 @@ module.exports = Edge;
 //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 //}
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],19:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4563,7 +4588,7 @@ var FavButton = React.createClass({displayName: "FavButton",
 
 module.exports = FavButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":214}],20:[function(require,module,exports){
+},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":216}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -5039,7 +5064,7 @@ var Port = React.createClass({displayName: "Port",
 
 module.exports = GateNode;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],21:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],21:[function(require,module,exports){
 /**
  * Created by twi18192 on 02/12/15.
  */
@@ -5224,7 +5249,7 @@ var Port = React.createClass({displayName: "Port",
 
 module.exports = LUTNode;
 
-},{"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],22:[function(require,module,exports){
+},{"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],22:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -5657,7 +5682,57 @@ module.exports = MainPane;
 //var BlueBlock = require('./blueBlock');
 //var GreenBlock = require('./greenBlock');
 
-},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":29,"./configButton":16,"./favButton":19,"./gateNode.js":20,"./lutNode.js":21,"./pcompNode.js":24,"./tgenNode.js":27,"./theGraphDiamond.js":28,"react":214,"react-panels":39}],23:[function(require,module,exports){
+},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":30,"./configButton":16,"./favButton":19,"./gateNode.js":20,"./lutNode.js":21,"./pcompNode.js":25,"./tgenNode.js":28,"./theGraphDiamond.js":29,"react":216,"react-panels":41}],23:[function(require,module,exports){
+/**
+ * Created by twi18192 on 18/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var NodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
+
+function getNodeRectanglesState(){
+  return {
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+  }
+}
+
+var NodeRectangles = React.createClass({displayName: "NodeRectangles",
+  //getInitialState: function(){
+  //  return getNodeRectanglesState();
+  //},
+  //componentDidMount: function(){
+  //  NodeStore.addChangeListener(this._onChange);
+  //},
+  //componentWillUnmount: function(){
+  //  NodeStore.removeChangeListener(this._onChange);
+  //},
+  //_onChange: function(){
+  //  this.setState(getNodeRectanglesState());
+  //},
+
+  render: function(){
+
+    return(
+      React.createElement("g", null, 
+        React.createElement("rect", {id: this.props.nodeId.concat("Rectangle"), height: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height, 
+              width: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width, x: 0, y: 0, rx: 7, ry: 7, 
+              style: {fill: 'lightgrey', 'strokeWidth': 1.65,
+               stroke: this.props.selected ? '#797979' : 'black',
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+          //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+        )
+      )
+    )
+  }
+
+});
+
+module.exports = NodeRectangles;
+
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 14/01/16.
  */
@@ -5669,6 +5744,9 @@ var nodeActions = require('../actions/nodeActions.js');
 var paneActions = require('../actions/paneActions');
 
 var Ports = require('./ports.js');
+var NodeRectangle = require('./nodeRectangle');
+
+var interact = require('../../node_modules/interact.js');
 
 function getNodeState(){
   return{
@@ -5676,49 +5754,75 @@ function getNodeState(){
     //inports: NodeStore.getTGenNodeInportsState(),
     //outports: NodeStore.getTGenNodeOutportsState()
     //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    defaultStyling: NodeStore.getTGenNodeStyling(),
-    selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
+    //areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    //defaultStyling: NodeStore.getTGenNodeStyling(),
+    //selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver(),
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    //portMouseOver: NodeStore.getPortMouseOver(),
 
     //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling()
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling()
   }
 }
 
 var Node = React.createClass({displayName: "Node",
-  getInitialState: function(){
-    return getNodeState();
-  },
-
-  _onChange: function(){
-    this.setState(getNodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
-    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
-
-  },
+  //getInitialState: function(){
+  //  return getNodeState();
+  //},
+  //
+  //_onChange: function(){
+  //  //this.setState(getNodeState());
+  //  //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
+  //  //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
+  //
+  //},
 
   componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
+    //NodeStore.addChangeListener(this._onChange);
     console.log(this.props);
     console.log(this.state);
 
-    ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
-      console.log(this.state.selected);
-
-      console.log("A node has been mounted"); });
+    //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
+    //  console.log(this.props.selected);
+    //
+    //  console.log("A node has been mounted"); });
     //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
     //  console.log(this.state.nodePosition);
     //});
+
+    //interact('.node')
+    //  .draggable({
+    //    onmove: this.interactJsDrag
+    //  });
+
+    this.interactable = interact(ReactDOM.findDOMNode(this));
+    this.interactable
+      .draggable({
+        onmove: this.interactJsDrag
+      });
+
+    this.interactable
+      .on('tap', this.nodeSelect)
   },
 
   componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange)
+    //NodeStore.removeChangeListener(this._onChange);
+    this.interactable.unset();
+    this.interactable = null;
+  },
+
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  console.log("shouldComponentUpdate");
+  //  console.log(nextProps.allNodeInfo[this.props.id].position);
+  //  return this.props.allNodeInfo[this.props.id].position.x === nextProps.allNodeInfo[this.props.id].position.x;
+  //},
+
+  handleInteractJsDrag: function(item){
+    nodeActions.interactJsDrag(item);
   },
 
   nodeClick: function(){
@@ -5729,105 +5833,137 @@ var Node = React.createClass({displayName: "Node",
     console.log("node has been dragged!");
   },
 
-  mouseOver: function(){
-    //console.log("mouseOver");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-    test.style.stroke = '#797979'
-  },
+  //mouseOver: function(){
+  //  //console.log("mouseOver");
+  //  var rectangleName = this.props.id.concat("Rectangle");
+  //  var test = document.getElementById(rectangleName);
+  //  test.style.stroke = '#797979'
+  //},
 
-  mouseLeave: function(){
-    //console.log("mouseLeave");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
-    }
-    else{
-      test.style.stroke = 'black'
-    }
-  },
+  //mouseLeave: function(){
+  //  //console.log("mouseLeave");
+  //  var rectangleName = this.props.id.concat("Rectangle");
+  //  var test = document.getElementById(rectangleName);
+  //
+  //  if(this.props.selected === true){
+  //    console.log("this.props.selected is true, so don't reset the border colour");
+  //  }
+  //  else{
+  //    test.style.stroke = 'black'
+  //  }
+  //},
 
   nodeSelect: function(){
-    console.log("TGen1 has been selected");
+    console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
-    if(this.state.portMouseOver === true){
-      console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
-    }
-    else if(this.state.portMouseOver === false){
+
+    /* Don't want hover stuff anymore! */
+
+    //if(this.props.portMouseOver === true){
+    //  console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
+    //}
+    //else if(this.props.portMouseOver === false){
+    //  nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+    //  paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+    //  console.log(this.props.selected);
+    //}
+
+    if(this.props.areAnyNodesSelected === false){
       nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
       paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.state.selected);
-    }
-
-  },
-
-  mouseDown: function(e){
-    console.log("TGen1 mouseDown");
-    console.log(e.currentTarget);
-    console.log(e.currentTarget.parentNode);
-    nodeActions.draggedElement(e.currentTarget.parentNode);
-  },
-
-  portMouseDown: function(e){
-    console.log("portMouseDown");
-    console.log(e);
-    nodeActions.passPortMouseDown(e.currentTarget);
-
-    var portMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({portMouseDownCoords: portMouseDownCoords});
-    var whichPort = e.currentTarget;
-    console.log(whichPort);
-  },
-  portMouseUp: function(e){
-    console.log("portMouseUp");
-    console.log(e);
-    var portMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-      this.portClick(e);
+      console.log(this.props.selected);
     }
     else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+      /* Need to run deselect before I select the current node */
+      this.props.deselect();
+      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+      console.log(this.props.selected);
     }
+
+
+
   },
-  portClick: function(e){
-    console.log("portClick");
-    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
-    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-    var passingEvent = e;
-    if(this.state.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-      theGraphDiamondHandle.dispatchEvent(EdgePreview);
-    }
-    else if(this.state.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-    }
-    //theGraphDiamondHandle.dispatchEvent(PortSelect);
-  },
+
+  //mouseDown: function(e){
+  //  console.log("TGen1 mouseDown");
+  //  console.log(e.currentTarget);
+  //  console.log(e.currentTarget.parentNode);
+  //  nodeActions.draggedElement(e.currentTarget.parentNode);
+  //},
+
+  //portMouseDown: function(e){
+  //  console.log("portMouseDown");
+  //  console.log(e);
+  //  nodeActions.passPortMouseDown(e.currentTarget);
+  //
+  //  var portMouseDownCoords = {
+  //    x: e.nativeEvent.clientX,
+  //    y: e.nativeEvent.clientY
+  //  };
+  //  this.setState({portMouseDownCoords: portMouseDownCoords});
+  //  var whichPort = e.currentTarget;
+  //  console.log(whichPort);
+  //},
+  //portMouseUp: function(e){
+  //  console.log("portMouseUp");
+  //  console.log(e);
+  //  var portMouseUpCoords = {
+  //    x: e.nativeEvent.clientX,
+  //    y: e.nativeEvent.clientY
+  //  };
+  //  if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
+  //    console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
+  //    this.portClick(e);
+  //  }
+  //  else{
+  //    console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+  //  }
+  //},
+  //portClick: function(e){
+  //  console.log("portClick");
+  //  /* Need to either invoke an action or fire an event to cause an edge to be drawn */
+  //  /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+  //  var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+  //  var passingEvent = e;
+  //  if(this.state.storingFirstPortClicked === null){
+  //    console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+  //    theGraphDiamondHandle.dispatchEvent(EdgePreview);
+  //  }
+  //  else if(this.state.storingFirstPortClicked !== null){
+  //    console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+  //    theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+  //  }
+  //  //theGraphDiamondHandle.dispatchEvent(PortSelect);
+  //},
   //portSelect: function(){
   //  console.log("portClick has occured, so a port has been selected");
   //
   //},
 
+  interactJsDrag: function(e){
+    console.log("interactJs drag is occurring");
+    var target = e.target.id;
+    var deltaMovement = {
+      target: target,
+      x: e.dx,
+      y: e.dy
+    };
+
+    this.handleInteractJsDrag(deltaMovement);
+
+  },
+
 
   render: function(){
 
-    console.log("portThatHasBeenClicked is: " + this.state.portThatHasBeenClicked);
+    console.log("portThatHasBeenClicked is: " + this.props.portThatHasBeenClicked);
+    console.log(this.props);
 
     /* Unecessary now that I don't want the ports to focus on node selection (I think? =P) */
 
-    //if(this.state.selected === true){
-    //  var currentStyling = this.state.selectedStyling;
+    //if(this.props.selected === true){
+    //  var currentStyling = this.props.selectedStyling;
     //}
     //else{
     //  var currentStyling = this.state.defaultStyling;
@@ -5840,37 +5976,41 @@ var Node = React.createClass({displayName: "Node",
     //var outportPositions = currentStyling.ports.portPositions.outportPositions;
     //var textPosition = currentStyling.text.textPositions;
 
-    var nodeInfo = this.state.allNodeInfo[this.props.id];
-    var nodePositionX = nodeInfo.position.x;
-    var nodePositionY = nodeInfo.position.y;
-    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
+    //var nodeInfo = this.state.allNodeInfo[this.props.id];
+    //var nodePositionX = this.state.allNodeInfo[this.props.id].position.x;
+    //var nodePositionY = this.state.allNodeInfo[this.props.id].position.y;
+    var nodeTranslate = "translate(" + this.props.allNodeInfo[this.props.id].position.x + "," + this.props.allNodeInfo[this.props.id].position.y + ")";
+    console.log(nodeTranslate);
 
     //var nodeName = nodeInfo.name;
-    var rectangleString = "Rectangle";
-    var rectangleName = this.props.id.concat(rectangleString);
+    //var rectangleString = "Rectangle";
+    //var rectangleName = this.props.id.concat(rectangleString);
 
     /* Trying to automatically generate the correct ports and port text */
     /* NOTE: This will run on every render, so all the ports will be reset back to an empty array and then iterate through the loops to recreate them...
       I Suppose I could try moving these into methods of the component instead, and them running them once at the start of the node's lifetime? */
 
     //var nodePortsStyling = this.state.allNodeTypesPortStyling; /* Need the styling of everything, not just the port positions, so I need to alter the object I get from the store to be all the styling and not just the different node's PORT stylign */
-    var allNodeTypesStyling = this.state.allNodeTypesStyling;
-    var nodeType = nodeInfo.type;
+    //var allNodeTypesStyling = this.state.allNodeTypesStyling;
+    //var nodeType = nodeInfo.type;
 
     return (
-      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
-                         transform: nodeTranslate
+      React.createElement("g", React.__spread({},  this.props, 
+          //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+                         //style={this.props.selected && this.props.areAnyNodesSelected || !this.props.selected && !this.props.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
+                         {transform: nodeTranslate
       }), 
 
-        React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement("rect", {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
+        React.createElement("g", {style: {MozUserSelect: 'none'}
+           //onMouseDown={this.mouseDown}
+        }, 
+          React.createElement("rect", {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
 
-          React.createElement("rect", {id: rectangleName, height: allNodeTypesStyling[nodeType].rectangle.rectangleStyling.height, width: allNodeTypesStyling[nodeType].rectangle.rectangleStyling.width, x: 0, y: 0, rx: 7, ry: 7, 
-                     style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
-            //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-          ), 
+          React.createElement(NodeRectangle, {nodeId: this.props.id, nodeType: this.props.allNodeInfo[this.props.id].type, allNodeTypesStyling: this.props.allNodeTypesStyling, 
+                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, selected: this.props.selected}), 
 
-          React.createElement(Ports, {nodeId: this.props.id})
+          React.createElement(Ports, {nodeId: this.props.id, allNodeInfo: this.props.allNodeInfo, allNodeTypesStyling: this.props.allNodeTypesStyling, 
+                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked})
 
         )
 
@@ -5960,7 +6100,12 @@ module.exports = Node;
 //console.log(outports);
 //console.log(portsText);
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13,"./ports.js":25}],24:[function(require,module,exports){
+//<rect id={rectangleName} height={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.height} width={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.width} x={0} y={0} rx={7} ry={7}
+//      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.props.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
+//  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+///>
+
+},{"../../node_modules/interact.js":37,"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13,"./nodeRectangle":23,"./ports.js":26}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -6296,7 +6441,7 @@ var Port = React.createClass({displayName: "Port",
 
 module.exports = PCompNode;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],25:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/01/16.
  */
@@ -6309,26 +6454,26 @@ var paneActions = require('../actions/paneActions');
 
 function getPortState(){
   return{
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
   }
 }
 
 var Ports = React.createClass({displayName: "Ports",
-  getInitialState: function(){
-    return getPortState();
-  },
-  componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-  },
-  componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
-  },
-  _onChange: function(){
-    this.setState(getPortState());
-  },
+  //getInitialState: function(){
+  //  return getPortState();
+  //},
+  //componentDidMount: function(){
+  //  NodeStore.addChangeListener(this._onChange);
+  //},
+  //componentWillUnmount: function(){
+  //  NodeStore.removeChangeListener(this._onChange);
+  //},
+  //_onChange: function(){
+  //  this.setState(getPortState());
+  //},
 
   portMouseDown: function(e){
     console.log("portMouseDown");
@@ -6364,11 +6509,11 @@ var Ports = React.createClass({displayName: "Ports",
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
-    if(this.state.storingFirstPortClicked === null){
+    if(this.props.storingFirstPortClicked === null){
       console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
       theGraphDiamondHandle.dispatchEvent(EdgePreview);
     }
-    else if(this.state.storingFirstPortClicked !== null){
+    else if(this.props.storingFirstPortClicked !== null){
       console.log("a port has already been clicked before, so dispatch TwoPortClicks");
       theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
     }
@@ -6378,9 +6523,9 @@ var Ports = React.createClass({displayName: "Ports",
   render: function(){
 
     var nodeId = this.props.nodeId;
-    var nodeInfo = this.state.allNodeInfo[nodeId];
+    var nodeInfo = this.props.allNodeInfo[nodeId];
 
-    var allNodeTypesStyling = this.state.allNodeTypesStyling;
+    var allNodeTypesStyling = this.props.allNodeTypesStyling;
     var nodeType = nodeInfo.type;
     var inports = [];
     var inportsXCoord;
@@ -6390,9 +6535,9 @@ var Ports = React.createClass({displayName: "Ports",
 
     for(i = 0; i < nodeInfo.inports.length; i++){
       var inportName = nodeInfo.inports[i].name;
-      console.log(allNodeTypesStyling[nodeType]);
+      //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        React.createElement("circle", {className: inportName, cx: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y, 
+        React.createElement("circle", {key: nodeId + inportName, className: inportName, cx: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y, 
                 r: allNodeTypesStyling[nodeType].ports.portStyling.portRadius, style: {fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65}, 
                 onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}
         )
@@ -6400,8 +6545,8 @@ var Ports = React.createClass({displayName: "Ports",
 
       /* Taking care of the inport text too */
       portsText.push(
-        React.createElement("text", {x: allNodeTypesStyling[nodeType].text.textPositions[inportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[inportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
+        React.createElement("text", {key: nodeId + inportName + "-text", x: allNodeTypesStyling[nodeType].text.textPositions[inportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[inportName].y, 
+              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
         }, 
           inportName
         )
@@ -6411,15 +6556,15 @@ var Ports = React.createClass({displayName: "Ports",
     for(j = 0; j < nodeInfo.outports.length; j++){
       var outportName = nodeInfo.outports[j].name;
       outports.push(
-        React.createElement("circle", {className: outportName, cx: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y, 
+        React.createElement("circle", {key: nodeId + outportName, className: outportName, cx: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y, 
                 r: allNodeTypesStyling[nodeType].ports.portStyling.portRadius, style: {fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65}, 
                 onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}
         )
       );
 
       portsText.push(
-        React.createElement("text", {x: allNodeTypesStyling[nodeType].text.textPositions[outportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[outportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
+        React.createElement("text", {key: nodeId + outportName + "-text", x: allNodeTypesStyling[nodeType].text.textPositions[outportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[outportName].y, 
+              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
         }, 
           outportName
         )
@@ -6430,12 +6575,12 @@ var Ports = React.createClass({displayName: "Ports",
     /* Hmm, where should I get/calculate their position & height from?... */
 
     portsText.push([
-      React.createElement("text", {className: "nodeName", style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
+      React.createElement("text", {className: "nodeName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
             transform: "translate(32.5, 80)"}, 
         nodeInfo.name
       ),
 
-      React.createElement("text", {className: "nodeType", style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
+      React.createElement("text", {className: "nodeType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
             transform: "translate(32.5, 93)"}, 
         nodeInfo.type
       )
@@ -6454,7 +6599,7 @@ var Ports = React.createClass({displayName: "Ports",
 
 module.exports = Ports;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],26:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -6628,7 +6773,7 @@ module.exports = SidePane;
 //  console.log("it ran correctly");
 //},
 
-},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":17,"react":214,"react-panels":39}],27:[function(require,module,exports){
+},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":17,"react":216,"react-panels":41}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -6937,7 +7082,7 @@ var Port = React.createClass({displayName: "Port",
 
 module.exports = TGenNode;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":214,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],28:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -6955,6 +7100,10 @@ var LUTNode = require('./lutNode.js');
 var Edge = require('./edge.js');
 
 var Node = require('./nodes.js');
+
+var interact = require('../../node_modules/interact.js');
+
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
@@ -6975,13 +7124,13 @@ var NodeStylingProperties = { /* Only here temporarily until I think of a better
 window.defaultNodeContainerStyle = {
   cursor: 'move',
   draggable: 'true',
-  className: 'nodeContainer',
+  //className: 'nodeContainer',
 };
 
 window.nonSelectedNodeContainerStyle = {
   cursor: 'move',
   draggable: 'true',
-  className: 'nodeContainer',
+  //className: 'nodeContainer',
   opacity: 0.3
 };
 
@@ -7006,22 +7155,27 @@ function getAppState(){
     //TGen1Position: NodeStore.getTGen1Position(),
     //PComp1Position: NodeStore.getPComp1Position(),
     //LUT1Position: NodeStore.getLUT1Position(),
-    allNodePositions: NodeStore.getAllNodePositions(),
+    //allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
     allEdges: NodeStore.getAllEdges(),
-    gateNodeStyling: NodeStore.getGateNodeStyling(),
-    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    //gateNodeStyling: NodeStore.getGateNodeStyling(),
+    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     nodesToRender: NodeStore.getNodesToRenderArray(),
     edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
     newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    nodeLibrary: NodeStore.getNodeLibrary()
-    //newlyAddedNode: NodeStore.getNewlyAddedNode()
+    nodeLibrary: NodeStore.getNodeLibrary(),
+    //newlyAddedNode: NodeStore.getNewlyAddedNode(),
+    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    portMouseOver: NodeStore.getPortMouseOver(),
+    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
+    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
   }
 }
 
@@ -7053,7 +7207,7 @@ var App = React.createClass({displayName: "App",
 
     /* Let's try using my refactored nodes.js file instead! */
     //this.addNodeToNodesArray();
-    this.refactoredAddNodeToNodesArray();
+    //this.refactoredAddNodeToNodesArray();
 
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
@@ -7062,26 +7216,21 @@ var App = React.createClass({displayName: "App",
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+
+    //interact('.node')
+    //  .draggable({
+    //    onmove: this.interactJsDrag
+    //  });
+
+    //Perf.start();
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
   },
 
-  /* react-draggabble event handlers */
-  handleStart: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
-
-  handleDrag: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
-
-  handleStop: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
+  //handleInteractJsDrag: function(item){
+  //  nodeActions.interactJsDrag(item);
+  //},
 
 
   mouseDownSelectElement: function (evt) {
@@ -7595,24 +7744,29 @@ var App = React.createClass({displayName: "App",
       //var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
 
       if(gateNodeRegExp.test(node) === true){
-        nodeActions.pushNodeToArray(React.createElement(GateNode, {id: node, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+        nodeActions.pushNodeToArray(React.createElement(GateNode, {id: node, className: "node"}
+                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        ))
       }
       else if(tgenNodeRegExp.test(node) === true){
         //console.log("we have a tgen node!");
-        nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: node, 
-                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+        nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: node, className: "node"}
+                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        ))
       }
       else if(pcompNodeRegExp.test(node) === true){
         //console.log("we have a pcomp node!");
-        nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: node, 
-                              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+        nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: node, className: "node"}
+                              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        ))
       }
       else if(lutNodeRegExp.test(node) === true){
         //console.log("we have an lut node!");
-        nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, 
+        nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, className: "node"}
                             //NodeName={nodeName} RectangleName={rectangleName}
-                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
+                            //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        )
+        )
       }
       else{
         console.log("no match to any node type, something's wrong?");
@@ -7623,8 +7777,11 @@ var App = React.createClass({displayName: "App",
   refactoredAddNodeToNodesArray: function(){
     for(var node in this.state.allNodeInfo){
       nodeActions.pushNodeToArray(
-        React.createElement(Node, {id: node, 
-              onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
+        React.createElement(Node, {key: node, id: node, className: "node", 
+              allNodeInfo: this.state.allNodeInfo, allNodeTypesStyling: this.state.allNodeTypesStyling, areAnyNodesSelected: this.state.areAnyNodesSelected, 
+              portThatHasBeenClicked: this.state.portThatHasBeenClicked, storingFirstPortClicked: this.state.storingFirstPortClicked, portMouseOver: this.state.portMouseOver, 
+              selected: NodeStore.getAnyNodeSelectedState(node)}
+              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
               )
       )
     }
@@ -7632,10 +7789,10 @@ var App = React.createClass({displayName: "App",
 
   addNodeInfo: function(){
     console.log("addNodeInfo");
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
+    //var gateNodeRegExp = /Gate/;
+    //var tgenNodeRegExp = /TGen/;
+    //var pcompNodeRegExp = /PComp/;
+    //var lutNodeRegExp = /LUT/;
 
     var newGateNodeId = this.generateNewNodeId();
     console.log(newGateNodeId);
@@ -7649,31 +7806,46 @@ var App = React.createClass({displayName: "App",
     //console.log(this.state.newlyAddedNode);
     //newNode = "Gate2";
 
-    if(gateNodeRegExp.test(newGateNodeId) === true){
-      nodeActions.pushNodeToArray(React.createElement(GateNode, {id: newGateNodeId, 
-                                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-    }
-    else if(tgenNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a tgen node!");
-      nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: newGateNodeId, 
-                                            onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-    }
-    else if(pcompNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a pcomp node!");
-      nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: newGateNodeId, 
-                                             onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-    }
-    else if(lutNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have an lut node!");
-      nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: newGateNodeId, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, 
-        //NodeName={nodeName} RectangleName={rectangleName}
-                                           onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}))
-    }
-    else{
-      console.log("no match to any node type, something's wrong?");
-    }
-    console.log(this.state.nodesToRender);
+    /* Replacing with my refactored nodes.js file instead to test the performanc of having many ndes along with interact.js */
+    /* Ok, these use MY drag function, so then I can compare interactjs vs my drag in one go */
 
+    //if(gateNodeRegExp.test(newGateNodeId) === true){
+    //  nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(tgenNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have a tgen node!");
+    //  nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(pcompNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have a pcomp node!");
+    //  nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+    //                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(lutNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have an lut node!");
+    //  nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //    //NodeName={nodeName} RectangleName={rectangleName}
+    //                                       onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else{
+    //  console.log("no match to any node type, something's wrong?");
+    //}
+    //console.log(this.state.nodesToRender);
+
+    //nodeActions.pushNodeToArray(
+    //  <Node key={newGateNodeId} id={newGateNodeId} className="node"
+    //        allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling}
+    //        portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+    //        selected={NodeStore.getAnyNodeSelectedState(newGateNodeId)}
+    //    //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+    //  />
+    //);
+
+    //Perf.stop();
+    //Perf.getLastMeasurements();
+    //Perf.printWasted();
 
   },
 
@@ -7719,6 +7891,7 @@ var App = React.createClass({displayName: "App",
     //console.log(port.style.stroke);
     /* Node select is also messing with the port styling... */
   },
+
   portDeselectRemoveHighlight: function(){
     console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
     var port = this.state.portThatHasBeenClicked;
@@ -7768,6 +7941,7 @@ var App = React.createClass({displayName: "App",
 
     /* For my refactored nodes.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
+    /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
 
     if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
       console.log("the two clicked ports are the same port, you clicked on the same port twice!");
@@ -8119,13 +8293,26 @@ var App = React.createClass({displayName: "App",
       //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
       //}
 
-      nodeActions.pushEdgeToArray(React.createElement(Edge, {id: edge, 
+      nodeActions.pushEdgeToArray(React.createElement(Edge, {key: edge, id: edge, 
                        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
                        onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
       ))
 
     }
   },
+
+  //interactJsDrag: function(e){
+  //  console.log("interactJs drag is occurring");
+  //  var target = e.target.id;
+  //  var deltaMovement = {
+  //    target: target,
+  //    x: e.dx,
+  //    y: e.dy
+  //  };
+  //
+  //  this.handleInteractJsDrag(deltaMovement);
+  //
+  //},
 
 
 
@@ -8141,8 +8328,8 @@ var App = React.createClass({displayName: "App",
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
     console.log(this.state.nodesToRender);
-    console.log("this.dragging is:" + this.dragging);
-    console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
+    //console.log("this.dragging is:" + this.dragging);
+    //console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
 
     //var regExpTest = /abc/;
     //var testString = "I know my abc's";
@@ -8278,6 +8465,31 @@ var App = React.createClass({displayName: "App",
     //  }
     //}
 
+    var nodes = [];
+    var edges = [];
+
+    for(var node in this.state.allNodeInfo){
+      nodes.push(
+        React.createElement(Node, {key: node, id: node, className: "node", 
+              allNodeInfo: this.state.allNodeInfo, allNodeTypesStyling: this.state.allNodeTypesStyling, areAnyNodesSelected: this.state.areAnyNodesSelected, 
+              portThatHasBeenClicked: this.state.portThatHasBeenClicked, storingFirstPortClicked: this.state.storingFirstPortClicked, portMouseOver: this.state.portMouseOver, 
+              selected: NodeStore.getAnyNodeSelectedState(node), deselect: this.deselect}
+          //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        )
+      )
+    }
+
+    for(var edge in this.state.allEdges){
+      edges.push(React.createElement(Edge, {key: edge, id: edge, 
+        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                       onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp, 
+                       allEdges: this.state.allEdges, allNodeTypesPortStyling: this.state.allNodeTypesPortStyling, 
+                       allNodeInfo: this.state.allNodeInfo, areAnyEdgesSelected: this.state.areAnyEdgesSelected, 
+                       selected: NodeStore.getIfEdgeIsSelected(edge)}
+      ))
+
+    }
+
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
 
@@ -8301,13 +8513,13 @@ var App = React.createClass({displayName: "App",
 
             React.createElement("g", {id: "EdgesGroup"}, 
 
-              this.state.edgesToRender
+              edges
 
             ), 
 
             React.createElement("g", {id: "NodesGroup"}, 
 
-              this.state.nodesToRender
+              nodes
 
             )
 
@@ -8425,9 +8637,14 @@ module.exports = App;
 
 
 
-/* Next bit takes care of if the scale factor is zero I think */
+//<Node key="TGen1" id="TGen1" className="node"
+//      allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling}
+//      portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+//      selected={NodeStore.getAnyNodeSelectedState("TGen1")}
+//  //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":23,"./pcompNode.js":24,"./tgenNode.js":27,"react":214}],29:[function(require,module,exports){
+},{"../../node_modules/interact.js":37,"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/lib/ReactDefaultPerf.js":96,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":24,"./pcompNode.js":25,"./tgenNode.js":28,"react":216}],30:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/10/15.
  */
@@ -8461,7 +8678,7 @@ WebSocketClient.addWebSocketOnErrorCallback(function(){
 
 module.exports = WebSocketClient;
 
-},{"./writingWebSocketsInReact":30}],30:[function(require,module,exports){
+},{"./writingWebSocketsInReact":31}],31:[function(require,module,exports){
 /**
  * Created by twi18192 on 28/09/15.
  */
@@ -9185,7 +9402,7 @@ module.exports = Client;
 
 //var ReactClient = new Client("wss://echo.websocket.org", null, 10, null, null);
 
-},{"./actions/paneActions":4,"./actions/serverActions":5}],31:[function(require,module,exports){
+},{"./actions/paneActions":4,"./actions/serverActions":5}],32:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9488,7 +9705,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -9580,7 +9797,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -9592,7 +9809,7 @@ process.umask = function() { return 0; };
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":34}],34:[function(require,module,exports){
+},{"./lib/Dispatcher":35}],35:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -9844,7 +10061,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":35}],35:[function(require,module,exports){
+},{"./invariant":36}],36:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -9899,7 +10116,5985 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
+/**
+ * interact.js v1.2.6
+ *
+ * Copyright (c) 2012-2015 Taye Adeyemi <dev@taye.me>
+ * Open source under the MIT License.
+ * https://raw.github.com/taye/interact.js/master/LICENSE
+ */
+(function (realWindow) {
+    'use strict';
+
+    // return early if there's no window to work with (eg. Node.js)
+    if (!realWindow) { return; }
+
+    var // get wrapped window if using Shadow DOM polyfill
+        window = (function () {
+            // create a TextNode
+            var el = realWindow.document.createTextNode('');
+
+            // check if it's wrapped by a polyfill
+            if (el.ownerDocument !== realWindow.document
+                && typeof realWindow.wrap === 'function'
+                && realWindow.wrap(el) === el) {
+                // return wrapped window
+                return realWindow.wrap(realWindow);
+            }
+
+            // no Shadow DOM polyfil or native implementation
+            return realWindow;
+        }()),
+
+        document           = window.document,
+        DocumentFragment   = window.DocumentFragment   || blank,
+        SVGElement         = window.SVGElement         || blank,
+        SVGSVGElement      = window.SVGSVGElement      || blank,
+        SVGElementInstance = window.SVGElementInstance || blank,
+        HTMLElement        = window.HTMLElement        || window.Element,
+
+        PointerEvent = (window.PointerEvent || window.MSPointerEvent),
+        pEventTypes,
+
+        hypot = Math.hypot || function (x, y) { return Math.sqrt(x * x + y * y); },
+
+        tmpXY = {},     // reduce object creation in getXY()
+
+        documents       = [],   // all documents being listened to
+
+        interactables   = [],   // all set interactables
+        interactions    = [],   // all interactions
+
+        dynamicDrop     = false,
+
+        // {
+        //      type: {
+        //          selectors: ['selector', ...],
+        //          contexts : [document, ...],
+        //          listeners: [[listener, useCapture], ...]
+        //      }
+        //  }
+        delegatedEvents = {},
+
+        defaultOptions = {
+            base: {
+                accept        : null,
+                actionChecker : null,
+                styleCursor   : true,
+                preventDefault: 'auto',
+                origin        : { x: 0, y: 0 },
+                deltaSource   : 'page',
+                allowFrom     : null,
+                ignoreFrom    : null,
+                _context      : document,
+                dropChecker   : null
+            },
+
+            drag: {
+                enabled: false,
+                manualStart: true,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: null,
+                restrict: null,
+                inertia: null,
+                autoScroll: null,
+
+                axis: 'xy'
+            },
+
+            drop: {
+                enabled: false,
+                accept: null,
+                overlap: 'pointer'
+            },
+
+            resize: {
+                enabled: false,
+                manualStart: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: null,
+                restrict: null,
+                inertia: null,
+                autoScroll: null,
+
+                square: false,
+                preserveAspectRatio: false,
+                axis: 'xy',
+
+                // use default margin
+                margin: NaN,
+
+                // object with props left, right, top, bottom which are
+                // true/false values to resize when the pointer is over that edge,
+                // CSS selectors to match the handles for each direction
+                // or the Elements for each handle
+                edges: null,
+
+                // a value of 'none' will limit the resize rect to a minimum of 0x0
+                // 'negate' will alow the rect to have negative width/height
+                // 'reposition' will keep the width/height positive by swapping
+                // the top and bottom edges and/or swapping the left and right edges
+                invert: 'none'
+            },
+
+            gesture: {
+                manualStart: false,
+                enabled: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                restrict: null
+            },
+
+            perAction: {
+                manualStart: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: {
+                    enabled     : false,
+                    endOnly     : false,
+                    range       : Infinity,
+                    targets     : null,
+                    offsets     : null,
+
+                    relativePoints: null
+                },
+
+                restrict: {
+                    enabled: false,
+                    endOnly: false
+                },
+
+                autoScroll: {
+                    enabled     : false,
+                    container   : null,     // the item that is scrolled (Window or HTMLElement)
+                    margin      : 60,
+                    speed       : 300       // the scroll speed in pixels per second
+                },
+
+                inertia: {
+                    enabled          : false,
+                    resistance       : 10,    // the lambda in exponential decay
+                    minSpeed         : 100,   // target speed must be above this for inertia to start
+                    endSpeed         : 10,    // the speed at which inertia is slow enough to stop
+                    allowResume      : true,  // allow resuming an action in inertia phase
+                    zeroResumeDelta  : true,  // if an action is resumed after launch, set dx/dy to 0
+                    smoothEndDuration: 300    // animate to snap/restrict endOnly if there's no inertia
+                }
+            },
+
+            _holdDuration: 600
+        },
+
+        // Things related to autoScroll
+        autoScroll = {
+            interaction: null,
+            i: null,    // the handle returned by window.setInterval
+            x: 0, y: 0, // Direction each pulse is to scroll in
+
+            // scroll the window by the values in scroll.x/y
+            scroll: function () {
+                var options = autoScroll.interaction.target.options[autoScroll.interaction.prepared.name].autoScroll,
+                    container = options.container || getWindow(autoScroll.interaction.element),
+                    now = new Date().getTime(),
+                    // change in time in seconds
+                    dtx = (now - autoScroll.prevTimeX) / 1000,
+                    dty = (now - autoScroll.prevTimeY) / 1000,
+                    vx, vy, sx, sy;
+
+                // displacement
+                if (options.velocity) {
+                  vx = options.velocity.x;
+                  vy = options.velocity.y;
+                }
+                else {
+                  vx = vy = options.speed
+                }
+ 
+                sx = vx * dtx;
+                sy = vy * dty;
+
+                if (sx >= 1 || sy >= 1) {
+                    if (isWindow(container)) {
+                        container.scrollBy(autoScroll.x * sx, autoScroll.y * sy);
+                    }
+                    else if (container) {
+                        container.scrollLeft += autoScroll.x * sx;
+                        container.scrollTop  += autoScroll.y * sy;
+                    }
+
+                    if (sx >=1) autoScroll.prevTimeX = now;
+                    if (sy >= 1) autoScroll.prevTimeY = now;
+                }
+
+                if (autoScroll.isScrolling) {
+                    cancelFrame(autoScroll.i);
+                    autoScroll.i = reqFrame(autoScroll.scroll);
+                }
+            },
+
+            isScrolling: false,
+            prevTimeX: 0,
+            prevTimeY: 0,
+
+            start: function (interaction) {
+                autoScroll.isScrolling = true;
+                cancelFrame(autoScroll.i);
+
+                autoScroll.interaction = interaction;
+                autoScroll.prevTimeX = new Date().getTime();
+                autoScroll.prevTimeY = new Date().getTime();
+                autoScroll.i = reqFrame(autoScroll.scroll);
+            },
+
+            stop: function () {
+                autoScroll.isScrolling = false;
+                cancelFrame(autoScroll.i);
+            }
+        },
+
+        // Does the browser support touch input?
+        supportsTouch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch),
+
+        // Does the browser support PointerEvents
+        supportsPointerEvent = !!PointerEvent,
+
+        // Less Precision with touch input
+        margin = supportsTouch || supportsPointerEvent? 20: 10,
+
+        pointerMoveTolerance = 1,
+
+        // for ignoring browser's simulated mouse events
+        prevTouchTime = 0,
+
+        // Allow this many interactions to happen simultaneously
+        maxInteractions = Infinity,
+
+        // Check if is IE9 or older
+        actionCursors = (document.all && !window.atob) ? {
+            drag    : 'move',
+            resizex : 'e-resize',
+            resizey : 's-resize',
+            resizexy: 'se-resize',
+
+            resizetop        : 'n-resize',
+            resizeleft       : 'w-resize',
+            resizebottom     : 's-resize',
+            resizeright      : 'e-resize',
+            resizetopleft    : 'se-resize',
+            resizebottomright: 'se-resize',
+            resizetopright   : 'ne-resize',
+            resizebottomleft : 'ne-resize',
+
+            gesture : ''
+        } : {
+            drag    : 'move',
+            resizex : 'ew-resize',
+            resizey : 'ns-resize',
+            resizexy: 'nwse-resize',
+
+            resizetop        : 'ns-resize',
+            resizeleft       : 'ew-resize',
+            resizebottom     : 'ns-resize',
+            resizeright      : 'ew-resize',
+            resizetopleft    : 'nwse-resize',
+            resizebottomright: 'nwse-resize',
+            resizetopright   : 'nesw-resize',
+            resizebottomleft : 'nesw-resize',
+
+            gesture : ''
+        },
+
+        actionIsEnabled = {
+            drag   : true,
+            resize : true,
+            gesture: true
+        },
+
+        // because Webkit and Opera still use 'mousewheel' event type
+        wheelEvent = 'onmousewheel' in document? 'mousewheel': 'wheel',
+
+        eventTypes = [
+            'dragstart',
+            'dragmove',
+            'draginertiastart',
+            'dragend',
+            'dragenter',
+            'dragleave',
+            'dropactivate',
+            'dropdeactivate',
+            'dropmove',
+            'drop',
+            'resizestart',
+            'resizemove',
+            'resizeinertiastart',
+            'resizeend',
+            'gesturestart',
+            'gesturemove',
+            'gestureinertiastart',
+            'gestureend',
+
+            'down',
+            'move',
+            'up',
+            'cancel',
+            'tap',
+            'doubletap',
+            'hold'
+        ],
+
+        globalEvents = {},
+
+        // Opera Mobile must be handled differently
+        isOperaMobile = navigator.appName == 'Opera' &&
+            supportsTouch &&
+            navigator.userAgent.match('Presto'),
+
+        // scrolling doesn't change the result of getClientRects on iOS 7
+        isIOS7 = (/iP(hone|od|ad)/.test(navigator.platform)
+                         && /OS 7[^\d]/.test(navigator.appVersion)),
+
+        // prefix matchesSelector
+        prefixedMatchesSelector = 'matches' in Element.prototype?
+                'matches': 'webkitMatchesSelector' in Element.prototype?
+                    'webkitMatchesSelector': 'mozMatchesSelector' in Element.prototype?
+                        'mozMatchesSelector': 'oMatchesSelector' in Element.prototype?
+                            'oMatchesSelector': 'msMatchesSelector',
+
+        // will be polyfill function if browser is IE8
+        ie8MatchesSelector,
+
+        // native requestAnimationFrame or polyfill
+        reqFrame = realWindow.requestAnimationFrame,
+        cancelFrame = realWindow.cancelAnimationFrame,
+
+        // Events wrapper
+        events = (function () {
+            var useAttachEvent = ('attachEvent' in window) && !('addEventListener' in window),
+                addEvent       = useAttachEvent?  'attachEvent': 'addEventListener',
+                removeEvent    = useAttachEvent?  'detachEvent': 'removeEventListener',
+                on             = useAttachEvent? 'on': '',
+
+                elements          = [],
+                targets           = [],
+                attachedListeners = [];
+
+            function add (element, type, listener, useCapture) {
+                var elementIndex = indexOf(elements, element),
+                    target = targets[elementIndex];
+
+                if (!target) {
+                    target = {
+                        events: {},
+                        typeCount: 0
+                    };
+
+                    elementIndex = elements.push(element) - 1;
+                    targets.push(target);
+
+                    attachedListeners.push((useAttachEvent ? {
+                            supplied: [],
+                            wrapped : [],
+                            useCount: []
+                        } : null));
+                }
+
+                if (!target.events[type]) {
+                    target.events[type] = [];
+                    target.typeCount++;
+                }
+
+                if (!contains(target.events[type], listener)) {
+                    var ret;
+
+                    if (useAttachEvent) {
+                        var listeners = attachedListeners[elementIndex],
+                            listenerIndex = indexOf(listeners.supplied, listener);
+
+                        var wrapped = listeners.wrapped[listenerIndex] || function (event) {
+                            if (!event.immediatePropagationStopped) {
+                                event.target = event.srcElement;
+                                event.currentTarget = element;
+
+                                event.preventDefault = event.preventDefault || preventDef;
+                                event.stopPropagation = event.stopPropagation || stopProp;
+                                event.stopImmediatePropagation = event.stopImmediatePropagation || stopImmProp;
+
+                                if (/mouse|click/.test(event.type)) {
+                                    event.pageX = event.clientX + getWindow(element).document.documentElement.scrollLeft;
+                                    event.pageY = event.clientY + getWindow(element).document.documentElement.scrollTop;
+                                }
+
+                                listener(event);
+                            }
+                        };
+
+                        ret = element[addEvent](on + type, wrapped, Boolean(useCapture));
+
+                        if (listenerIndex === -1) {
+                            listeners.supplied.push(listener);
+                            listeners.wrapped.push(wrapped);
+                            listeners.useCount.push(1);
+                        }
+                        else {
+                            listeners.useCount[listenerIndex]++;
+                        }
+                    }
+                    else {
+                        ret = element[addEvent](type, listener, useCapture || false);
+                    }
+                    target.events[type].push(listener);
+
+                    return ret;
+                }
+            }
+
+            function remove (element, type, listener, useCapture) {
+                var i,
+                    elementIndex = indexOf(elements, element),
+                    target = targets[elementIndex],
+                    listeners,
+                    listenerIndex,
+                    wrapped = listener;
+
+                if (!target || !target.events) {
+                    return;
+                }
+
+                if (useAttachEvent) {
+                    listeners = attachedListeners[elementIndex];
+                    listenerIndex = indexOf(listeners.supplied, listener);
+                    wrapped = listeners.wrapped[listenerIndex];
+                }
+
+                if (type === 'all') {
+                    for (type in target.events) {
+                        if (target.events.hasOwnProperty(type)) {
+                            remove(element, type, 'all');
+                        }
+                    }
+                    return;
+                }
+
+                if (target.events[type]) {
+                    var len = target.events[type].length;
+
+                    if (listener === 'all') {
+                        for (i = 0; i < len; i++) {
+                            remove(element, type, target.events[type][i], Boolean(useCapture));
+                        }
+                        return;
+                    } else {
+                        for (i = 0; i < len; i++) {
+                            if (target.events[type][i] === listener) {
+                                element[removeEvent](on + type, wrapped, useCapture || false);
+                                target.events[type].splice(i, 1);
+
+                                if (useAttachEvent && listeners) {
+                                    listeners.useCount[listenerIndex]--;
+                                    if (listeners.useCount[listenerIndex] === 0) {
+                                        listeners.supplied.splice(listenerIndex, 1);
+                                        listeners.wrapped.splice(listenerIndex, 1);
+                                        listeners.useCount.splice(listenerIndex, 1);
+                                    }
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (target.events[type] && target.events[type].length === 0) {
+                        target.events[type] = null;
+                        target.typeCount--;
+                    }
+                }
+
+                if (!target.typeCount) {
+                    targets.splice(elementIndex, 1);
+                    elements.splice(elementIndex, 1);
+                    attachedListeners.splice(elementIndex, 1);
+                }
+            }
+
+            function preventDef () {
+                this.returnValue = false;
+            }
+
+            function stopProp () {
+                this.cancelBubble = true;
+            }
+
+            function stopImmProp () {
+                this.cancelBubble = true;
+                this.immediatePropagationStopped = true;
+            }
+
+            return {
+                add: add,
+                remove: remove,
+                useAttachEvent: useAttachEvent,
+
+                _elements: elements,
+                _targets: targets,
+                _attachedListeners: attachedListeners
+            };
+        }());
+
+    function blank () {}
+
+    function isElement (o) {
+        if (!o || (typeof o !== 'object')) { return false; }
+
+        var _window = getWindow(o) || window;
+
+        return (/object|function/.test(typeof _window.Element)
+            ? o instanceof _window.Element //DOM2
+            : o.nodeType === 1 && typeof o.nodeName === "string");
+    }
+    function isWindow (thing) { return thing === window || !!(thing && thing.Window) && (thing instanceof thing.Window); }
+    function isDocFrag (thing) { return !!thing && thing instanceof DocumentFragment; }
+    function isArray (thing) {
+        return isObject(thing)
+                && (typeof thing.length !== undefined)
+                && isFunction(thing.splice);
+    }
+    function isObject   (thing) { return !!thing && (typeof thing === 'object'); }
+    function isFunction (thing) { return typeof thing === 'function'; }
+    function isNumber   (thing) { return typeof thing === 'number'  ; }
+    function isBool     (thing) { return typeof thing === 'boolean' ; }
+    function isString   (thing) { return typeof thing === 'string'  ; }
+
+    function trySelector (value) {
+        if (!isString(value)) { return false; }
+
+        // an exception will be raised if it is invalid
+        document.querySelector(value);
+        return true;
+    }
+
+    function extend (dest, source) {
+        for (var prop in source) {
+            dest[prop] = source[prop];
+        }
+        return dest;
+    }
+
+    var prefixedPropREs = {
+      webkit: /(Movement[XY]|Radius[XY]|RotationAngle|Force)$/
+    };
+
+    function pointerExtend (dest, source) {
+        for (var prop in source) {
+          var deprecated = false;
+
+          // skip deprecated prefixed properties
+          for (var vendor in prefixedPropREs) {
+            if (prop.indexOf(vendor) === 0 && prefixedPropREs[vendor].test(prop)) {
+              deprecated = true;
+              break;
+            }
+          }
+
+          if (!deprecated) {
+            dest[prop] = source[prop];
+          }
+        }
+        return dest;
+    }
+
+    function copyCoords (dest, src) {
+        dest.page = dest.page || {};
+        dest.page.x = src.page.x;
+        dest.page.y = src.page.y;
+
+        dest.client = dest.client || {};
+        dest.client.x = src.client.x;
+        dest.client.y = src.client.y;
+
+        dest.timeStamp = src.timeStamp;
+    }
+
+    function setEventXY (targetObj, pointers, interaction) {
+        var pointer = (pointers.length > 1
+                       ? pointerAverage(pointers)
+                       : pointers[0]);
+
+        getPageXY(pointer, tmpXY, interaction);
+        targetObj.page.x = tmpXY.x;
+        targetObj.page.y = tmpXY.y;
+
+        getClientXY(pointer, tmpXY, interaction);
+        targetObj.client.x = tmpXY.x;
+        targetObj.client.y = tmpXY.y;
+
+        targetObj.timeStamp = new Date().getTime();
+    }
+
+    function setEventDeltas (targetObj, prev, cur) {
+        targetObj.page.x     = cur.page.x      - prev.page.x;
+        targetObj.page.y     = cur.page.y      - prev.page.y;
+        targetObj.client.x   = cur.client.x    - prev.client.x;
+        targetObj.client.y   = cur.client.y    - prev.client.y;
+        targetObj.timeStamp = new Date().getTime() - prev.timeStamp;
+
+        // set pointer velocity
+        var dt = Math.max(targetObj.timeStamp / 1000, 0.001);
+        targetObj.page.speed   = hypot(targetObj.page.x, targetObj.page.y) / dt;
+        targetObj.page.vx      = targetObj.page.x / dt;
+        targetObj.page.vy      = targetObj.page.y / dt;
+
+        targetObj.client.speed = hypot(targetObj.client.x, targetObj.page.y) / dt;
+        targetObj.client.vx    = targetObj.client.x / dt;
+        targetObj.client.vy    = targetObj.client.y / dt;
+    }
+
+    function isNativePointer (pointer) {
+        return (pointer instanceof window.Event
+            || (supportsTouch && window.Touch && pointer instanceof window.Touch));
+    }
+
+    // Get specified X/Y coords for mouse or event.touches[0]
+    function getXY (type, pointer, xy) {
+        xy = xy || {};
+        type = type || 'page';
+
+        xy.x = pointer[type + 'X'];
+        xy.y = pointer[type + 'Y'];
+
+        return xy;
+    }
+
+    function getPageXY (pointer, page) {
+        page = page || {};
+
+        // Opera Mobile handles the viewport and scrolling oddly
+        if (isOperaMobile && isNativePointer(pointer)) {
+            getXY('screen', pointer, page);
+
+            page.x += window.scrollX;
+            page.y += window.scrollY;
+        }
+        else {
+            getXY('page', pointer, page);
+        }
+
+        return page;
+    }
+
+    function getClientXY (pointer, client) {
+        client = client || {};
+
+        if (isOperaMobile && isNativePointer(pointer)) {
+            // Opera Mobile handles the viewport and scrolling oddly
+            getXY('screen', pointer, client);
+        }
+        else {
+          getXY('client', pointer, client);
+        }
+
+        return client;
+    }
+
+    function getScrollXY (win) {
+        win = win || window;
+        return {
+            x: win.scrollX || win.document.documentElement.scrollLeft,
+            y: win.scrollY || win.document.documentElement.scrollTop
+        };
+    }
+
+    function getPointerId (pointer) {
+        return isNumber(pointer.pointerId)? pointer.pointerId : pointer.identifier;
+    }
+
+    function getActualElement (element) {
+        return (element instanceof SVGElementInstance
+            ? element.correspondingUseElement
+            : element);
+    }
+
+    function getWindow (node) {
+        if (isWindow(node)) {
+            return node;
+        }
+
+        var rootNode = (node.ownerDocument || node);
+
+        return rootNode.defaultView || rootNode.parentWindow || window;
+    }
+
+    function getElementClientRect (element) {
+        var clientRect = (element instanceof SVGElement
+                            ? element.getBoundingClientRect()
+                            : element.getClientRects()[0]);
+
+        return clientRect && {
+            left  : clientRect.left,
+            right : clientRect.right,
+            top   : clientRect.top,
+            bottom: clientRect.bottom,
+            width : clientRect.width || clientRect.right - clientRect.left,
+            height: clientRect.height || clientRect.bottom - clientRect.top
+        };
+    }
+
+    function getElementRect (element) {
+        var clientRect = getElementClientRect(element);
+
+        if (!isIOS7 && clientRect) {
+            var scroll = getScrollXY(getWindow(element));
+
+            clientRect.left   += scroll.x;
+            clientRect.right  += scroll.x;
+            clientRect.top    += scroll.y;
+            clientRect.bottom += scroll.y;
+        }
+
+        return clientRect;
+    }
+
+    function getTouchPair (event) {
+        var touches = [];
+
+        // array of touches is supplied
+        if (isArray(event)) {
+            touches[0] = event[0];
+            touches[1] = event[1];
+        }
+        // an event
+        else {
+            if (event.type === 'touchend') {
+                if (event.touches.length === 1) {
+                    touches[0] = event.touches[0];
+                    touches[1] = event.changedTouches[0];
+                }
+                else if (event.touches.length === 0) {
+                    touches[0] = event.changedTouches[0];
+                    touches[1] = event.changedTouches[1];
+                }
+            }
+            else {
+                touches[0] = event.touches[0];
+                touches[1] = event.touches[1];
+            }
+        }
+
+        return touches;
+    }
+
+    function pointerAverage (pointers) {
+        var average = {
+            pageX  : 0,
+            pageY  : 0,
+            clientX: 0,
+            clientY: 0,
+            screenX: 0,
+            screenY: 0
+        };
+        var prop;
+
+        for (var i = 0; i < pointers.length; i++) {
+            for (prop in average) {
+                average[prop] += pointers[i][prop];
+            }
+        }
+        for (prop in average) {
+            average[prop] /= pointers.length;
+        }
+
+        return average;
+    }
+
+    function touchBBox (event) {
+        if (!event.length && !(event.touches && event.touches.length > 1)) {
+            return;
+        }
+
+        var touches = getTouchPair(event),
+            minX = Math.min(touches[0].pageX, touches[1].pageX),
+            minY = Math.min(touches[0].pageY, touches[1].pageY),
+            maxX = Math.max(touches[0].pageX, touches[1].pageX),
+            maxY = Math.max(touches[0].pageY, touches[1].pageY);
+
+        return {
+            x: minX,
+            y: minY,
+            left: minX,
+            top: minY,
+            width: maxX - minX,
+            height: maxY - minY
+        };
+    }
+
+    function touchDistance (event, deltaSource) {
+        deltaSource = deltaSource || defaultOptions.deltaSource;
+
+        var sourceX = deltaSource + 'X',
+            sourceY = deltaSource + 'Y',
+            touches = getTouchPair(event);
+
+
+        var dx = touches[0][sourceX] - touches[1][sourceX],
+            dy = touches[0][sourceY] - touches[1][sourceY];
+
+        return hypot(dx, dy);
+    }
+
+    function touchAngle (event, prevAngle, deltaSource) {
+        deltaSource = deltaSource || defaultOptions.deltaSource;
+
+        var sourceX = deltaSource + 'X',
+            sourceY = deltaSource + 'Y',
+            touches = getTouchPair(event),
+            dx = touches[0][sourceX] - touches[1][sourceX],
+            dy = touches[0][sourceY] - touches[1][sourceY],
+            angle = 180 * Math.atan(dy / dx) / Math.PI;
+
+        if (isNumber(prevAngle)) {
+            var dr = angle - prevAngle,
+                drClamped = dr % 360;
+
+            if (drClamped > 315) {
+                angle -= 360 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped > 135) {
+                angle -= 180 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped < -315) {
+                angle += 360 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped < -135) {
+                angle += 180 + (angle / 360)|0 * 360;
+            }
+        }
+
+        return  angle;
+    }
+
+    function getOriginXY (interactable, element) {
+        var origin = interactable
+                ? interactable.options.origin
+                : defaultOptions.origin;
+
+        if (origin === 'parent') {
+            origin = parentElement(element);
+        }
+        else if (origin === 'self') {
+            origin = interactable.getRect(element);
+        }
+        else if (trySelector(origin)) {
+            origin = closest(element, origin) || { x: 0, y: 0 };
+        }
+
+        if (isFunction(origin)) {
+            origin = origin(interactable && element);
+        }
+
+        if (isElement(origin))  {
+            origin = getElementRect(origin);
+        }
+
+        origin.x = ('x' in origin)? origin.x : origin.left;
+        origin.y = ('y' in origin)? origin.y : origin.top;
+
+        return origin;
+    }
+
+    // http://stackoverflow.com/a/5634528/2280888
+    function _getQBezierValue(t, p1, p2, p3) {
+        var iT = 1 - t;
+        return iT * iT * p1 + 2 * iT * t * p2 + t * t * p3;
+    }
+
+    function getQuadraticCurvePoint(startX, startY, cpX, cpY, endX, endY, position) {
+        return {
+            x:  _getQBezierValue(position, startX, cpX, endX),
+            y:  _getQBezierValue(position, startY, cpY, endY)
+        };
+    }
+
+    // http://gizma.com/easing/
+    function easeOutQuad (t, b, c, d) {
+        t /= d;
+        return -c * t*(t-2) + b;
+    }
+
+    function nodeContains (parent, child) {
+        while (child) {
+            if (child === parent) {
+                return true;
+            }
+
+            child = child.parentNode;
+        }
+
+        return false;
+    }
+
+    function closest (child, selector) {
+        var parent = parentElement(child);
+
+        while (isElement(parent)) {
+            if (matchesSelector(parent, selector)) { return parent; }
+
+            parent = parentElement(parent);
+        }
+
+        return null;
+    }
+
+    function parentElement (node) {
+        var parent = node.parentNode;
+
+        if (isDocFrag(parent)) {
+            // skip past #shado-root fragments
+            while ((parent = parent.host) && isDocFrag(parent)) {}
+
+            return parent;
+        }
+
+        return parent;
+    }
+
+    function inContext (interactable, element) {
+        return interactable._context === element.ownerDocument
+                || nodeContains(interactable._context, element);
+    }
+
+    function testIgnore (interactable, interactableElement, element) {
+        var ignoreFrom = interactable.options.ignoreFrom;
+
+        if (!ignoreFrom || !isElement(element)) { return false; }
+
+        if (isString(ignoreFrom)) {
+            return matchesUpTo(element, ignoreFrom, interactableElement);
+        }
+        else if (isElement(ignoreFrom)) {
+            return nodeContains(ignoreFrom, element);
+        }
+
+        return false;
+    }
+
+    function testAllow (interactable, interactableElement, element) {
+        var allowFrom = interactable.options.allowFrom;
+
+        if (!allowFrom) { return true; }
+
+        if (!isElement(element)) { return false; }
+
+        if (isString(allowFrom)) {
+            return matchesUpTo(element, allowFrom, interactableElement);
+        }
+        else if (isElement(allowFrom)) {
+            return nodeContains(allowFrom, element);
+        }
+
+        return false;
+    }
+
+    function checkAxis (axis, interactable) {
+        if (!interactable) { return false; }
+
+        var thisAxis = interactable.options.drag.axis;
+
+        return (axis === 'xy' || thisAxis === 'xy' || thisAxis === axis);
+    }
+
+    function checkSnap (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return options[action].snap && options[action].snap.enabled;
+    }
+
+    function checkRestrict (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return  options[action].restrict && options[action].restrict.enabled;
+    }
+
+    function checkAutoScroll (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return  options[action].autoScroll && options[action].autoScroll.enabled;
+    }
+
+    function withinInteractionLimit (interactable, element, action) {
+        var options = interactable.options,
+            maxActions = options[action.name].max,
+            maxPerElement = options[action.name].maxPerElement,
+            activeInteractions = 0,
+            targetCount = 0,
+            targetElementCount = 0;
+
+        for (var i = 0, len = interactions.length; i < len; i++) {
+            var interaction = interactions[i],
+                otherAction = interaction.prepared.name,
+                active = interaction.interacting();
+
+            if (!active) { continue; }
+
+            activeInteractions++;
+
+            if (activeInteractions >= maxInteractions) {
+                return false;
+            }
+
+            if (interaction.target !== interactable) { continue; }
+
+            targetCount += (otherAction === action.name)|0;
+
+            if (targetCount >= maxActions) {
+                return false;
+            }
+
+            if (interaction.element === element) {
+                targetElementCount++;
+
+                if (otherAction !== action.name || targetElementCount >= maxPerElement) {
+                    return false;
+                }
+            }
+        }
+
+        return maxInteractions > 0;
+    }
+
+    // Test for the element that's "above" all other qualifiers
+    function indexOfDeepestElement (elements) {
+        var dropzone,
+            deepestZone = elements[0],
+            index = deepestZone? 0: -1,
+            parent,
+            deepestZoneParents = [],
+            dropzoneParents = [],
+            child,
+            i,
+            n;
+
+        for (i = 1; i < elements.length; i++) {
+            dropzone = elements[i];
+
+            // an element might belong to multiple selector dropzones
+            if (!dropzone || dropzone === deepestZone) {
+                continue;
+            }
+
+            if (!deepestZone) {
+                deepestZone = dropzone;
+                index = i;
+                continue;
+            }
+
+            // check if the deepest or current are document.documentElement or document.rootElement
+            // - if the current dropzone is, do nothing and continue
+            if (dropzone.parentNode === dropzone.ownerDocument) {
+                continue;
+            }
+            // - if deepest is, update with the current dropzone and continue to next
+            else if (deepestZone.parentNode === dropzone.ownerDocument) {
+                deepestZone = dropzone;
+                index = i;
+                continue;
+            }
+
+            if (!deepestZoneParents.length) {
+                parent = deepestZone;
+                while (parent.parentNode && parent.parentNode !== parent.ownerDocument) {
+                    deepestZoneParents.unshift(parent);
+                    parent = parent.parentNode;
+                }
+            }
+
+            // if this element is an svg element and the current deepest is
+            // an HTMLElement
+            if (deepestZone instanceof HTMLElement
+                && dropzone instanceof SVGElement
+                && !(dropzone instanceof SVGSVGElement)) {
+
+                if (dropzone === deepestZone.parentNode) {
+                    continue;
+                }
+
+                parent = dropzone.ownerSVGElement;
+            }
+            else {
+                parent = dropzone;
+            }
+
+            dropzoneParents = [];
+
+            while (parent.parentNode !== parent.ownerDocument) {
+                dropzoneParents.unshift(parent);
+                parent = parent.parentNode;
+            }
+
+            n = 0;
+
+            // get (position of last common ancestor) + 1
+            while (dropzoneParents[n] && dropzoneParents[n] === deepestZoneParents[n]) {
+                n++;
+            }
+
+            var parents = [
+                dropzoneParents[n - 1],
+                dropzoneParents[n],
+                deepestZoneParents[n]
+            ];
+
+            child = parents[0].lastChild;
+
+            while (child) {
+                if (child === parents[1]) {
+                    deepestZone = dropzone;
+                    index = i;
+                    deepestZoneParents = [];
+
+                    break;
+                }
+                else if (child === parents[2]) {
+                    break;
+                }
+
+                child = child.previousSibling;
+            }
+        }
+
+        return index;
+    }
+
+    function Interaction () {
+        this.target          = null; // current interactable being interacted with
+        this.element         = null; // the target element of the interactable
+        this.dropTarget      = null; // the dropzone a drag target might be dropped into
+        this.dropElement     = null; // the element at the time of checking
+        this.prevDropTarget  = null; // the dropzone that was recently dragged away from
+        this.prevDropElement = null; // the element at the time of checking
+
+        this.prepared        = {     // action that's ready to be fired on next move event
+            name : null,
+            axis : null,
+            edges: null
+        };
+
+        this.matches         = [];   // all selectors that are matched by target element
+        this.matchElements   = [];   // corresponding elements
+
+        this.inertiaStatus = {
+            active       : false,
+            smoothEnd    : false,
+            ending       : false,
+
+            startEvent: null,
+            upCoords: {},
+
+            xe: 0, ye: 0,
+            sx: 0, sy: 0,
+
+            t0: 0,
+            vx0: 0, vys: 0,
+            duration: 0,
+
+            resumeDx: 0,
+            resumeDy: 0,
+
+            lambda_v0: 0,
+            one_ve_v0: 0,
+            i  : null
+        };
+
+        if (isFunction(Function.prototype.bind)) {
+            this.boundInertiaFrame = this.inertiaFrame.bind(this);
+            this.boundSmoothEndFrame = this.smoothEndFrame.bind(this);
+        }
+        else {
+            var that = this;
+
+            this.boundInertiaFrame = function () { return that.inertiaFrame(); };
+            this.boundSmoothEndFrame = function () { return that.smoothEndFrame(); };
+        }
+
+        this.activeDrops = {
+            dropzones: [],      // the dropzones that are mentioned below
+            elements : [],      // elements of dropzones that accept the target draggable
+            rects    : []       // the rects of the elements mentioned above
+        };
+
+        // keep track of added pointers
+        this.pointers    = [];
+        this.pointerIds  = [];
+        this.downTargets = [];
+        this.downTimes   = [];
+        this.holdTimers  = [];
+
+        // Previous native pointer move event coordinates
+        this.prevCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+        // current native pointer move event coordinates
+        this.curCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+
+        // Starting InteractEvent pointer coordinates
+        this.startCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+
+        // Change in coordinates and time of the pointer
+        this.pointerDelta = {
+            page     : { x: 0, y: 0, vx: 0, vy: 0, speed: 0 },
+            client   : { x: 0, y: 0, vx: 0, vy: 0, speed: 0 },
+            timeStamp: 0
+        };
+
+        this.downEvent   = null;    // pointerdown/mousedown/touchstart event
+        this.downPointer = {};
+
+        this._eventTarget    = null;
+        this._curEventTarget = null;
+
+        this.prevEvent = null;      // previous action event
+        this.tapTime   = 0;         // time of the most recent tap event
+        this.prevTap   = null;
+
+        this.startOffset    = { left: 0, right: 0, top: 0, bottom: 0 };
+        this.restrictOffset = { left: 0, right: 0, top: 0, bottom: 0 };
+        this.snapOffsets    = [];
+
+        this.gesture = {
+            start: { x: 0, y: 0 },
+
+            startDistance: 0,   // distance between two touches of touchStart
+            prevDistance : 0,
+            distance     : 0,
+
+            scale: 1,           // gesture.distance / gesture.startDistance
+
+            startAngle: 0,      // angle of line joining two touches
+            prevAngle : 0       // angle of the previous gesture event
+        };
+
+        this.snapStatus = {
+            x       : 0, y       : 0,
+            dx      : 0, dy      : 0,
+            realX   : 0, realY   : 0,
+            snappedX: 0, snappedY: 0,
+            targets : [],
+            locked  : false,
+            changed : false
+        };
+
+        this.restrictStatus = {
+            dx         : 0, dy         : 0,
+            restrictedX: 0, restrictedY: 0,
+            snap       : null,
+            restricted : false,
+            changed    : false
+        };
+
+        this.restrictStatus.snap = this.snapStatus;
+
+        this.pointerIsDown   = false;
+        this.pointerWasMoved = false;
+        this.gesturing       = false;
+        this.dragging        = false;
+        this.resizing        = false;
+        this.resizeAxes      = 'xy';
+
+        this.mouse = false;
+
+        interactions.push(this);
+    }
+
+    Interaction.prototype = {
+        getPageXY  : function (pointer, xy) { return   getPageXY(pointer, xy, this); },
+        getClientXY: function (pointer, xy) { return getClientXY(pointer, xy, this); },
+        setEventXY : function (target, ptr) { return  setEventXY(target, ptr, this); },
+
+        pointerOver: function (pointer, event, eventTarget) {
+            if (this.prepared.name || !this.mouse) { return; }
+
+            var curMatches = [],
+                curMatchElements = [],
+                prevTargetElement = this.element;
+
+            this.addPointer(pointer);
+
+            if (this.target
+                && (testIgnore(this.target, this.element, eventTarget)
+                    || !testAllow(this.target, this.element, eventTarget))) {
+                // if the eventTarget should be ignored or shouldn't be allowed
+                // clear the previous target
+                this.target = null;
+                this.element = null;
+                this.matches = [];
+                this.matchElements = [];
+            }
+
+            var elementInteractable = interactables.get(eventTarget),
+                elementAction = (elementInteractable
+                                 && !testIgnore(elementInteractable, eventTarget, eventTarget)
+                                 && testAllow(elementInteractable, eventTarget, eventTarget)
+                                 && validateAction(
+                                     elementInteractable.getAction(pointer, event, this, eventTarget),
+                                     elementInteractable));
+
+            if (elementAction && !withinInteractionLimit(elementInteractable, eventTarget, elementAction)) {
+                 elementAction = null;
+            }
+
+            function pushCurMatches (interactable, selector) {
+                if (interactable
+                    && inContext(interactable, eventTarget)
+                    && !testIgnore(interactable, eventTarget, eventTarget)
+                    && testAllow(interactable, eventTarget, eventTarget)
+                    && matchesSelector(eventTarget, selector)) {
+
+                    curMatches.push(interactable);
+                    curMatchElements.push(eventTarget);
+                }
+            }
+
+            if (elementAction) {
+                this.target = elementInteractable;
+                this.element = eventTarget;
+                this.matches = [];
+                this.matchElements = [];
+            }
+            else {
+                interactables.forEachSelector(pushCurMatches);
+
+                if (this.validateSelector(pointer, event, curMatches, curMatchElements)) {
+                    this.matches = curMatches;
+                    this.matchElements = curMatchElements;
+
+                    this.pointerHover(pointer, event, this.matches, this.matchElements);
+                    events.add(eventTarget,
+                                        PointerEvent? pEventTypes.move : 'mousemove',
+                                        listeners.pointerHover);
+                }
+                else if (this.target) {
+                    if (nodeContains(prevTargetElement, eventTarget)) {
+                        this.pointerHover(pointer, event, this.matches, this.matchElements);
+                        events.add(this.element,
+                                            PointerEvent? pEventTypes.move : 'mousemove',
+                                            listeners.pointerHover);
+                    }
+                    else {
+                        this.target = null;
+                        this.element = null;
+                        this.matches = [];
+                        this.matchElements = [];
+                    }
+                }
+            }
+        },
+
+        // Check what action would be performed on pointerMove target if a mouse
+        // button were pressed and change the cursor accordingly
+        pointerHover: function (pointer, event, eventTarget, curEventTarget, matches, matchElements) {
+            var target = this.target;
+
+            if (!this.prepared.name && this.mouse) {
+
+                var action;
+
+                // update pointer coords for defaultActionChecker to use
+                this.setEventXY(this.curCoords, [pointer]);
+
+                if (matches) {
+                    action = this.validateSelector(pointer, event, matches, matchElements);
+                }
+                else if (target) {
+                    action = validateAction(target.getAction(this.pointers[0], event, this, this.element), this.target);
+                }
+
+                if (target && target.options.styleCursor) {
+                    if (action) {
+                        target._doc.documentElement.style.cursor = getActionCursor(action);
+                    }
+                    else {
+                        target._doc.documentElement.style.cursor = '';
+                    }
+                }
+            }
+            else if (this.prepared.name) {
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+        },
+
+        pointerOut: function (pointer, event, eventTarget) {
+            if (this.prepared.name) { return; }
+
+            // Remove temporary event listeners for selector Interactables
+            if (!interactables.get(eventTarget)) {
+                events.remove(eventTarget,
+                                       PointerEvent? pEventTypes.move : 'mousemove',
+                                       listeners.pointerHover);
+            }
+
+            if (this.target && this.target.options.styleCursor && !this.interacting()) {
+                this.target._doc.documentElement.style.cursor = '';
+            }
+        },
+
+        selectorDown: function (pointer, event, eventTarget, curEventTarget) {
+            var that = this,
+                // copy event to be used in timeout for IE8
+                eventCopy = events.useAttachEvent? extend({}, event) : event,
+                element = eventTarget,
+                pointerIndex = this.addPointer(pointer),
+                action;
+
+            this.holdTimers[pointerIndex] = setTimeout(function () {
+                that.pointerHold(events.useAttachEvent? eventCopy : pointer, eventCopy, eventTarget, curEventTarget);
+            }, defaultOptions._holdDuration);
+
+            this.pointerIsDown = true;
+
+            // Check if the down event hits the current inertia target
+            if (this.inertiaStatus.active && this.target.selector) {
+                // climb up the DOM tree from the event target
+                while (isElement(element)) {
+
+                    // if this element is the current inertia target element
+                    if (element === this.element
+                        // and the prospective action is the same as the ongoing one
+                        && validateAction(this.target.getAction(pointer, event, this, this.element), this.target).name === this.prepared.name) {
+
+                        // stop inertia so that the next move will be a normal one
+                        cancelFrame(this.inertiaStatus.i);
+                        this.inertiaStatus.active = false;
+
+                        this.collectEventTargets(pointer, event, eventTarget, 'down');
+                        return;
+                    }
+                    element = parentElement(element);
+                }
+            }
+
+            // do nothing if interacting
+            if (this.interacting()) {
+                this.collectEventTargets(pointer, event, eventTarget, 'down');
+                return;
+            }
+
+            function pushMatches (interactable, selector, context) {
+                var elements = ie8MatchesSelector
+                    ? context.querySelectorAll(selector)
+                    : undefined;
+
+                if (inContext(interactable, element)
+                    && !testIgnore(interactable, element, eventTarget)
+                    && testAllow(interactable, element, eventTarget)
+                    && matchesSelector(element, selector, elements)) {
+
+                    that.matches.push(interactable);
+                    that.matchElements.push(element);
+                }
+            }
+
+            // update pointer coords for defaultActionChecker to use
+            this.setEventXY(this.curCoords, [pointer]);
+            this.downEvent = event;
+
+            while (isElement(element) && !action) {
+                this.matches = [];
+                this.matchElements = [];
+
+                interactables.forEachSelector(pushMatches);
+
+                action = this.validateSelector(pointer, event, this.matches, this.matchElements);
+                element = parentElement(element);
+            }
+
+            if (action) {
+                this.prepared.name  = action.name;
+                this.prepared.axis  = action.axis;
+                this.prepared.edges = action.edges;
+
+                this.collectEventTargets(pointer, event, eventTarget, 'down');
+
+                return this.pointerDown(pointer, event, eventTarget, curEventTarget, action);
+            }
+            else {
+                // do these now since pointerDown isn't being called from here
+                this.downTimes[pointerIndex] = new Date().getTime();
+                this.downTargets[pointerIndex] = eventTarget;
+                pointerExtend(this.downPointer, pointer);
+
+                copyCoords(this.prevCoords, this.curCoords);
+                this.pointerWasMoved = false;
+            }
+
+            this.collectEventTargets(pointer, event, eventTarget, 'down');
+        },
+
+        // Determine action to be performed on next pointerMove and add appropriate
+        // style and event Listeners
+        pointerDown: function (pointer, event, eventTarget, curEventTarget, forceAction) {
+            if (!forceAction && !this.inertiaStatus.active && this.pointerWasMoved && this.prepared.name) {
+                this.checkAndPreventDefault(event, this.target, this.element);
+
+                return;
+            }
+
+            this.pointerIsDown = true;
+            this.downEvent = event;
+
+            var pointerIndex = this.addPointer(pointer),
+                action;
+
+            // If it is the second touch of a multi-touch gesture, keep the
+            // target the same and get a new action if a target was set by the
+            // first touch
+            if (this.pointerIds.length > 1 && this.target._element === this.element) {
+                var newAction = validateAction(forceAction || this.target.getAction(pointer, event, this, this.element), this.target);
+
+                if (withinInteractionLimit(this.target, this.element, newAction)) {
+                    action = newAction;
+                }
+
+                this.prepared.name = null;
+            }
+            // Otherwise, set the target if there is no action prepared
+            else if (!this.prepared.name) {
+                var interactable = interactables.get(curEventTarget);
+
+                if (interactable
+                    && !testIgnore(interactable, curEventTarget, eventTarget)
+                    && testAllow(interactable, curEventTarget, eventTarget)
+                    && (action = validateAction(forceAction || interactable.getAction(pointer, event, this, curEventTarget), interactable, eventTarget))
+                    && withinInteractionLimit(interactable, curEventTarget, action)) {
+                    this.target = interactable;
+                    this.element = curEventTarget;
+                }
+            }
+
+            var target = this.target,
+                options = target && target.options;
+
+            if (target && (forceAction || !this.prepared.name)) {
+                action = action || validateAction(forceAction || target.getAction(pointer, event, this, curEventTarget), target, this.element);
+
+                this.setEventXY(this.startCoords, this.pointers);
+
+                if (!action) { return; }
+
+                if (options.styleCursor) {
+                    target._doc.documentElement.style.cursor = getActionCursor(action);
+                }
+
+                this.resizeAxes = action.name === 'resize'? action.axis : null;
+
+                if (action === 'gesture' && this.pointerIds.length < 2) {
+                    action = null;
+                }
+
+                this.prepared.name  = action.name;
+                this.prepared.axis  = action.axis;
+                this.prepared.edges = action.edges;
+
+                this.snapStatus.snappedX = this.snapStatus.snappedY =
+                    this.restrictStatus.restrictedX = this.restrictStatus.restrictedY = NaN;
+
+                this.downTimes[pointerIndex] = new Date().getTime();
+                this.downTargets[pointerIndex] = eventTarget;
+                pointerExtend(this.downPointer, pointer);
+
+                copyCoords(this.prevCoords, this.startCoords);
+                this.pointerWasMoved = false;
+
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+            // if inertia is active try to resume action
+            else if (this.inertiaStatus.active
+                && curEventTarget === this.element
+                && validateAction(target.getAction(pointer, event, this, this.element), target).name === this.prepared.name) {
+
+                cancelFrame(this.inertiaStatus.i);
+                this.inertiaStatus.active = false;
+
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+        },
+
+        setModifications: function (coords, preEnd) {
+            var target         = this.target,
+                shouldMove     = true,
+                shouldSnap     = checkSnap(target, this.prepared.name)     && (!target.options[this.prepared.name].snap.endOnly     || preEnd),
+                shouldRestrict = checkRestrict(target, this.prepared.name) && (!target.options[this.prepared.name].restrict.endOnly || preEnd);
+
+            if (shouldSnap    ) { this.setSnapping   (coords); } else { this.snapStatus    .locked     = false; }
+            if (shouldRestrict) { this.setRestriction(coords); } else { this.restrictStatus.restricted = false; }
+
+            if (shouldSnap && this.snapStatus.locked && !this.snapStatus.changed) {
+                shouldMove = shouldRestrict && this.restrictStatus.restricted && this.restrictStatus.changed;
+            }
+            else if (shouldRestrict && this.restrictStatus.restricted && !this.restrictStatus.changed) {
+                shouldMove = false;
+            }
+
+            return shouldMove;
+        },
+
+        setStartOffsets: function (action, interactable, element) {
+            var rect = interactable.getRect(element),
+                origin = getOriginXY(interactable, element),
+                snap = interactable.options[this.prepared.name].snap,
+                restrict = interactable.options[this.prepared.name].restrict,
+                width, height;
+
+            if (rect) {
+                this.startOffset.left = this.startCoords.page.x - rect.left;
+                this.startOffset.top  = this.startCoords.page.y - rect.top;
+
+                this.startOffset.right  = rect.right  - this.startCoords.page.x;
+                this.startOffset.bottom = rect.bottom - this.startCoords.page.y;
+
+                if ('width' in rect) { width = rect.width; }
+                else { width = rect.right - rect.left; }
+                if ('height' in rect) { height = rect.height; }
+                else { height = rect.bottom - rect.top; }
+            }
+            else {
+                this.startOffset.left = this.startOffset.top = this.startOffset.right = this.startOffset.bottom = 0;
+            }
+
+            this.snapOffsets.splice(0);
+
+            var snapOffset = snap && snap.offset === 'startCoords'
+                                ? {
+                                    x: this.startCoords.page.x - origin.x,
+                                    y: this.startCoords.page.y - origin.y
+                                }
+                                : snap && snap.offset || { x: 0, y: 0 };
+
+            if (rect && snap && snap.relativePoints && snap.relativePoints.length) {
+                for (var i = 0; i < snap.relativePoints.length; i++) {
+                    this.snapOffsets.push({
+                        x: this.startOffset.left - (width  * snap.relativePoints[i].x) + snapOffset.x,
+                        y: this.startOffset.top  - (height * snap.relativePoints[i].y) + snapOffset.y
+                    });
+                }
+            }
+            else {
+                this.snapOffsets.push(snapOffset);
+            }
+
+            if (rect && restrict.elementRect) {
+                this.restrictOffset.left = this.startOffset.left - (width  * restrict.elementRect.left);
+                this.restrictOffset.top  = this.startOffset.top  - (height * restrict.elementRect.top);
+
+                this.restrictOffset.right  = this.startOffset.right  - (width  * (1 - restrict.elementRect.right));
+                this.restrictOffset.bottom = this.startOffset.bottom - (height * (1 - restrict.elementRect.bottom));
+            }
+            else {
+                this.restrictOffset.left = this.restrictOffset.top = this.restrictOffset.right = this.restrictOffset.bottom = 0;
+            }
+        },
+
+        /*\
+         * Interaction.start
+         [ method ]
+         *
+         * Start an action with the given Interactable and Element as tartgets. The
+         * action must be enabled for the target Interactable and an appropriate number
+         * of pointers must be held down – 1 for drag/resize, 2 for gesture.
+         *
+         * Use it with `interactable.<action>able({ manualStart: false })` to always
+         * [start actions manually](https://github.com/taye/interact.js/issues/114)
+         *
+         - action       (object)  The action to be performed - drag, resize, etc.
+         - interactable (Interactable) The Interactable to target
+         - element      (Element) The DOM Element to target
+         = (object) interact
+         **
+         | interact(target)
+         |   .draggable({
+         |     // disable the default drag start by down->move
+         |     manualStart: true
+         |   })
+         |   // start dragging after the user holds the pointer down
+         |   .on('hold', function (event) {
+         |     var interaction = event.interaction;
+         |
+         |     if (!interaction.interacting()) {
+         |       interaction.start({ name: 'drag' },
+         |                         event.interactable,
+         |                         event.currentTarget);
+         |     }
+         | });
+        \*/
+        start: function (action, interactable, element) {
+            if (this.interacting()
+                || !this.pointerIsDown
+                || this.pointerIds.length < (action.name === 'gesture'? 2 : 1)) {
+                return;
+            }
+
+            // if this interaction had been removed after stopping
+            // add it back
+            if (indexOf(interactions, this) === -1) {
+                interactions.push(this);
+            }
+
+            // set the startCoords if there was no prepared action
+            if (!this.prepared.name) {
+                this.setEventXY(this.startCoords);
+            }
+
+            this.prepared.name  = action.name;
+            this.prepared.axis  = action.axis;
+            this.prepared.edges = action.edges;
+            this.target         = interactable;
+            this.element        = element;
+
+            this.setStartOffsets(action.name, interactable, element);
+            this.setModifications(this.startCoords.page);
+
+            this.prevEvent = this[this.prepared.name + 'Start'](this.downEvent);
+        },
+
+        pointerMove: function (pointer, event, eventTarget, curEventTarget, preEnd) {
+            if (this.inertiaStatus.active) {
+                var pageUp   = this.inertiaStatus.upCoords.page;
+                var clientUp = this.inertiaStatus.upCoords.client;
+
+                var inertiaPosition = {
+                    pageX  : pageUp.x   + this.inertiaStatus.sx,
+                    pageY  : pageUp.y   + this.inertiaStatus.sy,
+                    clientX: clientUp.x + this.inertiaStatus.sx,
+                    clientY: clientUp.y + this.inertiaStatus.sy
+                };
+
+                this.setEventXY(this.curCoords, [inertiaPosition]);
+            }
+            else {
+                this.recordPointer(pointer);
+                this.setEventXY(this.curCoords, this.pointers);
+            }
+
+            var duplicateMove = (this.curCoords.page.x === this.prevCoords.page.x
+                                 && this.curCoords.page.y === this.prevCoords.page.y
+                                 && this.curCoords.client.x === this.prevCoords.client.x
+                                 && this.curCoords.client.y === this.prevCoords.client.y);
+
+            var dx, dy,
+                pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            // register movement greater than pointerMoveTolerance
+            if (this.pointerIsDown && !this.pointerWasMoved) {
+                dx = this.curCoords.client.x - this.startCoords.client.x;
+                dy = this.curCoords.client.y - this.startCoords.client.y;
+
+                this.pointerWasMoved = hypot(dx, dy) > pointerMoveTolerance;
+            }
+
+            if (!duplicateMove && (!this.pointerIsDown || this.pointerWasMoved)) {
+                if (this.pointerIsDown) {
+                    clearTimeout(this.holdTimers[pointerIndex]);
+                }
+
+                this.collectEventTargets(pointer, event, eventTarget, 'move');
+            }
+
+            if (!this.pointerIsDown) { return; }
+
+            if (duplicateMove && this.pointerWasMoved && !preEnd) {
+                this.checkAndPreventDefault(event, this.target, this.element);
+                return;
+            }
+
+            // set pointer coordinate, time changes and speeds
+            setEventDeltas(this.pointerDelta, this.prevCoords, this.curCoords);
+
+            if (!this.prepared.name) { return; }
+
+            if (this.pointerWasMoved
+                // ignore movement while inertia is active
+                && (!this.inertiaStatus.active || (pointer instanceof InteractEvent && /inertiastart/.test(pointer.type)))) {
+
+                // if just starting an action, calculate the pointer speed now
+                if (!this.interacting()) {
+                    setEventDeltas(this.pointerDelta, this.prevCoords, this.curCoords);
+
+                    // check if a drag is in the correct axis
+                    if (this.prepared.name === 'drag') {
+                        var absX = Math.abs(dx),
+                            absY = Math.abs(dy),
+                            targetAxis = this.target.options.drag.axis,
+                            axis = (absX > absY ? 'x' : absX < absY ? 'y' : 'xy');
+
+                        // if the movement isn't in the axis of the interactable
+                        if (axis !== 'xy' && targetAxis !== 'xy' && targetAxis !== axis) {
+                            // cancel the prepared action
+                            this.prepared.name = null;
+
+                            // then try to get a drag from another ineractable
+
+                            var element = eventTarget;
+
+                            // check element interactables
+                            while (isElement(element)) {
+                                var elementInteractable = interactables.get(element);
+
+                                if (elementInteractable
+                                    && elementInteractable !== this.target
+                                    && !elementInteractable.options.drag.manualStart
+                                    && elementInteractable.getAction(this.downPointer, this.downEvent, this, element).name === 'drag'
+                                    && checkAxis(axis, elementInteractable)) {
+
+                                    this.prepared.name = 'drag';
+                                    this.target = elementInteractable;
+                                    this.element = element;
+                                    break;
+                                }
+
+                                element = parentElement(element);
+                            }
+
+                            // if there's no drag from element interactables,
+                            // check the selector interactables
+                            if (!this.prepared.name) {
+                                var thisInteraction = this;
+
+                                var getDraggable = function (interactable, selector, context) {
+                                    var elements = ie8MatchesSelector
+                                        ? context.querySelectorAll(selector)
+                                        : undefined;
+
+                                    if (interactable === thisInteraction.target) { return; }
+
+                                    if (inContext(interactable, eventTarget)
+                                        && !interactable.options.drag.manualStart
+                                        && !testIgnore(interactable, element, eventTarget)
+                                        && testAllow(interactable, element, eventTarget)
+                                        && matchesSelector(element, selector, elements)
+                                        && interactable.getAction(thisInteraction.downPointer, thisInteraction.downEvent, thisInteraction, element).name === 'drag'
+                                        && checkAxis(axis, interactable)
+                                        && withinInteractionLimit(interactable, element, 'drag')) {
+
+                                        return interactable;
+                                    }
+                                };
+
+                                element = eventTarget;
+
+                                while (isElement(element)) {
+                                    var selectorInteractable = interactables.forEachSelector(getDraggable);
+
+                                    if (selectorInteractable) {
+                                        this.prepared.name = 'drag';
+                                        this.target = selectorInteractable;
+                                        this.element = element;
+                                        break;
+                                    }
+
+                                    element = parentElement(element);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var starting = !!this.prepared.name && !this.interacting();
+
+                if (starting
+                    && (this.target.options[this.prepared.name].manualStart
+                        || !withinInteractionLimit(this.target, this.element, this.prepared))) {
+                    this.stop(event);
+                    return;
+                }
+
+                if (this.prepared.name && this.target) {
+                    if (starting) {
+                        this.start(this.prepared, this.target, this.element);
+                    }
+
+                    var shouldMove = this.setModifications(this.curCoords.page, preEnd);
+
+                    // move if snapping or restriction doesn't prevent it
+                    if (shouldMove || starting) {
+                        this.prevEvent = this[this.prepared.name + 'Move'](event);
+                    }
+
+                    this.checkAndPreventDefault(event, this.target, this.element);
+                }
+            }
+
+            copyCoords(this.prevCoords, this.curCoords);
+
+            if (this.dragging || this.resizing) {
+                this.autoScrollMove(pointer);
+            }
+        },
+
+        dragStart: function (event) {
+            var dragEvent = new InteractEvent(this, event, 'drag', 'start', this.element);
+
+            this.dragging = true;
+            this.target.fire(dragEvent);
+
+            // reset active dropzones
+            this.activeDrops.dropzones = [];
+            this.activeDrops.elements  = [];
+            this.activeDrops.rects     = [];
+
+            if (!this.dynamicDrop) {
+                this.setActiveDrops(this.element);
+            }
+
+            var dropEvents = this.getDropEvents(event, dragEvent);
+
+            if (dropEvents.activate) {
+                this.fireActiveDrops(dropEvents.activate);
+            }
+
+            return dragEvent;
+        },
+
+        dragMove: function (event) {
+            var target = this.target,
+                dragEvent  = new InteractEvent(this, event, 'drag', 'move', this.element),
+                draggableElement = this.element,
+                drop = this.getDrop(dragEvent, event, draggableElement);
+
+            this.dropTarget = drop.dropzone;
+            this.dropElement = drop.element;
+
+            var dropEvents = this.getDropEvents(event, dragEvent);
+
+            target.fire(dragEvent);
+
+            if (dropEvents.leave) { this.prevDropTarget.fire(dropEvents.leave); }
+            if (dropEvents.enter) {     this.dropTarget.fire(dropEvents.enter); }
+            if (dropEvents.move ) {     this.dropTarget.fire(dropEvents.move ); }
+
+            this.prevDropTarget  = this.dropTarget;
+            this.prevDropElement = this.dropElement;
+
+            return dragEvent;
+        },
+
+        resizeStart: function (event) {
+            var resizeEvent = new InteractEvent(this, event, 'resize', 'start', this.element);
+
+            if (this.prepared.edges) {
+                var startRect = this.target.getRect(this.element);
+
+                /*
+                 * When using the `resizable.square` or `resizable.preserveAspectRatio` options, resizing from one edge
+                 * will affect another. E.g. with `resizable.square`, resizing to make the right edge larger will make
+                 * the bottom edge larger by the same amount. We call these 'linked' edges. Any linked edges will depend
+                 * on the active edges and the edge being interacted with.
+                 */
+                if (this.target.options.resize.square || this.target.options.resize.preserveAspectRatio) {
+                    var linkedEdges = extend({}, this.prepared.edges);
+
+                    linkedEdges.top    = linkedEdges.top    || (linkedEdges.left   && !linkedEdges.bottom);
+                    linkedEdges.left   = linkedEdges.left   || (linkedEdges.top    && !linkedEdges.right );
+                    linkedEdges.bottom = linkedEdges.bottom || (linkedEdges.right  && !linkedEdges.top   );
+                    linkedEdges.right  = linkedEdges.right  || (linkedEdges.bottom && !linkedEdges.left  );
+
+                    this.prepared._linkedEdges = linkedEdges;
+                }
+                else {
+                    this.prepared._linkedEdges = null;
+                }
+
+                // if using `resizable.preserveAspectRatio` option, record aspect ratio at the start of the resize
+                if (this.target.options.resize.preserveAspectRatio) {
+                    this.resizeStartAspectRatio = startRect.width / startRect.height;
+                }
+
+                this.resizeRects = {
+                    start     : startRect,
+                    current   : extend({}, startRect),
+                    restricted: extend({}, startRect),
+                    previous  : extend({}, startRect),
+                    delta     : {
+                        left: 0, right : 0, width : 0,
+                        top : 0, bottom: 0, height: 0
+                    }
+                };
+
+                resizeEvent.rect = this.resizeRects.restricted;
+                resizeEvent.deltaRect = this.resizeRects.delta;
+            }
+
+            this.target.fire(resizeEvent);
+
+            this.resizing = true;
+
+            return resizeEvent;
+        },
+
+        resizeMove: function (event) {
+            var resizeEvent = new InteractEvent(this, event, 'resize', 'move', this.element);
+
+            var edges = this.prepared.edges,
+                invert = this.target.options.resize.invert,
+                invertible = invert === 'reposition' || invert === 'negate';
+
+            if (edges) {
+                var dx = resizeEvent.dx,
+                    dy = resizeEvent.dy,
+
+                    start      = this.resizeRects.start,
+                    current    = this.resizeRects.current,
+                    restricted = this.resizeRects.restricted,
+                    delta      = this.resizeRects.delta,
+                    previous   = extend(this.resizeRects.previous, restricted),
+
+                    originalEdges = edges;
+
+                // `resize.preserveAspectRatio` takes precedence over `resize.square`
+                if (this.target.options.resize.preserveAspectRatio) {
+                    var resizeStartAspectRatio = this.resizeStartAspectRatio;
+
+                    edges = this.prepared._linkedEdges;
+
+                    if ((originalEdges.left && originalEdges.bottom)
+                        || (originalEdges.right && originalEdges.top)) {
+                        dy = -dx / resizeStartAspectRatio;
+                    }
+                    else if (originalEdges.left || originalEdges.right) { dy = dx / resizeStartAspectRatio; }
+                    else if (originalEdges.top || originalEdges.bottom) { dx = dy * resizeStartAspectRatio; }
+                }
+                else if (this.target.options.resize.square) {
+                    edges = this.prepared._linkedEdges;
+
+                    if ((originalEdges.left && originalEdges.bottom)
+                        || (originalEdges.right && originalEdges.top)) {
+                        dy = -dx;
+                    }
+                    else if (originalEdges.left || originalEdges.right) { dy = dx; }
+                    else if (originalEdges.top || originalEdges.bottom) { dx = dy; }
+                }
+
+                // update the 'current' rect without modifications
+                if (edges.top   ) { current.top    += dy; }
+                if (edges.bottom) { current.bottom += dy; }
+                if (edges.left  ) { current.left   += dx; }
+                if (edges.right ) { current.right  += dx; }
+
+                if (invertible) {
+                    // if invertible, copy the current rect
+                    extend(restricted, current);
+
+                    if (invert === 'reposition') {
+                        // swap edge values if necessary to keep width/height positive
+                        var swap;
+
+                        if (restricted.top > restricted.bottom) {
+                            swap = restricted.top;
+
+                            restricted.top = restricted.bottom;
+                            restricted.bottom = swap;
+                        }
+                        if (restricted.left > restricted.right) {
+                            swap = restricted.left;
+
+                            restricted.left = restricted.right;
+                            restricted.right = swap;
+                        }
+                    }
+                }
+                else {
+                    // if not invertible, restrict to minimum of 0x0 rect
+                    restricted.top    = Math.min(current.top, start.bottom);
+                    restricted.bottom = Math.max(current.bottom, start.top);
+                    restricted.left   = Math.min(current.left, start.right);
+                    restricted.right  = Math.max(current.right, start.left);
+                }
+
+                restricted.width  = restricted.right  - restricted.left;
+                restricted.height = restricted.bottom - restricted.top ;
+
+                for (var edge in restricted) {
+                    delta[edge] = restricted[edge] - previous[edge];
+                }
+
+                resizeEvent.edges = this.prepared.edges;
+                resizeEvent.rect = restricted;
+                resizeEvent.deltaRect = delta;
+            }
+
+            this.target.fire(resizeEvent);
+
+            return resizeEvent;
+        },
+
+        gestureStart: function (event) {
+            var gestureEvent = new InteractEvent(this, event, 'gesture', 'start', this.element);
+
+            gestureEvent.ds = 0;
+
+            this.gesture.startDistance = this.gesture.prevDistance = gestureEvent.distance;
+            this.gesture.startAngle = this.gesture.prevAngle = gestureEvent.angle;
+            this.gesture.scale = 1;
+
+            this.gesturing = true;
+
+            this.target.fire(gestureEvent);
+
+            return gestureEvent;
+        },
+
+        gestureMove: function (event) {
+            if (!this.pointerIds.length) {
+                return this.prevEvent;
+            }
+
+            var gestureEvent;
+
+            gestureEvent = new InteractEvent(this, event, 'gesture', 'move', this.element);
+            gestureEvent.ds = gestureEvent.scale - this.gesture.scale;
+
+            this.target.fire(gestureEvent);
+
+            this.gesture.prevAngle = gestureEvent.angle;
+            this.gesture.prevDistance = gestureEvent.distance;
+
+            if (gestureEvent.scale !== Infinity &&
+                gestureEvent.scale !== null &&
+                gestureEvent.scale !== undefined  &&
+                !isNaN(gestureEvent.scale)) {
+
+                this.gesture.scale = gestureEvent.scale;
+            }
+
+            return gestureEvent;
+        },
+
+        pointerHold: function (pointer, event, eventTarget) {
+            this.collectEventTargets(pointer, event, eventTarget, 'hold');
+        },
+
+        pointerUp: function (pointer, event, eventTarget, curEventTarget) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            clearTimeout(this.holdTimers[pointerIndex]);
+
+            this.collectEventTargets(pointer, event, eventTarget, 'up' );
+            this.collectEventTargets(pointer, event, eventTarget, 'tap');
+
+            this.pointerEnd(pointer, event, eventTarget, curEventTarget);
+
+            this.removePointer(pointer);
+        },
+
+        pointerCancel: function (pointer, event, eventTarget, curEventTarget) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            clearTimeout(this.holdTimers[pointerIndex]);
+
+            this.collectEventTargets(pointer, event, eventTarget, 'cancel');
+            this.pointerEnd(pointer, event, eventTarget, curEventTarget);
+
+            this.removePointer(pointer);
+        },
+
+        // http://www.quirksmode.org/dom/events/click.html
+        // >Events leading to dblclick
+        //
+        // IE8 doesn't fire down event before dblclick.
+        // This workaround tries to fire a tap and doubletap after dblclick
+        ie8Dblclick: function (pointer, event, eventTarget) {
+            if (this.prevTap
+                && event.clientX === this.prevTap.clientX
+                && event.clientY === this.prevTap.clientY
+                && eventTarget   === this.prevTap.target) {
+
+                this.downTargets[0] = eventTarget;
+                this.downTimes[0] = new Date().getTime();
+                this.collectEventTargets(pointer, event, eventTarget, 'tap');
+            }
+        },
+
+        // End interact move events and stop auto-scroll unless inertia is enabled
+        pointerEnd: function (pointer, event, eventTarget, curEventTarget) {
+            var endEvent,
+                target = this.target,
+                options = target && target.options,
+                inertiaOptions = options && this.prepared.name && options[this.prepared.name].inertia,
+                inertiaStatus = this.inertiaStatus;
+
+            if (this.interacting()) {
+
+                if (inertiaStatus.active && !inertiaStatus.ending) { return; }
+
+                var pointerSpeed,
+                    now = new Date().getTime(),
+                    inertiaPossible = false,
+                    inertia = false,
+                    smoothEnd = false,
+                    endSnap = checkSnap(target, this.prepared.name) && options[this.prepared.name].snap.endOnly,
+                    endRestrict = checkRestrict(target, this.prepared.name) && options[this.prepared.name].restrict.endOnly,
+                    dx = 0,
+                    dy = 0,
+                    startEvent;
+
+                if (this.dragging) {
+                    if      (options.drag.axis === 'x' ) { pointerSpeed = Math.abs(this.pointerDelta.client.vx); }
+                    else if (options.drag.axis === 'y' ) { pointerSpeed = Math.abs(this.pointerDelta.client.vy); }
+                    else   /*options.drag.axis === 'xy'*/{ pointerSpeed = this.pointerDelta.client.speed; }
+                }
+                else {
+                    pointerSpeed = this.pointerDelta.client.speed;
+                }
+
+                // check if inertia should be started
+                inertiaPossible = (inertiaOptions && inertiaOptions.enabled
+                                   && this.prepared.name !== 'gesture'
+                                   && event !== inertiaStatus.startEvent);
+
+                inertia = (inertiaPossible
+                           && (now - this.curCoords.timeStamp) < 50
+                           && pointerSpeed > inertiaOptions.minSpeed
+                           && pointerSpeed > inertiaOptions.endSpeed);
+
+                if (inertiaPossible && !inertia && (endSnap || endRestrict)) {
+
+                    var snapRestrict = {};
+
+                    snapRestrict.snap = snapRestrict.restrict = snapRestrict;
+
+                    if (endSnap) {
+                        this.setSnapping(this.curCoords.page, snapRestrict);
+                        if (snapRestrict.locked) {
+                            dx += snapRestrict.dx;
+                            dy += snapRestrict.dy;
+                        }
+                    }
+
+                    if (endRestrict) {
+                        this.setRestriction(this.curCoords.page, snapRestrict);
+                        if (snapRestrict.restricted) {
+                            dx += snapRestrict.dx;
+                            dy += snapRestrict.dy;
+                        }
+                    }
+
+                    if (dx || dy) {
+                        smoothEnd = true;
+                    }
+                }
+
+                if (inertia || smoothEnd) {
+                    copyCoords(inertiaStatus.upCoords, this.curCoords);
+
+                    this.pointers[0] = inertiaStatus.startEvent = startEvent =
+                        new InteractEvent(this, event, this.prepared.name, 'inertiastart', this.element);
+
+                    inertiaStatus.t0 = now;
+
+                    target.fire(inertiaStatus.startEvent);
+
+                    if (inertia) {
+                        inertiaStatus.vx0 = this.pointerDelta.client.vx;
+                        inertiaStatus.vy0 = this.pointerDelta.client.vy;
+                        inertiaStatus.v0 = pointerSpeed;
+
+                        this.calcInertia(inertiaStatus);
+
+                        var page = extend({}, this.curCoords.page),
+                            origin = getOriginXY(target, this.element),
+                            statusObject;
+
+                        page.x = page.x + inertiaStatus.xe - origin.x;
+                        page.y = page.y + inertiaStatus.ye - origin.y;
+
+                        statusObject = {
+                            useStatusXY: true,
+                            x: page.x,
+                            y: page.y,
+                            dx: 0,
+                            dy: 0,
+                            snap: null
+                        };
+
+                        statusObject.snap = statusObject;
+
+                        dx = dy = 0;
+
+                        if (endSnap) {
+                            var snap = this.setSnapping(this.curCoords.page, statusObject);
+
+                            if (snap.locked) {
+                                dx += snap.dx;
+                                dy += snap.dy;
+                            }
+                        }
+
+                        if (endRestrict) {
+                            var restrict = this.setRestriction(this.curCoords.page, statusObject);
+
+                            if (restrict.restricted) {
+                                dx += restrict.dx;
+                                dy += restrict.dy;
+                            }
+                        }
+
+                        inertiaStatus.modifiedXe += dx;
+                        inertiaStatus.modifiedYe += dy;
+
+                        inertiaStatus.i = reqFrame(this.boundInertiaFrame);
+                    }
+                    else {
+                        inertiaStatus.smoothEnd = true;
+                        inertiaStatus.xe = dx;
+                        inertiaStatus.ye = dy;
+
+                        inertiaStatus.sx = inertiaStatus.sy = 0;
+
+                        inertiaStatus.i = reqFrame(this.boundSmoothEndFrame);
+                    }
+
+                    inertiaStatus.active = true;
+                    return;
+                }
+
+                if (endSnap || endRestrict) {
+                    // fire a move event at the snapped coordinates
+                    this.pointerMove(pointer, event, eventTarget, curEventTarget, true);
+                }
+            }
+
+            if (this.dragging) {
+                endEvent = new InteractEvent(this, event, 'drag', 'end', this.element);
+
+                var draggableElement = this.element,
+                    drop = this.getDrop(endEvent, event, draggableElement);
+
+                this.dropTarget = drop.dropzone;
+                this.dropElement = drop.element;
+
+                var dropEvents = this.getDropEvents(event, endEvent);
+
+                if (dropEvents.leave) { this.prevDropTarget.fire(dropEvents.leave); }
+                if (dropEvents.enter) {     this.dropTarget.fire(dropEvents.enter); }
+                if (dropEvents.drop ) {     this.dropTarget.fire(dropEvents.drop ); }
+                if (dropEvents.deactivate) {
+                    this.fireActiveDrops(dropEvents.deactivate);
+                }
+
+                target.fire(endEvent);
+            }
+            else if (this.resizing) {
+                endEvent = new InteractEvent(this, event, 'resize', 'end', this.element);
+                target.fire(endEvent);
+            }
+            else if (this.gesturing) {
+                endEvent = new InteractEvent(this, event, 'gesture', 'end', this.element);
+                target.fire(endEvent);
+            }
+
+            this.stop(event);
+        },
+
+        collectDrops: function (element) {
+            var drops = [],
+                elements = [],
+                i;
+
+            element = element || this.element;
+
+            // collect all dropzones and their elements which qualify for a drop
+            for (i = 0; i < interactables.length; i++) {
+                if (!interactables[i].options.drop.enabled) { continue; }
+
+                var current = interactables[i],
+                    accept = current.options.drop.accept;
+
+                // test the draggable element against the dropzone's accept setting
+                if ((isElement(accept) && accept !== element)
+                    || (isString(accept)
+                        && !matchesSelector(element, accept))) {
+
+                    continue;
+                }
+
+                // query for new elements if necessary
+                var dropElements = current.selector? current._context.querySelectorAll(current.selector) : [current._element];
+
+                for (var j = 0, len = dropElements.length; j < len; j++) {
+                    var currentElement = dropElements[j];
+
+                    if (currentElement === element) {
+                        continue;
+                    }
+
+                    drops.push(current);
+                    elements.push(currentElement);
+                }
+            }
+
+            return {
+                dropzones: drops,
+                elements: elements
+            };
+        },
+
+        fireActiveDrops: function (event) {
+            var i,
+                current,
+                currentElement,
+                prevElement;
+
+            // loop through all active dropzones and trigger event
+            for (i = 0; i < this.activeDrops.dropzones.length; i++) {
+                current = this.activeDrops.dropzones[i];
+                currentElement = this.activeDrops.elements [i];
+
+                // prevent trigger of duplicate events on same element
+                if (currentElement !== prevElement) {
+                    // set current element as event target
+                    event.target = currentElement;
+                    current.fire(event);
+                }
+                prevElement = currentElement;
+            }
+        },
+
+        // Collect a new set of possible drops and save them in activeDrops.
+        // setActiveDrops should always be called when a drag has just started or a
+        // drag event happens while dynamicDrop is true
+        setActiveDrops: function (dragElement) {
+            // get dropzones and their elements that could receive the draggable
+            var possibleDrops = this.collectDrops(dragElement, true);
+
+            this.activeDrops.dropzones = possibleDrops.dropzones;
+            this.activeDrops.elements  = possibleDrops.elements;
+            this.activeDrops.rects     = [];
+
+            for (var i = 0; i < this.activeDrops.dropzones.length; i++) {
+                this.activeDrops.rects[i] = this.activeDrops.dropzones[i].getRect(this.activeDrops.elements[i]);
+            }
+        },
+
+        getDrop: function (dragEvent, event, dragElement) {
+            var validDrops = [];
+
+            if (dynamicDrop) {
+                this.setActiveDrops(dragElement);
+            }
+
+            // collect all dropzones and their elements which qualify for a drop
+            for (var j = 0; j < this.activeDrops.dropzones.length; j++) {
+                var current        = this.activeDrops.dropzones[j],
+                    currentElement = this.activeDrops.elements [j],
+                    rect           = this.activeDrops.rects    [j];
+
+                validDrops.push(current.dropCheck(dragEvent, event, this.target, dragElement, currentElement, rect)
+                                ? currentElement
+                                : null);
+            }
+
+            // get the most appropriate dropzone based on DOM depth and order
+            var dropIndex = indexOfDeepestElement(validDrops),
+                dropzone  = this.activeDrops.dropzones[dropIndex] || null,
+                element   = this.activeDrops.elements [dropIndex] || null;
+
+            return {
+                dropzone: dropzone,
+                element: element
+            };
+        },
+
+        getDropEvents: function (pointerEvent, dragEvent) {
+            var dropEvents = {
+                enter     : null,
+                leave     : null,
+                activate  : null,
+                deactivate: null,
+                move      : null,
+                drop      : null
+            };
+
+            if (this.dropElement !== this.prevDropElement) {
+                // if there was a prevDropTarget, create a dragleave event
+                if (this.prevDropTarget) {
+                    dropEvents.leave = {
+                        target       : this.prevDropElement,
+                        dropzone     : this.prevDropTarget,
+                        relatedTarget: dragEvent.target,
+                        draggable    : dragEvent.interactable,
+                        dragEvent    : dragEvent,
+                        interaction  : this,
+                        timeStamp    : dragEvent.timeStamp,
+                        type         : 'dragleave'
+                    };
+
+                    dragEvent.dragLeave = this.prevDropElement;
+                    dragEvent.prevDropzone = this.prevDropTarget;
+                }
+                // if the dropTarget is not null, create a dragenter event
+                if (this.dropTarget) {
+                    dropEvents.enter = {
+                        target       : this.dropElement,
+                        dropzone     : this.dropTarget,
+                        relatedTarget: dragEvent.target,
+                        draggable    : dragEvent.interactable,
+                        dragEvent    : dragEvent,
+                        interaction  : this,
+                        timeStamp    : dragEvent.timeStamp,
+                        type         : 'dragenter'
+                    };
+
+                    dragEvent.dragEnter = this.dropElement;
+                    dragEvent.dropzone = this.dropTarget;
+                }
+            }
+
+            if (dragEvent.type === 'dragend' && this.dropTarget) {
+                dropEvents.drop = {
+                    target       : this.dropElement,
+                    dropzone     : this.dropTarget,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'drop'
+                };
+
+                dragEvent.dropzone = this.dropTarget;
+            }
+            if (dragEvent.type === 'dragstart') {
+                dropEvents.activate = {
+                    target       : null,
+                    dropzone     : null,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropactivate'
+                };
+            }
+            if (dragEvent.type === 'dragend') {
+                dropEvents.deactivate = {
+                    target       : null,
+                    dropzone     : null,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropdeactivate'
+                };
+            }
+            if (dragEvent.type === 'dragmove' && this.dropTarget) {
+                dropEvents.move = {
+                    target       : this.dropElement,
+                    dropzone     : this.dropTarget,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    dragmove     : dragEvent,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropmove'
+                };
+                dragEvent.dropzone = this.dropTarget;
+            }
+
+            return dropEvents;
+        },
+
+        currentAction: function () {
+            return (this.dragging && 'drag') || (this.resizing && 'resize') || (this.gesturing && 'gesture') || null;
+        },
+
+        interacting: function () {
+            return this.dragging || this.resizing || this.gesturing;
+        },
+
+        clearTargets: function () {
+            this.target = this.element = null;
+
+            this.dropTarget = this.dropElement = this.prevDropTarget = this.prevDropElement = null;
+        },
+
+        stop: function (event) {
+            if (this.interacting()) {
+                autoScroll.stop();
+                this.matches = [];
+                this.matchElements = [];
+
+                var target = this.target;
+
+                if (target.options.styleCursor) {
+                    target._doc.documentElement.style.cursor = '';
+                }
+
+                // prevent Default only if were previously interacting
+                if (event && isFunction(event.preventDefault)) {
+                    this.checkAndPreventDefault(event, target, this.element);
+                }
+
+                if (this.dragging) {
+                    this.activeDrops.dropzones = this.activeDrops.elements = this.activeDrops.rects = null;
+                }
+            }
+
+            this.clearTargets();
+
+            this.pointerIsDown = this.snapStatus.locked = this.dragging = this.resizing = this.gesturing = false;
+            this.prepared.name = this.prevEvent = null;
+            this.inertiaStatus.resumeDx = this.inertiaStatus.resumeDy = 0;
+
+            // remove pointers if their ID isn't in this.pointerIds
+            for (var i = 0; i < this.pointers.length; i++) {
+                if (indexOf(this.pointerIds, getPointerId(this.pointers[i])) === -1) {
+                    this.pointers.splice(i, 1);
+                }
+            }
+        },
+
+        inertiaFrame: function () {
+            var inertiaStatus = this.inertiaStatus,
+                options = this.target.options[this.prepared.name].inertia,
+                lambda = options.resistance,
+                t = new Date().getTime() / 1000 - inertiaStatus.t0;
+
+            if (t < inertiaStatus.te) {
+
+                var progress =  1 - (Math.exp(-lambda * t) - inertiaStatus.lambda_v0) / inertiaStatus.one_ve_v0;
+
+                if (inertiaStatus.modifiedXe === inertiaStatus.xe && inertiaStatus.modifiedYe === inertiaStatus.ye) {
+                    inertiaStatus.sx = inertiaStatus.xe * progress;
+                    inertiaStatus.sy = inertiaStatus.ye * progress;
+                }
+                else {
+                    var quadPoint = getQuadraticCurvePoint(
+                            0, 0,
+                            inertiaStatus.xe, inertiaStatus.ye,
+                            inertiaStatus.modifiedXe, inertiaStatus.modifiedYe,
+                            progress);
+
+                    inertiaStatus.sx = quadPoint.x;
+                    inertiaStatus.sy = quadPoint.y;
+                }
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.i = reqFrame(this.boundInertiaFrame);
+            }
+            else {
+                inertiaStatus.ending = true;
+
+                inertiaStatus.sx = inertiaStatus.modifiedXe;
+                inertiaStatus.sy = inertiaStatus.modifiedYe;
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+                this.pointerEnd(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.active = inertiaStatus.ending = false;
+            }
+        },
+
+        smoothEndFrame: function () {
+            var inertiaStatus = this.inertiaStatus,
+                t = new Date().getTime() - inertiaStatus.t0,
+                duration = this.target.options[this.prepared.name].inertia.smoothEndDuration;
+
+            if (t < duration) {
+                inertiaStatus.sx = easeOutQuad(t, 0, inertiaStatus.xe, duration);
+                inertiaStatus.sy = easeOutQuad(t, 0, inertiaStatus.ye, duration);
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.i = reqFrame(this.boundSmoothEndFrame);
+            }
+            else {
+                inertiaStatus.ending = true;
+
+                inertiaStatus.sx = inertiaStatus.xe;
+                inertiaStatus.sy = inertiaStatus.ye;
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+                this.pointerEnd(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.smoothEnd =
+                  inertiaStatus.active = inertiaStatus.ending = false;
+            }
+        },
+
+        addPointer: function (pointer) {
+            var id = getPointerId(pointer),
+                index = this.mouse? 0 : indexOf(this.pointerIds, id);
+
+            if (index === -1) {
+                index = this.pointerIds.length;
+            }
+
+            this.pointerIds[index] = id;
+            this.pointers[index] = pointer;
+
+            return index;
+        },
+
+        removePointer: function (pointer) {
+            var id = getPointerId(pointer),
+                index = this.mouse? 0 : indexOf(this.pointerIds, id);
+
+            if (index === -1) { return; }
+
+            this.pointers   .splice(index, 1);
+            this.pointerIds .splice(index, 1);
+            this.downTargets.splice(index, 1);
+            this.downTimes  .splice(index, 1);
+            this.holdTimers .splice(index, 1);
+        },
+
+        recordPointer: function (pointer) {
+            var index = this.mouse? 0: indexOf(this.pointerIds, getPointerId(pointer));
+
+            if (index === -1) { return; }
+
+            this.pointers[index] = pointer;
+        },
+
+        collectEventTargets: function (pointer, event, eventTarget, eventType) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            // do not fire a tap event if the pointer was moved before being lifted
+            if (eventType === 'tap' && (this.pointerWasMoved
+                // or if the pointerup target is different to the pointerdown target
+                || !(this.downTargets[pointerIndex] && this.downTargets[pointerIndex] === eventTarget))) {
+                return;
+            }
+
+            var targets = [],
+                elements = [],
+                element = eventTarget;
+
+            function collectSelectors (interactable, selector, context) {
+                var els = ie8MatchesSelector
+                        ? context.querySelectorAll(selector)
+                        : undefined;
+
+                if (interactable._iEvents[eventType]
+                    && isElement(element)
+                    && inContext(interactable, element)
+                    && !testIgnore(interactable, element, eventTarget)
+                    && testAllow(interactable, element, eventTarget)
+                    && matchesSelector(element, selector, els)) {
+
+                    targets.push(interactable);
+                    elements.push(element);
+                }
+            }
+
+            while (element) {
+                if (interact.isSet(element) && interact(element)._iEvents[eventType]) {
+                    targets.push(interact(element));
+                    elements.push(element);
+                }
+
+                interactables.forEachSelector(collectSelectors);
+
+                element = parentElement(element);
+            }
+
+            // create the tap event even if there are no listeners so that
+            // doubletap can still be created and fired
+            if (targets.length || eventType === 'tap') {
+                this.firePointers(pointer, event, eventTarget, targets, elements, eventType);
+            }
+        },
+
+        firePointers: function (pointer, event, eventTarget, targets, elements, eventType) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer)),
+                pointerEvent = {},
+                i,
+                // for tap events
+                interval, createNewDoubleTap;
+
+            // if it's a doubletap then the event properties would have been
+            // copied from the tap event and provided as the pointer argument
+            if (eventType === 'doubletap') {
+                pointerEvent = pointer;
+            }
+            else {
+                pointerExtend(pointerEvent, event);
+                if (event !== pointer) {
+                    pointerExtend(pointerEvent, pointer);
+                }
+
+                pointerEvent.preventDefault           = preventOriginalDefault;
+                pointerEvent.stopPropagation          = InteractEvent.prototype.stopPropagation;
+                pointerEvent.stopImmediatePropagation = InteractEvent.prototype.stopImmediatePropagation;
+                pointerEvent.interaction              = this;
+
+                pointerEvent.timeStamp       = new Date().getTime();
+                pointerEvent.originalEvent   = event;
+                pointerEvent.originalPointer = pointer;
+                pointerEvent.type            = eventType;
+                pointerEvent.pointerId       = getPointerId(pointer);
+                pointerEvent.pointerType     = this.mouse? 'mouse' : !supportsPointerEvent? 'touch'
+                                                    : isString(pointer.pointerType)
+                                                        ? pointer.pointerType
+                                                        : [,,'touch', 'pen', 'mouse'][pointer.pointerType];
+            }
+
+            if (eventType === 'tap') {
+                pointerEvent.dt = pointerEvent.timeStamp - this.downTimes[pointerIndex];
+
+                interval = pointerEvent.timeStamp - this.tapTime;
+                createNewDoubleTap = !!(this.prevTap && this.prevTap.type !== 'doubletap'
+                       && this.prevTap.target === pointerEvent.target
+                       && interval < 500);
+
+                pointerEvent.double = createNewDoubleTap;
+
+                this.tapTime = pointerEvent.timeStamp;
+            }
+
+            for (i = 0; i < targets.length; i++) {
+                pointerEvent.currentTarget = elements[i];
+                pointerEvent.interactable = targets[i];
+                targets[i].fire(pointerEvent);
+
+                if (pointerEvent.immediatePropagationStopped
+                    ||(pointerEvent.propagationStopped && elements[i + 1] !== pointerEvent.currentTarget)) {
+                    break;
+                }
+            }
+
+            if (createNewDoubleTap) {
+                var doubleTap = {};
+
+                extend(doubleTap, pointerEvent);
+
+                doubleTap.dt   = interval;
+                doubleTap.type = 'doubletap';
+
+                this.collectEventTargets(doubleTap, event, eventTarget, 'doubletap');
+
+                this.prevTap = doubleTap;
+            }
+            else if (eventType === 'tap') {
+                this.prevTap = pointerEvent;
+            }
+        },
+
+        validateSelector: function (pointer, event, matches, matchElements) {
+            for (var i = 0, len = matches.length; i < len; i++) {
+                var match = matches[i],
+                    matchElement = matchElements[i],
+                    action = validateAction(match.getAction(pointer, event, this, matchElement), match);
+
+                if (action && withinInteractionLimit(match, matchElement, action)) {
+                    this.target = match;
+                    this.element = matchElement;
+
+                    return action;
+                }
+            }
+        },
+
+        setSnapping: function (pageCoords, status) {
+            var snap = this.target.options[this.prepared.name].snap,
+                targets = [],
+                target,
+                page,
+                i;
+
+            status = status || this.snapStatus;
+
+            if (status.useStatusXY) {
+                page = { x: status.x, y: status.y };
+            }
+            else {
+                var origin = getOriginXY(this.target, this.element);
+
+                page = extend({}, pageCoords);
+
+                page.x -= origin.x;
+                page.y -= origin.y;
+            }
+
+            status.realX = page.x;
+            status.realY = page.y;
+
+            page.x = page.x - this.inertiaStatus.resumeDx;
+            page.y = page.y - this.inertiaStatus.resumeDy;
+
+            var len = snap.targets? snap.targets.length : 0;
+
+            for (var relIndex = 0; relIndex < this.snapOffsets.length; relIndex++) {
+                var relative = {
+                    x: page.x - this.snapOffsets[relIndex].x,
+                    y: page.y - this.snapOffsets[relIndex].y
+                };
+
+                for (i = 0; i < len; i++) {
+                    if (isFunction(snap.targets[i])) {
+                        target = snap.targets[i](relative.x, relative.y, this);
+                    }
+                    else {
+                        target = snap.targets[i];
+                    }
+
+                    if (!target) { continue; }
+
+                    targets.push({
+                        x: isNumber(target.x) ? (target.x + this.snapOffsets[relIndex].x) : relative.x,
+                        y: isNumber(target.y) ? (target.y + this.snapOffsets[relIndex].y) : relative.y,
+
+                        range: isNumber(target.range)? target.range: snap.range
+                    });
+                }
+            }
+
+            var closest = {
+                    target: null,
+                    inRange: false,
+                    distance: 0,
+                    range: 0,
+                    dx: 0,
+                    dy: 0
+                };
+
+            for (i = 0, len = targets.length; i < len; i++) {
+                target = targets[i];
+
+                var range = target.range,
+                    dx = target.x - page.x,
+                    dy = target.y - page.y,
+                    distance = hypot(dx, dy),
+                    inRange = distance <= range;
+
+                // Infinite targets count as being out of range
+                // compared to non infinite ones that are in range
+                if (range === Infinity && closest.inRange && closest.range !== Infinity) {
+                    inRange = false;
+                }
+
+                if (!closest.target || (inRange
+                    // is the closest target in range?
+                    ? (closest.inRange && range !== Infinity
+                        // the pointer is relatively deeper in this target
+                        ? distance / range < closest.distance / closest.range
+                        // this target has Infinite range and the closest doesn't
+                        : (range === Infinity && closest.range !== Infinity)
+                            // OR this target is closer that the previous closest
+                            || distance < closest.distance)
+                    // The other is not in range and the pointer is closer to this target
+                    : (!closest.inRange && distance < closest.distance))) {
+
+                    if (range === Infinity) {
+                        inRange = true;
+                    }
+
+                    closest.target = target;
+                    closest.distance = distance;
+                    closest.range = range;
+                    closest.inRange = inRange;
+                    closest.dx = dx;
+                    closest.dy = dy;
+
+                    status.range = range;
+                }
+            }
+
+            var snapChanged;
+
+            if (closest.target) {
+                snapChanged = (status.snappedX !== closest.target.x || status.snappedY !== closest.target.y);
+
+                status.snappedX = closest.target.x;
+                status.snappedY = closest.target.y;
+            }
+            else {
+                snapChanged = true;
+
+                status.snappedX = NaN;
+                status.snappedY = NaN;
+            }
+
+            status.dx = closest.dx;
+            status.dy = closest.dy;
+
+            status.changed = (snapChanged || (closest.inRange && !status.locked));
+            status.locked = closest.inRange;
+
+            return status;
+        },
+
+        setRestriction: function (pageCoords, status) {
+            var target = this.target,
+                restrict = target && target.options[this.prepared.name].restrict,
+                restriction = restrict && restrict.restriction,
+                page;
+
+            if (!restriction) {
+                return status;
+            }
+
+            status = status || this.restrictStatus;
+
+            page = status.useStatusXY
+                    ? page = { x: status.x, y: status.y }
+                    : page = extend({}, pageCoords);
+
+            if (status.snap && status.snap.locked) {
+                page.x += status.snap.dx || 0;
+                page.y += status.snap.dy || 0;
+            }
+
+            page.x -= this.inertiaStatus.resumeDx;
+            page.y -= this.inertiaStatus.resumeDy;
+
+            status.dx = 0;
+            status.dy = 0;
+            status.restricted = false;
+
+            var rect, restrictedX, restrictedY;
+
+            if (isString(restriction)) {
+                if (restriction === 'parent') {
+                    restriction = parentElement(this.element);
+                }
+                else if (restriction === 'self') {
+                    restriction = target.getRect(this.element);
+                }
+                else {
+                    restriction = closest(this.element, restriction);
+                }
+
+                if (!restriction) { return status; }
+            }
+
+            if (isFunction(restriction)) {
+                restriction = restriction(page.x, page.y, this.element);
+            }
+
+            if (isElement(restriction)) {
+                restriction = getElementRect(restriction);
+            }
+
+            rect = restriction;
+
+            if (!restriction) {
+                restrictedX = page.x;
+                restrictedY = page.y;
+            }
+            // object is assumed to have
+            // x, y, width, height or
+            // left, top, right, bottom
+            else if ('x' in restriction && 'y' in restriction) {
+                restrictedX = Math.max(Math.min(rect.x + rect.width  - this.restrictOffset.right , page.x), rect.x + this.restrictOffset.left);
+                restrictedY = Math.max(Math.min(rect.y + rect.height - this.restrictOffset.bottom, page.y), rect.y + this.restrictOffset.top );
+            }
+            else {
+                restrictedX = Math.max(Math.min(rect.right  - this.restrictOffset.right , page.x), rect.left + this.restrictOffset.left);
+                restrictedY = Math.max(Math.min(rect.bottom - this.restrictOffset.bottom, page.y), rect.top  + this.restrictOffset.top );
+            }
+
+            status.dx = restrictedX - page.x;
+            status.dy = restrictedY - page.y;
+
+            status.changed = status.restrictedX !== restrictedX || status.restrictedY !== restrictedY;
+            status.restricted = !!(status.dx || status.dy);
+
+            status.restrictedX = restrictedX;
+            status.restrictedY = restrictedY;
+
+            return status;
+        },
+
+        checkAndPreventDefault: function (event, interactable, element) {
+            if (!(interactable = interactable || this.target)) { return; }
+
+            var options = interactable.options,
+                prevent = options.preventDefault;
+
+            if (prevent === 'auto' && element && !/^(input|select|textarea)$/i.test(event.target.nodeName)) {
+                // do not preventDefault on pointerdown if the prepared action is a drag
+                // and dragging can only start from a certain direction - this allows
+                // a touch to pan the viewport if a drag isn't in the right direction
+                if (/down|start/i.test(event.type)
+                    && this.prepared.name === 'drag' && options.drag.axis !== 'xy') {
+
+                    return;
+                }
+
+                // with manualStart, only preventDefault while interacting
+                if (options[this.prepared.name] && options[this.prepared.name].manualStart
+                    && !this.interacting()) {
+                    return;
+                }
+
+                event.preventDefault();
+                return;
+            }
+
+            if (prevent === 'always') {
+                event.preventDefault();
+                return;
+            }
+        },
+
+        calcInertia: function (status) {
+            var inertiaOptions = this.target.options[this.prepared.name].inertia,
+                lambda = inertiaOptions.resistance,
+                inertiaDur = -Math.log(inertiaOptions.endSpeed / status.v0) / lambda;
+
+            status.x0 = this.prevEvent.pageX;
+            status.y0 = this.prevEvent.pageY;
+            status.t0 = status.startEvent.timeStamp / 1000;
+            status.sx = status.sy = 0;
+
+            status.modifiedXe = status.xe = (status.vx0 - inertiaDur) / lambda;
+            status.modifiedYe = status.ye = (status.vy0 - inertiaDur) / lambda;
+            status.te = inertiaDur;
+
+            status.lambda_v0 = lambda / status.v0;
+            status.one_ve_v0 = 1 - inertiaOptions.endSpeed / status.v0;
+        },
+
+        autoScrollMove: function (pointer) {
+            if (!(this.interacting()
+                && checkAutoScroll(this.target, this.prepared.name))) {
+                return;
+            }
+
+            if (this.inertiaStatus.active) {
+                autoScroll.x = autoScroll.y = 0;
+                return;
+            }
+
+            var top,
+                right,
+                bottom,
+                left,
+                options = this.target.options[this.prepared.name].autoScroll,
+                container = options.container || getWindow(this.element);
+
+            if (isWindow(container)) {
+                left   = pointer.clientX < autoScroll.margin;
+                top    = pointer.clientY < autoScroll.margin;
+                right  = pointer.clientX > container.innerWidth  - autoScroll.margin;
+                bottom = pointer.clientY > container.innerHeight - autoScroll.margin;
+            }
+            else {
+                var rect = getElementClientRect(container);
+
+                left   = pointer.clientX < rect.left   + autoScroll.margin;
+                top    = pointer.clientY < rect.top    + autoScroll.margin;
+                right  = pointer.clientX > rect.right  - autoScroll.margin;
+                bottom = pointer.clientY > rect.bottom - autoScroll.margin;
+            }
+
+            autoScroll.x = (right ? 1: left? -1: 0);
+            autoScroll.y = (bottom? 1:  top? -1: 0);
+
+            if (!autoScroll.isScrolling) {
+                // set the autoScroll properties to those of the target
+                autoScroll.margin = options.margin;
+                autoScroll.speed  = options.speed;
+
+                autoScroll.start(this);
+            }
+        },
+
+        _updateEventTargets: function (target, currentTarget) {
+            this._eventTarget    = target;
+            this._curEventTarget = currentTarget;
+        }
+
+    };
+
+    function getInteractionFromPointer (pointer, eventType, eventTarget) {
+        var i = 0, len = interactions.length,
+            mouseEvent = (/mouse/i.test(pointer.pointerType || eventType)
+                          // MSPointerEvent.MSPOINTER_TYPE_MOUSE
+                          || pointer.pointerType === 4),
+            interaction;
+
+        var id = getPointerId(pointer);
+
+        // try to resume inertia with a new pointer
+        if (/down|start/i.test(eventType)) {
+            for (i = 0; i < len; i++) {
+                interaction = interactions[i];
+
+                var element = eventTarget;
+
+                if (interaction.inertiaStatus.active && interaction.target.options[interaction.prepared.name].inertia.allowResume
+                    && (interaction.mouse === mouseEvent)) {
+                    while (element) {
+                        // if the element is the interaction element
+                        if (element === interaction.element) {
+                            return interaction;
+                        }
+                        element = parentElement(element);
+                    }
+                }
+            }
+        }
+
+        // if it's a mouse interaction
+        if (mouseEvent || !(supportsTouch || supportsPointerEvent)) {
+
+            // find a mouse interaction that's not in inertia phase
+            for (i = 0; i < len; i++) {
+                if (interactions[i].mouse && !interactions[i].inertiaStatus.active) {
+                    return interactions[i];
+                }
+            }
+
+            // find any interaction specifically for mouse.
+            // if the eventType is a mousedown, and inertia is active
+            // ignore the interaction
+            for (i = 0; i < len; i++) {
+                if (interactions[i].mouse && !(/down/.test(eventType) && interactions[i].inertiaStatus.active)) {
+                    return interaction;
+                }
+            }
+
+            // create a new interaction for mouse
+            interaction = new Interaction();
+            interaction.mouse = true;
+
+            return interaction;
+        }
+
+        // get interaction that has this pointer
+        for (i = 0; i < len; i++) {
+            if (contains(interactions[i].pointerIds, id)) {
+                return interactions[i];
+            }
+        }
+
+        // at this stage, a pointerUp should not return an interaction
+        if (/up|end|out/i.test(eventType)) {
+            return null;
+        }
+
+        // get first idle interaction
+        for (i = 0; i < len; i++) {
+            interaction = interactions[i];
+
+            if ((!interaction.prepared.name || (interaction.target.options.gesture.enabled))
+                && !interaction.interacting()
+                && !(!mouseEvent && interaction.mouse)) {
+
+                return interaction;
+            }
+        }
+
+        return new Interaction();
+    }
+
+    function doOnInteractions (method) {
+        return (function (event) {
+            var interaction,
+                eventTarget = getActualElement(event.path
+                                               ? event.path[0]
+                                               : event.target),
+                curEventTarget = getActualElement(event.currentTarget),
+                i;
+
+            if (supportsTouch && /touch/.test(event.type)) {
+                prevTouchTime = new Date().getTime();
+
+                for (i = 0; i < event.changedTouches.length; i++) {
+                    var pointer = event.changedTouches[i];
+
+                    interaction = getInteractionFromPointer(pointer, event.type, eventTarget);
+
+                    if (!interaction) { continue; }
+
+                    interaction._updateEventTargets(eventTarget, curEventTarget);
+
+                    interaction[method](pointer, event, eventTarget, curEventTarget);
+                }
+            }
+            else {
+                if (!supportsPointerEvent && /mouse/.test(event.type)) {
+                    // ignore mouse events while touch interactions are active
+                    for (i = 0; i < interactions.length; i++) {
+                        if (!interactions[i].mouse && interactions[i].pointerIsDown) {
+                            return;
+                        }
+                    }
+
+                    // try to ignore mouse events that are simulated by the browser
+                    // after a touch event
+                    if (new Date().getTime() - prevTouchTime < 500) {
+                        return;
+                    }
+                }
+
+                interaction = getInteractionFromPointer(event, event.type, eventTarget);
+
+                if (!interaction) { return; }
+
+                interaction._updateEventTargets(eventTarget, curEventTarget);
+
+                interaction[method](event, event, eventTarget, curEventTarget);
+            }
+        });
+    }
+
+    function InteractEvent (interaction, event, action, phase, element, related) {
+        var client,
+            page,
+            target      = interaction.target,
+            snapStatus  = interaction.snapStatus,
+            restrictStatus  = interaction.restrictStatus,
+            pointers    = interaction.pointers,
+            deltaSource = (target && target.options || defaultOptions).deltaSource,
+            sourceX     = deltaSource + 'X',
+            sourceY     = deltaSource + 'Y',
+            options     = target? target.options: defaultOptions,
+            origin      = getOriginXY(target, element),
+            starting    = phase === 'start',
+            ending      = phase === 'end',
+            coords      = starting? interaction.startCoords : interaction.curCoords;
+
+        element = element || interaction.element;
+
+        page   = extend({}, coords.page);
+        client = extend({}, coords.client);
+
+        page.x -= origin.x;
+        page.y -= origin.y;
+
+        client.x -= origin.x;
+        client.y -= origin.y;
+
+        var relativePoints = options[action].snap && options[action].snap.relativePoints ;
+
+        if (checkSnap(target, action) && !(starting && relativePoints && relativePoints.length)) {
+            this.snap = {
+                range  : snapStatus.range,
+                locked : snapStatus.locked,
+                x      : snapStatus.snappedX,
+                y      : snapStatus.snappedY,
+                realX  : snapStatus.realX,
+                realY  : snapStatus.realY,
+                dx     : snapStatus.dx,
+                dy     : snapStatus.dy
+            };
+
+            if (snapStatus.locked) {
+                page.x += snapStatus.dx;
+                page.y += snapStatus.dy;
+                client.x += snapStatus.dx;
+                client.y += snapStatus.dy;
+            }
+        }
+
+        if (checkRestrict(target, action) && !(starting && options[action].restrict.elementRect) && restrictStatus.restricted) {
+            page.x += restrictStatus.dx;
+            page.y += restrictStatus.dy;
+            client.x += restrictStatus.dx;
+            client.y += restrictStatus.dy;
+
+            this.restrict = {
+                dx: restrictStatus.dx,
+                dy: restrictStatus.dy
+            };
+        }
+
+        this.pageX     = page.x;
+        this.pageY     = page.y;
+        this.clientX   = client.x;
+        this.clientY   = client.y;
+
+        this.x0        = interaction.startCoords.page.x - origin.x;
+        this.y0        = interaction.startCoords.page.y - origin.y;
+        this.clientX0  = interaction.startCoords.client.x - origin.x;
+        this.clientY0  = interaction.startCoords.client.y - origin.y;
+        this.ctrlKey   = event.ctrlKey;
+        this.altKey    = event.altKey;
+        this.shiftKey  = event.shiftKey;
+        this.metaKey   = event.metaKey;
+        this.button    = event.button;
+        this.buttons   = event.buttons;
+        this.target    = element;
+        this.t0        = interaction.downTimes[0];
+        this.type      = action + (phase || '');
+
+        this.interaction = interaction;
+        this.interactable = target;
+
+        var inertiaStatus = interaction.inertiaStatus;
+
+        if (inertiaStatus.active) {
+            this.detail = 'inertia';
+        }
+
+        if (related) {
+            this.relatedTarget = related;
+        }
+
+        // end event dx, dy is difference between start and end points
+        if (ending) {
+            if (deltaSource === 'client') {
+                this.dx = client.x - interaction.startCoords.client.x;
+                this.dy = client.y - interaction.startCoords.client.y;
+            }
+            else {
+                this.dx = page.x - interaction.startCoords.page.x;
+                this.dy = page.y - interaction.startCoords.page.y;
+            }
+        }
+        else if (starting) {
+            this.dx = 0;
+            this.dy = 0;
+        }
+        // copy properties from previousmove if starting inertia
+        else if (phase === 'inertiastart') {
+            this.dx = interaction.prevEvent.dx;
+            this.dy = interaction.prevEvent.dy;
+        }
+        else {
+            if (deltaSource === 'client') {
+                this.dx = client.x - interaction.prevEvent.clientX;
+                this.dy = client.y - interaction.prevEvent.clientY;
+            }
+            else {
+                this.dx = page.x - interaction.prevEvent.pageX;
+                this.dy = page.y - interaction.prevEvent.pageY;
+            }
+        }
+        if (interaction.prevEvent && interaction.prevEvent.detail === 'inertia'
+            && !inertiaStatus.active
+            && options[action].inertia && options[action].inertia.zeroResumeDelta) {
+
+            inertiaStatus.resumeDx += this.dx;
+            inertiaStatus.resumeDy += this.dy;
+
+            this.dx = this.dy = 0;
+        }
+
+        if (action === 'resize' && interaction.resizeAxes) {
+            if (options.resize.square) {
+                if (interaction.resizeAxes === 'y') {
+                    this.dx = this.dy;
+                }
+                else {
+                    this.dy = this.dx;
+                }
+                this.axes = 'xy';
+            }
+            else {
+                this.axes = interaction.resizeAxes;
+
+                if (interaction.resizeAxes === 'x') {
+                    this.dy = 0;
+                }
+                else if (interaction.resizeAxes === 'y') {
+                    this.dx = 0;
+                }
+            }
+        }
+        else if (action === 'gesture') {
+            this.touches = [pointers[0], pointers[1]];
+
+            if (starting) {
+                this.distance = touchDistance(pointers, deltaSource);
+                this.box      = touchBBox(pointers);
+                this.scale    = 1;
+                this.ds       = 0;
+                this.angle    = touchAngle(pointers, undefined, deltaSource);
+                this.da       = 0;
+            }
+            else if (ending || event instanceof InteractEvent) {
+                this.distance = interaction.prevEvent.distance;
+                this.box      = interaction.prevEvent.box;
+                this.scale    = interaction.prevEvent.scale;
+                this.ds       = this.scale - 1;
+                this.angle    = interaction.prevEvent.angle;
+                this.da       = this.angle - interaction.gesture.startAngle;
+            }
+            else {
+                this.distance = touchDistance(pointers, deltaSource);
+                this.box      = touchBBox(pointers);
+                this.scale    = this.distance / interaction.gesture.startDistance;
+                this.angle    = touchAngle(pointers, interaction.gesture.prevAngle, deltaSource);
+
+                this.ds = this.scale - interaction.gesture.prevScale;
+                this.da = this.angle - interaction.gesture.prevAngle;
+            }
+        }
+
+        if (starting) {
+            this.timeStamp = interaction.downTimes[0];
+            this.dt        = 0;
+            this.duration  = 0;
+            this.speed     = 0;
+            this.velocityX = 0;
+            this.velocityY = 0;
+        }
+        else if (phase === 'inertiastart') {
+            this.timeStamp = interaction.prevEvent.timeStamp;
+            this.dt        = interaction.prevEvent.dt;
+            this.duration  = interaction.prevEvent.duration;
+            this.speed     = interaction.prevEvent.speed;
+            this.velocityX = interaction.prevEvent.velocityX;
+            this.velocityY = interaction.prevEvent.velocityY;
+        }
+        else {
+            this.timeStamp = new Date().getTime();
+            this.dt        = this.timeStamp - interaction.prevEvent.timeStamp;
+            this.duration  = this.timeStamp - interaction.downTimes[0];
+
+            if (event instanceof InteractEvent) {
+                var dx = this[sourceX] - interaction.prevEvent[sourceX],
+                    dy = this[sourceY] - interaction.prevEvent[sourceY],
+                    dt = this.dt / 1000;
+
+                this.speed = hypot(dx, dy) / dt;
+                this.velocityX = dx / dt;
+                this.velocityY = dy / dt;
+            }
+            // if normal move or end event, use previous user event coords
+            else {
+                // speed and velocity in pixels per second
+                this.speed = interaction.pointerDelta[deltaSource].speed;
+                this.velocityX = interaction.pointerDelta[deltaSource].vx;
+                this.velocityY = interaction.pointerDelta[deltaSource].vy;
+            }
+        }
+
+        if ((ending || phase === 'inertiastart')
+            && interaction.prevEvent.speed > 600 && this.timeStamp - interaction.prevEvent.timeStamp < 150) {
+
+            var angle = 180 * Math.atan2(interaction.prevEvent.velocityY, interaction.prevEvent.velocityX) / Math.PI,
+                overlap = 22.5;
+
+            if (angle < 0) {
+                angle += 360;
+            }
+
+            var left = 135 - overlap <= angle && angle < 225 + overlap,
+                up   = 225 - overlap <= angle && angle < 315 + overlap,
+
+                right = !left && (315 - overlap <= angle || angle <  45 + overlap),
+                down  = !up   &&   45 - overlap <= angle && angle < 135 + overlap;
+
+            this.swipe = {
+                up   : up,
+                down : down,
+                left : left,
+                right: right,
+                angle: angle,
+                speed: interaction.prevEvent.speed,
+                velocity: {
+                    x: interaction.prevEvent.velocityX,
+                    y: interaction.prevEvent.velocityY
+                }
+            };
+        }
+    }
+
+    InteractEvent.prototype = {
+        preventDefault: blank,
+        stopImmediatePropagation: function () {
+            this.immediatePropagationStopped = this.propagationStopped = true;
+        },
+        stopPropagation: function () {
+            this.propagationStopped = true;
+        }
+    };
+
+    function preventOriginalDefault () {
+        this.originalEvent.preventDefault();
+    }
+
+    function getActionCursor (action) {
+        var cursor = '';
+
+        if (action.name === 'drag') {
+            cursor =  actionCursors.drag;
+        }
+        if (action.name === 'resize') {
+            if (action.axis) {
+                cursor =  actionCursors[action.name + action.axis];
+            }
+            else if (action.edges) {
+                var cursorKey = 'resize',
+                    edgeNames = ['top', 'bottom', 'left', 'right'];
+
+                for (var i = 0; i < 4; i++) {
+                    if (action.edges[edgeNames[i]]) {
+                        cursorKey += edgeNames[i];
+                    }
+                }
+
+                cursor = actionCursors[cursorKey];
+            }
+        }
+
+        return cursor;
+    }
+
+    function checkResizeEdge (name, value, page, element, interactableElement, rect, margin) {
+        // false, '', undefined, null
+        if (!value) { return false; }
+
+        // true value, use pointer coords and element rect
+        if (value === true) {
+            // if dimensions are negative, "switch" edges
+            var width = isNumber(rect.width)? rect.width : rect.right - rect.left,
+                height = isNumber(rect.height)? rect.height : rect.bottom - rect.top;
+
+            if (width < 0) {
+                if      (name === 'left' ) { name = 'right'; }
+                else if (name === 'right') { name = 'left' ; }
+            }
+            if (height < 0) {
+                if      (name === 'top'   ) { name = 'bottom'; }
+                else if (name === 'bottom') { name = 'top'   ; }
+            }
+
+            if (name === 'left'  ) { return page.x < ((width  >= 0? rect.left: rect.right ) + margin); }
+            if (name === 'top'   ) { return page.y < ((height >= 0? rect.top : rect.bottom) + margin); }
+
+            if (name === 'right' ) { return page.x > ((width  >= 0? rect.right : rect.left) - margin); }
+            if (name === 'bottom') { return page.y > ((height >= 0? rect.bottom: rect.top ) - margin); }
+        }
+
+        // the remaining checks require an element
+        if (!isElement(element)) { return false; }
+
+        return isElement(value)
+                    // the value is an element to use as a resize handle
+                    ? value === element
+                    // otherwise check if element matches value as selector
+                    : matchesUpTo(element, value, interactableElement);
+    }
+
+    function defaultActionChecker (pointer, interaction, element) {
+        var rect = this.getRect(element),
+            shouldResize = false,
+            action = null,
+            resizeAxes = null,
+            resizeEdges,
+            page = extend({}, interaction.curCoords.page),
+            options = this.options;
+
+        if (!rect) { return null; }
+
+        if (actionIsEnabled.resize && options.resize.enabled) {
+            var resizeOptions = options.resize;
+
+            resizeEdges = {
+                left: false, right: false, top: false, bottom: false
+            };
+
+            // if using resize.edges
+            if (isObject(resizeOptions.edges)) {
+                for (var edge in resizeEdges) {
+                    resizeEdges[edge] = checkResizeEdge(edge,
+                                                        resizeOptions.edges[edge],
+                                                        page,
+                                                        interaction._eventTarget,
+                                                        element,
+                                                        rect,
+                                                        resizeOptions.margin || margin);
+                }
+
+                resizeEdges.left = resizeEdges.left && !resizeEdges.right;
+                resizeEdges.top  = resizeEdges.top  && !resizeEdges.bottom;
+
+                shouldResize = resizeEdges.left || resizeEdges.right || resizeEdges.top || resizeEdges.bottom;
+            }
+            else {
+                var right  = options.resize.axis !== 'y' && page.x > (rect.right  - margin),
+                    bottom = options.resize.axis !== 'x' && page.y > (rect.bottom - margin);
+
+                shouldResize = right || bottom;
+                resizeAxes = (right? 'x' : '') + (bottom? 'y' : '');
+            }
+        }
+
+        action = shouldResize
+            ? 'resize'
+            : actionIsEnabled.drag && options.drag.enabled
+                ? 'drag'
+                : null;
+
+        if (actionIsEnabled.gesture
+            && interaction.pointerIds.length >=2
+            && !(interaction.dragging || interaction.resizing)) {
+            action = 'gesture';
+        }
+
+        if (action) {
+            return {
+                name: action,
+                axis: resizeAxes,
+                edges: resizeEdges
+            };
+        }
+
+        return null;
+    }
+
+    // Check if action is enabled globally and the current target supports it
+    // If so, return the validated action. Otherwise, return null
+    function validateAction (action, interactable) {
+        if (!isObject(action)) { return null; }
+
+        var actionName = action.name,
+            options = interactable.options;
+
+        if ((  (actionName  === 'resize'   && options.resize.enabled )
+            || (actionName      === 'drag'     && options.drag.enabled  )
+            || (actionName      === 'gesture'  && options.gesture.enabled))
+            && actionIsEnabled[actionName]) {
+
+            if (actionName === 'resize' || actionName === 'resizeyx') {
+                actionName = 'resizexy';
+            }
+
+            return action;
+        }
+        return null;
+    }
+
+    var listeners = {},
+        interactionListeners = [
+            'dragStart', 'dragMove', 'resizeStart', 'resizeMove', 'gestureStart', 'gestureMove',
+            'pointerOver', 'pointerOut', 'pointerHover', 'selectorDown',
+            'pointerDown', 'pointerMove', 'pointerUp', 'pointerCancel', 'pointerEnd',
+            'addPointer', 'removePointer', 'recordPointer', 'autoScrollMove'
+        ];
+
+    for (var i = 0, len = interactionListeners.length; i < len; i++) {
+        var name = interactionListeners[i];
+
+        listeners[name] = doOnInteractions(name);
+    }
+
+    // bound to the interactable context when a DOM event
+    // listener is added to a selector interactable
+    function delegateListener (event, useCapture) {
+        var fakeEvent = {},
+            delegated = delegatedEvents[event.type],
+            eventTarget = getActualElement(event.path
+                                           ? event.path[0]
+                                           : event.target),
+            element = eventTarget;
+
+        useCapture = useCapture? true: false;
+
+        // duplicate the event so that currentTarget can be changed
+        for (var prop in event) {
+            fakeEvent[prop] = event[prop];
+        }
+
+        fakeEvent.originalEvent = event;
+        fakeEvent.preventDefault = preventOriginalDefault;
+
+        // climb up document tree looking for selector matches
+        while (isElement(element)) {
+            for (var i = 0; i < delegated.selectors.length; i++) {
+                var selector = delegated.selectors[i],
+                    context = delegated.contexts[i];
+
+                if (matchesSelector(element, selector)
+                    && nodeContains(context, eventTarget)
+                    && nodeContains(context, element)) {
+
+                    var listeners = delegated.listeners[i];
+
+                    fakeEvent.currentTarget = element;
+
+                    for (var j = 0; j < listeners.length; j++) {
+                        if (listeners[j][1] === useCapture) {
+                            listeners[j][0](fakeEvent);
+                        }
+                    }
+                }
+            }
+
+            element = parentElement(element);
+        }
+    }
+
+    function delegateUseCapture (event) {
+        return delegateListener.call(this, event, true);
+    }
+
+    interactables.indexOfElement = function indexOfElement (element, context) {
+        context = context || document;
+
+        for (var i = 0; i < this.length; i++) {
+            var interactable = this[i];
+
+            if ((interactable.selector === element
+                && (interactable._context === context))
+                || (!interactable.selector && interactable._element === element)) {
+
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    interactables.get = function interactableGet (element, options) {
+        return this[this.indexOfElement(element, options && options.context)];
+    };
+
+    interactables.forEachSelector = function (callback) {
+        for (var i = 0; i < this.length; i++) {
+            var interactable = this[i];
+
+            if (!interactable.selector) {
+                continue;
+            }
+
+            var ret = callback(interactable, interactable.selector, interactable._context, i, this);
+
+            if (ret !== undefined) {
+                return ret;
+            }
+        }
+    };
+
+    /*\
+     * interact
+     [ method ]
+     *
+     * The methods of this variable can be used to set elements as
+     * interactables and also to change various default settings.
+     *
+     * Calling it as a function and passing an element or a valid CSS selector
+     * string returns an Interactable object which has various methods to
+     * configure it.
+     *
+     - element (Element | string) The HTML or SVG Element to interact with or CSS selector
+     = (object) An @Interactable
+     *
+     > Usage
+     | interact(document.getElementById('draggable')).draggable(true);
+     |
+     | var rectables = interact('rect');
+     | rectables
+     |     .gesturable(true)
+     |     .on('gesturemove', function (event) {
+     |         // something cool...
+     |     })
+     |     .autoScroll(true);
+    \*/
+    function interact (element, options) {
+        return interactables.get(element, options) || new Interactable(element, options);
+    }
+
+    /*\
+     * Interactable
+     [ property ]
+     **
+     * Object type returned by @interact
+    \*/
+    function Interactable (element, options) {
+        this._element = element;
+        this._iEvents = this._iEvents || {};
+
+        var _window;
+
+        if (trySelector(element)) {
+            this.selector = element;
+
+            var context = options && options.context;
+
+            _window = context? getWindow(context) : window;
+
+            if (context && (_window.Node
+                    ? context instanceof _window.Node
+                    : (isElement(context) || context === _window.document))) {
+
+                this._context = context;
+            }
+        }
+        else {
+            _window = getWindow(element);
+
+            if (isElement(element, _window)) {
+
+                if (PointerEvent) {
+                    events.add(this._element, pEventTypes.down, listeners.pointerDown );
+                    events.add(this._element, pEventTypes.move, listeners.pointerHover);
+                }
+                else {
+                    events.add(this._element, 'mousedown' , listeners.pointerDown );
+                    events.add(this._element, 'mousemove' , listeners.pointerHover);
+                    events.add(this._element, 'touchstart', listeners.pointerDown );
+                    events.add(this._element, 'touchmove' , listeners.pointerHover);
+                }
+            }
+        }
+
+        this._doc = _window.document;
+
+        if (!contains(documents, this._doc)) {
+            listenToDocument(this._doc);
+        }
+
+        interactables.push(this);
+
+        this.set(options);
+    }
+
+    Interactable.prototype = {
+        setOnEvents: function (action, phases) {
+            if (action === 'drop') {
+                if (isFunction(phases.ondrop)          ) { this.ondrop           = phases.ondrop          ; }
+                if (isFunction(phases.ondropactivate)  ) { this.ondropactivate   = phases.ondropactivate  ; }
+                if (isFunction(phases.ondropdeactivate)) { this.ondropdeactivate = phases.ondropdeactivate; }
+                if (isFunction(phases.ondragenter)     ) { this.ondragenter      = phases.ondragenter     ; }
+                if (isFunction(phases.ondragleave)     ) { this.ondragleave      = phases.ondragleave     ; }
+                if (isFunction(phases.ondropmove)      ) { this.ondropmove       = phases.ondropmove      ; }
+            }
+            else {
+                action = 'on' + action;
+
+                if (isFunction(phases.onstart)       ) { this[action + 'start'         ] = phases.onstart         ; }
+                if (isFunction(phases.onmove)        ) { this[action + 'move'          ] = phases.onmove          ; }
+                if (isFunction(phases.onend)         ) { this[action + 'end'           ] = phases.onend           ; }
+                if (isFunction(phases.oninertiastart)) { this[action + 'inertiastart'  ] = phases.oninertiastart  ; }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.draggable
+         [ method ]
+         *
+         * Gets or sets whether drag actions can be performed on the
+         * Interactable
+         *
+         = (boolean) Indicates if this can be the target of drag events
+         | var isDraggable = interact('ul li').draggable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on drag events (object makes the Interactable draggable)
+         = (object) This Interactable
+         | interact(element).draggable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     // the axis in which the first movement must be
+         |     // for the drag sequence to start
+         |     // 'xy' by default - any direction
+         |     axis: 'x' || 'y' || 'xy',
+         |
+         |     // max number of drags that can happen concurrently
+         |     // with elements of this Interactable. Infinity by default
+         |     max: Infinity,
+         |
+         |     // max number of drags that can target the same element+Interactable
+         |     // 1 by default
+         |     maxPerElement: 2
+         | });
+        \*/
+        draggable: function (options) {
+            if (isObject(options)) {
+                this.options.drag.enabled = options.enabled === false? false: true;
+                this.setPerAction('drag', options);
+                this.setOnEvents('drag', options);
+
+                if (/^x$|^y$|^xy$/.test(options.axis)) {
+                    this.options.drag.axis = options.axis;
+                }
+                else if (options.axis === null) {
+                    delete this.options.drag.axis;
+                }
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.drag.enabled = options;
+
+                return this;
+            }
+
+            return this.options.drag;
+        },
+
+        setPerAction: function (action, options) {
+            // for all the default per-action options
+            for (var option in options) {
+                // if this option exists for this action
+                if (option in defaultOptions[action]) {
+                    // if the option in the options arg is an object value
+                    if (isObject(options[option])) {
+                        // duplicate the object
+                        this.options[action][option] = extend(this.options[action][option] || {}, options[option]);
+
+                        if (isObject(defaultOptions.perAction[option]) && 'enabled' in defaultOptions.perAction[option]) {
+                            this.options[action][option].enabled = options[option].enabled === false? false : true;
+                        }
+                    }
+                    else if (isBool(options[option]) && isObject(defaultOptions.perAction[option])) {
+                        this.options[action][option].enabled = options[option];
+                    }
+                    else if (options[option] !== undefined) {
+                        // or if it's not undefined, do a plain assignment
+                        this.options[action][option] = options[option];
+                    }
+                }
+            }
+        },
+
+        /*\
+         * Interactable.dropzone
+         [ method ]
+         *
+         * Returns or sets whether elements can be dropped onto this
+         * Interactable to trigger drop events
+         *
+         * Dropzones can receive the following events:
+         *  - `dropactivate` and `dropdeactivate` when an acceptable drag starts and ends
+         *  - `dragenter` and `dragleave` when a draggable enters and leaves the dropzone
+         *  - `dragmove` when a draggable that has entered the dropzone is moved
+         *  - `drop` when a draggable is dropped into this dropzone
+         *
+         *  Use the `accept` option to allow only elements that match the given CSS selector or element.
+         *
+         *  Use the `overlap` option to set how drops are checked for. The allowed values are:
+         *   - `'pointer'`, the pointer must be over the dropzone (default)
+         *   - `'center'`, the draggable element's center must be over the dropzone
+         *   - a number from 0-1 which is the `(intersection area) / (draggable area)`.
+         *       e.g. `0.5` for drop to happen when half of the area of the
+         *       draggable is over the dropzone
+         *
+         - options (boolean | object | null) #optional The new value to be set.
+         | interact('.drop').dropzone({
+         |   accept: '.can-drop' || document.getElementById('single-drop'),
+         |   overlap: 'pointer' || 'center' || zeroToOne
+         | }
+         = (boolean | object) The current setting or this Interactable
+        \*/
+        dropzone: function (options) {
+            if (isObject(options)) {
+                this.options.drop.enabled = options.enabled === false? false: true;
+                this.setOnEvents('drop', options);
+
+                if (/^(pointer|center)$/.test(options.overlap)) {
+                    this.options.drop.overlap = options.overlap;
+                }
+                else if (isNumber(options.overlap)) {
+                    this.options.drop.overlap = Math.max(Math.min(1, options.overlap), 0);
+                }
+                if ('accept' in options) {
+                  this.options.drop.accept = options.accept;
+                }
+                if ('checker' in options) {
+                  this.options.drop.checker = options.checker;
+                }
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.drop.enabled = options;
+
+                return this;
+            }
+
+            return this.options.drop;
+        },
+
+        dropCheck: function (dragEvent, event, draggable, draggableElement, dropElement, rect) {
+            var dropped = false;
+
+            // if the dropzone has no rect (eg. display: none)
+            // call the custom dropChecker or just return false
+            if (!(rect = rect || this.getRect(dropElement))) {
+                return (this.options.drop.checker
+                    ? this.options.drop.checker(dragEvent, event, dropped, this, dropElement, draggable, draggableElement)
+                    : false);
+            }
+
+            var dropOverlap = this.options.drop.overlap;
+
+            if (dropOverlap === 'pointer') {
+                var page = getPageXY(dragEvent),
+                    origin = getOriginXY(draggable, draggableElement),
+                    horizontal,
+                    vertical;
+
+                page.x += origin.x;
+                page.y += origin.y;
+
+                horizontal = (page.x > rect.left) && (page.x < rect.right);
+                vertical   = (page.y > rect.top ) && (page.y < rect.bottom);
+
+                dropped = horizontal && vertical;
+            }
+
+            var dragRect = draggable.getRect(draggableElement);
+
+            if (dropOverlap === 'center') {
+                var cx = dragRect.left + dragRect.width  / 2,
+                    cy = dragRect.top  + dragRect.height / 2;
+
+                dropped = cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
+            }
+
+            if (isNumber(dropOverlap)) {
+                var overlapArea  = (Math.max(0, Math.min(rect.right , dragRect.right ) - Math.max(rect.left, dragRect.left))
+                                  * Math.max(0, Math.min(rect.bottom, dragRect.bottom) - Math.max(rect.top , dragRect.top ))),
+                    overlapRatio = overlapArea / (dragRect.width * dragRect.height);
+
+                dropped = overlapRatio >= dropOverlap;
+            }
+
+            if (this.options.drop.checker) {
+                dropped = this.options.drop.checker(dragEvent, event, dropped, this, dropElement, draggable, draggableElement);
+            }
+
+            return dropped;
+        },
+
+        /*\
+         * Interactable.dropChecker
+         [ method ]
+         *
+         * DEPRECATED. Use interactable.dropzone({ checker: function... }) instead.
+         *
+         * Gets or sets the function used to check if a dragged element is
+         * over this Interactable.
+         *
+         - checker (function) #optional The function that will be called when checking for a drop
+         = (Function | Interactable) The checker function or this Interactable
+         *
+         * The checker function takes the following arguments:
+         *
+         - dragEvent (InteractEvent) The related dragmove or dragend event
+         - event (TouchEvent | PointerEvent | MouseEvent) The user move/up/end Event related to the dragEvent
+         - dropped (boolean) The value from the default drop checker
+         - dropzone (Interactable) The dropzone interactable
+         - dropElement (Element) The dropzone element
+         - draggable (Interactable) The Interactable being dragged
+         - draggableElement (Element) The actual element that's being dragged
+         *
+         > Usage:
+         | interact(target)
+         | .dropChecker(function(dragEvent,         // related dragmove or dragend event
+         |                       event,             // TouchEvent/PointerEvent/MouseEvent
+         |                       dropped,           // bool result of the default checker
+         |                       dropzone,          // dropzone Interactable
+         |                       dropElement,       // dropzone elemnt
+         |                       draggable,         // draggable Interactable
+         |                       draggableElement) {// draggable element
+         |
+         |   return dropped && event.target.hasAttribute('allow-drop');
+         | }
+        \*/
+        dropChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.options.drop.checker = checker;
+
+                return this;
+            }
+            if (checker === null) {
+                delete this.options.getRect;
+
+                return this;
+            }
+
+            return this.options.drop.checker;
+        },
+
+        /*\
+         * Interactable.accept
+         [ method ]
+         *
+         * Deprecated. add an `accept` property to the options object passed to
+         * @Interactable.dropzone instead.
+         *
+         * Gets or sets the Element or CSS selector match that this
+         * Interactable accepts if it is a dropzone.
+         *
+         - newValue (Element | string | null) #optional
+         * If it is an Element, then only that element can be dropped into this dropzone.
+         * If it is a string, the element being dragged must match it as a selector.
+         * If it is null, the accept options is cleared - it accepts any element.
+         *
+         = (string | Element | null | Interactable) The current accept option if given `undefined` or this Interactable
+        \*/
+        accept: function (newValue) {
+            if (isElement(newValue)) {
+                this.options.drop.accept = newValue;
+
+                return this;
+            }
+
+            // test if it is a valid CSS selector
+            if (trySelector(newValue)) {
+                this.options.drop.accept = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.drop.accept;
+
+                return this;
+            }
+
+            return this.options.drop.accept;
+        },
+
+        /*\
+         * Interactable.resizable
+         [ method ]
+         *
+         * Gets or sets whether resize actions can be performed on the
+         * Interactable
+         *
+         = (boolean) Indicates if this can be the target of resize elements
+         | var isResizeable = interact('input[type=text]').resizable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on resize events (object makes the Interactable resizable)
+         = (object) This Interactable
+         | interact(element).resizable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     edges: {
+         |       top   : true,       // Use pointer coords to check for resize.
+         |       left  : false,      // Disable resizing from left edge.
+         |       bottom: '.resize-s',// Resize if pointer target matches selector
+         |       right : handleEl    // Resize if pointer target is the given Element
+         |     },
+         |
+         |     // Width and height can be adjusted independently. When `true`, width and
+         |     // height are adjusted at a 1:1 ratio.
+         |     square: false,
+         |
+         |     // Width and height can be adjusted independently. When `true`, width and
+         |     // height maintain the aspect ratio they had when resizing started.
+         |     preserveAspectRatio: false,
+         |
+         |     // a value of 'none' will limit the resize rect to a minimum of 0x0
+         |     // 'negate' will allow the rect to have negative width/height
+         |     // 'reposition' will keep the width/height positive by swapping
+         |     // the top and bottom edges and/or swapping the left and right edges
+         |     invert: 'none' || 'negate' || 'reposition'
+         |
+         |     // limit multiple resizes.
+         |     // See the explanation in the @Interactable.draggable example
+         |     max: Infinity,
+         |     maxPerElement: 1,
+         | });
+        \*/
+        resizable: function (options) {
+            if (isObject(options)) {
+                this.options.resize.enabled = options.enabled === false? false: true;
+                this.setPerAction('resize', options);
+                this.setOnEvents('resize', options);
+
+                if (/^x$|^y$|^xy$/.test(options.axis)) {
+                    this.options.resize.axis = options.axis;
+                }
+                else if (options.axis === null) {
+                    this.options.resize.axis = defaultOptions.resize.axis;
+                }
+
+                if (isBool(options.preserveAspectRatio)) {
+                    this.options.resize.preserveAspectRatio = options.preserveAspectRatio;
+                }
+                else if (isBool(options.square)) {
+                    this.options.resize.square = options.square;
+                }
+
+                return this;
+            }
+            if (isBool(options)) {
+                this.options.resize.enabled = options;
+
+                return this;
+            }
+            return this.options.resize;
+        },
+
+        /*\
+         * Interactable.squareResize
+         [ method ]
+         *
+         * Deprecated. Add a `square: true || false` property to @Interactable.resizable instead
+         *
+         * Gets or sets whether resizing is forced 1:1 aspect
+         *
+         = (boolean) Current setting
+         *
+         * or
+         *
+         - newValue (boolean) #optional
+         = (object) this Interactable
+        \*/
+        squareResize: function (newValue) {
+            if (isBool(newValue)) {
+                this.options.resize.square = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.resize.square;
+
+                return this;
+            }
+
+            return this.options.resize.square;
+        },
+
+        /*\
+         * Interactable.gesturable
+         [ method ]
+         *
+         * Gets or sets whether multitouch gestures can be performed on the
+         * Interactable's element
+         *
+         = (boolean) Indicates if this can be the target of gesture events
+         | var isGestureable = interact(element).gesturable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on gesture events (makes the Interactable gesturable)
+         = (object) this Interactable
+         | interact(element).gesturable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     // limit multiple gestures.
+         |     // See the explanation in @Interactable.draggable example
+         |     max: Infinity,
+         |     maxPerElement: 1,
+         | });
+        \*/
+        gesturable: function (options) {
+            if (isObject(options)) {
+                this.options.gesture.enabled = options.enabled === false? false: true;
+                this.setPerAction('gesture', options);
+                this.setOnEvents('gesture', options);
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.gesture.enabled = options;
+
+                return this;
+            }
+
+            return this.options.gesture;
+        },
+
+        /*\
+         * Interactable.autoScroll
+         [ method ]
+         **
+         * Deprecated. Add an `autoscroll` property to the options object
+         * passed to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets whether dragging and resizing near the edges of the
+         * window/container trigger autoScroll for this Interactable
+         *
+         = (object) Object with autoScroll properties
+         *
+         * or
+         *
+         - options (object | boolean) #optional
+         * options can be:
+         * - an object with margin, distance and interval properties,
+         * - true or false to enable or disable autoScroll or
+         = (Interactable) this Interactable
+        \*/
+        autoScroll: function (options) {
+            if (isObject(options)) {
+                options = extend({ actions: ['drag', 'resize']}, options);
+            }
+            else if (isBool(options)) {
+                options = { actions: ['drag', 'resize'], enabled: options };
+            }
+
+            return this.setOptions('autoScroll', options);
+        },
+
+        /*\
+         * Interactable.snap
+         [ method ]
+         **
+         * Deprecated. Add a `snap` property to the options object passed
+         * to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets if and how action coordinates are snapped. By
+         * default, snapping is relative to the pointer coordinates. You can
+         * change this by setting the
+         * [`elementOrigin`](https://github.com/taye/interact.js/pull/72).
+         **
+         = (boolean | object) `false` if snap is disabled; object with snap properties if snap is enabled
+         **
+         * or
+         **
+         - options (object | boolean | null) #optional
+         = (Interactable) this Interactable
+         > Usage
+         | interact(document.querySelector('#thing')).snap({
+         |     targets: [
+         |         // snap to this specific point
+         |         {
+         |             x: 100,
+         |             y: 100,
+         |             range: 25
+         |         },
+         |         // give this function the x and y page coords and snap to the object returned
+         |         function (x, y) {
+         |             return {
+         |                 x: x,
+         |                 y: (75 + 50 * Math.sin(x * 0.04)),
+         |                 range: 40
+         |             };
+         |         },
+         |         // create a function that snaps to a grid
+         |         interact.createSnapGrid({
+         |             x: 50,
+         |             y: 50,
+         |             range: 10,              // optional
+         |             offset: { x: 5, y: 10 } // optional
+         |         })
+         |     ],
+         |     // do not snap during normal movement.
+         |     // Instead, trigger only one snapped move event
+         |     // immediately before the end event.
+         |     endOnly: true,
+         |
+         |     relativePoints: [
+         |         { x: 0, y: 0 },  // snap relative to the top left of the element
+         |         { x: 1, y: 1 },  // and also to the bottom right
+         |     ],  
+         |
+         |     // offset the snap target coordinates
+         |     // can be an object with x/y or 'startCoords'
+         |     offset: { x: 50, y: 50 }
+         |   }
+         | });
+        \*/
+        snap: function (options) {
+            var ret = this.setOptions('snap', options);
+
+            if (ret === this) { return this; }
+
+            return ret.drag;
+        },
+
+        setOptions: function (option, options) {
+            var actions = options && isArray(options.actions)
+                    ? options.actions
+                    : ['drag'];
+
+            var i;
+
+            if (isObject(options) || isBool(options)) {
+                for (i = 0; i < actions.length; i++) {
+                    var action = /resize/.test(actions[i])? 'resize' : actions[i];
+
+                    if (!isObject(this.options[action])) { continue; }
+
+                    var thisOption = this.options[action][option];
+
+                    if (isObject(options)) {
+                        extend(thisOption, options);
+                        thisOption.enabled = options.enabled === false? false: true;
+
+                        if (option === 'snap') {
+                            if (thisOption.mode === 'grid') {
+                                thisOption.targets = [
+                                    interact.createSnapGrid(extend({
+                                        offset: thisOption.gridOffset || { x: 0, y: 0 }
+                                    }, thisOption.grid || {}))
+                                ];
+                            }
+                            else if (thisOption.mode === 'anchor') {
+                                thisOption.targets = thisOption.anchors;
+                            }
+                            else if (thisOption.mode === 'path') {
+                                thisOption.targets = thisOption.paths;
+                            }
+
+                            if ('elementOrigin' in options) {
+                                thisOption.relativePoints = [options.elementOrigin];
+                            }
+                        }
+                    }
+                    else if (isBool(options)) {
+                        thisOption.enabled = options;
+                    }
+                }
+
+                return this;
+            }
+
+            var ret = {},
+                allActions = ['drag', 'resize', 'gesture'];
+
+            for (i = 0; i < allActions.length; i++) {
+                if (option in defaultOptions[allActions[i]]) {
+                    ret[allActions[i]] = this.options[allActions[i]][option];
+                }
+            }
+
+            return ret;
+        },
+
+
+        /*\
+         * Interactable.inertia
+         [ method ]
+         **
+         * Deprecated. Add an `inertia` property to the options object passed
+         * to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets if and how events continue to run after the pointer is released
+         **
+         = (boolean | object) `false` if inertia is disabled; `object` with inertia properties if inertia is enabled
+         **
+         * or
+         **
+         - options (object | boolean | null) #optional
+         = (Interactable) this Interactable
+         > Usage
+         | // enable and use default settings
+         | interact(element).inertia(true);
+         |
+         | // enable and use custom settings
+         | interact(element).inertia({
+         |     // value greater than 0
+         |     // high values slow the object down more quickly
+         |     resistance     : 16,
+         |
+         |     // the minimum launch speed (pixels per second) that results in inertia start
+         |     minSpeed       : 200,
+         |
+         |     // inertia will stop when the object slows down to this speed
+         |     endSpeed       : 20,
+         |
+         |     // boolean; should actions be resumed when the pointer goes down during inertia
+         |     allowResume    : true,
+         |
+         |     // boolean; should the jump when resuming from inertia be ignored in event.dx/dy
+         |     zeroResumeDelta: false,
+         |
+         |     // if snap/restrict are set to be endOnly and inertia is enabled, releasing
+         |     // the pointer without triggering inertia will animate from the release
+         |     // point to the snaped/restricted point in the given amount of time (ms)
+         |     smoothEndDuration: 300,
+         |
+         |     // an array of action types that can have inertia (no gesture)
+         |     actions        : ['drag', 'resize']
+         | });
+         |
+         | // reset custom settings and use all defaults
+         | interact(element).inertia(null);
+        \*/
+        inertia: function (options) {
+            var ret = this.setOptions('inertia', options);
+
+            if (ret === this) { return this; }
+
+            return ret.drag;
+        },
+
+        getAction: function (pointer, event, interaction, element) {
+            var action = this.defaultActionChecker(pointer, interaction, element);
+
+            if (this.options.actionChecker) {
+                return this.options.actionChecker(pointer, event, action, this, element, interaction);
+            }
+
+            return action;
+        },
+
+        defaultActionChecker: defaultActionChecker,
+
+        /*\
+         * Interactable.actionChecker
+         [ method ]
+         *
+         * Gets or sets the function used to check action to be performed on
+         * pointerDown
+         *
+         - checker (function | null) #optional A function which takes a pointer event, defaultAction string, interactable, element and interaction as parameters and returns an object with name property 'drag' 'resize' or 'gesture' and optionally an `edges` object with boolean 'top', 'left', 'bottom' and right props.
+         = (Function | Interactable) The checker function or this Interactable
+         *
+         | interact('.resize-drag')
+         |   .resizable(true)
+         |   .draggable(true)
+         |   .actionChecker(function (pointer, event, action, interactable, element, interaction) {
+         |
+         |   if (interact.matchesSelector(event.target, '.drag-handle') {
+         |     // force drag with handle target
+         |     action.name = drag;
+         |   }
+         |   else {
+         |     // resize from the top and right edges
+         |     action.name  = 'resize';
+         |     action.edges = { top: true, right: true };
+         |   }
+         |
+         |   return action;
+         | });
+        \*/
+        actionChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.options.actionChecker = checker;
+
+                return this;
+            }
+
+            if (checker === null) {
+                delete this.options.actionChecker;
+
+                return this;
+            }
+
+            return this.options.actionChecker;
+        },
+
+        /*\
+         * Interactable.getRect
+         [ method ]
+         *
+         * The default function to get an Interactables bounding rect. Can be
+         * overridden using @Interactable.rectChecker.
+         *
+         - element (Element) #optional The element to measure.
+         = (object) The object's bounding rectangle.
+         o {
+         o     top   : 0,
+         o     left  : 0,
+         o     bottom: 0,
+         o     right : 0,
+         o     width : 0,
+         o     height: 0
+         o }
+        \*/
+        getRect: function rectCheck (element) {
+            element = element || this._element;
+
+            if (this.selector && !(isElement(element))) {
+                element = this._context.querySelector(this.selector);
+            }
+
+            return getElementRect(element);
+        },
+
+        /*\
+         * Interactable.rectChecker
+         [ method ]
+         *
+         * Returns or sets the function used to calculate the interactable's
+         * element's rectangle
+         *
+         - checker (function) #optional A function which returns this Interactable's bounding rectangle. See @Interactable.getRect
+         = (function | object) The checker function or this Interactable
+        \*/
+        rectChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.getRect = checker;
+
+                return this;
+            }
+
+            if (checker === null) {
+                delete this.options.getRect;
+
+                return this;
+            }
+
+            return this.getRect;
+        },
+
+        /*\
+         * Interactable.styleCursor
+         [ method ]
+         *
+         * Returns or sets whether the action that would be performed when the
+         * mouse on the element are checked on `mousemove` so that the cursor
+         * may be styled appropriately
+         *
+         - newValue (boolean) #optional
+         = (boolean | Interactable) The current setting or this Interactable
+        \*/
+        styleCursor: function (newValue) {
+            if (isBool(newValue)) {
+                this.options.styleCursor = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.styleCursor;
+
+                return this;
+            }
+
+            return this.options.styleCursor;
+        },
+
+        /*\
+         * Interactable.preventDefault
+         [ method ]
+         *
+         * Returns or sets whether to prevent the browser's default behaviour
+         * in response to pointer events. Can be set to:
+         *  - `'always'` to always prevent
+         *  - `'never'` to never prevent
+         *  - `'auto'` to let interact.js try to determine what would be best
+         *
+         - newValue (string) #optional `true`, `false` or `'auto'`
+         = (string | Interactable) The current setting or this Interactable
+        \*/
+        preventDefault: function (newValue) {
+            if (/^(always|never|auto)$/.test(newValue)) {
+                this.options.preventDefault = newValue;
+                return this;
+            }
+
+            if (isBool(newValue)) {
+                this.options.preventDefault = newValue? 'always' : 'never';
+                return this;
+            }
+
+            return this.options.preventDefault;
+        },
+
+        /*\
+         * Interactable.origin
+         [ method ]
+         *
+         * Gets or sets the origin of the Interactable's element.  The x and y
+         * of the origin will be subtracted from action event coordinates.
+         *
+         - origin (object | string) #optional An object eg. { x: 0, y: 0 } or string 'parent', 'self' or any CSS selector
+         * OR
+         - origin (Element) #optional An HTML or SVG Element whose rect will be used
+         **
+         = (object) The current origin or this Interactable
+        \*/
+        origin: function (newValue) {
+            if (trySelector(newValue)) {
+                this.options.origin = newValue;
+                return this;
+            }
+            else if (isObject(newValue)) {
+                this.options.origin = newValue;
+                return this;
+            }
+
+            return this.options.origin;
+        },
+
+        /*\
+         * Interactable.deltaSource
+         [ method ]
+         *
+         * Returns or sets the mouse coordinate types used to calculate the
+         * movement of the pointer.
+         *
+         - newValue (string) #optional Use 'client' if you will be scrolling while interacting; Use 'page' if you want autoScroll to work
+         = (string | object) The current deltaSource or this Interactable
+        \*/
+        deltaSource: function (newValue) {
+            if (newValue === 'page' || newValue === 'client') {
+                this.options.deltaSource = newValue;
+
+                return this;
+            }
+
+            return this.options.deltaSource;
+        },
+
+        /*\
+         * Interactable.restrict
+         [ method ]
+         **
+         * Deprecated. Add a `restrict` property to the options object passed to
+         * @Interactable.draggable, @Interactable.resizable or @Interactable.gesturable instead.
+         *
+         * Returns or sets the rectangles within which actions on this
+         * interactable (after snap calculations) are restricted. By default,
+         * restricting is relative to the pointer coordinates. You can change
+         * this by setting the
+         * [`elementRect`](https://github.com/taye/interact.js/pull/72).
+         **
+         - options (object) #optional an object with keys drag, resize, and/or gesture whose values are rects, Elements, CSS selectors, or 'parent' or 'self'
+         = (object) The current restrictions object or this Interactable
+         **
+         | interact(element).restrict({
+         |     // the rect will be `interact.getElementRect(element.parentNode)`
+         |     drag: element.parentNode,
+         |
+         |     // x and y are relative to the the interactable's origin
+         |     resize: { x: 100, y: 100, width: 200, height: 200 }
+         | })
+         |
+         | interact('.draggable').restrict({
+         |     // the rect will be the selected element's parent
+         |     drag: 'parent',
+         |
+         |     // do not restrict during normal movement.
+         |     // Instead, trigger only one restricted move event
+         |     // immediately before the end event.
+         |     endOnly: true,
+         |
+         |     // https://github.com/taye/interact.js/pull/72#issue-41813493
+         |     elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+         | });
+        \*/
+        restrict: function (options) {
+            if (!isObject(options)) {
+                return this.setOptions('restrict', options);
+            }
+
+            var actions = ['drag', 'resize', 'gesture'],
+                ret;
+
+            for (var i = 0; i < actions.length; i++) {
+                var action = actions[i];
+
+                if (action in options) {
+                    var perAction = extend({
+                            actions: [action],
+                            restriction: options[action]
+                        }, options);
+
+                    ret = this.setOptions('restrict', perAction);
+                }
+            }
+
+            return ret;
+        },
+
+        /*\
+         * Interactable.context
+         [ method ]
+         *
+         * Gets the selector context Node of the Interactable. The default is `window.document`.
+         *
+         = (Node) The context Node of this Interactable
+         **
+        \*/
+        context: function () {
+            return this._context;
+        },
+
+        _context: document,
+
+        /*\
+         * Interactable.ignoreFrom
+         [ method ]
+         *
+         * If the target of the `mousedown`, `pointerdown` or `touchstart`
+         * event or any of it's parents match the given CSS selector or
+         * Element, no drag/resize/gesture is started.
+         *
+         - newValue (string | Element | null) #optional a CSS selector string, an Element or `null` to not ignore any elements
+         = (string | Element | object) The current ignoreFrom value or this Interactable
+         **
+         | interact(element, { ignoreFrom: document.getElementById('no-action') });
+         | // or
+         | interact(element).ignoreFrom('input, textarea, a');
+        \*/
+        ignoreFrom: function (newValue) {
+            if (trySelector(newValue)) {            // CSS selector to match event.target
+                this.options.ignoreFrom = newValue;
+                return this;
+            }
+
+            if (isElement(newValue)) {              // specific element
+                this.options.ignoreFrom = newValue;
+                return this;
+            }
+
+            return this.options.ignoreFrom;
+        },
+
+        /*\
+         * Interactable.allowFrom
+         [ method ]
+         *
+         * A drag/resize/gesture is started only If the target of the
+         * `mousedown`, `pointerdown` or `touchstart` event or any of it's
+         * parents match the given CSS selector or Element.
+         *
+         - newValue (string | Element | null) #optional a CSS selector string, an Element or `null` to allow from any element
+         = (string | Element | object) The current allowFrom value or this Interactable
+         **
+         | interact(element, { allowFrom: document.getElementById('drag-handle') });
+         | // or
+         | interact(element).allowFrom('.handle');
+        \*/
+        allowFrom: function (newValue) {
+            if (trySelector(newValue)) {            // CSS selector to match event.target
+                this.options.allowFrom = newValue;
+                return this;
+            }
+
+            if (isElement(newValue)) {              // specific element
+                this.options.allowFrom = newValue;
+                return this;
+            }
+
+            return this.options.allowFrom;
+        },
+
+        /*\
+         * Interactable.element
+         [ method ]
+         *
+         * If this is not a selector Interactable, it returns the element this
+         * interactable represents
+         *
+         = (Element) HTML / SVG Element
+        \*/
+        element: function () {
+            return this._element;
+        },
+
+        /*\
+         * Interactable.fire
+         [ method ]
+         *
+         * Calls listeners for the given InteractEvent type bound globally
+         * and directly to this Interactable
+         *
+         - iEvent (InteractEvent) The InteractEvent object to be fired on this Interactable
+         = (Interactable) this Interactable
+        \*/
+        fire: function (iEvent) {
+            if (!(iEvent && iEvent.type) || !contains(eventTypes, iEvent.type)) {
+                return this;
+            }
+
+            var listeners,
+                i,
+                len,
+                onEvent = 'on' + iEvent.type,
+                funcName = '';
+
+            // Interactable#on() listeners
+            if (iEvent.type in this._iEvents) {
+                listeners = this._iEvents[iEvent.type];
+
+                for (i = 0, len = listeners.length; i < len && !iEvent.immediatePropagationStopped; i++) {
+                    funcName = listeners[i].name;
+                    listeners[i](iEvent);
+                }
+            }
+
+            // interactable.onevent listener
+            if (isFunction(this[onEvent])) {
+                funcName = this[onEvent].name;
+                this[onEvent](iEvent);
+            }
+
+            // interact.on() listeners
+            if (iEvent.type in globalEvents && (listeners = globalEvents[iEvent.type]))  {
+
+                for (i = 0, len = listeners.length; i < len && !iEvent.immediatePropagationStopped; i++) {
+                    funcName = listeners[i].name;
+                    listeners[i](iEvent);
+                }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.on
+         [ method ]
+         *
+         * Binds a listener for an InteractEvent or DOM event.
+         *
+         - eventType  (string | array | object) The types of events to listen for
+         - listener   (function) The function to be called on the given event(s)
+         - useCapture (boolean) #optional useCapture flag for addEventListener
+         = (object) This Interactable
+        \*/
+        on: function (eventType, listener, useCapture) {
+            var i;
+
+            if (isString(eventType) && eventType.search(' ') !== -1) {
+                eventType = eventType.trim().split(/ +/);
+            }
+
+            if (isArray(eventType)) {
+                for (i = 0; i < eventType.length; i++) {
+                    this.on(eventType[i], listener, useCapture);
+                }
+
+                return this;
+            }
+
+            if (isObject(eventType)) {
+                for (var prop in eventType) {
+                    this.on(prop, eventType[prop], listener);
+                }
+
+                return this;
+            }
+
+            if (eventType === 'wheel') {
+                eventType = wheelEvent;
+            }
+
+            // convert to boolean
+            useCapture = useCapture? true: false;
+
+            if (contains(eventTypes, eventType)) {
+                // if this type of event was never bound to this Interactable
+                if (!(eventType in this._iEvents)) {
+                    this._iEvents[eventType] = [listener];
+                }
+                else {
+                    this._iEvents[eventType].push(listener);
+                }
+            }
+            // delegated event for selector
+            else if (this.selector) {
+                if (!delegatedEvents[eventType]) {
+                    delegatedEvents[eventType] = {
+                        selectors: [],
+                        contexts : [],
+                        listeners: []
+                    };
+
+                    // add delegate listener functions
+                    for (i = 0; i < documents.length; i++) {
+                        events.add(documents[i], eventType, delegateListener);
+                        events.add(documents[i], eventType, delegateUseCapture, true);
+                    }
+                }
+
+                var delegated = delegatedEvents[eventType],
+                    index;
+
+                for (index = delegated.selectors.length - 1; index >= 0; index--) {
+                    if (delegated.selectors[index] === this.selector
+                        && delegated.contexts[index] === this._context) {
+                        break;
+                    }
+                }
+
+                if (index === -1) {
+                    index = delegated.selectors.length;
+
+                    delegated.selectors.push(this.selector);
+                    delegated.contexts .push(this._context);
+                    delegated.listeners.push([]);
+                }
+
+                // keep listener and useCapture flag
+                delegated.listeners[index].push([listener, useCapture]);
+            }
+            else {
+                events.add(this._element, eventType, listener, useCapture);
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.off
+         [ method ]
+         *
+         * Removes an InteractEvent or DOM event listener
+         *
+         - eventType  (string | array | object) The types of events that were listened for
+         - listener   (function) The listener function to be removed
+         - useCapture (boolean) #optional useCapture flag for removeEventListener
+         = (object) This Interactable
+        \*/
+        off: function (eventType, listener, useCapture) {
+            var i;
+
+            if (isString(eventType) && eventType.search(' ') !== -1) {
+                eventType = eventType.trim().split(/ +/);
+            }
+
+            if (isArray(eventType)) {
+                for (i = 0; i < eventType.length; i++) {
+                    this.off(eventType[i], listener, useCapture);
+                }
+
+                return this;
+            }
+
+            if (isObject(eventType)) {
+                for (var prop in eventType) {
+                    this.off(prop, eventType[prop], listener);
+                }
+
+                return this;
+            }
+
+            var eventList,
+                index = -1;
+
+            // convert to boolean
+            useCapture = useCapture? true: false;
+
+            if (eventType === 'wheel') {
+                eventType = wheelEvent;
+            }
+
+            // if it is an action event type
+            if (contains(eventTypes, eventType)) {
+                eventList = this._iEvents[eventType];
+
+                if (eventList && (index = indexOf(eventList, listener)) !== -1) {
+                    this._iEvents[eventType].splice(index, 1);
+                }
+            }
+            // delegated event
+            else if (this.selector) {
+                var delegated = delegatedEvents[eventType],
+                    matchFound = false;
+
+                if (!delegated) { return this; }
+
+                // count from last index of delegated to 0
+                for (index = delegated.selectors.length - 1; index >= 0; index--) {
+                    // look for matching selector and context Node
+                    if (delegated.selectors[index] === this.selector
+                        && delegated.contexts[index] === this._context) {
+
+                        var listeners = delegated.listeners[index];
+
+                        // each item of the listeners array is an array: [function, useCaptureFlag]
+                        for (i = listeners.length - 1; i >= 0; i--) {
+                            var fn = listeners[i][0],
+                                useCap = listeners[i][1];
+
+                            // check if the listener functions and useCapture flags match
+                            if (fn === listener && useCap === useCapture) {
+                                // remove the listener from the array of listeners
+                                listeners.splice(i, 1);
+
+                                // if all listeners for this interactable have been removed
+                                // remove the interactable from the delegated arrays
+                                if (!listeners.length) {
+                                    delegated.selectors.splice(index, 1);
+                                    delegated.contexts .splice(index, 1);
+                                    delegated.listeners.splice(index, 1);
+
+                                    // remove delegate function from context
+                                    events.remove(this._context, eventType, delegateListener);
+                                    events.remove(this._context, eventType, delegateUseCapture, true);
+
+                                    // remove the arrays if they are empty
+                                    if (!delegated.selectors.length) {
+                                        delegatedEvents[eventType] = null;
+                                    }
+                                }
+
+                                // only remove one listener
+                                matchFound = true;
+                                break;
+                            }
+                        }
+
+                        if (matchFound) { break; }
+                    }
+                }
+            }
+            // remove listener from this Interatable's element
+            else {
+                events.remove(this._element, eventType, listener, useCapture);
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.set
+         [ method ]
+         *
+         * Reset the options of this Interactable
+         - options (object) The new settings to apply
+         = (object) This Interactable
+        \*/
+        set: function (options) {
+            if (!isObject(options)) {
+                options = {};
+            }
+
+            this.options = extend({}, defaultOptions.base);
+
+            var i,
+                actions = ['drag', 'drop', 'resize', 'gesture'],
+                methods = ['draggable', 'dropzone', 'resizable', 'gesturable'],
+                perActions = extend(extend({}, defaultOptions.perAction), options[action] || {});
+
+            for (i = 0; i < actions.length; i++) {
+                var action = actions[i];
+
+                this.options[action] = extend({}, defaultOptions[action]);
+
+                this.setPerAction(action, perActions);
+
+                this[methods[i]](options[action]);
+            }
+
+            var settings = [
+                    'accept', 'actionChecker', 'allowFrom', 'deltaSource',
+                    'dropChecker', 'ignoreFrom', 'origin', 'preventDefault',
+                    'rectChecker', 'styleCursor'
+                ];
+
+            for (i = 0, len = settings.length; i < len; i++) {
+                var setting = settings[i];
+
+                this.options[setting] = defaultOptions.base[setting];
+
+                if (setting in options) {
+                    this[setting](options[setting]);
+                }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.unset
+         [ method ]
+         *
+         * Remove this interactable from the list of interactables and remove
+         * it's drag, drop, resize and gesture capabilities
+         *
+         = (object) @interact
+        \*/
+        unset: function () {
+            events.remove(this._element, 'all');
+
+            if (!isString(this.selector)) {
+                events.remove(this, 'all');
+                if (this.options.styleCursor) {
+                    this._element.style.cursor = '';
+                }
+            }
+            else {
+                // remove delegated events
+                for (var type in delegatedEvents) {
+                    var delegated = delegatedEvents[type];
+
+                    for (var i = 0; i < delegated.selectors.length; i++) {
+                        if (delegated.selectors[i] === this.selector
+                            && delegated.contexts[i] === this._context) {
+
+                            delegated.selectors.splice(i, 1);
+                            delegated.contexts .splice(i, 1);
+                            delegated.listeners.splice(i, 1);
+
+                            // remove the arrays if they are empty
+                            if (!delegated.selectors.length) {
+                                delegatedEvents[type] = null;
+                            }
+                        }
+
+                        events.remove(this._context, type, delegateListener);
+                        events.remove(this._context, type, delegateUseCapture, true);
+
+                        break;
+                    }
+                }
+            }
+
+            this.dropzone(false);
+
+            interactables.splice(indexOf(interactables, this), 1);
+
+            return interact;
+        }
+    };
+
+    function warnOnce (method, message) {
+        var warned = false;
+
+        return function () {
+            if (!warned) {
+                window.console.warn(message);
+                warned = true;
+            }
+
+            return method.apply(this, arguments);
+        };
+    }
+
+    Interactable.prototype.snap = warnOnce(Interactable.prototype.snap,
+         'Interactable#snap is deprecated. See the new documentation for snapping at http://interactjs.io/docs/snapping');
+    Interactable.prototype.restrict = warnOnce(Interactable.prototype.restrict,
+         'Interactable#restrict is deprecated. See the new documentation for resticting at http://interactjs.io/docs/restriction');
+    Interactable.prototype.inertia = warnOnce(Interactable.prototype.inertia,
+         'Interactable#inertia is deprecated. See the new documentation for inertia at http://interactjs.io/docs/inertia');
+    Interactable.prototype.autoScroll = warnOnce(Interactable.prototype.autoScroll,
+         'Interactable#autoScroll is deprecated. See the new documentation for autoScroll at http://interactjs.io/docs/#autoscroll');
+    Interactable.prototype.squareResize = warnOnce(Interactable.prototype.squareResize,
+         'Interactable#squareResize is deprecated. See http://interactjs.io/docs/#resize-square');
+
+    Interactable.prototype.accept = warnOnce(Interactable.prototype.accept,
+         'Interactable#accept is deprecated. use Interactable#dropzone({ accept: target }) instead');
+    Interactable.prototype.dropChecker = warnOnce(Interactable.prototype.dropChecker,
+         'Interactable#dropChecker is deprecated. use Interactable#dropzone({ dropChecker: checkerFunction }) instead');
+    Interactable.prototype.context = warnOnce(Interactable.prototype.context,
+         'Interactable#context as a method is deprecated. It will soon be a DOM Node instead');
+
+    /*\
+     * interact.isSet
+     [ method ]
+     *
+     * Check if an element has been set
+     - element (Element) The Element being searched for
+     = (boolean) Indicates if the element or CSS selector was previously passed to interact
+    \*/
+    interact.isSet = function(element, options) {
+        return interactables.indexOfElement(element, options && options.context) !== -1;
+    };
+
+    /*\
+     * interact.on
+     [ method ]
+     *
+     * Adds a global listener for an InteractEvent or adds a DOM event to
+     * `document`
+     *
+     - type       (string | array | object) The types of events to listen for
+     - listener   (function) The function to be called on the given event(s)
+     - useCapture (boolean) #optional useCapture flag for addEventListener
+     = (object) interact
+    \*/
+    interact.on = function (type, listener, useCapture) {
+        if (isString(type) && type.search(' ') !== -1) {
+            type = type.trim().split(/ +/);
+        }
+
+        if (isArray(type)) {
+            for (var i = 0; i < type.length; i++) {
+                interact.on(type[i], listener, useCapture);
+            }
+
+            return interact;
+        }
+
+        if (isObject(type)) {
+            for (var prop in type) {
+                interact.on(prop, type[prop], listener);
+            }
+
+            return interact;
+        }
+
+        // if it is an InteractEvent type, add listener to globalEvents
+        if (contains(eventTypes, type)) {
+            // if this type of event was never bound
+            if (!globalEvents[type]) {
+                globalEvents[type] = [listener];
+            }
+            else {
+                globalEvents[type].push(listener);
+            }
+        }
+        // If non InteractEvent type, addEventListener to document
+        else {
+            events.add(document, type, listener, useCapture);
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.off
+     [ method ]
+     *
+     * Removes a global InteractEvent listener or DOM event from `document`
+     *
+     - type       (string | array | object) The types of events that were listened for
+     - listener   (function) The listener function to be removed
+     - useCapture (boolean) #optional useCapture flag for removeEventListener
+     = (object) interact
+     \*/
+    interact.off = function (type, listener, useCapture) {
+        if (isString(type) && type.search(' ') !== -1) {
+            type = type.trim().split(/ +/);
+        }
+
+        if (isArray(type)) {
+            for (var i = 0; i < type.length; i++) {
+                interact.off(type[i], listener, useCapture);
+            }
+
+            return interact;
+        }
+
+        if (isObject(type)) {
+            for (var prop in type) {
+                interact.off(prop, type[prop], listener);
+            }
+
+            return interact;
+        }
+
+        if (!contains(eventTypes, type)) {
+            events.remove(document, type, listener, useCapture);
+        }
+        else {
+            var index;
+
+            if (type in globalEvents
+                && (index = indexOf(globalEvents[type], listener)) !== -1) {
+                globalEvents[type].splice(index, 1);
+            }
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.enableDragging
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether dragging is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableDragging = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.drag = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.drag;
+    }, 'interact.enableDragging is deprecated and will soon be removed.');
+
+    /*\
+     * interact.enableResizing
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether resizing is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableResizing = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.resize = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.resize;
+    }, 'interact.enableResizing is deprecated and will soon be removed.');
+
+    /*\
+     * interact.enableGesturing
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether gesturing is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableGesturing = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.gesture = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.gesture;
+    }, 'interact.enableGesturing is deprecated and will soon be removed.');
+
+    interact.eventTypes = eventTypes;
+
+    /*\
+     * interact.debug
+     [ method ]
+     *
+     * Returns debugging data
+     = (object) An object with properties that outline the current state and expose internal functions and variables
+    \*/
+    interact.debug = function () {
+        var interaction = interactions[0] || new Interaction();
+
+        return {
+            interactions          : interactions,
+            target                : interaction.target,
+            dragging              : interaction.dragging,
+            resizing              : interaction.resizing,
+            gesturing             : interaction.gesturing,
+            prepared              : interaction.prepared,
+            matches               : interaction.matches,
+            matchElements         : interaction.matchElements,
+
+            prevCoords            : interaction.prevCoords,
+            startCoords           : interaction.startCoords,
+
+            pointerIds            : interaction.pointerIds,
+            pointers              : interaction.pointers,
+            addPointer            : listeners.addPointer,
+            removePointer         : listeners.removePointer,
+            recordPointer        : listeners.recordPointer,
+
+            snap                  : interaction.snapStatus,
+            restrict              : interaction.restrictStatus,
+            inertia               : interaction.inertiaStatus,
+
+            downTime              : interaction.downTimes[0],
+            downEvent             : interaction.downEvent,
+            downPointer           : interaction.downPointer,
+            prevEvent             : interaction.prevEvent,
+
+            Interactable          : Interactable,
+            interactables         : interactables,
+            pointerIsDown         : interaction.pointerIsDown,
+            defaultOptions        : defaultOptions,
+            defaultActionChecker  : defaultActionChecker,
+
+            actionCursors         : actionCursors,
+            dragMove              : listeners.dragMove,
+            resizeMove            : listeners.resizeMove,
+            gestureMove           : listeners.gestureMove,
+            pointerUp             : listeners.pointerUp,
+            pointerDown           : listeners.pointerDown,
+            pointerMove           : listeners.pointerMove,
+            pointerHover          : listeners.pointerHover,
+
+            eventTypes            : eventTypes,
+
+            events                : events,
+            globalEvents          : globalEvents,
+            delegatedEvents       : delegatedEvents,
+
+            prefixedPropREs       : prefixedPropREs
+        };
+    };
+
+    // expose the functions used to calculate multi-touch properties
+    interact.getPointerAverage = pointerAverage;
+    interact.getTouchBBox     = touchBBox;
+    interact.getTouchDistance = touchDistance;
+    interact.getTouchAngle    = touchAngle;
+
+    interact.getElementRect         = getElementRect;
+    interact.getElementClientRect   = getElementClientRect;
+    interact.matchesSelector        = matchesSelector;
+    interact.closest                = closest;
+
+    /*\
+     * interact.margin
+     [ method ]
+     *
+     * Deprecated. Use `interact(target).resizable({ margin: number });` instead.
+     * Returns or sets the margin for autocheck resizing used in
+     * @Interactable.getAction. That is the distance from the bottom and right
+     * edges of an element clicking in which will start resizing
+     *
+     - newValue (number) #optional
+     = (number | interact) The current margin value or interact
+    \*/
+    interact.margin = warnOnce(function (newvalue) {
+        if (isNumber(newvalue)) {
+            margin = newvalue;
+
+            return interact;
+        }
+        return margin;
+    },
+    'interact.margin is deprecated. Use interact(target).resizable({ margin: number }); instead.') ;
+
+    /*\
+     * interact.supportsTouch
+     [ method ]
+     *
+     = (boolean) Whether or not the browser supports touch input
+    \*/
+    interact.supportsTouch = function () {
+        return supportsTouch;
+    };
+
+    /*\
+     * interact.supportsPointerEvent
+     [ method ]
+     *
+     = (boolean) Whether or not the browser supports PointerEvents
+    \*/
+    interact.supportsPointerEvent = function () {
+        return supportsPointerEvent;
+    };
+
+    /*\
+     * interact.stop
+     [ method ]
+     *
+     * Cancels all interactions (end events are not fired)
+     *
+     - event (Event) An event on which to call preventDefault()
+     = (object) interact
+    \*/
+    interact.stop = function (event) {
+        for (var i = interactions.length - 1; i >= 0; i--) {
+            interactions[i].stop(event);
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.dynamicDrop
+     [ method ]
+     *
+     * Returns or sets whether the dimensions of dropzone elements are
+     * calculated on every dragmove or only on dragstart for the default
+     * dropChecker
+     *
+     - newValue (boolean) #optional True to check on each move. False to check only before start
+     = (boolean | interact) The current setting or interact
+    \*/
+    interact.dynamicDrop = function (newValue) {
+        if (isBool(newValue)) {
+            //if (dragging && dynamicDrop !== newValue && !newValue) {
+                //calcRects(dropzones);
+            //}
+
+            dynamicDrop = newValue;
+
+            return interact;
+        }
+        return dynamicDrop;
+    };
+
+    /*\
+     * interact.pointerMoveTolerance
+     [ method ]
+     * Returns or sets the distance the pointer must be moved before an action
+     * sequence occurs. This also affects tolerance for tap events.
+     *
+     - newValue (number) #optional The movement from the start position must be greater than this value
+     = (number | Interactable) The current setting or interact
+    \*/
+    interact.pointerMoveTolerance = function (newValue) {
+        if (isNumber(newValue)) {
+            pointerMoveTolerance = newValue;
+
+            return this;
+        }
+
+        return pointerMoveTolerance;
+    };
+
+    /*\
+     * interact.maxInteractions
+     [ method ]
+     **
+     * Returns or sets the maximum number of concurrent interactions allowed.
+     * By default only 1 interaction is allowed at a time (for backwards
+     * compatibility). To allow multiple interactions on the same Interactables
+     * and elements, you need to enable it in the draggable, resizable and
+     * gesturable `'max'` and `'maxPerElement'` options.
+     **
+     - newValue (number) #optional Any number. newValue <= 0 means no interactions.
+    \*/
+    interact.maxInteractions = function (newValue) {
+        if (isNumber(newValue)) {
+            maxInteractions = newValue;
+
+            return this;
+        }
+
+        return maxInteractions;
+    };
+
+    interact.createSnapGrid = function (grid) {
+        return function (x, y) {
+            var offsetX = 0,
+                offsetY = 0;
+
+            if (isObject(grid.offset)) {
+                offsetX = grid.offset.x;
+                offsetY = grid.offset.y;
+            }
+
+            var gridx = Math.round((x - offsetX) / grid.x),
+                gridy = Math.round((y - offsetY) / grid.y),
+
+                newX = gridx * grid.x + offsetX,
+                newY = gridy * grid.y + offsetY;
+
+            return {
+                x: newX,
+                y: newY,
+                range: grid.range
+            };
+        };
+    };
+
+    function endAllInteractions (event) {
+        for (var i = 0; i < interactions.length; i++) {
+            interactions[i].pointerEnd(event, event);
+        }
+    }
+
+    function listenToDocument (doc) {
+        if (contains(documents, doc)) { return; }
+
+        var win = doc.defaultView || doc.parentWindow;
+
+        // add delegate event listener
+        for (var eventType in delegatedEvents) {
+            events.add(doc, eventType, delegateListener);
+            events.add(doc, eventType, delegateUseCapture, true);
+        }
+
+        if (PointerEvent) {
+            if (PointerEvent === win.MSPointerEvent) {
+                pEventTypes = {
+                    up: 'MSPointerUp', down: 'MSPointerDown', over: 'mouseover',
+                    out: 'mouseout', move: 'MSPointerMove', cancel: 'MSPointerCancel' };
+            }
+            else {
+                pEventTypes = {
+                    up: 'pointerup', down: 'pointerdown', over: 'pointerover',
+                    out: 'pointerout', move: 'pointermove', cancel: 'pointercancel' };
+            }
+
+            events.add(doc, pEventTypes.down  , listeners.selectorDown );
+            events.add(doc, pEventTypes.move  , listeners.pointerMove  );
+            events.add(doc, pEventTypes.over  , listeners.pointerOver  );
+            events.add(doc, pEventTypes.out   , listeners.pointerOut   );
+            events.add(doc, pEventTypes.up    , listeners.pointerUp    );
+            events.add(doc, pEventTypes.cancel, listeners.pointerCancel);
+
+            // autoscroll
+            events.add(doc, pEventTypes.move, listeners.autoScrollMove);
+        }
+        else {
+            events.add(doc, 'mousedown', listeners.selectorDown);
+            events.add(doc, 'mousemove', listeners.pointerMove );
+            events.add(doc, 'mouseup'  , listeners.pointerUp   );
+            events.add(doc, 'mouseover', listeners.pointerOver );
+            events.add(doc, 'mouseout' , listeners.pointerOut  );
+
+            events.add(doc, 'touchstart' , listeners.selectorDown );
+            events.add(doc, 'touchmove'  , listeners.pointerMove  );
+            events.add(doc, 'touchend'   , listeners.pointerUp    );
+            events.add(doc, 'touchcancel', listeners.pointerCancel);
+
+            // autoscroll
+            events.add(doc, 'mousemove', listeners.autoScrollMove);
+            events.add(doc, 'touchmove', listeners.autoScrollMove);
+        }
+
+        events.add(win, 'blur', endAllInteractions);
+
+        try {
+            if (win.frameElement) {
+                var parentDoc = win.frameElement.ownerDocument,
+                    parentWindow = parentDoc.defaultView;
+
+                events.add(parentDoc   , 'mouseup'      , listeners.pointerEnd);
+                events.add(parentDoc   , 'touchend'     , listeners.pointerEnd);
+                events.add(parentDoc   , 'touchcancel'  , listeners.pointerEnd);
+                events.add(parentDoc   , 'pointerup'    , listeners.pointerEnd);
+                events.add(parentDoc   , 'MSPointerUp'  , listeners.pointerEnd);
+                events.add(parentWindow, 'blur'         , endAllInteractions );
+            }
+        }
+        catch (error) {
+            interact.windowParentError = error;
+        }
+
+        // prevent native HTML5 drag on interact.js target elements
+        events.add(doc, 'dragstart', function (event) {
+            for (var i = 0; i < interactions.length; i++) {
+                var interaction = interactions[i];
+
+                if (interaction.element
+                    && (interaction.element === event.target
+                        || nodeContains(interaction.element, event.target))) {
+
+                    interaction.checkAndPreventDefault(event, interaction.target, interaction.element);
+                    return;
+                }
+            }
+        });
+
+        if (events.useAttachEvent) {
+            // For IE's lack of Event#preventDefault
+            events.add(doc, 'selectstart', function (event) {
+                var interaction = interactions[0];
+
+                if (interaction.currentAction()) {
+                    interaction.checkAndPreventDefault(event);
+                }
+            });
+
+            // For IE's bad dblclick event sequence
+            events.add(doc, 'dblclick', doOnInteractions('ie8Dblclick'));
+        }
+
+        documents.push(doc);
+    }
+
+    listenToDocument(document);
+
+    function indexOf (array, target) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            if (array[i] === target) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    function contains (array, target) {
+        return indexOf(array, target) !== -1;
+    }
+
+    function matchesSelector (element, selector, nodeList) {
+        if (ie8MatchesSelector) {
+            return ie8MatchesSelector(element, selector, nodeList);
+        }
+
+        // remove /deep/ from selectors if shadowDOM polyfill is used
+        if (window !== realWindow) {
+            selector = selector.replace(/\/deep\//g, ' ');
+        }
+
+        return element[prefixedMatchesSelector](selector);
+    }
+
+    function matchesUpTo (element, selector, limit) {
+        while (isElement(element)) {
+            if (matchesSelector(element, selector)) {
+                return true;
+            }
+
+            element = parentElement(element);
+
+            if (element === limit) {
+                return matchesSelector(element, selector);
+            }
+        }
+
+        return false;
+    }
+
+    // For IE8's lack of an Element#matchesSelector
+    // taken from http://tanalin.com/en/blog/2012/12/matches-selector-ie8/ and modified
+    if (!(prefixedMatchesSelector in Element.prototype) || !isFunction(Element.prototype[prefixedMatchesSelector])) {
+        ie8MatchesSelector = function (element, selector, elems) {
+            elems = elems || element.parentNode.querySelectorAll(selector);
+
+            for (var i = 0, len = elems.length; i < len; i++) {
+                if (elems[i] === element) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    }
+
+    // requestAnimationFrame polyfill
+    (function() {
+        var lastTime = 0,
+            vendors = ['ms', 'moz', 'webkit', 'o'];
+
+        for(var x = 0; x < vendors.length && !realWindow.requestAnimationFrame; ++x) {
+            reqFrame = realWindow[vendors[x]+'RequestAnimationFrame'];
+            cancelFrame = realWindow[vendors[x]+'CancelAnimationFrame'] || realWindow[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!reqFrame) {
+            reqFrame = function(callback) {
+                var currTime = new Date().getTime(),
+                    timeToCall = Math.max(0, 16 - (currTime - lastTime)),
+                    id = setTimeout(function() { callback(currTime + timeToCall); },
+                  timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+
+        if (!cancelFrame) {
+            cancelFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+    }());
+
+    /* global exports: true, module, define */
+
+    // http://documentcloud.github.io/underscore/docs/underscore.html#section-11
+    if (typeof exports !== 'undefined') {
+        if (typeof module !== 'undefined' && module.exports) {
+            exports = module.exports = interact;
+        }
+        exports.interact = interact;
+    }
+    // AMD
+    else if (typeof define === 'function' && define.amd) {
+        define('interact', function() {
+            return interact;
+        });
+    }
+    else {
+        realWindow.interact = interact;
+    }
+
+} (typeof window === 'undefined'? undefined : window));
+
+},{}],38:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -9940,7 +16135,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 (function (global){
 /**
  * ReactDOM v0.14.3
@@ -9986,12 +16181,12 @@ module.exports = Object.assign || function (target, source) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"react":214}],38:[function(require,module,exports){
+},{"react":216}],40:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":79}],39:[function(require,module,exports){
+},{"react/lib/ReactDOM":81}],41:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -12524,7 +18719,7 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react/addons":40}],40:[function(require,module,exports){
+},{"react/addons":42}],42:[function(require,module,exports){
 'use strict';
 
 var warning = require('fbjs/lib/warning');
@@ -12539,7 +18734,7 @@ warning(
 
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":137,"fbjs/lib/warning":213}],41:[function(require,module,exports){
+},{"./lib/ReactWithAddons":139,"fbjs/lib/warning":215}],43:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -12576,7 +18771,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":111,"./findDOMNode":162,"fbjs/lib/focusNode":195}],42:[function(require,module,exports){
+},{"./ReactMount":113,"./findDOMNode":164,"fbjs/lib/focusNode":197}],44:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -12982,7 +19177,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":54,"./EventPropagators":58,"./FallbackCompositionState":59,"./SyntheticCompositionEvent":143,"./SyntheticInputEvent":147,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/keyOf":206}],43:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./FallbackCompositionState":61,"./SyntheticCompositionEvent":145,"./SyntheticInputEvent":149,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/keyOf":208}],45:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13122,7 +19317,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13300,7 +19495,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":43,"./ReactPerf":117,"./dangerousStyleValue":159,"_process":32,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/camelizeStyleName":189,"fbjs/lib/hyphenateStyleName":200,"fbjs/lib/memoizeStringOnly":208,"fbjs/lib/warning":213}],45:[function(require,module,exports){
+},{"./CSSProperty":45,"./ReactPerf":119,"./dangerousStyleValue":161,"_process":33,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/camelizeStyleName":191,"fbjs/lib/hyphenateStyleName":202,"fbjs/lib/memoizeStringOnly":210,"fbjs/lib/warning":215}],47:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13396,7 +19591,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./PooledClass":64,"_process":32,"fbjs/lib/invariant":201}],46:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"_process":33,"fbjs/lib/invariant":203}],48:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13718,7 +19913,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":54,"./EventPluginHub":55,"./EventPropagators":58,"./ReactUpdates":135,"./SyntheticEvent":145,"./getEventTarget":168,"./isEventSupported":173,"./isTextInputElement":174,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/keyOf":206}],47:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPropagators":60,"./ReactUpdates":137,"./SyntheticEvent":147,"./getEventTarget":170,"./isEventSupported":175,"./isTextInputElement":176,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/keyOf":208}],49:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13742,7 +19937,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13874,7 +20069,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":51,"./ReactMultiChildUpdateTypes":113,"./ReactPerf":117,"./setInnerHTML":178,"./setTextContent":179,"_process":32,"fbjs/lib/invariant":201}],49:[function(require,module,exports){
+},{"./Danger":53,"./ReactMultiChildUpdateTypes":115,"./ReactPerf":119,"./setInnerHTML":180,"./setTextContent":181,"_process":33,"fbjs/lib/invariant":203}],51:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14111,7 +20306,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],50:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],52:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14339,7 +20534,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":49,"./ReactPerf":117,"./quoteAttributeValueForBrowser":176,"_process":32,"fbjs/lib/warning":213}],51:[function(require,module,exports){
+},{"./DOMProperty":51,"./ReactPerf":119,"./quoteAttributeValueForBrowser":178,"_process":33,"fbjs/lib/warning":215}],53:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14487,7 +20682,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/createNodesFromMarkup":192,"fbjs/lib/emptyFunction":193,"fbjs/lib/getMarkupWrap":197,"fbjs/lib/invariant":201}],52:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/createNodesFromMarkup":194,"fbjs/lib/emptyFunction":195,"fbjs/lib/getMarkupWrap":199,"fbjs/lib/invariant":203}],54:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14515,7 +20710,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":206}],53:[function(require,module,exports){
+},{"fbjs/lib/keyOf":208}],55:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14640,7 +20835,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":54,"./EventPropagators":58,"./ReactMount":111,"./SyntheticMouseEvent":149,"fbjs/lib/keyOf":206}],54:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactMount":113,"./SyntheticMouseEvent":151,"fbjs/lib/keyOf":208}],56:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14733,7 +20928,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":205}],55:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],57:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15015,7 +21210,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":56,"./EventPluginUtils":57,"./ReactErrorUtils":100,"./accumulateInto":155,"./forEachAccumulated":164,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],56:[function(require,module,exports){
+},{"./EventPluginRegistry":58,"./EventPluginUtils":59,"./ReactErrorUtils":102,"./accumulateInto":157,"./forEachAccumulated":166,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],58:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15238,7 +21433,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],57:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],59:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15443,7 +21638,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":54,"./ReactErrorUtils":100,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],58:[function(require,module,exports){
+},{"./EventConstants":56,"./ReactErrorUtils":102,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],60:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15581,7 +21776,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":54,"./EventPluginHub":55,"./accumulateInto":155,"./forEachAccumulated":164,"_process":32,"fbjs/lib/warning":213}],59:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./accumulateInto":157,"./forEachAccumulated":166,"_process":33,"fbjs/lib/warning":215}],61:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15677,7 +21872,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":63,"./PooledClass":64,"./getTextContentAccessor":171}],60:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"./getTextContentAccessor":173}],62:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15910,7 +22105,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":49,"fbjs/lib/ExecutionEnvironment":187}],61:[function(require,module,exports){
+},{"./DOMProperty":51,"fbjs/lib/ExecutionEnvironment":189}],63:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15947,7 +22142,7 @@ var LinkedStateMixin = {
 };
 
 module.exports = LinkedStateMixin;
-},{"./ReactLink":109,"./ReactStateSetters":129}],62:[function(require,module,exports){
+},{"./ReactLink":111,"./ReactStateSetters":131}],64:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16084,7 +22279,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":120,"./ReactPropTypes":121,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],63:[function(require,module,exports){
+},{"./ReactPropTypeLocations":122,"./ReactPropTypes":123,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],65:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -16132,7 +22327,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],64:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16254,7 +22449,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],65:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],67:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16295,7 +22490,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":63,"./ReactDOM":79,"./ReactDOMServer":89,"./ReactIsomorphic":108,"./deprecated":160}],66:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactDOM":81,"./ReactDOMServer":91,"./ReactIsomorphic":110,"./deprecated":162}],68:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16334,7 +22529,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":107,"./findDOMNode":162,"_process":32,"fbjs/lib/warning":213}],67:[function(require,module,exports){
+},{"./ReactInstanceMap":109,"./findDOMNode":164,"_process":33,"fbjs/lib/warning":215}],69:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16659,7 +22854,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":54,"./EventPluginHub":55,"./EventPluginRegistry":56,"./Object.assign":63,"./ReactEventEmitterMixin":101,"./ReactPerf":117,"./ViewportMetrics":154,"./isEventSupported":173}],68:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPluginRegistry":58,"./Object.assign":65,"./ReactEventEmitterMixin":103,"./ReactPerf":119,"./ViewportMetrics":156,"./isEventSupported":175}],70:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16743,7 +22938,7 @@ var ReactCSSTransitionGroup = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroup;
-},{"./Object.assign":63,"./React":65,"./ReactCSSTransitionGroupChild":69,"./ReactTransitionGroup":133}],69:[function(require,module,exports){
+},{"./Object.assign":65,"./React":67,"./ReactCSSTransitionGroupChild":71,"./ReactTransitionGroup":135}],71:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16909,7 +23104,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroupChild;
-},{"./React":65,"./ReactDOM":79,"./ReactTransitionEvents":132,"./onlyChild":175,"fbjs/lib/CSSCore":185}],70:[function(require,module,exports){
+},{"./React":67,"./ReactDOM":81,"./ReactTransitionEvents":134,"./onlyChild":177,"fbjs/lib/CSSCore":187}],72:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -17034,7 +23229,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":123,"./instantiateReactComponent":172,"./shouldUpdateReactComponent":181,"./traverseAllChildren":182,"_process":32,"fbjs/lib/warning":213}],71:[function(require,module,exports){
+},{"./ReactReconciler":125,"./instantiateReactComponent":174,"./shouldUpdateReactComponent":183,"./traverseAllChildren":184,"_process":33,"fbjs/lib/warning":215}],73:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17217,7 +23412,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":64,"./ReactElement":96,"./traverseAllChildren":182,"fbjs/lib/emptyFunction":193}],72:[function(require,module,exports){
+},{"./PooledClass":66,"./ReactElement":98,"./traverseAllChildren":184,"fbjs/lib/emptyFunction":195}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17991,7 +24186,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactComponent":73,"./ReactElement":96,"./ReactNoopUpdateQueue":115,"./ReactPropTypeLocationNames":119,"./ReactPropTypeLocations":120,"_process":32,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201,"fbjs/lib/keyMirror":205,"fbjs/lib/keyOf":206,"fbjs/lib/warning":213}],73:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactComponent":75,"./ReactElement":98,"./ReactNoopUpdateQueue":117,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"_process":33,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/keyMirror":207,"fbjs/lib/keyOf":208,"fbjs/lib/warning":215}],75:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18116,7 +24311,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":115,"./canDefineProperty":157,"_process":32,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],74:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":117,"./canDefineProperty":159,"_process":33,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],76:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18158,7 +24353,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":84,"./ReactMount":111}],75:[function(require,module,exports){
+},{"./ReactDOMIDOperations":86,"./ReactMount":113}],77:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -18212,7 +24407,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],76:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],78:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18259,7 +24454,7 @@ var ReactComponentWithPureRenderMixin = {
 };
 
 module.exports = ReactComponentWithPureRenderMixin;
-},{"./shallowCompare":180}],77:[function(require,module,exports){
+},{"./shallowCompare":182}],79:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18956,7 +25151,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactComponentEnvironment":75,"./ReactCurrentOwner":78,"./ReactElement":96,"./ReactInstanceMap":107,"./ReactPerf":117,"./ReactPropTypeLocationNames":119,"./ReactPropTypeLocations":120,"./ReactReconciler":123,"./ReactUpdateQueue":134,"./shouldUpdateReactComponent":181,"_process":32,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],78:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactComponentEnvironment":77,"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceMap":109,"./ReactPerf":119,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"./ReactReconciler":125,"./ReactUpdateQueue":136,"./shouldUpdateReactComponent":183,"_process":33,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],80:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18987,7 +25182,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],79:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19082,7 +25277,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":78,"./ReactDOMTextComponent":90,"./ReactDefaultInjection":93,"./ReactInstanceHandles":106,"./ReactMount":111,"./ReactPerf":117,"./ReactReconciler":123,"./ReactUpdates":135,"./ReactVersion":136,"./findDOMNode":162,"./renderSubtreeIntoContainer":177,"_process":32,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/warning":213}],80:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactDOMTextComponent":92,"./ReactDefaultInjection":95,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactPerf":119,"./ReactReconciler":125,"./ReactUpdates":137,"./ReactVersion":138,"./findDOMNode":164,"./renderSubtreeIntoContainer":179,"_process":33,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/warning":215}],82:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19133,7 +25328,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],81:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20098,7 +26293,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":41,"./CSSPropertyOperations":44,"./DOMProperty":49,"./DOMPropertyOperations":50,"./EventConstants":54,"./Object.assign":63,"./ReactBrowserEventEmitter":67,"./ReactComponentBrowserEnvironment":74,"./ReactDOMButton":80,"./ReactDOMInput":85,"./ReactDOMOption":86,"./ReactDOMSelect":87,"./ReactDOMTextarea":91,"./ReactMount":111,"./ReactMultiChild":112,"./ReactPerf":117,"./ReactUpdateQueue":134,"./canDefineProperty":157,"./escapeTextContentForBrowser":161,"./isEventSupported":173,"./setInnerHTML":178,"./setTextContent":179,"./validateDOMNesting":184,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/keyOf":206,"fbjs/lib/shallowEqual":211,"fbjs/lib/warning":213}],82:[function(require,module,exports){
+},{"./AutoFocusUtils":43,"./CSSPropertyOperations":46,"./DOMProperty":51,"./DOMPropertyOperations":52,"./EventConstants":56,"./Object.assign":65,"./ReactBrowserEventEmitter":69,"./ReactComponentBrowserEnvironment":76,"./ReactDOMButton":82,"./ReactDOMInput":87,"./ReactDOMOption":88,"./ReactDOMSelect":89,"./ReactDOMTextarea":93,"./ReactMount":113,"./ReactMultiChild":114,"./ReactPerf":119,"./ReactUpdateQueue":136,"./canDefineProperty":159,"./escapeTextContentForBrowser":163,"./isEventSupported":175,"./setInnerHTML":180,"./setTextContent":181,"./validateDOMNesting":186,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208,"fbjs/lib/shallowEqual":213,"fbjs/lib/warning":215}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20278,7 +26473,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":96,"./ReactElementValidator":97,"_process":32,"fbjs/lib/mapObject":207}],83:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactElementValidator":99,"_process":33,"fbjs/lib/mapObject":209}],85:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20297,7 +26492,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],84:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20394,7 +26589,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":48,"./DOMPropertyOperations":50,"./ReactMount":111,"./ReactPerf":117,"_process":32,"fbjs/lib/invariant":201}],85:[function(require,module,exports){
+},{"./DOMChildrenOperations":50,"./DOMPropertyOperations":52,"./ReactMount":113,"./ReactPerf":119,"_process":33,"fbjs/lib/invariant":203}],87:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20550,7 +26745,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":62,"./Object.assign":63,"./ReactDOMIDOperations":84,"./ReactMount":111,"./ReactUpdates":135,"_process":32,"fbjs/lib/invariant":201}],86:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactDOMIDOperations":86,"./ReactMount":113,"./ReactUpdates":137,"_process":33,"fbjs/lib/invariant":203}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20639,7 +26834,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactChildren":71,"./ReactDOMSelect":87,"_process":32,"fbjs/lib/warning":213}],87:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactChildren":73,"./ReactDOMSelect":89,"_process":33,"fbjs/lib/warning":215}],89:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20830,7 +27025,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":62,"./Object.assign":63,"./ReactMount":111,"./ReactUpdates":135,"_process":32,"fbjs/lib/warning":213}],88:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactMount":113,"./ReactUpdates":137,"_process":33,"fbjs/lib/warning":215}],90:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21043,7 +27238,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":170,"./getTextContentAccessor":171,"fbjs/lib/ExecutionEnvironment":187}],89:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":172,"./getTextContentAccessor":173,"fbjs/lib/ExecutionEnvironment":189}],91:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21070,7 +27265,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":93,"./ReactServerRendering":127,"./ReactVersion":136}],90:[function(require,module,exports){
+},{"./ReactDefaultInjection":95,"./ReactServerRendering":129,"./ReactVersion":138}],92:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21200,7 +27395,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":48,"./DOMPropertyOperations":50,"./Object.assign":63,"./ReactComponentBrowserEnvironment":74,"./ReactMount":111,"./escapeTextContentForBrowser":161,"./setTextContent":179,"./validateDOMNesting":184,"_process":32}],91:[function(require,module,exports){
+},{"./DOMChildrenOperations":50,"./DOMPropertyOperations":52,"./Object.assign":65,"./ReactComponentBrowserEnvironment":76,"./ReactMount":113,"./escapeTextContentForBrowser":163,"./setTextContent":181,"./validateDOMNesting":186,"_process":33}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21316,7 +27511,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":62,"./Object.assign":63,"./ReactDOMIDOperations":84,"./ReactUpdates":135,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],92:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactDOMIDOperations":86,"./ReactUpdates":137,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],94:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21384,7 +27579,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":63,"./ReactUpdates":135,"./Transaction":153,"fbjs/lib/emptyFunction":193}],93:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactUpdates":137,"./Transaction":155,"fbjs/lib/emptyFunction":195}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21484,7 +27679,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":42,"./ChangeEventPlugin":46,"./ClientReactRootIndex":47,"./DefaultEventPluginOrder":52,"./EnterLeaveEventPlugin":53,"./HTMLDOMPropertyConfig":60,"./ReactBrowserComponentMixin":66,"./ReactComponentBrowserEnvironment":74,"./ReactDOMComponent":81,"./ReactDOMTextComponent":90,"./ReactDefaultBatchingStrategy":92,"./ReactDefaultPerf":94,"./ReactEventListener":102,"./ReactInjection":104,"./ReactInstanceHandles":106,"./ReactMount":111,"./ReactReconcileTransaction":122,"./SVGDOMPropertyConfig":138,"./SelectEventPlugin":139,"./ServerReactRootIndex":140,"./SimpleEventPlugin":141,"_process":32,"fbjs/lib/ExecutionEnvironment":187}],94:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":44,"./ChangeEventPlugin":48,"./ClientReactRootIndex":49,"./DefaultEventPluginOrder":54,"./EnterLeaveEventPlugin":55,"./HTMLDOMPropertyConfig":62,"./ReactBrowserComponentMixin":68,"./ReactComponentBrowserEnvironment":76,"./ReactDOMComponent":83,"./ReactDOMTextComponent":92,"./ReactDefaultBatchingStrategy":94,"./ReactDefaultPerf":96,"./ReactEventListener":104,"./ReactInjection":106,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactReconcileTransaction":124,"./SVGDOMPropertyConfig":140,"./SelectEventPlugin":141,"./ServerReactRootIndex":142,"./SimpleEventPlugin":143,"_process":33,"fbjs/lib/ExecutionEnvironment":189}],96:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21722,7 +27917,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":49,"./ReactDefaultPerfAnalysis":95,"./ReactMount":111,"./ReactPerf":117,"fbjs/lib/performanceNow":210}],95:[function(require,module,exports){
+},{"./DOMProperty":51,"./ReactDefaultPerfAnalysis":97,"./ReactMount":113,"./ReactPerf":119,"fbjs/lib/performanceNow":212}],97:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21922,7 +28117,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":63}],96:[function(require,module,exports){
+},{"./Object.assign":65}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -22172,7 +28367,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactCurrentOwner":78,"./canDefineProperty":157,"_process":32}],97:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCurrentOwner":80,"./canDefineProperty":159,"_process":33}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -22456,7 +28651,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":78,"./ReactElement":96,"./ReactPropTypeLocationNames":119,"./ReactPropTypeLocations":120,"./canDefineProperty":157,"./getIteratorFn":169,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],98:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"./canDefineProperty":159,"./getIteratorFn":171,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],100:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -22508,7 +28703,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":63,"./ReactElement":96,"./ReactEmptyComponentRegistry":99,"./ReactReconciler":123}],99:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactElement":98,"./ReactEmptyComponentRegistry":101,"./ReactReconciler":125}],101:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -22557,7 +28752,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],100:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22637,7 +28832,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":32}],101:[function(require,module,exports){
+},{"_process":33}],103:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22676,7 +28871,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":55}],102:[function(require,module,exports){
+},{"./EventPluginHub":57}],104:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22888,7 +29083,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":63,"./PooledClass":64,"./ReactInstanceHandles":106,"./ReactMount":111,"./ReactUpdates":135,"./getEventTarget":168,"fbjs/lib/EventListener":186,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/getUnboundedScrollPosition":198}],103:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactUpdates":137,"./getEventTarget":170,"fbjs/lib/EventListener":188,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/getUnboundedScrollPosition":200}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -22955,7 +29150,7 @@ var ReactFragment = {
 
 module.exports = ReactFragment;
 }).call(this,require('_process'))
-},{"./ReactChildren":71,"./ReactElement":96,"_process":32,"fbjs/lib/emptyFunction":193,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],104:[function(require,module,exports){
+},{"./ReactChildren":73,"./ReactElement":98,"_process":33,"fbjs/lib/emptyFunction":195,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],106:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22994,7 +29189,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":49,"./EventPluginHub":55,"./ReactBrowserEventEmitter":67,"./ReactClass":72,"./ReactComponentEnvironment":75,"./ReactEmptyComponent":98,"./ReactNativeComponent":114,"./ReactPerf":117,"./ReactRootIndex":125,"./ReactUpdates":135}],105:[function(require,module,exports){
+},{"./DOMProperty":51,"./EventPluginHub":57,"./ReactBrowserEventEmitter":69,"./ReactClass":74,"./ReactComponentEnvironment":77,"./ReactEmptyComponent":100,"./ReactNativeComponent":116,"./ReactPerf":119,"./ReactRootIndex":127,"./ReactUpdates":137}],107:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23119,7 +29314,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":88,"fbjs/lib/containsNode":190,"fbjs/lib/focusNode":195,"fbjs/lib/getActiveElement":196}],106:[function(require,module,exports){
+},{"./ReactDOMSelection":90,"fbjs/lib/containsNode":192,"fbjs/lib/focusNode":197,"fbjs/lib/getActiveElement":198}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23424,7 +29619,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":125,"_process":32,"fbjs/lib/invariant":201}],107:[function(require,module,exports){
+},{"./ReactRootIndex":127,"_process":33,"fbjs/lib/invariant":203}],109:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23472,7 +29667,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],108:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23549,7 +29744,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactChildren":71,"./ReactClass":72,"./ReactComponent":73,"./ReactDOMFactories":82,"./ReactElement":96,"./ReactElementValidator":97,"./ReactPropTypes":121,"./ReactVersion":136,"./onlyChild":175,"_process":32}],109:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactChildren":73,"./ReactClass":74,"./ReactComponent":75,"./ReactDOMFactories":84,"./ReactElement":98,"./ReactElementValidator":99,"./ReactPropTypes":123,"./ReactVersion":138,"./onlyChild":177,"_process":33}],111:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23619,7 +29814,7 @@ ReactLink.PropTypes = {
 };
 
 module.exports = ReactLink;
-},{"./React":65}],110:[function(require,module,exports){
+},{"./React":67}],112:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23665,7 +29860,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":156}],111:[function(require,module,exports){
+},{"./adler32":158}],113:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24518,7 +30713,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":49,"./Object.assign":63,"./ReactBrowserEventEmitter":67,"./ReactCurrentOwner":78,"./ReactDOMFeatureFlags":83,"./ReactElement":96,"./ReactEmptyComponentRegistry":99,"./ReactInstanceHandles":106,"./ReactInstanceMap":107,"./ReactMarkupChecksum":110,"./ReactPerf":117,"./ReactReconciler":123,"./ReactUpdateQueue":134,"./ReactUpdates":135,"./instantiateReactComponent":172,"./setInnerHTML":178,"./shouldUpdateReactComponent":181,"./validateDOMNesting":184,"_process":32,"fbjs/lib/containsNode":190,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],112:[function(require,module,exports){
+},{"./DOMProperty":51,"./Object.assign":65,"./ReactBrowserEventEmitter":69,"./ReactCurrentOwner":80,"./ReactDOMFeatureFlags":85,"./ReactElement":98,"./ReactEmptyComponentRegistry":101,"./ReactInstanceHandles":108,"./ReactInstanceMap":109,"./ReactMarkupChecksum":112,"./ReactPerf":119,"./ReactReconciler":125,"./ReactUpdateQueue":136,"./ReactUpdates":137,"./instantiateReactComponent":174,"./setInnerHTML":180,"./shouldUpdateReactComponent":183,"./validateDOMNesting":186,"_process":33,"fbjs/lib/containsNode":192,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],114:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25017,7 +31212,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":70,"./ReactComponentEnvironment":75,"./ReactCurrentOwner":78,"./ReactMultiChildUpdateTypes":113,"./ReactReconciler":123,"./flattenChildren":163,"_process":32}],113:[function(require,module,exports){
+},{"./ReactChildReconciler":72,"./ReactComponentEnvironment":77,"./ReactCurrentOwner":80,"./ReactMultiChildUpdateTypes":115,"./ReactReconciler":125,"./flattenChildren":165,"_process":33}],115:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25050,7 +31245,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":205}],114:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],116:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -25147,7 +31342,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"_process":32,"fbjs/lib/invariant":201}],115:[function(require,module,exports){
+},{"./Object.assign":65,"_process":33,"fbjs/lib/invariant":203}],117:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -25268,7 +31463,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/warning":213}],116:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/warning":215}],118:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25362,7 +31557,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],117:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],119:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25461,7 +31656,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":32}],118:[function(require,module,exports){
+},{"_process":33}],120:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25570,7 +31765,7 @@ var ReactPropTransferer = {
 };
 
 module.exports = ReactPropTransferer;
-},{"./Object.assign":63,"fbjs/lib/emptyFunction":193,"fbjs/lib/joinClasses":204}],119:[function(require,module,exports){
+},{"./Object.assign":65,"fbjs/lib/emptyFunction":195,"fbjs/lib/joinClasses":206}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25597,7 +31792,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":32}],120:[function(require,module,exports){
+},{"_process":33}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25620,7 +31815,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":205}],121:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],123:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25977,7 +32172,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":96,"./ReactPropTypeLocationNames":119,"./getIteratorFn":169,"fbjs/lib/emptyFunction":193}],122:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactPropTypeLocationNames":121,"./getIteratorFn":171,"fbjs/lib/emptyFunction":195}],124:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26129,7 +32324,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":45,"./Object.assign":63,"./PooledClass":64,"./ReactBrowserEventEmitter":67,"./ReactDOMFeatureFlags":83,"./ReactInputSelection":105,"./Transaction":153}],123:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./ReactBrowserEventEmitter":69,"./ReactDOMFeatureFlags":85,"./ReactInputSelection":107,"./Transaction":155}],125:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26237,7 +32432,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":124}],124:[function(require,module,exports){
+},{"./ReactRef":126}],126:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26316,7 +32511,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":116}],125:[function(require,module,exports){
+},{"./ReactOwner":118}],127:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26346,7 +32541,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],126:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -26370,7 +32565,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],127:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26456,7 +32651,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":92,"./ReactElement":96,"./ReactInstanceHandles":106,"./ReactMarkupChecksum":110,"./ReactServerBatchingStrategy":126,"./ReactServerRenderingTransaction":128,"./ReactUpdates":135,"./instantiateReactComponent":172,"_process":32,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201}],128:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":94,"./ReactElement":98,"./ReactInstanceHandles":108,"./ReactMarkupChecksum":112,"./ReactServerBatchingStrategy":128,"./ReactServerRenderingTransaction":130,"./ReactUpdates":137,"./instantiateReactComponent":174,"_process":33,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203}],130:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -26544,7 +32739,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":45,"./Object.assign":63,"./PooledClass":64,"./Transaction":153,"fbjs/lib/emptyFunction":193}],129:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./Transaction":155,"fbjs/lib/emptyFunction":195}],131:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26649,7 +32844,7 @@ ReactStateSetters.Mixin = {
 };
 
 module.exports = ReactStateSetters;
-},{}],130:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27125,7 +33320,7 @@ Object.keys(topLevelTypes).forEach(function (eventType) {
 
 module.exports = ReactTestUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":54,"./EventPluginHub":55,"./EventPropagators":58,"./Object.assign":63,"./React":65,"./ReactBrowserEventEmitter":67,"./ReactCompositeComponent":77,"./ReactDOM":79,"./ReactElement":96,"./ReactInstanceHandles":106,"./ReactInstanceMap":107,"./ReactMount":111,"./ReactUpdates":135,"./SyntheticEvent":145,"./findDOMNode":162,"_process":32,"fbjs/lib/emptyObject":194,"fbjs/lib/invariant":201}],131:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPropagators":60,"./Object.assign":65,"./React":67,"./ReactBrowserEventEmitter":69,"./ReactCompositeComponent":79,"./ReactDOM":81,"./ReactElement":98,"./ReactInstanceHandles":108,"./ReactInstanceMap":109,"./ReactMount":113,"./ReactUpdates":137,"./SyntheticEvent":147,"./findDOMNode":164,"_process":33,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27224,7 +33419,7 @@ var ReactTransitionChildMapping = {
 };
 
 module.exports = ReactTransitionChildMapping;
-},{"./flattenChildren":163}],132:[function(require,module,exports){
+},{"./flattenChildren":165}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27334,7 +33529,7 @@ var ReactTransitionEvents = {
 };
 
 module.exports = ReactTransitionEvents;
-},{"fbjs/lib/ExecutionEnvironment":187}],133:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],135:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27540,7 +33735,7 @@ var ReactTransitionGroup = React.createClass({
 });
 
 module.exports = ReactTransitionGroup;
-},{"./Object.assign":63,"./React":65,"./ReactTransitionChildMapping":131,"fbjs/lib/emptyFunction":193}],134:[function(require,module,exports){
+},{"./Object.assign":65,"./React":67,"./ReactTransitionChildMapping":133,"fbjs/lib/emptyFunction":195}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -27800,7 +33995,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactCurrentOwner":78,"./ReactElement":96,"./ReactInstanceMap":107,"./ReactUpdates":135,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],135:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceMap":109,"./ReactUpdates":137,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28026,7 +34221,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":45,"./Object.assign":63,"./PooledClass":64,"./ReactPerf":117,"./ReactReconciler":123,"./Transaction":153,"_process":32,"fbjs/lib/invariant":201}],136:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./ReactPerf":119,"./ReactReconciler":125,"./Transaction":155,"_process":33,"fbjs/lib/invariant":203}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28041,7 +34236,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],137:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28104,7 +34299,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":61,"./React":65,"./ReactCSSTransitionGroup":68,"./ReactComponentWithPureRenderMixin":76,"./ReactDefaultPerf":94,"./ReactFragment":103,"./ReactTestUtils":130,"./ReactTransitionGroup":133,"./ReactUpdates":135,"./cloneWithProps":158,"./shallowCompare":180,"./update":183,"_process":32,"fbjs/lib/warning":213}],138:[function(require,module,exports){
+},{"./LinkedStateMixin":63,"./React":67,"./ReactCSSTransitionGroup":70,"./ReactComponentWithPureRenderMixin":78,"./ReactDefaultPerf":96,"./ReactFragment":105,"./ReactTestUtils":132,"./ReactTransitionGroup":135,"./ReactUpdates":137,"./cloneWithProps":160,"./shallowCompare":182,"./update":185,"_process":33,"fbjs/lib/warning":215}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28232,7 +34427,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":49}],139:[function(require,module,exports){
+},{"./DOMProperty":51}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28434,7 +34629,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":54,"./EventPropagators":58,"./ReactInputSelection":105,"./SyntheticEvent":145,"./isTextInputElement":174,"fbjs/lib/ExecutionEnvironment":187,"fbjs/lib/getActiveElement":196,"fbjs/lib/keyOf":206,"fbjs/lib/shallowEqual":211}],140:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactInputSelection":107,"./SyntheticEvent":147,"./isTextInputElement":176,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/getActiveElement":198,"fbjs/lib/keyOf":208,"fbjs/lib/shallowEqual":213}],142:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28464,7 +34659,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],141:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29054,7 +35249,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":54,"./EventPropagators":58,"./ReactMount":111,"./SyntheticClipboardEvent":142,"./SyntheticDragEvent":144,"./SyntheticEvent":145,"./SyntheticFocusEvent":146,"./SyntheticKeyboardEvent":148,"./SyntheticMouseEvent":149,"./SyntheticTouchEvent":150,"./SyntheticUIEvent":151,"./SyntheticWheelEvent":152,"./getEventCharCode":165,"_process":32,"fbjs/lib/EventListener":186,"fbjs/lib/emptyFunction":193,"fbjs/lib/invariant":201,"fbjs/lib/keyOf":206}],142:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactMount":113,"./SyntheticClipboardEvent":144,"./SyntheticDragEvent":146,"./SyntheticEvent":147,"./SyntheticFocusEvent":148,"./SyntheticKeyboardEvent":150,"./SyntheticMouseEvent":151,"./SyntheticTouchEvent":152,"./SyntheticUIEvent":153,"./SyntheticWheelEvent":154,"./getEventCharCode":167,"_process":33,"fbjs/lib/EventListener":188,"fbjs/lib/emptyFunction":195,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208}],144:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29094,7 +35289,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":145}],143:[function(require,module,exports){
+},{"./SyntheticEvent":147}],145:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29132,7 +35327,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":145}],144:[function(require,module,exports){
+},{"./SyntheticEvent":147}],146:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29170,7 +35365,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":149}],145:[function(require,module,exports){
+},{"./SyntheticMouseEvent":151}],147:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29350,7 +35545,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./PooledClass":64,"_process":32,"fbjs/lib/emptyFunction":193,"fbjs/lib/warning":213}],146:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"_process":33,"fbjs/lib/emptyFunction":195,"fbjs/lib/warning":215}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29388,7 +35583,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":151}],147:[function(require,module,exports){
+},{"./SyntheticUIEvent":153}],149:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29427,7 +35622,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":145}],148:[function(require,module,exports){
+},{"./SyntheticEvent":147}],150:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29513,7 +35708,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":151,"./getEventCharCode":165,"./getEventKey":166,"./getEventModifierState":167}],149:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./getEventCharCode":167,"./getEventKey":168,"./getEventModifierState":169}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29587,7 +35782,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":151,"./ViewportMetrics":154,"./getEventModifierState":167}],150:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./ViewportMetrics":156,"./getEventModifierState":169}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29634,7 +35829,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":151,"./getEventModifierState":167}],151:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./getEventModifierState":169}],153:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29695,7 +35890,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":145,"./getEventTarget":168}],152:[function(require,module,exports){
+},{"./SyntheticEvent":147,"./getEventTarget":170}],154:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29751,7 +35946,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":149}],153:[function(require,module,exports){
+},{"./SyntheticMouseEvent":151}],155:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29985,7 +36180,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],154:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],156:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30013,7 +36208,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],155:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -30075,7 +36270,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":32,"fbjs/lib/invariant":201}],156:[function(require,module,exports){
+},{"_process":33,"fbjs/lib/invariant":203}],158:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30118,7 +36313,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],157:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30145,7 +36340,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":32}],158:[function(require,module,exports){
+},{"_process":33}],160:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30202,7 +36397,7 @@ function cloneWithProps(child, props) {
 
 module.exports = cloneWithProps;
 }).call(this,require('_process'))
-},{"./ReactElement":96,"./ReactPropTransferer":118,"_process":32,"fbjs/lib/keyOf":206,"fbjs/lib/warning":213}],159:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactPropTransferer":120,"_process":33,"fbjs/lib/keyOf":208,"fbjs/lib/warning":215}],161:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30258,7 +36453,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":43}],160:[function(require,module,exports){
+},{"./CSSProperty":45}],162:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30309,7 +36504,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"_process":32,"fbjs/lib/warning":213}],161:[function(require,module,exports){
+},{"./Object.assign":65,"_process":33,"fbjs/lib/warning":215}],163:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30348,7 +36543,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],162:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30400,7 +36595,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":78,"./ReactInstanceMap":107,"./ReactMount":111,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],163:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactInstanceMap":109,"./ReactMount":113,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],165:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30451,7 +36646,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":182,"_process":32,"fbjs/lib/warning":213}],164:[function(require,module,exports){
+},{"./traverseAllChildren":184,"_process":33,"fbjs/lib/warning":215}],166:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30481,7 +36676,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],165:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30532,7 +36727,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],166:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30636,7 +36831,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":165}],167:[function(require,module,exports){
+},{"./getEventCharCode":167}],169:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30681,7 +36876,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],168:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30711,7 +36906,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],169:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30752,7 +36947,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],170:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30826,7 +37021,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],171:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30860,7 +37055,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":187}],172:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],174:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30975,7 +37170,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"./ReactCompositeComponent":77,"./ReactEmptyComponent":98,"./ReactNativeComponent":114,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],173:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCompositeComponent":79,"./ReactEmptyComponent":100,"./ReactNativeComponent":116,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],175:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31036,7 +37231,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":187}],174:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],176:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31077,7 +37272,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],175:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31113,7 +37308,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":96,"_process":32,"fbjs/lib/invariant":201}],176:[function(require,module,exports){
+},{"./ReactElement":98,"_process":33,"fbjs/lib/invariant":203}],178:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31140,7 +37335,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":161}],177:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":163}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31157,7 +37352,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":111}],178:[function(require,module,exports){
+},{"./ReactMount":113}],180:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31248,7 +37443,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":187}],179:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],181:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31289,7 +37484,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":161,"./setInnerHTML":178,"fbjs/lib/ExecutionEnvironment":187}],180:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":163,"./setInnerHTML":180,"fbjs/lib/ExecutionEnvironment":189}],182:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31314,7 +37509,7 @@ function shallowCompare(instance, nextProps, nextState) {
 }
 
 module.exports = shallowCompare;
-},{"fbjs/lib/shallowEqual":211}],181:[function(require,module,exports){
+},{"fbjs/lib/shallowEqual":213}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31358,7 +37553,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],182:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31550,7 +37745,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":78,"./ReactElement":96,"./ReactInstanceHandles":106,"./getIteratorFn":169,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/warning":213}],183:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceHandles":108,"./getIteratorFn":171,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],185:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31660,7 +37855,7 @@ function update(value, spec) {
 
 module.exports = update;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"_process":32,"fbjs/lib/invariant":201,"fbjs/lib/keyOf":206}],184:[function(require,module,exports){
+},{"./Object.assign":65,"_process":33,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208}],186:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -32026,7 +38221,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":63,"_process":32,"fbjs/lib/emptyFunction":193,"fbjs/lib/warning":213}],185:[function(require,module,exports){
+},{"./Object.assign":65,"_process":33,"fbjs/lib/emptyFunction":195,"fbjs/lib/warning":215}],187:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32126,7 +38321,7 @@ var CSSCore = {
 
 module.exports = CSSCore;
 }).call(this,require('_process'))
-},{"./invariant":201,"_process":32}],186:[function(require,module,exports){
+},{"./invariant":203,"_process":33}],188:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32213,7 +38408,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":193,"_process":32}],187:[function(require,module,exports){
+},{"./emptyFunction":195,"_process":33}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32250,7 +38445,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],188:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32283,7 +38478,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],189:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32324,7 +38519,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":188}],190:[function(require,module,exports){
+},{"./camelize":190}],192:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32380,7 +38575,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":203}],191:[function(require,module,exports){
+},{"./isTextNode":205}],193:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32466,7 +38661,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":212}],192:[function(require,module,exports){
+},{"./toArray":214}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32553,7 +38748,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":187,"./createArrayFromMixed":191,"./getMarkupWrap":197,"./invariant":201,"_process":32}],193:[function(require,module,exports){
+},{"./ExecutionEnvironment":189,"./createArrayFromMixed":193,"./getMarkupWrap":199,"./invariant":203,"_process":33}],195:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32592,7 +38787,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],194:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32615,7 +38810,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":32}],195:[function(require,module,exports){
+},{"_process":33}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32642,7 +38837,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],196:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32676,7 +38871,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],197:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32774,7 +38969,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":187,"./invariant":201,"_process":32}],198:[function(require,module,exports){
+},{"./ExecutionEnvironment":189,"./invariant":203,"_process":33}],200:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32813,7 +39008,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],199:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32847,7 +39042,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],200:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32887,7 +39082,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":199}],201:[function(require,module,exports){
+},{"./hyphenate":201}],203:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32939,7 +39134,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":32}],202:[function(require,module,exports){
+},{"_process":33}],204:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32963,7 +39158,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],203:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32989,7 +39184,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":202}],204:[function(require,module,exports){
+},{"./isNode":204}],206:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33029,7 +39224,7 @@ function joinClasses(className /*, ... */) {
 }
 
 module.exports = joinClasses;
-},{}],205:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33080,7 +39275,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":201,"_process":32}],206:[function(require,module,exports){
+},{"./invariant":203,"_process":33}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33116,7 +39311,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],207:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33168,7 +39363,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],208:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33200,7 +39395,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],209:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33224,7 +39419,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":187}],210:[function(require,module,exports){
+},{"./ExecutionEnvironment":189}],212:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33254,7 +39449,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":209}],211:[function(require,module,exports){
+},{"./performance":211}],213:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33305,7 +39500,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],212:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33365,7 +39560,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":201,"_process":32}],213:[function(require,module,exports){
+},{"./invariant":203,"_process":33}],215:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -33425,9 +39620,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":193,"_process":32}],214:[function(require,module,exports){
+},{"./emptyFunction":195,"_process":33}],216:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":65}]},{},[8]);
+},{"./lib/React":67}]},{},[8]);

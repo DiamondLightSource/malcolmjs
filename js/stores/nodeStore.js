@@ -596,7 +596,7 @@ var allNodeInfo = {
     label: 'PComp1',
     name: "LinePulse",
     position: {
-      x: 450,
+      x: 350,
       y: 150,
     },
     //inports: {
@@ -801,7 +801,7 @@ function appendToAllNodeInfo(NodeInfo){
     type: 'Gate',
     name: "",
     position: {
-      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
       y: 50,
     },
     inports: {
@@ -946,6 +946,17 @@ function updateGate1Position(newCoordinates){
     y: nodePositions.Gate1.y + newCoordinates.y
   };
   /* Also need to update the port positions somehow! */
+}
+
+function interactJsDrag(NodeInfo){
+  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+  //console.log(allNodeInfo[NodeInfo.target].position);
+
+  allNodeInfo[NodeInfo.target].position = {
+    x: allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale),
+    y: allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale)
+  }
 }
 
 function updateNodePosition(NodeInfo){
@@ -1406,35 +1417,35 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   emitChange: function(){
     this.emit(CHANGE_EVENT)
   },
-  getGate1InportsState: function(){
-    return allNodeInfo.Gate1.inports
-  },
-  getGate1OutportsState: function(){
-    return allNodeInfo.Gate1.outports
-  },
-  getTGen1InportsState: function(){
-    return allNodeInfo.TGen1.inports
-  },
-  getTGen1OutportsState: function(){
-    return allNodeInfo.TGen1.outports
-  },
+  //getGate1InportsState: function(){
+  //  return allNodeInfo.Gate1.inports
+  //},
+  //getGate1OutportsState: function(){
+  //  return allNodeInfo.Gate1.outports
+  //},
+  //getTGen1InportsState: function(){
+  //  return allNodeInfo.TGen1.inports
+  //},
+  //getTGen1OutportsState: function(){
+  //  return allNodeInfo.TGen1.outports
+  //},
 
 
-  getGate1Position: function(){
-    return nodePositions.Gate1.position;
-  },
-  getTGen1Position: function(){
-    return nodePositions.TGen1.position;
-  },
-  getPComp1Position: function(){
-    return nodePositions.PComp1.position;
-  },
-  getLUT1Position: function(){
-    return nodePositions.LUT1;
-  },
-  getAllNodePositions: function(){
-    return nodePositions;
-  },
+  //getGate1Position: function(){
+  //  return nodePositions.Gate1.position;
+  //},
+  //getTGen1Position: function(){
+  //  return nodePositions.TGen1.position;
+  //},
+  //getPComp1Position: function(){
+  //  return nodePositions.PComp1.position;
+  //},
+  //getLUT1Position: function(){
+  //  return nodePositions.LUT1;
+  //},
+  //getAllNodePositions: function(){
+  //  return nodePositions;
+  //},
   getAllNodeInfo: function(){
     return allNodeInfo;
   },
@@ -1457,12 +1468,12 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGenNodeEnaPort: function(){
   //    return portPositionsForEdges.tgenNode.inports.ena;
   //},
-  getGateNodeOutportOut: function(){
-    return gateNodeOutports.out;
-  },
-  getTGenNodeInportEna: function(){
-    return tgenNodeInports.ena;
-  },
+  //getGateNodeOutportOut: function(){
+  //  return gateNodeOutports.out;
+  //},
+  //getTGenNodeInportEna: function(){
+  //  return tgenNodeInports.ena;
+  //},
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
@@ -1491,24 +1502,24 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
 
 
-  getGateNodeStyling: function(){
-    return GateNodeStyling;
-  },
-  getSelectedGateNodeStyling: function(){
-    return SelectedGateNodeStyling;
-  },
-  getTGenNodeStyling: function(){
-    return TGenNodeStyling;
-  },
-  getSelectedTGenNodeStyling: function(){
-    return SelectedTGenNodeStyling;
-  },
-  getPCompNodeStyling: function(){
-    return PCompNodeStyling;
-  },
-  getSelectedPCompNodeStyling: function(){
-    return SelectedPCompNodeStyling;
-  },
+  //getGateNodeStyling: function(){
+  //  return GateNodeStyling;
+  //},
+  //getSelectedGateNodeStyling: function(){
+  //  return SelectedGateNodeStyling;
+  //},
+  //getTGenNodeStyling: function(){
+  //  return TGenNodeStyling;
+  //},
+  //getSelectedTGenNodeStyling: function(){
+  //  return SelectedTGenNodeStyling;
+  //},
+  //getPCompNodeStyling: function(){
+  //  return PCompNodeStyling;
+  //},
+  //getSelectedPCompNodeStyling: function(){
+  //  return SelectedPCompNodeStyling;
+  //},
   getAllNodeTypesPortStyling: function(){
     return allNodeTypesPortStyling;
   },
@@ -1784,6 +1795,13 @@ AppDispatcher.register(function(payload){
       //console.log(payload);
       //console.log(item);
       portMouseOverLeaveToggle();
+      nodeStore.emitChange();
+      break;
+
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
       nodeStore.emitChange();
       break;
 

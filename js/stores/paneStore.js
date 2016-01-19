@@ -720,6 +720,7 @@ var setNodeTabStateTrue = function(NodeId){
  }
   else{
     console.log("tab state was already true, so don't bother changing it to true");
+    /* Need to have the tab jump to the newly selected node */
   }
 };
 

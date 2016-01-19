@@ -168,6 +168,12 @@ var nodeActions = {
       actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
       item: item
     })
+  },
+  interactJsDrag: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.INTERACTJS_DRAG,
+      item: item
+    })
   }
 };
 

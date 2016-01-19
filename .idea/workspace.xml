@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundleOnlySomeCSS.js" afterPath="$PROJECT_DIR$/bundleOnlySomeCSS.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/actions/nodeActions.js" afterPath="$PROJECT_DIR$/js/actions/nodeActions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/constants/appConstants.js" afterPath="$PROJECT_DIR$/js/constants/appConstants.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/nodeStore.js" afterPath="$PROJECT_DIR$/js/stores/nodeStore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/paneStore.js" afterPath="$PROJECT_DIR$/js/stores/paneStore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/edge.js" afterPath="$PROJECT_DIR$/js/views/edge.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/nodes.js" afterPath="$PROJECT_DIR$/js/views/nodes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/ports.js" afterPath="$PROJECT_DIR$/js/views/ports.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/theGraphDiamond.js" afterPath="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
     </list>
     <ignored path="StartingFlux.iws" />
@@ -26,27 +32,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gateNode.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
+      <file leaf-file-name="nodes.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.035714">
-              <caret line="343" column="58" selection-start-line="343" selection-start-column="58" selection-end-line="343" selection-end-column="58" />
+            <state vertical-scroll-proportion="-29.448277">
+              <caret line="224" column="21" selection-start-line="224" selection-start-column="21" selection-end-line="224" selection-end-column="21" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#7135#7164#0" expanded="false" />
+                <element signature="e#1394#1424#0" expanded="false" />
+                <element signature="e#3300#3348#0" expanded="false" />
+                <element signature="e#3373#3421#0" expanded="false" />
+                <element signature="e#3426#3450#0" expanded="false" />
+                <element signature="e#3649#3674#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="nodes.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
+      <file leaf-file-name="paneActions.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.362069">
-              <caret line="129" column="31" selection-start-line="112" selection-start-column="0" selection-end-line="155" selection-end-column="4" />
+            <state vertical-scroll-proportion="-10.714286">
+              <caret line="76" column="2" selection-start-line="76" selection-start-column="2" selection-end-line="76" selection-end-column="2" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="paneStore.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5997625">
+              <caret line="729" column="40" selection-start-line="729" selection-start-column="40" selection-end-line="729" selection-end-column="40" />
               <folding>
-                <element signature="e#0#43#0" expanded="false" />
+                <element signature="e#497#754#0" expanded="false" />
+                <element signature="e#779#1256#0" expanded="false" />
+                <element signature="e#2392#2653#0" expanded="false" />
+                <element signature="e#2678#2922#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nodeRectangle.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/views/nodeRectangle.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.568966">
+              <caret line="37" column="39" selection-start-line="37" selection-start-column="39" selection-end-line="37" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -54,8 +87,8 @@
       <file leaf-file-name="ports.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/ports.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.642857">
-              <caret line="116" column="36" selection-start-line="116" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+            <state vertical-scroll-proportion="-9.310345">
+              <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
               </folding>
@@ -63,31 +96,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pcompNode.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.327587">
-              <caret line="199" column="125" selection-start-line="199" selection-start-column="125" selection-end-line="199" selection-end-column="125" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tgenNode.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/views/tgenNode.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.810345">
-              <caret line="215" column="77" selection-start-line="215" selection-start-column="16" selection-end-line="215" selection-end-column="77" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="nodeStore.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.068966">
-              <caret line="1592" column="5" selection-start-line="1592" selection-start-column="5" selection-end-line="1593" selection-end-column="24" />
+            <state vertical-scroll-proportion="-84.82758">
+              <caret line="1141" column="3" selection-start-line="1141" selection-start-column="3" selection-end-line="1141" selection-end-column="3" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
                 <element signature="e#885#1680#0" expanded="false" />
@@ -101,38 +114,58 @@
                 <element signature="e#16838#16850#0" expanded="false" />
                 <element signature="e#19119#20587#0" expanded="false" />
                 <element signature="n#!!block;n#generateNewNodeId#0" expanded="false" />
-                <element signature="e#22735#23237#0" expanded="false" />
                 <element signature="n#!!block;n#appendToNodePositions#0" expanded="false" />
                 <element signature="e#23477#23988#0" expanded="false" />
-                <element signature="e#28243#28902#0" expanded="false" />
-                <element signature="e#28935#29598#0" expanded="false" />
-                <element signature="e#29624#30904#0" expanded="false" />
-                <element signature="e#30938#31937#0" expanded="false" />
-                <element signature="e#42878#42909#0" expanded="false" />
-                <element signature="e#44012#44048#0" expanded="false" />
+                <element signature="n#!!block;n#updateGate1Position#0" expanded="false" />
+                <element signature="n#!!block;n#updateNodePosition#0" expanded="false" />
+                <element signature="e#25484#26426#0" expanded="false" />
+                <element signature="e#26474#26888#0" expanded="false" />
+                <element signature="e#28799#29458#0" expanded="false" />
+                <element signature="e#29491#30154#0" expanded="false" />
+                <element signature="e#30180#31460#0" expanded="false" />
+                <element signature="e#31494#32493#0" expanded="false" />
+                <element signature="e#33127#33162#0" expanded="false" />
+                <element signature="e#33469#33500#0" expanded="false" />
+                <element signature="e#33927#33966#0" expanded="false" />
+                <element signature="e#34335#34368#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="theGraphDiamond.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="theGraphDiamond.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4219858">
-              <caret line="830" column="104" selection-start-line="830" selection-start-column="104" selection-end-line="830" selection-end-column="104" />
+            <state vertical-scroll-proportion="-3.7586207">
+              <caret line="1386" column="17" selection-start-line="1386" selection-start-column="17" selection-end-line="1386" selection-end-column="17" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#15667#17481#0" expanded="false" />
-                <element signature="e#20406#22005#0" expanded="false" />
-                <element signature="e#22034#23419#0" expanded="false" />
-                <element signature="e#24039#24070#0" expanded="false" />
-                <element signature="e#32999#33049#0" expanded="false" />
-                <element signature="e#44278#44778#0" expanded="false" />
-                <element signature="e#45716#45757#0" expanded="false" />
-                <element signature="e#50345#50375#0" expanded="false" />
-                <element signature="e#50573#50610#0" expanded="false" />
-                <element signature="e#51269#51297#0" expanded="false" />
-                <element signature="e#55101#55137#0" expanded="false" />
+                <element signature="e#4838#6694#0" expanded="false" />
+                <element signature="e#6720#6726#0" expanded="false" />
+                <element signature="e#6759#8689#0" expanded="false" />
+                <element signature="e#8727#10020#0" expanded="false" />
+                <element signature="e#10047#12997#0" expanded="false" />
+                <element signature="e#13062#13544#0" expanded="false" />
+                <element signature="e#14418#14791#0" expanded="false" />
+                <element signature="e#15919#17733#0" expanded="false" />
+                <element signature="e#17968#18113#0" expanded="false" />
+                <element signature="e#21211#21239#0" expanded="false" />
+                <element signature="e#22286#23671#0" expanded="false" />
+                <element signature="e#24291#24322#0" expanded="false" />
+                <element signature="e#29058#29108#0" expanded="false" />
+                <element signature="e#31640#33012#0" expanded="false" />
+                <element signature="e#33056#33838#0" expanded="false" />
+                <element signature="e#33876#36909#0" expanded="false" />
+                <element signature="e#34718#34768#0" expanded="false" />
+                <element signature="e#36956#40450#0" expanded="false" />
+                <element signature="e#40526#41381#0" expanded="false" />
+                <element signature="e#41419#41641#0" expanded="false" />
+                <element signature="e#44623#44658#0" expanded="false" />
+                <element signature="e#47435#47476#0" expanded="false" />
+                <element signature="e#52355#52385#0" expanded="false" />
+                <element signature="e#52583#52620#0" expanded="false" />
+                <element signature="e#53279#53307#0" expanded="false" />
+                <element signature="e#57111#57147#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -141,18 +174,8 @@
       <file leaf-file-name="edge.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/edge.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.53571427">
-              <caret line="51" column="37" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="appConstants.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-28.071428">
-              <caret line="73" column="55" selection-start-line="73" selection-start-column="55" selection-end-line="73" selection-end-column="55" />
+            <state vertical-scroll-proportion="10.086206">
+              <caret line="48" column="24" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -161,11 +184,22 @@
       <file leaf-file-name="nodeActions.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.071428">
-              <caret line="128" column="22" selection-start-line="128" selection-start-column="22" selection-end-line="128" selection-end-column="22" />
+            <state vertical-scroll-proportion="-28.464285">
+              <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
+                <marker date="1453112791236" expanded="true" signature="4238:4310" placeholder="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="appConstants.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-28.928572">
+              <caret line="74" column="35" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -187,8 +221,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/js/views/favButton.js" />
-        <option value="$PROJECT_DIR$/js/views/configButton.js" />
         <option value="$PROJECT_DIR$/js/views/redBlock.js" />
         <option value="$PROJECT_DIR$/js/views/functionalBlockConstructor.js" />
         <option value="$PROJECT_DIR$/js/actions/deviceActions.js" />
@@ -227,17 +259,19 @@
         <option value="$PROJECT_DIR$/js/views/sidePane.js" />
         <option value="$PROJECT_DIR$/js/views/mainPane.js" />
         <option value="$PROJECT_DIR$/js/theGraphDiamondCustomEvents.js" />
-        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
-        <option value="$PROJECT_DIR$/js/views/edge.js" />
-        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
-        <option value="$PROJECT_DIR$/js/actions/nodeActions.js" />
         <option value="$PROJECT_DIR$/js/views/pcompNode.js" />
         <option value="$PROJECT_DIR$/js/views/tgenNode.js" />
         <option value="$PROJECT_DIR$/js/views/gateNode.js" />
+        <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
+        <option value="$PROJECT_DIR$/js/actions/nodeActions.js" />
+        <option value="$PROJECT_DIR$/js/views/nodeRectangles.js" />
         <option value="$PROJECT_DIR$/js/stores/nodeStore.js" />
-        <option value="$PROJECT_DIR$/js/views/nodes.js" />
         <option value="$PROJECT_DIR$/js/views/ports.js" />
+        <option value="$PROJECT_DIR$/js/views/edge.js" />
+        <option value="$PROJECT_DIR$/js/views/nodeRectangle.js" />
         <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
+        <option value="$PROJECT_DIR$/js/views/nodes.js" />
+        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
       </list>
     </option>
   </component>
@@ -254,10 +288,9 @@
     </gulpfiles>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
     <option name="y" value="25" />
-    <option name="width" value="1924" />
-    <option name="height" value="1034" />
+    <option name="width" value="1920" />
+    <option name="height" value="1030" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -284,8 +317,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -301,6 +334,60 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="interact.js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StartingFlux" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="interact.js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dist" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -508,14 +595,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="25" width="1924" height="1034" extended-state="6" />
+    <frame x="0" y="25" width="1920" height="1030" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1515625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.151357" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290461" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32869378" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -529,6 +615,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -571,55 +658,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/the-graph-diamond/js/views/gateNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.017123288">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/the-graph-diamond/js/views/pcompNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.017123288">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.babelrc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitattributes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.flowconfig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbarToggleTestBundle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/the-graph-diamond/js/views/tgenNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-31.607143">
-          <caret line="59" column="88" selection-start-line="59" selection-start-column="88" selection-end-line="59" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/writingWebSocketsInReact.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.465754">
@@ -684,13 +722,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/indexOnlySomeCSS.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26408452">
-          <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/the-graph-diamond/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.4178083">
@@ -703,14 +734,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.08561644">
           <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/indexOnlySomeCSS.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8808962">
-          <caret line="102" column="1" selection-start-line="102" selection-start-column="1" selection-end-line="102" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -732,14 +755,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15410958">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/react/react.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.034246575">
-          <caret line="2" column="34" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -747,9 +762,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.08561644">
           <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -802,13 +814,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6335617">
-          <caret line="82" column="2" selection-start-line="82" selection-start-column="2" selection-end-line="82" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.103448">
@@ -830,14 +835,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/mainPane.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3275862">
-          <caret line="39" column="24" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/actions/serverActions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -845,49 +842,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="27.051723">
-          <caret line="745" column="35" selection-start-line="745" selection-start-column="0" selection-end-line="746" selection-end-column="0" />
-          <folding>
-            <element signature="e#497#754#0" expanded="false" />
-            <element signature="e#779#1256#0" expanded="false" />
-            <element signature="e#2392#2653#0" expanded="false" />
-            <element signature="e#2678#2922#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/theGraphDiamondCustomEvents.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18835616">
           <caret line="11" column="47" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/edge.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.53571427">
-          <caret line="51" column="37" selection-start-line="51" selection-start-column="37" selection-end-line="51" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-28.071428">
-          <caret line="73" column="55" selection-start-line="73" selection-start-column="55" selection-end-line="73" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.071428">
-          <caret line="128" column="22" selection-start-line="128" selection-start-column="22" selection-end-line="128" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -901,16 +859,158 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/tgenNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.810345">
+        <state vertical-scroll-proportion="0.0">
           <caret line="215" column="77" selection-start-line="215" selection-start-column="16" selection-end-line="215" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/interact.js/dist/interact.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-101.901375">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indexOnlySomeCSS.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.8042452">
+          <caret line="102" column="1" selection-start-line="102" selection-start-column="1" selection-end-line="102" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indexOnlySomeCSS.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2653302">
+          <caret line="15" column="39" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/constants/appConstants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-28.928572">
+          <caret line="74" column="35" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/interact.js/interact.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3440367">
+          <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/lib/ReactElement.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33254156">
+          <caret line="107" column="26" selection-start-line="107" selection-start-column="13" selection-end-line="107" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/react.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03440367">
+          <caret line="2" column="34" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/addons.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/lib/ReactDefaultPerf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="11.25">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/lib/ReactPerf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.6551723">
+          <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/mainPane.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="87.10714">
+          <caret line="39" column="24" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-43.706898">
+          <caret line="169" column="221" selection-start-line="169" selection-start-column="214" selection-end-line="169" selection-end-column="221" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/actions/nodeActions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-28.464285">
+          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <marker date="1453112791236" expanded="true" signature="4238:4310" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/edge.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="10.086206">
+          <caret line="48" column="24" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/nodeRectangle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.568966">
+          <caret line="37" column="39" selection-start-line="37" selection-start-column="39" selection-end-line="37" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27522936">
+          <caret line="18" column="60" selection-start-line="18" selection-start-column="60" selection-end-line="18" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#7135#7164#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.714286">
+          <caret line="76" column="2" selection-start-line="76" selection-start-column="2" selection-end-line="76" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.068966">
-          <caret line="1592" column="5" selection-start-line="1592" selection-start-column="5" selection-end-line="1593" selection-end-column="24" />
+        <state vertical-scroll-proportion="-84.82758">
+          <caret line="1141" column="3" selection-start-line="1141" selection-start-column="3" selection-end-line="1141" selection-end-column="3" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
             <element signature="e#885#1680#0" expanded="false" />
@@ -924,75 +1024,94 @@
             <element signature="e#16838#16850#0" expanded="false" />
             <element signature="e#19119#20587#0" expanded="false" />
             <element signature="n#!!block;n#generateNewNodeId#0" expanded="false" />
-            <element signature="e#22735#23237#0" expanded="false" />
             <element signature="n#!!block;n#appendToNodePositions#0" expanded="false" />
             <element signature="e#23477#23988#0" expanded="false" />
-            <element signature="e#28243#28902#0" expanded="false" />
-            <element signature="e#28935#29598#0" expanded="false" />
-            <element signature="e#29624#30904#0" expanded="false" />
-            <element signature="e#30938#31937#0" expanded="false" />
-            <element signature="e#42878#42909#0" expanded="false" />
-            <element signature="e#44012#44048#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/gateNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.035714">
-          <caret line="343" column="58" selection-start-line="343" selection-start-column="58" selection-end-line="343" selection-end-column="58" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#7135#7164#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/pcompNode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.327587">
-          <caret line="199" column="125" selection-start-line="199" selection-start-column="125" selection-end-line="199" selection-end-column="125" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.362069">
-          <caret line="129" column="31" selection-start-line="112" selection-start-column="0" selection-end-line="155" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.642857">
-          <caret line="116" column="36" selection-start-line="116" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
+            <element signature="n#!!block;n#updateGate1Position#0" expanded="false" />
+            <element signature="n#!!block;n#updateNodePosition#0" expanded="false" />
+            <element signature="e#25484#26426#0" expanded="false" />
+            <element signature="e#26474#26888#0" expanded="false" />
+            <element signature="e#28799#29458#0" expanded="false" />
+            <element signature="e#29491#30154#0" expanded="false" />
+            <element signature="e#30180#31460#0" expanded="false" />
+            <element signature="e#31494#32493#0" expanded="false" />
+            <element signature="e#33127#33162#0" expanded="false" />
+            <element signature="e#33469#33500#0" expanded="false" />
+            <element signature="e#33927#33966#0" expanded="false" />
+            <element signature="e#34335#34368#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4219858">
-          <caret line="830" column="104" selection-start-line="830" selection-start-column="104" selection-end-line="830" selection-end-column="104" />
+        <state vertical-scroll-proportion="-3.7586207">
+          <caret line="1386" column="17" selection-start-line="1386" selection-start-column="17" selection-end-line="1386" selection-end-column="17" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#15667#17481#0" expanded="false" />
-            <element signature="e#20406#22005#0" expanded="false" />
-            <element signature="e#22034#23419#0" expanded="false" />
-            <element signature="e#24039#24070#0" expanded="false" />
-            <element signature="e#32999#33049#0" expanded="false" />
-            <element signature="e#44278#44778#0" expanded="false" />
-            <element signature="e#45716#45757#0" expanded="false" />
-            <element signature="e#50345#50375#0" expanded="false" />
-            <element signature="e#50573#50610#0" expanded="false" />
-            <element signature="e#51269#51297#0" expanded="false" />
-            <element signature="e#55101#55137#0" expanded="false" />
+            <element signature="e#4838#6694#0" expanded="false" />
+            <element signature="e#6720#6726#0" expanded="false" />
+            <element signature="e#6759#8689#0" expanded="false" />
+            <element signature="e#8727#10020#0" expanded="false" />
+            <element signature="e#10047#12997#0" expanded="false" />
+            <element signature="e#13062#13544#0" expanded="false" />
+            <element signature="e#14418#14791#0" expanded="false" />
+            <element signature="e#15919#17733#0" expanded="false" />
+            <element signature="e#17968#18113#0" expanded="false" />
+            <element signature="e#21211#21239#0" expanded="false" />
+            <element signature="e#22286#23671#0" expanded="false" />
+            <element signature="e#24291#24322#0" expanded="false" />
+            <element signature="e#29058#29108#0" expanded="false" />
+            <element signature="e#31640#33012#0" expanded="false" />
+            <element signature="e#33056#33838#0" expanded="false" />
+            <element signature="e#33876#36909#0" expanded="false" />
+            <element signature="e#34718#34768#0" expanded="false" />
+            <element signature="e#36956#40450#0" expanded="false" />
+            <element signature="e#40526#41381#0" expanded="false" />
+            <element signature="e#41419#41641#0" expanded="false" />
+            <element signature="e#44623#44658#0" expanded="false" />
+            <element signature="e#47435#47476#0" expanded="false" />
+            <element signature="e#52355#52385#0" expanded="false" />
+            <element signature="e#52583#52620#0" expanded="false" />
+            <element signature="e#53279#53307#0" expanded="false" />
+            <element signature="e#57111#57147#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-29.448277">
+          <caret line="224" column="21" selection-start-line="224" selection-start-column="21" selection-end-line="224" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#1394#1424#0" expanded="false" />
+            <element signature="e#3300#3348#0" expanded="false" />
+            <element signature="e#3373#3421#0" expanded="false" />
+            <element signature="e#3426#3450#0" expanded="false" />
+            <element signature="e#3649#3674#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.310345">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5997625">
+          <caret line="729" column="40" selection-start-line="729" selection-start-column="40" selection-end-line="729" selection-end-column="40" />
+          <folding>
+            <element signature="e#497#754#0" expanded="false" />
+            <element signature="e#779#1256#0" expanded="false" />
+            <element signature="e#2392#2653#0" expanded="false" />
+            <element signature="e#2678#2922#0" expanded="false" />
           </folding>
         </state>
       </provider>

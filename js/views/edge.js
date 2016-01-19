@@ -12,19 +12,19 @@ function getEdgeState(){
     //startNode: NodeStore.getGateNodeOutPort(),
     //endNode: NodeStore.getTGenNodeEnaPort(),
 
-    Gate1Position: NodeStore.getGate1Position(),
-    TGen1Position: NodeStore.getTGen1Position(),
-    gateNodeOut: NodeStore.getGateNodeOutportOut(),
-    tgenNodeEna: NodeStore.getTGenNodeInportEna(),
+    //Gate1Position: NodeStore.getGate1Position(),
+    //TGen1Position: NodeStore.getTGen1Position(),
+    //gateNodeOut: NodeStore.getGateNodeOutportOut(),
+    //tgenNodeEna: NodeStore.getTGenNodeInportEna(),
     //selected: NodeStore.getIfEdgeIsSelected(),
-    allEdges: NodeStore.getAllEdges(),
-    gateNodeStyling: NodeStore.getGateNodeStyling(),
-    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    //allEdges: NodeStore.getAllEdges(),
+    //gateNodeStyling: NodeStore.getGateNodeStyling(),
+    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
+    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
   }
 }
 
@@ -33,23 +33,23 @@ var Edge = React.createClass({
     return getEdgeState();
   },
   _onChange: function(){
-    this.setState(getEdgeState());
-    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
+    //this.setState(getEdgeState());
+    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-    this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
-      console.log(this.state.selected);
-    });
+    //NodeStore.addChangeListener(this._onChange);
+    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.selected);
+    //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
   },
   componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
+    //NodeStore.removeChangeListener(this._onChange);
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
-    if(this.state.selected === true){
+    if(this.props.selected === true){
 
     }
     else{
@@ -59,11 +59,11 @@ var Edge = React.createClass({
   mouseLeave: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
+    if(this.props.selected === true){
+      console.log("this.props.selected is true, so don't reset the border colour");
     }
     else{
-      console.log("this.state.selected is false");
+      console.log("this.props.selected is false");
       test.style.stroke = 'lightgrey'
     }
   },
@@ -75,11 +75,11 @@ var Edge = React.createClass({
 
   render:function(){
 
-    var edgeInfo = this.state.allEdges[this.props.id];
+    var edgeInfo = this.props.allEdges[this.props.id];
     console.log(this.props.id);
     console.log(edgeInfo);
 
-    var allEdges = this.state.allEdges;
+    var allEdges = this.props.allEdges;
     //console.log(allEdges);
 
     var fromNode = edgeInfo.fromNode;
@@ -89,19 +89,19 @@ var Edge = React.createClass({
     var fromNodePort = edgeInfo.fromNodePort;
     var toNodePort = edgeInfo.toNodePort;
 
-    var allNodeTypesPortStyling = this.state.allNodeTypesPortStyling;
+    var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
 
-    var fromNodeType = this.state.allNodeInfo[fromNode].type;
-    var toNodeType = this.state.allNodeInfo[toNode].type;
+    var fromNodeType = this.props.allNodeInfo[fromNode].type;
+    var toNodeType = this.props.allNodeInfo[toNode].type;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.state.allNodePositions[toNode].position);
+    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
+    //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromNodePositionX = this.state.allNodeInfo[fromNode].position.x;
-    var fromNodePositionY = this.state.allNodeInfo[fromNode].position.y;
-    var toNodePositionX = this.state.allNodeInfo[toNode].position.x;
-    var toNodePositionY = this.state.allNodeInfo[toNode].position.y;
+    var fromNodePositionX = this.props.allNodeInfo[fromNode].position.x;
+    var fromNodePositionY = this.props.allNodeInfo[fromNode].position.y;
+    var toNodePositionX = this.props.allNodeInfo[toNode].position.x;
+    var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
 
@@ -124,13 +124,13 @@ var Edge = React.createClass({
     return(
       <g id="edgeContainer" {...this.props}>
 
-        <Line id={outerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+        <line id={outerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: this.state.selected === true ? "10" : "7", stroke: this.state.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
+              style={{strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
 
-        <Line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-          //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
+        <line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+          //x1={this.props.startNode.x} y1={this.props.startNode.y} x2={this.props.endNode.x} y2={this.props.endNode.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
               style={{strokeWidth: '5', stroke:"orange"}} />
@@ -141,13 +141,13 @@ var Edge = React.createClass({
   }
 });
 
-var Line = React.createClass({
-  render: function(){
-    return(
-      <line {...this.props}>{this.props.children}</line>
-    )
-  }
-});
+//var Line = React.createClass({
+//  render: function(){
+//    return(
+//      <line {...this.props}>{this.props.children}</line>
+//    )
+//  }
+//});
 
 module.exports = Edge;
 

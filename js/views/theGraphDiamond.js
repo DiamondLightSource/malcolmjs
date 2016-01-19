@@ -16,6 +16,10 @@ var Edge = require('./edge.js');
 
 var Node = require('./nodes.js');
 
+var interact = require('../../node_modules/interact.js');
+
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
   width: 65,
@@ -35,13 +39,13 @@ var NodeStylingProperties = { /* Only here temporarily until I think of a better
 window.defaultNodeContainerStyle = {
   cursor: 'move',
   draggable: 'true',
-  className: 'nodeContainer',
+  //className: 'nodeContainer',
 };
 
 window.nonSelectedNodeContainerStyle = {
   cursor: 'move',
   draggable: 'true',
-  className: 'nodeContainer',
+  //className: 'nodeContainer',
   opacity: 0.3
 };
 
@@ -66,22 +70,27 @@ function getAppState(){
     //TGen1Position: NodeStore.getTGen1Position(),
     //PComp1Position: NodeStore.getPComp1Position(),
     //LUT1Position: NodeStore.getLUT1Position(),
-    allNodePositions: NodeStore.getAllNodePositions(),
+    //allNodePositions: NodeStore.getAllNodePositions(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
     allEdges: NodeStore.getAllEdges(),
-    gateNodeStyling: NodeStore.getGateNodeStyling(),
-    tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    //gateNodeStyling: NodeStore.getGateNodeStyling(),
+    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     nodesToRender: NodeStore.getNodesToRenderArray(),
     edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
     newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    nodeLibrary: NodeStore.getNodeLibrary()
-    //newlyAddedNode: NodeStore.getNewlyAddedNode()
+    nodeLibrary: NodeStore.getNodeLibrary(),
+    //newlyAddedNode: NodeStore.getNewlyAddedNode(),
+    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    portMouseOver: NodeStore.getPortMouseOver(),
+    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
+    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
   }
 }
 
@@ -113,7 +122,7 @@ var App = React.createClass({
 
     /* Let's try using my refactored nodes.js file instead! */
     //this.addNodeToNodesArray();
-    this.refactoredAddNodeToNodesArray();
+    //this.refactoredAddNodeToNodesArray();
 
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
@@ -122,26 +131,21 @@ var App = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+
+    //interact('.node')
+    //  .draggable({
+    //    onmove: this.interactJsDrag
+    //  });
+
+    //Perf.start();
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
   },
 
-  /* react-draggabble event handlers */
-  handleStart: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
-
-  handleDrag: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
-
-  handleStop: function (event, ui) {
-    console.log('Event: ', event);
-    console.log('Position: ', ui.position);
-  },
+  //handleInteractJsDrag: function(item){
+  //  nodeActions.interactJsDrag(item);
+  //},
 
 
   mouseDownSelectElement: function (evt) {
@@ -655,24 +659,29 @@ var App = React.createClass({
       //var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
 
       if(gateNodeRegExp.test(node) === true){
-        nodeActions.pushNodeToArray(<GateNode id={node}
-                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+        nodeActions.pushNodeToArray(<GateNode id={node} className="node"
+                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        />)
       }
       else if(tgenNodeRegExp.test(node) === true){
         //console.log("we have a tgen node!");
-        nodeActions.pushNodeToArray(<TGenNode id={node}
-                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+        nodeActions.pushNodeToArray(<TGenNode id={node} className="node"
+                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        />)
       }
       else if(pcompNodeRegExp.test(node) === true){
         //console.log("we have a pcomp node!");
-        nodeActions.pushNodeToArray(<PCompNode id={node}
-                              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+        nodeActions.pushNodeToArray(<PCompNode id={node} className="node"
+                              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        />)
       }
       else if(lutNodeRegExp.test(node) === true){
         //console.log("we have an lut node!");
-        nodeActions.pushNodeToArray(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+        nodeActions.pushNodeToArray(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate} className="node"
                             //NodeName={nodeName} RectangleName={rectangleName}
-                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+                            //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        />
+        )
       }
       else{
         console.log("no match to any node type, something's wrong?");
@@ -683,8 +692,11 @@ var App = React.createClass({
   refactoredAddNodeToNodesArray: function(){
     for(var node in this.state.allNodeInfo){
       nodeActions.pushNodeToArray(
-        <Node id={node}
-              onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        <Node key={node} id={node} className="node"
+              allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
+              portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+              selected={NodeStore.getAnyNodeSelectedState(node)}
+              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
               />
       )
     }
@@ -692,10 +704,10 @@ var App = React.createClass({
 
   addNodeInfo: function(){
     console.log("addNodeInfo");
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
+    //var gateNodeRegExp = /Gate/;
+    //var tgenNodeRegExp = /TGen/;
+    //var pcompNodeRegExp = /PComp/;
+    //var lutNodeRegExp = /LUT/;
 
     var newGateNodeId = this.generateNewNodeId();
     console.log(newGateNodeId);
@@ -709,31 +721,46 @@ var App = React.createClass({
     //console.log(this.state.newlyAddedNode);
     //newNode = "Gate2";
 
-    if(gateNodeRegExp.test(newGateNodeId) === true){
-      nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
-                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(tgenNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a tgen node!");
-      nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
-                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(pcompNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a pcomp node!");
-      nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
-                                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(lutNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have an lut node!");
-      nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-        //NodeName={nodeName} RectangleName={rectangleName}
-                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else{
-      console.log("no match to any node type, something's wrong?");
-    }
-    console.log(this.state.nodesToRender);
+    /* Replacing with my refactored nodes.js file instead to test the performanc of having many ndes along with interact.js */
+    /* Ok, these use MY drag function, so then I can compare interactjs vs my drag in one go */
 
+    //if(gateNodeRegExp.test(newGateNodeId) === true){
+    //  nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(tgenNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have a tgen node!");
+    //  nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(pcompNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have a pcomp node!");
+    //  nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+    //                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else if(lutNodeRegExp.test(newGateNodeId) === true){
+    //  //console.log("we have an lut node!");
+    //  nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+    //    //NodeName={nodeName} RectangleName={rectangleName}
+    //                                       onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+    //}
+    //else{
+    //  console.log("no match to any node type, something's wrong?");
+    //}
+    //console.log(this.state.nodesToRender);
+
+    //nodeActions.pushNodeToArray(
+    //  <Node key={newGateNodeId} id={newGateNodeId} className="node"
+    //        allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling}
+    //        portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+    //        selected={NodeStore.getAnyNodeSelectedState(newGateNodeId)}
+    //    //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+    //  />
+    //);
+
+    //Perf.stop();
+    //Perf.getLastMeasurements();
+    //Perf.printWasted();
 
   },
 
@@ -779,6 +806,7 @@ var App = React.createClass({
     //console.log(port.style.stroke);
     /* Node select is also messing with the port styling... */
   },
+
   portDeselectRemoveHighlight: function(){
     console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
     var port = this.state.portThatHasBeenClicked;
@@ -1180,13 +1208,26 @@ var App = React.createClass({
       //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
       //}
 
-      nodeActions.pushEdgeToArray(<Edge id={edge}
+      nodeActions.pushEdgeToArray(<Edge key={edge} id={edge}
                        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
                        onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
       />)
 
     }
   },
+
+  //interactJsDrag: function(e){
+  //  console.log("interactJs drag is occurring");
+  //  var target = e.target.id;
+  //  var deltaMovement = {
+  //    target: target,
+  //    x: e.dx,
+  //    y: e.dy
+  //  };
+  //
+  //  this.handleInteractJsDrag(deltaMovement);
+  //
+  //},
 
 
 
@@ -1202,8 +1243,8 @@ var App = React.createClass({
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
     console.log(this.state.nodesToRender);
-    console.log("this.dragging is:" + this.dragging);
-    console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
+    //console.log("this.dragging is:" + this.dragging);
+    //console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
 
     //var regExpTest = /abc/;
     //var testString = "I know my abc's";
@@ -1339,6 +1380,31 @@ var App = React.createClass({
     //  }
     //}
 
+    var nodes = [];
+    var edges = [];
+
+    for(var node in this.state.allNodeInfo){
+      nodes.push(
+        <Node key={node} id={node} className="node"
+              allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
+              portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+              selected={NodeStore.getAnyNodeSelectedState(node)} deselect={this.deselect}
+          //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        />
+      )
+    }
+
+    for(var edge in this.state.allEdges){
+      edges.push(<Edge key={edge} id={edge}
+        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+                       onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+                       allEdges={this.state.allEdges} allNodeTypesPortStyling={this.state.allNodeTypesPortStyling}
+                       allNodeInfo={this.state.allNodeInfo} areAnyEdgesSelected={this.state.areAnyEdgesSelected}
+                       selected={NodeStore.getIfEdgeIsSelected(edge)}
+      />)
+
+    }
+
     return(
       <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
 
@@ -1362,13 +1428,13 @@ var App = React.createClass({
 
             <g id="EdgesGroup" >
 
-              {this.state.edgesToRender}
+              {edges}
 
             </g>
 
             <g id="NodesGroup" >
 
-              {this.state.nodesToRender}
+              {nodes}
 
             </g>
 
@@ -1486,4 +1552,9 @@ module.exports = App;
 
 
 
-/* Next bit takes care of if the scale factor is zero I think */
+//<Node key="TGen1" id="TGen1" className="node"
+//      allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling}
+//      portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+//      selected={NodeStore.getAnyNodeSelectedState("TGen1")}
+//  //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+///>
