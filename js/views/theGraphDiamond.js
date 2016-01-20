@@ -131,6 +131,20 @@ var App = React.createClass({
 
     interact('#dragArea')
       .on('tap', this.deselect);
+
+    interact('#dragArea')
+      .draggable({
+        onstart: function(e){
+          console.log("drag start");
+        },
+        onmove: this.interactJsDragPan,
+        onend: function(e){
+          console.log("drag end");
+        }
+      });
+
+    interact('#dragArea')
+      .styleCursor(false);
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -1207,6 +1221,18 @@ var App = React.createClass({
   //
   //},
 
+  interactJsDragPan: function(e){
+    console.log(e);
+
+    var xChange = this.state.graphPosition.x + e.dx;
+    var yChange = this.state.graphPosition.y + e.dy;
+
+    nodeActions.changeGraphPosition({
+      x: xChange,
+      y: yChange
+    });
+  },
+
 
 
   render: function(){
@@ -1390,7 +1416,7 @@ var App = React.createClass({
 
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
               //onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect}
-              onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onMouseMove={this.state.panMoveFunction}
+              //onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onMouseMove={this.state.panMoveFunction}
               onWheel={this.wheelZoom}
         />
         <svg id="appContainer" style={AppContainerStyle}

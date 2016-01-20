@@ -5812,7 +5812,11 @@ var Node = React.createClass({displayName: "Node",
       .on('tap', this.nodeSelect);
 
     interact(ReactDOM.findDOMNode(this))
-      .styleCursor(false)
+      .styleCursor(false);
+
+    /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
+    //interact
+    //  .pointerMoveTolerance(5);
   },
 
   componentWillUnmount: function(){
@@ -7226,6 +7230,20 @@ var App = React.createClass({displayName: "App",
 
     interact('#dragArea')
       .on('tap', this.deselect);
+
+    interact('#dragArea')
+      .draggable({
+        onstart: function(e){
+          console.log("drag start");
+        },
+        onmove: this.interactJsDragPan,
+        onend: function(e){
+          console.log("drag end");
+        }
+      });
+
+    interact('#dragArea')
+      .styleCursor(false);
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -8302,6 +8320,18 @@ var App = React.createClass({displayName: "App",
   //
   //},
 
+  interactJsDragPan: function(e){
+    console.log(e);
+
+    var xChange = this.state.graphPosition.x + e.dx;
+    var yChange = this.state.graphPosition.y + e.dy;
+
+    nodeActions.changeGraphPosition({
+      x: xChange,
+      y: yChange
+    });
+  },
+
 
 
   render: function(){
@@ -8485,7 +8515,7 @@ var App = React.createClass({displayName: "App",
 
         React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
               //onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect}
-              onMouseDown: this.panMouseDown, onMouseUp: this.panMouseUp, onMouseMove: this.state.panMoveFunction, 
+              //onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onMouseMove={this.state.panMoveFunction}
               onWheel: this.wheelZoom}
         ), 
         React.createElement("svg", {id: "appContainer", style: AppContainerStyle

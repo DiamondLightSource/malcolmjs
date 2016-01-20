@@ -76,7 +76,11 @@ var Node = React.createClass({
       .on('tap', this.nodeSelect);
 
     interact(ReactDOM.findDOMNode(this))
-      .styleCursor(false)
+      .styleCursor(false);
+
+    /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
+    //interact
+    //  .pointerMoveTolerance(5);
   },
 
   componentWillUnmount: function(){

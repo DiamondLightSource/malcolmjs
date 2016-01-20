@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundleOnlySomeCSS.js" afterPath="$PROJECT_DIR$/bundleOnlySomeCSS.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/nodeStore.js" afterPath="$PROJECT_DIR$/js/stores/nodeStore.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/nodes.js" afterPath="$PROJECT_DIR$/js/views/nodes.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/theGraphDiamond.js" afterPath="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
     </list>
@@ -26,21 +25,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="nodes.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="nodes.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6205674">
-              <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+            <state vertical-scroll-proportion="-6.465517">
+              <caret line="78" column="19" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="26" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
                 <element signature="n#!!block;n#getNodeState#0" expanded="false" />
                 <element signature="e#1394#1424#0" expanded="false" />
-                <element signature="e#3429#3477#0" expanded="false" />
-                <element signature="e#3502#3550#0" expanded="false" />
-                <element signature="e#3555#3579#0" expanded="false" />
-                <element signature="e#3778#3803#0" expanded="false" />
-                <element signature="e#5398#5423#0" expanded="false" />
-                <element signature="e#5617#5646#0" expanded="false" />
+                <element signature="e#5548#5573#0" expanded="false" />
+                <element signature="e#5767#5796#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,8 +86,8 @@
       <file leaf-file-name="nodeStore.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-222.67241">
-              <caret line="1677" column="29" selection-start-line="1677" selection-start-column="29" selection-end-line="1677" selection-end-column="29" />
+            <state vertical-scroll-proportion="-4.862069">
+              <caret line="1651" column="30" selection-start-line="1651" selection-start-column="22" selection-end-line="1651" selection-end-column="30" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
                 <element signature="e#885#1680#0" expanded="false" />
@@ -125,32 +120,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="theGraphDiamond.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="theGraphDiamond.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.637931">
-              <caret line="132" column="32" selection-start-line="132" selection-start-column="32" selection-end-line="132" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.429078">
+              <caret line="146" column="26" selection-start-line="146" selection-start-column="26" selection-end-line="146" selection-end-column="26" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#6634#6640#0" expanded="false" />
-                <element signature="e#8641#9934#0" expanded="false" />
-                <element signature="e#12976#13458#0" expanded="false" />
-                <element signature="e#20704#20732#0" expanded="false" />
-                <element signature="e#21779#23164#0" expanded="false" />
-                <element signature="e#28551#28601#0" expanded="false" />
-                <element signature="e#31133#32505#0" expanded="false" />
-                <element signature="e#32549#33331#0" expanded="false" />
-                <element signature="e#33369#36402#0" expanded="false" />
-                <element signature="e#34211#34261#0" expanded="false" />
-                <element signature="e#36449#39943#0" expanded="false" />
-                <element signature="e#40019#40874#0" expanded="false" />
-                <element signature="e#40912#41134#0" expanded="false" />
-                <element signature="e#44116#44151#0" expanded="false" />
-                <element signature="e#46928#46969#0" expanded="false" />
-                <element signature="e#51848#51878#0" expanded="false" />
-                <element signature="e#52076#52113#0" expanded="false" />
-                <element signature="e#52772#52800#0" expanded="false" />
-                <element signature="e#56604#56640#0" expanded="false" />
+                <element signature="e#6935#6941#0" expanded="false" />
+                <element signature="e#8942#10235#0" expanded="false" />
+                <element signature="e#13277#13759#0" expanded="false" />
+                <element signature="e#14696#15674#0" expanded="false" />
+                <element signature="e#15713#17527#0" expanded="false" />
+                <element signature="e#17557#20420#0" expanded="false" />
+                <element signature="e#20452#22051#0" expanded="false" />
+                <element signature="e#22080#23465#0" expanded="false" />
+                <element signature="e#28852#28902#0" expanded="false" />
+                <element signature="e#31434#32806#0" expanded="false" />
+                <element signature="e#32850#33632#0" expanded="false" />
+                <element signature="e#33670#36703#0" expanded="false" />
+                <element signature="e#34512#34562#0" expanded="false" />
+                <element signature="e#36750#40244#0" expanded="false" />
+                <element signature="e#40320#41175#0" expanded="false" />
+                <element signature="e#41213#41435#0" expanded="false" />
+                <element signature="e#44417#44452#0" expanded="false" />
+                <element signature="e#47229#47270#0" expanded="false" />
+                <element signature="e#52398#52428#0" expanded="false" />
+                <element signature="e#52626#52663#0" expanded="false" />
+                <element signature="e#53322#53350#0" expanded="false" />
+                <element signature="e#57154#57190#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -255,8 +253,8 @@
         <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
         <option value="$PROJECT_DIR$/js/stores/nodeStore.js" />
         <option value="$PROJECT_DIR$/js/views/nodeRectangle.js" />
-        <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
         <option value="$PROJECT_DIR$/js/views/nodes.js" />
+        <option value="$PROJECT_DIR$/js/views/theGraphDiamond.js" />
       </list>
     </option>
   </component>
@@ -1023,8 +1021,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/stores/nodeStore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-222.67241">
-          <caret line="1677" column="29" selection-start-line="1677" selection-start-column="29" selection-end-line="1677" selection-end-column="29" />
+        <state vertical-scroll-proportion="-4.862069">
+          <caret line="1651" column="30" selection-start-line="1651" selection-start-column="22" selection-end-line="1651" selection-end-column="30" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
             <element signature="e#885#1680#0" expanded="false" />
@@ -1056,49 +1054,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.637931">
-          <caret line="132" column="32" selection-start-line="132" selection-start-column="32" selection-end-line="132" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#6634#6640#0" expanded="false" />
-            <element signature="e#8641#9934#0" expanded="false" />
-            <element signature="e#12976#13458#0" expanded="false" />
-            <element signature="e#20704#20732#0" expanded="false" />
-            <element signature="e#21779#23164#0" expanded="false" />
-            <element signature="e#28551#28601#0" expanded="false" />
-            <element signature="e#31133#32505#0" expanded="false" />
-            <element signature="e#32549#33331#0" expanded="false" />
-            <element signature="e#33369#36402#0" expanded="false" />
-            <element signature="e#34211#34261#0" expanded="false" />
-            <element signature="e#36449#39943#0" expanded="false" />
-            <element signature="e#40019#40874#0" expanded="false" />
-            <element signature="e#40912#41134#0" expanded="false" />
-            <element signature="e#44116#44151#0" expanded="false" />
-            <element signature="e#46928#46969#0" expanded="false" />
-            <element signature="e#51848#51878#0" expanded="false" />
-            <element signature="e#52076#52113#0" expanded="false" />
-            <element signature="e#52772#52800#0" expanded="false" />
-            <element signature="e#56604#56640#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/nodes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6205674">
-          <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+        <state vertical-scroll-proportion="-6.465517">
+          <caret line="78" column="19" selection-start-line="78" selection-start-column="19" selection-end-line="78" selection-end-column="26" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
             <element signature="n#!!block;n#getNodeState#0" expanded="false" />
             <element signature="e#1394#1424#0" expanded="false" />
-            <element signature="e#3429#3477#0" expanded="false" />
-            <element signature="e#3502#3550#0" expanded="false" />
-            <element signature="e#3555#3579#0" expanded="false" />
-            <element signature="e#3778#3803#0" expanded="false" />
-            <element signature="e#5398#5423#0" expanded="false" />
-            <element signature="e#5617#5646#0" expanded="false" />
+            <element signature="e#5548#5573#0" expanded="false" />
+            <element signature="e#5767#5796#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/theGraphDiamond.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.429078">
+          <caret line="146" column="26" selection-start-line="146" selection-start-column="26" selection-end-line="146" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#6935#6941#0" expanded="false" />
+            <element signature="e#8942#10235#0" expanded="false" />
+            <element signature="e#13277#13759#0" expanded="false" />
+            <element signature="e#14696#15674#0" expanded="false" />
+            <element signature="e#15713#17527#0" expanded="false" />
+            <element signature="e#17557#20420#0" expanded="false" />
+            <element signature="e#20452#22051#0" expanded="false" />
+            <element signature="e#22080#23465#0" expanded="false" />
+            <element signature="e#28852#28902#0" expanded="false" />
+            <element signature="e#31434#32806#0" expanded="false" />
+            <element signature="e#32850#33632#0" expanded="false" />
+            <element signature="e#33670#36703#0" expanded="false" />
+            <element signature="e#34512#34562#0" expanded="false" />
+            <element signature="e#36750#40244#0" expanded="false" />
+            <element signature="e#40320#41175#0" expanded="false" />
+            <element signature="e#41213#41435#0" expanded="false" />
+            <element signature="e#44417#44452#0" expanded="false" />
+            <element signature="e#47229#47270#0" expanded="false" />
+            <element signature="e#52398#52428#0" expanded="false" />
+            <element signature="e#52626#52663#0" expanded="false" />
+            <element signature="e#53322#53350#0" expanded="false" />
+            <element signature="e#57154#57190#0" expanded="false" />
           </folding>
         </state>
       </provider>
