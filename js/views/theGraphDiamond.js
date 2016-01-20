@@ -107,12 +107,9 @@ var App = React.createClass({
     NodeStore.addChangeListener(this._onChange);
     //console.log(document.getElementById('appContainer'));
     //console.log(document.getElementById('Gate1'));
-
-    this.setState({moveFunction: this.defaultMoveFunction});
-    this.setState({panMoveFunction: this.defaultMoveFunction});
-    this.setState({self: this});
-
-    this.setState({wait: false});
+    //this.setState({moveFunction: this.defaultMoveFunction});
+    //this.setState({panMoveFunction: this.defaultMoveFunction});
+    //this.setState({wait: false});
 
     //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
     nodeActions.addEdgeToAllNodeInfo();
@@ -132,12 +129,8 @@ var App = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
-    //interact('.node')
-    //  .draggable({
-    //    onmove: this.interactJsDrag
-    //  });
-
-    //Perf.start();
+    interact('#dragArea')
+      .on('tap', this.deselect);
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -355,21 +348,6 @@ var App = React.createClass({
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
     }
 
-  },
-
-  debounce: function (func, wait, immediate) {
-    var timeout;
-    return function () {
-      var context = this, args = arguments;
-      var later = function () {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
   },
 
   setOpacity: function () {
@@ -1406,11 +1384,14 @@ var App = React.createClass({
     }
 
     return(
-      <svg id="appAndDragAreaContainer" onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave} style={AppContainerStyle}  >
+      <svg id="appAndDragAreaContainer"
+           //onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave}
+           style={AppContainerStyle}  >
 
         <rect id="dragArea" height="100%" width="100%" fill="transparent"  style={{MozUserSelect: 'none'}}
-              onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect} onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onWheel={this.wheelZoom}
-              onMouseMove={this.state.panMoveFunction}
+              //onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect}
+              onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onMouseMove={this.state.panMoveFunction}
+              onWheel={this.wheelZoom}
         />
         <svg id="appContainer" style={AppContainerStyle}
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
@@ -1558,3 +1539,18 @@ module.exports = App;
 //      selected={NodeStore.getAnyNodeSelectedState("TGen1")}
 //  //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+//debounce: function (func, wait, immediate) {
+//  var timeout;
+//  return function () {
+//    var context = this, args = arguments;
+//    var later = function () {
+//      timeout = null;
+//      if (!immediate) func.apply(context, args);
+//    };
+//    var callNow = immediate && !timeout;
+//    clearTimeout(timeout);
+//    timeout = setTimeout(later, wait);
+//    if (callNow) func.apply(context, args);
+//  };
+//},

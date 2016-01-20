@@ -2541,8 +2541,8 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       deselectAllNodes();
-      console.log(nodeSelectedStates.Gate1);
-      console.log(nodeSelectedStates.TGen1);
+      //console.log(nodeSelectedStates.Gate1);
+      //console.log(nodeSelectedStates.TGen1);
       nodeStore.emitChange();
       break;
 
@@ -3512,6 +3512,7 @@ var setNodeTabStateTrue = function(NodeId){
  }
   else{
     console.log("tab state was already true, so don't bother changing it to true");
+    /* Need to have the tab jump to the newly selected node */
   }
 };
 
@@ -5799,14 +5800,19 @@ var Node = React.createClass({displayName: "Node",
     //    onmove: this.interactJsDrag
     //  });
 
-    this.interactable = interact(ReactDOM.findDOMNode(this));
-    this.interactable
+    interact(ReactDOM.findDOMNode(this))
       .draggable({
-        onmove: this.interactJsDrag
+        onmove: this.interactJsDrag,
+        onend: function(e){
+          console.log("interactjs dragend");
+        }
       });
 
-    this.interactable
-      .on('tap', this.nodeSelect)
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.nodeSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .styleCursor(false)
   },
 
   componentWillUnmount: function(){
@@ -5853,7 +5859,9 @@ var Node = React.createClass({displayName: "Node",
   //  }
   //},
 
-  nodeSelect: function(){
+  nodeSelect: function(e){
+    console.log(e);
+    e.preventDefault();
     console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
 
@@ -5880,6 +5888,8 @@ var Node = React.createClass({displayName: "Node",
       paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
       console.log(this.props.selected);
     }
+
+    /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
 
 
 
@@ -7192,12 +7202,9 @@ var App = React.createClass({displayName: "App",
     NodeStore.addChangeListener(this._onChange);
     //console.log(document.getElementById('appContainer'));
     //console.log(document.getElementById('Gate1'));
-
-    this.setState({moveFunction: this.defaultMoveFunction});
-    this.setState({panMoveFunction: this.defaultMoveFunction});
-    this.setState({self: this});
-
-    this.setState({wait: false});
+    //this.setState({moveFunction: this.defaultMoveFunction});
+    //this.setState({panMoveFunction: this.defaultMoveFunction});
+    //this.setState({wait: false});
 
     //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
     nodeActions.addEdgeToAllNodeInfo();
@@ -7217,12 +7224,8 @@ var App = React.createClass({displayName: "App",
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
-    //interact('.node')
-    //  .draggable({
-    //    onmove: this.interactJsDrag
-    //  });
-
-    //Perf.start();
+    interact('#dragArea')
+      .on('tap', this.deselect);
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
@@ -7440,21 +7443,6 @@ var App = React.createClass({displayName: "App",
       console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
     }
 
-  },
-
-  debounce: function (func, wait, immediate) {
-    var timeout;
-    return function () {
-      var context = this, args = arguments;
-      var later = function () {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
   },
 
   setOpacity: function () {
@@ -8491,11 +8479,14 @@ var App = React.createClass({displayName: "App",
     }
 
     return(
-      React.createElement("svg", {id: "appAndDragAreaContainer", onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave, style: AppContainerStyle}, 
+      React.createElement("svg", {id: "appAndDragAreaContainer", 
+           //onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave}
+           style: AppContainerStyle}, 
 
         React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
-              onClick: this.dragging === true ? this.defaultMoveFunction: this.deselect, onMouseDown: this.panMouseDown, onMouseUp: this.panMouseUp, onWheel: this.wheelZoom, 
-              onMouseMove: this.state.panMoveFunction}
+              //onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect}
+              onMouseDown: this.panMouseDown, onMouseUp: this.panMouseUp, onMouseMove: this.state.panMoveFunction, 
+              onWheel: this.wheelZoom}
         ), 
         React.createElement("svg", {id: "appContainer", style: AppContainerStyle
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
@@ -8643,6 +8634,21 @@ module.exports = App;
 //      selected={NodeStore.getAnyNodeSelectedState("TGen1")}
 //  //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
 ///>
+
+//debounce: function (func, wait, immediate) {
+//  var timeout;
+//  return function () {
+//    var context = this, args = arguments;
+//    var later = function () {
+//      timeout = null;
+//      if (!immediate) func.apply(context, args);
+//    };
+//    var callNow = immediate && !timeout;
+//    clearTimeout(timeout);
+//    timeout = setTimeout(later, wait);
+//    if (callNow) func.apply(context, args);
+//  };
+//},
 
 },{"../../node_modules/interact.js":37,"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/lib/ReactDefaultPerf.js":96,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":24,"./pcompNode.js":25,"./tgenNode.js":28,"react":216}],30:[function(require,module,exports){
 /**

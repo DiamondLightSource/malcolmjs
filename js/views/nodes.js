@@ -64,14 +64,19 @@ var Node = React.createClass({
     //    onmove: this.interactJsDrag
     //  });
 
-    this.interactable = interact(ReactDOM.findDOMNode(this));
-    this.interactable
+    interact(ReactDOM.findDOMNode(this))
       .draggable({
-        onmove: this.interactJsDrag
+        onmove: this.interactJsDrag,
+        onend: function(e){
+          console.log("interactjs dragend");
+        }
       });
 
-    this.interactable
-      .on('tap', this.nodeSelect)
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.nodeSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .styleCursor(false)
   },
 
   componentWillUnmount: function(){
@@ -118,7 +123,9 @@ var Node = React.createClass({
   //  }
   //},
 
-  nodeSelect: function(){
+  nodeSelect: function(e){
+    console.log(e);
+    e.preventDefault();
     console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
 

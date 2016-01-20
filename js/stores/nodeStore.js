@@ -1620,8 +1620,8 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       deselectAllNodes();
-      console.log(nodeSelectedStates.Gate1);
-      console.log(nodeSelectedStates.TGen1);
+      //console.log(nodeSelectedStates.Gate1);
+      //console.log(nodeSelectedStates.TGen1);
       nodeStore.emitChange();
       break;
 
