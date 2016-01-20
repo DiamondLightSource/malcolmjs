@@ -32,8 +32,9 @@ var NodeRectangles = React.createClass({
 
     return(
       <g>
-        <rect id={this.props.nodeId.concat("Rectangle")} height={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height}
-              width={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width} x={0} y={0} rx={7} ry={7}
+        <rect id={this.props.nodeId.concat("Rectangle")}
+              height={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height} width={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width}
+              x={0} y={0} rx={7} ry={7}
               style={{fill: 'lightgrey', 'strokeWidth': 1.65,
                stroke: this.props.selected ? '#797979' : 'black',
                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}

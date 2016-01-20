@@ -66,6 +66,12 @@ var Node = React.createClass({
 
     interact(ReactDOM.findDOMNode(this))
       .draggable({
+        restrict: {
+          restriction: '#appAndDragAreaContainer',
+        },
+        onstart: function(e){
+
+        },
         onmove: this.interactJsDrag,
         onend: function(e){
           console.log("interactjs dragend");
@@ -227,6 +233,22 @@ var Node = React.createClass({
       x: e.dx,
       y: e.dy
     };
+
+    /* Currently doesn't work very well, selects a node after dragging a bit... */
+    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
+
+    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
+    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
+    //  this.nodeSelect(e);
+    //}
+    //else{
+    //  console.log("Drag movement is large enough, so do a drag");
+    //  this.handleInteractJsDrag(deltaMovement);
+    //}
+
+    /* Need to have some code here to check if the movement is large anough for a drag:
+    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
+     */
 
     this.handleInteractJsDrag(deltaMovement);
 

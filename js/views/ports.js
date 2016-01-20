@@ -31,6 +31,10 @@ var Ports = React.createClass({
   //  this.setState(getPortState());
   //},
 
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //
+  //},
+
   portMouseDown: function(e){
     console.log("portMouseDown");
     console.log(e);

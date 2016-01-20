@@ -5718,8 +5718,9 @@ var NodeRectangles = React.createClass({displayName: "NodeRectangles",
 
     return(
       React.createElement("g", null, 
-        React.createElement("rect", {id: this.props.nodeId.concat("Rectangle"), height: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height, 
-              width: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width, x: 0, y: 0, rx: 7, ry: 7, 
+        React.createElement("rect", {id: this.props.nodeId.concat("Rectangle"), 
+              height: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height, width: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width, 
+              x: 0, y: 0, rx: 7, ry: 7, 
               style: {fill: 'lightgrey', 'strokeWidth': 1.65,
                stroke: this.props.selected ? '#797979' : 'black',
                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
@@ -5802,6 +5803,12 @@ var Node = React.createClass({displayName: "Node",
 
     interact(ReactDOM.findDOMNode(this))
       .draggable({
+        restrict: {
+          restriction: '#appAndDragAreaContainer',
+        },
+        onstart: function(e){
+
+        },
         onmove: this.interactJsDrag,
         onend: function(e){
           console.log("interactjs dragend");
@@ -5963,6 +5970,22 @@ var Node = React.createClass({displayName: "Node",
       x: e.dx,
       y: e.dy
     };
+
+    /* Currently doesn't work very well, selects a node after dragging a bit... */
+    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
+
+    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
+    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
+    //  this.nodeSelect(e);
+    //}
+    //else{
+    //  console.log("Drag movement is large enough, so do a drag");
+    //  this.handleInteractJsDrag(deltaMovement);
+    //}
+
+    /* Need to have some code here to check if the movement is large anough for a drag:
+    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
+     */
 
     this.handleInteractJsDrag(deltaMovement);
 
@@ -6487,6 +6510,10 @@ var Ports = React.createClass({displayName: "Ports",
   //},
   //_onChange: function(){
   //  this.setState(getPortState());
+  //},
+
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //
   //},
 
   portMouseDown: function(e){
