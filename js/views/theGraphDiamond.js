@@ -823,7 +823,7 @@ var App = React.createClass({
     /* Problem is now that if you have clicked a port and have it selected, if you hover over a node it'll go back to being a hand...
     Need some way of checking that if a port is selected, don't override the cursor until a drop or deselection occurs
      */
-    port.style.cursor = "move";
+    port.style.cursor = "default";
     port.style.fill = "black";
     port.style.stroke = "black";
   },

@@ -40,7 +40,10 @@ var Ports = React.createClass({
 
   componentDidMount: function(){
     interact('.port')
-      .on('tap', this.portClick)
+      .on('tap', this.portClick);
+
+    interact('.port')
+      .styleCursor(false);
   },
 
   componentWillUnmount: function(){
