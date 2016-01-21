@@ -1726,7 +1726,7 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       portThatHasBeenClicked = item;
-      console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.className.animVal);
+      //console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.id);
       nodeStore.emitChange();
       break;
 
@@ -1740,7 +1740,7 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       storingFirstPortClicked = item;
-      console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.className.animVal);
+      //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
       nodeStore.emitChange();
       break;
 

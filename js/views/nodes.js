@@ -70,10 +70,14 @@ var Node = React.createClass({
           restriction: '#appAndDragAreaContainer',
         },
         onstart: function(e){
-
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
         onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
           console.log("interactjs dragend");
         }
       });
@@ -91,8 +95,11 @@ var Node = React.createClass({
 
   componentWillUnmount: function(){
     //NodeStore.removeChangeListener(this._onChange);
-    this.interactable.unset();
-    this.interactable = null;
+    //this.interactable.unset();
+    //this.interactable = null;
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.nodeSelect);
   },
 
   //shouldComponentUpdate: function(nextProps, nextState){
@@ -136,6 +143,8 @@ var Node = React.createClass({
   nodeSelect: function(e){
     console.log(e);
     e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();;
     console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
 
@@ -226,6 +235,9 @@ var Node = React.createClass({
   //},
 
   interactJsDrag: function(e){
+    console.log(e);
+    e.stopPropagation();
+    e.stopImmediatePropagation();
     console.log("interactJs drag is occurring");
     var target = e.target.id;
     var deltaMovement = {
@@ -257,8 +269,8 @@ var Node = React.createClass({
 
   render: function(){
 
-    console.log("portThatHasBeenClicked is: " + this.props.portThatHasBeenClicked);
-    console.log(this.props);
+    //console.log("portThatHasBeenClicked is: " + this.props.portThatHasBeenClicked);
+    //console.log(this.props);
 
     /* Unecessary now that I don't want the ports to focus on node selection (I think? =P) */
 
@@ -280,7 +292,7 @@ var Node = React.createClass({
     //var nodePositionX = this.state.allNodeInfo[this.props.id].position.x;
     //var nodePositionY = this.state.allNodeInfo[this.props.id].position.y;
     var nodeTranslate = "translate(" + this.props.allNodeInfo[this.props.id].position.x + "," + this.props.allNodeInfo[this.props.id].position.y + ")";
-    console.log(nodeTranslate);
+    //console.log(nodeTranslate);
 
     //var nodeName = nodeInfo.name;
     //var rectangleString = "Rectangle";

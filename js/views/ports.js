@@ -8,6 +8,9 @@ var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
 var paneActions = require('../actions/paneActions');
 
+var interact = require('../../node_modules/interact.js');
+
+
 function getPortState(){
   return{
     //allNodeInfo: NodeStore.getAllNodeInfo(),
@@ -35,10 +38,22 @@ var Ports = React.createClass({
   //
   //},
 
+  componentDidMount: function(){
+    interact('.port')
+      .on('tap', this.portClick)
+  },
+
+  componentWillUnmount: function(){
+    interact('.port')
+      .off('tap', this.portClick)
+  },
+
   portMouseDown: function(e){
     console.log("portMouseDown");
     console.log(e);
     nodeActions.passPortMouseDown(e.currentTarget);
+
+    console.log(e.currentTarget.parentNode.parentNode.parentNode);
 
     var portMouseDownCoords = {
       x: e.nativeEvent.clientX,
@@ -64,9 +79,12 @@ var Ports = React.createClass({
     }
   },
   portClick: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+    nodeActions.passPortMouseDown(e.currentTarget);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
@@ -97,9 +115,10 @@ var Ports = React.createClass({
       var inportName = nodeInfo.inports[i].name;
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        <circle key={nodeId + inportName} className={inportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y}
+        <circle key={nodeId + inportName} className="port" cx={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y}
                 r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
-                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                id={this.props.nodeId + inportName}
         />
       );
 
@@ -116,9 +135,10 @@ var Ports = React.createClass({
     for(j = 0; j < nodeInfo.outports.length; j++){
       var outportName = nodeInfo.outports[j].name;
       outports.push(
-        <circle key={nodeId + outportName} className={outportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y}
+        <circle key={nodeId + outportName} className="port" cx={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y}
                 r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
-                onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                id={this.props.nodeId + outportName}
         />
       );
 

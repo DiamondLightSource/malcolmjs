@@ -64,7 +64,7 @@ var AppContainerStyle = {
 /* This should really fetch the node's x & y coordinates from the store somehow */
 
 function getAppState(){
-  console.log("fetching app state");
+  //console.log("fetching app state");
   return{
     //Gate1Position: NodeStore.getGate1Position(),
     //TGen1Position: NodeStore.getTGen1Position(),
@@ -100,7 +100,7 @@ var App = React.createClass({
   },
   _onChange: function () {
     this.setState(getAppState(), function(){
-      console.log("app state has been mutated now!");
+      //console.log("app state has been mutated now!");
     });
   },
   componentDidMount: function () {
@@ -135,10 +135,14 @@ var App = React.createClass({
     interact('#dragArea')
       .draggable({
         onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
           console.log("drag start");
         },
         onmove: this.interactJsDragPan,
         onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
           console.log("drag end");
         }
       });
@@ -148,6 +152,13 @@ var App = React.createClass({
   },
   componentWillUnmount: function () {
     NodeStore.removeChangeListener(this._onChange);
+
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
+
+    interact('#dragArea')
+      .off('tap', this.deselect);
   },
 
   //handleInteractJsDrag: function(item){
@@ -348,8 +359,10 @@ var App = React.createClass({
     this.setState({afterDrag: null});
   },
 
-  deselect: function () {
-    //console.log("dragArea has been clicked");
+  deselect: function (e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.deselectAllEdges("deselect all edges");
 
@@ -694,7 +707,9 @@ var App = React.createClass({
     }
   },
 
-  addNodeInfo: function(){
+  addNodeInfo: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log("addNodeInfo");
     //var gateNodeRegExp = /Gate/;
     //var tgenNodeRegExp = /TGen/;
@@ -843,23 +858,34 @@ var App = React.createClass({
     var secondPort = this.state.portThatHasBeenClicked;
     console.log(firstPort);
     console.log(secondPort);
-    console.log(firstPort.parentNode.parentNode.id);
-    console.log(secondPort.parentNode.parentNode.id);
+    console.log(firstPort.parentNode.parentNode.parentNode.id);
+    console.log(secondPort.parentNode.parentNode.parentNode.id);
 
     /* For my refactored nodes.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
     /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
 
-    if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
+    /* Trying to use id instead of class to then allow class for interactjs use */
+    /* Need the length of the name of the node, then slice the firstPort id string until the end of the node name length */
+
+    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.id.length;
+    var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
+    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.id.length;
+    var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
+    console.log(firstPortStringSliceIndex);
+    console.log(firstPortName);
+    console.log(secondPortName);
+
+    if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
       console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
         fromNode: firstPort.parentNode.parentNode.parentNode.id,
-        fromNodePort: firstPort.className.animVal,
+        fromNodePort: firstPortName,
         toNode: secondPort.parentNode.parentNode.parentNode.id,
-        toNodePort: secondPort.className.animVal
+        toNodePort: secondPortName
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
@@ -884,14 +910,20 @@ var App = React.createClass({
     toNodeType: toNodeType
   };
 
+  console.log(nodeTypes);
+
   var fromNodeLibraryInfo = this.state.nodeLibrary[fromNodeType];
   var toNodeLibraryInfo = this.state.nodeLibrary[toNodeType];
+
+    console.log(fromNodeLibraryInfo);
+    console.log(toNodeLibraryInfo);
 
   for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
     if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
       console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
       var fromNodePortType = "inport";
       var inportIndex = i;
+      break;
     }
     else{
       console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
@@ -904,6 +936,7 @@ var App = React.createClass({
       console.log("The toNode is an inport: " + edgeInfo.toNodePort);
       var toNodePortType = "inport";
       var inportIndex = j;
+      break;
     }
     else{
       console.log("The toNode isn't an inport, so it's an outport!");
@@ -915,6 +948,8 @@ var App = React.createClass({
     fromNodePortType: fromNodePortType,
     toNodePortType: toNodePortType
   };
+
+  console.log(portTypes);
 
   var types = {
     nodeTypes: nodeTypes,
@@ -1103,7 +1138,9 @@ var App = React.createClass({
 
   },
 
-  addEdgeInfo: function(){
+  addEdgeInfo: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     nodeActions.addEdgeToAllNodeInfo({
       fromNode: 'TGen1',
       fromNodePort: 'posn',
@@ -1222,6 +1259,8 @@ var App = React.createClass({
   //},
 
   interactJsDragPan: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log(e);
 
     var xChange = this.state.graphPosition.x + e.dx;
@@ -1423,9 +1462,13 @@ var App = React.createClass({
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
-          <g><rect onClick={this.addNodeInfo} height="50" width="50" /></g>
+          <g><rect
+            //onClick={this.addNodeInfo}
+            height="50" width="50" /></g>
 
-          <g><rect onClick={this.addEdgeInfo} height="50" width="50" transform="translate(100, 0)" /></g>
+          <g><rect
+            //onClick={this.addEdgeInfo}
+            height="50" width="50" transform="translate(100, 0)" /></g>
 
 
           <g id="testPanGroup"
