@@ -707,9 +707,9 @@ var App = React.createClass({
     }
   },
 
-  addNodeInfo: function(e){
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  addNodeInfo: function(){
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
     console.log("addNodeInfo");
     //var gateNodeRegExp = /Gate/;
     //var tgenNodeRegExp = /TGen/;
@@ -806,9 +806,15 @@ var App = React.createClass({
     /* Need an if loop to check if we're hovering the port already
     Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
      */
-    port.style.cursor = "default";
-    port.style.fill = "yellow";
-    port.style.stroke = "yellow";
+    //port.style.cursor = "default";
+    //port.style.fill = "yellow";
+    //port.style.stroke = "yellow";
+
+    port.style.stroke = "black";
+    port.style.fill = "lightgrey";
+
+    port.setAttribute('r', 4);
+
     //console.log(port.style.fill);
     //console.log(port.style.stroke);
     /* Node select is also messing with the port styling... */
@@ -823,9 +829,14 @@ var App = React.createClass({
     /* Problem is now that if you have clicked a port and have it selected, if you hover over a node it'll go back to being a hand...
     Need some way of checking that if a port is selected, don't override the cursor until a drop or deselection occurs
      */
-    port.style.cursor = "default";
-    port.style.fill = "black";
+    //port.style.cursor = "default";
+    //port.style.fill = "black";
+    //port.style.stroke = "black";
+
     port.style.stroke = "black";
+    port.style.fill = "black";
+
+    port.setAttribute('r', 2);
   },
 
   checkBothClickedPorts: function(){
@@ -899,7 +910,7 @@ var App = React.createClass({
   checkPortCompatibility: function(edgeInfo){
   /* First need to check we have an inport and an outport */
   /* Find both port types, then compare them somehow */
-    console.log(edgeInfo);
+  console.log(edgeInfo);
 
   var fromNodeType = this.state.allNodeInfo[edgeInfo.fromNode].type;
   var toNodeType = this.state.allNodeInfo[edgeInfo.toNode].type;
@@ -958,9 +969,24 @@ var App = React.createClass({
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-  if(fromNodePortType === toNodePortType){
+    var fromPort = this.state.storingFirstPortClicked;
+
+    if(edgeInfo.fromNode === edgeInfo.toNode){
+    window.alert("Incompatible ports, they are part of the same node.");
+    //var fromPort = this.state.storingFirstPortClicked;
+    fromPort.style.stroke = "black";
+    fromPort.style.fill = "black";
+    fromPort.setAttribute('r', 2);
+    this.resetPortClickStorage();
+  }
+  else if(fromNodePortType === toNodePortType){
     console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-    window.alert("Incompatible ports");
+    window.alert("Incompatible ports, they are both " + fromNodePortType + "s.");
+    /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
+    //var fromPort = this.state.storingFirstPortClicked;
+    fromPort.style.stroke = "black";
+    fromPort.style.fill = "black";
+    fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
   }
@@ -994,11 +1020,23 @@ var App = React.createClass({
     if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
       window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
+      /* Set the styling of the first port back to normal */
+      //console.log(edgeInfo);
+      //console.log(this.state.storingFirstPortClicked);
+      var fromPort = this.state.storingFirstPortClicked;
+      fromPort.style.stroke = "black";
+      fromPort.style.fill = "black";
+      fromPort.setAttribute('r', 2);
       this.resetPortClickStorage();
     }
     else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){
       console.log("That inport isn't connected to anything, so proceed with the port connection process");
       console.log(edgeInfo);
+      var toPort = this.state.portThatHasBeenClicked;
+      console.log(toPort);
+      toPort.style.stroke = "black";
+      toPort.style.fill = "lightgrey";
+      toPort.setAttribute('r', 4);
       nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
       this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
     }
@@ -1138,9 +1176,9 @@ var App = React.createClass({
 
   },
 
-  addEdgeInfo: function(e){
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+  addEdgeInfo: function(){
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
     nodeActions.addEdgeToAllNodeInfo({
       fromNode: 'TGen1',
       fromNodePort: 'posn',
@@ -1463,11 +1501,11 @@ var App = React.createClass({
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
           <g><rect
-            //onClick={this.addNodeInfo}
+            onClick={this.addNodeInfo}
             height="50" width="50" /></g>
 
           <g><rect
-            //onClick={this.addEdgeInfo}
+            onClick={this.addEdgeInfo}
             height="50" width="50" transform="translate(100, 0)" /></g>
 
 
