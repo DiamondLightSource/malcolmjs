@@ -364,8 +364,8 @@ var App = React.createClass({
   },
 
   deselect: function (e) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
     console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.deselectAllEdges("deselect all edges");

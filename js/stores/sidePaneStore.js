@@ -17,15 +17,15 @@ var _stuff = {
 
 var dropdownMenuShow = function(){
   _stuff.dropdownListVisible = true;
-  //document.addEventListener("click", dropdownMenuHide)
+  //document.addEventListener("click", dropdownReference.handleActionHide)
 };
 
 var dropdownMenuHide = function(){
   _stuff.dropdownListVisible = false;
   //console.log("dropdown hide is doing something");
   //console.log(_stuff.dropdownListVisible);
-  sidePaneStore.emitChange();
-  //document.removeEventListener("click", dropdownMenuHide)
+  //sidePaneStore.emitChange();
+  //document.removeEventListener("click", dropdownReference.handleActionHide)
 };
 
 

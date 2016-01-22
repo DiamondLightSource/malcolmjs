@@ -3712,15 +3712,15 @@ var _stuff = {
 
 var dropdownMenuShow = function(){
   _stuff.dropdownListVisible = true;
-  //document.addEventListener("click", dropdownMenuHide)
+  //document.addEventListener("click", dropdownReference.handleActionHide)
 };
 
 var dropdownMenuHide = function(){
   _stuff.dropdownListVisible = false;
   //console.log("dropdown hide is doing something");
   //console.log(_stuff.dropdownListVisible);
-  sidePaneStore.emitChange();
-  //document.removeEventListener("click", dropdownMenuHide)
+  //sidePaneStore.emitChange();
+  //document.removeEventListener("click", dropdownReference.handleActionHide)
 };
 
 
@@ -4224,14 +4224,25 @@ var Dropdown = React.createClass({displayName: "Dropdown",
     this.setState(getDropdownState())
   },
 
-  handleActionShow: function(){
-    sidePaneActions.dropdownMenuShow("this is the item");
-    document.addEventListener("click", this.handleActionHide);
+  handleActionShow: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    sidePaneActions.dropdownMenuShow("This is the item");
+    //document.addEventListener("click", this.handleActionHide)
+
+    interact('#container')
+      .on('tap', this.handleActionHide);
   },
 
-  handleActionHide: function(){
-    sidePaneActions.dropdownMenuHide("this is the item");
-    document.removeEventListener("click", this.handleActionHide);
+  handleActionHide: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    console.log(arguments);
+    sidePaneActions.dropdownMenuHide("This is the item");
+    //document.removeEventListener("click", this.handleActionHide)
+
+    interact('#container')
+      .off('tap', this.handleActionHide);
   },
 
   testSelectInvokeSidePane: function(item){
@@ -4239,17 +4250,28 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   },
 
   componentDidMount: function(){
+    console.log("dropdown is mounted");
     sidePaneStore.addChangeListener(this._onChange);
 
     //interact('.dropdown-display')
     //  .on('tap', this.handleActionShow)
+
+    interact('#dropdownButton')
+      .on('tap', this.handleActionShow)
   },
 
   componentWillUnmount: function(){
     sidePaneStore.removeChangeListener(this._onChange);
+    console.log("dropdown is unmounting");
 
     //interact('.dropdown-display')
     //  .off('tap', this.handleActionShow)
+
+    interact('#dropdownButton')
+      .off('tap', this.handleActionShow);
+
+    interact('#container')
+      .off('tap', this.handleActionHide);
   },
 
   renderListItems: function() {
@@ -4268,8 +4290,9 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
 
     return React.createElement("div", {className: "dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}, 
-      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), 
-           onClick: this.handleActionShow}, 
+      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), id: "dropdownButton"
+           //onClick={this.handleActionShow}
+      }, 
         React.createElement("span", null), 
         React.createElement("i", {className: "fa fa-angle-down"})
       ), 
@@ -7544,8 +7567,8 @@ var App = React.createClass({displayName: "App",
   },
 
   deselect: function (e) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
     console.log("dragArea has been clicked");
     nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.deselectAllEdges("deselect all edges");
