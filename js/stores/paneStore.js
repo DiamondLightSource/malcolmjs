@@ -391,6 +391,7 @@ var dropdownMenuSelect = function(tab){
   //var findTheIndex = _stuff.tabState.indexOf(item);
   ////this.props.changeTab(findTheIndex)
   //_stuff.selectedTabIndex = findTheIndex;
+  /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
   var test = tab;
   console.log(tab);
@@ -632,7 +633,8 @@ AppDispatcher.register(function(payload){
       console.log(allNodeTabInfo[item]);
       setNodeTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
-      checkWhichNodeTabsOpen();
+      /* Seeing if I can cut out checkWhichNodeTabsOpen and cut straight to adding to _stuff.tabState */
+      //checkWhichNodeTabsOpen();
       //selectBlockOnClick();
       console.log(_stuff.tabState);
       paneStore.emitChange();
@@ -717,10 +719,21 @@ var setNodeTabStateTrue = function(NodeId){
     allNodeTabProperties[NodeId] = true;
     console.log(allNodeTabProperties[NodeId]);
     /* Now need to run the function to check which tabs should be open */
+    /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
+
+    _stuff.tabState.push(allNodeTabInfo[NodeId]);
+    console.log(_stuff.tabState);
+
+    /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
+
+    selectBlockOnClick();
  }
   else{
     console.log("tab state was already true, so don't bother changing it to true");
-    /* Need to have the tab jump to the newly selected node */
+    /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
+    /* Could try using dropdownMenuSelect? */
+
+    dropdownMenuSelect(NodeId);
   }
 };
 
@@ -745,6 +758,10 @@ var checkWhichNodeTabsOpen = function(){
 
         _stuff.tabState.push(allNodeTabInfo[key]);
         //console.log(_stuff.tabState);
+
+        /* Tab wasn't open, so it was added to the end, so just jump to the last tab*/
+
+        selectBlockOnClick()
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
@@ -758,6 +775,9 @@ var checkWhichNodeTabsOpen = function(){
             //console.log(_stuff.tabState[i].label);
             //console.log(key.label);
             console.log("tab is already open from before, don't add, break statement occurring");
+            /* Here, I need to then jump to the tab corresponding to the node I clicked */
+            /* But wait, this whole loop goes through EVERY node tab, regardless of if it's open or not, so it'll jump to every tab that is already open, leaving it to be on the very last tab that is open! =/ */
+            /* I think I need to write a better way of seeing which tabs are opening, and appending them to _stuff.tabState than this loop */
             break
           }
           else if(_stuff.tabState[i].label !== key){
@@ -777,6 +797,10 @@ var checkWhichNodeTabsOpen = function(){
 
               _stuff.tabState.push(allNodeTabInfo[key]);
               //console.log(_stuff.tabState);
+
+              /* Same as the other situation, tab wasn't open so it was added to the end, so just jump to the last tab*/
+
+              selectBlockOnClick()
             }
           }
         }
@@ -797,7 +821,7 @@ var checkWhichNodeTabsOpen = function(){
 
   //return updatedBlockTabsOpen;
 
-  selectBlockOnClick()
+  //selectBlockOnClick()
 
 };
 
