@@ -138,6 +138,7 @@ var App = React.createClass({
           e.stopImmediatePropagation();
           e.stopPropagation();
           console.log("drag start");
+
         },
         onmove: this.interactJsDragPan,
         onend: function(e){
@@ -145,6 +146,9 @@ var App = React.createClass({
           e.stopPropagation();
           console.log("drag end");
         }
+      })
+      .gesturable({
+        onmove: this.interactJsPinchZoom
       });
 
     interact('#dragArea')
@@ -1308,6 +1312,15 @@ var App = React.createClass({
       x: xChange,
       y: yChange
     });
+  },
+
+  interactJsPinchZoom: function(e){
+    console.log(e);
+
+    var currentZoomScale = this.state.graphZoomScale;
+    var newZoomScale = currentZoomScale + e.ds;
+
+    nodeActions.graphZoom(newZoomScale);
   },
 
 

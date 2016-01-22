@@ -4204,6 +4204,8 @@ var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
 
+var interact = require('../../node_modules/interact.js');
+
 function getDropdownState(){
   return{
     listVisible: sidePaneStore.getDropdownState(),
@@ -4236,18 +4238,24 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   },
 
   componentDidMount: function(){
-    sidePaneStore.addChangeListener(this._onChange)
+    sidePaneStore.addChangeListener(this._onChange);
+
+    //interact('.dropdown-display')
+    //  .on('tap', this.handleActionShow)
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange)
+    sidePaneStore.removeChangeListener(this._onChange);
+
+    //interact('.dropdown-display')
+    //  .off('tap', this.handleActionShow)
   },
 
   renderListItems: function() {
     var items = [];
     for (var i = 0; i < this.state.tabState.length; i++) {
       var item = this.state.tabState[i].label;
-      items.push(React.createElement("div", {onClick: this.testSelectInvokeSidePane.bind(null, item)}, 
+      items.push(React.createElement("div", {key: item + "-tab", className: "dropdownTab", onClick: this.testSelectInvokeSidePane.bind(null, item)}, 
         React.createElement("span", null, item)
       ));
     }
@@ -4259,7 +4267,8 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
 
     return React.createElement("div", {className: "dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}, 
-      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), onClick: this.handleActionShow}, 
+      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), 
+           onClick: this.handleActionShow}, 
         React.createElement("span", null), 
         React.createElement("i", {className: "fa fa-angle-down"})
       ), 
@@ -4302,7 +4311,7 @@ module.exports = Dropdown;
 //  this.props.changeTab(findTheIndex)
 //},
 
-},{"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":216}],18:[function(require,module,exports){
+},{"../../node_modules/interact.js":37,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":216}],18:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -7299,6 +7308,7 @@ var App = React.createClass({displayName: "App",
           e.stopImmediatePropagation();
           e.stopPropagation();
           console.log("drag start");
+
         },
         onmove: this.interactJsDragPan,
         onend: function(e){
@@ -7306,6 +7316,9 @@ var App = React.createClass({displayName: "App",
           e.stopPropagation();
           console.log("drag end");
         }
+      })
+      .gesturable({
+        onmove: this.interactJsPinchZoom
       });
 
     interact('#dragArea')
@@ -8469,6 +8482,15 @@ var App = React.createClass({displayName: "App",
       x: xChange,
       y: yChange
     });
+  },
+
+  interactJsPinchZoom: function(e){
+    console.log(e);
+
+    var currentZoomScale = this.state.graphZoomScale;
+    var newZoomScale = currentZoomScale + e.ds;
+
+    nodeActions.graphZoom(newZoomScale);
   },
 
 

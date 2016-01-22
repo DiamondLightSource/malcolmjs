@@ -8,6 +8,8 @@ var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
 
+var interact = require('../../node_modules/interact.js');
+
 function getDropdownState(){
   return{
     listVisible: sidePaneStore.getDropdownState(),
@@ -40,18 +42,24 @@ var Dropdown = React.createClass({
   },
 
   componentDidMount: function(){
-    sidePaneStore.addChangeListener(this._onChange)
+    sidePaneStore.addChangeListener(this._onChange);
+
+    //interact('.dropdown-display')
+    //  .on('tap', this.handleActionShow)
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange)
+    sidePaneStore.removeChangeListener(this._onChange);
+
+    //interact('.dropdown-display')
+    //  .off('tap', this.handleActionShow)
   },
 
   renderListItems: function() {
     var items = [];
     for (var i = 0; i < this.state.tabState.length; i++) {
       var item = this.state.tabState[i].label;
-      items.push(<div onClick={this.testSelectInvokeSidePane.bind(null, item)}>
+      items.push(<div key={item + "-tab"} className="dropdownTab" onClick={this.testSelectInvokeSidePane.bind(null, item)}>
         <span >{item}</span>
       </div>);
     }
@@ -63,7 +71,8 @@ var Dropdown = React.createClass({
 
 
     return <div className={"dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}>
-      <div className={"dropdown-display" + (this.state.listVisible ? " clicked": "")} onClick={this.handleActionShow}>
+      <div className={"dropdown-display" + (this.state.listVisible ? " clicked": "")}
+           onClick={this.handleActionShow}>
         <span ></span>
         <i className="fa fa-angle-down"></i>
       </div>
