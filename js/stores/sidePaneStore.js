@@ -17,7 +17,7 @@ var _stuff = {
 
 var dropdownMenuShow = function(){
   _stuff.dropdownListVisible = true;
-  document.addEventListener("click", dropdownMenuHide)
+  //document.addEventListener("click", dropdownMenuHide)
 };
 
 var dropdownMenuHide = function(){
@@ -25,8 +25,166 @@ var dropdownMenuHide = function(){
   //console.log("dropdown hide is doing something");
   //console.log(_stuff.dropdownListVisible);
   sidePaneStore.emitChange();
-  document.removeEventListener("click", dropdownMenuHide)
+  //document.removeEventListener("click", dropdownMenuHide)
 };
+
+
+var sidePaneStore = assign({}, EventEmitter.prototype, {
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+  getDropdownState: function(){
+    return _stuff.dropdownListVisible;
+  }
+
+
+  //getTabState: function(){
+  //  return _stuff.tabState;
+  //},
+  //getCalculateTabs: function(){
+  //  calculateTabs()
+  //},
+  //getSelectedTabIndex: function(){
+  //  return _stuff.selectedTabIndex;
+  //},
+  //getRedBlockTabClicked: function(){
+  //  return allBlockTabProperties.redBlockTabOpen;
+  //},
+  //getBlueBlockTabClicked: function(){
+  //  return allBlockTabProperties.blueBlockTabOpen;
+  //},
+  //getGreenBlockTabClicked: function(){
+  //  return allBlockTabProperties.greenBlockTabOpen;
+  //},
+});
+
+AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+  switch(action.actionType){
+
+    case appConstants.DROPDOWN_SHOW:
+      console.log(payload);
+      console.log(action);
+      dropdownMenuShow();
+      sidePaneStore.emitChange();
+      console.log(_stuff.dropdownListVisible);
+      break;
+
+    case appConstants.DROPDOWN_HIDE:
+      console.log(payload);
+      console.log(action);
+      dropdownMenuHide();
+      sidePaneStore.emitChange();
+      console.log(_stuff.dropdownListVisible);
+      break;
+
+    //case appConstants.ADD_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //      addTab(item);
+    //      sidePaneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //      break;
+    //
+    //case appConstants.REMOVE_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //  console.log(item);
+    //      removeTab(item);
+    //      sidePaneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //  console.log(allBlockTabProperties.redBlockTabOpen);
+    //      break;
+
+
+
+    //case appConstants.DROPDOWN_SELECT:
+    //  var tab = item.item;
+    //  var component = item.component;
+    //
+    //  console.log(payload);
+    //  console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
+    //      dropdownMenuSelect(tab, component);
+    //      sidePaneStore.emitChange();
+    //      break;
+
+    //case appConstants.REDBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //      changeRedBlockTabState();
+    //  console.log(allBlockTabProperties.redBlockTabOpen);
+    //      //checkWhichBlockTabsOpen();
+    //      sidePaneStore.emitChange();
+    //      break;
+    //
+    //case appConstants.BLUEBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //      changeBlueBlockTabState();
+    //  console.log(allBlockTabProperties.blueBlockTabOpen);
+    //      sidePaneStore.emitChange();
+    //      break;
+    //
+    //case appConstants.GREENBLOCKTAB_OPEN:
+    //  console.log(payload);
+    //  console.log(action);
+    //      changeGreenBlockTabState();
+    //  console.log(allBlockTabProperties.greenBlockTabOpen);
+    //      sidePaneStore.emitChange();
+    //      break;
+
+    //case appConstants.SWITCHTAB_WHENTABOPENS:
+    //  console.log(payload);
+    //  console.log(action);
+    //      switchTabWhenTabOpens(item);
+    //      sidePaneStore.emitChange();
+    //      break;
+
+    //case appConstants.PASSING_SIDEPANE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  var passedSidePane = item;
+    //  return passedSidePane;
+    //      sidePaneStore.emitChange();
+    //      break;
+
+    //case appConstants.REACTPANEL_SELECT:
+    //      break;
+
+    //case appConstants.REDBLOCKSTATE_CHANGE:
+    //  console.log(payload);
+    //  console.log(action);
+    //      changeRedBlockTabState();
+    //      sidePaneStore.emitChange();
+    //      break;
+
+    default:
+          return true;
+  }
+});
+
+module.exports = sidePaneStore;
+
+
+//var reactPanelSelect = function(){
+//  /* need this to somehow invoke the dropdownmenuchange function in SidePane! */
+//};
+
+
+//var calculateTabs = function(){
+//  var tabs = _stuff.tabState.map(function(item, i){
+//    var tabTitle = "Tab " + item;
+//    var tabIndex = i + 1;
+//  })
+//};
+
 
 //var allBlockContent = {
 //  redBlockContent: {
@@ -264,164 +422,3 @@ var dropdownMenuHide = function(){
 //var passSidePane = function(component){
 //  var passedComponent = {component: component}
 //};
-
-
-
-
-var sidePaneStore = assign({}, EventEmitter.prototype, {
-  addChangeListener: function(cb){
-    this.on(CHANGE_EVENT, cb)
-  },
-  removeChangeListener: function(cb){
-    this.removeListener(CHANGE_EVENT, cb)
-  },
-  emitChange: function(){
-    this.emit(CHANGE_EVENT)
-  },
-  getDropdownState: function(){
-    return _stuff.dropdownListVisible;
-  }
-
-
-  //getTabState: function(){
-  //  return _stuff.tabState;
-  //},
-  //getCalculateTabs: function(){
-  //  calculateTabs()
-  //},
-  //getSelectedTabIndex: function(){
-  //  return _stuff.selectedTabIndex;
-  //},
-  //getRedBlockTabClicked: function(){
-  //  return allBlockTabProperties.redBlockTabOpen;
-  //},
-  //getBlueBlockTabClicked: function(){
-  //  return allBlockTabProperties.blueBlockTabOpen;
-  //},
-  //getGreenBlockTabClicked: function(){
-  //  return allBlockTabProperties.greenBlockTabOpen;
-  //},
-});
-
-AppDispatcher.register(function(payload){
-  var action = payload.action;
-  var item = action.item;
-  switch(action.actionType){
-
-    case appConstants.DROPDOWN_SHOW:
-      console.log(payload);
-      console.log(action);
-      dropdownMenuShow();
-      sidePaneStore.emitChange();
-      console.log(_stuff.dropdownListVisible);
-      break;
-
-    case appConstants.DROPDOWN_HIDE:
-      console.log(payload);
-      console.log(action);
-      dropdownMenuHide();
-      sidePaneStore.emitChange();
-      console.log(_stuff.dropdownListVisible);
-      break;
-
-    //case appConstants.ADD_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //      addTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //      break;
-    //
-    //case appConstants.REMOVE_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //  console.log(item);
-    //      removeTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      break;
-
-
-
-    //case appConstants.DROPDOWN_SELECT:
-    //  var tab = item.item;
-    //  var component = item.component;
-    //
-    //  console.log(payload);
-    //  console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
-    //      dropdownMenuSelect(tab, component);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REDBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      //checkWhichBlockTabsOpen();
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.BLUEBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeBlueBlockTabState();
-    //  console.log(allBlockTabProperties.blueBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.GREENBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeGreenBlockTabState();
-    //  console.log(allBlockTabProperties.greenBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.SWITCHTAB_WHENTABOPENS:
-    //  console.log(payload);
-    //  console.log(action);
-    //      switchTabWhenTabOpens(item);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.PASSING_SIDEPANE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  var passedSidePane = item;
-    //  return passedSidePane;
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REACTPANEL_SELECT:
-    //      break;
-
-    //case appConstants.REDBLOCKSTATE_CHANGE:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    default:
-          return true;
-  }
-});
-
-module.exports = sidePaneStore;
-
-
-//var reactPanelSelect = function(){
-//  /* need this to somehow invoke the dropdownmenuchange function in SidePane! */
-//};
-
-
-//var calculateTabs = function(){
-//  var tabs = _stuff.tabState.map(function(item, i){
-//    var tabTitle = "Tab " + item;
-//    var tabIndex = i + 1;
-//  })
-//};
-
-

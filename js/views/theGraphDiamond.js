@@ -618,33 +618,6 @@ var App = React.createClass({
 
   },
 
-  //throttle: function(limit, e){
-  //
-  //  //this.test(this, e);
-  //  if(this.state.wait === false || this.state.wait === undefined){
-  //    console.log("wait is false, so do the thing");
-  //    this.setState({wait: true});
-  //    console.log(this.state.wait);
-  //    setTimeout.bind(this, [this.test(this, e), 40])
-  //  }
-  //  else if(this.state.wait === true){
-  //    console.log("we are still waiting, so don't run the move function again just yet");
-  //  }
-  //
-  //
-  //},
-  //throttleMoveFunction(e){
-  //  //console.count("Throttled");
-  //  //console.log(e);
-  //  this.throttle(100, e);
-  //},
-  //test: function(Component, e){
-  //  console.log("inside throttle return function");
-  //  this.setState({wait: false});
-  //  Component.anotherMoveFunction(e);
-  //  console.log(this.state.wait);
-  //},
-
   /* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
 
   addNodeToNodesArray: function(){
@@ -1315,6 +1288,8 @@ var App = React.createClass({
   },
 
   interactJsPinchZoom: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log(e);
 
     var currentZoomScale = this.state.graphZoomScale;
@@ -1673,4 +1648,31 @@ module.exports = App;
 //    timeout = setTimeout(later, wait);
 //    if (callNow) func.apply(context, args);
 //  };
+//},
+
+//throttle: function(limit, e){
+//
+//  //this.test(this, e);
+//  if(this.state.wait === false || this.state.wait === undefined){
+//    console.log("wait is false, so do the thing");
+//    this.setState({wait: true});
+//    console.log(this.state.wait);
+//    setTimeout.bind(this, [this.test(this, e), 40])
+//  }
+//  else if(this.state.wait === true){
+//    console.log("we are still waiting, so don't run the move function again just yet");
+//  }
+//
+//
+//},
+//throttleMoveFunction(e){
+//  //console.count("Throttled");
+//  //console.log(e);
+//  this.throttle(100, e);
+//},
+//test: function(Component, e){
+//  console.log("inside throttle return function");
+//  this.setState({wait: false});
+//  Component.anotherMoveFunction(e);
+//  console.log(this.state.wait);
 //},

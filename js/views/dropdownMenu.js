@@ -30,11 +30,13 @@ var Dropdown = React.createClass({
   },
 
   handleActionShow: function(){
-    sidePaneActions.dropdownMenuShow("this is the item")
+    sidePaneActions.dropdownMenuShow("this is the item");
+    document.addEventListener("click", this.handleActionHide);
   },
 
   handleActionHide: function(){
-    sidePaneActions.dropdownMenuHide("this is the item")
+    sidePaneActions.dropdownMenuHide("this is the item");
+    document.removeEventListener("click", this.handleActionHide);
   },
 
   testSelectInvokeSidePane: function(item){
