@@ -32,11 +32,18 @@ var Dropdown = React.createClass({
   handleActionShow: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    sidePaneActions.dropdownMenuShow("This is the item");
-    //document.addEventListener("click", this.handleActionHide)
+    if(this.state.tabState.length === 0){
+      console.log("tabState is empty, so there are no tabs, so don't show the dropdown menu");
+    }
+    else if(this.state.tabState.length > 0){
+      console.log("tabState wasn't empty, so go ahead and show the dropdown menu");
+      sidePaneActions.dropdownMenuShow("This is the item");
+      //document.addEventListener("click", this.handleActionHide)
 
-    interact('#container')
-      .on('tap', this.handleActionHide);
+      interact('#container')
+        .on('tap', this.handleActionHide);
+    }
+
   },
 
   handleActionHide: function(e){
