@@ -7,6 +7,8 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
 
+var interact = require('../../node_modules/interact.js');
+
 function getEdgeState(){
   return {
     //startNode: NodeStore.getGateNodeOutPort(),
@@ -42,9 +44,14 @@ var Edge = React.createClass({
     //  console.log(this.state.selected);
     //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.edgeSelect)
   },
   componentWillUnmount: function(){
     //NodeStore.removeChangeListener(this._onChange);
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.edgeSelect)
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
@@ -67,7 +74,9 @@ var Edge = React.createClass({
       test.style.stroke = 'lightgrey'
     }
   },
-  edgeSelect: function(){
+  edgeSelect: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
     nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);

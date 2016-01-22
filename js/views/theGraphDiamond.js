@@ -1172,7 +1172,7 @@ var App = React.createClass({
 
     nodeActions.pushEdgeToArray(<Edge id={edgeLabel}
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                                      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
     />);
 
     /* Now that a new edge component instance has been added, reset the port storage info */
@@ -1196,7 +1196,7 @@ var App = React.createClass({
 
     nodeActions.pushEdgeToArray(<Edge id='TGen1posn -> PComp1posn'
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                                      onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
     />)
   },
 
@@ -1281,7 +1281,7 @@ var App = React.createClass({
 
       nodeActions.pushEdgeToArray(<Edge key={edge} id={edge}
                        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                       onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+                       //onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
       />)
 
     }
@@ -1491,7 +1491,7 @@ var App = React.createClass({
     for(var edge in this.state.allEdges){
       edges.push(<Edge key={edge} id={edge}
         //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                       onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+        //               onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
                        allEdges={this.state.allEdges} allNodeTypesPortStyling={this.state.allNodeTypesPortStyling}
                        allNodeInfo={this.state.allNodeInfo} areAnyEdgesSelected={this.state.areAnyEdgesSelected}
                        selected={NodeStore.getIfEdgeIsSelected(edge)}

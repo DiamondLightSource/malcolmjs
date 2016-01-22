@@ -4321,6 +4321,8 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
 
+var interact = require('../../node_modules/interact.js');
+
 function getEdgeState(){
   return {
     //startNode: NodeStore.getGateNodeOutPort(),
@@ -4356,9 +4358,14 @@ var Edge = React.createClass({displayName: "Edge",
     //  console.log(this.state.selected);
     //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.edgeSelect)
   },
   componentWillUnmount: function(){
     //NodeStore.removeChangeListener(this._onChange);
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.edgeSelect)
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
@@ -4381,7 +4388,9 @@ var Edge = React.createClass({displayName: "Edge",
       test.style.stroke = 'lightgrey'
     }
   },
-  edgeSelect: function(){
+  edgeSelect: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
     nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
@@ -4523,7 +4532,7 @@ module.exports = Edge;
 //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 //}
 
-},{"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],19:[function(require,module,exports){
+},{"../../node_modules/interact.js":37,"../../node_modules/react-dom/dist/react-dom.js":39,"../../node_modules/react/react":216,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -8340,9 +8349,9 @@ var App = React.createClass({displayName: "App",
     //var newEdge = this.state.allEdges[newlyCreatedEdgeLabel];
     //console.log(newEdge);
 
-    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: edgeLabel, 
+    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: edgeLabel}
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                                      onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
+      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
     ));
 
     /* Now that a new edge component instance has been added, reset the port storage info */
@@ -8364,9 +8373,9 @@ var App = React.createClass({displayName: "App",
     console.log(newEdge);
 
 
-    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: "TGen1posn -> PComp1posn", 
+    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: "TGen1posn -> PComp1posn"}
       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                                      onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
+      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
     ))
   },
 
@@ -8449,9 +8458,9 @@ var App = React.createClass({displayName: "App",
       //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
       //}
 
-      nodeActions.pushEdgeToArray(React.createElement(Edge, {key: edge, id: edge, 
+      nodeActions.pushEdgeToArray(React.createElement(Edge, {key: edge, id: edge}
                        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                       onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp}
+                       //onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
       ))
 
     }
@@ -8661,7 +8670,7 @@ var App = React.createClass({displayName: "App",
     for(var edge in this.state.allEdges){
       edges.push(React.createElement(Edge, {key: edge, id: edge, 
         //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                       onMouseDown: this.edgeMouseDown, onMouseUp: this.edgeMouseUp, 
+        //               onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
                        allEdges: this.state.allEdges, allNodeTypesPortStyling: this.state.allNodeTypesPortStyling, 
                        allNodeInfo: this.state.allNodeInfo, areAnyEdgesSelected: this.state.areAnyEdgesSelected, 
                        selected: NodeStore.getIfEdgeIsSelected(edge)}
