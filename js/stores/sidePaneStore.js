@@ -16,8 +16,17 @@ var _stuff = {
 };
 
 var dropdownMenuShow = function(){
-  _stuff.dropdownListVisible = true;
+  //_stuff.dropdownListVisible = true;
   //document.addEventListener("click", dropdownReference.handleActionHide)
+
+  /* Want to have it so that you can toggle the dropdown menu if you click on the button more than once */
+
+  if(_stuff.dropdownListVisible === false){
+    _stuff.dropdownListVisible = true;
+  }
+  else if(_stuff.dropdownListVisible === true){
+    _stuff.dropdownListVisible = false;
+  }
 };
 
 var dropdownMenuHide = function(){
