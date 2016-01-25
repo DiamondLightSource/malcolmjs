@@ -9,6 +9,7 @@ var WebSocketClient = require('./websocketClientTEST');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');
+var BothPanes = require('./views/sidebar');
 
 var AppContainerStyle = {
   margin: 0,
@@ -37,8 +38,7 @@ var App = React.createClass({
   render: function(){
     return(
       <div id="appContainer" style={AppContainerStyle}>
-        <div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
-        <div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
+        <BothPanes/>
       </div>
     )
   }
@@ -48,3 +48,6 @@ ReactDOM.render(
   <App/>,
   document.getElementById('container')
 );
+
+//<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
+//<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>

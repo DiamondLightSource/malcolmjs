@@ -85,6 +85,13 @@ var paneActions = {
       actionType: appConstants.REMOVE_NODETAB,
       item: SelectedNodeTabIndex
     })
+  },
+
+  toggleSidebar: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.TOGGLE_SIDEBAR,
+      item: item
+    })
   }
 
 };

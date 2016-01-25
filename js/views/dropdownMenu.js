@@ -58,7 +58,8 @@ var Dropdown = React.createClass({
   },
 
   testSelectInvokeSidePane: function(item){
-    this.props.changeTab(item)
+    this.props.changeTab(item);
+    console.log("inside testSelectInvokeSidePane");
   },
 
   componentDidMount: function(){
@@ -90,9 +91,32 @@ var Dropdown = React.createClass({
     var items = [];
     for (var i = 0; i < this.state.tabState.length; i++) {
       var item = this.state.tabState[i].label;
-      items.push(<div key={item + "-tab"} className="dropdownTab" onClick={this.testSelectInvokeSidePane.bind(null, item)}>
+      var interactIdString = "#" + "dropdownTab" + item;
+
+      items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
+                      //onClick={this.testSelectInvokeSidePane.bind(null, item)}
+      >
         <span >{item}</span>
       </div>);
+
+      //interact(interactIdString)
+      //  .on('tap',
+      //    function(e){
+      //      //e.stopImmediatePropagation();
+      //      //e.stopPropagation();
+      //      this.testSelectInvokeSidePane.bind(null, item);
+      //      console.log(e);
+      //      console.log(this);
+      //      console.log(this.testSelectInvokeSidePane.bind(null, item));
+      //    }.bind(this)
+      //  );
+
+      /* Works, but gets increasingly slow the more you select from it */
+      //interact(interactIdString)
+      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+
+      interact(interactIdString)
+        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
     }
 
     return items;
@@ -100,6 +124,20 @@ var Dropdown = React.createClass({
 
   render: function(){
 
+    var items = [];
+    for (var i = 0; i < this.state.tabState.length; i++) {
+      var item = this.state.tabState[i].label;
+      var interactIdString = "#" + "dropdownTab" + item;
+
+      items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
+        //onClick={this.testSelectInvokeSidePane.bind(null, item)}
+      >
+        <span >{item}</span>
+      </div>);
+
+      interact(interactIdString)
+        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+    }
 
     return <div className={"dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}>
       <div className={"dropdown-display" + (this.state.listVisible ? " clicked": "")} id="dropdownButton"
@@ -110,7 +148,7 @@ var Dropdown = React.createClass({
       </div>
       <div className="dropdown-list">
         <div>
-          {this.renderListItems()}
+          {items}
         </div>
       </div>
     </div>;

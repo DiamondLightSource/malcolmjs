@@ -144,20 +144,20 @@ var SidePane = React.createClass({
     });
 
     return (
-      <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
+        <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 
-          //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-          //  <i className="fa fa-plus"></i>
-          //</Button>,
-          <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
-            <i className="fa fa-times"></i>
-          </Button>,
-          <Button title="Drop down menu">
-          <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
-          </Button>
-        ]}>
-        {tabs}
-      </Panel>
+            //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+            //  <i className="fa fa-plus"></i>
+            //</Button>,
+            <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
+              <i className="fa fa-times"></i>
+            </Button>,
+            <Button title="Drop down menu">
+            <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
+            </Button>
+          ]}>
+          {tabs}
+        </Panel>
     );
   }
 });
@@ -170,3 +170,18 @@ module.exports = SidePane;
 //  console.log(tab)
 //  console.log("it ran correctly");
 //},
+
+//<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
+//
+//      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+//      //  <i className="fa fa-plus"></i>
+//      //</Button>,
+//      <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
+//        <i className="fa fa-times"></i>
+//      </Button>,
+//      <Button title="Drop down menu">
+//      <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
+//      </Button>
+//    ]}>
+//  {tabs}
+//</Panel>

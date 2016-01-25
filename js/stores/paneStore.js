@@ -10,11 +10,60 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  tabState: [],
+  tabState: [{
+    type: 'Gate',
+    label: 'Gate1',
+    name: "Arm",
+    position: {
+      x: 50,
+      y: 100,
+    },
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        name: 'reset',
+        connected: false,
+        connectedTo: null
+      }
+    ],
+    outports: [
+      {
+        name: 'out',
+        connected: true,
+        connectedTo: [
+          {
+            node: 'TGen1',
+            port: 'ena'
+          }
+        ]
+      }
+    ]
+  }],
   selectedTabIndex: 0,
   //passSidePane: null
   updatedBlockContent: null,
-  nodeTabState: []
+  nodeTabState: [],
+  sidebarOpen: false
 };
 
 var _handles = {
@@ -517,6 +566,10 @@ var paneStore = assign({}, EventEmitter.prototype, {
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
+  },
+
+  getSidebarOpenState: function(){
+    return _stuff.sidebarOpen;
   }
 });
 
@@ -645,6 +698,13 @@ AppDispatcher.register(function(payload){
       console.log(item);
       removeNodeTab(item);
       console.log(_stuff.tabState);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TOGGLE_SIDEBAR:
+      console.log(payload);
+      console.log(item);
+      toggleSidebar();
       paneStore.emitChange();
       break;
 
@@ -838,6 +898,16 @@ var removeNodeTab = function(selectedTabIndex){
 var getInitialNodeDataFromNodeStore = function(){
   allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
 };
+
+function toggleSidebar(){
+  if(_stuff.sidebarOpen === true){
+    _stuff.sidebarOpen = false;
+  }
+  else if(_stuff.sidebarOpen === false){
+    _stuff.sidebarOpen = true;
+  }
+  console.log(_stuff.sidebarOpen)
+}
 
 module.exports = paneStore;
 

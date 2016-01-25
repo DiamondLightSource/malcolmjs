@@ -113,6 +113,10 @@ var MainPane = React.createClass({
     paneActions.configTabOpen('this is the item')
   },
 
+  handleActionToggleSidebar: function(){
+    paneActions.toggleSidebar("toggle sidebar");
+  },
+
   //handleActionTabChangeViaOtherMeans: function(tab){
   //  sidePaneActions.switchTabWhenTabOpens(tab)
   //},
@@ -308,6 +312,9 @@ var MainPane = React.createClass({
     //console.log(this.state);
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
+          <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
+            <i className="fa fa-bars"></i>
+          </ToggleButton>,
           <ToggleButton title="Toggle Footer" onChange={this.handleActionFooterToggle}>
             <i className="fa fa-wrench"></i>
           </ToggleButton>
