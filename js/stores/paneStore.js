@@ -10,55 +10,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  tabState: [{
-    type: 'Gate',
-    label: 'Gate1',
-    name: "Arm",
-    position: {
-      x: 50,
-      y: 100,
-    },
-    //inports: {
-    //  "set": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-    //  "reset": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "out": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
-    inports: [
-      {
-        name: 'set',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'reset',
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        connected: true,
-        connectedTo: [
-          {
-            node: 'TGen1',
-            port: 'ena'
-          }
-        ]
-      }
-    ]
-  }],
+  tabState: [],
   selectedTabIndex: 0,
   //passSidePane: null
   updatedBlockContent: null,
@@ -708,6 +660,13 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED:
+      console.log(payload);
+      console.log(item);
+      windowWidthMediaQueryChanged(item);
+      paneStore.emitChange();
+      break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -907,6 +866,18 @@ function toggleSidebar(){
     _stuff.sidebarOpen = true;
   }
   console.log(_stuff.sidebarOpen)
+}
+
+function windowWidthMediaQueryChanged(sidebarOpen){
+  //if(_stuff.sidebarOpen === true){
+  //  _stuff.sidebarOpen = false;
+  //}
+  //else if(_stuff.sidebarOpen === false){
+  //  console.log("sidebar was already closed, so don't bother setting it false even though the window width has changed");
+  //}
+  //console.log(_stuff.sidebarOpen)
+
+  _stuff.sidebarOpen = sidebarOpen;
 }
 
 module.exports = paneStore;

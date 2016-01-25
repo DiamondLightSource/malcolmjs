@@ -32,7 +32,7 @@ var SidebarStyling = {
   root: {
     position: 'absolute',
     id: "root",
-    minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
+    //minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
     top: 0,
     left: 0,
     right: 0,
@@ -55,7 +55,7 @@ var SidebarStyling = {
   content: {
     position: 'absolute',
     id: "content",
-    minWidth: 500,
+    //minWidth: 500,
     top: 0,
     left: 0,
     right: 0,
@@ -102,9 +102,18 @@ var BothPanes = React.createClass({
 
   componentDidMount: function(){
     paneStore.addChangeListener(this._onChange);
+    var mql = window.matchMedia(`(min-width: 800px)`);
+    mql.addListener(this.windowWidthMediaQueryChanged);
+    this.setState({mql: mql});
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
   },
   componentWillUnmount(){
     paneStore.removeChangeListener(this._onChange);
+    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
+  },
+
+  windowWidthMediaQueryChanged: function(){
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
   },
 
   render: function(){

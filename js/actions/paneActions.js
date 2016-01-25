@@ -92,6 +92,12 @@ var paneActions = {
       actionType: appConstants.TOGGLE_SIDEBAR,
       item: item
     })
+  },
+  windowWidthMediaQueryChanged: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED,
+      item: item
+    })
   }
 
 };

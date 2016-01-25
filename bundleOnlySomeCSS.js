@@ -330,6 +330,12 @@ var paneActions = {
       actionType: appConstants.TOGGLE_SIDEBAR,
       item: item
     })
+  },
+  windowWidthMediaQueryChanged: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED,
+      item: item
+    })
   }
 
 };
@@ -650,7 +656,8 @@ var appConstants = {
   PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
   INTERACTJS_DRAG: "INTERACTJS_DRAG",
 
-  TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR"
+  TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
+  WINDOWWIDTH_MEDIAQUERYCHANGED: "WINDOWWIDTH_MEDIAQUERYCHANGED"
 };
 
 module.exports = appConstants;
@@ -2814,55 +2821,7 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  tabState: [{
-    type: 'Gate',
-    label: 'Gate1',
-    name: "Arm",
-    position: {
-      x: 50,
-      y: 100,
-    },
-    //inports: {
-    //  "set": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-    //  "reset": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "out": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
-    inports: [
-      {
-        name: 'set',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'reset',
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        connected: true,
-        connectedTo: [
-          {
-            node: 'TGen1',
-            port: 'ena'
-          }
-        ]
-      }
-    ]
-  }],
+  tabState: [],
   selectedTabIndex: 0,
   //passSidePane: null
   updatedBlockContent: null,
@@ -3512,6 +3471,13 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED:
+      console.log(payload);
+      console.log(item);
+      windowWidthMediaQueryChanged(item);
+      paneStore.emitChange();
+      break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -3711,6 +3677,18 @@ function toggleSidebar(){
     _stuff.sidebarOpen = true;
   }
   console.log(_stuff.sidebarOpen)
+}
+
+function windowWidthMediaQueryChanged(sidebarOpen){
+  //if(_stuff.sidebarOpen === true){
+  //  _stuff.sidebarOpen = false;
+  //}
+  //else if(_stuff.sidebarOpen === false){
+  //  console.log("sidebar was already closed, so don't bother setting it false even though the window width has changed");
+  //}
+  //console.log(_stuff.sidebarOpen)
+
+  _stuff.sidebarOpen = sidebarOpen;
 }
 
 module.exports = paneStore;
@@ -7108,7 +7086,7 @@ var SidebarStyling = {
   root: {
     position: 'absolute',
     id: "root",
-    minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
+    //minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
     top: 0,
     left: 0,
     right: 0,
@@ -7131,7 +7109,7 @@ var SidebarStyling = {
   content: {
     position: 'absolute',
     id: "content",
-    minWidth: 500,
+    //minWidth: 500,
     top: 0,
     left: 0,
     right: 0,
@@ -7178,9 +7156,18 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
   componentDidMount: function(){
     paneStore.addChangeListener(this._onChange);
+    var mql = window.matchMedia(`(min-width: 800px)`);
+    mql.addListener(this.windowWidthMediaQueryChanged);
+    this.setState({mql: mql});
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
   },
   componentWillUnmount(){
     paneStore.removeChangeListener(this._onChange);
+    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
+  },
+
+  windowWidthMediaQueryChanged: function(){
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
   },
 
   render: function(){
