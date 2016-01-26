@@ -75,7 +75,7 @@ function getAppState(){
     //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //newlyAddedNode: NodeStore.getNewlyAddedNode(),
-    draggedElement: NodeStore.getDraggedElement(),
+    //draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
     allEdges: NodeStore.getAllEdges(),
@@ -283,6 +283,8 @@ var App = React.createClass({
       }
     }
   },
+
+  /* Don't need this anymore, I have a for loop in the render function */
 
   refactoredAddNodeToNodesArray: function(){
     for(var node in this.state.allNodeInfo){

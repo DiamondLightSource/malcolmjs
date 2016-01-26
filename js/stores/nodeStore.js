@@ -96,18 +96,6 @@ function deselectAllNodes(){
   console.log(nodeSelectedStates);
 }
 
-//function changeUnselectedNodesOpacity(){
-//    console.log(window.NodeContainerStyle);
-//    window.NodeContainerStyle = {
-//        'cursor': 'move',
-//        'draggable': 'true',
-//        'className': 'nodeContainer',
-//        'opacity': 0.5
-//    };
-//    console.log(window.NodeContainerStyle);
-//
-//}
-
 function checkIfAnyNodesAreSelected(){
   var areAnyNodesSelected = null;
   for(var node in nodeSelectedStates){
@@ -779,11 +767,6 @@ var nodeInfoTemplates = {
   }
 };
 
-function randomNodePositionGenerator(){
-  console.log("random number is being generated");
-  return (Math.random() * 1000) % 500;
-}
-
 function appendToAllNodeInfo(NodeInfo){
   //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
   //
@@ -1429,8 +1412,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGen1OutportsState: function(){
   //  return allNodeInfo.TGen1.outports
   //},
-
-
   //getGate1Position: function(){
   //  return nodePositions.Gate1.position;
   //},
@@ -1446,9 +1427,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getAllNodePositions: function(){
   //  return nodePositions;
   //},
-  getAllNodeInfo: function(){
-    return allNodeInfo;
-  },
   //getAnyNodePosition: function(NodeId){
   //  if(nodePositions[NodeId] === undefined || null){
   //    console.log("that node's position isn't here, something's gone wrong...");
@@ -1460,8 +1438,25 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //    return nodePositions[NodeId];
   //  }
   //},
-
-  /* For edge use */
+  //getGateNodeStyling: function(){
+  //  return GateNodeStyling;
+  //},
+  //getSelectedGateNodeStyling: function(){
+  //  return SelectedGateNodeStyling;
+  //},
+  //getTGenNodeStyling: function(){
+  //  return TGenNodeStyling;
+  //},
+  //getSelectedTGenNodeStyling: function(){
+  //  return SelectedTGenNodeStyling;
+  //},
+  //getPCompNodeStyling: function(){
+  //  return PCompNodeStyling;
+  //},
+  //getSelectedPCompNodeStyling: function(){
+  //  return SelectedPCompNodeStyling;
+  //},
+  ///* For edge use */
   //getGateNodeOutPort: function(){
   //    return portPositionsForEdges.gateNode.outports.out;
   //},
@@ -1474,6 +1469,16 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGenNodeInportEna: function(){
   //  return tgenNodeInports.ena;
   //},
+  //getDraggedElement: function(){
+  //  return draggedElement;
+  //},
+  //getNewlyAddedNode: function(){
+  //  return newlyAddedNode;
+  //},
+
+  getAllNodeInfo: function(){
+    return allNodeInfo;
+  },
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
@@ -1497,29 +1502,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getDraggedElement: function(){
-    return draggedElement;
-  },
-
-
-  //getGateNodeStyling: function(){
-  //  return GateNodeStyling;
-  //},
-  //getSelectedGateNodeStyling: function(){
-  //  return SelectedGateNodeStyling;
-  //},
-  //getTGenNodeStyling: function(){
-  //  return TGenNodeStyling;
-  //},
-  //getSelectedTGenNodeStyling: function(){
-  //  return SelectedTGenNodeStyling;
-  //},
-  //getPCompNodeStyling: function(){
-  //  return PCompNodeStyling;
-  //},
-  //getSelectedPCompNodeStyling: function(){
-  //  return SelectedPCompNodeStyling;
-  //},
   getAllNodeTypesPortStyling: function(){
     return allNodeTypesPortStyling;
   },
@@ -1539,10 +1521,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getEdgesToRenderArray: function(){
     return edgesToRender;
-  },
-
-  getNewlyAddedNode: function(){
-    return newlyAddedNode;
   },
 
   getAllNodeInfoForInitialNodeData: function(){
@@ -1576,36 +1554,47 @@ AppDispatcher.register(function(payload){
 
   switch(action.actionType){
 
-    case appConstants.GATENODE_CHANGEPOSITION:
-      console.log(payload);
-      console.log(action);
-      updateGate1Position(item);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.DRAGGED_ELEMENT:
-      //console.log(payload);
-      //console.log(item);
-      draggedElement = item;
-      //console.log(draggedElement);
-      nodeStore.emitChange();
-      break;
-
-
-    case appConstants.DRAGGED_ELEMENTID:
-      //console.log(payload);
-      //console.log(action);
-      draggedElementID = item;
-      //console.log(draggedElementID);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.CHANGE_NODEPOSITION:
-      console.log(payload);
-      console.log(item);
-      updateNodePosition(item);
-      nodeStore.emitChange();
-      break;
+    //case appConstants.GATENODE_CHANGEPOSITION:
+    //  console.log(payload);
+    //  console.log(action);
+    //  updateGate1Position(item);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DRAGGED_ELEMENT:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  draggedElement = item;
+    //  //console.log(draggedElement);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //
+    //case appConstants.DRAGGED_ELEMENTID:
+    //  //console.log(payload);
+    //  //console.log(action);
+    //  draggedElementID = item;
+    //  //console.log(draggedElementID);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.CHANGE_GATE1STYLING:
+    //    console.log(payload);
+    //    console.log(item);
+    //    checkGate1Styling();
+    //    nodeStore.emitChange();
+    //    break;
+    //case appConstants.CHANGE_NODEPOSITION:
+    //  console.log(payload);
+    //  console.log(item);
+    //  updateNodePosition(item);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  portMouseOverLeaveToggle();
+    //  nodeStore.emitChange();
+    //  break;
 
     case appConstants.SELECT_NODE:
       console.log(payload);
@@ -1655,13 +1644,6 @@ AppDispatcher.register(function(payload){
       graphPosition = item;
       nodeStore.emitChange();
       break;
-
-    //case appConstants.CHANGE_GATE1STYLING:
-    //    console.log(payload);
-    //    console.log(item);
-    //    checkGate1Styling();
-    //    nodeStore.emitChange();
-    //    break;
 
     case appConstants.GRAPH_ZOOM:
       //console.log(payload);
@@ -1791,13 +1773,6 @@ AppDispatcher.register(function(payload){
       console.log(edgeSelectedStates);
       break;
 
-    case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
-      //console.log(payload);
-      //console.log(item);
-      portMouseOverLeaveToggle();
-      nodeStore.emitChange();
-      break;
-
     case appConstants.INTERACTJS_DRAG:
       console.log(payload);
       console.log(item);
@@ -1867,3 +1842,18 @@ module.exports = nodeStore;
 //getGate1CurrentStyling: function(){
 //  return checkGate1Styling();
 //},
+//function changeUnselectedNodesOpacity(){
+//    console.log(window.NodeContainerStyle);
+//    window.NodeContainerStyle = {
+//        'cursor': 'move',
+//        'draggable': 'true',
+//        'className': 'nodeContainer',
+//        'opacity': 0.5
+//    };
+//    console.log(window.NodeContainerStyle);
+//
+//}
+//function randomNodePositionGenerator(){
+//  console.log("random number is being generated");
+//  return (Math.random() * 1000) % 500;
+//}

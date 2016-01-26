@@ -6,30 +6,42 @@ var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
 var nodeActions = {
-  changeGateNodePosition: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.GATENODE_CHANGEPOSITION,
-      item: item
-    })
-  },
-  draggedElement: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DRAGGED_ELEMENT,
-      item : item
-    })
-  },
-  draggedElementID: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DRAGGED_ELEMENTID,
-      item : item
-    })
-  },
-  changeNodePosition: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CHANGE_NODEPOSITION,
-      item: item
-    })
-  },
+  //changeGateNodePosition: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.GATENODE_CHANGEPOSITION,
+  //    item: item
+  //  })
+  //},
+  //draggedElement: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.DRAGGED_ELEMENT,
+  //    item : item
+  //  })
+  //},
+  //draggedElementID: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.DRAGGED_ELEMENTID,
+  //    item : item
+  //  })
+  //},
+  //changeNodePosition: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.CHANGE_NODEPOSITION,
+  //    item: item
+  //  })
+  //},
+  //changeGate1Styling: function(item){
+  //    AppDispatcher.handleAction({
+  //        actionType: appConstants.CHANGE_GATE1STYLING,
+  //        item: item
+  //    })
+  //}
+  //portMouseOverLeaveToggle: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
+  //    item: item
+  //  })
+  //},
 
   selectNode: function(item){
     AppDispatcher.handleAction({
@@ -55,13 +67,6 @@ var nodeActions = {
       item: item
     })
   },
-
-  //changeGate1Styling: function(item){
-  //    AppDispatcher.handleAction({
-  //        actionType: appConstants.CHANGE_GATE1STYLING,
-  //        item: item
-  //    })
-  //}
 
   changeGraphPosition: function(item){
     AppDispatcher.handleAction({
@@ -163,12 +168,6 @@ var nodeActions = {
     })
   },
 
-  portMouseOverLeaveToggle: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
-      item: item
-    })
-  },
   interactJsDrag: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.INTERACTJS_DRAG,

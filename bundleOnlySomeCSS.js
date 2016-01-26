@@ -62,30 +62,42 @@ var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
 var nodeActions = {
-  changeGateNodePosition: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.GATENODE_CHANGEPOSITION,
-      item: item
-    })
-  },
-  draggedElement: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DRAGGED_ELEMENT,
-      item : item
-    })
-  },
-  draggedElementID: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DRAGGED_ELEMENTID,
-      item : item
-    })
-  },
-  changeNodePosition: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CHANGE_NODEPOSITION,
-      item: item
-    })
-  },
+  //changeGateNodePosition: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.GATENODE_CHANGEPOSITION,
+  //    item: item
+  //  })
+  //},
+  //draggedElement: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.DRAGGED_ELEMENT,
+  //    item : item
+  //  })
+  //},
+  //draggedElementID: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.DRAGGED_ELEMENTID,
+  //    item : item
+  //  })
+  //},
+  //changeNodePosition: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.CHANGE_NODEPOSITION,
+  //    item: item
+  //  })
+  //},
+  //changeGate1Styling: function(item){
+  //    AppDispatcher.handleAction({
+  //        actionType: appConstants.CHANGE_GATE1STYLING,
+  //        item: item
+  //    })
+  //}
+  //portMouseOverLeaveToggle: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
+  //    item: item
+  //  })
+  //},
 
   selectNode: function(item){
     AppDispatcher.handleAction({
@@ -111,13 +123,6 @@ var nodeActions = {
       item: item
     })
   },
-
-  //changeGate1Styling: function(item){
-  //    AppDispatcher.handleAction({
-  //        actionType: appConstants.CHANGE_GATE1STYLING,
-  //        item: item
-  //    })
-  //}
 
   changeGraphPosition: function(item){
     AppDispatcher.handleAction({
@@ -219,12 +224,6 @@ var nodeActions = {
     })
   },
 
-  portMouseOverLeaveToggle: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
-      item: item
-    })
-  },
   interactJsDrag: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.INTERACTJS_DRAG,
@@ -1042,18 +1041,6 @@ function deselectAllNodes(){
   console.log(nodeSelectedStates);
 }
 
-//function changeUnselectedNodesOpacity(){
-//    console.log(window.NodeContainerStyle);
-//    window.NodeContainerStyle = {
-//        'cursor': 'move',
-//        'draggable': 'true',
-//        'className': 'nodeContainer',
-//        'opacity': 0.5
-//    };
-//    console.log(window.NodeContainerStyle);
-//
-//}
-
 function checkIfAnyNodesAreSelected(){
   var areAnyNodesSelected = null;
   for(var node in nodeSelectedStates){
@@ -1725,11 +1712,6 @@ var nodeInfoTemplates = {
   }
 };
 
-function randomNodePositionGenerator(){
-  console.log("random number is being generated");
-  return (Math.random() * 1000) % 500;
-}
-
 function appendToAllNodeInfo(NodeInfo){
   //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
   //
@@ -2375,8 +2357,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGen1OutportsState: function(){
   //  return allNodeInfo.TGen1.outports
   //},
-
-
   //getGate1Position: function(){
   //  return nodePositions.Gate1.position;
   //},
@@ -2392,9 +2372,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getAllNodePositions: function(){
   //  return nodePositions;
   //},
-  getAllNodeInfo: function(){
-    return allNodeInfo;
-  },
   //getAnyNodePosition: function(NodeId){
   //  if(nodePositions[NodeId] === undefined || null){
   //    console.log("that node's position isn't here, something's gone wrong...");
@@ -2406,8 +2383,25 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //    return nodePositions[NodeId];
   //  }
   //},
-
-  /* For edge use */
+  //getGateNodeStyling: function(){
+  //  return GateNodeStyling;
+  //},
+  //getSelectedGateNodeStyling: function(){
+  //  return SelectedGateNodeStyling;
+  //},
+  //getTGenNodeStyling: function(){
+  //  return TGenNodeStyling;
+  //},
+  //getSelectedTGenNodeStyling: function(){
+  //  return SelectedTGenNodeStyling;
+  //},
+  //getPCompNodeStyling: function(){
+  //  return PCompNodeStyling;
+  //},
+  //getSelectedPCompNodeStyling: function(){
+  //  return SelectedPCompNodeStyling;
+  //},
+  ///* For edge use */
   //getGateNodeOutPort: function(){
   //    return portPositionsForEdges.gateNode.outports.out;
   //},
@@ -2420,6 +2414,16 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getTGenNodeInportEna: function(){
   //  return tgenNodeInports.ena;
   //},
+  //getDraggedElement: function(){
+  //  return draggedElement;
+  //},
+  //getNewlyAddedNode: function(){
+  //  return newlyAddedNode;
+  //},
+
+  getAllNodeInfo: function(){
+    return allNodeInfo;
+  },
 
   getAnyNodeSelectedState:function(NodeId){
     if(nodeSelectedStates[NodeId] === undefined || null){
@@ -2443,29 +2447,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getDraggedElement: function(){
-    return draggedElement;
-  },
-
-
-  //getGateNodeStyling: function(){
-  //  return GateNodeStyling;
-  //},
-  //getSelectedGateNodeStyling: function(){
-  //  return SelectedGateNodeStyling;
-  //},
-  //getTGenNodeStyling: function(){
-  //  return TGenNodeStyling;
-  //},
-  //getSelectedTGenNodeStyling: function(){
-  //  return SelectedTGenNodeStyling;
-  //},
-  //getPCompNodeStyling: function(){
-  //  return PCompNodeStyling;
-  //},
-  //getSelectedPCompNodeStyling: function(){
-  //  return SelectedPCompNodeStyling;
-  //},
   getAllNodeTypesPortStyling: function(){
     return allNodeTypesPortStyling;
   },
@@ -2485,10 +2466,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getEdgesToRenderArray: function(){
     return edgesToRender;
-  },
-
-  getNewlyAddedNode: function(){
-    return newlyAddedNode;
   },
 
   getAllNodeInfoForInitialNodeData: function(){
@@ -2522,36 +2499,47 @@ AppDispatcher.register(function(payload){
 
   switch(action.actionType){
 
-    case appConstants.GATENODE_CHANGEPOSITION:
-      console.log(payload);
-      console.log(action);
-      updateGate1Position(item);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.DRAGGED_ELEMENT:
-      //console.log(payload);
-      //console.log(item);
-      draggedElement = item;
-      //console.log(draggedElement);
-      nodeStore.emitChange();
-      break;
-
-
-    case appConstants.DRAGGED_ELEMENTID:
-      //console.log(payload);
-      //console.log(action);
-      draggedElementID = item;
-      //console.log(draggedElementID);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.CHANGE_NODEPOSITION:
-      console.log(payload);
-      console.log(item);
-      updateNodePosition(item);
-      nodeStore.emitChange();
-      break;
+    //case appConstants.GATENODE_CHANGEPOSITION:
+    //  console.log(payload);
+    //  console.log(action);
+    //  updateGate1Position(item);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DRAGGED_ELEMENT:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  draggedElement = item;
+    //  //console.log(draggedElement);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //
+    //case appConstants.DRAGGED_ELEMENTID:
+    //  //console.log(payload);
+    //  //console.log(action);
+    //  draggedElementID = item;
+    //  //console.log(draggedElementID);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.CHANGE_GATE1STYLING:
+    //    console.log(payload);
+    //    console.log(item);
+    //    checkGate1Styling();
+    //    nodeStore.emitChange();
+    //    break;
+    //case appConstants.CHANGE_NODEPOSITION:
+    //  console.log(payload);
+    //  console.log(item);
+    //  updateNodePosition(item);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  portMouseOverLeaveToggle();
+    //  nodeStore.emitChange();
+    //  break;
 
     case appConstants.SELECT_NODE:
       console.log(payload);
@@ -2601,13 +2589,6 @@ AppDispatcher.register(function(payload){
       graphPosition = item;
       nodeStore.emitChange();
       break;
-
-    //case appConstants.CHANGE_GATE1STYLING:
-    //    console.log(payload);
-    //    console.log(item);
-    //    checkGate1Styling();
-    //    nodeStore.emitChange();
-    //    break;
 
     case appConstants.GRAPH_ZOOM:
       //console.log(payload);
@@ -2737,13 +2718,6 @@ AppDispatcher.register(function(payload){
       console.log(edgeSelectedStates);
       break;
 
-    case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
-      //console.log(payload);
-      //console.log(item);
-      portMouseOverLeaveToggle();
-      nodeStore.emitChange();
-      break;
-
     case appConstants.INTERACTJS_DRAG:
       console.log(payload);
       console.log(item);
@@ -2813,6 +2787,21 @@ module.exports = nodeStore;
 //getGate1CurrentStyling: function(){
 //  return checkGate1Styling();
 //},
+//function changeUnselectedNodesOpacity(){
+//    console.log(window.NodeContainerStyle);
+//    window.NodeContainerStyle = {
+//        'cursor': 'move',
+//        'draggable': 'true',
+//        'className': 'nodeContainer',
+//        'opacity': 0.5
+//    };
+//    console.log(window.NodeContainerStyle);
+//
+//}
+//function randomNodePositionGenerator(){
+//  console.log("random number is being generated");
+//  return (Math.random() * 1000) % 500;
+//}
 
 },{"../../node_modules/object-assign/index.js":39,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":33}],14:[function(require,module,exports){
 /**
@@ -7545,7 +7534,7 @@ function getAppState(){
     //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
     //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //newlyAddedNode: NodeStore.getNewlyAddedNode(),
-    draggedElement: NodeStore.getDraggedElement(),
+    //draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
     allEdges: NodeStore.getAllEdges(),
@@ -7575,11 +7564,6 @@ var App = React.createClass({displayName: "App",
   },
   componentDidMount: function () {
     NodeStore.addChangeListener(this._onChange);
-    //console.log(document.getElementById('appContainer'));
-    //console.log(document.getElementById('Gate1'));
-    //this.setState({moveFunction: this.defaultMoveFunction});
-    //this.setState({panMoveFunction: this.defaultMoveFunction});
-    //this.setState({wait: false});
 
     //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
     nodeActions.addEdgeToAllNodeInfo();
@@ -7594,7 +7578,6 @@ var App = React.createClass({displayName: "App",
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
 
-    //this.setState({storingFirstPortClicked: null});
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
@@ -7635,11 +7618,6 @@ var App = React.createClass({displayName: "App",
       .off('tap', this.deselect);
   },
 
-  //handleInteractJsDrag: function(item){
-  //  nodeActions.interactJsDrag(item);
-  //},
-
-
   deselect: function (e) {
     //e.stopImmediatePropagation();
     //e.stopPropagation();
@@ -7661,174 +7639,6 @@ var App = React.createClass({displayName: "App",
   setOpacity: function () {
     window.NodeContainerStyle[opacity] = 0.5
   },
-
-  //panMouseDown: function (e) {
-  //  console.log("panMouseDown");
-  //  this.setState({panMoveFunction: this.panMouseMove});
-  //  this.dragging = true;
-  //
-  //  this.coords = {
-  //    x: e.nativeEvent.clientX,
-  //    y: e.nativeEvent.clientY
-  //  };
-  //
-  //  /* Enabling a minimum movement threshold to check if a click was intended but the mouse moved a tiny bit between mouseDown and mouseUp */
-  //
-  //  //this.setState({
-  //  //  panGraphMouseDown: {
-  //  //    x: e.nativeEvent.clientX,
-  //  //    y: e.nativeEvent.clientY
-  //  //  }
-  //  //});
-  //  //
-  //  //this.setState({
-  //  //  panGraphBeforeDrag: {
-  //  //    x: e.nativeEvent.clientX,
-  //  //    y: e.nativeEvent.clientY
-  //  //  }
-  //  //});
-  //  //
-  //  ///* Will get rewritten if there is graph movement, and will stay the same if there's no movement */
-  //  //this.setState({
-  //  //  panGraphAfterDrag: {
-  //  //    x: e.nativeEvent.clientX,
-  //  //    y: e.nativeEvent.clientY
-  //  //  }
-  //  //});
-  //  //
-  //  //this.setState({panMoveFunction: this.panCheckIfClickOrDrag});
-  //
-  //},
-  //
-  //panCheckIfClickOrDrag: function(e){
-  //  //var mouseMovementX = e.nativeEvent.clientX - this.state.panGraphMouseDown.x;
-  //  //var mouseMovementY = e.nativeEvent.clientY - this.state.panGraphMouseDown.y;
-  //  //
-  //  //if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
-  //  //  console.log("we have a click, not a drag!");
-  //  //  /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
-  //  //  /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
-  //  //  /* Then I suppose I could have the select style be dependent on if that state is true or false */
-  //  //
-  //  //  /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
-  //  //
-  //  //  var smallChangeInCoords = {
-  //  //    x: e.nativeEvent.clientX,
-  //  //    y: e.nativeEvent.clientY
-  //  //  };
-  //  //  this.setState({afterPanDrag: smallChangeInCoords});
-  //  //
-  //  //  /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
-  //  //  /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
-  //  //  //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
-  //  //  //this.deselect();
-  //  //}
-  //  //else {
-  //  //  console.log("mouseMovementX & Y are big enough, is probably a drag!");
-  //  //  this.setState({moveFunction: this.panMouseMove});
-  //  //}
-  //},
-  //
-  //panMouseUp: function (e) {
-  //  console.log("panMouseUp");
-  //  this.setState({panMoveFunction: this.defaultMoveFunction});
-  //  this.dragging = false;
-  //
-  //  this.coords = {};
-  //
-  //  /* Implementing minimum movement for panning */
-  //
-  //  //if (this.state.panGraphBeforeDrag.x === this.state.panGraphAfterDrag.x && this.state.panGraphBeforeDrag.y === this.state.panGraphAfterDrag.y) {
-  //  //  console.log("zero movement between mouseUp and mouseDown, so it's a click, so we're deselecting everything!");
-  //  //  this.deselect();
-  //  //
-  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
-  //  //  this.setState({panGraphBeforeDrag: null});
-  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-  //  //  this.setState({panGraphAfterDrag: null});
-  //  //}
-  //  ///* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
-  //  //else if (Math.abs(this.state.afterDrag.x - this.state.panGraphMouseDown.x) > 4 && Math.abs(this.state.afterDrag.y - this.state.panGraphMouseDown.y) > 4) {
-  //  //  console.log("the mouse moved far enough to be a drag");
-  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
-  //  //  this.setState({panGraphBeforeDrag: null});
-  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-  //  //  this.setState({panGraphAfterDrag: null});
-  //  //}
-  //  ///* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
-  //  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) > 4) ||
-  //  //  (Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) <= 4)) {
-  //  //  console.log("> 4 movement in one axis but < 4 movement in the other");
-  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
-  //  //  this.setState({panGraphBeforeDrag: null});
-  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-  //  //  this.setState({panGraphAfterDrag: null});
-  //  //}
-  //  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
-  //  //  console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click, so deselect everything!");
-  //  //  this.deselect();
-  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
-  //  //  this.setState({panGraphBeforeDrag: null});
-  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-  //  //  this.setState({panGraphAfterDrag: null});
-  //  //}
-  //
-  //},
-  //
-  //panMouseMove: function (e) {
-  //  if (this.dragging) {
-  //    e.preventDefault();
-  //    console.log("dragging");
-  //  }
-  //
-  //  var dx = this.coords.x - e.nativeEvent.clientX;
-  //  var dy = this.coords.y - e.nativeEvent.clientY;
-  //
-  //  this.coords.x = e.nativeEvent.clientX;
-  //  this.coords.y = e.nativeEvent.clientY;
-  //
-  //  var xChange = this.state.graphPosition.x - dx;
-  //  var yChange = this.state.graphPosition.y - dy;
-  //
-  //  var newCoords = {
-  //    x: xChange,
-  //    y: yChange
-  //  };
-  //
-  //  nodeActions.changeGraphPosition(newCoords);
-  //
-  //  /* Implementing a minimum mouse movement */
-  //
-  //  //var updatedCoordinates = {
-  //  //  x: e.nativeEvent.clientX,
-  //  //  y: e.nativeEvent.clientY
-  //  //};
-  //  //
-  //  //if (!this.state.panGraphAfterDrag) {
-  //  //  this.setState({panGraphAfterDrag: updatedCoordinates},
-  //  //    function () {
-  //  //
-  //  //
-  //  //    })
-  //  //}
-  //  ////else{
-  //  ////    this.setState({beforeDrag: this.state.afterDrag},
-  //  ////        function(){
-  //  ////            this.setState({afterDrag: updatedCoordinates},
-  //  ////                function(){
-  //  ////                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
-  //  ////                })
-  //  ////        })
-  //  ////}
-  //  //else {
-  //  //  this.setState({beforeDrag: this.state.afterDrag},
-  //  //    function () {
-  //  //      this.setState({afterDrag: updatedCoordinates});
-  //  //      this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
-  //  //    })
-  //  //}
-  //
-  //},
 
   wheelZoom: function (e) {
     console.log("wheel!");
@@ -7878,21 +7688,6 @@ var App = React.createClass({displayName: "App",
 
   isZoomNegative: function(n){
     return ((n =+n) || 1/n) < 0;
-  },
-
-  edgeMouseDown: function(e){
-    console.log("mouseDown on an edge!");
-  },
-  edgeMouseUp: function(e){
-    console.log("mouseUp on an edge!");
-    nodeActions.selectEdge(e.currentTarget.id); /* Really simple way to select an edge, but when the mous events get more comples I'm probably gonna have to use events */
-    this.setState({selectedEdge: e.currentTarget}, function(){
-      console.log(this.state.selectedEdge);
-      this.state.selectedEdge.dispatchEvent(EdgeSelect);
-    });
-    nodeActions.clickedEdge(e.currentTarget.id);
-
-
   },
 
   /* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
@@ -7948,6 +7743,8 @@ var App = React.createClass({displayName: "App",
     }
   },
 
+  /* Don't need this anymore, I have a for loop in the render function */
+
   refactoredAddNodeToNodesArray: function(){
     for(var node in this.state.allNodeInfo){
       nodeActions.pushNodeToArray(
@@ -7960,6 +7757,8 @@ var App = React.createClass({displayName: "App",
       )
     }
   },
+
+  /* This is for my black block that adds a gate node when clicked */
 
   addNodeInfo: function(){
     //e.stopImmediatePropagation();
@@ -8536,19 +8335,6 @@ var App = React.createClass({displayName: "App",
 
     }
   },
-
-  //interactJsDrag: function(e){
-  //  console.log("interactJs drag is occurring");
-  //  var target = e.target.id;
-  //  var deltaMovement = {
-  //    target: target,
-  //    x: e.dx,
-  //    y: e.dy
-  //  };
-  //
-  //  this.handleInteractJsDrag(deltaMovement);
-  //
-  //},
 
   interactJsDragPan: function(e){
     e.stopImmediatePropagation();
@@ -9145,6 +8931,204 @@ module.exports = App;
 //  this.setState({panMoveFunction: this.defaultMoveFunction()});
 //  this.setState({beforeDrag: null});
 //  this.setState({afterDrag: null});
+//},
+
+//panMouseDown: function (e) {
+//  console.log("panMouseDown");
+//  this.setState({panMoveFunction: this.panMouseMove});
+//  this.dragging = true;
+//
+//  this.coords = {
+//    x: e.nativeEvent.clientX,
+//    y: e.nativeEvent.clientY
+//  };
+//
+//  /* Enabling a minimum movement threshold to check if a click was intended but the mouse moved a tiny bit between mouseDown and mouseUp */
+//
+//  //this.setState({
+//  //  panGraphMouseDown: {
+//  //    x: e.nativeEvent.clientX,
+//  //    y: e.nativeEvent.clientY
+//  //  }
+//  //});
+//  //
+//  //this.setState({
+//  //  panGraphBeforeDrag: {
+//  //    x: e.nativeEvent.clientX,
+//  //    y: e.nativeEvent.clientY
+//  //  }
+//  //});
+//  //
+//  ///* Will get rewritten if there is graph movement, and will stay the same if there's no movement */
+//  //this.setState({
+//  //  panGraphAfterDrag: {
+//  //    x: e.nativeEvent.clientX,
+//  //    y: e.nativeEvent.clientY
+//  //  }
+//  //});
+//  //
+//  //this.setState({panMoveFunction: this.panCheckIfClickOrDrag});
+//
+//},
+//
+//panCheckIfClickOrDrag: function(e){
+//  //var mouseMovementX = e.nativeEvent.clientX - this.state.panGraphMouseDown.x;
+//  //var mouseMovementY = e.nativeEvent.clientY - this.state.panGraphMouseDown.y;
+//  //
+//  //if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
+//  //  console.log("we have a click, not a drag!");
+//  //  /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
+//  //  /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
+//  //  /* Then I suppose I could have the select style be dependent on if that state is true or false */
+//  //
+//  //  /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
+//  //
+//  //  var smallChangeInCoords = {
+//  //    x: e.nativeEvent.clientX,
+//  //    y: e.nativeEvent.clientY
+//  //  };
+//  //  this.setState({afterPanDrag: smallChangeInCoords});
+//  //
+//  //  /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
+//  //  /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
+//  //  //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+//  //  //this.deselect();
+//  //}
+//  //else {
+//  //  console.log("mouseMovementX & Y are big enough, is probably a drag!");
+//  //  this.setState({moveFunction: this.panMouseMove});
+//  //}
+//},
+//
+//panMouseUp: function (e) {
+//  console.log("panMouseUp");
+//  this.setState({panMoveFunction: this.defaultMoveFunction});
+//  this.dragging = false;
+//
+//  this.coords = {};
+//
+//  /* Implementing minimum movement for panning */
+//
+//  //if (this.state.panGraphBeforeDrag.x === this.state.panGraphAfterDrag.x && this.state.panGraphBeforeDrag.y === this.state.panGraphAfterDrag.y) {
+//  //  console.log("zero movement between mouseUp and mouseDown, so it's a click, so we're deselecting everything!");
+//  //  this.deselect();
+//  //
+//  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+//  //  this.setState({panGraphBeforeDrag: null});
+//  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+//  //  this.setState({panGraphAfterDrag: null});
+//  //}
+//  ///* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
+//  //else if (Math.abs(this.state.afterDrag.x - this.state.panGraphMouseDown.x) > 4 && Math.abs(this.state.afterDrag.y - this.state.panGraphMouseDown.y) > 4) {
+//  //  console.log("the mouse moved far enough to be a drag");
+//  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+//  //  this.setState({panGraphBeforeDrag: null});
+//  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+//  //  this.setState({panGraphAfterDrag: null});
+//  //}
+//  ///* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
+//  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) > 4) ||
+//  //  (Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) <= 4)) {
+//  //  console.log("> 4 movement in one axis but < 4 movement in the other");
+//  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+//  //  this.setState({panGraphBeforeDrag: null});
+//  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+//  //  this.setState({panGraphAfterDrag: null});
+//  //}
+//  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
+//  //  console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click, so deselect everything!");
+//  //  this.deselect();
+//  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+//  //  this.setState({panGraphBeforeDrag: null});
+//  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+//  //  this.setState({panGraphAfterDrag: null});
+//  //}
+//
+//},
+//
+//panMouseMove: function (e) {
+//  if (this.dragging) {
+//    e.preventDefault();
+//    console.log("dragging");
+//  }
+//
+//  var dx = this.coords.x - e.nativeEvent.clientX;
+//  var dy = this.coords.y - e.nativeEvent.clientY;
+//
+//  this.coords.x = e.nativeEvent.clientX;
+//  this.coords.y = e.nativeEvent.clientY;
+//
+//  var xChange = this.state.graphPosition.x - dx;
+//  var yChange = this.state.graphPosition.y - dy;
+//
+//  var newCoords = {
+//    x: xChange,
+//    y: yChange
+//  };
+//
+//  nodeActions.changeGraphPosition(newCoords);
+//
+//  /* Implementing a minimum mouse movement */
+//
+//  //var updatedCoordinates = {
+//  //  x: e.nativeEvent.clientX,
+//  //  y: e.nativeEvent.clientY
+//  //};
+//  //
+//  //if (!this.state.panGraphAfterDrag) {
+//  //  this.setState({panGraphAfterDrag: updatedCoordinates},
+//  //    function () {
+//  //
+//  //
+//  //    })
+//  //}
+//  ////else{
+//  ////    this.setState({beforeDrag: this.state.afterDrag},
+//  ////        function(){
+//  ////            this.setState({afterDrag: updatedCoordinates},
+//  ////                function(){
+//  ////                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
+//  ////                })
+//  ////        })
+//  ////}
+//  //else {
+//  //  this.setState({beforeDrag: this.state.afterDrag},
+//  //    function () {
+//  //      this.setState({afterDrag: updatedCoordinates});
+//  //      this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
+//  //    })
+//  //}
+//
+//},
+
+//edgeMouseDown: function(e){
+//  console.log("mouseDown on an edge!");
+//},
+//edgeMouseUp: function(e){
+//  console.log("mouseUp on an edge!");
+//  nodeActions.selectEdge(e.currentTarget.id); /* Really simple way to select an edge, but when the mous events get more comples I'm probably gonna have to use events */
+//  this.setState({selectedEdge: e.currentTarget}, function(){
+//    console.log(this.state.selectedEdge);
+//    this.state.selectedEdge.dispatchEvent(EdgeSelect);
+//  });
+//  nodeActions.clickedEdge(e.currentTarget.id);
+//
+//
+//},
+//handleInteractJsDrag: function(item){
+//  nodeActions.interactJsDrag(item);
+//},
+//interactJsDrag: function(e){
+//  console.log("interactJs drag is occurring");
+//  var target = e.target.id;
+//  var deltaMovement = {
+//    target: target,
+//    x: e.dx,
+//    y: e.dy
+//  };
+//
+//  this.handleInteractJsDrag(deltaMovement);
+//
 //},
 
 },{"../../node_modules/interact.js":38,"../../node_modules/react-dom/dist/react-dom.js":40,"../../node_modules/react/lib/ReactDefaultPerf.js":99,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":24,"./pcompNode.js":25,"./tgenNode.js":29,"react":219}],31:[function(require,module,exports){
