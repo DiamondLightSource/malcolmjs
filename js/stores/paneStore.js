@@ -72,14 +72,27 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
   }
 };
 
-var appendToAllBlockContent = function(dispatchMarker){
-  allBlockContent[dispatchMarker] = {
-    name: "Whatever",
-    hack: dispatchMarker,
-    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
-  }
-};
-
+//var appendToAllBlockContent = function(dispatchMarker){
+//  allBlockContent[dispatchMarker] = {
+//    name: "Whatever",
+//    hack: dispatchMarker,
+//    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
+//  }
+//};
+//var appendToAllBlockTabProperties = function(dispatchMarker){
+//  console.log('appending to allBlockTabProperties');
+//  console.log(allBlockTabProperties);
+//  allBlockTabProperties[dispatchMarker] = false;
+//  console.log(allBlockTabProperties)
+//};
+//var addTab = function(newtab){
+//  /* set state of tabs somewhere here*/
+//  var newTabs = _stuff.tabState.concat(newtab);
+//  _stuff.tabState = newTabs;
+//  /* could you just skip the variable newTabs and set _stuff.tabState equal
+//   itself concatenated?
+//   */
+//};
 
 var favContent = [{
   name: "Favourites tab",
@@ -122,15 +135,6 @@ var allBlockTabProperties = {
   configTabOpen: false
 };
 
-var appendToAllBlockTabProperties = function(dispatchMarker){
-  console.log('appending to allBlockTabProperties');
-  console.log(allBlockTabProperties);
-  allBlockTabProperties[dispatchMarker] = false;
-  console.log(allBlockTabProperties)
-};
-
-
-
 var changeFavTabState = function(){
   console.log(allBlockTabProperties.favTabOpen);
   if(allBlockTabProperties.favTabOpen === false) {
@@ -152,69 +156,6 @@ var changeConfigTabState = function(){
     checkWhichBlockTabsOpen()
   }
 };
-
-//var checkFavAndConfigTabsOpen = function() {
-//  for (var key in favAndConfigTabProperties) {
-//    console.log(key);
-//    console.log(favAndConfigTabProperties[key]);
-//    if (favAndConfigTabProperties[key] === true) {
-//      console.log("just before starting the tabState checker loop");
-//      if (_stuff.tabState.length === 0) {
-//        console.log("tabState was empty, tab is now open");
-//        var blockTabsOpen = [];
-//        switch (key) {
-//          case 'favTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//            break;
-//          case 'configTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat();
-//            break;
-//          default:
-//            return 'default'
-//        }
-//        console.log(updatedBlockTabsOpen);
-//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//      }
-//      else {
-//        for (var i = 0; i < _stuff.tabState.length; i++) {
-//          console.log('in the non-empty tabState checker loop');
-//          console.log(_stuff.tabState.length);
-//          console.log(i);
-//          if (_stuff.tabState[i].hack === key) {
-//            console.log("tab is already open from before, don't add, break statement occurring");
-//            break
-//          }
-//          else if (_stuff.tabState[i].hack !== key) {
-//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-//            console.log(_stuff.tabState.length);
-//            console.log(i);
-//            if (i === _stuff.tabState.length - 1) {
-//              console.log('tabState didnt have this tab, tab is now open');
-//              var blockTabsOpen = [];
-//              switch (key) {
-//                case 'favTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//                  break;
-//                case 'configTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
-//                  break;
-//                default:
-//                  return 'default'
-//              }
-//              console.log(updatedBlockTabsOpen);
-//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//            }
-//          }
-//        }
-//        console.log('finished the tabState checker loop')
-//      }
-//    }
-//    else {
-//      console.log('tab is not open');
-//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
-//    }
-//  }
-//};
 
 var checkWhichBlockTabsOpen = function(){
   var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
@@ -324,17 +265,6 @@ function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from th
   console.log('deciding which tab to open lookup is working!');
   return possibleTabsToOpen[key](key)
 }
-
-
-
-var addTab = function(newtab){
-  /* set state of tabs somewhere here*/
-  var newTabs = _stuff.tabState.concat(newtab);
-  _stuff.tabState = newTabs;
-  /* could you just skip the variable newTabs and set _stuff.tabState equal
-   itself concatenated?
-   */
-};
 
 var removeTab = function(item){
 
@@ -461,8 +391,8 @@ var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this work
     else {
 
     }
-  }
-  console.log('appended to possibleBlockCases')
+  };
+  console.log('appended to possibleBlockCases');
   console.log(possibleBlockCases[dispatchMarker]);
 };
 
@@ -501,15 +431,15 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getTabState: function(){
     return _stuff.tabState;
   },
-  getRedBlockTabClicked: function(){
-    return allBlockTabProperties.redBlockTabOpen;
-  },
-  getBlueBlockTabClicked: function(){
-    return allBlockTabProperties.blueBlockTabOpen;
-  },
-  getGreenBlockTabClicked: function(){
-    return allBlockTabProperties.greenBlockTabOpen;
-  },
+  //getRedBlockTabClicked: function(){
+  //  return allBlockTabProperties.redBlockTabOpen;
+  //},
+  //getBlueBlockTabClicked: function(){
+  //  return allBlockTabProperties.blueBlockTabOpen;
+  //},
+  //getGreenBlockTabClicked: function(){
+  //  return allBlockTabProperties.greenBlockTabOpen;
+  //},
   getFavTabOpen:function(){
     return allBlockTabProperties.favTabOpen;
   },
@@ -538,14 +468,6 @@ AppDispatcher.register(function(payload){
       //console.log(item);
       passSidePane(item);
           break;
-
-    case appConstants.ADD_TAB:
-      console.log(payload);
-      console.log(action);
-      addTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      break;
 
     case appConstants.REMOVE_TAB:
       console.log(payload);
@@ -580,38 +502,6 @@ AppDispatcher.register(function(payload){
       console.log(item);
       changeConfigTabState();
       console.log(allBlockTabProperties.configTabOpen);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.PASS_DISPATCHMARKER:
-      console.log(payload);
-      console.log(item);
-      checkWhichBlockClicked(item);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.APPENDSTUFF_FORNEWBLOCK:
-      console.log(payload);
-      console.log(item);
-      /*functions that append to the various objects I need to append*/
-      appendToAllBlockTabProperties(item);
-      paneStore.emitChange();
-      appendToAllBlockContent(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToOpen(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToRemove(item);
-      paneStore.emitChange();
-      appendToPossibleBlockCases(item);
-      paneStore.emitChange();
-      checkWhichBlockClicked(item);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.CHANGE_INFO:
-      console.log(payload);
-      console.log(item);
-      changeSomeInfo();
       paneStore.emitChange();
       break;
 
@@ -689,6 +579,42 @@ AppDispatcher.register(function(payload){
     //  console.log(action);
     //  changeGreenBlockTabState();
     //  console.log(allBlockTabProperties.greenBlockTabOpen);
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.APPENDSTUFF_FORNEWBLOCK:
+    //  console.log(payload);
+    //  console.log(item);
+    //  /*functions that append to the various objects I need to append*/
+    //  appendToAllBlockTabProperties(item);
+    //  paneStore.emitChange();
+    //  appendToAllBlockContent(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleTabsToOpen(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleTabsToRemove(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleBlockCases(item);
+    //  paneStore.emitChange();
+    //  checkWhichBlockClicked(item);
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.CHANGE_INFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  changeSomeInfo();
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.ADD_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //  addTab(item);
+    //  paneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //  break;
+    //case appConstants.PASS_DISPATCHMARKER:
+    //  console.log(payload);
+    //  console.log(item);
+    //  checkWhichBlockClicked(item);
     //  paneStore.emitChange();
     //  break;
 
@@ -887,7 +813,6 @@ module.exports = paneStore;
 //  favTabOpen: false,
 //  configTabOpen: false
 //};
-
 //var changeRedBlockTabState = function(){
 //  if(allBlockTabProperties.redBlockTabOpen === false) {
 //    allBlockTabProperties.redBlockTabOpen = true;
@@ -918,7 +843,6 @@ module.exports = paneStore;
 //
 //  }
 //};
-
 //var possibleNodeTabsToOpen = {
 //  'Gate1': function(NodeId){
 //    var blockTabsOpen = [];
@@ -946,7 +870,6 @@ module.exports = paneStore;
 //    return updatedBlockTabsOpen
 //  }
 //};
-
 //var appendToPossibleNodeTabsToOpen = function(dispatchMarker){
 //  possibleTabsToOpen[dispatchMarker] = function(){
 //    var blockTabsOpen = [];
@@ -954,8 +877,6 @@ module.exports = paneStore;
 //    return updatedBlockTabsOpen
 //  }
 //};
-
-
 //function lookupWhichNodeTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
 //  /* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
 //  if(typeof possibleNodeTabsToOpen[key] !== 'function'){
@@ -964,3 +885,65 @@ module.exports = paneStore;
 //  console.log('deciding which tab to open lookup is working!');
 //  return possibleNodeTabsToOpen[key](key)
 //}
+//var checkFavAndConfigTabsOpen = function() {
+//  for (var key in favAndConfigTabProperties) {
+//    console.log(key);
+//    console.log(favAndConfigTabProperties[key]);
+//    if (favAndConfigTabProperties[key] === true) {
+//      console.log("just before starting the tabState checker loop");
+//      if (_stuff.tabState.length === 0) {
+//        console.log("tabState was empty, tab is now open");
+//        var blockTabsOpen = [];
+//        switch (key) {
+//          case 'favTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//            break;
+//          case 'configTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat();
+//            break;
+//          default:
+//            return 'default'
+//        }
+//        console.log(updatedBlockTabsOpen);
+//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//      }
+//      else {
+//        for (var i = 0; i < _stuff.tabState.length; i++) {
+//          console.log('in the non-empty tabState checker loop');
+//          console.log(_stuff.tabState.length);
+//          console.log(i);
+//          if (_stuff.tabState[i].hack === key) {
+//            console.log("tab is already open from before, don't add, break statement occurring");
+//            break
+//          }
+//          else if (_stuff.tabState[i].hack !== key) {
+//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+//            console.log(_stuff.tabState.length);
+//            console.log(i);
+//            if (i === _stuff.tabState.length - 1) {
+//              console.log('tabState didnt have this tab, tab is now open');
+//              var blockTabsOpen = [];
+//              switch (key) {
+//                case 'favTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//                  break;
+//                case 'configTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
+//                  break;
+//                default:
+//                  return 'default'
+//              }
+//              console.log(updatedBlockTabsOpen);
+//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//            }
+//          }
+//        }
+//        console.log('finished the tabState checker loop')
+//      }
+//    }
+//    else {
+//      console.log('tab is not open');
+//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
+//    }
+//  }
+//};

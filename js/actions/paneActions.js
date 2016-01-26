@@ -6,13 +6,6 @@ var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var paneActions = {
-
-  addTab: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.ADD_TAB,
-      item: item
-    })
-  },
   removeTab: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.REMOVE_TAB,
@@ -40,24 +33,6 @@ var paneActions = {
   configTabOpen: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.CONFIGTAB_OPEN,
-      item: item
-    })
-  },
-  passDispatchMarker: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PASS_DISPATCHMARKER,
-      item: item
-    })
-  },
-  appendStuffForNewBlock: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
-      item: item
-    })
-  },
-  changeSomeInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CHANGE_INFO,
       item: item
     })
   },
@@ -120,6 +95,30 @@ module.exports = paneActions;
 //greenBlockTabOpen: function(item){
 //  AppDispatcher.handleAction({
 //    actionType: appConstants.GREENBLOCKTAB_OPEN,
+//    item: item
+//  })
+//},
+//addTab: function(item){
+//  AppDispatcher.handleViewAction({
+//    actionType: appConstants.ADD_TAB,
+//    item: item
+//  })
+//},
+//appendStuffForNewBlock: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
+//    item: item
+//  })
+//},
+//changeSomeInfo: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.CHANGE_INFO,
+//    item: item
+//  })
+//},
+//passDispatchMarker: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.PASS_DISPATCHMARKER,
 //    item: item
 //  })
 //},

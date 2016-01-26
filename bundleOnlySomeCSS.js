@@ -244,13 +244,6 @@ var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var paneActions = {
-
-  addTab: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.ADD_TAB,
-      item: item
-    })
-  },
   removeTab: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.REMOVE_TAB,
@@ -278,24 +271,6 @@ var paneActions = {
   configTabOpen: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.CONFIGTAB_OPEN,
-      item: item
-    })
-  },
-  passDispatchMarker: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PASS_DISPATCHMARKER,
-      item: item
-    })
-  },
-  appendStuffForNewBlock: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
-      item: item
-    })
-  },
-  changeSomeInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CHANGE_INFO,
       item: item
     })
   },
@@ -358,6 +333,30 @@ module.exports = paneActions;
 //greenBlockTabOpen: function(item){
 //  AppDispatcher.handleAction({
 //    actionType: appConstants.GREENBLOCKTAB_OPEN,
+//    item: item
+//  })
+//},
+//addTab: function(item){
+//  AppDispatcher.handleViewAction({
+//    actionType: appConstants.ADD_TAB,
+//    item: item
+//  })
+//},
+//appendStuffForNewBlock: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
+//    item: item
+//  })
+//},
+//changeSomeInfo: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.CHANGE_INFO,
+//    item: item
+//  })
+//},
+//passDispatchMarker: function(item){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.PASS_DISPATCHMARKER,
 //    item: item
 //  })
 //},
@@ -585,30 +584,37 @@ ReactDOM.render(
  */
 
 var appConstants = {
-  FOOTER_TOGGLE: "FOOTER_TOGGLE", /*mainPaneStore use*/
+  /*mainPaneStore use*/
+  FOOTER_TOGGLE: "FOOTER_TOGGLE",
   CONFIG_TOGGLE: "CONFIG_TOGGLE",
   FAV_TOGGLE: "FAV_TOGGLE",
 
-  ADD_TAB: "ADD_TAB", /*paneStore use*/
+  /*paneStore use*/
+  //ADD_TAB: "ADD_TAB",
+  //APPENDSTUFF_FORNEWBLOCK: "APPENDSTUFF_FORNEWBLOCK",
+  //CHANGE_INFO: "CHANGE_INFO",
+  //PASS_DISPATCHMARKER: "PASS_DISPATCHMARKER",
   REMOVE_TAB: "REMOVE_TAB",
   DROPDOWN_SELECT: "DROPDOWN_SELECT",
   FAVTAB_OPEN: "FAVTAB_OPEN",
   CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
-  PASS_DISPATCHMARKER: "PASS_DISPATCHMARKER",
-  APPENDSTUFF_FORNEWBLOCK: "APPENDSTUFF_FORNEWBLOCK",
-  CHANGE_INFO: "CHANGE_INFO",
 
-  DROPDOWN_SHOW: "DROPDOWN_SHOW", /*sidePaneStore use*/
+
+  /*sidePaneStore use*/
+  DROPDOWN_SHOW: "DROPDOWN_SHOW",
   DROPDOWN_HIDE: "DROPDOWN_HIDE",
   PASS_SIDEPANE: "PASS_SIDEPANE",
 
-  MOCK_SERVERREQUEST: "MOCK_SERVERREQUEST", /* deviceStore use*/
+  /* deviceStore use*/
+  MOCK_SERVERREQUEST: "MOCK_SERVERREQUEST",
   UPDATEBLOCKCONTENT_VIASERVER: "UPDATEBLOCKCONTENT_VIASERVER",
 
-  FETCHNEWCHANNEL_VALUE: "FETCHNEWCHANNEL_VALUE", /* sessionActions use */
+  /* sessionActions use */
+  FETCHNEWCHANNEL_VALUE: "FETCHNEWCHANNEL_VALUE",
   PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO: "PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO",
 
-  PASSUPDATEDCHANNEL_VALUE: "PASSUPDATEDCHANNEL_VALUE", /* serverActions use */
+  /* serverActions use */
+  PASSUPDATEDCHANNEL_VALUE: "PASSUPDATEDCHANNEL_VALUE",
   PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED: "PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED",
 
 
@@ -2883,14 +2889,27 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
   }
 };
 
-var appendToAllBlockContent = function(dispatchMarker){
-  allBlockContent[dispatchMarker] = {
-    name: "Whatever",
-    hack: dispatchMarker,
-    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
-  }
-};
-
+//var appendToAllBlockContent = function(dispatchMarker){
+//  allBlockContent[dispatchMarker] = {
+//    name: "Whatever",
+//    hack: dispatchMarker,
+//    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
+//  }
+//};
+//var appendToAllBlockTabProperties = function(dispatchMarker){
+//  console.log('appending to allBlockTabProperties');
+//  console.log(allBlockTabProperties);
+//  allBlockTabProperties[dispatchMarker] = false;
+//  console.log(allBlockTabProperties)
+//};
+//var addTab = function(newtab){
+//  /* set state of tabs somewhere here*/
+//  var newTabs = _stuff.tabState.concat(newtab);
+//  _stuff.tabState = newTabs;
+//  /* could you just skip the variable newTabs and set _stuff.tabState equal
+//   itself concatenated?
+//   */
+//};
 
 var favContent = [{
   name: "Favourites tab",
@@ -2933,15 +2952,6 @@ var allBlockTabProperties = {
   configTabOpen: false
 };
 
-var appendToAllBlockTabProperties = function(dispatchMarker){
-  console.log('appending to allBlockTabProperties');
-  console.log(allBlockTabProperties);
-  allBlockTabProperties[dispatchMarker] = false;
-  console.log(allBlockTabProperties)
-};
-
-
-
 var changeFavTabState = function(){
   console.log(allBlockTabProperties.favTabOpen);
   if(allBlockTabProperties.favTabOpen === false) {
@@ -2963,69 +2973,6 @@ var changeConfigTabState = function(){
     checkWhichBlockTabsOpen()
   }
 };
-
-//var checkFavAndConfigTabsOpen = function() {
-//  for (var key in favAndConfigTabProperties) {
-//    console.log(key);
-//    console.log(favAndConfigTabProperties[key]);
-//    if (favAndConfigTabProperties[key] === true) {
-//      console.log("just before starting the tabState checker loop");
-//      if (_stuff.tabState.length === 0) {
-//        console.log("tabState was empty, tab is now open");
-//        var blockTabsOpen = [];
-//        switch (key) {
-//          case 'favTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//            break;
-//          case 'configTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat();
-//            break;
-//          default:
-//            return 'default'
-//        }
-//        console.log(updatedBlockTabsOpen);
-//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//      }
-//      else {
-//        for (var i = 0; i < _stuff.tabState.length; i++) {
-//          console.log('in the non-empty tabState checker loop');
-//          console.log(_stuff.tabState.length);
-//          console.log(i);
-//          if (_stuff.tabState[i].hack === key) {
-//            console.log("tab is already open from before, don't add, break statement occurring");
-//            break
-//          }
-//          else if (_stuff.tabState[i].hack !== key) {
-//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-//            console.log(_stuff.tabState.length);
-//            console.log(i);
-//            if (i === _stuff.tabState.length - 1) {
-//              console.log('tabState didnt have this tab, tab is now open');
-//              var blockTabsOpen = [];
-//              switch (key) {
-//                case 'favTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//                  break;
-//                case 'configTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
-//                  break;
-//                default:
-//                  return 'default'
-//              }
-//              console.log(updatedBlockTabsOpen);
-//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//            }
-//          }
-//        }
-//        console.log('finished the tabState checker loop')
-//      }
-//    }
-//    else {
-//      console.log('tab is not open');
-//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
-//    }
-//  }
-//};
 
 var checkWhichBlockTabsOpen = function(){
   var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
@@ -3135,17 +3082,6 @@ function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from th
   console.log('deciding which tab to open lookup is working!');
   return possibleTabsToOpen[key](key)
 }
-
-
-
-var addTab = function(newtab){
-  /* set state of tabs somewhere here*/
-  var newTabs = _stuff.tabState.concat(newtab);
-  _stuff.tabState = newTabs;
-  /* could you just skip the variable newTabs and set _stuff.tabState equal
-   itself concatenated?
-   */
-};
 
 var removeTab = function(item){
 
@@ -3272,8 +3208,8 @@ var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this work
     else {
 
     }
-  }
-  console.log('appended to possibleBlockCases')
+  };
+  console.log('appended to possibleBlockCases');
   console.log(possibleBlockCases[dispatchMarker]);
 };
 
@@ -3312,15 +3248,15 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getTabState: function(){
     return _stuff.tabState;
   },
-  getRedBlockTabClicked: function(){
-    return allBlockTabProperties.redBlockTabOpen;
-  },
-  getBlueBlockTabClicked: function(){
-    return allBlockTabProperties.blueBlockTabOpen;
-  },
-  getGreenBlockTabClicked: function(){
-    return allBlockTabProperties.greenBlockTabOpen;
-  },
+  //getRedBlockTabClicked: function(){
+  //  return allBlockTabProperties.redBlockTabOpen;
+  //},
+  //getBlueBlockTabClicked: function(){
+  //  return allBlockTabProperties.blueBlockTabOpen;
+  //},
+  //getGreenBlockTabClicked: function(){
+  //  return allBlockTabProperties.greenBlockTabOpen;
+  //},
   getFavTabOpen:function(){
     return allBlockTabProperties.favTabOpen;
   },
@@ -3349,14 +3285,6 @@ AppDispatcher.register(function(payload){
       //console.log(item);
       passSidePane(item);
           break;
-
-    case appConstants.ADD_TAB:
-      console.log(payload);
-      console.log(action);
-      addTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      break;
 
     case appConstants.REMOVE_TAB:
       console.log(payload);
@@ -3391,38 +3319,6 @@ AppDispatcher.register(function(payload){
       console.log(item);
       changeConfigTabState();
       console.log(allBlockTabProperties.configTabOpen);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.PASS_DISPATCHMARKER:
-      console.log(payload);
-      console.log(item);
-      checkWhichBlockClicked(item);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.APPENDSTUFF_FORNEWBLOCK:
-      console.log(payload);
-      console.log(item);
-      /*functions that append to the various objects I need to append*/
-      appendToAllBlockTabProperties(item);
-      paneStore.emitChange();
-      appendToAllBlockContent(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToOpen(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToRemove(item);
-      paneStore.emitChange();
-      appendToPossibleBlockCases(item);
-      paneStore.emitChange();
-      checkWhichBlockClicked(item);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.CHANGE_INFO:
-      console.log(payload);
-      console.log(item);
-      changeSomeInfo();
       paneStore.emitChange();
       break;
 
@@ -3500,6 +3396,42 @@ AppDispatcher.register(function(payload){
     //  console.log(action);
     //  changeGreenBlockTabState();
     //  console.log(allBlockTabProperties.greenBlockTabOpen);
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.APPENDSTUFF_FORNEWBLOCK:
+    //  console.log(payload);
+    //  console.log(item);
+    //  /*functions that append to the various objects I need to append*/
+    //  appendToAllBlockTabProperties(item);
+    //  paneStore.emitChange();
+    //  appendToAllBlockContent(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleTabsToOpen(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleTabsToRemove(item);
+    //  paneStore.emitChange();
+    //  appendToPossibleBlockCases(item);
+    //  paneStore.emitChange();
+    //  checkWhichBlockClicked(item);
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.CHANGE_INFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  changeSomeInfo();
+    //  paneStore.emitChange();
+    //  break;
+    //case appConstants.ADD_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //  addTab(item);
+    //  paneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //  break;
+    //case appConstants.PASS_DISPATCHMARKER:
+    //  console.log(payload);
+    //  console.log(item);
+    //  checkWhichBlockClicked(item);
     //  paneStore.emitChange();
     //  break;
 
@@ -3698,7 +3630,6 @@ module.exports = paneStore;
 //  favTabOpen: false,
 //  configTabOpen: false
 //};
-
 //var changeRedBlockTabState = function(){
 //  if(allBlockTabProperties.redBlockTabOpen === false) {
 //    allBlockTabProperties.redBlockTabOpen = true;
@@ -3729,7 +3660,6 @@ module.exports = paneStore;
 //
 //  }
 //};
-
 //var possibleNodeTabsToOpen = {
 //  'Gate1': function(NodeId){
 //    var blockTabsOpen = [];
@@ -3757,7 +3687,6 @@ module.exports = paneStore;
 //    return updatedBlockTabsOpen
 //  }
 //};
-
 //var appendToPossibleNodeTabsToOpen = function(dispatchMarker){
 //  possibleTabsToOpen[dispatchMarker] = function(){
 //    var blockTabsOpen = [];
@@ -3765,8 +3694,6 @@ module.exports = paneStore;
 //    return updatedBlockTabsOpen
 //  }
 //};
-
-
 //function lookupWhichNodeTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
 //  /* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
 //  if(typeof possibleNodeTabsToOpen[key] !== 'function'){
@@ -3775,6 +3702,68 @@ module.exports = paneStore;
 //  console.log('deciding which tab to open lookup is working!');
 //  return possibleNodeTabsToOpen[key](key)
 //}
+//var checkFavAndConfigTabsOpen = function() {
+//  for (var key in favAndConfigTabProperties) {
+//    console.log(key);
+//    console.log(favAndConfigTabProperties[key]);
+//    if (favAndConfigTabProperties[key] === true) {
+//      console.log("just before starting the tabState checker loop");
+//      if (_stuff.tabState.length === 0) {
+//        console.log("tabState was empty, tab is now open");
+//        var blockTabsOpen = [];
+//        switch (key) {
+//          case 'favTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//            break;
+//          case 'configTabOpen':
+//            var updatedBlockTabsOpen = blockTabsOpen.concat();
+//            break;
+//          default:
+//            return 'default'
+//        }
+//        console.log(updatedBlockTabsOpen);
+//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//      }
+//      else {
+//        for (var i = 0; i < _stuff.tabState.length; i++) {
+//          console.log('in the non-empty tabState checker loop');
+//          console.log(_stuff.tabState.length);
+//          console.log(i);
+//          if (_stuff.tabState[i].hack === key) {
+//            console.log("tab is already open from before, don't add, break statement occurring");
+//            break
+//          }
+//          else if (_stuff.tabState[i].hack !== key) {
+//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+//            console.log(_stuff.tabState.length);
+//            console.log(i);
+//            if (i === _stuff.tabState.length - 1) {
+//              console.log('tabState didnt have this tab, tab is now open');
+//              var blockTabsOpen = [];
+//              switch (key) {
+//                case 'favTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//                  break;
+//                case 'configTabOpen':
+//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
+//                  break;
+//                default:
+//                  return 'default'
+//              }
+//              console.log(updatedBlockTabsOpen);
+//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
+//            }
+//          }
+//        }
+//        console.log('finished the tabState checker loop')
+//      }
+//    }
+//    else {
+//      console.log('tab is not open');
+//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
+//    }
+//  }
+//};
 
 },{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./deviceStore":11,"./nodeStore":13,"events":33,"object-assign":39}],15:[function(require,module,exports){
 /**
@@ -5442,26 +5431,17 @@ var mainPaneActions = require('../actions/mainPaneActions');
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
 
-//var SidePane = require('./sidePane');
-//var sidePaneActions = require('../actions/sidePaneActions');
-//var sidePaneStore = require('../stores/sidePaneStore'); /*not sure if this is allowed, but I'll give it a whirl :P*/
-
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-
 var deviceStore = require('../stores/deviceStore');
 var deviceActions = require('../actions/deviceActions');
+var nodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
 
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
 
 var TheGraphDiamond = require('./theGraphDiamond.js');
-//var TheGraphDiamond = require('../the-graph-diamond/js/app.js');
-
-var nodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-
-//var FlexboxTheme = require('./reactPanelsCustomTheme.js');
 
 var GateNode = require('./gateNode.js');
 var TGenNode = require('./tgenNode.js');
@@ -5478,15 +5458,14 @@ var Button = ReactPanels.Button;
 
 function getMainPaneState(){
   return {
+    //redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
+    //blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
+    //greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
     footers: mainPaneStore.getFooterState(),
-    configPanelOpen: mainPaneStore.getConfigPanelState(),
     favPanelOpen: mainPaneStore.getFavPanelState(),
-    redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
-    blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
-    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
     favTabOpen: paneStore.getFavTabOpen(),
+    configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: paneStore.getConfigTabOpen(),
-
     updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
     updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
     updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
@@ -5507,25 +5486,6 @@ var MainPane = React.createClass({displayName: "MainPane",
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")
-  },
-
-  handleActionAddTab: function(stuff){
-    paneActions.addTab(stuff)
-  },
-
-  handleActionPassDispatchMarker: function(selectedObject){
-    var selectedObject = selectedObject;
-    var selectedDispatchMarker = selectedObject.dispatchMarker;
-    console.log(selectedDispatchMarker);
-    paneActions.passDispatchMarker(selectedDispatchMarker)
-  },
-
-  //handleActionAppendStuffForNewBlock: function(selectedObject){
-  //
-  //},
-
-  handleActionChangeSomeInfo: function(){
-    paneActions.changeSomeInfo('this is the item')
   },
 
   handleActionMockServerRequest: function(){
@@ -5550,10 +5510,6 @@ var MainPane = React.createClass({displayName: "MainPane",
     paneActions.toggleSidebar("toggle sidebar");
   },
 
-  //handleActionTabChangeViaOtherMeans: function(tab){
-  //  sidePaneActions.switchTabWhenTabOpens(tab)
-  //},
-
   componentDidMount: function(){
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
@@ -5565,109 +5521,8 @@ var MainPane = React.createClass({displayName: "MainPane",
     paneStore.removeChangeListener(this._onChange);
   },
 
-  addDivToContent: function(selectedObject){
-    var selectedObject = selectedObject;
-    var selectedDispatchMarker = selectedObject.dispatchMarker;
-    console.log(selectedObject);
-    console.log(selectedObject.dispatchMarker);
-
-    function getRandomColor() {
-      var letters = '0123456789ABCDEF'.split('');
-      var color = '#';
-      for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
-    var YES = document.createElement('DIV');
-
-    YES.addEventListener("click", function(){
-      console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
-      console.log(selectedObject.dispatchMarker);
-      //var selectedObject = selectedObject;
-      //var selectedDispatchMarker = selectedObject.dispatchMarker;
-      console.log(selectedDispatchMarker);
-      paneActions.appendStuffForNewBlock(selectedDispatchMarker);
-    });
-    YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
-    YES.style.backgroundColor = getRandomColor();
-    //YES.setAttribute('draggable', 'true'); No need for this anymore!
-    //YES.id = selectedObject;
-
-    var testDivStyling = {
-      float: 'right',
-      backgroundColor: "magenta",
-      height: 100,
-      width: 100,
-      marginTop: 10,
-      marginBottom: 10
-    };
-    var ComeOn = React.createClass({displayName: "ComeOn",render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
-      return(
-        React.createElement("div", null)
-      )
-    }});
-    //ComeOn.id = "meh";
-    //document.getElementById('TEST').appendChild(comeOn)
-    React.render(React.createElement(ComeOn, {style: testDivStyling}), document.getElementById('TEST').appendChild(YES));
-    console.log(ComeOn)
-  },
-
-
-
-
-
-  //testingChannelUnsubscription: function(){
-  //  //console.log("checking state of websocket connection:");
-  //  //WebSocketClient.checkStateOfWebSocketConnection();
-  //  //console.log("seeing what WebSocket.getchannel(0) returns");
-  //  //console.log(WebSocketClient.getChannel(0));
-  //  //console.log("getting channel 0, seeing if it's undefined");
-  //  WebSocketClient.getChannel(0).unsubscribe();
-  //
-  //  //WebSocketClient.getAllChannels()
-  //
-  //},
-  //
-  //testingChannelResubscription: function(){
-  //  WebSocketClient.resubscribeChannel(0);
-  //},
-  //
-  //testingChannelValueType: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  testChannel.setValue({test: "Test"});
-  //  console.log(testChannel.getValue());
-  //  testChannel.channelValueType()
-  //},
-  //
-  //testingChannelPause: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  console.log("Attempting to pause the channel");
-  //  testChannel.pause()
-  //},
-  //
-  //testingChannelSetValue: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  console.log("Attempting to use Channel.setValue");
-  //  testChannel.setValue(2);
-  //  //console.log("Hopefully the value of the Channel has changed, let's see:");
-  //  //console.log(testChannel.getValue())
-  //  //Doesn't work, it runs before the server responds!
-  //
-  //},
-
-  testingAddChannelChangeInfoViaProperServerRequest: function(){
-    sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
-    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  },
-
   addGateNode: function(){
     nodeActions.addToAllNodeInfo("adding gate node");
-
   },
 
   generateNewNodeId: function(){
@@ -5803,7 +5658,6 @@ module.exports = MainPane;
 //handleActionChangeRedBlockState: function(){
 //  sidePaneActions.redBlockStateChange("this is the item")
 //},
-
 //showObjectProperties: function(selectedObject){
 //  console.log(selectedObject);
 //  var objectProperties = selectedObject; /* currently the div that contains the object, not the actual React component*/
@@ -5817,7 +5671,6 @@ module.exports = MainPane;
 //    return "uihy"
 //  }
 //},
-
 //changeClickedObjectProperties: function(selectedObject){ /*replaced by handleActionPassDispatchMarker*/
 //  var selectedObject = selectedObject;
 //  var selectedDiv = selectedObject.target;
@@ -5861,14 +5714,123 @@ module.exports = MainPane;
 //  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
-
 //<button type="button" onClick={this.addDivToContent}>Add block</button>
 //<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
 //<button type="button" onClick={this.addNodeInfo}>Add node</button>
-
 //var RedBlock = require('./redBlock');
 //var BlueBlock = require('./blueBlock');
 //var GreenBlock = require('./greenBlock');
+//addDivToContent: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedObject);
+//  console.log(selectedObject.dispatchMarker);
+//
+//  function getRandomColor() {
+//    var letters = '0123456789ABCDEF'.split('');
+//    var color = '#';
+//    for (var i = 0; i < 6; i++ ) {
+//      color += letters[Math.floor(Math.random() * 16)];
+//    }
+//    return color;
+//  }
+//
+//  var YES = document.createElement('DIV');
+//
+//  YES.addEventListener("click", function(){
+//    console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
+//    console.log(selectedObject.dispatchMarker);
+//    //var selectedObject = selectedObject;
+//    //var selectedDispatchMarker = selectedObject.dispatchMarker;
+//    console.log(selectedDispatchMarker);
+//    paneActions.appendStuffForNewBlock(selectedDispatchMarker);
+//  });
+//  YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
+//  YES.style.backgroundColor = getRandomColor();
+//  //YES.setAttribute('draggable', 'true'); No need for this anymore!
+//  //YES.id = selectedObject;
+//
+//  var testDivStyling = {
+//    float: 'right',
+//    backgroundColor: "magenta",
+//    height: 100,
+//    width: 100,
+//    marginTop: 10,
+//    marginBottom: 10
+//  };
+//  var ComeOn = React.createClass({render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
+//    return(
+//      <div></div>
+//    )
+//  }});
+//  //ComeOn.id = "meh";
+//  //document.getElementById('TEST').appendChild(comeOn)
+//  React.render(<ComeOn style={testDivStyling}/>, document.getElementById('TEST').appendChild(YES));
+//  console.log(ComeOn)
+//},
+//testingChannelUnsubscription: function(){
+//  //console.log("checking state of websocket connection:");
+//  //WebSocketClient.checkStateOfWebSocketConnection();
+//  //console.log("seeing what WebSocket.getchannel(0) returns");
+//  //console.log(WebSocketClient.getChannel(0));
+//  //console.log("getting channel 0, seeing if it's undefined");
+//  WebSocketClient.getChannel(0).unsubscribe();
+//
+//  //WebSocketClient.getAllChannels()
+//
+//},
+//
+//testingChannelResubscription: function(){
+//  WebSocketClient.resubscribeChannel(0);
+//},
+//
+//testingChannelValueType: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  testChannel.setValue({test: "Test"});
+//  console.log(testChannel.getValue());
+//  testChannel.channelValueType()
+//},
+//
+//testingChannelPause: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to pause the channel");
+//  testChannel.pause()
+//},
+//
+//testingChannelSetValue: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to use Channel.setValue");
+//  testChannel.setValue(2);
+//  //console.log("Hopefully the value of the Channel has changed, let's see:");
+//  //console.log(testChannel.getValue())
+//  //Doesn't work, it runs before the server responds!
+//
+//},
+//testingAddChannelChangeInfoViaProperServerRequest: function(){
+//  sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
+//  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+//},
+//handleActionChangeSomeInfo: function(){
+//  paneActions.changeSomeInfo('this is the item')
+//},
+//handleActionTabChangeViaOtherMeans: function(tab){
+//  sidePaneActions.switchTabWhenTabOpens(tab)
+//},
+//handleActionAddTab: function(stuff){
+//  paneActions.addTab(stuff)
+//},
+//handleActionPassDispatchMarker: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedDispatchMarker);
+//  paneActions.passDispatchMarker(selectedDispatchMarker)
+//},
+//handleActionAppendStuffForNewBlock: function(selectedObject){
+//
+//},
 
 },{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":31,"./configButton":16,"./favButton":19,"./gateNode.js":20,"./lutNode.js":21,"./pcompNode.js":25,"./tgenNode.js":29,"./theGraphDiamond.js":30,"react":219,"react-panels":42}],23:[function(require,module,exports){
 /**
@@ -7062,6 +7024,10 @@ var ReactDOM = require('react-dom');
 var MainPane = require('./mainPane');
 var SidePane = require('./sidePane');
 
+var mainPaneStore = require('../stores/mainPaneStore');
+var mainPaneActions = require('../actions/mainPaneActions');
+var sidePaneStore = require('../stores/sidePaneStore');
+var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
@@ -7158,8 +7124,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     paneStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
-    this.setState({mql: mql});
-    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    this.setState({mql: mql}, function(){
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    });
   },
   componentWillUnmount(){
     paneStore.removeChangeListener(this._onChange);
@@ -7192,7 +7159,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
 module.exports = BothPanes;
 
-},{"../actions/paneActions":4,"../stores/paneStore":14,"./mainPane":22,"./sidePane":27,"react":219,"react-dom":41,"react-sidebar":43}],29:[function(require,module,exports){
+},{"../actions/mainPaneActions":2,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/mainPaneStore":12,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./mainPane":22,"./sidePane":27,"react":219,"react-dom":41,"react-sidebar":43}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */

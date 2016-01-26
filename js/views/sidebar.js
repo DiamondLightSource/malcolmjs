@@ -8,6 +8,10 @@ var ReactDOM = require('react-dom');
 var MainPane = require('./mainPane');
 var SidePane = require('./sidePane');
 
+var mainPaneStore = require('../stores/mainPaneStore');
+var mainPaneActions = require('../actions/mainPaneActions');
+var sidePaneStore = require('../stores/sidePaneStore');
+var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
@@ -104,8 +108,9 @@ var BothPanes = React.createClass({
     paneStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
-    this.setState({mql: mql});
-    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    this.setState({mql: mql}, function(){
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    });
   },
   componentWillUnmount(){
     paneStore.removeChangeListener(this._onChange);
