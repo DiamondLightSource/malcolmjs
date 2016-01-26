@@ -6894,11 +6894,6 @@ var SidePane = React.createClass({displayName: "SidePane",
     paneActions.removeNodeTab(selectedIndex);
   },
 
-  //handleActionPassingSidePaneOnMount: function(){
-  //  console.log(this);
-  //  //sidePaneActions.passingSidePane(this)
-  //},
-
   componentDidMount: function(){
     sidePaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
@@ -6916,32 +6911,6 @@ var SidePane = React.createClass({displayName: "SidePane",
   render: function () {
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-
-    /* This was for the tabs when I had coloured blocks instead of nodes */
-
-    //var tabs = this.state.tabState.map(function(item, i) {
-    //  var tabTitle = "Tab " + item.name;
-    //  var tabIndex = i + 1;
-    //  var tabContent = function(){
-    //    var content = [];
-    //    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
-    //      content.push(<br/>);
-    //      content.push(<p>{outerkey}</p>);
-    //      for (var key in item.info[outerkey])
-    //        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
-    //    }
-    //    return content
-    //  };
-    //  return (
-    //    <Tab key={item.name} title={tabTitle}>
-    //
-    //      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
-    //        {tabContent()}
-    //      </Content>
-    //
-    //    </Tab>
-    //  );
-    //}.bind(this));
 
     var tabs = this.state.tabState.map(function(item, i){
       var tabTitle = item.label;
@@ -6973,9 +6942,7 @@ var SidePane = React.createClass({displayName: "SidePane",
     return (
         React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
 
-            //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-            //  <i className="fa fa-plus"></i>
-            //</Button>,
+
             React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveNodeTab}, 
               React.createElement("i", {className: "fa fa-times"})
             ),
@@ -6997,7 +6964,6 @@ module.exports = SidePane;
 //  console.log(tab)
 //  console.log("it ran correctly");
 //},
-
 //<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 //
 //      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
@@ -7012,6 +6978,39 @@ module.exports = SidePane;
 //    ]}>
 //  {tabs}
 //</Panel>
+//handleActionPassingSidePaneOnMount: function(){
+//  console.log(this);
+//  //sidePaneActions.passingSidePane(this)
+//},
+//<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+//  <i className="fa fa-plus"></i>
+//</Button>,
+
+/* This was for the tabs when I had coloured blocks instead of nodes */
+
+//var tabs = this.state.tabState.map(function(item, i) {
+//  var tabTitle = "Tab " + item.name;
+//  var tabIndex = i + 1;
+//  var tabContent = function(){
+//    var content = [];
+//    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+//      content.push(<br/>);
+//      content.push(<p>{outerkey}</p>);
+//      for (var key in item.info[outerkey])
+//        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
+//    }
+//    return content
+//  };
+//  return (
+//    <Tab key={item.name} title={tabTitle}>
+//
+//      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
+//        {tabContent()}
+//      </Content>
+//
+//    </Tab>
+//  );
+//}.bind(this));
 
 },{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":17,"react":219,"react-panels":42}],28:[function(require,module,exports){
 /**
@@ -7542,13 +7541,14 @@ function getAppState(){
     //PComp1Position: NodeStore.getPComp1Position(),
     //LUT1Position: NodeStore.getLUT1Position(),
     //allNodePositions: NodeStore.getAllNodePositions(),
+    //gateNodeStyling: NodeStore.getGateNodeStyling(),
+    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
+    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
+    //newlyAddedNode: NodeStore.getNewlyAddedNode(),
     draggedElement: NodeStore.getDraggedElement(),
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
     allEdges: NodeStore.getAllEdges(),
-    //gateNodeStyling: NodeStore.getGateNodeStyling(),
-    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     nodesToRender: NodeStore.getNodesToRenderArray(),
     edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
@@ -7556,7 +7556,6 @@ function getAppState(){
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
     newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
     nodeLibrary: NodeStore.getNodeLibrary(),
-    //newlyAddedNode: NodeStore.getNewlyAddedNode(),
     allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
     portMouseOver: NodeStore.getPortMouseOver(),
     areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
@@ -7641,199 +7640,6 @@ var App = React.createClass({displayName: "App",
   //},
 
 
-  mouseDownSelectElement: function (evt) {
-    console.log("mouseDown");
-    console.log(evt);
-    console.log(evt.currentTarget);
-
-    /*This is for calculating the overall distance moved of the dragged element, since beforeDrag gets updated when the element is moved */
-    this.setState({
-      mouseDownX: evt.nativeEvent.clientX,
-      mouseDownY: evt.nativeEvent.clientY
-    });
-
-    this.setState({moveFunction: this.moveElement});
-    //this.setState({draggedElement: evt.currentTarget}); /* Need to send to store */ /* Used for node event firing */ /* Replaced with nodeAction to update store in Gate1*/
-    nodeActions.draggedElementID(evt.currentTarget.id);
-    //nodeActions.deselectAllNodes("deselect all nodes");
-
-
-    if (this.state.draggedElement === evt.currentTarget) {
-      console.log("the draggedElement is equal to the selected element, so don't run deselect!");
-    }
-    else {
-      nodeActions.deselectAllNodes("deselect all nodes");
-      /* Don't want to deselect a node if you move around other nodes whilst having another node selected */
-
-    }
-
-    var startCoordinates = {
-      x: evt.nativeEvent.clientX,
-      y: evt.nativeEvent.clientY
-    };
-    //this.setState({beforeDrag: startCoordinates},
-    //    function(){
-    //        this.setState({moveFunction: this.anotherMoveFunction}, /* Do I need to wait for the beforeDrag state to change here? */
-    //            function(){
-    //                console.log("function has changed");
-    //            })
-    //    });
-
-    this.setState({beforeDrag: startCoordinates});
-    //this.setState({moveFunction: this.anotherMoveFunction}); /* Seeing if I can do this in the default mouse move to check the distance of movement to be a click or drag */
-    this.setState({afterDrag: startCoordinates});
-    /* This is just in case no movement occurs, if there is movement then this will be overwritten */
-
-  },
-
-  defaultMoveFunction(){
-
-  },
-
-  moveElement: function (evt) {
-    //this.setState({draggedElement: evt.currentTarget}); /* Need to send to store */
-    //nodeActions.draggedElement(evt.currentTarget.id);
-
-    //console.log("moveElement has occurred");
-    var mouseMovementX = evt.nativeEvent.clientX - this.state.mouseDownX;
-    var mouseMovementY = evt.nativeEvent.clientY - this.state.mouseDownY;
-
-    if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
-      console.log("we have a click, not a drag!");
-      /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
-      /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
-      /* Then I suppose I could have the select style be dependent on if that state is true or false */
-
-      /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
-
-      var smallChangeInCoords = {
-        x: evt.nativeEvent.clientX,
-        y: evt.nativeEvent.clientY
-      };
-      this.setState({afterDrag: smallChangeInCoords});
-
-      /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
-      /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
-      //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
-      //this.deselect();
-    }
-    else {
-      console.log("mouseMovementX & Y are big enough, is probably a drag!");
-      this.setState({moveFunction: this.anotherMoveFunction});
-    }
-  },
-  anotherMoveFunction: function (e) {
-    //console.log("now move is different!");
-
-    /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
-
-    //console.log(e);
-    //console.log(Math.floor(Date.now() / 1000));
-
-    var updatedCoordinates = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-
-    if (!this.state.afterDrag) {
-      this.setState({afterDrag: updatedCoordinates},
-        function () {
-          this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag)
-        })
-    }
-    //else{
-    //    this.setState({beforeDrag: this.state.afterDrag},
-    //        function(){
-    //            this.setState({afterDrag: updatedCoordinates},
-    //                function(){
-    //                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
-    //                })
-    //        })
-    //}
-    else {
-      this.setState({beforeDrag: this.state.afterDrag},
-        function () {
-          this.setState({afterDrag: updatedCoordinates});
-          this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
-        })
-    }
-  },
-
-  mouseUp: function (e) {
-    console.log("mouseUp");
-    //console.log(e);
-    //console.log(this.state.afterDrag);
-    //console.log(this.state.mouseDownX);
-    //console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
-    //console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
-
-
-    if (this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y) {
-      console.log("zero movement between mouseUp and mouseDown, so it's a click!");
-      this.state.draggedElement.dispatchEvent(NodeSelect);
-      /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
-      this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null});
-      /* Stops the cursor from jumping back to where it previously was on the last drag */
-      this.setState({afterDrag: null});
-    }
-    /* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
-    else if (Math.abs(this.state.afterDrag.x - this.state.mouseDownX) > 4 && Math.abs(this.state.afterDrag.y - this.state.mouseDownY) > 4) {
-      console.log("the mouse moved far enough to be a drag");
-      this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null});
-      /* Stops the cursor from jumping back to where it previously was on the last drag */
-      this.setState({afterDrag: null});
-    }
-    /* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
-    else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) > 4) ||
-      (Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
-      console.log("> 4 movement in one axis but < 4 movement in the other");
-      this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null});
-      /* Stops the cursor from jumping back to where it previously was on the last drag */
-      this.setState({afterDrag: null});
-    }
-    else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
-      console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click!");
-      this.state.draggedElement.dispatchEvent(NodeSelect);
-      /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
-      this.setState({moveFunction: this.defaultMoveFunction});
-      this.setState({beforeDrag: null});
-      /* Stops the cursor from jumping back to where it previously was on the last drag */
-      this.setState({afterDrag: null});
-    }
-
-
-  },
-
-  differenceBetweenMouseDownAndMouseUp: function (start, end) {
-    //console.log(start);
-    //console.log(end);
-
-    var zoomScale = this.state.graphZoomScale;
-    if(zoomScale === 0){
-      console.log("zoomScale is zero, can't divide by it!");
-    }
-    else{
-      var differenceInCoordinates = {
-        x: (1/zoomScale) * (end.x - start.x),
-        y: (1/zoomScale) * (end.y - start.y)
-      };
-      //nodeActions.changeGateNodePosition(differenceInCoordinates);
-      nodeActions.changeNodePosition(differenceInCoordinates);
-    }
-
-  },
-
-  mouseLeave: function (e) {
-    console.log("mouseLeave, left the window, emulate a mouseUp event!");
-    this.setState({moveFunction: this.defaultMoveFunction});
-    this.setState({panMoveFunction: this.defaultMoveFunction()});
-    this.setState({beforeDrag: null});
-    this.setState({afterDrag: null});
-  },
-
   deselect: function (e) {
     //e.stopImmediatePropagation();
     //e.stopPropagation();
@@ -7856,173 +7662,173 @@ var App = React.createClass({displayName: "App",
     window.NodeContainerStyle[opacity] = 0.5
   },
 
-  panMouseDown: function (e) {
-    console.log("panMouseDown");
-    this.setState({panMoveFunction: this.panMouseMove});
-    this.dragging = true;
-
-    this.coords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-
-    /* Enabling a minimum movement threshold to check if a click was intended but the mouse moved a tiny bit between mouseDown and mouseUp */
-
-    //this.setState({
-    //  panGraphMouseDown: {
-    //    x: e.nativeEvent.clientX,
-    //    y: e.nativeEvent.clientY
-    //  }
-    //});
-    //
-    //this.setState({
-    //  panGraphBeforeDrag: {
-    //    x: e.nativeEvent.clientX,
-    //    y: e.nativeEvent.clientY
-    //  }
-    //});
-    //
-    ///* Will get rewritten if there is graph movement, and will stay the same if there's no movement */
-    //this.setState({
-    //  panGraphAfterDrag: {
-    //    x: e.nativeEvent.clientX,
-    //    y: e.nativeEvent.clientY
-    //  }
-    //});
-    //
-    //this.setState({panMoveFunction: this.panCheckIfClickOrDrag});
-
-  },
-
-  panCheckIfClickOrDrag: function(e){
-    //var mouseMovementX = e.nativeEvent.clientX - this.state.panGraphMouseDown.x;
-    //var mouseMovementY = e.nativeEvent.clientY - this.state.panGraphMouseDown.y;
-    //
-    //if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
-    //  console.log("we have a click, not a drag!");
-    //  /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
-    //  /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
-    //  /* Then I suppose I could have the select style be dependent on if that state is true or false */
-    //
-    //  /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
-    //
-    //  var smallChangeInCoords = {
-    //    x: e.nativeEvent.clientX,
-    //    y: e.nativeEvent.clientY
-    //  };
-    //  this.setState({afterPanDrag: smallChangeInCoords});
-    //
-    //  /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
-    //  /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
-    //  //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
-    //  //this.deselect();
-    //}
-    //else {
-    //  console.log("mouseMovementX & Y are big enough, is probably a drag!");
-    //  this.setState({moveFunction: this.panMouseMove});
-    //}
-  },
-
-  panMouseUp: function (e) {
-    console.log("panMouseUp");
-    this.setState({panMoveFunction: this.defaultMoveFunction});
-    this.dragging = false;
-
-    this.coords = {};
-
-    /* Implementing minimum movement for panning */
-
-    //if (this.state.panGraphBeforeDrag.x === this.state.panGraphAfterDrag.x && this.state.panGraphBeforeDrag.y === this.state.panGraphAfterDrag.y) {
-    //  console.log("zero movement between mouseUp and mouseDown, so it's a click, so we're deselecting everything!");
-    //  this.deselect();
-    //
-    //  this.setState({panMoveFunction: this.defaultMoveFunction});
-    //  this.setState({panGraphBeforeDrag: null});
-    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-    //  this.setState({panGraphAfterDrag: null});
-    //}
-    ///* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
-    //else if (Math.abs(this.state.afterDrag.x - this.state.panGraphMouseDown.x) > 4 && Math.abs(this.state.afterDrag.y - this.state.panGraphMouseDown.y) > 4) {
-    //  console.log("the mouse moved far enough to be a drag");
-    //  this.setState({panMoveFunction: this.defaultMoveFunction});
-    //  this.setState({panGraphBeforeDrag: null});
-    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-    //  this.setState({panGraphAfterDrag: null});
-    //}
-    ///* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
-    //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) > 4) ||
-    //  (Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) <= 4)) {
-    //  console.log("> 4 movement in one axis but < 4 movement in the other");
-    //  this.setState({panMoveFunction: this.defaultMoveFunction});
-    //  this.setState({panGraphBeforeDrag: null});
-    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-    //  this.setState({panGraphAfterDrag: null});
-    //}
-    //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
-    //  console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click, so deselect everything!");
-    //  this.deselect();
-    //  this.setState({panMoveFunction: this.defaultMoveFunction});
-    //  this.setState({panGraphBeforeDrag: null});
-    //  /* Stops the cursor from jumping back to where it previously was on the last drag */
-    //  this.setState({panGraphAfterDrag: null});
-    //}
-
-  },
-
-  panMouseMove: function (e) {
-    if (this.dragging) {
-      e.preventDefault();
-      console.log("dragging");
-    }
-
-    var dx = this.coords.x - e.nativeEvent.clientX;
-    var dy = this.coords.y - e.nativeEvent.clientY;
-
-    this.coords.x = e.nativeEvent.clientX;
-    this.coords.y = e.nativeEvent.clientY;
-
-    var xChange = this.state.graphPosition.x - dx;
-    var yChange = this.state.graphPosition.y - dy;
-
-    var newCoords = {
-      x: xChange,
-      y: yChange
-    };
-
-    nodeActions.changeGraphPosition(newCoords);
-
-    /* Implementing a minimum mouse movement */
-
-    //var updatedCoordinates = {
-    //  x: e.nativeEvent.clientX,
-    //  y: e.nativeEvent.clientY
-    //};
-    //
-    //if (!this.state.panGraphAfterDrag) {
-    //  this.setState({panGraphAfterDrag: updatedCoordinates},
-    //    function () {
-    //
-    //
-    //    })
-    //}
-    ////else{
-    ////    this.setState({beforeDrag: this.state.afterDrag},
-    ////        function(){
-    ////            this.setState({afterDrag: updatedCoordinates},
-    ////                function(){
-    ////                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
-    ////                })
-    ////        })
-    ////}
-    //else {
-    //  this.setState({beforeDrag: this.state.afterDrag},
-    //    function () {
-    //      this.setState({afterDrag: updatedCoordinates});
-    //      this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
-    //    })
-    //}
-
-  },
+  //panMouseDown: function (e) {
+  //  console.log("panMouseDown");
+  //  this.setState({panMoveFunction: this.panMouseMove});
+  //  this.dragging = true;
+  //
+  //  this.coords = {
+  //    x: e.nativeEvent.clientX,
+  //    y: e.nativeEvent.clientY
+  //  };
+  //
+  //  /* Enabling a minimum movement threshold to check if a click was intended but the mouse moved a tiny bit between mouseDown and mouseUp */
+  //
+  //  //this.setState({
+  //  //  panGraphMouseDown: {
+  //  //    x: e.nativeEvent.clientX,
+  //  //    y: e.nativeEvent.clientY
+  //  //  }
+  //  //});
+  //  //
+  //  //this.setState({
+  //  //  panGraphBeforeDrag: {
+  //  //    x: e.nativeEvent.clientX,
+  //  //    y: e.nativeEvent.clientY
+  //  //  }
+  //  //});
+  //  //
+  //  ///* Will get rewritten if there is graph movement, and will stay the same if there's no movement */
+  //  //this.setState({
+  //  //  panGraphAfterDrag: {
+  //  //    x: e.nativeEvent.clientX,
+  //  //    y: e.nativeEvent.clientY
+  //  //  }
+  //  //});
+  //  //
+  //  //this.setState({panMoveFunction: this.panCheckIfClickOrDrag});
+  //
+  //},
+  //
+  //panCheckIfClickOrDrag: function(e){
+  //  //var mouseMovementX = e.nativeEvent.clientX - this.state.panGraphMouseDown.x;
+  //  //var mouseMovementY = e.nativeEvent.clientY - this.state.panGraphMouseDown.y;
+  //  //
+  //  //if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
+  //  //  console.log("we have a click, not a drag!");
+  //  //  /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
+  //  //  /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
+  //  //  /* Then I suppose I could have the select style be dependent on if that state is true or false */
+  //  //
+  //  //  /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
+  //  //
+  //  //  var smallChangeInCoords = {
+  //  //    x: e.nativeEvent.clientX,
+  //  //    y: e.nativeEvent.clientY
+  //  //  };
+  //  //  this.setState({afterPanDrag: smallChangeInCoords});
+  //  //
+  //  //  /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
+  //  //  /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
+  //  //  //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+  //  //  //this.deselect();
+  //  //}
+  //  //else {
+  //  //  console.log("mouseMovementX & Y are big enough, is probably a drag!");
+  //  //  this.setState({moveFunction: this.panMouseMove});
+  //  //}
+  //},
+  //
+  //panMouseUp: function (e) {
+  //  console.log("panMouseUp");
+  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+  //  this.dragging = false;
+  //
+  //  this.coords = {};
+  //
+  //  /* Implementing minimum movement for panning */
+  //
+  //  //if (this.state.panGraphBeforeDrag.x === this.state.panGraphAfterDrag.x && this.state.panGraphBeforeDrag.y === this.state.panGraphAfterDrag.y) {
+  //  //  console.log("zero movement between mouseUp and mouseDown, so it's a click, so we're deselecting everything!");
+  //  //  this.deselect();
+  //  //
+  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+  //  //  this.setState({panGraphBeforeDrag: null});
+  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+  //  //  this.setState({panGraphAfterDrag: null});
+  //  //}
+  //  ///* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
+  //  //else if (Math.abs(this.state.afterDrag.x - this.state.panGraphMouseDown.x) > 4 && Math.abs(this.state.afterDrag.y - this.state.panGraphMouseDown.y) > 4) {
+  //  //  console.log("the mouse moved far enough to be a drag");
+  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+  //  //  this.setState({panGraphBeforeDrag: null});
+  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+  //  //  this.setState({panGraphAfterDrag: null});
+  //  //}
+  //  ///* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
+  //  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) > 4) ||
+  //  //  (Math.abs(e.nativeEvent.clientX - this.state.panGraphMouseDown.x) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.panGraphMouseDown.y) <= 4)) {
+  //  //  console.log("> 4 movement in one axis but < 4 movement in the other");
+  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+  //  //  this.setState({panGraphBeforeDrag: null});
+  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+  //  //  this.setState({panGraphAfterDrag: null});
+  //  //}
+  //  //else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
+  //  //  console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click, so deselect everything!");
+  //  //  this.deselect();
+  //  //  this.setState({panMoveFunction: this.defaultMoveFunction});
+  //  //  this.setState({panGraphBeforeDrag: null});
+  //  //  /* Stops the cursor from jumping back to where it previously was on the last drag */
+  //  //  this.setState({panGraphAfterDrag: null});
+  //  //}
+  //
+  //},
+  //
+  //panMouseMove: function (e) {
+  //  if (this.dragging) {
+  //    e.preventDefault();
+  //    console.log("dragging");
+  //  }
+  //
+  //  var dx = this.coords.x - e.nativeEvent.clientX;
+  //  var dy = this.coords.y - e.nativeEvent.clientY;
+  //
+  //  this.coords.x = e.nativeEvent.clientX;
+  //  this.coords.y = e.nativeEvent.clientY;
+  //
+  //  var xChange = this.state.graphPosition.x - dx;
+  //  var yChange = this.state.graphPosition.y - dy;
+  //
+  //  var newCoords = {
+  //    x: xChange,
+  //    y: yChange
+  //  };
+  //
+  //  nodeActions.changeGraphPosition(newCoords);
+  //
+  //  /* Implementing a minimum mouse movement */
+  //
+  //  //var updatedCoordinates = {
+  //  //  x: e.nativeEvent.clientX,
+  //  //  y: e.nativeEvent.clientY
+  //  //};
+  //  //
+  //  //if (!this.state.panGraphAfterDrag) {
+  //  //  this.setState({panGraphAfterDrag: updatedCoordinates},
+  //  //    function () {
+  //  //
+  //  //
+  //  //    })
+  //  //}
+  //  ////else{
+  //  ////    this.setState({beforeDrag: this.state.afterDrag},
+  //  ////        function(){
+  //  ////            this.setState({afterDrag: updatedCoordinates},
+  //  ////                function(){
+  //  ////                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
+  //  ////                })
+  //  ////        })
+  //  ////}
+  //  //else {
+  //  //  this.setState({beforeDrag: this.state.afterDrag},
+  //  //    function () {
+  //  //      this.setState({afterDrag: updatedCoordinates});
+  //  //      this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
+  //  //    })
+  //  //}
+  //
+  //},
 
   wheelZoom: function (e) {
     console.log("wheel!");
@@ -9146,6 +8952,199 @@ module.exports = App;
 //  this.setState({wait: false});
 //  Component.anotherMoveFunction(e);
 //  console.log(this.state.wait);
+//},
+
+//mouseDownSelectElement: function (evt) {
+//  console.log("mouseDown");
+//  console.log(evt);
+//  console.log(evt.currentTarget);
+//
+//  /*This is for calculating the overall distance moved of the dragged element, since beforeDrag gets updated when the element is moved */
+//  this.setState({
+//    mouseDownX: evt.nativeEvent.clientX,
+//    mouseDownY: evt.nativeEvent.clientY
+//  });
+//
+//  this.setState({moveFunction: this.moveElement});
+//  //this.setState({draggedElement: evt.currentTarget}); /* Need to send to store */ /* Used for node event firing */ /* Replaced with nodeAction to update store in Gate1*/
+//  nodeActions.draggedElementID(evt.currentTarget.id);
+//  //nodeActions.deselectAllNodes("deselect all nodes");
+//
+//
+//  if (this.state.draggedElement === evt.currentTarget) {
+//    console.log("the draggedElement is equal to the selected element, so don't run deselect!");
+//  }
+//  else {
+//    nodeActions.deselectAllNodes("deselect all nodes");
+//    /* Don't want to deselect a node if you move around other nodes whilst having another node selected */
+//
+//  }
+//
+//  var startCoordinates = {
+//    x: evt.nativeEvent.clientX,
+//    y: evt.nativeEvent.clientY
+//  };
+//  //this.setState({beforeDrag: startCoordinates},
+//  //    function(){
+//  //        this.setState({moveFunction: this.anotherMoveFunction}, /* Do I need to wait for the beforeDrag state to change here? */
+//  //            function(){
+//  //                console.log("function has changed");
+//  //            })
+//  //    });
+//
+//  this.setState({beforeDrag: startCoordinates});
+//  //this.setState({moveFunction: this.anotherMoveFunction}); /* Seeing if I can do this in the default mouse move to check the distance of movement to be a click or drag */
+//  this.setState({afterDrag: startCoordinates});
+//  /* This is just in case no movement occurs, if there is movement then this will be overwritten */
+//
+//},
+//
+//defaultMoveFunction(){
+//
+//},
+//
+//moveElement: function (evt) {
+//  //this.setState({draggedElement: evt.currentTarget}); /* Need to send to store */
+//  //nodeActions.draggedElement(evt.currentTarget.id);
+//
+//  //console.log("moveElement has occurred");
+//  var mouseMovementX = evt.nativeEvent.clientX - this.state.mouseDownX;
+//  var mouseMovementY = evt.nativeEvent.clientY - this.state.mouseDownY;
+//
+//  if ((Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) <= 4) || (Math.abs(mouseMovementX) <= 4 && Math.abs(mouseMovementY) === 0) || (Math.abs(mouseMovementX) === 0 && Math.abs(mouseMovementY) <= 4)) {
+//    console.log("we have a click, not a drag!");
+//    /* Need to somehow prevent the zero movement click happening, it always happens for this click too, where's there's minimal movement */
+//    /* Or I could just have that if either occur then they change some state that says the node is selected, so either way it won't affect anything? */
+//    /* Then I suppose I could have the select style be dependent on if that state is true or false */
+//
+//    /* Or equally I can update afterDrag here with the very small change in coordinates to prevent that from happening */
+//
+//    var smallChangeInCoords = {
+//      x: evt.nativeEvent.clientX,
+//      y: evt.nativeEvent.clientY
+//    };
+//    this.setState({afterDrag: smallChangeInCoords});
+//
+//    /* These both HAVE to happen here, a node select needs to occur if the mouse movement is small enough */
+//    /* Actually, I think it makes more sense for the nodeSelect event fire to occur on the mouse up, otherwise here it'll get called for any small movement! */
+//    //this.state.draggedElement.dispatchEvent(NodeSelect); /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+//    //this.deselect();
+//  }
+//  else {
+//    console.log("mouseMovementX & Y are big enough, is probably a drag!");
+//    this.setState({moveFunction: this.anotherMoveFunction});
+//  }
+//},
+//anotherMoveFunction: function (e) {
+//  //console.log("now move is different!");
+//
+//  /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
+//
+//  //console.log(e);
+//  //console.log(Math.floor(Date.now() / 1000));
+//
+//  var updatedCoordinates = {
+//    x: e.nativeEvent.clientX,
+//    y: e.nativeEvent.clientY
+//  };
+//
+//  if (!this.state.afterDrag) {
+//    this.setState({afterDrag: updatedCoordinates},
+//      function () {
+//        this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag)
+//      })
+//  }
+//  //else{
+//  //    this.setState({beforeDrag: this.state.afterDrag},
+//  //        function(){
+//  //            this.setState({afterDrag: updatedCoordinates},
+//  //                function(){
+//  //                    this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag); /* No need to use state callback here for the updatedCoordinates, can use the variable directly to save time */
+//  //                })
+//  //        })
+//  //}
+//  else {
+//    this.setState({beforeDrag: this.state.afterDrag},
+//      function () {
+//        this.setState({afterDrag: updatedCoordinates});
+//        this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, updatedCoordinates);
+//      })
+//  }
+//},
+//
+//mouseUp: function (e) {
+//  console.log("mouseUp");
+//  //console.log(e);
+//  //console.log(this.state.afterDrag);
+//  //console.log(this.state.mouseDownX);
+//  //console.log(Math.abs(e.nativeEvent.clientX - this.state.mouseDownX));
+//  //console.log(Math.abs(e.nativeEvent.clientY - this.state.mouseDownY));
+//
+//
+//  if (this.state.beforeDrag.x === this.state.afterDrag.x && this.state.beforeDrag.y === this.state.afterDrag.y) {
+//    console.log("zero movement between mouseUp and mouseDown, so it's a click!");
+//    this.state.draggedElement.dispatchEvent(NodeSelect);
+//    /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+//    this.setState({moveFunction: this.defaultMoveFunction});
+//    this.setState({beforeDrag: null});
+//    /* Stops the cursor from jumping back to where it previously was on the last drag */
+//    this.setState({afterDrag: null});
+//  }
+//  /* This is when the mouse has moved far enough that we treat it as a drag, still need to accommodate if we have a mouseup when there's been a small amount of movement but is still a click */
+//  else if (Math.abs(this.state.afterDrag.x - this.state.mouseDownX) > 4 && Math.abs(this.state.afterDrag.y - this.state.mouseDownY) > 4) {
+//    console.log("the mouse moved far enough to be a drag");
+//    this.setState({moveFunction: this.defaultMoveFunction});
+//    this.setState({beforeDrag: null});
+//    /* Stops the cursor from jumping back to where it previously was on the last drag */
+//    this.setState({afterDrag: null});
+//  }
+//  /* Not ideal, but it fixes the annoying 'select a node even if it moves a lot in one axis but not the other' bug for now */
+//  else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) > 4) ||
+//    (Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) > 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
+//    console.log("> 4 movement in one axis but < 4 movement in the other");
+//    this.setState({moveFunction: this.defaultMoveFunction});
+//    this.setState({beforeDrag: null});
+//    /* Stops the cursor from jumping back to where it previously was on the last drag */
+//    this.setState({afterDrag: null});
+//  }
+//  else if ((0 <= Math.abs(e.nativeEvent.clientX - this.state.mouseDownX) <= 4 && 0 <= Math.abs(e.nativeEvent.clientY - this.state.mouseDownY) <= 4)) {
+//    console.log("there was minimal mouse movement between mouseDown and mouseUp so it was probably a click!");
+//    this.state.draggedElement.dispatchEvent(NodeSelect);
+//    /* draggedElement happens to be the element that is clicked as well as the element that is dragged! */
+//    this.setState({moveFunction: this.defaultMoveFunction});
+//    this.setState({beforeDrag: null});
+//    /* Stops the cursor from jumping back to where it previously was on the last drag */
+//    this.setState({afterDrag: null});
+//  }
+//
+//
+//},
+//
+//differenceBetweenMouseDownAndMouseUp: function (start, end) {
+//  //console.log(start);
+//  //console.log(end);
+//
+//  var zoomScale = this.state.graphZoomScale;
+//  if(zoomScale === 0){
+//    console.log("zoomScale is zero, can't divide by it!");
+//  }
+//  else{
+//    var differenceInCoordinates = {
+//      x: (1/zoomScale) * (end.x - start.x),
+//      y: (1/zoomScale) * (end.y - start.y)
+//    };
+//    //nodeActions.changeGateNodePosition(differenceInCoordinates);
+//    nodeActions.changeNodePosition(differenceInCoordinates);
+//  }
+//
+//},
+//
+//mouseLeave: function (e) {
+//  console.log("mouseLeave, left the window, emulate a mouseUp event!");
+//  this.setState({moveFunction: this.defaultMoveFunction});
+//  this.setState({panMoveFunction: this.defaultMoveFunction()});
+//  this.setState({beforeDrag: null});
+//  this.setState({afterDrag: null});
 //},
 
 },{"../../node_modules/interact.js":38,"../../node_modules/react-dom/dist/react-dom.js":40,"../../node_modules/react/lib/ReactDefaultPerf.js":99,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":24,"./pcompNode.js":25,"./tgenNode.js":29,"react":219}],31:[function(require,module,exports){

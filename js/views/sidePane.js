@@ -67,11 +67,6 @@ var SidePane = React.createClass({
     paneActions.removeNodeTab(selectedIndex);
   },
 
-  //handleActionPassingSidePaneOnMount: function(){
-  //  console.log(this);
-  //  //sidePaneActions.passingSidePane(this)
-  //},
-
   componentDidMount: function(){
     sidePaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
@@ -89,32 +84,6 @@ var SidePane = React.createClass({
   render: function () {
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-
-    /* This was for the tabs when I had coloured blocks instead of nodes */
-
-    //var tabs = this.state.tabState.map(function(item, i) {
-    //  var tabTitle = "Tab " + item.name;
-    //  var tabIndex = i + 1;
-    //  var tabContent = function(){
-    //    var content = [];
-    //    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
-    //      content.push(<br/>);
-    //      content.push(<p>{outerkey}</p>);
-    //      for (var key in item.info[outerkey])
-    //        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
-    //    }
-    //    return content
-    //  };
-    //  return (
-    //    <Tab key={item.name} title={tabTitle}>
-    //
-    //      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
-    //        {tabContent()}
-    //      </Content>
-    //
-    //    </Tab>
-    //  );
-    //}.bind(this));
 
     var tabs = this.state.tabState.map(function(item, i){
       var tabTitle = item.label;
@@ -146,9 +115,7 @@ var SidePane = React.createClass({
     return (
         <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 
-            //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-            //  <i className="fa fa-plus"></i>
-            //</Button>,
+
             <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
               <i className="fa fa-times"></i>
             </Button>,
@@ -170,7 +137,6 @@ module.exports = SidePane;
 //  console.log(tab)
 //  console.log("it ran correctly");
 //},
-
 //<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 //
 //      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
@@ -185,3 +151,36 @@ module.exports = SidePane;
 //    ]}>
 //  {tabs}
 //</Panel>
+//handleActionPassingSidePaneOnMount: function(){
+//  console.log(this);
+//  //sidePaneActions.passingSidePane(this)
+//},
+//<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+//  <i className="fa fa-plus"></i>
+//</Button>,
+
+/* This was for the tabs when I had coloured blocks instead of nodes */
+
+//var tabs = this.state.tabState.map(function(item, i) {
+//  var tabTitle = "Tab " + item.name;
+//  var tabIndex = i + 1;
+//  var tabContent = function(){
+//    var content = [];
+//    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+//      content.push(<br/>);
+//      content.push(<p>{outerkey}</p>);
+//      for (var key in item.info[outerkey])
+//        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
+//    }
+//    return content
+//  };
+//  return (
+//    <Tab key={item.name} title={tabTitle}>
+//
+//      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
+//        {tabContent()}
+//      </Content>
+//
+//    </Tab>
+//  );
+//}.bind(this));
