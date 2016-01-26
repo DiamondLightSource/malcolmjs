@@ -14,6 +14,8 @@ var sidePaneStore = require('../stores/sidePaneStore');
 var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
+var NodeStore = require('../stores/nodeStore.js');
+var nodeActions = require('../actions/nodeActions.js');
 
 var SideBar = require('react-sidebar').default;
 
@@ -91,7 +93,38 @@ var SidebarStyling = {
 
 function getBothPanesState(){
   return{
-    sidebarOpen: paneStore.getSidebarOpenState()
+    /* Its own getter functions first */
+    sidebarOpen: paneStore.getSidebarOpenState(),
+
+    /* MainPane's getter functions for stores */
+    footers: mainPaneStore.getFooterState(),
+    favPanelOpen: mainPaneStore.getFavPanelState(),
+    favTabOpen: paneStore.getFavTabOpen(),
+    configPanelOpen: mainPaneStore.getConfigPanelState(),
+    configTabOpen: paneStore.getConfigTabOpen(),
+
+    /* SidePane's getter functions for stores */
+    tabState: paneStore.getTabState(),
+    selectedTabIndex: paneStore.getSelectedTabIndex(),
+
+    //theGraphDiamondState:{
+    //  /* theGraphDiamond's getter functions for stores */
+    //  graphPosition: NodeStore.getGraphPosition(),
+    //  graphZoomScale: NodeStore.getGraphZoomScale(),
+    //  allEdges: NodeStore.getAllEdges(),
+    //  nodesToRender: NodeStore.getNodesToRenderArray(),
+    //  edgesToRender: NodeStore.getEdgesToRenderArray(),
+    //  allNodeInfo: NodeStore.getAllNodeInfo(),
+    //  portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //  storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    //  newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
+    //  nodeLibrary: NodeStore.getNodeLibrary(),
+    //  allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    //  portMouseOver: NodeStore.getPortMouseOver(),
+    //  areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    //  areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
+    //  allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
+    //}
   }
 }
 
@@ -105,7 +138,10 @@ var BothPanes = React.createClass({
   },
 
   componentDidMount: function(){
+    console.log(this.state);
+    mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
+    //NodeStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
     this.setState({mql: mql}, function(){
@@ -113,7 +149,9 @@ var BothPanes = React.createClass({
     });
   },
   componentWillUnmount(){
+    mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
+    //NodeStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
 
@@ -122,18 +160,26 @@ var BothPanes = React.createClass({
   },
 
   render: function(){
+
+    console.log(this.state);
+
     return(
       <SideBar sidebarClassName="sidebar" styles={SidebarStyling} docked={this.state.sidebarOpen}
                //open={this.state.sidebarOpen}
                pullRight={true}
                children={
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
-                <MainPane/>
+                <MainPane footers={this.state.footers} favPanelOpen={this.state.favPanelOpen}
+                favTabOpen={this.state.favTabOpen} configPanelOpen={this.state.configPanelOpen}
+                configTabOpen={this.state.configTabOpen}
+                //theGraphDiamondState={this.state.theGraphDiamondState}
+                />
                 //</div>
                 }
                sidebar={
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               <SidePane/>
+               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
+               />
                //</div>
                }>
       </SideBar>

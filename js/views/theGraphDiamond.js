@@ -76,35 +76,56 @@ function getAppState(){
     //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
     //newlyAddedNode: NodeStore.getNewlyAddedNode(),
     //draggedElement: NodeStore.getDraggedElement(),
-    graphPosition: NodeStore.getGraphPosition(),
-    graphZoomScale: NodeStore.getGraphZoomScale(),
-    allEdges: NodeStore.getAllEdges(),
-    nodesToRender: NodeStore.getNodesToRenderArray(),
-    edgesToRender: NodeStore.getEdgesToRenderArray(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    nodeLibrary: NodeStore.getNodeLibrary(),
-    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    portMouseOver: NodeStore.getPortMouseOver(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
+
+    //graphPosition: NodeStore.getGraphPosition(),
+    //graphZoomScale: NodeStore.getGraphZoomScale(),
+    //allEdges: NodeStore.getAllEdges(),
+    //nodesToRender: NodeStore.getNodesToRenderArray(),
+    //edgesToRender: NodeStore.getEdgesToRenderArray(),
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
+    //nodeLibrary: NodeStore.getNodeLibrary(),
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    //portMouseOver: NodeStore.getPortMouseOver(),
+    //areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
+    //areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
+    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
   }
 }
 
 var App = React.createClass({
-  getInitialState: function () {
-    return getAppState();
-  },
+  //getInitialState: function () {
+  //  return getAppState();
+  //},
   _onChange: function () {
-    this.setState(getAppState(), function(){
-      //console.log("app state has been mutated now!");
-    });
+    //this.setState(getAppState(), function(){
+    //  //console.log("app state has been mutated now!");
+    //});
   },
+
+  propTypes: {
+    graphPosition: React.PropTypes.object,
+    graphZoomScale: React.PropTypes.number,
+    allEdges: React.PropTypes.object,
+    nodesToRender: React.PropTypes.array,
+    edgesToRender: React.PropTypes.array,
+    allNodeInfo: React.PropTypes.object,
+    //portThatHasBeenClicked:React.PropTypes.oneOfType([
+    //  React.PropTypes.element,
+    //  /*Dunno how to say it could be null? */
+    //])
+    nodeLibrary: React.PropTypes.object,
+    allNodeTypesStyling: React.PropTypes.object,
+    portMouseOver: React.PropTypes.bool,
+    areAnyNodesSelected: React.PropTypes.bool,
+    areAnyEdgesSelected: React.PropTypes.bool,
+    allNodeTypesPortStyling: React.PropTypes.object,
+  },
+
   componentDidMount: function () {
-    NodeStore.addChangeListener(this._onChange);
+    //NodeStore.addChangeListener(this._onChange);
 
     //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
     nodeActions.addEdgeToAllNodeInfo();
@@ -149,7 +170,7 @@ var App = React.createClass({
       .styleCursor(false);
   },
   componentWillUnmount: function () {
-    NodeStore.removeChangeListener(this._onChange);
+    //NodeStore.removeChangeListener(this._onChange);
 
     ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
@@ -166,13 +187,13 @@ var App = React.createClass({
     nodeActions.deselectAllNodes("deselect all nodes");
     nodeActions.deselectAllEdges("deselect all edges");
 
-    if(this.state.portThatHasBeenClicked !== null){
+    if(this.props.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
       nodeActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
     }
     else{
-      console.log("this.state.portThatHasBeenSelected is null, so no need to run port deselection process");
+      console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
     }
 
   },
@@ -186,21 +207,23 @@ var App = React.createClass({
     console.log(e);
     e.preventDefault();
     e.stopPropagation();
+    e.nativeEvent.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
 
-    var currentZoomScale = this.state.graphZoomScale;
-    var currentGraphPositionX = this.state.graphPosition.x;
-    var currentGraphPositionY = this.state.graphPosition.y;
+    var currentZoomScale = this.props.graphZoomScale;
+    var currentGraphPositionX = this.props.graphPosition.x;
+    var currentGraphPositionY = this.props.graphPosition.y;
 
 
     var ZOOM_STEP = 0.03;
     var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
 
     if(zoomDirection === 'up'){
-      var newZoomScale = this.state.graphZoomScale + ZOOM_STEP;
+      var newZoomScale = this.props.graphZoomScale + ZOOM_STEP;
       //nodeActions.graphZoom(newScaleFactor);
     }
     else{
-      var newZoomScale = this.state.graphZoomScale - ZOOM_STEP;
+      var newZoomScale = this.props.graphZoomScale - ZOOM_STEP;
       //nodeActions.graphZoom(newScaleFactor);
     }
 
@@ -239,7 +262,7 @@ var App = React.createClass({
     var pcompNodeRegExp = /PComp/;
     var lutNodeRegExp = /LUT/;
 
-    var allNodeInfo = this.state.allNodeInfo;
+    var allNodeInfo = this.props.allNodeInfo;
 
     /* Seems like this could be for adding all the initla nodes on startup, perhaps have another fucion for adding one node at a time? */
     for(var node in allNodeInfo){
@@ -282,16 +305,16 @@ var App = React.createClass({
         console.log("no match to any node type, something's wrong?");
       }
     }
-  },
 
-  /* Don't need this anymore, I have a for loop in the render function */
+
+  /* Don't need this anymore, I have a for loop in the render function */},
 
   refactoredAddNodeToNodesArray: function(){
-    for(var node in this.state.allNodeInfo){
+    for(var node in this.props.allNodeInfo){
       nodeActions.pushNodeToArray(
         <Node key={node} id={node} className="node"
-              allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
-              portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+              allNodeInfo={this.props.allNodeInfo} allNodeTypesStyling={this.props.allNodeTypesStyling} areAnyNodesSelected={this.props.areAnyNodesSelected}
+              portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} portMouseOver={this.props.portMouseOver}
               selected={NodeStore.getAnyNodeSelectedState(node)}
               //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
               />
@@ -392,11 +415,11 @@ var App = React.createClass({
     //console.log(node);
     //console.log(port);
 
-    console.log(this.state.portThatHasBeenClicked);
+    console.log(this.props.portThatHasBeenClicked);
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
-    nodeActions.storingFirstPortClicked(this.state.portThatHasBeenClicked);
+    nodeActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
-    var port = this.state.portThatHasBeenClicked;
+    var port = this.props.portThatHasBeenClicked;
     /* Need an if loop to check if we're hovering the port already
     Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
      */
@@ -416,7 +439,7 @@ var App = React.createClass({
 
   portDeselectRemoveHighlight: function(){
     console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
-    var port = this.state.portThatHasBeenClicked;
+    var port = this.props.portThatHasBeenClicked;
     /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
     Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
     */
@@ -459,8 +482,8 @@ var App = React.createClass({
     //else if(this.state.storingFirstPortClicked === null){
     //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
     //}
-    var firstPort = this.state.storingFirstPortClicked;
-    var secondPort = this.state.portThatHasBeenClicked;
+    var firstPort = this.props.storingFirstPortClicked;
+    var secondPort = this.props.portThatHasBeenClicked;
     console.log(firstPort);
     console.log(secondPort);
     console.log(firstPort.parentNode.parentNode.parentNode.id);
@@ -506,8 +529,8 @@ var App = React.createClass({
   /* Find both port types, then compare them somehow */
   console.log(edgeInfo);
 
-  var fromNodeType = this.state.allNodeInfo[edgeInfo.fromNode].type;
-  var toNodeType = this.state.allNodeInfo[edgeInfo.toNode].type;
+  var fromNodeType = this.props.allNodeInfo[edgeInfo.fromNode].type;
+  var toNodeType = this.props.allNodeInfo[edgeInfo.toNode].type;
 
   /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
   var nodeTypes = {
@@ -517,8 +540,8 @@ var App = React.createClass({
 
   console.log(nodeTypes);
 
-  var fromNodeLibraryInfo = this.state.nodeLibrary[fromNodeType];
-  var toNodeLibraryInfo = this.state.nodeLibrary[toNodeType];
+  var fromNodeLibraryInfo = this.props.nodeLibrary[fromNodeType];
+  var toNodeLibraryInfo = this.props.nodeLibrary[toNodeType];
 
     console.log(fromNodeLibraryInfo);
     console.log(toNodeLibraryInfo);
@@ -563,7 +586,7 @@ var App = React.createClass({
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-    var fromPort = this.state.storingFirstPortClicked;
+    var fromPort = this.props.storingFirstPortClicked;
 
     if(edgeInfo.fromNode === edgeInfo.toNode){
     window.alert("Incompatible ports, they are part of the same node.");
@@ -610,23 +633,23 @@ var App = React.createClass({
   },
 
   isInportConnected: function(inport, inportIndex, node, edgeInfo, types){
-    console.log("The inport " + inport + " of the node " + node + " is " + this.state.allNodeInfo[node].inports[inportIndex].connected);
-    if(this.state.allNodeInfo[node].inports[inportIndex].connected === true){
+    console.log("The inport " + inport + " of the node " + node + " is " + this.props.allNodeInfo[node].inports[inportIndex].connected);
+    if(this.props.allNodeInfo[node].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
       window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
-      var fromPort = this.state.storingFirstPortClicked;
+      var fromPort = this.props.storingFirstPortClicked;
       fromPort.style.stroke = "black";
       fromPort.style.fill = "black";
       fromPort.setAttribute('r', 2);
       this.resetPortClickStorage();
     }
-    else if(this.state.allNodeInfo[node].inports[inportIndex].connected === false){
+    else if(this.props.allNodeInfo[node].inports[inportIndex].connected === false){
       console.log("That inport isn't connected to anything, so proceed with the port connection process");
       console.log(edgeInfo);
-      var toPort = this.state.portThatHasBeenClicked;
+      var toPort = this.props.portThatHasBeenClicked;
       console.log(toPort);
       toPort.style.stroke = "black";
       toPort.style.fill = "lightgrey";
@@ -700,7 +723,7 @@ var App = React.createClass({
 
   /* Checking if the edge already exists, if it does don't bother adding another edge */
 
-  if(this.state.allEdges[edgeLabel] === undefined){
+  if(this.props.allEdges[edgeLabel] === undefined){
     console.log("The newEdge's label is " + edgeLabel);
 
     /* Need an action to do this */
@@ -780,7 +803,7 @@ var App = React.createClass({
       toNodePort: 'posn'
     });
 
-    var newEdge = this.state.allEdges['TGen1posn -> PComp1posn'];
+    var newEdge = this.props.allEdges['TGen1posn -> PComp1posn'];
     console.log(newEdge);
 
 
@@ -797,7 +820,7 @@ var App = React.createClass({
     //var lutNodeRegExp = /LUT/;
 
     //var allNodePositions = this.state.allNodePositions;
-    var allEdges = this.state.allEdges;
+    var allEdges = this.props.allEdges;
 
     //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
     //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
@@ -882,8 +905,8 @@ var App = React.createClass({
     e.stopPropagation();
     console.log(e);
 
-    var xChange = this.state.graphPosition.x + e.dx;
-    var yChange = this.state.graphPosition.y + e.dy;
+    var xChange = this.props.graphPosition.x + e.dx;
+    var yChange = this.props.graphPosition.y + e.dy;
 
     nodeActions.changeGraphPosition({
       x: xChange,
@@ -896,7 +919,7 @@ var App = React.createClass({
     e.stopPropagation();
     console.log(e);
 
-    var currentZoomScale = this.state.graphZoomScale;
+    var currentZoomScale = this.props.graphZoomScale;
     var newZoomScale = currentZoomScale + e.ds;
 
     nodeActions.graphZoom(newZoomScale);
@@ -909,13 +932,14 @@ var App = React.createClass({
     //console.log(this.props.newlyAddedNode);
     //console.log(this.props);
 
-    var x = this.state.graphPosition.x;
-    var y = this.state.graphPosition.y;
-    var scale = this.state.graphZoomScale;
+    var x = this.props.graphPosition.x;
+    var y = this.props.graphPosition.y;
+    var scale = this.props.graphZoomScale;
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
-    console.log(this.state.nodesToRender);
+    console.log(this.props.nodesToRender);
+    console.log(this.props);
     //console.log("this.dragging is:" + this.dragging);
     //console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
 
@@ -1056,23 +1080,23 @@ var App = React.createClass({
     var nodes = [];
     var edges = [];
 
-    for(var node in this.state.allNodeInfo){
+    for(var node in this.props.allNodeInfo){
       nodes.push(
         <Node key={node} id={node} className="node"
-              allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
-              portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
+              allNodeInfo={this.props.allNodeInfo} allNodeTypesStyling={this.props.allNodeTypesStyling} areAnyNodesSelected={this.props.areAnyNodesSelected}
+              portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} portMouseOver={this.props.portMouseOver}
               selected={NodeStore.getAnyNodeSelectedState(node)} deselect={this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       )
     }
 
-    for(var edge in this.state.allEdges){
+    for(var edge in this.props.allEdges){
       edges.push(<Edge key={edge} id={edge}
         //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
         //               onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-                       allEdges={this.state.allEdges} allNodeTypesPortStyling={this.state.allNodeTypesPortStyling}
-                       allNodeInfo={this.state.allNodeInfo} areAnyEdgesSelected={this.state.areAnyEdgesSelected}
+                       allEdges={this.props.allEdges} allNodeTypesPortStyling={this.props.allNodeTypesPortStyling}
+                       allNodeInfo={this.props.allNodeInfo} areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                        selected={NodeStore.getIfEdgeIsSelected(edge)}
       />)
 

@@ -19,7 +19,8 @@ var nodeActions = require('../actions/nodeActions.js');
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
 
-var TheGraphDiamond = require('./theGraphDiamond.js');
+var theGraphDiamond = require('./theGraphDiamond');
+var TheGraphDiamondControllerView = require('./theGraphDiamondControllerView');
 
 var GateNode = require('./gateNode.js');
 var TGenNode = require('./tgenNode.js');
@@ -39,40 +40,67 @@ function getMainPaneState(){
     //redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
     //blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
     //greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
-    footers: mainPaneStore.getFooterState(),
-    favPanelOpen: mainPaneStore.getFavPanelState(),
-    favTabOpen: paneStore.getFavTabOpen(),
-    configPanelOpen: mainPaneStore.getConfigPanelState(),
-    configTabOpen: paneStore.getConfigTabOpen(),
-    updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
-    updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
-    updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
+
+    //footers: mainPaneStore.getFooterState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
+    //favTabOpen: paneStore.getFavTabOpen(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
+    //configTabOpen: paneStore.getConfigTabOpen(),
+
+    //updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
+    //updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
+    //updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
   }
 }
 
 var MainPane = React.createClass({
 
-  getInitialState: function(){
-    return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
+  //getInitialState: function(){
+  //  //return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
+  //},
+
+  componentDidMount: function(){
+    //mainPaneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    console.log(this.props);
+    this.setState({gateNodeIdCounter: 1});
+  },
+
+  componentWillUnmount: function(){
+    //mainPaneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function(){
-    this.setState(getMainPaneState(), function(){
-      console.log("mainpane's state has been mutated");
-    })
+    //this.setState(getMainPaneState(), function(){
+    //  console.log("mainpane's state has been mutated");
+    //})
   },
+
+  propTypes: {
+    footers: React.PropTypes.bool,
+    favPanelOpen: React.PropTypes.bool,
+    favTabOpen: React.PropTypes.bool,
+    configPanelOpen: React.PropTypes.bool,
+    configTabOpen: React.PropTypes.bool,
+    theGraphDiamondState: React.PropTypes.object
+  },
+
+  //shouldComponentUpdate(nextProps, nextState){
+  //  return this.props.footers !== nextProps.footers;
+  //},
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")
   },
 
-  handleActionMockServerRequest: function(){
-    deviceActions.mockServerRequest('this is the item');
-    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  },
+  //handleActionMockServerRequest: function(){
+  //  deviceActions.mockServerRequest('this is the item');
+  //  console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+  //},
 
   handleActionFavTabOpen: function(){
     console.log('favTabOpen is a go');
@@ -88,82 +116,10 @@ var MainPane = React.createClass({
     paneActions.toggleSidebar("toggle sidebar");
   },
 
-  componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
-    this.setState({gateNodeIdCounter: 1});
-  },
-
-  componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
-  },
-
-  addGateNode: function(){
-    nodeActions.addToAllNodeInfo("adding gate node");
-  },
-
-  generateNewNodeId: function(){
-    /* Do it for just a Gate node for now, remember, small steps before big steps! */
-    var gateNodeIdCounter = this.state.gateNodeIdCounter;
-    gateNodeIdCounter += 1;
-    var newGateId = "Gate" + gateNodeIdCounter;
-    console.log(newGateId);
-    this.setState({gateNodeIdCounter: gateNodeIdCounter});
-    return newGateId;
-
-  },
-
-  addNodeInfo: function(){
-    console.log("addNodeInfo");
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
-
-    var newGateNodeId = this.generateNewNodeId();
-    console.log(newGateNodeId);
-
-    nodeActions.addToAllNodeInfo(newGateNodeId);
-
-    //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
-
-    //var newNode = this.state.newlyAddedNode;
-    //console.log(newNode);
-    //console.log(this.state.newlyAddedNode);
-    //newNode = "Gate2";
-
-    if(gateNodeRegExp.test(newGateNodeId) === true){
-      nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
-                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(tgenNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a tgen node!");
-      nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
-                                            onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(pcompNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have a pcomp node!");
-      nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
-                                             onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else if(lutNodeRegExp.test(newGateNodeId) === true){
-      //console.log("we have an lut node!");
-      nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-        //NodeName={nodeName} RectangleName={rectangleName}
-                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    }
-    else{
-      console.log("no match to any node type, something's wrong?");
-    }
-    console.log(this.state.nodesToRender);
-
-
-  },
-
-
-
   render: function() {
+
+    console.log(this.props);
+
     var TESTStyling = {
       height: 1000,
       width: 1000,
@@ -185,37 +141,30 @@ var MainPane = React.createClass({
             <i className="fa fa-wrench"></i>
           </ToggleButton>
         ]}>
-        <Tab title="View" showFooter={this.state.footers}>
+        <Tab title="View" showFooter={this.props.footers}>
           <Content  >
             <div style={contentStyling} >
-              <TheGraphDiamond />
+              <TheGraphDiamondControllerView/>
             </div>
-
-
-
-
-
           </Content>
 
           <Footer><div id="blockDock">
             <div id="buttonContainer">
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
-
-
             </div>
           </div>
           </Footer>
         </Tab>
 
-        <Tab title="Design" showFooter={this.state.footers}>
+        <Tab title="Design" showFooter={this.props.footers}>
           <Content>Secondary main view - graph of position data <br/>
             Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
-            <p>Config panel is {this.state.configTabOpen ? 'open' : 'closed'}</p>
+            <p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
 
-            <div className={this.state.configTabOpen ? "border" : ""}></div>
+            <div className={this.props.configTabOpen ? "border" : ""}></div>
 
-            <p>Fav panel is {this.state.favTabOpen ? 'open' : 'closed'}</p>
+            <p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
           </Content>
           <Footer><div id="blockDock">
@@ -409,3 +358,75 @@ module.exports = MainPane;
 //handleActionAppendStuffForNewBlock: function(selectedObject){
 //
 //},
+
+//addGateNode: function(){
+//  nodeActions.addToAllNodeInfo("adding gate node");
+//},
+//
+//generateNewNodeId: function(){
+//  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+//  var gateNodeIdCounter = this.state.gateNodeIdCounter;
+//  gateNodeIdCounter += 1;
+//  var newGateId = "Gate" + gateNodeIdCounter;
+//  console.log(newGateId);
+//  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+//  return newGateId;
+//
+//},
+//
+//addNodeInfo: function(){
+//  console.log("addNodeInfo");
+//  var gateNodeRegExp = /Gate/;
+//  var tgenNodeRegExp = /TGen/;
+//  var pcompNodeRegExp = /PComp/;
+//  var lutNodeRegExp = /LUT/;
+//
+//  var newGateNodeId = this.generateNewNodeId();
+//  console.log(newGateNodeId);
+//
+//  nodeActions.addToAllNodeInfo(newGateNodeId);
+//
+//  //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
+//
+//  //var newNode = this.state.newlyAddedNode;
+//  //console.log(newNode);
+//  //console.log(this.state.newlyAddedNode);
+//  //newNode = "Gate2";
+//
+//  if(gateNodeRegExp.test(newGateNodeId) === true){
+//    nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(tgenNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a tgen node!");
+//    nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(pcompNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a pcomp node!");
+//    nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+//                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(lutNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have an lut node!");
+//    nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+//      //NodeName={nodeName} RectangleName={rectangleName}
+//                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else{
+//    console.log("no match to any node type, something's wrong?");
+//  }
+//  console.log(this.state.nodesToRender);
+//
+//
+//},
+
+//<TheGraphDiamond
+//  graphPosition={this.props.theGraphDiamondState.graphPosition} graphZoomScale={this.props.theGraphDiamondState.graphZoomScale} allEdges={this.props.theGraphDiamondState.allEdges}
+//  nodesToRender={this.props.theGraphDiamondState.nodesToRender} edgesToRender={this.props.theGraphDiamondState.edgesToRender} allNodeInfo={this.props.theGraphDiamondState.allNodeInfo}
+//  portThatHasBeenClicked={this.props.theGraphDiamondState.portThatHasBeenClicked} storingFirstPortClicked={this.props.theGraphDiamondState.storingFirstPortClicked}
+//  newlyCreatedEdgeLabel={this.props.theGraphDiamondState.newlyCreatedEdgeLabel} nodeLibrary={this.props.theGraphDiamondState.nodeLibrary}
+//  allNodeTypesStyling={this.props.theGraphDiamondState.allNodeTypesStyling} areAnyNodesSelected={this.props.theGraphDiamondState.areAnyNodesSelected}
+//  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
+//  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
+///>

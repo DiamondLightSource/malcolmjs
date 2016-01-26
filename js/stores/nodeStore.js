@@ -141,7 +141,7 @@ function getAnyEdgeSelectedState(EdgeId){
 }
 
 function checkIfAnyEdgesAreSelected(){
-  var areAnyEdgesSelected = null;
+  var areAnyEdgesSelected;
   for(var edge in edgeSelectedStates){
     if(edgeSelectedStates[edge] === true){
       //console.log(edgeSelectedStates[edge]);

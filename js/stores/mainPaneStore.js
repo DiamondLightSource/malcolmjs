@@ -55,26 +55,26 @@ AppDispatcher.register(function(payload){
     case appConstants.FOOTER_TOGGLE:
       console.log(payload);
       console.log(action);
-          toggleFooter();
-          mainPaneStore.emitChange();
+      toggleFooter();
+      mainPaneStore.emitChange();
       console.log(_stuff.footerState);
-          break;
+      break;
 
     case appConstants.CONFIG_TOGGLE:
-       console.log(payload);
-       console.log(action);
-          toggleConfigPanel();
-          mainPaneStore.emitChange();
+      console.log(payload);
+      console.log(action);
+      toggleConfigPanel();
+      mainPaneStore.emitChange();
       console.log(_stuff.configPanelOpen);
-          break;
+      break;
 
     case appConstants.FAV_TOGGLE:
       console.log(payload);
       console.log(action);
-          toggleFavPanel();
-          mainPaneStore.emitChange();
+      toggleFavPanel();
+      mainPaneStore.emitChange();
       console.log(_stuff.favPanelOpen);
-          break;
+      break;
 
     default:
           return true;
