@@ -22,19 +22,19 @@ var paneActions = require('../actions/paneActions');
 
 function getSidePaneState(){
   return{
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex()
+    //tabState: paneStore.getTabState(),
+    //selectedTabIndex: paneStore.getSelectedTabIndex()
   }
 }
 
 var SidePane = React.createClass({
 
-  getInitialState: function(){
-    return getSidePaneState();
-  },
+  //getInitialState: function(){
+  //  return getSidePaneState();
+  //},
 
   _onChange: function(){
-    this.setState(getSidePaneState());
+    //this.setState(getSidePaneState());
     //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
     /* this works, but I'm not convinced that this is the 'Flux' way to do things...
     UPDATE: actually it doesn't work, selected tab content jumps about!*/
@@ -68,16 +68,16 @@ var SidePane = React.createClass({
   },
 
   componentDidMount: function(){
-    sidePaneStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
+    //sidePaneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
     this.handleActionInitialFetchOfNodeData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
+    //sidePaneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
   },
 
 
@@ -85,7 +85,7 @@ var SidePane = React.createClass({
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
-    var tabs = this.state.tabState.map(function(item, i){
+    var tabs = this.props.tabState.map(function(item, i){
       var tabTitle = item.label;
       var tabIndex = i + 1;
       var tabContent = function(){
