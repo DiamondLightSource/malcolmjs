@@ -135,8 +135,16 @@ var Dropdown = React.createClass({
         <span >{item}</span>
       </div>);
 
+      //interact(interactIdString)
+      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+
       interact(interactIdString)
-        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+        .on('tap', function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        this.testSelectInvokeSidePane(item);
+        this.handleActionHide(e);
+      }.bind(this))
     }
 
     return <div className={"dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}>

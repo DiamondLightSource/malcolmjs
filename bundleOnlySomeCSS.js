@@ -4442,8 +4442,16 @@ var Dropdown = React.createClass({displayName: "Dropdown",
         React.createElement("span", null, item)
       ));
 
+      //interact(interactIdString)
+      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+
       interact(interactIdString)
-        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+        .on('tap', function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        this.testSelectInvokeSidePane(item);
+        this.handleActionHide(e);
+      }.bind(this))
     }
 
     return React.createElement("div", {className: "dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}, 
