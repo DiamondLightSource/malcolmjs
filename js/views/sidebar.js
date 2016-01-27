@@ -98,9 +98,9 @@ function getBothPanesState(){
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    favPanelOpen: mainPaneStore.getFavPanelState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
     favTabOpen: paneStore.getFavTabOpen(),
-    configPanelOpen: mainPaneStore.getConfigPanelState(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: paneStore.getConfigTabOpen(),
 
     /* SidePane's getter functions for stores */
@@ -169,8 +169,8 @@ var BothPanes = React.createClass({
                pullRight={true}
                children={
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
-                <MainPane footers={this.state.footers} favPanelOpen={this.state.favPanelOpen}
-                favTabOpen={this.state.favTabOpen} configPanelOpen={this.state.configPanelOpen}
+                <MainPane footers={this.state.footers}
+                favTabOpen={this.state.favTabOpen}
                 configTabOpen={this.state.configTabOpen}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 />

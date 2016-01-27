@@ -29,19 +29,19 @@ var ButtonTitlePadding = {
 
 };
 
-function getFavButtonState(){
-  return{
-    favPanelOpen: mainPaneStore.getFavPanelState()
-  }
-}
+//function getFavButtonState(){
+//  return{
+//    favPanelOpen: mainPaneStore.getFavPanelState()
+//  }
+//}
 
 var FavButton = React.createClass({
-  getInitialState: function(){
-    return getFavButtonState();
-  },
+  //getInitialState: function(){
+  //  return getFavButtonState();
+  //},
 
   _onChange: function(){
-    this.setState(getFavButtonState)
+    //this.setState(getFavButtonState)
   },
 
   handleActionFavToggle: function(){
@@ -50,11 +50,11 @@ var FavButton = React.createClass({
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function(){

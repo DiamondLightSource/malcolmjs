@@ -11,21 +11,21 @@ var CHANGE_EVENT = 'change';
 
 var _stuff = {
     footerState: false,
-    configPanelOpen: false,
-    favPanelOpen: false
+    //configPanelOpen: false,
+    //favPanelOpen: false
 };
 
 var toggleFooter = function(){
     _stuff.footerState = !_stuff.footerState
   };
 
-var toggleConfigPanel = function(){
-  _stuff.configPanelOpen = !_stuff.configPanelOpen
-};
-
-var toggleFavPanel = function(){
-  _stuff.favPanelOpen = !_stuff.favPanelOpen
-};
+//var toggleConfigPanel = function(){
+//  _stuff.configPanelOpen = !_stuff.configPanelOpen
+//};
+//
+//var toggleFavPanel = function(){
+//  _stuff.favPanelOpen = !_stuff.favPanelOpen
+//};
 
 
 var mainPaneStore = assign({}, EventEmitter.prototype, {
@@ -41,12 +41,12 @@ var mainPaneStore = assign({}, EventEmitter.prototype, {
   getFooterState: function(){
     return _stuff.footerState;
   },
-  getConfigPanelState: function(){
-    return _stuff.configPanelOpen;
-  },
-  getFavPanelState: function(){
-    return _stuff.favPanelOpen;
-  }
+  //getConfigPanelState: function(){
+  //  return _stuff.configPanelOpen;
+  //},
+  //getFavPanelState: function(){
+  //  return _stuff.favPanelOpen;
+  //}
 });
 
 AppDispatcher.register(function(payload){
@@ -60,21 +60,21 @@ AppDispatcher.register(function(payload){
       console.log(_stuff.footerState);
       break;
 
-    case appConstants.CONFIG_TOGGLE:
-      console.log(payload);
-      console.log(action);
-      toggleConfigPanel();
-      mainPaneStore.emitChange();
-      console.log(_stuff.configPanelOpen);
-      break;
-
-    case appConstants.FAV_TOGGLE:
-      console.log(payload);
-      console.log(action);
-      toggleFavPanel();
-      mainPaneStore.emitChange();
-      console.log(_stuff.favPanelOpen);
-      break;
+    //case appConstants.CONFIG_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleConfigPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.configPanelOpen);
+    //  break;
+    //
+    //case appConstants.FAV_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleFavPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.favPanelOpen);
+    //  break;
 
     default:
           return true;

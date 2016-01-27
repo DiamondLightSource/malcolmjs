@@ -94,7 +94,7 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
 //   */
 //};
 
-var favContent = [{
+var favContent = {
   name: "Favourites tab",
   label: 'Favourites',
   hack: "favTabOpen",
@@ -110,9 +110,9 @@ var favContent = [{
       stuff2: "blah"
     }
   }
-}];
+};
 
-var configContent = [{
+var configContent = {
   name: "Configuration tab",
   label: 'Config',
   hack: "configTabOpen",
@@ -125,7 +125,7 @@ var configContent = [{
       firmwareVersion: "numbers & letters"
     }
   }
-}];
+};
 
 var allBlockTabProperties = {
   redBlockTabOpen: false,
@@ -441,10 +441,14 @@ var paneStore = assign({}, EventEmitter.prototype, {
   //  return allBlockTabProperties.greenBlockTabOpen;
   //},
   getFavTabOpen:function(){
-    return allBlockTabProperties.favTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.favTabOpen;
+    return allNodeTabProperties.Favourites;
   },
   getConfigTabOpen: function(){
-    return allBlockTabProperties.configTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.configTabOpen;
+    return allNodeTabProperties.Configuration;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
@@ -492,7 +496,9 @@ AppDispatcher.register(function(payload){
     case appConstants.FAVTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeFavTabState();
+      /* Want to replace with a better version, now that I'm doing node tabs */
+      //changeFavTabState();
+      setFavTabStateTrue();
       console.log(allBlockTabProperties.favTabOpen);
       paneStore.emitChange();
       break;
@@ -500,7 +506,9 @@ AppDispatcher.register(function(payload){
     case appConstants.CONFIGTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeConfigTabState();
+      /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
+      //changeConfigTabState();
+      setConfigTabStateTrue();
       console.log(allBlockTabProperties.configTabOpen);
       paneStore.emitChange();
       break;
@@ -681,6 +689,39 @@ var setNodeTabStateTrue = function(NodeId){
     dropdownMenuSelect(NodeId);
   }
 };
+
+function setFavTabStateTrue(){
+ if(allNodeTabProperties['Favourites'] === false){
+   allNodeTabProperties['Favourites'] = true;
+
+   _stuff.tabState.push(favContent);
+   console.log(_stuff.tabState);
+
+   selectBlockOnClick()
+ }
+  else if(allNodeTabProperties['Favourites'] === true){
+   console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+   dropdownMenuSelect("Favourites")
+ }
+}
+
+function setConfigTabStateTrue(){
+  if(allNodeTabProperties['Configuration'] === false){
+    allNodeTabProperties['Configuration'] = true;
+
+    _stuff.tabState.push(configContent);
+    console.log(_stuff.tabState);
+
+    selectBlockOnClick();
+  }
+  else if(allNodeTabProperties['Configuration'] === true){
+    console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+    dropdownMenuSelect("Config");
+    /* dropdownMenuSelect uses the label attribute rather than the object key name */
+  }
+}
 
 /* Note that this function also adds the tabs to SidePane */
 

@@ -870,21 +870,21 @@ var CHANGE_EVENT = 'change';
 
 var _stuff = {
     footerState: false,
-    configPanelOpen: false,
-    favPanelOpen: false
+    //configPanelOpen: false,
+    //favPanelOpen: false
 };
 
 var toggleFooter = function(){
     _stuff.footerState = !_stuff.footerState
   };
 
-var toggleConfigPanel = function(){
-  _stuff.configPanelOpen = !_stuff.configPanelOpen
-};
-
-var toggleFavPanel = function(){
-  _stuff.favPanelOpen = !_stuff.favPanelOpen
-};
+//var toggleConfigPanel = function(){
+//  _stuff.configPanelOpen = !_stuff.configPanelOpen
+//};
+//
+//var toggleFavPanel = function(){
+//  _stuff.favPanelOpen = !_stuff.favPanelOpen
+//};
 
 
 var mainPaneStore = assign({}, EventEmitter.prototype, {
@@ -900,12 +900,12 @@ var mainPaneStore = assign({}, EventEmitter.prototype, {
   getFooterState: function(){
     return _stuff.footerState;
   },
-  getConfigPanelState: function(){
-    return _stuff.configPanelOpen;
-  },
-  getFavPanelState: function(){
-    return _stuff.favPanelOpen;
-  }
+  //getConfigPanelState: function(){
+  //  return _stuff.configPanelOpen;
+  //},
+  //getFavPanelState: function(){
+  //  return _stuff.favPanelOpen;
+  //}
 });
 
 AppDispatcher.register(function(payload){
@@ -919,21 +919,21 @@ AppDispatcher.register(function(payload){
       console.log(_stuff.footerState);
       break;
 
-    case appConstants.CONFIG_TOGGLE:
-      console.log(payload);
-      console.log(action);
-      toggleConfigPanel();
-      mainPaneStore.emitChange();
-      console.log(_stuff.configPanelOpen);
-      break;
-
-    case appConstants.FAV_TOGGLE:
-      console.log(payload);
-      console.log(action);
-      toggleFavPanel();
-      mainPaneStore.emitChange();
-      console.log(_stuff.favPanelOpen);
-      break;
+    //case appConstants.CONFIG_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleConfigPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.configPanelOpen);
+    //  break;
+    //
+    //case appConstants.FAV_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleFavPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.favPanelOpen);
+    //  break;
 
     default:
           return true;
@@ -2900,7 +2900,7 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
 //   */
 //};
 
-var favContent = [{
+var favContent = {
   name: "Favourites tab",
   label: 'Favourites',
   hack: "favTabOpen",
@@ -2916,9 +2916,9 @@ var favContent = [{
       stuff2: "blah"
     }
   }
-}];
+};
 
-var configContent = [{
+var configContent = {
   name: "Configuration tab",
   label: 'Config',
   hack: "configTabOpen",
@@ -2931,7 +2931,7 @@ var configContent = [{
       firmwareVersion: "numbers & letters"
     }
   }
-}];
+};
 
 var allBlockTabProperties = {
   redBlockTabOpen: false,
@@ -3247,10 +3247,14 @@ var paneStore = assign({}, EventEmitter.prototype, {
   //  return allBlockTabProperties.greenBlockTabOpen;
   //},
   getFavTabOpen:function(){
-    return allBlockTabProperties.favTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.favTabOpen;
+    return allNodeTabProperties.Favourites;
   },
   getConfigTabOpen: function(){
-    return allBlockTabProperties.configTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.configTabOpen;
+    return allNodeTabProperties.Configuration;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
@@ -3298,7 +3302,9 @@ AppDispatcher.register(function(payload){
     case appConstants.FAVTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeFavTabState();
+      /* Want to replace with a better version, now that I'm doing node tabs */
+      //changeFavTabState();
+      setFavTabStateTrue();
       console.log(allBlockTabProperties.favTabOpen);
       paneStore.emitChange();
       break;
@@ -3306,7 +3312,9 @@ AppDispatcher.register(function(payload){
     case appConstants.CONFIGTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeConfigTabState();
+      /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
+      //changeConfigTabState();
+      setConfigTabStateTrue();
       console.log(allBlockTabProperties.configTabOpen);
       paneStore.emitChange();
       break;
@@ -3487,6 +3495,39 @@ var setNodeTabStateTrue = function(NodeId){
     dropdownMenuSelect(NodeId);
   }
 };
+
+function setFavTabStateTrue(){
+ if(allNodeTabProperties['Favourites'] === false){
+   allNodeTabProperties['Favourites'] = true;
+
+   _stuff.tabState.push(favContent);
+   console.log(_stuff.tabState);
+
+   selectBlockOnClick()
+ }
+  else if(allNodeTabProperties['Favourites'] === true){
+   console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+   dropdownMenuSelect("Favourites")
+ }
+}
+
+function setConfigTabStateTrue(){
+  if(allNodeTabProperties['Configuration'] === false){
+    allNodeTabProperties['Configuration'] = true;
+
+    _stuff.tabState.push(configContent);
+    console.log(_stuff.tabState);
+
+    selectBlockOnClick();
+  }
+  else if(allNodeTabProperties['Configuration'] === true){
+    console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+    dropdownMenuSelect("Config");
+    /* dropdownMenuSelect uses the label attribute rather than the object key name */
+  }
+}
 
 /* Note that this function also adds the tabs to SidePane */
 
@@ -4221,20 +4262,20 @@ var ButtonTitlePadding = {
 
 };
 
-function getConfigButtonState(){
-  return {
-    configPanelOpen:mainPaneStore.getConfigPanelState()
-  }
-}
+//function getConfigButtonState(){
+//  return {
+//    configPanelOpen:mainPaneStore.getConfigPanelState()
+//  }
+//}
 
 var ConfigButton = React.createClass({displayName: "ConfigButton",
-  getInitialState: function(){
-    return getConfigButtonState();
-  },
+  //getInitialState: function(){
+  //  return getConfigButtonState();
+  //},
 
-  _onChange: function(){
-    this.setState(getConfigButtonState)
-  },
+  //_onChange: function(){
+  //  this.setState(getConfigButtonState)
+  //},
 
   handleActionConfigToggle:function(){
     mainPaneActions.toggleConfigPanel("this is the item");
@@ -4242,11 +4283,11 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function() {
@@ -4704,19 +4745,19 @@ var ButtonTitlePadding = {
 
 };
 
-function getFavButtonState(){
-  return{
-    favPanelOpen: mainPaneStore.getFavPanelState()
-  }
-}
+//function getFavButtonState(){
+//  return{
+//    favPanelOpen: mainPaneStore.getFavPanelState()
+//  }
+//}
 
 var FavButton = React.createClass({displayName: "FavButton",
-  getInitialState: function(){
-    return getFavButtonState();
-  },
+  //getInitialState: function(){
+  //  return getFavButtonState();
+  //},
 
   _onChange: function(){
-    this.setState(getFavButtonState)
+    //this.setState(getFavButtonState)
   },
 
   handleActionFavToggle: function(){
@@ -4725,11 +4766,11 @@ var FavButton = React.createClass({displayName: "FavButton",
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function(){
@@ -5490,11 +5531,11 @@ var MainPane = React.createClass({displayName: "MainPane",
 
   propTypes: {
     footers: React.PropTypes.bool,
-    favPanelOpen: React.PropTypes.bool,
+    //favPanelOpen: React.PropTypes.bool,
     favTabOpen: React.PropTypes.bool,
-    configPanelOpen: React.PropTypes.bool,
+    //configPanelOpen: React.PropTypes.bool,
     configTabOpen: React.PropTypes.bool,
-    theGraphDiamondState: React.PropTypes.object
+    //theGraphDiamondState: React.PropTypes.object
   },
 
   //shouldComponentUpdate(nextProps, nextState){
@@ -5570,12 +5611,7 @@ var MainPane = React.createClass({displayName: "MainPane",
 
         React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
           React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
-            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null), 
-            React.createElement("p", null, "Config panel is ", this.props.configTabOpen ? 'open' : 'closed'), 
-
-            React.createElement("div", {className: this.props.configTabOpen ? "border" : ""}), 
-
-            React.createElement("p", null, "Fav panel is ", this.props.favTabOpen ? 'open' : 'closed')
+            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
 
           ), 
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
@@ -5841,6 +5877,12 @@ module.exports = MainPane;
 //  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
 //  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
 ///>
+
+//<p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
+//
+//<div className={this.props.configTabOpen ? "border" : ""}></div>
+//
+//<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
 },{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":32,"./configButton":16,"./favButton":19,"./gateNode.js":20,"./lutNode.js":21,"./pcompNode.js":25,"./tgenNode.js":29,"./theGraphDiamond":30,"./theGraphDiamondControllerView":31,"react":220,"react-panels":43}],23:[function(require,module,exports){
 /**
@@ -7123,9 +7165,9 @@ function getBothPanesState(){
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    favPanelOpen: mainPaneStore.getFavPanelState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
     favTabOpen: paneStore.getFavTabOpen(),
-    configPanelOpen: mainPaneStore.getConfigPanelState(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: paneStore.getConfigTabOpen(),
 
     /* SidePane's getter functions for stores */
@@ -7194,8 +7236,8 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                pullRight: true, 
                children: 
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
-                React.createElement(MainPane, {footers: this.state.footers, favPanelOpen: this.state.favPanelOpen, 
-                favTabOpen: this.state.favTabOpen, configPanelOpen: this.state.configPanelOpen, 
+                React.createElement(MainPane, {footers: this.state.footers, 
+                favTabOpen: this.state.favTabOpen, 
                 configTabOpen: this.state.configTabOpen}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 ), 

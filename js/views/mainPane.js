@@ -79,11 +79,11 @@ var MainPane = React.createClass({
 
   propTypes: {
     footers: React.PropTypes.bool,
-    favPanelOpen: React.PropTypes.bool,
+    //favPanelOpen: React.PropTypes.bool,
     favTabOpen: React.PropTypes.bool,
-    configPanelOpen: React.PropTypes.bool,
+    //configPanelOpen: React.PropTypes.bool,
     configTabOpen: React.PropTypes.bool,
-    theGraphDiamondState: React.PropTypes.object
+    //theGraphDiamondState: React.PropTypes.object
   },
 
   //shouldComponentUpdate(nextProps, nextState){
@@ -160,11 +160,6 @@ var MainPane = React.createClass({
         <Tab title="Design" showFooter={this.props.footers}>
           <Content>Secondary main view - graph of position data <br/>
             Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
-            <p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
-
-            <div className={this.props.configTabOpen ? "border" : ""}></div>
-
-            <p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
           </Content>
           <Footer><div id="blockDock">
@@ -430,3 +425,9 @@ module.exports = MainPane;
 //  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
 //  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
 ///>
+
+//<p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
+//
+//<div className={this.props.configTabOpen ? "border" : ""}></div>
+//
+//<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>

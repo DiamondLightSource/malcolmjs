@@ -29,20 +29,20 @@ var ButtonTitlePadding = {
 
 };
 
-function getConfigButtonState(){
-  return {
-    configPanelOpen:mainPaneStore.getConfigPanelState()
-  }
-}
+//function getConfigButtonState(){
+//  return {
+//    configPanelOpen:mainPaneStore.getConfigPanelState()
+//  }
+//}
 
 var ConfigButton = React.createClass({
-  getInitialState: function(){
-    return getConfigButtonState();
-  },
+  //getInitialState: function(){
+  //  return getConfigButtonState();
+  //},
 
-  _onChange: function(){
-    this.setState(getConfigButtonState)
-  },
+  //_onChange: function(){
+  //  this.setState(getConfigButtonState)
+  //},
 
   handleActionConfigToggle:function(){
     mainPaneActions.toggleConfigPanel("this is the item");
@@ -50,11 +50,11 @@ var ConfigButton = React.createClass({
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function() {
