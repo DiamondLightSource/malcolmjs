@@ -7813,7 +7813,7 @@ var App = React.createClass({displayName: "App",
     var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
 
     var scaleDelta = 1 + (newZoomScale - currentZoomScale);
-    this.lastScale = newZoomScale;
+    //this.lastScale = newZoomScale;
 
     var scale = scaleDelta * currentZoomScale;
 
@@ -8504,7 +8504,23 @@ var App = React.createClass({displayName: "App",
     var currentZoomScale = this.props.graphZoomScale;
     var newZoomScale = currentZoomScale + e.ds;
 
+    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+
+    //var scale = scaleDelta * currentZoomScale;
+
+    var pinchZoomX = e.nativeEvent.clientX;
+    var pinchZoomY = e.nativeEvent.clientY;
+
+    var newGraphPositionX = scaleDelta * (this.props.graphPosition.x - pinchZoomX) + pinchZoomX ;
+    var newGraphPositionY = scaleDelta * (this.props.graphPosition.y - pinchZoomY) + pinchZoomY ;
+
+    var newGraphPosition = {
+      x: newGraphPositionX,
+      y: newGraphPositionY
+    };
+
     nodeActions.graphZoom(newZoomScale);
+    nodeActions.changeGraphPosition(newGraphPosition);
   },
 
 
