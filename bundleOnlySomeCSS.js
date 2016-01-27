@@ -7247,7 +7247,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     return(
       React.createElement(SideBar, {sidebarClassName: "sidebar", styles: SidebarStyling, docked: this.state.sidebarOpen, 
                //open={this.state.sidebarOpen}
-               pullRight: true, 
+               pullRight: true, touchHandleWidth: 5, 
                children: 
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
                 React.createElement(MainPane, {footers: this.state.footers, 

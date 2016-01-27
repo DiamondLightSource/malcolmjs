@@ -169,7 +169,7 @@ var BothPanes = React.createClass({
     return(
       <SideBar sidebarClassName="sidebar" styles={SidebarStyling} docked={this.state.sidebarOpen}
                //open={this.state.sidebarOpen}
-               pullRight={true}
+               pullRight={true} touchHandleWidth={5}
                children={
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
                 <MainPane footers={this.state.footers}
