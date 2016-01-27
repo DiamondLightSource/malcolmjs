@@ -106,6 +106,7 @@ function getBothPanesState(){
     /* SidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
+    listVisible: sidePaneStore.getDropdownState()
 
     //theGraphDiamondState:{
     //  /* theGraphDiamond's getter functions for stores */
@@ -141,6 +142,7 @@ var BothPanes = React.createClass({
     console.log(this.state);
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
+    sidePaneStore.addChangeListener(this._onChange);
     //NodeStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -151,6 +153,7 @@ var BothPanes = React.createClass({
   componentWillUnmount(){
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
+    sidePaneStore.removeChangeListener(this._onChange);
     //NodeStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -178,7 +181,7 @@ var BothPanes = React.createClass({
                 }
                sidebar={
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
+               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible}
                />
                //</div>
                }>

@@ -120,7 +120,10 @@ var SidePane = React.createClass({
               <i className="fa fa-times"></i>
             </Button>,
             <Button title="Drop down menu">
-            <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
+            <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
+            tabState={this.props.tabState}
+            listVisible={this.props.listVisible}
+            /></div>
             </Button>
           ]}>
           {tabs}

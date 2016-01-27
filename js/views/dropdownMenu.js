@@ -10,32 +10,32 @@ var paneStore = require('../stores/paneStore');
 
 var interact = require('../../node_modules/interact.js');
 
-function getDropdownState(){
-  return{
-    listVisible: sidePaneStore.getDropdownState(),
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
+//function getDropdownState(){
+//  return{
+//    listVisible: sidePaneStore.getDropdownState(),
+//    tabState: paneStore.getTabState(),
+//    selectedTabIndex: paneStore.getSelectedTabIndex()
+//  }
+//}
 
 
 var Dropdown = React.createClass({
 
-  getInitialState: function() {
-    return getDropdownState();
-  },
+  //getInitialState: function() {
+  //  return getDropdownState();
+  //},
 
   _onChange: function(){
-    this.setState(getDropdownState())
+    //this.setState(getDropdownState())
   },
 
   handleActionShow: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    if(this.state.tabState.length === 0){
+    if(this.props.tabState.length === 0){
       console.log("tabState is empty, so there are no tabs, so don't show the dropdown menu");
     }
-    else if(this.state.tabState.length > 0){
+    else if(this.props.tabState.length > 0){
       console.log("tabState wasn't empty, so go ahead and show the dropdown menu");
       sidePaneActions.dropdownMenuShow("This is the item");
       //document.addEventListener("click", this.handleActionHide)
@@ -64,7 +64,7 @@ var Dropdown = React.createClass({
 
   componentDidMount: function(){
     console.log("dropdown is mounted");
-    sidePaneStore.addChangeListener(this._onChange);
+    //sidePaneStore.addChangeListener(this._onChange);
 
     //interact('.dropdown-display')
     //  .on('tap', this.handleActionShow)
@@ -74,7 +74,7 @@ var Dropdown = React.createClass({
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange);
+    //sidePaneStore.removeChangeListener(this._onChange);
     console.log("dropdown is unmounting");
 
     //interact('.dropdown-display')
@@ -89,8 +89,8 @@ var Dropdown = React.createClass({
 
   renderListItems: function() {
     var items = [];
-    for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].label;
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      var item = this.props.tabState[i].label;
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
@@ -125,8 +125,8 @@ var Dropdown = React.createClass({
   render: function(){
 
     var items = [];
-    for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].label;
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      var item = this.props.tabState[i].label;
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
@@ -147,8 +147,8 @@ var Dropdown = React.createClass({
       }.bind(this))
     }
 
-    return <div className={"dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}>
-      <div className={"dropdown-display" + (this.state.listVisible ? " clicked": "")} id="dropdownButton"
+    return <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}>
+      <div className={"dropdown-display" + (this.props.listVisible ? " clicked": "")} id="dropdownButton"
            //onClick={this.handleActionShow}
       >
         <span ></span>

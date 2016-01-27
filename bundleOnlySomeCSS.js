@@ -2920,7 +2920,7 @@ var favContent = {
 
 var configContent = {
   name: "Configuration tab",
-  label: 'Config',
+  label: 'Configuration',
   hack: "configTabOpen",
   info: {
     Configurations: {
@@ -3524,7 +3524,7 @@ function setConfigTabStateTrue(){
   else if(allNodeTabProperties['Configuration'] === true){
     console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
 
-    dropdownMenuSelect("Config");
+    dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
   }
 }
@@ -4317,32 +4317,32 @@ var paneStore = require('../stores/paneStore');
 
 var interact = require('../../node_modules/interact.js');
 
-function getDropdownState(){
-  return{
-    listVisible: sidePaneStore.getDropdownState(),
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
+//function getDropdownState(){
+//  return{
+//    listVisible: sidePaneStore.getDropdownState(),
+//    tabState: paneStore.getTabState(),
+//    selectedTabIndex: paneStore.getSelectedTabIndex()
+//  }
+//}
 
 
 var Dropdown = React.createClass({displayName: "Dropdown",
 
-  getInitialState: function() {
-    return getDropdownState();
-  },
+  //getInitialState: function() {
+  //  return getDropdownState();
+  //},
 
   _onChange: function(){
-    this.setState(getDropdownState())
+    //this.setState(getDropdownState())
   },
 
   handleActionShow: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    if(this.state.tabState.length === 0){
+    if(this.props.tabState.length === 0){
       console.log("tabState is empty, so there are no tabs, so don't show the dropdown menu");
     }
-    else if(this.state.tabState.length > 0){
+    else if(this.props.tabState.length > 0){
       console.log("tabState wasn't empty, so go ahead and show the dropdown menu");
       sidePaneActions.dropdownMenuShow("This is the item");
       //document.addEventListener("click", this.handleActionHide)
@@ -4371,7 +4371,7 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
   componentDidMount: function(){
     console.log("dropdown is mounted");
-    sidePaneStore.addChangeListener(this._onChange);
+    //sidePaneStore.addChangeListener(this._onChange);
 
     //interact('.dropdown-display')
     //  .on('tap', this.handleActionShow)
@@ -4381,7 +4381,7 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange);
+    //sidePaneStore.removeChangeListener(this._onChange);
     console.log("dropdown is unmounting");
 
     //interact('.dropdown-display')
@@ -4396,8 +4396,8 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
   renderListItems: function() {
     var items = [];
-    for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].label;
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      var item = this.props.tabState[i].label;
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
@@ -4432,8 +4432,8 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   render: function(){
 
     var items = [];
-    for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].label;
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      var item = this.props.tabState[i].label;
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
@@ -4454,8 +4454,8 @@ var Dropdown = React.createClass({displayName: "Dropdown",
       }.bind(this))
     }
 
-    return React.createElement("div", {className: "dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}, 
-      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), id: "dropdownButton"
+    return React.createElement("div", {className: "dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}, 
+      React.createElement("div", {className: "dropdown-display" + (this.props.listVisible ? " clicked": ""), id: "dropdownButton"
            //onClick={this.handleActionShow}
       }, 
         React.createElement("span", null), 
@@ -4534,9 +4534,9 @@ function getEdgeState(){
 }
 
 var Edge = React.createClass({displayName: "Edge",
-  getInitialState: function(){
-    return getEdgeState();
-  },
+  //getInitialState: function(){
+  //  return getEdgeState();
+  //},
   _onChange: function(){
     //this.setState(getEdgeState());
     //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
@@ -7007,7 +7007,10 @@ var SidePane = React.createClass({displayName: "SidePane",
               React.createElement("i", {className: "fa fa-times"})
             ),
             React.createElement(Button, {title: "Drop down menu"}, 
-            React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans}))
+            React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans, 
+            tabState: this.props.tabState, 
+            listVisible: this.props.listVisible}
+            ))
             )
           ]}, 
           tabs
@@ -7181,6 +7184,7 @@ function getBothPanesState(){
     /* SidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
+    listVisible: sidePaneStore.getDropdownState()
 
     //theGraphDiamondState:{
     //  /* theGraphDiamond's getter functions for stores */
@@ -7216,6 +7220,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     console.log(this.state);
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
+    sidePaneStore.addChangeListener(this._onChange);
     //NodeStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -7226,6 +7231,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
   componentWillUnmount(){
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
+    sidePaneStore.removeChangeListener(this._onChange);
     //NodeStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -7253,7 +7259,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                 
                sidebar: 
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex}
+               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, listVisible: this.state.listVisible}
                )
                //</div>
                }

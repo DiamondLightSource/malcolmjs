@@ -114,7 +114,7 @@ var favContent = {
 
 var configContent = {
   name: "Configuration tab",
-  label: 'Config',
+  label: 'Configuration',
   hack: "configTabOpen",
   info: {
     Configurations: {
@@ -718,7 +718,7 @@ function setConfigTabStateTrue(){
   else if(allNodeTabProperties['Configuration'] === true){
     console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
 
-    dropdownMenuSelect("Config");
+    dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
   }
 }

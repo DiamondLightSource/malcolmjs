@@ -31,9 +31,9 @@ function getEdgeState(){
 }
 
 var Edge = React.createClass({
-  getInitialState: function(){
-    return getEdgeState();
-  },
+  //getInitialState: function(){
+  //  return getEdgeState();
+  //},
   _onChange: function(){
     //this.setState(getEdgeState());
     //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
