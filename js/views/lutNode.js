@@ -3,8 +3,8 @@
  */
 
 var React = require('../../node_modules/react/react');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var NodeStore = require('../stores/blockStore.js');
+var nodeActions = require('../actions/blockActions.js');
 
 var LUTNode = React.createClass({
     render: function(){

@@ -50,8 +50,8 @@ module.exports = nodeActions;
 var React = require('../node_modules/react/react');
 var ReactDOM = require('../node_modules/react-dom/dist/react-dom.js');
 
-var NodeStore = require('./stores/nodeStore.js');
-var nodeActions = require('./actions/nodeActions.js');
+var NodeStore = require('./stores/blockStore.js');
+var nodeActions = require('./actions/blockActions.js');
 var Node = require('./views/node.js');
 var GateNode = require('./views/gateNode.js');
 var TGenNode = require('./views/tgenNode.js');
@@ -291,43 +291,43 @@ var App = React.createClass({displayName: "App",
         return(
             React.createElement("svg", {id: "appContainer", style: AppContainerStyle, onMouseMove: this.state.moveFunction, onMouseLeave: this.mouseLeave
                  //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
-            }, 
-                React.createElement("rect", {id: "dragArea", height: "10000", width: "10000", fill: "transparent", style: {MozUserSelect: 'none'}, 
-                      onClick: this.deselect}), 
+            },
+                React.createElement("rect", {id: "dragArea", height: "10000", width: "10000", fill: "transparent", style: {MozUserSelect: 'none'},
+                      onClick: this.deselect}),
 
-                React.createElement("g", {id: "EdgesGroup"}, 
+                React.createElement("g", {id: "EdgesGroup"},
                     React.createElement(Edge, null)
-                ), 
+                ),
 
-                React.createElement("g", {id: "NodesGroup"}, 
-                    React.createElement(GateNode, {id: "Gate1", style: NodeContainerStyle, 
-                              height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.Gate1Position.x, y: this.state.Gate1Position.y, 
+                React.createElement("g", {id: "NodesGroup"},
+                    React.createElement(GateNode, {id: "Gate1", style: NodeContainerStyle,
+                              height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.Gate1Position.x, y: this.state.Gate1Position.y,
                               //onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
 
                               onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
                               //onMouseMove={this.state.moveFunction}
 
-                    ), 
-                    React.createElement(TGenNode, {id: "TGen1", style: NodeContainerStyle, 
-                              height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.TGen1Position.x, y: this.state.TGen1Position.y, 
+                    ),
+                    React.createElement(TGenNode, {id: "TGen1", style: NodeContainerStyle,
+                              height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.TGen1Position.x, y: this.state.TGen1Position.y,
 
                               onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
-                    ), 
+                    ),
 
-                    React.createElement(PCompNode, {id: "PComp1", style: NodeContainerStyle, 
-                               height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.PComp1Position.x, y: this.state.PComp1Position.y, 
+                    React.createElement(PCompNode, {id: "PComp1", style: NodeContainerStyle,
+                               height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 6, x: this.state.PComp1Position.x, y: this.state.PComp1Position.y,
                                onMouseDown: this.mouseDownSelectElement, onMouseUp: this.mouseUp}
                     )
-                ), 
+                ),
 
-                React.createElement(Draggable, {axis: "both", 
-                           handle: ".handle", 
+                React.createElement(Draggable, {axis: "both",
+                           handle: ".handle",
                            start: {x: 20, y: 20}, /* Starting position, not sure if its relative to the window, or just to its parent */
                            grid: [25, 25], /* If you want the object to snap to a certain quantised pixel interval, set it here */
                            zIndex: 100, /* I think this allows you to set if it goes on top of other thingas when dragged, or goes below them */
-                           onStart: this.handleStart, 
-                           onDrag: this.handleDrag, 
-                           onStop: this.handleStop}, 
+                           onStart: this.handleStart,
+                           onDrag: this.handleDrag,
+                           onStop: this.handleStop},
                     React.createElement("rect", {className: "handle", height: "100", width: "100", id: "test", style: {fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65}})
                 ), " /* The problem is that it uses CSS transforms to translate, not updating state... */"
 
@@ -755,7 +755,7 @@ module.exports = nodeStore;
  */
 
 var React = require('../../node_modules/react/react');
-var NodeStore = require('../stores/nodeStore.js');
+var NodeStore = require('../stores/blockStore.js');
 
 function getEdgeState(){
     return {
@@ -784,11 +784,11 @@ var Edge = React.createClass({displayName: "Edge",
     },
     render:function(){
         return(
-            React.createElement("svg", React.__spread({id: "edgeContainer"},  this.props), 
-                React.createElement(Line, {height: "100", width: "100", 
+            React.createElement("svg", React.__spread({id: "edgeContainer"},  this.props),
+                React.createElement(Line, {height: "100", width: "100",
                       //x1={this.state.startNode.x} y1={this.state.startNode.y} x2={this.state.endNode.x} y2={this.state.endNode.y}
-                      x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y, 
-                      x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y, 
+                      x1: this.state.Gate1Position.x + this.state.gateNodeOut.x, y1: this.state.Gate1Position.y + this.state.gateNodeOut.y,
+                      x2: this.state.TGen1Position.x + this.state.tgenNodeEna.x, y2: this.state.TGen1Position.y + this.state.tgenNodeEna.y,
                       style: {strokeWidth: '5', stroke:"orange"}})
             )
         )
@@ -812,8 +812,8 @@ module.exports = Edge;
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var NodeStore = require('../stores/blockStore.js');
+var nodeActions = require('../actions/blockActions.js');
 
 function getGateNodeState(){
     return{
@@ -976,28 +976,28 @@ var GateNode = React.createClass({displayName: "GateNode",
                 //                 onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
 
                 //onMouseDown={this.mouseDownSelectElement} onMouseMove={this.state.moveFunction} onMouseUp={this.mouseUp}
-            }), 
+            }),
 
-                React.createElement("g", {style: {MozUserSelect: 'none'}}, 
+                React.createElement("g", {style: {MozUserSelect: 'none'}},
                     React.createElement("rect", {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
-                                 ), 
+                                 ),
 
-                    React.createElement(Rectangle, {id: "GateRectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry, 
+                    React.createElement(Rectangle, {id: "GateRectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry,
                                style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
                                //onDragStart={this.rectangleDrag}
-                    ), 
-                    React.createElement(Port, {cx: GateNodePortStyling.inportPositions.set.x, cy: GateNodePortStyling.inportPositions.set.y, r: GateNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                    React.createElement(Port, {cx: GateNodePortStyling.inportPositions.reset.x, cy: GateNodePortStyling.inportPositions.reset.y, r: GateNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                    React.createElement(Port, {cx: GateNodePortStyling.outportPositions.out.x, cy: GateNodePortStyling.outportPositions.out.y, r: GateNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
+                    ),
+                    React.createElement(Port, {cx: GateNodePortStyling.inportPositions.set.x, cy: GateNodePortStyling.inportPositions.set.y, r: GateNodePortStyling.portRadius,
+                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                    React.createElement(Port, {cx: GateNodePortStyling.inportPositions.reset.x, cy: GateNodePortStyling.inportPositions.reset.y, r: GateNodePortStyling.portRadius,
+                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                    React.createElement(Port, {cx: GateNodePortStyling.outportPositions.out.x, cy: GateNodePortStyling.outportPositions.out.y, r: GateNodePortStyling.portRadius,
+                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
 
-                    React.createElement(InportSetText, {x: "10", y: NodeStylingProperties.height / 2 - 6, style: {MozUserSelect: 'none'}}), 
-                    React.createElement(InportResetText, {x: "10", y: NodeStylingProperties.height / 2 + 12, style: {MozUserSelect: 'none'}}), 
-                    React.createElement(OutportOutText, {x: NodeStylingProperties.width - 20, y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}), 
+                    React.createElement(InportSetText, {x: "10", y: NodeStylingProperties.height / 2 - 6, style: {MozUserSelect: 'none'}}),
+                    React.createElement(InportResetText, {x: "10", y: NodeStylingProperties.height / 2 + 12, style: {MozUserSelect: 'none'}}),
+                    React.createElement(OutportOutText, {x: NodeStylingProperties.width - 20, y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}),
 
-                    React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}}), 
+                    React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}}),
                     React.createElement(NodeType, {x: "25", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
 
                 )
@@ -1203,18 +1203,18 @@ var Node = React.createClass({displayName: "Node",
     },
     render: function(){
         return (
-            React.createElement("svg", React.__spread({id: "nodeContainer"},  this.props, {draggable: "true"}), 
-                React.createElement(Rectangle, {id: "rectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry, 
-                           style: {fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65}, 
-                           onClick: this.nodeClick, onDragStart: this.nodeDrag}), 
-                React.createElement(Port, {cx: NodeStylingProperties.width + 3, cy: "25", r: PortStyling.portRadius, 
-                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                React.createElement(Port, {cx: NodeStylingProperties.width + 3, cy: "40", r: PortStyling.portRadius, 
-                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                React.createElement(Port, {cx: 3, cy: "33", r: PortStyling.portRadius, 
-                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                React.createElement(InportAText, {x: "10", y: NodeStylingProperties.height / 2 + 3}), 
-                React.createElement(OutportAText, {x: NodeStylingProperties.width - 27, y: NodeStylingProperties.height / 2 - 6}), 
+            React.createElement("svg", React.__spread({id: "nodeContainer"},  this.props, {draggable: "true"}),
+                React.createElement(Rectangle, {id: "rectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry,
+                           style: {fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65},
+                           onClick: this.nodeClick, onDragStart: this.nodeDrag}),
+                React.createElement(Port, {cx: NodeStylingProperties.width + 3, cy: "25", r: PortStyling.portRadius,
+                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                React.createElement(Port, {cx: NodeStylingProperties.width + 3, cy: "40", r: PortStyling.portRadius,
+                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                React.createElement(Port, {cx: 3, cy: "33", r: PortStyling.portRadius,
+                      style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                React.createElement(InportAText, {x: "10", y: NodeStylingProperties.height / 2 + 3}),
+                React.createElement(OutportAText, {x: NodeStylingProperties.width - 27, y: NodeStylingProperties.height / 2 - 6}),
                 React.createElement(OutportBText, {x: NodeStylingProperties.width - 27, y: NodeStylingProperties.height / 2 + 12})
             )
         )
@@ -1294,40 +1294,40 @@ module.exports = Node;
  */
 
 var React = require('../../node_modules/react/react');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var NodeStore = require('../stores/blockStore.js');
+var nodeActions = require('../actions/blockActions.js');
 
 var PCompNode = React.createClass({displayName: "PCompNode",
    render: function(){
        return(
-           React.createElement("svg", React.__spread({},  this.props), 
-               React.createElement("g", {style: {MozUserSelect: 'none'}}, 
-                   React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-                   React.createElement(Rectangle, {id: "rectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry, 
+           React.createElement("svg", React.__spread({},  this.props),
+               React.createElement("g", {style: {MozUserSelect: 'none'}},
+                   React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */",
+                   React.createElement(Rectangle, {id: "rectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry,
                               style: {fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65}}
                        //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 
 
-                   ), 
+                   ),
 
-                   React.createElement(Port, {cx: PCompNodePortStyling.inportPositions.ena.x, cy: PCompNodePortStyling.inportPositions.ena.y, r: PCompNodePortStyling.portRadius, 
-                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                   React.createElement(Port, {cx: PCompNodePortStyling.inportPositions.posn.x, cy: PCompNodePortStyling.inportPositions.posn.y, r: PCompNodePortStyling.portRadius, 
-                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
+                   React.createElement(Port, {cx: PCompNodePortStyling.inportPositions.ena.x, cy: PCompNodePortStyling.inportPositions.ena.y, r: PCompNodePortStyling.portRadius,
+                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                   React.createElement(Port, {cx: PCompNodePortStyling.inportPositions.posn.x, cy: PCompNodePortStyling.inportPositions.posn.y, r: PCompNodePortStyling.portRadius,
+                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
 
-                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.act.x, cy: PCompNodePortStyling.outportPositions.act.y, r: PCompNodePortStyling.portRadius, 
+                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.act.x, cy: PCompNodePortStyling.outportPositions.act.y, r: PCompNodePortStyling.portRadius,
                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}
-                   ), 
+                   ),
 
-                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.out.x, cy: PCompNodePortStyling.outportPositions.out.y, r: PCompNodePortStyling.portRadius, 
-                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
+                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.out.x, cy: PCompNodePortStyling.outportPositions.out.y, r: PCompNodePortStyling.portRadius,
+                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
 
-                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.pulse.x, cy: PCompNodePortStyling.outportPositions.pulse.y, r: PCompNodePortStyling.portRadius, 
-                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
+                   React.createElement(Port, {cx: PCompNodePortStyling.outportPositions.pulse.x, cy: PCompNodePortStyling.outportPositions.pulse.y, r: PCompNodePortStyling.portRadius,
+                         style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
 
 
 
-                   React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}}), 
+                   React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}}),
                    React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}})
 
                )
@@ -1461,8 +1461,8 @@ module.exports = PCompNode;
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var NodeStore = require('../stores/blockStore.js');
+var nodeActions = require('../actions/blockActions.js');
 
 function getTGenNodeState(){
     return{
@@ -1530,21 +1530,21 @@ var TGenNode = React.createClass({displayName: "TGenNode",
 
     render: function(){
         return (
-            React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave}), 
+            React.createElement("svg", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave}),
 
-                React.createElement("g", {style: {MozUserSelect: 'none'}}, 
-                    React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
+                React.createElement("g", {style: {MozUserSelect: 'none'}},
+                    React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */",
 
-                    React.createElement(Rectangle, {id: "TGenRectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry, 
+                    React.createElement(Rectangle, {id: "TGenRectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry,
                                style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
                                //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-                    ), 
-                    React.createElement(Port, {cx: TGenNodePortStyling.inportPositions.ena.x, cy: TGenNodePortStyling.inportPositions.ena.y, r: TGenNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                    React.createElement(Port, {cx: TGenNodePortStyling.outportPositions.posn.x, cy: TGenNodePortStyling.outportPositions.posn.y, r: TGenNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-                    React.createElement(InportEnaText, {x: "10", y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}), 
-                    React.createElement(OutportPosnText, {x: NodeStylingProperties.width - 27, y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}), 
+                    ),
+                    React.createElement(Port, {cx: TGenNodePortStyling.inportPositions.ena.x, cy: TGenNodePortStyling.inportPositions.ena.y, r: TGenNodePortStyling.portRadius,
+                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                    React.createElement(Port, {cx: TGenNodePortStyling.outportPositions.posn.x, cy: TGenNodePortStyling.outportPositions.posn.y, r: TGenNodePortStyling.portRadius,
+                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}),
+                    React.createElement(InportEnaText, {x: "10", y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}),
+                    React.createElement(OutportPosnText, {x: NodeStylingProperties.width - 27, y: NodeStylingProperties.height / 2 + 3, style: {MozUserSelect: 'none'}}),
 
                     React.createElement(NodeName, {x: "17", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}})
                 )
@@ -2111,7 +2111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
 	 * @providesModule Dispatcher
-	 * 
+	 *
 	 * @preventMunge
 	 */
 
@@ -2546,7 +2546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	module.exports = __webpack_require__(1);
 	module.exports.DraggableCore = __webpack_require__(10);
 
@@ -2555,134 +2555,134 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
+
 	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
+
 	var _react = __webpack_require__(2);
-	
+
 	var _react2 = _interopRequireDefault(_react);
-	
+
 	var _reactDom = __webpack_require__(3);
-	
+
 	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
+
 	var _classnames = __webpack_require__(4);
-	
+
 	var _classnames2 = _interopRequireDefault(_classnames);
-	
+
 	var _objectAssign = __webpack_require__(5);
-	
+
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
-	
+
 	var _utilsDomFns = __webpack_require__(6);
-	
+
 	var _utilsPositionFns = __webpack_require__(9);
-	
+
 	var _utilsShims = __webpack_require__(7);
-	
+
 	var _DraggableCore2 = __webpack_require__(10);
-	
+
 	var _DraggableCore3 = _interopRequireDefault(_DraggableCore2);
-	
+
 	var _utilsLog = __webpack_require__(11);
-	
+
 	var _utilsLog2 = _interopRequireDefault(_utilsLog);
-	
+
 	//
 	// Define <Draggable>
 	//
-	
+
 	var Draggable = (function (_DraggableCore) {
 	  _inherits(Draggable, _DraggableCore);
-	
+
 	  function Draggable() {
 	    var _this = this;
-	
+
 	    _classCallCheck(this, Draggable);
-	
+
 	    _get(Object.getPrototypeOf(Draggable.prototype), 'constructor', this).apply(this, arguments);
-	
+
 	    this.state = {
 	      // Whether or not we are currently dragging.
 	      dragging: false,
-	
+
 	      // Current transform x and y.
 	      clientX: this.props.start.x, clientY: this.props.start.y,
-	
+
 	      // Can only determine if SVG after mounting
 	      isElementSVG: false
 	    };
-	
+
 	    this.onDragStart = function (e, coreEvent) {
 	      (0, _utilsLog2['default'])('Draggable: onDragStart: %j', coreEvent.position);
-	
+
 	      // Short-circuit if user's callback killed it.
 	      var shouldStart = _this.props.onStart(e, (0, _utilsDomFns.createUIEvent)(_this, coreEvent));
 	      // Kills start event on core as well, so move handlers are never bound.
 	      if (shouldStart === false) return false;
-	
+
 	      _this.setState({ dragging: true });
 	    };
-	
+
 	    this.onDrag = function (e, coreEvent) {
 	      if (!_this.state.dragging) return false;
 	      (0, _utilsLog2['default'])('Draggable: onDrag: %j', coreEvent.position);
-	
+
 	      var uiEvent = (0, _utilsDomFns.createUIEvent)(_this, coreEvent);
-	
+
 	      // Short-circuit if user's callback killed it.
 	      var shouldUpdate = _this.props.onDrag(e, uiEvent);
 	      if (shouldUpdate === false) return false;
-	
+
 	      var newState = {
 	        clientX: uiEvent.position.left,
 	        clientY: uiEvent.position.top
 	      };
-	
+
 	      // Keep within bounds.
 	      if (_this.props.bounds) {
 	        var _getBoundPosition = (0, _utilsPositionFns.getBoundPosition)(_this, newState.clientX, newState.clientY);
-	
+
 	        var _getBoundPosition2 = _slicedToArray(_getBoundPosition, 2);
-	
+
 	        newState.clientX = _getBoundPosition2[0];
 	        newState.clientY = _getBoundPosition2[1];
 	      }
-	
+
 	      _this.setState(newState);
 	    };
-	
+
 	    this.onDragStop = function (e, coreEvent) {
 	      if (!_this.state.dragging) return false;
-	
+
 	      // Short-circuit if user's callback killed it.
 	      var shouldStop = _this.props.onStop(e, (0, _utilsDomFns.createUIEvent)(_this, coreEvent));
 	      if (shouldStop === false) return false;
-	
+
 	      (0, _utilsLog2['default'])('Draggable: onDragStop: %j', coreEvent.position);
-	
+
 	      _this.setState({
 	        dragging: false
 	      });
 	    };
 	  }
-	
+
 	  _createClass(Draggable, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
@@ -2703,28 +2703,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	      style = (0, _utilsDomFns.createTransform)({
 	        // Set left if horizontal drag is enabled
 	        x: (0, _utilsPositionFns.canDragX)(this) ? this.state.clientX : this.props.start.x,
-	
+
 	        // Set top if vertical drag is enabled
 	        y: (0, _utilsPositionFns.canDragY)(this) ? this.state.clientY : this.props.start.y
 	      }, this.state.isElementSVG);
-	
+
 	      // If this element was SVG, we use the `transform` attribute.
 	      if (this.state.isElementSVG) {
 	        svgTransform = style;
 	        style = {};
 	      }
-	
+
 	      // zIndex option
 	      if (this.state.dragging && !isNaN(this.props.zIndex)) {
 	        style.zIndex = this.props.zIndex;
 	      }
-	
+
 	      // Mark with class while dragging
 	      var className = (0, _classnames2['default'])(this.props.children.props.className || '', 'react-draggable', {
 	        'react-draggable-dragging': this.state.dragging,
 	        'react-draggable-dragged': this.state.dragged
 	      });
-	
+
 	      // Reuse the child provided
 	      // This makes it flexible to use whatever element is wanted (div, ul, etc)
 	      return _react2['default'].createElement(
@@ -2754,7 +2754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * Defaults to 'both'.
 	       */
 	      axis: _react.PropTypes.oneOf(['both', 'x', 'y']),
-	
+
 	      /**
 	       * `bounds` determines the range of movement available to the element.
 	       * Available values are:
@@ -2787,7 +2787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        top: _react.PropTypes.Number,
 	        bottom: _react.PropTypes.Number
 	      }), _react.PropTypes.oneOf(['parent', false])]),
-	
+
 	      /**
 	       * `start` specifies the x and y that the dragged item should start at
 	       *
@@ -2809,7 +2809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        x: _react.PropTypes.number,
 	        y: _react.PropTypes.number
 	      }),
-	
+
 	      /**
 	       * `zIndex` specifies the zIndex to use while dragging.
 	       *
@@ -2828,7 +2828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      zIndex: _react.PropTypes.number,
-	
+
 	      /**
 	       * These properties should be defined on the child, not here.
 	       */
@@ -2847,10 +2847,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }),
 	    enumerable: true
 	  }]);
-	
+
 	  return Draggable;
 	})(_DraggableCore3['default']);
-	
+
 	exports['default'] = Draggable;
 	module.exports = exports['default'];
 
@@ -2876,21 +2876,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  http://jedwatson.github.io/classnames
 	*/
 	/* global define */
-	
+
 	(function () {
 		'use strict';
-	
+
 		var hasOwn = {}.hasOwnProperty;
-	
+
 		function classNames () {
 			var classes = '';
-	
+
 			for (var i = 0; i < arguments.length; i++) {
 				var arg = arguments[i];
 				if (!arg) continue;
-	
+
 				var argType = typeof arg;
-	
+
 				if (argType === 'string' || argType === 'number') {
 					classes += ' ' + arg;
 				} else if (Array.isArray(arg)) {
@@ -2903,10 +2903,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					}
 				}
 			}
-	
+
 			return classes.substr(1);
 		}
-	
+
 		if (typeof module !== 'undefined' && module.exports) {
 			module.exports = classNames;
 		} else if (true) {
@@ -2928,29 +2928,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-	
+
 	function toObject(val) {
 		if (val === null || val === undefined) {
 			throw new TypeError('Object.assign cannot be called with null or undefined');
 		}
-	
+
 		return Object(val);
 	}
-	
+
 	module.exports = Object.assign || function (target, source) {
 		var from;
 		var to = toObject(target);
 		var symbols;
-	
+
 		for (var s = 1; s < arguments.length; s++) {
 			from = Object(arguments[s]);
-	
+
 			for (var key in from) {
 				if (hasOwnProperty.call(from, key)) {
 					to[key] = from[key];
 				}
 			}
-	
+
 			if (Object.getOwnPropertySymbols) {
 				symbols = Object.getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
@@ -2960,7 +2960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			}
 		}
-	
+
 		return to;
 	};
 
@@ -2970,7 +2970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -2989,43 +2989,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.styleHacks = styleHacks;
 	exports.createCoreEvent = createCoreEvent;
 	exports.createUIEvent = createUIEvent;
-	
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
+
 	var _shims = __webpack_require__(7);
-	
+
 	var _getPrefix = __webpack_require__(8);
-	
+
 	var _getPrefix2 = _interopRequireDefault(_getPrefix);
-	
+
 	var _objectAssign = __webpack_require__(5);
-	
+
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
-	
+
 	var _reactDom = __webpack_require__(3);
-	
+
 	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
+
 	var matchesSelectorFunc = '';
-	
+
 	function matchesSelector(el, selector) {
 	  if (!(el instanceof Node)) throw new TypeError('Value of argument \'el\' violates contract, expected Node got ' + (el === null ? 'null' : el instanceof Object && el.constructor ? el.constructor.name : typeof el));
 	  if (typeof selector !== 'string') throw new TypeError('Value of argument \'selector\' violates contract, expected string got ' + (selector === null ? 'null' : selector instanceof Object && selector.constructor ? selector.constructor.name : typeof selector));
-	
+
 	  if (!matchesSelectorFunc) {
 	    matchesSelectorFunc = (0, _shims.findInArray)(['matches', 'webkitMatchesSelector', 'mozMatchesSelector', 'msMatchesSelector', 'oMatchesSelector'], function (method) {
 	      return (0, _shims.isFunction)(el[method]);
 	    });
 	  }
-	
+
 	  return el[matchesSelectorFunc].call(el, selector);
 	}
-	
+
 	function addEvent(el, event, handler) {
 	  if (el != null && !(el instanceof Node)) throw new TypeError('Value of argument \'el\' violates contract, expected null or Node got ' + (el === null ? 'null' : el instanceof Object && el.constructor ? el.constructor.name : typeof el));
 	  if (typeof event !== 'string') throw new TypeError('Value of argument \'event\' violates contract, expected string got ' + (event === null ? 'null' : event instanceof Object && event.constructor ? event.constructor.name : typeof event));
 	  if (typeof handler !== 'function') throw new TypeError('Value of argument \'handler\' violates contract, expected function got ' + (handler === null ? 'null' : handler instanceof Object && handler.constructor ? handler.constructor.name : typeof handler));
-	
+
 	  if (!el) {
 	    return;
 	  }
@@ -3037,12 +3037,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    el['on' + event] = handler;
 	  }
 	}
-	
+
 	function removeEvent(el, event, handler) {
 	  if (el != null && !(el instanceof Node)) throw new TypeError('Value of argument \'el\' violates contract, expected null or Node got ' + (el === null ? 'null' : el instanceof Object && el.constructor ? el.constructor.name : typeof el));
 	  if (typeof event !== 'string') throw new TypeError('Value of argument \'event\' violates contract, expected string got ' + (event === null ? 'null' : event instanceof Object && event.constructor ? event.constructor.name : typeof event));
 	  if (typeof handler !== 'function') throw new TypeError('Value of argument \'handler\' violates contract, expected function got ' + (handler === null ? 'null' : handler instanceof Object && handler.constructor ? handler.constructor.name : typeof handler));
-	
+
 	  if (!el) {
 	    return;
 	  }
@@ -3054,10 +3054,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    el['on' + event] = null;
 	  }
 	}
-	
+
 	function outerHeight(node) {
 	  if (!(node instanceof Node)) throw new TypeError('Value of argument \'node\' violates contract, expected Node got ' + (node === null ? 'null' : node instanceof Object && node.constructor ? node.constructor.name : typeof node));
-	
+
 	  // This is deliberately excluding margin for our calculations, since we are using
 	  // offsetTop which is including margin. See getBoundPosition
 	  var height = node.clientHeight;
@@ -3066,10 +3066,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  height += (0, _shims.int)(computedStyle.borderBottomWidth);
 	  return height;
 	}
-	
+
 	function outerWidth(node) {
 	  if (!(node instanceof Node)) throw new TypeError('Value of argument \'node\' violates contract, expected Node got ' + (node === null ? 'null' : node instanceof Object && node.constructor ? node.constructor.name : typeof node));
-	
+
 	  // This is deliberately excluding margin for our calculations, since we are using
 	  // offsetLeft which is including margin. See getBoundPosition
 	  var width = node.clientWidth;
@@ -3078,41 +3078,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	  width += (0, _shims.int)(computedStyle.borderRightWidth);
 	  return width;
 	}
-	
+
 	function innerHeight(node) {
 	  if (!(node instanceof Node)) throw new TypeError('Value of argument \'node\' violates contract, expected Node got ' + (node === null ? 'null' : node instanceof Object && node.constructor ? node.constructor.name : typeof node));
-	
+
 	  var height = node.clientHeight;
 	  var computedStyle = window.getComputedStyle(node);
 	  height -= (0, _shims.int)(computedStyle.paddingTop);
 	  height -= (0, _shims.int)(computedStyle.paddingBottom);
 	  return height;
 	}
-	
+
 	function innerWidth(node) {
 	  if (!(node instanceof Node)) throw new TypeError('Value of argument \'node\' violates contract, expected Node got ' + (node === null ? 'null' : node instanceof Object && node.constructor ? node.constructor.name : typeof node));
-	
+
 	  var width = node.clientWidth;
 	  var computedStyle = window.getComputedStyle(node);
 	  width -= (0, _shims.int)(computedStyle.paddingLeft);
 	  width -= (0, _shims.int)(computedStyle.paddingRight);
 	  return width;
 	}
-	
+
 	function createTransform(position, isSVG) {
 	  if (typeof position !== 'object') throw new TypeError('Value of argument \'position\' violates contract, expected object got ' + (position === null ? 'null' : position instanceof Object && position.constructor ? position.constructor.name : typeof position));
 	  if (isSVG != null && typeof isSVG !== 'boolean') throw new TypeError('Value of argument \'isSVG\' violates contract, expected null or boolean got ' + (isSVG === null ? 'null' : isSVG instanceof Object && isSVG.constructor ? isSVG.constructor.name : typeof isSVG));
-	
+
 	  if (isSVG) return createSVGTransform(position);
 	  return createCSSTransform(position);
 	}
-	
+
 	function createCSSTransform(_ref) {
 	  var x = _ref.x;
 	  var y = _ref.y;
 	  return (function () {
 	    if ({ x: x, y: y } === null || typeof { x: x, y: y } !== 'object' || typeof { x: x, y: y }.x !== 'number' || typeof { x: x, y: y }.y !== 'number') throw new TypeError('Value of argument \'undefined\' violates contract, expected Object with properties x and y got ' + ({ x: x, y: y } === null ? 'null' : { x: x, y: y } instanceof Object && { x: x, y: y }.constructor ? { x: x, y: y }.constructor.name : typeof { x: x, y: y }));
-	
+
 	    // Replace unitless items with px
 	    var out = { transform: 'translate(' + x + 'px,' + y + 'px)' };
 	    // Add single prefixed property as well
@@ -3122,17 +3122,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return out;
 	  })();
 	}
-	
+
 	function createSVGTransform(_ref2) {
 	  var x = _ref2.x;
 	  var y = _ref2.y;
 	  return (function () {
 	    if ({ x: x, y: y } === null || typeof { x: x, y: y } !== 'object' || typeof { x: x, y: y }.x !== 'number' || typeof { x: x, y: y }.y !== 'number') throw new TypeError('Value of argument \'undefined\' violates contract, expected Object with properties x and y got ' + ({ x: x, y: y } === null ? 'null' : { x: x, y: y } instanceof Object && { x: x, y: y }.constructor ? { x: x, y: y }.constructor.name : typeof { x: x, y: y }));
-	
+
 	    return 'translate(' + x + ',' + y + ')';
 	  })();
 	}
-	
+
 	// User-select Hacks:
 	//
 	// Useful for preventing blue highlights all over everything when dragging.
@@ -3140,36 +3140,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	if (_getPrefix2['default']) {
 	  userSelectStyle += '-' + _getPrefix2['default'].toLowerCase() + '-user-select: none;';
 	}
-	
+
 	function addUserSelectStyles() {
 	  var style = document.body.getAttribute('style') || '';
 	  document.body.setAttribute('style', style + userSelectStyle);
 	}
-	
+
 	function removeUserSelectStyles() {
 	  var style = document.body.getAttribute('style') || '';
 	  document.body.setAttribute('style', style.replace(userSelectStyle, ''));
 	}
-	
+
 	function styleHacks() {
 	  var childStyle = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+
 	  // Workaround IE pointer events; see #51
 	  // https://github.com/mzabriskie/react-draggable/issues/51#issuecomment-103488278
 	  var touchHacks = {
 	    touchAction: 'none'
 	  };
-	
+
 	  return (0, _objectAssign2['default'])(touchHacks, childStyle);
 	}
-	
+
 	// Create an event exposed by <DraggableCore>
-	
+
 	function createCoreEvent(draggable, clientX, clientY) {
 	  // State changes are often (but not always!) async. We want the latest value.
 	  var state = draggable._pendingState || draggable.state;
 	  var isStart = !(0, _shims.isNum)(state.lastX);
-	
+
 	  return {
 	    node: _reactDom2['default'].findDOMNode(draggable),
 	    position: isStart ?
@@ -3187,9 +3187,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 	}
-	
+
 	// Create an event exposed by <Draggable>
-	
+
 	function createUIEvent(draggable, coreEvent) {
 	  return {
 	    node: _reactDom2['default'].findDOMNode(draggable),
@@ -3208,7 +3208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// @credits https://gist.github.com/rogozhnikoff/a43cfed27c41e4e68cdc
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -3217,25 +3217,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.isNum = isNum;
 	exports.int = int;
 	exports.dontSetMe = dontSetMe;
-	
+
 	function findInArray(array, callback) {
 	  for (var i = 0, _length = array.length; i < _length; i++) {
 	    if (callback.apply(callback, [array[i], i, array])) return array[i];
 	  }
 	}
-	
+
 	function isFunction(func) {
 	  return typeof func === 'function' || Object.prototype.toString.call(func) === '[object Function]';
 	}
-	
+
 	function isNum(num) {
 	  return typeof num === 'number' && !isNaN(num);
 	}
-	
+
 	function int(a) {
 	  return parseInt(a, 10);
 	}
-	
+
 	function dontSetMe(props, propName, componentName) {
 	  if (props[propName]) {
 	    throw new Error('Invalid prop ' + propName + ' passed to ' + componentName + ' - do not set this, set it on the child.');
@@ -3247,17 +3247,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	exports['default'] = (function () {
 	  // Checking specifically for 'window.document' is for pseudo-browser server-side
 	  // environments that define 'window' as the global context.
 	  // E.g. React-rails (see https://github.com/reactjs/react-rails/pull/84)
 	  if (typeof window === 'undefined' || typeof window.document === 'undefined') return '';
-	
+
 	  // Thanks David Walsh
 	  var styles = window.getComputedStyle(document.documentElement, ''),
 	      pre = (Array.prototype.slice.call(styles).join('').match(/-(moz|webkit|ms)-/) || styles.OLink === '' && ['', 'o'])[1];
@@ -3267,7 +3267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (pre === undefined || pre === null) return '';
 	  return pre.slice(0, 1).toUpperCase() + pre.slice(1);
 	})();
-	
+
 	module.exports = exports['default'];
 
 /***/ },
@@ -3275,7 +3275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -3284,25 +3284,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.canDragX = canDragX;
 	exports.canDragY = canDragY;
 	exports.getControlPosition = getControlPosition;
-	
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
+
 	var _shims = __webpack_require__(7);
-	
+
 	var _reactDom = __webpack_require__(3);
-	
+
 	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
+
 	var _domFns = __webpack_require__(6);
-	
+
 	function getBoundPosition(draggable, clientX, clientY) {
 	  // If no bounds, short-circuit and move on
 	  if (!draggable.props.bounds) return [clientX, clientY];
-	
+
 	  var bounds = JSON.parse(JSON.stringify(draggable.props.bounds));
 	  var node = _reactDom2['default'].findDOMNode(draggable);
 	  var parent = node.parentNode;
-	
+
 	  if (bounds === 'parent') {
 	    var nodeStyle = window.getComputedStyle(node);
 	    var parentStyle = window.getComputedStyle(parent);
@@ -3314,34 +3314,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	      bottom: (0, _domFns.innerHeight)(parent) - (0, _domFns.outerHeight)(node) - node.offsetTop
 	    };
 	  }
-	
+
 	  // Keep x and y below right and bottom limits...
 	  if ((0, _shims.isNum)(bounds.right)) clientX = Math.min(clientX, bounds.right);
 	  if ((0, _shims.isNum)(bounds.bottom)) clientY = Math.min(clientY, bounds.bottom);
-	
+
 	  // But above left and top limits.
 	  if ((0, _shims.isNum)(bounds.left)) clientX = Math.max(clientX, bounds.left);
 	  if ((0, _shims.isNum)(bounds.top)) clientY = Math.max(clientY, bounds.top);
-	
+
 	  return [clientX, clientY];
 	}
-	
+
 	function snapToGrid(grid, pendingX, pendingY) {
 	  var x = Math.round(pendingX / grid[0]) * grid[0];
 	  var y = Math.round(pendingY / grid[1]) * grid[1];
 	  return [x, y];
 	}
-	
+
 	function canDragX(draggable) {
 	  return draggable.props.axis === 'both' || draggable.props.axis === 'x';
 	}
-	
+
 	function canDragY(draggable) {
 	  return draggable.props.axis === 'both' || draggable.props.axis === 'y';
 	}
-	
+
 	// Get {clientX, clientY} positions from event.
-	
+
 	function getControlPosition(e) {
 	  var position = e.targetTouches && e.targetTouches[0] || e;
 	  return {
@@ -3355,37 +3355,37 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
+
 	var _react = __webpack_require__(2);
-	
+
 	var _react2 = _interopRequireDefault(_react);
-	
+
 	var _utilsDomFns = __webpack_require__(6);
-	
+
 	var _utilsPositionFns = __webpack_require__(9);
-	
+
 	var _utilsShims = __webpack_require__(7);
-	
+
 	var _utilsLog = __webpack_require__(11);
-	
+
 	var _utilsLog2 = _interopRequireDefault(_utilsLog);
-	
+
 	// Simple abstraction for dragging events names.
 	var eventsFor = {
 	  touch: {
@@ -3399,86 +3399,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	    stop: 'mouseup'
 	  }
 	};
-	
+
 	// Default to mouse events.
 	var dragEventFor = eventsFor.mouse;
-	
+
 	//
 	// Define <DraggableCore>.
 	//
 	// <DraggableCore> is for advanced usage of <Draggable>. It maintains minimal internal state so it can
 	// work well with libraries that require more control over the element.
 	//
-	
+
 	var DraggableCore = (function (_React$Component) {
 	  _inherits(DraggableCore, _React$Component);
-	
+
 	  function DraggableCore() {
 	    var _this = this;
-	
+
 	    _classCallCheck(this, DraggableCore);
-	
+
 	    _get(Object.getPrototypeOf(DraggableCore.prototype), 'constructor', this).apply(this, arguments);
-	
+
 	    this.state = {
 	      dragging: false,
 	      // Used while dragging to determine deltas.
 	      lastX: null, lastY: null
 	    };
-	
+
 	    this.handleDragStart = function (e) {
 	      // Make it possible to attach event handlers on top of this one.
 	      _this.props.onMouseDown(e);
-	
+
 	      // Only accept left-clicks.
 	      if (!_this.props.allowAnyClick && typeof e.button === 'number' && e.button !== 0) return false;
-	
+
 	      // Short circuit if handle or cancel prop was provided and selector doesn't match.
 	      if (_this.props.disabled || _this.props.handle && !(0, _utilsDomFns.matchesSelector)(e.target, _this.props.handle) || _this.props.cancel && (0, _utilsDomFns.matchesSelector)(e.target, _this.props.cancel)) {
 	        return;
 	      }
-	
+
 	      // Set touch identifier in component state if this is a touch event. This allows us to
 	      // distinguish between individual touches on multitouch screens by identifying which
 	      // touchpoint was set to this element.
 	      if (e.targetTouches) {
 	        _this.setState({ touchIdentifier: e.targetTouches[0].identifier });
 	      }
-	
+
 	      // Add a style to the body to disable user-select. This prevents text from
 	      // being selected all over the page.
 	      if (_this.props.enableUserSelectHack) (0, _utilsDomFns.addUserSelectStyles)();
-	
+
 	      // Get the current drag point from the event. This is used as the offset.
-	
+
 	      var _getControlPosition = (0, _utilsPositionFns.getControlPosition)(e);
-	
+
 	      var clientX = _getControlPosition.clientX;
 	      var clientY = _getControlPosition.clientY;
-	
+
 	      // Create an event object with all the data parents need to make a decision here.
 	      var coreEvent = (0, _utilsDomFns.createCoreEvent)(_this, clientX, clientY);
-	
+
 	      (0, _utilsLog2['default'])('DraggableCore: handleDragStart: %j', coreEvent.position);
-	
+
 	      // Call event handler. If it returns explicit false, cancel.
 	      (0, _utilsLog2['default'])('calling', _this.props.onStart);
 	      var shouldUpdate = _this.props.onStart(e, coreEvent);
 	      if (shouldUpdate === false) return;
-	
+
 	      // Initiate dragging. Set the current x and y as offsets
 	      // so we know how much we've moved during the drag. This allows us
 	      // to drag elements around even if they have been moved, without issue.
 	      _this.setState({
 	        dragging: true,
-	
+
 	        lastX: clientX,
 	        lastY: clientY,
 	        // Stored so we can adjust our offset if scrolled.
 	        scrollX: document.body.scrollLeft,
 	        scrollY: document.body.scrollTop
 	      });
-	
+
 	      // Translate el on page scroll.
 	      (0, _utilsDomFns.addEvent)(document, 'scroll', _this.handleScroll);
 	      // Add events to the document directly so we catch when the user's mouse/touch moves outside of
@@ -3487,103 +3487,103 @@ return /******/ (function(modules) { // webpackBootstrap
 	      (0, _utilsDomFns.addEvent)(document, dragEventFor.move, _this.handleDrag);
 	      (0, _utilsDomFns.addEvent)(document, dragEventFor.stop, _this.handleDragStop);
 	    };
-	
+
 	    this.handleDrag = function (e) {
 	      // Return if this is a touch event, but not the correct one for this element
 	      if (e.targetTouches && e.targetTouches[0].identifier !== _this.state.touchIdentifier) return;
-	
+
 	      var _getControlPosition2 = (0, _utilsPositionFns.getControlPosition)(e);
-	
+
 	      var clientX = _getControlPosition2.clientX;
 	      var clientY = _getControlPosition2.clientY;
-	
+
 	      // Snap to grid if prop has been provided
 	      if (Array.isArray(_this.props.grid)) {
 	        var deltaX = clientX - _this.state.lastX,
 	            deltaY = clientY - _this.state.lastY;
-	
+
 	        var _snapToGrid = (0, _utilsPositionFns.snapToGrid)(_this.props.grid, deltaX, deltaY);
-	
+
 	        var _snapToGrid2 = _slicedToArray(_snapToGrid, 2);
-	
+
 	        deltaX = _snapToGrid2[0];
 	        deltaY = _snapToGrid2[1];
-	
+
 	        if (!deltaX && !deltaY) return; // skip useless drag
 	        clientX = _this.state.lastX + deltaX, clientY = _this.state.lastY + deltaY;
 	      }
-	
+
 	      var coreEvent = (0, _utilsDomFns.createCoreEvent)(_this, clientX, clientY);
-	
+
 	      (0, _utilsLog2['default'])('DraggableCore: handleDrag: %j', coreEvent.position);
-	
+
 	      // Call event handler. If it returns explicit false, trigger end.
 	      var shouldUpdate = _this.props.onDrag(e, coreEvent);
 	      if (shouldUpdate === false) {
 	        _this.handleDragStop({});
 	        return;
 	      }
-	
+
 	      _this.setState({
 	        lastX: clientX,
 	        lastY: clientY
 	      });
 	    };
-	
+
 	    this.handleDragStop = function (e) {
 	      if (!_this.state.dragging) return;
-	
+
 	      // Short circuit if this is not the correct touch event. `changedTouches` contains all
 	      // touch points that have been removed from the surface.
 	      if (e.changedTouches && e.changedTouches[0].identifier !== _this.state.touchIdentifier) return;
-	
+
 	      // Remove user-select hack
 	      if (_this.props.enableUserSelectHack) (0, _utilsDomFns.removeUserSelectStyles)();
-	
+
 	      var _getControlPosition3 = (0, _utilsPositionFns.getControlPosition)(e);
-	
+
 	      var clientX = _getControlPosition3.clientX;
 	      var clientY = _getControlPosition3.clientY;
-	
+
 	      var coreEvent = (0, _utilsDomFns.createCoreEvent)(_this, clientX, clientY);
-	
+
 	      (0, _utilsLog2['default'])('DraggableCore: handleDragStop: %j', coreEvent.position);
-	
+
 	      // Reset the el.
 	      _this.setState({
 	        dragging: false,
 	        lastX: null,
 	        lastY: null
 	      });
-	
+
 	      // Call event handler
 	      _this.props.onStop(e, coreEvent);
-	
+
 	      // Remove event handlers
 	      (0, _utilsLog2['default'])('DraggableCore: Removing handlers');
 	      (0, _utilsDomFns.removeEvent)(document, 'scroll', _this.handleScroll);
 	      (0, _utilsDomFns.removeEvent)(document, dragEventFor.move, _this.handleDrag);
 	      (0, _utilsDomFns.removeEvent)(document, dragEventFor.stop, _this.handleDragStop);
 	    };
-	
+
 	    this.handleScroll = function (e) {
 	      var s = _this.state,
 	          x = document.body.scrollLeft,
 	          y = document.body.scrollTop;
-	
+
 	      // Create the usual event, but make the scroll offset our deltas.
 	      var coreEvent = (0, _utilsDomFns.createCoreEvent)(_this);
 	      coreEvent.position.deltaX = x - s.scrollX;
 	      coreEvent.position.deltaY = y - s.scrollY;
-	
+
 	      _this.setState({
 	        lastX: s.lastX + coreEvent.position.deltaX,
 	        lastY: s.lastY + coreEvent.position.deltaY
 	      });
-	
+
 	      _this.props.onDrag(e, coreEvent);
 	    };
-	
+
 	    this.onMouseDown = function (e) {
 	      // HACK: Prevent 'ghost click' which happens 300ms after touchstart if the event isn't cancelled.
 	      // We don't cancel the event on touchstart because of #37; we might want to make a scrollable item draggable.
@@ -3591,18 +3591,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (dragEventFor === eventsFor.touch) {
 	        return e.preventDefault();
 	      }
-	
+
 	      return _this.handleDragStart(e);
 	    };
-	
+
 	    this.onTouchStart = function (e) {
 	      // We're on a touch device now, so change the event handlers
 	      dragEventFor = eventsFor.touch;
-	
+
 	      return _this.handleDragStart(e);
 	    };
 	  }
-	
+
 	  _createClass(DraggableCore, [{
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
@@ -3622,7 +3622,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // This makes it flexible to use whatever element is wanted (div, ul, etc)
 	      return _react2['default'].cloneElement(_react2['default'].Children.only(this.props.children), {
 	        style: (0, _utilsDomFns.styleHacks)(this.props.children.props.style),
-	
+
 	        // Note: mouseMove handler is attached to document so it will still function
 	        // when the user drags quickly and leaves the bounds of the element.
 	        onMouseDown: this.onMouseDown,
@@ -3645,7 +3645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * Defaults to `false`.
 	       */
 	      allowAnyClick: _react.PropTypes.bool,
-	
+
 	      /**
 	       * `disabled`, if true, stops the <Draggable> from dragging. All handlers,
 	       * with the exception of `onMouseDown`, will not fire.
@@ -3665,14 +3665,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      disabled: _react.PropTypes.bool,
-	
+
 	      /**
 	       * By default, we add 'user-select:none' attributes to the document body
 	       * to prevent ugly text selection during drag. If this is causing problems
 	       * for your app, set this to `false`.
 	       */
 	      enableUserSelectHack: _react.PropTypes.bool,
-	
+
 	      /**
 	       * `grid` specifies the x and y that dragging should snap to.
 	       *
@@ -3691,7 +3691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      grid: _react.PropTypes.arrayOf(_react.PropTypes.number),
-	
+
 	      /**
 	       * `handle` specifies a selector to be used as the handle that initiates drag.
 	       *
@@ -3713,7 +3713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      handle: _react.PropTypes.string,
-	
+
 	      /**
 	       * `cancel` specifies a selector to be used to prevent drag initialization.
 	       *
@@ -3735,7 +3735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      cancel: _react.PropTypes.string,
-	
+
 	      /**
 	       * Called when dragging starts.
 	       * If this function returns the boolean false, dragging will be canceled.
@@ -3756,7 +3756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      onStart: _react.PropTypes.func,
-	
+
 	      /**
 	       * Called while dragging.
 	       * If this function returns the boolean false, dragging will be canceled.
@@ -3777,7 +3777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      onDrag: _react.PropTypes.func,
-	
+
 	      /**
 	       * Called when dragging stops.
 	       *
@@ -3797,13 +3797,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * ```
 	       */
 	      onStop: _react.PropTypes.func,
-	
+
 	      /**
 	       * A workaround option which can be passed if onMouseDown needs to be accessed,
 	       * since it'll always be blocked (due to that there's internal use of onMouseDown)
 	       */
 	      onMouseDown: _react.PropTypes.func,
-	
+
 	      /**
 	       * These properties should be defined on the child, not here.
 	       */
@@ -3829,10 +3829,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    enumerable: true
 	  }]);
-	
+
 	  return DraggableCore;
 	})(_react2['default'].Component);
-	
+
 	exports['default'] = DraggableCore;
 	module.exports = exports['default'];
 
@@ -3848,16 +3848,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports["default"] = log;
-	
+
 	function log() {
 	  if ((undefined)) console.log.apply(console, arguments);
 	}
-	
+
 	module.exports = exports["default"];
 
 /***/ }
@@ -22620,7 +22620,7 @@ module.exports = performanceNow;
  *
  * @providesModule shallowEqual
  * @typechecks
- * 
+ *
  */
 
 'use strict';

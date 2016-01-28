@@ -7,25 +7,25 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
 var TheGraphDiamond = require('./theGraphDiamond');
 
-var NodeStore = require('../stores/nodeStore.js');
+var blockStore = require('../stores/blockStore.js');
 
 function getTheGraphDiamondState(){
   return{
-    graphPosition: NodeStore.getGraphPosition(),
-    graphZoomScale: NodeStore.getGraphZoomScale(),
+    graphPosition: blockStore.getGraphPosition(),
+    graphZoomScale: blockStore.getGraphZoomScale(),
     //allEdges: NodeStore.getAllEdges(),
     //nodesToRender: NodeStore.getNodesToRenderArray(),
     //edgesToRender: NodeStore.getEdgesToRenderArray(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    allBlockInfo: blockStore.getAllBlockInfo(),
+    portThatHasBeenClicked: blockStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    nodeLibrary: NodeStore.getNodeLibrary(),
-    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    portMouseOver: NodeStore.getPortMouseOver(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
+    blockLibrary: blockStore.getBlockLibrary(),
+    allBlockTypesStyling: blockStore.getAllBlockTypesStyling(),
+    portMouseOver: blockStore.getPortMouseOver(),
+    areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
+    areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
+    allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling()
   }
 }
 
@@ -40,22 +40,22 @@ var theGraphDiamondControllerView = React.createClass({
   },
 
   componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
+    blockStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
+    blockStore.removeChangeListener(this._onChange);
   },
 
   render: function(){
     return(
       <TheGraphDiamond
         graphPosition={this.state.graphPosition} graphZoomScale={this.state.graphZoomScale}
-        allNodeInfo={this.state.allNodeInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
+        allBlockInfo={this.state.allBlockInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
         storingFirstPortClicked={this.state.storingFirstPortClicked}
-        nodeLibrary={this.state.nodeLibrary}
-        allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
-        areAnyEdgesSelected={this.state.areAnyEdgesSelected} allNodeTypesPortStyling={this.state.allNodeTypesPortStyling}
+        blockLibrary={this.state.blockLibrary}
+        allBlockTypesStyling={this.state.allBlockTypesStyling} areAnyBlocksSelected={this.state.areAnyBlocksSelected}
+        areAnyEdgesSelected={this.state.areAnyEdgesSelected} allBlockTypesPortStyling={this.state.allBlockTypesPortStyling}
         portMouseOver={this.state.portMouseOver}
       />
     )

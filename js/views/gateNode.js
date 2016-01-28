@@ -4,8 +4,8 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var NodeStore = require('../stores/blockStore.js');
+var nodeActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 
 function getGateNodeState(){

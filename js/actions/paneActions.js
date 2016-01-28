@@ -43,22 +43,22 @@ var paneActions = {
     })
   },
 
-  initialFetchOfNodeDataFromNodeStore: function(item){
+  initialFetchOfBlockDataFromBlockStore: function(item){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.FETCHINITIAL_NODEDATA,
+      actionType: appConstants.FETCHINITIAL_BLOCKDATA,
       item: item
     })
   },
-  openNodeTab: function(NodeId){
+  openBlockTab: function(BlockId){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.OPEN_NODETAB,
-      item: NodeId
+      actionType: appConstants.OPEN_BLOCKTAB,
+      item: BlockId
     })
   },
-  removeNodeTab: function(SelectedNodeTabIndex){
+  removeBlockTab: function(SelectedBlockTabIndex){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.REMOVE_NODETAB,
-      item: SelectedNodeTabIndex
+      actionType: appConstants.REMOVE_BLOCKTAB,
+      item: SelectedBlockTabIndex
     })
   },
 

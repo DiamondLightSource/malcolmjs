@@ -4,17 +4,17 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
-function getNodeRectanglesState(){
+function getBlockRectanglesState(){
   return {
     //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
   }
 }
 
-var NodeRectangles = React.createClass({
+var BlockRectangles = React.createClass({
   //getInitialState: function(){
   //  return getNodeRectanglesState();
   //},
@@ -32,8 +32,8 @@ var NodeRectangles = React.createClass({
 
     return(
       <g>
-        <rect id={this.props.nodeId.concat("Rectangle")}
-              height={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height} width={this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width}
+        <rect id={this.props.blockId.concat("Rectangle")}
+              height={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height} width={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width}
               x={0} y={0} rx={7} ry={7}
               style={{fill: 'lightgrey', 'strokeWidth': 1.65,
                stroke: this.props.selected ? '#797979' : 'black',
@@ -46,4 +46,4 @@ var NodeRectangles = React.createClass({
 
 });
 
-module.exports = NodeRectangles;
+module.exports = BlockRectangles;

@@ -4,8 +4,8 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 
 var interact = require('../../node_modules/interact.js');
@@ -54,7 +54,7 @@ var Ports = React.createClass({
   portMouseDown: function(e){
     console.log("portMouseDown");
     console.log(e);
-    nodeActions.passPortMouseDown(e.currentTarget);
+    blockActions.passPortMouseDown(e.currentTarget);
 
     console.log(e.currentTarget.parentNode.parentNode.parentNode);
 
@@ -87,7 +87,7 @@ var Ports = React.createClass({
     console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    nodeActions.passPortMouseDown(e.currentTarget);
+    blockActions.passPortMouseDown(e.currentTarget);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
@@ -103,31 +103,31 @@ var Ports = React.createClass({
 
   render: function(){
 
-    var nodeId = this.props.nodeId;
-    var nodeInfo = this.props.allNodeInfo[nodeId];
+    var blockId = this.props.blockId;
+    var blockInfo = this.props.allBlockInfo[blockId];
 
-    var allNodeTypesStyling = this.props.allNodeTypesStyling;
-    var nodeType = nodeInfo.type;
+    var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    var blockType = blockInfo.type;
     var inports = [];
     var inportsXCoord;
     var outports = [];
     var outportsXCoord;
     var portsText = [];
 
-    for(i = 0; i < nodeInfo.inports.length; i++){
-      var inportName = nodeInfo.inports[i].name;
+    for(i = 0; i < blockInfo.inports.length; i++){
+      var inportName = blockInfo.inports[i].name;
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        <circle key={nodeId + inportName} className="port" cx={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y}
-                r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+        <circle key={blockId + inportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y}
+                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65 }}
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id={this.props.nodeId + inportName}
+                id={this.props.blockId + inportName}
         />
       );
 
       /* Taking care of the inport text too */
       portsText.push(
-        <text key={nodeId + inportName + "-text"} x={allNodeTypesStyling[nodeType].text.textPositions[inportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[inportName].y}
+        <text key={blockId + inportName + "-text"} x={allBlockTypesStyling[blockType].text.textPositions[inportName].x} y={allBlockTypesStyling[blockType].text.textPositions[inportName].y}
               style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
         >
           {inportName}
@@ -135,18 +135,18 @@ var Ports = React.createClass({
       )
     }
 
-    for(j = 0; j < nodeInfo.outports.length; j++){
-      var outportName = nodeInfo.outports[j].name;
+    for(j = 0; j < blockInfo.outports.length; j++){
+      var outportName = blockInfo.outports[j].name;
       outports.push(
-        <circle key={nodeId + outportName} className="port" cx={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y}
-                r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+        <circle key={blockId + outportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y}
+                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65 }}
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id={this.props.nodeId + outportName}
+                id={this.props.blockId + outportName}
         />
       );
 
       portsText.push(
-        <text key={nodeId + outportName + "-text"} x={allNodeTypesStyling[nodeType].text.textPositions[outportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[outportName].y}
+        <text key={blockId + outportName + "-text"} x={allBlockTypesStyling[blockType].text.textPositions[outportName].x} y={allBlockTypesStyling[blockType].text.textPositions[outportName].y}
               style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
         >
           {outportName}
@@ -158,19 +158,19 @@ var Ports = React.createClass({
     /* Hmm, where should I get/calculate their position & height from?... */
 
     portsText.push([
-      <text className="nodeName" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
+      <text className="blockName" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
             transform="translate(32.5, 80)" >
-        {nodeInfo.name}
+        {blockInfo.name}
       </text>,
 
-      <text className="nodeType" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+      <text className="blockType" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
             transform="translate(32.5, 93)" >
-        {nodeInfo.type}
+        {blockInfo.type}
       </text>
     ]);
 
     return (
-      <g id={nodeId + "-ports"} >
+      <g id={blockId + "-ports"} >
         {inports}
         {outports}
         {portsText}

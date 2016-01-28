@@ -20,7 +20,7 @@ var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
 var portMouseOver = false;
 
-var allNodeTabInfo = {
+var allBlockTabInfo = {
   'Gate1': {
     type: 'Gate',
     label: 'Gate1',
@@ -59,42 +59,42 @@ var allNodeTabInfo = {
   }
 };
 
-var nodeSelectedStates = {
+var blockSelectedStates = {
   Gate1: false,
   TGen1: false,
   PComp1: false
 };
 
-function appendToNodeSelectedStates(NodeId){
-  console.log("nodeSelectedStates before adding a new node:");
-  console.log(nodeSelectedStates);
-  nodeSelectedStates[NodeId] = false;
-  console.log("nodeSelectedStates after adding a new node:");
-  console.log(nodeSelectedStates);
+function appendToBlockSelectedStates(BlockId){
+  console.log("blockSelectedStates before adding a new block:");
+  console.log(blockSelectedStates);
+  blockSelectedStates[BlockId] = false;
+  console.log("blockSelectedStates after adding a new block:");
+  console.log(blockSelectedStates);
 }
 
-function deselectAllNodes(){
-  for(var node in nodeSelectedStates){
-    nodeSelectedStates[node] = false
+function deselectAllBlocks(){
+  for(var block in blockSelectedStates){
+    blockSelectedStates[block] = false
   }
-  console.log(nodeSelectedStates);
+  console.log(blockSelectedStates);
 }
 
-function checkIfAnyNodesAreSelected(){
-  var areAnyNodesSelected = null;
-  for(var node in nodeSelectedStates){
-    if(nodeSelectedStates[node] === true){
-      console.log(nodeSelectedStates[node]);
-      areAnyNodesSelected = true;
+function checkIfAnyBlocksAreSelected(){
+  var areAnyBlocksSelected = null;
+  for(var block in blockSelectedStates){
+    if(blockSelectedStates[block] === true){
+      console.log(blockSelectedStates[block]);
+      areAnyBlocksSelected = true;
       break;
     }
     else{
-      //console.log("one of the nodes' state is false, check the next one if it is true");
-      areAnyNodesSelected = false;
+      //console.log("one of the blocks' state is false, check the next one if it is true");
+      areAnyBlocksSelected = false;
     }
   }
   //console.log(areAnyNodesSelected);
-  return areAnyNodesSelected;
+  return areAnyBlocksSelected;
 }
 
 var edgeSelectedStates = {
@@ -141,7 +141,7 @@ function deselectAllEdges(){
   console.log(edgeSelectedStates);
 }
 
-var nodeLibrary = {
+var blockLibrary = {
   Gate: {
     name: 'Gate',
     description: 'SR Gate block',
@@ -243,7 +243,7 @@ var nodeLibrary = {
   }
 };
 
-var allNodeInfo = {
+var allBlockInfo = {
 
   'Gate1': {
     type: 'Gate',
@@ -287,7 +287,7 @@ var allNodeInfo = {
         connected: true,
         connectedTo: [
           {
-            node: 'TGen1',
+            block: 'TGen1',
             port: 'ena'
           }
         ]
@@ -320,7 +320,7 @@ var allNodeInfo = {
         name: 'ena',
         connected: true,
         connectedTo: {
-          node: 'Gate1',
+          block: 'Gate1',
           port: 'out'
         }
       }
@@ -397,44 +397,44 @@ var allNodeInfo = {
   },
 };
 
-function addEdgeToAllNodeInfo(Info){
+function addEdgeToAllBlockInfo(Info){
 
-  console.log("Inside addEdgeToAllNodeInfo, here's the input:");
+  console.log("Inside addEdgeToAllBlockInfo, here's the input:");
   console.log(Info);
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
-  for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
-    if(allNodeInfo[Info.fromNode].outports[i].name === Info.fromNodePort){
-      var newEdgeToFromNode = {
-        node: Info.toNode,
-        port: Info.toNodePort
+  for(i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
+    if(allBlockInfo[Info.fromBlock].outports[i].name === Info.fromBlockPort){
+      var newEdgeToFromBlock = {
+        block: Info.toBlock,
+        port: Info.toBlockPort
       };
-      console.log(newEdgeToFromNode);
-      allNodeInfo[Info.fromNode].outports[i].connected = true;
-      console.log(allNodeInfo[Info.fromNode].outports[i]);
-      allNodeInfo[Info.fromNode].outports[i].connectedTo.push(newEdgeToFromNode);
+      console.log(newEdgeToFromBlock);
+      allBlockInfo[Info.fromBlock].outports[i].connected = true;
+      console.log(allBlockInfo[Info.fromBlock].outports[i]);
+      allBlockInfo[Info.fromBlock].outports[i].connectedTo.push(newEdgeToFromBlock);
     }
   }
   /* Also need to add to the node whose inport we've connected that outport to! */
 
-  for(j = 0; j < allNodeInfo[Info.toNode].inports.length; j++){
-    if(allNodeInfo[Info.toNode].inports[j].name === Info.toNodePort){
-      var newEdgeToToNode = {
-        node: Info.fromNode,
-        port: Info.fromNodePort
+  for(j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
+    if(allBlockInfo[Info.toBlock].inports[j].name === Info.toBlockPort){
+      var newEdgeToToBlock = {
+        block: Info.fromBlock,
+        port: Info.fromBlockPort
       };
-      console.log(newEdgeToToNode);
-      allNodeInfo[Info.toNode].inports[j].connected = true;
+      console.log(newEdgeToToBlock);
+      allBlockInfo[Info.toBlock].inports[j].connected = true;
 
       /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
-      allNodeInfo[Info.toNode].inports[j].connectedTo = newEdgeToToNode;
+      allBlockInfo[Info.toBlock].inports[j].connectedTo = newEdgeToToBlock;
     }
   }
-  console.log(allNodeInfo);
+  console.log(allBlockInfo);
 }
 
-var nodeInfoTemplates = {
+var blockInfoTemplates = {
   'Gate': {
     type: 'Gate',
     name: "",
@@ -525,7 +525,7 @@ var nodeInfoTemplates = {
   }
 };
 
-function appendToAllNodeInfo(NodeInfo){
+function appendToAllBlockInfo(BlockInfo){
   //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
   //
   //}
@@ -536,9 +536,9 @@ function appendToAllNodeInfo(NodeInfo){
   //console.log(allNodeInfo);
   //newlyAddedNode = allNodeInfo[newGateId];
   //console.log(newlyAddedNode);
-  console.log(NodeInfo);
+  console.log(BlockInfo);
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
-  allNodeInfo[NodeInfo] = {
+  allBlockInfo[BlockInfo] = {
     type: 'Gate',
     name: "",
     position: {
@@ -570,36 +570,36 @@ function appendToAllNodeInfo(NodeInfo){
   //
   //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
   //}
-  console.log(nodeInfoTemplates.Gate);
+  console.log(blockInfoTemplates.Gate);
   //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
   //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
   //console.log(randomNodePositionGenerator());
   //console.log(randomNodePositionGenerator());
-  console.log(allNodeInfo);
+  console.log(allBlockInfo);
 }
 
-var nodeIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
 
-function generateNewNodeId(){
+function generateNewBlockId(){
   /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  nodeIdCounter += 1;
-  var newGateId = "Gate" + nodeIdCounter;
+  blockIdCounter += 1;
+  var newGateId = "Gate" + blockIdCounter;
   console.log(newGateId);
   return newGateId;
 }
 
-function interactJsDrag(NodeInfo){
+function interactJsDrag(BlockInfo){
   //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
   //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
   //console.log(allNodeInfo[NodeInfo.target].position);
 
-  allNodeInfo[NodeInfo.target].position = {
-    x: allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale),
-    y: allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale)
+  allBlockInfo[BlockInfo.target].position = {
+    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
+    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
   }
 }
 
-var GateNodeStyling = {
+var GateBlockStyling = {
   rectangle: {
     rectanglePosition: {
       x : 0,
@@ -713,7 +713,7 @@ var SelectedGateNodeStyling = {
   }
 };
 
-var TGenNodeStyling = {
+var TGenBlockStyling = {
   rectangle: {
     rectanglePosition: {
       x : 0,
@@ -811,7 +811,7 @@ var SelectedTGenNodeStyling = {
   }
 };
 
-var PCompNodeStyling = {
+var PCompBlockStyling = {
   /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
   Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
    */
@@ -960,16 +960,16 @@ var SelectedPCompNodeStyling = {
   }
 };
 
-var allNodeTypesPortStyling = {
-  'Gate': GateNodeStyling.ports.portPositions,
-  'TGen': TGenNodeStyling.ports.portPositions,
-  'PComp': PCompNodeStyling.ports.portPositions
+var allBlockTypesPortStyling = {
+  'Gate': GateBlockStyling.ports.portPositions,
+  'TGen': TGenBlockStyling.ports.portPositions,
+  'PComp': PCompBlockStyling.ports.portPositions
 };
 
-var allNodeTypesStyling = {
-  'Gate': GateNodeStyling,
-  'TGen': TGenNodeStyling,
-  'PComp': PCompNodeStyling
+var allBlockTypesStyling = {
+  'Gate': GateBlockStyling,
+  'TGen': TGenBlockStyling,
+  'PComp': PCompBlockStyling
 };
 
 var graphPosition = {
@@ -979,7 +979,7 @@ var graphPosition = {
 
 var graphZoomScale = 2.0;
 
-var nodeStore = assign({}, EventEmitter.prototype, {
+var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
   },
@@ -1077,12 +1077,12 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //  return edgesToRender;
   //},
 
-  getAllNodeInfo: function(){
-    return allNodeInfo;
+  getAllBlockInfo: function(){
+    return allBlockInfo;
   },
 
-  getAnyNodeSelectedState:function(NodeId){
-    if(nodeSelectedStates[NodeId] === undefined || null){
+  getAnyBlockSelectedState:function(BlockId){
+    if(blockSelectedStates[BlockId] === undefined || null){
       //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
       //console.log(NodeId);
       //console.log(nodeSelectedStates[NodeId]);
@@ -1090,11 +1090,11 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     else{
       //console.log("the state of that nod exists, passing it now");
       //console.log(nodeSelectedStates[NodeId]);
-      return nodeSelectedStates[NodeId];
+      return blockSelectedStates[BlockId];
     }
   },
-  getIfAnyNodesAreSelected: function(){
-    return checkIfAnyNodesAreSelected();
+  getIfAnyBlocksAreSelected: function(){
+    return checkIfAnyBlocksAreSelected();
   },
   getIfEdgeIsSelected: function(EdgeId){
     return getAnyEdgeSelectedState(EdgeId);
@@ -1103,8 +1103,8 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getAllNodeTypesPortStyling: function(){
-    return allNodeTypesPortStyling;
+  getAllBlockTypesPortStyling: function(){
+    return allBlockTypesPortStyling;
   },
 
   getGraphPosition: function(){
@@ -1114,8 +1114,8 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return graphZoomScale;
   },
 
-  getAllNodeInfoForInitialNodeData: function(){
-    return allNodeInfo;
+  getAllBlockInfoForInitialBlockData: function(){
+    return allBlockInfo;
   },
   getPortThatHasBeenClicked: function(){
     return portThatHasBeenClicked;
@@ -1123,16 +1123,16 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getStoringFirstPortClicked: function(){
     return storingFirstPortClicked;
   },
-  getNodeLibrary: function(){
-    return nodeLibrary;
+  getBlockLibrary: function(){
+    return blockLibrary;
   },
 
   getPortMouseOver: function(){
     return portMouseOver;
   },
 
-  getAllNodeTypesStyling: function(){
-    return allNodeTypesStyling;
+  getAllBlockTypesStyling: function(){
+    return allBlockTypesStyling;
   }
 });
 
@@ -1240,19 +1240,19 @@ AppDispatcher.register(function(payload){
     case appConstants.SELECT_NODE:
       console.log(payload);
       console.log(item);
-      nodeSelectedStates[item] = true;
-      console.log(nodeSelectedStates);
+      blockSelectedStates[item] = true;
+      console.log(blockSelectedStates);
       //changeUnselectedNodesOpacity();
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLNODES:
       console.log(payload);
       console.log(item);
-      deselectAllNodes();
+      deselectAllBlocks();
       //console.log(nodeSelectedStates.Gate1);
       //console.log(nodeSelectedStates.TGen1);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.SELECT_EDGE:
@@ -1269,28 +1269,28 @@ AppDispatcher.register(function(payload){
         selectEdge(item);
       }
       console.log(edgeSelectedStates);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLEDGES:
       console.log(payload);
       console.log(item);
       deselectAllEdges();
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.CHANGE_GRAPHPOSITION:
       //console.log(payload);
       //console.log(item);
       graphPosition = item;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.GRAPH_ZOOM:
       //console.log(payload);
       //console.log(item);
       graphZoomScale = item;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.GETANY_EDGESELECTEDSTATE:
@@ -1298,7 +1298,7 @@ AppDispatcher.register(function(payload){
       console.log(item);
       getAnyEdgeSelectedState(item);
       console.log(edgeSelectedStates[item]);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.CLICKED_EDGE:
@@ -1306,17 +1306,17 @@ AppDispatcher.register(function(payload){
       console.log(item);
       clickedEdge = item;
       console.log(clickedEdge);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.ADDTO_ALLNODEINFO:
       console.log(payload);
       console.log(item);
-      appendToAllNodeInfo(item);
-      appendToAllPossibleNodes(item);
-      appendToNodeSelectedStates(item);
+      appendToAllBlockInfo(item);
+      appendToAllPossibleBlocks(item);
+      appendToBlockSelectedStates(item);
       //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.PASS_PORTMOUSEDOWN:
@@ -1324,13 +1324,13 @@ AppDispatcher.register(function(payload){
       console.log(item);
       portThatHasBeenClicked = item;
       //console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.id);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLPORTS:
       portThatHasBeenClicked = null;
       console.log("portThatHasBeenClicked has been reset");
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.STORING_FIRSTPORTCLICKED:
@@ -1338,22 +1338,22 @@ AppDispatcher.register(function(payload){
       console.log(item);
       storingFirstPortClicked = item;
       //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
       console.log(payload);
       console.log(item);
-      addEdgeToAllNodeInfo(item);
-      nodeStore.emitChange();
-      console.log(allNodeInfo);
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
       break;
 
     case appConstants.APPEND_EDGESELECTEDSTATE:
       console.log(payload);
       console.log(item);
       edgeSelectedStates[item] = false;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       console.log(edgeSelectedStates);
       break;
 
@@ -1361,7 +1361,7 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       interactJsDrag(item);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     default:
@@ -1370,7 +1370,7 @@ AppDispatcher.register(function(payload){
 
 });
 
-module.exports = nodeStore;
+module.exports = blockStore;
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;

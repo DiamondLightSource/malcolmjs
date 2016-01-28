@@ -5,7 +5,7 @@
 var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
-var nodeActions = {
+var blockActions = {
   //changeGateNodePosition: function(item){
   //  AppDispatcher.handleAction({
   //    actionType: appConstants.GATENODE_CHANGEPOSITION,
@@ -79,15 +79,15 @@ var nodeActions = {
   //  })
   //},
 
-  selectNode: function(item){
+  selectBlock: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.SELECT_NODE,
+      actionType: appConstants.SELECT_BLOCK,
       item: item
     })
   },
-  deselectAllNodes: function(item){
+  deselectAllBlocks: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.DESELECT_ALLNODES,
+      actionType: appConstants.DESELECT_ALLBLOCKS,
       item: item
     })
   },
@@ -131,9 +131,9 @@ var nodeActions = {
     })
   },
 
-  addToAllNodeInfo: function(item){
+  addToAllBlockInfo: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.ADDTO_ALLNODEINFO,
+      actionType: appConstants.ADDTO_ALLBLOCKINFO,
       item: item
     })
   },
@@ -157,9 +157,9 @@ var nodeActions = {
     })
   },
 
-  addOneSingleEdgeToAllNodeInfo(edgeInfo){
+  addOneSingleEdgeToAllBlockInfo(edgeInfo){
     AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOALLNODEINFO,
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
       item: edgeInfo
     })
   },
@@ -179,4 +179,4 @@ var nodeActions = {
   }
 };
 
-module.exports = nodeActions;
+module.exports = blockActions;

@@ -59,19 +59,19 @@ var SidePane = React.createClass({
     console.log("action function for changing tab via other means ran correctly");
   },
 
-  handleActionInitialFetchOfNodeData: function(){
-    paneActions.initialFetchOfNodeDataFromNodeStore("fetch the initial node data!");
+  handleActionInitialFetchOfBlockData: function(){
+    paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
   },
-  handleActionRemoveNodeTab: function(){
+  handleActionRemoveBlockTab: function(){
     var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeNodeTab(selectedIndex);
+    paneActions.removeBlockTab(selectedIndex);
   },
 
   componentDidMount: function(){
     //sidePaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    this.handleActionInitialFetchOfNodeData();
+    this.handleActionInitialFetchOfBlockData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
@@ -116,7 +116,7 @@ var SidePane = React.createClass({
         <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
 
 
-            <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
+            <Button title="Remove active tab" onButtonClick={this.handleActionRemoveBlockTab}>
               <i className="fa fa-times"></i>
             </Button>,
             <Button title="Drop down menu">

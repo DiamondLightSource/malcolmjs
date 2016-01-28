@@ -14,8 +14,8 @@ var sidePaneStore = require('../stores/sidePaneStore');
 var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var SideBar = require('react-sidebar').default;
 
@@ -108,24 +108,6 @@ function getBothPanesState(){
     selectedTabIndex: paneStore.getSelectedTabIndex(),
     listVisible: sidePaneStore.getDropdownState()
 
-    //theGraphDiamondState:{
-    //  /* theGraphDiamond's getter functions for stores */
-    //  graphPosition: NodeStore.getGraphPosition(),
-    //  graphZoomScale: NodeStore.getGraphZoomScale(),
-    //  allEdges: NodeStore.getAllEdges(),
-    //  nodesToRender: NodeStore.getNodesToRenderArray(),
-    //  edgesToRender: NodeStore.getEdgesToRenderArray(),
-    //  allNodeInfo: NodeStore.getAllNodeInfo(),
-    //  portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //  storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    //  newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    //  nodeLibrary: NodeStore.getNodeLibrary(),
-    //  allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //  portMouseOver: NodeStore.getPortMouseOver(),
-    //  areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    //  areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    //  allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
-    //}
   }
 }
 
@@ -143,7 +125,6 @@ var BothPanes = React.createClass({
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
-    //NodeStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
     this.setState({mql: mql}, function(){
@@ -154,7 +135,6 @@ var BothPanes = React.createClass({
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
-    //NodeStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
 

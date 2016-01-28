@@ -4,46 +4,16 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 
 var Ports = require('./ports.js');
-var NodeRectangle = require('./nodeRectangle');
+var BlockRectangle = require('./blockRectangle');
 
 var interact = require('../../node_modules/interact.js');
 
-function getNodeState(){
-  return{
-    //position: NodeStore.getTGenNodePosition(),
-    //inports: NodeStore.getTGenNodeInportsState(),
-    //outports: NodeStore.getTGenNodeOutportsState()
-    //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
-    //areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    //defaultStyling: NodeStore.getTGenNodeStyling(),
-    //selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    //portMouseOver: NodeStore.getPortMouseOver(),
-
-    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling()
-  }
-}
-
-var Node = React.createClass({
-  //getInitialState: function(){
-  //  return getNodeState();
-  //},
-  //
-  //_onChange: function(){
-  //  //this.setState(getNodeState());
-  //  //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
-  //  //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
-  //
-  //},
+var Block = React.createClass({
 
   componentDidMount: function(){
     //NodeStore.addChangeListener(this._onChange);
@@ -83,7 +53,7 @@ var Node = React.createClass({
       });
 
     interact(ReactDOM.findDOMNode(this))
-      .on('tap', this.nodeSelect);
+      .on('tap', this.blockSelect);
 
     interact(ReactDOM.findDOMNode(this))
       .styleCursor(false);
@@ -99,7 +69,7 @@ var Node = React.createClass({
     //this.interactable = null;
 
     interact(ReactDOM.findDOMNode(this))
-      .off('tap', this.nodeSelect);
+      .off('tap', this.blockSelect);
   },
 
   //shouldComponentUpdate: function(nextProps, nextState){
@@ -109,15 +79,7 @@ var Node = React.createClass({
   //},
 
   handleInteractJsDrag: function(item){
-    nodeActions.interactJsDrag(item);
-  },
-
-  nodeClick: function(){
-    console.log("node has been clicked!");
-  },
-
-  nodeDrag: function(){
-    console.log("node has been dragged!");
+    blockActions.interactJsDrag(item);
   },
 
   //mouseOver: function(){
@@ -140,7 +102,7 @@ var Node = React.createClass({
   //  }
   //},
 
-  nodeSelect: function(e){
+  blockSelect: function(e){
     console.log(e);
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -159,16 +121,16 @@ var Node = React.createClass({
     //  console.log(this.props.selected);
     //}
 
-    if(this.props.areAnyNodesSelected === false){
-      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+    if(this.props.areAnyBlocksSelected === false){
+      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
       console.log(this.props.selected);
     }
     else{
       /* Need to run deselect before I select the current node */
       this.props.deselect();
-      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
       console.log(this.props.selected);
     }
 
@@ -269,59 +231,24 @@ var Node = React.createClass({
 
   render: function(){
 
-    //console.log("portThatHasBeenClicked is: " + this.props.portThatHasBeenClicked);
-    //console.log(this.props);
-
-    /* Unecessary now that I don't want the ports to focus on node selection (I think? =P) */
-
-    //if(this.props.selected === true){
-    //  var currentStyling = this.props.selectedStyling;
-    //}
-    //else{
-    //  var currentStyling = this.state.defaultStyling;
-    //}
-    //
-    //var rectangleStyling = currentStyling.rectangle.rectangleStyling;
-    //var rectanglePosition = currentStyling.rectangle.rectanglePosition;
-    //var inportPositions = currentStyling.ports.portPositions.inportPositions;
-    //var portStyling = currentStyling.ports.portStyling;
-    //var outportPositions = currentStyling.ports.portPositions.outportPositions;
-    //var textPosition = currentStyling.text.textPositions;
-
-    //var nodeInfo = this.state.allNodeInfo[this.props.id];
-    //var nodePositionX = this.state.allNodeInfo[this.props.id].position.x;
-    //var nodePositionY = this.state.allNodeInfo[this.props.id].position.y;
-    var nodeTranslate = "translate(" + this.props.allNodeInfo[this.props.id].position.x + "," + this.props.allNodeInfo[this.props.id].position.y + ")";
-    //console.log(nodeTranslate);
-
-    //var nodeName = nodeInfo.name;
-    //var rectangleString = "Rectangle";
-    //var rectangleName = this.props.id.concat(rectangleString);
-
-    /* Trying to automatically generate the correct ports and port text */
-    /* NOTE: This will run on every render, so all the ports will be reset back to an empty array and then iterate through the loops to recreate them...
-      I Suppose I could try moving these into methods of the component instead, and them running them once at the start of the node's lifetime? */
-
-    //var nodePortsStyling = this.state.allNodeTypesPortStyling; /* Need the styling of everything, not just the port positions, so I need to alter the object I get from the store to be all the styling and not just the different node's PORT stylign */
-    //var allNodeTypesStyling = this.state.allNodeTypesStyling;
-    //var nodeType = nodeInfo.type;
+    var blockTranslate = "translate(" + this.props.allBlockInfo[this.props.id].position.x + "," + this.props.allBlockInfo[this.props.id].position.y + ")";
 
     return (
       <g {...this.props}
           //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-                         //style={this.props.selected && this.props.areAnyNodesSelected || !this.props.selected && !this.props.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
-                         transform={nodeTranslate}
+                         //style={this.props.selected && this.props.areAnyBlocksSelected || !this.props.selected && !this.props.areAnyBlocksSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
+                         transform={blockTranslate}
       >
 
         <g style={{MozUserSelect: 'none'}}
            //onMouseDown={this.mouseDown}
         >
-          <rect id="nodeBackground" height="105" width="65" style={{fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/> /* To allow the cursor to change when hovering over the entire node container */
+          <rect id="blockBackground" height="105" width="65" style={{fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/> /* To allow the cursor to change when hovering over the entire block container */
 
-          <NodeRectangle nodeId={this.props.id} nodeType={this.props.allNodeInfo[this.props.id].type} allNodeTypesStyling={this.props.allNodeTypesStyling}
+          <BlockRectangle blockId={this.props.id} blockType={this.props.allBlockInfo[this.props.id].type} allBlockTypesStyling={this.props.allBlockTypesStyling}
                          portThatHasBeenClicked={this.props.portThatHasBeenClicked} selected={this.props.selected} />
 
-          <Ports nodeId={this.props.id} allNodeInfo={this.props.allNodeInfo} allNodeTypesStyling={this.props.allNodeTypesStyling}
+          <Ports blockId={this.props.id} allBlockInfo={this.props.allBlockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} />
 
         </g>
@@ -331,7 +258,7 @@ var Node = React.createClass({
   }
 });
 
-module.exports = Node;
+module.exports = Block;
 
 //<Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius} id="ena"
 //      style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>

@@ -5,12 +5,12 @@
 var React = require('react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var Edge = require('./edge.js');
 
-var Node = require('./nodes.js');
+var Block = require('./block.js');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -62,25 +62,25 @@ var App = React.createClass({
   propTypes: {
     graphPosition: React.PropTypes.object,
     graphZoomScale: React.PropTypes.number,
-    allEdges: React.PropTypes.object,
-    nodesToRender: React.PropTypes.array,
-    edgesToRender: React.PropTypes.array,
-    allNodeInfo: React.PropTypes.object,
+    //allEdges: React.PropTypes.object,
+    //nodesToRender: React.PropTypes.array,
+    //edgesToRender: React.PropTypes.array,
+    allBlockInfo: React.PropTypes.object,
     //portThatHasBeenClicked:React.PropTypes.oneOfType([
     //  React.PropTypes.element,
     //  /*Dunno how to say it could be null? */
     //])
-    nodeLibrary: React.PropTypes.object,
-    allNodeTypesStyling: React.PropTypes.object,
+    blockLibrary: React.PropTypes.object,
+    allBlockTypesStyling: React.PropTypes.object,
     portMouseOver: React.PropTypes.bool,
-    areAnyNodesSelected: React.PropTypes.bool,
+    areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
-    allNodeTypesPortStyling: React.PropTypes.object,
+    allBlockTypesPortStyling: React.PropTypes.object,
   },
 
   componentDidMount: function () {
     console.log(ReactDOM.findDOMNode(this));
-    this.setState({gateNodeIdCounter: 1});
+    this.setState({gateBlockIdCounter: 1});
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
@@ -125,12 +125,12 @@ var App = React.createClass({
     //e.stopImmediatePropagation();
     //e.stopPropagation();
     console.log("dragArea has been clicked");
-    nodeActions.deselectAllNodes("deselect all nodes");
-    nodeActions.deselectAllEdges("deselect all edges");
+    blockActions.deselectAllBlocks("deselect all blocks");
+    blockActions.deselectAllEdges("deselect all edges");
 
     if(this.props.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
-      nodeActions.deselectAllPorts("deselect all ports");
+      blockActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
     }
     else{
@@ -187,8 +187,8 @@ var App = React.createClass({
        y: newGraphPositionY
      };
 
-     nodeActions.graphZoom(scale);
-     nodeActions.changeGraphPosition(newGraphPosition);
+     blockActions.graphZoom(scale);
+     blockActions.changeGraphPosition(newGraphPosition);
   },
 
   isZoomNegative: function(n){
@@ -197,29 +197,29 @@ var App = React.createClass({
 
   /* This is for my black block that adds a gate node when clicked */
 
-  addNodeInfo: function(){
+  addBlockInfo: function(){
     //e.stopImmediatePropagation();
     //e.stopPropagation();
-    console.log("addNodeInfo");
+    console.log("addBlockInfo");
     //var gateNodeRegExp = /Gate/;
     //var tgenNodeRegExp = /TGen/;
     //var pcompNodeRegExp = /PComp/;
     //var lutNodeRegExp = /LUT/;
 
-    var newGateNodeId = this.generateNewNodeId();
-    console.log(newGateNodeId);
+    var newGateBlockId = this.generateNewBlockId();
+    console.log(newGateBlockId);
 
-    nodeActions.addToAllNodeInfo(newGateNodeId);
+    blockActions.addToAllBlockInfo(newGateBlockId);
 
   },
 
-  generateNewNodeId: function(){
+  generateNewBlockId: function(){
   /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  var gateNodeIdCounter = this.state.gateNodeIdCounter;
-  gateNodeIdCounter += 1;
-  var newGateId = "Gate" + gateNodeIdCounter;
+  var gateBlockIdCounter = this.state.gateBlockIdCounter;
+    gateBlockIdCounter += 1;
+  var newGateId = "Gate" + gateBlockIdCounter;
   console.log(newGateId);
-  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+  this.setState({gateBlockIdCounter: gateBlockIdCounter});
   return newGateId;
 
   },
@@ -242,7 +242,7 @@ var App = React.createClass({
 
     console.log(this.props.portThatHasBeenClicked);
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
-    nodeActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
+    blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
     var port = this.props.portThatHasBeenClicked;
     /* Need an if loop to check if we're hovering the port already
@@ -314,7 +314,7 @@ var App = React.createClass({
     console.log(firstPort.parentNode.parentNode.parentNode.id);
     console.log(secondPort.parentNode.parentNode.parentNode.id);
 
-    /* For my refactored nodes.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
+    /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
     /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
 
@@ -335,10 +335,10 @@ var App = React.createClass({
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
-        fromNode: firstPort.parentNode.parentNode.parentNode.id,
-        fromNodePort: firstPortName,
-        toNode: secondPort.parentNode.parentNode.parentNode.id,
-        toNodePort: secondPortName
+        fromBlock: firstPort.parentNode.parentNode.parentNode.id,
+        fromBlockPort: firstPortName,
+        toBlock: secondPort.parentNode.parentNode.parentNode.id,
+        toBlockPort: secondPortName
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
@@ -354,58 +354,58 @@ var App = React.createClass({
   /* Find both port types, then compare them somehow */
   console.log(edgeInfo);
 
-  var fromNodeType = this.props.allNodeInfo[edgeInfo.fromNode].type;
-  var toNodeType = this.props.allNodeInfo[edgeInfo.toNode].type;
+  var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
+  var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
 
   /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
-  var nodeTypes = {
-    fromNodeType: fromNodeType,
-    toNodeType: toNodeType
+  var blockTypes = {
+    fromBlockType: fromBlockType,
+    toBlockType: toBlockType
   };
 
-  console.log(nodeTypes);
+  console.log(blockTypes);
 
-  var fromNodeLibraryInfo = this.props.nodeLibrary[fromNodeType];
-  var toNodeLibraryInfo = this.props.nodeLibrary[toNodeType];
+  var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
+  var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
-    console.log(fromNodeLibraryInfo);
-    console.log(toNodeLibraryInfo);
+    console.log(fromBlockLibraryInfo);
+    console.log(toBlockLibraryInfo);
 
-  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-      var fromNodePortType = "inport";
+  for(i = 0; i < fromBlockLibraryInfo.inports.length; i++){
+    if(fromBlockLibraryInfo.inports[i].name === edgeInfo.fromBlockPort){
+      console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
+      var fromBlockPortType = "inport";
       var inportIndex = i;
       break;
     }
     else{
-      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromNodePortType = "outport";
+      console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
+      var fromBlockPortType = "outport";
     }
   }
 
-  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-      var toNodePortType = "inport";
+  for(j = 0; j < toBlockLibraryInfo.inports.length; j++ ){
+    if(toBlockLibraryInfo.inports[j].name === edgeInfo.toBlockPort){
+      console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
+      var toBlockPortType = "inport";
       var inportIndex = j;
       break;
     }
     else{
-      console.log("The toNode isn't an inport, so it's an outport!");
-      var toNodePortType = "outport";
+      console.log("The toBlock isn't an inport, so it's an outport!");
+      var toBlockPortType = "outport";
     }
   }
 
   var portTypes = {
-    fromNodePortType: fromNodePortType,
-    toNodePortType: toNodePortType
+    fromBlockPortType: fromBlockPortType,
+    toBlockPortType: toBlockPortType
   };
 
   console.log(portTypes);
 
   var types = {
-    nodeTypes: nodeTypes,
+    blockTypes: blockTypes,
     portTypes: portTypes
   };
 
@@ -413,17 +413,17 @@ var App = React.createClass({
 
     var fromPort = this.props.storingFirstPortClicked;
 
-    if(edgeInfo.fromNode === edgeInfo.toNode){
-    window.alert("Incompatible ports, they are part of the same node.");
+    if(edgeInfo.fromBlock === edgeInfo.toBlock){
+    window.alert("Incompatible ports, they are part of the same block.");
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
     fromPort.style.fill = "black";
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
   }
-  else if(fromNodePortType === toNodePortType){
-    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-    window.alert("Incompatible ports, they are both " + fromNodePortType + "s.");
+  else if(fromBlockPortType === toBlockPortType){
+    console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
+    window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
@@ -432,17 +432,17 @@ var App = React.createClass({
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
   }
-  else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports and their respective nodes are compatible.");
+  else if(fromBlockPortType !== toBlockPortType){
+    console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
     /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    if(fromNodePortType === "inport"){
-      this.isInportConnected(edgeInfo.fromNodePort, inportIndex, edgeInfo.fromNode, edgeInfo, types);
+    if(fromBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
     }
-    else if(toNodePortType === "inport"){
-      this.isInportConnected(edgeInfo.toNodePort, inportIndex, edgeInfo.toNode, edgeInfo, types);
+    else if(toBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
     }
     else{
-      console.log("fromNodePortType and toNodePortType are apparently different, yet neither are an inport, so something is up...");
+      console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
     }
     /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
     //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
@@ -457,11 +457,11 @@ var App = React.createClass({
 
   },
 
-  isInportConnected: function(inport, inportIndex, node, edgeInfo, types){
-    console.log("The inport " + inport + " of the node " + node + " is " + this.props.allNodeInfo[node].inports[inportIndex].connected);
-    if(this.props.allNodeInfo[node].inports[inportIndex].connected === true){
+  isInportConnected: function(inport, inportIndex, block, edgeInfo, types){
+    console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
+    if(this.props.allBlockInfo[block].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
-      window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
+      window.alert("The inport " + inport + " of the block " + block + " is already connected, so another connection cannot be made");
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
@@ -471,7 +471,7 @@ var App = React.createClass({
       fromPort.setAttribute('r', 2);
       this.resetPortClickStorage();
     }
-    else if(this.props.allNodeInfo[node].inports[inportIndex].connected === false){
+    else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       console.log("That inport isn't connected to anything, so proceed with the port connection process");
       console.log(edgeInfo);
       var toPort = this.props.portThatHasBeenClicked;
@@ -485,22 +485,22 @@ var App = React.createClass({
 
       /* Now need to implement the logic that checks if the start port was an inport or outport */
 
-      var startNode;
-      var startNodeType;
-      var startNodePort;
-      var endNode;
-      var endNodeType;
-      var endNodePort;
+      var startBlock;
+      var startBlockType;
+      var startBlockPort;
+      var endBlock;
+      var endBlockType;
+      var endBlockPort;
       var newEdge;
       var edgeLabel;
-      if(types.portTypes.fromNodePortType === "outport"){
+      if(types.portTypes.fromBlockPortType === "outport"){
         console.log("outport to inport, so edge labelling is normal");
-        startNode = edgeInfo.fromNode;
-        startNodeType = types.nodeTypes.fromNodeType;
-        startNodePort = edgeInfo.fromNodePort;
-        endNode = edgeInfo.toNode;
-        endNodeType = types.nodeTypes.toNodeType;
-        endNodePort = edgeInfo.toNodePort;
+        startBlock = edgeInfo.fromBlock;
+        startBlockType = types.blockTypes.fromBlockType;
+        startBlockPort = edgeInfo.fromBlockPort;
+        endBlock = edgeInfo.toBlock;
+        endBlockType = types.blockTypes.toBlockType;
+        endBlockPort = edgeInfo.toBlockPort;
         //newEdge = {
         //  fromNode: startNode,
         //  fromNodePort: startNodePort,
@@ -508,15 +508,15 @@ var App = React.createClass({
         //  toNodePort: endNodePort
         //}
       }
-      else if(types.portTypes.fromNodePortType === "inport"){
+      else if(types.portTypes.fromBlockPortType === "inport"){
         console.log("inport to outport, so have to flip the edge labelling direction");
         /* Note that you must also flip the ports too! */
-        startNode = edgeInfo.toNode;
-        startNodeType = types.nodeTypes.toNodeType;
-        startNodePort = edgeInfo.toNodePort;
-        endNode = edgeInfo.fromNode;
-        endNodeType = types.nodeTypes.fromNodeType;
-        endNodePort = edgeInfo.fromNodePort;
+        startBlock = edgeInfo.toBlock;
+        startBlockType = types.blockTypes.toBlockType;
+        startBlockPort = edgeInfo.toBlockPort;
+        endBlock = edgeInfo.fromBlock;
+        endBlockType = types.blockTypes.fromBlockType;
+        endBlockPort = edgeInfo.fromBlockPort;
         /* Don't need this in both loops, can just set this after the loops have completed! */
         //newEdge = {
         //  fromNode: startNode,
@@ -527,19 +527,19 @@ var App = React.createClass({
       }
 
       newEdge = {
-        fromNode: startNode,
-        fromNodeType: startNodeType,
-        fromNodePort: startNodePort,
-        toNode: endNode,
-        toNodeType: endNodeType,
-        toNodePort: endNodePort
+        fromBlock: startBlock,
+        fromBlockType: startBlockType,
+        fromBlockPort: startBlockPort,
+        toBlock: endBlock,
+        toBlockType: endBlockType,
+        toBlockPort: endBlockPort
       };
 
       /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-      edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+      edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
-      nodeActions.addOneSingleEdgeToAllNodeInfo(newEdge);
-      nodeActions.appendToEdgeSelectedState(edgeLabel);
+      blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+      blockActions.appendToEdgeSelectedState(edgeLabel);
       this.resetPortClickStorage();
     }
   },
@@ -547,8 +547,8 @@ var App = React.createClass({
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
     console.log("Resetting port click storage");
-    nodeActions.storingFirstPortClicked(null);
-    nodeActions.passPortMouseDown(null);
+    blockActions.storingFirstPortClicked(null);
+    blockActions.passPortMouseDown(null);
   },
 
   interactJsDragPan: function(e){
@@ -559,7 +559,7 @@ var App = React.createClass({
     var xChange = this.props.graphPosition.x + e.dx;
     var yChange = this.props.graphPosition.y + e.dy;
 
-    nodeActions.changeGraphPosition({
+    blockActions.changeGraphPosition({
       x: xChange,
       y: yChange
     });
@@ -588,8 +588,8 @@ var App = React.createClass({
       y: newGraphPositionY
     };
 
-    nodeActions.graphZoom(newZoomScale);
-    nodeActions.changeGraphPosition(newGraphPosition);
+    blockActions.graphZoom(newZoomScale);
+    blockActions.changeGraphPosition(newGraphPosition);
   },
 
 
@@ -606,52 +606,53 @@ var App = React.createClass({
 
     console.log(this.props);
 
-    var nodes = [];
+    var blocks = [];
     var edges = [];
 
-    for(var node in this.props.allNodeInfo){
-      nodes.push(
-        <Node key={node} id={node} className="node"
-              allNodeInfo={this.props.allNodeInfo} allNodeTypesStyling={this.props.allNodeTypesStyling} areAnyNodesSelected={this.props.areAnyNodesSelected}
+    for(var block in this.props.allBlockInfo){
+      blocks.push(
+        <Block key={block} id={block} className="block"
+              allBlockInfo={this.props.allBlockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling} areAnyBlocksSelected={this.props.areAnyBlocksSelected}
               portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} portMouseOver={this.props.portMouseOver}
-              selected={NodeStore.getAnyNodeSelectedState(node)} deselect={this.deselect}
+              selected={blockStore.getAnyBlockSelectedState(block)} deselect={this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );
 
-      for(var i = 0; i < this.props.allNodeInfo[node].inports.length; i++){
-        if(this.props.allNodeInfo[node].inports[i].connected === true){
-          console.log(this.props.allNodeInfo[node].inports[i]);
-          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is connected, so find out what node it is connected to");
+      for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
+        if(this.props.allBlockInfo[block].inports[i].connected === true){
+          console.log(this.props.allBlockInfo[block].inports[i]);
+          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
           /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
-          var toNode = node;
-          var toNodeType = this.props.allNodeInfo[node].type;
-          var toNodePort = this.props.allNodeInfo[node].inports[i].name;
-          var fromNode = this.props.allNodeInfo[node].inports[i].connectedTo.node;
-          var fromNodeType = this.props.allNodeInfo[fromNode].type;
-          var fromNodePort = this.props.allNodeInfo[node].inports[i].connectedTo.port;
+          var toBlock = block;
+          var toBlockType = this.props.allBlockInfo[block].type;
+          var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+          var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
+          console.log(this.props.allBlockInfo);
+          var fromBlockType = this.props.allBlockInfo[fromBlock].type;
+          var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
-          var edgeLabel = String(fromNode) + String(fromNodePort) + " -> " + String(toNode) + String(toNodePort);
+          var edgeLabel = String(fromBlock) + String(fromBlockPort) + " -> " + String(toBlock) + String(toBlockPort);
 
           edges.push(
             <Edge key={edgeLabel} id={edgeLabel}
-                  fromNode={fromNode} fromNodeType={fromNodeType} fromNodePort={fromNodePort}
-                  toNode={toNode} toNodeType={toNodeType} toNodePort={toNodePort}
-                  allNodeTypesPortStyling={this.props.allNodeTypesPortStyling}
-                  allNodeInfo={this.props.allNodeInfo} areAnyEdgesSelected={this.props.areAnyEdgesSelected}
-                  selected={NodeStore.getIfEdgeIsSelected(edgeLabel)}
+                  fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort}
+                  toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort}
+                  allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
+                  allBlockInfo={this.props.allBlockInfo} areAnyEdgesSelected={this.props.areAnyEdgesSelected}
+                  selected={blockStore.getIfEdgeIsSelected(edgeLabel)}
             />
           )
         }
-        else if(this.props.allNodeInfo[node].inports[i].connected === false){
-          console.log(this.props.allNodeInfo[node].inports[i]);
-          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is NOT connected, so move on to the next inport/node");
+        else if(this.props.allBlockInfo[block].inports[i].connected === false){
+          console.log(this.props.allBlockInfo[block].inports[i]);
+          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
         }
       }
 
     }
 
-    console.log(nodes);
+    console.log(blocks);
     console.log(edges);
 
     return(
@@ -669,7 +670,7 @@ var App = React.createClass({
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
           <g><rect
-            onClick={this.addNodeInfo}
+            onClick={this.addBlockInfo}
             height="50" width="50" /></g>
 
           <g id="testPanGroup"
@@ -683,9 +684,9 @@ var App = React.createClass({
 
             </g>
 
-            <g id="NodesGroup" >
+            <g id="BlocksGroup" >
 
-              {nodes}
+              {blocks}
 
             </g>
 

@@ -13,8 +13,8 @@ var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 var deviceStore = require('../stores/deviceStore');
 var deviceActions = require('../actions/deviceActions');
-var nodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
@@ -22,10 +22,10 @@ var sessionActions = require('../actions/sessionActions');
 var theGraphDiamond = require('./theGraphDiamond');
 var TheGraphDiamondControllerView = require('./theGraphDiamondControllerView');
 
-var GateNode = require('./gateNode.js');
-var TGenNode = require('./tgenNode.js');
-var PCompNode = require('./pcompNode.js');
-var LUTNode = require('./lutNode.js');
+//var GateNode = require('./gateNode.js');
+//var TGenNode = require('./tgenNode.js');
+//var PCompNode = require('./pcompNode.js');
+//var LUTNode = require('./lutNode.js');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
@@ -63,7 +63,7 @@ var MainPane = React.createClass({
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     console.log(this.props);
-    this.setState({gateNodeIdCounter: 1});
+    //this.setState({gateNodeIdCounter: 1});
   },
 
   componentWillUnmount: function(){

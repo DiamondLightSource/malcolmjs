@@ -4,8 +4,8 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -39,17 +39,12 @@ var Edge = React.createClass({
     //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
-    //NodeStore.addChangeListener(this._onChange);
-    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
-    //  console.log(this.state.selected);
-    //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
 
     interact(ReactDOM.findDOMNode(this))
       .on('tap', this.edgeSelect)
   },
   componentWillUnmount: function(){
-    //NodeStore.removeChangeListener(this._onChange);
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.edgeSelect)
   },
@@ -79,7 +74,7 @@ var Edge = React.createClass({
     e.stopPropagation();
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
-    nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
+    blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
   },
 
   render:function(){
@@ -92,41 +87,41 @@ var Edge = React.createClass({
     //var allEdges = this.props.allEdges;
     //console.log(allEdges);
     console.log(this.props.id);
-    var fromNode = this.props.fromNode;
-    var toNode = this.props.toNode;
+    var fromBlock = this.props.fromBlock;
+    var toBlock = this.props.toBlock;
     //console.log(fromNode);
     //console.log(toNode);
-    var fromNodePort = this.props.fromNodePort;
-    var toNodePort = this.props.toNodePort;
+    var fromBlockPort = this.props.fromBlockPort;
+    var toBlockPort = this.props.toBlockPort;
 
-    var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
+    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
 
-    var fromNodeType = this.props.fromNodeType;
-    var toNodeType = this.props.toNodeType;
+    var fromBlockType = this.props.fromBlockType;
+    var toBlockType = this.props.toBlockType;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromNodePositionX = this.props.allNodeInfo[fromNode].position.x;
-    var fromNodePositionY = this.props.allNodeInfo[fromNode].position.y;
-    var toNodePositionX = this.props.allNodeInfo[toNode].position.x;
-    var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
+    var fromBlockPositionX = this.props.allBlockInfo[fromBlock].position.x;
+    var fromBlockPositionY = this.props.allBlockInfo[fromBlock].position.y;
+    var toBlockPositionX = this.props.allBlockInfo[toBlock].position.x;
+    var toBlockPositionY = this.props.allBlockInfo[toBlock].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
     //
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
-    var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
-    var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
-    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].x;
+    var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].y;
+    var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
+    var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    var endOfEdgePortOffsetX = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].x;
-    var endOfEdgePortOffsetY = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].y;
-    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    var endOfEdgePortOffsetX = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].x;
+    var endOfEdgePortOffsetY = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].y;
+    var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
+    var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
     var innerLineString = "-innerline";
     var outerLineString = "-outerline";
@@ -143,7 +138,7 @@ var Edge = React.createClass({
               style={{strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
 
         <line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-          //x1={this.props.startNode.x} y1={this.props.startNode.y} x2={this.props.endNode.x} y2={this.props.endNode.y}
+          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
               style={{strokeWidth: '5', stroke:"orange"}} />

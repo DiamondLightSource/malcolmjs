@@ -1,67 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
- * Created by twi18192 on 24/09/15.
- */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-
-var deviceActions = {
-  mockServerRequest: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.MOCK_SERVERREQUEST,
-      item: item
-    })
-  }
-
-};
-
-module.exports = deviceActions;
-
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10}],2:[function(require,module,exports){
-/**
- * Created by twi18192 on 25/08/15.
- */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-
-var mainPaneActions = {
-  toggleFooter1: function(item){
-    AppDispatcher.handleViewAction({
-      actionType:appConstants.FOOTER_TOGGLE,
-      item: item
-    })
-  },
-  toggleConfigPanel: function(item){
-    AppDispatcher.handleViewAction({
-      actionType:appConstants.CONFIG_TOGGLE,
-      item: item
-    })
-  },
-  toggleFavPanel: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.FAV_TOGGLE,
-      item: item
-    })
-  }
-};
-
-/* This isn't a React component, so you don't need a
-capital first letter in order for it to work
- */
-
-module.exports = mainPaneActions;
-
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10}],3:[function(require,module,exports){
-/**
  * Created by twi18192 on 10/12/15.
  */
 
 var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
-var nodeActions = {
+var blockActions = {
   //changeGateNodePosition: function(item){
   //  AppDispatcher.handleAction({
   //    actionType: appConstants.GATENODE_CHANGEPOSITION,
@@ -135,15 +80,15 @@ var nodeActions = {
   //  })
   //},
 
-  selectNode: function(item){
+  selectBlock: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.SELECT_NODE,
+      actionType: appConstants.SELECT_BLOCK,
       item: item
     })
   },
-  deselectAllNodes: function(item){
+  deselectAllBlocks: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.DESELECT_ALLNODES,
+      actionType: appConstants.DESELECT_ALLBLOCKS,
       item: item
     })
   },
@@ -187,9 +132,9 @@ var nodeActions = {
     })
   },
 
-  addToAllNodeInfo: function(item){
+  addToAllBlockInfo: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.ADDTO_ALLNODEINFO,
+      actionType: appConstants.ADDTO_ALLBLOCKINFO,
       item: item
     })
   },
@@ -213,9 +158,9 @@ var nodeActions = {
     })
   },
 
-  addOneSingleEdgeToAllNodeInfo(edgeInfo){
+  addOneSingleEdgeToAllBlockInfo(edgeInfo){
     AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOALLNODEINFO,
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
       item: edgeInfo
     })
   },
@@ -235,9 +180,64 @@ var nodeActions = {
   }
 };
 
-module.exports = nodeActions;
+module.exports = blockActions;
 
-},{"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10}],4:[function(require,module,exports){
+},{"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10}],2:[function(require,module,exports){
+/**
+ * Created by twi18192 on 24/09/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher');
+var appConstants = require('../constants/appConstants');
+
+var deviceActions = {
+  mockServerRequest: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.MOCK_SERVERREQUEST,
+      item: item
+    })
+  }
+
+};
+
+module.exports = deviceActions;
+
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10}],3:[function(require,module,exports){
+/**
+ * Created by twi18192 on 25/08/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher');
+var appConstants = require('../constants/appConstants');
+
+var mainPaneActions = {
+  toggleFooter1: function(item){
+    AppDispatcher.handleViewAction({
+      actionType:appConstants.FOOTER_TOGGLE,
+      item: item
+    })
+  },
+  toggleConfigPanel: function(item){
+    AppDispatcher.handleViewAction({
+      actionType:appConstants.CONFIG_TOGGLE,
+      item: item
+    })
+  },
+  toggleFavPanel: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.FAV_TOGGLE,
+      item: item
+    })
+  }
+};
+
+/* This isn't a React component, so you don't need a
+capital first letter in order for it to work
+ */
+
+module.exports = mainPaneActions;
+
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10}],4:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -283,22 +283,22 @@ var paneActions = {
     })
   },
 
-  initialFetchOfNodeDataFromNodeStore: function(item){
+  initialFetchOfBlockDataFromBlockStore: function(item){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.FETCHINITIAL_NODEDATA,
+      actionType: appConstants.FETCHINITIAL_BLOCKDATA,
       item: item
     })
   },
-  openNodeTab: function(NodeId){
+  openBlockTab: function(BlockId){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.OPEN_NODETAB,
-      item: NodeId
+      actionType: appConstants.OPEN_BLOCKTAB,
+      item: BlockId
     })
   },
-  removeNodeTab: function(SelectedNodeTabIndex){
+  removeBlockTab: function(SelectedBlockTabIndex){
     AppDispatcher.handleViewAction({
-      actionType: appConstants.REMOVE_NODETAB,
-      item: SelectedNodeTabIndex
+      actionType: appConstants.REMOVE_BLOCKTAB,
+      item: SelectedBlockTabIndex
     })
   },
 
@@ -434,7 +434,7 @@ var sessionActions = {
 
 module.exports = sessionActions;
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"../websocketClientTEST":32}],7:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"../websocketClientTEST":28}],7:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -580,7 +580,7 @@ ReactDOM.render(
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
 
-},{"./views/mainPane":22,"./views/sidePane":27,"./views/sidebar":28,"./websocketClientTEST":32,"react":220,"react-dom":42,"react-panels":43}],9:[function(require,module,exports){
+},{"./views/mainPane":22,"./views/sidePane":24,"./views/sidebar":25,"./websocketClientTEST":28,"react":216,"react-dom":38,"react-panels":39}],9:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -631,13 +631,13 @@ var appConstants = {
 
   /* Constants from the-graph-diamond added here */
 
-  GATENODE_CHANGEPOSITION: "GATENODE_CHANGEPOSITION",
+  GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
   DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",
   DRAGGED_ELEMENT: "DRAGGED_ELEMENT",
-  CHANGE_NODEPOSITION: "CHANGE_NODEPOSITION",
+  CHANGE_BLOCKPOSITION: "CHANGE_BLOCKPOSITION",
 
-  SELECT_NODE: "SELECT_NODE",
-  DESELECT_ALLNODES: "DESELECT_ALLNODES",
+  SELECT_BLOCK: "SELECT_BLOCK",
+  DESELECT_ALLBLOCKS: "DESELECT_ALLBLOCKS",
   SELECT_EDGE: "SELECT_EDGE",
   DESELECT_ALLEDGES: "DESELECT_ALLEDGES",
   //CHANGE_GATE1STYLING: "CHANGE_GATE1STYLING"
@@ -648,17 +648,17 @@ var appConstants = {
   GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
   CLICKED_EDGE: "CLICKED_EDGE",
 
-  ADDTO_ALLNODEINFO: "ADDTO_ALLNODEINFO",
-  FETCHINITIAL_NODEDATA: "FETCHINITIAL_NODEDATA",
-  OPEN_NODETAB: "OPEN_NODETAB",
-  REMOVE_NODETAB: "REMOVE_NODETAB",
+  ADDTO_ALLBLOCKINFO: "ADDTO_ALLBLOCKINFO",
+  FETCHINITIAL_BLOCKDATA: "FETCHINITIAL_BLOCKDATA",
+  OPEN_BLOCKTAB: "OPEN_BLOCKTAB",
+  REMOVE_BLOCKTAB: "REMOVE_BLOCKTAB",
   //ADDEDGE_TOALLNODEINFO: "ADDEDGE_TOALLNODEINFO",
   PASS_PORTMOUSEDOWN: "PASS_PORTMOUSEDOWN",
   DESELECT_ALLPORTS: "DESELECT_ALLPORTS",
   STORING_FIRSTPORTCLICKED: "STORING_FIRSTPORTCLICKED",
   //ADD_ONESINGLEEDGE: "ADD_ONESINGLEEDGE",
   //CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
-  ADD_ONESINGLEEDGETOALLNODEINFO: "ADD_ONESINGLEEDGETOALLNODEINFO",
+  ADD_ONESINGLEEDGETOALLBLOCKINFO: "ADD_ONESINGLEEDGETOALLBLOCKINFO",
   //ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
   APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
   PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
@@ -715,237 +715,7 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":36,"object-assign":40}],11:[function(require,module,exports){
-/**
- * Created by twi18192 on 24/09/15.
- */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-
-var CHANGE_EVENT = 'change';
-
-var allDeviceContent = {
-  /* Will contain all the blocks/devices, along with their attributes-key pairs*/
-  redBlockContent: {
-    name: "Red block",
-    hack: "redBlockTabOpen",
-    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
-  },
-  blueBlockContent: {
-    name: "Blue block",
-    hack: "blueBlockTabOpen",
-    info: {
-      work: {height: "20 pixels", width: "460 pixels"}
-    }
-  },
-  greenBlockContent: {
-    name: "Green block",
-    hack: "greenBlockTabOpen",
-    info: {work: {height: "10 pixels", width: "980 pixels"}
-    }
-  }
-
-};
-
-var changeBlockContent = function(infoFromServer){
-  /* Code to alter/update the appropriate block object in allDeviceContent.
-  Not sure if I should filter out the 'message' type and all that from the
-  json that comes from the server before this, or do it in here to get the
-  actual changed value?
-   */
-
-  /* Also, I suppose it depends on if each Channel does indeed represent just one
-  block attribute, because then you could use probably some of the json to
-  distinguish which block and which attribute to change, making this function
-  easier to write
-   */
-};
-
-//var mockBlockContentPlayingWithServer = {
-//  redBlockContent: {
-//    name: "Red block",
-//    hack: "redBlockTabOpen",
-//    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
-//  },
-//};
-
-var simpleChangeChannelName = function(name){
-  allDeviceContent.redBlockContent.info.work.ChannelName = name
-};
-
-
-
-
-
-
-var deviceStore = assign({}, EventEmitter.prototype, {
-  addChangeListener: function(cb){
-    this.on(CHANGE_EVENT, cb)
-  },
-  removeChangeListener: function(cb){
-    this.removeListener(CHANGE_EVENT, cb)
-  },
-  emitChange: function(){
-    this.emit(CHANGE_EVENT)
-  },
-  getRedBlockContent: function(){
-    return allDeviceContent.redBlockContent;
-  },
-  getBlueBlockContent: function(){
-    return allDeviceContent.blueBlockContent;
-  },
-  getGreenBlockContent: function(){
-    return allDeviceContent.greenBlockContent;
-  }
-});
-
-AppDispatcher.register(function(payload){
-  var action = payload.action;
-  var item = action.item;
-  switch(action.actionType){
-
-    case appConstants.MOCK_SERVERREQUEST:
-      console.log('mock server request running');
-          console.log(payload);
-          console.log(item);
-          /* just a mock, so do nothing :P*/
-          /* Just as a reference though, this'll be something like "you will have received an object of info, stick it into allDeviceContent/replace whatever it was with the newer object" */
-          deviceStore.emitChange();
-          break;
-
-    /* Testing/mocking up a case where info has been passed from server to the dispatcher, and now to deviceStore (ie, here :P) */
-
-    case appConstants.PASSUPDATEDCHANNEL_VALUE:
-          console.log(payload);
-          console.log(action);
-          break;
-
-
-
-
-
-    case appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO:
-          console.log(payload);
-          console.log(action);
-          deviceStore.emitChange();
-          break;
-
-    //case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
-    //      console.log(payload);
-    //      console.log(action);
-    //      simpleChangeChannelName(item);
-    //      deviceStore.emitChange();
-    //      break;
-
-
-    default:
-          return 'deviceStore: default'
-  }
-});
-
-/* Testing waitFor() to update the Channel value in RedBlock BEFORE PaneStore fetches the block object and runs its fucntion to check which attrubute values have changed */
-
-deviceStore.dispatchToken = AppDispatcher.register(function(payload){
-  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
-    console.log(payload);
-    console.log(payload.action.item);
-    simpleChangeChannelName(payload.action.item);
-    deviceStore.emitChange();
-  }
-});
-
-module.exports = deviceStore;
-
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":34,"object-assign":40}],12:[function(require,module,exports){
-/**
- * Created by twi18192 on 25/08/15.
- */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-
-var CHANGE_EVENT = 'change';
-
-var _stuff = {
-    footerState: false,
-    //configPanelOpen: false,
-    //favPanelOpen: false
-};
-
-var toggleFooter = function(){
-    _stuff.footerState = !_stuff.footerState
-  };
-
-//var toggleConfigPanel = function(){
-//  _stuff.configPanelOpen = !_stuff.configPanelOpen
-//};
-//
-//var toggleFavPanel = function(){
-//  _stuff.favPanelOpen = !_stuff.favPanelOpen
-//};
-
-
-var mainPaneStore = assign({}, EventEmitter.prototype, {
-  addChangeListener: function(cb) {
-    this.on(CHANGE_EVENT, cb);
-  },
-  removeChangeListener: function(cb) {
-    this.removeListener(CHANGE_EVENT, cb);
-  },
-  emitChange: function(){
-    this.emit(CHANGE_EVENT)
-  },
-  getFooterState: function(){
-    return _stuff.footerState;
-  },
-  //getConfigPanelState: function(){
-  //  return _stuff.configPanelOpen;
-  //},
-  //getFavPanelState: function(){
-  //  return _stuff.favPanelOpen;
-  //}
-});
-
-AppDispatcher.register(function(payload){
-  var action = payload.action;
-  switch(action.actionType){
-    case appConstants.FOOTER_TOGGLE:
-      console.log(payload);
-      console.log(action);
-      toggleFooter();
-      mainPaneStore.emitChange();
-      console.log(_stuff.footerState);
-      break;
-
-    //case appConstants.CONFIG_TOGGLE:
-    //  console.log(payload);
-    //  console.log(action);
-    //  toggleConfigPanel();
-    //  mainPaneStore.emitChange();
-    //  console.log(_stuff.configPanelOpen);
-    //  break;
-    //
-    //case appConstants.FAV_TOGGLE:
-    //  console.log(payload);
-    //  console.log(action);
-    //  toggleFavPanel();
-    //  mainPaneStore.emitChange();
-    //  console.log(_stuff.favPanelOpen);
-    //  break;
-
-    default:
-          return true;
-  }
-});
-
-module.exports = mainPaneStore;
-
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":34,"object-assign":40}],13:[function(require,module,exports){
+},{"flux":32,"object-assign":36}],11:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -968,7 +738,7 @@ var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
 var portMouseOver = false;
 
-var allNodeTabInfo = {
+var allBlockTabInfo = {
   'Gate1': {
     type: 'Gate',
     label: 'Gate1',
@@ -1007,42 +777,42 @@ var allNodeTabInfo = {
   }
 };
 
-var nodeSelectedStates = {
+var blockSelectedStates = {
   Gate1: false,
   TGen1: false,
   PComp1: false
 };
 
-function appendToNodeSelectedStates(NodeId){
-  console.log("nodeSelectedStates before adding a new node:");
-  console.log(nodeSelectedStates);
-  nodeSelectedStates[NodeId] = false;
-  console.log("nodeSelectedStates after adding a new node:");
-  console.log(nodeSelectedStates);
+function appendToBlockSelectedStates(BlockId){
+  console.log("blockSelectedStates before adding a new block:");
+  console.log(blockSelectedStates);
+  blockSelectedStates[BlockId] = false;
+  console.log("blockSelectedStates after adding a new block:");
+  console.log(blockSelectedStates);
 }
 
-function deselectAllNodes(){
-  for(var node in nodeSelectedStates){
-    nodeSelectedStates[node] = false
+function deselectAllBlocks(){
+  for(var block in blockSelectedStates){
+    blockSelectedStates[block] = false
   }
-  console.log(nodeSelectedStates);
+  console.log(blockSelectedStates);
 }
 
-function checkIfAnyNodesAreSelected(){
-  var areAnyNodesSelected = null;
-  for(var node in nodeSelectedStates){
-    if(nodeSelectedStates[node] === true){
-      console.log(nodeSelectedStates[node]);
-      areAnyNodesSelected = true;
+function checkIfAnyBlocksAreSelected(){
+  var areAnyBlocksSelected = null;
+  for(var block in blockSelectedStates){
+    if(blockSelectedStates[block] === true){
+      console.log(blockSelectedStates[block]);
+      areAnyBlocksSelected = true;
       break;
     }
     else{
-      //console.log("one of the nodes' state is false, check the next one if it is true");
-      areAnyNodesSelected = false;
+      //console.log("one of the blocks' state is false, check the next one if it is true");
+      areAnyBlocksSelected = false;
     }
   }
   //console.log(areAnyNodesSelected);
-  return areAnyNodesSelected;
+  return areAnyBlocksSelected;
 }
 
 var edgeSelectedStates = {
@@ -1089,7 +859,7 @@ function deselectAllEdges(){
   console.log(edgeSelectedStates);
 }
 
-var nodeLibrary = {
+var blockLibrary = {
   Gate: {
     name: 'Gate',
     description: 'SR Gate block',
@@ -1191,7 +961,7 @@ var nodeLibrary = {
   }
 };
 
-var allNodeInfo = {
+var allBlockInfo = {
 
   'Gate1': {
     type: 'Gate',
@@ -1235,7 +1005,7 @@ var allNodeInfo = {
         connected: true,
         connectedTo: [
           {
-            node: 'TGen1',
+            block: 'TGen1',
             port: 'ena'
           }
         ]
@@ -1268,7 +1038,7 @@ var allNodeInfo = {
         name: 'ena',
         connected: true,
         connectedTo: {
-          node: 'Gate1',
+          block: 'Gate1',
           port: 'out'
         }
       }
@@ -1345,44 +1115,44 @@ var allNodeInfo = {
   },
 };
 
-function addEdgeToAllNodeInfo(Info){
+function addEdgeToAllBlockInfo(Info){
 
-  console.log("Inside addEdgeToAllNodeInfo, here's the input:");
+  console.log("Inside addEdgeToAllBlockInfo, here's the input:");
   console.log(Info);
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
-  for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
-    if(allNodeInfo[Info.fromNode].outports[i].name === Info.fromNodePort){
-      var newEdgeToFromNode = {
-        node: Info.toNode,
-        port: Info.toNodePort
+  for(i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
+    if(allBlockInfo[Info.fromBlock].outports[i].name === Info.fromBlockPort){
+      var newEdgeToFromBlock = {
+        block: Info.toBlock,
+        port: Info.toBlockPort
       };
-      console.log(newEdgeToFromNode);
-      allNodeInfo[Info.fromNode].outports[i].connected = true;
-      console.log(allNodeInfo[Info.fromNode].outports[i]);
-      allNodeInfo[Info.fromNode].outports[i].connectedTo.push(newEdgeToFromNode);
+      console.log(newEdgeToFromBlock);
+      allBlockInfo[Info.fromBlock].outports[i].connected = true;
+      console.log(allBlockInfo[Info.fromBlock].outports[i]);
+      allBlockInfo[Info.fromBlock].outports[i].connectedTo.push(newEdgeToFromBlock);
     }
   }
   /* Also need to add to the node whose inport we've connected that outport to! */
 
-  for(j = 0; j < allNodeInfo[Info.toNode].inports.length; j++){
-    if(allNodeInfo[Info.toNode].inports[j].name === Info.toNodePort){
-      var newEdgeToToNode = {
-        node: Info.fromNode,
-        port: Info.fromNodePort
+  for(j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
+    if(allBlockInfo[Info.toBlock].inports[j].name === Info.toBlockPort){
+      var newEdgeToToBlock = {
+        block: Info.fromBlock,
+        port: Info.fromBlockPort
       };
-      console.log(newEdgeToToNode);
-      allNodeInfo[Info.toNode].inports[j].connected = true;
+      console.log(newEdgeToToBlock);
+      allBlockInfo[Info.toBlock].inports[j].connected = true;
 
       /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
-      allNodeInfo[Info.toNode].inports[j].connectedTo = newEdgeToToNode;
+      allBlockInfo[Info.toBlock].inports[j].connectedTo = newEdgeToToBlock;
     }
   }
-  console.log(allNodeInfo);
+  console.log(allBlockInfo);
 }
 
-var nodeInfoTemplates = {
+var blockInfoTemplates = {
   'Gate': {
     type: 'Gate',
     name: "",
@@ -1473,7 +1243,7 @@ var nodeInfoTemplates = {
   }
 };
 
-function appendToAllNodeInfo(NodeInfo){
+function appendToAllBlockInfo(BlockInfo){
   //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
   //
   //}
@@ -1484,9 +1254,9 @@ function appendToAllNodeInfo(NodeInfo){
   //console.log(allNodeInfo);
   //newlyAddedNode = allNodeInfo[newGateId];
   //console.log(newlyAddedNode);
-  console.log(NodeInfo);
+  console.log(BlockInfo);
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
-  allNodeInfo[NodeInfo] = {
+  allBlockInfo[BlockInfo] = {
     type: 'Gate',
     name: "",
     position: {
@@ -1518,36 +1288,36 @@ function appendToAllNodeInfo(NodeInfo){
   //
   //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
   //}
-  console.log(nodeInfoTemplates.Gate);
+  console.log(blockInfoTemplates.Gate);
   //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
   //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
   //console.log(randomNodePositionGenerator());
   //console.log(randomNodePositionGenerator());
-  console.log(allNodeInfo);
+  console.log(allBlockInfo);
 }
 
-var nodeIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
 
-function generateNewNodeId(){
+function generateNewBlockId(){
   /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  nodeIdCounter += 1;
-  var newGateId = "Gate" + nodeIdCounter;
+  blockIdCounter += 1;
+  var newGateId = "Gate" + blockIdCounter;
   console.log(newGateId);
   return newGateId;
 }
 
-function interactJsDrag(NodeInfo){
+function interactJsDrag(BlockInfo){
   //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
   //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
   //console.log(allNodeInfo[NodeInfo.target].position);
 
-  allNodeInfo[NodeInfo.target].position = {
-    x: allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale),
-    y: allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale)
+  allBlockInfo[BlockInfo.target].position = {
+    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
+    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
   }
 }
 
-var GateNodeStyling = {
+var GateBlockStyling = {
   rectangle: {
     rectanglePosition: {
       x : 0,
@@ -1661,7 +1431,7 @@ var SelectedGateNodeStyling = {
   }
 };
 
-var TGenNodeStyling = {
+var TGenBlockStyling = {
   rectangle: {
     rectanglePosition: {
       x : 0,
@@ -1759,7 +1529,7 @@ var SelectedTGenNodeStyling = {
   }
 };
 
-var PCompNodeStyling = {
+var PCompBlockStyling = {
   /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
   Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
    */
@@ -1908,16 +1678,16 @@ var SelectedPCompNodeStyling = {
   }
 };
 
-var allNodeTypesPortStyling = {
-  'Gate': GateNodeStyling.ports.portPositions,
-  'TGen': TGenNodeStyling.ports.portPositions,
-  'PComp': PCompNodeStyling.ports.portPositions
+var allBlockTypesPortStyling = {
+  'Gate': GateBlockStyling.ports.portPositions,
+  'TGen': TGenBlockStyling.ports.portPositions,
+  'PComp': PCompBlockStyling.ports.portPositions
 };
 
-var allNodeTypesStyling = {
-  'Gate': GateNodeStyling,
-  'TGen': TGenNodeStyling,
-  'PComp': PCompNodeStyling
+var allBlockTypesStyling = {
+  'Gate': GateBlockStyling,
+  'TGen': TGenBlockStyling,
+  'PComp': PCompBlockStyling
 };
 
 var graphPosition = {
@@ -1927,7 +1697,7 @@ var graphPosition = {
 
 var graphZoomScale = 2.0;
 
-var nodeStore = assign({}, EventEmitter.prototype, {
+var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
   },
@@ -2025,12 +1795,12 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //  return edgesToRender;
   //},
 
-  getAllNodeInfo: function(){
-    return allNodeInfo;
+  getAllBlockInfo: function(){
+    return allBlockInfo;
   },
 
-  getAnyNodeSelectedState:function(NodeId){
-    if(nodeSelectedStates[NodeId] === undefined || null){
+  getAnyBlockSelectedState:function(BlockId){
+    if(blockSelectedStates[BlockId] === undefined || null){
       //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
       //console.log(NodeId);
       //console.log(nodeSelectedStates[NodeId]);
@@ -2038,11 +1808,11 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     else{
       //console.log("the state of that nod exists, passing it now");
       //console.log(nodeSelectedStates[NodeId]);
-      return nodeSelectedStates[NodeId];
+      return blockSelectedStates[BlockId];
     }
   },
-  getIfAnyNodesAreSelected: function(){
-    return checkIfAnyNodesAreSelected();
+  getIfAnyBlocksAreSelected: function(){
+    return checkIfAnyBlocksAreSelected();
   },
   getIfEdgeIsSelected: function(EdgeId){
     return getAnyEdgeSelectedState(EdgeId);
@@ -2051,8 +1821,8 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getAllNodeTypesPortStyling: function(){
-    return allNodeTypesPortStyling;
+  getAllBlockTypesPortStyling: function(){
+    return allBlockTypesPortStyling;
   },
 
   getGraphPosition: function(){
@@ -2062,8 +1832,8 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return graphZoomScale;
   },
 
-  getAllNodeInfoForInitialNodeData: function(){
-    return allNodeInfo;
+  getAllBlockInfoForInitialBlockData: function(){
+    return allBlockInfo;
   },
   getPortThatHasBeenClicked: function(){
     return portThatHasBeenClicked;
@@ -2071,16 +1841,16 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   getStoringFirstPortClicked: function(){
     return storingFirstPortClicked;
   },
-  getNodeLibrary: function(){
-    return nodeLibrary;
+  getBlockLibrary: function(){
+    return blockLibrary;
   },
 
   getPortMouseOver: function(){
     return portMouseOver;
   },
 
-  getAllNodeTypesStyling: function(){
-    return allNodeTypesStyling;
+  getAllBlockTypesStyling: function(){
+    return allBlockTypesStyling;
   }
 });
 
@@ -2188,19 +1958,19 @@ AppDispatcher.register(function(payload){
     case appConstants.SELECT_NODE:
       console.log(payload);
       console.log(item);
-      nodeSelectedStates[item] = true;
-      console.log(nodeSelectedStates);
+      blockSelectedStates[item] = true;
+      console.log(blockSelectedStates);
       //changeUnselectedNodesOpacity();
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLNODES:
       console.log(payload);
       console.log(item);
-      deselectAllNodes();
+      deselectAllBlocks();
       //console.log(nodeSelectedStates.Gate1);
       //console.log(nodeSelectedStates.TGen1);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.SELECT_EDGE:
@@ -2217,28 +1987,28 @@ AppDispatcher.register(function(payload){
         selectEdge(item);
       }
       console.log(edgeSelectedStates);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLEDGES:
       console.log(payload);
       console.log(item);
       deselectAllEdges();
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.CHANGE_GRAPHPOSITION:
       //console.log(payload);
       //console.log(item);
       graphPosition = item;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.GRAPH_ZOOM:
       //console.log(payload);
       //console.log(item);
       graphZoomScale = item;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.GETANY_EDGESELECTEDSTATE:
@@ -2246,7 +2016,7 @@ AppDispatcher.register(function(payload){
       console.log(item);
       getAnyEdgeSelectedState(item);
       console.log(edgeSelectedStates[item]);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.CLICKED_EDGE:
@@ -2254,17 +2024,17 @@ AppDispatcher.register(function(payload){
       console.log(item);
       clickedEdge = item;
       console.log(clickedEdge);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.ADDTO_ALLNODEINFO:
       console.log(payload);
       console.log(item);
-      appendToAllNodeInfo(item);
-      appendToAllPossibleNodes(item);
-      appendToNodeSelectedStates(item);
+      appendToAllBlockInfo(item);
+      appendToAllPossibleBlocks(item);
+      appendToBlockSelectedStates(item);
       //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.PASS_PORTMOUSEDOWN:
@@ -2272,13 +2042,13 @@ AppDispatcher.register(function(payload){
       console.log(item);
       portThatHasBeenClicked = item;
       //console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.id);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLPORTS:
       portThatHasBeenClicked = null;
       console.log("portThatHasBeenClicked has been reset");
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.STORING_FIRSTPORTCLICKED:
@@ -2286,22 +2056,22 @@ AppDispatcher.register(function(payload){
       console.log(item);
       storingFirstPortClicked = item;
       //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
       console.log(payload);
       console.log(item);
-      addEdgeToAllNodeInfo(item);
-      nodeStore.emitChange();
-      console.log(allNodeInfo);
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
       break;
 
     case appConstants.APPEND_EDGESELECTEDSTATE:
       console.log(payload);
       console.log(item);
       edgeSelectedStates[item] = false;
-      nodeStore.emitChange();
+      blockStore.emitChange();
       console.log(edgeSelectedStates);
       break;
 
@@ -2309,7 +2079,7 @@ AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       interactJsDrag(item);
-      nodeStore.emitChange();
+      blockStore.emitChange();
       break;
 
     default:
@@ -2318,7 +2088,7 @@ AppDispatcher.register(function(payload){
 
 });
 
-module.exports = nodeStore;
+module.exports = blockStore;
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;
@@ -2795,7 +2565,237 @@ module.exports = nodeStore;
 //var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
 //var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
 
-},{"../../node_modules/object-assign/index.js":40,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":34}],14:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":36,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":30}],12:[function(require,module,exports){
+/**
+ * Created by twi18192 on 24/09/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher');
+var appConstants = require('../constants/appConstants');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+
+var CHANGE_EVENT = 'change';
+
+var allDeviceContent = {
+  /* Will contain all the blocks/devices, along with their attributes-key pairs*/
+  redBlockContent: {
+    name: "Red block",
+    hack: "redBlockTabOpen",
+    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
+  },
+  blueBlockContent: {
+    name: "Blue block",
+    hack: "blueBlockTabOpen",
+    info: {
+      work: {height: "20 pixels", width: "460 pixels"}
+    }
+  },
+  greenBlockContent: {
+    name: "Green block",
+    hack: "greenBlockTabOpen",
+    info: {work: {height: "10 pixels", width: "980 pixels"}
+    }
+  }
+
+};
+
+var changeBlockContent = function(infoFromServer){
+  /* Code to alter/update the appropriate block object in allDeviceContent.
+  Not sure if I should filter out the 'message' type and all that from the
+  json that comes from the server before this, or do it in here to get the
+  actual changed value?
+   */
+
+  /* Also, I suppose it depends on if each Channel does indeed represent just one
+  block attribute, because then you could use probably some of the json to
+  distinguish which block and which attribute to change, making this function
+  easier to write
+   */
+};
+
+//var mockBlockContentPlayingWithServer = {
+//  redBlockContent: {
+//    name: "Red block",
+//    hack: "redBlockTabOpen",
+//    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
+//  },
+//};
+
+var simpleChangeChannelName = function(name){
+  allDeviceContent.redBlockContent.info.work.ChannelName = name
+};
+
+
+
+
+
+
+var deviceStore = assign({}, EventEmitter.prototype, {
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+  getRedBlockContent: function(){
+    return allDeviceContent.redBlockContent;
+  },
+  getBlueBlockContent: function(){
+    return allDeviceContent.blueBlockContent;
+  },
+  getGreenBlockContent: function(){
+    return allDeviceContent.greenBlockContent;
+  }
+});
+
+AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+  switch(action.actionType){
+
+    case appConstants.MOCK_SERVERREQUEST:
+      console.log('mock server request running');
+          console.log(payload);
+          console.log(item);
+          /* just a mock, so do nothing :P*/
+          /* Just as a reference though, this'll be something like "you will have received an object of info, stick it into allDeviceContent/replace whatever it was with the newer object" */
+          deviceStore.emitChange();
+          break;
+
+    /* Testing/mocking up a case where info has been passed from server to the dispatcher, and now to deviceStore (ie, here :P) */
+
+    case appConstants.PASSUPDATEDCHANNEL_VALUE:
+          console.log(payload);
+          console.log(action);
+          break;
+
+
+
+
+
+    case appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO:
+          console.log(payload);
+          console.log(action);
+          deviceStore.emitChange();
+          break;
+
+    //case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
+    //      console.log(payload);
+    //      console.log(action);
+    //      simpleChangeChannelName(item);
+    //      deviceStore.emitChange();
+    //      break;
+
+
+    default:
+          return 'deviceStore: default'
+  }
+});
+
+/* Testing waitFor() to update the Channel value in RedBlock BEFORE PaneStore fetches the block object and runs its fucntion to check which attrubute values have changed */
+
+deviceStore.dispatchToken = AppDispatcher.register(function(payload){
+  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+    console.log(payload);
+    console.log(payload.action.item);
+    simpleChangeChannelName(payload.action.item);
+    deviceStore.emitChange();
+  }
+});
+
+module.exports = deviceStore;
+
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":30,"object-assign":36}],13:[function(require,module,exports){
+/**
+ * Created by twi18192 on 25/08/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher');
+var appConstants = require('../constants/appConstants');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+
+var CHANGE_EVENT = 'change';
+
+var _stuff = {
+    footerState: false,
+    //configPanelOpen: false,
+    //favPanelOpen: false
+};
+
+var toggleFooter = function(){
+    _stuff.footerState = !_stuff.footerState
+  };
+
+//var toggleConfigPanel = function(){
+//  _stuff.configPanelOpen = !_stuff.configPanelOpen
+//};
+//
+//var toggleFavPanel = function(){
+//  _stuff.favPanelOpen = !_stuff.favPanelOpen
+//};
+
+
+var mainPaneStore = assign({}, EventEmitter.prototype, {
+  addChangeListener: function(cb) {
+    this.on(CHANGE_EVENT, cb);
+  },
+  removeChangeListener: function(cb) {
+    this.removeListener(CHANGE_EVENT, cb);
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+  getFooterState: function(){
+    return _stuff.footerState;
+  },
+  //getConfigPanelState: function(){
+  //  return _stuff.configPanelOpen;
+  //},
+  //getFavPanelState: function(){
+  //  return _stuff.favPanelOpen;
+  //}
+});
+
+AppDispatcher.register(function(payload){
+  var action = payload.action;
+  switch(action.actionType){
+    case appConstants.FOOTER_TOGGLE:
+      console.log(payload);
+      console.log(action);
+      toggleFooter();
+      mainPaneStore.emitChange();
+      console.log(_stuff.footerState);
+      break;
+
+    //case appConstants.CONFIG_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleConfigPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.configPanelOpen);
+    //  break;
+    //
+    //case appConstants.FAV_TOGGLE:
+    //  console.log(payload);
+    //  console.log(action);
+    //  toggleFavPanel();
+    //  mainPaneStore.emitChange();
+    //  console.log(_stuff.favPanelOpen);
+    //  break;
+
+    default:
+          return true;
+  }
+});
+
+module.exports = mainPaneStore;
+
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":30,"object-assign":36}],14:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -2812,7 +2812,7 @@ var _stuff = {
   selectedTabIndex: 0,
   //passSidePane: null
   updatedBlockContent: null,
-  nodeTabState: [],
+  blockTabState: [],
   sidebarOpen: false
 };
 
@@ -2870,28 +2870,6 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
   }
 };
 
-//var appendToAllBlockContent = function(dispatchMarker){
-//  allBlockContent[dispatchMarker] = {
-//    name: "Whatever",
-//    hack: dispatchMarker,
-//    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
-//  }
-//};
-//var appendToAllBlockTabProperties = function(dispatchMarker){
-//  console.log('appending to allBlockTabProperties');
-//  console.log(allBlockTabProperties);
-//  allBlockTabProperties[dispatchMarker] = false;
-//  console.log(allBlockTabProperties)
-//};
-//var addTab = function(newtab){
-//  /* set state of tabs somewhere here*/
-//  var newTabs = _stuff.tabState.concat(newtab);
-//  _stuff.tabState = newTabs;
-//  /* could you just skip the variable newTabs and set _stuff.tabState equal
-//   itself concatenated?
-//   */
-//};
-
 var favContent = {
   name: "Favourites tab",
   label: 'Favourites',
@@ -2925,197 +2903,6 @@ var configContent = {
   }
 };
 
-var allBlockTabProperties = {
-  redBlockTabOpen: false,
-  blueBlockTabOpen: false,
-  greenBlockTabOpen: false,
-  favTabOpen: false,
-  configTabOpen: false
-};
-
-var changeFavTabState = function(){
-  console.log(allBlockTabProperties.favTabOpen);
-  if(allBlockTabProperties.favTabOpen === false) {
-    allBlockTabProperties.favTabOpen = true;
-    console.log(allBlockTabProperties.favTabOpen);
-    checkWhichBlockTabsOpen();
-    /* function that checks if fav tab or config are already open*/
-  }
-  else {
-
-  }
-};
-
-var changeConfigTabState = function(){
-  console.log(allBlockTabProperties.configTabOpen);
-  if(allBlockTabProperties.configTabOpen === false) {
-    allBlockTabProperties.configTabOpen = true;
-    console.log(allBlockTabProperties.configTabOpen);
-    checkWhichBlockTabsOpen()
-  }
-};
-
-var checkWhichBlockTabsOpen = function(){
-  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
-  for (var key in allBlockTabProperties){
-    console.log(key);
-    console.log(allBlockTabProperties[key]);
-    if(allBlockTabProperties[key] === true) {
-      console.log('just before starting the tabState checker loop');
-      if(_stuff.tabState.length === 0){
-        console.log('tabState was empty, tab is now open');
-        var blockTabsOpen = [];
-        lookupWhichTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
-
-        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-        console.log(lookupWhichTabToOpen(key));
-        _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
-        console.log(_stuff.tabState);
-      }
-      else{
-        for (var i = 0; i < _stuff.tabState.length; i++) {
-          console.log('in the non-empty tabState checker loop');
-          console.log(_stuff.tabState.length);
-          console.log(i);
-          if (_stuff.tabState[i].hack === key) {
-            console.log("tab is already open from before, don't add, break statement occurring");
-            break
-          }
-          else if(_stuff.tabState[i].hack !== key){
-            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-            console.log(_stuff.tabState.length);
-            console.log(i);
-            if(i === _stuff.tabState.length - 1){
-              console.log('tabState didnt have this tab, tab is now open');
-              var blockTabsOpen = [];
-              lookupWhichTabToOpen(key);
-
-              //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-              console.log(lookupWhichTabToOpen(key));
-              console.log(blockTabsOpen);
-              _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
-            }
-          }
-        }
-        console.log('finished the tabState checker loop')
-      }
-    }
-    else{
-      console.log('tab is not open')
-    }
-  }
-
-  //console.log(blockTabsOpen);
-  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
-  console.log(_stuff.tabState);
-
-  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
-  // Actually, no need since at the start of the function it is reset*/
-
-  //return updatedBlockTabsOpen;
-
-  selectBlockOnClick()
-
-};
-
-var possibleTabsToOpen = {
-  'redBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent); /*not sure if blockTabsOpen will get passed through... :/*/
-    return updatedBlockTabsOpen
-  },
-  'blueBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-    return updatedBlockTabsOpen
-  },
-  'greenBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-    return updatedBlockTabsOpen
-  },
-  'favTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-    return updatedBlockTabsOpen
-  },
-  'configTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
-    return updatedBlockTabsOpen
-  }
-};
-
-var appendToPossibleTabsToOpen = function(dispatchMarker){
-  possibleTabsToOpen[dispatchMarker] = function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent[dispatchMarker]);
-    return updatedBlockTabsOpen
-  }
-};
-
-
-function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
-/* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
-  if(typeof possibleTabsToOpen[key] !== 'function'){
-    throw new Error('Invalid key');
-  }
-  console.log('deciding which tab to open lookup is working!');
-  return possibleTabsToOpen[key](key)
-}
-
-var removeTab = function(item){
-
-  var tabName = _stuff.tabState[item].hack;
-  console.log(tabName);
-  lookupRemoveTab(tabName); /* Again, switch statement replaced by the lookup function to allow adding more items after initial render*/
-  /* code for removing tabs*/
-  console.log(tabName);
-  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-  newTabs.splice(item, 1);
-  _stuff.tabState = newTabs;
-};
-
-var possibleTabsToRemove = {
-  'redBlockTabOpen': function(){
-    allBlockTabProperties.redBlockTabOpen = false;
-    console.log(allBlockTabProperties.redBlockTabOpen);
-  },
-  'blueBlockTabOpen': function(){
-    allBlockTabProperties.blueBlockTabOpen = false;
-    console.log(allBlockTabProperties.blueBlockTabOpen);
-  },
-  'greenBlockTabOpen': function(){
-    allBlockTabProperties.greenBlockTabOpen = false;
-    console.log(allBlockTabProperties.greenBlockTabOpen);
-  },
-  'favTabOpen': function(){
-    allBlockTabProperties.favTabOpen = false;
-    console.log(allBlockTabProperties.favTabOpen);
-  },
-  'configTabOpen': function(){
-    allBlockTabProperties.configTabOpen = false;
-    console.log(allBlockTabProperties.configTabOpen);
-  }
-};
-
-var appendToPossibleTabsToRemove = function(dispatchMarker){
-  possibleTabsToRemove[dispatchMarker] = function(){
-    allBlockTabProperties[dispatchMarker] = false;
-    console.log(allBlockTabProperties[dispatchMarker]);
-  }
-};
-
-function lookupRemoveTab(item){
-  if(typeof possibleTabsToRemove[item] !== 'function'){
-    throw new Error('Invalid tab to remove')
-  }
-  console.log('remove tab lookup is working!');
-  return possibleTabsToRemove[item](item)
-}
-
-
-
 var dropdownMenuSelect = function(tab){
   //var findTheIndex = _stuff.tabState.indexOf(item);
   ////this.props.changeTab(findTheIndex)
@@ -3145,62 +2932,6 @@ var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
-
-
-
-var possibleBlockCases = {
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.1': function(){
-    if(allBlockTabProperties.redBlockTabOpen === false) {
-      allBlockTabProperties.redBlockTabOpen = true;
-      checkWhichBlockTabsOpen();
-      console.log(_handles.passSidePane)
-    }
-    else{
-
-    }
-  },
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.2': function(){
-    if(allBlockTabProperties.blueBlockTabOpen === false){
-      allBlockTabProperties.blueBlockTabOpen = true;
-      checkWhichBlockTabsOpen()
-    }
-    else{
-
-    }
-  },
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.3': function(){
-    if(allBlockTabProperties.greenBlockTabOpen === false){
-      allBlockTabProperties.greenBlockTabOpen = true;
-      checkWhichBlockTabsOpen()
-    }
-    else{
-
-    }
-  }
-};
-
-var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this works... :P*/
-  //dispatchMarker = function () { I think this part was uneeded, I was just making it harder for myself!
-  possibleBlockCases[dispatchMarker] = function () {
-    if (allBlockTabProperties[dispatchMarker] === false) {
-      allBlockTabProperties[dispatchMarker] = true;
-      checkWhichBlockTabsOpen()
-    }
-    else {
-
-    }
-  };
-  console.log('appended to possibleBlockCases');
-  console.log(possibleBlockCases[dispatchMarker]);
-};
-
-function checkWhichBlockClicked(dispatchMarker){
-  if(typeof possibleBlockCases[dispatchMarker] !== 'function'){ /* need a better condition for an error :P*/
-    throw new Error('Invalid dispatch marker')
-  }
-  console.log('dispatch marker method lookup is working!!');
-  return possibleBlockCases[dispatchMarker](dispatchMarker);
-}
 
 var changeSomeInfo = function(){
   allBlockContent.redBlockContent.info.work.height = "500 pixels";
@@ -3241,12 +2972,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getFavTabOpen:function(){
     /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
     //return allBlockTabProperties.favTabOpen;
-    return allNodeTabProperties.Favourites;
+    return allBlockTabProperties.Favourites;
   },
   getConfigTabOpen: function(){
     /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
     //return allBlockTabProperties.configTabOpen;
-    return allNodeTabProperties.Configuration;
+    return allBlockTabProperties.Configuration;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
@@ -3320,19 +3051,19 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.FETCHINITIAL_NODEDATA:
+    case appConstants.FETCHINITIAL_BLOCKDATA:
       console.log(payload);
       console.log(item);
-      getInitialNodeDataFromNodeStore();
-      console.log(allNodeTabInfo);
+      getInitialBlockDataFromBlockStore();
+      console.log(allBlockTabInfo);
       paneStore.emitChange();
       break;
 
-    case appConstants.OPEN_NODETAB:
+    case appConstants.OPEN_BLOCKTAB:
       console.log(payload);
       console.log(item);
-      console.log(allNodeTabInfo[item]);
-      setNodeTabStateTrue(item);
+      console.log(allBlockTabInfo[item]);
+      setBlockTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
       /* Seeing if I can cut out checkWhichNodeTabsOpen and cut straight to adding to _stuff.tabState */
       //checkWhichNodeTabsOpen();
@@ -3341,10 +3072,10 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.REMOVE_NODETAB:
+    case appConstants.REMOVE_BLOCKTAB:
       console.log(payload);
       console.log(item);
-      removeNodeTab(item);
+      removeBlockTab(item);
       console.log(_stuff.tabState);
       paneStore.emitChange();
       break;
@@ -3452,12 +3183,12 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
-var nodeStore = require('./nodeStore');
+var blockStore = require('./blockStore');
 
-var allNodeTabInfo;
+var allBlockTabInfo;
 
 /* This will need an append function at some point */
-var allNodeTabProperties = {
+var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
   'Gate1': false,
@@ -3465,14 +3196,14 @@ var allNodeTabProperties = {
   'PComp1': false
 };
 
-var setNodeTabStateTrue = function(NodeId){
-  if(allNodeTabProperties[NodeId] === false) {
-    allNodeTabProperties[NodeId] = true;
-    console.log(allNodeTabProperties[NodeId]);
+var setBlockTabStateTrue = function(BlockId){
+  if(allBlockTabProperties[BlockId] === false) {
+    allBlockTabProperties[BlockId] = true;
+    console.log(allBlockTabProperties[BlockId]);
     /* Now need to run the function to check which tabs should be open */
     /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
 
-    _stuff.tabState.push(allNodeTabInfo[NodeId]);
+    _stuff.tabState.push(allBlockTabInfo[BlockId]);
     console.log(_stuff.tabState);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
@@ -3484,20 +3215,20 @@ var setNodeTabStateTrue = function(NodeId){
     /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
     /* Could try using dropdownMenuSelect? */
 
-    dropdownMenuSelect(NodeId);
+    dropdownMenuSelect(BlockId);
   }
 };
 
 function setFavTabStateTrue(){
- if(allNodeTabProperties['Favourites'] === false){
-   allNodeTabProperties['Favourites'] = true;
+ if(allBlockTabProperties['Favourites'] === false){
+   allBlockTabProperties['Favourites'] = true;
 
    _stuff.tabState.push(favContent);
    console.log(_stuff.tabState);
 
    selectBlockOnClick()
  }
-  else if(allNodeTabProperties['Favourites'] === true){
+  else if(allBlockTabProperties['Favourites'] === true){
    console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
 
    dropdownMenuSelect("Favourites")
@@ -3505,15 +3236,15 @@ function setFavTabStateTrue(){
 }
 
 function setConfigTabStateTrue(){
-  if(allNodeTabProperties['Configuration'] === false){
-    allNodeTabProperties['Configuration'] = true;
+  if(allBlockTabProperties['Configuration'] === false){
+    allBlockTabProperties['Configuration'] = true;
 
     _stuff.tabState.push(configContent);
     console.log(_stuff.tabState);
 
     selectBlockOnClick();
   }
-  else if(allNodeTabProperties['Configuration'] === true){
+  else if(allBlockTabProperties['Configuration'] === true){
     console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
 
     dropdownMenuSelect("Configuration");
@@ -3523,11 +3254,11 @@ function setConfigTabStateTrue(){
 
 /* Note that this function also adds the tabs to SidePane */
 
-var checkWhichNodeTabsOpen = function(){
-  for (var key in allNodeTabProperties){
+var checkWhichBlockTabsOpen = function(){
+  for (var key in allBlockTabProperties){
     //console.log(key);
     //console.log(allNodeTabProperties[key]);
-    if(allNodeTabProperties[key] === true) {
+    if(allBlockTabProperties[key] === true) {
       console.log('just before starting the tabState checker loop');
       if(_stuff.tabState.length === 0){
         console.log('tabState was empty, tab is now open');
@@ -3540,7 +3271,7 @@ var checkWhichNodeTabsOpen = function(){
         //console.log(lookupWhichNodeTabToOpen(key));
         //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
 
-        _stuff.tabState.push(allNodeTabInfo[key]);
+        _stuff.tabState.push(allBlockTabInfo[key]);
         //console.log(_stuff.tabState);
 
         /* Tab wasn't open, so it was added to the end, so just jump to the last tab*/
@@ -3579,7 +3310,7 @@ var checkWhichNodeTabsOpen = function(){
               //console.log(blockTabsOpen);
               //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
 
-              _stuff.tabState.push(allNodeTabInfo[key]);
+              _stuff.tabState.push(allBlockTabInfo[key]);
               //console.log(_stuff.tabState);
 
               /* Same as the other situation, tab wasn't open so it was added to the end, so just jump to the last tab*/
@@ -3609,18 +3340,18 @@ var checkWhichNodeTabsOpen = function(){
 
 };
 
-var removeNodeTab = function(selectedTabIndex){
+var removeBlockTab = function(selectedTabIndex){
 
   var tabName = _stuff.tabState[selectedTabIndex].label;
   console.log(tabName);
-  allNodeTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+  allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
   newTabs.splice(selectedTabIndex, 1);
   _stuff.tabState = newTabs;
 };
 
-var getInitialNodeDataFromNodeStore = function(){
-  allNodeTabInfo = nodeStore.getAllNodeInfoForInitialNodeData();
+var getInitialBlockDataFromBlockStore = function(){
+  allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
 };
 
 function toggleSidebar(){
@@ -3787,7 +3518,272 @@ module.exports = paneStore;
 //  }
 //};
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./deviceStore":11,"./nodeStore":13,"events":34,"object-assign":40}],15:[function(require,module,exports){
+//var appendToAllBlockContent = function(dispatchMarker){
+//  allBlockContent[dispatchMarker] = {
+//    name: "Whatever",
+//    hack: dispatchMarker,
+//    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
+//  }
+//};
+//var appendToAllBlockTabProperties = function(dispatchMarker){
+//  console.log('appending to allBlockTabProperties');
+//  console.log(allBlockTabProperties);
+//  allBlockTabProperties[dispatchMarker] = false;
+//  console.log(allBlockTabProperties)
+//};
+//var addTab = function(newtab){
+//  /* set state of tabs somewhere here*/
+//  var newTabs = _stuff.tabState.concat(newtab);
+//  _stuff.tabState = newTabs;
+//  /* could you just skip the variable newTabs and set _stuff.tabState equal
+//   itself concatenated?
+//   */
+//};
+
+//var allBlockTabProperties = {
+//  redBlockTabOpen: false,
+//  blueBlockTabOpen: false,
+//  greenBlockTabOpen: false,
+//  favTabOpen: false,
+//  configTabOpen: false
+//};
+
+//var changeFavTabState = function(){
+//  console.log(allBlockTabProperties.favTabOpen);
+//  if(allBlockTabProperties.favTabOpen === false) {
+//    allBlockTabProperties.favTabOpen = true;
+//    console.log(allBlockTabProperties.favTabOpen);
+//    checkWhichBlockTabsOpen();
+//    /* function that checks if fav tab or config are already open*/
+//  }
+//  else {
+//
+//  }
+//};
+//
+//var changeConfigTabState = function(){
+//  console.log(allBlockTabProperties.configTabOpen);
+//  if(allBlockTabProperties.configTabOpen === false) {
+//    allBlockTabProperties.configTabOpen = true;
+//    console.log(allBlockTabProperties.configTabOpen);
+//    checkWhichBlockTabsOpen()
+//  }
+//};
+//
+//var checkWhichBlockTabsOpen = function(){
+//  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
+//  for (var key in allBlockTabProperties){
+//    console.log(key);
+//    console.log(allBlockTabProperties[key]);
+//    if(allBlockTabProperties[key] === true) {
+//      console.log('just before starting the tabState checker loop');
+//      if(_stuff.tabState.length === 0){
+//        console.log('tabState was empty, tab is now open');
+//        var blockTabsOpen = [];
+//        lookupWhichTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
+//
+//        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+//        console.log(lookupWhichTabToOpen(key));
+//        _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
+//        console.log(_stuff.tabState);
+//      }
+//      else{
+//        for (var i = 0; i < _stuff.tabState.length; i++) {
+//          console.log('in the non-empty tabState checker loop');
+//          console.log(_stuff.tabState.length);
+//          console.log(i);
+//          if (_stuff.tabState[i].hack === key) {
+//            console.log("tab is already open from before, don't add, break statement occurring");
+//            break
+//          }
+//          else if(_stuff.tabState[i].hack !== key){
+//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+//            console.log(_stuff.tabState.length);
+//            console.log(i);
+//            if(i === _stuff.tabState.length - 1){
+//              console.log('tabState didnt have this tab, tab is now open');
+//              var blockTabsOpen = [];
+//              lookupWhichTabToOpen(key);
+//
+//              //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+//              console.log(lookupWhichTabToOpen(key));
+//              console.log(blockTabsOpen);
+//              _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
+//            }
+//          }
+//        }
+//        console.log('finished the tabState checker loop')
+//      }
+//    }
+//    else{
+//      console.log('tab is not open')
+//    }
+//  }
+//
+//  //console.log(blockTabsOpen);
+//  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
+//  console.log(_stuff.tabState);
+//
+//  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
+//  // Actually, no need since at the start of the function it is reset*/
+//
+//  //return updatedBlockTabsOpen;
+//
+//  selectBlockOnClick()
+//
+//};
+
+//var possibleTabsToOpen = {
+//  'redBlockTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent); /*not sure if blockTabsOpen will get passed through... :/*/
+//    return updatedBlockTabsOpen
+//  },
+//  'blueBlockTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
+//    return updatedBlockTabsOpen
+//  },
+//  'greenBlockTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
+//    return updatedBlockTabsOpen
+//  },
+//  'favTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
+//    return updatedBlockTabsOpen
+//  },
+//  'configTabOpen': function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
+//    return updatedBlockTabsOpen
+//  }
+//};
+//
+//var appendToPossibleTabsToOpen = function(dispatchMarker){
+//  possibleTabsToOpen[dispatchMarker] = function(){
+//    var blockTabsOpen = [];
+//    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent[dispatchMarker]);
+//    return updatedBlockTabsOpen
+//  }
+//};
+//
+//
+//function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
+///* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
+//  if(typeof possibleTabsToOpen[key] !== 'function'){
+//    throw new Error('Invalid key');
+//  }
+//  console.log('deciding which tab to open lookup is working!');
+//  return possibleTabsToOpen[key](key)
+//}
+
+//var removeTab = function(item){
+//
+//  var tabName = _stuff.tabState[item].hack;
+//  console.log(tabName);
+//  lookupRemoveTab(tabName); /* Again, switch statement replaced by the lookup function to allow adding more items after initial render*/
+//  /* code for removing tabs*/
+//  console.log(tabName);
+//  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+//  newTabs.splice(item, 1);
+//  _stuff.tabState = newTabs;
+//};
+
+//var possibleTabsToRemove = {
+//  'redBlockTabOpen': function(){
+//    allBlockTabProperties.redBlockTabOpen = false;
+//    console.log(allBlockTabProperties.redBlockTabOpen);
+//  },
+//  'blueBlockTabOpen': function(){
+//    allBlockTabProperties.blueBlockTabOpen = false;
+//    console.log(allBlockTabProperties.blueBlockTabOpen);
+//  },
+//  'greenBlockTabOpen': function(){
+//    allBlockTabProperties.greenBlockTabOpen = false;
+//    console.log(allBlockTabProperties.greenBlockTabOpen);
+//  },
+//  'favTabOpen': function(){
+//    allBlockTabProperties.favTabOpen = false;
+//    console.log(allBlockTabProperties.favTabOpen);
+//  },
+//  'configTabOpen': function(){
+//    allBlockTabProperties.configTabOpen = false;
+//    console.log(allBlockTabProperties.configTabOpen);
+//  }
+//};
+//
+//var appendToPossibleTabsToRemove = function(dispatchMarker){
+//  possibleTabsToRemove[dispatchMarker] = function(){
+//    allBlockTabProperties[dispatchMarker] = false;
+//    console.log(allBlockTabProperties[dispatchMarker]);
+//  }
+//};
+
+//function lookupRemoveTab(item){
+//  if(typeof possibleTabsToRemove[item] !== 'function'){
+//    throw new Error('Invalid tab to remove')
+//  }
+//  console.log('remove tab lookup is working!');
+//  return possibleTabsToRemove[item](item)
+//}
+
+//var possibleBlockCases = {
+//  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.1': function(){
+//    if(allBlockTabProperties.redBlockTabOpen === false) {
+//      allBlockTabProperties.redBlockTabOpen = true;
+//      checkWhichBlockTabsOpen();
+//      console.log(_handles.passSidePane)
+//    }
+//    else{
+//
+//    }
+//  },
+//  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.2': function(){
+//    if(allBlockTabProperties.blueBlockTabOpen === false){
+//      allBlockTabProperties.blueBlockTabOpen = true;
+//      checkWhichBlockTabsOpen()
+//    }
+//    else{
+//
+//    }
+//  },
+//  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.3': function(){
+//    if(allBlockTabProperties.greenBlockTabOpen === false){
+//      allBlockTabProperties.greenBlockTabOpen = true;
+//      checkWhichBlockTabsOpen()
+//    }
+//    else{
+//
+//    }
+//  }
+//};
+//
+//var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this works... :P*/
+//  //dispatchMarker = function () { I think this part was uneeded, I was just making it harder for myself!
+//  possibleBlockCases[dispatchMarker] = function () {
+//    if (allBlockTabProperties[dispatchMarker] === false) {
+//      allBlockTabProperties[dispatchMarker] = true;
+//      checkWhichBlockTabsOpen()
+//    }
+//    else {
+//
+//    }
+//  };
+//  console.log('appended to possibleBlockCases');
+//  console.log(possibleBlockCases[dispatchMarker]);
+//};
+
+//function checkWhichBlockClicked(dispatchMarker){
+//  if(typeof possibleBlockCases[dispatchMarker] !== 'function'){ /* need a better condition for an error :P*/
+//    throw new Error('Invalid dispatch marker')
+//  }
+//  console.log('dispatch marker method lookup is working!!');
+//  return possibleBlockCases[dispatchMarker](dispatchMarker);
+//}
+
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"./blockStore":11,"./deviceStore":12,"events":30,"object-assign":36}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -4222,7 +4218,405 @@ module.exports = sidePaneStore;
 //  var passedComponent = {component: component}
 //};
 
-},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":34,"object-assign":40}],16:[function(require,module,exports){
+},{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":30,"object-assign":36}],16:[function(require,module,exports){
+/**
+ * Created by twi18192 on 14/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+
+var Ports = require('./ports.js');
+var BlockRectangle = require('./blockRectangle');
+
+var interact = require('../../node_modules/interact.js');
+
+var Block = React.createClass({displayName: "Block",
+
+  componentDidMount: function(){
+    //NodeStore.addChangeListener(this._onChange);
+    console.log(this.props);
+    console.log(this.state);
+
+    //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
+    //  console.log(this.props.selected);
+    //
+    //  console.log("A node has been mounted"); });
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.nodePosition);
+    //});
+
+    //interact('.node')
+    //  .draggable({
+    //    onmove: this.interactJsDrag
+    //  });
+
+    interact(ReactDOM.findDOMNode(this))
+      .draggable({
+        restrict: {
+          restriction: '#appAndDragAreaContainer',
+        },
+        onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          console.log("interactjs dragstart");
+        },
+        onmove: this.interactJsDrag,
+        onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          console.log("interactjs dragend");
+        }
+      });
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.blockSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .styleCursor(false);
+
+    /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
+    //interact
+    //  .pointerMoveTolerance(5);
+  },
+
+  componentWillUnmount: function(){
+    //NodeStore.removeChangeListener(this._onChange);
+    //this.interactable.unset();
+    //this.interactable = null;
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.blockSelect);
+  },
+
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  console.log("shouldComponentUpdate");
+  //  console.log(nextProps.allNodeInfo[this.props.id].position);
+  //  return this.props.allNodeInfo[this.props.id].position.x === nextProps.allNodeInfo[this.props.id].position.x;
+  //},
+
+  handleInteractJsDrag: function(item){
+    blockActions.interactJsDrag(item);
+  },
+
+  //mouseOver: function(){
+  //  //console.log("mouseOver");
+  //  var rectangleName = this.props.id.concat("Rectangle");
+  //  var test = document.getElementById(rectangleName);
+  //  test.style.stroke = '#797979'
+  //},
+
+  //mouseLeave: function(){
+  //  //console.log("mouseLeave");
+  //  var rectangleName = this.props.id.concat("Rectangle");
+  //  var test = document.getElementById(rectangleName);
+  //
+  //  if(this.props.selected === true){
+  //    console.log("this.props.selected is true, so don't reset the border colour");
+  //  }
+  //  else{
+  //    test.style.stroke = 'black'
+  //  }
+  //},
+
+  blockSelect: function(e){
+    console.log(e);
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();;
+    console.log(this.props.id + "has been selected");
+    //nodeActions.deselectAllNodes("deselect all nodes");
+
+    /* Don't want hover stuff anymore! */
+
+    //if(this.props.portMouseOver === true){
+    //  console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
+    //}
+    //else if(this.props.portMouseOver === false){
+    //  nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
+    //  paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
+    //  console.log(this.props.selected);
+    //}
+
+    if(this.props.areAnyBlocksSelected === false){
+      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+      console.log(this.props.selected);
+    }
+    else{
+      /* Need to run deselect before I select the current node */
+      this.props.deselect();
+      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+      console.log(this.props.selected);
+    }
+
+    /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
+
+
+
+  },
+
+  //mouseDown: function(e){
+  //  console.log("TGen1 mouseDown");
+  //  console.log(e.currentTarget);
+  //  console.log(e.currentTarget.parentNode);
+  //  nodeActions.draggedElement(e.currentTarget.parentNode);
+  //},
+
+  //portMouseDown: function(e){
+  //  console.log("portMouseDown");
+  //  console.log(e);
+  //  nodeActions.passPortMouseDown(e.currentTarget);
+  //
+  //  var portMouseDownCoords = {
+  //    x: e.nativeEvent.clientX,
+  //    y: e.nativeEvent.clientY
+  //  };
+  //  this.setState({portMouseDownCoords: portMouseDownCoords});
+  //  var whichPort = e.currentTarget;
+  //  console.log(whichPort);
+  //},
+  //portMouseUp: function(e){
+  //  console.log("portMouseUp");
+  //  console.log(e);
+  //  var portMouseUpCoords = {
+  //    x: e.nativeEvent.clientX,
+  //    y: e.nativeEvent.clientY
+  //  };
+  //  if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
+  //    console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
+  //    this.portClick(e);
+  //  }
+  //  else{
+  //    console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+  //  }
+  //},
+  //portClick: function(e){
+  //  console.log("portClick");
+  //  /* Need to either invoke an action or fire an event to cause an edge to be drawn */
+  //  /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+  //  var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+  //  var passingEvent = e;
+  //  if(this.state.storingFirstPortClicked === null){
+  //    console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+  //    theGraphDiamondHandle.dispatchEvent(EdgePreview);
+  //  }
+  //  else if(this.state.storingFirstPortClicked !== null){
+  //    console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+  //    theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+  //  }
+  //  //theGraphDiamondHandle.dispatchEvent(PortSelect);
+  //},
+  //portSelect: function(){
+  //  console.log("portClick has occured, so a port has been selected");
+  //
+  //},
+
+  interactJsDrag: function(e){
+    console.log(e);
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    console.log("interactJs drag is occurring");
+    var target = e.target.id;
+    var deltaMovement = {
+      target: target,
+      x: e.dx,
+      y: e.dy
+    };
+
+    /* Currently doesn't work very well, selects a node after dragging a bit... */
+    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
+
+    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
+    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
+    //  this.nodeSelect(e);
+    //}
+    //else{
+    //  console.log("Drag movement is large enough, so do a drag");
+    //  this.handleInteractJsDrag(deltaMovement);
+    //}
+
+    /* Need to have some code here to check if the movement is large anough for a drag:
+    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
+     */
+
+    this.handleInteractJsDrag(deltaMovement);
+
+  },
+
+
+  render: function(){
+
+    var blockTranslate = "translate(" + this.props.allBlockInfo[this.props.id].position.x + "," + this.props.allBlockInfo[this.props.id].position.y + ")";
+
+    return (
+      React.createElement("g", React.__spread({},  this.props, 
+          //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+                         //style={this.props.selected && this.props.areAnyBlocksSelected || !this.props.selected && !this.props.areAnyBlocksSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
+                         {transform: blockTranslate
+      }), 
+
+        React.createElement("g", {style: {MozUserSelect: 'none'}
+           //onMouseDown={this.mouseDown}
+        }, 
+          React.createElement("rect", {id: "blockBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire block container */", 
+
+          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.allBlockInfo[this.props.id].type, allBlockTypesStyling: this.props.allBlockTypesStyling, 
+                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, selected: this.props.selected}), 
+
+          React.createElement(Ports, {blockId: this.props.id, allBlockInfo: this.props.allBlockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, 
+                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked})
+
+        )
+
+      )
+    )
+  }
+});
+
+module.exports = Block;
+
+//<Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius} id="ena"
+//      style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
+//<Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius} className="posn"
+//style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
+//onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} onMouseOver={this.portMouseOver} onMouseLeave={this.portMouseLeave} />
+
+//<InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
+//<OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
+
+
+//{inports}
+//
+//{outports}
+//
+//{portsText}
+
+//var inports = [];
+//var inportsXCoord; /* This will be used when I change the port styling obejct to not give every inport its own x coord, but instead have it higher up and give it to all of them at once */
+//var outports = [];
+//var outportsXCoord;
+//var portsText = [];
+//
+//console.log(nodeInfo.inports);
+//
+//for(i = 0; i < nodeInfo.inports.length; i++){
+//  var inportName = nodeInfo.inports[i].name;
+//  console.log(allNodeTypesStyling[nodeType]);
+//  inports.push(
+//    <circle className={inportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y}
+//          r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+//          onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+//    />
+//  );
+//  /* Taking care of the inport text too */
+//  portsText.push(
+//    <text x={allNodeTypesStyling[nodeType].text.textPositions[inportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[inportName].y}
+//          style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
+//    >
+//      {inportName}
+//    </text>
+//  )
+//}
+//
+//for(j = 0; j < nodeInfo.outports.length; j++){
+//  var outportName = nodeInfo.outports[j].name;
+//  outports.push(
+//    <circle className={outportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y}
+//          r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+//          onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+//    />
+//  );
+//  portsText.push(
+//    <text x={allNodeTypesStyling[nodeType].text.textPositions[outportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[outportName].y}
+//          style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
+//    >
+//      {outportName}
+//    </text>
+//  )
+//}
+//
+///* Now just need to add the node name and node type text as well */
+///* Hmm, where should I get/calculate their position & height from?... */
+//
+//portsText.push([
+//  <text className="nodeName" style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
+//        transform="translate(32.5, 80)" >
+//    {nodeInfo.name}
+//  </text>,
+//
+//  <text className="nodeType" style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+//        transform="translate(32.5, 93)" >
+//    {nodeInfo.type}
+//  </text>
+//]);
+//
+//console.log(inports);
+//console.log(outports);
+//console.log(portsText);
+
+//<rect id={rectangleName} height={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.height} width={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.width} x={0} y={0} rx={7} ry={7}
+//      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.props.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
+//  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+///>
+
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11,"./blockRectangle":17,"./ports.js":23}],17:[function(require,module,exports){
+/**
+ * Created by twi18192 on 18/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+
+function getBlockRectanglesState(){
+  return {
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+  }
+}
+
+var BlockRectangles = React.createClass({displayName: "BlockRectangles",
+  //getInitialState: function(){
+  //  return getNodeRectanglesState();
+  //},
+  //componentDidMount: function(){
+  //  NodeStore.addChangeListener(this._onChange);
+  //},
+  //componentWillUnmount: function(){
+  //  NodeStore.removeChangeListener(this._onChange);
+  //},
+  //_onChange: function(){
+  //  this.setState(getNodeRectanglesState());
+  //},
+
+  render: function(){
+
+    return(
+      React.createElement("g", null, 
+        React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
+              height: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height, width: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width, 
+              x: 0, y: 0, rx: 7, ry: 7, 
+              style: {fill: 'lightgrey', 'strokeWidth': 1.65,
+               stroke: this.props.selected ? '#797979' : 'black',
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+          //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+        )
+      )
+    )
+  }
+
+});
+
+module.exports = BlockRectangles;
+
+},{"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../stores/blockStore.js":11}],18:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4296,7 +4690,7 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
 
 module.exports = ConfigButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":220}],17:[function(require,module,exports){
+},{"../actions/mainPaneActions":3,"../stores/mainPaneStore":13,"react":216}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -4493,15 +4887,15 @@ module.exports = Dropdown;
 //  this.props.changeTab(findTheIndex)
 //},
 
-},{"../../node_modules/interact.js":39,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":220}],18:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"react":216}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -4535,17 +4929,12 @@ var Edge = React.createClass({displayName: "Edge",
     //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
   },
   componentDidMount: function(){
-    //NodeStore.addChangeListener(this._onChange);
-    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)}, function(){
-    //  console.log(this.state.selected);
-    //});
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
 
     interact(ReactDOM.findDOMNode(this))
       .on('tap', this.edgeSelect)
   },
   componentWillUnmount: function(){
-    //NodeStore.removeChangeListener(this._onChange);
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.edgeSelect)
   },
@@ -4575,7 +4964,7 @@ var Edge = React.createClass({displayName: "Edge",
     e.stopPropagation();
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
-    nodeActions.selectEdge(ReactDOM.findDOMNode(this).id);
+    blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
   },
 
   render:function(){
@@ -4588,41 +4977,41 @@ var Edge = React.createClass({displayName: "Edge",
     //var allEdges = this.props.allEdges;
     //console.log(allEdges);
     console.log(this.props.id);
-    var fromNode = this.props.fromNode;
-    var toNode = this.props.toNode;
+    var fromBlock = this.props.fromBlock;
+    var toBlock = this.props.toBlock;
     //console.log(fromNode);
     //console.log(toNode);
-    var fromNodePort = this.props.fromNodePort;
-    var toNodePort = this.props.toNodePort;
+    var fromBlockPort = this.props.fromBlockPort;
+    var toBlockPort = this.props.toBlockPort;
 
-    var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
+    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
 
-    var fromNodeType = this.props.fromNodeType;
-    var toNodeType = this.props.toNodeType;
+    var fromBlockType = this.props.fromBlockType;
+    var toBlockType = this.props.toBlockType;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromNodePositionX = this.props.allNodeInfo[fromNode].position.x;
-    var fromNodePositionY = this.props.allNodeInfo[fromNode].position.y;
-    var toNodePositionX = this.props.allNodeInfo[toNode].position.x;
-    var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
+    var fromBlockPositionX = this.props.allBlockInfo[fromBlock].position.x;
+    var fromBlockPositionY = this.props.allBlockInfo[fromBlock].position.y;
+    var toBlockPositionX = this.props.allBlockInfo[toBlock].position.x;
+    var toBlockPositionY = this.props.allBlockInfo[toBlock].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
     //
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
-    var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
-    var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
-    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+    var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].x;
+    var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].y;
+    var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
+    var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    var endOfEdgePortOffsetX = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].x;
-    var endOfEdgePortOffsetY = allNodeTypesPortStyling[toNodeType].inportPositions[toNodePort].y;
-    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+    var endOfEdgePortOffsetX = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].x;
+    var endOfEdgePortOffsetY = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].y;
+    var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
+    var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
     var innerLineString = "-innerline";
     var outerLineString = "-outerline";
@@ -4639,7 +5028,7 @@ var Edge = React.createClass({displayName: "Edge",
               style: {strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
 
         React.createElement("line", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-          //x1={this.props.startNode.x} y1={this.props.startNode.y} x2={this.props.endNode.x} y2={this.props.endNode.y}
+          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
               style: {strokeWidth: '5', stroke:"orange"}})
@@ -4718,7 +5107,7 @@ module.exports = Edge;
 //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
 //}
 
-},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],19:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../stores/blockStore.js":11}],21:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4793,668 +5182,7 @@ var FavButton = React.createClass({displayName: "FavButton",
 
 module.exports = FavButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":12,"react":220}],20:[function(require,module,exports){
-/**
- * Created by twi18192 on 10/12/15.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-var paneActions = require('../actions/paneActions');
-
-function getGateNodeState(){
-  return{
-    //position: NodeStore.getGateNodePosition(),
-    //inports: NodeStore.getGateNodeInportsState(),
-    //outports: NodeStore.getGateNodeOutportsState()
-    //selected: NodeStore.getGate1SelectedState(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    defaultStyling: NodeStore.getGateNodeStyling(),
-    selectedStyling: NodeStore.getSelectedGateNodeStyling(),
-    //currentStyling: NodeStore.getGate1CurrentStyling()
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver()
-  }
-}
-
-var GateNode = React.createClass({displayName: "GateNode",
-  getInitialState: function(){
-    return getGateNodeState();
-  },
-
-  _onChange: function(){
-    this.setState(getGateNodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
-  },
-
-  componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    console.log(this.state);
-    this.setState({moveFunction: this.moveElement});
-    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
-    ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    ReactDOM.findDOMNode(this).addEventListener('contextmenu', this.portRightClick);
-  },
-
-  componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
-  },
-
-  nodeClick: function(e){
-    console.log("node has been clicked!");
-    //alert("Click!")
-    console.log(e);
-    console.log(e.clientX);
-  },
-
-  nodeDrag: function(){
-    console.log("node has been dragged!");
-  },
-
-  rectangleDrag: function(e){
-    console.log("rectangleDrag!");
-  },
-  gDrag: function(e){
-    console.log("gDrag");
-  },
-
-  mouseDownSelectElement: function(evt){
-    console.log("mouseDown");
-    console.log(evt);
-    console.log(evt.currentTarget);
-
-    var startCoordinates = {
-      x: evt.nativeEvent.clientX,
-      y: evt.nativeEvent.clientY
-    };
-    this.setState({beforeDrag: startCoordinates},
-      function(){
-        this.setState({moveFunction: this.anotherMoveFunction},
-          function(){
-            console.log("function has changed");
-          })
-      });
-  },
-
-  moveElement: function(evt){
-    console.log("moveElement has occurred");
-  },
-  anotherMoveFunction: function(e){
-    console.log("now move is different!");
-
-    /* If mouse movement is minimal, don't change it, but if mouse movement is big enough, change the state */
-
-    console.log(e);
-
-    var updatedCoordinates = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-
-    if(!this.state.afterDrag){
-      this.setState({afterDrag: updatedCoordinates},
-        function(){
-          this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag)
-        })
-    }
-    else{
-      this.setState({beforeDrag: this.state.afterDrag},
-        function(){
-          this.setState({afterDrag: updatedCoordinates},
-            function(){
-              this.differenceBetweenMouseDownAndMouseUp(this.state.beforeDrag, this.state.afterDrag)
-            })
-        })
-    }
-  },
-
-  mouseUp: function(e){
-    console.log("mouseUp");
-    console.log(e);
-    this.setState({moveFunction: this.moveElement});
-    this.setState({beforeDrag: null}); /* Stops the cursor from jumping back to where it previously was on the last drag */
-    this.setState({afterDrag: null});
-
-  },
-
-  differenceBetweenMouseDownAndMouseUp: function(start, end){
-    console.log(start);
-    console.log(end);
-    var differenceInCoordinates = {
-      x: end.x - start.x,
-      y: end.y - start.y
-    };
-
-    /* Could potentially debounce somewhere around here for better performance if necessary */
-    nodeActions.changeGateNodePosition(differenceInCoordinates);
-  },
-
-  mouseOver: function(){
-    //console.log("mouseOver");
-    //var stringVersionOfRectangleName = String(this.props.RectangleName);
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-    if(this.state.selected === true){
-
-    }
-    else{
-      test.style.stroke = '#797979'
-    }
-  },
-
-  mouseLeave: function(){
-    //console.log("mouseLeave");
-    //console.log(this.props.RectangleName);
-    //var stringVersionOfRectangleName = String(this.props.RectangleName);
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
-    }
-    else{
-      console.log("this.state.selected is false");
-      test.style.stroke = 'black'
-    }
-  },
-
-  nodeSelect: function(){
-    console.log("Gate1 has been selected");
-    //nodeActions.deselectAllNodes("deselect all nodes"); /* Node deselection occurs on mouseDown instaed of in here, since if it's here the border doesn't change until dragging starts, instead of on mouseDown */
-    nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-    console.log(this.state.selected);
-    console.log(this.state.areAnyNodesSelected);
-    //nodeActions.changeGate1Styling("check Gate1's state!");
-
-    //console.log(ReactDOM.findDOMNode(this));
-    //console.log(ReactDOM.findDOMNode(this).id);
-    //this.setState({selected: true});
-  },
-  mouseDown: function(e) {
-    console.log("Gate1 mouseDown");
-    console.log(e.currentTarget);
-    console.log(e.currentTarget.parentNode);
-    //if (this.portMouseDownBool === true) { /* Doesn't stop the dragging of a node even when mouseDown on a port, need to somehow propagate it to theGraphDiamond I guess */
-    //}
-    //else {
-    //nodeActions.draggedElement(e.currentTarget.parentNode);
-    //}
-    nodeActions.draggedElement(e.currentTarget.parentNode);
-
-  },
-
-  portHover: function(e){
-    console.log("hovering over a port!");
-    console.log(e);
-    console.log(e.currentTarget);
-    var port = e.currentTarget;
-    if(this.state.selected === true){
-      port.style.fill = "yellow";
-      port.style.stroke = "yellow";
-      port.style.cursor = "default";
-    }
-    else{
-      port.style.fill = "yellow";
-      port.style.stroke = "yellow";
-      port.style.cursor = "default";
-    }
-  },
-
-  portExitHover: function(e){
-    console.log("exited hovering over a port!");
-    console.log(e);
-    console.log(e.currentTarget);
-    var port = e.currentTarget;
-    port.style.fill = "black";
-
-    if(this.state.selected === true){
-      port.style.fill = "lightgrey";
-      port.style.stroke = "black";
-    }
-    else{
-      port.style.fill = "black";
-      port.style.stroke = "black";
-    }
-  },
-  //portMouseDown: function(e){
-  //  console.log("mousedowen on a port!");
-  //  console.log(e.currentTarget.id);
-  //  console.log(e.currentTarget.parentNode.parentNode.id);
-  //  this.portMouseDownBool = true;
-  //},
-  //portMouseUp: function(e){
-  //  console.log("mouseUp on a port!");
-  //  this.portMouseDownBool = false;
-  //},
-  //portRightClick: function(e){
-  //  console.log(e);
-  //  e.preventDefault();
-  //  e.stopPropagation();
-  //  console.log("right click on port");
-  //},
-  portMouseOver: function(e){
-    console.log("portMouseOver");
-    console.log(e.currentTarget);
-    var target = e.currentTarget;
-    target.style.cursor = "pointer";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-  portMouseLeave: function(e){
-    console.log("portMouseLeave");
-    var target = e.currentTarget;
-    target.style.cursor = "default";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-  portMouseDown: function(e){
-    console.log("Gate1 portMouseDown");
-    nodeActions.passPortMouseDown(e.currentTarget);
-
-    var connectToPortMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({connectToPortMouseDownCoords: connectToPortMouseDownCoords})
-  },
-  portMouseUp: function(e){
-    var connectToPortMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-
-    if(this.state.connectToPortMouseDownCoords.x === connectToPortMouseUpCoords.x && this.state.connectToPortMouseDownCoords.y === connectToPortMouseUpCoords.y){
-      console.log("zero movement between portMouseDown & portMouseUp, hence a portClick!");
-      this.portClick();
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
-  portClick: function(){
-    console.log("Gate1 portClick");
-
-    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-    //var passingEvent = e;
-    if(this.state.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-      theGraphDiamondHandle.dispatchEvent(EdgePreview);
-    }
-    else if(this.state.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-    }
-  },
-
-  render: function(){
-    //console.log("inside gateNode's render function");
-
-    if(this.state.selected === true){
-      var currentStyling = this.state.selectedStyling;
-    }
-    else{
-      var currentStyling = this.state.defaultStyling;
-    }
-
-    //var rectangleStyling = this.state.currentStyling.rectangle.rectangleStyling;
-    //var rectanglePosition = this.state.currentStyling.rectangle.rectanglePosition;
-    //var inportPositions = this.state.currentStyling.ports.portPositions.inportPositions;
-    //var portStyling = this.state.currentStyling.ports.portStyling;
-    //var outportPositions = this.state.currentStyling.ports.portPositions.outportPositions;
-    //var textPosition = this.state.currentStyling.text.textPositions;
-
-    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
-    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
-    var inportPositions = currentStyling.ports.portPositions.inportPositions;
-    var portStyling = currentStyling.ports.portStyling;
-    var outportPositions = currentStyling.ports.portPositions.outportPositions;
-    var textPosition = currentStyling.text.textPositions;
-
-    var nodeInfo = this.state.allNodeInfo[this.props.id];
-    //console.log(nodeInfo);
-    var nodePositionX = nodeInfo.position.x;
-    var nodePositionY = nodeInfo.position.y;
-    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
-
-    var nodeName = nodeInfo.name;
-    var rectangleString = "Rectangle";
-    var rectangleName = this.props.id.concat(rectangleString);
-
-    return (
-      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
-        //onMouseDown={this.mouseDown} onMouseUp={this.mouseUp} onMouseLeave={this.mouseLeave} onMouseMove={this.mouseMove}
-        //                 onDragStart={this.dragStart} onDragEnd={this.dragEnd} onDrag={this.drag}
-        transform: nodeTranslate
-
-        //onMouseDown={this.mouseDownSelectElement} onMouseMove={this.state.moveFunction} onMouseUp={this.mouseUp}
-
-      }), 
-
-        React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement("rect", {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: 'move'}}/* To allow the cursor to change when hovering over the entire node container */
-          ), 
-
-          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, 
-                     rx: 7, ry: 7, 
-                     style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected === true ? '#797979' : 'black'}}
-            //onDragStart={this.rectangleDrag}
-          ), 
-          React.createElement(Port, {cx: inportPositions.set.x, cy: inportPositions.set.y, r: portStyling.portRadius, className: "set", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}, 
-                onMouseOver: this.portHover, onMouseLeave: this.portExitHover, onMouseDown: this.portMouseDown}), 
-
-          React.createElement(Port, {cx: inportPositions.reset.x, cy: inportPositions.reset.y, r: portStyling.portRadius, className: "reset", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}}), 
-
-          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, className: "out", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': portStyling.strokeWidth}, 
-                onMouseOver: this.portMouseOver, onMouseLeave: this.portMouseLeave, onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp}), 
-
-          React.createElement(InportSetText, {x: textPosition.set.x, y: textPosition.set.y, style: {MozUserSelect: 'none'}}), 
-
-          React.createElement(InportResetText, {x: textPosition.reset.x, y: textPosition.reset.y, style: {MozUserSelect: 'none'}}), 
-
-          React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
-
-          React.createElement(NodeName, {x: "20", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, NodeName: nodeName}), 
-          React.createElement(NodeType, {x: "25", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
-
-        )
-
-      )
-    )
-  }
-});
-
-var NodeStylingProperties = {
-  height: 65,
-  width: 65,
-  rx: 7,
-  ry: 7
-};
-
-var GateNodePortStyling = {
-  inportPositions: {
-    set: {
-      x: 3,
-      y: 25
-    },
-    reset: {
-      x: 3,
-      y: 40
-    }
-  },
-  outportPositions: {
-    out: {
-      x: NodeStylingProperties.width + 3,
-      y: 33
-    }
-  },
-  portRadius: 2,
-  inportPositionRatio: 0,
-  outportPositionRatio: 1
-};
-
-
-
-
-
-var InportSetText = React.createClass({displayName: "InportSetText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "set")
-    )
-  }
-});
-
-var InportResetText = React.createClass({displayName: "InportResetText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "reset")
-    )
-  }
-});
-
-var OutportOutText = React.createClass({displayName: "OutportOutText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "out")
-    )
-  }
-});
-
-
-
-
-var NodeName = React.createClass({displayName: "NodeName",
-  render: function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), this.props.NodeName)
-    )
-  }
-});
-
-var NodeType = React.createClass({displayName: "NodeType",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "8px", fontFamily: "Verdana"}), "Gate")
-    )
-  }
-});
-
-
-
-
-var Rectangle = React.createClass({displayName: "Rectangle",
-  render: function(){
-    return(
-      React.createElement("rect", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-var Port = React.createClass({displayName: "Port",
-  render: function(){
-    return(
-      React.createElement("circle", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-module.exports = GateNode;
-
-},{"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],21:[function(require,module,exports){
-/**
- * Created by twi18192 on 02/12/15.
- */
-
-var React = require('../../node_modules/react/react');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-
-var LUTNode = React.createClass({displayName: "LUTNode",
-    render: function(){
-        return(
-            React.createElement("svg", React.__spread({},  this.props), 
-                React.createElement("g", {style: {MozUserSelect: 'none'}}, 
-                    React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "71", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-                    React.createElement(Rectangle, {id: "rectangle", height: NodeStylingProperties.height, width: NodeStylingProperties.width, x: "3", y: "2", rx: NodeStylingProperties.rx, ry: NodeStylingProperties.ry, 
-                               style: {fill: 'lightgrey', stroke: 'black', 'strokeWidth': 1.65}}
-                        //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-
-
-                        ), 
-                    React.createElement(Port, {cx: LUTNodePortStyling.inportPositions.inpa.x, cy: LUTNodePortStyling.inportPositions.inpa.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-                    React.createElement(Port, {cx: LUTNodePortStyling.inportPositions.inpb.x, cy: LUTNodePortStyling.inportPositions.inpb.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-                    React.createElement(Port, {cx: LUTNodePortStyling.inportPositions.inpc.x, cy: LUTNodePortStyling.inportPositions.inpc.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-                    React.createElement(Port, {cx: LUTNodePortStyling.inportPositions.inpd.x, cy: LUTNodePortStyling.inportPositions.inpd.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-                    React.createElement(Port, {cx: LUTNodePortStyling.inportPositions.inpe.x, cy: LUTNodePortStyling.inportPositions.inpe.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-
-                    React.createElement(Port, {cx: LUTNodePortStyling.outportPositions.out.x, cy: LUTNodePortStyling.outportPositions.out.y, r: LUTNodePortStyling.portRadius, 
-                          style: {fill: 'black', stroke: 'black', 'strokeWidth': 1.65}}), 
-
-
-
-
-
-                    React.createElement(NodeName, {x: "0", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}}), 
-                    React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}, style: {MozUserSelect: 'none'}})
-
-                )
-            )
-        )
-    }
-});
-
-var NodeStylingProperties = {
-    height: 65,
-    width: 65,
-    rx: 7,
-    ry: 7
-};
-
-var LUTNodePortStyling = {
-    portRadius: 2,
-    inportPositionRatio: 0,
-    outportPositionRatio: 1,
-    inportPositions: {
-        inpa: {
-            x: 3,
-            y: 13
-        },
-        inpb: {
-            x: 3,
-            y: 24
-        },
-        inpc: {
-            x: 3,
-            y: 35
-        },
-        inpd: {
-            x: 3,
-            y: 46
-        },
-        inpe: {
-            x: 3,
-            y: 56
-        }
-    },
-    outportPositions: {
-        out: {
-            x: NodeStylingProperties.width + 3,
-            y: 33
-        }
-
-    }
-};
-
-
-var InportInpaText = React.createClass({displayName: "InportInpaText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "inpa")
-        )
-    }
-});
-
-var InportInpbText = React.createClass({displayName: "InportInpbText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "inpb")
-        )
-    }
-});
-
-var InportInpcText = React.createClass({displayName: "InportInpcText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "inpc")
-        )
-    }
-});
-
-var InportInpdText = React.createClass({displayName: "InportInpdText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "inpd")
-        )
-    }
-});
-
-var InportInpeText = React.createClass({displayName: "InportInpeText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "inpe")
-        )
-    }
-});
-
-
-var OutportOutText = React.createClass({displayName: "OutportOutText",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "out")
-        )
-    }
-});
-
-
-
-
-
-
-var NodeName = React.createClass({displayName: "NodeName",
-    render: function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), "OrLineDone")
-        )
-    }
-});
-
-var NodeType = React.createClass({displayName: "NodeType",
-    render:function(){
-        return(
-            React.createElement("text", React.__spread({},  this.props, {fontSize: "8px", fontFamily: "Verdana"}), "LUT")
-        )
-    }
-});
-
-
-var Rectangle = React.createClass({displayName: "Rectangle",
-    render: function(){
-        return(
-            React.createElement("rect", React.__spread({},  this.props), this.props.children)
-        )
-    }
-});
-
-var Port = React.createClass({displayName: "Port",
-    render: function(){
-        return(
-            React.createElement("circle", React.__spread({},  this.props), this.props.children)
-        )
-    }
-});
-
-module.exports = LUTNode;
-
-},{"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],22:[function(require,module,exports){
+},{"../actions/mainPaneActions":3,"../stores/mainPaneStore":13,"react":216}],22:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -5470,8 +5198,8 @@ var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 var deviceStore = require('../stores/deviceStore');
 var deviceActions = require('../actions/deviceActions');
-var nodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
@@ -5479,10 +5207,10 @@ var sessionActions = require('../actions/sessionActions');
 var theGraphDiamond = require('./theGraphDiamond');
 var TheGraphDiamondControllerView = require('./theGraphDiamondControllerView');
 
-var GateNode = require('./gateNode.js');
-var TGenNode = require('./tgenNode.js');
-var PCompNode = require('./pcompNode.js');
-var LUTNode = require('./lutNode.js');
+//var GateNode = require('./gateNode.js');
+//var TGenNode = require('./tgenNode.js');
+//var PCompNode = require('./pcompNode.js');
+//var LUTNode = require('./lutNode.js');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
@@ -5520,7 +5248,7 @@ var MainPane = React.createClass({displayName: "MainPane",
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     console.log(this.props);
-    this.setState({gateNodeIdCounter: 1});
+    //this.setState({gateNodeIdCounter: 1});
   },
 
   componentWillUnmount: function(){
@@ -5889,822 +5617,15 @@ module.exports = MainPane;
 //
 //<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
-},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/deviceStore":11,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../websocketClientTEST":32,"./configButton":16,"./favButton":19,"./gateNode.js":20,"./lutNode.js":21,"./pcompNode.js":25,"./tgenNode.js":29,"./theGraphDiamond":30,"./theGraphDiamondControllerView":31,"react":220,"react-panels":43}],23:[function(require,module,exports){
-/**
- * Created by twi18192 on 18/01/16.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-
-function getNodeRectanglesState(){
-  return {
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-  }
-}
-
-var NodeRectangles = React.createClass({displayName: "NodeRectangles",
-  //getInitialState: function(){
-  //  return getNodeRectanglesState();
-  //},
-  //componentDidMount: function(){
-  //  NodeStore.addChangeListener(this._onChange);
-  //},
-  //componentWillUnmount: function(){
-  //  NodeStore.removeChangeListener(this._onChange);
-  //},
-  //_onChange: function(){
-  //  this.setState(getNodeRectanglesState());
-  //},
-
-  render: function(){
-
-    return(
-      React.createElement("g", null, 
-        React.createElement("rect", {id: this.props.nodeId.concat("Rectangle"), 
-              height: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.height, width: this.props.allNodeTypesStyling[this.props.nodeType].rectangle.rectangleStyling.width, 
-              x: 0, y: 0, rx: 7, ry: 7, 
-              style: {fill: 'lightgrey', 'strokeWidth': 1.65,
-               stroke: this.props.selected ? '#797979' : 'black',
-               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
-          //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-        )
-      )
-    )
-  }
-
-});
-
-module.exports = NodeRectangles;
-
-},{"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13}],24:[function(require,module,exports){
-/**
- * Created by twi18192 on 14/01/16.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-var paneActions = require('../actions/paneActions');
-
-var Ports = require('./ports.js');
-var NodeRectangle = require('./nodeRectangle');
-
-var interact = require('../../node_modules/interact.js');
-
-function getNodeState(){
-  return{
-    //position: NodeStore.getTGenNodePosition(),
-    //inports: NodeStore.getTGenNodeInportsState(),
-    //outports: NodeStore.getTGenNodeOutportsState()
-    //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
-    //areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    //defaultStyling: NodeStore.getTGenNodeStyling(),
-    //selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    //portMouseOver: NodeStore.getPortMouseOver(),
-
-    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling()
-  }
-}
-
-var Node = React.createClass({displayName: "Node",
-  //getInitialState: function(){
-  //  return getNodeState();
-  //},
-  //
-  //_onChange: function(){
-  //  //this.setState(getNodeState());
-  //  //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
-  //  //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
-  //
-  //},
-
-  componentDidMount: function(){
-    //NodeStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    console.log(this.state);
-
-    //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
-    //  console.log(this.props.selected);
-    //
-    //  console.log("A node has been mounted"); });
-    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
-    //  console.log(this.state.nodePosition);
-    //});
-
-    //interact('.node')
-    //  .draggable({
-    //    onmove: this.interactJsDrag
-    //  });
-
-    interact(ReactDOM.findDOMNode(this))
-      .draggable({
-        restrict: {
-          restriction: '#appAndDragAreaContainer',
-        },
-        onstart: function(e){
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          console.log("interactjs dragstart");
-        },
-        onmove: this.interactJsDrag,
-        onend: function(e){
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-          console.log("interactjs dragend");
-        }
-      });
-
-    interact(ReactDOM.findDOMNode(this))
-      .on('tap', this.nodeSelect);
-
-    interact(ReactDOM.findDOMNode(this))
-      .styleCursor(false);
-
-    /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
-    //interact
-    //  .pointerMoveTolerance(5);
-  },
-
-  componentWillUnmount: function(){
-    //NodeStore.removeChangeListener(this._onChange);
-    //this.interactable.unset();
-    //this.interactable = null;
-
-    interact(ReactDOM.findDOMNode(this))
-      .off('tap', this.nodeSelect);
-  },
-
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  console.log("shouldComponentUpdate");
-  //  console.log(nextProps.allNodeInfo[this.props.id].position);
-  //  return this.props.allNodeInfo[this.props.id].position.x === nextProps.allNodeInfo[this.props.id].position.x;
-  //},
-
-  handleInteractJsDrag: function(item){
-    nodeActions.interactJsDrag(item);
-  },
-
-  nodeClick: function(){
-    console.log("node has been clicked!");
-  },
-
-  nodeDrag: function(){
-    console.log("node has been dragged!");
-  },
-
-  //mouseOver: function(){
-  //  //console.log("mouseOver");
-  //  var rectangleName = this.props.id.concat("Rectangle");
-  //  var test = document.getElementById(rectangleName);
-  //  test.style.stroke = '#797979'
-  //},
-
-  //mouseLeave: function(){
-  //  //console.log("mouseLeave");
-  //  var rectangleName = this.props.id.concat("Rectangle");
-  //  var test = document.getElementById(rectangleName);
-  //
-  //  if(this.props.selected === true){
-  //    console.log("this.props.selected is true, so don't reset the border colour");
-  //  }
-  //  else{
-  //    test.style.stroke = 'black'
-  //  }
-  //},
-
-  nodeSelect: function(e){
-    console.log(e);
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    e.stopPropagation();;
-    console.log(this.props.id + "has been selected");
-    //nodeActions.deselectAllNodes("deselect all nodes");
-
-    /* Don't want hover stuff anymore! */
-
-    //if(this.props.portMouseOver === true){
-    //  console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
-    //}
-    //else if(this.props.portMouseOver === false){
-    //  nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-    //  paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-    //  console.log(this.props.selected);
-    //}
-
-    if(this.props.areAnyNodesSelected === false){
-      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
-    }
-    else{
-      /* Need to run deselect before I select the current node */
-      this.props.deselect();
-      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
-    }
-
-    /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
-
-
-
-  },
-
-  //mouseDown: function(e){
-  //  console.log("TGen1 mouseDown");
-  //  console.log(e.currentTarget);
-  //  console.log(e.currentTarget.parentNode);
-  //  nodeActions.draggedElement(e.currentTarget.parentNode);
-  //},
-
-  //portMouseDown: function(e){
-  //  console.log("portMouseDown");
-  //  console.log(e);
-  //  nodeActions.passPortMouseDown(e.currentTarget);
-  //
-  //  var portMouseDownCoords = {
-  //    x: e.nativeEvent.clientX,
-  //    y: e.nativeEvent.clientY
-  //  };
-  //  this.setState({portMouseDownCoords: portMouseDownCoords});
-  //  var whichPort = e.currentTarget;
-  //  console.log(whichPort);
-  //},
-  //portMouseUp: function(e){
-  //  console.log("portMouseUp");
-  //  console.log(e);
-  //  var portMouseUpCoords = {
-  //    x: e.nativeEvent.clientX,
-  //    y: e.nativeEvent.clientY
-  //  };
-  //  if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-  //    console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-  //    this.portClick(e);
-  //  }
-  //  else{
-  //    console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-  //  }
-  //},
-  //portClick: function(e){
-  //  console.log("portClick");
-  //  /* Need to either invoke an action or fire an event to cause an edge to be drawn */
-  //  /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-  //  var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-  //  var passingEvent = e;
-  //  if(this.state.storingFirstPortClicked === null){
-  //    console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-  //    theGraphDiamondHandle.dispatchEvent(EdgePreview);
-  //  }
-  //  else if(this.state.storingFirstPortClicked !== null){
-  //    console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-  //    theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-  //  }
-  //  //theGraphDiamondHandle.dispatchEvent(PortSelect);
-  //},
-  //portSelect: function(){
-  //  console.log("portClick has occured, so a port has been selected");
-  //
-  //},
-
-  interactJsDrag: function(e){
-    console.log(e);
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    console.log("interactJs drag is occurring");
-    var target = e.target.id;
-    var deltaMovement = {
-      target: target,
-      x: e.dx,
-      y: e.dy
-    };
-
-    /* Currently doesn't work very well, selects a node after dragging a bit... */
-    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
-
-    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
-    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
-    //  this.nodeSelect(e);
-    //}
-    //else{
-    //  console.log("Drag movement is large enough, so do a drag");
-    //  this.handleInteractJsDrag(deltaMovement);
-    //}
-
-    /* Need to have some code here to check if the movement is large anough for a drag:
-    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
-     */
-
-    this.handleInteractJsDrag(deltaMovement);
-
-  },
-
-
-  render: function(){
-
-    //console.log("portThatHasBeenClicked is: " + this.props.portThatHasBeenClicked);
-    //console.log(this.props);
-
-    /* Unecessary now that I don't want the ports to focus on node selection (I think? =P) */
-
-    //if(this.props.selected === true){
-    //  var currentStyling = this.props.selectedStyling;
-    //}
-    //else{
-    //  var currentStyling = this.state.defaultStyling;
-    //}
-    //
-    //var rectangleStyling = currentStyling.rectangle.rectangleStyling;
-    //var rectanglePosition = currentStyling.rectangle.rectanglePosition;
-    //var inportPositions = currentStyling.ports.portPositions.inportPositions;
-    //var portStyling = currentStyling.ports.portStyling;
-    //var outportPositions = currentStyling.ports.portPositions.outportPositions;
-    //var textPosition = currentStyling.text.textPositions;
-
-    //var nodeInfo = this.state.allNodeInfo[this.props.id];
-    //var nodePositionX = this.state.allNodeInfo[this.props.id].position.x;
-    //var nodePositionY = this.state.allNodeInfo[this.props.id].position.y;
-    var nodeTranslate = "translate(" + this.props.allNodeInfo[this.props.id].position.x + "," + this.props.allNodeInfo[this.props.id].position.y + ")";
-    //console.log(nodeTranslate);
-
-    //var nodeName = nodeInfo.name;
-    //var rectangleString = "Rectangle";
-    //var rectangleName = this.props.id.concat(rectangleString);
-
-    /* Trying to automatically generate the correct ports and port text */
-    /* NOTE: This will run on every render, so all the ports will be reset back to an empty array and then iterate through the loops to recreate them...
-      I Suppose I could try moving these into methods of the component instead, and them running them once at the start of the node's lifetime? */
-
-    //var nodePortsStyling = this.state.allNodeTypesPortStyling; /* Need the styling of everything, not just the port positions, so I need to alter the object I get from the store to be all the styling and not just the different node's PORT stylign */
-    //var allNodeTypesStyling = this.state.allNodeTypesStyling;
-    //var nodeType = nodeInfo.type;
-
-    return (
-      React.createElement("g", React.__spread({},  this.props, 
-          //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-                         //style={this.props.selected && this.props.areAnyNodesSelected || !this.props.selected && !this.props.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
-                         {transform: nodeTranslate
-      }), 
-
-        React.createElement("g", {style: {MozUserSelect: 'none'}
-           //onMouseDown={this.mouseDown}
-        }, 
-          React.createElement("rect", {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-
-          React.createElement(NodeRectangle, {nodeId: this.props.id, nodeType: this.props.allNodeInfo[this.props.id].type, allNodeTypesStyling: this.props.allNodeTypesStyling, 
-                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, selected: this.props.selected}), 
-
-          React.createElement(Ports, {nodeId: this.props.id, allNodeInfo: this.props.allNodeInfo, allNodeTypesStyling: this.props.allNodeTypesStyling, 
-                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked})
-
-        )
-
-      )
-    )
-  }
-});
-
-module.exports = Node;
-
-//<Port cx={inportPositions.ena.x} cy={inportPositions.ena.y} r={portStyling.portRadius} id="ena"
-//      style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}/>
-//<Port cx={outportPositions.posn.x} cy={outportPositions.posn.y} r={portStyling.portRadius} className="posn"
-//style={{fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}
-//onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp} onMouseOver={this.portMouseOver} onMouseLeave={this.portMouseLeave} />
-
-//<InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
-//<OutportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}} />
-
-
-//{inports}
-//
-//{outports}
-//
-//{portsText}
-
-//var inports = [];
-//var inportsXCoord; /* This will be used when I change the port styling obejct to not give every inport its own x coord, but instead have it higher up and give it to all of them at once */
-//var outports = [];
-//var outportsXCoord;
-//var portsText = [];
-//
-//console.log(nodeInfo.inports);
-//
-//for(i = 0; i < nodeInfo.inports.length; i++){
-//  var inportName = nodeInfo.inports[i].name;
-//  console.log(allNodeTypesStyling[nodeType]);
-//  inports.push(
-//    <circle className={inportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y}
-//          r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
-//          onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-//    />
-//  );
-//  /* Taking care of the inport text too */
-//  portsText.push(
-//    <text x={allNodeTypesStyling[nodeType].text.textPositions[inportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[inportName].y}
-//          style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
-//    >
-//      {inportName}
-//    </text>
-//  )
-//}
-//
-//for(j = 0; j < nodeInfo.outports.length; j++){
-//  var outportName = nodeInfo.outports[j].name;
-//  outports.push(
-//    <circle className={outportName} cx={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x} cy={allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y}
-//          r={allNodeTypesStyling[nodeType].ports.portStyling.portRadius} style={{fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65 }}
-//          onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-//    />
-//  );
-//  portsText.push(
-//    <text x={allNodeTypesStyling[nodeType].text.textPositions[outportName].x} y={allNodeTypesStyling[nodeType].text.textPositions[outportName].y}
-//          style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
-//    >
-//      {outportName}
-//    </text>
-//  )
-//}
-//
-///* Now just need to add the node name and node type text as well */
-///* Hmm, where should I get/calculate their position & height from?... */
-//
-//portsText.push([
-//  <text className="nodeName" style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
-//        transform="translate(32.5, 80)" >
-//    {nodeInfo.name}
-//  </text>,
-//
-//  <text className="nodeType" style={{MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
-//        transform="translate(32.5, 93)" >
-//    {nodeInfo.type}
-//  </text>
-//]);
-//
-//console.log(inports);
-//console.log(outports);
-//console.log(portsText);
-
-//<rect id={rectangleName} height={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.height} width={allNodeTypesStyling[nodeType].rectangle.rectangleStyling.width} x={0} y={0} rx={7} ry={7}
-//      style={{fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.props.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
-//  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-///>
-
-},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13,"./nodeRectangle":23,"./ports.js":26}],25:[function(require,module,exports){
-/**
- * Created by twi18192 on 10/12/15.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-var paneActions = require('../actions/paneActions');
-
-function getPComp1NodeState(){
-  return {
-    //selected: NodeStore.getPComp1SelectedState(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    defaultStyling: NodeStore.getPCompNodeStyling(),
-    selectedStyling: NodeStore.getSelectedPCompNodeStyling(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver(),
-  }
-}
-
-var PCompNode = React.createClass({displayName: "PCompNode",
-
-  getInitialState: function(){
-    return getPComp1NodeState();
-  },
-
-  _onChange: function(){
-    this.setState(getPComp1NodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
-  },
-
-  componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-    this.setState({selected: NodeStore.getAnyNodeSelectedState(ReactDOM.findDOMNode(this).id)});
-    ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    var nodeNameTextPixelLength = document.getElementById("LinePulseText");
-    console.log(nodeNameTextPixelLength.getComputedTextLength());
-    this.setState({textLength: nodeNameTextPixelLength.getComputedTextLength()})
-  },
-
-  componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange)
-  },
-
-  mouseOver: function(){
-    //console.log("mouseOver");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-    test.style.stroke = '#797979'
-  },
-
-  mouseLeave: function(){
-    //console.log("mouseLeave");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
-    }
-    else{
-      test.style.stroke = 'black'
-    }
-  },
-
-  nodeSelect: function(){
-    console.log("PComp1 has been selected");
-    //nodeActions.deselectAllNodes("deselect all nodes");
-    nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-    paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-    console.log(this.state.selected);
-  },
-
-  mouseDown: function(e){
-    console.log("TGen1 mouseDown");
-    console.log(e.currentTarget);
-    console.log(e.currentTarget.parentNode);
-    nodeActions.draggedElement(e.currentTarget.parentNode);
-  },
-
-  portMouseDown: function(e){
-    console.log("PComp1 portMouseDown");
-    nodeActions.passPortMouseDown(e.currentTarget);
-
-    var connectToPortMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({connectToPortMouseDownCoords: connectToPortMouseDownCoords})
-  },
-  portMouseUp: function(e){
-    var connectToPortMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-
-    if(this.state.connectToPortMouseDownCoords.x === connectToPortMouseUpCoords.x && this.state.connectToPortMouseDownCoords.y === connectToPortMouseUpCoords.y){
-      console.log("zero movement between portMouseDown & portMouseUp, hence a portClick!");
-      this.portClick();
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
-  portClick: function(){
-    console.log("PComp1 portClick");
-
-    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-    //var passingEvent = e;
-    if(this.state.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-      theGraphDiamondHandle.dispatchEvent(EdgePreview);
-    }
-    else if(this.state.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-    }
-  },
-
-  portMouseOver: function(e){
-    console.log("portMouseOver");
-    console.log(e.currentTarget);
-    var target = e.currentTarget;
-    target.style.cursor = "pointer";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-  portMouseLeave: function(e){
-    console.log("portMouseLeave");
-    var target = e.currentTarget;
-    target.style.cursor = "default";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-
-
-  render: function(){
-
-    if(this.state.selected === true){
-      var currentStyling = this.state.selectedStyling;
-    }
-    else{
-      var currentStyling = this.state.defaultStyling;
-    }
-
-    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
-    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
-    var inportPositions = currentStyling.ports.portPositions.inportPositions;
-    var portStyling = currentStyling.ports.portStyling;
-    var outportPositions = currentStyling.ports.portPositions.outportPositions;
-    var textPosition = currentStyling.text.textPositions;
-    //console.log(inportPositions);
-
-    var nodeInfo = this.state.allNodeInfo[this.props.id];
-    var nodePositionX = nodeInfo.position.x;
-    var nodePositionY = nodeInfo.position.y;
-    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
-
-    var nodeName = nodeInfo.name;
-    var rectangleString = "Rectangle";
-    var rectangleName = this.props.id.concat(rectangleString);
-
-    var nodeNameCoords = "translate(32.5" + ",80)";
-    console.log("textLength is: " + this.state.textLength);
-
-    return(
-      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
-         transform: nodeTranslate}), 
-
-        React.createElement("g", {style: {MozUserSelect: 'none', position: 'relative'}, onMouseDown: this.mouseDown, overflow: "visible"}, 
-          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: 'move'}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
-                     style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black'}}
-            //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-
-
-          ), 
-
-          React.createElement(Port, {cx: inportPositions.ena.x, cy: inportPositions.ena.y, r: portStyling.portRadius, 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
-          React.createElement(Port, {cx: inportPositions.posn.x, cy: inportPositions.posn.y, r: portStyling.portRadius, className: "posn", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}, 
-                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp, onMouseOver: this.portMouseOver, oneMouseLeave: this.portMouseLeave}), 
-          React.createElement(Port, {cx: outportPositions.act.x, cy: outportPositions.act.y, r: portStyling.portRadius, 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
-          React.createElement(Port, {cx: outportPositions.out.x, cy: outportPositions.out.y, r: portStyling.portRadius, 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
-          React.createElement(Port, {cx: outportPositions.pulse.x, cy: outportPositions.pulse.y, r: portStyling.portRadius, 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
-
-          React.createElement(InportEnaText, {x: textPosition.ena.x, y: textPosition.ena.y, style: {MozUserSelect: 'none'}}), 
-          React.createElement(InportPosnText, {x: textPosition.posn.x, y: textPosition.posn.y, style: {MozUserSelect: 'none'}}), 
-          React.createElement(OutportActText, {x: textPosition.act.x, y: textPosition.act.y, style: {MozUserSelect: 'none'}}), 
-          React.createElement(OutportOutText, {x: textPosition.out.x, y: textPosition.out.y, style: {MozUserSelect: 'none'}}), 
-          React.createElement(OutportPulseText, {x: textPosition.pulse.x, y: textPosition.pulse.y, style: {MozUserSelect: 'none'}}), 
-
-          React.createElement(NodeName, {style: {MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}, NodeName: "LinePulse", id: nodeName + "Text", transform: nodeNameCoords}), 
-
-          React.createElement(NodeType, {x: "22", y: NodeStylingProperties.height + 33, style: {MozUserSelect: 'none'}})
-
-        )
-      )
-    )
-  }
-});
-
-//<InportEnaText x={textPosition.ena.x} y={textPosition.ena.y} style={{MozUserSelect: 'none'}}  />
-//<InportPosnText x={textPosition.posn.x} y={textPosition.posn.y} style={{MozUserSelect: 'none'}} />
-//<OutportActText x={textPosition.act.x} y={textPosition.act.y} style={{MozUserSelect: 'none'}} />
-//<OutportOutText x={textPosition.out.x} y={textPosition.out.y} style={{MozUserSelect: 'none'}} />
-//<OutportPulseText x={textPosition.pulse.x} y={textPosition.pulse.y} style={{MozUserSelect: 'none'}} />
-//
-//<NodeName style={{MozUserSelect: 'none', textAnchor: 'middle', alignmentBaseline: 'middle'}} NodeName={"LinePulse"} id={nodeName + "Text"} transform={nodeNameCoords} />
-
-var NodeStylingProperties = {
-  height: 65,
-  width: 65,
-  rx: 7,
-  ry: 7
-};
-
-var PCompNodePortStyling = {
-  portRadius: 2,
-  inportPositionRatio: 0,
-  outportPositionRatio: 1,
-  inportPositions: {
-    ena: {
-      x: 3,
-      y: 25
-    },
-    posn: {
-      x: 3,
-      y: 40
-    }
-  },
-  outportPositions: {
-    act: {
-      x: NodeStylingProperties.width + 3,
-      y: 25
-    },
-    out: {
-      x: NodeStylingProperties.width + 3,
-      y: 33
-    },
-    pulse: {
-      x: NodeStylingProperties.width + 3,
-      y: 40
-    }
-  }
-};
-
-
-
-
-var InportEnaText = React.createClass({displayName: "InportEnaText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "ena")
-    )
-  }
-});
-
-var InportPosnText = React.createClass({displayName: "InportPosnText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "posn")
-    )
-  }
-});
-
-var OutportActText = React.createClass({displayName: "OutportActText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "act")
-    )
-  }
-});
-
-var OutportOutText = React.createClass({displayName: "OutportOutText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "out")
-    )
-  }
-});
-
-var OutportPulseText = React.createClass({displayName: "OutportPulseText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "pulse")
-    )
-  }
-});
-
-
-
-
-var NodeName = React.createClass({displayName: "NodeName",
-  render: function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), this.props.NodeName)
-    )
-  }
-});
-
-var NodeType = React.createClass({displayName: "NodeType",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "8px", fontFamily: "Verdana"}), "PComp")
-    )
-  }
-});
-
-
-var Rectangle = React.createClass({displayName: "Rectangle",
-  render: function(){
-    return(
-      React.createElement("rect", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-var Port = React.createClass({displayName: "Port",
-  render: function(){
-    return(
-      React.createElement("circle", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-module.exports = PCompNode;
-
-},{"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],26:[function(require,module,exports){
+},{"../actions/blockActions.js":1,"../actions/deviceActions":2,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/blockStore.js":11,"../stores/deviceStore":12,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../websocketClientTEST":28,"./configButton":18,"./favButton":21,"./theGraphDiamond":26,"./theGraphDiamondControllerView":27,"react":216,"react-panels":39}],23:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/01/16.
  */
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 
 var interact = require('../../node_modules/interact.js');
@@ -6753,7 +5674,7 @@ var Ports = React.createClass({displayName: "Ports",
   portMouseDown: function(e){
     console.log("portMouseDown");
     console.log(e);
-    nodeActions.passPortMouseDown(e.currentTarget);
+    blockActions.passPortMouseDown(e.currentTarget);
 
     console.log(e.currentTarget.parentNode.parentNode.parentNode);
 
@@ -6786,7 +5707,7 @@ var Ports = React.createClass({displayName: "Ports",
     console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    nodeActions.passPortMouseDown(e.currentTarget);
+    blockActions.passPortMouseDown(e.currentTarget);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
@@ -6802,31 +5723,31 @@ var Ports = React.createClass({displayName: "Ports",
 
   render: function(){
 
-    var nodeId = this.props.nodeId;
-    var nodeInfo = this.props.allNodeInfo[nodeId];
+    var blockId = this.props.blockId;
+    var blockInfo = this.props.allBlockInfo[blockId];
 
-    var allNodeTypesStyling = this.props.allNodeTypesStyling;
-    var nodeType = nodeInfo.type;
+    var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    var blockType = blockInfo.type;
     var inports = [];
     var inportsXCoord;
     var outports = [];
     var outportsXCoord;
     var portsText = [];
 
-    for(i = 0; i < nodeInfo.inports.length; i++){
-      var inportName = nodeInfo.inports[i].name;
+    for(i = 0; i < blockInfo.inports.length; i++){
+      var inportName = blockInfo.inports[i].name;
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        React.createElement("circle", {key: nodeId + inportName, className: "port", cx: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.inportPositions[inportName].y, 
-                r: allNodeTypesStyling[nodeType].ports.portStyling.portRadius, style: {fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+        React.createElement("circle", {key: blockId + inportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.nodeId + inportName}
+                id: this.props.blockId + inportName}
         )
       );
 
       /* Taking care of the inport text too */
       portsText.push(
-        React.createElement("text", {key: nodeId + inportName + "-text", x: allNodeTypesStyling[nodeType].text.textPositions[inportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[inportName].y, 
+        React.createElement("text", {key: blockId + inportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[inportName].x, y: allBlockTypesStyling[blockType].text.textPositions[inportName].y, 
               style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
         }, 
           inportName
@@ -6834,18 +5755,18 @@ var Ports = React.createClass({displayName: "Ports",
       )
     }
 
-    for(j = 0; j < nodeInfo.outports.length; j++){
-      var outportName = nodeInfo.outports[j].name;
+    for(j = 0; j < blockInfo.outports.length; j++){
+      var outportName = blockInfo.outports[j].name;
       outports.push(
-        React.createElement("circle", {key: nodeId + outportName, className: "port", cx: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].x, cy: allNodeTypesStyling[nodeType].ports.portPositions.outportPositions[outportName].y, 
-                r: allNodeTypesStyling[nodeType].ports.portStyling.portRadius, style: {fill: allNodeTypesStyling[nodeType].ports.portStyling.fill, stroke: allNodeTypesStyling[nodeType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+        React.createElement("circle", {key: blockId + outportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.nodeId + outportName}
+                id: this.props.blockId + outportName}
         )
       );
 
       portsText.push(
-        React.createElement("text", {key: nodeId + outportName + "-text", x: allNodeTypesStyling[nodeType].text.textPositions[outportName].x, y: allNodeTypesStyling[nodeType].text.textPositions[outportName].y, 
+        React.createElement("text", {key: blockId + outportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[outportName].x, y: allBlockTypesStyling[blockType].text.textPositions[outportName].y, 
               style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
         }, 
           outportName
@@ -6857,19 +5778,19 @@ var Ports = React.createClass({displayName: "Ports",
     /* Hmm, where should I get/calculate their position & height from?... */
 
     portsText.push([
-      React.createElement("text", {className: "nodeName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
+      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
             transform: "translate(32.5, 80)"}, 
-        nodeInfo.name
+        blockInfo.name
       ),
 
-      React.createElement("text", {className: "nodeType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
+      React.createElement("text", {className: "blockType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
             transform: "translate(32.5, 93)"}, 
-        nodeInfo.type
+        blockInfo.type
       )
     ]);
 
     return (
-      React.createElement("g", {id: nodeId + "-ports"}, 
+      React.createElement("g", {id: blockId + "-ports"}, 
         inports, 
         outports, 
         portsText
@@ -6881,7 +5802,7 @@ var Ports = React.createClass({displayName: "Ports",
 
 module.exports = Ports;
 
-},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],27:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -6943,19 +5864,19 @@ var SidePane = React.createClass({displayName: "SidePane",
     console.log("action function for changing tab via other means ran correctly");
   },
 
-  handleActionInitialFetchOfNodeData: function(){
-    paneActions.initialFetchOfNodeDataFromNodeStore("fetch the initial node data!");
+  handleActionInitialFetchOfBlockData: function(){
+    paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
   },
-  handleActionRemoveNodeTab: function(){
+  handleActionRemoveBlockTab: function(){
     var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeNodeTab(selectedIndex);
+    paneActions.removeBlockTab(selectedIndex);
   },
 
   componentDidMount: function(){
     //sidePaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    this.handleActionInitialFetchOfNodeData();
+    this.handleActionInitialFetchOfBlockData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
@@ -7000,7 +5921,7 @@ var SidePane = React.createClass({displayName: "SidePane",
         React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
 
 
-            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveNodeTab}, 
+            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveBlockTab}, 
               React.createElement("i", {className: "fa fa-times"})
             ),
             React.createElement(Button, {title: "Drop down menu"}, 
@@ -7072,7 +5993,7 @@ module.exports = SidePane;
 //  );
 //}.bind(this));
 
-},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":17,"react":220,"react-panels":43}],28:[function(require,module,exports){
+},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":19,"react":216,"react-panels":39}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -7089,8 +6010,8 @@ var sidePaneStore = require('../stores/sidePaneStore');
 var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var SideBar = require('react-sidebar').default;
 
@@ -7183,24 +6104,6 @@ function getBothPanesState(){
     selectedTabIndex: paneStore.getSelectedTabIndex(),
     listVisible: sidePaneStore.getDropdownState()
 
-    //theGraphDiamondState:{
-    //  /* theGraphDiamond's getter functions for stores */
-    //  graphPosition: NodeStore.getGraphPosition(),
-    //  graphZoomScale: NodeStore.getGraphZoomScale(),
-    //  allEdges: NodeStore.getAllEdges(),
-    //  nodesToRender: NodeStore.getNodesToRenderArray(),
-    //  edgesToRender: NodeStore.getEdgesToRenderArray(),
-    //  allNodeInfo: NodeStore.getAllNodeInfo(),
-    //  portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //  storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    //  newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    //  nodeLibrary: NodeStore.getNodeLibrary(),
-    //  allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //  portMouseOver: NodeStore.getPortMouseOver(),
-    //  areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    //  areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    //  allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
-    //}
   }
 }
 
@@ -7218,7 +6121,6 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
-    //NodeStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
     this.setState({mql: mql}, function(){
@@ -7229,7 +6131,6 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
-    //NodeStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
 
@@ -7267,316 +6168,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
 module.exports = BothPanes;
 
-},{"../actions/mainPaneActions":2,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/mainPaneStore":12,"../stores/nodeStore.js":13,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./mainPane":22,"./sidePane":27,"react":220,"react-dom":42,"react-sidebar":44}],29:[function(require,module,exports){
-/**
- * Created by twi18192 on 10/12/15.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
-var paneActions = require('../actions/paneActions');
-
-function getTGenNodeState(){
-  return{
-    //position: NodeStore.getTGenNodePosition(),
-    //inports: NodeStore.getTGenNodeInportsState(),
-    //outports: NodeStore.getTGenNodeOutportsState()
-    //selected: NodeStore.getTGen1SelectedState(), /* Old selected state */
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    defaultStyling: NodeStore.getTGenNodeStyling(),
-    selectedStyling: NodeStore.getSelectedTGenNodeStyling(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    portMouseOver: NodeStore.getPortMouseOver()
-  }
-}
-
-var TGenNode = React.createClass({displayName: "TGenNode",
-  getInitialState: function(){
-    return getTGenNodeState();
-  },
-
-  _onChange: function(){
-    this.setState(getTGenNodeState());
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))});
-    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)});
-
-  },
-
-  componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    console.log(this.state);
-
-    ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
-      console.log(this.state.selected);
-
-    console.log("Tgen has been mounted"); });
-    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
-    //  console.log(this.state.nodePosition);
-    //});
-  },
-
-  componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange)
-  },
-
-  nodeClick: function(){
-    console.log("node has been clicked!");
-  },
-
-  nodeDrag: function(){
-    console.log("node has been dragged!");
-  },
-
-  mouseOver: function(){
-    //console.log("mouseOver");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-    test.style.stroke = '#797979'
-  },
-
-  mouseLeave: function(){
-    //console.log("mouseLeave");
-    var rectangleName = this.props.id.concat("Rectangle");
-    var test = document.getElementById(rectangleName);
-
-    if(this.state.selected === true){
-      console.log("this.state.selected is true, so don't reset the border colour");
-    }
-    else{
-      test.style.stroke = 'black'
-    }
-  },
-
-  nodeSelect: function(){
-    console.log("TGen1 has been selected");
-    //nodeActions.deselectAllNodes("deselect all nodes");
-    if(this.state.portMouseOver === true){
-      console.log("hovering over port, so will likely want a portClick if a click occurs rather than a nodeSelect");
-    }
-    else if(this.state.portMouseOver === false){
-      nodeActions.selectNode(ReactDOM.findDOMNode(this).id);
-      paneActions.openNodeTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.state.selected);
-    }
-
-  },
-
-  mouseDown: function(e){
-    console.log("TGen1 mouseDown");
-    console.log(e.currentTarget);
-    console.log(e.currentTarget.parentNode);
-    nodeActions.draggedElement(e.currentTarget.parentNode);
-  },
-
-  portMouseDown: function(e){
-    console.log("portMouseDown");
-    console.log(e);
-    nodeActions.passPortMouseDown(e.currentTarget);
-
-    var portMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({portMouseDownCoords: portMouseDownCoords});
-    var whichPort = e.currentTarget;
-    console.log(whichPort);
-  },
-  portMouseUp: function(e){
-    console.log("portMouseUp");
-    console.log(e);
-    var portMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-      this.portClick(e);
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
-  portClick: function(e){
-    console.log("portClick");
-    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
-    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-    var passingEvent = e;
-    if(this.state.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-      theGraphDiamondHandle.dispatchEvent(EdgePreview);
-    }
-    else if(this.state.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-    }
-    //theGraphDiamondHandle.dispatchEvent(PortSelect);
-  },
-  //portSelect: function(){
-  //  console.log("portClick has occured, so a port has been selected");
-  //
-  //},
-
-  portMouseOver: function(e){
-    console.log("portMouseOver");
-    console.log(e.currentTarget);
-    var target = e.currentTarget;
-    target.style.cursor = "pointer";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-  portMouseLeave: function(e){
-    console.log("portMouseLeave");
-    var target = e.currentTarget;
-    target.style.cursor = "default";
-    nodeActions.portMouseOverLeaveToggle("toggle portMouseOver");
-    console.log(this.state.portMouseOver);
-  },
-
-  render: function(){
-
-    console.log("portThatHasBeenClicked is: " + this.state.portThatHasBeenClicked);
-
-    if(this.state.selected === true){
-      var currentStyling = this.state.selectedStyling;
-    }
-    else{
-      var currentStyling = this.state.defaultStyling;
-    }
-
-    var rectangleStyling = currentStyling.rectangle.rectangleStyling;
-    var rectanglePosition = currentStyling.rectangle.rectanglePosition;
-    var inportPositions = currentStyling.ports.portPositions.inportPositions;
-    var portStyling = currentStyling.ports.portStyling;
-    var outportPositions = currentStyling.ports.portPositions.outportPositions;
-    var textPosition = currentStyling.text.textPositions;
-
-    var nodeInfo = this.state.allNodeInfo[this.props.id];
-    var nodePositionX = nodeInfo.position.x;
-    var nodePositionY = nodeInfo.position.y;
-    var nodeTranslate = "translate(" + nodePositionX + "," + nodePositionY + ")";
-
-    //var nodeName = nodeInfo.name;
-    var rectangleString = "Rectangle";
-    var rectangleName = this.props.id.concat(rectangleString);
-
-    return (
-      React.createElement("g", React.__spread({},  this.props, {onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, style: this.state.selected && this.state.areAnyNodesSelected || !this.state.selected && !this.state.areAnyNodesSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle, 
-           transform: nodeTranslate
-            }), 
-
-        React.createElement("g", {style: {MozUserSelect: 'none'}, onMouseDown: this.mouseDown}, 
-          React.createElement(Rectangle, {id: "nodeBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire node container */", 
-
-          React.createElement(Rectangle, {id: rectangleName, height: rectangleStyling.height, width: rectangleStyling.width, x: rectanglePosition.x, y: rectanglePosition.y, rx: 7, ry: 7, 
-                     style: {fill: 'lightgrey', 'strokeWidth': 1.65, stroke: this.state.selected ? '#797979' : 'black', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}
-            //onClick={this.nodeClick} onDragStart={this.nodeDrag}
-          ), 
-          React.createElement(Port, {cx: inportPositions.ena.x, cy: inportPositions.ena.y, r: portStyling.portRadius, id: "ena", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}}), 
-          React.createElement(Port, {cx: outportPositions.posn.x, cy: outportPositions.posn.y, r: portStyling.portRadius, className: "posn", 
-                style: {fill: portStyling.fill, stroke: portStyling.stroke, 'strokeWidth': 1.65}, 
-                onMouseDown: this.portMouseDown, onMouseUp: this.portMouseUp, onMouseOver: this.portMouseOver, onMouseLeave: this.portMouseLeave}), 
-          React.createElement(InportEnaText, {x: textPosition.ena.x, y: textPosition.ena.y, style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), 
-          React.createElement(OutportPosnText, {x: textPosition.posn.x, y: textPosition.posn.y, style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}}), 
-
-          React.createElement(NodeName, {x: "17", y: NodeStylingProperties.height + 22, style: {MozUserSelect: 'none', cursor: this.state.portThatHasBeenClicked === null ? "move" : "default"}})
-        )
-
-      )
-    )
-  }
-});
-
-var NodeStylingProperties = {
-  height: 65,
-  width: 65,
-  rx: 7,
-  ry: 7
-};
-
-var TGenNodePortStyling = {
-  portRadius: 2,
-  inportPositionRatio: 0,
-  outportPositionRatio: 1,
-  inportPositions: {
-    ena: {
-      x: 3,
-      y: 33
-    }
-  },
-  outportPositions: {
-    posn: {
-      x: 65 + 3,
-      y: 33
-    }
-  }
-};
-
-var InportEnaText = React.createClass({displayName: "InportEnaText",
-  render:function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana"}), "ena")
-    )
-  }
-});
-
-var OutportPosnText = React.createClass({displayName: "OutportPosnText",
-  render: function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "10px", fontFamily: "Verdana", MozUserSelect: "none"}), "posn")
-    )
-  }
-});
-
-
-
-
-var NodeName = React.createClass({displayName: "NodeName",
-  render: function(){
-    return(
-      React.createElement("text", React.__spread({},  this.props, {fontSize: "15px", fontFamily: "Verdana"}), "TGen")
-    )
-  }
-});
-
-//var NodeType = React.createClass({
-//    render:function(){
-//        return(
-//            <text {...this.props} fontSize="8px" fontFamily="Verdana">Gate</text>
-//        )
-//    }
-//})
-
-
-
-
-var Rectangle = React.createClass({displayName: "Rectangle",
-  render: function(){
-    return(
-      React.createElement("rect", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-var Port = React.createClass({displayName: "Port",
-  render: function(){
-    return(
-      React.createElement("circle", React.__spread({},  this.props), this.props.children)
-    )
-  }
-});
-
-module.exports = TGenNode;
-
-},{"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/react":220,"../actions/nodeActions.js":3,"../actions/paneActions":4,"../stores/nodeStore.js":13}],30:[function(require,module,exports){
+},{"../actions/blockActions.js":1,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/blockStore.js":11,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./mainPane":22,"./sidePane":24,"react":216,"react-dom":38,"react-sidebar":40}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -7584,12 +6176,12 @@ module.exports = TGenNode;
 var React = require('react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
-var NodeStore = require('../stores/nodeStore.js');
-var nodeActions = require('../actions/nodeActions.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
 var Edge = require('./edge.js');
 
-var Node = require('./nodes.js');
+var Block = require('./block.js');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -7641,25 +6233,25 @@ var App = React.createClass({displayName: "App",
   propTypes: {
     graphPosition: React.PropTypes.object,
     graphZoomScale: React.PropTypes.number,
-    allEdges: React.PropTypes.object,
-    nodesToRender: React.PropTypes.array,
-    edgesToRender: React.PropTypes.array,
-    allNodeInfo: React.PropTypes.object,
+    //allEdges: React.PropTypes.object,
+    //nodesToRender: React.PropTypes.array,
+    //edgesToRender: React.PropTypes.array,
+    allBlockInfo: React.PropTypes.object,
     //portThatHasBeenClicked:React.PropTypes.oneOfType([
     //  React.PropTypes.element,
     //  /*Dunno how to say it could be null? */
     //])
-    nodeLibrary: React.PropTypes.object,
-    allNodeTypesStyling: React.PropTypes.object,
+    blockLibrary: React.PropTypes.object,
+    allBlockTypesStyling: React.PropTypes.object,
     portMouseOver: React.PropTypes.bool,
-    areAnyNodesSelected: React.PropTypes.bool,
+    areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
-    allNodeTypesPortStyling: React.PropTypes.object,
+    allBlockTypesPortStyling: React.PropTypes.object,
   },
 
   componentDidMount: function () {
     console.log(ReactDOM.findDOMNode(this));
-    this.setState({gateNodeIdCounter: 1});
+    this.setState({gateBlockIdCounter: 1});
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
@@ -7704,12 +6296,12 @@ var App = React.createClass({displayName: "App",
     //e.stopImmediatePropagation();
     //e.stopPropagation();
     console.log("dragArea has been clicked");
-    nodeActions.deselectAllNodes("deselect all nodes");
-    nodeActions.deselectAllEdges("deselect all edges");
+    blockActions.deselectAllBlocks("deselect all blocks");
+    blockActions.deselectAllEdges("deselect all edges");
 
     if(this.props.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
-      nodeActions.deselectAllPorts("deselect all ports");
+      blockActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
     }
     else{
@@ -7766,8 +6358,8 @@ var App = React.createClass({displayName: "App",
        y: newGraphPositionY
      };
 
-     nodeActions.graphZoom(scale);
-     nodeActions.changeGraphPosition(newGraphPosition);
+     blockActions.graphZoom(scale);
+     blockActions.changeGraphPosition(newGraphPosition);
   },
 
   isZoomNegative: function(n){
@@ -7776,29 +6368,29 @@ var App = React.createClass({displayName: "App",
 
   /* This is for my black block that adds a gate node when clicked */
 
-  addNodeInfo: function(){
+  addBlockInfo: function(){
     //e.stopImmediatePropagation();
     //e.stopPropagation();
-    console.log("addNodeInfo");
+    console.log("addBlockInfo");
     //var gateNodeRegExp = /Gate/;
     //var tgenNodeRegExp = /TGen/;
     //var pcompNodeRegExp = /PComp/;
     //var lutNodeRegExp = /LUT/;
 
-    var newGateNodeId = this.generateNewNodeId();
-    console.log(newGateNodeId);
+    var newGateBlockId = this.generateNewBlockId();
+    console.log(newGateBlockId);
 
-    nodeActions.addToAllNodeInfo(newGateNodeId);
+    blockActions.addToAllBlockInfo(newGateBlockId);
 
   },
 
-  generateNewNodeId: function(){
+  generateNewBlockId: function(){
   /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  var gateNodeIdCounter = this.state.gateNodeIdCounter;
-  gateNodeIdCounter += 1;
-  var newGateId = "Gate" + gateNodeIdCounter;
+  var gateBlockIdCounter = this.state.gateBlockIdCounter;
+    gateBlockIdCounter += 1;
+  var newGateId = "Gate" + gateBlockIdCounter;
   console.log(newGateId);
-  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+  this.setState({gateBlockIdCounter: gateBlockIdCounter});
   return newGateId;
 
   },
@@ -7821,7 +6413,7 @@ var App = React.createClass({displayName: "App",
 
     console.log(this.props.portThatHasBeenClicked);
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
-    nodeActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
+    blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
     var port = this.props.portThatHasBeenClicked;
     /* Need an if loop to check if we're hovering the port already
@@ -7893,7 +6485,7 @@ var App = React.createClass({displayName: "App",
     console.log(firstPort.parentNode.parentNode.parentNode.id);
     console.log(secondPort.parentNode.parentNode.parentNode.id);
 
-    /* For my refactored nodes.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
+    /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
     /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
 
@@ -7914,10 +6506,10 @@ var App = React.createClass({displayName: "App",
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
-        fromNode: firstPort.parentNode.parentNode.parentNode.id,
-        fromNodePort: firstPortName,
-        toNode: secondPort.parentNode.parentNode.parentNode.id,
-        toNodePort: secondPortName
+        fromBlock: firstPort.parentNode.parentNode.parentNode.id,
+        fromBlockPort: firstPortName,
+        toBlock: secondPort.parentNode.parentNode.parentNode.id,
+        toBlockPort: secondPortName
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
@@ -7933,58 +6525,58 @@ var App = React.createClass({displayName: "App",
   /* Find both port types, then compare them somehow */
   console.log(edgeInfo);
 
-  var fromNodeType = this.props.allNodeInfo[edgeInfo.fromNode].type;
-  var toNodeType = this.props.allNodeInfo[edgeInfo.toNode].type;
+  var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
+  var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
 
   /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
-  var nodeTypes = {
-    fromNodeType: fromNodeType,
-    toNodeType: toNodeType
+  var blockTypes = {
+    fromBlockType: fromBlockType,
+    toBlockType: toBlockType
   };
 
-  console.log(nodeTypes);
+  console.log(blockTypes);
 
-  var fromNodeLibraryInfo = this.props.nodeLibrary[fromNodeType];
-  var toNodeLibraryInfo = this.props.nodeLibrary[toNodeType];
+  var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
+  var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
-    console.log(fromNodeLibraryInfo);
-    console.log(toNodeLibraryInfo);
+    console.log(fromBlockLibraryInfo);
+    console.log(toBlockLibraryInfo);
 
-  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-      var fromNodePortType = "inport";
+  for(i = 0; i < fromBlockLibraryInfo.inports.length; i++){
+    if(fromBlockLibraryInfo.inports[i].name === edgeInfo.fromBlockPort){
+      console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
+      var fromBlockPortType = "inport";
       var inportIndex = i;
       break;
     }
     else{
-      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromNodePortType = "outport";
+      console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
+      var fromBlockPortType = "outport";
     }
   }
 
-  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-      var toNodePortType = "inport";
+  for(j = 0; j < toBlockLibraryInfo.inports.length; j++ ){
+    if(toBlockLibraryInfo.inports[j].name === edgeInfo.toBlockPort){
+      console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
+      var toBlockPortType = "inport";
       var inportIndex = j;
       break;
     }
     else{
-      console.log("The toNode isn't an inport, so it's an outport!");
-      var toNodePortType = "outport";
+      console.log("The toBlock isn't an inport, so it's an outport!");
+      var toBlockPortType = "outport";
     }
   }
 
   var portTypes = {
-    fromNodePortType: fromNodePortType,
-    toNodePortType: toNodePortType
+    fromBlockPortType: fromBlockPortType,
+    toBlockPortType: toBlockPortType
   };
 
   console.log(portTypes);
 
   var types = {
-    nodeTypes: nodeTypes,
+    blockTypes: blockTypes,
     portTypes: portTypes
   };
 
@@ -7992,17 +6584,17 @@ var App = React.createClass({displayName: "App",
 
     var fromPort = this.props.storingFirstPortClicked;
 
-    if(edgeInfo.fromNode === edgeInfo.toNode){
-    window.alert("Incompatible ports, they are part of the same node.");
+    if(edgeInfo.fromBlock === edgeInfo.toBlock){
+    window.alert("Incompatible ports, they are part of the same block.");
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
     fromPort.style.fill = "black";
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
   }
-  else if(fromNodePortType === toNodePortType){
-    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-    window.alert("Incompatible ports, they are both " + fromNodePortType + "s.");
+  else if(fromBlockPortType === toBlockPortType){
+    console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
+    window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
@@ -8011,17 +6603,17 @@ var App = React.createClass({displayName: "App",
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
   }
-  else if(fromNodePortType !== toNodePortType){
-    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports and their respective nodes are compatible.");
+  else if(fromBlockPortType !== toBlockPortType){
+    console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
     /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    if(fromNodePortType === "inport"){
-      this.isInportConnected(edgeInfo.fromNodePort, inportIndex, edgeInfo.fromNode, edgeInfo, types);
+    if(fromBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
     }
-    else if(toNodePortType === "inport"){
-      this.isInportConnected(edgeInfo.toNodePort, inportIndex, edgeInfo.toNode, edgeInfo, types);
+    else if(toBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
     }
     else{
-      console.log("fromNodePortType and toNodePortType are apparently different, yet neither are an inport, so something is up...");
+      console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
     }
     /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
     //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
@@ -8036,11 +6628,11 @@ var App = React.createClass({displayName: "App",
 
   },
 
-  isInportConnected: function(inport, inportIndex, node, edgeInfo, types){
-    console.log("The inport " + inport + " of the node " + node + " is " + this.props.allNodeInfo[node].inports[inportIndex].connected);
-    if(this.props.allNodeInfo[node].inports[inportIndex].connected === true){
+  isInportConnected: function(inport, inportIndex, block, edgeInfo, types){
+    console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
+    if(this.props.allBlockInfo[block].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
-      window.alert("The inport " + inport + " of the node " + node + " is already connected, so another connection cannot be made");
+      window.alert("The inport " + inport + " of the block " + block + " is already connected, so another connection cannot be made");
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
@@ -8050,7 +6642,7 @@ var App = React.createClass({displayName: "App",
       fromPort.setAttribute('r', 2);
       this.resetPortClickStorage();
     }
-    else if(this.props.allNodeInfo[node].inports[inportIndex].connected === false){
+    else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       console.log("That inport isn't connected to anything, so proceed with the port connection process");
       console.log(edgeInfo);
       var toPort = this.props.portThatHasBeenClicked;
@@ -8064,22 +6656,22 @@ var App = React.createClass({displayName: "App",
 
       /* Now need to implement the logic that checks if the start port was an inport or outport */
 
-      var startNode;
-      var startNodeType;
-      var startNodePort;
-      var endNode;
-      var endNodeType;
-      var endNodePort;
+      var startBlock;
+      var startBlockType;
+      var startBlockPort;
+      var endBlock;
+      var endBlockType;
+      var endBlockPort;
       var newEdge;
       var edgeLabel;
-      if(types.portTypes.fromNodePortType === "outport"){
+      if(types.portTypes.fromBlockPortType === "outport"){
         console.log("outport to inport, so edge labelling is normal");
-        startNode = edgeInfo.fromNode;
-        startNodeType = types.nodeTypes.fromNodeType;
-        startNodePort = edgeInfo.fromNodePort;
-        endNode = edgeInfo.toNode;
-        endNodeType = types.nodeTypes.toNodeType;
-        endNodePort = edgeInfo.toNodePort;
+        startBlock = edgeInfo.fromBlock;
+        startBlockType = types.blockTypes.fromBlockType;
+        startBlockPort = edgeInfo.fromBlockPort;
+        endBlock = edgeInfo.toBlock;
+        endBlockType = types.blockTypes.toBlockType;
+        endBlockPort = edgeInfo.toBlockPort;
         //newEdge = {
         //  fromNode: startNode,
         //  fromNodePort: startNodePort,
@@ -8087,15 +6679,15 @@ var App = React.createClass({displayName: "App",
         //  toNodePort: endNodePort
         //}
       }
-      else if(types.portTypes.fromNodePortType === "inport"){
+      else if(types.portTypes.fromBlockPortType === "inport"){
         console.log("inport to outport, so have to flip the edge labelling direction");
         /* Note that you must also flip the ports too! */
-        startNode = edgeInfo.toNode;
-        startNodeType = types.nodeTypes.toNodeType;
-        startNodePort = edgeInfo.toNodePort;
-        endNode = edgeInfo.fromNode;
-        endNodeType = types.nodeTypes.fromNodeType;
-        endNodePort = edgeInfo.fromNodePort;
+        startBlock = edgeInfo.toBlock;
+        startBlockType = types.blockTypes.toBlockType;
+        startBlockPort = edgeInfo.toBlockPort;
+        endBlock = edgeInfo.fromBlock;
+        endBlockType = types.blockTypes.fromBlockType;
+        endBlockPort = edgeInfo.fromBlockPort;
         /* Don't need this in both loops, can just set this after the loops have completed! */
         //newEdge = {
         //  fromNode: startNode,
@@ -8106,19 +6698,19 @@ var App = React.createClass({displayName: "App",
       }
 
       newEdge = {
-        fromNode: startNode,
-        fromNodeType: startNodeType,
-        fromNodePort: startNodePort,
-        toNode: endNode,
-        toNodeType: endNodeType,
-        toNodePort: endNodePort
+        fromBlock: startBlock,
+        fromBlockType: startBlockType,
+        fromBlockPort: startBlockPort,
+        toBlock: endBlock,
+        toBlockType: endBlockType,
+        toBlockPort: endBlockPort
       };
 
       /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-      edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+      edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
-      nodeActions.addOneSingleEdgeToAllNodeInfo(newEdge);
-      nodeActions.appendToEdgeSelectedState(edgeLabel);
+      blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+      blockActions.appendToEdgeSelectedState(edgeLabel);
       this.resetPortClickStorage();
     }
   },
@@ -8126,8 +6718,8 @@ var App = React.createClass({displayName: "App",
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
     console.log("Resetting port click storage");
-    nodeActions.storingFirstPortClicked(null);
-    nodeActions.passPortMouseDown(null);
+    blockActions.storingFirstPortClicked(null);
+    blockActions.passPortMouseDown(null);
   },
 
   interactJsDragPan: function(e){
@@ -8138,7 +6730,7 @@ var App = React.createClass({displayName: "App",
     var xChange = this.props.graphPosition.x + e.dx;
     var yChange = this.props.graphPosition.y + e.dy;
 
-    nodeActions.changeGraphPosition({
+    blockActions.changeGraphPosition({
       x: xChange,
       y: yChange
     });
@@ -8167,8 +6759,8 @@ var App = React.createClass({displayName: "App",
       y: newGraphPositionY
     };
 
-    nodeActions.graphZoom(newZoomScale);
-    nodeActions.changeGraphPosition(newGraphPosition);
+    blockActions.graphZoom(newZoomScale);
+    blockActions.changeGraphPosition(newGraphPosition);
   },
 
 
@@ -8185,52 +6777,53 @@ var App = React.createClass({displayName: "App",
 
     console.log(this.props);
 
-    var nodes = [];
+    var blocks = [];
     var edges = [];
 
-    for(var node in this.props.allNodeInfo){
-      nodes.push(
-        React.createElement(Node, {key: node, id: node, className: "node", 
-              allNodeInfo: this.props.allNodeInfo, allNodeTypesStyling: this.props.allNodeTypesStyling, areAnyNodesSelected: this.props.areAnyNodesSelected, 
+    for(var block in this.props.allBlockInfo){
+      blocks.push(
+        React.createElement(Block, {key: block, id: block, className: "block", 
+              allBlockInfo: this.props.allBlockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
               portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked, portMouseOver: this.props.portMouseOver, 
-              selected: NodeStore.getAnyNodeSelectedState(node), deselect: this.deselect}
+              selected: blockStore.getAnyBlockSelectedState(block), deselect: this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         )
       );
 
-      for(var i = 0; i < this.props.allNodeInfo[node].inports.length; i++){
-        if(this.props.allNodeInfo[node].inports[i].connected === true){
-          console.log(this.props.allNodeInfo[node].inports[i]);
-          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is connected, so find out what node it is connected to");
+      for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
+        if(this.props.allBlockInfo[block].inports[i].connected === true){
+          console.log(this.props.allBlockInfo[block].inports[i]);
+          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
           /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
-          var toNode = node;
-          var toNodeType = this.props.allNodeInfo[node].type;
-          var toNodePort = this.props.allNodeInfo[node].inports[i].name;
-          var fromNode = this.props.allNodeInfo[node].inports[i].connectedTo.node;
-          var fromNodeType = this.props.allNodeInfo[fromNode].type;
-          var fromNodePort = this.props.allNodeInfo[node].inports[i].connectedTo.port;
+          var toBlock = block;
+          var toBlockType = this.props.allBlockInfo[block].type;
+          var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+          var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
+          console.log(this.props.allBlockInfo);
+          var fromBlockType = this.props.allBlockInfo[fromBlock].type;
+          var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
-          var edgeLabel = String(fromNode) + String(fromNodePort) + " -> " + String(toNode) + String(toNodePort);
+          var edgeLabel = String(fromBlock) + String(fromBlockPort) + " -> " + String(toBlock) + String(toBlockPort);
 
           edges.push(
             React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 
-                  fromNode: fromNode, fromNodeType: fromNodeType, fromNodePort: fromNodePort, 
-                  toNode: toNode, toNodeType: toNodeType, toNodePort: toNodePort, 
-                  allNodeTypesPortStyling: this.props.allNodeTypesPortStyling, 
-                  allNodeInfo: this.props.allNodeInfo, areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
-                  selected: NodeStore.getIfEdgeIsSelected(edgeLabel)}
+                  fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, 
+                  toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, 
+                  allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
+                  allBlockInfo: this.props.allBlockInfo, areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
+                  selected: blockStore.getIfEdgeIsSelected(edgeLabel)}
             )
           )
         }
-        else if(this.props.allNodeInfo[node].inports[i].connected === false){
-          console.log(this.props.allNodeInfo[node].inports[i]);
-          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is NOT connected, so move on to the next inport/node");
+        else if(this.props.allBlockInfo[block].inports[i].connected === false){
+          console.log(this.props.allBlockInfo[block].inports[i]);
+          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
         }
       }
 
     }
 
-    console.log(nodes);
+    console.log(blocks);
     console.log(edges);
 
     return(
@@ -8248,7 +6841,7 @@ var App = React.createClass({displayName: "App",
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         }, 
           React.createElement("g", null, React.createElement("rect", {
-            onClick: this.addNodeInfo, 
+            onClick: this.addBlockInfo, 
             height: "50", width: "50"})), 
 
           React.createElement("g", {id: "testPanGroup", 
@@ -8262,9 +6855,9 @@ var App = React.createClass({displayName: "App",
 
             ), 
 
-            React.createElement("g", {id: "NodesGroup"}, 
+            React.createElement("g", {id: "BlocksGroup"}, 
 
-              nodes
+              blocks
 
             )
 
@@ -9134,7 +7727,7 @@ module.exports = App;
 //
 //}
 
-},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/lib/ReactDefaultPerf.js":100,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./nodes.js":24,"react":220}],31:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/lib/ReactDefaultPerf.js":96,"../actions/blockActions.js":1,"../stores/blockStore.js":11,"./block.js":16,"./edge.js":20,"react":216}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -9144,25 +7737,25 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
 var TheGraphDiamond = require('./theGraphDiamond');
 
-var NodeStore = require('../stores/nodeStore.js');
+var blockStore = require('../stores/blockStore.js');
 
 function getTheGraphDiamondState(){
   return{
-    graphPosition: NodeStore.getGraphPosition(),
-    graphZoomScale: NodeStore.getGraphZoomScale(),
+    graphPosition: blockStore.getGraphPosition(),
+    graphZoomScale: blockStore.getGraphZoomScale(),
     //allEdges: NodeStore.getAllEdges(),
     //nodesToRender: NodeStore.getNodesToRenderArray(),
     //edgesToRender: NodeStore.getEdgesToRenderArray(),
-    allNodeInfo: NodeStore.getAllNodeInfo(),
-    portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+    allBlockInfo: blockStore.getAllBlockInfo(),
+    portThatHasBeenClicked: blockStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    nodeLibrary: NodeStore.getNodeLibrary(),
-    allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    portMouseOver: NodeStore.getPortMouseOver(),
-    areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
+    blockLibrary: blockStore.getBlockLibrary(),
+    allBlockTypesStyling: blockStore.getAllBlockTypesStyling(),
+    portMouseOver: blockStore.getPortMouseOver(),
+    areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
+    areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
+    allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling()
   }
 }
 
@@ -9177,22 +7770,22 @@ var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDia
   },
 
   componentDidMount: function(){
-    NodeStore.addChangeListener(this._onChange);
+    blockStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function(){
-    NodeStore.removeChangeListener(this._onChange);
+    blockStore.removeChangeListener(this._onChange);
   },
 
   render: function(){
     return(
       React.createElement(TheGraphDiamond, {
         graphPosition: this.state.graphPosition, graphZoomScale: this.state.graphZoomScale, 
-        allNodeInfo: this.state.allNodeInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
+        allBlockInfo: this.state.allBlockInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
         storingFirstPortClicked: this.state.storingFirstPortClicked, 
-        nodeLibrary: this.state.nodeLibrary, 
-        allNodeTypesStyling: this.state.allNodeTypesStyling, areAnyNodesSelected: this.state.areAnyNodesSelected, 
-        areAnyEdgesSelected: this.state.areAnyEdgesSelected, allNodeTypesPortStyling: this.state.allNodeTypesPortStyling, 
+        blockLibrary: this.state.blockLibrary, 
+        allBlockTypesStyling: this.state.allBlockTypesStyling, areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
+        areAnyEdgesSelected: this.state.areAnyEdgesSelected, allBlockTypesPortStyling: this.state.allBlockTypesPortStyling, 
         portMouseOver: this.state.portMouseOver}
       )
     )
@@ -9201,7 +7794,7 @@ var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDia
 
 module.exports = theGraphDiamondControllerView;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":41,"../stores/nodeStore.js":13,"./theGraphDiamond":30,"react":220}],32:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":37,"../stores/blockStore.js":11,"./theGraphDiamond":26,"react":216}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/10/15.
  */
@@ -9235,7 +7828,7 @@ WebSocketClient.addWebSocketOnErrorCallback(function(){
 
 module.exports = WebSocketClient;
 
-},{"./writingWebSocketsInReact":33}],33:[function(require,module,exports){
+},{"./writingWebSocketsInReact":29}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 28/09/15.
  */
@@ -9959,7 +8552,7 @@ module.exports = Client;
 
 //var ReactClient = new Client("wss://echo.websocket.org", null, 10, null, null);
 
-},{"./actions/paneActions":4,"./actions/serverActions":5}],34:[function(require,module,exports){
+},{"./actions/paneActions":4,"./actions/serverActions":5}],30:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10262,7 +8855,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],35:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -10354,7 +8947,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],36:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -10366,7 +8959,7 @@ process.umask = function() { return 0; };
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":37}],37:[function(require,module,exports){
+},{"./lib/Dispatcher":33}],33:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -10618,7 +9211,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":38}],38:[function(require,module,exports){
+},{"./invariant":34}],34:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -10673,7 +9266,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],39:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -16651,7 +15244,7 @@ module.exports = invariant;
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],40:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -16692,7 +15285,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],41:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 (function (global){
 /**
  * ReactDOM v0.14.3
@@ -16738,12 +15331,12 @@ module.exports = Object.assign || function (target, source) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"react":220}],42:[function(require,module,exports){
+},{"react":216}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":85}],43:[function(require,module,exports){
+},{"react/lib/ReactDOM":81}],39:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -19276,7 +17869,7 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react/addons":46}],44:[function(require,module,exports){
+},{"react/addons":42}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19290,7 +17883,7 @@ var _sidebar2 = _interopRequireDefault(_sidebar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _sidebar2.default;
-},{"./sidebar":45}],45:[function(require,module,exports){
+},{"./sidebar":41}],41:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19728,7 +18321,7 @@ Sidebar.defaultProps = {
 };
 
 exports.default = Sidebar;
-},{"react":220,"react-dom":42}],46:[function(require,module,exports){
+},{"react":216,"react-dom":38}],42:[function(require,module,exports){
 'use strict';
 
 var warning = require('fbjs/lib/warning');
@@ -19743,7 +18336,7 @@ warning(
 
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":143,"fbjs/lib/warning":219}],47:[function(require,module,exports){
+},{"./lib/ReactWithAddons":139,"fbjs/lib/warning":215}],43:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19780,7 +18373,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":117,"./findDOMNode":168,"fbjs/lib/focusNode":201}],48:[function(require,module,exports){
+},{"./ReactMount":113,"./findDOMNode":164,"fbjs/lib/focusNode":197}],44:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -20186,7 +18779,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":60,"./EventPropagators":64,"./FallbackCompositionState":65,"./SyntheticCompositionEvent":149,"./SyntheticInputEvent":153,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/keyOf":212}],49:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./FallbackCompositionState":61,"./SyntheticCompositionEvent":145,"./SyntheticInputEvent":149,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/keyOf":208}],45:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20326,7 +18919,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],50:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20504,7 +19097,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":49,"./ReactPerf":123,"./dangerousStyleValue":165,"_process":35,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/camelizeStyleName":195,"fbjs/lib/hyphenateStyleName":206,"fbjs/lib/memoizeStringOnly":214,"fbjs/lib/warning":219}],51:[function(require,module,exports){
+},{"./CSSProperty":45,"./ReactPerf":119,"./dangerousStyleValue":161,"_process":31,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/camelizeStyleName":191,"fbjs/lib/hyphenateStyleName":202,"fbjs/lib/memoizeStringOnly":210,"fbjs/lib/warning":215}],47:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20600,7 +19193,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./PooledClass":70,"_process":35,"fbjs/lib/invariant":207}],52:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"_process":31,"fbjs/lib/invariant":203}],48:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20922,7 +19515,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":60,"./EventPluginHub":61,"./EventPropagators":64,"./ReactUpdates":141,"./SyntheticEvent":151,"./getEventTarget":174,"./isEventSupported":179,"./isTextInputElement":180,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/keyOf":212}],53:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPropagators":60,"./ReactUpdates":137,"./SyntheticEvent":147,"./getEventTarget":170,"./isEventSupported":175,"./isTextInputElement":176,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/keyOf":208}],49:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20946,7 +19539,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],54:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21078,7 +19671,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":57,"./ReactMultiChildUpdateTypes":119,"./ReactPerf":123,"./setInnerHTML":184,"./setTextContent":185,"_process":35,"fbjs/lib/invariant":207}],55:[function(require,module,exports){
+},{"./Danger":53,"./ReactMultiChildUpdateTypes":115,"./ReactPerf":119,"./setInnerHTML":180,"./setTextContent":181,"_process":31,"fbjs/lib/invariant":203}],51:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21315,7 +19908,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],56:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],52:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21543,7 +20136,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":55,"./ReactPerf":123,"./quoteAttributeValueForBrowser":182,"_process":35,"fbjs/lib/warning":219}],57:[function(require,module,exports){
+},{"./DOMProperty":51,"./ReactPerf":119,"./quoteAttributeValueForBrowser":178,"_process":31,"fbjs/lib/warning":215}],53:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21691,7 +20284,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/createNodesFromMarkup":198,"fbjs/lib/emptyFunction":199,"fbjs/lib/getMarkupWrap":203,"fbjs/lib/invariant":207}],58:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/createNodesFromMarkup":194,"fbjs/lib/emptyFunction":195,"fbjs/lib/getMarkupWrap":199,"fbjs/lib/invariant":203}],54:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21719,7 +20312,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":212}],59:[function(require,module,exports){
+},{"fbjs/lib/keyOf":208}],55:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21844,7 +20437,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":60,"./EventPropagators":64,"./ReactMount":117,"./SyntheticMouseEvent":155,"fbjs/lib/keyOf":212}],60:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactMount":113,"./SyntheticMouseEvent":151,"fbjs/lib/keyOf":208}],56:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21937,7 +20530,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":211}],61:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],57:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22219,7 +20812,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":62,"./EventPluginUtils":63,"./ReactErrorUtils":106,"./accumulateInto":161,"./forEachAccumulated":170,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],62:[function(require,module,exports){
+},{"./EventPluginRegistry":58,"./EventPluginUtils":59,"./ReactErrorUtils":102,"./accumulateInto":157,"./forEachAccumulated":166,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],58:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22442,7 +21035,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],63:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],59:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22647,7 +21240,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":60,"./ReactErrorUtils":106,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],64:[function(require,module,exports){
+},{"./EventConstants":56,"./ReactErrorUtils":102,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],60:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22785,7 +21378,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":60,"./EventPluginHub":61,"./accumulateInto":161,"./forEachAccumulated":170,"_process":35,"fbjs/lib/warning":219}],65:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./accumulateInto":157,"./forEachAccumulated":166,"_process":31,"fbjs/lib/warning":215}],61:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22881,7 +21474,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":69,"./PooledClass":70,"./getTextContentAccessor":177}],66:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"./getTextContentAccessor":173}],62:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23114,7 +21707,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":55,"fbjs/lib/ExecutionEnvironment":193}],67:[function(require,module,exports){
+},{"./DOMProperty":51,"fbjs/lib/ExecutionEnvironment":189}],63:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23151,7 +21744,7 @@ var LinkedStateMixin = {
 };
 
 module.exports = LinkedStateMixin;
-},{"./ReactLink":115,"./ReactStateSetters":135}],68:[function(require,module,exports){
+},{"./ReactLink":111,"./ReactStateSetters":131}],64:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23288,7 +21881,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":126,"./ReactPropTypes":127,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],69:[function(require,module,exports){
+},{"./ReactPropTypeLocations":122,"./ReactPropTypes":123,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],65:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -23336,7 +21929,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],70:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23458,7 +22051,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],71:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],67:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23499,7 +22092,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":69,"./ReactDOM":85,"./ReactDOMServer":95,"./ReactIsomorphic":114,"./deprecated":166}],72:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactDOM":81,"./ReactDOMServer":91,"./ReactIsomorphic":110,"./deprecated":162}],68:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23538,7 +22131,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":113,"./findDOMNode":168,"_process":35,"fbjs/lib/warning":219}],73:[function(require,module,exports){
+},{"./ReactInstanceMap":109,"./findDOMNode":164,"_process":31,"fbjs/lib/warning":215}],69:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23863,7 +22456,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":60,"./EventPluginHub":61,"./EventPluginRegistry":62,"./Object.assign":69,"./ReactEventEmitterMixin":107,"./ReactPerf":123,"./ViewportMetrics":160,"./isEventSupported":179}],74:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPluginRegistry":58,"./Object.assign":65,"./ReactEventEmitterMixin":103,"./ReactPerf":119,"./ViewportMetrics":156,"./isEventSupported":175}],70:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23947,7 +22540,7 @@ var ReactCSSTransitionGroup = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroup;
-},{"./Object.assign":69,"./React":71,"./ReactCSSTransitionGroupChild":75,"./ReactTransitionGroup":139}],75:[function(require,module,exports){
+},{"./Object.assign":65,"./React":67,"./ReactCSSTransitionGroupChild":71,"./ReactTransitionGroup":135}],71:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24113,7 +22706,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroupChild;
-},{"./React":71,"./ReactDOM":85,"./ReactTransitionEvents":138,"./onlyChild":181,"fbjs/lib/CSSCore":191}],76:[function(require,module,exports){
+},{"./React":67,"./ReactDOM":81,"./ReactTransitionEvents":134,"./onlyChild":177,"fbjs/lib/CSSCore":187}],72:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -24238,7 +22831,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":129,"./instantiateReactComponent":178,"./shouldUpdateReactComponent":187,"./traverseAllChildren":188,"_process":35,"fbjs/lib/warning":219}],77:[function(require,module,exports){
+},{"./ReactReconciler":125,"./instantiateReactComponent":174,"./shouldUpdateReactComponent":183,"./traverseAllChildren":184,"_process":31,"fbjs/lib/warning":215}],73:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24421,7 +23014,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":70,"./ReactElement":102,"./traverseAllChildren":188,"fbjs/lib/emptyFunction":199}],78:[function(require,module,exports){
+},{"./PooledClass":66,"./ReactElement":98,"./traverseAllChildren":184,"fbjs/lib/emptyFunction":195}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25195,7 +23788,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactComponent":79,"./ReactElement":102,"./ReactNoopUpdateQueue":121,"./ReactPropTypeLocationNames":125,"./ReactPropTypeLocations":126,"_process":35,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207,"fbjs/lib/keyMirror":211,"fbjs/lib/keyOf":212,"fbjs/lib/warning":219}],79:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactComponent":75,"./ReactElement":98,"./ReactNoopUpdateQueue":117,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"_process":31,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/keyMirror":207,"fbjs/lib/keyOf":208,"fbjs/lib/warning":215}],75:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25320,7 +23913,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":121,"./canDefineProperty":163,"_process":35,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],80:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":117,"./canDefineProperty":159,"_process":31,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],76:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25362,7 +23955,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":90,"./ReactMount":117}],81:[function(require,module,exports){
+},{"./ReactDOMIDOperations":86,"./ReactMount":113}],77:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -25416,7 +24009,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],82:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],78:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25463,7 +24056,7 @@ var ReactComponentWithPureRenderMixin = {
 };
 
 module.exports = ReactComponentWithPureRenderMixin;
-},{"./shallowCompare":186}],83:[function(require,module,exports){
+},{"./shallowCompare":182}],79:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26160,7 +24753,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactComponentEnvironment":81,"./ReactCurrentOwner":84,"./ReactElement":102,"./ReactInstanceMap":113,"./ReactPerf":123,"./ReactPropTypeLocationNames":125,"./ReactPropTypeLocations":126,"./ReactReconciler":129,"./ReactUpdateQueue":140,"./shouldUpdateReactComponent":187,"_process":35,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],84:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactComponentEnvironment":77,"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceMap":109,"./ReactPerf":119,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"./ReactReconciler":125,"./ReactUpdateQueue":136,"./shouldUpdateReactComponent":183,"_process":31,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],80:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26191,7 +24784,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],85:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26286,7 +24879,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":84,"./ReactDOMTextComponent":96,"./ReactDefaultInjection":99,"./ReactInstanceHandles":112,"./ReactMount":117,"./ReactPerf":123,"./ReactReconciler":129,"./ReactUpdates":141,"./ReactVersion":142,"./findDOMNode":168,"./renderSubtreeIntoContainer":183,"_process":35,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/warning":219}],86:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactDOMTextComponent":92,"./ReactDefaultInjection":95,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactPerf":119,"./ReactReconciler":125,"./ReactUpdates":137,"./ReactVersion":138,"./findDOMNode":164,"./renderSubtreeIntoContainer":179,"_process":31,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/warning":215}],82:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26337,7 +24930,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],87:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27302,7 +25895,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":47,"./CSSPropertyOperations":50,"./DOMProperty":55,"./DOMPropertyOperations":56,"./EventConstants":60,"./Object.assign":69,"./ReactBrowserEventEmitter":73,"./ReactComponentBrowserEnvironment":80,"./ReactDOMButton":86,"./ReactDOMInput":91,"./ReactDOMOption":92,"./ReactDOMSelect":93,"./ReactDOMTextarea":97,"./ReactMount":117,"./ReactMultiChild":118,"./ReactPerf":123,"./ReactUpdateQueue":140,"./canDefineProperty":163,"./escapeTextContentForBrowser":167,"./isEventSupported":179,"./setInnerHTML":184,"./setTextContent":185,"./validateDOMNesting":190,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/keyOf":212,"fbjs/lib/shallowEqual":217,"fbjs/lib/warning":219}],88:[function(require,module,exports){
+},{"./AutoFocusUtils":43,"./CSSPropertyOperations":46,"./DOMProperty":51,"./DOMPropertyOperations":52,"./EventConstants":56,"./Object.assign":65,"./ReactBrowserEventEmitter":69,"./ReactComponentBrowserEnvironment":76,"./ReactDOMButton":82,"./ReactDOMInput":87,"./ReactDOMOption":88,"./ReactDOMSelect":89,"./ReactDOMTextarea":93,"./ReactMount":113,"./ReactMultiChild":114,"./ReactPerf":119,"./ReactUpdateQueue":136,"./canDefineProperty":159,"./escapeTextContentForBrowser":163,"./isEventSupported":175,"./setInnerHTML":180,"./setTextContent":181,"./validateDOMNesting":186,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208,"fbjs/lib/shallowEqual":213,"fbjs/lib/warning":215}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27482,7 +26075,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":102,"./ReactElementValidator":103,"_process":35,"fbjs/lib/mapObject":213}],89:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactElementValidator":99,"_process":31,"fbjs/lib/mapObject":209}],85:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27501,7 +26094,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],90:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27598,7 +26191,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":54,"./DOMPropertyOperations":56,"./ReactMount":117,"./ReactPerf":123,"_process":35,"fbjs/lib/invariant":207}],91:[function(require,module,exports){
+},{"./DOMChildrenOperations":50,"./DOMPropertyOperations":52,"./ReactMount":113,"./ReactPerf":119,"_process":31,"fbjs/lib/invariant":203}],87:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27754,7 +26347,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":68,"./Object.assign":69,"./ReactDOMIDOperations":90,"./ReactMount":117,"./ReactUpdates":141,"_process":35,"fbjs/lib/invariant":207}],92:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactDOMIDOperations":86,"./ReactMount":113,"./ReactUpdates":137,"_process":31,"fbjs/lib/invariant":203}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27843,7 +26436,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactChildren":77,"./ReactDOMSelect":93,"_process":35,"fbjs/lib/warning":219}],93:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactChildren":73,"./ReactDOMSelect":89,"_process":31,"fbjs/lib/warning":215}],89:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28034,7 +26627,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":68,"./Object.assign":69,"./ReactMount":117,"./ReactUpdates":141,"_process":35,"fbjs/lib/warning":219}],94:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactMount":113,"./ReactUpdates":137,"_process":31,"fbjs/lib/warning":215}],90:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28247,7 +26840,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":176,"./getTextContentAccessor":177,"fbjs/lib/ExecutionEnvironment":193}],95:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":172,"./getTextContentAccessor":173,"fbjs/lib/ExecutionEnvironment":189}],91:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28274,7 +26867,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":99,"./ReactServerRendering":133,"./ReactVersion":142}],96:[function(require,module,exports){
+},{"./ReactDefaultInjection":95,"./ReactServerRendering":129,"./ReactVersion":138}],92:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28404,7 +26997,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":54,"./DOMPropertyOperations":56,"./Object.assign":69,"./ReactComponentBrowserEnvironment":80,"./ReactMount":117,"./escapeTextContentForBrowser":167,"./setTextContent":185,"./validateDOMNesting":190,"_process":35}],97:[function(require,module,exports){
+},{"./DOMChildrenOperations":50,"./DOMPropertyOperations":52,"./Object.assign":65,"./ReactComponentBrowserEnvironment":76,"./ReactMount":113,"./escapeTextContentForBrowser":163,"./setTextContent":181,"./validateDOMNesting":186,"_process":31}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28520,7 +27113,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":68,"./Object.assign":69,"./ReactDOMIDOperations":90,"./ReactUpdates":141,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],98:[function(require,module,exports){
+},{"./LinkedValueUtils":64,"./Object.assign":65,"./ReactDOMIDOperations":86,"./ReactUpdates":137,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],94:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28588,7 +27181,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":69,"./ReactUpdates":141,"./Transaction":159,"fbjs/lib/emptyFunction":199}],99:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactUpdates":137,"./Transaction":155,"fbjs/lib/emptyFunction":195}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28688,7 +27281,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":48,"./ChangeEventPlugin":52,"./ClientReactRootIndex":53,"./DefaultEventPluginOrder":58,"./EnterLeaveEventPlugin":59,"./HTMLDOMPropertyConfig":66,"./ReactBrowserComponentMixin":72,"./ReactComponentBrowserEnvironment":80,"./ReactDOMComponent":87,"./ReactDOMTextComponent":96,"./ReactDefaultBatchingStrategy":98,"./ReactDefaultPerf":100,"./ReactEventListener":108,"./ReactInjection":110,"./ReactInstanceHandles":112,"./ReactMount":117,"./ReactReconcileTransaction":128,"./SVGDOMPropertyConfig":144,"./SelectEventPlugin":145,"./ServerReactRootIndex":146,"./SimpleEventPlugin":147,"_process":35,"fbjs/lib/ExecutionEnvironment":193}],100:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":44,"./ChangeEventPlugin":48,"./ClientReactRootIndex":49,"./DefaultEventPluginOrder":54,"./EnterLeaveEventPlugin":55,"./HTMLDOMPropertyConfig":62,"./ReactBrowserComponentMixin":68,"./ReactComponentBrowserEnvironment":76,"./ReactDOMComponent":83,"./ReactDOMTextComponent":92,"./ReactDefaultBatchingStrategy":94,"./ReactDefaultPerf":96,"./ReactEventListener":104,"./ReactInjection":106,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactReconcileTransaction":124,"./SVGDOMPropertyConfig":140,"./SelectEventPlugin":141,"./ServerReactRootIndex":142,"./SimpleEventPlugin":143,"_process":31,"fbjs/lib/ExecutionEnvironment":189}],96:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28926,7 +27519,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":55,"./ReactDefaultPerfAnalysis":101,"./ReactMount":117,"./ReactPerf":123,"fbjs/lib/performanceNow":216}],101:[function(require,module,exports){
+},{"./DOMProperty":51,"./ReactDefaultPerfAnalysis":97,"./ReactMount":113,"./ReactPerf":119,"fbjs/lib/performanceNow":212}],97:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29126,7 +27719,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":69}],102:[function(require,module,exports){
+},{"./Object.assign":65}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -29376,7 +27969,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactCurrentOwner":84,"./canDefineProperty":163,"_process":35}],103:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCurrentOwner":80,"./canDefineProperty":159,"_process":31}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -29660,7 +28253,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":84,"./ReactElement":102,"./ReactPropTypeLocationNames":125,"./ReactPropTypeLocations":126,"./canDefineProperty":163,"./getIteratorFn":175,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],104:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactPropTypeLocationNames":121,"./ReactPropTypeLocations":122,"./canDefineProperty":159,"./getIteratorFn":171,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],100:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -29712,7 +28305,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":69,"./ReactElement":102,"./ReactEmptyComponentRegistry":105,"./ReactReconciler":129}],105:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactElement":98,"./ReactEmptyComponentRegistry":101,"./ReactReconciler":125}],101:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -29761,7 +28354,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],106:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29841,7 +28434,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":35}],107:[function(require,module,exports){
+},{"_process":31}],103:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29880,7 +28473,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":61}],108:[function(require,module,exports){
+},{"./EventPluginHub":57}],104:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30092,7 +28685,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":69,"./PooledClass":70,"./ReactInstanceHandles":112,"./ReactMount":117,"./ReactUpdates":141,"./getEventTarget":174,"fbjs/lib/EventListener":192,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/getUnboundedScrollPosition":204}],109:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"./ReactInstanceHandles":108,"./ReactMount":113,"./ReactUpdates":137,"./getEventTarget":170,"fbjs/lib/EventListener":188,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/getUnboundedScrollPosition":200}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -30159,7 +28752,7 @@ var ReactFragment = {
 
 module.exports = ReactFragment;
 }).call(this,require('_process'))
-},{"./ReactChildren":77,"./ReactElement":102,"_process":35,"fbjs/lib/emptyFunction":199,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],110:[function(require,module,exports){
+},{"./ReactChildren":73,"./ReactElement":98,"_process":31,"fbjs/lib/emptyFunction":195,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],106:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30198,7 +28791,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":55,"./EventPluginHub":61,"./ReactBrowserEventEmitter":73,"./ReactClass":78,"./ReactComponentEnvironment":81,"./ReactEmptyComponent":104,"./ReactNativeComponent":120,"./ReactPerf":123,"./ReactRootIndex":131,"./ReactUpdates":141}],111:[function(require,module,exports){
+},{"./DOMProperty":51,"./EventPluginHub":57,"./ReactBrowserEventEmitter":69,"./ReactClass":74,"./ReactComponentEnvironment":77,"./ReactEmptyComponent":100,"./ReactNativeComponent":116,"./ReactPerf":119,"./ReactRootIndex":127,"./ReactUpdates":137}],107:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30323,7 +28916,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":94,"fbjs/lib/containsNode":196,"fbjs/lib/focusNode":201,"fbjs/lib/getActiveElement":202}],112:[function(require,module,exports){
+},{"./ReactDOMSelection":90,"fbjs/lib/containsNode":192,"fbjs/lib/focusNode":197,"fbjs/lib/getActiveElement":198}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30628,7 +29221,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":131,"_process":35,"fbjs/lib/invariant":207}],113:[function(require,module,exports){
+},{"./ReactRootIndex":127,"_process":31,"fbjs/lib/invariant":203}],109:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30676,7 +29269,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],114:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30753,7 +29346,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactChildren":77,"./ReactClass":78,"./ReactComponent":79,"./ReactDOMFactories":88,"./ReactElement":102,"./ReactElementValidator":103,"./ReactPropTypes":127,"./ReactVersion":142,"./onlyChild":181,"_process":35}],115:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactChildren":73,"./ReactClass":74,"./ReactComponent":75,"./ReactDOMFactories":84,"./ReactElement":98,"./ReactElementValidator":99,"./ReactPropTypes":123,"./ReactVersion":138,"./onlyChild":177,"_process":31}],111:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30823,7 +29416,7 @@ ReactLink.PropTypes = {
 };
 
 module.exports = ReactLink;
-},{"./React":71}],116:[function(require,module,exports){
+},{"./React":67}],112:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30869,7 +29462,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":162}],117:[function(require,module,exports){
+},{"./adler32":158}],113:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31722,7 +30315,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":55,"./Object.assign":69,"./ReactBrowserEventEmitter":73,"./ReactCurrentOwner":84,"./ReactDOMFeatureFlags":89,"./ReactElement":102,"./ReactEmptyComponentRegistry":105,"./ReactInstanceHandles":112,"./ReactInstanceMap":113,"./ReactMarkupChecksum":116,"./ReactPerf":123,"./ReactReconciler":129,"./ReactUpdateQueue":140,"./ReactUpdates":141,"./instantiateReactComponent":178,"./setInnerHTML":184,"./shouldUpdateReactComponent":187,"./validateDOMNesting":190,"_process":35,"fbjs/lib/containsNode":196,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],118:[function(require,module,exports){
+},{"./DOMProperty":51,"./Object.assign":65,"./ReactBrowserEventEmitter":69,"./ReactCurrentOwner":80,"./ReactDOMFeatureFlags":85,"./ReactElement":98,"./ReactEmptyComponentRegistry":101,"./ReactInstanceHandles":108,"./ReactInstanceMap":109,"./ReactMarkupChecksum":112,"./ReactPerf":119,"./ReactReconciler":125,"./ReactUpdateQueue":136,"./ReactUpdates":137,"./instantiateReactComponent":174,"./setInnerHTML":180,"./shouldUpdateReactComponent":183,"./validateDOMNesting":186,"_process":31,"fbjs/lib/containsNode":192,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],114:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32221,7 +30814,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":76,"./ReactComponentEnvironment":81,"./ReactCurrentOwner":84,"./ReactMultiChildUpdateTypes":119,"./ReactReconciler":129,"./flattenChildren":169,"_process":35}],119:[function(require,module,exports){
+},{"./ReactChildReconciler":72,"./ReactComponentEnvironment":77,"./ReactCurrentOwner":80,"./ReactMultiChildUpdateTypes":115,"./ReactReconciler":125,"./flattenChildren":165,"_process":31}],115:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32254,7 +30847,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":211}],120:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],116:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -32351,7 +30944,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"_process":35,"fbjs/lib/invariant":207}],121:[function(require,module,exports){
+},{"./Object.assign":65,"_process":31,"fbjs/lib/invariant":203}],117:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -32472,7 +31065,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/warning":219}],122:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/warning":215}],118:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32566,7 +31159,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],123:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],119:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32665,7 +31258,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":35}],124:[function(require,module,exports){
+},{"_process":31}],120:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32774,7 +31367,7 @@ var ReactPropTransferer = {
 };
 
 module.exports = ReactPropTransferer;
-},{"./Object.assign":69,"fbjs/lib/emptyFunction":199,"fbjs/lib/joinClasses":210}],125:[function(require,module,exports){
+},{"./Object.assign":65,"fbjs/lib/emptyFunction":195,"fbjs/lib/joinClasses":206}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32801,7 +31394,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":35}],126:[function(require,module,exports){
+},{"_process":31}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32824,7 +31417,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":211}],127:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":207}],123:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33181,7 +31774,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":102,"./ReactPropTypeLocationNames":125,"./getIteratorFn":175,"fbjs/lib/emptyFunction":199}],128:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactPropTypeLocationNames":121,"./getIteratorFn":171,"fbjs/lib/emptyFunction":195}],124:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33333,7 +31926,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":51,"./Object.assign":69,"./PooledClass":70,"./ReactBrowserEventEmitter":73,"./ReactDOMFeatureFlags":89,"./ReactInputSelection":111,"./Transaction":159}],129:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./ReactBrowserEventEmitter":69,"./ReactDOMFeatureFlags":85,"./ReactInputSelection":107,"./Transaction":155}],125:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33441,7 +32034,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":130}],130:[function(require,module,exports){
+},{"./ReactRef":126}],126:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33520,7 +32113,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":122}],131:[function(require,module,exports){
+},{"./ReactOwner":118}],127:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33550,7 +32143,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],132:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -33574,7 +32167,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],133:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33660,7 +32253,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":98,"./ReactElement":102,"./ReactInstanceHandles":112,"./ReactMarkupChecksum":116,"./ReactServerBatchingStrategy":132,"./ReactServerRenderingTransaction":134,"./ReactUpdates":141,"./instantiateReactComponent":178,"_process":35,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207}],134:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":94,"./ReactElement":98,"./ReactInstanceHandles":108,"./ReactMarkupChecksum":112,"./ReactServerBatchingStrategy":128,"./ReactServerRenderingTransaction":130,"./ReactUpdates":137,"./instantiateReactComponent":174,"_process":31,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203}],130:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -33748,7 +32341,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":51,"./Object.assign":69,"./PooledClass":70,"./Transaction":159,"fbjs/lib/emptyFunction":199}],135:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./Transaction":155,"fbjs/lib/emptyFunction":195}],131:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33853,7 +32446,7 @@ ReactStateSetters.Mixin = {
 };
 
 module.exports = ReactStateSetters;
-},{}],136:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34329,7 +32922,7 @@ Object.keys(topLevelTypes).forEach(function (eventType) {
 
 module.exports = ReactTestUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":60,"./EventPluginHub":61,"./EventPropagators":64,"./Object.assign":69,"./React":71,"./ReactBrowserEventEmitter":73,"./ReactCompositeComponent":83,"./ReactDOM":85,"./ReactElement":102,"./ReactInstanceHandles":112,"./ReactInstanceMap":113,"./ReactMount":117,"./ReactUpdates":141,"./SyntheticEvent":151,"./findDOMNode":168,"_process":35,"fbjs/lib/emptyObject":200,"fbjs/lib/invariant":207}],137:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPluginHub":57,"./EventPropagators":60,"./Object.assign":65,"./React":67,"./ReactBrowserEventEmitter":69,"./ReactCompositeComponent":79,"./ReactDOM":81,"./ReactElement":98,"./ReactInstanceHandles":108,"./ReactInstanceMap":109,"./ReactMount":113,"./ReactUpdates":137,"./SyntheticEvent":147,"./findDOMNode":164,"_process":31,"fbjs/lib/emptyObject":196,"fbjs/lib/invariant":203}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34428,7 +33021,7 @@ var ReactTransitionChildMapping = {
 };
 
 module.exports = ReactTransitionChildMapping;
-},{"./flattenChildren":169}],138:[function(require,module,exports){
+},{"./flattenChildren":165}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34538,7 +33131,7 @@ var ReactTransitionEvents = {
 };
 
 module.exports = ReactTransitionEvents;
-},{"fbjs/lib/ExecutionEnvironment":193}],139:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],135:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34744,7 +33337,7 @@ var ReactTransitionGroup = React.createClass({
 });
 
 module.exports = ReactTransitionGroup;
-},{"./Object.assign":69,"./React":71,"./ReactTransitionChildMapping":137,"fbjs/lib/emptyFunction":199}],140:[function(require,module,exports){
+},{"./Object.assign":65,"./React":67,"./ReactTransitionChildMapping":133,"fbjs/lib/emptyFunction":195}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -35004,7 +33597,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactCurrentOwner":84,"./ReactElement":102,"./ReactInstanceMap":113,"./ReactUpdates":141,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],141:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceMap":109,"./ReactUpdates":137,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -35230,7 +33823,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":51,"./Object.assign":69,"./PooledClass":70,"./ReactPerf":123,"./ReactReconciler":129,"./Transaction":159,"_process":35,"fbjs/lib/invariant":207}],142:[function(require,module,exports){
+},{"./CallbackQueue":47,"./Object.assign":65,"./PooledClass":66,"./ReactPerf":119,"./ReactReconciler":125,"./Transaction":155,"_process":31,"fbjs/lib/invariant":203}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35245,7 +33838,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],143:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -35308,7 +33901,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":67,"./React":71,"./ReactCSSTransitionGroup":74,"./ReactComponentWithPureRenderMixin":82,"./ReactDefaultPerf":100,"./ReactFragment":109,"./ReactTestUtils":136,"./ReactTransitionGroup":139,"./ReactUpdates":141,"./cloneWithProps":164,"./shallowCompare":186,"./update":189,"_process":35,"fbjs/lib/warning":219}],144:[function(require,module,exports){
+},{"./LinkedStateMixin":63,"./React":67,"./ReactCSSTransitionGroup":70,"./ReactComponentWithPureRenderMixin":78,"./ReactDefaultPerf":96,"./ReactFragment":105,"./ReactTestUtils":132,"./ReactTransitionGroup":135,"./ReactUpdates":137,"./cloneWithProps":160,"./shallowCompare":182,"./update":185,"_process":31,"fbjs/lib/warning":215}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35436,7 +34029,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":55}],145:[function(require,module,exports){
+},{"./DOMProperty":51}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35638,7 +34231,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":60,"./EventPropagators":64,"./ReactInputSelection":111,"./SyntheticEvent":151,"./isTextInputElement":180,"fbjs/lib/ExecutionEnvironment":193,"fbjs/lib/getActiveElement":202,"fbjs/lib/keyOf":212,"fbjs/lib/shallowEqual":217}],146:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactInputSelection":107,"./SyntheticEvent":147,"./isTextInputElement":176,"fbjs/lib/ExecutionEnvironment":189,"fbjs/lib/getActiveElement":198,"fbjs/lib/keyOf":208,"fbjs/lib/shallowEqual":213}],142:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35668,7 +34261,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],147:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -36258,7 +34851,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":60,"./EventPropagators":64,"./ReactMount":117,"./SyntheticClipboardEvent":148,"./SyntheticDragEvent":150,"./SyntheticEvent":151,"./SyntheticFocusEvent":152,"./SyntheticKeyboardEvent":154,"./SyntheticMouseEvent":155,"./SyntheticTouchEvent":156,"./SyntheticUIEvent":157,"./SyntheticWheelEvent":158,"./getEventCharCode":171,"_process":35,"fbjs/lib/EventListener":192,"fbjs/lib/emptyFunction":199,"fbjs/lib/invariant":207,"fbjs/lib/keyOf":212}],148:[function(require,module,exports){
+},{"./EventConstants":56,"./EventPropagators":60,"./ReactMount":113,"./SyntheticClipboardEvent":144,"./SyntheticDragEvent":146,"./SyntheticEvent":147,"./SyntheticFocusEvent":148,"./SyntheticKeyboardEvent":150,"./SyntheticMouseEvent":151,"./SyntheticTouchEvent":152,"./SyntheticUIEvent":153,"./SyntheticWheelEvent":154,"./getEventCharCode":167,"_process":31,"fbjs/lib/EventListener":188,"fbjs/lib/emptyFunction":195,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208}],144:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36298,7 +34891,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":151}],149:[function(require,module,exports){
+},{"./SyntheticEvent":147}],145:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36336,7 +34929,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":151}],150:[function(require,module,exports){
+},{"./SyntheticEvent":147}],146:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36374,7 +34967,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":155}],151:[function(require,module,exports){
+},{"./SyntheticMouseEvent":151}],147:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -36554,7 +35147,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./PooledClass":70,"_process":35,"fbjs/lib/emptyFunction":199,"fbjs/lib/warning":219}],152:[function(require,module,exports){
+},{"./Object.assign":65,"./PooledClass":66,"_process":31,"fbjs/lib/emptyFunction":195,"fbjs/lib/warning":215}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36592,7 +35185,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":157}],153:[function(require,module,exports){
+},{"./SyntheticUIEvent":153}],149:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36631,7 +35224,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":151}],154:[function(require,module,exports){
+},{"./SyntheticEvent":147}],150:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36717,7 +35310,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":157,"./getEventCharCode":171,"./getEventKey":172,"./getEventModifierState":173}],155:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./getEventCharCode":167,"./getEventKey":168,"./getEventModifierState":169}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36791,7 +35384,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":157,"./ViewportMetrics":160,"./getEventModifierState":173}],156:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./ViewportMetrics":156,"./getEventModifierState":169}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36838,7 +35431,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":157,"./getEventModifierState":173}],157:[function(require,module,exports){
+},{"./SyntheticUIEvent":153,"./getEventModifierState":169}],153:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36899,7 +35492,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":151,"./getEventTarget":174}],158:[function(require,module,exports){
+},{"./SyntheticEvent":147,"./getEventTarget":170}],154:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36955,7 +35548,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":155}],159:[function(require,module,exports){
+},{"./SyntheticMouseEvent":151}],155:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37189,7 +35782,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],160:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],156:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37217,7 +35810,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],161:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -37279,7 +35872,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":35,"fbjs/lib/invariant":207}],162:[function(require,module,exports){
+},{"_process":31,"fbjs/lib/invariant":203}],158:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37322,7 +35915,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],163:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37349,7 +35942,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":35}],164:[function(require,module,exports){
+},{"_process":31}],160:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37406,7 +35999,7 @@ function cloneWithProps(child, props) {
 
 module.exports = cloneWithProps;
 }).call(this,require('_process'))
-},{"./ReactElement":102,"./ReactPropTransferer":124,"_process":35,"fbjs/lib/keyOf":212,"fbjs/lib/warning":219}],165:[function(require,module,exports){
+},{"./ReactElement":98,"./ReactPropTransferer":120,"_process":31,"fbjs/lib/keyOf":208,"fbjs/lib/warning":215}],161:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37462,7 +36055,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":49}],166:[function(require,module,exports){
+},{"./CSSProperty":45}],162:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37513,7 +36106,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"_process":35,"fbjs/lib/warning":219}],167:[function(require,module,exports){
+},{"./Object.assign":65,"_process":31,"fbjs/lib/warning":215}],163:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37552,7 +36145,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],168:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37604,7 +36197,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":84,"./ReactInstanceMap":113,"./ReactMount":117,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],169:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactInstanceMap":109,"./ReactMount":113,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],165:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37655,7 +36248,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":188,"_process":35,"fbjs/lib/warning":219}],170:[function(require,module,exports){
+},{"./traverseAllChildren":184,"_process":31,"fbjs/lib/warning":215}],166:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37685,7 +36278,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],171:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37736,7 +36329,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],172:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37840,7 +36433,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":171}],173:[function(require,module,exports){
+},{"./getEventCharCode":167}],169:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37885,7 +36478,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],174:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37915,7 +36508,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],175:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37956,7 +36549,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],176:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38030,7 +36623,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],177:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38064,7 +36657,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":193}],178:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],174:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38179,7 +36772,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"./ReactCompositeComponent":83,"./ReactEmptyComponent":104,"./ReactNativeComponent":120,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],179:[function(require,module,exports){
+},{"./Object.assign":65,"./ReactCompositeComponent":79,"./ReactEmptyComponent":100,"./ReactNativeComponent":116,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],175:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38240,7 +36833,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":193}],180:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],176:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38281,7 +36874,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],181:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38317,7 +36910,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":102,"_process":35,"fbjs/lib/invariant":207}],182:[function(require,module,exports){
+},{"./ReactElement":98,"_process":31,"fbjs/lib/invariant":203}],178:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38344,7 +36937,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":167}],183:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":163}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38361,7 +36954,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":117}],184:[function(require,module,exports){
+},{"./ReactMount":113}],180:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38452,7 +37045,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":193}],185:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":189}],181:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38493,7 +37086,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":167,"./setInnerHTML":184,"fbjs/lib/ExecutionEnvironment":193}],186:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":163,"./setInnerHTML":180,"fbjs/lib/ExecutionEnvironment":189}],182:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38518,7 +37111,7 @@ function shallowCompare(instance, nextProps, nextState) {
 }
 
 module.exports = shallowCompare;
-},{"fbjs/lib/shallowEqual":217}],187:[function(require,module,exports){
+},{"fbjs/lib/shallowEqual":213}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38562,7 +37155,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],188:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38754,7 +37347,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":84,"./ReactElement":102,"./ReactInstanceHandles":112,"./getIteratorFn":175,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/warning":219}],189:[function(require,module,exports){
+},{"./ReactCurrentOwner":80,"./ReactElement":98,"./ReactInstanceHandles":108,"./getIteratorFn":171,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/warning":215}],185:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38864,7 +37457,7 @@ function update(value, spec) {
 
 module.exports = update;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"_process":35,"fbjs/lib/invariant":207,"fbjs/lib/keyOf":212}],190:[function(require,module,exports){
+},{"./Object.assign":65,"_process":31,"fbjs/lib/invariant":203,"fbjs/lib/keyOf":208}],186:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -39230,7 +37823,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":69,"_process":35,"fbjs/lib/emptyFunction":199,"fbjs/lib/warning":219}],191:[function(require,module,exports){
+},{"./Object.assign":65,"_process":31,"fbjs/lib/emptyFunction":195,"fbjs/lib/warning":215}],187:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39330,7 +37923,7 @@ var CSSCore = {
 
 module.exports = CSSCore;
 }).call(this,require('_process'))
-},{"./invariant":207,"_process":35}],192:[function(require,module,exports){
+},{"./invariant":203,"_process":31}],188:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39417,7 +38010,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":199,"_process":35}],193:[function(require,module,exports){
+},{"./emptyFunction":195,"_process":31}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39454,7 +38047,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],194:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39487,7 +38080,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],195:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39528,7 +38121,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":194}],196:[function(require,module,exports){
+},{"./camelize":190}],192:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39584,7 +38177,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":209}],197:[function(require,module,exports){
+},{"./isTextNode":205}],193:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39670,7 +38263,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":218}],198:[function(require,module,exports){
+},{"./toArray":214}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39757,7 +38350,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":193,"./createArrayFromMixed":197,"./getMarkupWrap":203,"./invariant":207,"_process":35}],199:[function(require,module,exports){
+},{"./ExecutionEnvironment":189,"./createArrayFromMixed":193,"./getMarkupWrap":199,"./invariant":203,"_process":31}],195:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39796,7 +38389,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],200:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39819,7 +38412,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":35}],201:[function(require,module,exports){
+},{"_process":31}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39846,7 +38439,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],202:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39880,7 +38473,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],203:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39978,7 +38571,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":193,"./invariant":207,"_process":35}],204:[function(require,module,exports){
+},{"./ExecutionEnvironment":189,"./invariant":203,"_process":31}],200:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40017,7 +38610,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],205:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40051,7 +38644,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],206:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40091,7 +38684,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":205}],207:[function(require,module,exports){
+},{"./hyphenate":201}],203:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40143,7 +38736,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":35}],208:[function(require,module,exports){
+},{"_process":31}],204:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40167,7 +38760,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],209:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40193,7 +38786,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":208}],210:[function(require,module,exports){
+},{"./isNode":204}],206:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40233,7 +38826,7 @@ function joinClasses(className /*, ... */) {
 }
 
 module.exports = joinClasses;
-},{}],211:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40284,7 +38877,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":207,"_process":35}],212:[function(require,module,exports){
+},{"./invariant":203,"_process":31}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40320,7 +38913,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],213:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40372,7 +38965,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],214:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40404,7 +38997,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],215:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40428,7 +39021,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":193}],216:[function(require,module,exports){
+},{"./ExecutionEnvironment":189}],212:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40458,7 +39051,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":215}],217:[function(require,module,exports){
+},{"./performance":211}],213:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40509,7 +39102,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],218:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40569,7 +39162,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":207,"_process":35}],219:[function(require,module,exports){
+},{"./invariant":203,"_process":31}],215:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -40629,9 +39222,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":199,"_process":35}],220:[function(require,module,exports){
+},{"./emptyFunction":195,"_process":31}],216:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":71}]},{},[8]);
+},{"./lib/React":67}]},{},[8]);
