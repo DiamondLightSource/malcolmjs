@@ -13,13 +13,13 @@ function getTheGraphDiamondState(){
   return{
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
-    allEdges: NodeStore.getAllEdges(),
-    nodesToRender: NodeStore.getNodesToRenderArray(),
-    edgesToRender: NodeStore.getEdgesToRenderArray(),
+    //allEdges: NodeStore.getAllEdges(),
+    //nodesToRender: NodeStore.getNodesToRenderArray(),
+    //edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
+    //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
     nodeLibrary: NodeStore.getNodeLibrary(),
     allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
     portMouseOver: NodeStore.getPortMouseOver(),
@@ -50,10 +50,10 @@ var theGraphDiamondControllerView = React.createClass({
   render: function(){
     return(
       <TheGraphDiamond
-        graphPosition={this.state.graphPosition} graphZoomScale={this.state.graphZoomScale} allEdges={this.state.allEdges}
-        nodesToRender={this.state.nodesToRender} edgesToRender={this.state.edgesToRender} allNodeInfo={this.state.allNodeInfo}
-        portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked}
-        newlyCreatedEdgeLabel={this.state.newlyCreatedEdgeLabel} nodeLibrary={this.state.nodeLibrary}
+        graphPosition={this.state.graphPosition} graphZoomScale={this.state.graphZoomScale}
+        allNodeInfo={this.state.allNodeInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
+        storingFirstPortClicked={this.state.storingFirstPortClicked}
+        nodeLibrary={this.state.nodeLibrary}
         allNodeTypesStyling={this.state.allNodeTypesStyling} areAnyNodesSelected={this.state.areAnyNodesSelected}
         areAnyEdgesSelected={this.state.areAnyEdgesSelected} allNodeTypesPortStyling={this.state.allNodeTypesPortStyling}
         portMouseOver={this.state.portMouseOver}

@@ -30,6 +30,7 @@ var Dropdown = React.createClass({
   },
 
   handleActionShow: function(e){
+    console.log(e);
     e.stopImmediatePropagation();
     e.stopPropagation();
     if(this.props.tabState.length === 0){

@@ -84,24 +84,25 @@ var Edge = React.createClass({
 
   render:function(){
 
-    var edgeInfo = this.props.allEdges[this.props.id];
-    console.log(this.props.id);
-    console.log(edgeInfo);
-
-    var allEdges = this.props.allEdges;
+    /* Retiring allEdges in favour of calculating everything from allNodeInfo */
+    //var edgeInfo = this.props.allEdges[this.props.id];
+    //console.log(this.props.id);
+    //console.log(edgeInfo);
+    //
+    //var allEdges = this.props.allEdges;
     //console.log(allEdges);
-
-    var fromNode = edgeInfo.fromNode;
-    var toNode = edgeInfo.toNode;
-    console.log(fromNode);
-    console.log(toNode);
-    var fromNodePort = edgeInfo.fromNodePort;
-    var toNodePort = edgeInfo.toNodePort;
+    console.log(this.props.id);
+    var fromNode = this.props.fromNode;
+    var toNode = this.props.toNode;
+    //console.log(fromNode);
+    //console.log(toNode);
+    var fromNodePort = this.props.fromNodePort;
+    var toNodePort = this.props.toNodePort;
 
     var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
 
-    var fromNodeType = this.props.allNodeInfo[fromNode].type;
-    var toNodeType = this.props.allNodeInfo[toNode].type;
+    var fromNodeType = this.props.fromNodeType;
+    var toNodeType = this.props.toNodeType;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
@@ -113,7 +114,10 @@ var Edge = React.createClass({
     var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
-
+    //
+    //console.log(allNodeTypesPortStyling[fromNodeType]);
+    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
+    //console.log(fromNodePort);
     var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
     var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
     var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;

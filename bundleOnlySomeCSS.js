@@ -98,6 +98,42 @@ var nodeActions = {
   //    item: item
   //  })
   //},
+  //pushNodeToArray: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.PUSH_NODETOARRAY,
+  //    item: item
+  //  })
+  //},
+  //pushEdgeToArray: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.PUSH_EDGETOARRAY,
+  //    item: item
+  //  })
+  //},
+  //addEdgeToAllNodeInfo: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.ADDEDGE_TOALLNODEINFO,
+  //    item: item
+  //  })
+  //},
+  //addOneSingleEdge: function(edgeInfo){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.ADD_ONESINGLEEDGE,
+  //    item: edgeInfo
+  //  })
+  //},
+  //createNewEdgeLabel: function(edgeInfo){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.CREATENEW_EDGELABEL,
+  //    item: edgeInfo
+  //  })
+  //},
+  //addOneSingleEdgeToEdgesObject(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
+  //    item: item
+  //  })
+  //},
 
   selectNode: function(item){
     AppDispatcher.handleAction({
@@ -137,18 +173,6 @@ var nodeActions = {
       item: item
     })
   },
-  pushNodeToArray: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PUSH_NODETOARRAY,
-      item: item
-    })
-  },
-  pushEdgeToArray: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PUSH_EDGETOARRAY,
-      item: item
-    })
-  },
 
   getAnyEdgeSelectedState: function(item){
     AppDispatcher.handleAction({
@@ -169,12 +193,7 @@ var nodeActions = {
       item: item
     })
   },
-  addEdgeToAllNodeInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADDEDGE_TOALLNODEINFO,
-      item: item
-    })
-  },
+
   passPortMouseDown: function(port){
     AppDispatcher.handleAction({
       actionType: appConstants.PASS_PORTMOUSEDOWN,
@@ -193,30 +212,14 @@ var nodeActions = {
       item: item
     })
   },
-  addOneSingleEdge: function(edgeInfo){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGE,
-      item: edgeInfo
-    })
-  },
-  createNewEdgeLabel: function(edgeInfo){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CREATENEW_EDGELABEL,
-      item: edgeInfo
-    })
-  },
+
   addOneSingleEdgeToAllNodeInfo(edgeInfo){
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_ONESINGLEEDGETOALLNODEINFO,
       item: edgeInfo
     })
   },
-  addOneSingleEdgeToEdgesObject(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
-      item: item
-    })
-  },
+
   appendToEdgeSelectedState: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.APPEND_EDGESELECTEDSTATE,
@@ -640,8 +643,8 @@ var appConstants = {
   //CHANGE_GATE1STYLING: "CHANGE_GATE1STYLING"
   CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
   GRAPH_ZOOM: "GRAPH_ZOOM",
-  PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
-  PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY",
+  //PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
+  //PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY",
   GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
   CLICKED_EDGE: "CLICKED_EDGE",
 
@@ -649,14 +652,14 @@ var appConstants = {
   FETCHINITIAL_NODEDATA: "FETCHINITIAL_NODEDATA",
   OPEN_NODETAB: "OPEN_NODETAB",
   REMOVE_NODETAB: "REMOVE_NODETAB",
-  ADDEDGE_TOALLNODEINFO: "ADDEDGE_TOALLNODEINFO",
+  //ADDEDGE_TOALLNODEINFO: "ADDEDGE_TOALLNODEINFO",
   PASS_PORTMOUSEDOWN: "PASS_PORTMOUSEDOWN",
   DESELECT_ALLPORTS: "DESELECT_ALLPORTS",
   STORING_FIRSTPORTCLICKED: "STORING_FIRSTPORTCLICKED",
-  ADD_ONESINGLEEDGE: "ADD_ONESINGLEEDGE",
-  CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
+  //ADD_ONESINGLEEDGE: "ADD_ONESINGLEEDGE",
+  //CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
   ADD_ONESINGLEEDGETOALLNODEINFO: "ADD_ONESINGLEEDGETOALLNODEINFO",
-  ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
+  //ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
   APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
   PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
   INTERACTJS_DRAG: "INTERACTJS_DRAG",
@@ -954,28 +957,16 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var CHANGE_EVENT = 'change';
 
+//var nodesToRender = [];
+//var edgesToRender = [];
+//var newlyAddedNode = null;
+//var newlyCreatedEdgeLabel = null;
 var draggedElement = null;
 var draggedElementID = null;
-var nodesToRender = [];
-var edgesToRender = [];
 var clickedEdge = null;
-var newlyAddedNode = null;
 var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
-var newlyCreatedEdgeLabel = null;
 var portMouseOver = false;
-
-function portMouseOverLeaveToggle(){
-  if(portMouseOver === false){
-    portMouseOver = true;
-  }
-  else if(portMouseOver === true){
-    portMouseOver = false;
-  }
-  else{
-    console.log("portMouseOver is neither true nor false, so something is up");
-  }
-}
 
 var allNodeTabInfo = {
   'Gate1': {
@@ -1030,10 +1021,6 @@ function appendToNodeSelectedStates(NodeId){
   console.log(nodeSelectedStates);
 }
 
-function selectNode(Node){
-  nodeSelectedStates[Node] = true;
-}
-
 function deselectAllNodes(){
   for(var node in nodeSelectedStates){
     nodeSelectedStates[node] = false
@@ -1063,12 +1050,6 @@ var edgeSelectedStates = {
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false
 };
-
-function appendToEdgeSelectedStates(EdgeId){
-  edgeSelectedStates[EdgeId] = false;
-  console.log("edgeSelectedStates is now:");
-  console.log(edgeSelectedStates);
-}
 
 function selectEdge(Edge){
   edgeSelectedStates[Edge] = true;
@@ -1106,84 +1087,6 @@ function deselectAllEdges(){
     edgeSelectedStates[edge] = false
   }
   console.log(edgeSelectedStates);
-}
-
-var edges = {
-  //Gate1OutTGen1Ena: {
-  //  fromNode: 'Gate1',
-  //  fromNodeType: 'Gate',
-  //  fromNodePort: 'out',
-  //  toNode: 'TGen1',
-  //  toNodeType: 'TGen',
-  //  toNodePort: 'ena'
-  //},
-  //TGen1PosnPComp1Posn: {
-  //  fromNode: 'TGen1',
-  //  fromNodeType: 'TGen',
-  //  fromNodePort: 'posn',
-  //  toNode: 'PComp1',
-  //  toNodeType: 'PComp',
-  //  toNodePort: 'posn'
-  //},
-  //TGen1PosnPComp1Ena: {
-  //  fromNode: 'TGen1',
-  //  fromNodeType: 'TGen',
-  //  fromNodePort: 'posn',
-  //  toNode: 'PComp1',
-  //  toNodeType: 'PComp',
-  //  toNodePort: 'ena'
-  //},
-  //Gate1OutPComp2Ena: {
-  //  fromNode: 'Gate1',
-  //  fromNodeType: 'Gate',
-  //  fromNodePort: 'out',
-  //  toNode: 'PComp2',
-  //  toNodeType: 'PComp',
-  //  toNodePort: 'ena'
-  //}
-};
-
-/* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
-
-function addToEdgesObject(){
-  for(var node in allNodeInfo){
-    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
-    for(i = 0; i < allNodeInfo[node].outports.length; i++){
-      console.log(i);
-      console.log(allNodeInfo[node].outports[i]);
-      if(allNodeInfo[node].outports[i].connected === true){
-        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
-        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
-          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
-          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
-          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
-          var newEdge = {
-            fromNode: node,
-            fromNodeType: allNodeInfo[node].type,
-            fromNodePort: allNodeInfo[node].outports[i].name,
-            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
-            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
-            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
-          };
-          console.log(newEdge);
-          /* Then here I need to add this new edge to the edges object */
-          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-          newlyCreatedEdgeLabel = newEdgeLabel;
-          console.log(newlyCreatedEdgeLabel);
-          console.log("The newEdge's label is " + newEdgeLabel);
-          edges[newEdgeLabel] = newEdge;
-          console.log(edges);
-          /* Also need to add the selected states to edgeSelectedStates! */
-
-          edgeSelectedStates[newEdgeLabel] = false;
-          console.log(edgeSelectedStates);
-        }
-      }
-      else{
-        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
-      }
-    }
-  }
 }
 
 var nodeLibrary = {
@@ -1287,152 +1190,6 @@ var nodeLibrary = {
     ]
   }
 };
-
-function addOneSingleEdge(edgeLabel, edgeInfo){
-  edges[edgeLabel] = edgeInfo;
-}
-
-//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
-//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
-//
-//  var startNode;
-//  var startNodePort;
-//  var endNode;
-//  var endNodePort;
-//  var newEdge;
-//  var edgeLabel;
-//  if(portTypes.fromNodePortType === "outport"){
-//    console.log("outport to inport, so edge labelling is normal");
-//    startNode = edgeInfo.fromNode;
-//    startNodePort = edgeInfo.fromNodePort;
-//    endNode = edgeInfo.toNode;
-//    endNodePort = edgeInfo.toNodePort;
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//  else if(portTypes.fromNodePortType === "inport"){
-//    console.log("inport to outport, so have to flip the edge labelling direction");
-//    /* Note that you must also flip the ports too! */
-//    startNode = edgeInfo.toNode;
-//    startNodePort = edgeInfo.toNode;
-//    endNode = edgeInfo.fromNode;
-//    endNodePort = edgeInfo.fromNodePort;
-//    /* Don't need this in both loops, can just set this after the loops have completed! */
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//
-//  newEdge = {
-//    fromNode: startNode,
-//    fromNodePort: startNodePort,
-//    toNode: endNode,
-//    toNodePort: endNodePort
-//  };
-//
-//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  console.log("The newEdge's label is " + edgeLabel);
-//  newlyCreatedEdgeLabel = edgeLabel;
-//  edges[edgeLabel] = newEdge;
-//  console.log(edges);
-//
-//  /* Also need to add the selected states to edgeSelectedStates! */
-//
-//  edgeSelectedStates[edgeLabel] = false;
-//
-//
-//}
-
-//function checkPortCompatibility(edgeInfo){
-//  /* First need to check we have an inport and an outport */
-//  /* Find both port types, then compare them somehow */
-//
-//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
-//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
-//
-//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
-//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
-//
-//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-//      var fromNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-//      var fromNodePortType = "outport";
-//    }
-//  }
-//
-//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-//      var toNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The toNode isn't an inport, so it's an outport!");
-//      var toNodePortType = "outport";
-//    }
-//  }
-//
-//  /* Time to compare the fromNodePortType and toNodePortType */
-//
-//  if(fromNodeType === toNodePortType){
-//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-//    window.alert("Incompatible ports");
-//    /* Hence, don't add anything to allNodeInfo */
-//  }
-//  else if(fromNodePortType !== toNodePortType){
-//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
-//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-//    addEdgeToAllNodeInfo(edgeInfo);
-//
-//    /* Also need the equivalent of addToEdgesObject for single edges here! */
-//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-//    if it's an outport then it's a normal connection from an out to an in,
-//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
-//     */
-//
-//    var portTypes = {
-//      fromNodePortType: fromNodePortType,
-//      toNodePortType: toNodePortType
-//    };
-//
-//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
-//  }
-//
-//}
-
-function createNewEdgeLabel(edgeInfo){
-  var newEdge = edgeInfo;
-  var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-  newlyCreatedEdgeLabel = newEdgeLabel;
-}
-
-//function addNewEdge(EdgeInfo){
-//  var newEdge = EdgeInfo;
-//  var fromNode = newEdge.fromNode;
-//  var toNode = newEdge.toNode;
-//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
-//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
-//  console.log(newEdge);
-//
-//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  //newlyCreatedEdgeLabel = newEdgeLabel;
-//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
-//  edges[newlyCreatedEdgeLabel] = newEdge;
-//  console.log(edges);
-//
-//}
 
 var allNodeInfo = {
 
@@ -1590,6 +1347,9 @@ var allNodeInfo = {
 
 function addEdgeToAllNodeInfo(Info){
 
+  console.log("Inside addEdgeToAllNodeInfo, here's the input:");
+  console.log(Info);
+
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
   for(i = 0; i < allNodeInfo[Info.fromNode].outports.length; i++){
@@ -1619,6 +1379,7 @@ function addEdgeToAllNodeInfo(Info){
       allNodeInfo[Info.toNode].inports[j].connectedTo = newEdgeToToNode;
     }
   }
+  console.log(allNodeInfo);
 }
 
 var nodeInfoTemplates = {
@@ -1775,107 +1536,6 @@ function generateNewNodeId(){
   return newGateId;
 }
 
-var nodePositions = {
-  Gate1: {
-    position: {
-      x: 50,
-      y: 100,
-    },
-    name: "Arm"
-  },
-
-  TGen1: {
-    position: {
-      x: 450,
-      y: 10
-    }
-  },
-  PComp1: {
-    position: {
-      x: 650,
-      y: 250,
-    },
-    name: "LinePulse"
-  },
-  ////LUT1: {
-  ////  x: 250,
-  ////  y: 150
-  ////}
-  //PComp2: {
-  //  position: {
-  //    x: 250,
-  //    y: 150
-  //  },
-  //  name: "FwdLineGate"
-  //},
-  //PComp3: {
-  //  position: {
-  //    x: 250,
-  //    y: 350
-  //  },
-  //  name: "BwdLineGate"
-  //}
-};
-
-function appendToNodePositions(NodeInfo){
-  var nodePropertyName = function(){
-    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
-  };
-  //nodePositions[nodePropertyName()] = NodeInfo;
-}
-
-var portPositionsForNodes = {
-  portRadius: 2,
-  inportPositionRatio: 0,
-  outportPositionRatio: 1,
-  GateNodePortStyling: {
-    inportPositions: {
-      set: {
-        x: 6,
-        y: 25
-      },
-      reset: {
-        x: 6,
-        y: 40
-      }
-    },
-    outportPositions: {
-      out: {
-        x: 68 + 3,
-        y: 33
-      }
-    }
-  },
-  TGenNodePortStyling: {
-    inportPositions: {
-      ena: {
-        x: 6,
-        y: 33
-      }
-    },
-    outportPositions: {
-      posn: {
-        x: 68 + 3,
-        y: 33
-      }
-    }
-  }
-};
-
-var gateNodeInports = portPositionsForNodes.GateNodePortStyling.inportPositions;
-var gateNodeOutports = portPositionsForNodes.GateNodePortStyling.outportPositions;
-var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
-var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
-
-function updateGate1Position(newCoordinates){
-  /* Will be used to update the coordinates of a node when dragged, to then find the new location of the ports a connected edge needs to stick to */
-  nodePositions.Gate1 = {
-    x: nodePositions.Gate1.x + newCoordinates.x,
-    y: nodePositions.Gate1.y + newCoordinates.y
-  };
-  /* Also need to update the port positions somehow! */
-}
-
 function interactJsDrag(NodeInfo){
   //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
   //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
@@ -1886,62 +1546,6 @@ function interactJsDrag(NodeInfo){
     y: allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale)
   }
 }
-
-function updateNodePosition(NodeInfo){
-  if(typeof allPossibleNodes[draggedElementID] !== 'function'){
-    throw new Error('Invalid node id')
-  }
-  return allPossibleNodes[draggedElementID](NodeInfo)
-}
-
-var allPossibleNodes = {
-
-  'Gate1': function(NodeInfo){
-    allNodeInfo.Gate1.position = {
-      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
-      y: allNodeInfo.Gate1.position.y + NodeInfo.y
-    };
-  },
-  'TGen1': function(NodeInfo){
-    allNodeInfo.TGen1.position = {
-      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
-      y: allNodeInfo.TGen1.position.y + NodeInfo.y
-    }
-  },
-  'PComp1': function(NodeInfo){
-    allNodeInfo.PComp1.position = {
-      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
-      y: allNodeInfo.PComp1.position.y + NodeInfo.y
-    }
-  },
-  //'PComp2': function(NodeInfo) {
-  //  allNodeInfo.PComp2.position = {
-  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
-  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
-  //  }
-  //},
-  //'PComp3': function(NodeInfo) {
-  //  allNodeInfo.PComp3.position = {
-  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
-  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
-  //  }
-  //}
-};
-
-var appendToAllPossibleNodes = function(Node){
-  allPossibleNodes[Node] = function(NodeInfo){
-    console.log(nodeInfoTemplates.Gate);
-    allNodeInfo[Node].position = {
-      x: allNodeInfo[Node].position.x + NodeInfo.x,
-      y: allNodeInfo[Node].position.y + NodeInfo.y
-    }
-  };
-  console.log("appended to allPossibleNodes");
-  console.log(Node);
-  console.log(allPossibleNodes);
-  console.log(allPossibleNodes[Node]);
-  console.log(allNodeInfo[Node]);
-};
 
 var GateNodeStyling = {
   rectangle: {
@@ -2056,18 +1660,6 @@ var SelectedGateNodeStyling = {
     }
   }
 };
-
-//var Gate1CurrentStyling = GateNodeStyling;
-//
-//function checkGate1Styling(){
-//  if(nodeSelectedStates.Gate1 === true){
-//    Gate1CurrentStyling = SelectedGateNodeStyling;
-//  }
-//  else{
-//    Gate1CurrentStyling = GateNodeStyling
-//  }
-//  return Gate1CurrentStyling
-//}
 
 var TGenNodeStyling = {
   rectangle: {
@@ -2420,6 +2012,18 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   //getNewlyAddedNode: function(){
   //  return newlyAddedNode;
   //},
+  //getNewlyCreatedEdgeLabel: function(){
+  //  return newlyCreatedEdgeLabel;
+  //},
+  //getAllEdges: function(){
+  //  return edges;
+  //},
+  //getNodesToRenderArray: function(){
+  //  return nodesToRender;
+  //},
+  //getEdgesToRenderArray: function(){
+  //  return edgesToRender;
+  //},
 
   getAllNodeInfo: function(){
     return allNodeInfo;
@@ -2458,16 +2062,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
     return graphZoomScale;
   },
 
-  getAllEdges: function(){
-    return edges;
-  },
-  getNodesToRenderArray: function(){
-    return nodesToRender;
-  },
-  getEdgesToRenderArray: function(){
-    return edgesToRender;
-  },
-
   getAllNodeInfoForInitialNodeData: function(){
     return allNodeInfo;
   },
@@ -2476,9 +2070,6 @@ var nodeStore = assign({}, EventEmitter.prototype, {
   },
   getStoringFirstPortClicked: function(){
     return storingFirstPortClicked;
-  },
-  getNewlyCreatedEdgeLabel: function(){
-    return newlyCreatedEdgeLabel;
   },
   getNodeLibrary: function(){
     return nodeLibrary;
@@ -2540,11 +2131,64 @@ AppDispatcher.register(function(payload){
     //  portMouseOverLeaveToggle();
     //  nodeStore.emitChange();
     //  break;
+    //case appConstants.PUSH_NODETOARRAY:
+    //  console.log(payload);
+    //  console.log(item);
+    //  nodesToRender.push(item);
+    //  console.log(nodesToRender);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //case appConstants.PUSH_EDGETOARRAY:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  edgesToRender.push(item);
+    //  console.log(edgesToRender);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.ADDEDGE_TOALLNODEINFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  //addEdgeToAllNodeInfo(item);
+    //  addToEdgesObject();
+    //  console.log(allNodeInfo);
+    //  console.log(newlyCreatedEdgeLabel);
+    //  nodeStore.emitChange();
+    //  break;
+    //case appConstants.ADD_ONESINGLEEDGE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  /* Let's try replacing with my function that checks port compatibility */
+    //  //addEdgeToAllNodeInfo(item);
+    //  //addNewEdge(item);
+    //
+    //  /* Try putting port compatibility checker in theGraphDiamond */
+    //  //checkPortCompatibility(item);
+    //
+    //  console.log(edges);
+    //  nodeStore.emitChange();
+    //  break;
+    //
+    //case appConstants.CREATENEW_EDGELABEL:
+    //  console.log(payload);
+    //  console.log(item);
+    //  createNewEdgeLabel(item);
+    //  appendToEdgeSelectedStates(newlyCreatedEdgeLabel);
+    //  nodeStore.emitChange();
+    //  console.log(newlyCreatedEdgeLabel);
+    //  break;
+    //case appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT:
+    //  console.log(payload);
+    //  console.log(item);
+    //  addOneSingleEdge(item.edgeLabel, item.edgeInfo);
+    //  nodeStore.emitChange();
+    //  console.log(edges);
+    //  break;
 
     case appConstants.SELECT_NODE:
       console.log(payload);
       console.log(item);
-      selectNode(item);
+      nodeSelectedStates[item] = true;
       console.log(nodeSelectedStates);
       //changeUnselectedNodesOpacity();
       nodeStore.emitChange();
@@ -2597,22 +2241,6 @@ AppDispatcher.register(function(payload){
       nodeStore.emitChange();
       break;
 
-    case appConstants.PUSH_NODETOARRAY:
-      console.log(payload);
-      console.log(item);
-      nodesToRender.push(item);
-      console.log(nodesToRender);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.PUSH_EDGETOARRAY:
-      //console.log(payload);
-      //console.log(item);
-      edgesToRender.push(item);
-      console.log(edgesToRender);
-      nodeStore.emitChange();
-      break;
-
     case appConstants.GETANY_EDGESELECTEDSTATE:
       console.log(payload);
       console.log(item);
@@ -2639,16 +2267,6 @@ AppDispatcher.register(function(payload){
       nodeStore.emitChange();
       break;
 
-    case appConstants.ADDEDGE_TOALLNODEINFO:
-      console.log(payload);
-      console.log(item);
-      //addEdgeToAllNodeInfo(item);
-      addToEdgesObject();
-      console.log(allNodeInfo);
-      console.log(newlyCreatedEdgeLabel);
-      nodeStore.emitChange();
-      break;
-
     case appConstants.PASS_PORTMOUSEDOWN:
       console.log(payload);
       console.log(item);
@@ -2671,43 +2289,12 @@ AppDispatcher.register(function(payload){
       nodeStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGE:
-      console.log(payload);
-      console.log(item);
-      /* Let's try replacing with my function that checks port compatibility */
-      //addEdgeToAllNodeInfo(item);
-      //addNewEdge(item);
-
-      /* Try putting port compatibility checker in theGraphDiamond */
-      //checkPortCompatibility(item);
-
-      console.log(edges);
-      nodeStore.emitChange();
-      break;
-
-    case appConstants.CREATENEW_EDGELABEL:
-      console.log(payload);
-      console.log(item);
-      createNewEdgeLabel(item);
-      appendToEdgeSelectedStates(newlyCreatedEdgeLabel);
-      nodeStore.emitChange();
-      console.log(newlyCreatedEdgeLabel);
-      break;
-
     case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
       console.log(payload);
       console.log(item);
       addEdgeToAllNodeInfo(item);
       nodeStore.emitChange();
       console.log(allNodeInfo);
-      break;
-
-    case appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT:
-      console.log(payload);
-      console.log(item);
-      addOneSingleEdge(item.edgeLabel, item.edgeInfo);
-      nodeStore.emitChange();
-      console.log(edges);
       break;
 
     case appConstants.APPEND_EDGESELECTEDSTATE:
@@ -2802,6 +2389,411 @@ module.exports = nodeStore;
 //  console.log("random number is being generated");
 //  return (Math.random() * 1000) % 500;
 //}
+
+//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
+//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//
+//  var startNode;
+//  var startNodePort;
+//  var endNode;
+//  var endNodePort;
+//  var newEdge;
+//  var edgeLabel;
+//  if(portTypes.fromNodePortType === "outport"){
+//    console.log("outport to inport, so edge labelling is normal");
+//    startNode = edgeInfo.fromNode;
+//    startNodePort = edgeInfo.fromNodePort;
+//    endNode = edgeInfo.toNode;
+//    endNodePort = edgeInfo.toNodePort;
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//  else if(portTypes.fromNodePortType === "inport"){
+//    console.log("inport to outport, so have to flip the edge labelling direction");
+//    /* Note that you must also flip the ports too! */
+//    startNode = edgeInfo.toNode;
+//    startNodePort = edgeInfo.toNode;
+//    endNode = edgeInfo.fromNode;
+//    endNodePort = edgeInfo.fromNodePort;
+//    /* Don't need this in both loops, can just set this after the loops have completed! */
+//    //newEdge = {
+//    //  fromNode: startNode,
+//    //  fromNodePort: startNodePort,
+//    //  toNode: endNode,
+//    //  toNodePort: endNodePort
+//    //}
+//  }
+//
+//  newEdge = {
+//    fromNode: startNode,
+//    fromNodePort: startNodePort,
+//    toNode: endNode,
+//    toNodePort: endNodePort
+//  };
+//
+//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  console.log("The newEdge's label is " + edgeLabel);
+//  newlyCreatedEdgeLabel = edgeLabel;
+//  edges[edgeLabel] = newEdge;
+//  console.log(edges);
+//
+//  /* Also need to add the selected states to edgeSelectedStates! */
+//
+//  edgeSelectedStates[edgeLabel] = false;
+//
+//
+//}
+
+//function checkPortCompatibility(edgeInfo){
+//  /* First need to check we have an inport and an outport */
+//  /* Find both port types, then compare them somehow */
+//
+//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
+//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
+//
+//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
+//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
+//
+//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
+//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
+//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
+//      var fromNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
+//      var fromNodePortType = "outport";
+//    }
+//  }
+//
+//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
+//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
+//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
+//      var toNodePortType = "inport";
+//    }
+//    else{
+//      console.log("The toNode isn't an inport, so it's an outport!");
+//      var toNodePortType = "outport";
+//    }
+//  }
+//
+//  /* Time to compare the fromNodePortType and toNodePortType */
+//
+//  if(fromNodeType === toNodePortType){
+//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
+//    window.alert("Incompatible ports");
+//    /* Hence, don't add anything to allNodeInfo */
+//  }
+//  else if(fromNodePortType !== toNodePortType){
+//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
+//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+//    addEdgeToAllNodeInfo(edgeInfo);
+//
+//    /* Also need the equivalent of addToEdgesObject for single edges here! */
+//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+//    if it's an outport then it's a normal connection from an out to an in,
+//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
+//     */
+//
+//    var portTypes = {
+//      fromNodePortType: fromNodePortType,
+//      toNodePortType: toNodePortType
+//    };
+//
+//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
+//  }
+//
+//}
+
+//function createNewEdgeLabel(edgeInfo){
+//  var newEdge = edgeInfo;
+//  var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//  newlyCreatedEdgeLabel = newEdgeLabel;
+//}
+
+//function addNewEdge(EdgeInfo){
+//  var newEdge = EdgeInfo;
+//  var fromNode = newEdge.fromNode;
+//  var toNode = newEdge.toNode;
+//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
+//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
+//  console.log(newEdge);
+//
+//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+//  //newlyCreatedEdgeLabel = newEdgeLabel;
+//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
+//  edges[newlyCreatedEdgeLabel] = newEdge;
+//  console.log(edges);
+//
+//}
+
+//function appendToEdgeSelectedStates(EdgeId){
+//  edgeSelectedStates[EdgeId] = false;
+//  console.log("edgeSelectedStates is now:");
+//  console.log(edgeSelectedStates);
+//}
+
+//function selectNode(Node){
+//  nodeSelectedStates[Node] = true;
+//}
+
+///* Not using an edges object anymore, instead I create the edges directly from allNodeInfo */
+//
+//var edges = {
+//  //Gate1OutTGen1Ena: {
+//  //  fromNode: 'Gate1',
+//  //  fromNodeType: 'Gate',
+//  //  fromNodePort: 'out',
+//  //  toNode: 'TGen1',
+//  //  toNodeType: 'TGen',
+//  //  toNodePort: 'ena'
+//  //},
+//  //TGen1PosnPComp1Posn: {
+//  //  fromNode: 'TGen1',
+//  //  fromNodeType: 'TGen',
+//  //  fromNodePort: 'posn',
+//  //  toNode: 'PComp1',
+//  //  toNodeType: 'PComp',
+//  //  toNodePort: 'posn'
+//  //},
+//  //TGen1PosnPComp1Ena: {
+//  //  fromNode: 'TGen1',
+//  //  fromNodeType: 'TGen',
+//  //  fromNodePort: 'posn',
+//  //  toNode: 'PComp1',
+//  //  toNodeType: 'PComp',
+//  //  toNodePort: 'ena'
+//  //},
+//  //Gate1OutPComp2Ena: {
+//  //  fromNode: 'Gate1',
+//  //  fromNodeType: 'Gate',
+//  //  fromNodePort: 'out',
+//  //  toNode: 'PComp2',
+//  //  toNodeType: 'PComp',
+//  //  toNodePort: 'ena'
+//  //}
+//};
+
+///* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
+//
+//function addToEdgesObject(){
+//  for(var node in allNodeInfo){
+//    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
+//    for(i = 0; i < allNodeInfo[node].outports.length; i++){
+//      console.log(i);
+//      console.log(allNodeInfo[node].outports[i]);
+//      if(allNodeInfo[node].outports[i].connected === true){
+//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
+//        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
+//          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
+//          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
+//          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
+//          var newEdge = {
+//            fromNode: node,
+//            fromNodeType: allNodeInfo[node].type,
+//            fromNodePort: allNodeInfo[node].outports[i].name,
+//            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
+//            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
+//            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
+//          };
+//          console.log(newEdge);
+//          /* Then here I need to add this new edge to the edges object */
+//          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//          newlyCreatedEdgeLabel = newEdgeLabel;
+//          console.log(newlyCreatedEdgeLabel);
+//          console.log("The newEdge's label is " + newEdgeLabel);
+//          edges[newEdgeLabel] = newEdge;
+//          console.log(edges);
+//          /* Also need to add the selected states to edgeSelectedStates! */
+//
+//          edgeSelectedStates[newEdgeLabel] = false;
+//          console.log(edgeSelectedStates);
+//        }
+//      }
+//      else{
+//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
+//      }
+//    }
+//  }
+//}
+
+//function addOneSingleEdge(edgeLabel, edgeInfo){
+//  edges[edgeLabel] = edgeInfo;
+//}
+
+//function portMouseOverLeaveToggle(){
+//  if(portMouseOver === false){
+//    portMouseOver = true;
+//  }
+//  else if(portMouseOver === true){
+//    portMouseOver = false;
+//  }
+//  else{
+//    console.log("portMouseOver is neither true nor false, so something is up");
+//  }
+//}
+
+//function updateGate1Position(newCoordinates){
+//  /* Will be used to update the coordinates of a node when dragged, to then find the new location of the ports a connected edge needs to stick to */
+//  nodePositions.Gate1 = {
+//    x: nodePositions.Gate1.x + newCoordinates.x,
+//    y: nodePositions.Gate1.y + newCoordinates.y
+//  };
+//  /* Also need to update the port positions somehow! */
+//}
+
+//function updateNodePosition(NodeInfo){
+//  if(typeof allPossibleNodes[draggedElementID] !== 'function'){
+//    throw new Error('Invalid node id')
+//  }
+//  return allPossibleNodes[draggedElementID](NodeInfo)
+//}
+//
+//var allPossibleNodes = {
+//
+//  'Gate1': function(NodeInfo){
+//    allNodeInfo.Gate1.position = {
+//      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
+//      y: allNodeInfo.Gate1.position.y + NodeInfo.y
+//    };
+//  },
+//  'TGen1': function(NodeInfo){
+//    allNodeInfo.TGen1.position = {
+//      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
+//      y: allNodeInfo.TGen1.position.y + NodeInfo.y
+//    }
+//  },
+//  'PComp1': function(NodeInfo){
+//    allNodeInfo.PComp1.position = {
+//      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
+//      y: allNodeInfo.PComp1.position.y + NodeInfo.y
+//    }
+//  },
+//  //'PComp2': function(NodeInfo) {
+//  //  allNodeInfo.PComp2.position = {
+//  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
+//  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
+//  //  }
+//  //},
+//  //'PComp3': function(NodeInfo) {
+//  //  allNodeInfo.PComp3.position = {
+//  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
+//  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
+//  //  }
+//  //}
+//};
+//
+//var appendToAllPossibleNodes = function(Node){
+//  allPossibleNodes[Node] = function(NodeInfo){
+//    console.log(nodeInfoTemplates.Gate);
+//    allNodeInfo[Node].position = {
+//      x: allNodeInfo[Node].position.x + NodeInfo.x,
+//      y: allNodeInfo[Node].position.y + NodeInfo.y
+//    }
+//  };
+//  console.log("appended to allPossibleNodes");
+//  console.log(Node);
+//  console.log(allPossibleNodes);
+//  console.log(allPossibleNodes[Node]);
+//  console.log(allNodeInfo[Node]);
+//};
+
+//var nodePositions = {
+//  Gate1: {
+//    position: {
+//      x: 50,
+//      y: 100,
+//    },
+//    name: "Arm"
+//  },
+//
+//  TGen1: {
+//    position: {
+//      x: 450,
+//      y: 10
+//    }
+//  },
+//  PComp1: {
+//    position: {
+//      x: 650,
+//      y: 250,
+//    },
+//    name: "LinePulse"
+//  },
+//  ////LUT1: {
+//  ////  x: 250,
+//  ////  y: 150
+//  ////}
+//  //PComp2: {
+//  //  position: {
+//  //    x: 250,
+//  //    y: 150
+//  //  },
+//  //  name: "FwdLineGate"
+//  //},
+//  //PComp3: {
+//  //  position: {
+//  //    x: 250,
+//  //    y: 350
+//  //  },
+//  //  name: "BwdLineGate"
+//  //}
+//};
+//
+//function appendToNodePositions(NodeInfo){
+//  var nodePropertyName = function(){
+//    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
+//  };
+//  //nodePositions[nodePropertyName()] = NodeInfo;
+//}
+//
+//var portPositionsForNodes = {
+//  portRadius: 2,
+//  inportPositionRatio: 0,
+//  outportPositionRatio: 1,
+//  GateNodePortStyling: {
+//    inportPositions: {
+//      set: {
+//        x: 6,
+//        y: 25
+//      },
+//      reset: {
+//        x: 6,
+//        y: 40
+//      }
+//    },
+//    outportPositions: {
+//      out: {
+//        x: 68 + 3,
+//        y: 33
+//      }
+//    }
+//  },
+//  TGenNodePortStyling: {
+//    inportPositions: {
+//      ena: {
+//        x: 6,
+//        y: 33
+//      }
+//    },
+//    outportPositions: {
+//      posn: {
+//        x: 68 + 3,
+//        y: 33
+//      }
+//    }
+//  }
+//};
+
+//var gateNodeInports = portPositionsForNodes.GateNodePortStyling.inportPositions;
+//var gateNodeOutports = portPositionsForNodes.GateNodePortStyling.outportPositions;
+//var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
+//var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
 
 },{"../../node_modules/object-assign/index.js":40,"../constants/appConstants.js":9,"../dispatcher/appDispatcher.js":10,"events":34}],14:[function(require,module,exports){
 /**
@@ -4337,6 +4329,7 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   },
 
   handleActionShow: function(e){
+    console.log(e);
     e.stopImmediatePropagation();
     e.stopPropagation();
     if(this.props.tabState.length === 0){
@@ -4587,24 +4580,25 @@ var Edge = React.createClass({displayName: "Edge",
 
   render:function(){
 
-    var edgeInfo = this.props.allEdges[this.props.id];
-    console.log(this.props.id);
-    console.log(edgeInfo);
-
-    var allEdges = this.props.allEdges;
+    /* Retiring allEdges in favour of calculating everything from allNodeInfo */
+    //var edgeInfo = this.props.allEdges[this.props.id];
+    //console.log(this.props.id);
+    //console.log(edgeInfo);
+    //
+    //var allEdges = this.props.allEdges;
     //console.log(allEdges);
-
-    var fromNode = edgeInfo.fromNode;
-    var toNode = edgeInfo.toNode;
-    console.log(fromNode);
-    console.log(toNode);
-    var fromNodePort = edgeInfo.fromNodePort;
-    var toNodePort = edgeInfo.toNodePort;
+    console.log(this.props.id);
+    var fromNode = this.props.fromNode;
+    var toNode = this.props.toNode;
+    //console.log(fromNode);
+    //console.log(toNode);
+    var fromNodePort = this.props.fromNodePort;
+    var toNodePort = this.props.toNodePort;
 
     var allNodeTypesPortStyling = this.props.allNodeTypesPortStyling;
 
-    var fromNodeType = this.props.allNodeInfo[fromNode].type;
-    var toNodeType = this.props.allNodeInfo[toNode].type;
+    var fromNodeType = this.props.fromNodeType;
+    var toNodeType = this.props.toNodeType;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
@@ -4616,7 +4610,10 @@ var Edge = React.createClass({displayName: "Edge",
     var toNodePositionY = this.props.allNodeInfo[toNode].position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
-
+    //
+    //console.log(allNodeTypesPortStyling[fromNodeType]);
+    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
+    //console.log(fromNodePort);
     var startOfEdgePortOffsetX = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].x;
     var startOfEdgePortOffsetY = allNodeTypesPortStyling[fromNodeType].outportPositions[fromNodePort].y;
     var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
@@ -7590,10 +7587,6 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var NodeStore = require('../stores/nodeStore.js');
 var nodeActions = require('../actions/nodeActions.js');
 
-var GateNode = require('./gateNode.js');
-var TGenNode = require('./tgenNode.js');
-var PCompNode = require('./pcompNode.js');
-var LUTNode = require('./lutNode.js');
 var Edge = require('./edge.js');
 
 var Node = require('./nodes.js');
@@ -7643,49 +7636,7 @@ var AppContainerStyle = {
   //'backgroundColor': "green"
 };
 
-/* This should really fetch the node's x & y coordinates from the store somehow */
-
-function getAppState(){
-  //console.log("fetching app state");
-  return{
-    //Gate1Position: NodeStore.getGate1Position(),
-    //TGen1Position: NodeStore.getTGen1Position(),
-    //PComp1Position: NodeStore.getPComp1Position(),
-    //LUT1Position: NodeStore.getLUT1Position(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    //gateNodeStyling: NodeStore.getGateNodeStyling(),
-    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
-    //newlyAddedNode: NodeStore.getNewlyAddedNode(),
-    //draggedElement: NodeStore.getDraggedElement(),
-
-    //graphPosition: NodeStore.getGraphPosition(),
-    //graphZoomScale: NodeStore.getGraphZoomScale(),
-    //allEdges: NodeStore.getAllEdges(),
-    //nodesToRender: NodeStore.getNodesToRenderArray(),
-    //edgesToRender: NodeStore.getEdgesToRenderArray(),
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    //nodeLibrary: NodeStore.getNodeLibrary(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //portMouseOver: NodeStore.getPortMouseOver(),
-    //areAnyNodesSelected: NodeStore.getIfAnyNodesAreSelected(),
-    //areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected(),
-    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling()
-  }
-}
-
 var App = React.createClass({displayName: "App",
-  //getInitialState: function () {
-  //  return getAppState();
-  //},
-  _onChange: function () {
-    //this.setState(getAppState(), function(){
-    //  //console.log("app state has been mutated now!");
-    //});
-  },
 
   propTypes: {
     graphPosition: React.PropTypes.object,
@@ -7707,18 +7658,6 @@ var App = React.createClass({displayName: "App",
   },
 
   componentDidMount: function () {
-    //NodeStore.addChangeListener(this._onChange);
-
-    //this.addEdgeToEdgesArray(); /* See if I can replace this with my nodeAction that does all edges on initial render */
-    nodeActions.addEdgeToAllNodeInfo();
-    /* Still need to somehow invoke the function to push all the initial edges to the edges array... */
-    /* Just use this.addEdgeToEdgesArray for now =P */
-    this.addEdgeToEdgesArray();
-
-    /* Let's try using my refactored nodes.js file instead! */
-    //this.addNodeToNodesArray();
-    //this.refactoredAddNodeToNodesArray();
-
     console.log(ReactDOM.findDOMNode(this));
     this.setState({gateNodeIdCounter: 1});
 
@@ -7752,7 +7691,6 @@ var App = React.createClass({displayName: "App",
       .styleCursor(false);
   },
   componentWillUnmount: function () {
-    //NodeStore.removeChangeListener(this._onChange);
 
     ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
@@ -7836,74 +7774,6 @@ var App = React.createClass({displayName: "App",
     return ((n =+n) || 1/n) < 0;
   },
 
-  /* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
-
-  addNodeToNodesArray: function(){
-    var gateNodeRegExp = /Gate/;
-    var tgenNodeRegExp = /TGen/;
-    var pcompNodeRegExp = /PComp/;
-    var lutNodeRegExp = /LUT/;
-
-    var allNodeInfo = this.props.allNodeInfo;
-
-    /* Seems like this could be for adding all the initla nodes on startup, perhaps have another fucion for adding one node at a time? */
-    for(var node in allNodeInfo){
-      //console.log("we have a gate node!");
-      //var nodeName = allNodePositions[node].name;
-      //var rectangleString = "Rectangle";
-      //var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-      ////console.log(rectangleName);
-      //
-      //var nodeX = allNodePositions[node].position.x;
-      //var nodeY = allNodePositions[node].position.y;
-      //var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
-
-      if(gateNodeRegExp.test(node) === true){
-        nodeActions.pushNodeToArray(React.createElement(GateNode, {id: node, className: "node"}
-                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-        ))
-      }
-      else if(tgenNodeRegExp.test(node) === true){
-        //console.log("we have a tgen node!");
-        nodeActions.pushNodeToArray(React.createElement(TGenNode, {id: node, className: "node"}
-                             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-        ))
-      }
-      else if(pcompNodeRegExp.test(node) === true){
-        //console.log("we have a pcomp node!");
-        nodeActions.pushNodeToArray(React.createElement(PCompNode, {id: node, className: "node"}
-                              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-        ))
-      }
-      else if(lutNodeRegExp.test(node) === true){
-        //console.log("we have an lut node!");
-        nodeActions.pushNodeToArray(React.createElement(LUTNode, {id: node, height: NodeStylingProperties.height + 40, width: NodeStylingProperties.width + 13, transform: nodeTranslate, className: "node"}
-                            //NodeName={nodeName} RectangleName={rectangleName}
-                            //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-        )
-        )
-      }
-      else{
-        console.log("no match to any node type, something's wrong?");
-      }
-    }
-
-
-  /* Don't need this anymore, I have a for loop in the render function */},
-
-  refactoredAddNodeToNodesArray: function(){
-    for(var node in this.props.allNodeInfo){
-      nodeActions.pushNodeToArray(
-        React.createElement(Node, {key: node, id: node, className: "node", 
-              allNodeInfo: this.props.allNodeInfo, allNodeTypesStyling: this.props.allNodeTypesStyling, areAnyNodesSelected: this.props.areAnyNodesSelected, 
-              portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked, portMouseOver: this.props.portMouseOver, 
-              selected: NodeStore.getAnyNodeSelectedState(node)}
-              //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-              )
-      )
-    }
-  },
-
   /* This is for my black block that adds a gate node when clicked */
 
   addNodeInfo: function(){
@@ -7919,54 +7789,6 @@ var App = React.createClass({displayName: "App",
     console.log(newGateNodeId);
 
     nodeActions.addToAllNodeInfo(newGateNodeId);
-
-    //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
-
-    //var newNode = this.state.newlyAddedNode;
-    //console.log(newNode);
-    //console.log(this.state.newlyAddedNode);
-    //newNode = "Gate2";
-
-    /* Replacing with my refactored nodes.js file instead to test the performanc of having many ndes along with interact.js */
-    /* Ok, these use MY drag function, so then I can compare interactjs vs my drag in one go */
-
-    //if(gateNodeRegExp.test(newGateNodeId) === true){
-    //  nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
-    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //}
-    //else if(tgenNodeRegExp.test(newGateNodeId) === true){
-    //  //console.log("we have a tgen node!");
-    //  nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
-    //                                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //}
-    //else if(pcompNodeRegExp.test(newGateNodeId) === true){
-    //  //console.log("we have a pcomp node!");
-    //  nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
-    //                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //}
-    //else if(lutNodeRegExp.test(newGateNodeId) === true){
-    //  //console.log("we have an lut node!");
-    //  nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-    //    //NodeName={nodeName} RectangleName={rectangleName}
-    //                                       onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //}
-    //else{
-    //  console.log("no match to any node type, something's wrong?");
-    //}
-    //console.log(this.state.nodesToRender);
-
-    //nodeActions.pushNodeToArray(
-    //  <Node key={newGateNodeId} id={newGateNodeId} className="node"
-    //        allNodeInfo={this.state.allNodeInfo} allNodeTypesStyling={this.state.allNodeTypesStyling}
-    //        portThatHasBeenClicked={this.state.portThatHasBeenClicked} storingFirstPortClicked={this.state.storingFirstPortClicked} portMouseOver={this.state.portMouseOver}
-    //        selected={NodeStore.getAnyNodeSelectedState(newGateNodeId)}
-    //    //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
-    //  />
-    //);
-
-    //Perf.stop();
-    //Perf.getLastMeasurements();
-    //Perf.printWasted();
 
   },
 
@@ -8236,8 +8058,68 @@ var App = React.createClass({displayName: "App",
       toPort.style.stroke = "black";
       toPort.style.fill = "lightgrey";
       toPort.setAttribute('r', 4);
-      nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
-      this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
+      /* Putting later, since I need to check if the start node was an inport or outport */
+      //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+      //this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
+
+      /* Now need to implement the logic that checks if the start port was an inport or outport */
+
+      var startNode;
+      var startNodeType;
+      var startNodePort;
+      var endNode;
+      var endNodeType;
+      var endNodePort;
+      var newEdge;
+      var edgeLabel;
+      if(types.portTypes.fromNodePortType === "outport"){
+        console.log("outport to inport, so edge labelling is normal");
+        startNode = edgeInfo.fromNode;
+        startNodeType = types.nodeTypes.fromNodeType;
+        startNodePort = edgeInfo.fromNodePort;
+        endNode = edgeInfo.toNode;
+        endNodeType = types.nodeTypes.toNodeType;
+        endNodePort = edgeInfo.toNodePort;
+        //newEdge = {
+        //  fromNode: startNode,
+        //  fromNodePort: startNodePort,
+        //  toNode: endNode,
+        //  toNodePort: endNodePort
+        //}
+      }
+      else if(types.portTypes.fromNodePortType === "inport"){
+        console.log("inport to outport, so have to flip the edge labelling direction");
+        /* Note that you must also flip the ports too! */
+        startNode = edgeInfo.toNode;
+        startNodeType = types.nodeTypes.toNodeType;
+        startNodePort = edgeInfo.toNodePort;
+        endNode = edgeInfo.fromNode;
+        endNodeType = types.nodeTypes.fromNodeType;
+        endNodePort = edgeInfo.fromNodePort;
+        /* Don't need this in both loops, can just set this after the loops have completed! */
+        //newEdge = {
+        //  fromNode: startNode,
+        //  fromNodePort: startNodePort,
+        //  toNode: endNode,
+        //  toNodePort: endNodePort
+        //}
+      }
+
+      newEdge = {
+        fromNode: startNode,
+        fromNodeType: startNodeType,
+        fromNodePort: startNodePort,
+        toNode: endNode,
+        toNodeType: endNodeType,
+        toNodePort: endNodePort
+      };
+
+      /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
+      edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+
+      nodeActions.addOneSingleEdgeToAllNodeInfo(newEdge);
+      nodeActions.appendToEdgeSelectedState(edgeLabel);
+      this.resetPortClickStorage();
     }
   },
 
@@ -8246,240 +8128,6 @@ var App = React.createClass({displayName: "App",
     console.log("Resetting port click storage");
     nodeActions.storingFirstPortClicked(null);
     nodeActions.passPortMouseDown(null);
-  },
-
-  addOneEdgeToEdgesObject: function(edgeInfo, portTypes, nodeTypes){
-  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
-
-  var startNode;
-  var startNodeType;
-  var startNodePort;
-  var endNode;
-  var endNodeType;
-  var endNodePort;
-  var newEdge;
-  var edgeLabel;
-  if(portTypes.fromNodePortType === "outport"){
-    console.log("outport to inport, so edge labelling is normal");
-    startNode = edgeInfo.fromNode;
-    startNodeType = nodeTypes.fromNodeType;
-    startNodePort = edgeInfo.fromNodePort;
-    endNode = edgeInfo.toNode;
-    endNodeType = nodeTypes.toNodeType;
-    endNodePort = edgeInfo.toNodePort;
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-  else if(portTypes.fromNodePortType === "inport"){
-    console.log("inport to outport, so have to flip the edge labelling direction");
-    /* Note that you must also flip the ports too! */
-    startNode = edgeInfo.toNode;
-    startNodeType = nodeTypes.toNodeType;
-    startNodePort = edgeInfo.toNodePort;
-    endNode = edgeInfo.fromNode;
-    endNodeType = nodeTypes.fromNodeType;
-    endNodePort = edgeInfo.fromNodePort;
-    /* Don't need this in both loops, can just set this after the loops have completed! */
-    //newEdge = {
-    //  fromNode: startNode,
-    //  fromNodePort: startNodePort,
-    //  toNode: endNode,
-    //  toNodePort: endNodePort
-    //}
-  }
-
-  newEdge = {
-    fromNode: startNode,
-    fromNodeType: startNodeType,
-    fromNodePort: startNodePort,
-    toNode: endNode,
-    toNodeType: endNodeType,
-    toNodePort: endNodePort
-  };
-
-  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-
-  /* Checking if the edge already exists, if it does don't bother adding another edge */
-
-  if(this.props.allEdges[edgeLabel] === undefined){
-    console.log("The newEdge's label is " + edgeLabel);
-
-    /* Need an action to do this */
-    //edges[edgeLabel] = newEdge;
-    //console.log(edges);
-
-    var edgeStuff = {
-      edgeLabel: edgeLabel,
-      edgeInfo: newEdge
-    };
-    nodeActions.addOneSingleEdgeToEdgesObject(edgeStuff);
-
-    /* Also need to add the selected states to edgeSelectedStates! */
-    /* Can have an action do this */
-
-    //edgeSelectedStates[edgeLabel] = false;
-    nodeActions.appendToEdgeSelectedState(edgeLabel);
-
-    this.createNewEdge(edgeLabel)
-  }
-  else{
-    console.log("That edge already exists, so don't add another one");
-  }
-
-
-
-  },
-
-  createNewEdge: function(edgeLabel){
-    console.log("edgeLabel is: " +  edgeLabel);
-    /* This aciton is for adding ALL INITIAL EDGES, not for adding one signle edge! */
-    //nodeActions.addEdgeToAllNodeInfo(edge);
-
-
-    /* Trying to replace with my port compatibility checker function*/
-    //console.log(this.state.allEdges);
-    //console.log(this.state.newlyCreatedEdgeLabel);
-    //nodeActions.createNewEdgeLabel(edge);
-    //console.log("between createNewEdgeLabel and addOneSingleEdge nodeActions");
-    //console.log(this.state.allEdges);
-    //console.log(this.state.newlyCreatedEdgeLabel);
-    //nodeActions.addOneSingleEdge(edge);
-    //console.log("after both nodeActions");
-    //console.log(this.state.allEdges);
-    //console.log(this.state.newlyCreatedEdgeLabel);
-
-    //var newEdgeLabel = edge.fromNode + edge.fromNodePort + " -> " + edge.toNode + edge.toNodePort;
-    //console.log(newEdgeLabel);
-
-
-    //nodeActions.addOneSingleEdge(edge);
-    //
-    //var newlyCreatedEdgeLabel = this.state.newlyCreatedEdgeLabel;
-    ////console.log(this.state.allEdges);
-    ////console.log(this.state.newlyCreatedEdgeLabel);
-    ////console.log(newlyCreatedEdgeLabel);
-    //var newEdge = this.state.allEdges[newlyCreatedEdgeLabel];
-    //console.log(newEdge);
-
-    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: edgeLabel}
-      //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-    ));
-
-    /* Now that a new edge component instance has been added, reset the port storage info */
-    this.resetPortClickStorage();
-
-  },
-
-  addEdgeInfo: function(){
-    //e.stopImmediatePropagation();
-    //e.stopPropagation();
-    nodeActions.addEdgeToAllNodeInfo({
-      fromNode: 'TGen1',
-      fromNodePort: 'posn',
-      toNode: 'PComp1',
-      toNodePort: 'posn'
-    });
-
-    var newEdge = this.props.allEdges['TGen1posn -> PComp1posn'];
-    console.log(newEdge);
-
-
-    nodeActions.pushEdgeToArray(React.createElement(Edge, {id: "TGen1posn -> PComp1posn"}
-      //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-      //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-    ))
-  },
-
-  addEdgeToEdgesArray: function(){
-    //var gateNodeRegExp = /Gate/;
-    //var tgenNodeRegExp = /TGen/;
-    //var pcompNodeRegExp = /PComp/;
-    //var lutNodeRegExp = /LUT/;
-
-    //var allNodePositions = this.state.allNodePositions;
-    var allEdges = this.props.allEdges;
-
-    //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
-    //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
-    //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
-    //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
-    //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
-    //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
-
-    for(var edge in allEdges){
-      //var fromNode = allEdges[edge].fromNode;
-      //var toNode = allEdges[edge].toNode;
-      ////console.log(fromNode);
-      ////console.log(toNode);
-      //var fromNodePort = allEdges[edge].fromNodePort;
-      //var toNodePort = allEdges[edge].toNodePort;
-      ////console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-      ////console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
-      ////console.log(this.state.allNodePositions[toNode].position);
-      //var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
-      //var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
-      //var toNodePositionX = this.state.allNodePositions[toNode].position.x;
-      //var toNodePositionY = this.state.allNodePositions[toNode].position.y;
-      ////console.log(fromNodePositionX);
-      ////console.log(fromNodePositionY);
-      //
-      ///* fromNodes */
-      //if(gateNodeRegExp.test(fromNode) === true){
-      //  var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
-      //  var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
-      //  //console.log(startOfEdgePortOffsetX);
-      //  //console.log(startOfEdgePortOffsetY);
-      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-      //  //console.log(startOfEdgeX);
-      //  //console.log(startOfEdgeY);
-      //}
-      //else if(tgenNodeRegExp.test(fromNode) === true){
-      //  var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
-      //  var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
-      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-      //}
-      //else if(pcompNodeRegExp.test(fromNode) === true){
-      //  var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
-      //  var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
-      //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-      //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-      //}
-      //
-      ///* toNodes */
-      //if(tgenNodeRegExp.test(toNode) === true){
-      //  var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
-      //  var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
-      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-      //  //console.log(endOfEdgeX);
-      //  //console.log(endOfEdgeY);
-      //}
-      //else if(gateNodeRegExp.test(toNode) === true){
-      //  var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
-      //  var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
-      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-      //}
-      //else if(pcompNodeRegExp.test(toNode) === true){
-      //  var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
-      //  var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
-      //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-      //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-      //}
-
-      nodeActions.pushEdgeToArray(React.createElement(Edge, {key: edge, id: edge}
-                       //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-                       //onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-      ))
-
-    }
   },
 
   interactJsDragPan: function(e){
@@ -8508,8 +8156,8 @@ var App = React.createClass({displayName: "App",
 
     //var scale = scaleDelta * currentZoomScale;
 
-    var pinchZoomX = e.nativeEvent.clientX;
-    var pinchZoomY = e.nativeEvent.clientY;
+    var pinchZoomX = e.clientX;
+    var pinchZoomY = e.clientY;
 
     var newGraphPositionX = scaleDelta * (this.props.graphPosition.x - pinchZoomX) + pinchZoomX ;
     var newGraphPositionY = scaleDelta * (this.props.graphPosition.y - pinchZoomY) + pinchZoomY ;
@@ -8527,7 +8175,6 @@ var App = React.createClass({displayName: "App",
 
   render: function(){
     //console.log("inside theGraphDiamond's render function");
-    //console.log(this.props.newlyAddedNode);
     //console.log(this.props);
 
     var x = this.props.graphPosition.x;
@@ -8536,144 +8183,7 @@ var App = React.createClass({displayName: "App",
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
-    console.log(this.props.nodesToRender);
     console.log(this.props);
-    //console.log("this.dragging is:" + this.dragging);
-    //console.log("this.state.newlyCreatedEdgeLabel is: " + this.state.newlyCreatedEdgeLabel);
-
-    //var regExpTest = /abc/;
-    //var testString = "I know my abc's";
-    //var anotherTestString = "Grab crab";
-    //console.log(regExpTest.test(testString));
-    //console.log(regExpTest.test(anotherTestString));
-
-    //var gateNodeRegExp = /Gate/;
-    //var tgenNodeRegExp = /TGen/;
-    //var pcompNodeRegExp = /PComp/;
-    //var lutNodeRegExp = /LUT/;
-    //
-    //var allNodePositions = this.state.allNodePositions;
-    //var nodes = [];
-
-    //var allEdges = this.state.allEdges;
-    //var edges = [];
-    //
-    //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
-    //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
-    //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
-    //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
-    //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
-    //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
-
-
-
-    //for(var edge in allEdges){
-    //  var fromNode = allEdges[edge].fromNode;
-    //  var toNode = allEdges[edge].toNode;
-    //  //console.log(fromNode);
-    //  //console.log(toNode);
-    //  var fromNodePort = allEdges[edge].fromNodePort;
-    //  var toNodePort = allEdges[edge].toNodePort;
-    //  //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //  //console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
-    //  //console.log(this.state.allNodePositions[toNode].position);
-    //  var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
-    //  var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
-    //  var toNodePositionX = this.state.allNodePositions[toNode].position.x;
-    //  var toNodePositionY = this.state.allNodePositions[toNode].position.y;
-    //  //console.log(fromNodePositionX);
-    //  //console.log(fromNodePositionY);
-    //
-    //  /* fromNodes */
-    //  if(gateNodeRegExp.test(fromNode) === true){
-    //    var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
-    //    var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
-    //    //console.log(startOfEdgePortOffsetX);
-    //    //console.log(startOfEdgePortOffsetY);
-    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-    //    //console.log(startOfEdgeX);
-    //    //console.log(startOfEdgeY);
-    //  }
-    //  else if(tgenNodeRegExp.test(fromNode) === true){
-    //    var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
-    //    var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
-    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-    //  }
-    //  else if(pcompNodeRegExp.test(fromNode) === true){
-    //    var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
-    //    var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
-    //    var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-    //    var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-    //  }
-    //
-    //  /* toNodes */
-    //  if(tgenNodeRegExp.test(toNode) === true){
-    //    var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
-    //    var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
-    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-    //    //console.log(endOfEdgeX);
-    //    //console.log(endOfEdgeY);
-    //  }
-    //  else if(gateNodeRegExp.test(toNode) === true){
-    //    var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
-    //    var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
-    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-    //  }
-    //  else if(pcompNodeRegExp.test(toNode) === true){
-    //    var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
-    //    var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
-    //    var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-    //    var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-    //  }
-    //
-    //  edges.push(<Edge id={edge}
-    //                   x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-    //                   onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-    //  />)
-    //
-    //}
-
-    //for(var node in allNodePositions){
-    //  //console.log("we have a gate node!");
-    //  var nodeName = allNodePositions[node].name;
-    //  var rectangleString = "Rectangle";
-    //  var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
-    //  //console.log(rectangleName);
-    //
-    //  var nodeX = allNodePositions[node].position.x;
-    //  var nodeY = allNodePositions[node].position.y;
-    //  var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
-    //
-    //  if(gateNodeRegExp.test(node) === true){
-    //    nodes.push(<GateNode id={node}
-    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //  }
-    //  else if(tgenNodeRegExp.test(node) === true){
-    //    //console.log("we have a tgen node!");
-    //    nodes.push(<TGenNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-    //                         RectangleName={rectangleName}
-    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //  }
-    //  else if(pcompNodeRegExp.test(node) === true){
-    //    //console.log("we have a pcomp node!");
-    //    nodes.push(<PCompNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-    //                          NodeName={nodeName} RectangleName={rectangleName}
-    //                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //  }
-    //  else if(lutNodeRegExp.test(node) === true){
-    //    //console.log("we have an lut node!");
-    //    nodes.push(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-    //                        NodeName={nodeName} RectangleName={rectangleName}
-    //                        onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-    //  }
-    //  else{
-    //    console.log("no match to any node type, something's wrong?");
-    //  }
-    //}
 
     var nodes = [];
     var edges = [];
@@ -8686,19 +8196,42 @@ var App = React.createClass({displayName: "App",
               selected: NodeStore.getAnyNodeSelectedState(node), deselect: this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         )
-      )
+      );
+
+      for(var i = 0; i < this.props.allNodeInfo[node].inports.length; i++){
+        if(this.props.allNodeInfo[node].inports[i].connected === true){
+          console.log(this.props.allNodeInfo[node].inports[i]);
+          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is connected, so find out what node it is connected to");
+          /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
+          var toNode = node;
+          var toNodeType = this.props.allNodeInfo[node].type;
+          var toNodePort = this.props.allNodeInfo[node].inports[i].name;
+          var fromNode = this.props.allNodeInfo[node].inports[i].connectedTo.node;
+          var fromNodeType = this.props.allNodeInfo[fromNode].type;
+          var fromNodePort = this.props.allNodeInfo[node].inports[i].connectedTo.port;
+
+          var edgeLabel = String(fromNode) + String(fromNodePort) + " -> " + String(toNode) + String(toNodePort);
+
+          edges.push(
+            React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 
+                  fromNode: fromNode, fromNodeType: fromNodeType, fromNodePort: fromNodePort, 
+                  toNode: toNode, toNodeType: toNodeType, toNodePort: toNodePort, 
+                  allNodeTypesPortStyling: this.props.allNodeTypesPortStyling, 
+                  allNodeInfo: this.props.allNodeInfo, areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
+                  selected: NodeStore.getIfEdgeIsSelected(edgeLabel)}
+            )
+          )
+        }
+        else if(this.props.allNodeInfo[node].inports[i].connected === false){
+          console.log(this.props.allNodeInfo[node].inports[i]);
+          console.log("The " + this.props.allNodeInfo[node].inports[i].name + " inport of " + node + " is NOT connected, so move on to the next inport/node");
+        }
+      }
+
     }
 
-    for(var edge in this.props.allEdges){
-      edges.push(React.createElement(Edge, {key: edge, id: edge, 
-        //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-        //               onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
-                       allEdges: this.props.allEdges, allNodeTypesPortStyling: this.props.allNodeTypesPortStyling, 
-                       allNodeInfo: this.props.allNodeInfo, areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
-                       selected: NodeStore.getIfEdgeIsSelected(edge)}
-      ))
-
-    }
+    console.log(nodes);
+    console.log(edges);
 
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", 
@@ -8717,11 +8250,6 @@ var App = React.createClass({displayName: "App",
           React.createElement("g", null, React.createElement("rect", {
             onClick: this.addNodeInfo, 
             height: "50", width: "50"})), 
-
-          React.createElement("g", null, React.createElement("rect", {
-            onClick: this.addEdgeInfo, 
-            height: "50", width: "50", transform: "translate(100, 0)"})), 
-
 
           React.createElement("g", {id: "testPanGroup", 
              transform: matrixTransform, 
@@ -8749,11 +8277,6 @@ var App = React.createClass({displayName: "App",
     )
   }
 });
-
-//ReactDOM.render(
-//  <App/>,
-//  document.getElementById('testContainer')
-//);
 
 module.exports = App;
 
@@ -9294,7 +8817,324 @@ module.exports = App;
 //
 //},
 
-},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/lib/ReactDefaultPerf.js":100,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./gateNode.js":20,"./lutNode.js":21,"./nodes.js":24,"./pcompNode.js":25,"./tgenNode.js":29,"react":220}],31:[function(require,module,exports){
+///* NOTE: This function is essentially adding all the nodes that are on initial render, this doesn't add new nodes once the app has been launched! */
+//
+//addNodeToNodesArray: function(){
+//  var gateNodeRegExp = /Gate/;
+//  var tgenNodeRegExp = /TGen/;
+//  var pcompNodeRegExp = /PComp/;
+//  var lutNodeRegExp = /LUT/;
+//
+//  var allNodeInfo = this.props.allNodeInfo;
+//
+//  /* Seems like this could be for adding all the initla nodes on startup, perhaps have another fucion for adding one node at a time? */
+//  for(var node in allNodeInfo){
+//    //console.log("we have a gate node!");
+//    //var nodeName = allNodePositions[node].name;
+//    //var rectangleString = "Rectangle";
+//    //var rectangleName = node.concat(rectangleString); /*  Even though 'node' is an object, concatenating it with a string makes it work to give GAteRectangle? =P */
+//    ////console.log(rectangleName);
+//    //
+//    //var nodeX = allNodePositions[node].position.x;
+//    //var nodeY = allNodePositions[node].position.y;
+//    //var nodeTranslate = "translate(" + nodeX + "," + nodeY + ")";
+//
+//    if(gateNodeRegExp.test(node) === true){
+//      nodeActions.pushNodeToArray(<GateNode id={node} className="node"
+//                           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//      />)
+//    }
+//    else if(tgenNodeRegExp.test(node) === true){
+//      //console.log("we have a tgen node!");
+//      nodeActions.pushNodeToArray(<TGenNode id={node} className="node"
+//                           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//      />)
+//    }
+//    else if(pcompNodeRegExp.test(node) === true){
+//      //console.log("we have a pcomp node!");
+//      nodeActions.pushNodeToArray(<PCompNode id={node} className="node"
+//                            //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//      />)
+//    }
+//    else if(lutNodeRegExp.test(node) === true){
+//      //console.log("we have an lut node!");
+//      nodeActions.pushNodeToArray(<LUTNode id={node} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate} className="node"
+//                          //NodeName={nodeName} RectangleName={rectangleName}
+//                          //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//      />
+//      )
+//    }
+//    else{
+//      console.log("no match to any node type, something's wrong?");
+//    }
+//  }
+//
+//
+///* Don't need this anymore, I have a for loop in the render function */},
+//
+//refactoredAddNodeToNodesArray: function(){
+//  for(var node in this.props.allNodeInfo){
+//    nodeActions.pushNodeToArray(
+//      <Node key={node} id={node} className="node"
+//            allNodeInfo={this.props.allNodeInfo} allNodeTypesStyling={this.props.allNodeTypesStyling} areAnyNodesSelected={this.props.areAnyNodesSelected}
+//            portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} portMouseOver={this.props.portMouseOver}
+//            selected={NodeStore.getAnyNodeSelectedState(node)}
+//            //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+//            />
+//    )
+//  }
+//},
+//addEdgeInfo: function(){
+//  //e.stopImmediatePropagation();
+//  //e.stopPropagation();
+//  nodeActions.addEdgeToAllNodeInfo({
+//    fromNode: 'TGen1',
+//    fromNodePort: 'posn',
+//    toNode: 'PComp1',
+//    toNodePort: 'posn'
+//  });
+//
+//  var newEdge = this.props.allEdges['TGen1posn -> PComp1posn'];
+//  console.log(newEdge);
+//
+//
+//  nodeActions.pushEdgeToArray(<Edge id='TGen1posn -> PComp1posn'
+//    //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+//    //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+//  />)
+//},
+//
+//addEdgeToEdgesArray: function(){
+//  //var gateNodeRegExp = /Gate/;
+//  //var tgenNodeRegExp = /TGen/;
+//  //var pcompNodeRegExp = /PComp/;
+//  //var lutNodeRegExp = /LUT/;
+//
+//  //var allNodePositions = this.state.allNodePositions;
+//  var allEdges = this.props.allEdges;
+//
+//  //var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
+//  //var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
+//  //var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
+//  //var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
+//  //var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
+//  //var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
+//
+//  for(var edge in allEdges){
+//    //var fromNode = allEdges[edge].fromNode;
+//    //var toNode = allEdges[edge].toNode;
+//    ////console.log(fromNode);
+//    ////console.log(toNode);
+//    //var fromNodePort = allEdges[edge].fromNodePort;
+//    //var toNodePort = allEdges[edge].toNodePort;
+//    ////console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+//    ////console.log(this.state.allNodePositions[fromNode].position); /* Position of fromNode */
+//    ////console.log(this.state.allNodePositions[toNode].position);
+//    //var fromNodePositionX = this.state.allNodePositions[fromNode].position.x;
+//    //var fromNodePositionY = this.state.allNodePositions[fromNode].position.y;
+//    //var toNodePositionX = this.state.allNodePositions[toNode].position.x;
+//    //var toNodePositionY = this.state.allNodePositions[toNode].position.y;
+//    ////console.log(fromNodePositionX);
+//    ////console.log(fromNodePositionY);
+//    //
+//    ///* fromNodes */
+//    //if(gateNodeRegExp.test(fromNode) === true){
+//    //  var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
+//    //  var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
+//    //  //console.log(startOfEdgePortOffsetX);
+//    //  //console.log(startOfEdgePortOffsetY);
+//    //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//    //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//    //  //console.log(startOfEdgeX);
+//    //  //console.log(startOfEdgeY);
+//    //}
+//    //else if(tgenNodeRegExp.test(fromNode) === true){
+//    //  var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
+//    //  var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
+//    //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//    //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//    //}
+//    //else if(pcompNodeRegExp.test(fromNode) === true){
+//    //  var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
+//    //  var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
+//    //  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
+//    //  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
+//    //}
+//    //
+//    ///* toNodes */
+//    //if(tgenNodeRegExp.test(toNode) === true){
+//    //  var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
+//    //  var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
+//    //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//    //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//    //  //console.log(endOfEdgeX);
+//    //  //console.log(endOfEdgeY);
+//    //}
+//    //else if(gateNodeRegExp.test(toNode) === true){
+//    //  var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
+//    //  var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
+//    //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//    //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//    //}
+//    //else if(pcompNodeRegExp.test(toNode) === true){
+//    //  var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
+//    //  var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
+//    //  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
+//    //  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
+//    //}
+//
+//    nodeActions.pushEdgeToArray(<Edge key={edge} id={edge}
+//                     //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+//                     //onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+//    />)
+//
+//  }
+//},
+//<g><rect
+//  onClick={this.addEdgeInfo}
+//  height="50" width="50" transform="translate(100, 0)" /></g>
+//createNewEdge: function(edgeLabel){
+//  console.log("edgeLabel is: " +  edgeLabel);
+//  /* This aciton is for adding ALL INITIAL EDGES, not for adding one signle edge! */
+//  //nodeActions.addEdgeToAllNodeInfo(edge);
+//
+//
+//  /* Trying to replace with my port compatibility checker function*/
+//  //console.log(this.state.allEdges);
+//  //console.log(this.state.newlyCreatedEdgeLabel);
+//  //nodeActions.createNewEdgeLabel(edge);
+//  //console.log("between createNewEdgeLabel and addOneSingleEdge nodeActions");
+//  //console.log(this.state.allEdges);
+//  //console.log(this.state.newlyCreatedEdgeLabel);
+//  //nodeActions.addOneSingleEdge(edge);
+//  //console.log("after both nodeActions");
+//  //console.log(this.state.allEdges);
+//  //console.log(this.state.newlyCreatedEdgeLabel);
+//
+//  //var newEdgeLabel = edge.fromNode + edge.fromNodePort + " -> " + edge.toNode + edge.toNodePort;
+//  //console.log(newEdgeLabel);
+//
+//
+//  //nodeActions.addOneSingleEdge(edge);
+//  //
+//  //var newlyCreatedEdgeLabel = this.state.newlyCreatedEdgeLabel;
+//  ////console.log(this.state.allEdges);
+//  ////console.log(this.state.newlyCreatedEdgeLabel);
+//  ////console.log(newlyCreatedEdgeLabel);
+//  //var newEdge = this.state.allEdges[newlyCreatedEdgeLabel];
+//  //console.log(newEdge);
+//
+//  nodeActions.pushEdgeToArray(<Edge id={edgeLabel}
+//    //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+//    //                                onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+//  />);
+//
+//  /* Now that a new edge component instance has been added, reset the port storage info */
+//  this.resetPortClickStorage();
+//
+//},
+//addOneEdgeToEdgesObject: function(edgeInfo, portTypes, nodeTypes){
+///* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
+//
+//var startNode;
+//var startNodeType;
+//var startNodePort;
+//var endNode;
+//var endNodeType;
+//var endNodePort;
+//var newEdge;
+//var edgeLabel;
+//if(portTypes.fromNodePortType === "outport"){
+//  console.log("outport to inport, so edge labelling is normal");
+//  startNode = edgeInfo.fromNode;
+//  startNodeType = nodeTypes.fromNodeType;
+//  startNodePort = edgeInfo.fromNodePort;
+//  endNode = edgeInfo.toNode;
+//  endNodeType = nodeTypes.toNodeType;
+//  endNodePort = edgeInfo.toNodePort;
+//  //newEdge = {
+//  //  fromNode: startNode,
+//  //  fromNodePort: startNodePort,
+//  //  toNode: endNode,
+//  //  toNodePort: endNodePort
+//  //}
+//}
+//else if(portTypes.fromNodePortType === "inport"){
+//  console.log("inport to outport, so have to flip the edge labelling direction");
+//  /* Note that you must also flip the ports too! */
+//  startNode = edgeInfo.toNode;
+//  startNodeType = nodeTypes.toNodeType;
+//  startNodePort = edgeInfo.toNodePort;
+//  endNode = edgeInfo.fromNode;
+//  endNodeType = nodeTypes.fromNodeType;
+//  endNodePort = edgeInfo.fromNodePort;
+//  /* Don't need this in both loops, can just set this after the loops have completed! */
+//  //newEdge = {
+//  //  fromNode: startNode,
+//  //  fromNodePort: startNodePort,
+//  //  toNode: endNode,
+//  //  toNodePort: endNodePort
+//  //}
+//}
+//
+//newEdge = {
+//  fromNode: startNode,
+//  fromNodeType: startNodeType,
+//  fromNodePort: startNodePort,
+//  toNode: endNode,
+//  toNodeType: endNodeType,
+//  toNodePort: endNodePort
+//};
+//
+//edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
+//
+///* Checking if the edge already exists, if it does don't bother adding another edge */
+//
+//if(this.props.allEdges[edgeLabel] === undefined){
+//  console.log("The newEdge's label is " + edgeLabel);
+//
+//  /* Need an action to do this */
+//  //edges[edgeLabel] = newEdge;
+//  //console.log(edges);
+//
+//  var edgeStuff = {
+//    edgeLabel: edgeLabel,
+//    edgeInfo: newEdge
+//  };
+//  nodeActions.addOneSingleEdgeToEdgesObject(edgeStuff);
+//
+//  /* Also need to add the selected states to edgeSelectedStates! */
+//  /* Can have an action do this */
+//
+//  //edgeSelectedStates[edgeLabel] = false;
+//  nodeActions.appendToEdgeSelectedState(edgeLabel);
+//
+//  //this.createNewEdge(edgeLabel)
+//  this.resetPortClickStorage();
+//
+//}
+//else{
+//  console.log("That edge already exists, so don't add another one");
+//  window.alert("That connection already exists");
+//  this.resetPortClickStorage();
+//
+//}
+//},
+
+
+// Not using the edges object anymore!!
+//for(var edge in this.props.allEdges){
+//  edges.push(<Edge key={edge} id={edge}
+//    //x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+//    //               onMouseDown={this.edgeMouseDown} onMouseUp={this.edgeMouseUp}
+//                   allEdges={this.props.allEdges} allNodeTypesPortStyling={this.props.allNodeTypesPortStyling}
+//                   allNodeInfo={this.props.allNodeInfo} areAnyEdgesSelected={this.props.areAnyEdgesSelected}
+//                   selected={NodeStore.getIfEdgeIsSelected(edge)}
+//  />)
+//
+//}
+
+},{"../../node_modules/interact.js":39,"../../node_modules/react-dom/dist/react-dom.js":41,"../../node_modules/react/lib/ReactDefaultPerf.js":100,"../actions/nodeActions.js":3,"../stores/nodeStore.js":13,"./edge.js":18,"./nodes.js":24,"react":220}],31:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -9310,13 +9150,13 @@ function getTheGraphDiamondState(){
   return{
     graphPosition: NodeStore.getGraphPosition(),
     graphZoomScale: NodeStore.getGraphZoomScale(),
-    allEdges: NodeStore.getAllEdges(),
-    nodesToRender: NodeStore.getNodesToRenderArray(),
-    edgesToRender: NodeStore.getEdgesToRenderArray(),
+    //allEdges: NodeStore.getAllEdges(),
+    //nodesToRender: NodeStore.getNodesToRenderArray(),
+    //edgesToRender: NodeStore.getEdgesToRenderArray(),
     allNodeInfo: NodeStore.getAllNodeInfo(),
     portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-    newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
+    //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
     nodeLibrary: NodeStore.getNodeLibrary(),
     allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
     portMouseOver: NodeStore.getPortMouseOver(),
@@ -9347,10 +9187,10 @@ var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDia
   render: function(){
     return(
       React.createElement(TheGraphDiamond, {
-        graphPosition: this.state.graphPosition, graphZoomScale: this.state.graphZoomScale, allEdges: this.state.allEdges, 
-        nodesToRender: this.state.nodesToRender, edgesToRender: this.state.edgesToRender, allNodeInfo: this.state.allNodeInfo, 
-        portThatHasBeenClicked: this.state.portThatHasBeenClicked, storingFirstPortClicked: this.state.storingFirstPortClicked, 
-        newlyCreatedEdgeLabel: this.state.newlyCreatedEdgeLabel, nodeLibrary: this.state.nodeLibrary, 
+        graphPosition: this.state.graphPosition, graphZoomScale: this.state.graphZoomScale, 
+        allNodeInfo: this.state.allNodeInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
+        storingFirstPortClicked: this.state.storingFirstPortClicked, 
+        nodeLibrary: this.state.nodeLibrary, 
         allNodeTypesStyling: this.state.allNodeTypesStyling, areAnyNodesSelected: this.state.areAnyNodesSelected, 
         areAnyEdgesSelected: this.state.areAnyEdgesSelected, allNodeTypesPortStyling: this.state.allNodeTypesPortStyling, 
         portMouseOver: this.state.portMouseOver}
