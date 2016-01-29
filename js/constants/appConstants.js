@@ -46,7 +46,7 @@ var appConstants = {
   //BLUEBLOCKTAB_OPEN: "BLUEBLOCKTAB_OPEN",
   //GREENBLOCKTAB_OPEN: "GREENBLOCKTAB_OPEN",
 
-  /* Constants from the-graph-diamond added here */
+  /* Constants from flowChart added here */
 
   GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
   DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",

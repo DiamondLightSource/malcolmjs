@@ -19,8 +19,7 @@ var blockActions = require('../actions/blockActions.js');
 var WebSocketClient = require('../websocketClientTEST');
 var sessionActions = require('../actions/sessionActions');
 
-var theGraphDiamond = require('./theGraphDiamond');
-var TheGraphDiamondControllerView = require('./theGraphDiamondControllerView');
+var FlowChartControllerView = require('./flowChartControllerView');
 
 //var GateNode = require('./gateNode.js');
 //var TGenNode = require('./tgenNode.js');
@@ -144,7 +143,7 @@ var MainPane = React.createClass({
         <Tab title="View" showFooter={this.props.footers}>
           <Content  >
             <div style={contentStyling} >
-              <TheGraphDiamondControllerView/>
+              <FlowChartControllerView/>
             </div>
           </Content>
 

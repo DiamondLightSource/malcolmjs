@@ -57,7 +57,7 @@ var AppContainerStyle = {
   //'backgroundColor': "green"
 };
 
-var App = React.createClass({
+var FlowChart = React.createClass({
 
   propTypes: {
     graphPosition: React.PropTypes.object,
@@ -225,7 +225,7 @@ var App = React.createClass({
   },
 
   addEdgePreview: function(){
-    console.log("addEdgePreview in theGraphDiamond has been invoked!");
+    console.log("addEdgePreview in flowChart has been invoked!");
   },
 
   portSelectHighlight: function(){
@@ -538,6 +538,7 @@ var App = React.createClass({
       /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
       edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
+      console.log(newEdge);
       blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
       blockActions.appendToEdgeSelectedState(edgeLabel);
       this.resetPortClickStorage();
@@ -700,7 +701,7 @@ var App = React.createClass({
   }
 });
 
-module.exports = App;
+module.exports = FlowChart;
 
 //<LUTNode id="LUT1"
 //         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}

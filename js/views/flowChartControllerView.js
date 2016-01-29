@@ -5,11 +5,11 @@
 var React = require('react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
-var TheGraphDiamond = require('./theGraphDiamond');
+var FlowChart = require('./flowChart');
 
 var blockStore = require('../stores/blockStore.js');
 
-function getTheGraphDiamondState(){
+function getFlowChartState(){
   return{
     graphPosition: blockStore.getGraphPosition(),
     graphZoomScale: blockStore.getGraphZoomScale(),
@@ -29,14 +29,14 @@ function getTheGraphDiamondState(){
   }
 }
 
-var theGraphDiamondControllerView = React.createClass({
+var FlowChartControllerView = React.createClass({
 
   getInitialState: function(){
-    return getTheGraphDiamondState();
+    return getFlowChartState();
   },
 
   _onChange: function(){
-    this.setState(getTheGraphDiamondState());
+    this.setState(getFlowChartState());
   },
 
   componentDidMount: function(){
@@ -49,7 +49,7 @@ var theGraphDiamondControllerView = React.createClass({
 
   render: function(){
     return(
-      <TheGraphDiamond
+      <FlowChart
         graphPosition={this.state.graphPosition} graphZoomScale={this.state.graphZoomScale}
         allBlockInfo={this.state.allBlockInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
         storingFirstPortClicked={this.state.storingFirstPortClicked}
@@ -62,4 +62,4 @@ var theGraphDiamondControllerView = React.createClass({
   }
 });
 
-module.exports = theGraphDiamondControllerView;
+module.exports = FlowChartControllerView;

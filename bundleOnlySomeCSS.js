@@ -580,7 +580,7 @@ ReactDOM.render(
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
 
-},{"./views/mainPane":22,"./views/sidePane":24,"./views/sidebar":25,"./websocketClientTEST":28,"react":216,"react-dom":38,"react-panels":39}],9:[function(require,module,exports){
+},{"./views/mainPane":24,"./views/sidePane":26,"./views/sidebar":27,"./websocketClientTEST":28,"react":216,"react-dom":38,"react-panels":39}],9:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -629,7 +629,7 @@ var appConstants = {
   //BLUEBLOCKTAB_OPEN: "BLUEBLOCKTAB_OPEN",
   //GREENBLOCKTAB_OPEN: "GREENBLOCKTAB_OPEN",
 
-  /* Constants from the-graph-diamond added here */
+  /* Constants from flowChart added here */
 
   GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
   DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",
@@ -816,6 +816,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
+  'Gate1out -> TGen1ena': false,
   //Gate1OutTGen1Ena: false,
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false
@@ -826,6 +827,8 @@ function selectEdge(Edge){
 }
 
 function getAnyEdgeSelectedState(EdgeId){
+  console.log(edgeSelectedStates);
+  console.log(EdgeId);
   if(edgeSelectedStates[EdgeId] === undefined || null){
     console.log("edge selected state is underfined or null, best check it out...");
   }
@@ -1955,7 +1958,7 @@ AppDispatcher.register(function(payload){
     //  console.log(edges);
     //  break;
 
-    case appConstants.SELECT_NODE:
+    case appConstants.SELECT_BLOCK:
       console.log(payload);
       console.log(item);
       blockSelectedStates[item] = true;
@@ -1964,7 +1967,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.DESELECT_ALLNODES:
+    case appConstants.DESELECT_ALLBLOCKS:
       console.log(payload);
       console.log(item);
       deselectAllBlocks();
@@ -2027,7 +2030,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADDTO_ALLNODEINFO:
+    case appConstants.ADDTO_ALLBLOCKINFO:
       console.log(payload);
       console.log(item);
       appendToAllBlockInfo(item);
@@ -2059,7 +2062,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
       console.log(payload);
       console.log(item);
       addEdgeToAllBlockInfo(item);
@@ -4565,7 +4568,7 @@ module.exports = Block;
 //  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 ///>
 
-},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11,"./blockRectangle":17,"./ports.js":23}],17:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11,"./blockRectangle":17,"./ports.js":25}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -5184,992 +5187,6 @@ module.exports = FavButton;
 
 },{"../actions/mainPaneActions":3,"../stores/mainPaneStore":13,"react":216}],22:[function(require,module,exports){
 /**
- * Created by twi18192 on 25/08/15.
- */
-
-var React = require('react');
-var ReactPanels = require('react-panels');
-var mainPaneStore = require('../stores/mainPaneStore');
-var mainPaneActions = require('../actions/mainPaneActions');
-var ConfigButton = require('./configButton');
-var FavButton = require('./favButton');
-
-var paneStore = require('../stores/paneStore');
-var paneActions = require('../actions/paneActions');
-var deviceStore = require('../stores/deviceStore');
-var deviceActions = require('../actions/deviceActions');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
-
-var WebSocketClient = require('../websocketClientTEST');
-var sessionActions = require('../actions/sessionActions');
-
-var theGraphDiamond = require('./theGraphDiamond');
-var TheGraphDiamondControllerView = require('./theGraphDiamondControllerView');
-
-//var GateNode = require('./gateNode.js');
-//var TGenNode = require('./tgenNode.js');
-//var PCompNode = require('./pcompNode.js');
-//var LUTNode = require('./lutNode.js');
-
-var Panel = ReactPanels.Panel;
-var Tab = ReactPanels.Tab;
-var Toolbar = ReactPanels.Toolbar;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-var ToggleButton = ReactPanels.ToggleButton;
-var Button = ReactPanels.Button;
-
-function getMainPaneState(){
-  return {
-    //redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
-    //blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
-    //greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
-
-    //footers: mainPaneStore.getFooterState(),
-    //favPanelOpen: mainPaneStore.getFavPanelState(),
-    //favTabOpen: paneStore.getFavTabOpen(),
-    //configPanelOpen: mainPaneStore.getConfigPanelState(),
-    //configTabOpen: paneStore.getConfigTabOpen(),
-
-    //updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
-    //updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
-    //updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
-  }
-}
-
-var MainPane = React.createClass({displayName: "MainPane",
-
-  //getInitialState: function(){
-  //  //return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
-  //},
-
-  componentDidMount: function(){
-    //mainPaneStore.addChangeListener(this._onChange);
-    //paneStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    //this.setState({gateNodeIdCounter: 1});
-  },
-
-  componentWillUnmount: function(){
-    //mainPaneStore.removeChangeListener(this._onChange);
-    //paneStore.removeChangeListener(this._onChange);
-  },
-
-  _onChange: function(){
-    //this.setState(getMainPaneState(), function(){
-    //  console.log("mainpane's state has been mutated");
-    //})
-  },
-
-  propTypes: {
-    footers: React.PropTypes.bool,
-    //favPanelOpen: React.PropTypes.bool,
-    favTabOpen: React.PropTypes.bool,
-    //configPanelOpen: React.PropTypes.bool,
-    configTabOpen: React.PropTypes.bool,
-    //theGraphDiamondState: React.PropTypes.object
-  },
-
-  //shouldComponentUpdate(nextProps, nextState){
-  //  return this.props.footers !== nextProps.footers;
-  //},
-
-  handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
-    mainPaneActions.toggleFooter1("this is the item")
-  },
-
-  //handleActionMockServerRequest: function(){
-  //  deviceActions.mockServerRequest('this is the item');
-  //  console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  //},
-
-  handleActionFavTabOpen: function(){
-    console.log('favTabOpen is a go');
-    paneActions.favTabOpen("this is the item")
-  },
-
-  handleActionConfigTabOpen: function(){
-    console.log('configTabOpen is a go');
-    paneActions.configTabOpen('this is the item')
-  },
-
-  handleActionToggleSidebar: function(){
-    paneActions.toggleSidebar("toggle sidebar");
-  },
-
-  render: function() {
-
-    console.log(this.props);
-
-    var TESTStyling = {
-      height: 1000,
-      width: 1000,
-      //backgroundColor: 'darkmagenta'
-    };
-
-    var contentStyling = {
-      'height': '1476',
-      'width': '1494'
-    };
-    //console.log(this.state.newlyAddedNode);
-    //console.log(this.state);
-    return(
-      React.createElement(Panel, {theme: "flexbox", useAvailableHeight: true, buttons: [
-          React.createElement(ToggleButton, {title: "Toggle sidebar", onClick: this.handleActionToggleSidebar}, 
-            React.createElement("i", {className: "fa fa-bars"})
-          ),
-          React.createElement(ToggleButton, {title: "Toggle Footer", onChange: this.handleActionFooterToggle}, 
-            React.createElement("i", {className: "fa fa-wrench"})
-          )
-        ]}, 
-        React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
-          React.createElement(Content, null, 
-            React.createElement("div", {style: contentStyling}, 
-              React.createElement(TheGraphDiamondControllerView, null)
-            )
-          ), 
-
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
-            )
-          )
-          )
-        ), 
-
-        React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
-          React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
-            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
-
-          ), 
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
-            )
-          )
-          )
-        )
-      )
-    )
-  }
-});
-
-module.exports = MainPane;
-
-//handleActionChangeRedBlockState: function(){
-//  sidePaneActions.redBlockStateChange("this is the item")
-//},
-//showObjectProperties: function(selectedObject){
-//  console.log(selectedObject);
-//  var objectProperties = selectedObject; /* currently the div that contains the object, not the actual React component*/
-//  console.log("something is happening");
-//  if(this.state.redBlockPropertiesClicked === true){
-//    console.log("if statement");
-//    return objectProperties
-//  }
-//  else{
-//    console.log("else statement");
-//    return "uihy"
-//  }
-//},
-//changeClickedObjectProperties: function(selectedObject){ /*replaced by handleActionPassDispatchMarker*/
-//  var selectedObject = selectedObject;
-//  var selectedDiv = selectedObject.target;
-//  var selectedDispatchMarker = selectedObject.dispatchMarker;
-//  console.log(selectedObject);
-//  console.log(selectedDiv);
-//  console.log(selectedDispatchMarker);
-//
-//  switch(selectedDispatchMarker){
-//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1':
-//          //this.setState({redBlockPropertiesClicked: true}); /*need a separate handleAction for each block most likely*/
-//      this.handleActionRedBlockPropertiesClicked();
-//      //this.handleActionTabChangeViaOtherMeans('Red block');
-//      var tabToAdd = "RedBlock";
-//      //sidePaneActions.redBlockTabOpen();
-//          break;
-//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2':
-//          //this.setState({blueBlockPropertiesClicked: true});
-//      this.handleActionBlueBlockPropertiesClicked();
-//      //this.handleActionTabChangeViaOtherMeans('Blue block');
-//      var tabToAdd = "BlueBlock";
-//          break;
-//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3':
-//          //this.setState({greenBlockPropertiesClicked: true});
-//      this.handleActionGreenBlockPropertiesClicked();
-//      //this.handleActionTabChangeViaOtherMeans('Green block');
-//      var tabToAdd = "GreenBlock";
-//          break;
-//
-//    default:
-//          return 'default'
-//  }
-//
-//  //this.handleActionAddTab(tabToAdd);
-//
-//  console.log(tabToAdd);
-//  //console.log(this.state.redBlockPropertiesClicked);
-//
-//  //this.setState({objectPropertiesClicked: true});
-//
-//  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
-//  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
-//},
-//<button type="button" onClick={this.addDivToContent}>Add block</button>
-//<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
-//<button type="button" onClick={this.addNodeInfo}>Add node</button>
-//var RedBlock = require('./redBlock');
-//var BlueBlock = require('./blueBlock');
-//var GreenBlock = require('./greenBlock');
-//addDivToContent: function(selectedObject){
-//  var selectedObject = selectedObject;
-//  var selectedDispatchMarker = selectedObject.dispatchMarker;
-//  console.log(selectedObject);
-//  console.log(selectedObject.dispatchMarker);
-//
-//  function getRandomColor() {
-//    var letters = '0123456789ABCDEF'.split('');
-//    var color = '#';
-//    for (var i = 0; i < 6; i++ ) {
-//      color += letters[Math.floor(Math.random() * 16)];
-//    }
-//    return color;
-//  }
-//
-//  var YES = document.createElement('DIV');
-//
-//  YES.addEventListener("click", function(){
-//    console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
-//    console.log(selectedObject.dispatchMarker);
-//    //var selectedObject = selectedObject;
-//    //var selectedDispatchMarker = selectedObject.dispatchMarker;
-//    console.log(selectedDispatchMarker);
-//    paneActions.appendStuffForNewBlock(selectedDispatchMarker);
-//  });
-//  YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
-//  YES.style.backgroundColor = getRandomColor();
-//  //YES.setAttribute('draggable', 'true'); No need for this anymore!
-//  //YES.id = selectedObject;
-//
-//  var testDivStyling = {
-//    float: 'right',
-//    backgroundColor: "magenta",
-//    height: 100,
-//    width: 100,
-//    marginTop: 10,
-//    marginBottom: 10
-//  };
-//  var ComeOn = React.createClass({render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
-//    return(
-//      <div></div>
-//    )
-//  }});
-//  //ComeOn.id = "meh";
-//  //document.getElementById('TEST').appendChild(comeOn)
-//  React.render(<ComeOn style={testDivStyling}/>, document.getElementById('TEST').appendChild(YES));
-//  console.log(ComeOn)
-//},
-//testingChannelUnsubscription: function(){
-//  //console.log("checking state of websocket connection:");
-//  //WebSocketClient.checkStateOfWebSocketConnection();
-//  //console.log("seeing what WebSocket.getchannel(0) returns");
-//  //console.log(WebSocketClient.getChannel(0));
-//  //console.log("getting channel 0, seeing if it's undefined");
-//  WebSocketClient.getChannel(0).unsubscribe();
-//
-//  //WebSocketClient.getAllChannels()
-//
-//},
-//
-//testingChannelResubscription: function(){
-//  WebSocketClient.resubscribeChannel(0);
-//},
-//
-//testingChannelValueType: function(){
-//  var testChannel = WebSocketClient.getChannel(0);
-//  testChannel.setValue({test: "Test"});
-//  console.log(testChannel.getValue());
-//  testChannel.channelValueType()
-//},
-//
-//testingChannelPause: function(){
-//  var testChannel = WebSocketClient.getChannel(0);
-//  console.log("Attempting to pause the channel");
-//  testChannel.pause()
-//},
-//
-//testingChannelSetValue: function(){
-//  var testChannel = WebSocketClient.getChannel(0);
-//  console.log("Attempting to use Channel.setValue");
-//  testChannel.setValue(2);
-//  //console.log("Hopefully the value of the Channel has changed, let's see:");
-//  //console.log(testChannel.getValue())
-//  //Doesn't work, it runs before the server responds!
-//
-//},
-//testingAddChannelChangeInfoViaProperServerRequest: function(){
-//  sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
-//  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-//},
-//handleActionChangeSomeInfo: function(){
-//  paneActions.changeSomeInfo('this is the item')
-//},
-//handleActionTabChangeViaOtherMeans: function(tab){
-//  sidePaneActions.switchTabWhenTabOpens(tab)
-//},
-//handleActionAddTab: function(stuff){
-//  paneActions.addTab(stuff)
-//},
-//handleActionPassDispatchMarker: function(selectedObject){
-//  var selectedObject = selectedObject;
-//  var selectedDispatchMarker = selectedObject.dispatchMarker;
-//  console.log(selectedDispatchMarker);
-//  paneActions.passDispatchMarker(selectedDispatchMarker)
-//},
-//handleActionAppendStuffForNewBlock: function(selectedObject){
-//
-//},
-
-//addGateNode: function(){
-//  nodeActions.addToAllNodeInfo("adding gate node");
-//},
-//
-//generateNewNodeId: function(){
-//  /* Do it for just a Gate node for now, remember, small steps before big steps! */
-//  var gateNodeIdCounter = this.state.gateNodeIdCounter;
-//  gateNodeIdCounter += 1;
-//  var newGateId = "Gate" + gateNodeIdCounter;
-//  console.log(newGateId);
-//  this.setState({gateNodeIdCounter: gateNodeIdCounter});
-//  return newGateId;
-//
-//},
-//
-//addNodeInfo: function(){
-//  console.log("addNodeInfo");
-//  var gateNodeRegExp = /Gate/;
-//  var tgenNodeRegExp = /TGen/;
-//  var pcompNodeRegExp = /PComp/;
-//  var lutNodeRegExp = /LUT/;
-//
-//  var newGateNodeId = this.generateNewNodeId();
-//  console.log(newGateNodeId);
-//
-//  nodeActions.addToAllNodeInfo(newGateNodeId);
-//
-//  //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
-//
-//  //var newNode = this.state.newlyAddedNode;
-//  //console.log(newNode);
-//  //console.log(this.state.newlyAddedNode);
-//  //newNode = "Gate2";
-//
-//  if(gateNodeRegExp.test(newGateNodeId) === true){
-//    nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
-//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-//  }
-//  else if(tgenNodeRegExp.test(newGateNodeId) === true){
-//    //console.log("we have a tgen node!");
-//    nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
-//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-//  }
-//  else if(pcompNodeRegExp.test(newGateNodeId) === true){
-//    //console.log("we have a pcomp node!");
-//    nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
-//                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-//  }
-//  else if(lutNodeRegExp.test(newGateNodeId) === true){
-//    //console.log("we have an lut node!");
-//    nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
-//      //NodeName={nodeName} RectangleName={rectangleName}
-//                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
-//  }
-//  else{
-//    console.log("no match to any node type, something's wrong?");
-//  }
-//  console.log(this.state.nodesToRender);
-//
-//
-//},
-
-//<TheGraphDiamond
-//  graphPosition={this.props.theGraphDiamondState.graphPosition} graphZoomScale={this.props.theGraphDiamondState.graphZoomScale} allEdges={this.props.theGraphDiamondState.allEdges}
-//  nodesToRender={this.props.theGraphDiamondState.nodesToRender} edgesToRender={this.props.theGraphDiamondState.edgesToRender} allNodeInfo={this.props.theGraphDiamondState.allNodeInfo}
-//  portThatHasBeenClicked={this.props.theGraphDiamondState.portThatHasBeenClicked} storingFirstPortClicked={this.props.theGraphDiamondState.storingFirstPortClicked}
-//  newlyCreatedEdgeLabel={this.props.theGraphDiamondState.newlyCreatedEdgeLabel} nodeLibrary={this.props.theGraphDiamondState.nodeLibrary}
-//  allNodeTypesStyling={this.props.theGraphDiamondState.allNodeTypesStyling} areAnyNodesSelected={this.props.theGraphDiamondState.areAnyNodesSelected}
-//  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
-//  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
-///>
-
-//<p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
-//
-//<div className={this.props.configTabOpen ? "border" : ""}></div>
-//
-//<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
-
-},{"../actions/blockActions.js":1,"../actions/deviceActions":2,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/blockStore.js":11,"../stores/deviceStore":12,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../websocketClientTEST":28,"./configButton":18,"./favButton":21,"./theGraphDiamond":26,"./theGraphDiamondControllerView":27,"react":216,"react-panels":39}],23:[function(require,module,exports){
-/**
- * Created by twi18192 on 15/01/16.
- */
-
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
-var paneActions = require('../actions/paneActions');
-
-var interact = require('../../node_modules/interact.js');
-
-
-function getPortState(){
-  return{
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-  }
-}
-
-var Ports = React.createClass({displayName: "Ports",
-  //getInitialState: function(){
-  //  return getPortState();
-  //},
-  //componentDidMount: function(){
-  //  NodeStore.addChangeListener(this._onChange);
-  //},
-  //componentWillUnmount: function(){
-  //  NodeStore.removeChangeListener(this._onChange);
-  //},
-  //_onChange: function(){
-  //  this.setState(getPortState());
-  //},
-
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //
-  //},
-
-  componentDidMount: function(){
-    interact('.port')
-      .on('tap', this.portClick);
-
-    interact('.port')
-      .styleCursor(false);
-  },
-
-  componentWillUnmount: function(){
-    interact('.port')
-      .off('tap', this.portClick)
-  },
-
-  portMouseDown: function(e){
-    console.log("portMouseDown");
-    console.log(e);
-    blockActions.passPortMouseDown(e.currentTarget);
-
-    console.log(e.currentTarget.parentNode.parentNode.parentNode);
-
-    var portMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({portMouseDownCoords: portMouseDownCoords});
-    var whichPort = e.currentTarget;
-    console.log(whichPort);
-  },
-  portMouseUp: function(e){
-    console.log("portMouseUp");
-    console.log(e);
-    var portMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-      this.portClick(e);
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
-  portClick: function(e){
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    console.log("portClick");
-    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
-    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    blockActions.passPortMouseDown(e.currentTarget);
-    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
-    var passingEvent = e;
-    if(this.props.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
-      theGraphDiamondHandle.dispatchEvent(EdgePreview);
-    }
-    else if(this.props.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
-      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
-    }
-    //theGraphDiamondHandle.dispatchEvent(PortSelect);
-  },
-
-  render: function(){
-
-    var blockId = this.props.blockId;
-    var blockInfo = this.props.allBlockInfo[blockId];
-
-    var allBlockTypesStyling = this.props.allBlockTypesStyling;
-    var blockType = blockInfo.type;
-    var inports = [];
-    var inportsXCoord;
-    var outports = [];
-    var outportsXCoord;
-    var portsText = [];
-
-    for(i = 0; i < blockInfo.inports.length; i++){
-      var inportName = blockInfo.inports[i].name;
-      //console.log(allNodeTypesStyling[nodeType]);
-      inports.push(
-        React.createElement("circle", {key: blockId + inportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.blockId + inportName}
-        )
-      );
-
-      /* Taking care of the inport text too */
-      portsText.push(
-        React.createElement("text", {key: blockId + inportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[inportName].x, y: allBlockTypesStyling[blockType].text.textPositions[inportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
-        }, 
-          inportName
-        )
-      )
-    }
-
-    for(j = 0; j < blockInfo.outports.length; j++){
-      var outportName = blockInfo.outports[j].name;
-      outports.push(
-        React.createElement("circle", {key: blockId + outportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.blockId + outportName}
-        )
-      );
-
-      portsText.push(
-        React.createElement("text", {key: blockId + outportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[outportName].x, y: allBlockTypesStyling[blockType].text.textPositions[outportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
-        }, 
-          outportName
-        )
-      )
-    }
-
-    /* Now just need to add the node name and node type text as well */
-    /* Hmm, where should I get/calculate their position & height from?... */
-
-    portsText.push([
-      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
-            transform: "translate(32.5, 80)"}, 
-        blockInfo.name
-      ),
-
-      React.createElement("text", {className: "blockType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
-            transform: "translate(32.5, 93)"}, 
-        blockInfo.type
-      )
-    ]);
-
-    return (
-      React.createElement("g", {id: blockId + "-ports"}, 
-        inports, 
-        outports, 
-        portsText
-      )
-
-    )
-  }
-});
-
-module.exports = Ports;
-
-},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11}],24:[function(require,module,exports){
-/**
- * Created by twi18192 on 01/09/15.
- */
-
-var React = require('react');
-var ReactPanels = require('react-panels');
-var sidePaneStore = require('../stores/sidePaneStore');
-var sidePaneActions = require('../actions/sidePaneActions');
-var Dropdown = require('./dropdownMenu');
-//var mainPaneStore = require('../stores/mainPaneStore');
-
-var Panel = ReactPanels.Panel;
-var Tab = ReactPanels.Tab;
-var Toolbar = ReactPanels.Toolbar;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-var ToggleButton = ReactPanels.ToggleButton;
-var Button = ReactPanels.Button;
-
-var paneStore = require('../stores/paneStore');
-var paneActions = require('../actions/paneActions');
-
-function getSidePaneState(){
-  return{
-    //tabState: paneStore.getTabState(),
-    //selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
-
-var SidePane = React.createClass({displayName: "SidePane",
-
-  //getInitialState: function(){
-  //  return getSidePaneState();
-  //},
-
-  _onChange: function(){
-    //this.setState(getSidePaneState());
-    //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
-    /* this works, but I'm not convinced that this is the 'Flux' way to do things...
-    UPDATE: actually it doesn't work, selected tab content jumps about!*/
-  },
-
-  handleActionPassSidePane: function(){
-    paneActions.passSidePane(this)
-  },
-
-  handleActionAddTab: function(){
-    paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
-  },
-
-  handleActionRemoveTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeTab(selectedIndex);
-  },
-
-  handleActionTabChangeViaOtherMeans: function(tab){
-    console.log(tab);
-    paneActions.dropdownMenuSelect(tab, this);
-    console.log("action function for changing tab via other means ran correctly");
-  },
-
-  handleActionInitialFetchOfBlockData: function(){
-    paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
-  },
-  handleActionRemoveBlockTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeBlockTab(selectedIndex);
-  },
-
-  componentDidMount: function(){
-    //sidePaneStore.addChangeListener(this._onChange);
-    //paneStore.addChangeListener(this._onChange);
-    this.handleActionPassSidePane();
-    this.handleActionInitialFetchOfBlockData();
-    //this.handleActionPassingSidePaneOnMount()
-  },
-
-  componentWillUnmount: function(){
-    //sidePaneStore.removeChangeListener(this._onChange);
-    //paneStore.removeChangeListener(this._onChange);
-  },
-
-
-  render: function () {
-    var skin = this.props.skin || "default",
-      globals = this.props.globals || {};
-
-    var tabs = this.props.tabState.map(function(item, i){
-      var tabTitle = item.label;
-      var tabIndex = i + 1;
-      var tabContent = function(){
-        console.log("inside tabContent function now");
-        var content = [];
-          //content.push(<p>stuff</p>);
-
-          content.push(React.createElement("br", null));
-          content.push(React.createElement("p", null, tabTitle));
-          for(var attribute in item){
-            content.push(React.createElement("p", null, attribute, ": ", String(item[attribute])))
-          }
-        console.log(content);
-          return content
-      };
-      return (
-        React.createElement(Tab, {title: tabTitle}, 
-
-          React.createElement(Content, null, "Attributes of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
-            tabContent()
-          )
-
-        )
-      );
-    });
-
-    return (
-        React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
-
-
-            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveBlockTab}, 
-              React.createElement("i", {className: "fa fa-times"})
-            ),
-            React.createElement(Button, {title: "Drop down menu"}, 
-            React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans, 
-            tabState: this.props.tabState, 
-            listVisible: this.props.listVisible}
-            ))
-            )
-          ]}, 
-          tabs
-        )
-    );
-  }
-});
-
-module.exports = SidePane;
-
-//
-//dropdownChange:function(tab) {
-//  this.refs.panel.setSelectedIndex(tab, null);
-//  console.log(tab)
-//  console.log("it ran correctly");
-//},
-//<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
-//
-//      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-//      //  <i className="fa fa-plus"></i>
-//      //</Button>,
-//      <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
-//        <i className="fa fa-times"></i>
-//      </Button>,
-//      <Button title="Drop down menu">
-//      <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
-//      </Button>
-//    ]}>
-//  {tabs}
-//</Panel>
-//handleActionPassingSidePaneOnMount: function(){
-//  console.log(this);
-//  //sidePaneActions.passingSidePane(this)
-//},
-//<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-//  <i className="fa fa-plus"></i>
-//</Button>,
-
-/* This was for the tabs when I had coloured blocks instead of nodes */
-
-//var tabs = this.state.tabState.map(function(item, i) {
-//  var tabTitle = "Tab " + item.name;
-//  var tabIndex = i + 1;
-//  var tabContent = function(){
-//    var content = [];
-//    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
-//      content.push(<br/>);
-//      content.push(<p>{outerkey}</p>);
-//      for (var key in item.info[outerkey])
-//        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
-//    }
-//    return content
-//  };
-//  return (
-//    <Tab key={item.name} title={tabTitle}>
-//
-//      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
-//        {tabContent()}
-//      </Content>
-//
-//    </Tab>
-//  );
-//}.bind(this));
-
-},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":19,"react":216,"react-panels":39}],25:[function(require,module,exports){
-/**
- * Created by twi18192 on 25/01/16.
- */
-
-var React = require('react');
-var ReactDOM = require('react-dom');
-
-var MainPane = require('./mainPane');
-var SidePane = require('./sidePane');
-
-var mainPaneStore = require('../stores/mainPaneStore');
-var mainPaneActions = require('../actions/mainPaneActions');
-var sidePaneStore = require('../stores/sidePaneStore');
-var sidePaneActions = require('../actions/sidePaneActions');
-var paneStore = require('../stores/paneStore');
-var paneActions = require('../actions/paneActions');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
-
-var SideBar = require('react-sidebar').default;
-
-var MainTabbedViewStyle = {
-  "height": "100%",
-  "width": "100%",
-  minWidth: 200,
-  minHeight: 500,
-  display: 'inlineBlock'
-};
-
-var SideTabbedViewStyle = {
-  float: 'right',
-  "height": "100%",
-  "width": "100%",
-  maxWidth:400
-};
-
-var SidebarStyling = {
-  root: {
-    position: 'absolute',
-    id: "root",
-    //minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: 'hidden',
-  },
-  sidebar: {
-    zIndex: 2,
-    id: "sidebar",
-    width: "400px",
-    position: 'absolute',
-    top: 0,
-    //left: "400px",
-    bottom: 0,
-    transition: 'transform .3s ease-out',
-    WebkitTransition: '-webkit-transform .3s ease-out',
-    willChange: 'transform',
-    overflowY: 'auto',
-  },
-  content: {
-    position: 'absolute',
-    id: "content",
-    //minWidth: 500,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: 'auto',
-    transition: 'left .3s ease-out, right .3s ease-out',
-  },
-  overlay: {
-    zIndex: 1,
-    id: "overlay",
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    opacity: 0,
-    visibility: 'hidden',
-    transition: 'opacity .3s ease-out',
-    backgroundColor: 'rgba(0,0,0,.3)',
-  },
-  dragHandle: {
-    zIndex: 1,
-    id: "draghandle",
-    position: 'fixed',
-    top: 0,
-    bottom: 0,
-  },
-};
-
-function getBothPanesState(){
-  return{
-    /* Its own getter functions first */
-    sidebarOpen: paneStore.getSidebarOpenState(),
-
-    /* MainPane's getter functions for stores */
-    footers: mainPaneStore.getFooterState(),
-    //favPanelOpen: mainPaneStore.getFavPanelState(),
-    favTabOpen: paneStore.getFavTabOpen(),
-    //configPanelOpen: mainPaneStore.getConfigPanelState(),
-    configTabOpen: paneStore.getConfigTabOpen(),
-
-    /* SidePane's getter functions for stores */
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState()
-
-  }
-}
-
-var BothPanes = React.createClass({displayName: "BothPanes",
-  getInitialState: function(){
-    return getBothPanesState();
-  },
-
-  _onChange: function(){
-    this.setState(getBothPanesState());
-  },
-
-  componentDidMount: function(){
-    console.log(this.state);
-    mainPaneStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
-    sidePaneStore.addChangeListener(this._onChange);
-    var mql = window.matchMedia(`(min-width: 800px)`);
-    mql.addListener(this.windowWidthMediaQueryChanged);
-    this.setState({mql: mql}, function(){
-      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
-    });
-  },
-  componentWillUnmount(){
-    mainPaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
-    sidePaneStore.removeChangeListener(this._onChange);
-    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
-  },
-
-  windowWidthMediaQueryChanged: function(){
-    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
-  },
-
-  render: function(){
-
-    console.log(this.state);
-
-    return(
-      React.createElement(SideBar, {sidebarClassName: "sidebar", styles: SidebarStyling, docked: this.state.sidebarOpen, 
-               //open={this.state.sidebarOpen}
-               pullRight: true, touchHandleWidth: 5, 
-               children: 
-               //<div id="MainTabbedView" style={MainTabbedViewStyle}>
-                React.createElement(MainPane, {footers: this.state.footers, 
-                favTabOpen: this.state.favTabOpen, 
-                configTabOpen: this.state.configTabOpen}
-                //theGraphDiamondState={this.state.theGraphDiamondState}
-                ), 
-                //</div>
-                
-               sidebar: 
-               //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, listVisible: this.state.listVisible}
-               )
-               //</div>
-               }
-      )
-    )
-  }
-});
-
-module.exports = BothPanes;
-
-},{"../actions/blockActions.js":1,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/blockStore.js":11,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./mainPane":22,"./sidePane":24,"react":216,"react-dom":38,"react-sidebar":40}],26:[function(require,module,exports){
-/**
  * Created by twi18192 on 10/12/15.
  */
 
@@ -6228,7 +5245,7 @@ var AppContainerStyle = {
   //'backgroundColor': "green"
 };
 
-var App = React.createClass({displayName: "App",
+var FlowChart = React.createClass({displayName: "FlowChart",
 
   propTypes: {
     graphPosition: React.PropTypes.object,
@@ -6396,7 +5413,7 @@ var App = React.createClass({displayName: "App",
   },
 
   addEdgePreview: function(){
-    console.log("addEdgePreview in theGraphDiamond has been invoked!");
+    console.log("addEdgePreview in flowChart has been invoked!");
   },
 
   portSelectHighlight: function(){
@@ -6709,6 +5726,7 @@ var App = React.createClass({displayName: "App",
       /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
       edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
+      console.log(newEdge);
       blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
       blockActions.appendToEdgeSelectedState(edgeLabel);
       this.resetPortClickStorage();
@@ -6871,7 +5889,7 @@ var App = React.createClass({displayName: "App",
   }
 });
 
-module.exports = App;
+module.exports = FlowChart;
 
 //<LUTNode id="LUT1"
 //         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}
@@ -7727,7 +6745,7 @@ module.exports = App;
 //
 //}
 
-},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/lib/ReactDefaultPerf.js":96,"../actions/blockActions.js":1,"../stores/blockStore.js":11,"./block.js":16,"./edge.js":20,"react":216}],27:[function(require,module,exports){
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/lib/ReactDefaultPerf.js":96,"../actions/blockActions.js":1,"../stores/blockStore.js":11,"./block.js":16,"./edge.js":20,"react":216}],23:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -7735,11 +6753,11 @@ module.exports = App;
 var React = require('react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
-var TheGraphDiamond = require('./theGraphDiamond');
+var FlowChart = require('./flowChart');
 
 var blockStore = require('../stores/blockStore.js');
 
-function getTheGraphDiamondState(){
+function getFlowChartState(){
   return{
     graphPosition: blockStore.getGraphPosition(),
     graphZoomScale: blockStore.getGraphZoomScale(),
@@ -7759,14 +6777,14 @@ function getTheGraphDiamondState(){
   }
 }
 
-var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDiamondControllerView",
+var FlowChartControllerView = React.createClass({displayName: "FlowChartControllerView",
 
   getInitialState: function(){
-    return getTheGraphDiamondState();
+    return getFlowChartState();
   },
 
   _onChange: function(){
-    this.setState(getTheGraphDiamondState());
+    this.setState(getFlowChartState());
   },
 
   componentDidMount: function(){
@@ -7779,7 +6797,7 @@ var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDia
 
   render: function(){
     return(
-      React.createElement(TheGraphDiamond, {
+      React.createElement(FlowChart, {
         graphPosition: this.state.graphPosition, graphZoomScale: this.state.graphZoomScale, 
         allBlockInfo: this.state.allBlockInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
         storingFirstPortClicked: this.state.storingFirstPortClicked, 
@@ -7792,9 +6810,994 @@ var theGraphDiamondControllerView = React.createClass({displayName: "theGraphDia
   }
 });
 
-module.exports = theGraphDiamondControllerView;
+module.exports = FlowChartControllerView;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":37,"../stores/blockStore.js":11,"./theGraphDiamond":26,"react":216}],28:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":37,"../stores/blockStore.js":11,"./flowChart":22,"react":216}],24:[function(require,module,exports){
+/**
+ * Created by twi18192 on 25/08/15.
+ */
+
+var React = require('react');
+var ReactPanels = require('react-panels');
+var mainPaneStore = require('../stores/mainPaneStore');
+var mainPaneActions = require('../actions/mainPaneActions');
+var ConfigButton = require('./configButton');
+var FavButton = require('./favButton');
+
+var paneStore = require('../stores/paneStore');
+var paneActions = require('../actions/paneActions');
+var deviceStore = require('../stores/deviceStore');
+var deviceActions = require('../actions/deviceActions');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+
+var WebSocketClient = require('../websocketClientTEST');
+var sessionActions = require('../actions/sessionActions');
+
+var FlowChartControllerView = require('./flowChartControllerView');
+
+//var GateNode = require('./gateNode.js');
+//var TGenNode = require('./tgenNode.js');
+//var PCompNode = require('./pcompNode.js');
+//var LUTNode = require('./lutNode.js');
+
+var Panel = ReactPanels.Panel;
+var Tab = ReactPanels.Tab;
+var Toolbar = ReactPanels.Toolbar;
+var Content = ReactPanels.Content;
+var Footer = ReactPanels.Footer;
+var ToggleButton = ReactPanels.ToggleButton;
+var Button = ReactPanels.Button;
+
+function getMainPaneState(){
+  return {
+    //redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
+    //blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
+    //greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
+
+    //footers: mainPaneStore.getFooterState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
+    //favTabOpen: paneStore.getFavTabOpen(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
+    //configTabOpen: paneStore.getConfigTabOpen(),
+
+    //updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
+    //updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
+    //updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
+  }
+}
+
+var MainPane = React.createClass({displayName: "MainPane",
+
+  //getInitialState: function(){
+  //  //return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
+  //},
+
+  componentDidMount: function(){
+    //mainPaneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    console.log(this.props);
+    //this.setState({gateNodeIdCounter: 1});
+  },
+
+  componentWillUnmount: function(){
+    //mainPaneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    //this.setState(getMainPaneState(), function(){
+    //  console.log("mainpane's state has been mutated");
+    //})
+  },
+
+  propTypes: {
+    footers: React.PropTypes.bool,
+    //favPanelOpen: React.PropTypes.bool,
+    favTabOpen: React.PropTypes.bool,
+    //configPanelOpen: React.PropTypes.bool,
+    configTabOpen: React.PropTypes.bool,
+    //theGraphDiamondState: React.PropTypes.object
+  },
+
+  //shouldComponentUpdate(nextProps, nextState){
+  //  return this.props.footers !== nextProps.footers;
+  //},
+
+  handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
+    mainPaneActions.toggleFooter1("this is the item")
+  },
+
+  //handleActionMockServerRequest: function(){
+  //  deviceActions.mockServerRequest('this is the item');
+  //  console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+  //},
+
+  handleActionFavTabOpen: function(){
+    console.log('favTabOpen is a go');
+    paneActions.favTabOpen("this is the item")
+  },
+
+  handleActionConfigTabOpen: function(){
+    console.log('configTabOpen is a go');
+    paneActions.configTabOpen('this is the item')
+  },
+
+  handleActionToggleSidebar: function(){
+    paneActions.toggleSidebar("toggle sidebar");
+  },
+
+  render: function() {
+
+    console.log(this.props);
+
+    var TESTStyling = {
+      height: 1000,
+      width: 1000,
+      //backgroundColor: 'darkmagenta'
+    };
+
+    var contentStyling = {
+      'height': '1476',
+      'width': '1494'
+    };
+    //console.log(this.state.newlyAddedNode);
+    //console.log(this.state);
+    return(
+      React.createElement(Panel, {theme: "flexbox", useAvailableHeight: true, buttons: [
+          React.createElement(ToggleButton, {title: "Toggle sidebar", onClick: this.handleActionToggleSidebar}, 
+            React.createElement("i", {className: "fa fa-bars"})
+          ),
+          React.createElement(ToggleButton, {title: "Toggle Footer", onChange: this.handleActionFooterToggle}, 
+            React.createElement("i", {className: "fa fa-wrench"})
+          )
+        ]}, 
+        React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
+          React.createElement(Content, null, 
+            React.createElement("div", {style: contentStyling}, 
+              React.createElement(FlowChartControllerView, null)
+            )
+          ), 
+
+          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
+            React.createElement("div", {id: "buttonContainer"}, 
+              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
+            )
+          )
+          )
+        ), 
+
+        React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
+          React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
+            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
+
+          ), 
+          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
+            React.createElement("div", {id: "buttonContainer"}, 
+              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
+            )
+          )
+          )
+        )
+      )
+    )
+  }
+});
+
+module.exports = MainPane;
+
+//handleActionChangeRedBlockState: function(){
+//  sidePaneActions.redBlockStateChange("this is the item")
+//},
+//showObjectProperties: function(selectedObject){
+//  console.log(selectedObject);
+//  var objectProperties = selectedObject; /* currently the div that contains the object, not the actual React component*/
+//  console.log("something is happening");
+//  if(this.state.redBlockPropertiesClicked === true){
+//    console.log("if statement");
+//    return objectProperties
+//  }
+//  else{
+//    console.log("else statement");
+//    return "uihy"
+//  }
+//},
+//changeClickedObjectProperties: function(selectedObject){ /*replaced by handleActionPassDispatchMarker*/
+//  var selectedObject = selectedObject;
+//  var selectedDiv = selectedObject.target;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedObject);
+//  console.log(selectedDiv);
+//  console.log(selectedDispatchMarker);
+//
+//  switch(selectedDispatchMarker){
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.1':
+//          //this.setState({redBlockPropertiesClicked: true}); /*need a separate handleAction for each block most likely*/
+//      this.handleActionRedBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Red block');
+//      var tabToAdd = "RedBlock";
+//      //sidePaneActions.redBlockTabOpen();
+//          break;
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.2':
+//          //this.setState({blueBlockPropertiesClicked: true});
+//      this.handleActionBlueBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Blue block');
+//      var tabToAdd = "BlueBlock";
+//          break;
+//    case '.0.0.0.1.$tabb-0.$=1$=010=2$0.0.0.3':
+//          //this.setState({greenBlockPropertiesClicked: true});
+//      this.handleActionGreenBlockPropertiesClicked();
+//      //this.handleActionTabChangeViaOtherMeans('Green block');
+//      var tabToAdd = "GreenBlock";
+//          break;
+//
+//    default:
+//          return 'default'
+//  }
+//
+//  //this.handleActionAddTab(tabToAdd);
+//
+//  console.log(tabToAdd);
+//  //console.log(this.state.redBlockPropertiesClicked);
+//
+//  //this.setState({objectPropertiesClicked: true});
+//
+//  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
+//  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
+//},
+//<button type="button" onClick={this.addDivToContent}>Add block</button>
+//<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+//<button type="button" onClick={this.addNodeInfo}>Add node</button>
+//var RedBlock = require('./redBlock');
+//var BlueBlock = require('./blueBlock');
+//var GreenBlock = require('./greenBlock');
+//addDivToContent: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedObject);
+//  console.log(selectedObject.dispatchMarker);
+//
+//  function getRandomColor() {
+//    var letters = '0123456789ABCDEF'.split('');
+//    var color = '#';
+//    for (var i = 0; i < 6; i++ ) {
+//      color += letters[Math.floor(Math.random() * 16)];
+//    }
+//    return color;
+//  }
+//
+//  var YES = document.createElement('DIV');
+//
+//  YES.addEventListener("click", function(){
+//    console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
+//    console.log(selectedObject.dispatchMarker);
+//    //var selectedObject = selectedObject;
+//    //var selectedDispatchMarker = selectedObject.dispatchMarker;
+//    console.log(selectedDispatchMarker);
+//    paneActions.appendStuffForNewBlock(selectedDispatchMarker);
+//  });
+//  YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
+//  YES.style.backgroundColor = getRandomColor();
+//  //YES.setAttribute('draggable', 'true'); No need for this anymore!
+//  //YES.id = selectedObject;
+//
+//  var testDivStyling = {
+//    float: 'right',
+//    backgroundColor: "magenta",
+//    height: 100,
+//    width: 100,
+//    marginTop: 10,
+//    marginBottom: 10
+//  };
+//  var ComeOn = React.createClass({render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
+//    return(
+//      <div></div>
+//    )
+//  }});
+//  //ComeOn.id = "meh";
+//  //document.getElementById('TEST').appendChild(comeOn)
+//  React.render(<ComeOn style={testDivStyling}/>, document.getElementById('TEST').appendChild(YES));
+//  console.log(ComeOn)
+//},
+//testingChannelUnsubscription: function(){
+//  //console.log("checking state of websocket connection:");
+//  //WebSocketClient.checkStateOfWebSocketConnection();
+//  //console.log("seeing what WebSocket.getchannel(0) returns");
+//  //console.log(WebSocketClient.getChannel(0));
+//  //console.log("getting channel 0, seeing if it's undefined");
+//  WebSocketClient.getChannel(0).unsubscribe();
+//
+//  //WebSocketClient.getAllChannels()
+//
+//},
+//
+//testingChannelResubscription: function(){
+//  WebSocketClient.resubscribeChannel(0);
+//},
+//
+//testingChannelValueType: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  testChannel.setValue({test: "Test"});
+//  console.log(testChannel.getValue());
+//  testChannel.channelValueType()
+//},
+//
+//testingChannelPause: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to pause the channel");
+//  testChannel.pause()
+//},
+//
+//testingChannelSetValue: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to use Channel.setValue");
+//  testChannel.setValue(2);
+//  //console.log("Hopefully the value of the Channel has changed, let's see:");
+//  //console.log(testChannel.getValue())
+//  //Doesn't work, it runs before the server responds!
+//
+//},
+//testingAddChannelChangeInfoViaProperServerRequest: function(){
+//  sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
+//  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+//},
+//handleActionChangeSomeInfo: function(){
+//  paneActions.changeSomeInfo('this is the item')
+//},
+//handleActionTabChangeViaOtherMeans: function(tab){
+//  sidePaneActions.switchTabWhenTabOpens(tab)
+//},
+//handleActionAddTab: function(stuff){
+//  paneActions.addTab(stuff)
+//},
+//handleActionPassDispatchMarker: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedDispatchMarker);
+//  paneActions.passDispatchMarker(selectedDispatchMarker)
+//},
+//handleActionAppendStuffForNewBlock: function(selectedObject){
+//
+//},
+
+//addGateNode: function(){
+//  nodeActions.addToAllNodeInfo("adding gate node");
+//},
+//
+//generateNewNodeId: function(){
+//  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+//  var gateNodeIdCounter = this.state.gateNodeIdCounter;
+//  gateNodeIdCounter += 1;
+//  var newGateId = "Gate" + gateNodeIdCounter;
+//  console.log(newGateId);
+//  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+//  return newGateId;
+//
+//},
+//
+//addNodeInfo: function(){
+//  console.log("addNodeInfo");
+//  var gateNodeRegExp = /Gate/;
+//  var tgenNodeRegExp = /TGen/;
+//  var pcompNodeRegExp = /PComp/;
+//  var lutNodeRegExp = /LUT/;
+//
+//  var newGateNodeId = this.generateNewNodeId();
+//  console.log(newGateNodeId);
+//
+//  nodeActions.addToAllNodeInfo(newGateNodeId);
+//
+//  //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
+//
+//  //var newNode = this.state.newlyAddedNode;
+//  //console.log(newNode);
+//  //console.log(this.state.newlyAddedNode);
+//  //newNode = "Gate2";
+//
+//  if(gateNodeRegExp.test(newGateNodeId) === true){
+//    nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(tgenNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a tgen node!");
+//    nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(pcompNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a pcomp node!");
+//    nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+//                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(lutNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have an lut node!");
+//    nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+//      //NodeName={nodeName} RectangleName={rectangleName}
+//                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else{
+//    console.log("no match to any node type, something's wrong?");
+//  }
+//  console.log(this.state.nodesToRender);
+//
+//
+//},
+
+//<TheGraphDiamond
+//  graphPosition={this.props.theGraphDiamondState.graphPosition} graphZoomScale={this.props.theGraphDiamondState.graphZoomScale} allEdges={this.props.theGraphDiamondState.allEdges}
+//  nodesToRender={this.props.theGraphDiamondState.nodesToRender} edgesToRender={this.props.theGraphDiamondState.edgesToRender} allNodeInfo={this.props.theGraphDiamondState.allNodeInfo}
+//  portThatHasBeenClicked={this.props.theGraphDiamondState.portThatHasBeenClicked} storingFirstPortClicked={this.props.theGraphDiamondState.storingFirstPortClicked}
+//  newlyCreatedEdgeLabel={this.props.theGraphDiamondState.newlyCreatedEdgeLabel} nodeLibrary={this.props.theGraphDiamondState.nodeLibrary}
+//  allNodeTypesStyling={this.props.theGraphDiamondState.allNodeTypesStyling} areAnyNodesSelected={this.props.theGraphDiamondState.areAnyNodesSelected}
+//  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
+//  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
+///>
+
+//<p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
+//
+//<div className={this.props.configTabOpen ? "border" : ""}></div>
+//
+//<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
+
+},{"../actions/blockActions.js":1,"../actions/deviceActions":2,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sessionActions":6,"../stores/blockStore.js":11,"../stores/deviceStore":12,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../websocketClientTEST":28,"./configButton":18,"./favButton":21,"./flowChartControllerView":23,"react":216,"react-panels":39}],25:[function(require,module,exports){
+/**
+ * Created by twi18192 on 15/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+
+var interact = require('../../node_modules/interact.js');
+
+
+function getPortState(){
+  return{
+    //allNodeInfo: NodeStore.getAllNodeInfo(),
+    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
+    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
+    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
+  }
+}
+
+var Ports = React.createClass({displayName: "Ports",
+  //getInitialState: function(){
+  //  return getPortState();
+  //},
+  //componentDidMount: function(){
+  //  NodeStore.addChangeListener(this._onChange);
+  //},
+  //componentWillUnmount: function(){
+  //  NodeStore.removeChangeListener(this._onChange);
+  //},
+  //_onChange: function(){
+  //  this.setState(getPortState());
+  //},
+
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //
+  //},
+
+  componentDidMount: function(){
+    interact('.port')
+      .on('tap', this.portClick);
+
+    interact('.port')
+      .styleCursor(false);
+  },
+
+  componentWillUnmount: function(){
+    interact('.port')
+      .off('tap', this.portClick)
+  },
+
+  portMouseDown: function(e){
+    console.log("portMouseDown");
+    console.log(e);
+    blockActions.passPortMouseDown(e.currentTarget);
+
+    console.log(e.currentTarget.parentNode.parentNode.parentNode);
+
+    var portMouseDownCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    this.setState({portMouseDownCoords: portMouseDownCoords});
+    var whichPort = e.currentTarget;
+    console.log(whichPort);
+  },
+  portMouseUp: function(e){
+    console.log("portMouseUp");
+    console.log(e);
+    var portMouseUpCoords = {
+      x: e.nativeEvent.clientX,
+      y: e.nativeEvent.clientY
+    };
+    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
+      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
+      this.portClick(e);
+    }
+    else{
+      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
+    }
+  },
+  portClick: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    console.log("portClick");
+    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
+    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+    blockActions.passPortMouseDown(e.currentTarget);
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    var passingEvent = e;
+    if(this.props.storingFirstPortClicked === null){
+      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.props.storingFirstPortClicked !== null){
+      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
+    //theGraphDiamondHandle.dispatchEvent(PortSelect);
+  },
+
+  render: function(){
+
+    var blockId = this.props.blockId;
+    var blockInfo = this.props.allBlockInfo[blockId];
+
+    var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    var blockType = blockInfo.type;
+    var inports = [];
+    var inportsXCoord;
+    var outports = [];
+    var outportsXCoord;
+    var portsText = [];
+
+    for(i = 0; i < blockInfo.inports.length; i++){
+      var inportName = blockInfo.inports[i].name;
+      //console.log(allNodeTypesStyling[nodeType]);
+      inports.push(
+        React.createElement("circle", {key: blockId + inportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                id: this.props.blockId + inportName}
+        )
+      );
+
+      /* Taking care of the inport text too */
+      portsText.push(
+        React.createElement("text", {key: blockId + inportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[inportName].x, y: allBlockTypesStyling[blockType].text.textPositions[inportName].y, 
+              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
+        }, 
+          inportName
+        )
+      )
+    }
+
+    for(j = 0; j < blockInfo.outports.length; j++){
+      var outportName = blockInfo.outports[j].name;
+      outports.push(
+        React.createElement("circle", {key: blockId + outportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                id: this.props.blockId + outportName}
+        )
+      );
+
+      portsText.push(
+        React.createElement("text", {key: blockId + outportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[outportName].x, y: allBlockTypesStyling[blockType].text.textPositions[outportName].y, 
+              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
+        }, 
+          outportName
+        )
+      )
+    }
+
+    /* Now just need to add the node name and node type text as well */
+    /* Hmm, where should I get/calculate their position & height from?... */
+
+    portsText.push([
+      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
+            transform: "translate(32.5, 80)"}, 
+        blockInfo.name
+      ),
+
+      React.createElement("text", {className: "blockType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
+            transform: "translate(32.5, 93)"}, 
+        blockInfo.type
+      )
+    ]);
+
+    return (
+      React.createElement("g", {id: blockId + "-ports"}, 
+        inports, 
+        outports, 
+        portsText
+      )
+
+    )
+  }
+});
+
+module.exports = Ports;
+
+},{"../../node_modules/interact.js":35,"../../node_modules/react-dom/dist/react-dom.js":37,"../../node_modules/react/react":216,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11}],26:[function(require,module,exports){
+/**
+ * Created by twi18192 on 01/09/15.
+ */
+
+var React = require('react');
+var ReactPanels = require('react-panels');
+var sidePaneStore = require('../stores/sidePaneStore');
+var sidePaneActions = require('../actions/sidePaneActions');
+var Dropdown = require('./dropdownMenu');
+//var mainPaneStore = require('../stores/mainPaneStore');
+
+var Panel = ReactPanels.Panel;
+var Tab = ReactPanels.Tab;
+var Toolbar = ReactPanels.Toolbar;
+var Content = ReactPanels.Content;
+var Footer = ReactPanels.Footer;
+var ToggleButton = ReactPanels.ToggleButton;
+var Button = ReactPanels.Button;
+
+var paneStore = require('../stores/paneStore');
+var paneActions = require('../actions/paneActions');
+
+function getSidePaneState(){
+  return{
+    //tabState: paneStore.getTabState(),
+    //selectedTabIndex: paneStore.getSelectedTabIndex()
+  }
+}
+
+var SidePane = React.createClass({displayName: "SidePane",
+
+  //getInitialState: function(){
+  //  return getSidePaneState();
+  //},
+
+  _onChange: function(){
+    //this.setState(getSidePaneState());
+    //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
+    /* this works, but I'm not convinced that this is the 'Flux' way to do things...
+    UPDATE: actually it doesn't work, selected tab content jumps about!*/
+  },
+
+  handleActionPassSidePane: function(){
+    paneActions.passSidePane(this)
+  },
+
+  handleActionAddTab: function(){
+    paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
+  },
+
+  handleActionRemoveTab: function(){
+    var selectedIndex = this.refs.panel.getSelectedIndex();
+    paneActions.removeTab(selectedIndex);
+  },
+
+  handleActionTabChangeViaOtherMeans: function(tab){
+    console.log(tab);
+    paneActions.dropdownMenuSelect(tab, this);
+    console.log("action function for changing tab via other means ran correctly");
+  },
+
+  handleActionInitialFetchOfBlockData: function(){
+    paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
+  },
+  handleActionRemoveBlockTab: function(){
+    var selectedIndex = this.refs.panel.getSelectedIndex();
+    paneActions.removeBlockTab(selectedIndex);
+  },
+
+  componentDidMount: function(){
+    //sidePaneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    this.handleActionPassSidePane();
+    this.handleActionInitialFetchOfBlockData();
+    //this.handleActionPassingSidePaneOnMount()
+  },
+
+  componentWillUnmount: function(){
+    //sidePaneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
+  },
+
+
+  render: function () {
+    var skin = this.props.skin || "default",
+      globals = this.props.globals || {};
+
+    var tabs = this.props.tabState.map(function(item, i){
+      var tabTitle = item.label;
+      var tabIndex = i + 1;
+      var tabContent = function(){
+        console.log("inside tabContent function now");
+        var content = [];
+          //content.push(<p>stuff</p>);
+
+          content.push(React.createElement("br", null));
+          content.push(React.createElement("p", null, tabTitle));
+          for(var attribute in item){
+            content.push(React.createElement("p", null, attribute, ": ", String(item[attribute])))
+          }
+        console.log(content);
+          return content
+      };
+      return (
+        React.createElement(Tab, {title: tabTitle}, 
+
+          React.createElement(Content, null, "Attributes of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
+            tabContent()
+          )
+
+        )
+      );
+    });
+
+    return (
+        React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
+
+
+            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveBlockTab}, 
+              React.createElement("i", {className: "fa fa-times"})
+            ),
+            React.createElement(Button, {title: "Drop down menu"}, 
+            React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans, 
+            tabState: this.props.tabState, 
+            listVisible: this.props.listVisible}
+            ))
+            )
+          ]}, 
+          tabs
+        )
+    );
+  }
+});
+
+module.exports = SidePane;
+
+//
+//dropdownChange:function(tab) {
+//  this.refs.panel.setSelectedIndex(tab, null);
+//  console.log(tab)
+//  console.log("it ran correctly");
+//},
+//<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
+//
+//      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+//      //  <i className="fa fa-plus"></i>
+//      //</Button>,
+//      <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
+//        <i className="fa fa-times"></i>
+//      </Button>,
+//      <Button title="Drop down menu">
+//      <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
+//      </Button>
+//    ]}>
+//  {tabs}
+//</Panel>
+//handleActionPassingSidePaneOnMount: function(){
+//  console.log(this);
+//  //sidePaneActions.passingSidePane(this)
+//},
+//<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
+//  <i className="fa fa-plus"></i>
+//</Button>,
+
+/* This was for the tabs when I had coloured blocks instead of nodes */
+
+//var tabs = this.state.tabState.map(function(item, i) {
+//  var tabTitle = "Tab " + item.name;
+//  var tabIndex = i + 1;
+//  var tabContent = function(){
+//    var content = [];
+//    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
+//      content.push(<br/>);
+//      content.push(<p>{outerkey}</p>);
+//      for (var key in item.info[outerkey])
+//        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
+//    }
+//    return content
+//  };
+//  return (
+//    <Tab key={item.name} title={tabTitle}>
+//
+//      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
+//        {tabContent()}
+//      </Content>
+//
+//    </Tab>
+//  );
+//}.bind(this));
+
+},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":19,"react":216,"react-panels":39}],27:[function(require,module,exports){
+/**
+ * Created by twi18192 on 25/01/16.
+ */
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var MainPane = require('./mainPane');
+var SidePane = require('./sidePane');
+
+var mainPaneStore = require('../stores/mainPaneStore');
+var mainPaneActions = require('../actions/mainPaneActions');
+var sidePaneStore = require('../stores/sidePaneStore');
+var sidePaneActions = require('../actions/sidePaneActions');
+var paneStore = require('../stores/paneStore');
+var paneActions = require('../actions/paneActions');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+
+var SideBar = require('react-sidebar').default;
+
+var MainTabbedViewStyle = {
+  "height": "100%",
+  "width": "100%",
+  minWidth: 200,
+  minHeight: 500,
+  display: 'inlineBlock'
+};
+
+var SideTabbedViewStyle = {
+  float: 'right',
+  "height": "100%",
+  "width": "100%",
+  maxWidth:400
+};
+
+var SidebarStyling = {
+  root: {
+    position: 'absolute',
+    id: "root",
+    //minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  sidebar: {
+    zIndex: 2,
+    id: "sidebar",
+    width: "400px",
+    position: 'absolute',
+    top: 0,
+    //left: "400px",
+    bottom: 0,
+    transition: 'transform .3s ease-out',
+    WebkitTransition: '-webkit-transform .3s ease-out',
+    willChange: 'transform',
+    overflowY: 'auto',
+  },
+  content: {
+    position: 'absolute',
+    id: "content",
+    //minWidth: 500,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'auto',
+    transition: 'left .3s ease-out, right .3s ease-out',
+  },
+  overlay: {
+    zIndex: 1,
+    id: "overlay",
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity .3s ease-out',
+    backgroundColor: 'rgba(0,0,0,.3)',
+  },
+  dragHandle: {
+    zIndex: 1,
+    id: "draghandle",
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+  },
+};
+
+function getBothPanesState(){
+  return{
+    /* Its own getter functions first */
+    sidebarOpen: paneStore.getSidebarOpenState(),
+
+    /* MainPane's getter functions for stores */
+    footers: mainPaneStore.getFooterState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
+    favTabOpen: paneStore.getFavTabOpen(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
+    configTabOpen: paneStore.getConfigTabOpen(),
+
+    /* SidePane's getter functions for stores */
+    tabState: paneStore.getTabState(),
+    selectedTabIndex: paneStore.getSelectedTabIndex(),
+    listVisible: sidePaneStore.getDropdownState()
+
+  }
+}
+
+var BothPanes = React.createClass({displayName: "BothPanes",
+  getInitialState: function(){
+    return getBothPanesState();
+  },
+
+  _onChange: function(){
+    this.setState(getBothPanesState());
+  },
+
+  componentDidMount: function(){
+    console.log(this.state);
+    mainPaneStore.addChangeListener(this._onChange);
+    paneStore.addChangeListener(this._onChange);
+    sidePaneStore.addChangeListener(this._onChange);
+    var mql = window.matchMedia(`(min-width: 800px)`);
+    mql.addListener(this.windowWidthMediaQueryChanged);
+    this.setState({mql: mql}, function(){
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    });
+  },
+  componentWillUnmount(){
+    mainPaneStore.removeChangeListener(this._onChange);
+    paneStore.removeChangeListener(this._onChange);
+    sidePaneStore.removeChangeListener(this._onChange);
+    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
+  },
+
+  windowWidthMediaQueryChanged: function(){
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+  },
+
+  render: function(){
+
+    console.log(this.state);
+
+    return(
+      React.createElement(SideBar, {sidebarClassName: "sidebar", styles: SidebarStyling, docked: this.state.sidebarOpen, 
+               //open={this.state.sidebarOpen}
+               pullRight: true, touchHandleWidth: 5, 
+               children: 
+               //<div id="MainTabbedView" style={MainTabbedViewStyle}>
+                React.createElement(MainPane, {footers: this.state.footers, 
+                favTabOpen: this.state.favTabOpen, 
+                configTabOpen: this.state.configTabOpen}
+                //theGraphDiamondState={this.state.theGraphDiamondState}
+                ), 
+                //</div>
+                
+               sidebar: 
+               //<div id="SideTabbedView" style={SideTabbedViewStyle}>
+               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, listVisible: this.state.listVisible}
+               )
+               //</div>
+               }
+      )
+    )
+  }
+});
+
+module.exports = BothPanes;
+
+},{"../actions/blockActions.js":1,"../actions/mainPaneActions":3,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/blockStore.js":11,"../stores/mainPaneStore":13,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./mainPane":24,"./sidePane":26,"react":216,"react-dom":38,"react-sidebar":40}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/10/15.
  */

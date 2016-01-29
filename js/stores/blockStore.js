@@ -98,6 +98,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
+  'Gate1out -> TGen1ena': false,
   //Gate1OutTGen1Ena: false,
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false
@@ -108,6 +109,8 @@ function selectEdge(Edge){
 }
 
 function getAnyEdgeSelectedState(EdgeId){
+  console.log(edgeSelectedStates);
+  console.log(EdgeId);
   if(edgeSelectedStates[EdgeId] === undefined || null){
     console.log("edge selected state is underfined or null, best check it out...");
   }
@@ -1237,7 +1240,7 @@ AppDispatcher.register(function(payload){
     //  console.log(edges);
     //  break;
 
-    case appConstants.SELECT_NODE:
+    case appConstants.SELECT_BLOCK:
       console.log(payload);
       console.log(item);
       blockSelectedStates[item] = true;
@@ -1246,7 +1249,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.DESELECT_ALLNODES:
+    case appConstants.DESELECT_ALLBLOCKS:
       console.log(payload);
       console.log(item);
       deselectAllBlocks();
@@ -1309,7 +1312,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADDTO_ALLNODEINFO:
+    case appConstants.ADDTO_ALLBLOCKINFO:
       console.log(payload);
       console.log(item);
       appendToAllBlockInfo(item);
@@ -1341,7 +1344,7 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGETOALLNODEINFO:
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
       console.log(payload);
       console.log(item);
       addEdgeToAllBlockInfo(item);
