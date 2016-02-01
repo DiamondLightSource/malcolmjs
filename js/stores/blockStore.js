@@ -982,6 +982,20 @@ var graphPosition = {
 
 var graphZoomScale = 2.0;
 
+/* Functions to do with data retrieval from the server */
+
+/* So what will happen is that an action will tell the server we want new info, it'll fetch it, and then
+return it to blockStore in the form of an object of some sort. From there you can do all sorts of things like update
+the value of a specific port of an existing block, add a port to an existing block etc.
+
+Depending on the action that triggered the data fetch from the server I'll know which one of these various things
+it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
+been returned/fetched to blockStore successfully?
+ */
+function addBlock(){
+
+}
+
 var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
@@ -1136,6 +1150,10 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getAllBlockTypesStyling: function(){
     return allBlockTypesStyling;
+  },
+
+  getSubsetOfAllBlockInfo: function(){
+    return allBlockInfo.Gate1.inports;
   }
 });
 
@@ -1312,16 +1330,6 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      appendToAllBlockInfo(item);
-      appendToAllPossibleBlocks(item);
-      appendToBlockSelectedStates(item);
-      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-      blockStore.emitChange();
-      break;
-
     case appConstants.PASS_PORTMOUSEDOWN:
       console.log(payload);
       console.log(item);
@@ -1344,14 +1352,6 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      addEdgeToAllBlockInfo(item);
-      blockStore.emitChange();
-      console.log(allBlockInfo);
-      break;
-
     case appConstants.APPEND_EDGESELECTEDSTATE:
       console.log(payload);
       console.log(item);
@@ -1360,6 +1360,22 @@ AppDispatcher.register(function(payload){
       console.log(edgeSelectedStates);
       break;
 
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      appendToAllBlockInfo(item);
+      //appendToAllPossibleBlocks(item);
+      appendToBlockSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      blockStore.emitChange();
+      break;
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
+      break;
     case appConstants.INTERACTJS_DRAG:
       console.log(payload);
       console.log(item);
@@ -1374,6 +1390,49 @@ AppDispatcher.register(function(payload){
 });
 
 module.exports = blockStore;
+
+blockStore.dispatchToken = AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+
+  switch(action.actionType){
+
+    /* These are all the actions that result in a data change in allBlockInfo of some kind */
+
+    //case appConstants.ADDTO_ALLBLOCKINFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  appendToAllBlockInfo(item);
+    //  //appendToAllPossibleBlocks(item);
+    //  appendToBlockSelectedStates(item);
+    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  addEdgeToAllBlockInfo(item);
+    //  blockStore.emitChange();
+    //  console.log(allBlockInfo);
+    //  break;
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  console.log(payload);
+    //  console.log(item);
+    //  interactJsDrag(item);
+    //  blockStore.emitChange();
+    //  break;
+
+    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
+    change at all first =P
+     */
+
+    default:
+          return 'blockStore: default';
+
+  }
+});
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;

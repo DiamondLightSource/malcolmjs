@@ -107,7 +107,6 @@ function getBothPanesState(){
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
     listVisible: sidePaneStore.getDropdownState()
-
   }
 }
 
@@ -145,6 +144,9 @@ var BothPanes = React.createClass({
   render: function(){
 
     console.log(this.state);
+    //if(this.state.tabState[0]) {
+    //  console.log(this.state.tabState[0].position.x);
+    //}
 
     return(
       <SideBar sidebarClassName="sidebar" styles={SidebarStyling} docked={this.state.sidebarOpen}

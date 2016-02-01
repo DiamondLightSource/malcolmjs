@@ -1700,6 +1700,20 @@ var graphPosition = {
 
 var graphZoomScale = 2.0;
 
+/* Functions to do with data retrieval from the server */
+
+/* So what will happen is that an action will tell the server we want new info, it'll fetch it, and then
+return it to blockStore in the form of an object of some sort. From there you can do all sorts of things like update
+the value of a specific port of an existing block, add a port to an existing block etc.
+
+Depending on the action that triggered the data fetch from the server I'll know which one of these various things
+it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
+been returned/fetched to blockStore successfully?
+ */
+function addBlock(){
+
+}
+
 var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
@@ -1854,6 +1868,10 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getAllBlockTypesStyling: function(){
     return allBlockTypesStyling;
+  },
+
+  getSubsetOfAllBlockInfo: function(){
+    return allBlockInfo.Gate1.inports;
   }
 });
 
@@ -2030,16 +2048,6 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      appendToAllBlockInfo(item);
-      appendToAllPossibleBlocks(item);
-      appendToBlockSelectedStates(item);
-      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-      blockStore.emitChange();
-      break;
-
     case appConstants.PASS_PORTMOUSEDOWN:
       console.log(payload);
       console.log(item);
@@ -2062,14 +2070,6 @@ AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      addEdgeToAllBlockInfo(item);
-      blockStore.emitChange();
-      console.log(allBlockInfo);
-      break;
-
     case appConstants.APPEND_EDGESELECTEDSTATE:
       console.log(payload);
       console.log(item);
@@ -2078,6 +2078,22 @@ AppDispatcher.register(function(payload){
       console.log(edgeSelectedStates);
       break;
 
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      appendToAllBlockInfo(item);
+      //appendToAllPossibleBlocks(item);
+      appendToBlockSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      blockStore.emitChange();
+      break;
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
+      break;
     case appConstants.INTERACTJS_DRAG:
       console.log(payload);
       console.log(item);
@@ -2092,6 +2108,49 @@ AppDispatcher.register(function(payload){
 });
 
 module.exports = blockStore;
+
+blockStore.dispatchToken = AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+
+  switch(action.actionType){
+
+    /* These are all the actions that result in a data change in allBlockInfo of some kind */
+
+    //case appConstants.ADDTO_ALLBLOCKINFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  appendToAllBlockInfo(item);
+    //  //appendToAllPossibleBlocks(item);
+    //  appendToBlockSelectedStates(item);
+    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+    //  console.log(payload);
+    //  console.log(item);
+    //  addEdgeToAllBlockInfo(item);
+    //  blockStore.emitChange();
+    //  console.log(allBlockInfo);
+    //  break;
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  console.log(payload);
+    //  console.log(item);
+    //  interactJsDrag(item);
+    //  blockStore.emitChange();
+    //  break;
+
+    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
+    change at all first =P
+     */
+
+    default:
+          return 'blockStore: default';
+
+  }
+});
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;
@@ -3065,6 +3124,7 @@ AppDispatcher.register(function(payload){
     case appConstants.OPEN_BLOCKTAB:
       console.log(payload);
       console.log(item);
+      console.log(allBlockTabInfo[item].position.x);
       console.log(allBlockTabInfo[item]);
       setBlockTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
@@ -3172,16 +3232,32 @@ var getBlockContentFromDeviceStore = function(){
 };
 
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+  /* Old stuff for deviceStore */
 
-    AppDispatcher.waitFor([deviceStore.dispatchToken]);
+  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+  //
+  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
+  //
+  //  console.log(payload);
+  //  console.log(payload.action.item);
+  //  getBlockContentFromDeviceStore();
+  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+  //  paneStore.emitChange();
+  //}
 
-    console.log(payload);
-    console.log(payload.action.item);
-    getBlockContentFromDeviceStore();
-    compareCurrentPaneStoreBlockContentAndDeviceStore();
-    paneStore.emitChange();
-  }
+  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+
+  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO || appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
+  //  //|| appConstants.CHANGE_BLOCKPOSITION
+  //){
+  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+  //
+  //  console.log(payload);
+  //  console.log(payload.action.item);
+  //  getInitialBlockDataFromBlockStore();
+  //  paneStore.emitChange();
+  //}
+
 });
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
@@ -5810,14 +5886,14 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
       for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
         if(this.props.allBlockInfo[block].inports[i].connected === true){
-          console.log(this.props.allBlockInfo[block].inports[i]);
-          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
           /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
           var toBlock = block;
           var toBlockType = this.props.allBlockInfo[block].type;
           var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
           var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
-          console.log(this.props.allBlockInfo);
+          //console.log(this.props.allBlockInfo);
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
@@ -5834,8 +5910,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
           )
         }
         else if(this.props.allBlockInfo[block].inports[i].connected === false){
-          console.log(this.props.allBlockInfo[block].inports[i]);
-          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
         }
       }
 
@@ -7516,34 +7592,120 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 
   render: function () {
+
+    console.log("sidePane rerender");
+
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
-    var tabs = this.props.tabState.map(function(item, i){
-      var tabTitle = item.label;
-      var tabIndex = i + 1;
-      var tabContent = function(){
-        console.log("inside tabContent function now");
-        var content = [];
-          //content.push(<p>stuff</p>);
+    //var tabs = this.props.tabState.map(function(item, i){
+    //  var tabTitle = item.label;
+    //  var tabIndex = i + 1;
+    //  var tabContent = function(){
+    //    console.log("inside tabContent function now");
+    //    var content = [];
+    //      //content.push(<p>stuff</p>);
+    //
+    //      content.push(<br/>);
+    //      content.push(<p>{tabTitle}</p>);
+    //      for(var attribute in item){
+    //        content.push(<p>{attribute}: {String(item[attribute])}</p>)
+    //      }
+    //    console.log(content);
+    //      return content
+    //  };
+    //  return (
+    //    <Tab title={tabTitle}>
+    //
+    //      <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
+    //        {tabContent()}
+    //      </Content>
+    //
+    //    </Tab>
+    //  );
+    //});
 
-          content.push(React.createElement("br", null));
-          content.push(React.createElement("p", null, tabTitle));
-          for(var attribute in item){
-            content.push(React.createElement("p", null, attribute, ": ", String(item[attribute])))
+    /* A better version of the above tabState .map function to displaythe attributes of a block properly */
+
+    var betterTabs = this.props.tabState.map(function(block, i){
+      var tabTitle = block.label;
+      var tabIndex = i + 1;
+
+      var betterTabContent = function() {
+        var tabContent = [];
+
+        tabContent.push(React.createElement("p", null, "x: ", block.position.x));
+        tabContent.push(React.createElement("p", null, "y: ", block.position.y));
+        tabContent.push(React.createElement("br", null));
+
+        tabContent.push(React.createElement("p", null, "Inports"));
+        for (var j = 0; j < block.inports.length; j++) {
+          for (var attribute in block.inports[j]) {
+            if(attribute !== 'connectedTo') {
+              console.log(block);
+              console.log(block.inports[j][attribute]);
+              tabContent.push(React.createElement("p", null, attribute, ": ", String(block.inports[j][attribute])));
+            }
+            else if(attribute === 'connectedTo'){
+              tabContent.push(React.createElement("p", null, "connectedTo:"));
+              if(block.inports[j].connectedTo !== null) {
+                //for (var subAttribute in block.inports[j].connectedTo) {
+                  tabContent.push(React.createElement("p", null, "block: ", block.inports[j].connectedTo.block));
+                  tabContent.push(React.createElement("p", null, "port: ", block.inports[j].connectedTo.port));
+                //}
+              }
+              else if(block.inports[j].connectedTo === null){
+                tabContent.push(React.createElement("p", null, "null"));
+              }
+            }
           }
-        console.log(content);
-          return content
+          //tabContent.push(<p>, </p>);
+        }
+        tabContent.push(React.createElement("br", null));
+
+        console.log(tabContent);
+
+        tabContent.push(React.createElement("p", null, "Outports"));
+        for (var k = 0; k < block.outports.length; k++) {
+          /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+          for (var attribute in block.outports[k]) {
+            if(attribute !== 'connectedTo') {
+              console.log(attribute);
+              tabContent.push(React.createElement("p", null, attribute, ": ", String(block.outports[k][attribute])));
+            }
+            else if(attribute === 'connectedTo'){
+              console.log(attribute);
+              tabContent.push(React.createElement("p", null, "connectedTo:"));
+              if(block.outports[k].connectedTo.length === 0){
+                console.log("LENGTH OF ARRAY IS ZERO");
+                tabContent.push(React.createElement("p", null, "[]"));
+              }
+              else if(block.outports[k].connectedTo !== null) {
+                for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+                  tabContent.push(React.createElement("p", null, "[block: ", block.outports[k].connectedTo[l]['block'], ","));
+                  tabContent.push(React.createElement("p", null, "port: ", block.outports[k].connectedTo[l]['port'], "]"))
+                }
+              }
+              else if(block.outports[k].connectedTo === null){
+                tabContent.push(React.createElement("p", null, "null"));
+              }
+            }
+          }
+          //tabContent.push(<p>, </p>);
+        }
+        console.log(tabContent);
+        return tabContent;
       };
+
       return (
         React.createElement(Tab, {title: tabTitle}, 
 
           React.createElement(Content, null, "Attributes of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
-            tabContent()
+            betterTabContent()
           )
 
         )
-      );
+      )
     });
 
     return (
@@ -7560,7 +7722,7 @@ var SidePane = React.createClass({displayName: "SidePane",
             ))
             )
           ]}, 
-          tabs
+          betterTabs
         )
     );
   }
@@ -7732,7 +7894,6 @@ function getBothPanesState(){
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
     listVisible: sidePaneStore.getDropdownState()
-
   }
 }
 
@@ -7770,6 +7931,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
   render: function(){
 
     console.log(this.state);
+    //if(this.state.tabState[0]) {
+    //  console.log(this.state.tabState[0].position.x);
+    //}
 
     return(
       React.createElement(SideBar, {sidebarClassName: "sidebar", styles: SidebarStyling, docked: this.state.sidebarOpen, 

@@ -622,14 +622,14 @@ var FlowChart = React.createClass({
 
       for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
         if(this.props.allBlockInfo[block].inports[i].connected === true){
-          console.log(this.props.allBlockInfo[block].inports[i]);
-          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
           /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
           var toBlock = block;
           var toBlockType = this.props.allBlockInfo[block].type;
           var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
           var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
-          console.log(this.props.allBlockInfo);
+          //console.log(this.props.allBlockInfo);
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
@@ -646,8 +646,8 @@ var FlowChart = React.createClass({
           )
         }
         else if(this.props.allBlockInfo[block].inports[i].connected === false){
-          console.log(this.props.allBlockInfo[block].inports[i]);
-          console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
         }
       }
 

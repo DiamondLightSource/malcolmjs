@@ -82,34 +82,120 @@ var SidePane = React.createClass({
 
 
   render: function () {
+
+    console.log("sidePane rerender");
+
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
-    var tabs = this.props.tabState.map(function(item, i){
-      var tabTitle = item.label;
-      var tabIndex = i + 1;
-      var tabContent = function(){
-        console.log("inside tabContent function now");
-        var content = [];
-          //content.push(<p>stuff</p>);
+    //var tabs = this.props.tabState.map(function(item, i){
+    //  var tabTitle = item.label;
+    //  var tabIndex = i + 1;
+    //  var tabContent = function(){
+    //    console.log("inside tabContent function now");
+    //    var content = [];
+    //      //content.push(<p>stuff</p>);
+    //
+    //      content.push(<br/>);
+    //      content.push(<p>{tabTitle}</p>);
+    //      for(var attribute in item){
+    //        content.push(<p>{attribute}: {String(item[attribute])}</p>)
+    //      }
+    //    console.log(content);
+    //      return content
+    //  };
+    //  return (
+    //    <Tab title={tabTitle}>
+    //
+    //      <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
+    //        {tabContent()}
+    //      </Content>
+    //
+    //    </Tab>
+    //  );
+    //});
 
-          content.push(<br/>);
-          content.push(<p>{tabTitle}</p>);
-          for(var attribute in item){
-            content.push(<p>{attribute}: {String(item[attribute])}</p>)
+    /* A better version of the above tabState .map function to displaythe attributes of a block properly */
+
+    var betterTabs = this.props.tabState.map(function(block, i){
+      var tabTitle = block.label;
+      var tabIndex = i + 1;
+
+      var betterTabContent = function() {
+        var tabContent = [];
+
+        tabContent.push(<p>x: {block.position.x}</p>);
+        tabContent.push(<p>y: {block.position.y}</p>);
+        tabContent.push(<br/>);
+
+        tabContent.push(<p>Inports</p>);
+        for (var j = 0; j < block.inports.length; j++) {
+          for (var attribute in block.inports[j]) {
+            if(attribute !== 'connectedTo') {
+              console.log(block);
+              console.log(block.inports[j][attribute]);
+              tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
+            }
+            else if(attribute === 'connectedTo'){
+              tabContent.push(<p>connectedTo:</p>);
+              if(block.inports[j].connectedTo !== null) {
+                //for (var subAttribute in block.inports[j].connectedTo) {
+                  tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
+                  tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
+                //}
+              }
+              else if(block.inports[j].connectedTo === null){
+                tabContent.push(<p>null</p>);
+              }
+            }
           }
-        console.log(content);
-          return content
+          //tabContent.push(<p>, </p>);
+        }
+        tabContent.push(<br/>);
+
+        console.log(tabContent);
+
+        tabContent.push(<p>Outports</p>);
+        for (var k = 0; k < block.outports.length; k++) {
+          /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+          for (var attribute in block.outports[k]) {
+            if(attribute !== 'connectedTo') {
+              console.log(attribute);
+              tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
+            }
+            else if(attribute === 'connectedTo'){
+              console.log(attribute);
+              tabContent.push(<p>connectedTo:</p>);
+              if(block.outports[k].connectedTo.length === 0){
+                console.log("LENGTH OF ARRAY IS ZERO");
+                tabContent.push(<p>[]</p>);
+              }
+              else if(block.outports[k].connectedTo !== null) {
+                for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+                  tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
+                  tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
+                }
+              }
+              else if(block.outports[k].connectedTo === null){
+                tabContent.push(<p>null</p>);
+              }
+            }
+          }
+          //tabContent.push(<p>, </p>);
+        }
+        console.log(tabContent);
+        return tabContent;
       };
+
       return (
         <Tab title={tabTitle}>
 
           <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
-            {tabContent()}
+            {betterTabContent()}
           </Content>
 
         </Tab>
-      );
+      )
     });
 
     return (
@@ -126,7 +212,7 @@ var SidePane = React.createClass({
             /></div>
             </Button>
           ]}>
-          {tabs}
+          {betterTabs}
         </Panel>
     );
   }

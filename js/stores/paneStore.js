@@ -264,6 +264,7 @@ AppDispatcher.register(function(payload){
     case appConstants.OPEN_BLOCKTAB:
       console.log(payload);
       console.log(item);
+      console.log(allBlockTabInfo[item].position.x);
       console.log(allBlockTabInfo[item]);
       setBlockTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
@@ -371,16 +372,32 @@ var getBlockContentFromDeviceStore = function(){
 };
 
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+  /* Old stuff for deviceStore */
 
-    AppDispatcher.waitFor([deviceStore.dispatchToken]);
+  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+  //
+  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
+  //
+  //  console.log(payload);
+  //  console.log(payload.action.item);
+  //  getBlockContentFromDeviceStore();
+  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+  //  paneStore.emitChange();
+  //}
 
-    console.log(payload);
-    console.log(payload.action.item);
-    getBlockContentFromDeviceStore();
-    compareCurrentPaneStoreBlockContentAndDeviceStore();
-    paneStore.emitChange();
-  }
+  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+
+  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO || appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
+  //  //|| appConstants.CHANGE_BLOCKPOSITION
+  //){
+  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+  //
+  //  console.log(payload);
+  //  console.log(payload.action.item);
+  //  getInitialBlockDataFromBlockStore();
+  //  paneStore.emitChange();
+  //}
+
 });
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
