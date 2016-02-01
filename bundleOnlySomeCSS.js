@@ -4531,7 +4531,7 @@ var Block = React.createClass({displayName: "Block",
 
   render: function(){
 
-    var blockTranslate = "translate(" + this.props.allBlockInfo[this.props.id].position.x + "," + this.props.allBlockInfo[this.props.id].position.y + ")";
+    var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 
     return (
       React.createElement("g", React.__spread({},  this.props, 
@@ -4545,10 +4545,10 @@ var Block = React.createClass({displayName: "Block",
         }, 
           React.createElement("rect", {id: "blockBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire block container */", 
 
-          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.allBlockInfo[this.props.id].type, allBlockTypesStyling: this.props.allBlockTypesStyling, 
+          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, allBlockTypesStyling: this.props.allBlockTypesStyling, 
                          portThatHasBeenClicked: this.props.portThatHasBeenClicked, selected: this.props.selected}), 
 
-          React.createElement(Ports, {blockId: this.props.id, allBlockInfo: this.props.allBlockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, 
+          React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, 
                  portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked})
 
         )
@@ -5072,10 +5072,10 @@ var Edge = React.createClass({displayName: "Edge",
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromBlockPositionX = this.props.allBlockInfo[fromBlock].position.x;
-    var fromBlockPositionY = this.props.allBlockInfo[fromBlock].position.y;
-    var toBlockPositionX = this.props.allBlockInfo[toBlock].position.x;
-    var toBlockPositionY = this.props.allBlockInfo[toBlock].position.y;
+    var fromBlockPositionX = this.props.fromBlockInfo.position.x;
+    var fromBlockPositionY = this.props.fromBlockInfo.position.y;
+    var toBlockPositionX = this.props.toBlockInfo.position.x;
+    var toBlockPositionY = this.props.toBlockInfo.position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
     //
@@ -5877,7 +5877,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     for(var block in this.props.allBlockInfo){
       blocks.push(
         React.createElement(Block, {key: block, id: block, className: "block", 
-              allBlockInfo: this.props.allBlockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
+              blockInfo: this.props.allBlockInfo[block], 
+               allBlockTypesStyling: this.props.allBlockTypesStyling, areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
               portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked, portMouseOver: this.props.portMouseOver, 
               selected: blockStore.getAnyBlockSelectedState(block), deselect: this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
@@ -5904,7 +5905,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                   fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, 
                   toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, 
                   allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
-                  allBlockInfo: this.props.allBlockInfo, areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
+                  //allBlockInfo={this.props.allBlockInfo}
+                  fromBlockInfo: this.props.allBlockInfo[fromBlock], 
+                  toBlockInfo: this.props.allBlockInfo[toBlock], 
+                  areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
                   selected: blockStore.getIfEdgeIsSelected(edgeLabel)}
             )
           )
@@ -7429,7 +7433,7 @@ var Ports = React.createClass({displayName: "Ports",
   render: function(){
 
     var blockId = this.props.blockId;
-    var blockInfo = this.props.allBlockInfo[blockId];
+    var blockInfo = this.props.blockInfo;
 
     var allBlockTypesStyling = this.props.allBlockTypesStyling;
     var blockType = blockInfo.type;

@@ -231,7 +231,7 @@ var Block = React.createClass({
 
   render: function(){
 
-    var blockTranslate = "translate(" + this.props.allBlockInfo[this.props.id].position.x + "," + this.props.allBlockInfo[this.props.id].position.y + ")";
+    var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 
     return (
       <g {...this.props}
@@ -245,10 +245,10 @@ var Block = React.createClass({
         >
           <rect id="blockBackground" height="105" width="65" style={{fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/> /* To allow the cursor to change when hovering over the entire block container */
 
-          <BlockRectangle blockId={this.props.id} blockType={this.props.allBlockInfo[this.props.id].type} allBlockTypesStyling={this.props.allBlockTypesStyling}
+          <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type} allBlockTypesStyling={this.props.allBlockTypesStyling}
                          portThatHasBeenClicked={this.props.portThatHasBeenClicked} selected={this.props.selected} />
 
-          <Ports blockId={this.props.id} allBlockInfo={this.props.allBlockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling}
+          <Ports blockId={this.props.id} blockInfo={this.props.blockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} />
 
         </g>

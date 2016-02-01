@@ -613,7 +613,8 @@ var FlowChart = React.createClass({
     for(var block in this.props.allBlockInfo){
       blocks.push(
         <Block key={block} id={block} className="block"
-              allBlockInfo={this.props.allBlockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling} areAnyBlocksSelected={this.props.areAnyBlocksSelected}
+              blockInfo={this.props.allBlockInfo[block]}
+               allBlockTypesStyling={this.props.allBlockTypesStyling} areAnyBlocksSelected={this.props.areAnyBlocksSelected}
               portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} portMouseOver={this.props.portMouseOver}
               selected={blockStore.getAnyBlockSelectedState(block)} deselect={this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
@@ -640,7 +641,9 @@ var FlowChart = React.createClass({
                   fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort}
                   toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort}
                   allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
-                  allBlockInfo={this.props.allBlockInfo} areAnyEdgesSelected={this.props.areAnyEdgesSelected}
+                  fromBlockInfo={this.props.allBlockInfo[fromBlock]}
+                  toBlockInfo={this.props.allBlockInfo[toBlock]}
+                  areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                   selected={blockStore.getIfEdgeIsSelected(edgeLabel)}
             />
           )

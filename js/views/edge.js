@@ -103,10 +103,10 @@ var Edge = React.createClass({
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromBlockPositionX = this.props.allBlockInfo[fromBlock].position.x;
-    var fromBlockPositionY = this.props.allBlockInfo[fromBlock].position.y;
-    var toBlockPositionX = this.props.allBlockInfo[toBlock].position.x;
-    var toBlockPositionY = this.props.allBlockInfo[toBlock].position.y;
+    var fromBlockPositionX = this.props.fromBlockInfo.position.x;
+    var fromBlockPositionY = this.props.fromBlockInfo.position.y;
+    var toBlockPositionX = this.props.toBlockInfo.position.x;
+    var toBlockPositionY = this.props.toBlockInfo.position.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
     //

@@ -104,7 +104,7 @@ var Ports = React.createClass({
   render: function(){
 
     var blockId = this.props.blockId;
-    var blockInfo = this.props.allBlockInfo[blockId];
+    var blockInfo = this.props.blockInfo;
 
     var allBlockTypesStyling = this.props.allBlockTypesStyling;
     var blockType = blockInfo.type;
