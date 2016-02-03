@@ -1875,7 +1875,7 @@ var blockStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-AppDispatcher.register(function(payload){
+blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
@@ -2109,48 +2109,50 @@ AppDispatcher.register(function(payload){
 
 module.exports = blockStore;
 
-blockStore.dispatchToken = AppDispatcher.register(function(payload){
-  var action = payload.action;
-  var item = action.item;
+/* Put blockStore.dispatchToken in front of the whole switch case above */
 
-  switch(action.actionType){
-
-    /* These are all the actions that result in a data change in allBlockInfo of some kind */
-
-    //case appConstants.ADDTO_ALLBLOCKINFO:
-    //  console.log(payload);
-    //  console.log(item);
-    //  appendToAllBlockInfo(item);
-    //  //appendToAllPossibleBlocks(item);
-    //  appendToBlockSelectedStates(item);
-    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-    //  console.log(payload);
-    //  console.log(item);
-    //  addEdgeToAllBlockInfo(item);
-    //  blockStore.emitChange();
-    //  console.log(allBlockInfo);
-    //  break;
-
-    //case appConstants.INTERACTJS_DRAG:
-    //  console.log(payload);
-    //  console.log(item);
-    //  interactJsDrag(item);
-    //  blockStore.emitChange();
-    //  break;
-
-    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
-    change at all first =P
-     */
-
-    default:
-          return 'blockStore: default';
-
-  }
-});
+//blockStore.dispatchToken = AppDispatcher.register(function(payload){
+//  var action = payload.action;
+//  var item = action.item;
+//
+//  switch(action.actionType){
+//
+//    /* These are all the actions that result in a data change in allBlockInfo of some kind */
+//
+//    //case appConstants.ADDTO_ALLBLOCKINFO:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  appendToAllBlockInfo(item);
+//    //  //appendToAllPossibleBlocks(item);
+//    //  appendToBlockSelectedStates(item);
+//    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+//    //  blockStore.emitChange();
+//    //  break;
+//    //
+//    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  addEdgeToAllBlockInfo(item);
+//    //  blockStore.emitChange();
+//    //  console.log(allBlockInfo);
+//    //  break;
+//
+//    //case appConstants.INTERACTJS_DRAG:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  interactJsDrag(item);
+//    //  blockStore.emitChange();
+//    //  break;
+//
+//    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
+//    change at all first =P
+//     */
+//
+//    default:
+//          return 'blockStore: default';
+//
+//  }
+//});
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;
@@ -3047,12 +3049,19 @@ var paneStore = assign({}, EventEmitter.prototype, {
 
   getSidebarOpenState: function(){
     return _stuff.sidebarOpen;
+  },
+
+  getAllBlockTabOpenStates: function(){
+    return allBlockTabProperties;
+  },
+  getAllBlockTabInfo: function(){
+    return allBlockTabInfo;
   }
 });
 
 
 
-AppDispatcher.register(function(payload){
+paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
   switch(action.actionType){
@@ -3157,6 +3166,32 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    /* Trying to add waitFor blockStore in order to update allBlockTabInfo */
+
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  getInitialBlockDataFromBlockStore();
+    //  /* Try simply resetting the references in tabState */
+    //  resetTabStateReferences();
+    //  paneStore.emitChange();
+    //  break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -3231,34 +3266,37 @@ var getBlockContentFromDeviceStore = function(){
   _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
 };
 
-paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  /* Old stuff for deviceStore */
+/* Put paneStore.dispatchToken in front of the whole swicth case above */
 
-  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
-  //
-  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
-  //
-  //  console.log(payload);
-  //  console.log(payload.action.item);
-  //  getBlockContentFromDeviceStore();
-  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
-  //  paneStore.emitChange();
-  //}
-
-  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
-
-  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO || appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
-  //  //|| appConstants.CHANGE_BLOCKPOSITION
-  //){
-  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-  //
-  //  console.log(payload);
-  //  console.log(payload.action.item);
-  //  getInitialBlockDataFromBlockStore();
-  //  paneStore.emitChange();
-  //}
-
-});
+//paneStore.dispatchToken = AppDispatcher.register(function(payload){
+//  /* Old stuff for deviceStore */
+//
+//  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+//  //
+//  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
+//  //
+//  //  console.log(payload);
+//  //  console.log(payload.action.item);
+//  //  getBlockContentFromDeviceStore();
+//  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+//  //  paneStore.emitChange();
+//  //}
+//
+//  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+//
+//  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO
+//  //  //|| appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
+//  //  //|| appConstants.CHANGE_BLOCKPOSITION
+//  //){
+//  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+//  //
+//  //  console.log(payload);
+//  //  console.log(payload.action.item);
+//  //  getInitialBlockDataFromBlockStore();
+//  //  paneStore.emitChange();
+//  //}
+//
+//});
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
@@ -3430,7 +3468,13 @@ var removeBlockTab = function(selectedTabIndex){
 };
 
 var getInitialBlockDataFromBlockStore = function(){
-  allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
+  //allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
+  allBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+  /* Try using Object.assign instead to not fetch position data as well from allBlockInfo */
+  //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+  ///* Now need to loop over each block object and 'remove' the position attribute */
+  //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
+  console.log(allBlockTabInfo);
 };
 
 function toggleSidebar(){
@@ -3453,6 +3497,17 @@ function windowWidthMediaQueryChanged(sidebarOpen){
   //console.log(_stuff.sidebarOpen)
 
   _stuff.sidebarOpen = sidebarOpen;
+}
+
+function copyTabState(){
+  _stuff['newTabState'] = _stuff.tabState.slice();
+}
+
+function resetTabStateReferences(){
+  for(var i = 0; i < _stuff.tabState.length; i++){
+    _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
+    console.log(_stuff.tabState[i]);
+  }
 }
 
 module.exports = paneStore;
@@ -5905,7 +5960,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                   fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, 
                   toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, 
                   allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
-                  //allBlockInfo={this.props.allBlockInfo}
                   fromBlockInfo: this.props.allBlockInfo[fromBlock], 
                   toBlockInfo: this.props.allBlockInfo[toBlock], 
                   areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
@@ -7630,19 +7684,32 @@ var SidePane = React.createClass({displayName: "SidePane",
     //});
 
     /* A better version of the above tabState .map function to displaythe attributes of a block properly */
+    /* Also, try calculating tabState in here directly from allBlockTabInfo & OpenStates */
+    //var newerTabState = [];
+    //
+    //for(var block in this.props.allBlockTabOpenStates){
+    //  /* Need a separate check for the config tabs and such... */
+    //  if(this.props.allBlockTabOpenStates[block] === true){
+    //    newerTabState.push(this.props.allBlockTabInfo[block]);
+    //  }
+    //  else if(this.props.allBlockTabOpenStates[block] === false){
+    //    console.log("block tab wasn't open, s")
+    //  }
+    //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
       var tabTitle = block.label;
       var tabIndex = i + 1;
 
       var betterTabContent = function() {
+
         var tabContent = [];
 
-        tabContent.push(React.createElement("p", null, "x: ", block.position.x));
-        tabContent.push(React.createElement("p", null, "y: ", block.position.y));
-        tabContent.push(React.createElement("br", null));
+        //tabContent.push(<p>x: {block.position.x}</p>);
+        //tabContent.push(<p>y: {block.position.y}</p>);
+        //tabContent.push(<br/>);
 
-        tabContent.push(React.createElement("p", null, "Inports"));
+        tabContent.push(React.createElement("b", null, "Inports"));
         for (var j = 0; j < block.inports.length; j++) {
           for (var attribute in block.inports[j]) {
             if(attribute !== 'connectedTo') {
@@ -7669,7 +7736,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
         console.log(tabContent);
 
-        tabContent.push(React.createElement("p", null, "Outports"));
+        tabContent.push(React.createElement("b", null, "Outports"));
         for (var k = 0; k < block.outports.length; k++) {
           /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
           for (var attribute in block.outports[k]) {
@@ -7704,13 +7771,109 @@ var SidePane = React.createClass({displayName: "SidePane",
       return (
         React.createElement(Tab, {title: tabTitle}, 
 
-          React.createElement(Content, null, "Attributes of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
+          React.createElement(Content, null, 
+            React.createElement("b", null, "Attributes of ", tabTitle), " ", React.createElement("br", null), 
             betterTabContent()
           )
 
         )
       )
     });
+
+    /* Using allBlockTabInfo instead of going through the intermediate tabState array */
+    //var calculateTabsInfo = function() {
+    //  var i = 0;
+    //  var tabs = [];
+    //  console.log(this.props.allBlockTabInfo);
+    //  console.log(this.props.allBlockTabOpenStates);
+    //  for (var block in this.props.allBlockTabInfo) {
+    //    console.log(block);
+    //    i = i + 1;
+    //    console.log(this.props.allBlockTabOpenStates[block]);
+    //    console.log(block.label);
+    //    if (this.props.allBlockTabOpenStates[block] === true) {
+    //      console.log("a tab is open, time to calculate its contents");
+    //      var tabContent = [];
+    //
+    //      tabContent.push(<p>x: {this.props.allBlockTabInfo[block].position.x}</p>);
+    //      tabContent.push(<p>y: {this.props.allBlockTabInfo[block].position.y}</p>);
+    //      tabContent.push(<br/>);
+    //
+    //      tabContent.push(<p>Inports</p>);
+    //      for (var j = 0; j < this.props.allBlockTabInfo[block].inports.length; j++) {
+    //        for (var attribute in this.props.allBlockTabInfo[block].inports[j]) {
+    //          if (attribute !== 'connectedTo') {
+    //            console.log(block);
+    //            console.log(this.props.allBlockTabInfo[block].inports[j][attribute]);
+    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].inports[j][attribute])}</p>);
+    //          }
+    //          else if (attribute === 'connectedTo') {
+    //            tabContent.push(<p>connectedTo:</p>);
+    //            if (this.props.allBlockTabInfo[block].inports[j].connectedTo !== null) {
+    //              //for (var subAttribute in block.inports[j].connectedTo) {
+    //              tabContent.push(<p>block: {this.props.allBlockTabInfo[block].inports[j].connectedTo.block}</p>);
+    //              tabContent.push(<p>port: {this.props.allBlockTabInfo[block].inports[j].connectedTo.port}</p>);
+    //              //}
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].inports[j].connectedTo === null) {
+    //              tabContent.push(<p>null</p>);
+    //            }
+    //          }
+    //        }
+    //        //tabContent.push(<p>, </p>);
+    //      }
+    //      tabContent.push(<br/>);
+    //
+    //      console.log(tabContent);
+    //
+    //      tabContent.push(<p>Outports</p>);
+    //      for (var k = 0; k < this.props.allBlockTabInfo[block].outports.length; k++) {
+    //        /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+    //        for (var attribute in this.props.allBlockTabInfo[block].outports[k]) {
+    //          if (attribute !== 'connectedTo') {
+    //            console.log(attribute);
+    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].outports[k][attribute])}</p>);
+    //          }
+    //          else if (attribute === 'connectedTo') {
+    //            console.log(attribute);
+    //            tabContent.push(<p>connectedTo:</p>);
+    //            if (this.props.allBlockTabInfo[block].outports[k].connectedTo.length === 0) {
+    //              console.log("LENGTH OF ARRAY IS ZERO");
+    //              tabContent.push(<p>[]</p>);
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo !== null) {
+    //              for (var l = 0; l < this.props.allBlockTabInfo[block].outports[k].connectedTo.length; l++) {
+    //                tabContent.push(<p>[block: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['block']},</p>);
+    //                tabContent.push(<p>port: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['port']}]</p>)
+    //              }
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo === null) {
+    //              tabContent.push(<p>null</p>);
+    //            }
+    //          }
+    //        }
+    //        //tabContent.push(<p>, </p>);
+    //      }
+    //      tabs.push(
+    //        <Tab title={this.props.allBlockTabInfo[block].label}>
+    //
+    //          <Content>Attributes of {this.props.allBlockTabInfo[block].label} <br/> Tab number {i}
+    //            {tabContent}
+    //          </Content>
+    //
+    //        </Tab>
+    //      )
+    //    }
+    //    else if (this.props.allBlockTabOpenStates[block] === false) {
+    //      console.log("that block tab wasn't open, so don't open the " + block.label + " tab");
+    //    }
+    //  }
+    //  console.log(tabs);
+    //
+    //  return(
+    //    tabs
+    //  )
+    //}.bind(this);
 
     return (
         React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
@@ -7897,7 +8060,10 @@ function getBothPanesState(){
     /* SidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState()
+    listVisible: sidePaneStore.getDropdownState(),
+
+    //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
+    //allBlockTabInfo: paneStore.getAllBlockTabInfo()
   }
 }
 
@@ -7954,7 +8120,10 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                 
                sidebar: 
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, listVisible: this.state.listVisible}
+               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, 
+               listVisible: this.state.listVisible}
+               //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
+               //allBlockTabInfo={this.state.allBlockTabInfo}
                )
                //</div>
                }

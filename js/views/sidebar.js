@@ -106,7 +106,10 @@ function getBothPanesState(){
     /* SidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState()
+    listVisible: sidePaneStore.getDropdownState(),
+
+    //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
+    //allBlockTabInfo: paneStore.getAllBlockTabInfo()
   }
 }
 
@@ -163,7 +166,10 @@ var BothPanes = React.createClass({
                 }
                sidebar={
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible}
+               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
+               listVisible={this.state.listVisible}
+               //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
+               //allBlockTabInfo={this.state.allBlockTabInfo}
                />
                //</div>
                }>

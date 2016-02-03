@@ -116,19 +116,32 @@ var SidePane = React.createClass({
     //});
 
     /* A better version of the above tabState .map function to displaythe attributes of a block properly */
+    /* Also, try calculating tabState in here directly from allBlockTabInfo & OpenStates */
+    //var newerTabState = [];
+    //
+    //for(var block in this.props.allBlockTabOpenStates){
+    //  /* Need a separate check for the config tabs and such... */
+    //  if(this.props.allBlockTabOpenStates[block] === true){
+    //    newerTabState.push(this.props.allBlockTabInfo[block]);
+    //  }
+    //  else if(this.props.allBlockTabOpenStates[block] === false){
+    //    console.log("block tab wasn't open, s")
+    //  }
+    //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
       var tabTitle = block.label;
       var tabIndex = i + 1;
 
       var betterTabContent = function() {
+
         var tabContent = [];
 
-        tabContent.push(<p>x: {block.position.x}</p>);
-        tabContent.push(<p>y: {block.position.y}</p>);
-        tabContent.push(<br/>);
+        //tabContent.push(<p>x: {block.position.x}</p>);
+        //tabContent.push(<p>y: {block.position.y}</p>);
+        //tabContent.push(<br/>);
 
-        tabContent.push(<p>Inports</p>);
+        tabContent.push(<b>Inports</b>);
         for (var j = 0; j < block.inports.length; j++) {
           for (var attribute in block.inports[j]) {
             if(attribute !== 'connectedTo') {
@@ -155,7 +168,7 @@ var SidePane = React.createClass({
 
         console.log(tabContent);
 
-        tabContent.push(<p>Outports</p>);
+        tabContent.push(<b>Outports</b>);
         for (var k = 0; k < block.outports.length; k++) {
           /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
           for (var attribute in block.outports[k]) {
@@ -190,13 +203,109 @@ var SidePane = React.createClass({
       return (
         <Tab title={tabTitle}>
 
-          <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
+          <Content>
+            <b>Attributes of {tabTitle}</b> <br/>
             {betterTabContent()}
           </Content>
 
         </Tab>
       )
     });
+
+    /* Using allBlockTabInfo instead of going through the intermediate tabState array */
+    //var calculateTabsInfo = function() {
+    //  var i = 0;
+    //  var tabs = [];
+    //  console.log(this.props.allBlockTabInfo);
+    //  console.log(this.props.allBlockTabOpenStates);
+    //  for (var block in this.props.allBlockTabInfo) {
+    //    console.log(block);
+    //    i = i + 1;
+    //    console.log(this.props.allBlockTabOpenStates[block]);
+    //    console.log(block.label);
+    //    if (this.props.allBlockTabOpenStates[block] === true) {
+    //      console.log("a tab is open, time to calculate its contents");
+    //      var tabContent = [];
+    //
+    //      tabContent.push(<p>x: {this.props.allBlockTabInfo[block].position.x}</p>);
+    //      tabContent.push(<p>y: {this.props.allBlockTabInfo[block].position.y}</p>);
+    //      tabContent.push(<br/>);
+    //
+    //      tabContent.push(<p>Inports</p>);
+    //      for (var j = 0; j < this.props.allBlockTabInfo[block].inports.length; j++) {
+    //        for (var attribute in this.props.allBlockTabInfo[block].inports[j]) {
+    //          if (attribute !== 'connectedTo') {
+    //            console.log(block);
+    //            console.log(this.props.allBlockTabInfo[block].inports[j][attribute]);
+    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].inports[j][attribute])}</p>);
+    //          }
+    //          else if (attribute === 'connectedTo') {
+    //            tabContent.push(<p>connectedTo:</p>);
+    //            if (this.props.allBlockTabInfo[block].inports[j].connectedTo !== null) {
+    //              //for (var subAttribute in block.inports[j].connectedTo) {
+    //              tabContent.push(<p>block: {this.props.allBlockTabInfo[block].inports[j].connectedTo.block}</p>);
+    //              tabContent.push(<p>port: {this.props.allBlockTabInfo[block].inports[j].connectedTo.port}</p>);
+    //              //}
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].inports[j].connectedTo === null) {
+    //              tabContent.push(<p>null</p>);
+    //            }
+    //          }
+    //        }
+    //        //tabContent.push(<p>, </p>);
+    //      }
+    //      tabContent.push(<br/>);
+    //
+    //      console.log(tabContent);
+    //
+    //      tabContent.push(<p>Outports</p>);
+    //      for (var k = 0; k < this.props.allBlockTabInfo[block].outports.length; k++) {
+    //        /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+    //        for (var attribute in this.props.allBlockTabInfo[block].outports[k]) {
+    //          if (attribute !== 'connectedTo') {
+    //            console.log(attribute);
+    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].outports[k][attribute])}</p>);
+    //          }
+    //          else if (attribute === 'connectedTo') {
+    //            console.log(attribute);
+    //            tabContent.push(<p>connectedTo:</p>);
+    //            if (this.props.allBlockTabInfo[block].outports[k].connectedTo.length === 0) {
+    //              console.log("LENGTH OF ARRAY IS ZERO");
+    //              tabContent.push(<p>[]</p>);
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo !== null) {
+    //              for (var l = 0; l < this.props.allBlockTabInfo[block].outports[k].connectedTo.length; l++) {
+    //                tabContent.push(<p>[block: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['block']},</p>);
+    //                tabContent.push(<p>port: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['port']}]</p>)
+    //              }
+    //            }
+    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo === null) {
+    //              tabContent.push(<p>null</p>);
+    //            }
+    //          }
+    //        }
+    //        //tabContent.push(<p>, </p>);
+    //      }
+    //      tabs.push(
+    //        <Tab title={this.props.allBlockTabInfo[block].label}>
+    //
+    //          <Content>Attributes of {this.props.allBlockTabInfo[block].label} <br/> Tab number {i}
+    //            {tabContent}
+    //          </Content>
+    //
+    //        </Tab>
+    //      )
+    //    }
+    //    else if (this.props.allBlockTabOpenStates[block] === false) {
+    //      console.log("that block tab wasn't open, so don't open the " + block.label + " tab");
+    //    }
+    //  }
+    //  console.log(tabs);
+    //
+    //  return(
+    //    tabs
+    //  )
+    //}.bind(this);
 
     return (
         <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[

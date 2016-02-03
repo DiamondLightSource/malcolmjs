@@ -1157,7 +1157,7 @@ var blockStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-AppDispatcher.register(function(payload){
+blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
@@ -1391,48 +1391,50 @@ AppDispatcher.register(function(payload){
 
 module.exports = blockStore;
 
-blockStore.dispatchToken = AppDispatcher.register(function(payload){
-  var action = payload.action;
-  var item = action.item;
+/* Put blockStore.dispatchToken in front of the whole switch case above */
 
-  switch(action.actionType){
-
-    /* These are all the actions that result in a data change in allBlockInfo of some kind */
-
-    //case appConstants.ADDTO_ALLBLOCKINFO:
-    //  console.log(payload);
-    //  console.log(item);
-    //  appendToAllBlockInfo(item);
-    //  //appendToAllPossibleBlocks(item);
-    //  appendToBlockSelectedStates(item);
-    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-    //  console.log(payload);
-    //  console.log(item);
-    //  addEdgeToAllBlockInfo(item);
-    //  blockStore.emitChange();
-    //  console.log(allBlockInfo);
-    //  break;
-
-    //case appConstants.INTERACTJS_DRAG:
-    //  console.log(payload);
-    //  console.log(item);
-    //  interactJsDrag(item);
-    //  blockStore.emitChange();
-    //  break;
-
-    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
-    change at all first =P
-     */
-
-    default:
-          return 'blockStore: default';
-
-  }
-});
+//blockStore.dispatchToken = AppDispatcher.register(function(payload){
+//  var action = payload.action;
+//  var item = action.item;
+//
+//  switch(action.actionType){
+//
+//    /* These are all the actions that result in a data change in allBlockInfo of some kind */
+//
+//    //case appConstants.ADDTO_ALLBLOCKINFO:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  appendToAllBlockInfo(item);
+//    //  //appendToAllPossibleBlocks(item);
+//    //  appendToBlockSelectedStates(item);
+//    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+//    //  blockStore.emitChange();
+//    //  break;
+//    //
+//    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  addEdgeToAllBlockInfo(item);
+//    //  blockStore.emitChange();
+//    //  console.log(allBlockInfo);
+//    //  break;
+//
+//    //case appConstants.INTERACTJS_DRAG:
+//    //  console.log(payload);
+//    //  console.log(item);
+//    //  interactJsDrag(item);
+//    //  blockStore.emitChange();
+//    //  break;
+//
+//    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
+//    change at all first =P
+//     */
+//
+//    default:
+//          return 'blockStore: default';
+//
+//  }
+//});
 
 
 /* Port calculation to render the edges properly has been moved to the render function of an edge;

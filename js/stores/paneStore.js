@@ -187,12 +187,19 @@ var paneStore = assign({}, EventEmitter.prototype, {
 
   getSidebarOpenState: function(){
     return _stuff.sidebarOpen;
+  },
+
+  getAllBlockTabOpenStates: function(){
+    return allBlockTabProperties;
+  },
+  getAllBlockTabInfo: function(){
+    return allBlockTabInfo;
   }
 });
 
 
 
-AppDispatcher.register(function(payload){
+paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
   switch(action.actionType){
@@ -297,6 +304,32 @@ AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    /* Trying to add waitFor blockStore in order to update allBlockTabInfo */
+
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  getInitialBlockDataFromBlockStore();
+    //  /* Try simply resetting the references in tabState */
+    //  resetTabStateReferences();
+    //  paneStore.emitChange();
+    //  break;
+
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
     //  console.log(action);
@@ -371,34 +404,37 @@ var getBlockContentFromDeviceStore = function(){
   _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
 };
 
-paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  /* Old stuff for deviceStore */
+/* Put paneStore.dispatchToken in front of the whole swicth case above */
 
-  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
-  //
-  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
-  //
-  //  console.log(payload);
-  //  console.log(payload.action.item);
-  //  getBlockContentFromDeviceStore();
-  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
-  //  paneStore.emitChange();
-  //}
-
-  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
-
-  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO || appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
-  //  //|| appConstants.CHANGE_BLOCKPOSITION
-  //){
-  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-  //
-  //  console.log(payload);
-  //  console.log(payload.action.item);
-  //  getInitialBlockDataFromBlockStore();
-  //  paneStore.emitChange();
-  //}
-
-});
+//paneStore.dispatchToken = AppDispatcher.register(function(payload){
+//  /* Old stuff for deviceStore */
+//
+//  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+//  //
+//  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
+//  //
+//  //  console.log(payload);
+//  //  console.log(payload.action.item);
+//  //  getBlockContentFromDeviceStore();
+//  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+//  //  paneStore.emitChange();
+//  //}
+//
+//  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+//
+//  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO
+//  //  //|| appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
+//  //  //|| appConstants.CHANGE_BLOCKPOSITION
+//  //){
+//  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+//  //
+//  //  console.log(payload);
+//  //  console.log(payload.action.item);
+//  //  getInitialBlockDataFromBlockStore();
+//  //  paneStore.emitChange();
+//  //}
+//
+//});
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
@@ -570,7 +606,13 @@ var removeBlockTab = function(selectedTabIndex){
 };
 
 var getInitialBlockDataFromBlockStore = function(){
-  allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
+  //allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
+  allBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+  /* Try using Object.assign instead to not fetch position data as well from allBlockInfo */
+  //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+  ///* Now need to loop over each block object and 'remove' the position attribute */
+  //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
+  console.log(allBlockTabInfo);
 };
 
 function toggleSidebar(){
@@ -593,6 +635,17 @@ function windowWidthMediaQueryChanged(sidebarOpen){
   //console.log(_stuff.sidebarOpen)
 
   _stuff.sidebarOpen = sidebarOpen;
+}
+
+function copyTabState(){
+  _stuff['newTabState'] = _stuff.tabState.slice();
+}
+
+function resetTabStateReferences(){
+  for(var i = 0; i < _stuff.tabState.length; i++){
+    _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
+    console.log(_stuff.tabState[i]);
+  }
 }
 
 module.exports = paneStore;
