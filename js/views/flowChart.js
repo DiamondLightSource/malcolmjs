@@ -86,6 +86,7 @@ var FlowChart = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+    //window.addEventListener('keydown', this.keyPress);
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -134,7 +135,10 @@ var FlowChart = React.createClass({
       blockActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
 
-      window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      blockActions.addEdgePreview(null);
+      interact('#appAndDragAreaContainer')
+        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
     }
     else{
       console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -569,7 +573,7 @@ var FlowChart = React.createClass({
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
-      
+
     blockActions.addEdgePreview(null);
     interact('#appAndDragAreaContainer')
       .off('mousemove', this.interactJSMouseMoveForEdgePreview)
@@ -750,6 +754,21 @@ var FlowChart = React.createClass({
     blockActions.graphZoom(newZoomScale);
     blockActions.changeGraphPosition(newGraphPosition);
   },
+
+  //keyPress: function(e){
+  //  console.log("key press!");
+  //  console.log(e);
+  //
+  //  if(e.keyCode === 46){
+  //    console.log("delete key has been pressed");
+  //    if(this.props.areAnyEdgesSelected === true){
+  //
+  //    }
+  //    else if(this.props.areAnyEdgesSelected === false){
+  //
+  //    }
+  //  }
+  //},
 
 
 

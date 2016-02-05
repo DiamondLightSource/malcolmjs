@@ -195,6 +195,13 @@ var blockActions = {
       actionType: appConstants.PREVIOUS_MOUSECOORDSONZOOM,
       item: item
     })
+  },
+
+  deleteEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DELETE_EDGE,
+      item: item
+    })
   }
 };
 

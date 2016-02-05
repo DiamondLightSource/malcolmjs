@@ -322,6 +322,13 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.DELETE_EDGE:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
     //case appConstants.INTERACTJS_DRAG:
     //  AppDispatcher.waitFor([blockStore.dispatchToken]);
     //  getInitialBlockDataFromBlockStore();

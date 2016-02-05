@@ -131,7 +131,9 @@ function getAnyEdgeSelectedState(EdgeId){
 
 function checkIfAnyEdgesAreSelected(){
   var areAnyEdgesSelected;
+  var i = 0;
   for(var edge in edgeSelectedStates){
+    i = i + 1;
     if(edgeSelectedStates[edge] === true){
       //console.log(edgeSelectedStates[edge]);
       areAnyEdgesSelected = true;
@@ -142,6 +144,11 @@ function checkIfAnyEdgesAreSelected(){
     }
   }
   //console.log(areAnyEdgesSelected);
+  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+  if(i === 0){
+    areAnyEdgesSelected = false;
+  }
+
   return areAnyEdgesSelected;
 }
 
@@ -415,7 +422,7 @@ function addEdgeToAllBlockInfo(Info){
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
-  for(i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
+  for(var i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
     if(allBlockInfo[Info.fromBlock].outports[i].name === Info.fromBlockPort){
       var newEdgeToFromBlock = {
         block: Info.toBlock,
@@ -429,7 +436,7 @@ function addEdgeToAllBlockInfo(Info){
   }
   /* Also need to add to the node whose inport we've connected that outport to! */
 
-  for(j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
+  for(var j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
     if(allBlockInfo[Info.toBlock].inports[j].name === Info.toBlockPort){
       var newEdgeToToBlock = {
         block: Info.fromBlock,
@@ -443,6 +450,62 @@ function addEdgeToAllBlockInfo(Info){
     }
   }
   console.log(allBlockInfo);
+}
+
+function removeEdgeFromAllBlockInfo(Info){
+
+  for(var i = 0; i < allBlockInfo[Info.toBlock].inports.length; i++){
+    if(allBlockInfo[Info.toBlock].inports[i].name === Info.toBlockPort){
+      /* Remove the info about the connection since we want to delete the edge */
+      allBlockInfo[Info.toBlock].inports[i].connected = false;
+      allBlockInfo[Info.toBlock].inports[i].connectedTo = null;
+    }
+    else if(allBlockInfo[Info.toBlock].inports[i].name !== Info.toBlockPort){
+      console.log("not the right port, leave that info alone");
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.fromBlock].outports.length; j++){
+    if(allBlockInfo[Info.fromBlock].outports[j].name === Info.fromBlockPort){
+      /* First, remove it from the array; then check the length of the conenctedTo array:
+      if it's 0 then you can also reset the conencted attribute, but if the array is longer than 0 there are still
+      other connections, so don't set connected to false
+       */
+      for(var k = 0; k < allBlockInfo[Info.fromBlock].outports[j].connectedTo.length; k++){
+        /* Checking what the outport is CONNECTED TO, so it'll be the info of the fromBlock */
+        if(allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].block === Info.toBlock
+        && allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].port === Info.toBlockPort){
+          /* Remove this particular object from the connectedTo array */
+          allBlockInfo[Info.fromBlock].outports[j].connectedTo.splice(k, 1);
+          console.log(allBlockInfo[Info.fromBlock].outports[j].connectedTo);
+
+          /* Also need to remove it from the edgeSelectedStates object */
+
+          delete edgeSelectedStates[Info.edgeId];
+          console.log(edgeSelectedStates);
+          //window.alert("hsduiad");
+
+          /* And also need to reset the port styling somehow too... */
+
+          /* Now check the length of connectedTo to see if conencted needs to be reset too */
+          if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length === 0){
+            /* Reset connected */
+            allBlockInfo[Info.fromBlock].outports[j].connected = false;
+          }
+          else if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length > 0){
+            console.log("don't reset connected, there are other connections to that outport still");
+          }
+        }
+        else{
+          console.log("not the correct block or port (or both), so don't alter anything");
+        }
+      }
+    }
+    else if(allBlockInfo[Info.fromBlock].outports[j].name !== Info.fromBlockPort){
+      console.log("not the correct outport, carry on");
+    }
+  }
+
 }
 
 var blockInfoTemplates = {
@@ -1416,6 +1479,13 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       previousMouseCoordsOnZoom = item;
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      console.log(payload);
+      console.log(item);
+      removeEdgeFromAllBlockInfo(item);
       blockStore.emitChange();
       break;
 

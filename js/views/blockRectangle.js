@@ -35,10 +35,16 @@ var BlockRectangles = React.createClass({
         <rect id={this.props.blockId.concat("Rectangle")}
               height={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height} width={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width}
               x={0} y={0} rx={7} ry={7}
-              style={{fill: 'lightgrey', 'strokeWidth': 1.65,
+              style={{fill: 'white', 'strokeWidth': 1.65,
                stroke: this.props.selected ? '#797979' : 'black',
                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+        />
+        <rect id={this.props.blockId.concat("InnerRectangle")}
+              height={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height - 4} width={this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width - 4}
+              x={2} y={2} rx={5} ry={5}
+              style={{fill: 'lightgrey',
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
         />
       </g>
     )

@@ -42,11 +42,17 @@ var Edge = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
 
     interact(ReactDOM.findDOMNode(this))
-      .on('tap', this.edgeSelect)
+      .on('tap', this.edgeSelect);
+
+    window.addEventListener('keydown', this.keyPress);
+
   },
   componentWillUnmount: function(){
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.edgeSelect)
+
+    window.removeEventListener('keydown', this.keyPress);
+
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
@@ -75,6 +81,57 @@ var Edge = React.createClass({
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
     blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
+  },
+
+  keyPress: function(e){
+    console.log("key press!");
+    console.log(e);
+
+    if(e.keyCode === 46){
+      console.log("delete key has been pressed");
+      if(this.props.areAnyEdgesSelected === true){
+        if(this.props.selected === true){
+          /* Delete this particular edge */
+          console.log(this.props.fromBlock);
+          console.log(this.props.toBlock);
+          /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
+          switching it around
+           */
+          blockActions.deleteEdge({
+            fromBlock: this.props.fromBlock,
+            fromBlockPort: this.props.fromBlockPort,
+            toBlock: this.props.toBlock,
+            toBlockPort: this.props.toBlockPort,
+            edgeId: this.props.id
+          });
+
+          /* Reset both ports' styling to normal again */
+
+          console.log(this.props.fromBlock);
+          var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
+          console.log(fromBlockPortElement);
+
+          var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
+          console.log(toBlockPortElement);
+
+          fromBlockPortElement.style.stroke = "black";
+          fromBlockPortElement.style.fill = "black";
+          fromBlockPortElement.setAttribute('r', 2);
+
+          toBlockPortElement.style.stroke = "black";
+          toBlockPortElement.style.fill = "black";
+          toBlockPortElement.setAttribute('r', 2);
+
+        }
+
+        else if(this.props.selected === false){
+          /* Do nothing to this edge since it isn't the selected edge */
+        }
+      }
+      else if(this.props.areAnyEdgesSelected === false){
+        console.log("no edges are selected, so don't delete anything");
+      }
+    }
   },
 
   render:function(){

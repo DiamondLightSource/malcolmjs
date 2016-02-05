@@ -196,6 +196,13 @@ var blockActions = {
       actionType: appConstants.PREVIOUS_MOUSECOORDSONZOOM,
       item: item
     })
+  },
+
+  deleteEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DELETE_EDGE,
+      item: item
+    })
   }
 };
 
@@ -688,7 +695,9 @@ var appConstants = {
 
   ADD_EDGEPREVIEW: "ADD_EDGEPREVIEW",
   UPDATE_EDGEPREVIEWENDPOINT: "UPDATE_EDGEPREVIEWENDPOINT",
-  PREVIOUS_MOUSECOORDSONZOOM: "PREVIOUS_MOUSECOORDSONZOOM"
+  PREVIOUS_MOUSECOORDSONZOOM: "PREVIOUS_MOUSECOORDSONZOOM",
+
+  DELETE_EDGE: "DELETE_EDGE"
 };
 
 module.exports = appConstants;
@@ -872,7 +881,9 @@ function getAnyEdgeSelectedState(EdgeId){
 
 function checkIfAnyEdgesAreSelected(){
   var areAnyEdgesSelected;
+  var i = 0;
   for(var edge in edgeSelectedStates){
+    i = i + 1;
     if(edgeSelectedStates[edge] === true){
       //console.log(edgeSelectedStates[edge]);
       areAnyEdgesSelected = true;
@@ -883,6 +894,11 @@ function checkIfAnyEdgesAreSelected(){
     }
   }
   //console.log(areAnyEdgesSelected);
+  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+  if(i === 0){
+    areAnyEdgesSelected = false;
+  }
+
   return areAnyEdgesSelected;
 }
 
@@ -1156,7 +1172,7 @@ function addEdgeToAllBlockInfo(Info){
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
-  for(i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
+  for(var i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
     if(allBlockInfo[Info.fromBlock].outports[i].name === Info.fromBlockPort){
       var newEdgeToFromBlock = {
         block: Info.toBlock,
@@ -1170,7 +1186,7 @@ function addEdgeToAllBlockInfo(Info){
   }
   /* Also need to add to the node whose inport we've connected that outport to! */
 
-  for(j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
+  for(var j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
     if(allBlockInfo[Info.toBlock].inports[j].name === Info.toBlockPort){
       var newEdgeToToBlock = {
         block: Info.fromBlock,
@@ -1184,6 +1200,62 @@ function addEdgeToAllBlockInfo(Info){
     }
   }
   console.log(allBlockInfo);
+}
+
+function removeEdgeFromAllBlockInfo(Info){
+
+  for(var i = 0; i < allBlockInfo[Info.toBlock].inports.length; i++){
+    if(allBlockInfo[Info.toBlock].inports[i].name === Info.toBlockPort){
+      /* Remove the info about the connection since we want to delete the edge */
+      allBlockInfo[Info.toBlock].inports[i].connected = false;
+      allBlockInfo[Info.toBlock].inports[i].connectedTo = null;
+    }
+    else if(allBlockInfo[Info.toBlock].inports[i].name !== Info.toBlockPort){
+      console.log("not the right port, leave that info alone");
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.fromBlock].outports.length; j++){
+    if(allBlockInfo[Info.fromBlock].outports[j].name === Info.fromBlockPort){
+      /* First, remove it from the array; then check the length of the conenctedTo array:
+      if it's 0 then you can also reset the conencted attribute, but if the array is longer than 0 there are still
+      other connections, so don't set connected to false
+       */
+      for(var k = 0; k < allBlockInfo[Info.fromBlock].outports[j].connectedTo.length; k++){
+        /* Checking what the outport is CONNECTED TO, so it'll be the info of the fromBlock */
+        if(allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].block === Info.toBlock
+        && allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].port === Info.toBlockPort){
+          /* Remove this particular object from the connectedTo array */
+          allBlockInfo[Info.fromBlock].outports[j].connectedTo.splice(k, 1);
+          console.log(allBlockInfo[Info.fromBlock].outports[j].connectedTo);
+
+          /* Also need to remove it from the edgeSelectedStates object */
+
+          delete edgeSelectedStates[Info.edgeId];
+          console.log(edgeSelectedStates);
+          //window.alert("hsduiad");
+
+          /* And also need to reset the port styling somehow too... */
+
+          /* Now check the length of connectedTo to see if conencted needs to be reset too */
+          if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length === 0){
+            /* Reset connected */
+            allBlockInfo[Info.fromBlock].outports[j].connected = false;
+          }
+          else if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length > 0){
+            console.log("don't reset connected, there are other connections to that outport still");
+          }
+        }
+        else{
+          console.log("not the correct block or port (or both), so don't alter anything");
+        }
+      }
+    }
+    else if(allBlockInfo[Info.fromBlock].outports[j].name !== Info.fromBlockPort){
+      console.log("not the correct outport, carry on");
+    }
+  }
+
 }
 
 var blockInfoTemplates = {
@@ -2157,6 +2229,13 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       previousMouseCoordsOnZoom = item;
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      console.log(payload);
+      console.log(item);
+      removeEdgeFromAllBlockInfo(item);
       blockStore.emitChange();
       break;
 
@@ -3239,6 +3318,13 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
       /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
       resetTabStateReferences();
       paneStore.emitChange();
       break;
@@ -4796,10 +4882,16 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
         React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
               height: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height, width: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width, 
               x: 0, y: 0, rx: 7, ry: 7, 
-              style: {fill: 'lightgrey', 'strokeWidth': 1.65,
+              style: {fill: 'white', 'strokeWidth': 1.65,
                stroke: this.props.selected ? '#797979' : 'black',
                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+        ), 
+        React.createElement("rect", {id: this.props.blockId.concat("InnerRectangle"), 
+              height: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height - 4, width: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width - 4, 
+              x: 2, y: 2, rx: 5, ry: 5, 
+              style: {fill: 'lightgrey',
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
         )
       )
     )
@@ -5125,11 +5217,17 @@ var Edge = React.createClass({displayName: "Edge",
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
 
     interact(ReactDOM.findDOMNode(this))
-      .on('tap', this.edgeSelect)
+      .on('tap', this.edgeSelect);
+
+    window.addEventListener('keydown', this.keyPress);
+
   },
   componentWillUnmount: function(){
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.edgeSelect)
+
+    window.removeEventListener('keydown', this.keyPress);
+
   },
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
@@ -5158,6 +5256,57 @@ var Edge = React.createClass({displayName: "Edge",
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
     blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
+  },
+
+  keyPress: function(e){
+    console.log("key press!");
+    console.log(e);
+
+    if(e.keyCode === 46){
+      console.log("delete key has been pressed");
+      if(this.props.areAnyEdgesSelected === true){
+        if(this.props.selected === true){
+          /* Delete this particular edge */
+          console.log(this.props.fromBlock);
+          console.log(this.props.toBlock);
+          /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
+          switching it around
+           */
+          blockActions.deleteEdge({
+            fromBlock: this.props.fromBlock,
+            fromBlockPort: this.props.fromBlockPort,
+            toBlock: this.props.toBlock,
+            toBlockPort: this.props.toBlockPort,
+            edgeId: this.props.id
+          });
+
+          /* Reset both ports' styling to normal again */
+
+          console.log(this.props.fromBlock);
+          var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
+          console.log(fromBlockPortElement);
+
+          var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
+          console.log(toBlockPortElement);
+
+          fromBlockPortElement.style.stroke = "black";
+          fromBlockPortElement.style.fill = "black";
+          fromBlockPortElement.setAttribute('r', 2);
+
+          toBlockPortElement.style.stroke = "black";
+          toBlockPortElement.style.fill = "black";
+          toBlockPortElement.setAttribute('r', 2);
+
+        }
+
+        else if(this.props.selected === false){
+          /* Do nothing to this edge since it isn't the selected edge */
+        }
+      }
+      else if(this.props.areAnyEdgesSelected === false){
+        console.log("no edges are selected, so don't delete anything");
+      }
+    }
   },
 
   render:function(){
@@ -5554,6 +5703,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+    //window.addEventListener('keydown', this.keyPress);
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -5602,7 +5752,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       blockActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
 
-      window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      blockActions.addEdgePreview(null);
+      interact('#appAndDragAreaContainer')
+        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
     }
     else{
       console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -6037,7 +6190,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
-      
+
     blockActions.addEdgePreview(null);
     interact('#appAndDragAreaContainer')
       .off('mousemove', this.interactJSMouseMoveForEdgePreview)
@@ -6218,6 +6371,21 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     blockActions.graphZoom(newZoomScale);
     blockActions.changeGraphPosition(newGraphPosition);
   },
+
+  //keyPress: function(e){
+  //  console.log("key press!");
+  //  console.log(e);
+  //
+  //  if(e.keyCode === 46){
+  //    console.log("delete key has been pressed");
+  //    if(this.props.areAnyEdgesSelected === true){
+  //
+  //    }
+  //    else if(this.props.areAnyEdgesSelected === false){
+  //
+  //    }
+  //  }
+  //},
 
 
 
