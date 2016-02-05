@@ -140,8 +140,8 @@ var MainPane = React.createClass({
             <i className="fa fa-wrench"></i>
           </ToggleButton>
         ]}>
-        <Tab title="View" showFooter={this.props.footers}>
-          <Content  >
+        <Tab title="View" showFooter={this.props.footers} >
+          <Content >
             <div style={contentStyling} >
               <FlowChartControllerView/>
             </div>

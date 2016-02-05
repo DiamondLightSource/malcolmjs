@@ -176,6 +176,25 @@ var blockActions = {
       actionType: appConstants.INTERACTJS_DRAG,
       item: item
     })
+  },
+
+  addEdgePreview: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_EDGEPREVIEW,
+      item: item
+    })
+  },
+  updateEdgePreviewEndpoint: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.UPDATE_EDGEPREVIEWENDPOINT,
+      item: item
+    })
+  },
+  previousMouseCoordsOnZoom: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PREVIOUS_MOUSECOORDSONZOOM,
+      item: item
+    })
   }
 };
 

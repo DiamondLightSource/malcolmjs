@@ -9,6 +9,7 @@ var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
 var Edge = require('./edge.js');
+var EdgePreview = require('./edgePreview');
 
 var Block = require('./block.js');
 
@@ -132,6 +133,8 @@ var FlowChart = React.createClass({
       this.portDeselectRemoveHighlight();
       blockActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
+
+      window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
     }
     else{
       console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
@@ -168,9 +171,13 @@ var FlowChart = React.createClass({
       //nodeActions.graphZoom(newScaleFactor);
     }
 
+    /* Lets start again with the zoom and build up my own understanding of it */
+
     var zoomFactor = newZoomScale / -50;
     var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
 
+    /* Trying another definition of scaleDelta */
+    //var scaleDelta = newZoomScale / currentZoomScale;
     var scaleDelta = 1 + (newZoomScale - currentZoomScale);
     //this.lastScale = newZoomScale;
 
@@ -179,8 +186,28 @@ var FlowChart = React.createClass({
     var mouseOnZoomX = e.nativeEvent.clientX;
     var mouseOnZoomY = e.nativeEvent.clientY;
 
-     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX ;
-     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY ;
+    /* I'm missing the deltaX and deltaY variables that are in the-graph-app.js at line 195 & 196
+    Need the previous position of the mouse when wheel zoom was fired */
+    /* UPDATE: I don't think it's because of the lack of deltaX and deltaY, they don't work how I want so I reckon I
+    was looking at the wrong zoom, it's the one above!
+    So I reckon I'm not calculating the scale variable correctly, I need to be dividing by my previous scale I think?
+     */
+
+    //if(this.props.previousMouseCoordsOnZoom !== null){
+    //  var deltaX = mouseOnZoomX - this.props.previousMouseCoordsOnZoom.x;
+    //  var deltaY = mouseOnZoomY - this.props.previousMouseCoordsOnZoom.y;
+    //}
+    //else if(this.props.previousMouseCoordsOnZoom === null){
+    //  console.log("at the very first mouse wheel zoom, so the first offset is zero?");
+    //  var deltaX = 0;
+    //  var deltaY = 0;
+    //}
+
+     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX;
+     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY;
+
+    console.log(currentGraphPositionX);
+    console.log(mouseOnZoomX);
 
      var newGraphPosition = {
        x: newGraphPositionX,
@@ -189,6 +216,23 @@ var FlowChart = React.createClass({
 
      blockActions.graphZoom(scale);
      blockActions.changeGraphPosition(newGraphPosition);
+
+    //var previousMouseCoordsOnZoom = {
+    //  x: e.nativeEvent.clientX,
+    //  y: e.nativeEvent.clientY
+    //};
+    //
+    //blockActions.previousMouseCoordsOnZoom(previousMouseCoordsOnZoom);
+
+    //blockActions.graphZoom(newZoomScale);
+    //
+    //var newGraphPosition = {
+    //  x: newZoomScale * currentGraphPositionX,
+    //  y: newZoomScale * currentGraphPositionY
+    //};
+    //
+    //blockActions.changeGraphPosition(newGraphPosition);
+
   },
 
   isZoomNegative: function(n){
@@ -226,6 +270,91 @@ var FlowChart = React.createClass({
 
   addEdgePreview: function(){
     console.log("addEdgePreview in flowChart has been invoked!");
+    /* Trying to replace with interactjs using mousemove */
+    //window.addEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+
+    interact('#appAndDragAreaContainer')
+      .on('mousemove', this.interactJSMouseMoveForEdgePreview);
+
+    console.log(this.props.portThatHasBeenClicked);
+    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.id;
+
+    var portStringSliceIndex = fromBlockId.length;
+    var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
+    console.log(portName);
+    console.log(fromBlockId);
+    var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
+    console.log(fromBlockType);
+
+    /* Slightly confusing since the end of the edge is the same as the start of the edge at the very beginning
+    of an edgePreview, but this is only to do the initial render, this'll be updated by windowMouseMoveForEdgePreview()
+     */
+
+    console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
+
+    if(this.props.portThatHasBeenClicked.cx.baseVal.value === 0){
+      console.log("port clicked is an inport");
+      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].x;
+      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].y;
+      var portType = "inport";
+    }
+    else if(this.props.portThatHasBeenClicked.cx.baseVal.value !== 0) {
+      console.log("port clicked is an outport");
+      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].x;
+      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].y;
+      var portType = "outport";
+    }
+    var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
+    var endOfEdgeY = this.props.allBlockInfo[fromBlockId].position.y + endOfEdgePortOffsetY;
+
+    var edgePreviewInfo = {
+      fromBlockInfo: {
+        fromBlock: fromBlockId,
+        fromBlockType: fromBlockType,
+        fromBlockPort: portName,
+        fromBlockPortType: portType
+      },
+      /* At the very start this'll be the same as the fromBlockPort position, then I'll update it with
+      windowMouseMoveForEdgePreview() */
+      endpointCoords: {
+        x: endOfEdgeX,
+        y: endOfEdgeY
+      }
+    };
+
+    console.log(edgePreviewInfo);
+
+    blockActions.addEdgePreview(edgePreviewInfo);
+
+  },
+
+  interactJSMouseMoveForEdgePreview: function(e){
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
+
+    console.log("interactjs mousemove");
+    console.log(e);
+
+    var mousePositionChange = {
+      x: e.mozMovementX,
+      y: e.mozMovementY
+    };
+
+    blockActions.updateEdgePreviewEndpoint(mousePositionChange);
+
+  },
+
+  windowMouseMoveForEdgePreview: function(e){
+    console.log(e);
+    console.log(e.clientX);
+
+    var mousePosition = {
+      x: e.layerX,
+      y: e.layerY
+    };
+
+    blockActions.updateEdgePreviewEndpoint(mousePosition);
+
   },
 
   portSelectHighlight: function(){
@@ -279,6 +408,11 @@ var FlowChart = React.createClass({
     port.style.fill = "black";
 
     port.setAttribute('r', 2);
+
+    /* Reset edgePreview in blockStore */
+
+    blockActions.addEdgePreview(null);
+
   },
 
   checkBothClickedPorts: function(){
@@ -420,6 +554,10 @@ var FlowChart = React.createClass({
     fromPort.style.fill = "black";
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
+
+    blockActions.addEdgePreview(null);
+    interact('#appAndDragAreaContainer')
+      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
   }
   else if(fromBlockPortType === toBlockPortType){
     console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
@@ -431,6 +569,10 @@ var FlowChart = React.createClass({
     fromPort.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
+      
+    blockActions.addEdgePreview(null);
+    interact('#appAndDragAreaContainer')
+      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
   }
   else if(fromBlockPortType !== toBlockPortType){
     console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
@@ -470,6 +612,10 @@ var FlowChart = React.createClass({
       fromPort.style.fill = "black";
       fromPort.setAttribute('r', 2);
       this.resetPortClickStorage();
+
+      blockActions.addEdgePreview(null);
+      interact('#appAndDragAreaContainer')
+        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
     }
     else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       console.log("That inport isn't connected to anything, so proceed with the port connection process");
@@ -542,6 +688,11 @@ var FlowChart = React.createClass({
       blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
       blockActions.appendToEdgeSelectedState(edgeLabel);
       this.resetPortClickStorage();
+      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      /* Can now safely delete the edgePreview by setting it back to null */
+      blockActions.addEdgePreview(null);
+      interact('#appAndDragAreaContainer')
+        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
     }
   },
 
@@ -564,6 +715,13 @@ var FlowChart = React.createClass({
       x: xChange,
       y: yChange
     });
+
+    if(this.props.edgePreview !== null) {
+      blockActions.updateEdgePreviewEndpoint({
+        x: -e.dx,
+        y: -e.dy
+      })
+    }
   },
 
   interactJsPinchZoom: function(e){
@@ -656,6 +814,27 @@ var FlowChart = React.createClass({
 
     }
 
+    var edgePreview = [];
+
+    if(this.props.edgePreview !== null){
+      console.log("we have an edgePreview!");
+      /* Render the edgePreview component! */
+
+      var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock + this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
+
+      edgePreview.push(
+        <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel}
+          edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
+                     fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
+
+        />
+      )
+
+    }
+    else if(this.props.edgePreview === null){
+      console.log("edgePreview is null, so don't render one");
+    }
+
     console.log(blocks);
     console.log(edges);
 
@@ -685,6 +864,7 @@ var FlowChart = React.createClass({
             <g id="EdgesGroup" >
 
               {edges}
+              {edgePreview}
 
             </g>
 

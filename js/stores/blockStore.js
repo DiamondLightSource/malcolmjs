@@ -19,6 +19,14 @@ var clickedEdge = null;
 var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
 var portMouseOver = false;
+var edgePreview = null;
+var previousMouseCoordsOnZoom = null;
+
+function updateEdgePreviewEndpoint(position){
+  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
+  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
+  console.log(edgePreview.endpointCoords);
+}
 
 var allBlockTabInfo = {
   'Gate1': {
@@ -976,7 +984,7 @@ var allBlockTypesStyling = {
 };
 
 var graphPosition = {
-  x: 100,
+  x: 0,
   y: 0
 };
 
@@ -1154,6 +1162,13 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getSubsetOfAllBlockInfo: function(){
     return allBlockInfo.Gate1.inports;
+  },
+
+  getEdgePreview: function(){
+    return edgePreview;
+  },
+  getPreviousMouseCoordsOnZoom: function(){
+    return previousMouseCoordsOnZoom;
   }
 });
 
@@ -1380,6 +1395,27 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       interactJsDrag(item);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.ADD_EDGEPREVIEW:
+      console.log(payload);
+      console.log(item);
+      edgePreview = item;
+      blockStore.emitChange();
+      break;
+
+    case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
+      console.log(payload);
+      console.log(item);
+      updateEdgePreviewEndpoint(item);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
+      console.log(payload);
+      console.log(item);
+      previousMouseCoordsOnZoom = item;
       blockStore.emitChange();
       break;
 
