@@ -147,6 +147,13 @@ var SidePane = React.createClass({
         }
         else {
           var tabTitle = "Attributes of " + tabLabel;
+
+          tabContent.push(<b>Position</b>);
+          tabContent.push(<p>x: {block.position.x}</p>);
+          tabContent.push(<p>y: {block.position.y}</p>);
+
+          tabContent.push(<br/>);
+
           tabContent.push(<b>Inports</b>);
           for (var j = 0; j < block.inports.length; j++) {
             for (var attribute in block.inports[j]) {

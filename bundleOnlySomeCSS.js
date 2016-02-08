@@ -3339,13 +3339,13 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    //case appConstants.INTERACTJS_DRAG:
-    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  getInitialBlockDataFromBlockStore();
-    //  /* Try simply resetting the references in tabState */
-    //  resetTabStateReferences();
-    //  paneStore.emitChange();
-    //  break;
+    case appConstants.INTERACTJS_DRAG:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
@@ -4766,9 +4766,6 @@ var Block = React.createClass({displayName: "Block",
       console.log("inside setTimeout");
       this.handleInteractJsDrag(dragMovement)}.bind(this), 500
     );
-
-    //clearTimeout(timer);
-
   },
 
   //differentDebounce: function(func, wait, immediate) {
@@ -8389,6 +8386,13 @@ var SidePane = React.createClass({displayName: "SidePane",
         }
         else {
           var tabTitle = "Attributes of " + tabLabel;
+
+          tabContent.push(React.createElement("b", null, "Position"));
+          tabContent.push(React.createElement("p", null, "x: ", block.position.x));
+          tabContent.push(React.createElement("p", null, "y: ", block.position.y));
+
+          tabContent.push(React.createElement("br", null));
+
           tabContent.push(React.createElement("b", null, "Inports"));
           for (var j = 0; j < block.inports.length; j++) {
             for (var attribute in block.inports[j]) {

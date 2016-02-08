@@ -329,13 +329,13 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    //case appConstants.INTERACTJS_DRAG:
-    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  getInitialBlockDataFromBlockStore();
-    //  /* Try simply resetting the references in tabState */
-    //  resetTabStateReferences();
-    //  paneStore.emitChange();
-    //  break;
+    case appConstants.INTERACTJS_DRAG:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      getInitialBlockDataFromBlockStore();
+      /* Try simply resetting the references in tabState */
+      resetTabStateReferences();
+      paneStore.emitChange();
+      break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
