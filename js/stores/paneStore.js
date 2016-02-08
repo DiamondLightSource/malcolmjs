@@ -211,15 +211,15 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       passSidePane(item);
           break;
 
-    case appConstants.REMOVE_TAB:
-      console.log(payload);
-      console.log(action);
-      console.log(item);
-      removeTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      console.log(allBlockTabProperties.redBlockTabOpen);
-      break;
+    //case appConstants.REMOVE_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //  console.log(item);
+    //  removeTab(item);
+    //  paneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //  console.log(allBlockTabProperties.redBlockTabOpen);
+    //  break;
 
     case appConstants.DROPDOWN_SELECT:
       //var tab = item.item;
@@ -237,7 +237,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Want to replace with a better version, now that I'm doing node tabs */
       //changeFavTabState();
       setFavTabStateTrue();
-      console.log(allBlockTabProperties.favTabOpen);
+      console.log(allBlockTabProperties.Favourites);
       paneStore.emitChange();
       break;
 
@@ -247,7 +247,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
       //changeConfigTabState();
       setConfigTabStateTrue();
-      console.log(allBlockTabProperties.configTabOpen);
+      console.log(allBlockTabProperties.Configuration);
       paneStore.emitChange();
       break;
 

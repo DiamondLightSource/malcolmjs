@@ -130,7 +130,7 @@ var SidePane = React.createClass({
     //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
-      var tabTitle = block.label;
+      var tabLabel = block.label;
       var tabIndex = i + 1;
 
       var betterTabContent = function() {
@@ -141,70 +141,77 @@ var SidePane = React.createClass({
         //tabContent.push(<p>y: {block.position.y}</p>);
         //tabContent.push(<br/>);
 
-        tabContent.push(<b>Inports</b>);
-        for (var j = 0; j < block.inports.length; j++) {
-          for (var attribute in block.inports[j]) {
-            if(attribute !== 'connectedTo') {
-              console.log(block);
-              console.log(block.inports[j][attribute]);
-              tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
-            }
-            else if(attribute === 'connectedTo'){
-              tabContent.push(<p>connectedTo:</p>);
-              if(block.inports[j].connectedTo !== null) {
-                //for (var subAttribute in block.inports[j].connectedTo) {
+        if(tabLabel === "Favourites" || tabLabel === "Configuration"){
+          console.log("we have a favourites tab or configuaration tab");
+          var tabTitle = tabLabel;
+        }
+        else {
+          var tabTitle = "Attributes of " + tabLabel;
+          tabContent.push(<b>Inports</b>);
+          for (var j = 0; j < block.inports.length; j++) {
+            for (var attribute in block.inports[j]) {
+              if (attribute !== 'connectedTo') {
+                console.log(block);
+                console.log(block.inports[j][attribute]);
+                tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
+              }
+              else if (attribute === 'connectedTo') {
+                tabContent.push(<p>connectedTo:</p>);
+                if (block.inports[j].connectedTo !== null) {
+                  //for (var subAttribute in block.inports[j].connectedTo) {
                   tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
                   tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
-                //}
-              }
-              else if(block.inports[j].connectedTo === null){
-                tabContent.push(<p>null</p>);
-              }
-            }
-          }
-          //tabContent.push(<p>, </p>);
-        }
-        tabContent.push(<br/>);
-
-        console.log(tabContent);
-
-        tabContent.push(<b>Outports</b>);
-        for (var k = 0; k < block.outports.length; k++) {
-          /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-          for (var attribute in block.outports[k]) {
-            if(attribute !== 'connectedTo') {
-              console.log(attribute);
-              tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
-            }
-            else if(attribute === 'connectedTo'){
-              console.log(attribute);
-              tabContent.push(<p>connectedTo:</p>);
-              if(block.outports[k].connectedTo.length === 0){
-                console.log("LENGTH OF ARRAY IS ZERO");
-                tabContent.push(<p>[]</p>);
-              }
-              else if(block.outports[k].connectedTo !== null) {
-                for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
-                  tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
-                  tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
+                  //}
+                }
+                else if (block.inports[j].connectedTo === null) {
+                  tabContent.push(<p>null</p>);
                 }
               }
-              else if(block.outports[k].connectedTo === null){
-                tabContent.push(<p>null</p>);
+            }
+            //tabContent.push(<p>, </p>);
+          }
+          tabContent.push(<br/>);
+
+          console.log(tabContent);
+
+          tabContent.push(<b>Outports</b>);
+          for (var k = 0; k < block.outports.length; k++) {
+            /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+            for (var attribute in block.outports[k]) {
+              if (attribute !== 'connectedTo') {
+                console.log(attribute);
+                tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
+              }
+              else if (attribute === 'connectedTo') {
+                console.log(attribute);
+                tabContent.push(<p>connectedTo:</p>);
+                if (block.outports[k].connectedTo.length === 0) {
+                  console.log("LENGTH OF ARRAY IS ZERO");
+                  tabContent.push(<p>[]</p>);
+                }
+                else if (block.outports[k].connectedTo !== null) {
+                  for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+                    tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
+                    tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
+                  }
+                }
+                else if (block.outports[k].connectedTo === null) {
+                  tabContent.push(<p>null</p>);
+                }
               }
             }
+            //tabContent.push(<p>, </p>);
           }
-          //tabContent.push(<p>, </p>);
         }
         console.log(tabContent);
         return tabContent;
       };
 
       return (
-        <Tab title={tabTitle}>
+        <Tab title={tabLabel}>
 
           <Content>
-            <b>Attributes of {tabTitle}</b> <br/>
+            <b>Attributes of {tabLabel}</b> <br/>
             {betterTabContent()}
           </Content>
 

@@ -1040,11 +1040,13 @@ var allBlockInfo = {
     inports: [
       {
         name: 'set',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       },
       {
         name: 'reset',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       }
@@ -1052,6 +1054,7 @@ var allBlockInfo = {
     outports: [
       {
         name: 'out',
+        type: 'boolean',
         connected: true,
         connectedTo: [
           {
@@ -1086,6 +1089,7 @@ var allBlockInfo = {
     inports: [
       {
         name: 'ena',
+        type: 'boolean',
         connected: true,
         connectedTo: {
           block: 'Gate1',
@@ -1096,6 +1100,7 @@ var allBlockInfo = {
     outports: [
       {
         name: 'posn',
+        type: 'int',
         connected: false,
         connectedTo:[]
       }
@@ -1136,11 +1141,13 @@ var allBlockInfo = {
     inports: [
       {
         name: 'ena',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       },
       {
         name: 'posn',
+        type: 'int',
         connected: false,
         connectedTo: null
       }
@@ -1148,16 +1155,19 @@ var allBlockInfo = {
     outports: [
       {
         name: 'act',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       },
       {
         name: 'out',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       },
       {
         name: 'pulse',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       }
@@ -3211,15 +3221,15 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       passSidePane(item);
           break;
 
-    case appConstants.REMOVE_TAB:
-      console.log(payload);
-      console.log(action);
-      console.log(item);
-      removeTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      console.log(allBlockTabProperties.redBlockTabOpen);
-      break;
+    //case appConstants.REMOVE_TAB:
+    //  console.log(payload);
+    //  console.log(action);
+    //  console.log(item);
+    //  removeTab(item);
+    //  paneStore.emitChange();
+    //  console.log(_stuff.tabState);
+    //  console.log(allBlockTabProperties.redBlockTabOpen);
+    //  break;
 
     case appConstants.DROPDOWN_SELECT:
       //var tab = item.item;
@@ -3237,7 +3247,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Want to replace with a better version, now that I'm doing node tabs */
       //changeFavTabState();
       setFavTabStateTrue();
-      console.log(allBlockTabProperties.favTabOpen);
+      console.log(allBlockTabProperties.Favourites);
       paneStore.emitChange();
       break;
 
@@ -3247,7 +3257,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
       //changeConfigTabState();
       setConfigTabStateTrue();
-      console.log(allBlockTabProperties.configTabOpen);
+      console.log(allBlockTabProperties.Configuration);
       paneStore.emitChange();
       break;
 
@@ -5951,7 +5961,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   interactJSMouseMoveForEdgePreview: function(e){
     //e.stopImmediatePropagation();
-    //e.stopPropagation();
+    //console.log(e.isImmediatePropagationStopped());
 
     console.log("interactjs mousemove");
     console.log(e);
@@ -6166,9 +6176,9 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-    var fromPort = this.props.storingFirstPortClicked;
+  var fromPort = this.props.storingFirstPortClicked;
 
-    if(edgeInfo.fromBlock === edgeInfo.toBlock){
+  if(edgeInfo.fromBlock === edgeInfo.toBlock){
     window.alert("Incompatible ports, they are part of the same block.");
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
@@ -6243,14 +6253,17 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       console.log(edgeInfo);
       var toPort = this.props.portThatHasBeenClicked;
       console.log(toPort);
-      toPort.style.stroke = "black";
-      toPort.style.fill = "lightgrey";
-      toPort.setAttribute('r', 4);
+
+      /* Put this styling later, sicne I've now added the port value type checker */
+      //toPort.style.stroke = "black";
+      //toPort.style.fill = "lightgrey";
+      //toPort.setAttribute('r', 4);
+
       /* Putting later, since I need to check if the start node was an inport or outport */
       //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
       //this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
 
-      /* Now need to implement the logic that checks if the start port was an inport or outport */
+      /* Now check if the port value types are compatible (ie, if they're the same) */
 
       var startBlock;
       var startBlockType;
@@ -6260,7 +6273,9 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       var endBlockPort;
       var newEdge;
       var edgeLabel;
-      if(types.portTypes.fromBlockPortType === "outport"){
+
+      if(types.portTypes.fromBlockPortType === 'outport'){
+
         console.log("outport to inport, so edge labelling is normal");
         startBlock = edgeInfo.fromBlock;
         startBlockType = types.blockTypes.fromBlockType;
@@ -6268,14 +6283,22 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         endBlock = edgeInfo.toBlock;
         endBlockType = types.blockTypes.toBlockType;
         endBlockPort = edgeInfo.toBlockPort;
-        //newEdge = {
-        //  fromNode: startNode,
-        //  fromNodePort: startNodePort,
-        //  toNode: endNode,
-        //  toNodePort: endNodePort
-        //}
+
+        /* Then we know that the toBlockPortType is an inport, so then we can check their port VALUE types accordingly */
+        for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
+          }
+        }
+
+        for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].inports[j].type;
+          }
+        }
       }
-      else if(types.portTypes.fromBlockPortType === "inport"){
+      else if(types.portTypes.fromBlockPortType === 'inport'){
+
         console.log("inport to outport, so have to flip the edge labelling direction");
         /* Note that you must also flip the ports too! */
         startBlock = edgeInfo.toBlock;
@@ -6284,36 +6307,110 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         endBlock = edgeInfo.fromBlock;
         endBlockType = types.blockTypes.fromBlockType;
         endBlockPort = edgeInfo.fromBlockPort;
-        /* Don't need this in both loops, can just set this after the loops have completed! */
-        //newEdge = {
-        //  fromNode: startNode,
-        //  fromNodePort: startNodePort,
-        //  toNode: endNode,
-        //  toNodePort: endNodePort
-        //}
+
+        /* Then we know that the toBlockPortType is an outport */
+        for(var k = 0; k < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; k++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].type;
+          }
+        }
+        for(var l = 0; l < this.props.allBlockInfo[edgeInfo.toBlock].outports.length; l++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].outports[l].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].outports[l].type;
+          }
+        }
       }
 
-      newEdge = {
-        fromBlock: startBlock,
-        fromBlockType: startBlockType,
-        fromBlockPort: startBlockPort,
-        toBlock: endBlock,
-        toBlockType: endBlockType,
-        toBlockPort: endBlockPort
-      };
+      if(fromPortValueType === toPortValueType){
+        /* Proceed with the connection as we have compatible port value types */
+        toPort.style.stroke = "black";
+        toPort.style.fill = "lightgrey";
+        toPort.setAttribute('r', 4);
 
-      /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-      edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+        /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
+        /* Now need to implement the logic that checks if the start port was an inport or outport */
 
-      console.log(newEdge);
-      blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
-      blockActions.appendToEdgeSelectedState(edgeLabel);
-      this.resetPortClickStorage();
-      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
-      /* Can now safely delete the edgePreview by setting it back to null */
-      blockActions.addEdgePreview(null);
-      interact('#appAndDragAreaContainer')
-        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+        //var startBlock;
+        //var startBlockType;
+        //var startBlockPort;
+        //var endBlock;
+        //var endBlockType;
+        //var endBlockPort;
+        //var newEdge;
+        //var edgeLabel;
+        //if(types.portTypes.fromBlockPortType === "outport"){
+        //  console.log("outport to inport, so edge labelling is normal");
+        //  startBlock = edgeInfo.fromBlock;
+        //  startBlockType = types.blockTypes.fromBlockType;
+        //  startBlockPort = edgeInfo.fromBlockPort;
+        //  endBlock = edgeInfo.toBlock;
+        //  endBlockType = types.blockTypes.toBlockType;
+        //  endBlockPort = edgeInfo.toBlockPort;
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+        //else if(types.portTypes.fromBlockPortType === "inport"){
+        //  console.log("inport to outport, so have to flip the edge labelling direction");
+        //  /* Note that you must also flip the ports too! */
+        //  startBlock = edgeInfo.toBlock;
+        //  startBlockType = types.blockTypes.toBlockType;
+        //  startBlockPort = edgeInfo.toBlockPort;
+        //  endBlock = edgeInfo.fromBlock;
+        //  endBlockType = types.blockTypes.fromBlockType;
+        //  endBlockPort = edgeInfo.fromBlockPort;
+        //  /* Don't need this in both loops, can just set this after the loops have completed! */
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+
+        newEdge = {
+          fromBlock: startBlock,
+          fromBlockType: startBlockType,
+          fromBlockPort: startBlockPort,
+          toBlock: endBlock,
+          toBlockType: endBlockType,
+          toBlockPort: endBlockPort
+        };
+
+        /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
+        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+
+        console.log(newEdge);
+        blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+        blockActions.appendToEdgeSelectedState(edgeLabel);
+        this.resetPortClickStorage();
+        //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+        /* Can now safely delete the edgePreview by setting it back to null */
+        blockActions.addEdgePreview(null);
+        interact('#appAndDragAreaContainer')
+          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      }
+      else if(fromPortValueType !== toPortValueType){
+        window.alert("Incompatible port value types: the port " + edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
+          " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " + edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
+          " has value type " + toPortValueType.toUpperCase() + ".");
+
+        /* Do all the resetting jazz */
+
+        var fromPort = this.props.storingFirstPortClicked;
+        fromPort.style.stroke = "black";
+        fromPort.style.fill = "black";
+        fromPort.setAttribute('r', 2);
+        this.resetPortClickStorage();
+
+        blockActions.addEdgePreview(null);
+        interact('#appAndDragAreaContainer')
+          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      }
+
     }
   },
 
@@ -8199,7 +8296,7 @@ var SidePane = React.createClass({displayName: "SidePane",
     //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
-      var tabTitle = block.label;
+      var tabLabel = block.label;
       var tabIndex = i + 1;
 
       var betterTabContent = function() {
@@ -8210,70 +8307,77 @@ var SidePane = React.createClass({displayName: "SidePane",
         //tabContent.push(<p>y: {block.position.y}</p>);
         //tabContent.push(<br/>);
 
-        tabContent.push(React.createElement("b", null, "Inports"));
-        for (var j = 0; j < block.inports.length; j++) {
-          for (var attribute in block.inports[j]) {
-            if(attribute !== 'connectedTo') {
-              console.log(block);
-              console.log(block.inports[j][attribute]);
-              tabContent.push(React.createElement("p", null, attribute, ": ", String(block.inports[j][attribute])));
-            }
-            else if(attribute === 'connectedTo'){
-              tabContent.push(React.createElement("p", null, "connectedTo:"));
-              if(block.inports[j].connectedTo !== null) {
-                //for (var subAttribute in block.inports[j].connectedTo) {
+        if(tabLabel === "Favourites" || tabLabel === "Configuration"){
+          console.log("we have a favourites tab or configuaration tab");
+          var tabTitle = tabLabel;
+        }
+        else {
+          var tabTitle = "Attributes of " + tabLabel;
+          tabContent.push(React.createElement("b", null, "Inports"));
+          for (var j = 0; j < block.inports.length; j++) {
+            for (var attribute in block.inports[j]) {
+              if (attribute !== 'connectedTo') {
+                console.log(block);
+                console.log(block.inports[j][attribute]);
+                tabContent.push(React.createElement("p", null, attribute, ": ", String(block.inports[j][attribute])));
+              }
+              else if (attribute === 'connectedTo') {
+                tabContent.push(React.createElement("p", null, "connectedTo:"));
+                if (block.inports[j].connectedTo !== null) {
+                  //for (var subAttribute in block.inports[j].connectedTo) {
                   tabContent.push(React.createElement("p", null, "block: ", block.inports[j].connectedTo.block));
                   tabContent.push(React.createElement("p", null, "port: ", block.inports[j].connectedTo.port));
-                //}
-              }
-              else if(block.inports[j].connectedTo === null){
-                tabContent.push(React.createElement("p", null, "null"));
-              }
-            }
-          }
-          //tabContent.push(<p>, </p>);
-        }
-        tabContent.push(React.createElement("br", null));
-
-        console.log(tabContent);
-
-        tabContent.push(React.createElement("b", null, "Outports"));
-        for (var k = 0; k < block.outports.length; k++) {
-          /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-          for (var attribute in block.outports[k]) {
-            if(attribute !== 'connectedTo') {
-              console.log(attribute);
-              tabContent.push(React.createElement("p", null, attribute, ": ", String(block.outports[k][attribute])));
-            }
-            else if(attribute === 'connectedTo'){
-              console.log(attribute);
-              tabContent.push(React.createElement("p", null, "connectedTo:"));
-              if(block.outports[k].connectedTo.length === 0){
-                console.log("LENGTH OF ARRAY IS ZERO");
-                tabContent.push(React.createElement("p", null, "[]"));
-              }
-              else if(block.outports[k].connectedTo !== null) {
-                for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
-                  tabContent.push(React.createElement("p", null, "[block: ", block.outports[k].connectedTo[l]['block'], ","));
-                  tabContent.push(React.createElement("p", null, "port: ", block.outports[k].connectedTo[l]['port'], "]"))
+                  //}
+                }
+                else if (block.inports[j].connectedTo === null) {
+                  tabContent.push(React.createElement("p", null, "null"));
                 }
               }
-              else if(block.outports[k].connectedTo === null){
-                tabContent.push(React.createElement("p", null, "null"));
+            }
+            //tabContent.push(<p>, </p>);
+          }
+          tabContent.push(React.createElement("br", null));
+
+          console.log(tabContent);
+
+          tabContent.push(React.createElement("b", null, "Outports"));
+          for (var k = 0; k < block.outports.length; k++) {
+            /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+            for (var attribute in block.outports[k]) {
+              if (attribute !== 'connectedTo') {
+                console.log(attribute);
+                tabContent.push(React.createElement("p", null, attribute, ": ", String(block.outports[k][attribute])));
+              }
+              else if (attribute === 'connectedTo') {
+                console.log(attribute);
+                tabContent.push(React.createElement("p", null, "connectedTo:"));
+                if (block.outports[k].connectedTo.length === 0) {
+                  console.log("LENGTH OF ARRAY IS ZERO");
+                  tabContent.push(React.createElement("p", null, "[]"));
+                }
+                else if (block.outports[k].connectedTo !== null) {
+                  for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+                    tabContent.push(React.createElement("p", null, "[block: ", block.outports[k].connectedTo[l]['block'], ","));
+                    tabContent.push(React.createElement("p", null, "port: ", block.outports[k].connectedTo[l]['port'], "]"))
+                  }
+                }
+                else if (block.outports[k].connectedTo === null) {
+                  tabContent.push(React.createElement("p", null, "null"));
+                }
               }
             }
+            //tabContent.push(<p>, </p>);
           }
-          //tabContent.push(<p>, </p>);
         }
         console.log(tabContent);
         return tabContent;
       };
 
       return (
-        React.createElement(Tab, {title: tabTitle}, 
+        React.createElement(Tab, {title: tabLabel}, 
 
           React.createElement(Content, null, 
-            React.createElement("b", null, "Attributes of ", tabTitle), " ", React.createElement("br", null), 
+            React.createElement("b", null, "Attributes of ", tabLabel), " ", React.createElement("br", null), 
             betterTabContent()
           )
 

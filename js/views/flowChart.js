@@ -334,7 +334,7 @@ var FlowChart = React.createClass({
 
   interactJSMouseMoveForEdgePreview: function(e){
     //e.stopImmediatePropagation();
-    //e.stopPropagation();
+    //console.log(e.isImmediatePropagationStopped());
 
     console.log("interactjs mousemove");
     console.log(e);
@@ -549,9 +549,9 @@ var FlowChart = React.createClass({
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-    var fromPort = this.props.storingFirstPortClicked;
+  var fromPort = this.props.storingFirstPortClicked;
 
-    if(edgeInfo.fromBlock === edgeInfo.toBlock){
+  if(edgeInfo.fromBlock === edgeInfo.toBlock){
     window.alert("Incompatible ports, they are part of the same block.");
     //var fromPort = this.state.storingFirstPortClicked;
     fromPort.style.stroke = "black";
@@ -626,14 +626,17 @@ var FlowChart = React.createClass({
       console.log(edgeInfo);
       var toPort = this.props.portThatHasBeenClicked;
       console.log(toPort);
-      toPort.style.stroke = "black";
-      toPort.style.fill = "lightgrey";
-      toPort.setAttribute('r', 4);
+
+      /* Put this styling later, sicne I've now added the port value type checker */
+      //toPort.style.stroke = "black";
+      //toPort.style.fill = "lightgrey";
+      //toPort.setAttribute('r', 4);
+
       /* Putting later, since I need to check if the start node was an inport or outport */
       //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
       //this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
 
-      /* Now need to implement the logic that checks if the start port was an inport or outport */
+      /* Now check if the port value types are compatible (ie, if they're the same) */
 
       var startBlock;
       var startBlockType;
@@ -643,7 +646,9 @@ var FlowChart = React.createClass({
       var endBlockPort;
       var newEdge;
       var edgeLabel;
-      if(types.portTypes.fromBlockPortType === "outport"){
+
+      if(types.portTypes.fromBlockPortType === 'outport'){
+
         console.log("outport to inport, so edge labelling is normal");
         startBlock = edgeInfo.fromBlock;
         startBlockType = types.blockTypes.fromBlockType;
@@ -651,14 +656,22 @@ var FlowChart = React.createClass({
         endBlock = edgeInfo.toBlock;
         endBlockType = types.blockTypes.toBlockType;
         endBlockPort = edgeInfo.toBlockPort;
-        //newEdge = {
-        //  fromNode: startNode,
-        //  fromNodePort: startNodePort,
-        //  toNode: endNode,
-        //  toNodePort: endNodePort
-        //}
+
+        /* Then we know that the toBlockPortType is an inport, so then we can check their port VALUE types accordingly */
+        for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
+          }
+        }
+
+        for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].inports[j].type;
+          }
+        }
       }
-      else if(types.portTypes.fromBlockPortType === "inport"){
+      else if(types.portTypes.fromBlockPortType === 'inport'){
+
         console.log("inport to outport, so have to flip the edge labelling direction");
         /* Note that you must also flip the ports too! */
         startBlock = edgeInfo.toBlock;
@@ -667,36 +680,110 @@ var FlowChart = React.createClass({
         endBlock = edgeInfo.fromBlock;
         endBlockType = types.blockTypes.fromBlockType;
         endBlockPort = edgeInfo.fromBlockPort;
-        /* Don't need this in both loops, can just set this after the loops have completed! */
-        //newEdge = {
-        //  fromNode: startNode,
-        //  fromNodePort: startNodePort,
-        //  toNode: endNode,
-        //  toNodePort: endNodePort
-        //}
+
+        /* Then we know that the toBlockPortType is an outport */
+        for(var k = 0; k < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; k++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].type;
+          }
+        }
+        for(var l = 0; l < this.props.allBlockInfo[edgeInfo.toBlock].outports.length; l++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].outports[l].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].outports[l].type;
+          }
+        }
       }
 
-      newEdge = {
-        fromBlock: startBlock,
-        fromBlockType: startBlockType,
-        fromBlockPort: startBlockPort,
-        toBlock: endBlock,
-        toBlockType: endBlockType,
-        toBlockPort: endBlockPort
-      };
+      if(fromPortValueType === toPortValueType){
+        /* Proceed with the connection as we have compatible port value types */
+        toPort.style.stroke = "black";
+        toPort.style.fill = "lightgrey";
+        toPort.setAttribute('r', 4);
 
-      /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-      edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+        /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
+        /* Now need to implement the logic that checks if the start port was an inport or outport */
 
-      console.log(newEdge);
-      blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
-      blockActions.appendToEdgeSelectedState(edgeLabel);
-      this.resetPortClickStorage();
-      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
-      /* Can now safely delete the edgePreview by setting it back to null */
-      blockActions.addEdgePreview(null);
-      interact('#appAndDragAreaContainer')
-        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+        //var startBlock;
+        //var startBlockType;
+        //var startBlockPort;
+        //var endBlock;
+        //var endBlockType;
+        //var endBlockPort;
+        //var newEdge;
+        //var edgeLabel;
+        //if(types.portTypes.fromBlockPortType === "outport"){
+        //  console.log("outport to inport, so edge labelling is normal");
+        //  startBlock = edgeInfo.fromBlock;
+        //  startBlockType = types.blockTypes.fromBlockType;
+        //  startBlockPort = edgeInfo.fromBlockPort;
+        //  endBlock = edgeInfo.toBlock;
+        //  endBlockType = types.blockTypes.toBlockType;
+        //  endBlockPort = edgeInfo.toBlockPort;
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+        //else if(types.portTypes.fromBlockPortType === "inport"){
+        //  console.log("inport to outport, so have to flip the edge labelling direction");
+        //  /* Note that you must also flip the ports too! */
+        //  startBlock = edgeInfo.toBlock;
+        //  startBlockType = types.blockTypes.toBlockType;
+        //  startBlockPort = edgeInfo.toBlockPort;
+        //  endBlock = edgeInfo.fromBlock;
+        //  endBlockType = types.blockTypes.fromBlockType;
+        //  endBlockPort = edgeInfo.fromBlockPort;
+        //  /* Don't need this in both loops, can just set this after the loops have completed! */
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+
+        newEdge = {
+          fromBlock: startBlock,
+          fromBlockType: startBlockType,
+          fromBlockPort: startBlockPort,
+          toBlock: endBlock,
+          toBlockType: endBlockType,
+          toBlockPort: endBlockPort
+        };
+
+        /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
+        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + " -> " + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+
+        console.log(newEdge);
+        blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+        blockActions.appendToEdgeSelectedState(edgeLabel);
+        this.resetPortClickStorage();
+        //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+        /* Can now safely delete the edgePreview by setting it back to null */
+        blockActions.addEdgePreview(null);
+        interact('#appAndDragAreaContainer')
+          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      }
+      else if(fromPortValueType !== toPortValueType){
+        window.alert("Incompatible port value types: the port " + edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
+          " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " + edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
+          " has value type " + toPortValueType.toUpperCase() + ".");
+
+        /* Do all the resetting jazz */
+
+        var fromPort = this.props.storingFirstPortClicked;
+        fromPort.style.stroke = "black";
+        fromPort.style.fill = "black";
+        fromPort.setAttribute('r', 2);
+        this.resetPortClickStorage();
+
+        blockActions.addEdgePreview(null);
+        interact('#appAndDragAreaContainer')
+          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      }
+
     }
   },
 

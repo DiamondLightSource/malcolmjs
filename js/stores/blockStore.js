@@ -290,11 +290,13 @@ var allBlockInfo = {
     inports: [
       {
         name: 'set',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       },
       {
         name: 'reset',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       }
@@ -302,6 +304,7 @@ var allBlockInfo = {
     outports: [
       {
         name: 'out',
+        type: 'boolean',
         connected: true,
         connectedTo: [
           {
@@ -336,6 +339,7 @@ var allBlockInfo = {
     inports: [
       {
         name: 'ena',
+        type: 'boolean',
         connected: true,
         connectedTo: {
           block: 'Gate1',
@@ -346,6 +350,7 @@ var allBlockInfo = {
     outports: [
       {
         name: 'posn',
+        type: 'int',
         connected: false,
         connectedTo:[]
       }
@@ -386,11 +391,13 @@ var allBlockInfo = {
     inports: [
       {
         name: 'ena',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       },
       {
         name: 'posn',
+        type: 'int',
         connected: false,
         connectedTo: null
       }
@@ -398,16 +405,19 @@ var allBlockInfo = {
     outports: [
       {
         name: 'act',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       },
       {
         name: 'out',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       },
       {
         name: 'pulse',
+        type: 'boolean',
         connected: false,
         connectedTo: []
       }
