@@ -163,7 +163,7 @@ var FlowChart = React.createClass({
     var currentGraphPositionY = this.props.graphPosition.y;
 
 
-    var ZOOM_STEP = 0.03;
+    var ZOOM_STEP = 0.05;
     var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
 
     if(zoomDirection === 'up'){
@@ -228,13 +228,25 @@ var FlowChart = React.createClass({
     //
     //blockActions.previousMouseCoordsOnZoom(previousMouseCoordsOnZoom);
 
-    //blockActions.graphZoom(newZoomScale);
+    //if(zoomDirection === 'up') {
+    //  var newGraphPosition = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
+    //else{
+    //  var newGraphPosition = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
     //
     //var newGraphPosition = {
-    //  x: newZoomScale * currentGraphPositionX,
-    //  y: newZoomScale * currentGraphPositionY
+    //    x: currentGraphPositionX - deltaXMovement,
+    //    y: currentGraphPositionY - deltaYMovement
     //};
     //
+    //blockActions.graphZoom(newZoomScale);
     //blockActions.changeGraphPosition(newGraphPosition);
 
   },

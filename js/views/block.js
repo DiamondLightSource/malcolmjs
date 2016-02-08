@@ -79,7 +79,9 @@ var Block = React.createClass({
   //},
 
   handleInteractJsDrag: function(item){
+    console.log("interactJs drag is occurring");
     blockActions.interactJsDrag(item);
+    this.startDrag = null;
   },
 
   //mouseOver: function(){
@@ -200,13 +202,33 @@ var Block = React.createClass({
     console.log(e);
     e.stopPropagation();
     e.stopImmediatePropagation();
-    console.log("interactJs drag is occurring");
     var target = e.target.id;
+
+    if(this.startDrag === null || this.startDrag === undefined){
+      this.startDrag = {
+        x: 0,
+        y: 0
+      };
+      //var accumulatedXMovement = this.startDrag.x;
+      //var accumulatedYMovement = this.startDrag.y;
+    }
+
+    this.startDrag.x += e.dx;
+    this.startDrag.y += e.dy;
+
+    console.log(this.startDrag);
+
     var deltaMovement = {
       target: target,
-      x: e.dx,
-      y: e.dy
+      x: this.startDrag.x,
+      y: this.startDrag.y
     };
+
+    console.log(deltaMovement);
+
+    //this.interactJsDragDebounce(deltaMovement);
+    clearTimeout(this.timer);
+    this.interactJsDragDebounce(deltaMovement);
 
     /* Currently doesn't work very well, selects a node after dragging a bit... */
     /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
@@ -224,9 +246,48 @@ var Block = React.createClass({
     if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
      */
 
-    this.handleInteractJsDrag(deltaMovement);
+    //this.handleInteractJsDrag(deltaMovement);
 
   },
+
+  interactJsDragDebounce: function(dragMovement){
+    console.log("debouncing");
+    this.timer = setTimeout(function(){
+      console.log("inside setTimeout");
+      this.handleInteractJsDrag(dragMovement)}.bind(this), 500
+    );
+  },
+
+  //differentDebounce: function(func, wait, immediate) {
+  //  console.log("debouncing...");
+  //  var timeout;
+  //  return function() {
+  //    var context = this, args = arguments;
+  //    var later = function() {
+  //      timeout = null;
+  //      if (!immediate) func.apply(context, args);
+  //    };
+  //    var callNow = immediate && !timeout;
+  //    clearTimeout(timeout);
+  //    timeout = setTimeout(later, wait);
+  //    if (callNow) func.apply(context, args);
+  //  };
+  //},
+  //
+  //debounce: function(fn, delay, dragMovement) {
+  //  console.log("debouncing");
+  //  console.log(fn);
+  //  console.log(delay);
+  //  var timer = null;
+  //  return function (dragMovement) {
+  //    console.log("inside returned fucntion");
+  //    var context = this, args = arguments;
+  //    clearTimeout(timer);
+  //    timer = setTimeout(function () {
+  //      fn.apply(context, args);
+  //    }, delay);
+  //  }(dragMovement);
+  //},
 
 
   render: function(){
