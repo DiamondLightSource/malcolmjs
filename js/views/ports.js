@@ -163,9 +163,9 @@ var Ports = React.createClass({
         {blockInfo.name}
       </text>,
 
-      <text className="blockType" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+      <text className="blockLabel" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
             transform="translate(32.5, 93)" >
-        {blockInfo.type}
+        {blockInfo.label}
       </text>
     ]);
 

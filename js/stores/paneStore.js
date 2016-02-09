@@ -317,8 +317,12 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.ADDTO_ALLBLOCKINFO:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
+      /* Add that block to allBlockTabProperties */
+      appendToAllBlockTabProperties(item);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
+      console.log(allBlockTabInfo);
+      console.log(item);
       paneStore.emitChange();
       break;
 
@@ -450,6 +454,7 @@ var blockStore = require('./blockStore');
 var allBlockTabInfo;
 
 /* This will need an append function at some point */
+/* Yeahhh, this is why a new tab won't open when a new block is added, need to append to this somehow */
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
@@ -458,7 +463,12 @@ var allBlockTabProperties = {
   'PComp1': false
 };
 
+function appendToAllBlockTabProperties(BlockId){
+  allBlockTabProperties[BlockId] = false;
+}
+
 var setBlockTabStateTrue = function(BlockId){
+  console.log(allBlockTabProperties);
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
     console.log(allBlockTabProperties[BlockId]);

@@ -62,8 +62,7 @@ var MainPane = React.createClass({
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     console.log(this.props);
-    //this.setState({gateNodeIdCounter: 1});
-  },
+    this.setState({gateBlockIdCounter: 1});  },
 
   componentWillUnmount: function(){
     //mainPaneStore.removeChangeListener(this._onChange);
@@ -115,6 +114,26 @@ var MainPane = React.createClass({
     paneActions.toggleSidebar("toggle sidebar");
   },
 
+  generateNewBlockId: function(){
+    /* Do it for just a Gate node for now, remember, small steps before big steps! */
+    var gateBlockIdCounter = this.state.gateBlockIdCounter;
+    gateBlockIdCounter += 1;
+    var newGateId = "Gate" + gateBlockIdCounter;
+    console.log(newGateId);
+    this.setState({gateBlockIdCounter: gateBlockIdCounter});
+    return newGateId;
+  },
+
+  addBlockInfo: function(){
+    console.log("addBlockInfo");
+
+    var newGateBlockId = this.generateNewBlockId();
+    console.log(newGateBlockId);
+
+    blockActions.addToAllBlockInfo(newGateBlockId);
+
+  },
+
   render: function() {
 
     console.log(this.props);
@@ -151,6 +170,9 @@ var MainPane = React.createClass({
             <div id="buttonContainer">
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
+              <svg  width="100" height="100" ><rect x="10" y="15"
+                onClick={this.addBlockInfo}
+                height="50" width="50" /></svg>
             </div>
           </div>
           </Footer>

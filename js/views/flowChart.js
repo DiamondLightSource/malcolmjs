@@ -81,7 +81,7 @@ var FlowChart = React.createClass({
 
   componentDidMount: function () {
     console.log(ReactDOM.findDOMNode(this));
-    this.setState({gateBlockIdCounter: 1});
+    //this.setState({gateBlockIdCounter: 1});
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
@@ -563,19 +563,20 @@ var FlowChart = React.createClass({
 
   var fromPort = this.props.storingFirstPortClicked;
 
-  if(edgeInfo.fromBlock === edgeInfo.toBlock){
-    window.alert("Incompatible ports, they are part of the same block.");
-    //var fromPort = this.state.storingFirstPortClicked;
-    fromPort.style.stroke = "black";
-    fromPort.style.fill = "black";
-    fromPort.setAttribute('r', 2);
-    this.resetPortClickStorage();
-
-    blockActions.addEdgePreview(null);
-    interact('#appAndDragAreaContainer')
-      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
-  }
-  else if(fromBlockPortType === toBlockPortType){
+  /* Turns out that this is sctually allowed */
+  //if(edgeInfo.fromBlock === edgeInfo.toBlock){
+  //  window.alert("Incompatible ports, they are part of the same block.");
+  //  //var fromPort = this.state.storingFirstPortClicked;
+  //  fromPort.style.stroke = "black";
+  //  fromPort.style.fill = "black";
+  //  fromPort.setAttribute('r', 2);
+  //  this.resetPortClickStorage();
+  //
+  //  blockActions.addEdgePreview(null);
+  //  interact('#appAndDragAreaContainer')
+  //    .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+  //}
+  if(fromBlockPortType === toBlockPortType){
     console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
     window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
@@ -985,9 +986,6 @@ var FlowChart = React.createClass({
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         >
-          <g><rect
-            onClick={this.addBlockInfo}
-            height="50" width="50" /></g>
 
           <g id="testPanGroup"
              transform={matrixTransform}
@@ -1872,3 +1870,7 @@ module.exports = FlowChart;
 //  />)
 //
 //}
+
+//<g><rect
+//  onClick={this.addBlockInfo}
+//  height="50" width="50" /></g>

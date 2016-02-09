@@ -624,27 +624,56 @@ function appendToAllBlockInfo(BlockInfo){
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
   allBlockInfo[BlockInfo] = {
     type: 'Gate',
+    label: BlockInfo,
     name: "",
     position: {
       x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
       y: 50,
     },
-    inports: {
-      "set": {
+    /* Replacing inport and outport obejcts with arrays */
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
+        type: 'boolean',
         connected: false,
         connectedTo: null
-      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {
+      },
+      {
+        name: 'reset',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       }
-    },
-    outports: {
-      "out": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: true,
+        connectedTo: [
+          {
+            block: 'TGen1',
+            port: 'ena'
+          }
+        ]
       }
-    }
+    ]
   };
 
   /* Trying to use a for loop to copy over the template */

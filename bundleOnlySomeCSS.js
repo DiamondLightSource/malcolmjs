@@ -1374,27 +1374,56 @@ function appendToAllBlockInfo(BlockInfo){
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
   allBlockInfo[BlockInfo] = {
     type: 'Gate',
+    label: BlockInfo,
     name: "",
     position: {
       x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
       y: 50,
     },
-    inports: {
-      "set": {
+    /* Replacing inport and outport obejcts with arrays */
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
+        type: 'boolean',
         connected: false,
         connectedTo: null
-      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-      "reset": {
+      },
+      {
+        name: 'reset',
+        type: 'boolean',
         connected: false,
         connectedTo: null
       }
-    },
-    outports: {
-      "out": {
-        connected: false,
-        connectedTo: null
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: true,
+        connectedTo: [
+          {
+            block: 'TGen1',
+            port: 'ena'
+          }
+        ]
       }
-    }
+    ]
   };
 
   /* Trying to use a for loop to copy over the template */
@@ -3327,8 +3356,12 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.ADDTO_ALLBLOCKINFO:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
+      /* Add that block to allBlockTabProperties */
+      appendToAllBlockTabProperties(item);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
+      console.log(allBlockTabInfo);
+      console.log(item);
       paneStore.emitChange();
       break;
 
@@ -3460,6 +3493,7 @@ var blockStore = require('./blockStore');
 var allBlockTabInfo;
 
 /* This will need an append function at some point */
+/* Yeahhh, this is why a new tab won't open when a new block is added, need to append to this somehow */
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
@@ -3468,7 +3502,12 @@ var allBlockTabProperties = {
   'PComp1': false
 };
 
+function appendToAllBlockTabProperties(BlockId){
+  allBlockTabProperties[BlockId] = false;
+}
+
 var setBlockTabStateTrue = function(BlockId){
+  console.log(allBlockTabProperties);
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
     console.log(allBlockTabProperties[BlockId]);
@@ -5536,17 +5575,13 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
   componentDidMount: function(){
     this.noPanning = true;
-    //ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
-    //
-    //interact(ReactDOM.findDOMNode(this))
-    //  .on('tap', this.edgeSelect)
+
     interact(ReactDOM.findDOMNode(this))
       .draggable({
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           console.log("drag start");
-
         },
         onmove: function(e){
           e.stopImmediatePropagation();
@@ -5575,6 +5610,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
         console.log("tapped!");
         this.props.failedPortConnection();
       }.bind(this));
+
     interact(ReactDOM.findDOMNode(this))
       .on('mousedown', function(e){
         e.stopImmediatePropagation();
@@ -5583,6 +5619,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
         /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
         update the mouse position?
+        UPDATE: nice, it actually improved the performance!! :)
          */
 
         interact('#appAndDragAreaContainer')
@@ -5590,8 +5627,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
       }.bind(this))
   },
   componentWillUnmount: function(){
-    //interact(ReactDOM.findDOMNode(this))
-    //  .off('tap', this.edgeSelect)
+
   },
 
   shouldComponentUpdate: function(){
@@ -5823,7 +5859,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   componentDidMount: function () {
     console.log(ReactDOM.findDOMNode(this));
-    this.setState({gateBlockIdCounter: 1});
+    //this.setState({gateBlockIdCounter: 1});
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
@@ -6305,19 +6341,20 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   var fromPort = this.props.storingFirstPortClicked;
 
-  if(edgeInfo.fromBlock === edgeInfo.toBlock){
-    window.alert("Incompatible ports, they are part of the same block.");
-    //var fromPort = this.state.storingFirstPortClicked;
-    fromPort.style.stroke = "black";
-    fromPort.style.fill = "black";
-    fromPort.setAttribute('r', 2);
-    this.resetPortClickStorage();
-
-    blockActions.addEdgePreview(null);
-    interact('#appAndDragAreaContainer')
-      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
-  }
-  else if(fromBlockPortType === toBlockPortType){
+  /* Turns out that this is sctually allowed */
+  //if(edgeInfo.fromBlock === edgeInfo.toBlock){
+  //  window.alert("Incompatible ports, they are part of the same block.");
+  //  //var fromPort = this.state.storingFirstPortClicked;
+  //  fromPort.style.stroke = "black";
+  //  fromPort.style.fill = "black";
+  //  fromPort.setAttribute('r', 2);
+  //  this.resetPortClickStorage();
+  //
+  //  blockActions.addEdgePreview(null);
+  //  interact('#appAndDragAreaContainer')
+  //    .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+  //}
+  if(fromBlockPortType === toBlockPortType){
     console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
     window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
@@ -6727,9 +6764,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
           //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
           //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
         }, 
-          React.createElement("g", null, React.createElement("rect", {
-            onClick: this.addBlockInfo, 
-            height: "50", width: "50"})), 
 
           React.createElement("g", {id: "testPanGroup", 
              transform: matrixTransform, 
@@ -7615,6 +7649,10 @@ module.exports = FlowChart;
 //
 //}
 
+//<g><rect
+//  onClick={this.addBlockInfo}
+//  height="50" width="50" /></g>
+
 },{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/lib/ReactDefaultPerf.js":97,"../actions/blockActions.js":1,"../stores/blockStore.js":11,"./block.js":16,"./edge.js":20,"./edgePreview":21,"react":217}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
@@ -7751,8 +7789,7 @@ var MainPane = React.createClass({displayName: "MainPane",
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     console.log(this.props);
-    //this.setState({gateNodeIdCounter: 1});
-  },
+    this.setState({gateBlockIdCounter: 1});  },
 
   componentWillUnmount: function(){
     //mainPaneStore.removeChangeListener(this._onChange);
@@ -7804,6 +7841,26 @@ var MainPane = React.createClass({displayName: "MainPane",
     paneActions.toggleSidebar("toggle sidebar");
   },
 
+  generateNewBlockId: function(){
+    /* Do it for just a Gate node for now, remember, small steps before big steps! */
+    var gateBlockIdCounter = this.state.gateBlockIdCounter;
+    gateBlockIdCounter += 1;
+    var newGateId = "Gate" + gateBlockIdCounter;
+    console.log(newGateId);
+    this.setState({gateBlockIdCounter: gateBlockIdCounter});
+    return newGateId;
+  },
+
+  addBlockInfo: function(){
+    console.log("addBlockInfo");
+
+    var newGateBlockId = this.generateNewBlockId();
+    console.log(newGateBlockId);
+
+    blockActions.addToAllBlockInfo(newGateBlockId);
+
+  },
+
   render: function() {
 
     console.log(this.props);
@@ -7839,7 +7896,10 @@ var MainPane = React.createClass({displayName: "MainPane",
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
             React.createElement("div", {id: "buttonContainer"}, 
               React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
+              React.createElement("svg", {width: "100", height: "100"}, React.createElement("rect", {x: "10", y: "15", 
+                onClick: this.addBlockInfo, 
+                height: "50", width: "50"}))
             )
           )
           )
@@ -8286,9 +8346,9 @@ var Ports = React.createClass({displayName: "Ports",
         blockInfo.name
       ),
 
-      React.createElement("text", {className: "blockType", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
+      React.createElement("text", {className: "blockLabel", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
             transform: "translate(32.5, 93)"}, 
-        blockInfo.type
+        blockInfo.label
       )
     ]);
 

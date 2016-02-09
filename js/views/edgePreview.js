@@ -13,17 +13,13 @@ var EdgePreview = React.createClass({
 
   componentDidMount: function(){
     this.noPanning = true;
-    //ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
-    //
-    //interact(ReactDOM.findDOMNode(this))
-    //  .on('tap', this.edgeSelect)
+
     interact(ReactDOM.findDOMNode(this))
       .draggable({
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           console.log("drag start");
-
         },
         onmove: function(e){
           e.stopImmediatePropagation();
@@ -52,6 +48,7 @@ var EdgePreview = React.createClass({
         console.log("tapped!");
         this.props.failedPortConnection();
       }.bind(this));
+
     interact(ReactDOM.findDOMNode(this))
       .on('mousedown', function(e){
         e.stopImmediatePropagation();
@@ -68,8 +65,7 @@ var EdgePreview = React.createClass({
       }.bind(this))
   },
   componentWillUnmount: function(){
-    //interact(ReactDOM.findDOMNode(this))
-    //  .off('tap', this.edgeSelect)
+
   },
 
   shouldComponentUpdate: function(){

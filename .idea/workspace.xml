@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundleOnlySomeCSS.js" afterPath="$PROJECT_DIR$/bundleOnlySomeCSS.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/indexOnlySomeCSS.css" afterPath="$PROJECT_DIR$/indexOnlySomeCSS.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/blockStore.js" afterPath="$PROJECT_DIR$/js/stores/blockStore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/paneStore.js" afterPath="$PROJECT_DIR$/js/stores/paneStore.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/edgePreview.js" afterPath="$PROJECT_DIR$/js/views/edgePreview.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/flowChart.js" afterPath="$PROJECT_DIR$/js/views/flowChart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/mainPane.js" afterPath="$PROJECT_DIR$/js/views/mainPane.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/ports.js" afterPath="$PROJECT_DIR$/js/views/ports.js" />
     </list>
     <ignored path="StartingFlux.iws" />
@@ -28,6 +30,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="paneStore.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-17.928572">
+              <caret line="320" column="42" selection-start-line="320" selection-start-column="42" selection-end-line="320" selection-end-column="42" />
+              <folding>
+                <element signature="e#9917#9954#0" expanded="false" />
+                <element signature="n#!!block;n#copyTabState#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="sidePane.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -44,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ports.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ports.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/views/ports.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.107143">
-              <caret line="141" column="253" selection-start-line="141" selection-start-column="253" selection-end-line="141" selection-end-column="253" />
+            <state vertical-scroll-proportion="0.89041096">
+              <caret line="175" column="19" selection-start-line="175" selection-start-column="19" selection-end-line="175" selection-end-column="19" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
                 <element signature="e#1838#2375#0" expanded="false" />
@@ -60,25 +75,11 @@
       <file leaf-file-name="mainPane.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/mainPane.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.214285">
-              <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+            <state vertical-scroll-proportion="-11.844828">
+              <caret line="132" column="49" selection-start-line="132" selection-start-column="35" selection-end-line="132" selection-end-column="49" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#2607#2731#0" expanded="false" />
-                <element signature="e#6067#6113#0" expanded="false" />
-                <element signature="e#13209#13235#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edgePreview.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/views/edgePreview.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.82191783">
-              <caret line="62" column="39" selection-start-line="62" selection-start-column="39" selection-end-line="62" selection-end-column="39" />
-              <folding>
-                <element signature="e#0#43#0" expanded="false" />
+                <element signature="e#2605#2729#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -87,12 +88,40 @@
       <file leaf-file-name="flowChart.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/views/flowChart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.965517">
-              <caret line="358" column="25" selection-start-line="358" selection-start-column="17" selection-end-line="358" selection-end-column="25" />
+            <state vertical-scroll-proportion="-435.0345">
+              <caret line="1870" column="2" selection-start-line="1870" selection-start-column="2" selection-end-line="1870" selection-end-column="2" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
-                <element signature="e#11946#12020#0" expanded="false" />
-                <element signature="e#27576#27593#0" expanded="false" />
+                <element signature="e#11948#12022#0" expanded="false" />
+                <element signature="e#27647#27664#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="block.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/views/block.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="15.535714">
+              <caret line="200" column="26" selection-start-line="200" selection-start-column="26" selection-end-line="200" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#43#0" expanded="false" />
+                <element signature="e#4711#4736#0" expanded="false" />
+                <element signature="e#4930#4959#0" expanded="false" />
+                <element signature="e#8769#8823#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="blockRectangle.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/views/blockRectangle.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-15.535714">
+              <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
+              <folding>
+                <element signature="n#!!block;n#getBlockRectanglesState#0" expanded="false" />
+                <element signature="e#516#546#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -124,33 +153,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.892857">
-              <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="blockStore.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/stores/blockStore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.862069">
-              <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+            <state vertical-scroll-proportion="-5.172414">
+              <caret line="626" column="21" selection-start-line="626" selection-start-column="21" selection-end-line="626" selection-end-column="21" />
               <folding>
                 <element signature="e#0#43#0" expanded="false" />
                 <element signature="e#7508#7520#0" expanded="false" />
                 <element signature="e#8180#8192#0" expanded="false" />
+                <element signature="e#13379#14847#0" expanded="false" />
                 <element signature="n#!!block;n#generateNewBlockId#0" expanded="false" />
-                <element signature="e#17441#18214#0" expanded="false" />
-                <element signature="e#18247#19024#0" expanded="false" />
-                <element signature="e#19050#19709#0" expanded="false" />
-                <element signature="e#19742#20405#0" expanded="false" />
-                <element signature="e#21746#22745#0" expanded="false" />
-                <element signature="e#28361#28405#0" expanded="false" />
-                <element signature="e#48986#49026#0" expanded="false" />
+                <element signature="e#18025#18798#0" expanded="false" />
+                <element signature="e#18831#19608#0" expanded="false" />
+                <element signature="e#19634#20293#0" expanded="false" />
+                <element signature="e#20326#20989#0" expanded="false" />
+                <element signature="e#22330#23329#0" expanded="false" />
+                <element signature="e#49570#49610#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -215,15 +234,15 @@
         <option value="$PROJECT_DIR$/js/views/blockRectangle.js" />
         <option value="$PROJECT_DIR$/js/views/block.js" />
         <option value="$PROJECT_DIR$/js/views/sidePane.js" />
-        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
-        <option value="$PROJECT_DIR$/js/views/mainPane.js" />
         <option value="$PROJECT_DIR$/indexOnlySomeCSS.css" />
         <option value="$PROJECT_DIR$/js/views/sidebar.js" />
         <option value="$PROJECT_DIR$/js/views/flowChartControllerView.js" />
-        <option value="$PROJECT_DIR$/js/views/ports.js" />
-        <option value="$PROJECT_DIR$/js/stores/blockStore.js" />
-        <option value="$PROJECT_DIR$/js/views/flowChart.js" />
         <option value="$PROJECT_DIR$/js/views/edgePreview.js" />
+        <option value="$PROJECT_DIR$/js/views/mainPane.js" />
+        <option value="$PROJECT_DIR$/js/views/flowChart.js" />
+        <option value="$PROJECT_DIR$/js/stores/blockStore.js" />
+        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
+        <option value="$PROJECT_DIR$/js/views/ports.js" />
       </list>
     </option>
   </component>
@@ -793,30 +812,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/block.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.25">
-          <caret line="200" column="26" selection-start-line="200" selection-start-column="26" selection-end-line="200" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#4711#4736#0" expanded="false" />
-            <element signature="e#4930#4959#0" expanded="false" />
-            <element signature="e#8769#8823#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/blockRectangle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49657536">
-          <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
-          <folding>
-            <element signature="n#!!block;n#getBlockRectanglesState#0" expanded="false" />
-            <element signature="e#516#546#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/actions/serverActions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-15.535714">
@@ -841,16 +836,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.607142">
-          <caret line="332" column="55" selection-start-line="332" selection-start-column="55" selection-end-line="332" selection-end-column="55" />
-          <folding>
-            <element signature="n#!!block;n#copyTabState#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/react-panels/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.310345">
@@ -869,33 +854,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.071428">
-          <caret line="152" column="33" selection-start-line="152" selection-start-column="33" selection-end-line="152" selection-end-column="33" />
-          <folding>
-            <element signature="n#!!block;n#getSidePaneState#0" expanded="false" />
-            <element signature="e#859#889#0" expanded="false" />
-            <element signature="e#954#1234#0" expanded="false" />
-            <element signature="e#2431#2548#0" expanded="false" />
-            <element signature="e#2708#2763#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/mainPane.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.214285">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#2607#2731#0" expanded="false" />
-            <element signature="e#6067#6113#0" expanded="false" />
-            <element signature="e#13209#13235#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-20.892857">
@@ -904,32 +862,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/flowChartControllerView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-26.464285">
-          <caret line="54" column="16" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/indexOnlySomeCSS.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.123239435">
           <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-24.107143">
-          <caret line="141" column="253" selection-start-line="141" selection-start-column="253" selection-end-line="141" selection-end-column="253" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#1838#2375#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -956,44 +893,125 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/stores/blockStore.js">
+    <entry file="file://$PROJECT_DIR$/js/views/flowChartControllerView.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.862069">
-          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+        <state vertical-scroll-proportion="-26.464285">
+          <caret line="54" column="16" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#7508#7520#0" expanded="false" />
-            <element signature="e#8180#8192#0" expanded="false" />
-            <element signature="n#!!block;n#generateNewBlockId#0" expanded="false" />
-            <element signature="e#17441#18214#0" expanded="false" />
-            <element signature="e#18247#19024#0" expanded="false" />
-            <element signature="e#19050#19709#0" expanded="false" />
-            <element signature="e#19742#20405#0" expanded="false" />
-            <element signature="e#21746#22745#0" expanded="false" />
-            <element signature="e#28361#28405#0" expanded="false" />
-            <element signature="e#48986#49026#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/flowChart.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.965517">
-          <caret line="358" column="25" selection-start-line="358" selection-start-column="17" selection-end-line="358" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-            <element signature="e#11946#12020#0" expanded="false" />
-            <element signature="e#27576#27593#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/views/edgePreview.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.82191783">
-          <caret line="62" column="39" selection-start-line="62" selection-start-column="39" selection-end-line="62" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.18835616">
+          <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/flowChart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-435.0345">
+          <caret line="1870" column="2" selection-start-line="1870" selection-start-column="2" selection-end-line="1870" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#11948#12022#0" expanded="false" />
+            <element signature="e#27647#27664#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/mainPane.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.844828">
+          <caret line="132" column="49" selection-start-line="132" selection-start-column="35" selection-end-line="132" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#2605#2729#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.928572">
+          <caret line="320" column="42" selection-start-line="320" selection-start-column="42" selection-end-line="320" selection-end-column="42" />
+          <folding>
+            <element signature="e#9917#9954#0" expanded="false" />
+            <element signature="n#!!block;n#copyTabState#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/stores/blockStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.172414">
+          <caret line="626" column="21" selection-start-line="626" selection-start-column="21" selection-end-line="626" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#7508#7520#0" expanded="false" />
+            <element signature="e#8180#8192#0" expanded="false" />
+            <element signature="e#13379#14847#0" expanded="false" />
+            <element signature="n#!!block;n#generateNewBlockId#0" expanded="false" />
+            <element signature="e#18025#18798#0" expanded="false" />
+            <element signature="e#18831#19608#0" expanded="false" />
+            <element signature="e#19634#20293#0" expanded="false" />
+            <element signature="e#20326#20989#0" expanded="false" />
+            <element signature="e#22330#23329#0" expanded="false" />
+            <element signature="e#49570#49610#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.071428">
+          <caret line="152" column="33" selection-start-line="152" selection-start-column="33" selection-end-line="152" selection-end-column="33" />
+          <folding>
+            <element signature="n#!!block;n#getSidePaneState#0" expanded="false" />
+            <element signature="e#859#889#0" expanded="false" />
+            <element signature="e#954#1234#0" expanded="false" />
+            <element signature="e#2431#2548#0" expanded="false" />
+            <element signature="e#2708#2763#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/block.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="15.535714">
+          <caret line="200" column="26" selection-start-line="200" selection-start-column="26" selection-end-line="200" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#4711#4736#0" expanded="false" />
+            <element signature="e#4930#4959#0" expanded="false" />
+            <element signature="e#8769#8823#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/blockRectangle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.535714">
+          <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
+          <folding>
+            <element signature="n#!!block;n#getBlockRectanglesState#0" expanded="false" />
+            <element signature="e#516#546#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.89041096">
+          <caret line="175" column="19" selection-start-line="175" selection-start-column="19" selection-end-line="175" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+            <element signature="e#1838#2375#0" expanded="false" />
           </folding>
         </state>
       </provider>
