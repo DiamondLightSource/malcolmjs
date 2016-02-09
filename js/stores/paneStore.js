@@ -660,8 +660,17 @@ function copyTabState(){
 
 function resetTabStateReferences(){
   for(var i = 0; i < _stuff.tabState.length; i++){
-    _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
-    console.log(_stuff.tabState[i]);
+    if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
+      console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
+    }
+    else {
+      console.log(_stuff.tabState);
+      console.log(i);
+      console.log(_stuff.tabState[i]);
+      console.log(allBlockTabInfo);
+      _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
+      console.log(_stuff.tabState[i]);
+    }
   }
 }
 

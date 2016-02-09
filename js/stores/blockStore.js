@@ -665,13 +665,8 @@ function appendToAllBlockInfo(BlockInfo){
       {
         name: 'out',
         type: 'boolean',
-        connected: true,
-        connectedTo: [
-          {
-            block: 'TGen1',
-            port: 'ena'
-          }
-        ]
+        connected: false,
+        connectedTo: []
       }
     ]
   };

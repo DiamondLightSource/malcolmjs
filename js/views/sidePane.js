@@ -20,6 +20,8 @@ var Button = ReactPanels.Button;
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
+var Treeview = require('react-treeview');
+
 function getSidePaneState(){
   return{
     //tabState: paneStore.getTabState(),

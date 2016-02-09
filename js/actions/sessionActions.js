@@ -27,6 +27,13 @@ var sessionActions = {
     });
     WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
     WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
+  },
+
+  interactJsDrag: function(newBlockCoords){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.SESSION_INTERACTJSDRAG,
+      item: newBlockCoords
+    })
   }
 
 };
