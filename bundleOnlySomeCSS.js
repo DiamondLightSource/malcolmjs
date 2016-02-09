@@ -775,7 +775,7 @@ var previousMouseCoordsOnZoom = null;
 function updateEdgePreviewEndpoint(position){
   edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
   edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-  console.log(edgePreview.endpointCoords);
+  //console.log(edgePreview.endpointCoords);
 }
 
 var allBlockTabInfo = {
@@ -2229,8 +2229,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       updateEdgePreviewEndpoint(item);
       blockStore.emitChange();
       break;
@@ -5535,19 +5535,73 @@ var interact = require('../../node_modules/interact.js');
 var EdgePreview = React.createClass({displayName: "EdgePreview",
 
   componentDidMount: function(){
+    this.noPanning = true;
     //ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
     //
     //interact(ReactDOM.findDOMNode(this))
     //  .on('tap', this.edgeSelect)
+    interact(ReactDOM.findDOMNode(this))
+      .draggable({
+        onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          console.log("drag start");
+
+        },
+        onmove: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.props.interactJsDragPan(e);
+        }.bind(this),
+        onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          console.log("drag end");
+          this.noPanning = true;
+          interact('#appAndDragAreaContainer')
+            .on('mousemove', this.props.interactJSMouseMoveForEdgePreview);
+          console.log(e);
+          blockActions.updateEdgePreviewEndpoint({
+            x: e.dx,
+            y: e.dy
+          })
+        }.bind(this)
+      });
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', function(e){
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        console.log("tapped!");
+        this.props.failedPortConnection();
+      }.bind(this));
+    interact(ReactDOM.findDOMNode(this))
+      .on('mousedown', function(e){
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        this.noPanning = false;
+
+        /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
+        update the mouse position?
+         */
+
+        interact('#appAndDragAreaContainer')
+          .off('mousemove', this.props.interactJSMouseMoveForEdgePreview);
+      }.bind(this))
   },
   componentWillUnmount: function(){
     //interact(ReactDOM.findDOMNode(this))
     //  .off('tap', this.edgeSelect)
   },
 
+  shouldComponentUpdate: function(){
+    return this.noPanning
+  },
+
   render:function(){
 
-    console.log(this.props.id);
+    //console.log(this.props.id);
+    //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
 
     var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
@@ -5594,13 +5648,13 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
         React.createElement("line", {id: outerLineName, 
           //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: "7", stroke: "lightgrey", strokeLinecap: "round"}}), 
+              style: {strokeWidth: "7", stroke: "lightgrey", strokeLinecap: "round", cursor: 'default'}}), 
 
         React.createElement("line", {id: innerLineName, 
           //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: '5', stroke:"orange"}})
+              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
 
 
       )
@@ -6036,8 +6090,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //e.stopImmediatePropagation();
     //console.log(e.isImmediatePropagationStopped());
 
-    console.log("interactjs mousemove");
-    console.log(e);
+    //console.log("interactjs mousemove");
+    //console.log(e);
 
     var mousePositionChange = {
       x: e.mozMovementX,
@@ -6487,6 +6541,19 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     }
   },
 
+  failedPortConnection: function(){
+    this.props.storingFirstPortClicked.style.stroke = "black";
+    this.props.storingFirstPortClicked.style.fill = "black";
+    this.props.storingFirstPortClicked.setAttribute('r', 2);
+    this.resetPortClickStorage();
+    /* Hence, don't add anything to allNodeInfo */
+
+    document.getElementById('dragArea').style.cursor = 'default';
+    blockActions.addEdgePreview(null);
+    interact('#appAndDragAreaContainer')
+      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+  },
+
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
     console.log("Resetting port click storage");
@@ -6629,7 +6696,9 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock + this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
 
       edgePreview.push(
-        React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, 
+        React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, interactJsDragPan: this.interactJsDragPan, 
+                     failedPortConnection: this.failedPortConnection, 
+                     interactJSMouseMoveForEdgePreview: this.interactJSMouseMoveForEdgePreview, 
           edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
                      fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
 
@@ -6645,7 +6714,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     console.log(edges);
 
     return(
-      React.createElement("svg", {id: "appAndDragAreaContainer", 
+      React.createElement("svg", {id: "appAndDragAreaContainer", height: "100%", width: "100%", 
            //onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave}
            style: AppContainerStyle}, 
 
@@ -8173,7 +8242,7 @@ var Ports = React.createClass({displayName: "Ports",
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
         React.createElement("circle", {key: blockId + inportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default'}, 
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                 id: this.props.blockId + inportName}
         )
@@ -8193,7 +8262,7 @@ var Ports = React.createClass({displayName: "Ports",
       var outportName = blockInfo.outports[j].name;
       outports.push(
         React.createElement("circle", {key: blockId + outportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65}, 
+                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default'}, 
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                 id: this.props.blockId + outportName}
         )

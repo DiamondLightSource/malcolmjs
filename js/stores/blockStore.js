@@ -25,7 +25,7 @@ var previousMouseCoordsOnZoom = null;
 function updateEdgePreviewEndpoint(position){
   edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
   edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-  console.log(edgePreview.endpointCoords);
+  //console.log(edgePreview.endpointCoords);
 }
 
 var allBlockTabInfo = {
@@ -1479,8 +1479,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-      console.log(payload);
-      console.log(item);
+      //console.log(payload);
+      //console.log(item);
       updateEdgePreviewEndpoint(item);
       blockStore.emitChange();
       break;

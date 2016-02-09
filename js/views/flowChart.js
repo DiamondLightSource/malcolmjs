@@ -348,8 +348,8 @@ var FlowChart = React.createClass({
     //e.stopImmediatePropagation();
     //console.log(e.isImmediatePropagationStopped());
 
-    console.log("interactjs mousemove");
-    console.log(e);
+    //console.log("interactjs mousemove");
+    //console.log(e);
 
     var mousePositionChange = {
       x: e.mozMovementX,
@@ -799,6 +799,19 @@ var FlowChart = React.createClass({
     }
   },
 
+  failedPortConnection: function(){
+    this.props.storingFirstPortClicked.style.stroke = "black";
+    this.props.storingFirstPortClicked.style.fill = "black";
+    this.props.storingFirstPortClicked.setAttribute('r', 2);
+    this.resetPortClickStorage();
+    /* Hence, don't add anything to allNodeInfo */
+
+    document.getElementById('dragArea').style.cursor = 'default';
+    blockActions.addEdgePreview(null);
+    interact('#appAndDragAreaContainer')
+      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+  },
+
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
     console.log("Resetting port click storage");
@@ -941,7 +954,9 @@ var FlowChart = React.createClass({
       var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock + this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
 
       edgePreview.push(
-        <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel}
+        <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel} interactJsDragPan={this.interactJsDragPan}
+                     failedPortConnection={this.failedPortConnection}
+                     interactJSMouseMoveForEdgePreview={this.interactJSMouseMoveForEdgePreview}
           edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
                      fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
 
@@ -957,7 +972,7 @@ var FlowChart = React.createClass({
     console.log(edges);
 
     return(
-      <svg id="appAndDragAreaContainer"
+      <svg id="appAndDragAreaContainer" height="100%" width="100%"
            //onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave}
            style={AppContainerStyle}  >
 

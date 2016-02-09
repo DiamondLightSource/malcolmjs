@@ -54,50 +54,55 @@ body {
   margin-top: 39px;
 }
 
-.border {
-  background-color: green;
-  border: 2px solid black;
-  height: 100px;
-  width: 100px;
-}
+/*.border {*/
+  /*background-color: green;*/
+  /*border: 2px solid black;*/
+  /*height: 100px;*/
+  /*width: 100px;*/
+/*}*/
 
-#redBlock {
-  background-color: red;
-  height: 100px;
-  width: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+/*#redBlock {*/
+  /*background-color: red;*/
+  /*height: 100px;*/
+  /*width: 100px;*/
+  /*margin-top: 10px;*/
+  /*margin-bottom: 10px;*/
+/*}*/
 
-#redBlock:hover {
-  cursor: pointer;
-}
+/*#redBlock:hover {*/
+  /*cursor: pointer;*/
+/*}*/
 
-#blueBlock {
-  background-color: blue;
-  height: 100px;
-  width: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+/*#blueBlock {*/
+  /*background-color: blue;*/
+  /*height: 100px;*/
+  /*width: 100px;*/
+  /*margin-top: 10px;*/
+  /*margin-bottom: 10px;*/
+/*}*/
 
-#blueBlock:hover {
-  cursor: pointer;
-}
+/*#blueBlock:hover {*/
+  /*cursor: pointer;*/
+/*}*/
 
-#greenBlock {
-  background-color: green;
-  height: 100px;
-  width: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+/*#greenBlock {*/
+  /*background-color: green;*/
+  /*height: 100px;*/
+  /*width: 100px;*/
+  /*margin-top: 10px;*/
+  /*margin-bottom: 10px;*/
+/*}*/
 
-#greenBlock:hover {
-  cursor: pointer;
-}
+/*#greenBlock:hover {*/
+  /*cursor: pointer;*/
+/*}*/
 
-#check {
-  height: 100%;
-  width: 100%;
-}
+/*#check {*/
+  /*height: 100%;*/
+  /*width: 100%;*/
+/*}*/
+
+/*!* Temporary dirty fix for tab content padding *!*/
+/*.tab-content {*/
+  /*padding: 0 !important;*/
+/*}*/

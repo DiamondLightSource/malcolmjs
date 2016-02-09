@@ -119,7 +119,7 @@ var Ports = React.createClass({
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
         <circle key={blockId + inportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y}
-                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default' }}
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                 id={this.props.blockId + inportName}
         />
@@ -139,7 +139,7 @@ var Ports = React.createClass({
       var outportName = blockInfo.outports[j].name;
       outports.push(
         <circle key={blockId + outportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y}
-                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65 }}
+                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default' }}
                 //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                 id={this.props.blockId + outportName}
         />
