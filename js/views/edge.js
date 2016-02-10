@@ -6,6 +6,7 @@ var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -81,6 +82,13 @@ var Edge = React.createClass({
     console.log("edge has been selected");
     console.log(ReactDOM.findDOMNode(this).id);
     blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
+    paneActions.openEdgeTab({
+      edgeId: ReactDOM.findDOMNode(this).id,
+      fromBlock: this.props.fromBlock,
+      fromBlockPort: this.props.fromBlockPort,
+      toBlock: this.props.toBlock,
+      toBlockPort: this.props.toBlockPort
+    });
   },
 
   keyPress: function(e){

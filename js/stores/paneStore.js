@@ -304,11 +304,42 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.OPEN_EDGETAB:
+      console.log(payload);
+      console.log(item);
+      if(allEdgeTabProperties[item.edgeId] === false){
+        allEdgeTabProperties[item.edgeId] = true;
+
+        createObjectForEdgeTabContent({
+          fromBlock: item.fromBlock,
+          fromBlockPort: item.fromBlockPort,
+          toBlock: item.toBlock,
+          toBlockPort: item.toBlockPort
+        });
+        selectBlockOnClick();
+      }
+      else{
+        console.log("edge tab is already open, jump to it");
+        /* Tab is already open, so jump to it! */
+        /* Need to remove the spaces in the edge id first */
+
+
+        var spacelessEdgeId = item.edgeId.replace(/\s/g, '');
+        console.log(spacelessEdgeId);
+
+        dropdownMenuSelect(spacelessEdgeId);
+      }
+      paneStore.emitChange();
+      break;
+
     /* Trying to add waitFor blockStore in order to update allBlockTabInfo */
 
     case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
+      /* Add the edge to allEdgeTabProperties */
+      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + "->" + String(item.toBlock) + String(item.toBlockPort)] = false;
+      console.log(allEdgeTabProperties);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
       paneStore.emitChange();
@@ -330,6 +361,20 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
       resetTabStateReferences();
+
+      /* Also need to remove the edges tab if it is open */
+      if(allEdgeTabProperties[item.edgeId] === true){
+        /* Do the tab removal stuff */
+        console.log("that edge tab was open, so now we need to remove that tab");
+        for(var i = 0; i < _stuff.tabState.length; i++){
+          if(_stuff.tabState[i].tabType === 'edge'){
+            allEdgeTabProperties[item.edgeId] = false;
+            var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+            newTabs.splice(i, 1);
+            _stuff.tabState = newTabs;
+          }
+        }
+      }
       paneStore.emitChange();
       break;
 
@@ -463,6 +508,10 @@ var allBlockTabProperties = {
   'PComp1': false
 };
 
+var allEdgeTabProperties = {
+  'Gate1out->TGen1ena': false,
+};
+
 function appendToAllBlockTabProperties(BlockId){
   allBlockTabProperties[BlockId] = false;
 }
@@ -490,6 +539,24 @@ var setBlockTabStateTrue = function(BlockId){
     dropdownMenuSelect(BlockId);
   }
 };
+
+//function setEdgeTabStateTrue(EdgeId){
+//  console.log(allEdgeTabProperties);
+//  if(allEdgeTabProperties[EdgeId] === false){
+//    allEdgeTabProperties[EdgeId] = true;
+//  }
+//  else{
+//    console.log("edge tab is already open, jump to it");
+//    /* Tab is already open, so jump to it! */
+//    /* Need to remove the spaces in the edge id first */
+//
+//    /* Changed edge id's to be spaceless to prevent this hassle, got too annoying when dealing with removing tabs */
+//    //var spacelessEdgeId = EdgeId.replace(/\s/g, '');
+//    //console.log(spacelessEdgeId);
+//
+//    dropdownMenuSelect(EdgeId);
+//  }
+//}
 
 function setFavTabStateTrue(){
  if(allBlockTabProperties['Favourites'] === false){
@@ -522,6 +589,29 @@ function setConfigTabStateTrue(){
     dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
   }
+}
+
+function createObjectForEdgeTabContent(EdgeInfo){
+  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + "->" + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
+  var edgeTabObject = {
+    'tabType': 'edge',
+    'label': edgeLabel
+  };
+  for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
+    if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
+      edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
+    }
+  }
+
+  for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
+    console.log(allBlockTabInfo[EdgeInfo.toBlock]);
+    if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
+      edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
+    }
+  }
+
+  console.log(edgeTabObject);
+  _stuff.tabState.push(edgeTabObject);
 }
 
 /* Note that this function also adds the tabs to SidePane */
@@ -616,7 +706,26 @@ var removeBlockTab = function(selectedTabIndex){
 
   var tabName = _stuff.tabState[selectedTabIndex].label;
   console.log(tabName);
-  allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+
+  /* Checking if it's a edge tab or a block tab */
+
+  if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
+    console.log("removing an edge tab");
+
+    //var spacelessEdgeTabName = tabName.replace(/\s/g, '');
+
+    /* Hmmm, I'm using the edge id WITH spaces in allEdgeTabProperties, but I'm using the spaceless
+    edge id in tabState, is that a good idea?...
+     */
+    allEdgeTabProperties[tabName] = false;
+    console.log(allEdgeTabProperties);
+  }
+  else{
+    console.log("removing a block tab");
+    allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+  }
+
+  //allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
   newTabs.splice(selectedTabIndex, 1);
   _stuff.tabState = newTabs;
@@ -662,6 +771,9 @@ function resetTabStateReferences(){
   for(var i = 0; i < _stuff.tabState.length; i++){
     if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
       console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
+    }
+    else if(_stuff.tabState[i].tabType === 'edge'){
+      console.log("also do nothing, since this info is created from allBlockTabInfo");
     }
     else {
       console.log(_stuff.tabState);

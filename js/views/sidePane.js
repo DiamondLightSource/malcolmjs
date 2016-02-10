@@ -147,7 +147,11 @@ var SidePane = React.createClass({
           console.log("we have a favourites tab or configuaration tab");
           var tabTitle = tabLabel;
         }
+        else if(block.tabType === 'edge'){
+          console.log("we have an edge tab!!");
+        }
         else {
+          console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
           tabContent.push(<b>Position</b>);
