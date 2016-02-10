@@ -338,7 +338,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
       /* Add the edge to allEdgeTabProperties */
-      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + "->" + String(item.toBlock) + String(item.toBlockPort)] = false;
+      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
       console.log(allEdgeTabProperties);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
@@ -509,7 +509,7 @@ var allBlockTabProperties = {
 };
 
 var allEdgeTabProperties = {
-  'Gate1out->TGen1ena': false,
+  'Gate1outTGen1ena': false,
 };
 
 function appendToAllBlockTabProperties(BlockId){
@@ -592,7 +592,7 @@ function setConfigTabStateTrue(){
 }
 
 function createObjectForEdgeTabContent(EdgeInfo){
-  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + "->" + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
+  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
   var edgeTabObject = {
     'tabType': 'edge',
     'label': edgeLabel

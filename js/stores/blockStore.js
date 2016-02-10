@@ -106,7 +106,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
-  'Gate1out -> TGen1ena': false,
+  'Gate1outTGen1ena': false,
   //Gate1OutTGen1Ena: false,
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false

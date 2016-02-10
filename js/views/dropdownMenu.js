@@ -128,6 +128,7 @@ var Dropdown = React.createClass({
     var items = [];
     for (var i = 0; i < this.props.tabState.length; i++) {
       var item = this.props.tabState[i].label;
+      console.log(item);
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
@@ -143,9 +144,12 @@ var Dropdown = React.createClass({
         .on('tap', function(e){
         e.stopPropagation();
         e.stopImmediatePropagation();
+        console.log("dropdownMenu item click");
+        console.log(item);
         this.testSelectInvokeSidePane(item);
         this.handleActionHide(e);
-      }.bind(this))
+      }.bind(this));
+      console.log(document.getElementById("dropdownTab" + item));
     }
 
     return <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}>

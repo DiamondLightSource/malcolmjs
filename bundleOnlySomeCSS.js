@@ -874,7 +874,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
-  'Gate1out -> TGen1ena': false,
+  'Gate1outTGen1ena': false,
   //Gate1OutTGen1Ena: false,
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false
@@ -3390,7 +3390,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       AppDispatcher.waitFor([blockStore.dispatchToken]);
       getInitialBlockDataFromBlockStore();
       /* Add the edge to allEdgeTabProperties */
-      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + "->" + String(item.toBlock) + String(item.toBlockPort)] = false;
+      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
       console.log(allEdgeTabProperties);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
@@ -3561,7 +3561,7 @@ var allBlockTabProperties = {
 };
 
 var allEdgeTabProperties = {
-  'Gate1out->TGen1ena': false,
+  'Gate1outTGen1ena': false,
 };
 
 function appendToAllBlockTabProperties(BlockId){
@@ -3644,7 +3644,7 @@ function setConfigTabStateTrue(){
 }
 
 function createObjectForEdgeTabContent(EdgeInfo){
-  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + "->" + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
+  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
   var edgeTabObject = {
     'tabType': 'edge',
     'label': edgeLabel
@@ -5350,6 +5350,7 @@ var Dropdown = React.createClass({displayName: "Dropdown",
     var items = [];
     for (var i = 0; i < this.props.tabState.length; i++) {
       var item = this.props.tabState[i].label;
+      console.log(item);
       var interactIdString = "#" + "dropdownTab" + item;
 
       items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
@@ -5365,9 +5366,12 @@ var Dropdown = React.createClass({displayName: "Dropdown",
         .on('tap', function(e){
         e.stopPropagation();
         e.stopImmediatePropagation();
+        console.log("dropdownMenu item click");
+        console.log(item);
         this.testSelectInvokeSidePane(item);
         this.handleActionHide(e);
-      }.bind(this))
+      }.bind(this));
+      console.log(document.getElementById("dropdownTab" + item));
     }
 
     return React.createElement("div", {className: "dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}, 
@@ -6687,7 +6691,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         };
 
         /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + "->" + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) +  String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
         console.log(newEdge);
         blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
@@ -6844,7 +6848,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
-          var edgeLabel = String(fromBlock) + String(fromBlockPort) + "->" + String(toBlock) + String(toBlockPort);
+          var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
 
           edges.push(
             React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 

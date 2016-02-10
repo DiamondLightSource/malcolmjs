@@ -767,7 +767,7 @@ var FlowChart = React.createClass({
         };
 
         /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) + "->" + String(newEdge.toBlock) + String(newEdge.toBlockPort);
+        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) +  String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
         console.log(newEdge);
         blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
@@ -924,7 +924,7 @@ var FlowChart = React.createClass({
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
 
-          var edgeLabel = String(fromBlock) + String(fromBlockPort) + "->" + String(toBlock) + String(toBlockPort);
+          var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
 
           edges.push(
             <Edge key={edgeLabel} id={edgeLabel}
