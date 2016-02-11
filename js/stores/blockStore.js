@@ -714,10 +714,10 @@ var GateBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -740,10 +740,10 @@ var GateBlockStyling = {
       },
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {
@@ -828,10 +828,10 @@ var TGenBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -850,10 +850,10 @@ var TGenBlockStyling = {
       }
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {
@@ -929,10 +929,10 @@ var PCompBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -963,10 +963,10 @@ var PCompBlockStyling = {
       },
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {

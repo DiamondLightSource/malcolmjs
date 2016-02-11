@@ -293,7 +293,7 @@ var FlowChart = React.createClass({
       .on('mousemove', this.interactJSMouseMoveForEdgePreview);
 
     console.log(this.props.portThatHasBeenClicked);
-    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.id;
+    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
     var portStringSliceIndex = fromBlockId.length;
     var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
@@ -307,17 +307,37 @@ var FlowChart = React.createClass({
      */
 
     console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
+    console.log(this.props.portThatHasBeenClicked.className);
 
-    if(this.props.portThatHasBeenClicked.cx.baseVal.value === 0){
+    if(this.props.portThatHasBeenClicked.className.baseVal === "inport"){
       console.log("port clicked is an inport");
-      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].x;
-      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].y;
+
+      var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
+      var inportArrayIndex;
+      for(var j = 0; j < inportArrayLength; j++){
+        console.log(this.props.allBlockInfo[fromBlockId].inports[j].name);
+        if(this.props.allBlockInfo[fromBlockId].inports[j].name === portName){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      var endOfEdgePortOffsetX = 0;
+      var endOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
-    else if(this.props.portThatHasBeenClicked.cx.baseVal.value !== 0) {
+    else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
       console.log("port clicked is an outport");
-      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].x;
-      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].y;
+
+      var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.allBlockInfo[fromBlockId].outports[i].name === portName){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+
+      var endOfEdgePortOffsetX = 72;
+      var endOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
       var portType = "outport";
     }
     var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
@@ -397,10 +417,10 @@ var FlowChart = React.createClass({
     //port.style.fill = "yellow";
     //port.style.stroke = "yellow";
 
-    port.style.stroke = "black";
-    port.style.fill = "lightgrey";
+    //port.style.stroke = "black";
+    port.style.fill = "#00c9cc";
 
-    port.setAttribute('r', 4);
+    //port.setAttribute('r', 4);
 
     //console.log(port.style.fill);
     //console.log(port.style.stroke);
@@ -420,10 +440,10 @@ var FlowChart = React.createClass({
     //port.style.fill = "black";
     //port.style.stroke = "black";
 
-    port.style.stroke = "black";
-    port.style.fill = "black";
+    //port.style.stroke = "black";
+    port.style.fill = "grey";
 
-    port.setAttribute('r', 2);
+    //port.setAttribute('r', 2);
 
     /* Reset edgePreview in blockStore */
 
@@ -471,23 +491,23 @@ var FlowChart = React.createClass({
     /* Trying to use id instead of class to then allow class for interactjs use */
     /* Need the length of the name of the node, then slice the firstPort id string until the end of the node name length */
 
-    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.id.length;
+    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
-    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.id.length;
+    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
     console.log(firstPortStringSliceIndex);
     console.log(firstPortName);
     console.log(secondPortName);
 
-    if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
+    if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
       console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
-        fromBlock: firstPort.parentNode.parentNode.parentNode.id,
+        fromBlock: firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         fromBlockPort: firstPortName,
-        toBlock: secondPort.parentNode.parentNode.parentNode.id,
+        toBlock: secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         toBlockPort: secondPortName
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
@@ -581,9 +601,11 @@ var FlowChart = React.createClass({
     window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
     //var fromPort = this.state.storingFirstPortClicked;
-    fromPort.style.stroke = "black";
-    fromPort.style.fill = "black";
-    fromPort.setAttribute('r', 2);
+
+    //fromPort.style.stroke = "black";
+    fromPort.style.fill = "grey";
+    //fromPort.setAttribute('r', 2);
+
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
 
@@ -625,9 +647,11 @@ var FlowChart = React.createClass({
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
       var fromPort = this.props.storingFirstPortClicked;
-      fromPort.style.stroke = "black";
-      fromPort.style.fill = "black";
-      fromPort.setAttribute('r', 2);
+
+      //fromPort.style.stroke = "black";
+      fromPort.style.fill = "grey";
+      //fromPort.setAttribute('r', 2);
+
       this.resetPortClickStorage();
 
       blockActions.addEdgePreview(null);
@@ -709,9 +733,11 @@ var FlowChart = React.createClass({
 
       if(fromPortValueType === toPortValueType){
         /* Proceed with the connection as we have compatible port value types */
-        toPort.style.stroke = "black";
-        toPort.style.fill = "lightgrey";
-        toPort.setAttribute('r', 4);
+
+        //toPort.style.stroke = "black";
+        toPort.style.fill = "#00c9cc";
+        //toPort.setAttribute('r', 4);
+
 
         /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
         /* Now need to implement the logic that checks if the start port was an inport or outport */
@@ -787,9 +813,11 @@ var FlowChart = React.createClass({
         /* Do all the resetting jazz */
 
         var fromPort = this.props.storingFirstPortClicked;
-        fromPort.style.stroke = "black";
-        fromPort.style.fill = "black";
-        fromPort.setAttribute('r', 2);
+
+        //fromPort.style.stroke = "black";
+        fromPort.style.fill = "grey";
+        //fromPort.setAttribute('r', 2);
+
         this.resetPortClickStorage();
 
         blockActions.addEdgePreview(null);
@@ -801,9 +829,9 @@ var FlowChart = React.createClass({
   },
 
   failedPortConnection: function(){
-    this.props.storingFirstPortClicked.style.stroke = "black";
-    this.props.storingFirstPortClicked.style.fill = "black";
-    this.props.storingFirstPortClicked.setAttribute('r', 2);
+    //this.props.storingFirstPortClicked.style.stroke = "black";
+    this.props.storingFirstPortClicked.style.fill = "grey";
+    //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
 
@@ -935,6 +963,7 @@ var FlowChart = React.createClass({
                   toBlockInfo={this.props.allBlockInfo[toBlock]}
                   areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                   selected={blockStore.getIfEdgeIsSelected(edgeLabel)}
+                  inportArrayIndex={i} inportArrayLength={this.props.allBlockInfo[block].inports.length}
             />
           )
         }
@@ -960,6 +989,7 @@ var FlowChart = React.createClass({
                      interactJSMouseMoveForEdgePreview={this.interactJSMouseMoveForEdgePreview}
           edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
                      fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
+                     fromBlockInfo={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
 
         />
       )

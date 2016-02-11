@@ -92,14 +92,36 @@ var EdgePreview = React.createClass({
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
+    console.log(fromBlockInfo);
 
     if(fromBlockInfo.fromBlockPortType === "inport"){
-      var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].inportPositions[fromBlockInfo.fromBlockPort].x;
-      var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].inportPositions[fromBlockInfo.fromBlockPort].y;
+      console.log(this.props.fromBlockInfo);
+      var inportArrayLength = this.props.fromBlockInfo.inports.length;
+      var inportArrayIndex;
+      console.log(inportArrayLength);
+      console.log(fromBlockInfo);
+      for(var j = 0; j < inportArrayLength; j++){
+        console.log(this.props.fromBlockInfo.inports[j].name);
+        console.log(fromBlockInfo.fromBlockPort);
+        if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      console.log(inportArrayIndex);
+      var startOfEdgePortOffsetX = 0;
+      var startOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
-      var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].outportPositions[fromBlockInfo.fromBlockPort].x;
-      var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].outportPositions[fromBlockInfo.fromBlockPort].y;
+      var outportArrayLength = this.props.fromBlockInfo.outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+      var startOfEdgePortOffsetX = 72;
+      var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
     else{
       window.alert("the port type is neither an inport or outport...");

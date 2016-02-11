@@ -1482,10 +1482,10 @@ var GateBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -1508,10 +1508,10 @@ var GateBlockStyling = {
       },
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {
@@ -1596,10 +1596,10 @@ var TGenBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -1618,10 +1618,10 @@ var TGenBlockStyling = {
       }
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {
@@ -1697,10 +1697,10 @@ var PCompBlockStyling = {
       y : 0
     },
     rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
+      height: 72,
+      width: 72,
+      rx: 8,
+      ry: 8
     }
   },
   ports: {
@@ -1731,10 +1731,10 @@ var PCompBlockStyling = {
       },
     },
     portStyling: {
-      portRadius: 2,
-      fill: 'black',
-      stroke: 'black',
-      strokeWidth: 1.65
+      portRadius: 2.5,
+      fill: 'grey',
+      //stroke: 'black',
+      //strokeWidth: 1.65
     }
   },
   text: {
@@ -4987,13 +4987,20 @@ var Block = React.createClass({displayName: "Block",
         React.createElement("g", {style: {MozUserSelect: 'none'}
            //onMouseDown={this.mouseDown}
         }, 
-          React.createElement("rect", {id: "blockBackground", height: "105", width: "65", style: {fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), " /* To allow the cursor to change when hovering over the entire block container */", 
+          React.createElement("rect", {id: "blockBackground", height: "105", width: "65", style: {fill: 'transparent',
+          cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), 
+          "/* To allow the cursor to change when hovering over the entire block container */", 
 
-          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, allBlockTypesStyling: this.props.allBlockTypesStyling, 
-                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, selected: this.props.selected}), 
+          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, 
+                          allBlockTypesStyling: this.props.allBlockTypesStyling, 
+                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+                          selected: this.props.selected}), 
 
-          React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, allBlockTypesStyling: this.props.allBlockTypesStyling, 
-                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked})
+          React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, 
+                 allBlockTypesStyling: this.props.allBlockTypesStyling, 
+                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+                 storingFirstPortClicked: this.props.storingFirstPortClicked, 
+                 selected: this.props.selected})
 
         )
 
@@ -5124,18 +5131,18 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
     return(
       React.createElement("g", null, 
         React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
-              height: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height, width: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width, 
-              x: 0, y: 0, rx: 7, ry: 7, 
-              style: {fill: 'white', 'strokeWidth': 1.65,
+              height: 72, width: 72, 
+              x: 0, y: 0, rx: 8, ry: 8, 
+              style: {fill: 'white', 'strokeWidth': 2,
                stroke: this.props.selected ? '#797979' : 'black',
                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
         ), 
         React.createElement("rect", {id: this.props.blockId.concat("InnerRectangle"), 
-              height: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.height - 4, width: this.props.allBlockTypesStyling[this.props.blockType].rectangle.rectangleStyling.width - 4, 
-              x: 2, y: 2, rx: 5, ry: 5, 
-              style: {fill: 'lightgrey',
-               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+              height: 66, width: 66, 
+              x: 3, y: 3, rx: 6, ry: 6, 
+              style: {fill: 'rgba(230,238,240,0.94)',
+                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
         )
       )
     )
@@ -5545,13 +5552,13 @@ var Edge = React.createClass({displayName: "Edge",
           var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
           console.log(toBlockPortElement);
 
-          fromBlockPortElement.style.stroke = "black";
-          fromBlockPortElement.style.fill = "black";
-          fromBlockPortElement.setAttribute('r', 2);
+          //fromBlockPortElement.style.stroke = "black";
+          fromBlockPortElement.style.fill = "grey";
+          //fromBlockPortElement.setAttribute('r', 2);
 
-          toBlockPortElement.style.stroke = "black";
-          toBlockPortElement.style.fill = "black";
-          toBlockPortElement.setAttribute('r', 2);
+          //toBlockPortElement.style.stroke = "black";
+          toBlockPortElement.style.fill = "grey";
+          //toBlockPortElement.setAttribute('r', 2);
 
         }
 
@@ -5601,13 +5608,22 @@ var Edge = React.createClass({displayName: "Edge",
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
-    var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].x;
-    var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockType].outportPositions[fromBlockPort].y;
+
+    var outportArrayLength = this.props.fromBlockInfo.outports.length;
+    var outportArrayIndex;
+    for(var i = 0; i < outportArrayLength; i++){
+      if(this.props.fromBlockInfo.outports[i].name === fromBlockPort){
+        outportArrayIndex = JSON.parse(JSON.stringify(i));
+      }
+    }
+
+    var startOfEdgePortOffsetX = 72;
+    var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    var endOfEdgePortOffsetX = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].x;
-    var endOfEdgePortOffsetY = allBlockTypesPortStyling[toBlockType].inportPositions[toBlockPort].y;
+    var endOfEdgePortOffsetX = 0;
+    var endOfEdgePortOffsetY = 72 / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
     var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
@@ -5646,64 +5662,6 @@ var Edge = React.createClass({displayName: "Edge",
 //});
 
 module.exports = Edge;
-
-//var gateNodeRegExp = /Gate/;
-//var tgenNodeRegExp = /TGen/;
-//var pcompNodeRegExp = /PComp/;
-//var lutNodeRegExp = /LUT/;
-//
-//var gateNodeInportPositioning = this.state.gateNodeStyling.ports.portPositions.inportPositions;
-//var gateNodeOutportPositioning = this.state.gateNodeStyling.ports.portPositions.outportPositions;
-//var tgenNodeInportPositioning = this.state.tgenNodeStyling.ports.portPositions.inportPositions;
-//var tgenNodeOutportPositioning = this.state.tgenNodeStyling.ports.portPositions.outportPositions;
-//var pcompNodeInportPositioning = this.state.pcompNodeStyling.ports.portPositions.inportPositions;
-//var pcompNodeOutportPositioning = this.state.pcompNodeStyling.ports.portPositions.outportPositions;
-
-/* fromNodes */
-//if(gateNodeRegExp.test(fromNode) === true){
-//  var startOfEdgePortOffsetX = gateNodeOutportPositioning[fromNodePort].x;
-//  var startOfEdgePortOffsetY = gateNodeOutportPositioning[fromNodePort].y;
-//  //console.log(startOfEdgePortOffsetX);
-//  //console.log(startOfEdgePortOffsetY);
-//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-//  //console.log(startOfEdgeX);
-//  //console.log(startOfEdgeY);
-//}
-//else if(tgenNodeRegExp.test(fromNode) === true){
-//  var startOfEdgePortOffsetX = tgenNodeOutportPositioning[fromNodePort].x;
-//  var startOfEdgePortOffsetY = tgenNodeOutportPositioning[fromNodePort].y;
-//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-//}
-//else if(pcompNodeRegExp.test(fromNode) === true){
-//  var startOfEdgePortOffsetX = pcompNodeOutportPositioning[fromNodePort].x;
-//  var startOfEdgePortOffsetY = pcompNodeOutportPositioning[fromNodePort].y;
-//  var startOfEdgeX = fromNodePositionX + startOfEdgePortOffsetX;
-//  var startOfEdgeY = fromNodePositionY + startOfEdgePortOffsetY;
-//}
-//
-///* toNodes */
-//if(tgenNodeRegExp.test(toNode) === true){
-//  var endOfEdgePortOffsetX = tgenNodeInportPositioning[toNodePort].x;
-//  var endOfEdgePortOffsetY = tgenNodeInportPositioning[toNodePort].y;
-//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-//  //console.log(endOfEdgeX);
-//  //console.log(endOfEdgeY);
-//}
-//else if(gateNodeRegExp.test(toNode) === true){
-//  var endOfEdgePortOffsetX = gateNodeInportPositioning[toNodePort].x;
-//  var endOfEdgePortOffsetY = gateNodeInportPositioning[toNodePort].y;
-//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-//}
-//else if(pcompNodeRegExp.test(toNode) === true){
-//  var endOfEdgePortOffsetX = pcompNodeInportPositioning[toNodePort].x;
-//  var endOfEdgePortOffsetY = pcompNodeInportPositioning[toNodePort].y;
-//  var endOfEdgeX = toNodePositionX + endOfEdgePortOffsetX;
-//  var endOfEdgeY = toNodePositionY + endOfEdgePortOffsetY;
-//}
 
 },{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/react":218,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11}],21:[function(require,module,exports){
 /**
@@ -5800,14 +5758,36 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
+    console.log(fromBlockInfo);
 
     if(fromBlockInfo.fromBlockPortType === "inport"){
-      var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].inportPositions[fromBlockInfo.fromBlockPort].x;
-      var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].inportPositions[fromBlockInfo.fromBlockPort].y;
+      console.log(this.props.fromBlockInfo);
+      var inportArrayLength = this.props.fromBlockInfo.inports.length;
+      var inportArrayIndex;
+      console.log(inportArrayLength);
+      console.log(fromBlockInfo);
+      for(var j = 0; j < inportArrayLength; j++){
+        console.log(this.props.fromBlockInfo.inports[j].name);
+        console.log(fromBlockInfo.fromBlockPort);
+        if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      console.log(inportArrayIndex);
+      var startOfEdgePortOffsetX = 0;
+      var startOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
-      var startOfEdgePortOffsetX = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].outportPositions[fromBlockInfo.fromBlockPort].x;
-      var startOfEdgePortOffsetY = allBlockTypesPortStyling[fromBlockInfo.fromBlockType].outportPositions[fromBlockInfo.fromBlockPort].y;
+      var outportArrayLength = this.props.fromBlockInfo.outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+      var startOfEdgePortOffsetX = 72;
+      var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
     else{
       window.alert("the port type is neither an inport or outport...");
@@ -6217,7 +6197,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       .on('mousemove', this.interactJSMouseMoveForEdgePreview);
 
     console.log(this.props.portThatHasBeenClicked);
-    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.id;
+    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
     var portStringSliceIndex = fromBlockId.length;
     var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
@@ -6231,17 +6211,37 @@ var FlowChart = React.createClass({displayName: "FlowChart",
      */
 
     console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
+    console.log(this.props.portThatHasBeenClicked.className);
 
-    if(this.props.portThatHasBeenClicked.cx.baseVal.value === 0){
+    if(this.props.portThatHasBeenClicked.className.baseVal === "inport"){
       console.log("port clicked is an inport");
-      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].x;
-      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].inportPositions[portName].y;
+
+      var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
+      var inportArrayIndex;
+      for(var j = 0; j < inportArrayLength; j++){
+        console.log(this.props.allBlockInfo[fromBlockId].inports[j].name);
+        if(this.props.allBlockInfo[fromBlockId].inports[j].name === portName){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      var endOfEdgePortOffsetX = 0;
+      var endOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
-    else if(this.props.portThatHasBeenClicked.cx.baseVal.value !== 0) {
+    else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
       console.log("port clicked is an outport");
-      var endOfEdgePortOffsetX = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].x;
-      var endOfEdgePortOffsetY = this.props.allBlockTypesPortStyling[fromBlockType].outportPositions[portName].y;
+
+      var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.allBlockInfo[fromBlockId].outports[i].name === portName){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+
+      var endOfEdgePortOffsetX = 72;
+      var endOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
       var portType = "outport";
     }
     var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
@@ -6321,10 +6321,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //port.style.fill = "yellow";
     //port.style.stroke = "yellow";
 
-    port.style.stroke = "black";
-    port.style.fill = "lightgrey";
+    //port.style.stroke = "black";
+    port.style.fill = "#00c9cc";
 
-    port.setAttribute('r', 4);
+    //port.setAttribute('r', 4);
 
     //console.log(port.style.fill);
     //console.log(port.style.stroke);
@@ -6344,10 +6344,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //port.style.fill = "black";
     //port.style.stroke = "black";
 
-    port.style.stroke = "black";
-    port.style.fill = "black";
+    //port.style.stroke = "black";
+    port.style.fill = "grey";
 
-    port.setAttribute('r', 2);
+    //port.setAttribute('r', 2);
 
     /* Reset edgePreview in blockStore */
 
@@ -6395,23 +6395,23 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     /* Trying to use id instead of class to then allow class for interactjs use */
     /* Need the length of the name of the node, then slice the firstPort id string until the end of the node name length */
 
-    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.id.length;
+    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
-    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.id.length;
+    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
     console.log(firstPortStringSliceIndex);
     console.log(firstPortName);
     console.log(secondPortName);
 
-    if(firstPort.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
+    if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
       console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
       console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
-        fromBlock: firstPort.parentNode.parentNode.parentNode.id,
+        fromBlock: firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         fromBlockPort: firstPortName,
-        toBlock: secondPort.parentNode.parentNode.parentNode.id,
+        toBlock: secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         toBlockPort: secondPortName
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
@@ -6505,9 +6505,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
     //var fromPort = this.state.storingFirstPortClicked;
-    fromPort.style.stroke = "black";
-    fromPort.style.fill = "black";
-    fromPort.setAttribute('r', 2);
+
+    //fromPort.style.stroke = "black";
+    fromPort.style.fill = "grey";
+    //fromPort.setAttribute('r', 2);
+
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
 
@@ -6549,9 +6551,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
       var fromPort = this.props.storingFirstPortClicked;
-      fromPort.style.stroke = "black";
-      fromPort.style.fill = "black";
-      fromPort.setAttribute('r', 2);
+
+      //fromPort.style.stroke = "black";
+      fromPort.style.fill = "grey";
+      //fromPort.setAttribute('r', 2);
+
       this.resetPortClickStorage();
 
       blockActions.addEdgePreview(null);
@@ -6633,9 +6637,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
       if(fromPortValueType === toPortValueType){
         /* Proceed with the connection as we have compatible port value types */
-        toPort.style.stroke = "black";
-        toPort.style.fill = "lightgrey";
-        toPort.setAttribute('r', 4);
+
+        //toPort.style.stroke = "black";
+        toPort.style.fill = "#00c9cc";
+        //toPort.setAttribute('r', 4);
+
 
         /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
         /* Now need to implement the logic that checks if the start port was an inport or outport */
@@ -6711,9 +6717,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         /* Do all the resetting jazz */
 
         var fromPort = this.props.storingFirstPortClicked;
-        fromPort.style.stroke = "black";
-        fromPort.style.fill = "black";
-        fromPort.setAttribute('r', 2);
+
+        //fromPort.style.stroke = "black";
+        fromPort.style.fill = "grey";
+        //fromPort.setAttribute('r', 2);
+
         this.resetPortClickStorage();
 
         blockActions.addEdgePreview(null);
@@ -6725,9 +6733,9 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   },
 
   failedPortConnection: function(){
-    this.props.storingFirstPortClicked.style.stroke = "black";
-    this.props.storingFirstPortClicked.style.fill = "black";
-    this.props.storingFirstPortClicked.setAttribute('r', 2);
+    //this.props.storingFirstPortClicked.style.stroke = "black";
+    this.props.storingFirstPortClicked.style.fill = "grey";
+    //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
 
@@ -6858,7 +6866,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                   fromBlockInfo: this.props.allBlockInfo[fromBlock], 
                   toBlockInfo: this.props.allBlockInfo[toBlock], 
                   areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
-                  selected: blockStore.getIfEdgeIsSelected(edgeLabel)}
+                  selected: blockStore.getIfEdgeIsSelected(edgeLabel), 
+                  inportArrayIndex: i, inportArrayLength: this.props.allBlockInfo[block].inports.length}
             )
           )
         }
@@ -6883,7 +6892,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                      failedPortConnection: this.failedPortConnection, 
                      interactJSMouseMoveForEdgePreview: this.interactJSMouseMoveForEdgePreview, 
           edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
-                     fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
+                     fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position, 
+                     fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
 
         )
       )
@@ -8339,84 +8349,64 @@ var paneActions = require('../actions/paneActions');
 
 var interact = require('../../node_modules/interact.js');
 
-
-function getPortState(){
-  return{
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-  }
-}
-
 var Ports = React.createClass({displayName: "Ports",
-  //getInitialState: function(){
-  //  return getPortState();
-  //},
-  //componentDidMount: function(){
-  //  NodeStore.addChangeListener(this._onChange);
-  //},
-  //componentWillUnmount: function(){
-  //  NodeStore.removeChangeListener(this._onChange);
-  //},
-  //_onChange: function(){
-  //  this.setState(getPortState());
-  //},
-
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //
-  //},
 
   componentDidMount: function(){
-    interact('.port')
+    interact('.inport')
+      .on('tap', this.portClick);
+    interact('.outport')
+      .on('tap', this.portClick);
+    interact('.portArc')
       .on('tap', this.portClick);
 
-    interact('.port')
+    interact('.inport')
+      .styleCursor(false);
+    interact('.outport')
+      .styleCursor(false);
+    interact('.portArc')
       .styleCursor(false);
   },
 
   componentWillUnmount: function(){
-    interact('.port')
-      .off('tap', this.portClick)
+    interact('.inport')
+      .off('tap', this.portClick);
+    interact('.outport')
+      .off('tap', this.portClick);
+    interact('.portArc')
+      .off('tap', this.portClick);
   },
 
-  portMouseDown: function(e){
-    console.log("portMouseDown");
-    console.log(e);
-    blockActions.passPortMouseDown(e.currentTarget);
-
-    console.log(e.currentTarget.parentNode.parentNode.parentNode);
-
-    var portMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({portMouseDownCoords: portMouseDownCoords});
-    var whichPort = e.currentTarget;
-    console.log(whichPort);
-  },
-  portMouseUp: function(e){
-    console.log("portMouseUp");
-    console.log(e);
-    var portMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-      this.portClick(e);
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
     console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    blockActions.passPortMouseDown(e.currentTarget);
+
+    var target;
+
+    console.log(e.currentTarget);
+
+    if(e.currentTarget.className.animVal === "portArc"){
+      console.log("clicked on an arc, so need to find the corresponding port");
+      console.log(e.currentTarget.parentNode);
+      console.log(e.currentTarget.parentNode.children);
+      for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
+        console.log(e.currentTarget.parentNode.children[i]);
+        if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
+          || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+          target = e.currentTarget.parentNode.children[i];
+          console.log(target);
+        }
+      }
+    }
+    else{
+      console.log("clicked on a port, makes it easier");
+      target = e.currentTarget;
+    }
+    console.log(target);
+
+    blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
@@ -8430,6 +8420,30 @@ var Ports = React.createClass({displayName: "Ports",
     //theGraphDiamondHandle.dispatchEvent(PortSelect);
   },
 
+  /* From the-graph */
+
+  angleToX: function (percent, radius) {
+    return radius * Math.cos(2*Math.PI * percent);
+  },
+  angleToY: function (percent, radius) {
+  return radius * Math.sin(2*Math.PI * percent);
+  },
+  makeArcPath: function (port) {
+
+    if(port === "inport"){
+      return [
+        "M", this.angleToX(-1/4, 4), this.angleToY(-1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(1/4, 4), this.angleToY(1/4, 4)
+      ].join(" ");
+    }
+    else if(port === "outport"){
+      return [
+        "M", this.angleToX(1/4, 4), this.angleToY(1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(-1/4, 4), this.angleToY(-1/4, 4)
+      ].join(" ");
+    }
+  },
+
   render: function(){
 
     var blockId = this.props.blockId;
@@ -8441,69 +8455,104 @@ var Ports = React.createClass({displayName: "Ports",
     var inportsXCoord;
     var outports = [];
     var outportsXCoord;
-    var portsText = [];
+    var inportsText = [];
+    var outportsText = [];
+    var blockText = [];
 
-    for(i = 0; i < blockInfo.inports.length; i++){
+    for(var i = 0; i < blockInfo.inports.length; i++){
+      var len = blockInfo.inports.length;
       var inportName = blockInfo.inports[i].name;
+      var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        React.createElement("circle", {key: blockId + inportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default'}, 
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.blockId + inportName}
+        React.createElement("g", {id: blockId + inportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {d: this.makeArcPath("inport"), className: "portArc", 
+                style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
+          React.createElement("circle", {key: blockId + inportName, className: "inport", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, 
+                  style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, cursor: 'default'
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65, cursor: 'default'
+                    }, 
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + inportName}
+          ), 
+          React.createElement("text", {key: blockId + inportName + "-text", textAnchor: "start", 
+                x: 5, 
+                y: 3, 
+                style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"10px", fontFamily: "Verdana"}
+          }, 
+            inportName
+          )
         )
       );
-
-      /* Taking care of the inport text too */
-      portsText.push(
-        React.createElement("text", {key: blockId + inportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[inportName].x, y: allBlockTypesStyling[blockType].text.textPositions[inportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
-        }, 
-          inportName
-        )
-      )
     }
 
-    for(j = 0; j < blockInfo.outports.length; j++){
+    for(var j = 0; j < blockInfo.outports.length; j++){
+      var len = blockInfo.outports.length;
       var outportName = blockInfo.outports[j].name;
+      var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
+        + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
       outports.push(
-        React.createElement("circle", {key: blockId + outportName, className: "port", cx: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x, cy: allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y, 
-                r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default'}, 
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id: this.props.blockId + outportName}
+        React.createElement("g", {id: blockId + outportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {d: this.makeArcPath("outport"), className: "portArc", 
+                style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
+          React.createElement("circle", {key: blockId + outportName, className: "outport", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, 
+                  style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill,
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65,
+                    cursor: 'default'}, 
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + outportName}
+          ), 
+          React.createElement("text", {key: blockId + outportName + "-text", textAnchor: "end", 
+                x: -5, 
+                y: 3, 
+                style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"10px", fontFamily: "Verdana"}
+          }, 
+            outportName
+          )
         )
       );
-
-      portsText.push(
-        React.createElement("text", {key: blockId + outportName + "-text", x: allBlockTypesStyling[blockType].text.textPositions[outportName].x, y: allBlockTypesStyling[blockType].text.textPositions[outportName].y, 
-              style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}
-        }, 
-          outportName
-        )
-      )
     }
 
     /* Now just need to add the node name and node type text as well */
     /* Hmm, where should I get/calculate their position & height from?... */
 
-    portsText.push([
-      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
-            transform: "translate(32.5, 80)"}, 
+    blockText.push([
+      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
+       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+        alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
+            transform: "translate(36, 88)"}, 
         blockInfo.name
       ),
 
-      React.createElement("text", {className: "blockLabel", style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
-            transform: "translate(32.5, 93)"}, 
-        blockInfo.label
+      React.createElement("text", {className: "blockText", style: {MozUserSelect: 'none',
+       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+        alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
+            transform: "translate(36, 101)"}, 
+        blockInfo.type
       )
     ]);
 
     return (
       React.createElement("g", {id: blockId + "-ports"}, 
-        inports, 
-        outports, 
-        portsText
+        React.createElement("g", {id: blockId + "-inports"}, 
+          inports
+        ), 
+        React.createElement("g", {id: blockId + "-outports"}, 
+          outports
+        ), 
+        blockText
       )
+
 
     )
   }
@@ -8663,6 +8712,8 @@ var SidePane = React.createClass({displayName: "SidePane",
         }
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
+
+          /* Don't want any content here, just a 'delete edge' button */
         }
         else {
           console.log("normal block tab");

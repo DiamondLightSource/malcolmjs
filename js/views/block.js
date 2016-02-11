@@ -304,13 +304,20 @@ var Block = React.createClass({
         <g style={{MozUserSelect: 'none'}}
            //onMouseDown={this.mouseDown}
         >
-          <rect id="blockBackground" height="105" width="65" style={{fill: 'transparent', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/> /* To allow the cursor to change when hovering over the entire block container */
+          <rect id="blockBackground" height="105" width="65" style={{fill: 'transparent',
+          cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/>
+          /* To allow the cursor to change when hovering over the entire block container */
 
-          <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type} allBlockTypesStyling={this.props.allBlockTypesStyling}
-                         portThatHasBeenClicked={this.props.portThatHasBeenClicked} selected={this.props.selected} />
+          <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
+                          allBlockTypesStyling={this.props.allBlockTypesStyling}
+                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
+                          selected={this.props.selected} />
 
-          <Ports blockId={this.props.id} blockInfo={this.props.blockInfo} allBlockTypesStyling={this.props.allBlockTypesStyling}
-                 portThatHasBeenClicked={this.props.portThatHasBeenClicked} storingFirstPortClicked={this.props.storingFirstPortClicked} />
+          <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
+                 allBlockTypesStyling={this.props.allBlockTypesStyling}
+                 portThatHasBeenClicked={this.props.portThatHasBeenClicked}
+                 storingFirstPortClicked={this.props.storingFirstPortClicked}
+                 selected={this.props.selected} />
 
         </g>
 

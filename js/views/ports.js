@@ -10,84 +10,64 @@ var paneActions = require('../actions/paneActions');
 
 var interact = require('../../node_modules/interact.js');
 
-
-function getPortState(){
-  return{
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //storingFirstPortClicked: NodeStore.getStoringFirstPortClicked(),
-  }
-}
-
 var Ports = React.createClass({
-  //getInitialState: function(){
-  //  return getPortState();
-  //},
-  //componentDidMount: function(){
-  //  NodeStore.addChangeListener(this._onChange);
-  //},
-  //componentWillUnmount: function(){
-  //  NodeStore.removeChangeListener(this._onChange);
-  //},
-  //_onChange: function(){
-  //  this.setState(getPortState());
-  //},
-
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //
-  //},
 
   componentDidMount: function(){
-    interact('.port')
+    interact('.inport')
+      .on('tap', this.portClick);
+    interact('.outport')
+      .on('tap', this.portClick);
+    interact('.portArc')
       .on('tap', this.portClick);
 
-    interact('.port')
+    interact('.inport')
+      .styleCursor(false);
+    interact('.outport')
+      .styleCursor(false);
+    interact('.portArc')
       .styleCursor(false);
   },
 
   componentWillUnmount: function(){
-    interact('.port')
-      .off('tap', this.portClick)
+    interact('.inport')
+      .off('tap', this.portClick);
+    interact('.outport')
+      .off('tap', this.portClick);
+    interact('.portArc')
+      .off('tap', this.portClick);
   },
 
-  portMouseDown: function(e){
-    console.log("portMouseDown");
-    console.log(e);
-    blockActions.passPortMouseDown(e.currentTarget);
-
-    console.log(e.currentTarget.parentNode.parentNode.parentNode);
-
-    var portMouseDownCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    this.setState({portMouseDownCoords: portMouseDownCoords});
-    var whichPort = e.currentTarget;
-    console.log(whichPort);
-  },
-  portMouseUp: function(e){
-    console.log("portMouseUp");
-    console.log(e);
-    var portMouseUpCoords = {
-      x: e.nativeEvent.clientX,
-      y: e.nativeEvent.clientY
-    };
-    if(this.state.portMouseDownCoords.x === portMouseUpCoords.x && this.state.portMouseDownCoords.y === portMouseUpCoords.y){
-      console.log("zero mouse movement on portMOuseDown & Up, hence invoke portClick!");
-      this.portClick(e);
-    }
-    else{
-      console.log("some other mouse movement has occured between portMouseDown & Up, so portClick won't be invoked");
-    }
-  },
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
     console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
-    blockActions.passPortMouseDown(e.currentTarget);
+
+    var target;
+
+    console.log(e.currentTarget);
+
+    if(e.currentTarget.className.animVal === "portArc"){
+      console.log("clicked on an arc, so need to find the corresponding port");
+      console.log(e.currentTarget.parentNode);
+      console.log(e.currentTarget.parentNode.children);
+      for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
+        console.log(e.currentTarget.parentNode.children[i]);
+        if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
+          || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+          target = e.currentTarget.parentNode.children[i];
+          console.log(target);
+        }
+      }
+    }
+    else{
+      console.log("clicked on a port, makes it easier");
+      target = e.currentTarget;
+    }
+    console.log(target);
+
+    blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
@@ -101,6 +81,30 @@ var Ports = React.createClass({
     //theGraphDiamondHandle.dispatchEvent(PortSelect);
   },
 
+  /* From the-graph */
+
+  angleToX: function (percent, radius) {
+    return radius * Math.cos(2*Math.PI * percent);
+  },
+  angleToY: function (percent, radius) {
+  return radius * Math.sin(2*Math.PI * percent);
+  },
+  makeArcPath: function (port) {
+
+    if(port === "inport"){
+      return [
+        "M", this.angleToX(-1/4, 4), this.angleToY(-1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(1/4, 4), this.angleToY(1/4, 4)
+      ].join(" ");
+    }
+    else if(port === "outport"){
+      return [
+        "M", this.angleToX(1/4, 4), this.angleToY(1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(-1/4, 4), this.angleToY(-1/4, 4)
+      ].join(" ");
+    }
+  },
+
   render: function(){
 
     var blockId = this.props.blockId;
@@ -112,69 +116,104 @@ var Ports = React.createClass({
     var inportsXCoord;
     var outports = [];
     var outportsXCoord;
-    var portsText = [];
+    var inportsText = [];
+    var outportsText = [];
+    var blockText = [];
 
-    for(i = 0; i < blockInfo.inports.length; i++){
+    for(var i = 0; i < blockInfo.inports.length; i++){
+      var len = blockInfo.inports.length;
       var inportName = blockInfo.inports[i].name;
+      var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        <circle key={blockId + inportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.inportPositions[inportName].y}
-                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default' }}
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id={this.props.blockId + inportName}
-        />
+        <g id={blockId + inportName + "portAndText"} transform={portAndTextTransform} >
+          <path d={this.makeArcPath("inport")} className="portArc"
+                style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default' }} />
+          <circle key={blockId + inportName} className="inport"
+                  cx={0}
+                  cy={0}
+                  r={allBlockTypesStyling[blockType].ports.portStyling.portRadius}
+                  style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, cursor: 'default'
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65, cursor: 'default'
+                    }}
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id={this.props.blockId + inportName}
+          />
+          <text key={blockId + inportName + "-text"} textAnchor="start"
+                x={5}
+                y={3}
+                style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"10px", fontFamily: "Verdana"}}
+          >
+            {inportName}
+          </text>
+        </g>
       );
-
-      /* Taking care of the inport text too */
-      portsText.push(
-        <text key={blockId + inportName + "-text"} x={allBlockTypesStyling[blockType].text.textPositions[inportName].x} y={allBlockTypesStyling[blockType].text.textPositions[inportName].y}
-              style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
-        >
-          {inportName}
-        </text>
-      )
     }
 
-    for(j = 0; j < blockInfo.outports.length; j++){
+    for(var j = 0; j < blockInfo.outports.length; j++){
+      var len = blockInfo.outports.length;
       var outportName = blockInfo.outports[j].name;
+      var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
+        + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
       outports.push(
-        <circle key={blockId + outportName} className="port" cx={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].x} cy={allBlockTypesStyling[blockType].ports.portPositions.outportPositions[outportName].y}
-                r={allBlockTypesStyling[blockType].ports.portStyling.portRadius} style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke, strokeWidth: 1.65, cursor: 'default' }}
-                //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
-                id={this.props.blockId + outportName}
-        />
+        <g id={blockId + outportName + "portAndText"} transform={portAndTextTransform} >
+          <path d={this.makeArcPath("outport")} className="portArc"
+                style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default'  }} />
+          <circle key={blockId + outportName} className="outport"
+                  cx={0}
+                  cy={0}
+                  r={allBlockTypesStyling[blockType].ports.portStyling.portRadius}
+                  style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill,
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65,
+                    cursor: 'default' }}
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id={this.props.blockId + outportName}
+          />
+          <text key={blockId + outportName + "-text"} textAnchor="end"
+                x={-5}
+                y={3}
+                style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"10px", fontFamily: "Verdana"}}
+          >
+            {outportName}
+          </text>
+        </g>
       );
-
-      portsText.push(
-        <text key={blockId + outportName + "-text"} x={allBlockTypesStyling[blockType].text.textPositions[outportName].x} y={allBlockTypesStyling[blockType].text.textPositions[outportName].y}
-              style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", fontSize:"10px", fontFamily: "Verdana"}}
-        >
-          {outportName}
-        </text>
-      )
     }
 
     /* Now just need to add the node name and node type text as well */
     /* Hmm, where should I get/calculate their position & height from?... */
 
-    portsText.push([
-      <text className="blockName" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
-            transform="translate(32.5, 80)" >
+    blockText.push([
+      <text className="blockName" style={{MozUserSelect: 'none',
+       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+        alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
+            transform="translate(36, 88)" >
         {blockInfo.name}
       </text>,
 
-      <text className="blockLabel" style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle', alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
-            transform="translate(32.5, 93)" >
-        {blockInfo.label}
+      <text className="blockText" style={{MozUserSelect: 'none',
+       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+        alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+            transform="translate(36, 101)" >
+        {blockInfo.type}
       </text>
     ]);
 
     return (
       <g id={blockId + "-ports"} >
-        {inports}
-        {outports}
-        {portsText}
+        <g id={blockId + "-inports"} >
+          {inports}
+        </g>
+        <g id={blockId + "-outports"} >
+          {outports}
+        </g>
+        {blockText}
       </g>
+
 
     )
   }

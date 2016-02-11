@@ -149,6 +149,8 @@ var SidePane = React.createClass({
         }
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
+
+          /* Don't want any content here, just a 'delete edge' button */
         }
         else {
           console.log("normal block tab");
