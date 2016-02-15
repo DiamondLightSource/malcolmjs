@@ -50,6 +50,26 @@ var FlowChartControllerView = React.createClass({
     blockStore.removeChangeListener(this._onChange);
   },
 
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  console.log(nextState);
+  //  console.log(this.state.graphPosition);
+  //  console.log(nextState.graphPosition);
+  //  return (
+  //    nextState.graphZoomScale !== this.state.graphZoomScale ||
+  //    nextState.graphPosition !== this.state.graphPosition ||
+  //    nextState.allBlockInfo !== this.state.allBlockInfo ||
+  //    nextState.portThatHasBeenClicked !== this.state.portThatHasBeenClicked ||
+  //    nextState.storingFirstPortClicked !== this.state.storingFirstPortClicked ||
+  //    nextState.blockLibrary !== this.state.blockLibrary ||
+  //    nextState.allBlockTypesStyling !== this.state.allBlockTypesStyling ||
+  //    nextState.portMouseOver !== this.state.portMouseOver ||
+  //    nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
+  //    nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
+  //    nextState.allBlockTypesPortStyling !== this.state.allBlockTypesPortStyling ||
+  //    nextState.edgePreview !== this.state.edgePreview
+  //  )
+  //},
+
   render: function(){
     return(
       <FlowChart

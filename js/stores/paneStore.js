@@ -23,10 +23,8 @@ var _handles = {
 };
 
 var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
-  console.log(ReactComponent);
-  console.log(_handles.passSidePane);
+
   _handles.passSidePane = ReactComponent;
-  console.log(_handles.passSidePane);
 
   //selectBlockOnClick(ReactComponent)
 };
@@ -58,10 +56,10 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
       for(var subKey in allBlockContent[key].info.work){
         if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
           /* Do nothing*/
-          console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
         }
         else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-          console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
           allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
         }
       }
@@ -111,9 +109,7 @@ var dropdownMenuSelect = function(tab){
   //_stuff.selectedTabIndex = findTheIndex;
   /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
-  var test = tab;
-  console.log(tab);
-  console.log(_handles.passSidePane);
+
   //var keepingSidePane = ReactComponent;
   //keepSidePane(ReactComponent);
   //console.log(keepingSidePane);
@@ -130,7 +126,6 @@ var dropdownMenuSelect = function(tab){
 };
 
 var selectBlockOnClick = function(){
-  console.log(_handles.passSidePane);
   var tabStateLength = _stuff.tabState.length;
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
@@ -142,7 +137,6 @@ var changeSomeInfo = function(){
 };
 
 var updatePaneStoreAllBlockContent = function(newBlockContent){
-  console.log(newBlockContent);
   allBlockContent = newBlockContent;
 };
 
@@ -319,13 +313,12 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
         selectBlockOnClick();
       }
       else{
-        console.log("edge tab is already open, jump to it");
+        //console.log("edge tab is already open, jump to it");
         /* Tab is already open, so jump to it! */
         /* Need to remove the spaces in the edge id first */
 
 
         var spacelessEdgeId = item.edgeId.replace(/\s/g, '');
-        console.log(spacelessEdgeId);
 
         dropdownMenuSelect(spacelessEdgeId);
       }
@@ -339,7 +332,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       getInitialBlockDataFromBlockStore();
       /* Add the edge to allEdgeTabProperties */
       allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
-      console.log(allEdgeTabProperties);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
       paneStore.emitChange();
@@ -352,7 +344,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       appendToAllBlockTabProperties(item);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
-      console.log(allBlockTabInfo);
       console.log(item);
       paneStore.emitChange();
       break;
@@ -365,7 +356,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Also need to remove the edges tab if it is open */
       if(allEdgeTabProperties[item.edgeId] === true){
         /* Do the tab removal stuff */
-        console.log("that edge tab was open, so now we need to remove that tab");
+        //console.log("that edge tab was open, so now we need to remove that tab");
         for(var i = 0; i < _stuff.tabState.length; i++){
           if(_stuff.tabState[i].tabType === 'edge'){
             allEdgeTabProperties[item.edgeId] = false;
@@ -517,22 +508,19 @@ function appendToAllBlockTabProperties(BlockId){
 }
 
 var setBlockTabStateTrue = function(BlockId){
-  console.log(allBlockTabProperties);
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
-    console.log(allBlockTabProperties[BlockId]);
     /* Now need to run the function to check which tabs should be open */
     /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
 
     _stuff.tabState.push(allBlockTabInfo[BlockId]);
-    console.log(_stuff.tabState);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
 
     selectBlockOnClick();
  }
   else{
-    console.log("tab state was already true, so don't bother changing it to true");
+    //console.log("tab state was already true, so don't bother changing it to true");
     /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
     /* Could try using dropdownMenuSelect? */
 
@@ -563,12 +551,11 @@ function setFavTabStateTrue(){
    allBlockTabProperties['Favourites'] = true;
 
    _stuff.tabState.push(favContent);
-   console.log(_stuff.tabState);
 
    selectBlockOnClick()
  }
   else if(allBlockTabProperties['Favourites'] === true){
-   console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
+   //console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
 
    dropdownMenuSelect("Favourites")
  }
@@ -579,12 +566,11 @@ function setConfigTabStateTrue(){
     allBlockTabProperties['Configuration'] = true;
 
     _stuff.tabState.push(configContent);
-    console.log(_stuff.tabState);
 
     selectBlockOnClick();
   }
   else if(allBlockTabProperties['Configuration'] === true){
-    console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
+    //console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
 
     dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
@@ -604,13 +590,11 @@ function createObjectForEdgeTabContent(EdgeInfo){
   }
 
   for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
-    console.log(allBlockTabInfo[EdgeInfo.toBlock]);
     if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
       edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
     }
   }
 
-  console.log(edgeTabObject);
   _stuff.tabState.push(edgeTabObject);
 }
 
@@ -621,9 +605,9 @@ var checkWhichBlockTabsOpen = function(){
     //console.log(key);
     //console.log(allNodeTabProperties[key]);
     if(allBlockTabProperties[key] === true) {
-      console.log('just before starting the tabState checker loop');
+      //console.log('just before starting the tabState checker loop');
       if(_stuff.tabState.length === 0){
-        console.log('tabState was empty, tab is now open');
+        //console.log('tabState was empty, tab is now open');
 
         /* Not sure if there's a need for a lookup table, just go straight to allNodeTabInfo using key? */
 
@@ -642,7 +626,7 @@ var checkWhichBlockTabsOpen = function(){
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
-          console.log('in the non-empty tabState checker loop');
+          //console.log('in the non-empty tabState checker loop');
           //console.log(_stuff.tabState.length);
           //console.log(i);
           //console.log(_stuff.tabState[i].label);
@@ -651,18 +635,18 @@ var checkWhichBlockTabsOpen = function(){
           if (_stuff.tabState[i].label === key) {
             //console.log(_stuff.tabState[i].label);
             //console.log(key.label);
-            console.log("tab is already open from before, don't add, break statement occurring");
+            //console.log("tab is already open from before, don't add, break statement occurring");
             /* Here, I need to then jump to the tab corresponding to the node I clicked */
             /* But wait, this whole loop goes through EVERY node tab, regardless of if it's open or not, so it'll jump to every tab that is already open, leaving it to be on the very last tab that is open! =/ */
             /* I think I need to write a better way of seeing which tabs are opening, and appending them to _stuff.tabState than this loop */
             break
           }
           else if(_stuff.tabState[i].label !== key){
-            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+            //console.log('key isnt equal to the ith position, move onto the next value in tabState');
             //console.log(_stuff.tabState.length);
             //console.log(i);
             if(i === _stuff.tabState.length - 1){
-              console.log('tabState didnt have this tab, tab is now open');
+              //console.log('tabState didnt have this tab, tab is now open');
               //console.log(key);
               //console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
               //console.log(lookupWhichNodeTabToOpen(key));
@@ -681,7 +665,7 @@ var checkWhichBlockTabsOpen = function(){
             }
           }
         }
-        console.log('finished the tabState checker loop')
+        //console.log('finished the tabState checker loop')
       }
     }
     else{
@@ -691,7 +675,6 @@ var checkWhichBlockTabsOpen = function(){
 
   //console.log(blockTabsOpen);
   //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
-  console.log(_stuff.tabState);
 
   //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
   // Actually, no need since at the start of the function it is reset*/
@@ -705,12 +688,11 @@ var checkWhichBlockTabsOpen = function(){
 var removeBlockTab = function(selectedTabIndex){
 
   var tabName = _stuff.tabState[selectedTabIndex].label;
-  console.log(tabName);
 
   /* Checking if it's a edge tab or a block tab */
 
   if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
-    console.log("removing an edge tab");
+    //console.log("removing an edge tab");
 
     //var spacelessEdgeTabName = tabName.replace(/\s/g, '');
 
@@ -718,10 +700,9 @@ var removeBlockTab = function(selectedTabIndex){
     edge id in tabState, is that a good idea?...
      */
     allEdgeTabProperties[tabName] = false;
-    console.log(allEdgeTabProperties);
   }
   else{
-    console.log("removing a block tab");
+    //console.log("removing a block tab");
     allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   }
 
@@ -738,7 +719,6 @@ var getInitialBlockDataFromBlockStore = function(){
   //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
   ///* Now need to loop over each block object and 'remove' the position attribute */
   //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
-  console.log(allBlockTabInfo);
 };
 
 function toggleSidebar(){
@@ -748,7 +728,6 @@ function toggleSidebar(){
   else if(_stuff.sidebarOpen === false){
     _stuff.sidebarOpen = true;
   }
-  console.log(_stuff.sidebarOpen)
 }
 
 function windowWidthMediaQueryChanged(sidebarOpen){
@@ -770,18 +749,13 @@ function copyTabState(){
 function resetTabStateReferences(){
   for(var i = 0; i < _stuff.tabState.length; i++){
     if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
-      console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
+      //console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
     }
     else if(_stuff.tabState[i].tabType === 'edge'){
-      console.log("also do nothing, since this info is created from allBlockTabInfo");
+      //console.log("also do nothing, since this info is created from allBlockTabInfo");
     }
     else {
-      console.log(_stuff.tabState);
-      console.log(i);
-      console.log(_stuff.tabState[i]);
-      console.log(allBlockTabInfo);
       _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
-      console.log(_stuff.tabState[i]);
     }
   }
 }

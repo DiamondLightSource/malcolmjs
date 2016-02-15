@@ -21,6 +21,7 @@ var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
 var Treeview = require('react-treeview');
+var interact = require('../../node_modules/interact.js');
 
 function getSidePaneState(){
   return{
@@ -77,6 +78,14 @@ var SidePane = React.createClass({
     //this.handleActionPassingSidePaneOnMount()
   },
 
+  toggleTreeviewContent: function(){
+
+  },
+
+  collapseAllTreeviews: function(){
+
+  },
+
   componentWillUnmount: function(){
     //sidePaneStore.removeChangeListener(this._onChange);
     //paneStore.removeChangeListener(this._onChange);
@@ -85,51 +94,10 @@ var SidePane = React.createClass({
 
   render: function () {
 
-    console.log("sidePane rerender");
+    console.log("render: sidePane");
 
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-
-    //var tabs = this.props.tabState.map(function(item, i){
-    //  var tabTitle = item.label;
-    //  var tabIndex = i + 1;
-    //  var tabContent = function(){
-    //    console.log("inside tabContent function now");
-    //    var content = [];
-    //      //content.push(<p>stuff</p>);
-    //
-    //      content.push(<br/>);
-    //      content.push(<p>{tabTitle}</p>);
-    //      for(var attribute in item){
-    //        content.push(<p>{attribute}: {String(item[attribute])}</p>)
-    //      }
-    //    console.log(content);
-    //      return content
-    //  };
-    //  return (
-    //    <Tab title={tabTitle}>
-    //
-    //      <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
-    //        {tabContent()}
-    //      </Content>
-    //
-    //    </Tab>
-    //  );
-    //});
-
-    /* A better version of the above tabState .map function to displaythe attributes of a block properly */
-    /* Also, try calculating tabState in here directly from allBlockTabInfo & OpenStates */
-    //var newerTabState = [];
-    //
-    //for(var block in this.props.allBlockTabOpenStates){
-    //  /* Need a separate check for the config tabs and such... */
-    //  if(this.props.allBlockTabOpenStates[block] === true){
-    //    newerTabState.push(this.props.allBlockTabInfo[block]);
-    //  }
-    //  else if(this.props.allBlockTabOpenStates[block] === false){
-    //    console.log("block tab wasn't open, s")
-    //  }
-    //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
       var tabLabel = block.label;
@@ -139,10 +107,6 @@ var SidePane = React.createClass({
 
         var tabContent = [];
 
-        //tabContent.push(<p>x: {block.position.x}</p>);
-        //tabContent.push(<p>y: {block.position.y}</p>);
-        //tabContent.push(<br/>);
-
         if(tabLabel === "Favourites" || tabLabel === "Configuration"){
           console.log("we have a favourites tab or configuaration tab");
           var tabTitle = tabLabel;
@@ -150,89 +114,161 @@ var SidePane = React.createClass({
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
 
+          //tabContent.push(<button>Delete edge</button>);
+
           /* Don't want any content here, just a 'delete edge' button */
         }
         else {
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          tabContent.push(<b>Position</b>);
-          tabContent.push(<p>x: {block.position.x}</p>);
-          tabContent.push(<p>y: {block.position.y}</p>);
+          var inportDivs = [];
+          var outportDivs = [];
 
-          tabContent.push(<br/>);
-
-          tabContent.push(<b>Inports</b>);
           for (var j = 0; j < block.inports.length; j++) {
-            for (var attribute in block.inports[j]) {
-              if (attribute !== 'connectedTo') {
                 console.log(block);
-                console.log(block.inports[j][attribute]);
-                tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
-              }
-              else if (attribute === 'connectedTo') {
-                tabContent.push(<p>connectedTo:</p>);
-                if (block.inports[j].connectedTo !== null) {
-                  //for (var subAttribute in block.inports[j].connectedTo) {
-                  tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
-                  tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
-                  //}
-                }
-                else if (block.inports[j].connectedTo === null) {
-                  tabContent.push(<p>null</p>);
-                }
-              }
-            }
-            //tabContent.push(<p>, </p>);
+                console.log(block.inports[j]);
+
+            /* For getting the tree label to expand/collapse the treeview too */
+            var interactJsIdString = "#" + block.inports[j].name + "textContent";
+
+            inportDivs.push(
+              <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
+                <p key={block.inports[j].name + "textContent"}
+                   id={block.inports[j].name + "textContent"}
+                   style={{fontSize: '14px', position: 'relative', top: '3px'}} >
+                  {String(block.inports[j].name).toUpperCase()}
+                </p>
+                <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
+                  <button style={{position: 'relative', left: '160px',}}  >Icon</button>
+                  <input style={{position: 'relative', textAlign: 'left',}}
+                         value={block.position.x} readOnly="readonly" maxLength="10" size="10" />
+                </div>
+
+              </div>
+            );
           }
+
+          tabContent.push(
+            <Treeview key={"InportsTreeview"}
+                      nodeLabel={<b>Inports</b>}
+                      defaultCollapsed={false}
+            >{inportDivs}
+            </Treeview>
+          );
+
+          /* Don't need to display position, not interested in it being seen */
+          //tabContent.push(<b>Position</b>);
+          //tabContent.push(<p>x: {block.position.x}</p>);
+          //tabContent.push(<p>y: {block.position.y}</p>);
+          //
+          //tabContent.push(<br/>);
+
+          /* Replacing by putting all inports in a treeview */
+          //tabContent.push(<b>Inports</b>);
+          //for (var j = 0; j < block.inports.length; j++) {
+          //  for (var attribute in block.inports[j]) {
+          //    if (attribute !== 'connectedTo') {
+          //      console.log(block);
+          //      console.log(block.inports[j][attribute]);
+          //      tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
+          //    }
+          //    else if (attribute === 'connectedTo') {
+          //      tabContent.push(<p>connectedTo:</p>);
+          //      if (block.inports[j].connectedTo !== null) {
+          //        //for (var subAttribute in block.inports[j].connectedTo) {
+          //        tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
+          //        tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
+          //        //}
+          //      }
+          //      else if (block.inports[j].connectedTo === null) {
+          //        tabContent.push(<p>null</p>);
+          //      }
+          //    }
+          //  }
+          //  //tabContent.push(<p>, </p>);
+          //}
+
+          //tabContent.push(<br/>);
+
           tabContent.push(<br/>);
 
-          console.log(tabContent);
+          for (var k = 0; k < block.outports.length; k++){
+            outportDivs.push(
+              <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
 
-          tabContent.push(<b>Outports</b>);
-          for (var k = 0; k < block.outports.length; k++) {
-            /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-            for (var attribute in block.outports[k]) {
-              if (attribute !== 'connectedTo') {
-                console.log(attribute);
-                tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
-              }
-              else if (attribute === 'connectedTo') {
-                console.log(attribute);
-                tabContent.push(<p>connectedTo:</p>);
-                if (block.outports[k].connectedTo.length === 0) {
-                  console.log("LENGTH OF ARRAY IS ZERO");
-                  tabContent.push(<p>[]</p>);
-                }
-                else if (block.outports[k].connectedTo !== null) {
-                  for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
-                    tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
-                    tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
-                  }
-                }
-                else if (block.outports[k].connectedTo === null) {
-                  tabContent.push(<p>null</p>);
-                }
-              }
-            }
-            //tabContent.push(<p>, </p>);
+                <p key={block.outports[k].name + "textContent"}
+                   id={block.outports[k].name + "textContent"}
+                   style={{fontSize: '14px', position: 'relative', top: '3px'}}>
+                  {String(block.outports[k].name).toUpperCase()}
+                </p>
+
+                <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
+
+                  <button style={{position: 'relative', left: '160px',}}  >Icon</button>
+                  <input style={{position: 'relative', textAlign: 'left',}}
+                         value={block.position.y} readOnly="readonly" maxLength="10" size="10" />
+                </div>
+
+              </div>
+            )
           }
+
+          tabContent.push(
+            <Treeview key={"OutportTreeview"}
+                      nodeLabel={<b>Outports</b>}
+                      defaultCollapsed={false}
+                      >{outportDivs}
+            </Treeview>
+          );
+
+          /* Replacing with treeview */
+          //tabContent.push(<b>Outports</b>);
+          //for (var k = 0; k < block.outports.length; k++) {
+          //  /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+          //  for (var attribute in block.outports[k]) {
+          //    if (attribute !== 'connectedTo') {
+          //      console.log(attribute);
+          //      tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
+          //    }
+          //    else if (attribute === 'connectedTo') {
+          //      console.log(attribute);
+          //      tabContent.push(<p>connectedTo:</p>);
+          //      if (block.outports[k].connectedTo.length === 0) {
+          //        console.log("LENGTH OF ARRAY IS ZERO");
+          //        tabContent.push(<p>[]</p>);
+          //      }
+          //      else if (block.outports[k].connectedTo !== null) {
+          //        for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+          //          tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
+          //          tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
+          //        }
+          //      }
+          //      else if (block.outports[k].connectedTo === null) {
+          //        tabContent.push(<p>null</p>);
+          //      }
+          //    }
+          //  }
+          //  //tabContent.push(<p>, </p>);
+          //}
         }
         console.log(tabContent);
         return tabContent;
       };
 
       return (
-        <Tab title={tabLabel}>
+        <Tab key={tabLabel + "tab"} title={tabLabel}>
 
-          <Content>
-            <b>Attributes of {tabLabel}</b> <br/>
+          <Content key={tabLabel + "content"} >
             {betterTabContent()}
           </Content>
 
         </Tab>
       )
     });
+
+    //<b>Attributes of {tabLabel}</b> <br/>
+
 
     /* Using allBlockTabInfo instead of going through the intermediate tabState array */
     //var calculateTabsInfo = function() {
@@ -350,6 +386,56 @@ var SidePane = React.createClass({
 });
 
 module.exports = SidePane;
+
+//<div style={{position: 'relative', left: '120px', bottom: '32px', width: '230px', height: '50px'}} >
+//  <p key={block.inports[j].name + "textContent"}
+//     id={block.inports[j].name + "textContent"}
+//     style={{fontSize: '15px', position: 'relative'}} >
+//    {String(block.inports[j].name).toUpperCase()}
+//  </p>
+//  <button style={{position: 'relative', left: '165px'}}  >Icon</button>
+//  <input style={{position: 'relative', textAlign: 'center'}}
+//         value={'number'} readOnly="readonly" maxLength="10" size="10" />
+//
+//</div>
+
+//inportDivs.push(
+//  <input style={{float: 'right', margin: "0 30px 0 0"}} value="Hello" />
+//);
+
+//interact(interactJsIdString)
+//  .on('tap', function(e){
+//    e.stopPropagation();
+//    e.stopImmediatePropagation();
+//    /* I guess I'll be passing the parameter 'j' here to the function? */
+//    this.toggleTreeviewContent();
+//  }.bind(this));
+
+//tabContent.push(<p>, </p>);
+
+/* Using svg */
+//inportDivs.push(
+//  <svg key={block.inports[j].name + "content"} >
+//    <g transform="translate(0, 0)" >
+//
+//      <text key={block.inports[j].name + "textContent"}
+//         id={block.inports[j].name + "textContent"}
+//            style={{fill: "white", fontSize: "16"}}
+//      x="0" y="20">
+//        {String(block.inports[j].name).toUpperCase()}
+//      </text>
+//      <rect width="80" height="20" style={{fill: "white", stroke: "red"}} x="100" y="5"/>
+//      </g>
+//  </svg>
+//);
+
+//inportDivs.push(
+//  <p key={block.inports[j].name + "textContent"}
+//     id={block.inports[j].name + "textContent"}
+//     style={{fontSize: '15px'}} >
+//    {String(block.inports[j].name).toUpperCase()}
+//  </p>
+//);
 
 //
 //dropdownChange:function(tab) {

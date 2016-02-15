@@ -123,7 +123,6 @@ var BothPanes = React.createClass({
   },
 
   componentDidMount: function(){
-    console.log(this.state);
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
@@ -146,7 +145,7 @@ var BothPanes = React.createClass({
 
   render: function(){
 
-    console.log(this.state);
+    console.log("render: sidebar");
     //if(this.state.tabState[0]) {
     //  console.log(this.state.tabState[0].position.x);
     //}

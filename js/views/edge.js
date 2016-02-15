@@ -50,7 +50,7 @@ var Edge = React.createClass({
   },
   componentWillUnmount: function(){
     interact(ReactDOM.findDOMNode(this))
-      .off('tap', this.edgeSelect)
+      .off('tap', this.edgeSelect);
 
     window.removeEventListener('keydown', this.keyPress);
 
@@ -69,18 +69,17 @@ var Edge = React.createClass({
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
     if(this.props.selected === true){
-      console.log("this.props.selected is true, so don't reset the border colour");
+      //console.log("this.props.selected is true, so don't reset the border colour");
     }
     else{
-      console.log("this.props.selected is false");
+      //console.log("this.props.selected is false");
       test.style.stroke = 'lightgrey'
     }
   },
   edgeSelect: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log("edge has been selected");
-    console.log(ReactDOM.findDOMNode(this).id);
+    //console.log("edge has been selected");
     blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
     paneActions.openEdgeTab({
       edgeId: ReactDOM.findDOMNode(this).id,
@@ -92,16 +91,15 @@ var Edge = React.createClass({
   },
 
   keyPress: function(e){
-    console.log("key press!");
-    console.log(e);
+    //console.log("key press!");
+    //console.log(e);
 
     if(e.keyCode === 46){
-      console.log("delete key has been pressed");
+      //console.log("delete key has been pressed");
       if(this.props.areAnyEdgesSelected === true){
         if(this.props.selected === true){
           /* Delete this particular edge */
-          console.log(this.props.fromBlock);
-          console.log(this.props.toBlock);
+
           /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
           switching it around
            */
@@ -115,12 +113,9 @@ var Edge = React.createClass({
 
           /* Reset both ports' styling to normal again */
 
-          console.log(this.props.fromBlock);
           var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
-          console.log(fromBlockPortElement);
 
           var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
-          console.log(toBlockPortElement);
 
           //fromBlockPortElement.style.stroke = "black";
           fromBlockPortElement.style.fill = "grey";
@@ -137,12 +132,13 @@ var Edge = React.createClass({
         }
       }
       else if(this.props.areAnyEdgesSelected === false){
-        console.log("no edges are selected, so don't delete anything");
+        //console.log("no edges are selected, so don't delete anything");
       }
     }
   },
 
   render:function(){
+    console.log("render: edges");
 
     /* Retiring allEdges in favour of calculating everything from allNodeInfo */
     //var edgeInfo = this.props.allEdges[this.props.id];
@@ -151,7 +147,6 @@ var Edge = React.createClass({
     //
     //var allEdges = this.props.allEdges;
     //console.log(allEdges);
-    console.log(this.props.id);
     var fromBlock = this.props.fromBlock;
     var toBlock = this.props.toBlock;
     //console.log(fromNode);
@@ -209,13 +204,15 @@ var Edge = React.createClass({
         <line id={outerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}} />
+              style={{strokeWidth: this.props.selected === true ? "10" : "7",
+               stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round",
+               cursor: 'default'}} />
 
         <line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
           //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: '5', stroke:"orange"}} />
+              style={{strokeWidth: '5', stroke:"orange", cursor: 'default'}} />
 
 
       </g>

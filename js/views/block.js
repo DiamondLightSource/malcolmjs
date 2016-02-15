@@ -17,8 +17,6 @@ var Block = React.createClass({
 
   componentDidMount: function(){
     //NodeStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    console.log(this.state);
 
     //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
     //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
@@ -42,13 +40,13 @@ var Block = React.createClass({
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("interactjs dragstart");
+          //console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("interactjs dragend");
+          //console.log("interactjs dragend");
         }
       });
 
@@ -72,14 +70,26 @@ var Block = React.createClass({
       .off('tap', this.blockSelect);
   },
 
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  console.log("shouldComponentUpdate");
-  //  console.log(nextProps.allNodeInfo[this.props.id].position);
-  //  return this.props.allNodeInfo[this.props.id].position.x === nextProps.allNodeInfo[this.props.id].position.x;
-  //},
+  componentWillReceiveProps: function(nextProps){
+    //console.log(this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log("shouldComponentUpdate");
+    //console.log(nextProps);
+    //console.log(this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    return (
+      true
+    );
+  },
 
   handleInteractJsDrag: function(item){
-    console.log("interactJs drag is occurring");
+    //console.log("interactJs drag is occurring");
     blockActions.interactJsDrag(item);
     this.startDrag = null;
   },
@@ -105,11 +115,10 @@ var Block = React.createClass({
   //},
 
   blockSelect: function(e){
-    console.log(e);
     e.preventDefault();
     e.stopImmediatePropagation();
-    e.stopPropagation();;
-    console.log(this.props.id + "has been selected");
+    e.stopPropagation();
+    //console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
 
     /* Don't want hover stuff anymore! */
@@ -126,14 +135,12 @@ var Block = React.createClass({
     if(this.props.areAnyBlocksSelected === false){
       blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
     }
     else{
       /* Need to run deselect before I select the current node */
       this.props.deselect();
       blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
     }
 
     /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
@@ -199,7 +206,6 @@ var Block = React.createClass({
   //},
 
   interactJsDrag: function(e){
-    console.log(e);
     e.stopPropagation();
     e.stopImmediatePropagation();
     var target = e.target.id;
@@ -216,7 +222,6 @@ var Block = React.createClass({
     this.startDrag.x += e.dx;
     this.startDrag.y += e.dy;
 
-    console.log(this.startDrag);
 
     var deltaMovement = {
       target: target,
@@ -224,7 +229,6 @@ var Block = React.createClass({
       y: this.startDrag.y
     };
 
-    console.log(deltaMovement);
 
     //this.interactJsDragDebounce(deltaMovement);
     clearTimeout(this.timer);
@@ -251,9 +255,9 @@ var Block = React.createClass({
   },
 
   interactJsDragDebounce: function(dragMovement){
-    console.log("debouncing");
+    //console.log("debouncing");
     this.timer = setTimeout(function(){
-      console.log("inside setTimeout");
+      //console.log("inside setTimeout");
       this.handleInteractJsDrag(dragMovement)}.bind(this), 500
     );
   },
@@ -291,6 +295,7 @@ var Block = React.createClass({
 
 
   render: function(){
+    console.log("render: block");
 
     var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 

@@ -61,7 +61,6 @@ var MainPane = React.createClass({
   componentDidMount: function(){
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
-    console.log(this.props);
     this.setState({gateBlockIdCounter: 1});  },
 
   componentWillUnmount: function(){
@@ -101,12 +100,10 @@ var MainPane = React.createClass({
   //},
 
   handleActionFavTabOpen: function(){
-    console.log('favTabOpen is a go');
     paneActions.favTabOpen("this is the item")
   },
 
   handleActionConfigTabOpen: function(){
-    console.log('configTabOpen is a go');
     paneActions.configTabOpen('this is the item')
   },
 
@@ -119,25 +116,19 @@ var MainPane = React.createClass({
     var gateBlockIdCounter = this.state.gateBlockIdCounter;
     gateBlockIdCounter += 1;
     var newGateId = "Gate" + gateBlockIdCounter;
-    console.log(newGateId);
     this.setState({gateBlockIdCounter: gateBlockIdCounter});
     return newGateId;
   },
 
   addBlockInfo: function(){
-    console.log("addBlockInfo");
-
     var newGateBlockId = this.generateNewBlockId();
-    console.log(newGateBlockId);
 
     blockActions.addToAllBlockInfo(newGateBlockId);
 
   },
 
   render: function() {
-
-    console.log(this.props);
-
+    console.log("render: mainPane");
     var TESTStyling = {
       height: 1000,
       width: 1000,

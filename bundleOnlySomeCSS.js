@@ -604,6 +604,7 @@ var SideTabbedViewStyle = {
 
 var App = React.createClass({displayName: "App",
   render: function(){
+    console.log("render: app");
     return(
       React.createElement("div", {id: "appContainer", style: AppContainerStyle}, 
         React.createElement(BothPanes, null)
@@ -842,25 +843,21 @@ var blockSelectedStates = {
 };
 
 function appendToBlockSelectedStates(BlockId){
-  console.log("blockSelectedStates before adding a new block:");
-  console.log(blockSelectedStates);
+  //console.log("blockSelectedStates before adding a new block:");
   blockSelectedStates[BlockId] = false;
-  console.log("blockSelectedStates after adding a new block:");
-  console.log(blockSelectedStates);
+  //console.log("blockSelectedStates after adding a new block:");
 }
 
 function deselectAllBlocks(){
   for(var block in blockSelectedStates){
     blockSelectedStates[block] = false
   }
-  console.log(blockSelectedStates);
 }
 
 function checkIfAnyBlocksAreSelected(){
   var areAnyBlocksSelected = null;
   for(var block in blockSelectedStates){
     if(blockSelectedStates[block] === true){
-      console.log(blockSelectedStates[block]);
       areAnyBlocksSelected = true;
       break;
     }
@@ -885,14 +882,11 @@ function selectEdge(Edge){
 }
 
 function getAnyEdgeSelectedState(EdgeId){
-  console.log(edgeSelectedStates);
-  console.log(EdgeId);
   if(edgeSelectedStates[EdgeId] === undefined || null){
-    console.log("edge selected state is underfined or null, best check it out...");
+    //console.log("edge selected state is underfined or null, best check it out...");
   }
   else{
-    console.log("that edge's state exists, hooray!");
-    console.log(edgeSelectedStates[EdgeId]);
+    //console.log("that edge's state exists, hooray!");
     return edgeSelectedStates[EdgeId];
   }
 }
@@ -924,7 +918,6 @@ function deselectAllEdges(){
   for(var edge in edgeSelectedStates){
     edgeSelectedStates[edge] = false
   }
-  console.log(edgeSelectedStates);
 }
 
 var blockLibrary = {
@@ -1195,8 +1188,7 @@ var allBlockInfo = {
 
 function addEdgeToAllBlockInfo(Info){
 
-  console.log("Inside addEdgeToAllBlockInfo, here's the input:");
-  console.log(Info);
+  //console.log("Inside addEdgeToAllBlockInfo, here's the input:");
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
@@ -1206,9 +1198,7 @@ function addEdgeToAllBlockInfo(Info){
         block: Info.toBlock,
         port: Info.toBlockPort
       };
-      console.log(newEdgeToFromBlock);
       allBlockInfo[Info.fromBlock].outports[i].connected = true;
-      console.log(allBlockInfo[Info.fromBlock].outports[i]);
       allBlockInfo[Info.fromBlock].outports[i].connectedTo.push(newEdgeToFromBlock);
     }
   }
@@ -1220,14 +1210,12 @@ function addEdgeToAllBlockInfo(Info){
         block: Info.fromBlock,
         port: Info.fromBlockPort
       };
-      console.log(newEdgeToToBlock);
       allBlockInfo[Info.toBlock].inports[j].connected = true;
 
       /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
       allBlockInfo[Info.toBlock].inports[j].connectedTo = newEdgeToToBlock;
     }
   }
-  console.log(allBlockInfo);
 }
 
 function removeEdgeFromAllBlockInfo(Info){
@@ -1239,7 +1227,7 @@ function removeEdgeFromAllBlockInfo(Info){
       allBlockInfo[Info.toBlock].inports[i].connectedTo = null;
     }
     else if(allBlockInfo[Info.toBlock].inports[i].name !== Info.toBlockPort){
-      console.log("not the right port, leave that info alone");
+      //console.log("not the right port, leave that info alone");
     }
   }
 
@@ -1255,12 +1243,10 @@ function removeEdgeFromAllBlockInfo(Info){
         && allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].port === Info.toBlockPort){
           /* Remove this particular object from the connectedTo array */
           allBlockInfo[Info.fromBlock].outports[j].connectedTo.splice(k, 1);
-          console.log(allBlockInfo[Info.fromBlock].outports[j].connectedTo);
 
           /* Also need to remove it from the edgeSelectedStates object */
 
           delete edgeSelectedStates[Info.edgeId];
-          console.log(edgeSelectedStates);
           //window.alert("hsduiad");
 
           /* And also need to reset the port styling somehow too... */
@@ -1271,16 +1257,16 @@ function removeEdgeFromAllBlockInfo(Info){
             allBlockInfo[Info.fromBlock].outports[j].connected = false;
           }
           else if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length > 0){
-            console.log("don't reset connected, there are other connections to that outport still");
+            //console.log("don't reset connected, there are other connections to that outport still");
           }
         }
         else{
-          console.log("not the correct block or port (or both), so don't alter anything");
+          //console.log("not the correct block or port (or both), so don't alter anything");
         }
       }
     }
     else if(allBlockInfo[Info.fromBlock].outports[j].name !== Info.fromBlockPort){
-      console.log("not the correct outport, carry on");
+      //console.log("not the correct outport, carry on");
     }
   }
 
@@ -1388,7 +1374,7 @@ function appendToAllBlockInfo(BlockInfo){
   //console.log(allNodeInfo);
   //newlyAddedNode = allNodeInfo[newGateId];
   //console.log(newlyAddedNode);
-  console.log(BlockInfo);
+
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
   allBlockInfo[BlockInfo] = {
     type: 'Gate',
@@ -1446,12 +1432,10 @@ function appendToAllBlockInfo(BlockInfo){
   //
   //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
   //}
-  console.log(blockInfoTemplates.Gate);
   //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
   //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
   //console.log(randomNodePositionGenerator());
   //console.log(randomNodePositionGenerator());
-  console.log(allBlockInfo);
 }
 
 var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
@@ -3075,10 +3059,8 @@ var _handles = {
 };
 
 var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
-  console.log(ReactComponent);
-  console.log(_handles.passSidePane);
+
   _handles.passSidePane = ReactComponent;
-  console.log(_handles.passSidePane);
 
   //selectBlockOnClick(ReactComponent)
 };
@@ -3110,10 +3092,10 @@ var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
       for(var subKey in allBlockContent[key].info.work){
         if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
           /* Do nothing*/
-          console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
         }
         else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-          console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
           allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
         }
       }
@@ -3163,9 +3145,7 @@ var dropdownMenuSelect = function(tab){
   //_stuff.selectedTabIndex = findTheIndex;
   /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
-  var test = tab;
-  console.log(tab);
-  console.log(_handles.passSidePane);
+
   //var keepingSidePane = ReactComponent;
   //keepSidePane(ReactComponent);
   //console.log(keepingSidePane);
@@ -3182,7 +3162,6 @@ var dropdownMenuSelect = function(tab){
 };
 
 var selectBlockOnClick = function(){
-  console.log(_handles.passSidePane);
   var tabStateLength = _stuff.tabState.length;
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
@@ -3194,7 +3173,6 @@ var changeSomeInfo = function(){
 };
 
 var updatePaneStoreAllBlockContent = function(newBlockContent){
-  console.log(newBlockContent);
   allBlockContent = newBlockContent;
 };
 
@@ -3371,13 +3349,12 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
         selectBlockOnClick();
       }
       else{
-        console.log("edge tab is already open, jump to it");
+        //console.log("edge tab is already open, jump to it");
         /* Tab is already open, so jump to it! */
         /* Need to remove the spaces in the edge id first */
 
 
         var spacelessEdgeId = item.edgeId.replace(/\s/g, '');
-        console.log(spacelessEdgeId);
 
         dropdownMenuSelect(spacelessEdgeId);
       }
@@ -3391,7 +3368,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       getInitialBlockDataFromBlockStore();
       /* Add the edge to allEdgeTabProperties */
       allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
-      console.log(allEdgeTabProperties);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
       paneStore.emitChange();
@@ -3404,7 +3380,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       appendToAllBlockTabProperties(item);
       /* Try simply resetting the references in tabState */
       resetTabStateReferences();
-      console.log(allBlockTabInfo);
       console.log(item);
       paneStore.emitChange();
       break;
@@ -3417,7 +3392,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Also need to remove the edges tab if it is open */
       if(allEdgeTabProperties[item.edgeId] === true){
         /* Do the tab removal stuff */
-        console.log("that edge tab was open, so now we need to remove that tab");
+        //console.log("that edge tab was open, so now we need to remove that tab");
         for(var i = 0; i < _stuff.tabState.length; i++){
           if(_stuff.tabState[i].tabType === 'edge'){
             allEdgeTabProperties[item.edgeId] = false;
@@ -3569,22 +3544,19 @@ function appendToAllBlockTabProperties(BlockId){
 }
 
 var setBlockTabStateTrue = function(BlockId){
-  console.log(allBlockTabProperties);
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
-    console.log(allBlockTabProperties[BlockId]);
     /* Now need to run the function to check which tabs should be open */
     /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
 
     _stuff.tabState.push(allBlockTabInfo[BlockId]);
-    console.log(_stuff.tabState);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
 
     selectBlockOnClick();
  }
   else{
-    console.log("tab state was already true, so don't bother changing it to true");
+    //console.log("tab state was already true, so don't bother changing it to true");
     /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
     /* Could try using dropdownMenuSelect? */
 
@@ -3615,12 +3587,11 @@ function setFavTabStateTrue(){
    allBlockTabProperties['Favourites'] = true;
 
    _stuff.tabState.push(favContent);
-   console.log(_stuff.tabState);
 
    selectBlockOnClick()
  }
   else if(allBlockTabProperties['Favourites'] === true){
-   console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
+   //console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
 
    dropdownMenuSelect("Favourites")
  }
@@ -3631,12 +3602,11 @@ function setConfigTabStateTrue(){
     allBlockTabProperties['Configuration'] = true;
 
     _stuff.tabState.push(configContent);
-    console.log(_stuff.tabState);
 
     selectBlockOnClick();
   }
   else if(allBlockTabProperties['Configuration'] === true){
-    console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
+    //console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
 
     dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
@@ -3656,13 +3626,11 @@ function createObjectForEdgeTabContent(EdgeInfo){
   }
 
   for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
-    console.log(allBlockTabInfo[EdgeInfo.toBlock]);
     if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
       edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
     }
   }
 
-  console.log(edgeTabObject);
   _stuff.tabState.push(edgeTabObject);
 }
 
@@ -3673,9 +3641,9 @@ var checkWhichBlockTabsOpen = function(){
     //console.log(key);
     //console.log(allNodeTabProperties[key]);
     if(allBlockTabProperties[key] === true) {
-      console.log('just before starting the tabState checker loop');
+      //console.log('just before starting the tabState checker loop');
       if(_stuff.tabState.length === 0){
-        console.log('tabState was empty, tab is now open');
+        //console.log('tabState was empty, tab is now open');
 
         /* Not sure if there's a need for a lookup table, just go straight to allNodeTabInfo using key? */
 
@@ -3694,7 +3662,7 @@ var checkWhichBlockTabsOpen = function(){
       }
       else{
         for (var i = 0; i < _stuff.tabState.length; i++) {
-          console.log('in the non-empty tabState checker loop');
+          //console.log('in the non-empty tabState checker loop');
           //console.log(_stuff.tabState.length);
           //console.log(i);
           //console.log(_stuff.tabState[i].label);
@@ -3703,18 +3671,18 @@ var checkWhichBlockTabsOpen = function(){
           if (_stuff.tabState[i].label === key) {
             //console.log(_stuff.tabState[i].label);
             //console.log(key.label);
-            console.log("tab is already open from before, don't add, break statement occurring");
+            //console.log("tab is already open from before, don't add, break statement occurring");
             /* Here, I need to then jump to the tab corresponding to the node I clicked */
             /* But wait, this whole loop goes through EVERY node tab, regardless of if it's open or not, so it'll jump to every tab that is already open, leaving it to be on the very last tab that is open! =/ */
             /* I think I need to write a better way of seeing which tabs are opening, and appending them to _stuff.tabState than this loop */
             break
           }
           else if(_stuff.tabState[i].label !== key){
-            console.log('key isnt equal to the ith position, move onto the next value in tabState');
+            //console.log('key isnt equal to the ith position, move onto the next value in tabState');
             //console.log(_stuff.tabState.length);
             //console.log(i);
             if(i === _stuff.tabState.length - 1){
-              console.log('tabState didnt have this tab, tab is now open');
+              //console.log('tabState didnt have this tab, tab is now open');
               //console.log(key);
               //console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
               //console.log(lookupWhichNodeTabToOpen(key));
@@ -3733,7 +3701,7 @@ var checkWhichBlockTabsOpen = function(){
             }
           }
         }
-        console.log('finished the tabState checker loop')
+        //console.log('finished the tabState checker loop')
       }
     }
     else{
@@ -3743,7 +3711,6 @@ var checkWhichBlockTabsOpen = function(){
 
   //console.log(blockTabsOpen);
   //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
-  console.log(_stuff.tabState);
 
   //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
   // Actually, no need since at the start of the function it is reset*/
@@ -3757,12 +3724,11 @@ var checkWhichBlockTabsOpen = function(){
 var removeBlockTab = function(selectedTabIndex){
 
   var tabName = _stuff.tabState[selectedTabIndex].label;
-  console.log(tabName);
 
   /* Checking if it's a edge tab or a block tab */
 
   if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
-    console.log("removing an edge tab");
+    //console.log("removing an edge tab");
 
     //var spacelessEdgeTabName = tabName.replace(/\s/g, '');
 
@@ -3770,10 +3736,9 @@ var removeBlockTab = function(selectedTabIndex){
     edge id in tabState, is that a good idea?...
      */
     allEdgeTabProperties[tabName] = false;
-    console.log(allEdgeTabProperties);
   }
   else{
-    console.log("removing a block tab");
+    //console.log("removing a block tab");
     allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   }
 
@@ -3790,7 +3755,6 @@ var getInitialBlockDataFromBlockStore = function(){
   //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
   ///* Now need to loop over each block object and 'remove' the position attribute */
   //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
-  console.log(allBlockTabInfo);
 };
 
 function toggleSidebar(){
@@ -3800,7 +3764,6 @@ function toggleSidebar(){
   else if(_stuff.sidebarOpen === false){
     _stuff.sidebarOpen = true;
   }
-  console.log(_stuff.sidebarOpen)
 }
 
 function windowWidthMediaQueryChanged(sidebarOpen){
@@ -3822,18 +3785,13 @@ function copyTabState(){
 function resetTabStateReferences(){
   for(var i = 0; i < _stuff.tabState.length; i++){
     if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
-      console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
+      //console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
     }
     else if(_stuff.tabState[i].tabType === 'edge'){
-      console.log("also do nothing, since this info is created from allBlockTabInfo");
+      //console.log("also do nothing, since this info is created from allBlockTabInfo");
     }
     else {
-      console.log(_stuff.tabState);
-      console.log(i);
-      console.log(_stuff.tabState[i]);
-      console.log(allBlockTabInfo);
       _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
-      console.log(_stuff.tabState[i]);
     }
   }
 }
@@ -4300,25 +4258,6 @@ var sidePaneStore = assign({}, EventEmitter.prototype, {
     return _stuff.dropdownListVisible;
   }
 
-
-  //getTabState: function(){
-  //  return _stuff.tabState;
-  //},
-  //getCalculateTabs: function(){
-  //  calculateTabs()
-  //},
-  //getSelectedTabIndex: function(){
-  //  return _stuff.selectedTabIndex;
-  //},
-  //getRedBlockTabClicked: function(){
-  //  return allBlockTabProperties.redBlockTabOpen;
-  //},
-  //getBlueBlockTabClicked: function(){
-  //  return allBlockTabProperties.blueBlockTabOpen;
-  //},
-  //getGreenBlockTabClicked: function(){
-  //  return allBlockTabProperties.greenBlockTabOpen;
-  //},
 });
 
 AppDispatcher.register(function(payload){
@@ -4342,343 +4281,12 @@ AppDispatcher.register(function(payload){
       console.log(_stuff.dropdownListVisible);
       break;
 
-    //case appConstants.ADD_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //      addTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //      break;
-    //
-    //case appConstants.REMOVE_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //  console.log(item);
-    //      removeTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      break;
-
-
-
-    //case appConstants.DROPDOWN_SELECT:
-    //  var tab = item.item;
-    //  var component = item.component;
-    //
-    //  console.log(payload);
-    //  console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
-    //      dropdownMenuSelect(tab, component);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REDBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      //checkWhichBlockTabsOpen();
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.BLUEBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeBlueBlockTabState();
-    //  console.log(allBlockTabProperties.blueBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.GREENBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeGreenBlockTabState();
-    //  console.log(allBlockTabProperties.greenBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.SWITCHTAB_WHENTABOPENS:
-    //  console.log(payload);
-    //  console.log(action);
-    //      switchTabWhenTabOpens(item);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.PASSING_SIDEPANE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  var passedSidePane = item;
-    //  return passedSidePane;
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REACTPANEL_SELECT:
-    //      break;
-
-    //case appConstants.REDBLOCKSTATE_CHANGE:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //      sidePaneStore.emitChange();
-    //      break;
-
     default:
           return true;
   }
 });
 
 module.exports = sidePaneStore;
-
-
-//var reactPanelSelect = function(){
-//  /* need this to somehow invoke the dropdownmenuchange function in SidePane! */
-//};
-
-
-//var calculateTabs = function(){
-//  var tabs = _stuff.tabState.map(function(item, i){
-//    var tabTitle = "Tab " + item;
-//    var tabIndex = i + 1;
-//  })
-//};
-
-
-//var allBlockContent = {
-//  redBlockContent: {
-//    name: "Red block",
-//    hack: "redBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  },
-//  blueBlockContent: {
-//    name: "Blue block",
-//    hack: "blueBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  },
-//  greenBlockContent: {
-//    name: "Green block",
-//    hack: "greenBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  }
-//};
-//
-//var allBlockTabProperties = {
-//  redBlockTabOpen: false,
-//  blueBlockTabOpen: false,
-//  greenBlockTabOpen: false
-//};
-
-//var checkWhichBlockTabsOpen = function(){
-//  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
-//  for (var key in allBlockTabProperties){
-//    console.log(key)
-//    console.log(allBlockTabProperties[key]);
-//    if(allBlockTabProperties[key] === true) {
-//      console.log('just before starting the tabState checker loop');
-//      if(_stuff.tabState.length === 0){
-//        console.log('tabState was empty, tab is now open');
-//        var blockTabsOpen = [];
-//        switch(key){
-//          case 'redBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-//                break;
-//          case 'blueBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-//                break;
-//          case 'greenBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-//                break;
-//          default:
-//                return 'default'
-//        }
-//        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-//        console.log(updatedBlockTabsOpen);
-//        console.log(blockTabsOpen);
-//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//      }
-//      else{
-//        for (var i = 0; i < _stuff.tabState.length; i++) {
-//          console.log('in the non-empty tabState checker loop');
-//          console.log(_stuff.tabState.length);
-//          console.log(i);
-//          if (_stuff.tabState[i].hack === key) {
-//            console.log("tab is already open from before, don't add, break statement occurring");
-//            break
-//          }
-//          else if(_stuff.tabState[i].hack !== key){
-//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-//            console.log(_stuff.tabState.length);
-//            console.log(i);
-//            if(i === _stuff.tabState.length - 1){
-//              console.log('tabState didnt have this tab, tab is now open');
-//              var blockTabsOpen = [];
-//              switch(key){
-//                case 'redBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-//                  break;
-//                case 'blueBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-//                  break;
-//                case 'greenBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-//                  break;
-//                default:
-//                  return 'default'
-//              }
-//              //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-//              console.log(updatedBlockTabsOpen);
-//              console.log(blockTabsOpen);
-//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//            }
-//          }
-//        }
-//        console.log('finished the tabState checker loop')
-//      }
-//    }
-//    else{
-//    console.log('tab is not open')
-//    }
-//  }
-//
-//  console.log(blockTabsOpen);
-//  console.log(updatedBlockTabsOpen);
-//  console.log(_stuff.tabState);
-//
-//  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
-//  // Actually, no need since at the start of the function it is reset*/
-//
-//  //return updatedBlockTabsOpen;
-//
-//};
-
-//var changeRedBlockTabState = function(){
-//  if(allBlockTabProperties.redBlockTabOpen === false) {
-//    allBlockTabProperties.redBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeBlueBlockTabState = function(){
-//  if(allBlockTabProperties.blueBlockTabOpen === false){
-//    allBlockTabProperties.blueBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeGreenBlockTabState = function(){
-//  if(allBlockTabProperties.greenBlockTabOpen === false){
-//    allBlockTabProperties.greenBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-
-
-
-
-
-
-
-//var addTab = function(newtab){
-//  /* set state of tabs somewhere here*/
-//  var newTabs = _stuff.tabState.concat(newtab);
-//  _stuff.tabState = newTabs;
-//  /* could you just skip the variable newTabs and set _stuff.tabState equal
-//  itself concatenated?
-//   */
-//};
-//
-//var removeTab = function(item){
-//
-//  var tabName = _stuff.tabState[item].hack;
-//  switch(tabName){
-//
-//    case 'redBlockTabOpen':
-//      allBlockTabProperties.redBlockTabOpen = false;
-//      console.log(allBlockTabProperties.redBlockTabOpen);
-//          break;
-//
-//    case 'blueBlockTabOpen':
-//      allBlockTabProperties.blueBlockTabOpen = false;
-//      console.log(allBlockTabProperties.blueBlockTabOpen);
-//          break;
-//
-//    case 'greenBlockTabOpen':
-//      allBlockTabProperties.greenBlockTabOpen = false;
-//      console.log(allBlockTabProperties.greenBlockTabOpen);
-//          break;
-//
-//    default:
-//      console.log('default');
-//      return 'default'
-//  }
-//  /* code for removing tabs*/
-//  console.log(tabName);
-//  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-//  newTabs.splice(item, 1);
-//  _stuff.tabState = newTabs;
-//};
-
-
-
-
-
-
-
-
-
-//var dropdownMenuSelect = function(tab, ReactComponent){
-//  //var findTheIndex = _stuff.tabState.indexOf(item);
-//  ////this.props.changeTab(findTheIndex)
-//  //_stuff.selectedTabIndex = findTheIndex;
-//
-//  var test = tab;
-//  console.log(tab);
-//  console.log(ReactComponent);
-//  //var keepingSidePane = ReactComponent;
-//  //keepSidePane(ReactComponent);
-//  //console.log(keepingSidePane);
-//
-//  for(var i = 0; i < _stuff.tabState.length; i++){
-//    if(_stuff.tabState[i].name === tab){
-//      var findTheIndex = i
-//    }
-//  }
-//  //
-//  //var findTheIndex = this.props.list.indexOf(item);
-//  ReactComponent.refs.panel.setSelectedIndex(findTheIndex);
-//  //keepSidePane(ReactComponent)
-//};
-
-//var keepSidePane = function(testSidePane){ /*Ok, this saves 'SidePane' how I want it, so I can refer to it via this.refs.panel to use the select tab function*/
-//  console.log('alternative select function is running');
-//  console.log(testSidePane);               /* Not sure if/how this'll actually work, since it relies on dropdownMenuSelect running first? */
-//  return testSidePane
-//};
-//
-//var switchTabWhenTabOpens = function(tab){
-//  var passedComponent = passedSidePane;
-//  console.log(passedComponent);
-//  console.log(tab);
-//
-//  for(var i = 0; i < _stuff.tabState.length; i++){
-//    if(_stuff.tabState[i].name === tab){
-//      var findTheIndex = i
-//    }
-//  }
-//  passedComponent.refs.panel.setSelectedIndex(findTheIndex);
-//};
-//
-//var passSidePane = function(component){
-//  var passedComponent = {component: component}
-//};
 
 },{"../constants/appConstants":9,"../dispatcher/appDispatcher":10,"events":31,"object-assign":37}],16:[function(require,module,exports){
 /**
@@ -4700,8 +4308,6 @@ var Block = React.createClass({displayName: "Block",
 
   componentDidMount: function(){
     //NodeStore.addChangeListener(this._onChange);
-    console.log(this.props);
-    console.log(this.state);
 
     //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
     //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
@@ -4725,13 +4331,13 @@ var Block = React.createClass({displayName: "Block",
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("interactjs dragstart");
+          //console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("interactjs dragend");
+          //console.log("interactjs dragend");
         }
       });
 
@@ -4755,14 +4361,26 @@ var Block = React.createClass({displayName: "Block",
       .off('tap', this.blockSelect);
   },
 
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  console.log("shouldComponentUpdate");
-  //  console.log(nextProps.allNodeInfo[this.props.id].position);
-  //  return this.props.allNodeInfo[this.props.id].position.x === nextProps.allNodeInfo[this.props.id].position.x;
-  //},
+  componentWillReceiveProps: function(nextProps){
+    //console.log(this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log("shouldComponentUpdate");
+    //console.log(nextProps);
+    //console.log(this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    return (
+      true
+    );
+  },
 
   handleInteractJsDrag: function(item){
-    console.log("interactJs drag is occurring");
+    //console.log("interactJs drag is occurring");
     blockActions.interactJsDrag(item);
     this.startDrag = null;
   },
@@ -4788,11 +4406,10 @@ var Block = React.createClass({displayName: "Block",
   //},
 
   blockSelect: function(e){
-    console.log(e);
     e.preventDefault();
     e.stopImmediatePropagation();
-    e.stopPropagation();;
-    console.log(this.props.id + "has been selected");
+    e.stopPropagation();
+    //console.log(this.props.id + "has been selected");
     //nodeActions.deselectAllNodes("deselect all nodes");
 
     /* Don't want hover stuff anymore! */
@@ -4809,14 +4426,12 @@ var Block = React.createClass({displayName: "Block",
     if(this.props.areAnyBlocksSelected === false){
       blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
     }
     else{
       /* Need to run deselect before I select the current node */
       this.props.deselect();
       blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
-      console.log(this.props.selected);
     }
 
     /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
@@ -4882,7 +4497,6 @@ var Block = React.createClass({displayName: "Block",
   //},
 
   interactJsDrag: function(e){
-    console.log(e);
     e.stopPropagation();
     e.stopImmediatePropagation();
     var target = e.target.id;
@@ -4899,7 +4513,6 @@ var Block = React.createClass({displayName: "Block",
     this.startDrag.x += e.dx;
     this.startDrag.y += e.dy;
 
-    console.log(this.startDrag);
 
     var deltaMovement = {
       target: target,
@@ -4907,7 +4520,6 @@ var Block = React.createClass({displayName: "Block",
       y: this.startDrag.y
     };
 
-    console.log(deltaMovement);
 
     //this.interactJsDragDebounce(deltaMovement);
     clearTimeout(this.timer);
@@ -4934,9 +4546,9 @@ var Block = React.createClass({displayName: "Block",
   },
 
   interactJsDragDebounce: function(dragMovement){
-    console.log("debouncing");
+    //console.log("debouncing");
     this.timer = setTimeout(function(){
-      console.log("inside setTimeout");
+      //console.log("inside setTimeout");
       this.handleInteractJsDrag(dragMovement)}.bind(this), 500
     );
   },
@@ -4974,6 +4586,7 @@ var Block = React.createClass({displayName: "Block",
 
 
   render: function(){
+    console.log("render: block");
 
     var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 
@@ -5127,6 +4740,7 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
   //},
 
   render: function(){
+    //console.log("render: blockRectangles");
 
     return(
       React.createElement("g", null, 
@@ -5480,7 +5094,7 @@ var Edge = React.createClass({displayName: "Edge",
   },
   componentWillUnmount: function(){
     interact(ReactDOM.findDOMNode(this))
-      .off('tap', this.edgeSelect)
+      .off('tap', this.edgeSelect);
 
     window.removeEventListener('keydown', this.keyPress);
 
@@ -5499,18 +5113,17 @@ var Edge = React.createClass({displayName: "Edge",
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
     if(this.props.selected === true){
-      console.log("this.props.selected is true, so don't reset the border colour");
+      //console.log("this.props.selected is true, so don't reset the border colour");
     }
     else{
-      console.log("this.props.selected is false");
+      //console.log("this.props.selected is false");
       test.style.stroke = 'lightgrey'
     }
   },
   edgeSelect: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log("edge has been selected");
-    console.log(ReactDOM.findDOMNode(this).id);
+    //console.log("edge has been selected");
     blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
     paneActions.openEdgeTab({
       edgeId: ReactDOM.findDOMNode(this).id,
@@ -5522,16 +5135,15 @@ var Edge = React.createClass({displayName: "Edge",
   },
 
   keyPress: function(e){
-    console.log("key press!");
-    console.log(e);
+    //console.log("key press!");
+    //console.log(e);
 
     if(e.keyCode === 46){
-      console.log("delete key has been pressed");
+      //console.log("delete key has been pressed");
       if(this.props.areAnyEdgesSelected === true){
         if(this.props.selected === true){
           /* Delete this particular edge */
-          console.log(this.props.fromBlock);
-          console.log(this.props.toBlock);
+
           /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
           switching it around
            */
@@ -5545,12 +5157,9 @@ var Edge = React.createClass({displayName: "Edge",
 
           /* Reset both ports' styling to normal again */
 
-          console.log(this.props.fromBlock);
           var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
-          console.log(fromBlockPortElement);
 
           var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
-          console.log(toBlockPortElement);
 
           //fromBlockPortElement.style.stroke = "black";
           fromBlockPortElement.style.fill = "grey";
@@ -5567,12 +5176,13 @@ var Edge = React.createClass({displayName: "Edge",
         }
       }
       else if(this.props.areAnyEdgesSelected === false){
-        console.log("no edges are selected, so don't delete anything");
+        //console.log("no edges are selected, so don't delete anything");
       }
     }
   },
 
   render:function(){
+    console.log("render: edges");
 
     /* Retiring allEdges in favour of calculating everything from allNodeInfo */
     //var edgeInfo = this.props.allEdges[this.props.id];
@@ -5581,7 +5191,6 @@ var Edge = React.createClass({displayName: "Edge",
     //
     //var allEdges = this.props.allEdges;
     //console.log(allEdges);
-    console.log(this.props.id);
     var fromBlock = this.props.fromBlock;
     var toBlock = this.props.toBlock;
     //console.log(fromNode);
@@ -5639,13 +5248,15 @@ var Edge = React.createClass({displayName: "Edge",
         React.createElement("line", {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
               //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: this.props.selected === true ? "10" : "7", stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round"}}), 
+              style: {strokeWidth: this.props.selected === true ? "10" : "7",
+               stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round",
+               cursor: 'default'}}), 
 
         React.createElement("line", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
           //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
           //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
               x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: '5', stroke:"orange"}})
+              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
 
 
       )
@@ -5675,9 +5286,17 @@ var blockActions = require('../actions/blockActions.js');
 
 var interact = require('../../node_modules/interact.js');
 
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+
 var EdgePreview = React.createClass({displayName: "EdgePreview",
 
   componentDidMount: function(){
+
+    Perf.start();
+    interact('#appAndDragAreaContainer')
+      .on('move', this.interactJSMouseMoveForEdgePreview);
+
     this.noPanning = true;
 
     interact(ReactDOM.findDOMNode(this))
@@ -5685,8 +5304,10 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("drag start");
-        },
+          interact('#appAndDragAreaContainer')
+            .off('move', this.interactJSMouseMoveForEdgePreview);
+          //console.log("drag start");
+        }.bind(this),
         onmove: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
@@ -5695,11 +5316,12 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("drag end");
+          //console.log("drag end");
           this.noPanning = true;
           interact('#appAndDragAreaContainer')
-            .on('mousemove', this.props.interactJSMouseMoveForEdgePreview);
-          console.log(e);
+            .on('move', this.interactJSMouseMoveForEdgePreview);
+          //console.log(e);
+          /* No need for this after changing mousemove to move for some reason? */
           blockActions.updateEdgePreviewEndpoint({
             x: e.dx,
             y: e.dy
@@ -5708,37 +5330,69 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
       });
 
     interact(ReactDOM.findDOMNode(this))
-      .on('tap', function(e){
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        console.log("tapped!");
-        this.props.failedPortConnection();
-      }.bind(this));
+      .on('tap', this.onTap);
 
     interact(ReactDOM.findDOMNode(this))
-      .on('mousedown', function(e){
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        this.noPanning = false;
-
-        /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
-        update the mouse position?
-        UPDATE: nice, it actually improved the performance!! :)
-         */
-
-        interact('#appAndDragAreaContainer')
-          .off('mousemove', this.props.interactJSMouseMoveForEdgePreview);
-      }.bind(this))
+      .on('down', this.onMouseDown);
   },
   componentWillUnmount: function(){
+    //console.log("edge preview unmounting!");
 
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.onTap);
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('down', this.onMouseDown);
+
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+
+    Perf.stop();
+    Perf.printWasted(Perf.getLastMeasurements());
   },
 
   shouldComponentUpdate: function(){
     return this.noPanning
   },
 
+  interactJSMouseMoveForEdgePreview: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    var mousePositionChange = {
+      x: e.mozMovementX,
+      y: e.mozMovementY
+    };
+
+    blockActions.updateEdgePreviewEndpoint(mousePositionChange);
+
+  },
+
+  onTap: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    //console.log("tapped!");
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+    this.props.failedPortConnection();
+  },
+
+  onMouseDown: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.noPanning = false;
+
+    /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
+     update the mouse position?
+     UPDATE: nice, it actually improved the performance!! :)
+     */
+
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+  },
+
   render:function(){
+    console.log("render: edgePreview");
 
     //console.log(this.props.id);
     //console.log(this.props.interactJsDragPan);
@@ -5758,22 +5412,15 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     //console.log(allNodeTypesPortStyling[fromNodeType]);
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
-    console.log(fromBlockInfo);
 
     if(fromBlockInfo.fromBlockPortType === "inport"){
-      console.log(this.props.fromBlockInfo);
       var inportArrayLength = this.props.fromBlockInfo.inports.length;
       var inportArrayIndex;
-      console.log(inportArrayLength);
-      console.log(fromBlockInfo);
       for(var j = 0; j < inportArrayLength; j++){
-        console.log(this.props.fromBlockInfo.inports[j].name);
-        console.log(fromBlockInfo.fromBlockPort);
         if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
           inportArrayIndex = JSON.parse(JSON.stringify(j));
         }
       }
-      console.log(inportArrayIndex);
       var startOfEdgePortOffsetX = 0;
       var startOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
@@ -5826,7 +5473,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
 module.exports= EdgePreview;
 
-},{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/react":218,"../actions/blockActions.js":1,"../stores/blockStore.js":11}],22:[function(require,module,exports){
+},{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/lib/ReactDefaultPerf.js":98,"../../node_modules/react/react":218,"../actions/blockActions.js":1,"../stores/blockStore.js":11}],22:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -5984,7 +5631,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   },
 
   componentDidMount: function () {
-    console.log(ReactDOM.findDOMNode(this));
+    //Perf.start();
     //this.setState({gateBlockIdCounter: 1});
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
@@ -6000,14 +5647,14 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("drag start");
+          //console.log("drag start");
 
         },
         onmove: this.interactJsDragPan,
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          console.log("drag end");
+          //console.log("drag end");
         }
       })
       .gesturable({
@@ -6030,7 +5677,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   deselect: function (e) {
     //e.stopImmediatePropagation();
     //e.stopPropagation();
-    console.log("dragArea has been clicked");
+    //console.log("dragArea has been clicked");
     blockActions.deselectAllBlocks("deselect all blocks");
     blockActions.deselectAllEdges("deselect all edges");
 
@@ -6041,11 +5688,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
       //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
       blockActions.addEdgePreview(null);
-      interact('#appAndDragAreaContainer')
-        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      //interact('#appAndDragAreaContainer')
+      //  .off('move', this.interactJSMouseMoveForEdgePreview)
     }
     else{
-      console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
+      //console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
     }
 
   },
@@ -6055,8 +5702,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   },
 
   wheelZoom: function (e) {
-    console.log("wheel!");
-    console.log(e);
+    //console.log("wheel!");
+    //console.log(e);
     e.preventDefault();
     e.stopPropagation();
     e.nativeEvent.stopPropagation();
@@ -6114,9 +5761,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
      var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX;
      var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY;
 
-    console.log(currentGraphPositionX);
-    console.log(mouseOnZoomX);
-
      var newGraphPosition = {
        x: newGraphPositionX,
        y: newGraphPositionY
@@ -6164,14 +5808,12 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   addBlockInfo: function(){
     //e.stopImmediatePropagation();
     //e.stopPropagation();
-    console.log("addBlockInfo");
     //var gateNodeRegExp = /Gate/;
     //var tgenNodeRegExp = /TGen/;
     //var pcompNodeRegExp = /PComp/;
     //var lutNodeRegExp = /LUT/;
 
     var newGateBlockId = this.generateNewBlockId();
-    console.log(newGateBlockId);
 
     blockActions.addToAllBlockInfo(newGateBlockId);
 
@@ -6182,44 +5824,35 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   var gateBlockIdCounter = this.state.gateBlockIdCounter;
     gateBlockIdCounter += 1;
   var newGateId = "Gate" + gateBlockIdCounter;
-  console.log(newGateId);
   this.setState({gateBlockIdCounter: gateBlockIdCounter});
   return newGateId;
 
   },
 
   addEdgePreview: function(){
-    console.log("addEdgePreview in flowChart has been invoked!");
-    /* Trying to replace with interactjs using mousemove */
-    //window.addEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+    //console.log("addEdgePreview in flowChart has been invoked!");
 
-    interact('#appAndDragAreaContainer')
-      .on('mousemove', this.interactJSMouseMoveForEdgePreview);
-
-    console.log(this.props.portThatHasBeenClicked);
     var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
     var portStringSliceIndex = fromBlockId.length;
     var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
-    console.log(portName);
-    console.log(fromBlockId);
+
     var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
-    console.log(fromBlockType);
 
     /* Slightly confusing since the end of the edge is the same as the start of the edge at the very beginning
     of an edgePreview, but this is only to do the initial render, this'll be updated by windowMouseMoveForEdgePreview()
      */
 
-    console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
-    console.log(this.props.portThatHasBeenClicked.className);
+    //console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
+    //console.log(this.props.portThatHasBeenClicked.className);
 
     if(this.props.portThatHasBeenClicked.className.baseVal === "inport"){
-      console.log("port clicked is an inport");
+      //console.log("port clicked is an inport");
 
       var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
       var inportArrayIndex;
       for(var j = 0; j < inportArrayLength; j++){
-        console.log(this.props.allBlockInfo[fromBlockId].inports[j].name);
+        //console.log(this.props.allBlockInfo[fromBlockId].inports[j].name);
         if(this.props.allBlockInfo[fromBlockId].inports[j].name === portName){
           inportArrayIndex = JSON.parse(JSON.stringify(j));
         }
@@ -6229,7 +5862,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       var portType = "inport";
     }
     else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
-      console.log("port clicked is an outport");
+      //console.log("port clicked is an outport");
 
       var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
       var outportArrayIndex;
@@ -6262,43 +5895,55 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       }
     };
 
-    console.log(edgePreviewInfo);
-
     blockActions.addEdgePreview(edgePreviewInfo);
 
-  },
+    //Perf.stop();
+    //Perf.printDOM(Perf.getLastMeasurements());
+    //Perf.printWasted(Perf.getLastMeasurements());
 
-  interactJSMouseMoveForEdgePreview: function(e){
-    //e.stopImmediatePropagation();
-    //console.log(e.isImmediatePropagationStopped());
+    /* Trying to replace with interactjs using mousemove */
+    //window.addEventListener('mousemove', this.windowMouseMoveForEdgePreview);
 
-    //console.log("interactjs mousemove");
-    //console.log(e);
-
-    var mousePositionChange = {
-      x: e.mozMovementX,
-      y: e.mozMovementY
-    };
-
-    blockActions.updateEdgePreviewEndpoint(mousePositionChange);
+    //interact('#appAndDragAreaContainer')
+    //  .on('move', this.interactJSMouseMoveForEdgePreview);
 
   },
 
-  windowMouseMoveForEdgePreview: function(e){
-    console.log(e);
-    console.log(e.clientX);
-
-    var mousePosition = {
-      x: e.layerX,
-      y: e.layerY
-    };
-
-    blockActions.updateEdgePreviewEndpoint(mousePosition);
-
-  },
+  //interactJSMouseMoveForEdgePreview: function(e){
+  //  e.stopImmediatePropagation();
+  //  e.stopPropagation();
+  //  //e.originalEvent.stopImmediatePropagation();
+  //  //e.originalEvent.stopPropagation();
+  //  //e.preventDefault();
+  //  //console.log(e.isImmediatePropagationStopped());
+  //
+  //  //console.log("interactjs mousemove");
+  //  console.log(e);
+  //
+  //  var mousePositionChange = {
+  //    x: e.mozMovementX,
+  //    y: e.mozMovementY
+  //  };
+  //
+  //  blockActions.updateEdgePreviewEndpoint(mousePositionChange);
+  //
+  //},
+  //
+  //windowMouseMoveForEdgePreview: function(e){
+  //  console.log(e);
+  //  console.log(e.clientX);
+  //
+  //  var mousePosition = {
+  //    x: e.layerX,
+  //    y: e.layerY
+  //  };
+  //
+  //  blockActions.updateEdgePreviewEndpoint(mousePosition);
+  //
+  //},
 
   portSelectHighlight: function(){
-    console.log("portSelectHighlight");
+    //console.log("portSelectHighlight");
     /* This was all pointless, I already have the specific port in this.state.portThatHasBeenSelected! */
     //var portClassName = this.state.portThatHasBeenClicked.className.animVal;
     //var nodeId = this.state.portThatHasBeenClicked.parentNode.parentNode.id;
@@ -6309,7 +5954,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //console.log(node);
     //console.log(port);
 
-    console.log(this.props.portThatHasBeenClicked);
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
     blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
@@ -6332,7 +5976,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   },
 
   portDeselectRemoveHighlight: function(){
-    console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
+    //console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
     var port = this.props.portThatHasBeenClicked;
     /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
     Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
@@ -6364,7 +6008,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     so then you can compare the two in some form or another?
      */
     /* Wait, this.state.portThatHasBeenClicked will never be null when portClick() is run, since we set it in the node to be something in the node file? */
-    console.log("checkBothClickedPorts has been called");
+    //console.log("checkBothClickedPorts has been called");
     //if(this.state.storingFirstPortClicked !== null){
     //  var firstPort = this.state.storingFirstPortClicked;
     //  var secondPort = this.state.portThatHasBeenClicked;
@@ -6383,10 +6027,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //}
     var firstPort = this.props.storingFirstPortClicked;
     var secondPort = this.props.portThatHasBeenClicked;
-    console.log(firstPort);
-    console.log(secondPort);
-    console.log(firstPort.parentNode.parentNode.parentNode.id);
-    console.log(secondPort.parentNode.parentNode.parentNode.id);
+
 
     /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
@@ -6399,15 +6040,13 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
     var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
-    console.log(firstPortStringSliceIndex);
-    console.log(firstPortName);
-    console.log(secondPortName);
+
 
     if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
-      console.log("the two clicked ports are the same port, you clicked on the same port twice!");
+      //console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
-      console.log("something else is afoot, time to look at adding the edge! =P");
+      //console.log("something else is afoot, time to look at adding the edge! =P");
       var edge = {
         fromBlock: firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         fromBlockPort: firstPortName,
@@ -6416,7 +6055,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       };
       /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
       //this.createNewEdge(edge);
-      console.log(edge);
 
       this.checkPortCompatibility(edge);
     }
@@ -6426,7 +6064,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   checkPortCompatibility: function(edgeInfo){
   /* First need to check we have an inport and an outport */
   /* Find both port types, then compare them somehow */
-  console.log(edgeInfo);
 
   var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
   var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
@@ -6437,36 +6074,34 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     toBlockType: toBlockType
   };
 
-  console.log(blockTypes);
 
   var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
   var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
-    console.log(fromBlockLibraryInfo);
-    console.log(toBlockLibraryInfo);
+
 
   for(i = 0; i < fromBlockLibraryInfo.inports.length; i++){
     if(fromBlockLibraryInfo.inports[i].name === edgeInfo.fromBlockPort){
-      console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
+      //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
       var fromBlockPortType = "inport";
       var inportIndex = i;
       break;
     }
     else{
-      console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
+      //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
       var fromBlockPortType = "outport";
     }
   }
 
   for(j = 0; j < toBlockLibraryInfo.inports.length; j++ ){
     if(toBlockLibraryInfo.inports[j].name === edgeInfo.toBlockPort){
-      console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
+      //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
       var toBlockPortType = "inport";
       var inportIndex = j;
       break;
     }
     else{
-      console.log("The toBlock isn't an inport, so it's an outport!");
+      //console.log("The toBlock isn't an inport, so it's an outport!");
       var toBlockPortType = "outport";
     }
   }
@@ -6475,8 +6110,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     fromBlockPortType: fromBlockPortType,
     toBlockPortType: toBlockPortType
   };
-
-  console.log(portTypes);
 
   var types = {
     blockTypes: blockTypes,
@@ -6501,7 +6134,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   //    .off('mousemove', this.interactJSMouseMoveForEdgePreview)
   //}
   if(fromBlockPortType === toBlockPortType){
-    console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
+    //console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
     window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
     /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
     //var fromPort = this.state.storingFirstPortClicked;
@@ -6514,11 +6147,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     /* Hence, don't add anything to allNodeInfo */
 
     blockActions.addEdgePreview(null);
-    interact('#appAndDragAreaContainer')
-      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+    //interact('#appAndDragAreaContainer')
+    //  .off('move', this.interactJSMouseMoveForEdgePreview)
   }
   else if(fromBlockPortType !== toBlockPortType){
-    console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
+    //console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
     /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
     if(fromBlockPortType === "inport"){
       this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
@@ -6527,7 +6160,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
     }
     else{
-      console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
+      //console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
     }
     /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
     //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
@@ -6543,7 +6176,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   },
 
   isInportConnected: function(inport, inportIndex, block, edgeInfo, types){
-    console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
+    //console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
     if(this.props.allBlockInfo[block].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
       window.alert("The inport " + inport + " of the block " + block + " is already connected, so another connection cannot be made");
@@ -6559,14 +6192,12 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       this.resetPortClickStorage();
 
       blockActions.addEdgePreview(null);
-      interact('#appAndDragAreaContainer')
-        .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+      //interact('#appAndDragAreaContainer')
+      //  .off('move', this.interactJSMouseMoveForEdgePreview)
     }
     else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
-      console.log("That inport isn't connected to anything, so proceed with the port connection process");
-      console.log(edgeInfo);
+      //console.log("That inport isn't connected to anything, so proceed with the port connection process");
       var toPort = this.props.portThatHasBeenClicked;
-      console.log(toPort);
 
       /* Put this styling later, sicne I've now added the port value type checker */
       //toPort.style.stroke = "black";
@@ -6590,7 +6221,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
       if(types.portTypes.fromBlockPortType === 'outport'){
 
-        console.log("outport to inport, so edge labelling is normal");
+        //console.log("outport to inport, so edge labelling is normal");
         startBlock = edgeInfo.fromBlock;
         startBlockType = types.blockTypes.fromBlockType;
         startBlockPort = edgeInfo.fromBlockPort;
@@ -6613,7 +6244,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       }
       else if(types.portTypes.fromBlockPortType === 'inport'){
 
-        console.log("inport to outport, so have to flip the edge labelling direction");
+        //console.log("inport to outport, so have to flip the edge labelling direction");
         /* Note that you must also flip the ports too! */
         startBlock = edgeInfo.toBlock;
         startBlockType = types.blockTypes.toBlockType;
@@ -6699,15 +6330,14 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
         edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) +  String(newEdge.toBlock) + String(newEdge.toBlockPort);
 
-        console.log(newEdge);
         blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
         blockActions.appendToEdgeSelectedState(edgeLabel);
         this.resetPortClickStorage();
         //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
         /* Can now safely delete the edgePreview by setting it back to null */
         blockActions.addEdgePreview(null);
-        interact('#appAndDragAreaContainer')
-          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+        //interact('#appAndDragAreaContainer')
+        //  .off('move', this.interactJSMouseMoveForEdgePreview)
       }
       else if(fromPortValueType !== toPortValueType){
         window.alert("Incompatible port value types: the port " + edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
@@ -6725,8 +6355,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         this.resetPortClickStorage();
 
         blockActions.addEdgePreview(null);
-        interact('#appAndDragAreaContainer')
-          .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+        //interact('#appAndDragAreaContainer')
+        //  .off('move', this.interactJSMouseMoveForEdgePreview)
       }
 
     }
@@ -6741,13 +6371,13 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
     document.getElementById('dragArea').style.cursor = 'default';
     blockActions.addEdgePreview(null);
-    interact('#appAndDragAreaContainer')
-      .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+    //interact('#appAndDragAreaContainer')
+    //  .off('move', this.interactJSMouseMoveForEdgePreview)
   },
 
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
-    console.log("Resetting port click storage");
+    //console.log("Resetting port click storage");
     blockActions.storingFirstPortClicked(null);
     blockActions.passPortMouseDown(null);
   },
@@ -6755,7 +6385,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   interactJsDragPan: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log(e);
 
     var xChange = this.props.graphPosition.x + e.dx;
     var yChange = this.props.graphPosition.y + e.dy;
@@ -6776,7 +6405,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   interactJsPinchZoom: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log(e);
 
     var currentZoomScale = this.props.graphZoomScale;
     var newZoomScale = currentZoomScale + e.ds;
@@ -6818,6 +6446,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
 
   render: function(){
+    console.log("render: flowChart");
+
     //console.log("inside theGraphDiamond's render function");
     //console.log(this.props);
 
@@ -6827,18 +6457,20 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     var transform = "translate(" + x + "," + y + ")";
     var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
-    console.log(this.props);
-
     var blocks = [];
     var edges = [];
 
     for(var block in this.props.allBlockInfo){
       blocks.push(
         React.createElement(Block, {key: block, id: block, className: "block", 
-              blockInfo: this.props.allBlockInfo[block], 
-               allBlockTypesStyling: this.props.allBlockTypesStyling, areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
-              portThatHasBeenClicked: this.props.portThatHasBeenClicked, storingFirstPortClicked: this.props.storingFirstPortClicked, portMouseOver: this.props.portMouseOver, 
-              selected: blockStore.getAnyBlockSelectedState(block), deselect: this.deselect}
+               blockInfo: this.props.allBlockInfo[block], 
+               allBlockTypesStyling: this.props.allBlockTypesStyling, 
+               areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
+               portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+               storingFirstPortClicked: this.props.storingFirstPortClicked, 
+               portMouseOver: this.props.portMouseOver, 
+               selected: blockStore.getAnyBlockSelectedState(block), 
+               deselect: this.deselect}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         )
       );
@@ -6882,7 +6514,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     var edgePreview = [];
 
     if(this.props.edgePreview !== null){
-      console.log("we have an edgePreview!");
       /* Render the edgePreview component! */
 
       var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock + this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
@@ -6890,7 +6521,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       edgePreview.push(
         React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, interactJsDragPan: this.interactJsDragPan, 
                      failedPortConnection: this.failedPortConnection, 
-                     interactJSMouseMoveForEdgePreview: this.interactJSMouseMoveForEdgePreview, 
           edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
                      fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position, 
                      fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
@@ -6900,11 +6530,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
     }
     else if(this.props.edgePreview === null){
-      console.log("edgePreview is null, so don't render one");
+      //console.log("edgePreview is null, so don't render one");
     }
-
-    console.log(blocks);
-    console.log(edges);
 
     return(
       React.createElement("svg", {id: "appAndDragAreaContainer", height: "100%", width: "100%", 
@@ -7862,6 +7489,26 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
     blockStore.removeChangeListener(this._onChange);
   },
 
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  console.log(nextState);
+  //  console.log(this.state.graphPosition);
+  //  console.log(nextState.graphPosition);
+  //  return (
+  //    nextState.graphZoomScale !== this.state.graphZoomScale ||
+  //    nextState.graphPosition !== this.state.graphPosition ||
+  //    nextState.allBlockInfo !== this.state.allBlockInfo ||
+  //    nextState.portThatHasBeenClicked !== this.state.portThatHasBeenClicked ||
+  //    nextState.storingFirstPortClicked !== this.state.storingFirstPortClicked ||
+  //    nextState.blockLibrary !== this.state.blockLibrary ||
+  //    nextState.allBlockTypesStyling !== this.state.allBlockTypesStyling ||
+  //    nextState.portMouseOver !== this.state.portMouseOver ||
+  //    nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
+  //    nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
+  //    nextState.allBlockTypesPortStyling !== this.state.allBlockTypesPortStyling ||
+  //    nextState.edgePreview !== this.state.edgePreview
+  //  )
+  //},
+
   render: function(){
     return(
       React.createElement(FlowChart, {
@@ -7944,7 +7591,6 @@ var MainPane = React.createClass({displayName: "MainPane",
   componentDidMount: function(){
     //mainPaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
-    console.log(this.props);
     this.setState({gateBlockIdCounter: 1});  },
 
   componentWillUnmount: function(){
@@ -7984,12 +7630,10 @@ var MainPane = React.createClass({displayName: "MainPane",
   //},
 
   handleActionFavTabOpen: function(){
-    console.log('favTabOpen is a go');
     paneActions.favTabOpen("this is the item")
   },
 
   handleActionConfigTabOpen: function(){
-    console.log('configTabOpen is a go');
     paneActions.configTabOpen('this is the item')
   },
 
@@ -8002,25 +7646,19 @@ var MainPane = React.createClass({displayName: "MainPane",
     var gateBlockIdCounter = this.state.gateBlockIdCounter;
     gateBlockIdCounter += 1;
     var newGateId = "Gate" + gateBlockIdCounter;
-    console.log(newGateId);
     this.setState({gateBlockIdCounter: gateBlockIdCounter});
     return newGateId;
   },
 
   addBlockInfo: function(){
-    console.log("addBlockInfo");
-
     var newGateBlockId = this.generateNewBlockId();
-    console.log(newGateBlockId);
 
     blockActions.addToAllBlockInfo(newGateBlockId);
 
   },
 
   render: function() {
-
-    console.log(this.props);
-
+    console.log("render: mainPane");
     var TESTStyling = {
       height: 1000,
       width: 1000,
@@ -8379,42 +8017,38 @@ var Ports = React.createClass({displayName: "Ports",
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
 
     var target;
 
-    console.log(e.currentTarget);
 
     if(e.currentTarget.className.animVal === "portArc"){
-      console.log("clicked on an arc, so need to find the corresponding port");
-      console.log(e.currentTarget.parentNode);
-      console.log(e.currentTarget.parentNode.children);
+      //console.log("clicked on an arc, so need to find the corresponding port");
+      //console.log(e.currentTarget.parentNode);
+      //console.log(e.currentTarget.parentNode.children);
       for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
-        console.log(e.currentTarget.parentNode.children[i]);
+        //console.log(e.currentTarget.parentNode.children[i]);
         if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
           || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
           target = e.currentTarget.parentNode.children[i];
-          console.log(target);
         }
       }
     }
     else{
-      console.log("clicked on a port, makes it easier");
+      //console.log("clicked on a port, makes it easier");
       target = e.currentTarget;
     }
-    console.log(target);
 
     blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      //console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
       theGraphDiamondHandle.dispatchEvent(EdgePreview);
     }
     else if(this.props.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      //console.log("a port has already been clicked before, so dispatch TwoPortClicks");
       theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
     }
     //theGraphDiamondHandle.dispatchEvent(PortSelect);
@@ -8445,6 +8079,7 @@ var Ports = React.createClass({displayName: "Ports",
   },
 
   render: function(){
+    console.log("render: ports");
 
     var blockId = this.props.blockId;
     var blockInfo = this.props.blockInfo;
@@ -8465,8 +8100,8 @@ var Ports = React.createClass({displayName: "Ports",
       var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        React.createElement("g", {id: blockId + inportName + "portAndText", transform: portAndTextTransform}, 
-          React.createElement("path", {d: this.makeArcPath("inport"), className: "portArc", 
+        React.createElement("g", {key: blockId + inportName + "portAndText", id: blockId + inportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {key: blockId + inportName + "-arc", d: this.makeArcPath("inport"), className: "portArc", 
                 style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
           React.createElement("circle", {key: blockId + inportName, className: "inport", 
                   cx: 0, 
@@ -8497,8 +8132,8 @@ var Ports = React.createClass({displayName: "Ports",
       var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
         + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
       outports.push(
-        React.createElement("g", {id: blockId + outportName + "portAndText", transform: portAndTextTransform}, 
-          React.createElement("path", {d: this.makeArcPath("outport"), className: "portArc", 
+        React.createElement("g", {key: blockId + outportName + "portAndText", id: blockId + outportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {key: blockId + outportName + "-arc", d: this.makeArcPath("outport"), className: "portArc", 
                 style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
           React.createElement("circle", {key: blockId + outportName, className: "outport", 
                   cx: 0, 
@@ -8584,6 +8219,7 @@ var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
 var Treeview = require('react-treeview');
+var interact = require('../../node_modules/interact.js');
 
 function getSidePaneState(){
   return{
@@ -8640,6 +8276,14 @@ var SidePane = React.createClass({displayName: "SidePane",
     //this.handleActionPassingSidePaneOnMount()
   },
 
+  toggleTreeviewContent: function(){
+
+  },
+
+  collapseAllTreeviews: function(){
+
+  },
+
   componentWillUnmount: function(){
     //sidePaneStore.removeChangeListener(this._onChange);
     //paneStore.removeChangeListener(this._onChange);
@@ -8648,51 +8292,10 @@ var SidePane = React.createClass({displayName: "SidePane",
 
   render: function () {
 
-    console.log("sidePane rerender");
+    console.log("render: sidePane");
 
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-
-    //var tabs = this.props.tabState.map(function(item, i){
-    //  var tabTitle = item.label;
-    //  var tabIndex = i + 1;
-    //  var tabContent = function(){
-    //    console.log("inside tabContent function now");
-    //    var content = [];
-    //      //content.push(<p>stuff</p>);
-    //
-    //      content.push(<br/>);
-    //      content.push(<p>{tabTitle}</p>);
-    //      for(var attribute in item){
-    //        content.push(<p>{attribute}: {String(item[attribute])}</p>)
-    //      }
-    //    console.log(content);
-    //      return content
-    //  };
-    //  return (
-    //    <Tab title={tabTitle}>
-    //
-    //      <Content>Attributes of {tabTitle} <br/> Tab number {tabIndex}
-    //        {tabContent()}
-    //      </Content>
-    //
-    //    </Tab>
-    //  );
-    //});
-
-    /* A better version of the above tabState .map function to displaythe attributes of a block properly */
-    /* Also, try calculating tabState in here directly from allBlockTabInfo & OpenStates */
-    //var newerTabState = [];
-    //
-    //for(var block in this.props.allBlockTabOpenStates){
-    //  /* Need a separate check for the config tabs and such... */
-    //  if(this.props.allBlockTabOpenStates[block] === true){
-    //    newerTabState.push(this.props.allBlockTabInfo[block]);
-    //  }
-    //  else if(this.props.allBlockTabOpenStates[block] === false){
-    //    console.log("block tab wasn't open, s")
-    //  }
-    //}
 
     var betterTabs = this.props.tabState.map(function(block, i){
       var tabLabel = block.label;
@@ -8702,10 +8305,6 @@ var SidePane = React.createClass({displayName: "SidePane",
 
         var tabContent = [];
 
-        //tabContent.push(<p>x: {block.position.x}</p>);
-        //tabContent.push(<p>y: {block.position.y}</p>);
-        //tabContent.push(<br/>);
-
         if(tabLabel === "Favourites" || tabLabel === "Configuration"){
           console.log("we have a favourites tab or configuaration tab");
           var tabTitle = tabLabel;
@@ -8713,89 +8312,161 @@ var SidePane = React.createClass({displayName: "SidePane",
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
 
+          //tabContent.push(<button>Delete edge</button>);
+
           /* Don't want any content here, just a 'delete edge' button */
         }
         else {
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          tabContent.push(React.createElement("b", null, "Position"));
-          tabContent.push(React.createElement("p", null, "x: ", block.position.x));
-          tabContent.push(React.createElement("p", null, "y: ", block.position.y));
+          var inportDivs = [];
+          var outportDivs = [];
 
-          tabContent.push(React.createElement("br", null));
-
-          tabContent.push(React.createElement("b", null, "Inports"));
           for (var j = 0; j < block.inports.length; j++) {
-            for (var attribute in block.inports[j]) {
-              if (attribute !== 'connectedTo') {
                 console.log(block);
-                console.log(block.inports[j][attribute]);
-                tabContent.push(React.createElement("p", null, attribute, ": ", String(block.inports[j][attribute])));
-              }
-              else if (attribute === 'connectedTo') {
-                tabContent.push(React.createElement("p", null, "connectedTo:"));
-                if (block.inports[j].connectedTo !== null) {
-                  //for (var subAttribute in block.inports[j].connectedTo) {
-                  tabContent.push(React.createElement("p", null, "block: ", block.inports[j].connectedTo.block));
-                  tabContent.push(React.createElement("p", null, "port: ", block.inports[j].connectedTo.port));
-                  //}
-                }
-                else if (block.inports[j].connectedTo === null) {
-                  tabContent.push(React.createElement("p", null, "null"));
-                }
-              }
-            }
-            //tabContent.push(<p>, </p>);
+                console.log(block.inports[j]);
+
+            /* For getting the tree label to expand/collapse the treeview too */
+            var interactJsIdString = "#" + block.inports[j].name + "textContent";
+
+            inportDivs.push(
+              React.createElement("div", {style: {position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}, 
+                React.createElement("p", {key: block.inports[j].name + "textContent", 
+                   id: block.inports[j].name + "textContent", 
+                   style: {fontSize: '14px', position: 'relative', top: '3px'}}, 
+                  String(block.inports[j].name).toUpperCase()
+                ), 
+                React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '70px'}}, 
+                  React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
+                  React.createElement("input", {style: {position: 'relative', textAlign: 'left',}, 
+                         value: block.position.x, readOnly: "readonly", maxLength: "10", size: "10"})
+                )
+
+              )
+            );
           }
+
+          tabContent.push(
+            React.createElement(Treeview, {key: "InportsTreeview", 
+                      nodeLabel: React.createElement("b", null, "Inports"), 
+                      defaultCollapsed: false
+            }, inportDivs
+            )
+          );
+
+          /* Don't need to display position, not interested in it being seen */
+          //tabContent.push(<b>Position</b>);
+          //tabContent.push(<p>x: {block.position.x}</p>);
+          //tabContent.push(<p>y: {block.position.y}</p>);
+          //
+          //tabContent.push(<br/>);
+
+          /* Replacing by putting all inports in a treeview */
+          //tabContent.push(<b>Inports</b>);
+          //for (var j = 0; j < block.inports.length; j++) {
+          //  for (var attribute in block.inports[j]) {
+          //    if (attribute !== 'connectedTo') {
+          //      console.log(block);
+          //      console.log(block.inports[j][attribute]);
+          //      tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
+          //    }
+          //    else if (attribute === 'connectedTo') {
+          //      tabContent.push(<p>connectedTo:</p>);
+          //      if (block.inports[j].connectedTo !== null) {
+          //        //for (var subAttribute in block.inports[j].connectedTo) {
+          //        tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
+          //        tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
+          //        //}
+          //      }
+          //      else if (block.inports[j].connectedTo === null) {
+          //        tabContent.push(<p>null</p>);
+          //      }
+          //    }
+          //  }
+          //  //tabContent.push(<p>, </p>);
+          //}
+
+          //tabContent.push(<br/>);
+
           tabContent.push(React.createElement("br", null));
 
-          console.log(tabContent);
+          for (var k = 0; k < block.outports.length; k++){
+            outportDivs.push(
+              React.createElement("div", {style: {position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}, 
 
-          tabContent.push(React.createElement("b", null, "Outports"));
-          for (var k = 0; k < block.outports.length; k++) {
-            /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-            for (var attribute in block.outports[k]) {
-              if (attribute !== 'connectedTo') {
-                console.log(attribute);
-                tabContent.push(React.createElement("p", null, attribute, ": ", String(block.outports[k][attribute])));
-              }
-              else if (attribute === 'connectedTo') {
-                console.log(attribute);
-                tabContent.push(React.createElement("p", null, "connectedTo:"));
-                if (block.outports[k].connectedTo.length === 0) {
-                  console.log("LENGTH OF ARRAY IS ZERO");
-                  tabContent.push(React.createElement("p", null, "[]"));
-                }
-                else if (block.outports[k].connectedTo !== null) {
-                  for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
-                    tabContent.push(React.createElement("p", null, "[block: ", block.outports[k].connectedTo[l]['block'], ","));
-                    tabContent.push(React.createElement("p", null, "port: ", block.outports[k].connectedTo[l]['port'], "]"))
-                  }
-                }
-                else if (block.outports[k].connectedTo === null) {
-                  tabContent.push(React.createElement("p", null, "null"));
-                }
-              }
-            }
-            //tabContent.push(<p>, </p>);
+                React.createElement("p", {key: block.outports[k].name + "textContent", 
+                   id: block.outports[k].name + "textContent", 
+                   style: {fontSize: '14px', position: 'relative', top: '3px'}}, 
+                  String(block.outports[k].name).toUpperCase()
+                ), 
+
+                React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '70px'}}, 
+
+                  React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
+                  React.createElement("input", {style: {position: 'relative', textAlign: 'left',}, 
+                         value: block.position.y, readOnly: "readonly", maxLength: "10", size: "10"})
+                )
+
+              )
+            )
           }
+
+          tabContent.push(
+            React.createElement(Treeview, {key: "OutportTreeview", 
+                      nodeLabel: React.createElement("b", null, "Outports"), 
+                      defaultCollapsed: false
+                      }, outportDivs
+            )
+          );
+
+          /* Replacing with treeview */
+          //tabContent.push(<b>Outports</b>);
+          //for (var k = 0; k < block.outports.length; k++) {
+          //  /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
+          //  for (var attribute in block.outports[k]) {
+          //    if (attribute !== 'connectedTo') {
+          //      console.log(attribute);
+          //      tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
+          //    }
+          //    else if (attribute === 'connectedTo') {
+          //      console.log(attribute);
+          //      tabContent.push(<p>connectedTo:</p>);
+          //      if (block.outports[k].connectedTo.length === 0) {
+          //        console.log("LENGTH OF ARRAY IS ZERO");
+          //        tabContent.push(<p>[]</p>);
+          //      }
+          //      else if (block.outports[k].connectedTo !== null) {
+          //        for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
+          //          tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
+          //          tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
+          //        }
+          //      }
+          //      else if (block.outports[k].connectedTo === null) {
+          //        tabContent.push(<p>null</p>);
+          //      }
+          //    }
+          //  }
+          //  //tabContent.push(<p>, </p>);
+          //}
         }
         console.log(tabContent);
         return tabContent;
       };
 
       return (
-        React.createElement(Tab, {title: tabLabel}, 
+        React.createElement(Tab, {key: tabLabel + "tab", title: tabLabel}, 
 
-          React.createElement(Content, null, 
-            React.createElement("b", null, "Attributes of ", tabLabel), " ", React.createElement("br", null), 
+          React.createElement(Content, {key: tabLabel + "content"}, 
             betterTabContent()
           )
 
         )
       )
     });
+
+    //<b>Attributes of {tabLabel}</b> <br/>
+
 
     /* Using allBlockTabInfo instead of going through the intermediate tabState array */
     //var calculateTabsInfo = function() {
@@ -8914,6 +8585,56 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 module.exports = SidePane;
 
+//<div style={{position: 'relative', left: '120px', bottom: '32px', width: '230px', height: '50px'}} >
+//  <p key={block.inports[j].name + "textContent"}
+//     id={block.inports[j].name + "textContent"}
+//     style={{fontSize: '15px', position: 'relative'}} >
+//    {String(block.inports[j].name).toUpperCase()}
+//  </p>
+//  <button style={{position: 'relative', left: '165px'}}  >Icon</button>
+//  <input style={{position: 'relative', textAlign: 'center'}}
+//         value={'number'} readOnly="readonly" maxLength="10" size="10" />
+//
+//</div>
+
+//inportDivs.push(
+//  <input style={{float: 'right', margin: "0 30px 0 0"}} value="Hello" />
+//);
+
+//interact(interactJsIdString)
+//  .on('tap', function(e){
+//    e.stopPropagation();
+//    e.stopImmediatePropagation();
+//    /* I guess I'll be passing the parameter 'j' here to the function? */
+//    this.toggleTreeviewContent();
+//  }.bind(this));
+
+//tabContent.push(<p>, </p>);
+
+/* Using svg */
+//inportDivs.push(
+//  <svg key={block.inports[j].name + "content"} >
+//    <g transform="translate(0, 0)" >
+//
+//      <text key={block.inports[j].name + "textContent"}
+//         id={block.inports[j].name + "textContent"}
+//            style={{fill: "white", fontSize: "16"}}
+//      x="0" y="20">
+//        {String(block.inports[j].name).toUpperCase()}
+//      </text>
+//      <rect width="80" height="20" style={{fill: "white", stroke: "red"}} x="100" y="5"/>
+//      </g>
+//  </svg>
+//);
+
+//inportDivs.push(
+//  <p key={block.inports[j].name + "textContent"}
+//     id={block.inports[j].name + "textContent"}
+//     style={{fontSize: '15px'}} >
+//    {String(block.inports[j].name).toUpperCase()}
+//  </p>
+//);
+
 //
 //dropdownChange:function(tab) {
 //  this.refs.panel.setSelectedIndex(tab, null);
@@ -8968,7 +8689,7 @@ module.exports = SidePane;
 //  );
 //}.bind(this));
 
-},{"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":19,"react":218,"react-panels":40,"react-treeview":43}],28:[function(require,module,exports){
+},{"../../node_modules/interact.js":36,"../actions/paneActions":4,"../actions/sidePaneActions":7,"../stores/paneStore":14,"../stores/sidePaneStore":15,"./dropdownMenu":19,"react":218,"react-panels":40,"react-treeview":43}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -9094,7 +8815,6 @@ var BothPanes = React.createClass({displayName: "BothPanes",
   },
 
   componentDidMount: function(){
-    console.log(this.state);
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
@@ -9117,7 +8837,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
   render: function(){
 
-    console.log(this.state);
+    console.log("render: sidebar");
     //if(this.state.tabState[0]) {
     //  console.log(this.state.tabState[0].position.x);
     //}

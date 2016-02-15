@@ -29,6 +29,7 @@ var BlockRectangles = React.createClass({
   //},
 
   render: function(){
+    //console.log("render: blockRectangles");
 
     return(
       <g>

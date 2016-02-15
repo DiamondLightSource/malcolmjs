@@ -40,42 +40,38 @@ var Ports = React.createClass({
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    console.log("portClick");
     /* Need to either invoke an action or fire an event to cause an edge to be drawn */
     /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
 
     var target;
 
-    console.log(e.currentTarget);
 
     if(e.currentTarget.className.animVal === "portArc"){
-      console.log("clicked on an arc, so need to find the corresponding port");
-      console.log(e.currentTarget.parentNode);
-      console.log(e.currentTarget.parentNode.children);
+      //console.log("clicked on an arc, so need to find the corresponding port");
+      //console.log(e.currentTarget.parentNode);
+      //console.log(e.currentTarget.parentNode.children);
       for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
-        console.log(e.currentTarget.parentNode.children[i]);
+        //console.log(e.currentTarget.parentNode.children[i]);
         if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
           || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
           target = e.currentTarget.parentNode.children[i];
-          console.log(target);
         }
       }
     }
     else{
-      console.log("clicked on a port, makes it easier");
+      //console.log("clicked on a port, makes it easier");
       target = e.currentTarget;
     }
-    console.log(target);
 
     blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){
-      console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      //console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
       theGraphDiamondHandle.dispatchEvent(EdgePreview);
     }
     else if(this.props.storingFirstPortClicked !== null){
-      console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      //console.log("a port has already been clicked before, so dispatch TwoPortClicks");
       theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
     }
     //theGraphDiamondHandle.dispatchEvent(PortSelect);
@@ -106,6 +102,7 @@ var Ports = React.createClass({
   },
 
   render: function(){
+    console.log("render: ports");
 
     var blockId = this.props.blockId;
     var blockInfo = this.props.blockInfo;
@@ -126,8 +123,8 @@ var Ports = React.createClass({
       var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
       //console.log(allNodeTypesStyling[nodeType]);
       inports.push(
-        <g id={blockId + inportName + "portAndText"} transform={portAndTextTransform} >
-          <path d={this.makeArcPath("inport")} className="portArc"
+        <g key={blockId + inportName + "portAndText"} id={blockId + inportName + "portAndText"} transform={portAndTextTransform} >
+          <path key={blockId + inportName + "-arc"} d={this.makeArcPath("inport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default' }} />
           <circle key={blockId + inportName} className="inport"
                   cx={0}
@@ -158,8 +155,8 @@ var Ports = React.createClass({
       var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
         + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
       outports.push(
-        <g id={blockId + outportName + "portAndText"} transform={portAndTextTransform} >
-          <path d={this.makeArcPath("outport")} className="portArc"
+        <g key={blockId + outportName + "portAndText"} id={blockId + outportName + "portAndText"} transform={portAndTextTransform} >
+          <path key={blockId + outportName + "-arc"} d={this.makeArcPath("outport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default'  }} />
           <circle key={blockId + outportName} className="outport"
                   cx={0}

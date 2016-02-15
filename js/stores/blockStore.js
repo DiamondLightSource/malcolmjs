@@ -74,25 +74,21 @@ var blockSelectedStates = {
 };
 
 function appendToBlockSelectedStates(BlockId){
-  console.log("blockSelectedStates before adding a new block:");
-  console.log(blockSelectedStates);
+  //console.log("blockSelectedStates before adding a new block:");
   blockSelectedStates[BlockId] = false;
-  console.log("blockSelectedStates after adding a new block:");
-  console.log(blockSelectedStates);
+  //console.log("blockSelectedStates after adding a new block:");
 }
 
 function deselectAllBlocks(){
   for(var block in blockSelectedStates){
     blockSelectedStates[block] = false
   }
-  console.log(blockSelectedStates);
 }
 
 function checkIfAnyBlocksAreSelected(){
   var areAnyBlocksSelected = null;
   for(var block in blockSelectedStates){
     if(blockSelectedStates[block] === true){
-      console.log(blockSelectedStates[block]);
       areAnyBlocksSelected = true;
       break;
     }
@@ -117,14 +113,11 @@ function selectEdge(Edge){
 }
 
 function getAnyEdgeSelectedState(EdgeId){
-  console.log(edgeSelectedStates);
-  console.log(EdgeId);
   if(edgeSelectedStates[EdgeId] === undefined || null){
-    console.log("edge selected state is underfined or null, best check it out...");
+    //console.log("edge selected state is underfined or null, best check it out...");
   }
   else{
-    console.log("that edge's state exists, hooray!");
-    console.log(edgeSelectedStates[EdgeId]);
+    //console.log("that edge's state exists, hooray!");
     return edgeSelectedStates[EdgeId];
   }
 }
@@ -156,7 +149,6 @@ function deselectAllEdges(){
   for(var edge in edgeSelectedStates){
     edgeSelectedStates[edge] = false
   }
-  console.log(edgeSelectedStates);
 }
 
 var blockLibrary = {
@@ -427,8 +419,7 @@ var allBlockInfo = {
 
 function addEdgeToAllBlockInfo(Info){
 
-  console.log("Inside addEdgeToAllBlockInfo, here's the input:");
-  console.log(Info);
+  //console.log("Inside addEdgeToAllBlockInfo, here's the input:");
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
@@ -438,9 +429,7 @@ function addEdgeToAllBlockInfo(Info){
         block: Info.toBlock,
         port: Info.toBlockPort
       };
-      console.log(newEdgeToFromBlock);
       allBlockInfo[Info.fromBlock].outports[i].connected = true;
-      console.log(allBlockInfo[Info.fromBlock].outports[i]);
       allBlockInfo[Info.fromBlock].outports[i].connectedTo.push(newEdgeToFromBlock);
     }
   }
@@ -452,14 +441,12 @@ function addEdgeToAllBlockInfo(Info){
         block: Info.fromBlock,
         port: Info.fromBlockPort
       };
-      console.log(newEdgeToToBlock);
       allBlockInfo[Info.toBlock].inports[j].connected = true;
 
       /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
       allBlockInfo[Info.toBlock].inports[j].connectedTo = newEdgeToToBlock;
     }
   }
-  console.log(allBlockInfo);
 }
 
 function removeEdgeFromAllBlockInfo(Info){
@@ -471,7 +458,7 @@ function removeEdgeFromAllBlockInfo(Info){
       allBlockInfo[Info.toBlock].inports[i].connectedTo = null;
     }
     else if(allBlockInfo[Info.toBlock].inports[i].name !== Info.toBlockPort){
-      console.log("not the right port, leave that info alone");
+      //console.log("not the right port, leave that info alone");
     }
   }
 
@@ -487,12 +474,10 @@ function removeEdgeFromAllBlockInfo(Info){
         && allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].port === Info.toBlockPort){
           /* Remove this particular object from the connectedTo array */
           allBlockInfo[Info.fromBlock].outports[j].connectedTo.splice(k, 1);
-          console.log(allBlockInfo[Info.fromBlock].outports[j].connectedTo);
 
           /* Also need to remove it from the edgeSelectedStates object */
 
           delete edgeSelectedStates[Info.edgeId];
-          console.log(edgeSelectedStates);
           //window.alert("hsduiad");
 
           /* And also need to reset the port styling somehow too... */
@@ -503,16 +488,16 @@ function removeEdgeFromAllBlockInfo(Info){
             allBlockInfo[Info.fromBlock].outports[j].connected = false;
           }
           else if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length > 0){
-            console.log("don't reset connected, there are other connections to that outport still");
+            //console.log("don't reset connected, there are other connections to that outport still");
           }
         }
         else{
-          console.log("not the correct block or port (or both), so don't alter anything");
+          //console.log("not the correct block or port (or both), so don't alter anything");
         }
       }
     }
     else if(allBlockInfo[Info.fromBlock].outports[j].name !== Info.fromBlockPort){
-      console.log("not the correct outport, carry on");
+      //console.log("not the correct outport, carry on");
     }
   }
 
@@ -620,7 +605,7 @@ function appendToAllBlockInfo(BlockInfo){
   //console.log(allNodeInfo);
   //newlyAddedNode = allNodeInfo[newGateId];
   //console.log(newlyAddedNode);
-  console.log(BlockInfo);
+
   //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
   allBlockInfo[BlockInfo] = {
     type: 'Gate',
@@ -678,12 +663,10 @@ function appendToAllBlockInfo(BlockInfo){
   //
   //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
   //}
-  console.log(blockInfoTemplates.Gate);
   //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
   //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
   //console.log(randomNodePositionGenerator());
   //console.log(randomNodePositionGenerator());
-  console.log(allBlockInfo);
 }
 
 var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
