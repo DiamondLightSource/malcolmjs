@@ -123,8 +123,6 @@ var EdgePreview = React.createClass({
     //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
 
-    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
-
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);

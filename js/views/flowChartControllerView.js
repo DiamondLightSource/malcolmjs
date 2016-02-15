@@ -21,11 +21,9 @@ function getFlowChartState(){
     storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
     blockLibrary: blockStore.getBlockLibrary(),
-    allBlockTypesStyling: blockStore.getAllBlockTypesStyling(),
     portMouseOver: blockStore.getPortMouseOver(),
     areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
-    allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling(),
 
     edgePreview: blockStore.getEdgePreview(),
     previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
@@ -79,8 +77,8 @@ var FlowChartControllerView = React.createClass({
         allBlockInfo={this.state.allBlockInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
         storingFirstPortClicked={this.state.storingFirstPortClicked}
         blockLibrary={this.state.blockLibrary}
-        allBlockTypesStyling={this.state.allBlockTypesStyling} areAnyBlocksSelected={this.state.areAnyBlocksSelected}
-        areAnyEdgesSelected={this.state.areAnyEdgesSelected} allBlockTypesPortStyling={this.state.allBlockTypesPortStyling}
+        areAnyBlocksSelected={this.state.areAnyBlocksSelected}
+        areAnyEdgesSelected={this.state.areAnyEdgesSelected}
         portMouseOver={this.state.portMouseOver} edgePreview={this.state.edgePreview}
         previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}

@@ -1577,321 +1577,321 @@ var GateBlockStyling = {
   }
 };
 
-var SelectedGateNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        set: {
-          x: 0,
-          y: 23
-        },
-        reset: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        out: {
-          x: 65,
-          y: 31
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      set: {
-        x : 9,
-        y: 24.5
-      },
-      reset: {
-        x : 9,
-        y: 42.5
-      },
-      out: {
-        x: 39,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var TGenBlockStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 31
-        }
-      },
-      outportPositions: {
-        posn: {
-          x: 65,
-          y: 31
-        }
-      }
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 4,
-        y: 33.5
-      },
-      posn: {
-        x: 37,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var SelectedTGenNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 31
-        }
-      },
-      outportPositions: {
-        posn: {
-          x: 65,
-          y: 31
-        }
-      }
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 6,
-        y: 33.5
-      },
-      posn: {
-        x: 35,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var PCompBlockStyling = {
-  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
-  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
-   */
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 23
-        },
-        posn: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        act: {
-          x: 65,
-          y: 23
-        },
-        out: {
-          x: 65,
-          y: 31
-        },
-        pulse: {
-          x: 65,
-          y: 38
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 7,
-        y: 24.5
-      },
-      posn: {
-        x : 7,
-        y: 42.5
-      },
-      act: {
-        x: 42,
-        y: 23
-      },
-      out: {
-        x: 42,
-        y: 33.5
-      },
-      pulse: {
-        x: 35,
-        y: 43
-      }
-    }
-  }
-};
-
-var SelectedPCompNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 23
-        },
-        posn: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        act: {
-          x: 65,
-          y: 23
-        },
-        out: {
-          x: 65,
-          y: 31
-        },
-        pulse: {
-          x: 65,
-          y: 38
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 9,
-        y: 24.5
-      },
-      posn: {
-        x : 9,
-        y: 42.5
-      },
-      act: {
-        x: 40,
-        y: 23
-      },
-      out: {
-        x: 40,
-        y: 33.5
-      },
-      pulse: {
-        x: 33,
-        y: 43
-      }
-    }
-  }
-};
-
-var allBlockTypesPortStyling = {
-  'Gate': GateBlockStyling.ports.portPositions,
-  'TGen': TGenBlockStyling.ports.portPositions,
-  'PComp': PCompBlockStyling.ports.portPositions
-};
-
-var allBlockTypesStyling = {
-  'Gate': GateBlockStyling,
-  'TGen': TGenBlockStyling,
-  'PComp': PCompBlockStyling
-};
+//var SelectedGateNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        set: {
+//          x: 0,
+//          y: 23
+//        },
+//        reset: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        out: {
+//          x: 65,
+//          y: 31
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      set: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      reset: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      out: {
+//        x: 39,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var TGenBlockStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 4,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 37,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedTGenNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 6,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 35,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var PCompBlockStyling = {
+//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
+//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
+//   */
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 7,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 7,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 42,
+//        y: 23
+//      },
+//      out: {
+//        x: 42,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 35,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedPCompNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 40,
+//        y: 23
+//      },
+//      out: {
+//        x: 40,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 33,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var allBlockTypesPortStyling = {
+//  'Gate': GateBlockStyling.ports.portPositions,
+//  'TGen': TGenBlockStyling.ports.portPositions,
+//  'PComp': PCompBlockStyling.ports.portPositions
+//};
+//
+//var allBlockTypesStyling = {
+//  'Gate': GateBlockStyling,
+//  'TGen': TGenBlockStyling,
+//  'PComp': PCompBlockStyling
+//};
 
 var blockStyling = {
   outerRectangleHeight: 76,
@@ -2020,6 +2020,12 @@ var blockStore = assign({}, EventEmitter.prototype, {
   //getEdgesToRenderArray: function(){
   //  return edgesToRender;
   //},
+  //getAllBlockTypesStyling: function(){
+  //  return allBlockTypesStyling;
+  //},
+  //getAllBlockTypesPortStyling: function(){
+  //  return allBlockTypesPortStyling;
+  //},
 
   getAllBlockInfo: function(){
     return allBlockInfo;
@@ -2047,10 +2053,6 @@ var blockStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getAllBlockTypesPortStyling: function(){
-    return allBlockTypesPortStyling;
-  },
-
   getGraphPosition: function(){
     return graphPosition;
   },
@@ -2073,10 +2075,6 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getPortMouseOver: function(){
     return portMouseOver;
-  },
-
-  getAllBlockTypesStyling: function(){
-    return allBlockTypesStyling;
   },
 
   getSubsetOfAllBlockInfo: function(){
@@ -4378,6 +4376,9 @@ var BlockRectangle = require('./blockRectangle');
 
 var interact = require('../../node_modules/interact.js');
 
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+
 var Block = React.createClass({displayName: "Block",
 
   componentDidMount: function(){
@@ -4405,6 +4406,7 @@ var Block = React.createClass({displayName: "Block",
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
+          Perf.start();
           //console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
@@ -4412,6 +4414,8 @@ var Block = React.createClass({displayName: "Block",
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragend");
+          Perf.stop();
+          Perf.printWasted(Perf.getLastMeasurements());
         }
       });
 
@@ -4435,28 +4439,30 @@ var Block = React.createClass({displayName: "Block",
       .off('tap', this.blockSelect);
   },
 
-  componentWillReceiveProps: function(nextProps){
-    //console.log(this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x);
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState){
-    //console.log("shouldComponentUpdate");
-    //console.log(nextProps);
-    //console.log(this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-    return (
-      true
-    );
-  },
+  //componentWillReceiveProps: function(nextProps){
+  //  //console.log(this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x);
+  //},
+  //
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  //console.log("shouldComponentUpdate");
+  //  //console.log(nextProps);
+  //  //console.log(this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+  //  //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+  //  return (
+  //    true
+  //  );
+  //},
 
   handleInteractJsDrag: function(item){
     //console.log("interactJs drag is occurring");
     blockActions.interactJsDrag(item);
-    this.startDrag = null;
+
+    /* For debouncing */
+    //this.startDrag = null;
   },
 
   //mouseOver: function(){
@@ -4575,29 +4581,38 @@ var Block = React.createClass({displayName: "Block",
     e.stopImmediatePropagation();
     var target = e.target.id;
 
-    if(this.startDrag === null || this.startDrag === undefined){
-      this.startDrag = {
-        x: 0,
-        y: 0
-      };
-      //var accumulatedXMovement = this.startDrag.x;
-      //var accumulatedYMovement = this.startDrag.y;
-    }
-
-    this.startDrag.x += e.dx;
-    this.startDrag.y += e.dy;
-
 
     var deltaMovement = {
       target: target,
-      x: this.startDrag.x,
-      y: this.startDrag.y
+      x: e.dx,
+      y: e.dy
     };
 
+    this.handleInteractJsDrag(deltaMovement);
 
+    /* For debouncing */
+    //if(this.startDrag === null || this.startDrag === undefined){
+    //  this.startDrag = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
+    //
+    //this.startDrag.x += e.dx;
+    //this.startDrag.y += e.dy;
+    //
+    //
+    //var deltaMovement = {
+    //  target: target,
+    //  x: this.startDrag.x,
+    //  y: this.startDrag.y
+    //};
+    //
+    //clearTimeout(this.timer);
     //this.interactJsDragDebounce(deltaMovement);
-    clearTimeout(this.timer);
-    this.interactJsDragDebounce(deltaMovement);
+
+
+
 
     /* Currently doesn't work very well, selects a node after dragging a bit... */
     /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
@@ -4661,6 +4676,7 @@ var Block = React.createClass({displayName: "Block",
 
   render: function(){
     console.log("render: block");
+    console.log(this.props.id);
 
     var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 
@@ -4679,13 +4695,11 @@ var Block = React.createClass({displayName: "Block",
           "/* To allow the cursor to change when hovering over the entire block container */", 
 
           React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, 
-                          allBlockTypesStyling: this.props.allBlockTypesStyling, 
                           portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                           selected: this.props.selected, 
                           blockStyling: this.props.blockStyling}), 
 
           React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, 
-                 allBlockTypesStyling: this.props.allBlockTypesStyling, 
                  portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                  storingFirstPortClicked: this.props.storingFirstPortClicked, 
                  selected: this.props.selected, 
@@ -4784,7 +4798,7 @@ module.exports = Block;
 //  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 ///>
 
-},{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/react":218,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11,"./blockRectangle":17,"./ports.js":26}],17:[function(require,module,exports){
+},{"../../node_modules/interact.js":36,"../../node_modules/react-dom/dist/react-dom.js":38,"../../node_modules/react/lib/ReactDefaultPerf.js":98,"../../node_modules/react/react":218,"../actions/blockActions.js":1,"../actions/paneActions":4,"../stores/blockStore.js":11,"./blockRectangle":17,"./ports.js":26}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -5278,8 +5292,6 @@ var Edge = React.createClass({displayName: "Edge",
     var fromBlockPort = this.props.fromBlockPort;
     var toBlockPort = this.props.toBlockPort;
 
-    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
-
     var fromBlockType = this.props.fromBlockType;
     var toBlockType = this.props.toBlockType;
 
@@ -5479,8 +5491,6 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     //console.log(this.props.id);
     //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
-
-    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
 
     //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
@@ -5705,11 +5715,9 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //  /*Dunno how to say it could be null? */
     //])
     blockLibrary: React.PropTypes.object,
-    allBlockTypesStyling: React.PropTypes.object,
     portMouseOver: React.PropTypes.bool,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
-    allBlockTypesPortStyling: React.PropTypes.object,
   },
 
   componentDidMount: function () {
@@ -6546,7 +6554,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       blocks.push(
         React.createElement(Block, {key: block, id: block, className: "block", 
                blockInfo: this.props.allBlockInfo[block], 
-               allBlockTypesStyling: this.props.allBlockTypesStyling, 
                areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
                portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                storingFirstPortClicked: this.props.storingFirstPortClicked, 
@@ -6577,7 +6584,6 @@ var FlowChart = React.createClass({displayName: "FlowChart",
             React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 
                   fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, 
                   toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, 
-                  allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
                   fromBlockInfo: this.props.allBlockInfo[fromBlock], 
                   toBlockInfo: this.props.allBlockInfo[toBlock], 
                   areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
@@ -6605,7 +6611,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       edgePreview.push(
         React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, interactJsDragPan: this.interactJsDragPan, 
                      failedPortConnection: this.failedPortConnection, 
-                     edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
+                     edgePreview: this.props.edgePreview, 
                      fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position, 
                      fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock], 
                      blockStyling: this.props.blockStyling}
@@ -7545,11 +7551,9 @@ function getFlowChartState(){
     storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
     blockLibrary: blockStore.getBlockLibrary(),
-    allBlockTypesStyling: blockStore.getAllBlockTypesStyling(),
     portMouseOver: blockStore.getPortMouseOver(),
     areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
-    allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling(),
 
     edgePreview: blockStore.getEdgePreview(),
     previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
@@ -7603,8 +7607,8 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
         allBlockInfo: this.state.allBlockInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
         storingFirstPortClicked: this.state.storingFirstPortClicked, 
         blockLibrary: this.state.blockLibrary, 
-        allBlockTypesStyling: this.state.allBlockTypesStyling, areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
-        areAnyEdgesSelected: this.state.areAnyEdgesSelected, allBlockTypesPortStyling: this.state.allBlockTypesPortStyling, 
+        areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
+        areAnyEdgesSelected: this.state.areAnyEdgesSelected, 
         portMouseOver: this.state.portMouseOver, edgePreview: this.state.edgePreview, 
         previousMouseCoordsOnZoom: this.state.previousMouseCoordsOnZoom, 
         blockStyling: this.state.blockStyling}

@@ -808,321 +808,6 @@ var GateBlockStyling = {
   }
 };
 
-var SelectedGateNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        set: {
-          x: 0,
-          y: 23
-        },
-        reset: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        out: {
-          x: 65,
-          y: 31
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      set: {
-        x : 9,
-        y: 24.5
-      },
-      reset: {
-        x : 9,
-        y: 42.5
-      },
-      out: {
-        x: 39,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var TGenBlockStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 31
-        }
-      },
-      outportPositions: {
-        posn: {
-          x: 65,
-          y: 31
-        }
-      }
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 4,
-        y: 33.5
-      },
-      posn: {
-        x: 37,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var SelectedTGenNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 31
-        }
-      },
-      outportPositions: {
-        posn: {
-          x: 65,
-          y: 31
-        }
-      }
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 6,
-        y: 33.5
-      },
-      posn: {
-        x: 35,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var PCompBlockStyling = {
-  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
-  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
-   */
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 23
-        },
-        posn: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        act: {
-          x: 65,
-          y: 23
-        },
-        out: {
-          x: 65,
-          y: 31
-        },
-        pulse: {
-          x: 65,
-          y: 38
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 7,
-        y: 24.5
-      },
-      posn: {
-        x : 7,
-        y: 42.5
-      },
-      act: {
-        x: 42,
-        y: 23
-      },
-      out: {
-        x: 42,
-        y: 33.5
-      },
-      pulse: {
-        x: 35,
-        y: 43
-      }
-    }
-  }
-};
-
-var SelectedPCompNodeStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 65,
-      width: 65,
-      rx: 7,
-      ry: 7
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        ena: {
-          x: 0,
-          y: 23
-        },
-        posn: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        act: {
-          x: 65,
-          y: 23
-        },
-        out: {
-          x: 65,
-          y: 31
-        },
-        pulse: {
-          x: 65,
-          y: 38
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 4,
-      fill: 'lightgrey',
-      stroke: 'black',
-      strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      ena: {
-        x : 9,
-        y: 24.5
-      },
-      posn: {
-        x : 9,
-        y: 42.5
-      },
-      act: {
-        x: 40,
-        y: 23
-      },
-      out: {
-        x: 40,
-        y: 33.5
-      },
-      pulse: {
-        x: 33,
-        y: 43
-      }
-    }
-  }
-};
-
-var allBlockTypesPortStyling = {
-  'Gate': GateBlockStyling.ports.portPositions,
-  'TGen': TGenBlockStyling.ports.portPositions,
-  'PComp': PCompBlockStyling.ports.portPositions
-};
-
-var allBlockTypesStyling = {
-  'Gate': GateBlockStyling,
-  'TGen': TGenBlockStyling,
-  'PComp': PCompBlockStyling
-};
 
 var blockStyling = {
   outerRectangleHeight: 76,
@@ -1251,6 +936,12 @@ var blockStore = assign({}, EventEmitter.prototype, {
   //getEdgesToRenderArray: function(){
   //  return edgesToRender;
   //},
+  //getAllBlockTypesStyling: function(){
+  //  return allBlockTypesStyling;
+  //},
+  //getAllBlockTypesPortStyling: function(){
+  //  return allBlockTypesPortStyling;
+  //},
 
   getAllBlockInfo: function(){
     return allBlockInfo;
@@ -1278,10 +969,6 @@ var blockStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
-  getAllBlockTypesPortStyling: function(){
-    return allBlockTypesPortStyling;
-  },
-
   getGraphPosition: function(){
     return graphPosition;
   },
@@ -1304,10 +991,6 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getPortMouseOver: function(){
     return portMouseOver;
-  },
-
-  getAllBlockTypesStyling: function(){
-    return allBlockTypesStyling;
   },
 
   getSubsetOfAllBlockInfo: function(){
@@ -1587,6 +1270,322 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 });
 
 module.exports = blockStore;
+
+//var SelectedGateNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        set: {
+//          x: 0,
+//          y: 23
+//        },
+//        reset: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        out: {
+//          x: 65,
+//          y: 31
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      set: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      reset: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      out: {
+//        x: 39,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var TGenBlockStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 4,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 37,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedTGenNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 6,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 35,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var PCompBlockStyling = {
+//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
+//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
+//   */
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 7,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 7,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 42,
+//        y: 23
+//      },
+//      out: {
+//        x: 42,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 35,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedPCompNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 40,
+//        y: 23
+//      },
+//      out: {
+//        x: 40,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 33,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var allBlockTypesPortStyling = {
+//  'Gate': GateBlockStyling.ports.portPositions,
+//  'TGen': TGenBlockStyling.ports.portPositions,
+//  'PComp': PCompBlockStyling.ports.portPositions
+//};
+//
+//var allBlockTypesStyling = {
+//  'Gate': GateBlockStyling,
+//  'TGen': TGenBlockStyling,
+//  'PComp': PCompBlockStyling
+//};
 
 /* Put blockStore.dispatchToken in front of the whole switch case above */
 

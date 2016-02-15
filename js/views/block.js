@@ -13,6 +13,9 @@ var BlockRectangle = require('./blockRectangle');
 
 var interact = require('../../node_modules/interact.js');
 
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+
 var Block = React.createClass({
 
   componentDidMount: function(){
@@ -40,6 +43,7 @@ var Block = React.createClass({
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
+          Perf.start();
           //console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
@@ -47,6 +51,8 @@ var Block = React.createClass({
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragend");
+          Perf.stop();
+          Perf.printWasted(Perf.getLastMeasurements());
         }
       });
 
@@ -70,28 +76,30 @@ var Block = React.createClass({
       .off('tap', this.blockSelect);
   },
 
-  componentWillReceiveProps: function(nextProps){
-    //console.log(this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x);
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState){
-    //console.log("shouldComponentUpdate");
-    //console.log(nextProps);
-    //console.log(this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-    return (
-      true
-    );
-  },
+  //componentWillReceiveProps: function(nextProps){
+  //  //console.log(this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x);
+  //},
+  //
+  //shouldComponentUpdate: function(nextProps, nextState){
+  //  //console.log("shouldComponentUpdate");
+  //  //console.log(nextProps);
+  //  //console.log(this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+  //  //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+  //  return (
+  //    true
+  //  );
+  //},
 
   handleInteractJsDrag: function(item){
     //console.log("interactJs drag is occurring");
     blockActions.interactJsDrag(item);
-    this.startDrag = null;
+
+    /* For debouncing */
+    //this.startDrag = null;
   },
 
   //mouseOver: function(){
@@ -210,29 +218,38 @@ var Block = React.createClass({
     e.stopImmediatePropagation();
     var target = e.target.id;
 
-    if(this.startDrag === null || this.startDrag === undefined){
-      this.startDrag = {
-        x: 0,
-        y: 0
-      };
-      //var accumulatedXMovement = this.startDrag.x;
-      //var accumulatedYMovement = this.startDrag.y;
-    }
-
-    this.startDrag.x += e.dx;
-    this.startDrag.y += e.dy;
-
 
     var deltaMovement = {
       target: target,
-      x: this.startDrag.x,
-      y: this.startDrag.y
+      x: e.dx,
+      y: e.dy
     };
 
+    this.handleInteractJsDrag(deltaMovement);
 
+    /* For debouncing */
+    //if(this.startDrag === null || this.startDrag === undefined){
+    //  this.startDrag = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
+    //
+    //this.startDrag.x += e.dx;
+    //this.startDrag.y += e.dy;
+    //
+    //
+    //var deltaMovement = {
+    //  target: target,
+    //  x: this.startDrag.x,
+    //  y: this.startDrag.y
+    //};
+    //
+    //clearTimeout(this.timer);
     //this.interactJsDragDebounce(deltaMovement);
-    clearTimeout(this.timer);
-    this.interactJsDragDebounce(deltaMovement);
+
+
+
 
     /* Currently doesn't work very well, selects a node after dragging a bit... */
     /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
@@ -296,6 +313,7 @@ var Block = React.createClass({
 
   render: function(){
     console.log("render: block");
+    console.log(this.props.id);
 
     var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
 
@@ -314,13 +332,11 @@ var Block = React.createClass({
           /* To allow the cursor to change when hovering over the entire block container */
 
           <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
-                          allBlockTypesStyling={this.props.allBlockTypesStyling}
                           portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                           selected={this.props.selected}
                           blockStyling={this.props.blockStyling}/>
 
           <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
-                 allBlockTypesStyling={this.props.allBlockTypesStyling}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                  storingFirstPortClicked={this.props.storingFirstPortClicked}
                  selected={this.props.selected}

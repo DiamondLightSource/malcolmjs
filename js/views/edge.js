@@ -156,8 +156,6 @@ var Edge = React.createClass({
     var fromBlockPort = this.props.fromBlockPort;
     var toBlockPort = this.props.toBlockPort;
 
-    var allBlockTypesPortStyling = this.props.allBlockTypesPortStyling;
-
     var fromBlockType = this.props.fromBlockType;
     var toBlockType = this.props.toBlockType;
 

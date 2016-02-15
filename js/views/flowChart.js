@@ -72,11 +72,9 @@ var FlowChart = React.createClass({
     //  /*Dunno how to say it could be null? */
     //])
     blockLibrary: React.PropTypes.object,
-    allBlockTypesStyling: React.PropTypes.object,
     portMouseOver: React.PropTypes.bool,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
-    allBlockTypesPortStyling: React.PropTypes.object,
   },
 
   componentDidMount: function () {
@@ -913,7 +911,6 @@ var FlowChart = React.createClass({
       blocks.push(
         <Block key={block} id={block} className="block"
                blockInfo={this.props.allBlockInfo[block]}
-               allBlockTypesStyling={this.props.allBlockTypesStyling}
                areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}
@@ -944,7 +941,6 @@ var FlowChart = React.createClass({
             <Edge key={edgeLabel} id={edgeLabel}
                   fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort}
                   toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort}
-                  allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
                   fromBlockInfo={this.props.allBlockInfo[fromBlock]}
                   toBlockInfo={this.props.allBlockInfo[toBlock]}
                   areAnyEdgesSelected={this.props.areAnyEdgesSelected}
@@ -972,7 +968,7 @@ var FlowChart = React.createClass({
       edgePreview.push(
         <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel} interactJsDragPan={this.interactJsDragPan}
                      failedPortConnection={this.failedPortConnection}
-                     edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
+                     edgePreview={this.props.edgePreview}
                      fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
                      fromBlockInfo={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
                      blockStyling={this.props.blockStyling}
