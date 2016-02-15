@@ -11,24 +11,24 @@ var blockStore = require('../stores/blockStore.js');
 
 function getFlowChartState(){
   return{
-    graphPosition: blockStore.getGraphPosition(),
-    graphZoomScale: blockStore.getGraphZoomScale(),
+    graphPosition: JSON.parse(JSON.stringify(blockStore.getGraphPosition())),
+    graphZoomScale: JSON.parse(JSON.stringify(blockStore.getGraphZoomScale())),
     //allEdges: NodeStore.getAllEdges(),
     //nodesToRender: NodeStore.getNodesToRenderArray(),
     //edgesToRender: NodeStore.getEdgesToRenderArray(),
-    allBlockInfo: blockStore.getAllBlockInfo(),
-    portThatHasBeenClicked: blockStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    portThatHasBeenClicked: JSON.parse(JSON.stringify(blockStore.getPortThatHasBeenClicked())),
+    storingFirstPortClicked: JSON.parse(JSON.stringify(blockStore.getStoringFirstPortClicked())),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    blockLibrary: blockStore.getBlockLibrary(),
-    portMouseOver: blockStore.getPortMouseOver(),
-    areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
-    areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
+    blockLibrary: JSON.parse(JSON.stringify(blockStore.getBlockLibrary())),
+    //portMouseOver: JSON.parse(JSON.stringify(blockStore.getPortMouseOver())),
+    areAnyBlocksSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyBlocksAreSelected())),
+    areAnyEdgesSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyEdgesAreSelected())),
 
-    edgePreview: blockStore.getEdgePreview(),
-    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
+    edgePreview: JSON.parse(JSON.stringify(blockStore.getEdgePreview())),
+    previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(blockStore.getPreviousMouseCoordsOnZoom())),
 
-    blockStyling: blockStore.getBlockStyling()
+    blockStyling: JSON.parse(JSON.stringify(blockStore.getBlockStyling()))
   }
 }
 
@@ -73,13 +73,16 @@ var FlowChartControllerView = React.createClass({
   render: function(){
     return(
       <FlowChart
-        graphPosition={this.state.graphPosition} graphZoomScale={this.state.graphZoomScale}
-        allBlockInfo={this.state.allBlockInfo} portThatHasBeenClicked={this.state.portThatHasBeenClicked}
+        graphPosition={this.state.graphPosition}
+        graphZoomScale={this.state.graphZoomScale}
+        allBlockInfo={this.state.allBlockInfo}
+        portThatHasBeenClicked={this.state.portThatHasBeenClicked}
         storingFirstPortClicked={this.state.storingFirstPortClicked}
         blockLibrary={this.state.blockLibrary}
         areAnyBlocksSelected={this.state.areAnyBlocksSelected}
         areAnyEdgesSelected={this.state.areAnyEdgesSelected}
-        portMouseOver={this.state.portMouseOver} edgePreview={this.state.edgePreview}
+        //portMouseOver={this.state.portMouseOver}
+        edgePreview={this.state.edgePreview}
         previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}
       />

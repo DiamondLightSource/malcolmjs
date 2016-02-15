@@ -1577,321 +1577,6 @@ var GateBlockStyling = {
   }
 };
 
-//var SelectedGateNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        set: {
-//          x: 0,
-//          y: 23
-//        },
-//        reset: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        out: {
-//          x: 65,
-//          y: 31
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      set: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      reset: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      out: {
-//        x: 39,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var TGenBlockStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 4,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 37,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedTGenNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 6,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 35,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var PCompBlockStyling = {
-//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
-//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
-//   */
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 7,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 7,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 42,
-//        y: 23
-//      },
-//      out: {
-//        x: 42,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 35,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedPCompNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 40,
-//        y: 23
-//      },
-//      out: {
-//        x: 40,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 33,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var allBlockTypesPortStyling = {
-//  'Gate': GateBlockStyling.ports.portPositions,
-//  'TGen': TGenBlockStyling.ports.portPositions,
-//  'PComp': PCompBlockStyling.ports.portPositions
-//};
-//
-//var allBlockTypesStyling = {
-//  'Gate': GateBlockStyling,
-//  'TGen': TGenBlockStyling,
-//  'PComp': PCompBlockStyling
-//};
 
 var blockStyling = {
   outerRectangleHeight: 76,
@@ -2270,7 +1955,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       portThatHasBeenClicked = item;
-      //console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.id);
+      console.log(portThatHasBeenClicked);
       blockStore.emitChange();
       break;
 
@@ -2354,6 +2039,322 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 });
 
 module.exports = blockStore;
+
+//var SelectedGateNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        set: {
+//          x: 0,
+//          y: 23
+//        },
+//        reset: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        out: {
+//          x: 65,
+//          y: 31
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      set: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      reset: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      out: {
+//        x: 39,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var TGenBlockStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 4,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 37,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedTGenNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 31
+//        }
+//      },
+//      outportPositions: {
+//        posn: {
+//          x: 65,
+//          y: 31
+//        }
+//      }
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 6,
+//        y: 33.5
+//      },
+//      posn: {
+//        x: 35,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var PCompBlockStyling = {
+//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
+//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
+//   */
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 7,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 7,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 42,
+//        y: 23
+//      },
+//      out: {
+//        x: 42,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 35,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var SelectedPCompNodeStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 65,
+//      width: 65,
+//      rx: 7,
+//      ry: 7
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        ena: {
+//          x: 0,
+//          y: 23
+//        },
+//        posn: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        act: {
+//          x: 65,
+//          y: 23
+//        },
+//        out: {
+//          x: 65,
+//          y: 31
+//        },
+//        pulse: {
+//          x: 65,
+//          y: 38
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 4,
+//      fill: 'lightgrey',
+//      stroke: 'black',
+//      strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      ena: {
+//        x : 9,
+//        y: 24.5
+//      },
+//      posn: {
+//        x : 9,
+//        y: 42.5
+//      },
+//      act: {
+//        x: 40,
+//        y: 23
+//      },
+//      out: {
+//        x: 40,
+//        y: 33.5
+//      },
+//      pulse: {
+//        x: 33,
+//        y: 43
+//      }
+//    }
+//  }
+//};
+//
+//var allBlockTypesPortStyling = {
+//  'Gate': GateBlockStyling.ports.portPositions,
+//  'TGen': TGenBlockStyling.ports.portPositions,
+//  'PComp': PCompBlockStyling.ports.portPositions
+//};
+//
+//var allBlockTypesStyling = {
+//  'Gate': GateBlockStyling,
+//  'TGen': TGenBlockStyling,
+//  'PComp': PCompBlockStyling
+//};
 
 /* Put blockStore.dispatchToken in front of the whole switch case above */
 
@@ -4440,22 +4441,58 @@ var Block = React.createClass({displayName: "Block",
   },
 
   //componentWillReceiveProps: function(nextProps){
-  //  //console.log(this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x);
+  //  console.log(this.props.blockInfo.position);
+  //  console.log(nextProps.blockInfo.position);
   //},
   //
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  //console.log("shouldComponentUpdate");
-  //  //console.log(nextProps);
-  //  //console.log(this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-  //  //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-  //  return (
-  //    true
-  //  );
+  //componentWillUpdate: function(nextProps, nextState){
+  //  console.log(this.props.blockInfo.position);
+  //  console.log(nextProps.blockInfo.position);
   //},
+  //
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log("shouldComponentUpdate");
+    //console.log(nextProps);
+    console.log(this.props.blockInfo.position);
+    console.log(nextProps.blockInfo.position);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+      nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    console.log(this.props.portThatHasBeenClicked);
+    //console.log(document.getElementById(this.props.portThatHasBeenClicked));
+    //console.log(document.getElementById(nextProps.portThatHasBeenClicked));
+    //
+    //var oldPortThatHasBeenClicked = document.getElementById(this.props.portThatHasBeenClicked);
+    //var newPortThatHasBeenClicked = document.getElementById(nextProps.portThatHasBeenClicked);
+    console.log("yep");
+
+    if(this.props.portThatHasBeenClicked === null){
+      console.log("portThatHasBeenClicked isn't anything");
+      return (
+        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null &&
+            this.props.portThatHasBeenClicked !== null &&
+            nextProps.storingFirstPortClicked !== null &&
+            this.props.storingFirstPortClicked !== null){
+      console.log("portThatHasBeenClicked is something");
+
+      return (
+        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+  },
 
   handleInteractJsDrag: function(item){
     //console.log("interactJs drag is occurring");
@@ -5715,7 +5752,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //  /*Dunno how to say it could be null? */
     //])
     blockLibrary: React.PropTypes.object,
-    portMouseOver: React.PropTypes.bool,
+    //portMouseOver: React.PropTypes.bool,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
   },
@@ -5922,10 +5959,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   addEdgePreview: function(){
     //console.log("addEdgePreview in flowChart has been invoked!");
 
-    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    var fromBlockId = document.getElementById(this.props.portThatHasBeenClicked).parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
     var portStringSliceIndex = fromBlockId.length;
-    var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
+    var portName = document.getElementById(this.props.portThatHasBeenClicked).id.slice(portStringSliceIndex);
 
     var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
 
@@ -5936,7 +5973,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
     //console.log(this.props.portThatHasBeenClicked.className);
 
-    if(this.props.portThatHasBeenClicked.className.baseVal === "inport"){
+    if(document.getElementById(this.props.portThatHasBeenClicked).className.baseVal === "inport"){
       //console.log("port clicked is an inport");
 
       var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
@@ -5951,7 +5988,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
-    else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
+    else if(document.getElementById(this.props.portThatHasBeenClicked).className.baseVal === "outport") {
       //console.log("port clicked is an outport");
 
       var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
@@ -6047,7 +6084,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
     blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
-    var port = this.props.portThatHasBeenClicked;
+    var port = document.getElementById(this.props.portThatHasBeenClicked);
     /* Need an if loop to check if we're hovering the port already
     Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
      */
@@ -6067,7 +6104,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   portDeselectRemoveHighlight: function(){
     //console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
-    var port = this.props.portThatHasBeenClicked;
+    var port = document.getElementById(this.props.portThatHasBeenClicked);
     /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
     Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
     */
@@ -6115,8 +6152,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     //else if(this.state.storingFirstPortClicked === null){
     //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
     //}
-    var firstPort = this.props.storingFirstPortClicked;
-    var secondPort = this.props.portThatHasBeenClicked;
+    var firstPort = document.getElementById(this.props.storingFirstPortClicked);
+    var secondPort = document.getElementById(this.props.portThatHasBeenClicked);
 
 
     /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
@@ -6208,7 +6245,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-  var fromPort = this.props.storingFirstPortClicked;
+  var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
   /* Turns out that this is sctually allowed */
   //if(edgeInfo.fromBlock === edgeInfo.toBlock){
@@ -6273,7 +6310,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
-      var fromPort = this.props.storingFirstPortClicked;
+      var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
       //fromPort.style.stroke = "black";
       fromPort.style.fill = "grey";
@@ -6287,7 +6324,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     }
     else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       //console.log("That inport isn't connected to anything, so proceed with the port connection process");
-      var toPort = this.props.portThatHasBeenClicked;
+      var toPort = document.getElementById(this.props.portThatHasBeenClicked);
 
       /* Put this styling later, sicne I've now added the port value type checker */
       //toPort.style.stroke = "black";
@@ -6436,7 +6473,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
         /* Do all the resetting jazz */
 
-        var fromPort = this.props.storingFirstPortClicked;
+        var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
         //fromPort.style.stroke = "black";
         fromPort.style.fill = "grey";
@@ -6454,7 +6491,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   failedPortConnection: function(){
     //this.props.storingFirstPortClicked.style.stroke = "black";
-    this.props.storingFirstPortClicked.style.fill = "grey";
+    document.getElementById(this.props.storingFirstPortClicked).style.fill = "grey";
     //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
@@ -6557,7 +6594,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
                portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                storingFirstPortClicked: this.props.storingFirstPortClicked, 
-               portMouseOver: this.props.portMouseOver, 
+               //portMouseOver={this.props.portMouseOver}
                selected: blockStore.getAnyBlockSelectedState(block), 
                deselect: this.deselect, 
                blockStyling: this.props.blockStyling}
@@ -7541,24 +7578,24 @@ var blockStore = require('../stores/blockStore.js');
 
 function getFlowChartState(){
   return{
-    graphPosition: blockStore.getGraphPosition(),
-    graphZoomScale: blockStore.getGraphZoomScale(),
+    graphPosition: JSON.parse(JSON.stringify(blockStore.getGraphPosition())),
+    graphZoomScale: JSON.parse(JSON.stringify(blockStore.getGraphZoomScale())),
     //allEdges: NodeStore.getAllEdges(),
     //nodesToRender: NodeStore.getNodesToRenderArray(),
     //edgesToRender: NodeStore.getEdgesToRenderArray(),
-    allBlockInfo: blockStore.getAllBlockInfo(),
-    portThatHasBeenClicked: blockStore.getPortThatHasBeenClicked(),
-    storingFirstPortClicked: blockStore.getStoringFirstPortClicked(),
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    portThatHasBeenClicked: JSON.parse(JSON.stringify(blockStore.getPortThatHasBeenClicked())),
+    storingFirstPortClicked: JSON.parse(JSON.stringify(blockStore.getStoringFirstPortClicked())),
     //newlyCreatedEdgeLabel: NodeStore.getNewlyCreatedEdgeLabel(),
-    blockLibrary: blockStore.getBlockLibrary(),
-    portMouseOver: blockStore.getPortMouseOver(),
-    areAnyBlocksSelected: blockStore.getIfAnyBlocksAreSelected(),
-    areAnyEdgesSelected: blockStore.getIfAnyEdgesAreSelected(),
+    blockLibrary: JSON.parse(JSON.stringify(blockStore.getBlockLibrary())),
+    //portMouseOver: JSON.parse(JSON.stringify(blockStore.getPortMouseOver())),
+    areAnyBlocksSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyBlocksAreSelected())),
+    areAnyEdgesSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyEdgesAreSelected())),
 
-    edgePreview: blockStore.getEdgePreview(),
-    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
+    edgePreview: JSON.parse(JSON.stringify(blockStore.getEdgePreview())),
+    previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(blockStore.getPreviousMouseCoordsOnZoom())),
 
-    blockStyling: blockStore.getBlockStyling()
+    blockStyling: JSON.parse(JSON.stringify(blockStore.getBlockStyling()))
   }
 }
 
@@ -7603,13 +7640,16 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
   render: function(){
     return(
       React.createElement(FlowChart, {
-        graphPosition: this.state.graphPosition, graphZoomScale: this.state.graphZoomScale, 
-        allBlockInfo: this.state.allBlockInfo, portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
+        graphPosition: this.state.graphPosition, 
+        graphZoomScale: this.state.graphZoomScale, 
+        allBlockInfo: this.state.allBlockInfo, 
+        portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
         storingFirstPortClicked: this.state.storingFirstPortClicked, 
         blockLibrary: this.state.blockLibrary, 
         areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
         areAnyEdgesSelected: this.state.areAnyEdgesSelected, 
-        portMouseOver: this.state.portMouseOver, edgePreview: this.state.edgePreview, 
+        //portMouseOver={this.state.portMouseOver}
+        edgePreview: this.state.edgePreview, 
         previousMouseCoordsOnZoom: this.state.previousMouseCoordsOnZoom, 
         blockStyling: this.state.blockStyling}
       )
@@ -8129,9 +8169,9 @@ var Ports = React.createClass({displayName: "Ports",
     }
     else{
       //console.log("clicked on a port, makes it easier");
-      target = e.currentTarget;
+      target = e.currentTarget.id;
     }
-
+    console.log(target);
     blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;

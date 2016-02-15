@@ -77,22 +77,58 @@ var Block = React.createClass({
   },
 
   //componentWillReceiveProps: function(nextProps){
-  //  //console.log(this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x);
+  //  console.log(this.props.blockInfo.position);
+  //  console.log(nextProps.blockInfo.position);
   //},
   //
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  //console.log("shouldComponentUpdate");
-  //  //console.log(nextProps);
-  //  //console.log(this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
-  //  //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-  //  //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-  //  return (
-  //    true
-  //  );
+  //componentWillUpdate: function(nextProps, nextState){
+  //  console.log(this.props.blockInfo.position);
+  //  console.log(nextProps.blockInfo.position);
   //},
+  //
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log("shouldComponentUpdate");
+    //console.log(nextProps);
+    console.log(this.props.blockInfo.position);
+    console.log(nextProps.blockInfo.position);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
+    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+      nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
+    console.log(this.props.portThatHasBeenClicked);
+    //console.log(document.getElementById(this.props.portThatHasBeenClicked));
+    //console.log(document.getElementById(nextProps.portThatHasBeenClicked));
+    //
+    //var oldPortThatHasBeenClicked = document.getElementById(this.props.portThatHasBeenClicked);
+    //var newPortThatHasBeenClicked = document.getElementById(nextProps.portThatHasBeenClicked);
+    console.log("yep");
+
+    if(this.props.portThatHasBeenClicked === null){
+      console.log("portThatHasBeenClicked isn't anything");
+      return (
+        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null &&
+            this.props.portThatHasBeenClicked !== null &&
+            nextProps.storingFirstPortClicked !== null &&
+            this.props.storingFirstPortClicked !== null){
+      console.log("portThatHasBeenClicked is something");
+
+      return (
+        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
+        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+  },
 
   handleInteractJsDrag: function(item){
     //console.log("interactJs drag is occurring");

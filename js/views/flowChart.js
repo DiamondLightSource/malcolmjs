@@ -72,7 +72,7 @@ var FlowChart = React.createClass({
     //  /*Dunno how to say it could be null? */
     //])
     blockLibrary: React.PropTypes.object,
-    portMouseOver: React.PropTypes.bool,
+    //portMouseOver: React.PropTypes.bool,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
   },
@@ -279,10 +279,10 @@ var FlowChart = React.createClass({
   addEdgePreview: function(){
     //console.log("addEdgePreview in flowChart has been invoked!");
 
-    var fromBlockId = this.props.portThatHasBeenClicked.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    var fromBlockId = document.getElementById(this.props.portThatHasBeenClicked).parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
     var portStringSliceIndex = fromBlockId.length;
-    var portName = this.props.portThatHasBeenClicked.id.slice(portStringSliceIndex);
+    var portName = document.getElementById(this.props.portThatHasBeenClicked).id.slice(portStringSliceIndex);
 
     var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
 
@@ -293,7 +293,7 @@ var FlowChart = React.createClass({
     //console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
     //console.log(this.props.portThatHasBeenClicked.className);
 
-    if(this.props.portThatHasBeenClicked.className.baseVal === "inport"){
+    if(document.getElementById(this.props.portThatHasBeenClicked).className.baseVal === "inport"){
       //console.log("port clicked is an inport");
 
       var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
@@ -308,7 +308,7 @@ var FlowChart = React.createClass({
       var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
-    else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
+    else if(document.getElementById(this.props.portThatHasBeenClicked).className.baseVal === "outport") {
       //console.log("port clicked is an outport");
 
       var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
@@ -404,7 +404,7 @@ var FlowChart = React.createClass({
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
     blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
-    var port = this.props.portThatHasBeenClicked;
+    var port = document.getElementById(this.props.portThatHasBeenClicked);
     /* Need an if loop to check if we're hovering the port already
     Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
      */
@@ -424,7 +424,7 @@ var FlowChart = React.createClass({
 
   portDeselectRemoveHighlight: function(){
     //console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
-    var port = this.props.portThatHasBeenClicked;
+    var port = document.getElementById(this.props.portThatHasBeenClicked);
     /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
     Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
     */
@@ -472,8 +472,8 @@ var FlowChart = React.createClass({
     //else if(this.state.storingFirstPortClicked === null){
     //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
     //}
-    var firstPort = this.props.storingFirstPortClicked;
-    var secondPort = this.props.portThatHasBeenClicked;
+    var firstPort = document.getElementById(this.props.storingFirstPortClicked);
+    var secondPort = document.getElementById(this.props.portThatHasBeenClicked);
 
 
     /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
@@ -565,7 +565,7 @@ var FlowChart = React.createClass({
 
   /* Time to compare the fromNodePortType and toNodePortType */
 
-  var fromPort = this.props.storingFirstPortClicked;
+  var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
   /* Turns out that this is sctually allowed */
   //if(edgeInfo.fromBlock === edgeInfo.toBlock){
@@ -630,7 +630,7 @@ var FlowChart = React.createClass({
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
-      var fromPort = this.props.storingFirstPortClicked;
+      var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
       //fromPort.style.stroke = "black";
       fromPort.style.fill = "grey";
@@ -644,7 +644,7 @@ var FlowChart = React.createClass({
     }
     else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       //console.log("That inport isn't connected to anything, so proceed with the port connection process");
-      var toPort = this.props.portThatHasBeenClicked;
+      var toPort = document.getElementById(this.props.portThatHasBeenClicked);
 
       /* Put this styling later, sicne I've now added the port value type checker */
       //toPort.style.stroke = "black";
@@ -793,7 +793,7 @@ var FlowChart = React.createClass({
 
         /* Do all the resetting jazz */
 
-        var fromPort = this.props.storingFirstPortClicked;
+        var fromPort = document.getElementById(this.props.storingFirstPortClicked);
 
         //fromPort.style.stroke = "black";
         fromPort.style.fill = "grey";
@@ -811,7 +811,7 @@ var FlowChart = React.createClass({
 
   failedPortConnection: function(){
     //this.props.storingFirstPortClicked.style.stroke = "black";
-    this.props.storingFirstPortClicked.style.fill = "grey";
+    document.getElementById(this.props.storingFirstPortClicked).style.fill = "grey";
     //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
@@ -914,7 +914,7 @@ var FlowChart = React.createClass({
                areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}
-               portMouseOver={this.props.portMouseOver}
+               //portMouseOver={this.props.portMouseOver}
                selected={blockStore.getAnyBlockSelectedState(block)}
                deselect={this.deselect}
                blockStyling={this.props.blockStyling}

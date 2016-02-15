@@ -1186,7 +1186,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       portThatHasBeenClicked = item;
-      //console.log("portThatHasBeenClicked is now: " + portThatHasBeenClicked.id);
+      console.log(portThatHasBeenClicked);
       blockStore.emitChange();
       break;
 

@@ -60,9 +60,9 @@ var Ports = React.createClass({
     }
     else{
       //console.log("clicked on a port, makes it easier");
-      target = e.currentTarget;
+      target = e.currentTarget.id;
     }
-
+    console.log(target);
     blockActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
