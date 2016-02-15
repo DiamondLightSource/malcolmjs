@@ -117,6 +117,8 @@ var EdgePreview = React.createClass({
   render:function(){
     console.log("render: edgePreview");
 
+    var blockStyling = this.props.blockStyling;
+
     //console.log(this.props.id);
     //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
@@ -145,7 +147,7 @@ var EdgePreview = React.createClass({
         }
       }
       var startOfEdgePortOffsetX = 0;
-      var startOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
@@ -156,8 +158,8 @@ var EdgePreview = React.createClass({
           outportArrayIndex = JSON.parse(JSON.stringify(i));
         }
       }
-      var startOfEdgePortOffsetX = 72;
-      var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
     else{
       window.alert("the port type is neither an inport or outport...");

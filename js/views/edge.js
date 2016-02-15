@@ -140,6 +140,8 @@ var Edge = React.createClass({
   render:function(){
     console.log("render: edges");
 
+    var blockStyling = this.props.blockStyling;
+
     /* Retiring allEdges in favour of calculating everything from allNodeInfo */
     //var edgeInfo = this.props.allEdges[this.props.id];
     //console.log(this.props.id);
@@ -182,13 +184,13 @@ var Edge = React.createClass({
       }
     }
 
-    var startOfEdgePortOffsetX = 72;
-    var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
     var endOfEdgePortOffsetX = 0;
-    var endOfEdgePortOffsetY = 72 / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
     var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 

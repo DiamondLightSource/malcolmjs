@@ -1184,6 +1184,67 @@ var allBlockInfo = {
       }
     ]
   },
+  '7portblock': {
+    type: '7port',
+    label: '7port1',
+    name: '',
+    position: {
+      x: 600,
+      y: 300
+    },
+    inports: [
+      {
+        name: 'inpa',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpb',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpc',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpd',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpe',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpf',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpg',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      }
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: false,
+        connectedTo: []
+      },
+    ]
+  }
 };
 
 function addEdgeToAllBlockInfo(Info){
@@ -1832,6 +1893,15 @@ var allBlockTypesStyling = {
   'PComp': PCompBlockStyling
 };
 
+var blockStyling = {
+  outerRectangleHeight: 76,
+  outerRectangleWidth: 72,
+  innerRectangleHeight: 70,
+  innerRectangleWidth: 66,
+  portRadius: 2.5,
+  portFill: 'grey',
+};
+
 var graphPosition = {
   x: 0,
   y: 0
@@ -2018,6 +2088,10 @@ var blockStore = assign({}, EventEmitter.prototype, {
   },
   getPreviousMouseCoordsOnZoom: function(){
     return previousMouseCoordsOnZoom;
+  },
+
+  getBlockStyling: function(){
+    return blockStyling;
   }
 });
 
@@ -4606,14 +4680,16 @@ var Block = React.createClass({displayName: "Block",
 
           React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, 
                           allBlockTypesStyling: this.props.allBlockTypesStyling, 
-                         portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
-                          selected: this.props.selected}), 
+                          portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+                          selected: this.props.selected, 
+                          blockStyling: this.props.blockStyling}), 
 
           React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, 
                  allBlockTypesStyling: this.props.allBlockTypesStyling, 
                  portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                  storingFirstPortClicked: this.props.storingFirstPortClicked, 
-                 selected: this.props.selected})
+                 selected: this.props.selected, 
+                 blockStyling: this.props.blockStyling})
 
         )
 
@@ -4742,10 +4818,12 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
   render: function(){
     //console.log("render: blockRectangles");
 
+    var blockStyling = this.props.blockStyling;
+
     return(
       React.createElement("g", null, 
         React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
-              height: 72, width: 72, 
+              height: blockStyling.outerRectangleHeight, width: blockStyling.outerRectangleWidth, 
               x: 0, y: 0, rx: 8, ry: 8, 
               style: {fill: 'white', 'strokeWidth': 2,
                stroke: this.props.selected ? '#797979' : 'black',
@@ -4753,7 +4831,7 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
         ), 
         React.createElement("rect", {id: this.props.blockId.concat("InnerRectangle"), 
-              height: 66, width: 66, 
+              height: blockStyling.innerRectangleHeight, width: blockStyling.innerRectangleWidth, 
               x: 3, y: 3, rx: 6, ry: 6, 
               style: {fill: 'rgba(230,238,240,0.94)',
                        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
@@ -5184,6 +5262,8 @@ var Edge = React.createClass({displayName: "Edge",
   render:function(){
     console.log("render: edges");
 
+    var blockStyling = this.props.blockStyling;
+
     /* Retiring allEdges in favour of calculating everything from allNodeInfo */
     //var edgeInfo = this.props.allEdges[this.props.id];
     //console.log(this.props.id);
@@ -5226,13 +5306,13 @@ var Edge = React.createClass({displayName: "Edge",
       }
     }
 
-    var startOfEdgePortOffsetX = 72;
-    var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
     var endOfEdgePortOffsetX = 0;
-    var endOfEdgePortOffsetY = 72 / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
     var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
@@ -5394,6 +5474,8 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
   render:function(){
     console.log("render: edgePreview");
 
+    var blockStyling = this.props.blockStyling;
+
     //console.log(this.props.id);
     //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
@@ -5422,7 +5504,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
         }
       }
       var startOfEdgePortOffsetX = 0;
-      var startOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
@@ -5433,8 +5515,8 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
           outportArrayIndex = JSON.parse(JSON.stringify(i));
         }
       }
-      var startOfEdgePortOffsetX = 72;
-      var startOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
     else{
       window.alert("the port type is neither an inport or outport...");
@@ -5858,7 +5940,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         }
       }
       var endOfEdgePortOffsetX = 0;
-      var endOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
     else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
@@ -5873,8 +5955,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         }
       }
 
-      var endOfEdgePortOffsetX = 72;
-      var endOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      var endOfEdgePortOffsetX = this.props.blockStyling.outerRectangleWidth;
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
       var portType = "outport";
     }
     var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
@@ -6470,7 +6552,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                storingFirstPortClicked: this.props.storingFirstPortClicked, 
                portMouseOver: this.props.portMouseOver, 
                selected: blockStore.getAnyBlockSelectedState(block), 
-               deselect: this.deselect}
+               deselect: this.deselect, 
+               blockStyling: this.props.blockStyling}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         )
       );
@@ -6499,7 +6582,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                   toBlockInfo: this.props.allBlockInfo[toBlock], 
                   areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
                   selected: blockStore.getIfEdgeIsSelected(edgeLabel), 
-                  inportArrayIndex: i, inportArrayLength: this.props.allBlockInfo[block].inports.length}
+                  inportArrayIndex: i, inportArrayLength: this.props.allBlockInfo[block].inports.length, 
+                  blockStyling: this.props.blockStyling}
             )
           )
         }
@@ -6521,9 +6605,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       edgePreview.push(
         React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, interactJsDragPan: this.interactJsDragPan, 
                      failedPortConnection: this.failedPortConnection, 
-          edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
+                     edgePreview: this.props.edgePreview, allBlockTypesPortStyling: this.props.allBlockTypesPortStyling, 
                      fromBlockPosition: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position, 
-                     fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
+                     fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock], 
+                     blockStyling: this.props.blockStyling}
 
         )
       )
@@ -7467,7 +7552,9 @@ function getFlowChartState(){
     allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling(),
 
     edgePreview: blockStore.getEdgePreview(),
-    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom()
+    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
+
+    blockStyling: blockStore.getBlockStyling()
   }
 }
 
@@ -7519,7 +7606,8 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
         allBlockTypesStyling: this.state.allBlockTypesStyling, areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
         areAnyEdgesSelected: this.state.areAnyEdgesSelected, allBlockTypesPortStyling: this.state.allBlockTypesPortStyling, 
         portMouseOver: this.state.portMouseOver, edgePreview: this.state.edgePreview, 
-        previousMouseCoordsOnZoom: this.state.previousMouseCoordsOnZoom}
+        previousMouseCoordsOnZoom: this.state.previousMouseCoordsOnZoom, 
+        blockStyling: this.state.blockStyling}
       )
     )
   }
@@ -8084,7 +8172,9 @@ var Ports = React.createClass({displayName: "Ports",
     var blockId = this.props.blockId;
     var blockInfo = this.props.blockInfo;
 
-    var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    /* Getting rid of the use of allBlockTypesStyling */
+
+    //var allBlockTypesStyling = this.props.allBlockTypesStyling;
     var blockType = blockInfo.type;
     var inports = [];
     var inportsXCoord;
@@ -8094,11 +8184,13 @@ var Ports = React.createClass({displayName: "Ports",
     var outportsText = [];
     var blockText = [];
 
+    var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
+
     for(var i = 0; i < blockInfo.inports.length; i++){
       var len = blockInfo.inports.length;
       var inportName = blockInfo.inports[i].name;
-      var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
-      //console.log(allNodeTypesStyling[nodeType]);
+      var portAndTextTransform = "translate(" + 0 + "," + blockStyling.outerRectangleHeight / (len + 1) * (i + 1) + ")";
+      //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
       inports.push(
         React.createElement("g", {key: blockId + inportName + "portAndText", id: blockId + inportName + "portAndText", transform: portAndTextTransform}, 
           React.createElement("path", {key: blockId + inportName + "-arc", d: this.makeArcPath("inport"), className: "portArc", 
@@ -8106,8 +8198,8 @@ var Ports = React.createClass({displayName: "Ports",
           React.createElement("circle", {key: blockId + inportName, className: "inport", 
                   cx: 0, 
                   cy: 0, 
-                  r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, 
-                  style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill, cursor: 'default'
+                  r: blockStyling.portRadius, //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style: {fill: blockStyling.portFill, cursor: 'default'//allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65, cursor: 'default'
                     }, 
@@ -8129,8 +8221,8 @@ var Ports = React.createClass({displayName: "Ports",
     for(var j = 0; j < blockInfo.outports.length; j++){
       var len = blockInfo.outports.length;
       var outportName = blockInfo.outports[j].name;
-      var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
-        + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
+      var portAndTextTransform = "translate(" + blockStyling.outerRectangleWidth //allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
+        + "," + blockStyling.outerRectangleHeight / (len + 1) * (j + 1) + ")"; //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
       outports.push(
         React.createElement("g", {key: blockId + outportName + "portAndText", id: blockId + outportName + "portAndText", transform: portAndTextTransform}, 
           React.createElement("path", {key: blockId + outportName + "-arc", d: this.makeArcPath("outport"), className: "portArc", 
@@ -8138,8 +8230,8 @@ var Ports = React.createClass({displayName: "Ports",
           React.createElement("circle", {key: blockId + outportName, className: "outport", 
                   cx: 0, 
                   cy: 0, 
-                  r: allBlockTypesStyling[blockType].ports.portStyling.portRadius, 
-                  style: {fill: allBlockTypesStyling[blockType].ports.portStyling.fill,
+                  r: blockStyling.portRadius, //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style: {fill: blockStyling.portFill, //allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65,
                     cursor: 'default'}, 
@@ -8165,14 +8257,14 @@ var Ports = React.createClass({displayName: "Ports",
       React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
-            transform: "translate(36, 88)"}, 
+            transform: "translate(36, 91)"}, 
         blockInfo.name
       ),
 
       React.createElement("text", {className: "blockText", style: {MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
-            transform: "translate(36, 101)"}, 
+            transform: "translate(36, 104)"}, 
         blockInfo.type
       )
     ]);

@@ -107,7 +107,9 @@ var Ports = React.createClass({
     var blockId = this.props.blockId;
     var blockInfo = this.props.blockInfo;
 
-    var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    /* Getting rid of the use of allBlockTypesStyling */
+
+    //var allBlockTypesStyling = this.props.allBlockTypesStyling;
     var blockType = blockInfo.type;
     var inports = [];
     var inportsXCoord;
@@ -117,11 +119,13 @@ var Ports = React.createClass({
     var outportsText = [];
     var blockText = [];
 
+    var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
+
     for(var i = 0; i < blockInfo.inports.length; i++){
       var len = blockInfo.inports.length;
       var inportName = blockInfo.inports[i].name;
-      var portAndTextTransform = "translate(" + 0 + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (i + 1) + ")";
-      //console.log(allNodeTypesStyling[nodeType]);
+      var portAndTextTransform = "translate(" + 0 + "," + blockStyling.outerRectangleHeight / (len + 1) * (i + 1) + ")";
+      //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
       inports.push(
         <g key={blockId + inportName + "portAndText"} id={blockId + inportName + "portAndText"} transform={portAndTextTransform} >
           <path key={blockId + inportName + "-arc"} d={this.makeArcPath("inport")} className="portArc"
@@ -129,8 +133,8 @@ var Ports = React.createClass({
           <circle key={blockId + inportName} className="inport"
                   cx={0}
                   cy={0}
-                  r={allBlockTypesStyling[blockType].ports.portStyling.portRadius}
-                  style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill, cursor: 'default'
+                  r={blockStyling.portRadius} //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style={{fill: blockStyling.portFill, cursor: 'default'  //allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65, cursor: 'default'
                     }}
@@ -152,8 +156,8 @@ var Ports = React.createClass({
     for(var j = 0; j < blockInfo.outports.length; j++){
       var len = blockInfo.outports.length;
       var outportName = blockInfo.outports[j].name;
-      var portAndTextTransform = "translate(" + allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
-        + "," + allBlockTypesStyling[blockType].rectangle.rectangleStyling.height / (len + 1) * (j + 1) + ")";
+      var portAndTextTransform = "translate(" + blockStyling.outerRectangleWidth //allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
+        + "," + blockStyling.outerRectangleHeight / (len + 1) * (j + 1) + ")"; //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
       outports.push(
         <g key={blockId + outportName + "portAndText"} id={blockId + outportName + "portAndText"} transform={portAndTextTransform} >
           <path key={blockId + outportName + "-arc"} d={this.makeArcPath("outport")} className="portArc"
@@ -161,8 +165,8 @@ var Ports = React.createClass({
           <circle key={blockId + outportName} className="outport"
                   cx={0}
                   cy={0}
-                  r={allBlockTypesStyling[blockType].ports.portStyling.portRadius}
-                  style={{fill: allBlockTypesStyling[blockType].ports.portStyling.fill,
+                  r={blockStyling.portRadius} //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style={{fill: blockStyling.portFill, //allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65,
                     cursor: 'default' }}
@@ -188,14 +192,14 @@ var Ports = React.createClass({
       <text className="blockName" style={{MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
-            transform="translate(36, 88)" >
+            transform="translate(36, 91)" >
         {blockInfo.name}
       </text>,
 
       <text className="blockText" style={{MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
-            transform="translate(36, 101)" >
+            transform="translate(36, 104)" >
         {blockInfo.type}
       </text>
     ]);

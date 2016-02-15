@@ -28,7 +28,9 @@ function getFlowChartState(){
     allBlockTypesPortStyling: blockStore.getAllBlockTypesPortStyling(),
 
     edgePreview: blockStore.getEdgePreview(),
-    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom()
+    previousMouseCoordsOnZoom: blockStore.getPreviousMouseCoordsOnZoom(),
+
+    blockStyling: blockStore.getBlockStyling()
   }
 }
 
@@ -81,6 +83,7 @@ var FlowChartControllerView = React.createClass({
         areAnyEdgesSelected={this.state.areAnyEdgesSelected} allBlockTypesPortStyling={this.state.allBlockTypesPortStyling}
         portMouseOver={this.state.portMouseOver} edgePreview={this.state.edgePreview}
         previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
+        blockStyling={this.state.blockStyling}
       />
     )
   }

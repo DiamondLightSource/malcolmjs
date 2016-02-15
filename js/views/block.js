@@ -315,14 +315,16 @@ var Block = React.createClass({
 
           <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
                           allBlockTypesStyling={this.props.allBlockTypesStyling}
-                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
-                          selected={this.props.selected} />
+                          portThatHasBeenClicked={this.props.portThatHasBeenClicked}
+                          selected={this.props.selected}
+                          blockStyling={this.props.blockStyling}/>
 
           <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
                  allBlockTypesStyling={this.props.allBlockTypesStyling}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                  storingFirstPortClicked={this.props.storingFirstPortClicked}
-                 selected={this.props.selected} />
+                 selected={this.props.selected}
+                 blockStyling={this.props.blockStyling} />
 
         </g>
 

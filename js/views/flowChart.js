@@ -307,7 +307,7 @@ var FlowChart = React.createClass({
         }
       }
       var endOfEdgePortOffsetX = 0;
-      var endOfEdgePortOffsetY = 72 / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       var portType = "inport";
     }
     else if(this.props.portThatHasBeenClicked.className.baseVal === "outport") {
@@ -322,8 +322,8 @@ var FlowChart = React.createClass({
         }
       }
 
-      var endOfEdgePortOffsetX = 72;
-      var endOfEdgePortOffsetY = 72 / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      var endOfEdgePortOffsetX = this.props.blockStyling.outerRectangleWidth;
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
       var portType = "outport";
     }
     var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
@@ -920,6 +920,7 @@ var FlowChart = React.createClass({
                portMouseOver={this.props.portMouseOver}
                selected={blockStore.getAnyBlockSelectedState(block)}
                deselect={this.deselect}
+               blockStyling={this.props.blockStyling}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );
@@ -949,6 +950,7 @@ var FlowChart = React.createClass({
                   areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                   selected={blockStore.getIfEdgeIsSelected(edgeLabel)}
                   inportArrayIndex={i} inportArrayLength={this.props.allBlockInfo[block].inports.length}
+                  blockStyling={this.props.blockStyling}
             />
           )
         }
@@ -970,9 +972,10 @@ var FlowChart = React.createClass({
       edgePreview.push(
         <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel} interactJsDragPan={this.interactJsDragPan}
                      failedPortConnection={this.failedPortConnection}
-          edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
+                     edgePreview={this.props.edgePreview} allBlockTypesPortStyling={this.props.allBlockTypesPortStyling}
                      fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
                      fromBlockInfo={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
+                     blockStyling={this.props.blockStyling}
 
         />
       )

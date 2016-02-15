@@ -415,6 +415,67 @@ var allBlockInfo = {
       }
     ]
   },
+  '7portblock': {
+    type: '7port',
+    label: '7port1',
+    name: '',
+    position: {
+      x: 600,
+      y: 300
+    },
+    inports: [
+      {
+        name: 'inpa',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpb',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpc',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpd',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpe',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpf',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        'name': 'inpg',
+        'type': 'boolean',
+        connected: false,
+        connectedTo: null
+      }
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: false,
+        connectedTo: []
+      },
+    ]
+  }
 };
 
 function addEdgeToAllBlockInfo(Info){
@@ -1063,6 +1124,15 @@ var allBlockTypesStyling = {
   'PComp': PCompBlockStyling
 };
 
+var blockStyling = {
+  outerRectangleHeight: 76,
+  outerRectangleWidth: 72,
+  innerRectangleHeight: 70,
+  innerRectangleWidth: 66,
+  portRadius: 2.5,
+  portFill: 'grey',
+};
+
 var graphPosition = {
   x: 0,
   y: 0
@@ -1249,6 +1319,10 @@ var blockStore = assign({}, EventEmitter.prototype, {
   },
   getPreviousMouseCoordsOnZoom: function(){
     return previousMouseCoordsOnZoom;
+  },
+
+  getBlockStyling: function(){
+    return blockStyling;
   }
 });
 
