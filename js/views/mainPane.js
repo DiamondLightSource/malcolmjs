@@ -83,9 +83,13 @@ var MainPane = React.createClass({
     //theGraphDiamondState: React.PropTypes.object
   },
 
-  //shouldComponentUpdate(nextProps, nextState){
-  //  return this.props.footers !== nextProps.footers;
-  //},
+  shouldComponentUpdate(nextProps, nextState){
+    return (
+      nextProps.footers !== this.props.footers ||
+      nextProps.favTabOpen !== this.props.favTabOpen ||
+      nextProps.configTabOpen !== this.props.configTabOpen
+    )
+  },
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")

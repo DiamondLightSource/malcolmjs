@@ -37,6 +37,25 @@ var Ports = React.createClass({
       .off('tap', this.portClick);
   },
 
+  shouldComponentUpdate(nextProps, nextState){
+    if(this.props.portThatHasBeenClicked === null){
+      return (
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null ||
+      this.props.portThatHasBeenClicked !== null ||
+      nextProps.storingFirstPortClicked !== null ||
+      this.props.storingFirstPortClicked !== null){
+
+      return (
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+  },
+
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();

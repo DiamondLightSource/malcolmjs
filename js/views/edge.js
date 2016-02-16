@@ -55,6 +55,18 @@ var Edge = React.createClass({
     window.removeEventListener('keydown', this.keyPress);
 
   },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected ||
+      nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
+      nextProps.fromBlockInfo.position.x !== this.props.fromBlockInfo.position.x ||
+      nextProps.fromBlockInfo.position.y !== this.props.fromBlockInfo.position.y ||
+      nextProps.toBlockInfo.position.x !== this.props.toBlockInfo.position.x ||
+      nextProps.toBlockInfo.position.y !== this.props.toBlockInfo.position.y
+    )
+  },
+
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);

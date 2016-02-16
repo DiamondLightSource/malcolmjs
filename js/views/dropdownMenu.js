@@ -29,6 +29,14 @@ var Dropdown = React.createClass({
     //this.setState(getDropdownState())
   },
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState ||
+      nextProps.changeTab !== this.props.changeTab
+    )
+  },
+
   handleActionShow: function(e){
     console.log(e);
     e.stopImmediatePropagation();

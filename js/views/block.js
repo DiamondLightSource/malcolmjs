@@ -113,9 +113,9 @@ var Block = React.createClass({
         nextProps.selected !== this.props.selected
       )
     }
-    else if(nextProps.portThatHasBeenClicked !== null &&
-            this.props.portThatHasBeenClicked !== null &&
-            nextProps.storingFirstPortClicked !== null &&
+    else if(nextProps.portThatHasBeenClicked !== null ||
+            this.props.portThatHasBeenClicked !== null ||
+            nextProps.storingFirstPortClicked !== null ||
             this.props.storingFirstPortClicked !== null){
       console.log("portThatHasBeenClicked is something");
 
@@ -127,6 +127,9 @@ var Block = React.createClass({
         nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
         nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
       );
+    }
+    else{
+      console.log("SOMETHING CRAY CRAY IN SHOULDCOMPONENTUPDATE");
     }
   },
 

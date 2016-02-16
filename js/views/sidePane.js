@@ -43,6 +43,25 @@ var SidePane = React.createClass({
     UPDATE: actually it doesn't work, selected tab content jumps about!*/
   },
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    //var same = true;
+    //
+    //for(var i = 0; i < this.props.tabState.length; i++){
+    //  if(nextProps.tabState[i] === undefined){
+    //    same = false;
+    //  }
+    //  else if(nextProps.tabState[i].label !== this.props.tabState[i].label){
+    //    same = false;
+    //  }
+    //}
+
+    return (
+      nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState
+    )
+  },
+
   handleActionPassSidePane: function(){
     paneActions.passSidePane(this)
   },

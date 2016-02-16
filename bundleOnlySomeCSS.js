@@ -4477,9 +4477,9 @@ var Block = React.createClass({displayName: "Block",
         nextProps.selected !== this.props.selected
       )
     }
-    else if(nextProps.portThatHasBeenClicked !== null &&
-            this.props.portThatHasBeenClicked !== null &&
-            nextProps.storingFirstPortClicked !== null &&
+    else if(nextProps.portThatHasBeenClicked !== null ||
+            this.props.portThatHasBeenClicked !== null ||
+            nextProps.storingFirstPortClicked !== null ||
             this.props.storingFirstPortClicked !== null){
       console.log("portThatHasBeenClicked is something");
 
@@ -4491,6 +4491,9 @@ var Block = React.createClass({displayName: "Block",
         nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
         nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
       );
+    }
+    else{
+      console.log("SOMETHING CRAY CRAY IN SHOULDCOMPONENTUPDATE");
     }
   },
 
@@ -4866,6 +4869,12 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
   //  this.setState(getNodeRectanglesState());
   //},
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected
+    )
+  },
+
   render: function(){
     //console.log("render: blockRectangles");
 
@@ -4878,14 +4887,16 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
               x: 0, y: 0, rx: 8, ry: 8, 
               style: {fill: 'white', 'strokeWidth': 2,
                stroke: this.props.selected ? '#797979' : 'black',
-               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+               }}
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
         ), 
         React.createElement("rect", {id: this.props.blockId.concat("InnerRectangle"), 
               height: blockStyling.innerRectangleHeight, width: blockStyling.innerRectangleWidth, 
               x: 3, y: 3, rx: 6, ry: 6, 
               style: {fill: 'rgba(230,238,240,0.94)',
-                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+                       }}
         )
       )
     )
@@ -4999,6 +5010,14 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
   _onChange: function(){
     //this.setState(getDropdownState())
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState ||
+      nextProps.changeTab !== this.props.changeTab
+    )
   },
 
   handleActionShow: function(e){
@@ -5228,6 +5247,18 @@ var Edge = React.createClass({displayName: "Edge",
     window.removeEventListener('keydown', this.keyPress);
 
   },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected ||
+      nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
+      nextProps.fromBlockInfo.position.x !== this.props.fromBlockInfo.position.x ||
+      nextProps.fromBlockInfo.position.y !== this.props.fromBlockInfo.position.y ||
+      nextProps.toBlockInfo.position.x !== this.props.toBlockInfo.position.x ||
+      nextProps.toBlockInfo.position.y !== this.props.toBlockInfo.position.y
+    )
+  },
+
   mouseOver: function(){
     var outerLineName = this.props.id.concat("-outerline");
     var test = document.getElementById(outerLineName);
@@ -7617,25 +7648,20 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
     blockStore.removeChangeListener(this._onChange);
   },
 
-  //shouldComponentUpdate: function(nextProps, nextState){
-  //  console.log(nextState);
-  //  console.log(this.state.graphPosition);
-  //  console.log(nextState.graphPosition);
-  //  return (
-  //    nextState.graphZoomScale !== this.state.graphZoomScale ||
-  //    nextState.graphPosition !== this.state.graphPosition ||
-  //    nextState.allBlockInfo !== this.state.allBlockInfo ||
-  //    nextState.portThatHasBeenClicked !== this.state.portThatHasBeenClicked ||
-  //    nextState.storingFirstPortClicked !== this.state.storingFirstPortClicked ||
-  //    nextState.blockLibrary !== this.state.blockLibrary ||
-  //    nextState.allBlockTypesStyling !== this.state.allBlockTypesStyling ||
-  //    nextState.portMouseOver !== this.state.portMouseOver ||
-  //    nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
-  //    nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
-  //    nextState.allBlockTypesPortStyling !== this.state.allBlockTypesPortStyling ||
-  //    nextState.edgePreview !== this.state.edgePreview
-  //  )
-  //},
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextState.graphZoomScale !== this.state.graphZoomScale ||
+      nextState.graphPosition.x !== this.state.graphPosition.x ||
+      nextState.graphPosition.y !== this.state.graphPosition.y ||
+      nextState.allBlockInfo !== this.state.allBlockInfo ||
+      nextState.portThatHasBeenClicked !== this.state.portThatHasBeenClicked ||
+      nextState.storingFirstPortClicked !== this.state.storingFirstPortClicked ||
+      nextState.blockLibrary !== this.state.blockLibrary ||
+      nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
+      nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
+      nextState.edgePreview !== this.state.edgePreview
+    )
+  },
 
   render: function(){
     return(
@@ -7745,9 +7771,13 @@ var MainPane = React.createClass({displayName: "MainPane",
     //theGraphDiamondState: React.PropTypes.object
   },
 
-  //shouldComponentUpdate(nextProps, nextState){
-  //  return this.props.footers !== nextProps.footers;
-  //},
+  shouldComponentUpdate(nextProps, nextState){
+    return (
+      nextProps.footers !== this.props.footers ||
+      nextProps.favTabOpen !== this.props.favTabOpen ||
+      nextProps.configTabOpen !== this.props.configTabOpen
+    )
+  },
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")
@@ -8146,6 +8176,25 @@ var Ports = React.createClass({displayName: "Ports",
       .off('tap', this.portClick);
   },
 
+  shouldComponentUpdate(nextProps, nextState){
+    if(this.props.portThatHasBeenClicked === null){
+      return (
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null ||
+      this.props.portThatHasBeenClicked !== null ||
+      nextProps.storingFirstPortClicked !== null ||
+      this.props.storingFirstPortClicked !== null){
+
+      return (
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+  },
+
   portClick: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -8375,6 +8424,25 @@ var SidePane = React.createClass({displayName: "SidePane",
     //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
     /* this works, but I'm not convinced that this is the 'Flux' way to do things...
     UPDATE: actually it doesn't work, selected tab content jumps about!*/
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    //var same = true;
+    //
+    //for(var i = 0; i < this.props.tabState.length; i++){
+    //  if(nextProps.tabState[i] === undefined){
+    //    same = false;
+    //  }
+    //  else if(nextProps.tabState[i].label !== this.props.tabState[i].label){
+    //    same = false;
+    //  }
+    //}
+
+    return (
+      nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState
+    )
   },
 
   handleActionPassSidePane: function(){
@@ -8922,19 +8990,19 @@ var SidebarStyling = {
 function getBothPanesState(){
   return{
     /* Its own getter functions first */
-    sidebarOpen: paneStore.getSidebarOpenState(),
+    sidebarOpen: JSON.parse(JSON.stringify(paneStore.getSidebarOpenState())),
 
     /* MainPane's getter functions for stores */
-    footers: mainPaneStore.getFooterState(),
+    footers: JSON.parse(JSON.stringify(mainPaneStore.getFooterState())),
     //favPanelOpen: mainPaneStore.getFavPanelState(),
-    favTabOpen: paneStore.getFavTabOpen(),
+    favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
-    configTabOpen: paneStore.getConfigTabOpen(),
+    configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
 
     /* SidePane's getter functions for stores */
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState(),
+    tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
+    selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
+    listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
     //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
     //allBlockTabInfo: paneStore.getAllBlockTabInfo()
@@ -8948,6 +9016,18 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
   _onChange: function(){
     this.setState(getBothPanesState());
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextState.sidebarOpen !== this.state.sidebarOpen ||
+      nextState.selectedTabIndex !== this.state.selectedTabIndex ||
+      nextState.listVisible !== this.state.listVisible ||
+      nextState.tabState !== this.state.tabState ||
+      nextState.footers !== this.state.footers ||
+      nextState.favTabOpen !== this.state.favTabOpen ||
+      nextState.configTabOpen !== this.state.configTabOpen
+    )
   },
 
   componentDidMount: function(){

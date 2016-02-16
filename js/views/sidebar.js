@@ -94,19 +94,19 @@ var SidebarStyling = {
 function getBothPanesState(){
   return{
     /* Its own getter functions first */
-    sidebarOpen: paneStore.getSidebarOpenState(),
+    sidebarOpen: JSON.parse(JSON.stringify(paneStore.getSidebarOpenState())),
 
     /* MainPane's getter functions for stores */
-    footers: mainPaneStore.getFooterState(),
+    footers: JSON.parse(JSON.stringify(mainPaneStore.getFooterState())),
     //favPanelOpen: mainPaneStore.getFavPanelState(),
-    favTabOpen: paneStore.getFavTabOpen(),
+    favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
-    configTabOpen: paneStore.getConfigTabOpen(),
+    configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
 
     /* SidePane's getter functions for stores */
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState(),
+    tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
+    selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
+    listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
     //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
     //allBlockTabInfo: paneStore.getAllBlockTabInfo()
@@ -120,6 +120,18 @@ var BothPanes = React.createClass({
 
   _onChange: function(){
     this.setState(getBothPanesState());
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextState.sidebarOpen !== this.state.sidebarOpen ||
+      nextState.selectedTabIndex !== this.state.selectedTabIndex ||
+      nextState.listVisible !== this.state.listVisible ||
+      nextState.tabState !== this.state.tabState ||
+      nextState.footers !== this.state.footers ||
+      nextState.favTabOpen !== this.state.favTabOpen ||
+      nextState.configTabOpen !== this.state.configTabOpen
+    )
   },
 
   componentDidMount: function(){

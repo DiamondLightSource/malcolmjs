@@ -28,6 +28,12 @@ var BlockRectangles = React.createClass({
   //  this.setState(getNodeRectanglesState());
   //},
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected
+    )
+  },
+
   render: function(){
     //console.log("render: blockRectangles");
 
@@ -40,14 +46,16 @@ var BlockRectangles = React.createClass({
               x={0} y={0} rx={8} ry={8}
               style={{fill: 'white', 'strokeWidth': 2,
                stroke: this.props.selected ? '#797979' : 'black',
-               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+               }}
           //onClick={this.nodeClick} onDragStart={this.nodeDrag}
         />
         <rect id={this.props.blockId.concat("InnerRectangle")}
               height={blockStyling.innerRectangleHeight} width={blockStyling.innerRectangleWidth}
               x={3} y={3} rx={6} ry={6}
               style={{fill: 'rgba(230,238,240,0.94)',
-                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}
+                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+                       }}
         />
       </g>
     )
