@@ -7,78 +7,38 @@ var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
 var blockActions = {
-  //changeGateNodePosition: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.GATENODE_CHANGEPOSITION,
-  //    item: item
-  //  })
-  //},
-  //draggedElement: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.DRAGGED_ELEMENT,
-  //    item : item
-  //  })
-  //},
-  //draggedElementID: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.DRAGGED_ELEMENTID,
-  //    item : item
-  //  })
-  //},
-  //changeNodePosition: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.CHANGE_NODEPOSITION,
-  //    item: item
-  //  })
-  //},
-  //changeGate1Styling: function(item){
-  //    AppDispatcher.handleAction({
-  //        actionType: appConstants.CHANGE_GATE1STYLING,
-  //        item: item
-  //    })
-  //}
-  //portMouseOverLeaveToggle: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
-  //    item: item
-  //  })
-  //},
-  //pushNodeToArray: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PUSH_NODETOARRAY,
-  //    item: item
-  //  })
-  //},
-  //pushEdgeToArray: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PUSH_EDGETOARRAY,
-  //    item: item
-  //  })
-  //},
-  //addEdgeToAllNodeInfo: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADDEDGE_TOALLNODEINFO,
-  //    item: item
-  //  })
-  //},
-  //addOneSingleEdge: function(edgeInfo){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADD_ONESINGLEEDGE,
-  //    item: edgeInfo
-  //  })
-  //},
-  //createNewEdgeLabel: function(edgeInfo){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.CREATENEW_EDGELABEL,
-  //    item: edgeInfo
-  //  })
-  //},
-  //addOneSingleEdgeToEdgesObject(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
-  //    item: item
-  //  })
-  //},
+
+  /* BLOCK use */
+
+  addToAllBlockInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDTO_ALLBLOCKINFO,
+      item: item
+    })
+  },
+  interactJsDrag: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.INTERACTJS_DRAG,
+      item: item
+    })
+  },
+  addOneSingleEdgeToAllBlockInfo(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
+      item: edgeInfo
+    })
+  },
+  deleteEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DELETE_EDGE,
+      item: item
+    })
+  },
+
+
+
+
+  /* FLOWCHART use */
 
   selectBlock: function(item){
     AppDispatcher.handleAction({
@@ -132,13 +92,6 @@ var blockActions = {
     })
   },
 
-  addToAllBlockInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADDTO_ALLBLOCKINFO,
-      item: item
-    })
-  },
-
   passPortMouseDown: function(port){
     AppDispatcher.handleAction({
       actionType: appConstants.PASS_PORTMOUSEDOWN,
@@ -157,28 +110,12 @@ var blockActions = {
       item: item
     })
   },
-
-  addOneSingleEdgeToAllBlockInfo(edgeInfo){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
-      item: edgeInfo
-    })
-  },
-
   appendToEdgeSelectedState: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.APPEND_EDGESELECTEDSTATE,
       item: item
     })
   },
-
-  interactJsDrag: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.INTERACTJS_DRAG,
-      item: item
-    })
-  },
-
   addEdgePreview: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_EDGEPREVIEW,
@@ -198,12 +135,6 @@ var blockActions = {
     })
   },
 
-  deleteEdge: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DELETE_EDGE,
-      item: item
-    })
-  }
 };
 
 module.exports = blockActions;
@@ -633,14 +564,16 @@ var appConstants = {
   FAV_TOGGLE: "FAV_TOGGLE",
 
   /*paneStore use*/
-  //ADD_TAB: "ADD_TAB",
-  //APPENDSTUFF_FORNEWBLOCK: "APPENDSTUFF_FORNEWBLOCK",
-  //CHANGE_INFO: "CHANGE_INFO",
-  //PASS_DISPATCHMARKER: "PASS_DISPATCHMARKER",
+
   REMOVE_TAB: "REMOVE_TAB",
   DROPDOWN_SELECT: "DROPDOWN_SELECT",
   FAVTAB_OPEN: "FAVTAB_OPEN",
   CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
+
+  OPEN_BLOCKTAB: "OPEN_BLOCKTAB",
+  REMOVE_BLOCKTAB: "REMOVE_BLOCKTAB",
+
+  OPEN_EDGETAB: "OPEN_EDGETAB",
 
 
   /*sidePaneStore use*/
@@ -662,61 +595,60 @@ var appConstants = {
   PASSUPDATEDCHANNEL_VALUE: "PASSUPDATEDCHANNEL_VALUE",
   PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED: "PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED",
 
-
-  //REACTPANEL_SELECT: "REACTPANEL_SELECT",
-  //REDBLOCKSTATE_CHANGE: "REDBLOCKSTATE_CHANGE",
-  //SWITCHTAB_WHENTABOPENS: "SWITCHTAB_WHENTABOPENS",
-  //PASSING_SIDEPANE: "PASSING_SIDEPANE"
-
-  //REDBLOCKTAB_OPEN: "REDBLOCKTAB_OPEN",
-  //BLUEBLOCKTAB_OPEN: "BLUEBLOCKTAB_OPEN",
-  //GREENBLOCKTAB_OPEN: "GREENBLOCKTAB_OPEN",
-
   /* Constants from flowChart added here */
+
+  /* BLOCK use */
+
+  ADDTO_ALLBLOCKINFO: "ADDTO_ALLBLOCKINFO",
+  INTERACTJS_DRAG: "INTERACTJS_DRAG",
+  ADD_ONESINGLEEDGETOALLBLOCKINFO: "ADD_ONESINGLEEDGETOALLBLOCKINFO",
+  DELETE_EDGE: "DELETE_EDGE",
+
+  FETCHINITIAL_BLOCKDATA: "FETCHINITIAL_BLOCKDATA",
+
 
   GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
   DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",
   DRAGGED_ELEMENT: "DRAGGED_ELEMENT",
   CHANGE_BLOCKPOSITION: "CHANGE_BLOCKPOSITION",
 
+
+  
+  /* FLOWCHART use */
+
   SELECT_BLOCK: "SELECT_BLOCK",
   DESELECT_ALLBLOCKS: "DESELECT_ALLBLOCKS",
   SELECT_EDGE: "SELECT_EDGE",
   DESELECT_ALLEDGES: "DESELECT_ALLEDGES",
-  //CHANGE_GATE1STYLING: "CHANGE_GATE1STYLING"
+
   CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
   GRAPH_ZOOM: "GRAPH_ZOOM",
-  //PUSH_NODETOARRAY: "PUSH_NODETOARRAY",
-  //PUSH_EDGETOARRAY: "PUSH_EDGETOARRAY",
+
   GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
   CLICKED_EDGE: "CLICKED_EDGE",
 
-  ADDTO_ALLBLOCKINFO: "ADDTO_ALLBLOCKINFO",
-  FETCHINITIAL_BLOCKDATA: "FETCHINITIAL_BLOCKDATA",
-  OPEN_BLOCKTAB: "OPEN_BLOCKTAB",
-  REMOVE_BLOCKTAB: "REMOVE_BLOCKTAB",
-  //ADDEDGE_TOALLNODEINFO: "ADDEDGE_TOALLNODEINFO",
   PASS_PORTMOUSEDOWN: "PASS_PORTMOUSEDOWN",
-  DESELECT_ALLPORTS: "DESELECT_ALLPORTS",
   STORING_FIRSTPORTCLICKED: "STORING_FIRSTPORTCLICKED",
-  //ADD_ONESINGLEEDGE: "ADD_ONESINGLEEDGE",
-  //CREATENEW_EDGELABEL: "CREATENEW_EDGELABEL",
-  ADD_ONESINGLEEDGETOALLBLOCKINFO: "ADD_ONESINGLEEDGETOALLBLOCKINFO",
-  //ADD_ONESINGLEEDGETOEDGESOBJECT: "ADD_ONESINGLEEDGETOEDGESOBJECT",
-  APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
-  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
-  INTERACTJS_DRAG: "INTERACTJS_DRAG",
+  DESELECT_ALLPORTS: "DESELECT_ALLPORTS",
 
-  TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
-  WINDOWWIDTH_MEDIAQUERYCHANGED: "WINDOWWIDTH_MEDIAQUERYCHANGED",
+
+  APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
 
   ADD_EDGEPREVIEW: "ADD_EDGEPREVIEW",
   UPDATE_EDGEPREVIEWENDPOINT: "UPDATE_EDGEPREVIEWENDPOINT",
+
+
+
+
+  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
   PREVIOUS_MOUSECOORDSONZOOM: "PREVIOUS_MOUSECOORDSONZOOM",
 
-  DELETE_EDGE: "DELETE_EDGE",
 
-  OPEN_EDGETAB: "OPEN_EDGETAB"
+
+  /* sidebar use */
+
+  TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
+  WINDOWWIDTH_MEDIAQUERYCHANGED: "WINDOWWIDTH_MEDIAQUERYCHANGED",
 };
 
 module.exports = appConstants;
@@ -778,249 +710,10 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var CHANGE_EVENT = 'change';
 
-//var nodesToRender = [];
-//var edgesToRender = [];
-//var newlyAddedNode = null;
-//var newlyCreatedEdgeLabel = null;
-var draggedElement = null;
-var draggedElementID = null;
-var clickedEdge = null;
-var portThatHasBeenClicked = null;
-var storingFirstPortClicked = null;
-var portMouseOver = false;
-var edgePreview = null;
-var previousMouseCoordsOnZoom = null;
 
-function updateEdgePreviewEndpoint(position){
-  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
-  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-  //console.log(edgePreview.endpointCoords);
-}
 
-var allBlockTabInfo = {
-  'Gate1': {
-    type: 'Gate',
-    label: 'Gate1',
-    description: 'SR Gate block',
-    inports: [
-      {'name': 'set', 'type': 'boolean'},
-      {'name': 'reset', 'type': 'boolean'},
-    ],
-    outports: [
-      {'name': 'out', 'type': 'boolean'}
-    ]
-  },
-  'TGen1': {
-    type: 'TGen',
-    label: 'TGen1',
-    description: 'Time Generator block',
-    inports: [
-      {'name': 'ena', 'type': 'boolean'}
-    ],
-    outports: [
-      {'name': 'posn', 'type': 'int'}
-    ]
-  },
-  'PComp1': {
-    type: 'PComp',
-    label: 'PComp1',
-    description: 'Position compare block',
-    inports: [
-      {'name': 'ena', 'type': 'boolean'},
-      {'name': 'posn', 'type': 'int'},
-    ],
-    outports: [
-      {'name': 'act', 'type': 'boolean'},
-      {'name': 'pulse', 'type': 'boolean'}
-    ]
-  }
-};
 
-var blockSelectedStates = {
-  Gate1: false,
-  TGen1: false,
-  PComp1: false
-};
-
-function appendToBlockSelectedStates(BlockId){
-  //console.log("blockSelectedStates before adding a new block:");
-  blockSelectedStates[BlockId] = false;
-  //console.log("blockSelectedStates after adding a new block:");
-}
-
-function deselectAllBlocks(){
-  for(var block in blockSelectedStates){
-    blockSelectedStates[block] = false
-  }
-}
-
-function checkIfAnyBlocksAreSelected(){
-  var areAnyBlocksSelected = null;
-  for(var block in blockSelectedStates){
-    if(blockSelectedStates[block] === true){
-      areAnyBlocksSelected = true;
-      break;
-    }
-    else{
-      //console.log("one of the blocks' state is false, check the next one if it is true");
-      areAnyBlocksSelected = false;
-    }
-  }
-  //console.log(areAnyNodesSelected);
-  return areAnyBlocksSelected;
-}
-
-var edgeSelectedStates = {
-  'Gate1outTGen1ena': false,
-  //Gate1OutTGen1Ena: false,
-  //TGen1PosnPComp1Posn: false,
-  //TGen1PosnPComp1Ena: false
-};
-
-function selectEdge(Edge){
-  edgeSelectedStates[Edge] = true;
-}
-
-function getAnyEdgeSelectedState(EdgeId){
-  if(edgeSelectedStates[EdgeId] === undefined || null){
-    //console.log("edge selected state is underfined or null, best check it out...");
-  }
-  else{
-    //console.log("that edge's state exists, hooray!");
-    return edgeSelectedStates[EdgeId];
-  }
-}
-
-function checkIfAnyEdgesAreSelected(){
-  var areAnyEdgesSelected;
-  var i = 0;
-  for(var edge in edgeSelectedStates){
-    i = i + 1;
-    if(edgeSelectedStates[edge] === true){
-      //console.log(edgeSelectedStates[edge]);
-      areAnyEdgesSelected = true;
-      break;
-    }
-    else{
-      areAnyEdgesSelected = false;
-    }
-  }
-  //console.log(areAnyEdgesSelected);
-  /* Taking care of if therer are no edges, so we return false instea dof undefined */
-  if(i === 0){
-    areAnyEdgesSelected = false;
-  }
-
-  return areAnyEdgesSelected;
-}
-
-function deselectAllEdges(){
-  for(var edge in edgeSelectedStates){
-    edgeSelectedStates[edge] = false
-  }
-}
-
-var blockLibrary = {
-  Gate: {
-    name: 'Gate',
-    description: 'SR Gate block',
-    icon: 'play-circle',
-    inports: [
-      {'name': 'set', 'type': 'boolean'},
-      {'name': 'reset', 'type': 'boolean'},
-    ],
-    outports: [
-      {'name': 'out', 'type': 'boolean'}
-    ]
-  },
-  EncIn: {
-    name: 'EncIn',
-    description: 'Encoder Input block',
-    icon: 'cogs',
-    inports: [
-    ],
-    outports: [
-      {'name': 'a', 'type': 'boolean'},
-      {'name': 'b', 'type': 'boolean'},
-      {'name': 'z', 'type': 'boolean'},
-      {'name': 'conn', 'type': 'boolean'},
-      {'name': 'posn', 'type': 'int'}
-    ]
-  },
-  PComp: {
-    name: 'PComp',
-    description: 'Position compare block',
-    icon: 'compass',
-    inports: [
-      {'name': 'ena', 'type': 'boolean'},
-      {'name': 'posn', 'type': 'int'},
-    ],
-    outports: [
-      {'name': 'act', 'type': 'boolean'},
-      {'name': 'pulse', 'type': 'boolean'}
-    ]
-  },
-  TGen: {
-    name: 'TGen',
-    description: 'Time Generator block',
-    icon: 'clock-o',
-    inports: [
-      {'name': 'ena', 'type': 'boolean'}
-    ],
-    outports: [
-      {'name': 'posn', 'type': 'int'}
-    ]
-  },
-  LUT: {
-    name: 'LUT',
-    description: 'Look up Table block',
-    icon: 'stop',
-    inports: [
-      {'name': 'inpa', 'type': 'boolean'},
-      {'name': 'inpb', 'type': 'boolean'},
-      {'name': 'inpc', 'type': 'boolean'},
-      {'name': 'inpd', 'type': 'boolean'},
-      {'name': 'inpe', 'type': 'boolean'}
-    ],
-    outports: [
-      {'name': 'out', 'type': 'boolean'}
-    ]
-  },
-  Pulse: {
-    name: 'Pulse',
-    description: 'Pulse Generator block',
-    icon: 'bolt',
-    inports: [
-      {'name': 'inp', 'type': 'boolean'},
-      {'name': 'reset', 'type': 'boolean'}
-    ],
-    outports: [
-      {'name': 'out', 'type': 'boolean'},
-      {'name': 'err', 'type': 'boolean'}
-    ]
-  },
-  TTLOut: {
-    name: 'TTLOut',
-    description: 'TTL Output block',
-    icon: 'toggle-on',
-    inports: [
-      {'name': 'val', 'type': 'boolean'}
-    ],
-    outports: [
-    ]
-  },
-  PCap: {
-    name: 'PCap',
-    description: 'Position capture block',
-    icon: 'bar-chart',
-    inports: [
-      {'name': 'ena', 'type': 'boolean'},
-      {'name': 'trig', 'type': 'boolean'}
-    ],
-    outports: [
-    ]
-  }
-};
+/* 'BLOCK' use */
 
 var allBlockInfo = {
 
@@ -1032,22 +725,6 @@ var allBlockInfo = {
       x: 50,
       y: 100,
     },
-    //inports: {
-    //  "set": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-    //  "reset": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "out": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
     inports: [
       {
         name: 'set',
@@ -1125,30 +802,6 @@ var allBlockInfo = {
       x: 350,
       y: 150,
     },
-    //inports: {
-    //  'ena': {
-    //    connected: false,
-    //    connectedTo: null
-    //  },
-    //  'posn': {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  'act': {
-    //    connected: false,
-    //    connectedTo: null
-    //  },
-    //  'out': {
-    //    connected: false,
-    //    connectedTo: null
-    //  },
-    //  'pulse': {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
     inports: [
       {
         name: 'ena',
@@ -1333,6 +986,242 @@ function removeEdgeFromAllBlockInfo(Info){
 
 }
 
+function appendToAllBlockInfo(BlockInfo){
+  //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
+  //
+  //}
+  /* This was for when I was generating the new gateNode id in the store rather than in theGraphDiamond */
+  //var newGateId = generateNewNodeId();
+  //console.log(newGateId);
+  //allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  //console.log(allNodeInfo);
+  //newlyAddedNode = allNodeInfo[newGateId];
+  //console.log(newlyAddedNode);
+
+  //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
+  allBlockInfo[BlockInfo] = {
+    type: 'Gate',
+    label: BlockInfo,
+    name: "",
+    position: {
+      x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    /* Replacing inport and outport obejcts with arrays */
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        name: 'reset',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      }
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: false,
+        connectedTo: []
+      }
+    ]
+  };
+
+  /* Trying to use a for loop to copy over the template */
+  //for(var property in nodeInfoTemplates.Gate){
+  //  console.log(NodeInfo);
+  //  console.log(allNodeInfo);
+  //
+  //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
+  //}
+  //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
+  //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
+  //console.log(randomNodePositionGenerator());
+  //console.log(randomNodePositionGenerator());
+}
+
+function interactJsDrag(BlockInfo){
+  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+  //console.log(allNodeInfo[NodeInfo.target].position);
+
+  allBlockInfo[BlockInfo.target].position = {
+    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
+    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
+  }
+}
+
+
+var blockLibrary = {
+  Gate: {
+    name: 'Gate',
+    description: 'SR Gate block',
+    icon: 'play-circle',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  EncIn: {
+    name: 'EncIn',
+    description: 'Encoder Input block',
+    icon: 'cogs',
+    inports: [
+    ],
+    outports: [
+      {'name': 'a', 'type': 'boolean'},
+      {'name': 'b', 'type': 'boolean'},
+      {'name': 'z', 'type': 'boolean'},
+      {'name': 'conn', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  PComp: {
+    name: 'PComp',
+    description: 'Position compare block',
+    icon: 'compass',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  },
+  TGen: {
+    name: 'TGen',
+    description: 'Time Generator block',
+    icon: 'clock-o',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  LUT: {
+    name: 'LUT',
+    description: 'Look up Table block',
+    icon: 'stop',
+    inports: [
+      {'name': 'inpa', 'type': 'boolean'},
+      {'name': 'inpb', 'type': 'boolean'},
+      {'name': 'inpc', 'type': 'boolean'},
+      {'name': 'inpd', 'type': 'boolean'},
+      {'name': 'inpe', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  Pulse: {
+    name: 'Pulse',
+    description: 'Pulse Generator block',
+    icon: 'bolt',
+    inports: [
+      {'name': 'inp', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'},
+      {'name': 'err', 'type': 'boolean'}
+    ]
+  },
+  TTLOut: {
+    name: 'TTLOut',
+    description: 'TTL Output block',
+    icon: 'toggle-on',
+    inports: [
+      {'name': 'val', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  },
+  PCap: {
+    name: 'PCap',
+    description: 'Position capture block',
+    icon: 'bar-chart',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'trig', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  }
+};
+
+var allBlockTabInfo = {
+  'Gate1': {
+    type: 'Gate',
+    label: 'Gate1',
+    description: 'SR Gate block',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  'TGen1': {
+    type: 'TGen',
+    label: 'TGen1',
+    description: 'Time Generator block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  'PComp1': {
+    type: 'PComp',
+    label: 'PComp1',
+    description: 'Position compare block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  }
+};
+
+function generateNewBlockId(){
+  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+  blockIdCounter += 1;
+  var newGateId = "Gate" + blockIdCounter;
+  console.log(newGateId);
+  return newGateId;
+}
+
 var blockInfoTemplates = {
   'Gate': {
     type: 'Gate',
@@ -1424,101 +1313,123 @@ var blockInfoTemplates = {
   }
 };
 
-function appendToAllBlockInfo(BlockInfo){
-  //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
-  //
-  //}
-  /* This was for when I was generating the new gateNode id in the store rather than in theGraphDiamond */
-  //var newGateId = generateNewNodeId();
-  //console.log(newGateId);
-  //allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
-  //console.log(allNodeInfo);
-  //newlyAddedNode = allNodeInfo[newGateId];
-  //console.log(newlyAddedNode);
 
-  //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
-  allBlockInfo[BlockInfo] = {
-    type: 'Gate',
-    label: BlockInfo,
-    name: "",
-    position: {
-      x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
-      y: 50,
-    },
-    /* Replacing inport and outport obejcts with arrays */
-    //inports: {
-    //  "set": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
-    //  "reset": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "out": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
-    inports: [
-      {
-        name: 'set',
-        type: 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'reset',
-        type: 'boolean',
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        type: 'boolean',
-        connected: false,
-        connectedTo: []
-      }
-    ]
-  };
 
-  /* Trying to use a for loop to copy over the template */
-  //for(var property in nodeInfoTemplates.Gate){
-  //  console.log(NodeInfo);
-  //  console.log(allNodeInfo);
-  //
-  //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
-  //}
-  //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
-  //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
-  //console.log(randomNodePositionGenerator());
-  //console.log(randomNodePositionGenerator());
+/* 'FLOWCHART use' */
+
+var clickedEdge = null;
+var portThatHasBeenClicked = null;
+var storingFirstPortClicked = null;
+var portMouseOver = false;
+var edgePreview = null;
+var previousMouseCoordsOnZoom = null;
+
+var blockStyling = {
+  outerRectangleHeight: 76,
+  outerRectangleWidth: 72,
+  innerRectangleHeight: 70,
+  innerRectangleWidth: 66,
+  portRadius: 2.5,
+  portFill: 'grey',
+};
+
+var graphPosition = {
+  x: 0,
+  y: 0
+};
+
+var graphZoomScale = 2.0;
+
+var blockSelectedStates = {
+  Gate1: false,
+  TGen1: false,
+  PComp1: false
+};
+
+function appendToBlockSelectedStates(BlockId){
+  //console.log("blockSelectedStates before adding a new block:");
+  blockSelectedStates[BlockId] = false;
+  //console.log("blockSelectedStates after adding a new block:");
 }
 
-var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
-
-function generateNewBlockId(){
-  /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  blockIdCounter += 1;
-  var newGateId = "Gate" + blockIdCounter;
-  console.log(newGateId);
-  return newGateId;
-}
-
-function interactJsDrag(BlockInfo){
-  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-  //console.log(allNodeInfo[NodeInfo.target].position);
-
-  allBlockInfo[BlockInfo.target].position = {
-    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
-    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
+function deselectAllBlocks(){
+  for(var block in blockSelectedStates){
+    blockSelectedStates[block] = false
   }
 }
+
+function checkIfAnyBlocksAreSelected(){
+  var areAnyBlocksSelected = null;
+  for(var block in blockSelectedStates){
+    if(blockSelectedStates[block] === true){
+      areAnyBlocksSelected = true;
+      break;
+    }
+    else{
+      //console.log("one of the blocks' state is false, check the next one if it is true");
+      areAnyBlocksSelected = false;
+    }
+  }
+  //console.log(areAnyNodesSelected);
+  return areAnyBlocksSelected;
+}
+
+var edgeSelectedStates = {
+  'Gate1outTGen1ena': false,
+  //Gate1OutTGen1Ena: false,
+  //TGen1PosnPComp1Posn: false,
+  //TGen1PosnPComp1Ena: false
+};
+
+function selectEdge(Edge){
+  edgeSelectedStates[Edge] = true;
+}
+
+function getAnyEdgeSelectedState(EdgeId){
+  if(edgeSelectedStates[EdgeId] === undefined || null){
+    //console.log("edge selected state is underfined or null, best check it out...");
+  }
+  else{
+    //console.log("that edge's state exists, hooray!");
+    return edgeSelectedStates[EdgeId];
+  }
+}
+
+function checkIfAnyEdgesAreSelected(){
+  var areAnyEdgesSelected;
+  var i = 0;
+  for(var edge in edgeSelectedStates){
+    i = i + 1;
+    if(edgeSelectedStates[edge] === true){
+      //console.log(edgeSelectedStates[edge]);
+      areAnyEdgesSelected = true;
+      break;
+    }
+    else{
+      areAnyEdgesSelected = false;
+    }
+  }
+  //console.log(areAnyEdgesSelected);
+  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+  if(i === 0){
+    areAnyEdgesSelected = false;
+  }
+
+  return areAnyEdgesSelected;
+}
+
+function deselectAllEdges(){
+  for(var edge in edgeSelectedStates){
+    edgeSelectedStates[edge] = false
+  }
+}
+
+function updateEdgePreviewEndpoint(position){
+  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
+  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
+  //console.log(edgePreview.endpointCoords);
+}
+
 
 var GateBlockStyling = {
   rectangle: {
@@ -1577,22 +1488,10 @@ var GateBlockStyling = {
   }
 };
 
+var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
 
-var blockStyling = {
-  outerRectangleHeight: 76,
-  outerRectangleWidth: 72,
-  innerRectangleHeight: 70,
-  innerRectangleWidth: 66,
-  portRadius: 2.5,
-  portFill: 'grey',
-};
 
-var graphPosition = {
-  x: 0,
-  y: 0
-};
 
-var graphZoomScale = 2.0;
 
 /* Functions to do with data retrieval from the server */
 
@@ -1618,103 +1517,22 @@ var blockStore = assign({}, EventEmitter.prototype, {
   emitChange: function(){
     this.emit(CHANGE_EVENT)
   },
-  //getGate1InportsState: function(){
-  //  return allNodeInfo.Gate1.inports
-  //},
-  //getGate1OutportsState: function(){
-  //  return allNodeInfo.Gate1.outports
-  //},
-  //getTGen1InportsState: function(){
-  //  return allNodeInfo.TGen1.inports
-  //},
-  //getTGen1OutportsState: function(){
-  //  return allNodeInfo.TGen1.outports
-  //},
-  //getGate1Position: function(){
-  //  return nodePositions.Gate1.position;
-  //},
-  //getTGen1Position: function(){
-  //  return nodePositions.TGen1.position;
-  //},
-  //getPComp1Position: function(){
-  //  return nodePositions.PComp1.position;
-  //},
-  //getLUT1Position: function(){
-  //  return nodePositions.LUT1;
-  //},
-  //getAllNodePositions: function(){
-  //  return nodePositions;
-  //},
-  //getAnyNodePosition: function(NodeId){
-  //  if(nodePositions[NodeId] === undefined || null){
-  //    console.log("that node's position isn't here, something's gone wrong...");
-  //    console.log(nodePositions);
-  //  }
-  //  else{
-  //    console.log("here's that node's position!");
-  //    console.log(nodePositions[NodeId]);
-  //    return nodePositions[NodeId];
-  //  }
-  //},
-  //getGateNodeStyling: function(){
-  //  return GateNodeStyling;
-  //},
-  //getSelectedGateNodeStyling: function(){
-  //  return SelectedGateNodeStyling;
-  //},
-  //getTGenNodeStyling: function(){
-  //  return TGenNodeStyling;
-  //},
-  //getSelectedTGenNodeStyling: function(){
-  //  return SelectedTGenNodeStyling;
-  //},
-  //getPCompNodeStyling: function(){
-  //  return PCompNodeStyling;
-  //},
-  //getSelectedPCompNodeStyling: function(){
-  //  return SelectedPCompNodeStyling;
-  //},
-  ///* For edge use */
-  //getGateNodeOutPort: function(){
-  //    return portPositionsForEdges.gateNode.outports.out;
-  //},
-  //getTGenNodeEnaPort: function(){
-  //    return portPositionsForEdges.tgenNode.inports.ena;
-  //},
-  //getGateNodeOutportOut: function(){
-  //  return gateNodeOutports.out;
-  //},
-  //getTGenNodeInportEna: function(){
-  //  return tgenNodeInports.ena;
-  //},
-  //getDraggedElement: function(){
-  //  return draggedElement;
-  //},
-  //getNewlyAddedNode: function(){
-  //  return newlyAddedNode;
-  //},
-  //getNewlyCreatedEdgeLabel: function(){
-  //  return newlyCreatedEdgeLabel;
-  //},
-  //getAllEdges: function(){
-  //  return edges;
-  //},
-  //getNodesToRenderArray: function(){
-  //  return nodesToRender;
-  //},
-  //getEdgesToRenderArray: function(){
-  //  return edgesToRender;
-  //},
-  //getAllBlockTypesStyling: function(){
-  //  return allBlockTypesStyling;
-  //},
-  //getAllBlockTypesPortStyling: function(){
-  //  return allBlockTypesPortStyling;
-  //},
+
+  /* BLOCK use */
 
   getAllBlockInfo: function(){
     return allBlockInfo;
   },
+  getAllBlockInfoForInitialBlockData: function(){
+    return allBlockInfo;
+  },
+  getBlockLibrary: function(){
+    return blockLibrary;
+  },
+
+
+
+  /* FLOWCHART use */
 
   getAnyBlockSelectedState:function(BlockId){
     if(blockSelectedStates[BlockId] === undefined || null){
@@ -1738,6 +1556,7 @@ var blockStore = assign({}, EventEmitter.prototype, {
     return checkIfAnyEdgesAreSelected();
   },
 
+
   getGraphPosition: function(){
     return graphPosition;
   },
@@ -1745,19 +1564,13 @@ var blockStore = assign({}, EventEmitter.prototype, {
     return graphZoomScale;
   },
 
-  getAllBlockInfoForInitialBlockData: function(){
-    return allBlockInfo;
-  },
+
   getPortThatHasBeenClicked: function(){
     return portThatHasBeenClicked;
   },
   getStoringFirstPortClicked: function(){
     return storingFirstPortClicked;
   },
-  getBlockLibrary: function(){
-    return blockLibrary;
-  },
-
   getPortMouseOver: function(){
     return portMouseOver;
   },
@@ -1775,7 +1588,8 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   getBlockStyling: function(){
     return blockStyling;
-  }
+  },
+
 });
 
 blockStore.dispatchToken = AppDispatcher.register(function(payload){
@@ -1784,100 +1598,43 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
   switch(action.actionType){
 
-    //case appConstants.GATENODE_CHANGEPOSITION:
-    //  console.log(payload);
-    //  console.log(action);
-    //  updateGate1Position(item);
-    //  nodeStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DRAGGED_ELEMENT:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  draggedElement = item;
-    //  //console.log(draggedElement);
-    //  nodeStore.emitChange();
-    //  break;
-    //
-    //
-    //case appConstants.DRAGGED_ELEMENTID:
-    //  //console.log(payload);
-    //  //console.log(action);
-    //  draggedElementID = item;
-    //  //console.log(draggedElementID);
-    //  nodeStore.emitChange();
-    //  break;
-    //case appConstants.CHANGE_GATE1STYLING:
-    //    console.log(payload);
-    //    console.log(item);
-    //    checkGate1Styling();
-    //    nodeStore.emitChange();
-    //    break;
-    //case appConstants.CHANGE_NODEPOSITION:
-    //  console.log(payload);
-    //  console.log(item);
-    //  updateNodePosition(item);
-    //  nodeStore.emitChange();
-    //  break;
-    //case appConstants.PORT_MOUSEOVERLEAVETOGGLE:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  portMouseOverLeaveToggle();
-    //  nodeStore.emitChange();
-    //  break;
-    //case appConstants.PUSH_NODETOARRAY:
-    //  console.log(payload);
-    //  console.log(item);
-    //  nodesToRender.push(item);
-    //  console.log(nodesToRender);
-    //  nodeStore.emitChange();
-    //  break;
-    //
-    //case appConstants.PUSH_EDGETOARRAY:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  edgesToRender.push(item);
-    //  console.log(edgesToRender);
-    //  nodeStore.emitChange();
-    //  break;
-    //case appConstants.ADDEDGE_TOALLNODEINFO:
-    //  console.log(payload);
-    //  console.log(item);
-    //  //addEdgeToAllNodeInfo(item);
-    //  addToEdgesObject();
-    //  console.log(allNodeInfo);
-    //  console.log(newlyCreatedEdgeLabel);
-    //  nodeStore.emitChange();
-    //  break;
-    //case appConstants.ADD_ONESINGLEEDGE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  /* Let's try replacing with my function that checks port compatibility */
-    //  //addEdgeToAllNodeInfo(item);
-    //  //addNewEdge(item);
-    //
-    //  /* Try putting port compatibility checker in theGraphDiamond */
-    //  //checkPortCompatibility(item);
-    //
-    //  console.log(edges);
-    //  nodeStore.emitChange();
-    //  break;
-    //
-    //case appConstants.CREATENEW_EDGELABEL:
-    //  console.log(payload);
-    //  console.log(item);
-    //  createNewEdgeLabel(item);
-    //  appendToEdgeSelectedStates(newlyCreatedEdgeLabel);
-    //  nodeStore.emitChange();
-    //  console.log(newlyCreatedEdgeLabel);
-    //  break;
-    //case appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT:
-    //  console.log(payload);
-    //  console.log(item);
-    //  addOneSingleEdge(item.edgeLabel, item.edgeInfo);
-    //  nodeStore.emitChange();
-    //  console.log(edges);
-    //  break;
+    /* BLOCK use */
+
+
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      appendToAllBlockInfo(item);
+      //appendToAllPossibleBlocks(item);
+      appendToBlockSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      blockStore.emitChange();
+      break;
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      console.log(payload);
+      console.log(item);
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
+      break;
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      console.log(payload);
+      console.log(item);
+      removeEdgeFromAllBlockInfo(item);
+      blockStore.emitChange();
+      break;
+
+
+
+    /* FLOWCHART use */
+
 
     case appConstants.SELECT_BLOCK:
       console.log(payload);
@@ -1981,29 +1738,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(edgeSelectedStates);
       break;
 
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      appendToAllBlockInfo(item);
-      //appendToAllPossibleBlocks(item);
-      appendToBlockSelectedStates(item);
-      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-      blockStore.emitChange();
-      break;
-    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
-      addEdgeToAllBlockInfo(item);
-      blockStore.emitChange();
-      console.log(allBlockInfo);
-      break;
-    case appConstants.INTERACTJS_DRAG:
-      console.log(payload);
-      console.log(item);
-      interactJsDrag(item);
-      blockStore.emitChange();
-      break;
-
     case appConstants.ADD_EDGEPREVIEW:
       console.log(payload);
       console.log(item);
@@ -2022,13 +1756,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(payload);
       console.log(item);
       previousMouseCoordsOnZoom = item;
-      blockStore.emitChange();
-      break;
-
-    case appConstants.DELETE_EDGE:
-      console.log(payload);
-      console.log(item);
-      removeEdgeFromAllBlockInfo(item);
       blockStore.emitChange();
       break;
 

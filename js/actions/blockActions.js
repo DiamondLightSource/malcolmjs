@@ -6,78 +6,38 @@ var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 
 var blockActions = {
-  //changeGateNodePosition: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.GATENODE_CHANGEPOSITION,
-  //    item: item
-  //  })
-  //},
-  //draggedElement: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.DRAGGED_ELEMENT,
-  //    item : item
-  //  })
-  //},
-  //draggedElementID: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.DRAGGED_ELEMENTID,
-  //    item : item
-  //  })
-  //},
-  //changeNodePosition: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.CHANGE_NODEPOSITION,
-  //    item: item
-  //  })
-  //},
-  //changeGate1Styling: function(item){
-  //    AppDispatcher.handleAction({
-  //        actionType: appConstants.CHANGE_GATE1STYLING,
-  //        item: item
-  //    })
-  //}
-  //portMouseOverLeaveToggle: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PORT_MOUSEOVERLEAVETOGGLE,
-  //    item: item
-  //  })
-  //},
-  //pushNodeToArray: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PUSH_NODETOARRAY,
-  //    item: item
-  //  })
-  //},
-  //pushEdgeToArray: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PUSH_EDGETOARRAY,
-  //    item: item
-  //  })
-  //},
-  //addEdgeToAllNodeInfo: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADDEDGE_TOALLNODEINFO,
-  //    item: item
-  //  })
-  //},
-  //addOneSingleEdge: function(edgeInfo){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADD_ONESINGLEEDGE,
-  //    item: edgeInfo
-  //  })
-  //},
-  //createNewEdgeLabel: function(edgeInfo){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.CREATENEW_EDGELABEL,
-  //    item: edgeInfo
-  //  })
-  //},
-  //addOneSingleEdgeToEdgesObject(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADD_ONESINGLEEDGETOEDGESOBJECT,
-  //    item: item
-  //  })
-  //},
+
+  /* BLOCK use */
+
+  addToAllBlockInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDTO_ALLBLOCKINFO,
+      item: item
+    })
+  },
+  interactJsDrag: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.INTERACTJS_DRAG,
+      item: item
+    })
+  },
+  addOneSingleEdgeToAllBlockInfo(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
+      item: edgeInfo
+    })
+  },
+  deleteEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DELETE_EDGE,
+      item: item
+    })
+  },
+
+
+
+
+  /* FLOWCHART use */
 
   selectBlock: function(item){
     AppDispatcher.handleAction({
@@ -131,13 +91,6 @@ var blockActions = {
     })
   },
 
-  addToAllBlockInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADDTO_ALLBLOCKINFO,
-      item: item
-    })
-  },
-
   passPortMouseDown: function(port){
     AppDispatcher.handleAction({
       actionType: appConstants.PASS_PORTMOUSEDOWN,
@@ -156,28 +109,12 @@ var blockActions = {
       item: item
     })
   },
-
-  addOneSingleEdgeToAllBlockInfo(edgeInfo){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
-      item: edgeInfo
-    })
-  },
-
   appendToEdgeSelectedState: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.APPEND_EDGESELECTEDSTATE,
       item: item
     })
   },
-
-  interactJsDrag: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.INTERACTJS_DRAG,
-      item: item
-    })
-  },
-
   addEdgePreview: function(item){
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_EDGEPREVIEW,
@@ -197,12 +134,6 @@ var blockActions = {
     })
   },
 
-  deleteEdge: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DELETE_EDGE,
-      item: item
-    })
-  }
 };
 
 module.exports = blockActions;
