@@ -23,6 +23,10 @@ var paneActions = require('../actions/paneActions');
 var Treeview = require('react-treeview');
 var interact = require('../../node_modules/interact.js');
 
+var blockActions = require('../actions/blockActions.js');
+
+var CustomButton = require('./button');
+
 function getSidePaneState(){
   return{
     //tabState: paneStore.getTabState(),
@@ -89,6 +93,19 @@ var SidePane = React.createClass({
     paneActions.removeBlockTab(selectedIndex);
   },
 
+  handleEdgeDeleteButton: function(EdgeInfo){
+    console.log(EdgeInfo);
+    blockActions.deleteEdge(EdgeInfo);
+
+    /* Reset port styling too */
+
+    var fromBlockPortElement = document.getElementById(EdgeInfo.fromBlock + EdgeInfo.fromBlockPort);
+    var toBlockPortElement = document.getElementById(EdgeInfo.toBlock + EdgeInfo.toBlockPort);
+
+    fromBlockPortElement.style.fill = "grey";
+    toBlockPortElement.style.fill = "grey";
+  },
+
   componentDidMount: function(){
     //sidePaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
@@ -133,7 +150,24 @@ var SidePane = React.createClass({
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
 
-          //tabContent.push(<button>Delete edge</button>);
+          tabContent.push(
+            <button key={block.label + "edgeDeleteButton"} onClick={this.handleEdgeDeleteButton.bind(null, block)}
+            >Delete edge</button>
+          );
+
+          /* Trying out my refactored button, doesn't handle different text lengths at all =P */
+          //tabContent.push(
+          //  <CustomButton key={block.label + "edgeDeleteButton"}
+          //                buttonClick={this.handleEdgeDeleteButton.bind(null, block)}
+          //                buttonLabel="Delete edge"
+          //                buttonId={block.label + "edgeDeleteButton"}
+          //  />
+          //);
+
+          console.log(block);
+          console.log(document.getElementById(block.label));
+
+          /* onClick, run the edge delete blockAction */
 
           /* Don't want any content here, just a 'delete edge' button */
         }
@@ -155,7 +189,7 @@ var SidePane = React.createClass({
               <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
                 <p key={block.inports[j].name + "textContent"}
                    id={block.inports[j].name + "textContent"}
-                   style={{fontSize: '14px', position: 'relative', top: '3px'}} >
+                   style={{fontSize: '14px', position: 'relative', top: '5px'}} >
                   {String(block.inports[j].name).toUpperCase()}
                 </p>
                 <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
@@ -218,14 +252,16 @@ var SidePane = React.createClass({
 
                 <p key={block.outports[k].name + "textContent"}
                    id={block.outports[k].name + "textContent"}
-                   style={{fontSize: '14px', position: 'relative', top: '3px'}}>
+                   style={{fontSize: '14px', position: 'relative', top: '5px'}}>
                   {String(block.outports[k].name).toUpperCase()}
                 </p>
 
                 <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
 
                   <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-                  <input style={{position: 'relative', textAlign: 'left',}}
+                  <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                  boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
+                  }}
                          value={block.position.y} readOnly="readonly" maxLength="10" size="10" />
                 </div>
 
@@ -273,7 +309,7 @@ var SidePane = React.createClass({
         }
         console.log(tabContent);
         return tabContent;
-      };
+      }.bind(this);
 
       return (
         <Tab key={tabLabel + "tab"} title={tabLabel}>
@@ -284,7 +320,7 @@ var SidePane = React.createClass({
 
         </Tab>
       )
-    });
+    }.bind(this));
 
     //<b>Attributes of {tabLabel}</b> <br/>
 

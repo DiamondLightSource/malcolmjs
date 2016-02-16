@@ -350,11 +350,13 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.DELETE_EDGE:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
+      console.log("delete edge");
       getInitialBlockDataFromBlockStore();
       resetTabStateReferences();
-
+      console.log(allEdgeTabProperties[item.edgeId]);
       /* Also need to remove the edges tab if it is open */
       if(allEdgeTabProperties[item.edgeId] === true){
+        console.log("need to remove edge tab too");
         /* Do the tab removal stuff */
         //console.log("that edge tab was open, so now we need to remove that tab");
         for(var i = 0; i < _stuff.tabState.length; i++){
@@ -581,19 +583,22 @@ function createObjectForEdgeTabContent(EdgeInfo){
   var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
   var edgeTabObject = {
     'tabType': 'edge',
-    'label': edgeLabel
+    'label': edgeLabel,
+    'edgeId': edgeLabel
   };
-  for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
-    if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
-      edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
-    }
-  }
+  //for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
+  //  if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
+  //    edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
+  //  }
+  //}
+  //
+  //for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
+  //  if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
+  //    edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
+  //  }
+  //}
 
-  for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
-    if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
-      edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
-    }
-  }
+  assign(edgeTabObject, EdgeInfo);
 
   _stuff.tabState.push(edgeTabObject);
 }
