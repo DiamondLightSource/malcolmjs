@@ -6,6 +6,7 @@ var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
+var flowChartActions = require('../actions/flowChartActions');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -45,7 +46,7 @@ var EdgePreview = React.createClass({
             .on('move', this.interactJSMouseMoveForEdgePreview);
           //console.log(e);
           /* No need for this after changing mousemove to move for some reason? */
-          blockActions.updateEdgePreviewEndpoint({
+          flowChartActions.updateEdgePreviewEndpoint({
             x: e.dx,
             y: e.dy
           })
@@ -87,7 +88,7 @@ var EdgePreview = React.createClass({
       y: e.mozMovementY
     };
 
-    blockActions.updateEdgePreviewEndpoint(mousePositionChange);
+    flowChartActions.updateEdgePreviewEndpoint(mousePositionChange);
 
   },
 

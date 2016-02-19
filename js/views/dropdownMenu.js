@@ -135,9 +135,17 @@ var Dropdown = React.createClass({
 
     var items = [];
     for (var i = 0; i < this.props.tabState.length; i++) {
-      var item = this.props.tabState[i].label;
-      console.log(item);
-      var interactIdString = "#" + "dropdownTab" + item;
+      if(this.props.tabState[i].label !== undefined) {
+        var item = this.props.tabState[i].label;
+        console.log(item);
+        var interactIdString = "#" + "dropdownTab" + item;
+      }
+      else if(this.props.tabState[i].label === undefined){
+        var item = this.props.tabState[i];
+        console.log(item);
+        var interactIdString = "#" + "dropdownTab" + item;
+      }
+      console.log(interactIdString);
 
       items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
         //onClick={this.testSelectInvokeSidePane.bind(null, item)}

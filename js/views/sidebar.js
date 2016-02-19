@@ -16,6 +16,7 @@ var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
+//var flowChartStore = require('../stores/flowChartStore');
 
 var SideBar = require('react-sidebar').default;
 
@@ -108,6 +109,12 @@ function getBothPanesState(){
     selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
     listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
+    configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
+
+    //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
+
     //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
     //allBlockTabInfo: paneStore.getAllBlockTabInfo()
   }
@@ -130,7 +137,12 @@ var BothPanes = React.createClass({
       nextState.tabState !== this.state.tabState ||
       nextState.footers !== this.state.footers ||
       nextState.favTabOpen !== this.state.favTabOpen ||
-      nextState.configTabOpen !== this.state.configTabOpen
+      nextState.configTabOpen !== this.state.configTabOpen ||
+
+      nextState.allBlockInfo !== this.state.allBlockInfo ||
+      nextState.favContent !== this.state.favContent ||
+      nextState.configContent !== this.state.configContent
+      //nextState.blockPositions !== this.state.blockPositions
     )
   },
 
@@ -138,6 +150,7 @@ var BothPanes = React.createClass({
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
+    //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
     this.setState({mql: mql}, function(){
@@ -148,6 +161,7 @@ var BothPanes = React.createClass({
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
+    //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
 
@@ -179,6 +193,9 @@ var BothPanes = React.createClass({
                //<div id="SideTabbedView" style={SideTabbedViewStyle}>
                <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
                listVisible={this.state.listVisible}
+               allBlockInfo={this.state.allBlockInfo}
+               favContent={this.state.favContent}
+               configContent={this.state.configContent}
                //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
                //allBlockTabInfo={this.state.allBlockTabInfo}
                />

@@ -5,7 +5,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
-var WebSocketClient = require('./websocketClientTEST');
+var WebSocketClient = require('./websocketClient');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');

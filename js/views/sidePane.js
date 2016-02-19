@@ -62,7 +62,11 @@ var SidePane = React.createClass({
     return (
       nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
       nextProps.listVisible !== this.props.listVisible ||
-      nextProps.tabState !== this.props.tabState
+      nextProps.tabState !== this.props.tabState ||
+      nextProps.allBlockInfo !== this.props.allBlockInfo ||
+      nextProps.favContent !== this.props.favContent ||
+      nextProps.configContent !== this.props.configContent
+      //nextProps.blockPositions !== this.props.blockPositions
     )
   },
 
@@ -110,7 +114,7 @@ var SidePane = React.createClass({
     //sidePaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    this.handleActionInitialFetchOfBlockData();
+    //this.handleActionInitialFetchOfBlockData();
     //this.handleActionPassingSidePaneOnMount()
   },
 
@@ -131,27 +135,40 @@ var SidePane = React.createClass({
   render: function () {
 
     console.log("render: sidePane");
+    console.log(this.props.tabState);
 
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
     var betterTabs = this.props.tabState.map(function(block, i){
-      var tabLabel = block.label;
+      /* Using strings in tabState instead of obejct so I can just point to this.props.allBlockInfo[block] to show
+      the data, rather than having to redupdate allBlockTabInfo via waitFor every time blockStore's allBlockInfo changes
+       */
+      //var tabLabel = block.label;
       var tabIndex = i + 1;
 
       var betterTabContent = function() {
 
         var tabContent = [];
 
-        if(tabLabel === "Favourites" || tabLabel === "Configuration"){
-          console.log("we have a favourites tab or configuaration tab");
-          var tabTitle = tabLabel;
+        if(block === "Favourites"){
+          console.log("we have a favourites tab");
+          tabContent.push(<p>{this.props.favContent.name}</p>);
+          var tabTitle = 'yh';
+        }
+        else if(block === 'Configuration'){
+          console.log("we have a config tab");
+          tabContent.push(<p>{this.props.configContent.name}</p>);
+          var tabTitle = 'yh';
         }
         else if(block.tabType === 'edge'){
           console.log("we have an edge tab!!");
 
+          var tabLabel = block.label;
+
+
           tabContent.push(
-            <button key={block.label + "edgeDeleteButton"} onClick={this.handleEdgeDeleteButton.bind(null, block)}
+            <button key={tabLabel + "edgeDeleteButton"} onClick={this.handleEdgeDeleteButton.bind(null, block)}
             >Delete edge</button>
           );
 
@@ -165,7 +182,7 @@ var SidePane = React.createClass({
           //);
 
           console.log(block);
-          console.log(document.getElementById(block.label));
+          console.log(document.getElementById(tabLabel));
 
           /* onClick, run the edge delete blockAction */
 
@@ -178,24 +195,24 @@ var SidePane = React.createClass({
           var inportDivs = [];
           var outportDivs = [];
 
-          for (var j = 0; j < block.inports.length; j++) {
-                console.log(block);
-                console.log(block.inports[j]);
+          for (var j = 0; j < this.props.allBlockInfo[block].inports.length; j++) {
+                console.log(this.props.allBlockInfo[block]);
+                console.log(this.props.allBlockInfo[block].inports[j]);
 
             /* For getting the tree label to expand/collapse the treeview too */
-            var interactJsIdString = "#" + block.inports[j].name + "textContent";
+            var interactJsIdString = "#" + this.props.allBlockInfo[block].inports[j].name + "textContent";
 
             inportDivs.push(
               <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
-                <p key={block.inports[j].name + "textContent"}
-                   id={block.inports[j].name + "textContent"}
+                <p key={this.props.allBlockInfo[block].inports[j].name + "textContent"}
+                   id={this.props.allBlockInfo[block].inports[j].name + "textContent"}
                    style={{fontSize: '14px', position: 'relative', top: '5px'}} >
-                  {String(block.inports[j].name).toUpperCase()}
+                  {String(this.props.allBlockInfo[block].inports[j].name).toUpperCase()}
                 </p>
                 <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
                   <button style={{position: 'relative', left: '160px',}}  >Icon</button>
                   <input style={{position: 'relative', textAlign: 'left',}}
-                         value={block.position.x} readOnly="readonly" maxLength="10" size="10" />
+                         value={'blank'} readOnly="readonly" maxLength="10" size="10" />
                 </div>
 
               </div>
@@ -246,14 +263,14 @@ var SidePane = React.createClass({
 
           tabContent.push(<br/>);
 
-          for (var k = 0; k < block.outports.length; k++){
+          for (var k = 0; k < this.props.allBlockInfo[block].outports.length; k++){
             outportDivs.push(
               <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
 
-                <p key={block.outports[k].name + "textContent"}
-                   id={block.outports[k].name + "textContent"}
+                <p key={this.props.allBlockInfo[block].outports[k].name + "textContent"}
+                   id={this.props.allBlockInfo[block].outports[k].name + "textContent"}
                    style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-                  {String(block.outports[k].name).toUpperCase()}
+                  {String(this.props.allBlockInfo[block].outports[k].name).toUpperCase()}
                 </p>
 
                 <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
@@ -262,7 +279,7 @@ var SidePane = React.createClass({
                   <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
                   boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
                   }}
-                         value={block.position.y} readOnly="readonly" maxLength="10" size="10" />
+                         value={'blank'} readOnly="readonly" maxLength="10" size="10" />
                 </div>
 
               </div>
@@ -312,9 +329,9 @@ var SidePane = React.createClass({
       }.bind(this);
 
       return (
-        <Tab key={tabLabel + "tab"} title={tabLabel}>
+        <Tab key={block + "tab"} title={block}>
 
-          <Content key={tabLabel + "content"} >
+          <Content key={block + "content"} >
             {betterTabContent()}
           </Content>
 

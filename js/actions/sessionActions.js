@@ -8,7 +8,7 @@
 var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
-var WebSocketClient = require('../websocketClientTEST');
+var WebSocketClient = require('../websocketClient');
 
 var sessionActions = {
 
@@ -20,21 +20,21 @@ var sessionActions = {
   // WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
   //},
 
-  properServerRequestToAddChannelChangeInfoTest: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO,
-      item: item
-    });
-    WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
-    WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
-  },
-
-  interactJsDrag: function(newBlockCoords){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.SESSION_INTERACTJSDRAG,
-      item: newBlockCoords
-    })
-  }
+  //properServerRequestToAddChannelChangeInfoTest: function(item){
+  //  AppDispatcher.handleViewAction({
+  //    actionType: appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO,
+  //    item: item
+  //  });
+  //  WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
+  //  WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
+  //},
+  //
+  //interactJsDrag: function(newBlockCoords){
+  //  AppDispatcher.handleViewAction({
+  //    actionType: appConstants.SESSION_INTERACTJSDRAG,
+  //    item: newBlockCoords
+  //  })
+  //}
 
 };
 

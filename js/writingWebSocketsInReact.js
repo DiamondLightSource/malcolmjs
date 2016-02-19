@@ -498,7 +498,7 @@ function Client(url, debug, maxRate, username, password){
     /* So I guess here (or more specifically, inside ths witch statement in the future) would be where the action to pass the data to deviceStore.
      Not sure if I'm meant to out this function into WebAPIUtils, but for now I'll just try and get this working before I start to get fancy :P */
 
-    serverActions.passingNameOfChannelThatsBeenAdded(json.channel)
+    serverActions.testingWebsocket(json)
 
 
   }

@@ -7,6 +7,8 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
+
 
 var interact = require('../../node_modules/interact.js');
 
@@ -82,7 +84,7 @@ var Ports = React.createClass({
       target = e.currentTarget.id;
     }
     console.log(target);
-    blockActions.passPortMouseDown(target);
+    flowChartActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
     if(this.props.storingFirstPortClicked === null){

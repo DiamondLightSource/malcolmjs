@@ -7,6 +7,7 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -60,10 +61,10 @@ var Edge = React.createClass({
     return (
       nextProps.selected !== this.props.selected ||
       nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
-      nextProps.fromBlockInfo.position.x !== this.props.fromBlockInfo.position.x ||
-      nextProps.fromBlockInfo.position.y !== this.props.fromBlockInfo.position.y ||
-      nextProps.toBlockInfo.position.x !== this.props.toBlockInfo.position.x ||
-      nextProps.toBlockInfo.position.y !== this.props.toBlockInfo.position.y
+      nextProps.fromBlockPosition.x !== this.props.fromBlockPosition.x ||
+      nextProps.fromBlockPosition.y !== this.props.fromBlockPosition.y ||
+      nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
+      nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
     )
   },
 
@@ -92,7 +93,7 @@ var Edge = React.createClass({
     e.stopImmediatePropagation();
     e.stopPropagation();
     //console.log("edge has been selected");
-    blockActions.selectEdge(ReactDOM.findDOMNode(this).id);
+    flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
     paneActions.openEdgeTab({
       edgeId: ReactDOM.findDOMNode(this).id,
       fromBlock: this.props.fromBlock,
@@ -175,10 +176,10 @@ var Edge = React.createClass({
     //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
     //console.log(this.props.allNodePositions[toNode].position);
 
-    var fromBlockPositionX = this.props.fromBlockInfo.position.x;
-    var fromBlockPositionY = this.props.fromBlockInfo.position.y;
-    var toBlockPositionX = this.props.toBlockInfo.position.x;
-    var toBlockPositionY = this.props.toBlockInfo.position.y;
+    var fromBlockPositionX = this.props.fromBlockPosition.x;
+    var fromBlockPositionY = this.props.fromBlockPosition.y;
+    var toBlockPositionX = this.props.toBlockPosition.x;
+    var toBlockPositionY = this.props.toBlockPosition.y;
     //console.log(fromNodePositionX);
     //console.log(fromNodePositionY);
     //

@@ -113,12 +113,16 @@ var dropdownMenuSelect = function(tab){
   //var keepingSidePane = ReactComponent;
   //keepSidePane(ReactComponent);
   //console.log(keepingSidePane);
+  console.log("dropdown menu select");
+  console.log(tab);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
-    if(_stuff.tabState[i].label === tab){              /* Changed from .name to .label */
+    console.log(_stuff.tabState[i]);
+    if(_stuff.tabState[i] === tab){              /* Changed from .name to .label */
       var findTheIndex = i
     }
   }
+  console.log(findTheIndex);
   //
   //var findTheIndex = this.props.list.indexOf(item);
   _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
@@ -174,6 +178,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
     /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
     //return allBlockTabProperties.configTabOpen;
     return allBlockTabProperties.Configuration;
+  },
+  getFavContent: function(){
+    return favContent;
+  },
+  getConfigContent: function(){
+    return configContent;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
@@ -254,19 +264,18 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.FETCHINITIAL_BLOCKDATA:
-      console.log(payload);
-      console.log(item);
-      getInitialBlockDataFromBlockStore();
-      console.log(allBlockTabInfo);
-      paneStore.emitChange();
-      break;
+    //case appConstants.FETCHINITIAL_BLOCKDATA:
+    //  console.log(payload);
+    //  console.log(item);
+    //  getInitialBlockDataFromBlockStore();
+    //  console.log(allBlockTabInfo);
+    //  paneStore.emitChange();
+    //  break;
 
     case appConstants.OPEN_BLOCKTAB:
       console.log(payload);
       console.log(item);
-      console.log(allBlockTabInfo[item].position.x);
-      console.log(allBlockTabInfo[item]);
+
       setBlockTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
       /* Seeing if I can cut out checkWhichNodeTabsOpen and cut straight to adding to _stuff.tabState */
@@ -325,59 +334,86 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    /* Trying to add waitFor blockStore in order to update allBlockTabInfo */
-
     case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
-      getInitialBlockDataFromBlockStore();
-      /* Add the edge to allEdgeTabProperties */
-      allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
-      /* Try simply resetting the references in tabState */
-      resetTabStateReferences();
-      paneStore.emitChange();
-      break;
-
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
-      getInitialBlockDataFromBlockStore();
-      /* Add that block to allBlockTabProperties */
-      appendToAllBlockTabProperties(item);
-      /* Try simply resetting the references in tabState */
-      resetTabStateReferences();
-      console.log(item);
+      appendToAllEdgeTabProperties(item.edgeLabel);
       paneStore.emitChange();
       break;
 
     case appConstants.DELETE_EDGE:
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
-      console.log("delete edge");
-      getInitialBlockDataFromBlockStore();
-      resetTabStateReferences();
-      console.log(allEdgeTabProperties[item.edgeId]);
-      /* Also need to remove the edges tab if it is open */
-      if(allEdgeTabProperties[item.edgeId] === true){
-        console.log("need to remove edge tab too");
-        /* Do the tab removal stuff */
-        //console.log("that edge tab was open, so now we need to remove that tab");
-        for(var i = 0; i < _stuff.tabState.length; i++){
-          if(_stuff.tabState[i].tabType === 'edge'){
-            allEdgeTabProperties[item.edgeId] = false;
-            var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-            newTabs.splice(i, 1);
-            _stuff.tabState = newTabs;
+        if(allEdgeTabProperties[item.edgeId] === true){
+          console.log("need to remove edge tab too");
+          /* Do the tab removal stuff */
+          //console.log("that edge tab was open, so now we need to remove that tab");
+          for(var i = 0; i < _stuff.tabState.length; i++){
+            if(_stuff.tabState[i].tabType === 'edge'){
+              allEdgeTabProperties[item.edgeId] = false;
+              var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+              newTabs.splice(i, 1);
+              _stuff.tabState = newTabs;
+            }
           }
         }
-      }
       paneStore.emitChange();
       break;
 
-    case appConstants.INTERACTJS_DRAG:
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
-      getInitialBlockDataFromBlockStore();
-      /* Try simply resetting the references in tabState */
-      resetTabStateReferences();
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      appendToAllBlockTabProperties(item);
       paneStore.emitChange();
       break;
+
+    /* Trying to add waitFor blockStore in order to update allBlockTabInfo */
+
+    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  getInitialBlockDataFromBlockStore();
+    //  /* Add the edge to allEdgeTabProperties */
+    //  allEdgeTabProperties[String(item.fromBlock) + String(item.fromBlockPort) + String(item.toBlock) + String(item.toBlockPort)] = false;
+    //  /* Try simply resetting the references in tabState */
+    //  resetTabStateReferences();
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.ADDTO_ALLBLOCKINFO:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  getInitialBlockDataFromBlockStore();
+    //  /* Add that block to allBlockTabProperties */
+    //  appendToAllBlockTabProperties(item);
+    //  /* Try simply resetting the references in tabState */
+    //  resetTabStateReferences();
+    //  console.log(item);
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DELETE_EDGE:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  console.log("delete edge");
+    //  getInitialBlockDataFromBlockStore();
+    //  resetTabStateReferences();
+    //  console.log(allEdgeTabProperties[item.edgeId]);
+    //  /* Also need to remove the edges tab if it is open */
+    //  if(allEdgeTabProperties[item.edgeId] === true){
+    //    console.log("need to remove edge tab too");
+    //    /* Do the tab removal stuff */
+    //    //console.log("that edge tab was open, so now we need to remove that tab");
+    //    for(var i = 0; i < _stuff.tabState.length; i++){
+    //      if(_stuff.tabState[i].tabType === 'edge'){
+    //        allEdgeTabProperties[item.edgeId] = false;
+    //        var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+    //        newTabs.splice(i, 1);
+    //        _stuff.tabState = newTabs;
+    //      }
+    //    }
+    //  }
+      paneStore.emitChange();
+      break;
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  getInitialBlockDataFromBlockStore();
+    //  /* Try simply resetting the references in tabState */
+    //  resetTabStateReferences();
+    //  paneStore.emitChange();
+    //  break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
@@ -447,43 +483,43 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
 /* Importing a store into another store is the only way to use the dispatchToken of another store in order to use waitFor, so it must be ok! */
 
-var deviceStore = require('./deviceStore');
-
-var getBlockContentFromDeviceStore = function(){
-  _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
-};
-
-/* Put paneStore.dispatchToken in front of the whole swicth case above */
-
-//paneStore.dispatchToken = AppDispatcher.register(function(payload){
-//  /* Old stuff for deviceStore */
+//var deviceStore = require('./deviceStore');
 //
-//  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
-//  //
-//  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
-//  //
-//  //  console.log(payload);
-//  //  console.log(payload.action.item);
-//  //  getBlockContentFromDeviceStore();
-//  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
-//  //  paneStore.emitChange();
-//  //}
+//var getBlockContentFromDeviceStore = function(){
+//  _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
+//};
 //
-//  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+///* Put paneStore.dispatchToken in front of the whole swicth case above */
 //
-//  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO
-//  //  //|| appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
-//  //  //|| appConstants.CHANGE_BLOCKPOSITION
-//  //){
-//  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-//  //
-//  //  console.log(payload);
-//  //  console.log(payload.action.item);
-//  //  getInitialBlockDataFromBlockStore();
-//  //  paneStore.emitChange();
-//  //}
-//
-//});
+////paneStore.dispatchToken = AppDispatcher.register(function(payload){
+////  /* Old stuff for deviceStore */
+////
+////  //if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+////  //
+////  //  AppDispatcher.waitFor([deviceStore.dispatchToken]);
+////  //
+////  //  console.log(payload);
+////  //  console.log(payload.action.item);
+////  //  getBlockContentFromDeviceStore();
+////  //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+////  //  paneStore.emitChange();
+////  //}
+////
+////  /* No need to do a switch statement, can just do a long if statement with lots of OR operators */
+////
+////  //if(payload.action.actionType === appConstants.ADDTO_ALLBLOCKINFO
+////  //  //|| appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO
+////  //  //|| appConstants.CHANGE_BLOCKPOSITION
+////  //){
+////  //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+////  //
+////  //  console.log(payload);
+////  //  console.log(payload.action.item);
+////  //  getInitialBlockDataFromBlockStore();
+////  //  paneStore.emitChange();
+////  //}
+////
+////});
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
@@ -505,6 +541,10 @@ var allEdgeTabProperties = {
   'Gate1outTGen1ena': false,
 };
 
+function appendToAllEdgeTabProperties(EdgeId){
+  allEdgeTabProperties[EdgeId] = false;
+}
+
 function appendToAllBlockTabProperties(BlockId){
   allBlockTabProperties[BlockId] = false;
 }
@@ -512,10 +552,11 @@ function appendToAllBlockTabProperties(BlockId){
 var setBlockTabStateTrue = function(BlockId){
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
+    console.log(allBlockTabProperties);
     /* Now need to run the function to check which tabs should be open */
     /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
 
-    _stuff.tabState.push(allBlockTabInfo[BlockId]);
+    _stuff.tabState.push(BlockId);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
 
@@ -552,7 +593,7 @@ function setFavTabStateTrue(){
  if(allBlockTabProperties['Favourites'] === false){
    allBlockTabProperties['Favourites'] = true;
 
-   _stuff.tabState.push(favContent);
+   _stuff.tabState.push('Favourites');
 
    selectBlockOnClick()
  }
@@ -567,7 +608,7 @@ function setConfigTabStateTrue(){
   if(allBlockTabProperties['Configuration'] === false){
     allBlockTabProperties['Configuration'] = true;
 
-    _stuff.tabState.push(configContent);
+    _stuff.tabState.push('Configuration');
 
     selectBlockOnClick();
   }
@@ -605,95 +646,102 @@ function createObjectForEdgeTabContent(EdgeInfo){
 
 /* Note that this function also adds the tabs to SidePane */
 
-var checkWhichBlockTabsOpen = function(){
-  for (var key in allBlockTabProperties){
-    //console.log(key);
-    //console.log(allNodeTabProperties[key]);
-    if(allBlockTabProperties[key] === true) {
-      //console.log('just before starting the tabState checker loop');
-      if(_stuff.tabState.length === 0){
-        //console.log('tabState was empty, tab is now open');
-
-        /* Not sure if there's a need for a lookup table, just go straight to allNodeTabInfo using key? */
-
-        //lookupWhichNodeTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
-        //
-        ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-        //console.log(lookupWhichNodeTabToOpen(key));
-        //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
-
-        _stuff.tabState.push(allBlockTabInfo[key]);
-        //console.log(_stuff.tabState);
-
-        /* Tab wasn't open, so it was added to the end, so just jump to the last tab*/
-
-        selectBlockOnClick()
-      }
-      else{
-        for (var i = 0; i < _stuff.tabState.length; i++) {
-          //console.log('in the non-empty tabState checker loop');
-          //console.log(_stuff.tabState.length);
-          //console.log(i);
-          //console.log(_stuff.tabState[i].label);
-          //console.log(key);
-          //console.log(key[label]);
-          if (_stuff.tabState[i].label === key) {
-            //console.log(_stuff.tabState[i].label);
-            //console.log(key.label);
-            //console.log("tab is already open from before, don't add, break statement occurring");
-            /* Here, I need to then jump to the tab corresponding to the node I clicked */
-            /* But wait, this whole loop goes through EVERY node tab, regardless of if it's open or not, so it'll jump to every tab that is already open, leaving it to be on the very last tab that is open! =/ */
-            /* I think I need to write a better way of seeing which tabs are opening, and appending them to _stuff.tabState than this loop */
-            break
-          }
-          else if(_stuff.tabState[i].label !== key){
-            //console.log('key isnt equal to the ith position, move onto the next value in tabState');
-            //console.log(_stuff.tabState.length);
-            //console.log(i);
-            if(i === _stuff.tabState.length - 1){
-              //console.log('tabState didnt have this tab, tab is now open');
-              //console.log(key);
-              //console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
-              //console.log(lookupWhichNodeTabToOpen(key));
-              //
-              ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-              //console.log(lookupWhichNodeTabToOpen(key));
-              //console.log(blockTabsOpen);
-              //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
-
-              _stuff.tabState.push(allBlockTabInfo[key]);
-              //console.log(_stuff.tabState);
-
-              /* Same as the other situation, tab wasn't open so it was added to the end, so just jump to the last tab*/
-
-              selectBlockOnClick()
-            }
-          }
-        }
-        //console.log('finished the tabState checker loop')
-      }
-    }
-    else{
-      //console.log('tab is not open')
-    }
-  }
-
-  //console.log(blockTabsOpen);
-  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
-
-  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
-  // Actually, no need since at the start of the function it is reset*/
-
-  //return updatedBlockTabsOpen;
-
-  //selectBlockOnClick()
-
-};
+//var checkWhichBlockTabsOpen = function(){
+//  for (var key in allBlockTabProperties){
+//    //console.log(key);
+//    //console.log(allNodeTabProperties[key]);
+//    if(allBlockTabProperties[key] === true) {
+//      //console.log('just before starting the tabState checker loop');
+//      if(_stuff.tabState.length === 0){
+//        //console.log('tabState was empty, tab is now open');
+//
+//        /* Not sure if there's a need for a lookup table, just go straight to allNodeTabInfo using key? */
+//
+//        //lookupWhichNodeTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
+//        //
+//        ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+//        //console.log(lookupWhichNodeTabToOpen(key));
+//        //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key));
+//
+//        _stuff.tabState.push(allBlockTabInfo[key]);
+//        //console.log(_stuff.tabState);
+//
+//        /* Tab wasn't open, so it was added to the end, so just jump to the last tab*/
+//
+//        selectBlockOnClick()
+//      }
+//      else{
+//        for (var i = 0; i < _stuff.tabState.length; i++) {
+//          //console.log('in the non-empty tabState checker loop');
+//          //console.log(_stuff.tabState.length);
+//          //console.log(i);
+//          //console.log(_stuff.tabState[i].label);
+//          //console.log(key);
+//          //console.log(key[label]);
+//          if (_stuff.tabState[i].label === key) {
+//            //console.log(_stuff.tabState[i].label);
+//            //console.log(key.label);
+//            //console.log("tab is already open from before, don't add, break statement occurring");
+//            /* Here, I need to then jump to the tab corresponding to the node I clicked */
+//            /* But wait, this whole loop goes through EVERY node tab, regardless of if it's open or not, so it'll jump to every tab that is already open, leaving it to be on the very last tab that is open! =/ */
+//            /* I think I need to write a better way of seeing which tabs are opening, and appending them to _stuff.tabState than this loop */
+//            break
+//          }
+//          else if(_stuff.tabState[i].label !== key){
+//            //console.log('key isnt equal to the ith position, move onto the next value in tabState');
+//            //console.log(_stuff.tabState.length);
+//            //console.log(i);
+//            if(i === _stuff.tabState.length - 1){
+//              //console.log('tabState didnt have this tab, tab is now open');
+//              //console.log(key);
+//              //console.log("here's the returned value of lookupWhichNodeTabToOpen(key)");
+//              //console.log(lookupWhichNodeTabToOpen(key));
+//              //
+//              ////var updatedBlockTabsOpen = blockTabsOpen.concat(key);
+//              //console.log(lookupWhichNodeTabToOpen(key));
+//              //console.log(blockTabsOpen);
+//              //_stuff.tabState = _stuff.tabState.concat(lookupWhichNodeTabToOpen(key)); /* This is the line that breaks everything and causes the infinite loop */
+//
+//              _stuff.tabState.push(allBlockTabInfo[key]);
+//              //console.log(_stuff.tabState);
+//
+//              /* Same as the other situation, tab wasn't open so it was added to the end, so just jump to the last tab*/
+//
+//              selectBlockOnClick()
+//            }
+//          }
+//        }
+//        //console.log('finished the tabState checker loop')
+//      }
+//    }
+//    else{
+//      //console.log('tab is not open')
+//    }
+//  }
+//
+//  //console.log(blockTabsOpen);
+//  //console.log(lookupWhichTabToOpen(key)); /* We've finished the loop, but it still seems that the variable 'key' from the loop still exists, and its the last value it was in the loop, 'configTab'! */
+//
+//  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
+//  // Actually, no need since at the start of the function it is reset*/
+//
+//  //return updatedBlockTabsOpen;
+//
+//  //selectBlockOnClick()
+//
+//};
 
 var removeBlockTab = function(selectedTabIndex){
 
-  var tabName = _stuff.tabState[selectedTabIndex].label;
+  if(_stuff.tabState[selectedTabIndex].label === undefined){
+    /* Tis a block tab, or a fav/config tab */
+    var tabName = _stuff.tabState[selectedTabIndex];
+    console.log(tabName);
+  }
+  else{
+    var tabName = _stuff.tabState[selectedTabIndex].label;
 
+  }
   /* Checking if it's a edge tab or a block tab */
 
   if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
@@ -717,14 +765,14 @@ var removeBlockTab = function(selectedTabIndex){
   _stuff.tabState = newTabs;
 };
 
-var getInitialBlockDataFromBlockStore = function(){
-  //allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
-  allBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
-  /* Try using Object.assign instead to not fetch position data as well from allBlockInfo */
-  //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
-  ///* Now need to loop over each block object and 'remove' the position attribute */
-  //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
-};
+//var getInitialBlockDataFromBlockStore = function(){
+//  //allBlockTabInfo = blockStore.getAllBlockInfoForInitialBlockData();
+//  allBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+//  /* Try using Object.assign instead to not fetch position data as well from allBlockInfo */
+//  //var intermediateBlockTabInfo = (JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())));
+//  ///* Now need to loop over each block object and 'remove' the position attribute */
+//  //allBlockTabInfo = assign({}, intermediateBlockTabInfo);
+//};
 
 function toggleSidebar(){
   if(_stuff.sidebarOpen === true){

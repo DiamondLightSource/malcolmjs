@@ -16,7 +16,7 @@ var deviceActions = require('../actions/deviceActions');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
-var WebSocketClient = require('../websocketClientTEST');
+var WebSocketClient = require('../websocketClient');
 var sessionActions = require('../actions/sessionActions');
 
 var FlowChartControllerView = require('./flowChartControllerView');

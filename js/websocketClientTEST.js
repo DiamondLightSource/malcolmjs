@@ -2,15 +2,15 @@
  * Created by twi18192 on 01/10/15.
  */
 
-var Client = require('./writingWebSocketsInReact');
+var ClientTest = require('./writingWebSocketsInReact');
 
-var WebSocketClient = new Client("wss://echo.websocket.org", null, 10, null, null);
+var WebSocketClientTest = new ClientTest("wss://echo.websocket.org", null, 10, null, null);
 
 console.log("trying to show all channels");
-console.log(WebSocketClient.getAllChannels());
+console.log(WebSocketClientTest.getAllChannels());
 /* This works correctly! :) */
 
-WebSocketClient.addWebSocketOnErrorCallback(function(){
+WebSocketClientTest.addWebSocketOnErrorCallback(function(){
   console.log("just a simple error")
 });
 
@@ -29,4 +29,4 @@ WebSocketClient.addWebSocketOnErrorCallback(function(){
 
 
 
-module.exports = WebSocketClient;
+module.exports = WebSocketClientTest;

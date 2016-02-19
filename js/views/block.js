@@ -7,6 +7,7 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
 
 var Ports = require('./ports.js');
 var BlockRectangle = require('./blockRectangle');
@@ -76,39 +77,13 @@ var Block = React.createClass({
       .off('tap', this.blockSelect);
   },
 
-  //componentWillReceiveProps: function(nextProps){
-  //  console.log(this.props.blockInfo.position);
-  //  console.log(nextProps.blockInfo.position);
-  //},
-  //
-  //componentWillUpdate: function(nextProps, nextState){
-  //  console.log(this.props.blockInfo.position);
-  //  console.log(nextProps.blockInfo.position);
-  //},
-  //
   shouldComponentUpdate: function(nextProps, nextState){
-    //console.log("shouldComponentUpdate");
-    //console.log(nextProps);
-    console.log(this.props.blockInfo.position);
-    console.log(nextProps.blockInfo.position);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x);
-    //console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-    //  nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-    console.log(nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-      nextProps.blockInfo.position.y !== this.props.blockInfo.position.y);
-    console.log(this.props.portThatHasBeenClicked);
-    //console.log(document.getElementById(this.props.portThatHasBeenClicked));
-    //console.log(document.getElementById(nextProps.portThatHasBeenClicked));
-    //
-    //var oldPortThatHasBeenClicked = document.getElementById(this.props.portThatHasBeenClicked);
-    //var newPortThatHasBeenClicked = document.getElementById(nextProps.portThatHasBeenClicked);
-    console.log("yep");
 
     if(this.props.portThatHasBeenClicked === null){
       console.log("portThatHasBeenClicked isn't anything");
       return (
-        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.blockPosition.x !== this.props.blockPosition.x ||
+        nextProps.blockPosition.y !== this.props.blockPosition.y ||
         nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
         nextProps.selected !== this.props.selected
       )
@@ -120,8 +95,8 @@ var Block = React.createClass({
       console.log("portThatHasBeenClicked is something");
 
       return (
-        nextProps.blockInfo.position.x !== this.props.blockInfo.position.x ||
-        nextProps.blockInfo.position.y !== this.props.blockInfo.position.y ||
+        nextProps.blockPosition.x !== this.props.blockPosition.x ||
+        nextProps.blockPosition.y !== this.props.blockPosition.y ||
         nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
         nextProps.selected !== this.props.selected ||
         nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
@@ -135,7 +110,7 @@ var Block = React.createClass({
 
   handleInteractJsDrag: function(item){
     //console.log("interactJs drag is occurring");
-    blockActions.interactJsDrag(item);
+    flowChartActions.interactJsDrag(item);
 
     /* For debouncing */
     //this.startDrag = null;
@@ -180,13 +155,13 @@ var Block = React.createClass({
     //}
 
     if(this.props.areAnyBlocksSelected === false){
-      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
     }
     else{
       /* Need to run deselect before I select the current node */
       this.props.deselect();
-      blockActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
     }
 
@@ -354,7 +329,7 @@ var Block = React.createClass({
     console.log("render: block");
     console.log(this.props.id);
 
-    var blockTranslate = "translate(" + this.props.blockInfo.position.x + "," + this.props.blockInfo.position.y + ")";
+    var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 
     return (
       <g {...this.props}

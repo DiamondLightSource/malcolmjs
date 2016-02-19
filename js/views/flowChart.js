@@ -8,6 +8,9 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
+var flowChartStore = require('../stores/flowChartStore');
+var flowChartActions = require('../actions/flowChartActions');
+
 var Edge = require('./edge.js');
 var EdgePreview = require('./edgePreview');
 
@@ -16,6 +19,9 @@ var Block = require('./block.js');
 var interact = require('../../node_modules/interact.js');
 
 var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+var WebAPIUtils = require('../utils/WebAPIUtils');
+
 
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
@@ -125,16 +131,16 @@ var FlowChart = React.createClass({
     //e.stopImmediatePropagation();
     //e.stopPropagation();
     //console.log("dragArea has been clicked");
-    blockActions.deselectAllBlocks("deselect all blocks");
-    blockActions.deselectAllEdges("deselect all edges");
+    flowChartActions.deselectAllBlocks("deselect all blocks");
+    flowChartActions.deselectAllEdges("deselect all edges");
 
     if(this.props.portThatHasBeenClicked !== null){
       this.portDeselectRemoveHighlight();
-      blockActions.deselectAllPorts("deselect all ports");
+      flowChartActions.deselectAllPorts("deselect all ports");
       this.resetPortClickStorage();
 
       //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
-      blockActions.addEdgePreview(null);
+      flowChartActions.addEdgePreview(null);
       //interact('#appAndDragAreaContainer')
       //  .off('move', this.interactJSMouseMoveForEdgePreview)
     }
@@ -213,8 +219,8 @@ var FlowChart = React.createClass({
        y: newGraphPositionY
      };
 
-     blockActions.graphZoom(scale);
-     blockActions.changeGraphPosition(newGraphPosition);
+     flowChartActions.graphZoom(scale);
+     flowChartActions.changeGraphPosition(newGraphPosition);
 
     //var previousMouseCoordsOnZoom = {
     //  x: e.nativeEvent.clientX,
@@ -324,8 +330,8 @@ var FlowChart = React.createClass({
       var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
       var portType = "outport";
     }
-    var endOfEdgeX = this.props.allBlockInfo[fromBlockId].position.x + endOfEdgePortOffsetX;
-    var endOfEdgeY = this.props.allBlockInfo[fromBlockId].position.y + endOfEdgePortOffsetY;
+    var endOfEdgeX = this.props.blockPositions[fromBlockId].x + endOfEdgePortOffsetX;
+    var endOfEdgeY = this.props.blockPositions[fromBlockId].y + endOfEdgePortOffsetY;
 
     var edgePreviewInfo = {
       fromBlockInfo: {
@@ -342,7 +348,7 @@ var FlowChart = React.createClass({
       }
     };
 
-    blockActions.addEdgePreview(edgePreviewInfo);
+    flowChartActions.addEdgePreview(edgePreviewInfo);
 
     //Perf.stop();
     //Perf.printDOM(Perf.getLastMeasurements());
@@ -402,7 +408,7 @@ var FlowChart = React.createClass({
     //console.log(port);
 
     //this.setState({storingFirstPortClicked: this.state.portThatHasBeenClicked}); /* Replaced with a nodeAction */
-    blockActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
+    flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
     var port = document.getElementById(this.props.portThatHasBeenClicked);
     /* Need an if loop to check if we're hovering the port already
@@ -442,7 +448,7 @@ var FlowChart = React.createClass({
 
     /* Reset edgePreview in blockStore */
 
-    blockActions.addEdgePreview(null);
+    flowChartActions.addEdgePreview(null);
 
   },
 
@@ -593,7 +599,7 @@ var FlowChart = React.createClass({
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
 
-    blockActions.addEdgePreview(null);
+    flowChartActions.addEdgePreview(null);
     //interact('#appAndDragAreaContainer')
     //  .off('move', this.interactJSMouseMoveForEdgePreview)
   }
@@ -638,7 +644,7 @@ var FlowChart = React.createClass({
 
       this.resetPortClickStorage();
 
-      blockActions.addEdgePreview(null);
+      flowChartActions.addEdgePreview(null);
       //interact('#appAndDragAreaContainer')
       //  .off('move', this.interactJSMouseMoveForEdgePreview)
     }
@@ -765,24 +771,28 @@ var FlowChart = React.createClass({
         //  //}
         //}
 
+
+        edgeLabel = String(startBlock) + String(startBlockPort) +  String(endBlock) + String(endBlockPort);
+
         newEdge = {
           fromBlock: startBlock,
           fromBlockType: startBlockType,
           fromBlockPort: startBlockPort,
           toBlock: endBlock,
           toBlockType: endBlockType,
-          toBlockPort: endBlockPort
+          toBlockPort: endBlockPort,
+          edgeLabel: edgeLabel
         };
 
-        /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
-        edgeLabel = String(newEdge.fromBlock) + String(newEdge.fromBlockPort) +  String(newEdge.toBlock) + String(newEdge.toBlockPort);
-
         blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
-        blockActions.appendToEdgeSelectedState(edgeLabel);
+        //flowChartActions.appendToEdgeSelectedState(edgeLabel);
+
+        /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
+
         this.resetPortClickStorage();
         //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
         /* Can now safely delete the edgePreview by setting it back to null */
-        blockActions.addEdgePreview(null);
+        flowChartActions.addEdgePreview(null);
         //interact('#appAndDragAreaContainer')
         //  .off('move', this.interactJSMouseMoveForEdgePreview)
       }
@@ -801,7 +811,7 @@ var FlowChart = React.createClass({
 
         this.resetPortClickStorage();
 
-        blockActions.addEdgePreview(null);
+        flowChartActions.addEdgePreview(null);
         //interact('#appAndDragAreaContainer')
         //  .off('move', this.interactJSMouseMoveForEdgePreview)
       }
@@ -817,7 +827,7 @@ var FlowChart = React.createClass({
     /* Hence, don't add anything to allNodeInfo */
 
     document.getElementById('dragArea').style.cursor = 'default';
-    blockActions.addEdgePreview(null);
+    flowChartActions.addEdgePreview(null);
     //interact('#appAndDragAreaContainer')
     //  .off('move', this.interactJSMouseMoveForEdgePreview)
   },
@@ -825,8 +835,8 @@ var FlowChart = React.createClass({
   resetPortClickStorage: function(){
     /* The same as what I would expect a portDeselect function to do I think */
     //console.log("Resetting port click storage");
-    blockActions.storingFirstPortClicked(null);
-    blockActions.passPortMouseDown(null);
+    flowChartActions.storingFirstPortClicked(null);
+    flowChartActions.passPortMouseDown(null);
   },
 
   interactJsDragPan: function(e){
@@ -836,13 +846,13 @@ var FlowChart = React.createClass({
     var xChange = this.props.graphPosition.x + e.dx;
     var yChange = this.props.graphPosition.y + e.dy;
 
-    blockActions.changeGraphPosition({
+    flowChartActions.changeGraphPosition({
       x: xChange,
       y: yChange
     });
 
     if(this.props.edgePreview !== null) {
-      blockActions.updateEdgePreviewEndpoint({
+      flowChartActions.updateEdgePreviewEndpoint({
         x: -e.dx,
         y: -e.dy
       })
@@ -871,8 +881,8 @@ var FlowChart = React.createClass({
       y: newGraphPositionY
     };
 
-    blockActions.graphZoom(newZoomScale);
-    blockActions.changeGraphPosition(newGraphPosition);
+    flowChartActions.graphZoom(newZoomScale);
+    flowChartActions.changeGraphPosition(newGraphPosition);
   },
 
   //keyPress: function(e){
@@ -889,6 +899,15 @@ var FlowChart = React.createClass({
   //    }
   //  }
   //},
+
+  testingWebsocket: function(){
+    //var message = '{"type" : "Subscribe", "id" : ' + idSub + ', "endpoint" : "' + channelSub + '"}';
+
+    //WebSocketClient.sendText('{"type" : "Subscribe", "id" : ' + '0' + ', "endpoint" : "' + 'Z:CLOCKS.attributes.A' + '"}');
+
+    WebAPIUtils.subscribeChannel();
+
+  },
 
 
 
@@ -915,9 +934,10 @@ var FlowChart = React.createClass({
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}
                //portMouseOver={this.props.portMouseOver}
-               selected={blockStore.getAnyBlockSelectedState(block)}
+               selected={flowChartStore.getAnyBlockSelectedState(block)}
                deselect={this.deselect}
                blockStyling={this.props.blockStyling}
+               blockPosition={this.props.blockPositions[block]}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );
@@ -939,12 +959,12 @@ var FlowChart = React.createClass({
 
           edges.push(
             <Edge key={edgeLabel} id={edgeLabel}
-                  fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort}
-                  toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort}
+                  fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort} fromBlockPosition={this.props.blockPositions[fromBlock]}
+                  toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort} toBlockPosition={this.props.blockPositions[toBlock]}
                   fromBlockInfo={this.props.allBlockInfo[fromBlock]}
                   toBlockInfo={this.props.allBlockInfo[toBlock]}
                   areAnyEdgesSelected={this.props.areAnyEdgesSelected}
-                  selected={blockStore.getIfEdgeIsSelected(edgeLabel)}
+                  selected={flowChartStore.getIfEdgeIsSelected(edgeLabel)}
                   inportArrayIndex={i} inportArrayLength={this.props.allBlockInfo[block].inports.length}
                   blockStyling={this.props.blockStyling}
             />
@@ -969,7 +989,7 @@ var FlowChart = React.createClass({
         <EdgePreview key={edgePreviewLabel} id={edgePreviewLabel} interactJsDragPan={this.interactJsDragPan}
                      failedPortConnection={this.failedPortConnection}
                      edgePreview={this.props.edgePreview}
-                     fromBlockPosition={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock].position}
+                     fromBlockPosition={this.props.blockPositions[this.props.edgePreview.fromBlockInfo.fromBlock]}
                      fromBlockInfo={this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock]}
                      blockStyling={this.props.blockStyling}
 
@@ -1000,6 +1020,14 @@ var FlowChart = React.createClass({
              transform={matrixTransform}
              onWheel={this.wheelZoom}  >
 
+            <g transform="translate(100, 50)" >
+              <text>{String(this.props.dataFetchTest.value)}</text>
+            </g>
+
+            <g transform="translate(200, 50)"  >
+              <rect height="50" width="50" onClick={this.testingWebsocket} ></rect>
+            </g>
+
 
             <g id="EdgesGroup" >
 
@@ -1025,6 +1053,21 @@ var FlowChart = React.createClass({
 });
 
 module.exports = FlowChart;
+
+//<g transform="translate(50, 50)" >
+//  <text>{this.props.allBlockInfo['Gate1'].position.x}</text>
+//  <text y="10" >{this.props.allBlockInfo['Gate1'].position.y}</text>
+//
+//</g>
+//<g transform="translate(100, 50)" >
+//  <text>{this.props.allBlockInfo['TGen1'].position.x}</text>
+//<text y="10" >{this.props.allBlockInfo['TGen1'].position.y}</text>
+//</g>
+//
+//<g transform="translate(150, 50)" >
+//  <text>{this.props.allBlockInfo['PComp1'].position.x}</text>
+//  <text y="10" >{this.props.allBlockInfo['PComp1'].position.y}</text>
+//</g>
 
 //<LUTNode id="LUT1"
 //         height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 6} x={this.state.LUT1Position.x} y={this.state.LUT1Position.y}

@@ -10,22 +10,29 @@ var appConstants = require('../constants/appConstants');
 //var paneActions = require('./paneActions');
 
 var serverActions = {
-  passingUpdatedChannelValue: function(item){
+  //passingUpdatedChannelValue: function(item){
+  //  AppDispatcher.handleServerAction({
+  //    actionType: appConstants.PASSUPDATEDCHANNEL_VALUE,
+  //    item: item
+  //  })
+  //},
+  //
+  //passingNameOfChannelThatsBeenAdded: function(item){
+  //  AppDispatcher.handleServerAction({
+  //    actionType: appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED,
+  //    item:item
+  //  });
+  //  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+  //}
+
+  testingWebsocket: function(item){
     AppDispatcher.handleServerAction({
-      actionType: appConstants.PASSUPDATEDCHANNEL_VALUE,
+      actionType: appConstants.TEST_WEBSOCKET,
       item: item
     })
-  },
-
-  passingNameOfChannelThatsBeenAdded: function(item){
-    AppDispatcher.handleServerAction({
-      actionType: appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED,
-      item:item
-    });
-    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   }
 
 };

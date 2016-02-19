@@ -20,10 +20,10 @@ var allBlockInfo = {
     type: 'Gate',
     label: 'Gate1',
     name: "Arm",
-    position: {
-      x: 50,
-      y: 100,
-    },
+    //position: {
+    //  x: 50,
+    //  y: 100,
+    //},
     inports: [
       {
         name: 'set',
@@ -57,10 +57,10 @@ var allBlockInfo = {
     type: 'TGen',
     label: 'TGen1',
     name: '',
-    position: {
-      x: 250,
-      y: 10
-    },
+    //position: {
+    //  x: 250,
+    //  y: 10
+    //},
     //inports: {
     //  "ena": {
     //    connected: false,
@@ -97,10 +97,10 @@ var allBlockInfo = {
     type: 'PComp',
     label: 'PComp1',
     name: "LinePulse",
-    position: {
-      x: 350,
-      y: 150,
-    },
+    //position: {
+    //  x: 350,
+    //  y: 150,
+    //},
     inports: [
       {
         name: 'ena',
@@ -136,67 +136,67 @@ var allBlockInfo = {
       }
     ]
   },
-  '7portblock': {
-    type: '7port',
-    label: '7port1',
-    name: '',
-    position: {
-      x: 600,
-      y: 300
-    },
-    inports: [
-      {
-        name: 'inpa',
-        type: 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpb',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpc',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpd',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpe',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpf',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      },
-      {
-        'name': 'inpg',
-        'type': 'boolean',
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        type: 'boolean',
-        connected: false,
-        connectedTo: []
-      },
-    ]
-  }
+  //'7portblock': {
+  //  type: '7port',
+  //  label: '7port1',
+  //  name: '',
+  //  position: {
+  //    x: 600,
+  //    y: 300
+  //  },
+  //  inports: [
+  //    {
+  //      name: 'inpa',
+  //      type: 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpb',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpc',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpd',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpe',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpf',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      'name': 'inpg',
+  //      'type': 'boolean',
+  //      connected: false,
+  //      connectedTo: null
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'out',
+  //      type: 'boolean',
+  //      connected: false,
+  //      connectedTo: []
+  //    },
+  //  ]
+  //}
 };
 
 function addEdgeToAllBlockInfo(Info){
@@ -360,16 +360,16 @@ function appendToAllBlockInfo(BlockInfo){
   //console.log(randomNodePositionGenerator());
 }
 
-function interactJsDrag(BlockInfo){
-  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-  //console.log(allNodeInfo[NodeInfo.target].position);
-
-  allBlockInfo[BlockInfo.target].position = {
-    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
-    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
-  }
-}
+//function interactJsDrag(BlockInfo){
+//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+//  //console.log(allNodeInfo[NodeInfo.target].position);
+//
+//  allBlockInfo[BlockInfo.target].position = {
+//    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
+//    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
+//  }
+//}
 
 
 var blockLibrary = {
@@ -806,6 +806,13 @@ function addBlock(){
 
 }
 
+
+/* Testing a simple data fetch */
+
+var dataFetchTest = {
+  value: true,
+};
+
 var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
@@ -829,65 +836,71 @@ var blockStore = assign({}, EventEmitter.prototype, {
     return blockLibrary;
   },
 
+  /* WebAPI use */
+
+  getDataFetchTest: function(){
+    return dataFetchTest;
+  },
+
 
 
   /* FLOWCHART use */
 
-  getAnyBlockSelectedState:function(BlockId){
-    if(blockSelectedStates[BlockId] === undefined || null){
-      //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
-      //console.log(NodeId);
-      //console.log(nodeSelectedStates[NodeId]);
-    }
-    else{
-      //console.log("the state of that nod exists, passing it now");
-      //console.log(nodeSelectedStates[NodeId]);
-      return blockSelectedStates[BlockId];
-    }
-  },
-  getIfAnyBlocksAreSelected: function(){
-    return checkIfAnyBlocksAreSelected();
-  },
-  getIfEdgeIsSelected: function(EdgeId){
-    return getAnyEdgeSelectedState(EdgeId);
-  },
-  getIfAnyEdgesAreSelected: function(){
-    return checkIfAnyEdgesAreSelected();
-  },
-
-
-  getGraphPosition: function(){
-    return graphPosition;
-  },
-  getGraphZoomScale: function(){
-    return graphZoomScale;
-  },
-
-
-  getPortThatHasBeenClicked: function(){
-    return portThatHasBeenClicked;
-  },
-  getStoringFirstPortClicked: function(){
-    return storingFirstPortClicked;
-  },
-  getPortMouseOver: function(){
-    return portMouseOver;
-  },
-
-  getSubsetOfAllBlockInfo: function(){
-    return allBlockInfo.Gate1.inports;
-  },
-
-  getEdgePreview: function(){
-    return edgePreview;
-  },
-  getPreviousMouseCoordsOnZoom: function(){
-    return previousMouseCoordsOnZoom;
-  },
-
-  getBlockStyling: function(){
-    return blockStyling;
-  },
+  //getAnyBlockSelectedState:function(BlockId){
+  //  if(blockSelectedStates[BlockId] === undefined || null){
+  //    //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+  //    //console.log(NodeId);
+  //    //console.log(nodeSelectedStates[NodeId]);
+  //  }
+  //  else{
+  //    //console.log("the state of that nod exists, passing it now");
+  //    //console.log(nodeSelectedStates[NodeId]);
+  //    return blockSelectedStates[BlockId];
+  //  }
+  //},
+  //getIfAnyBlocksAreSelected: function(){
+  //  return checkIfAnyBlocksAreSelected();
+  //},
+  //getIfEdgeIsSelected: function(EdgeId){
+  //  return getAnyEdgeSelectedState(EdgeId);
+  //},
+  //getIfAnyEdgesAreSelected: function(){
+  //  return checkIfAnyEdgesAreSelected();
+  //},
+  //
+  //
+  //getGraphPosition: function(){
+  //  return graphPosition;
+  //},
+  //getGraphZoomScale: function(){
+  //  return graphZoomScale;
+  //},
+  //
+  //
+  //getPortThatHasBeenClicked: function(){
+  //  return portThatHasBeenClicked;
+  //},
+  //getStoringFirstPortClicked: function(){
+  //  return storingFirstPortClicked;
+  //},
+  //getPortMouseOver: function(){
+  //  return portMouseOver;
+  //},
+  //
+  //getSubsetOfAllBlockInfo: function(){
+  //  return allBlockInfo.Gate1.inports;
+  //},
+  //
+  //getEdgePreview: function(){
+  //  return edgePreview;
+  //},
+  //getPreviousMouseCoordsOnZoom: function(){
+  //  return previousMouseCoordsOnZoom;
+  //},
+  //
+  //getBlockStyling: function(){
+  //  return blockStyling;
+  //},
 
 });
 
@@ -916,12 +929,12 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       console.log(allBlockInfo);
       break;
-    case appConstants.INTERACTJS_DRAG:
-      console.log(payload);
-      console.log(item);
-      interactJsDrag(item);
-      blockStore.emitChange();
-      break;
+    //case appConstants.INTERACTJS_DRAG:
+    //  console.log(payload);
+    //  console.log(item);
+    //  interactJsDrag(item);
+    //  blockStore.emitChange();
+    //  break;
 
     case appConstants.DELETE_EDGE:
       console.log(payload);
@@ -930,133 +943,164 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
+    /* serverActions */
+
+    case appConstants.TEST_WEBSOCKET:
+      console.log(payload);
+      console.log(item);
+      blockStore.emitChange();
+      break;
+
+    /* WebAPI use */
+
+    case appConstants.TEST_DATAFETCH:
+      console.log(payload);
+      console.log(item);
+      dataFetchTest = JSON.parse(JSON.stringify(item));
+      blockStore.emitChange();
+      break;
+
+    case appConstants.TEST_SUBSCRIBECHANNEL:
+      console.log(payload);
+      console.log(item);
+      blockStore.emitChange();
+      break;
+
+    /* WebAPI use, but flowChart will be using this to display a loading icon */
+
+    case appConstants.SERVER_REQUESTPENDING:
+      console.log(payload);
+      console.log(item);
+      /* Do nothign yet, I don't got no loading icon */
+      break;
+
 
 
     /* FLOWCHART use */
 
 
-    case appConstants.SELECT_BLOCK:
-      console.log(payload);
-      console.log(item);
-      blockSelectedStates[item] = true;
-      console.log(blockSelectedStates);
-      //changeUnselectedNodesOpacity();
-      blockStore.emitChange();
-      break;
-
-    case appConstants.DESELECT_ALLBLOCKS:
-      console.log(payload);
-      console.log(item);
-      deselectAllBlocks();
-      //console.log(nodeSelectedStates.Gate1);
-      //console.log(nodeSelectedStates.TGen1);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.SELECT_EDGE:
-      console.log(payload);
-      console.log(item);
-      var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
-      //console.log(areAnyEdgesSelected);
-      console.log(clickedEdge);
-      if(areAnyEdgesSelected === true && item !== clickedEdge){
-        deselectAllEdges();
-        selectEdge(item);
-      }
-      else if(areAnyEdgesSelected === false){
-        selectEdge(item);
-      }
-      console.log(edgeSelectedStates);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.DESELECT_ALLEDGES:
-      console.log(payload);
-      console.log(item);
-      deselectAllEdges();
-      blockStore.emitChange();
-      break;
-
-    case appConstants.CHANGE_GRAPHPOSITION:
-      //console.log(payload);
-      //console.log(item);
-      graphPosition = item;
-      blockStore.emitChange();
-      break;
-
-    case appConstants.GRAPH_ZOOM:
-      //console.log(payload);
-      //console.log(item);
-      graphZoomScale = item;
-      blockStore.emitChange();
-      break;
-
-    case appConstants.GETANY_EDGESELECTEDSTATE:
-      console.log(payload);
-      console.log(item);
-      getAnyEdgeSelectedState(item);
-      console.log(edgeSelectedStates[item]);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.CLICKED_EDGE:
-      console.log(payload);
-      console.log(item);
-      clickedEdge = item;
-      console.log(clickedEdge);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.PASS_PORTMOUSEDOWN:
-      console.log(payload);
-      console.log(item);
-      portThatHasBeenClicked = item;
-      console.log(portThatHasBeenClicked);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.DESELECT_ALLPORTS:
-      portThatHasBeenClicked = null;
-      console.log("portThatHasBeenClicked has been reset");
-      blockStore.emitChange();
-      break;
-
-    case appConstants.STORING_FIRSTPORTCLICKED:
-      console.log(payload);
-      console.log(item);
-      storingFirstPortClicked = item;
-      //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.APPEND_EDGESELECTEDSTATE:
-      console.log(payload);
-      console.log(item);
-      edgeSelectedStates[item] = false;
-      blockStore.emitChange();
-      console.log(edgeSelectedStates);
-      break;
-
-    case appConstants.ADD_EDGEPREVIEW:
-      console.log(payload);
-      console.log(item);
-      edgePreview = item;
-      blockStore.emitChange();
-      break;
-
-    case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-      //console.log(payload);
-      //console.log(item);
-      updateEdgePreviewEndpoint(item);
-      blockStore.emitChange();
-      break;
-
-    case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
-      console.log(payload);
-      console.log(item);
-      previousMouseCoordsOnZoom = item;
-      blockStore.emitChange();
-      break;
+    //case appConstants.SELECT_BLOCK:
+    //  console.log(payload);
+    //  console.log(item);
+    //  blockSelectedStates[item] = true;
+    //  console.log(blockSelectedStates);
+    //  //changeUnselectedNodesOpacity();
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DESELECT_ALLBLOCKS:
+    //  console.log(payload);
+    //  console.log(item);
+    //  deselectAllBlocks();
+    //  //console.log(nodeSelectedStates.Gate1);
+    //  //console.log(nodeSelectedStates.TGen1);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.SELECT_EDGE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
+    //  //console.log(areAnyEdgesSelected);
+    //  console.log(clickedEdge);
+    //  if(areAnyEdgesSelected === true && item !== clickedEdge){
+    //    deselectAllEdges();
+    //    selectEdge(item);
+    //  }
+    //  else if(areAnyEdgesSelected === false){
+    //    selectEdge(item);
+    //  }
+    //  console.log(edgeSelectedStates);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DESELECT_ALLEDGES:
+    //  console.log(payload);
+    //  console.log(item);
+    //  deselectAllEdges();
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.CHANGE_GRAPHPOSITION:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  graphPosition = item;
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.GRAPH_ZOOM:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  graphZoomScale = item;
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.GETANY_EDGESELECTEDSTATE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  getAnyEdgeSelectedState(item);
+    //  console.log(edgeSelectedStates[item]);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.CLICKED_EDGE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  clickedEdge = item;
+    //  console.log(clickedEdge);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.PASS_PORTMOUSEDOWN:
+    //  console.log(payload);
+    //  console.log(item);
+    //  portThatHasBeenClicked = item;
+    //  console.log(portThatHasBeenClicked);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.DESELECT_ALLPORTS:
+    //  portThatHasBeenClicked = null;
+    //  console.log("portThatHasBeenClicked has been reset");
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.STORING_FIRSTPORTCLICKED:
+    //  console.log(payload);
+    //  console.log(item);
+    //  storingFirstPortClicked = item;
+    //  //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.APPEND_EDGESELECTEDSTATE:
+    //  console.log(payload);
+    //  console.log(item);
+    //  edgeSelectedStates[item] = false;
+    //  blockStore.emitChange();
+    //  console.log(edgeSelectedStates);
+    //  break;
+    //
+    //case appConstants.ADD_EDGEPREVIEW:
+    //  console.log(payload);
+    //  console.log(item);
+    //  edgePreview = item;
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
+    //  //console.log(payload);
+    //  //console.log(item);
+    //  updateEdgePreviewEndpoint(item);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
+    //  console.log(payload);
+    //  console.log(item);
+    //  previousMouseCoordsOnZoom = item;
+    //  blockStore.emitChange();
+    //  break;
 
     default:
       return true
