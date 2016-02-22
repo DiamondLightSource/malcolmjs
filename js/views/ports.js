@@ -15,11 +15,13 @@ var interact = require('../../node_modules/interact.js');
 var Ports = React.createClass({
 
   componentDidMount: function(){
-    interact('.inport')
-      .on('tap', this.portClick);
-    interact('.outport')
-      .on('tap', this.portClick);
-    interact('.portArc')
+    //interact('.inport')
+    //  .on('tap', this.portClick);
+    //interact('.outport')
+    //  .on('tap', this.portClick);
+    //interact('.portArc')
+    //  .on('tap', this.portClick);
+    interact('.invisiblePortCircle')
       .on('tap', this.portClick);
 
     interact('.inport')
@@ -27,19 +29,24 @@ var Ports = React.createClass({
     interact('.outport')
       .styleCursor(false);
     interact('.portArc')
+      .styleCursor(false);
+    interact('.invisiblePortCircle')
       .styleCursor(false);
   },
 
   componentWillUnmount: function(){
-    interact('.inport')
-      .off('tap', this.portClick);
-    interact('.outport')
-      .off('tap', this.portClick);
-    interact('.portArc')
+    //interact('.inport')
+    //  .off('tap', this.portClick);
+    //interact('.outport')
+    //  .off('tap', this.portClick);
+    //interact('.portArc')
+    //  .off('tap', this.portClick);
+    interact('.invisiblePortCircle')
       .off('tap', this.portClick);
   },
 
   shouldComponentUpdate(nextProps, nextState){
+    console.log("port's shouldComponentUpdate");
     if(this.props.portThatHasBeenClicked === null){
       return (
         nextProps.selected !== this.props.selected
@@ -66,11 +73,16 @@ var Ports = React.createClass({
 
     var target;
 
+    console.log(e.currentTarget);
 
-    if(e.currentTarget.className.animVal === "portArc"){
-      //console.log("clicked on an arc, so need to find the corresponding port");
-      //console.log(e.currentTarget.parentNode);
-      //console.log(e.currentTarget.parentNode.children);
+    /* Doing the stuff to accomodate te invisiblePortCircle, instead of giving portClick
+    to both portCircle and portArc
+     */
+
+    if(e.currentTarget.className.animVal === "invisiblePortCircle"){
+      console.log("clicked on invisiblePortCircle, so need to find the corresponding port");
+      console.log(e.currentTarget.parentNode);
+      console.log(e.currentTarget.parentNode.children);
       for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
         //console.log(e.currentTarget.parentNode.children[i]);
         if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
@@ -79,14 +91,29 @@ var Ports = React.createClass({
         }
       }
     }
-    else{
-      //console.log("clicked on a port, makes it easier");
-      target = e.currentTarget.id;
-    }
+
+
+    //if(e.currentTarget.className.animVal === "portArc"){
+    //  console.log("clicked on an arc, so need to find the corresponding port");
+    //  console.log(e.currentTarget.parentNode);
+    //  console.log(e.currentTarget.parentNode.children);
+    //  for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
+    //    //console.log(e.currentTarget.parentNode.children[i]);
+    //    if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
+    //      || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+    //      target = e.currentTarget.parentNode.children[i];
+    //    }
+    //  }
+    //}
+    //else{
+    //  //console.log("clicked on a port, makes it easier");
+    //  target = e.currentTarget.id;
+    //}
     console.log(target);
     flowChartActions.passPortMouseDown(target);
     var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
     var passingEvent = e;
+    console.log(this.props.storingFirstPortClicked);
     if(this.props.storingFirstPortClicked === null){
       //console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
       theGraphDiamondHandle.dispatchEvent(EdgePreview);
@@ -162,6 +189,15 @@ var Ports = React.createClass({
                   //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                   id={this.props.blockId + inportName}
           />
+          <circle key={blockId + inportName + 'invisiblePortCircle'} className="invisiblePortCircle"
+                  cx={0}
+                  cy={0}
+                  r={blockStyling.portRadius + 2}
+                  style={{fill: 'transparent', cursor: 'default'
+                    }}
+            //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id={this.props.blockId + inportName + 'invisiblePortCircle'}
+          />
           <text key={blockId + inportName + "-text"} textAnchor="start"
                 x={5}
                 y={3}
@@ -193,6 +229,15 @@ var Ports = React.createClass({
                     cursor: 'default' }}
                   //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
                   id={this.props.blockId + outportName}
+          />
+          <circle key={blockId + outportName + 'invisiblePortCircle'} className="invisiblePortCircle"
+                  cx={0}
+                  cy={0}
+                  r={blockStyling.portRadius + 2}
+                  style={{fill: 'transparent', cursor: 'default'
+                    }}
+            //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id={this.props.blockId + outportName + 'invisiblePortCircle'}
           />
           <text key={blockId + outportName + "-text"} textAnchor="end"
                 x={-5}

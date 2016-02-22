@@ -420,7 +420,7 @@ function Client(url, debug, maxRate, username, password){
 
     if(json.message !== null){ /* There's no else prt to this outer loops, so I guess if json.message is null then don't do anything? */
       if(channelArray[json.id] === undefined){
-        console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore")
+        //console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore"), doesn't necessarily mean the channe; was unsubscribed, could be another error
       }
       else{
         handleServerMessage(json);
@@ -430,7 +430,7 @@ function Client(url, debug, maxRate, username, password){
     if(json.id !== null){
       if(channelArray[json.id] !== null){
         if(channelArray[json.id] === undefined){
-          console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore")
+          //console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore"), again, doesn't necessarily mean the channe; was unsubscribed, could be another error
         }
         else {
           console.log("dispatchMessage is now about to invoke fireChannelEventFunc");
@@ -498,7 +498,13 @@ function Client(url, debug, maxRate, username, password){
     /* So I guess here (or more specifically, inside ths witch statement in the future) would be where the action to pass the data to deviceStore.
      Not sure if I'm meant to out this function into WebAPIUtils, but for now I'll just try and get this working before I start to get fancy :P */
 
-    serverActions.testingWebsocket(json)
+    //serverActions.testingWebsocket(json)
+
+    /* Using testingWebsocketActions now */
+    /* Waiiiittt, I need to use callbacks, it won't work firing an aciton from here since I'm still in the middle of
+    testWrite; I'm relying on the use of callbacks so this si the incorrect way to do it!!!
+     */
+
 
 
   }

@@ -2,7 +2,7 @@
  * Created by twi18192 on 16/02/16.
  */
 
-//var Client = require('./writingWebSocketsInReact');
+var Client = require('./writingWebSocketsInReact');
 //
 //var WebSocketClient = new Client("ws://pc0013.cs.diamond.ac.uk:8080/ws", null, null, null, null);
 //
@@ -39,6 +39,7 @@
 
 /* Using the generic websocket constructor function, but I'll be defining my own soon-ish */
 
-var WebSocketClient = new WebSocket('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+//var WebSocketClient = new WebSocket('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+var WebSocketClient = new Client('ws://echo.websocket.org');
 
 module.exports = WebSocketClient;

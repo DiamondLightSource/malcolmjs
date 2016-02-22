@@ -30,8 +30,8 @@ function getFlowChartState(){
 
     graphPosition: JSON.parse(JSON.stringify(flowChartStore.getGraphPosition())),
     graphZoomScale: JSON.parse(JSON.stringify(flowChartStore.getGraphZoomScale())),
-    portThatHasBeenClicked: JSON.parse(JSON.stringify(flowChartStore.getPortThatHasBeenClicked())),
-    storingFirstPortClicked: JSON.parse(JSON.stringify(flowChartStore.getStoringFirstPortClicked())),
+    portThatHasBeenClicked: flowChartStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: flowChartStore.getStoringFirstPortClicked(),
     areAnyBlocksSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyBlocksAreSelected())),
     areAnyEdgesSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyEdgesAreSelected())),
     edgePreview: JSON.parse(JSON.stringify(flowChartStore.getEdgePreview())),
