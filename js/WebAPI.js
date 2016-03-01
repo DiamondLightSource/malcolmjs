@@ -42,6 +42,10 @@ var AppDispatcher = require('./dispatcher/appDispatcher');
 //  })
 //}
 
+function checkIfSuccessOrFail(){
+
+}
+
 var WebAPI = {
   //getValue: function(channelId, valuePath){
   //
@@ -111,9 +115,64 @@ var WebAPI = {
 
     WebSocketClient.sendText(message);
 
-    /* Not sure what to do now, do I make the stores do something with the response info? */
+    /* Not sure what to do now, do I make the stores do something with the response info,
+    or do I perform a 'get' to fetch the newly written data? */
 
-  }
+  },
+
+  testAddWebsocketOnOpenCallback: function(callback){
+    WebSocketClient.addWebSocketOnOpenCallback(callback);
+  },
+
+  testInitialDataFetch: function(message, successCallback, failureCallback){
+
+    //WebSocketClient.addOnServerMessageCallback(successCallBack);
+    //WebSocketClient.addWebSocketOnErrorCallback(failureCallback);
+
+    /* Try tetsing the generic 'get' request callbacks */
+
+    //successCallbacks = {
+    //  mainFetchSuccessCallback: successCallback,
+    //  blockFetchSuccessCallback: blockFetchSuccessCallback,
+    //};
+    //
+    //failureCallbacks = {
+    //  mainFetchFailureCallback: failureCallback,
+    //  blockFetchFailureCallback: blockFetchFailureCallback
+    //};
+
+    WebSocketClient.setGenericSuccessCallback(successCallback);
+    WebSocketClient.setGenericFailureCallback(failureCallback);
+
+    WebSocketClient.sendText(message);
+
+    //WebSocketClient.sendText('{"type" : "Subscribe", "id" : ' + 0 + ', "endpoint" : "' + 'Z:CLOCKS.attributes.OUTA.value' + '"}');
+
+    /* Haha, this is EXACTLY the same as the above testWrite function, I've obviously got some
+    place further back in my code that makes this part redundant, but oh well for now =P
+     */
+
+  },
+
+  //testFetchEveryInitialBlockObject: function(message, successCallback, failureCallback,
+  //                                           blockFetchSuccessCallback, blockFetchFailureCallback){
+  //
+  //  successCallbacks = {
+  //    mainFetchSuccessCallback: successCallback,
+  //    blockFetchSuccessCallback: blockFetchSuccessCallback,
+  //  };
+  //
+  //  failureCallbacks = {
+  //    mainFetchFailureCallback: failureCallback,
+  //    blockFetchFailureCallback: blockFetchFailureCallback
+  //  };
+  //
+  //  WebSocketClient.setGenericSuccessCallback(successCallbacks);
+  //  WebSocketClient.setGenericFailureCallback(failureCallbacks);
+  //
+  //  WebSocketClient.sendText(message);
+  //
+  //}
 
 
 };

@@ -6,10 +6,13 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
 var WebSocketClient = require('./websocketClient');
+var testingWebsocketActions = require('./actions/testingWebsocketActions');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');
 var BothPanes = require('./views/sidebar');
+
+var blockStore = require('./stores/blockStore.js');
 
 var AppContainerStyle = {
   margin: 0,
@@ -34,7 +37,33 @@ var SideTabbedViewStyle = {
   maxWidth:400
 };
 
+function getAppState(){
+  return {
+    initialBlockStringArray: JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())),
+  }
+}
+
 var App = React.createClass({
+
+  //getInitialState: function(){
+  //  this.setState(getAppState());
+  //},
+
+  componentDidMount: function(){
+    testingWebsocketActions.testAddWebsocketOnOpenCallback();
+    /* Perhaps use the newly fetched initial data to subscribe channels for
+     them all? */
+    //console.log("getting blocks now!");
+    //for(var i = 0; i < JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())).length; i++){
+    //  testingWebsocketActions.testFetchEveryInitialBlockObject(
+    //    JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData()[i])));
+    //}
+    //testingWebsocketActions.testFetchEveryInitialBlockObject(
+    //  JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData()[0]))
+    //)
+
+  },
+
   render: function(){
     console.log("render: app");
     return(

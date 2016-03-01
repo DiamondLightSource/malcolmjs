@@ -7,7 +7,7 @@
 function Client(url){
 
   var channelIDIndex = 0;
-  var channelArray = []; /* Presumably it holds all the different channels? */
+  var channelObject = {}; /* Presumably it holds all the different channels? */
   var websocket = null;
   var webSocketOnOpenCallbacks = [function(){console.log("function inside webSocketOnOpenCallbacks array")}, function(){console.log("another function in the array")}];
   var webSocketOnCloseCallbacks = [];
@@ -21,26 +21,54 @@ function Client(url){
   var jsonFilteredReceived = []; /* I have a feeling that this and the next array may have some relation to the data sent by the server */
   var jsonSent = [];
 
+  /* Things I've added */
+  var blockData = {};
+  var initialBlockDataArray = {};
+
+  this.addWebSocketOnOpenCallback = function(callback){
+    webSocketOnOpenCallbacks.push(callback);
+    console.log(webSocketOnOpenCallbacks);
+  };
+
+  this.addWebSocketOnCloseCallback = function(callback){
+    webSocketOnCloseCallbacks.push(callback);
+  };
+
+
+  /* Adding generic callbacks for 'get' requests which have no channel id */
+
+  var genericSuccessCallback = null;
+  var genericFailureCallback = null;
+
+  this.setGenericSuccessCallback = function(callback){
+    genericSuccessCallback = callback;
+  };
+
+  this.setGenericFailureCallback = function(callback){
+    genericFailureCallback = callback;
+  };
+
   this.sendText = function(message, callback){
     console.log(message);
     websocket.send(message);
 
     /* Pretty sure I'm not doing the callback thing right, but hey ho this is the best I got so far =P */
-    this.addOnServerMessageCallback(callback);
-    this.addWebSocketOnErrorCallback(callback);
+    //this.addOnServerMessageCallback(callback);
+    //this.addWebSocketOnErrorCallback(callback);
+    /* UPDATE: use the type attribute of the response message instead of callbacks! */
   };
 
   this.close = function(){
     websocket.close();
   };
 
-  this.addOnServerMessageCallback = function(callback){
-    onServerMessageCallbacks.push(callback);
-  };
-
-  this.addWebSocketOnErrorCallback = function(callback){
-    webSocketOnErrorCallbacks.push(callback);
-  };
+  //this.addOnServerMessageCallback = function(callback){
+  //  onServerMessageCallbacks.push(callback);
+  //};
+  //
+  //this.addWebSocketOnErrorCallback = function(callback){
+  //  webSocketOnErrorCallbacks.push(callback);
+  //};
 
   this.addWebSocketOnOpenCallback = function(callback){
     webSocketOnOpenCallbacks.push(callback);
@@ -66,23 +94,67 @@ function Client(url){
     websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
       console.log(evt);
       //fireOnOpen(evt);
+      for(var i in webSocketOnOpenCallbacks){
+        webSocketOnOpenCallbacks[i](evt)
+      }
       console.log("websocket has been opened")
     };
 
     websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
-      console.log("message has been received from server via websocket");
+      //console.log("message has been received from server via websocket");
       var json;
       json = JSON.parse(evt.data);
-      console.log("Here is the event:");
-      console.log(evt);
+      //console.log("Here is the event:");
+      //console.log(evt);
 
-      /* Need to provide a value to return to WebAPI.js that specifies that the request was successful or if it failed */
+      /* Time to check which channel callback to invoke based on the type! */
+      //console.log(json.type);
 
-      for(var i in onServerMessageCallbacks){
-        onServerMessageCallbacks[i](json)
+      /* First check if that channel id exists, if not then run the generic
+      callbacks
+       */
+      if(channelObject[json.id] === undefined){
+        //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
+        if(json.type === 'Error'){
+          genericFailureCallback(json);
+        }
+        else if(json.type === 'Return'){
+          if(json.value.descriptor === 'Child block names'){
+            initialBlockDataArray = JSON.parse(JSON.stringify(json.value.value));
+            console.log("initial block list, so need to do another call to fetch all block info?!")
+            for(var i = 0; i < json.value.value.length; i++){
+
+              /* Send a get request for all blocks in the initial block array */
+              clientSelf.sendText(
+                JSON.stringify(
+                  {type: 'Get', id: 0, endpoint: String(json.value.value[i])}
+                )
+              );
+            }
+          }
+
+          if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
+            json.value.tags[1] === "instance:Device" ) {
+              var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
+              blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
+              //console.log(blockData);
+              if(json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]){
+                /* Once all initial blocks are fetched, send the blockData object to the client */
+                console.log("ready to send the object containing all the block data!");
+                genericSuccessCallback(blockData);
+              }
+
+          }
+        }
       }
-
-      //dispatchMessage(json);
+      else {
+        if (json.type === 'Error') {
+          channelObject[json.id].failureCallback(json);
+        }
+        else if (json.type === 'Return') {
+          channelObject[json.id].successCallback(json);
+        }
+      }
     };
 
     websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
@@ -118,14 +190,14 @@ function Client(url){
 
     var channel = new Channel(name); /* Creating a new channel, with its name attribute set as the input argument; note that the variable is called 'channel' though for ALL channels subscribed */ /* Also, not sure if it matters, but the other 'name' arguments above highlight as well when I hover over this argument? Are they connected? */
     /* Haha, yep, they are connected, since this is all within one function, subscribeChannel()! :P */
-    channelArray[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
+    channelObject[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
     channel.id = channelIDIndex;
     channel.name = name;
     channel.readOnly = readOnly;
     channel.connected = true;
 
-    this.sendText(json, function(){console.log("send json to server")});
-    console.log(channelArray);
+    //this.sendText(json, function(){console.log("send json to server")});
+    //console.log(channelObject);
 
 
 
@@ -152,6 +224,9 @@ function Client(url){
     this.channelCallback = null; /* not sure why this gets 'unused definition' and the others don't? */ /* Update: it doesn't now, maybe it changed? */
     this.connected = false;
     this.readOnly = true;
+    /* Adding successCallback and failureCallback */
+    this.successCallback = null;
+    this.failureCallback = null;
 
     /* Chucking all the prototype function additions in the constructor */
     /* These internal methods of an object of the Channel class are used to return/access values of a channel object from OUTSIDE a channel,
@@ -231,7 +306,7 @@ function Client(url){
     });
 
     clientSelf.sendText(json);
-    delete channelArray[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
+    delete channelObject[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
     //channelArray.splice(channelIDIndex,1);
     //console.log(channelArray);
   }
@@ -257,6 +332,16 @@ function Client(url){
 
   }
 
+  /* Add function to set any channel's successCallback and failureCallback */
+
+  function setChannelSuccessCallback(channelID, callback){
+    channelObject[channelID].successCallback = callback;
+  }
+
+  function setChannelFailureCallback(channelID, callback){
+    channelObject[channelID].failureCallback = callback;
+  }
+
 
 
 
@@ -264,6 +349,6 @@ function Client(url){
 
 }
 
-var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+//var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
 
-module.exports = FluxWebSocketClient;
+module.exports = Client;

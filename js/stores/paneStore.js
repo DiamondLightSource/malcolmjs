@@ -15,7 +15,9 @@ var _stuff = {
   //passSidePane: null
   updatedBlockContent: null,
   blockTabState: [],
-  sidebarOpen: false
+  sidebarOpen: false,
+  loadingInitialData: true,
+  loadingInitialDataError: false
 };
 
 var _handles = {
@@ -29,46 +31,46 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
   //selectBlockOnClick(ReactComponent)
 };
 
-var allBlockContent = {
-  redBlockContent: {
-    name: "Red block",
-    hack: "redBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
-  },
-  blueBlockContent: {
-    name: "Blue block",
-    hack: "blueBlockTabOpen",
-    info: {
-      work: {height: "100 pixels", width: "100 pixels"}
-    }
-  },
-  greenBlockContent: {
-    name: "Green block",
-    hack: "greenBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels"}
-    }
-  }
-};
-
-var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
-  for(var key in allBlockContent){
-    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
-      for(var subKey in allBlockContent[key].info.work){
-        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
-          /* Do nothing*/
-          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
-        }
-        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
-          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
-        }
-      }
-    }
-    else{
-      /* Do nothing */
-    }
-  }
-};
+//var allBlockContent = {
+//  redBlockContent: {
+//    name: "Red block",
+//    hack: "redBlockTabOpen",
+//    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
+//  },
+//  blueBlockContent: {
+//    name: "Blue block",
+//    hack: "blueBlockTabOpen",
+//    info: {
+//      work: {height: "100 pixels", width: "100 pixels"}
+//    }
+//  },
+//  greenBlockContent: {
+//    name: "Green block",
+//    hack: "greenBlockTabOpen",
+//    info: {work: {height: "100 pixels", width: "100 pixels"}
+//    }
+//  }
+//};
+//
+//var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
+//  for(var key in allBlockContent){
+//    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
+//      for(var subKey in allBlockContent[key].info.work){
+//        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
+//          /* Do nothing*/
+//          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+//        }
+//        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
+//          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+//          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
+//        }
+//      }
+//    }
+//    else{
+//      /* Do nothing */
+//    }
+//  }
+//};
 
 var favContent = {
   name: "Favourites tab",
@@ -134,15 +136,15 @@ var selectBlockOnClick = function(){
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
 
-var changeSomeInfo = function(){
-  allBlockContent.redBlockContent.info.work.height = "500 pixels";
-  allBlockContent.redBlockContent.info.work.width = "250 pixels";
-  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
-};
-
-var updatePaneStoreAllBlockContent = function(newBlockContent){
-  allBlockContent = newBlockContent;
-};
+//var changeSomeInfo = function(){
+//  allBlockContent.redBlockContent.info.work.height = "500 pixels";
+//  allBlockContent.redBlockContent.info.work.width = "250 pixels";
+//  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
+//};
+//
+//var updatePaneStoreAllBlockContent = function(newBlockContent){
+//  allBlockContent = newBlockContent;
+//};
 
 
 
@@ -198,6 +200,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   },
   getAllBlockTabInfo: function(){
     return allBlockTabInfo;
+  },
+  getIfLoadingInitialData: function(){
+    return _stuff.loadingInitialData;
+  },
+  getIfLoadingInitialDataError: function(){
+    return _stuff.loadingInitialDataError;
   }
 });
 
@@ -414,6 +422,25 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     //  resetTabStateReferences();
     //  paneStore.emitChange();
     //  break;
+
+    /* WebAPI use */
+
+    case appConstants.TEST_INITIALDATAFETCH_PENDING:
+      /* Show the loading icon in the mainPane while the initial data is being fetched */
+      _stuff.loadingInitialData = true;
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      _stuff.loadingInitialData = false;
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TEST_INITIALDATAFETCH_FAILURE:
+      _stuff.loadingInitialDataError = true;
+      paneStore.emitChange();
+      break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);

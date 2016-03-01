@@ -2,8 +2,9 @@
  * Created by twi18192 on 16/02/16.
  */
 
-var Client = require('./writingWebSocketsInReact');
-//
+//var Client = require('./writingWebSocketsInReact');
+var FluxClient = require('./fluxWebsocketClient');
+
 //var WebSocketClient = new Client("ws://pc0013.cs.diamond.ac.uk:8080/ws", null, null, null, null);
 //
 //WebSocketClient.addWebSocketOnOpenCallback(function(){
@@ -39,7 +40,8 @@ var Client = require('./writingWebSocketsInReact');
 
 /* Using the generic websocket constructor function, but I'll be defining my own soon-ish */
 
-//var WebSocketClient = new WebSocket('ws://pc0013.cs.diamond.ac.uk:8080/ws');
-var WebSocketClient = new Client('ws://echo.websocket.org');
+//var WebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+//var WebSocketClient = new Client('ws://echo.websocket.org');
+var WebSocketClient = new FluxClient('ws://localhost:8080/ws');
 
 module.exports = WebSocketClient;

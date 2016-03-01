@@ -421,6 +421,9 @@ function Client(url, debug, maxRate, username, password){
     if(json.message !== null){ /* There's no else prt to this outer loops, so I guess if json.message is null then don't do anything? */
       if(channelArray[json.id] === undefined){
         //console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore"), doesn't necessarily mean the channe; was unsubscribed, could be another error
+
+        /* This is for TESTING PURPOSES, remove this after testing loading initial data!!! */
+        handleServerMessage(json);
       }
       else{
         handleServerMessage(json);

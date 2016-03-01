@@ -43,6 +43,10 @@ var AppDispatcher = require('./dispatcher/appDispatcher');
 //  })
 //}
 
+function checkIfSuccessOrFail(){
+
+}
+
 var WebAPI = {
   //getValue: function(channelId, valuePath){
   //
@@ -112,16 +116,71 @@ var WebAPI = {
 
     WebSocketClient.sendText(message);
 
-    /* Not sure what to do now, do I make the stores do something with the response info? */
+    /* Not sure what to do now, do I make the stores do something with the response info,
+    or do I perform a 'get' to fetch the newly written data? */
 
-  }
+  },
+
+  testAddWebsocketOnOpenCallback: function(callback){
+    WebSocketClient.addWebSocketOnOpenCallback(callback);
+  },
+
+  testInitialDataFetch: function(message, successCallback, failureCallback){
+
+    //WebSocketClient.addOnServerMessageCallback(successCallBack);
+    //WebSocketClient.addWebSocketOnErrorCallback(failureCallback);
+
+    /* Try tetsing the generic 'get' request callbacks */
+
+    //successCallbacks = {
+    //  mainFetchSuccessCallback: successCallback,
+    //  blockFetchSuccessCallback: blockFetchSuccessCallback,
+    //};
+    //
+    //failureCallbacks = {
+    //  mainFetchFailureCallback: failureCallback,
+    //  blockFetchFailureCallback: blockFetchFailureCallback
+    //};
+
+    WebSocketClient.setGenericSuccessCallback(successCallback);
+    WebSocketClient.setGenericFailureCallback(failureCallback);
+
+    WebSocketClient.sendText(message);
+
+    //WebSocketClient.sendText('{"type" : "Subscribe", "id" : ' + 0 + ', "endpoint" : "' + 'Z:CLOCKS.attributes.OUTA.value' + '"}');
+
+    /* Haha, this is EXACTLY the same as the above testWrite function, I've obviously got some
+    place further back in my code that makes this part redundant, but oh well for now =P
+     */
+
+  },
+
+  //testFetchEveryInitialBlockObject: function(message, successCallback, failureCallback,
+  //                                           blockFetchSuccessCallback, blockFetchFailureCallback){
+  //
+  //  successCallbacks = {
+  //    mainFetchSuccessCallback: successCallback,
+  //    blockFetchSuccessCallback: blockFetchSuccessCallback,
+  //  };
+  //
+  //  failureCallbacks = {
+  //    mainFetchFailureCallback: failureCallback,
+  //    blockFetchFailureCallback: blockFetchFailureCallback
+  //  };
+  //
+  //  WebSocketClient.setGenericSuccessCallback(successCallbacks);
+  //  WebSocketClient.setGenericFailureCallback(failureCallbacks);
+  //
+  //  WebSocketClient.sendText(message);
+  //
+  //}
 
 
 };
 
 module.exports = WebAPI;
 
-},{"./constants/appConstants":12,"./dispatcher/appDispatcher":13,"./websocketClient":35}],2:[function(require,module,exports){
+},{"./constants/appConstants":11,"./dispatcher/appDispatcher":12,"./websocketClient":35}],2:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -262,7 +321,7 @@ var blockActions = {
 
 module.exports = blockActions;
 
-},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13}],3:[function(require,module,exports){
+},{"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12}],3:[function(require,module,exports){
 /**
  * Created by twi18192 on 24/09/15.
  */
@@ -282,7 +341,7 @@ var deviceActions = {
 
 module.exports = deviceActions;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13}],4:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12}],4:[function(require,module,exports){
 /**
  * Created by twi18192 on 19/02/16.
  */
@@ -407,7 +466,7 @@ var flowChartActions = {
 
 module.exports = flowChartActions;
 
-},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13}],5:[function(require,module,exports){
+},{"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12}],5:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -442,7 +501,7 @@ capital first letter in order for it to work
 
 module.exports = mainPaneActions;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13}],6:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12}],6:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -575,49 +634,7 @@ module.exports = paneActions;
 //  })
 //},
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13}],7:[function(require,module,exports){
-/**
- * Created by twi18192 on 30/09/15.
- */
-
-/* Actions intended for communication from server to Client */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-
-//var paneActions = require('./paneActions');
-
-var serverActions = {
-  //passingUpdatedChannelValue: function(item){
-  //  AppDispatcher.handleServerAction({
-  //    actionType: appConstants.PASSUPDATEDCHANNEL_VALUE,
-  //    item: item
-  //  })
-  //},
-  //
-  //passingNameOfChannelThatsBeenAdded: function(item){
-  //  AppDispatcher.handleServerAction({
-  //    actionType: appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED,
-  //    item:item
-  //  });
-  //  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-  //  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  //}
-
-  testingWebsocket: function(item){
-    AppDispatcher.handleServerAction({
-      actionType: appConstants.TEST_WEBSOCKET,
-      item: item
-    })
-  }
-
-};
-
-module.exports = serverActions;
-
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13}],8:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12}],7:[function(require,module,exports){
 /**
  * Created by twi18192 on 30/09/15.
  */
@@ -660,7 +677,7 @@ var sessionActions = {
 
 module.exports = sessionActions;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"../websocketClient":35}],9:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12,"../websocketClient":35}],8:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -751,7 +768,7 @@ var sidePaneActions = {
 
 module.exports = sidePaneActions;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13}],10:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12}],9:[function(require,module,exports){
 /**
  * Created by twi18192 on 22/02/16.
  */
@@ -790,14 +807,94 @@ var testingWebsocketActions = {
       })
     }
 
-  }
+  },
+
+  testAddWebsocketOnOpenCallback: function(){
+
+    WebAPIUtils.testAddWebsocketOnOpenCallback(this.testInitialDataFetch)
+
+  },
+
+  testInitialDataFetch: function(){
+
+    /* Listening for this in the store will allow me to show a loading icon while
+    the initial data is fetched form the server.
+    May have to implement waitFor in case the server request comes back quick enough?
+     */
+
+    AppDispatcher.handleAction({
+      //actionType: appConstants.SERVER_REQUESTPENDING,
+      actionType: appConstants.TEST_INITIALDATAFETCH_PENDING,
+      item: 'server request pending'
+    });
+
+    WebAPIUtils.testInitialDataFetch(successInitialDataFetchAction, failInitialDataFetchAction);
+
+    /* Callbacks for the entire data fetch */
+
+    function successInitialDataFetchAction(responseMessage) {
+      AppDispatcher.handleAction({
+        actionType: appConstants.TEST_INITIALDATAFETCH_SUCCESS,
+        item: responseMessage
+      })
+    }
+
+    function failInitialDataFetchAction(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.TEST_INITIALDATAFETCH_FAILURE,
+        item: responseMessage
+      })
+    }
+
+    /* Callbacks for each block data object fetch */
+
+    //function testFetchEveryInitialBlockObjectSuccess(responseMessage){
+    //  console.log("fetching block object");
+    //
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+    //    item: responseMessage
+    //  })
+    //}
+    //
+    //function testFetchEveryInitialBlockObjectFailure(responseMessage){
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+    //    item: responseMessage
+    //  })
+    //}
+
+  },
+
+  //testFetchEveryInitialBlockObject: function(blockName){
+  //
+  //  WebAPIUtils.testFetchEveryInitialBlockObject(blockName,
+  //    testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+  //
+  //  function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
+  //    console.log("fetching block object");
+  //
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  function testFetchEveryInitialBlockObjectFailure(responseMessage){
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //}
 
 
 };
 
 module.exports = testingWebsocketActions;
 
-},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/WebAPIUtils":20}],11:[function(require,module,exports){
+},{"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"../utils/WebAPIUtils":20}],10:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -806,10 +903,13 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
 var WebSocketClient = require('./websocketClient');
+var testingWebsocketActions = require('./actions/testingWebsocketActions');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');
 var BothPanes = require('./views/sidebar');
+
+var blockStore = require('./stores/blockStore.js');
 
 var AppContainerStyle = {
   margin: 0,
@@ -834,7 +934,33 @@ var SideTabbedViewStyle = {
   maxWidth:400
 };
 
+function getAppState(){
+  return {
+    initialBlockStringArray: JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())),
+  }
+}
+
 var App = React.createClass({displayName: "App",
+
+  //getInitialState: function(){
+  //  this.setState(getAppState());
+  //},
+
+  componentDidMount: function(){
+    testingWebsocketActions.testAddWebsocketOnOpenCallback();
+    /* Perhaps use the newly fetched initial data to subscribe channels for
+     them all? */
+    //console.log("getting blocks now!");
+    //for(var i = 0; i < JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData())).length; i++){
+    //  testingWebsocketActions.testFetchEveryInitialBlockObject(
+    //    JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData()[i])));
+    //}
+    //testingWebsocketActions.testFetchEveryInitialBlockObject(
+    //  JSON.parse(JSON.stringify(blockStore.getAllBlockInfoForInitialBlockData()[0]))
+    //)
+
+  },
+
   render: function(){
     console.log("render: app");
     return(
@@ -853,7 +979,7 @@ ReactDOM.render(
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
 
-},{"./views/mainPane":31,"./views/sidePane":33,"./views/sidebar":34,"./websocketClient":35,"react":224,"react-dom":45,"react-panels":46}],12:[function(require,module,exports){
+},{"./actions/testingWebsocketActions":9,"./stores/blockStore.js":14,"./views/mainPane":31,"./views/sidePane":33,"./views/sidebar":34,"./websocketClient":35,"react":223,"react-dom":44,"react-panels":45}],11:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -905,6 +1031,11 @@ var appConstants = {
   TEST_SUBSCRIBECHANNEL: 'TEST_SUBSCRIBECHANNEL',
   TEST_WRITE_SUCCESS: 'TEST_WRITE_SUCCESS',
   TEST_WRITE_FAILURE: 'TEST_WRITE_FAILURE',
+  TEST_INITIALDATAFETCH_PENDING: 'TEST_INITIALDATAFETCH_PENDING',
+  TEST_INITIALDATAFETCH_SUCCESS: 'TEST_INITIALDATAFETCH_SUCCESS',
+  TEST_INITIALDATAFETCH_FAILURE: 'TEST_INITIALDATAFETCH_FAILURE',
+  TEST_FETCHINITIALBLOCKOBJECT_SUCCESS: 'TEST_FETCHINITIALBLOCKOBJECT_SUCCESS',
+  TEST_FETCHINITIALBLOCKOBJECT_FAILURE: 'TEST_FETCHINITIALBLOCKOBJECT_FAILURE',
 
   /* Constants from flowChart added here */
 
@@ -966,7 +1097,7 @@ var appConstants = {
 
 module.exports = appConstants;
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -1011,7 +1142,363 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":39,"object-assign":43}],14:[function(require,module,exports){
+},{"flux":38,"object-assign":42}],13:[function(require,module,exports){
+/**
+ * Created by twi18192 on 18/02/16.
+ */
+
+/* Main Client constructor function */
+
+function Client(url){
+
+  var channelIDIndex = 0;
+  var channelObject = {}; /* Presumably it holds all the different channels? */
+  var websocket = null;
+  var webSocketOnOpenCallbacks = [function(){console.log("function inside webSocketOnOpenCallbacks array")}, function(){console.log("another function in the array")}];
+  var webSocketOnCloseCallbacks = [];
+  var webSocketOnErrorCallbacks = [];
+  var onServerMessageCallbacks = [function(){console.log("message from the server callback array")}];
+  var clientSelf = this; /* Used as a handle for the Client when in other things like channels */
+  //var debug = debug;
+  var defaultTypeVersion = 1;
+  var isLive = false;
+  var forcedClose = false;
+  var jsonFilteredReceived = []; /* I have a feeling that this and the next array may have some relation to the data sent by the server */
+  var jsonSent = [];
+
+  /* Things I've added */
+  var blockData = {};
+  var initialBlockDataArray = {};
+
+  this.addWebSocketOnOpenCallback = function(callback){
+    webSocketOnOpenCallbacks.push(callback);
+    console.log(webSocketOnOpenCallbacks);
+  };
+
+  this.addWebSocketOnCloseCallback = function(callback){
+    webSocketOnCloseCallbacks.push(callback);
+  };
+
+
+  /* Adding generic callbacks for 'get' requests which have no channel id */
+
+  var genericSuccessCallback = null;
+  var genericFailureCallback = null;
+
+  this.setGenericSuccessCallback = function(callback){
+    genericSuccessCallback = callback;
+  };
+
+  this.setGenericFailureCallback = function(callback){
+    genericFailureCallback = callback;
+  };
+
+  this.sendText = function(message, callback){
+    console.log(message);
+    websocket.send(message);
+
+    /* Pretty sure I'm not doing the callback thing right, but hey ho this is the best I got so far =P */
+    //this.addOnServerMessageCallback(callback);
+    //this.addWebSocketOnErrorCallback(callback);
+    /* UPDATE: use the type attribute of the response message instead of callbacks! */
+  };
+
+  this.close = function(){
+    websocket.close();
+  };
+
+  //this.addOnServerMessageCallback = function(callback){
+  //  onServerMessageCallbacks.push(callback);
+  //};
+  //
+  //this.addWebSocketOnErrorCallback = function(callback){
+  //  webSocketOnErrorCallbacks.push(callback);
+  //};
+
+  this.addWebSocketOnOpenCallback = function(callback){
+    webSocketOnOpenCallbacks.push(callback);
+  };
+
+  openWebSocket(url);
+
+  function openWebSocket(url){
+
+    if("WebSocket" in window){  /* The window object refers to an open window in a browser */
+      websocket = new WebSocket(url); /* new WebSocket is an inbuilt function of Javascript */
+    }
+    else if("MozWebSocket" in window){    /* I suppose these two cases are seeing if WebSockets are usable in the browser that the user is using? */
+      websocket = new MozWebSocket(url);
+    }
+    else{
+      throw new Error("WebSocket isn't supported by this browser.");
+    }
+    websocket.binaryType = "arraybuffer"; /* binaryType is associated with WebSockets */
+
+    /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
+
+    websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
+      console.log(evt);
+      //fireOnOpen(evt);
+      for(var i in webSocketOnOpenCallbacks){
+        webSocketOnOpenCallbacks[i](evt)
+      }
+      console.log("websocket has been opened")
+    };
+
+    websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
+      //console.log("message has been received from server via websocket");
+      var json;
+      json = JSON.parse(evt.data);
+      //console.log("Here is the event:");
+      //console.log(evt);
+
+      /* Time to check which channel callback to invoke based on the type! */
+      //console.log(json.type);
+
+      /* First check if that channel id exists, if not then run the generic
+      callbacks
+       */
+      if(channelObject[json.id] === undefined){
+        //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
+        if(json.type === 'Error'){
+          genericFailureCallback(json);
+        }
+        else if(json.type === 'Return'){
+          if(json.value.descriptor === 'Child block names'){
+            initialBlockDataArray = JSON.parse(JSON.stringify(json.value.value));
+            console.log("initial block list, so need to do another call to fetch all block info?!")
+            for(var i = 0; i < json.value.value.length; i++){
+
+              /* Send a get request for all blocks in the initial block array */
+              clientSelf.sendText(
+                JSON.stringify(
+                  {type: 'Get', id: 0, endpoint: String(json.value.value[i])}
+                )
+              );
+            }
+          }
+
+          if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
+            json.value.tags[1] === "instance:Device" ) {
+              var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
+              blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
+              //console.log(blockData);
+              if(json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]){
+                /* Once all initial blocks are fetched, send the blockData object to the client */
+                console.log("ready to send the object containing all the block data!");
+                genericSuccessCallback(blockData);
+              }
+
+          }
+        }
+      }
+      else {
+        if (json.type === 'Error') {
+          channelObject[json.id].failureCallback(json);
+        }
+        else if (json.type === 'Return') {
+          channelObject[json.id].successCallback(json);
+        }
+      }
+    };
+
+    websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
+      //fireOnError(evt);
+      console.log("webocket error");
+      console.log(evt);
+    };
+
+    websocket.onclose = function(evt){
+      //fireOnClose(evt);
+      console.log("websocket has been closed")
+    };
+
+
+  }
+
+
+
+
+
+
+
+  this.subscribeChannel = function(name, callback, readOnly){
+    var typeJson; /* Not entirely sure what this is doing, it's creating a variable without a value? */
+    /* Yep, it implicitly is a variable of type 'undefined'; it's usually used to declare variables for later use */
+
+    /* what the subscribe message should look like */
+    //'{"type" : "Subscribe", "id" : ' + idSub + ', "endpoint" : "' + channelSub + '"}';
+
+    var json = '{"type" : "Subscribe", "id" : ' + channelIDIndex + ', "endpoint" : "' + name + '"}';
+
+    console.log(json);
+
+    var channel = new Channel(name); /* Creating a new channel, with its name attribute set as the input argument; note that the variable is called 'channel' though for ALL channels subscribed */ /* Also, not sure if it matters, but the other 'name' arguments above highlight as well when I hover over this argument? Are they connected? */
+    /* Haha, yep, they are connected, since this is all within one function, subscribeChannel()! :P */
+    channelObject[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
+    channel.id = channelIDIndex;
+    channel.name = name;
+    channel.readOnly = readOnly;
+    channel.connected = true;
+
+    //this.sendText(json, function(){console.log("send json to server")});
+    //console.log(channelObject);
+
+
+
+    channel.channelCallback = callback;
+    channelIDIndex++; /* Shorthand for incrementing channelIDIndex by one (happens each time the whole function subscribeChannel() gets called) */
+    /* Oh, so this is what prevents each channel from having the same id, the number inside the variable channelIDIndex is simply just to get it started, it's not used to keep track of every channel and its corresponding index, */
+    /* I suppose it's used to count how many channels there actually are */
+    return channel;
+  };
+
+
+
+
+
+
+
+  /* Channel constructor function */
+
+  function Channel(name){ /* Hmm, not sure the best way to get this to have state... */
+
+    this.name = name;
+    this.id = -1;   /* Look at the docs and their definition of getId, getValue: it says that they can have any data type, hence they can be strings, numbers, floats, objects etc */
+    this.value = null;
+    this.channelCallback = null; /* not sure why this gets 'unused definition' and the others don't? */ /* Update: it doesn't now, maybe it changed? */
+    this.connected = false;
+    this.readOnly = true;
+    /* Adding successCallback and failureCallback */
+    this.successCallback = null;
+    this.failureCallback = null;
+
+    /* Chucking all the prototype function additions in the constructor */
+    /* These internal methods of an object of the Channel class are used to return/access values of a channel object from OUTSIDE a channel,
+     hence, these functions are ALWAYS invoked from outside a channel */
+
+    this.channelValueType = function(){
+      console.log(typeof this.value);
+      console.log(this.value);
+    };
+
+    this.isConnected = function(){
+      return this.connected;
+    };
+
+    this.getId = function(){
+      return this.id;
+    };
+
+    this.isWriteAllowed = function(){
+      return !this.readOnly;  /* Why return the opposite of readOnly? I suppose read and write are related?*/
+      /* Oh, it's that if it's not just read only, it has to be able to write as well, since read only means you can only read and NOT write :P */
+    };
+
+    this.getValue = function(){
+      return this.value;
+    };
+
+    this.removeCallback = function(callback){ /* Not sure why it doesn't have 'this.' in front of it in the original JS file? */
+      this.channelCallback = null;            /* Plus, what's the point of having an input argument that isn't used in the function? */
+    };
+
+    this.setValue = function(value){  /*So, if the opposite of the value of readOnly is true, run this code */
+      if(!this.readOnly){
+        console.log("Inside setValue");
+        console.log(value);
+        setChannelValue(this.id, value);
+      }
+      else{
+        console.log("Channel is read only, cannot write")
+      }
+    };
+
+    /* What's the difference between setValue and updateValue? :/
+     I suppose at least they invoke the same function...
+     */
+
+    this.updateValue = function(){
+      if(!this.readOnly){
+        setChannelValue(this.id, this.value.value); /* No idea what this.value.value is referring to? */
+      }
+    };
+
+    this.unsubscribe = function(){
+      unsubscribe(this.id);
+    };
+
+    //this.fireChannelEventFunc = function(json){
+    //  console.log("firChanneklEventFunc is about to invoke processJsonForChannel, the thing that actually changes Channel attribute values!");
+    //  processJsonForChannel(json, this);  /* The only thing that invokes processJsonForChannel */
+    //  this.channelCallback(json, this); /* I suppose channelCallback is just a function that lets you know that
+    //   fireChannelEventFunc has occurred/ran (a console log will probably suffice)
+    //   Furthermore, since the inputs are 'this' and 'json', I guess it's pointing
+    //   to you logging which channel the info is travelling across, and what the info
+    //   travelling across is*/
+    //};
+
+  }
+
+
+  function unsubscribe(channelIDIndex){
+    console.log("unsubscribing a channel");
+    //console.log("the following is an update on channelArray");
+    //console.log(channelArray);
+    var json = JSON.stringify({
+      "message": "unsubscribe",
+      "id": channelIDIndex
+    });
+
+    clientSelf.sendText(json);
+    delete channelObject[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
+    //channelArray.splice(channelIDIndex,1);
+    //console.log(channelArray);
+  }
+
+  /* Ok, I'm starting to not understand this again: the function below is called setChannelValue, and one of
+   its inputs is the new value of the channel (presumably). After the json variable is set, a message goes to THE SERVER with this info;
+   Now, I thought the whole idea was that the new value was FETCHED FROM THE SERVER, and then the Client gets
+   notified that the new data has been fetched, but here it looks like the new value gets SET FIRST, and
+   THEN THE SERVER IS NOTIFIED OF THIS CHANGE?
+   */
+
+  function setChannelValue(channelIDIndex, value){
+    console.log("Inside setChannelValue");
+    console.log(channelIDIndex);
+    console.log(value);
+    var json = JSON.stringify({
+      "message": "write",
+      "id": channelIDIndex,
+      "value":value
+    });
+
+    clientSelf.sendText(json);  /* Don't worry, sendText is defined later (line 277 of original file) */
+
+  }
+
+  /* Add function to set any channel's successCallback and failureCallback */
+
+  function setChannelSuccessCallback(channelID, callback){
+    channelObject[channelID].successCallback = callback;
+  }
+
+  function setChannelFailureCallback(channelID, callback){
+    channelObject[channelID].failureCallback = callback;
+  }
+
+
+
+
+
+
+}
+
+//var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+
+module.exports = Client;
+
+},{}],14:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -1021,9 +1508,13 @@ var appConstants = require('../constants/appConstants.js');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('../../node_modules/object-assign/index.js');
 
+var WebAPIUtils = require('../utils/WebAPIUtils');
+
 var CHANGE_EVENT = 'change';
 
-
+var _stuff = {
+  initialBlockServerData: null
+};
 
 
 /* 'BLOCK' use */
@@ -1630,178 +2121,178 @@ var blockInfoTemplates = {
 
 /* 'FLOWCHART use' */
 
-var clickedEdge = null;
-var portThatHasBeenClicked = null;
-var storingFirstPortClicked = null;
-var portMouseOver = false;
-var edgePreview = null;
-var previousMouseCoordsOnZoom = null;
-
-var blockStyling = {
-  outerRectangleHeight: 76,
-  outerRectangleWidth: 72,
-  innerRectangleHeight: 70,
-  innerRectangleWidth: 66,
-  portRadius: 2.5,
-  portFill: 'grey',
-};
-
-var graphPosition = {
-  x: 0,
-  y: 0
-};
-
-var graphZoomScale = 2.0;
-
-var blockSelectedStates = {
-  Gate1: false,
-  TGen1: false,
-  PComp1: false
-};
-
-function appendToBlockSelectedStates(BlockId){
-  //console.log("blockSelectedStates before adding a new block:");
-  blockSelectedStates[BlockId] = false;
-  //console.log("blockSelectedStates after adding a new block:");
-}
-
-function deselectAllBlocks(){
-  for(var block in blockSelectedStates){
-    blockSelectedStates[block] = false
-  }
-}
-
-function checkIfAnyBlocksAreSelected(){
-  var areAnyBlocksSelected = null;
-  for(var block in blockSelectedStates){
-    if(blockSelectedStates[block] === true){
-      areAnyBlocksSelected = true;
-      break;
-    }
-    else{
-      //console.log("one of the blocks' state is false, check the next one if it is true");
-      areAnyBlocksSelected = false;
-    }
-  }
-  //console.log(areAnyNodesSelected);
-  return areAnyBlocksSelected;
-}
-
-var edgeSelectedStates = {
-  'Gate1outTGen1ena': false,
-  //Gate1OutTGen1Ena: false,
-  //TGen1PosnPComp1Posn: false,
-  //TGen1PosnPComp1Ena: false
-};
-
-function selectEdge(Edge){
-  edgeSelectedStates[Edge] = true;
-}
-
-function getAnyEdgeSelectedState(EdgeId){
-  if(edgeSelectedStates[EdgeId] === undefined || null){
-    //console.log("edge selected state is underfined or null, best check it out...");
-  }
-  else{
-    //console.log("that edge's state exists, hooray!");
-    return edgeSelectedStates[EdgeId];
-  }
-}
-
-function checkIfAnyEdgesAreSelected(){
-  var areAnyEdgesSelected;
-  var i = 0;
-  for(var edge in edgeSelectedStates){
-    i = i + 1;
-    if(edgeSelectedStates[edge] === true){
-      //console.log(edgeSelectedStates[edge]);
-      areAnyEdgesSelected = true;
-      break;
-    }
-    else{
-      areAnyEdgesSelected = false;
-    }
-  }
-  //console.log(areAnyEdgesSelected);
-  /* Taking care of if therer are no edges, so we return false instea dof undefined */
-  if(i === 0){
-    areAnyEdgesSelected = false;
-  }
-
-  return areAnyEdgesSelected;
-}
-
-function deselectAllEdges(){
-  for(var edge in edgeSelectedStates){
-    edgeSelectedStates[edge] = false
-  }
-}
-
-function updateEdgePreviewEndpoint(position){
-  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
-  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-  //console.log(edgePreview.endpointCoords);
-}
-
-
-var GateBlockStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        set: {
-          x: 0,
-          y: 23
-        },
-        reset: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        out: {
-          x: 65,
-          y: 31
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      set: {
-        x : 7,
-        y: 24.5
-      },
-      reset: {
-        x : 7,
-        y: 42.5
-      },
-      out: {
-        x: 42,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+//var clickedEdge = null;
+//var portThatHasBeenClicked = null;
+//var storingFirstPortClicked = null;
+//var portMouseOver = false;
+//var edgePreview = null;
+//var previousMouseCoordsOnZoom = null;
+//
+//var blockStyling = {
+//  outerRectangleHeight: 76,
+//  outerRectangleWidth: 72,
+//  innerRectangleHeight: 70,
+//  innerRectangleWidth: 66,
+//  portRadius: 2.5,
+//  portFill: 'grey',
+//};
+//
+//var graphPosition = {
+//  x: 0,
+//  y: 0
+//};
+//
+//var graphZoomScale = 2.0;
+//
+//var blockSelectedStates = {
+//  Gate1: false,
+//  TGen1: false,
+//  PComp1: false
+//};
+//
+//function appendToBlockSelectedStates(BlockId){
+//  //console.log("blockSelectedStates before adding a new block:");
+//  blockSelectedStates[BlockId] = false;
+//  //console.log("blockSelectedStates after adding a new block:");
+//}
+//
+//function deselectAllBlocks(){
+//  for(var block in blockSelectedStates){
+//    blockSelectedStates[block] = false
+//  }
+//}
+//
+//function checkIfAnyBlocksAreSelected(){
+//  var areAnyBlocksSelected = null;
+//  for(var block in blockSelectedStates){
+//    if(blockSelectedStates[block] === true){
+//      areAnyBlocksSelected = true;
+//      break;
+//    }
+//    else{
+//      //console.log("one of the blocks' state is false, check the next one if it is true");
+//      areAnyBlocksSelected = false;
+//    }
+//  }
+//  //console.log(areAnyNodesSelected);
+//  return areAnyBlocksSelected;
+//}
+//
+//var edgeSelectedStates = {
+//  'Gate1outTGen1ena': false,
+//  //Gate1OutTGen1Ena: false,
+//  //TGen1PosnPComp1Posn: false,
+//  //TGen1PosnPComp1Ena: false
+//};
+//
+//function selectEdge(Edge){
+//  edgeSelectedStates[Edge] = true;
+//}
+//
+//function getAnyEdgeSelectedState(EdgeId){
+//  if(edgeSelectedStates[EdgeId] === undefined || null){
+//    //console.log("edge selected state is underfined or null, best check it out...");
+//  }
+//  else{
+//    //console.log("that edge's state exists, hooray!");
+//    return edgeSelectedStates[EdgeId];
+//  }
+//}
+//
+//function checkIfAnyEdgesAreSelected(){
+//  var areAnyEdgesSelected;
+//  var i = 0;
+//  for(var edge in edgeSelectedStates){
+//    i = i + 1;
+//    if(edgeSelectedStates[edge] === true){
+//      //console.log(edgeSelectedStates[edge]);
+//      areAnyEdgesSelected = true;
+//      break;
+//    }
+//    else{
+//      areAnyEdgesSelected = false;
+//    }
+//  }
+//  //console.log(areAnyEdgesSelected);
+//  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+//  if(i === 0){
+//    areAnyEdgesSelected = false;
+//  }
+//
+//  return areAnyEdgesSelected;
+//}
+//
+//function deselectAllEdges(){
+//  for(var edge in edgeSelectedStates){
+//    edgeSelectedStates[edge] = false
+//  }
+//}
+//
+//function updateEdgePreviewEndpoint(position){
+//  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
+//  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
+//  //console.log(edgePreview.endpointCoords);
+//}
+//
+//
+//var GateBlockStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        set: {
+//          x: 0,
+//          y: 23
+//        },
+//        reset: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        out: {
+//          x: 65,
+//          y: 31
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      set: {
+//        x : 7,
+//        y: 24.5
+//      },
+//      reset: {
+//        x : 7,
+//        y: 42.5
+//      },
+//      out: {
+//        x: 42,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
 
 
 
@@ -1819,6 +2310,49 @@ been returned/fetched to blockStore successfully?
 function addBlock(){
 
 }
+
+function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
+  console.log("fetching block object");
+
+  AppDispatcher.handleAction({
+    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+    item: responseMessage
+  })
+}
+
+function testFetchEveryInitialBlockObjectFailure(responseMessage){
+  AppDispatcher.handleAction({
+    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+    item: responseMessage
+  })
+}
+
+var testAllBlockInfo = {};
+
+
+//function processInitialBlockData(){
+//  //var blockArray = [];
+//
+//  /* No need to get the block name without Z: ! */
+//
+//  //for(var i = 0; i < _stuff.initialBlockServerData.length; i++){
+//  //  /* Need to remove the string 'Z:' at the start of every block port*/
+//  //  var blockName = _stuff.initialBlockServerData[i].slice(2);
+//  //  blockArray.push(blockName);
+//  //  /* Now we have an array of all the blocks, need to recreate
+//  //  allBlockInfo from this! */
+//  //  console.log(blockArray);
+//  //}
+//
+//  for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
+//    console.log(_stuff.initialBlockServerData[j]);
+//
+//    WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
+//      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+//    window.alert("hjwifhw");
+//  }
+//  //return blockArray;
+//}
 
 
 /* Testing a simple data fetch */
@@ -1855,6 +2389,27 @@ var blockStore = assign({}, EventEmitter.prototype, {
   getDataFetchTest: function(){
     return dataFetchTest;
   },
+
+  getInitialBlockStringArray: function(){
+    return _stuff.initialBlockServerData;
+  },
+  getTestAllBlockInfo: function(){
+
+    if(testAllBlockInfo === null){
+    for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
+      console.log(_stuff.initialBlockServerData[j]);
+
+      WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
+      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+      }
+    /* Seems wrong to do this, but it'll emit a change easily for now! */
+    this.emitChange();
+    }
+    else{
+      return testAllBlockInfo;
+    }
+
+  }
 
 
 
@@ -1922,23 +2477,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
+  console.log(payload);
+  console.log(item);
+
   switch(action.actionType){
 
     /* BLOCK use */
 
 
     case appConstants.ADDTO_ALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
       appendToAllBlockInfo(item);
       //appendToAllPossibleBlocks(item);
-      appendToBlockSelectedStates(item);
+      //appendToBlockSelectedStates(item);
       //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
       blockStore.emitChange();
       break;
     case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
       addEdgeToAllBlockInfo(item);
       blockStore.emitChange();
       console.log(allBlockInfo);
@@ -1951,8 +2505,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     //  break;
 
     case appConstants.DELETE_EDGE:
-      console.log(payload);
-      console.log(item);
       removeEdgeFromAllBlockInfo(item);
       blockStore.emitChange();
       break;
@@ -1960,33 +2512,48 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     /* serverActions */
 
     case appConstants.TEST_WEBSOCKET:
-      console.log(payload);
-      console.log(item);
       blockStore.emitChange();
       break;
 
     /* WebAPI use */
 
     case appConstants.TEST_DATAFETCH:
-      console.log(payload);
-      console.log(item);
       dataFetchTest = JSON.parse(JSON.stringify(item));
       blockStore.emitChange();
       break;
 
     case appConstants.TEST_SUBSCRIBECHANNEL:
-      console.log(payload);
-      console.log(item);
       blockStore.emitChange();
       break;
 
     /* WebAPI use, but flowChart will be using this to display a loading icon */
 
-    case appConstants.SERVER_REQUESTPENDING:
-      console.log(payload);
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      /* Creating the object holding all initial block data in the websocket
+      instead, then passing it to the client at the end
+       */
       console.log(item);
-      /* Do nothign yet, I don't got no loading icon */
+      testAllBlockInfo = JSON.parse(JSON.stringify(item));
+      console.log(testAllBlockInfo);
+
+      blockStore.emitChange();
       break;
+
+    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS:
+    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  var blockName = JSON.parse(JSON.stringify(item.value.name.slice(2)));
+    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.value));
+    //  ///* No need to emiChnage since I'm only fetching one block by one,
+    //  //emitChange at the end of initial data fetch succes above
+    //  // */
+    //  console.log(testAllBlockInfo);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE:
+    //  window.alert("failed to fetch initial block object!");
+    //  blockStore.emitChange();
+    //  break;
 
 
 
@@ -2960,7 +3527,7 @@ module.exports = blockStore;
 //var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
 //var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
 
-},{"../../node_modules/object-assign/index.js":43,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"events":37}],15:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"../utils/WebAPIUtils":20,"events":36}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 24/09/15.
  */
@@ -3104,7 +3671,7 @@ deviceStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = deviceStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":37,"object-assign":43}],16:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12,"events":36,"object-assign":42}],16:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -3360,7 +3927,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-var blockStore = require('./blockStore');
+//var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
@@ -3505,7 +4072,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = flowChartStore;
 
-},{"../../node_modules/object-assign/index.js":43,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"./blockStore":14,"events":37}],17:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"events":36}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -3591,7 +4158,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = mainPaneStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":37,"object-assign":43}],18:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12,"events":36,"object-assign":42}],18:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -3609,7 +4176,9 @@ var _stuff = {
   //passSidePane: null
   updatedBlockContent: null,
   blockTabState: [],
-  sidebarOpen: false
+  sidebarOpen: false,
+  loadingInitialData: true,
+  loadingInitialDataError: false
 };
 
 var _handles = {
@@ -3623,46 +4192,46 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
   //selectBlockOnClick(ReactComponent)
 };
 
-var allBlockContent = {
-  redBlockContent: {
-    name: "Red block",
-    hack: "redBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
-  },
-  blueBlockContent: {
-    name: "Blue block",
-    hack: "blueBlockTabOpen",
-    info: {
-      work: {height: "100 pixels", width: "100 pixels"}
-    }
-  },
-  greenBlockContent: {
-    name: "Green block",
-    hack: "greenBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels"}
-    }
-  }
-};
-
-var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
-  for(var key in allBlockContent){
-    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
-      for(var subKey in allBlockContent[key].info.work){
-        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
-          /* Do nothing*/
-          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
-        }
-        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
-          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
-        }
-      }
-    }
-    else{
-      /* Do nothing */
-    }
-  }
-};
+//var allBlockContent = {
+//  redBlockContent: {
+//    name: "Red block",
+//    hack: "redBlockTabOpen",
+//    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
+//  },
+//  blueBlockContent: {
+//    name: "Blue block",
+//    hack: "blueBlockTabOpen",
+//    info: {
+//      work: {height: "100 pixels", width: "100 pixels"}
+//    }
+//  },
+//  greenBlockContent: {
+//    name: "Green block",
+//    hack: "greenBlockTabOpen",
+//    info: {work: {height: "100 pixels", width: "100 pixels"}
+//    }
+//  }
+//};
+//
+//var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
+//  for(var key in allBlockContent){
+//    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
+//      for(var subKey in allBlockContent[key].info.work){
+//        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
+//          /* Do nothing*/
+//          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+//        }
+//        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
+//          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+//          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
+//        }
+//      }
+//    }
+//    else{
+//      /* Do nothing */
+//    }
+//  }
+//};
 
 var favContent = {
   name: "Favourites tab",
@@ -3728,15 +4297,15 @@ var selectBlockOnClick = function(){
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
 
-var changeSomeInfo = function(){
-  allBlockContent.redBlockContent.info.work.height = "500 pixels";
-  allBlockContent.redBlockContent.info.work.width = "250 pixels";
-  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
-};
-
-var updatePaneStoreAllBlockContent = function(newBlockContent){
-  allBlockContent = newBlockContent;
-};
+//var changeSomeInfo = function(){
+//  allBlockContent.redBlockContent.info.work.height = "500 pixels";
+//  allBlockContent.redBlockContent.info.work.width = "250 pixels";
+//  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
+//};
+//
+//var updatePaneStoreAllBlockContent = function(newBlockContent){
+//  allBlockContent = newBlockContent;
+//};
 
 
 
@@ -3792,6 +4361,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   },
   getAllBlockTabInfo: function(){
     return allBlockTabInfo;
+  },
+  getIfLoadingInitialData: function(){
+    return _stuff.loadingInitialData;
+  },
+  getIfLoadingInitialDataError: function(){
+    return _stuff.loadingInitialDataError;
   }
 });
 
@@ -4008,6 +4583,25 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     //  resetTabStateReferences();
     //  paneStore.emitChange();
     //  break;
+
+    /* WebAPI use */
+
+    case appConstants.TEST_INITIALDATAFETCH_PENDING:
+      /* Show the loading icon in the mainPane while the initial data is being fetched */
+      _stuff.loadingInitialData = true;
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      _stuff.loadingInitialData = false;
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TEST_INITIALDATAFETCH_FAILURE:
+      _stuff.loadingInitialDataError = true;
+      paneStore.emitChange();
+      break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);
@@ -4814,7 +5408,7 @@ module.exports = paneStore;
 //  return possibleBlockCases[dispatchMarker](dispatchMarker);
 //}
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"./blockStore":14,"events":37,"object-assign":43}],19:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12,"./blockStore":14,"events":36,"object-assign":42}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -4899,7 +5493,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = sidePaneStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":37,"object-assign":43}],20:[function(require,module,exports){
+},{"../constants/appConstants":11,"../dispatcher/appDispatcher":12,"events":36,"object-assign":42}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -4930,7 +5524,7 @@ var WebAPIUtils = {
   testWrite: function(successCallback, failureCallback){
     /* Do a simple write to the server */
     /* I don't have access to the file that was used in the GUI server thing, but using WebPods' protocol to
-    say what value it should be / the message layout shouldn't be too bad for now:
+    say what value it should be / their message layout shouldn't be too bad for now:
 
      {
      “message” : “write”,
@@ -4942,10 +5536,35 @@ var WebAPIUtils = {
     var message = '{"type" : "Write", "id" : ' + 0 + ', "value" : "' + "false" + '"}'; // setting something to 'false'
 
     WebAPI.testWrite(message, successCallback, failureCallback);
+  },
+
+  testAddWebsocketOnOpenCallback: function(callback){
+    WebAPI.testAddWebsocketOnOpenCallback(callback);
+  },
+
+  testInitialDataFetch: function(successCallback, failureCallback){
+
+    //var message = '{"type" : "Get", "id" : ' + 0 + ', "endpoint" : "' + 'Z.attributes.blocks' + '"}';
+    var message = JSON.stringify({type: 'Get', id: 0, endpoint: 'Z.attributes.blocks'});
 
 
+    WebAPI.testInitialDataFetch(message, successCallback, failureCallback);
+  },
+
+  /* Invoked from blockStore */
+
+  //testFetchEveryInitialBlockObject: function(blockName, successCallback, failureCallback){
+  //
+  //  var message = '{"type" : "Get", "id" : ' + 0 + ', "endpoint" : "' + blockName +  '"}';
+  //
+  //  WebAPI.testFetchEveryInitialBlockObject(message, successCallback, failureCallback);
+  //
+  //},
+
+  testSubscribeChannel: function(){
 
   }
+
 };
 
 module.exports = WebAPIUtils;
@@ -5402,7 +6021,7 @@ module.exports = Block;
 //  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 ///>
 
-},{"../../node_modules/interact.js":42,"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/lib/ReactDefaultPerf.js":104,"../../node_modules/react/react":224,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14,"./blockRectangle":22,"./ports.js":32}],22:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/lib/ReactDefaultPerf.js":103,"../../node_modules/react/react":223,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14,"./blockRectangle":22,"./ports.js":32}],22:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -5470,7 +6089,7 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
 
 module.exports = BlockRectangles;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/react":224,"../actions/blockActions.js":2,"../stores/blockStore.js":14}],23:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/react":223,"../actions/blockActions.js":2,"../stores/blockStore.js":14}],23:[function(require,module,exports){
 /**
  * Created by twi18192 on 16/02/16.
  */
@@ -5517,7 +6136,7 @@ var Button = React.createClass({displayName: "Button",
 
 module.exports = Button;
 
-},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":224}],24:[function(require,module,exports){
+},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":223}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -5591,7 +6210,7 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
 
 module.exports = ConfigButton;
 
-},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":224}],25:[function(require,module,exports){
+},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":223}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -5808,7 +6427,7 @@ module.exports = Dropdown;
 //  this.props.changeTab(findTheIndex)
 //},
 
-},{"../../node_modules/interact.js":42,"../actions/sidePaneActions":9,"../stores/paneStore":18,"../stores/sidePaneStore":19,"react":224}],26:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../actions/sidePaneActions":8,"../stores/paneStore":18,"../stores/sidePaneStore":19,"react":223}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -6054,7 +6673,7 @@ var Edge = React.createClass({displayName: "Edge",
 
 module.exports = Edge;
 
-},{"../../node_modules/interact.js":42,"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/react":224,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14}],27:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/react":223,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/02/16.
  */
@@ -6254,7 +6873,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
 module.exports= EdgePreview;
 
-},{"../../node_modules/interact.js":42,"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/lib/ReactDefaultPerf.js":104,"../../node_modules/react/react":224,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../stores/blockStore.js":14}],28:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/lib/ReactDefaultPerf.js":103,"../../node_modules/react/react":223,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../stores/blockStore.js":14}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -6329,7 +6948,7 @@ var FavButton = React.createClass({displayName: "FavButton",
 
 module.exports = FavButton;
 
-},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":224}],29:[function(require,module,exports){
+},{"../actions/mainPaneActions":5,"../stores/mainPaneStore":17,"react":223}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -6784,6 +7403,11 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
     //port.setAttribute('r', 2);
 
+    /* Added to fix if, when having an edgePreview where the mouse doesn't hover over the edge due to
+    clicking near the boundary of where a portClick can occur on the invisibleCirclePort and you deselect
+    the edgePreview by clicking on the BACKGROUND rather than the EDGE, you don't get an error with
+    storingFirstPortClicked not being null in ports.js but is null in flowChart.js
+     */
     this.resetPortClickStorage();
 
     /* Reset edgePreview in blockStore */
@@ -8269,7 +8893,7 @@ module.exports = FlowChart;
 //  onClick={this.addBlockInfo}
 //  height="50" width="50" /></g>
 
-},{"../../node_modules/interact.js":42,"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/lib/ReactDefaultPerf.js":104,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/testingWebsocketActions":10,"../stores/blockStore.js":14,"../stores/flowChartStore":16,"../utils/WebAPIUtils":20,"./block.js":21,"./edge.js":26,"./edgePreview":27,"react":224}],30:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/lib/ReactDefaultPerf.js":103,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/testingWebsocketActions":9,"../stores/blockStore.js":14,"../stores/flowChartStore":16,"../utils/WebAPIUtils":20,"./block.js":21,"./edge.js":26,"./edgePreview":27,"react":223}],30:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -8384,7 +9008,7 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
 
 module.exports = FlowChartControllerView;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":44,"../stores/blockStore.js":14,"../stores/flowChartStore":16,"./flowChart":29,"react":224}],31:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":43,"../stores/blockStore.js":14,"../stores/flowChartStore":16,"./flowChart":29,"react":223}],31:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -8467,6 +9091,8 @@ var MainPane = React.createClass({displayName: "MainPane",
     favTabOpen: React.PropTypes.bool,
     //configPanelOpen: React.PropTypes.bool,
     configTabOpen: React.PropTypes.bool,
+    loadingInitialData: React.PropTypes.bool,
+    loadingInitialDataError: React.PropTypes.bool
     //theGraphDiamondState: React.PropTypes.object
   },
 
@@ -8474,7 +9100,9 @@ var MainPane = React.createClass({displayName: "MainPane",
     return (
       nextProps.footers !== this.props.footers ||
       nextProps.favTabOpen !== this.props.favTabOpen ||
-      nextProps.configTabOpen !== this.props.configTabOpen
+      nextProps.configTabOpen !== this.props.configTabOpen ||
+      nextProps.loadingInitialData !== this.props.loadingInitialData ||
+      nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
   },
 
@@ -8532,6 +9160,28 @@ var MainPane = React.createClass({displayName: "MainPane",
     };
     //console.log(this.state.newlyAddedNode);
     //console.log(this.state);
+
+    /* Using an if statement to check if we need to display the initial data fetch loading icon
+    instead of flowChart
+     */
+
+    var mainPaneContent;
+
+    if(this.props.loadingInitialData === true){
+      if(this.props.loadingInitialDataError === false) {
+        mainPaneContent = React.createElement("i", {className: "fa fa-spinner fa-spin fa-5x"})
+      }
+      else if(this.props.loadingInitialDataError === true){
+        mainPaneContent = React.createElement("i", {className: "fa fa-exclamation-circle fa-5x", x: "100"})
+      }
+    }
+    else if(this.props.loadingInitialData === false){
+      mainPaneContent = React.createElement(FlowChartControllerView, null)
+    }
+    else if(this.props.loadingInitialData === 'Error'){
+      /* Perhaps have a nother icon show up if initial data fetch doesn't work? */
+    }
+
     return(
       React.createElement(Panel, {theme: "flexbox", useAvailableHeight: true, buttons: [
           React.createElement(ToggleButton, {title: "Toggle sidebar", onClick: this.handleActionToggleSidebar}, 
@@ -8544,7 +9194,7 @@ var MainPane = React.createClass({displayName: "MainPane",
         React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
           React.createElement(Content, null, 
             React.createElement("div", {style: contentStyling}, 
-              React.createElement(FlowChartControllerView, null)
+              mainPaneContent
             )
           ), 
 
@@ -8835,7 +9485,7 @@ module.exports = MainPane;
 //
 //<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
-},{"../actions/blockActions.js":2,"../actions/deviceActions":3,"../actions/mainPaneActions":5,"../actions/paneActions":6,"../actions/sessionActions":8,"../stores/blockStore.js":14,"../stores/deviceStore":15,"../stores/mainPaneStore":17,"../stores/paneStore":18,"../websocketClient":35,"./configButton":24,"./favButton":28,"./flowChartControllerView":30,"react":224,"react-panels":46}],32:[function(require,module,exports){
+},{"../actions/blockActions.js":2,"../actions/deviceActions":3,"../actions/mainPaneActions":5,"../actions/paneActions":6,"../actions/sessionActions":7,"../stores/blockStore.js":14,"../stores/deviceStore":15,"../stores/mainPaneStore":17,"../stores/paneStore":18,"../websocketClient":35,"./configButton":24,"./favButton":28,"./flowChartControllerView":30,"react":223,"react-panels":45}],32:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/01/16.
  */
@@ -9126,7 +9776,7 @@ var Ports = React.createClass({displayName: "Ports",
 
 module.exports = Ports;
 
-},{"../../node_modules/interact.js":42,"../../node_modules/react-dom/dist/react-dom.js":44,"../../node_modules/react/react":224,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14}],33:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../../node_modules/react-dom/dist/react-dom.js":43,"../../node_modules/react/react":223,"../actions/blockActions.js":2,"../actions/flowChartActions":4,"../actions/paneActions":6,"../stores/blockStore.js":14}],33:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -9692,7 +10342,7 @@ module.exports = SidePane;
 //  );
 //}.bind(this));
 
-},{"../../node_modules/interact.js":42,"../actions/blockActions.js":2,"../actions/paneActions":6,"../actions/sidePaneActions":9,"../stores/paneStore":18,"../stores/sidePaneStore":19,"./button":23,"./dropdownMenu":25,"react":224,"react-panels":46,"react-treeview":49}],34:[function(require,module,exports){
+},{"../../node_modules/interact.js":41,"../actions/blockActions.js":2,"../actions/paneActions":6,"../actions/sidePaneActions":8,"../stores/paneStore":18,"../stores/sidePaneStore":19,"./button":23,"./dropdownMenu":25,"react":223,"react-panels":45,"react-treeview":48}],34:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -9798,6 +10448,8 @@ function getBothPanesState(){
     favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
+    loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
+    loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
 
     /* SidePane's getter functions for stores */
     tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
@@ -9836,7 +10488,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
-      nextState.configContent !== this.state.configContent
+      nextState.configContent !== this.state.configContent ||
+      nextState.loadingInitialData !== this.state.loadingInitialData ||
+      nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
     )
   },
@@ -9879,7 +10533,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
                 React.createElement(MainPane, {footers: this.state.footers, 
                 favTabOpen: this.state.favTabOpen, 
-                configTabOpen: this.state.configTabOpen}
+                configTabOpen: this.state.configTabOpen, 
+                loadingInitialData: this.state.loadingInitialData, 
+                loadingInitialDataError: this.state.loadingInitialDataError}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 ), 
                 //</div>
@@ -9903,13 +10559,14 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
 module.exports = BothPanes;
 
-},{"../actions/blockActions.js":2,"../actions/mainPaneActions":5,"../actions/paneActions":6,"../actions/sidePaneActions":9,"../stores/blockStore.js":14,"../stores/mainPaneStore":17,"../stores/paneStore":18,"../stores/sidePaneStore":19,"./mainPane":31,"./sidePane":33,"react":224,"react-dom":45,"react-sidebar":47}],35:[function(require,module,exports){
+},{"../actions/blockActions.js":2,"../actions/mainPaneActions":5,"../actions/paneActions":6,"../actions/sidePaneActions":8,"../stores/blockStore.js":14,"../stores/mainPaneStore":17,"../stores/paneStore":18,"../stores/sidePaneStore":19,"./mainPane":31,"./sidePane":33,"react":223,"react-dom":44,"react-sidebar":46}],35:[function(require,module,exports){
 /**
  * Created by twi18192 on 16/02/16.
  */
 
-var Client = require('./writingWebSocketsInReact');
-//
+//var Client = require('./writingWebSocketsInReact');
+var FluxClient = require('./fluxWebsocketClient');
+
 //var WebSocketClient = new Client("ws://pc0013.cs.diamond.ac.uk:8080/ws", null, null, null, null);
 //
 //WebSocketClient.addWebSocketOnOpenCallback(function(){
@@ -9945,742 +10602,13 @@ var Client = require('./writingWebSocketsInReact');
 
 /* Using the generic websocket constructor function, but I'll be defining my own soon-ish */
 
-//var WebSocketClient = new WebSocket('ws://pc0013.cs.diamond.ac.uk:8080/ws');
-var WebSocketClient = new Client('ws://echo.websocket.org');
+//var WebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+//var WebSocketClient = new Client('ws://echo.websocket.org');
+var WebSocketClient = new FluxClient('ws://localhost:8080/ws');
 
 module.exports = WebSocketClient;
 
-},{"./writingWebSocketsInReact":36}],36:[function(require,module,exports){
-/**
- * Created by twi18192 on 28/09/15.
- */
-
-var serverActions = require('./actions/serverActions');
-var paneActions = require('./actions/paneActions');
-
-function Client(url, debug, maxRate, username, password){
-
-  //this.getInitialState = function(){ /* No idea if this is the right thing to do, but I suppose it's a start :P */
-  //  return {
-  //    channelIDIndex: 0,
-  //    channelArray: [],
-  //    websocket: null,
-  //    webSocketOnOpenCallbacks: [],
-  //    webSocketOnCloseCallbacks: [],
-  //    onServerMessageCallbacks: [],
-  //    clientSelf: this,
-  //    debug: debug,
-  //    defaultTypeVersion: 1,
-  //      isLive: false,
-  //      forcedClose: false,
-  //      jsonFilteredReceived: [],  /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  //      jsonSent: []
-  //  };
-  //};
-
-  //var _state = {
-  //  channelIDIndex: 0,
-  //  channelArray: [],  /* Presumably it holds all the different channels? */
-  //  websocket: null,
-  //  webSocketOnOpenCallbacks: [],
-  //  webSocketOnCloseCallbacks: [],
-  //  webSocketOnErrorCallbacks: [],
-  //  onServerMessageCallbacks: [],
-  //  clientSelf: this,  /* Used as a handle for the Client when in other things like channels */
-  //  debug: debug,
-  //  defaultTypeVersion: 1,
-  //  isLive: false,
-  //  forcedClose: false,
-  //  jsonFilteredReceived: [],  /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  //  jsonSent: []
-  //};
-
-      var channelIDIndex = 0;
-      var channelArray = []; /* Presumably it holds all the different channels? */
-      var websocket = null;
-      var webSocketOnOpenCallbacks = [function(){console.log("function inside webSocketOnOpenCallbacks array")}, function(){console.log("another function in the array")}];
-      var webSocketOnCloseCallbacks = [];
-      var webSocketOnErrorCallbacks = [];
-      var onServerMessageCallbacks = [function(){console.log("message from the server callback array")}];
-      var clientSelf = this; /* Used as a handle for the Client when in other things like channels */
-      var debug = debug;
-      var defaultTypeVersion = 1;
-  var isLive = false;
-  var forcedClose = false;
-  var jsonFilteredReceived = []; /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  var jsonSent = [];
-
-  this.checkStateOfWebSocketConnection = function(){
-    console.log(websocket.readyState)
-  };
-
-
-
-  openWebSocket(url, username, password, maxRate);/* This gets its arguments from the input of the Client constructor! */
-  /// Oh, so this runs as soon as the constructor is called! ///
-
-  /* Adding the argument 'callback' to the webSocketOnOpenCallbacks array */
-
-  this.addWebSocketOnOpenCallback = function(callback){
-    webSocketOnOpenCallbacks.push(callback);
-  };
-
-  /* Removing the argument 'callback' from the array webSocketOnOpenCallbacks via the splice method, similarly to how the removeTab function in SidePane works */
-
-  this.removeWebSocketOnOpenCallback = function(callback){
-    webSocketOnOpenCallbacks.splice(webSocketOnOpenCallbacks.indexOf(callback), 1);
-  };
-
-  /* Adding the argument 'callback' to the webSocketOnCloseCallbacks array */
-  /* So when websocket.onclose runs, it then runs fireOnClose, which then looks at the array
-  webSocketOnCloseCallbacks and runs all the functions inside that array, one by one;
-  this function is essentially adding more callback functions to that array.
-  Same for all the other functions here really (apart from removeWebSocketOnCallback,
-  but in principle it's the same idea, just removing a callback instead of adding one)
-   */
-
-  this.addWebSocketOnCloseCallback = function(callback){
-    webSocketOnCloseCallbacks.push(callback);
-  };
-
-  /* Adding the argument 'callback' to the webSocketOnErrorCallbacks array */
-
-  this.addWebSocketOnErrorCallback = function(callback){
-    webSocketOnErrorCallbacks.push(callback);
-  };
-
-  /* Adding the argument 'callback' to the onServerMessageCallbacks array */
-  /* So this adds a callback function that is notified when the Websocket receives a message from the server */
-
-  this.addOnServerMessageCallback = function(callback){
-    onServerMessageCallbacks.push(callback);
-  };
-
-
-
-  /* Stuff to do with channels? :P */
-  /* More importantly, the two functions that create new Channel objects! */
-
-  this.subscribeChannel = function(name, callback, readOnly, type, version, maxRate){
-    var typeJson; /* Not entirely sure what this is doing, it's creating a variable without a value? */
-                  /* Yep, it implicitly is a variable of type 'undefined'; it's usually used to declare variables for later use */
-
-    if(readOnly !== false){
-      readOnly = true;
-    }
-
-    if(type !== null){
-      if(version === null){
-        version = defaultVersion; /* defaultVersion isn't located anywhere else in the file? */ /* Well, it's unknown in the original file too, so I guess it's fine? */ /* There's an unused variable (and in the original file): defaultTypeVersion? */
-
-        typeJson = JSON.stringify({ /* I have a feeling this has something to do with the data from the server, since it's converting a Javascript value to a JSON string */
-          "name": type,
-          "version": version
-        });
-      }
-    }
-
-    var json = JSON.stringify({ /* I have a feeling that this also relates to the info from the server */
-      "message": "subscribe",
-      "id": channelIDIndex,
-      "channel": name,
-      "readOnly": readOnly,
-      "maxRate": maxRate,
-      "type": typeJson
-    });
-
-    var channel = new Channel(name); /* Creating a new channel, with its name attribute set as the input argument; note that the variable is called 'channel' though for ALL channels subscribed */ /* Also, not sure if it matters, but the other 'name' arguments above highlight as well when I hover over this argument? Are they connected? */
-                                     /* Haha, yep, they are connected, since this is all within one function, subscribeChannel()! :P */
-    channelArray[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
-    channel.id = channelIDIndex;
-    channel.name = name;
-    channel.readOnly = readOnly;
-    channel.connected = true;
-
-    if(this.isLive){  /* Hmm, is this referring to the state of the Client, since the Channel constructor doesn't have a property or method entitled isLive? */ /* Not entirely sure what 'this' is referring to in this case... */
-      this.sendText(json);  /* Either way, it's a'saying to check if a value is true, and if so, do this, and if not, do the stuff below */
-                            /* Another note, this sendText command is simply to tell ther server that another
-                            channel has been subscribed
-                             */
-                            /* UPDATE: Oh ok, so if the websocket connection is already live, just send a message
-                            to the server telling it that another Channel has been subscribed, but if the websocket
-                            conenction ISN'T open, do the else block of code and add a callback to run when the websocket
-                            connection DOES open to let the user know that this particular Channel exists and is subscribed!
-                             */
-    }
-    else{
-      var webpdaSelf = this; /* No idea what this is for? */ /* So WebPDA is something to do with accessing data in realtime via websockets, look it up again if you want more info! */
-      var listener = null;
-      listener = function(evt){  /* Is evt short for event? */ /* Also, is this just redefining the variable listener to be a function rather than null as it is the line previously? */
-        clientSelf.sendText(json);
-
-        setTimeout(function(){  /* A function inside another function, but evt never gets passed, so what's the point of giving 'listener' and input argument? */
-          clientSelf.removeWebSocketOnOpenCallback(listener); /* Ok, so setTimeout is an internal Javascript function that runs the given function after the number of milliseconds (the 2nd argument) */
-        }, 0);                                                /* What's the point of using setTimeout if it's gonna run after 0 milliseconds (ie, immediately)? */
-      };
-
-      this.addWebSocketOnOpenCallback(listener);
-    } /* What is the point of this else part of the loop; all it does is sendText(json) just like the if part,
-    removes a callback from webSocketOnOpenCallbacks after 0 milliseconds,and then adds the SAME callback
-    back again to the SAME array??? Perhaps cleanup? */
-    /* On a separate note, I guess adding a callback for when the websocket connections is open is to be
-    able to then print to console that this particular channel is active
-     */
-
-    if(debug){   /* If debug is true, do the below */ /* Also, it doesn't appear that there's any else or else if statement to follow this? */
-      jsonFilteredReceived.unshift([json]); /* .unshift adds the element to the beginning of the given array */
-    }
-
-    channel.channelCallback = callback;
-    channelIDIndex++; /* Shorthand for incrementing channelIDIndex by one (happens each time the whole function subscribeChannel() gets called) */
-    /* Oh, so this is what prevents each channel from having the same id, the number inside the variable channelIDIndex is simply just to get it started, it's not used to keep track of every channel and its corresponding index, */
-    /* I suppose it's used to count how many channels there actually are */
-    return channel;
-  };
-
-
-
-  this.resubscribeChannel = function(ch){ /* Seems fairly similar to this.subscribeChannel() */
-                                          /* However, not that its sole input argument is a Channel, not like subscribe where it had 5 parameters! */
-                                          /* So this must somehow 'undo' the unsubscribe function? */
-                                          /* Ah ok, unsubscribe simply removes the channel object from channelArray (or more accurately, it sets it as undefined within the array),
-                                            but the Channel object still exists, so you can still use the usual Channel methods and everything else to refer to that particular Channel object.
-                                            Also note that it could potentially still keep its original index/channelIDIndex value from before it was unsubscribed!!
-                                             */
-
-    console.log("resubscribing channel");
-
-    var typeJson;
-
-    if(ch.value.type !== null){     /* I'm not entirely sure what ch.value.type is; like, a '.type' Javascript method doesn't exist so it can't simply be checking the data type can it (even thought that definitely is what it lookes like it's doing! :P)? */
-      typeJson = JSON.stringify({
-        "name": ch.value.type.name,
-        "version": ch.value.type.version
-      });
-    }
-
-    /* As the input Channel already existed, it already has all these attributes/properties that are part of the object, so this
-    is simply reattaching these attribute values to the variable 'json' that is associated with the channel
-     */
-
-    var json = JSON.stringify({
-      "message": "subscribe",
-      "id": ch.id,
-      "channel": ch.name,
-      "readOnly": ch.readOnly,
-      "maxRate": ch.maxRate,
-      "type": typeJson
-    });
-
-    /* Hmm, this part contradicts my statement just above; if the Channel objects still exists, and is just undefined inside
-    channelArray, then why is it creating a new Channel object here, and then setting the properties of this new
-    Channel object to have the same properties as the old Channel object? Surely if that old Channel object still
-    existed and had all its properties still intact outside channelArray, you could just set the corresponding index
-    of channelArray equal to this old Channel object again without creating a new one and transferring all
-    the old properties to this new one? Because then if both of these Channel objects exist, they'll both have the
-    same name and everything, causing conflict when referring to one or the either?
-     */
-
-    var channel = new Channel(ch.name);
-    channelArray[ch.id] = channel;
-    channel.id = ch.id;
-    channel.name = ch.name;
-    channel.readOnly = ch.readOnly;
-    channel.connected = true;
-
-    if(this.isLive){
-      this.sendText(json);
-    }
-    else{
-      var webpdaSelf = this;
-      var listener = null;
-      listener = function(evt){
-        clientSelf.sendText(json);
-
-        setTimeout(function(){
-          clientSelf.removeWebSocketOnOpenCallback(listener)
-        }, 0)
-      };
-
-      this.addWebSocketOnOpenCallback(listener); /* After this, it's simpler than this.subscribeChannel() */
-
-    }
-    channel.channelCallback = ch.channelCallback;
-    return channel; /* Hmm, in subscribeChannel at the end it raised channelIDIndex by 1, but here it doesn't?*/
-    /* Is it because it's called resubscribeChannel, so that means the Client is already aware of this channel, thus it's already got an associated channelIDIndex inside channelArray? */ /* UPDATE: Basically, yeah :P */
-    /* Surely that means that at one point that it was subscribed and then it wasn't? So then there must be an 'unsubscribe' function somewhere? */ /* UPDATE: Again, basically yeah :P */
-  };
-
-
-
-
-
-
-
-  /* Other methods of Client that were further down the page */
-
-  this.getReceivedMessagesPerChannel = function(channelID){
-    if(channelID === "*"){
-      return jsonFilteredReceived.join("\n");  /* Joins all the elements of the array jsonFilteredReceived into a single string with commas between the elements, no spaces */
-                                                      /* Actually, not sure what the "\n" inside the brackets does? */
-    }
-    else{
-      return jsonFilteredReceived[channelID].join("\n"); /* As this is just one element of the array, does it just turn the element into a string? */
-                                                         /* UPDATE: I have a feeling that the array jsonFilteredReceived will have arrays as
-                                                         its elements, so the asterix * in the code above this line is used to specify that you want
-                                                         the json messages received by the client from the server by EVERY channel,
-                                                         and if you just want the json messages received by a particular channel you specify that channel's
-                                                         channelID!
-                                                          */
-    }
-  };
-
-  this.getSentMessages = function(){
-    return jsonSent.join("\n"); /* Ohhh, the 2nd argument is the separator between each element in the string that gets outputted, so is "\n" adding a new line/line break after each element? */
-  };
-
-  this.close = function(){
-    forcedClose = true;
-    if(websocket !== null){
-      websocket.close();
-    }
-    websocket = null;
-  };
-
-  this.sendText = function(text){
-    //console.log("inside sendText");
-    //console.log("channelArray state again");
-    //console.log(channelArray);
-    websocket.send(text);  /* Should this refer to the websocket variable, or something else? */
-    //console.log("ok, after sendText now!");
-    if(debug){
-
-      jsonSent.unshift(text); /* Basically, I think this is to aid debugging: if debug is set to true,
-                              the array jsonSent gets another entry added to the beginning of itself */
-    }
-  };
-
-  /* Find a channel from its id */
-
-  this.getChannel = function(id){
-    console.log(channelArray[0]);
-    return channelArray[id];
-  };
-
-  /* Self explanatory, lets you get all the channels currently available */
-
-  this.getAllChannels = function(){
-    console.log("the following is the channelArray");
-    console.log(channelArray);
-    return channelArray;
-  };
-
-
-
-
-  /* The functions that aren't methods of the Client, but can be used by everything in here I guess? */
-
-
-  function openWebSocket(url, username, password, maxRate){
-    //var test = "test"
-    //console.log(typeof test)
-    //console.log(url)
-    //console.log("what is this...")
-    if((url.indexOf("wss://") !== -1 && username !== null) || maxRate !== null){ /* So there's two options for this loop to go to the code that executes on a 'true' output:
-                                                                                 /* Either, the string "wss://" can be found (ie, output of indexOf("wss://") is NOT equal to -1) AND (double ampersand) the input 'username' is not null */
-                                                                                 /* Or the input maxRate is not null; either of those scenarios will allow the 'true' block of code to execute */
-      url = url + "?";
-
-      if(maxRate !== null){     /* these are additional sub-checks if you will, to check individual inputs and their values */
-        url = url + "maxRate=" + maxRate;
-      }
-
-      if(url.indexOf("wss://") !== -1){ /* This is basically saying that, if all the inputs apart from password are valid and not null, run the given code */
-        if(username !== null){
-          if(maxRate !== null){
-            url = url + "&";
-          }
-
-          url = url + "user=" + username + "&password=" + password;  /* This statement only relies on the url and username inputs being valid, it doesn't depend on the maxRate input like the statement further inside this loop */
-
-        }
-      }
-    }
-
-    if("WebSocket" in window){  /* The window object refers to an open window in a browser */
-      websocket = new WebSocket(url); /* new WebSocket is an inbuilt function of Javascript */
-    }
-    else if("MozWebSocket" in window){    /* I suppose these two cases are seeing if WebSockets are usable in the browser that the user is using? */
-      websocket = new MozWebSocket(url);
-    }
-    else{
-      throw new Error("WebSocket isn't supported by this browser.");
-    }
-    websocket.binaryType = "arraybuffer"; /* binaryType is associated with WebSockets */
-
-    /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
-
-    websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
-      console.log(evt);
-      fireOnOpen(evt);
-      console.log("websocket has been opened")
-    };
-
-    websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
-      console.log("message has been received from server via websocket");
-      var json;
-      json = JSON.parse(evt.data);
-      console.log("Here is the event:");
-      console.log(evt);
-      dispatchMessage(json);
-    };
-
-    websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
-      fireOnError(evt);
-    };
-
-    websocket.onclose = function(evt){
-      fireOnClose(evt);
-      console.log("websocket has been closed")
-    };
-
-    if(debug){
-      onServerMessageCallbacks.push(function(json){
-        jsonFilteredReceived[json.id].unshift(JSON.stringify(json)); /* Adds a function that runs whenever a message from
-                                                                      the server is received, and the function adds another entry
-                                                                      to jsonFilteredReceived,and the entry consists of
-                                                                      ?? a filtered version of the json message received from the server ??
-                                                                      */
-      });
-      webSocketOnErrorCallbacks.push(function(evt){
-        jsonFilteredReceived[json.id].unshift(JSON.stringify(json)); /* Should this be evt instead of json? */
-      }); /* Don't get confused, both of these run if the if statement returns as true */
-    }
-  }
-
-
-
-  function dispatchMessage(json){
-    //console.log("in dispatchMessage, one more update");
-    //console.log(json);
-    //console.log(json.id);
-    //console.log(channelArray);
-    //console.log(channelArray[0]);
-
-    console.log("websocket.onmessage has invoked dispatchMessage, here's the full json and json.message from the server:");
-    console.log(json);
-    console.log(json.message);
-
-    if(json.message !== null){ /* There's no else prt to this outer loops, so I guess if json.message is null then don't do anything? */
-      if(channelArray[json.id] === undefined){
-        //console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore"), doesn't necessarily mean the channe; was unsubscribed, could be another error
-      }
-      else{
-        handleServerMessage(json);
-      }
-    }
-
-    if(json.id !== null){
-      if(channelArray[json.id] !== null){
-        if(channelArray[json.id] === undefined){
-          //console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore"), again, doesn't necessarily mean the channe; was unsubscribed, could be another error
-        }
-        else {
-          console.log("dispatchMessage is now about to invoke fireChannelEventFunc");
-          channelArray[json.id].fireChannelEventFunc(json);  /* The only thing that invokes fireChannelEventFunc,which in turn is the only
-                                                              thing that invokes processJsonForChannel, which is what is used for updating
-                                                              Channel values */
-                                                             /* This only invokes after websocket.onmessage, ie after a message from the server
-                                                             is received (and presumably, this message from the server contains the updated data/value)
-                                                              */
-          }
-        }
-      }
-    }
-
-
-  function handleServerMessage(json){
-    if(json.type === "error"){
-      console.log("Error: " + json.error); /* Provides an error related to the input to make debugging easier I suppose? */
-    }
-    fireOnServerMessage(json);
-  }
-
-  function fireOnError(evt){  /* If an error occurs, run the error messages from all the function inside webSocketErrorCallbacks */
-    for(var i in webSocketOnErrorCallbacks){
-      webSocketOnErrorCallbacks[i](evt);
-    }
-  }
-
-  function fireOnServerMessage(json){ /*If a message is received (not sure where from), run all the functions in the array onServerMessageCallbacks */
-    for(var i in onServerMessageCallbacks){
-      onServerMessageCallbacks[i](json)
-    }
-  }
-
-  function processJsonForChannel(json, Channel){ /* Could potentially replace this with the lookup method I used for paneStore */
-                                                 /* Also, I think this may also potentially be the function that alters/updates the Channel attribute value,
-                                                    since it runs after a message/data from the server is received and it has a json and channel input!
-                                                     */
-    console.log("Inside processJsonForChannel, here's the Channel whose value we're changing and the json too:");
-    console.log(Channel);
-    console.log(json);
-    switch(json.type){
-
-      case "connection":
-            Channel.connected = json.connected;
-            Channel.readOnly = !json.writeConnected;
-            break;
-
-      case "value":
-            Channel.value = json.value;
-            break;
-
-      default:
-        console.log("Switch statement runs the default case, something's up?");
-            break;
-    }
-    //console.log("Here's the new Channel value:");
-    //console.log(Channel.value);
-    //console.log("Here's channelArray:");
-    //console.log(channelArray);
-
-
-    console.log("Forget trying all the hard stuff, all I'm gonna do is pass the channel name!");
-
-    /* So I guess here (or more specifically, inside ths witch statement in the future) would be where the action to pass the data to deviceStore.
-     Not sure if I'm meant to out this function into WebAPIUtils, but for now I'll just try and get this working before I start to get fancy :P */
-
-    //serverActions.testingWebsocket(json)
-
-    /* Using testingWebsocketActions now */
-    /* Waiiiittt, I need to use callbacks, it won't work firing an aciton from here since I'm still in the middle of
-    testWrite; I'm relying on the use of callbacks so this si the incorrect way to do it!!!
-     */
-
-
-
-  }
-
-  function fireOnOpen(evt){
-    console.log(evt);
-    //var _clientSelf = clientSelf; /* Not needed anymore I don't think, now that I eliminated _state */
-    //var _isLive = isLive;
-    console.log("inside fireOnOpen function");
-    clientSelf.isLive = true; /* I have a feeling that this won't work, since isLive lives inside _state too? */
-                                     /* Perhaps it should just be _state.isLive? */ /* Oh ok, no, I think this is right, since _state.clintSelf is a handle on the Client when the keyword 'this' could be something else (ie, when you're inside a function like now!)
-                                     /* So it's the same as 'this.isLive' when used in the scope of Client, except you have to refer to 'this' as _state.clientSelf since we AREN'T in the scope of Client, we're in a function! */
-                                     /* Haha, back and forth, but actually I don't think this works, since once you have the handle on Client, you STILL need to access _state.isLive!?! */
-                                     /* Ok, I think that may have fixed it, but who knows? :P */
-    for(var i in webSocketOnOpenCallbacks){
-      //console.log(webSocketOnOpenCallbacks[i](evt));
-      //console.log(webSocketOnOpenCallbacks[i]);
-      webSocketOnOpenCallbacks[i](evt);  /* Every function in this array gets passed the input 'evt' */
-    }
-  }
-
-  function fireOnClose(evt){
-    isLive = false; /* Trying the other way! */
-    var url = evt.currentTarget.url; /* Look back at the .currentTarget method */
-
-    if(forcedClose){
-      for(var c in channelArray){
-        channelArray[c].unsubscribe(); /* Is this referring to the Channel method, or the function a bit later on? */
-                                       /* UPDATE: It's the Channel method, but it didn't really matter, the method invokes
-                                       the other function I was thinking of anyway!
-                                       Also, this makes it look like forcedClose (when its value is 'true') is used
-                                       to unsubscribe ALL Channels
-                                        */
-      }
-      for(var i in webSocketOnCloseCallbacks){
-        webSocketOnCloseCallbacks[i](evt);
-      }
-    }
-
-    /* So if forcedClose set to 'false' wasn't used, then this following block runs, and this essentially (after 10,000 milliseconds)
-    opens the websocket connection again with the same server url as before, and resubscribes all the
-    channels that are in channelArray.
-     */
-
-    else{
-      setTimeout(function(){
-        openWebSocket(url); /* Define this later */ /* Hmm, I don't get the 'invalid no. of input arguments' when I should, like the original file has? */
-
-        for(var c in channelArray){  /* So this function runs after 10000 milliseconds */ /* So I suppose this has something to do with resubscribing channels after a set interval of time (whatever that means :P)? */
-          clientSelf.resubscribeChannel(channelArray[c]);
-        }
-      }, 10000);
-    }
-  }
-
-
-
-
-
-
-
-
-  /* Defining the Channel constructor */
-
-  function Channel(name){ /* Hmm, not sure the best way to get this to have state... */
-
-    this.name = name;
-    this.id = -1;   /* Look at the docs and their definition of getId, getValue: it says that they can have any data type, hence they can be strings, numbers, floats, objects etc */
-    this.value = null;
-    this.channelCallback = null; /* not sure why this gets 'unused definition' and the others don't? */ /* Update: it doesn't now, maybe it changed? */
-    this.paused = false;
-    this.connected = false;
-    this.readOnly = true;
-
-    /* Chucking all the prototype function additions in the constructor */
-    /* These internal methods of an object of the Channel class are used to return/access values of a channel object from OUTSIDE a channel,
-    hence, these functions are ALWAYS invoked from outside a channel */
-
-    this.channelValueType = function(){
-      console.log(typeof this.value);
-      console.log(this.value);
-    };
-
-    this.isConnected = function(){
-      return this.connected;
-    };
-
-    this.getId = function(){
-      return this.id;
-    };
-
-    this.isWriteAllowed = function(){
-      return !this.readOnly;  /* Why return the opposite of readOnly? I suppose read and write are related?*/
-                              /* Oh, it's that if it's not just read only, it has to be able to write as well, since read only means you can only read and NOT write :P */
-    };
-
-    this.isPaused = function(){
-      return this.paused;
-    };
-
-    this.getValue = function(){
-      return this.value;
-    };
-
-    this.removeCallback = function(callback){ /* Not sure why it doesn't have 'this.' in front of it in the original JS file? */
-      this.channelCallback = null;            /* Plus, what's the point of having an input argument that isn't used in the function? */
-    };
-
-    this.setValue = function(value){  /*So, if the opposite of the value of readOnly is true, run this code */
-      if(!this.readOnly){
-        console.log("Inside setValue");
-        console.log(value);
-        setChannelValue(this.id, value);
-      }
-      else{
-        console.log("Channel is read only, cannot write")
-      }
-    };
-
-    /* What's the difference between setValue and updateValue? :/
-    I suppose at least they invoke the same function...
-     */
-
-    this.updateValue = function(){
-      if(!this.readOnly){
-        setChannelValue(this.id, this.value.value); /* No idea what this.value.value is referring to? */
-      }
-    };
-
-    this.unsubscribe = function(){
-      unsubscribe(this.id);
-    };
-
-    this.pause = function(){
-      this.paused = true;
-      pauseChannel(this.id);
-    };
-
-    this.resume = function(){
-      this.paused = false;
-      resumeChannel(this.id);
-    };
-
-    /* On a side note, what do pause and resume actually 'mean' when it comes to a channel?
-    Does it mean that you temporarily cannot send data across that particular channel when paused?
-    UPDATE: answer is in the docs :P; pause means to pause receiving notifications about that particular channel.
-     */
-
-    this.fireChannelEventFunc = function(json){
-      console.log("firChanneklEventFunc is about to invoke processJsonForChannel, the thing that actually changes Channel attribute values!");
-      processJsonForChannel(json, this);  /* The only thing that invokes processJsonForChannel */
-      this.channelCallback(json, this); /* I suppose channelCallback is just a function that lets you know that
-                                          fireChannelEventFunc has occurred/ran (a console log will probably suffice)
-                                          Furthermore, since the inputs are 'this' and 'json', I guess it's pointing
-                                          to you logging which channel the info is travelling across, and what the info
-                                          travelling across is*/
-    };
-
-  }
-
-  /* All these functions are related to channels and interaction with them; ie, relaying messages to different channels, and the channels are distinguished by their id? */
-
-  function unsubscribe(channelIDIndex){
-    console.log("unsubscribing a channel");
-    //console.log("the following is an update on channelArray");
-    //console.log(channelArray);
-    var json = JSON.stringify({
-      "message": "unsubscribe",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json);
-    delete channelArray[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
-    //channelArray.splice(channelIDIndex,1);
-    //console.log(channelArray);
-  }
-
-  function pauseChannel(channelIDIndex){
-    var json = JSON.stringify({
-      "message": "pause",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json);
-  }
-
-  function resumeChannel(channelIDIndex){
-    var json = JSON.stringify({
-      "message": "resume",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json)
-  }
-
-  /* Ok, I'm starting to not understand this again: the function below is called setChannelValue, and one of
-  its inputs is the new value of the channel (presumably). After the json variable is set, a message goes to THE SERVER with this info;
-  Now, I thought the whole idea was that the new value was FETCHED FROM THE SERVER, and then the Client gets
-  notified that the new data has been fetched, but here it looks like the new value gets SET FIRST, and
-  THEN THE SERVER IS NOTIFIED OF THIS CHANGE?
-   */
-
-  function setChannelValue(channelIDIndex, value){
-    console.log("Inside setChannelValue");
-    console.log(channelIDIndex);
-    console.log(value);
-    var json = JSON.stringify({
-      "message": "write",
-      "id": channelIDIndex,
-      "value":value
-    });
-
-    clientSelf.sendText(json);  /* Don't worry, sendText is defined later (line 277 of original file) */
-
-  }
-
-}
-
-module.exports = Client;
-
-//var ReactClient = new Client("wss://echo.websocket.org", null, 10, null, null);
-
-},{"./actions/paneActions":6,"./actions/serverActions":7}],37:[function(require,module,exports){
+},{"./fluxWebsocketClient":13}],36:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10983,7 +10911,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],38:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -11075,7 +11003,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],39:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -11087,7 +11015,7 @@ process.umask = function() { return 0; };
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":40}],40:[function(require,module,exports){
+},{"./lib/Dispatcher":39}],39:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -11339,7 +11267,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":41}],41:[function(require,module,exports){
+},{"./invariant":40}],40:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -11394,7 +11322,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],42:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -17372,7 +17300,7 @@ module.exports = invariant;
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -17413,7 +17341,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],44:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function (global){
 /**
  * ReactDOM v0.14.3
@@ -17459,12 +17387,12 @@ module.exports = Object.assign || function (target, source) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"react":224}],45:[function(require,module,exports){
+},{"react":223}],44:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":89}],46:[function(require,module,exports){
+},{"react/lib/ReactDOM":88}],45:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -19997,7 +19925,7 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react/addons":50}],47:[function(require,module,exports){
+},{"react/addons":49}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20011,7 +19939,7 @@ var _sidebar2 = _interopRequireDefault(_sidebar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _sidebar2.default;
-},{"./sidebar":48}],48:[function(require,module,exports){
+},{"./sidebar":47}],47:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -20449,7 +20377,7 @@ Sidebar.defaultProps = {
 };
 
 exports.default = Sidebar;
-},{"react":224,"react-dom":45}],49:[function(require,module,exports){
+},{"react":223,"react-dom":44}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -20534,7 +20462,7 @@ var TreeView = _react2['default'].createClass({
 
 exports['default'] = TreeView;
 module.exports = exports['default'];
-},{"react":224}],50:[function(require,module,exports){
+},{"react":223}],49:[function(require,module,exports){
 'use strict';
 
 var warning = require('fbjs/lib/warning');
@@ -20549,7 +20477,7 @@ warning(
 
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":147,"fbjs/lib/warning":223}],51:[function(require,module,exports){
+},{"./lib/ReactWithAddons":146,"fbjs/lib/warning":222}],50:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20586,7 +20514,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":121,"./findDOMNode":172,"fbjs/lib/focusNode":205}],52:[function(require,module,exports){
+},{"./ReactMount":120,"./findDOMNode":171,"fbjs/lib/focusNode":204}],51:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -20992,7 +20920,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":64,"./EventPropagators":68,"./FallbackCompositionState":69,"./SyntheticCompositionEvent":153,"./SyntheticInputEvent":157,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/keyOf":216}],53:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPropagators":67,"./FallbackCompositionState":68,"./SyntheticCompositionEvent":152,"./SyntheticInputEvent":156,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/keyOf":215}],52:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21132,7 +21060,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],54:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21310,7 +21238,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":53,"./ReactPerf":127,"./dangerousStyleValue":169,"_process":38,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/camelizeStyleName":199,"fbjs/lib/hyphenateStyleName":210,"fbjs/lib/memoizeStringOnly":218,"fbjs/lib/warning":223}],55:[function(require,module,exports){
+},{"./CSSProperty":52,"./ReactPerf":126,"./dangerousStyleValue":168,"_process":37,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/camelizeStyleName":198,"fbjs/lib/hyphenateStyleName":209,"fbjs/lib/memoizeStringOnly":217,"fbjs/lib/warning":222}],54:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21406,7 +21334,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./PooledClass":74,"_process":38,"fbjs/lib/invariant":211}],56:[function(require,module,exports){
+},{"./Object.assign":72,"./PooledClass":73,"_process":37,"fbjs/lib/invariant":210}],55:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21728,7 +21656,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":64,"./EventPluginHub":65,"./EventPropagators":68,"./ReactUpdates":145,"./SyntheticEvent":155,"./getEventTarget":178,"./isEventSupported":183,"./isTextInputElement":184,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/keyOf":216}],57:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPluginHub":64,"./EventPropagators":67,"./ReactUpdates":144,"./SyntheticEvent":154,"./getEventTarget":177,"./isEventSupported":182,"./isTextInputElement":183,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/keyOf":215}],56:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21752,7 +21680,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],58:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21884,7 +21812,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":61,"./ReactMultiChildUpdateTypes":123,"./ReactPerf":127,"./setInnerHTML":188,"./setTextContent":189,"_process":38,"fbjs/lib/invariant":211}],59:[function(require,module,exports){
+},{"./Danger":60,"./ReactMultiChildUpdateTypes":122,"./ReactPerf":126,"./setInnerHTML":187,"./setTextContent":188,"_process":37,"fbjs/lib/invariant":210}],58:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22121,7 +22049,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],60:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],59:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22349,7 +22277,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":59,"./ReactPerf":127,"./quoteAttributeValueForBrowser":186,"_process":38,"fbjs/lib/warning":223}],61:[function(require,module,exports){
+},{"./DOMProperty":58,"./ReactPerf":126,"./quoteAttributeValueForBrowser":185,"_process":37,"fbjs/lib/warning":222}],60:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22497,7 +22425,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/createNodesFromMarkup":202,"fbjs/lib/emptyFunction":203,"fbjs/lib/getMarkupWrap":207,"fbjs/lib/invariant":211}],62:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/createNodesFromMarkup":201,"fbjs/lib/emptyFunction":202,"fbjs/lib/getMarkupWrap":206,"fbjs/lib/invariant":210}],61:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22525,7 +22453,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":216}],63:[function(require,module,exports){
+},{"fbjs/lib/keyOf":215}],62:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22650,7 +22578,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":64,"./EventPropagators":68,"./ReactMount":121,"./SyntheticMouseEvent":159,"fbjs/lib/keyOf":216}],64:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPropagators":67,"./ReactMount":120,"./SyntheticMouseEvent":158,"fbjs/lib/keyOf":215}],63:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22743,7 +22671,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":215}],65:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":214}],64:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23025,7 +22953,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":66,"./EventPluginUtils":67,"./ReactErrorUtils":110,"./accumulateInto":165,"./forEachAccumulated":174,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],66:[function(require,module,exports){
+},{"./EventPluginRegistry":65,"./EventPluginUtils":66,"./ReactErrorUtils":109,"./accumulateInto":164,"./forEachAccumulated":173,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],65:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23248,7 +23176,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],67:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23453,7 +23381,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":64,"./ReactErrorUtils":110,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],68:[function(require,module,exports){
+},{"./EventConstants":63,"./ReactErrorUtils":109,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],67:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23591,7 +23519,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":64,"./EventPluginHub":65,"./accumulateInto":165,"./forEachAccumulated":174,"_process":38,"fbjs/lib/warning":223}],69:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPluginHub":64,"./accumulateInto":164,"./forEachAccumulated":173,"_process":37,"fbjs/lib/warning":222}],68:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23687,7 +23615,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":73,"./PooledClass":74,"./getTextContentAccessor":181}],70:[function(require,module,exports){
+},{"./Object.assign":72,"./PooledClass":73,"./getTextContentAccessor":180}],69:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23920,7 +23848,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":59,"fbjs/lib/ExecutionEnvironment":197}],71:[function(require,module,exports){
+},{"./DOMProperty":58,"fbjs/lib/ExecutionEnvironment":196}],70:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23957,7 +23885,7 @@ var LinkedStateMixin = {
 };
 
 module.exports = LinkedStateMixin;
-},{"./ReactLink":119,"./ReactStateSetters":139}],72:[function(require,module,exports){
+},{"./ReactLink":118,"./ReactStateSetters":138}],71:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24094,7 +24022,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":130,"./ReactPropTypes":131,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],73:[function(require,module,exports){
+},{"./ReactPropTypeLocations":129,"./ReactPropTypes":130,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],72:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -24142,7 +24070,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],74:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24264,7 +24192,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],75:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],74:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24305,7 +24233,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":73,"./ReactDOM":89,"./ReactDOMServer":99,"./ReactIsomorphic":118,"./deprecated":170}],76:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactDOM":88,"./ReactDOMServer":98,"./ReactIsomorphic":117,"./deprecated":169}],75:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24344,7 +24272,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":117,"./findDOMNode":172,"_process":38,"fbjs/lib/warning":223}],77:[function(require,module,exports){
+},{"./ReactInstanceMap":116,"./findDOMNode":171,"_process":37,"fbjs/lib/warning":222}],76:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24669,7 +24597,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":64,"./EventPluginHub":65,"./EventPluginRegistry":66,"./Object.assign":73,"./ReactEventEmitterMixin":111,"./ReactPerf":127,"./ViewportMetrics":164,"./isEventSupported":183}],78:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPluginHub":64,"./EventPluginRegistry":65,"./Object.assign":72,"./ReactEventEmitterMixin":110,"./ReactPerf":126,"./ViewportMetrics":163,"./isEventSupported":182}],77:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24753,7 +24681,7 @@ var ReactCSSTransitionGroup = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroup;
-},{"./Object.assign":73,"./React":75,"./ReactCSSTransitionGroupChild":79,"./ReactTransitionGroup":143}],79:[function(require,module,exports){
+},{"./Object.assign":72,"./React":74,"./ReactCSSTransitionGroupChild":78,"./ReactTransitionGroup":142}],78:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24919,7 +24847,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroupChild;
-},{"./React":75,"./ReactDOM":89,"./ReactTransitionEvents":142,"./onlyChild":185,"fbjs/lib/CSSCore":195}],80:[function(require,module,exports){
+},{"./React":74,"./ReactDOM":88,"./ReactTransitionEvents":141,"./onlyChild":184,"fbjs/lib/CSSCore":194}],79:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -25044,7 +24972,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":133,"./instantiateReactComponent":182,"./shouldUpdateReactComponent":191,"./traverseAllChildren":192,"_process":38,"fbjs/lib/warning":223}],81:[function(require,module,exports){
+},{"./ReactReconciler":132,"./instantiateReactComponent":181,"./shouldUpdateReactComponent":190,"./traverseAllChildren":191,"_process":37,"fbjs/lib/warning":222}],80:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25227,7 +25155,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":74,"./ReactElement":106,"./traverseAllChildren":192,"fbjs/lib/emptyFunction":203}],82:[function(require,module,exports){
+},{"./PooledClass":73,"./ReactElement":105,"./traverseAllChildren":191,"fbjs/lib/emptyFunction":202}],81:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26001,7 +25929,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactComponent":83,"./ReactElement":106,"./ReactNoopUpdateQueue":125,"./ReactPropTypeLocationNames":129,"./ReactPropTypeLocations":130,"_process":38,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211,"fbjs/lib/keyMirror":215,"fbjs/lib/keyOf":216,"fbjs/lib/warning":223}],83:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactComponent":82,"./ReactElement":105,"./ReactNoopUpdateQueue":124,"./ReactPropTypeLocationNames":128,"./ReactPropTypeLocations":129,"_process":37,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210,"fbjs/lib/keyMirror":214,"fbjs/lib/keyOf":215,"fbjs/lib/warning":222}],82:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26126,7 +26054,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":125,"./canDefineProperty":167,"_process":38,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],84:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":124,"./canDefineProperty":166,"_process":37,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],83:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26168,7 +26096,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":94,"./ReactMount":121}],85:[function(require,module,exports){
+},{"./ReactDOMIDOperations":93,"./ReactMount":120}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -26222,7 +26150,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],86:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],85:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26269,7 +26197,7 @@ var ReactComponentWithPureRenderMixin = {
 };
 
 module.exports = ReactComponentWithPureRenderMixin;
-},{"./shallowCompare":190}],87:[function(require,module,exports){
+},{"./shallowCompare":189}],86:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26966,7 +26894,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactComponentEnvironment":85,"./ReactCurrentOwner":88,"./ReactElement":106,"./ReactInstanceMap":117,"./ReactPerf":127,"./ReactPropTypeLocationNames":129,"./ReactPropTypeLocations":130,"./ReactReconciler":133,"./ReactUpdateQueue":144,"./shouldUpdateReactComponent":191,"_process":38,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],88:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactComponentEnvironment":84,"./ReactCurrentOwner":87,"./ReactElement":105,"./ReactInstanceMap":116,"./ReactPerf":126,"./ReactPropTypeLocationNames":128,"./ReactPropTypeLocations":129,"./ReactReconciler":132,"./ReactUpdateQueue":143,"./shouldUpdateReactComponent":190,"_process":37,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],87:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26997,7 +26925,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],89:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27092,7 +27020,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":88,"./ReactDOMTextComponent":100,"./ReactDefaultInjection":103,"./ReactInstanceHandles":116,"./ReactMount":121,"./ReactPerf":127,"./ReactReconciler":133,"./ReactUpdates":145,"./ReactVersion":146,"./findDOMNode":172,"./renderSubtreeIntoContainer":187,"_process":38,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/warning":223}],90:[function(require,module,exports){
+},{"./ReactCurrentOwner":87,"./ReactDOMTextComponent":99,"./ReactDefaultInjection":102,"./ReactInstanceHandles":115,"./ReactMount":120,"./ReactPerf":126,"./ReactReconciler":132,"./ReactUpdates":144,"./ReactVersion":145,"./findDOMNode":171,"./renderSubtreeIntoContainer":186,"_process":37,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/warning":222}],89:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27143,7 +27071,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],91:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28108,7 +28036,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":51,"./CSSPropertyOperations":54,"./DOMProperty":59,"./DOMPropertyOperations":60,"./EventConstants":64,"./Object.assign":73,"./ReactBrowserEventEmitter":77,"./ReactComponentBrowserEnvironment":84,"./ReactDOMButton":90,"./ReactDOMInput":95,"./ReactDOMOption":96,"./ReactDOMSelect":97,"./ReactDOMTextarea":101,"./ReactMount":121,"./ReactMultiChild":122,"./ReactPerf":127,"./ReactUpdateQueue":144,"./canDefineProperty":167,"./escapeTextContentForBrowser":171,"./isEventSupported":183,"./setInnerHTML":188,"./setTextContent":189,"./validateDOMNesting":194,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/keyOf":216,"fbjs/lib/shallowEqual":221,"fbjs/lib/warning":223}],92:[function(require,module,exports){
+},{"./AutoFocusUtils":50,"./CSSPropertyOperations":53,"./DOMProperty":58,"./DOMPropertyOperations":59,"./EventConstants":63,"./Object.assign":72,"./ReactBrowserEventEmitter":76,"./ReactComponentBrowserEnvironment":83,"./ReactDOMButton":89,"./ReactDOMInput":94,"./ReactDOMOption":95,"./ReactDOMSelect":96,"./ReactDOMTextarea":100,"./ReactMount":120,"./ReactMultiChild":121,"./ReactPerf":126,"./ReactUpdateQueue":143,"./canDefineProperty":166,"./escapeTextContentForBrowser":170,"./isEventSupported":182,"./setInnerHTML":187,"./setTextContent":188,"./validateDOMNesting":193,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/keyOf":215,"fbjs/lib/shallowEqual":220,"fbjs/lib/warning":222}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28288,7 +28216,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":106,"./ReactElementValidator":107,"_process":38,"fbjs/lib/mapObject":217}],93:[function(require,module,exports){
+},{"./ReactElement":105,"./ReactElementValidator":106,"_process":37,"fbjs/lib/mapObject":216}],92:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28307,7 +28235,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],94:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28404,7 +28332,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":58,"./DOMPropertyOperations":60,"./ReactMount":121,"./ReactPerf":127,"_process":38,"fbjs/lib/invariant":211}],95:[function(require,module,exports){
+},{"./DOMChildrenOperations":57,"./DOMPropertyOperations":59,"./ReactMount":120,"./ReactPerf":126,"_process":37,"fbjs/lib/invariant":210}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28560,7 +28488,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":72,"./Object.assign":73,"./ReactDOMIDOperations":94,"./ReactMount":121,"./ReactUpdates":145,"_process":38,"fbjs/lib/invariant":211}],96:[function(require,module,exports){
+},{"./LinkedValueUtils":71,"./Object.assign":72,"./ReactDOMIDOperations":93,"./ReactMount":120,"./ReactUpdates":144,"_process":37,"fbjs/lib/invariant":210}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28649,7 +28577,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactChildren":81,"./ReactDOMSelect":97,"_process":38,"fbjs/lib/warning":223}],97:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactChildren":80,"./ReactDOMSelect":96,"_process":37,"fbjs/lib/warning":222}],96:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28840,7 +28768,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":72,"./Object.assign":73,"./ReactMount":121,"./ReactUpdates":145,"_process":38,"fbjs/lib/warning":223}],98:[function(require,module,exports){
+},{"./LinkedValueUtils":71,"./Object.assign":72,"./ReactMount":120,"./ReactUpdates":144,"_process":37,"fbjs/lib/warning":222}],97:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29053,7 +28981,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":180,"./getTextContentAccessor":181,"fbjs/lib/ExecutionEnvironment":197}],99:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":179,"./getTextContentAccessor":180,"fbjs/lib/ExecutionEnvironment":196}],98:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29080,7 +29008,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":103,"./ReactServerRendering":137,"./ReactVersion":146}],100:[function(require,module,exports){
+},{"./ReactDefaultInjection":102,"./ReactServerRendering":136,"./ReactVersion":145}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29210,7 +29138,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":58,"./DOMPropertyOperations":60,"./Object.assign":73,"./ReactComponentBrowserEnvironment":84,"./ReactMount":121,"./escapeTextContentForBrowser":171,"./setTextContent":189,"./validateDOMNesting":194,"_process":38}],101:[function(require,module,exports){
+},{"./DOMChildrenOperations":57,"./DOMPropertyOperations":59,"./Object.assign":72,"./ReactComponentBrowserEnvironment":83,"./ReactMount":120,"./escapeTextContentForBrowser":170,"./setTextContent":188,"./validateDOMNesting":193,"_process":37}],100:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29326,7 +29254,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":72,"./Object.assign":73,"./ReactDOMIDOperations":94,"./ReactUpdates":145,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],102:[function(require,module,exports){
+},{"./LinkedValueUtils":71,"./Object.assign":72,"./ReactDOMIDOperations":93,"./ReactUpdates":144,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],101:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29394,7 +29322,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":73,"./ReactUpdates":145,"./Transaction":163,"fbjs/lib/emptyFunction":203}],103:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactUpdates":144,"./Transaction":162,"fbjs/lib/emptyFunction":202}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29494,7 +29422,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":52,"./ChangeEventPlugin":56,"./ClientReactRootIndex":57,"./DefaultEventPluginOrder":62,"./EnterLeaveEventPlugin":63,"./HTMLDOMPropertyConfig":70,"./ReactBrowserComponentMixin":76,"./ReactComponentBrowserEnvironment":84,"./ReactDOMComponent":91,"./ReactDOMTextComponent":100,"./ReactDefaultBatchingStrategy":102,"./ReactDefaultPerf":104,"./ReactEventListener":112,"./ReactInjection":114,"./ReactInstanceHandles":116,"./ReactMount":121,"./ReactReconcileTransaction":132,"./SVGDOMPropertyConfig":148,"./SelectEventPlugin":149,"./ServerReactRootIndex":150,"./SimpleEventPlugin":151,"_process":38,"fbjs/lib/ExecutionEnvironment":197}],104:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":51,"./ChangeEventPlugin":55,"./ClientReactRootIndex":56,"./DefaultEventPluginOrder":61,"./EnterLeaveEventPlugin":62,"./HTMLDOMPropertyConfig":69,"./ReactBrowserComponentMixin":75,"./ReactComponentBrowserEnvironment":83,"./ReactDOMComponent":90,"./ReactDOMTextComponent":99,"./ReactDefaultBatchingStrategy":101,"./ReactDefaultPerf":103,"./ReactEventListener":111,"./ReactInjection":113,"./ReactInstanceHandles":115,"./ReactMount":120,"./ReactReconcileTransaction":131,"./SVGDOMPropertyConfig":147,"./SelectEventPlugin":148,"./ServerReactRootIndex":149,"./SimpleEventPlugin":150,"_process":37,"fbjs/lib/ExecutionEnvironment":196}],103:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29732,7 +29660,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":59,"./ReactDefaultPerfAnalysis":105,"./ReactMount":121,"./ReactPerf":127,"fbjs/lib/performanceNow":220}],105:[function(require,module,exports){
+},{"./DOMProperty":58,"./ReactDefaultPerfAnalysis":104,"./ReactMount":120,"./ReactPerf":126,"fbjs/lib/performanceNow":219}],104:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29932,7 +29860,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":73}],106:[function(require,module,exports){
+},{"./Object.assign":72}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -30182,7 +30110,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactCurrentOwner":88,"./canDefineProperty":167,"_process":38}],107:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactCurrentOwner":87,"./canDefineProperty":166,"_process":37}],106:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -30466,7 +30394,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":88,"./ReactElement":106,"./ReactPropTypeLocationNames":129,"./ReactPropTypeLocations":130,"./canDefineProperty":167,"./getIteratorFn":179,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],108:[function(require,module,exports){
+},{"./ReactCurrentOwner":87,"./ReactElement":105,"./ReactPropTypeLocationNames":128,"./ReactPropTypeLocations":129,"./canDefineProperty":166,"./getIteratorFn":178,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],107:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -30518,7 +30446,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":73,"./ReactElement":106,"./ReactEmptyComponentRegistry":109,"./ReactReconciler":133}],109:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactElement":105,"./ReactEmptyComponentRegistry":108,"./ReactReconciler":132}],108:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -30567,7 +30495,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],110:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30647,7 +30575,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":38}],111:[function(require,module,exports){
+},{"_process":37}],110:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30686,7 +30614,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":65}],112:[function(require,module,exports){
+},{"./EventPluginHub":64}],111:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30898,7 +30826,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":73,"./PooledClass":74,"./ReactInstanceHandles":116,"./ReactMount":121,"./ReactUpdates":145,"./getEventTarget":178,"fbjs/lib/EventListener":196,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/getUnboundedScrollPosition":208}],113:[function(require,module,exports){
+},{"./Object.assign":72,"./PooledClass":73,"./ReactInstanceHandles":115,"./ReactMount":120,"./ReactUpdates":144,"./getEventTarget":177,"fbjs/lib/EventListener":195,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/getUnboundedScrollPosition":207}],112:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -30965,7 +30893,7 @@ var ReactFragment = {
 
 module.exports = ReactFragment;
 }).call(this,require('_process'))
-},{"./ReactChildren":81,"./ReactElement":106,"_process":38,"fbjs/lib/emptyFunction":203,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],114:[function(require,module,exports){
+},{"./ReactChildren":80,"./ReactElement":105,"_process":37,"fbjs/lib/emptyFunction":202,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],113:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31004,7 +30932,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":59,"./EventPluginHub":65,"./ReactBrowserEventEmitter":77,"./ReactClass":82,"./ReactComponentEnvironment":85,"./ReactEmptyComponent":108,"./ReactNativeComponent":124,"./ReactPerf":127,"./ReactRootIndex":135,"./ReactUpdates":145}],115:[function(require,module,exports){
+},{"./DOMProperty":58,"./EventPluginHub":64,"./ReactBrowserEventEmitter":76,"./ReactClass":81,"./ReactComponentEnvironment":84,"./ReactEmptyComponent":107,"./ReactNativeComponent":123,"./ReactPerf":126,"./ReactRootIndex":134,"./ReactUpdates":144}],114:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31129,7 +31057,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":98,"fbjs/lib/containsNode":200,"fbjs/lib/focusNode":205,"fbjs/lib/getActiveElement":206}],116:[function(require,module,exports){
+},{"./ReactDOMSelection":97,"fbjs/lib/containsNode":199,"fbjs/lib/focusNode":204,"fbjs/lib/getActiveElement":205}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31434,7 +31362,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":135,"_process":38,"fbjs/lib/invariant":211}],117:[function(require,module,exports){
+},{"./ReactRootIndex":134,"_process":37,"fbjs/lib/invariant":210}],116:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31482,7 +31410,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],118:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31559,7 +31487,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactChildren":81,"./ReactClass":82,"./ReactComponent":83,"./ReactDOMFactories":92,"./ReactElement":106,"./ReactElementValidator":107,"./ReactPropTypes":131,"./ReactVersion":146,"./onlyChild":185,"_process":38}],119:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactChildren":80,"./ReactClass":81,"./ReactComponent":82,"./ReactDOMFactories":91,"./ReactElement":105,"./ReactElementValidator":106,"./ReactPropTypes":130,"./ReactVersion":145,"./onlyChild":184,"_process":37}],118:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31629,7 +31557,7 @@ ReactLink.PropTypes = {
 };
 
 module.exports = ReactLink;
-},{"./React":75}],120:[function(require,module,exports){
+},{"./React":74}],119:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31675,7 +31603,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":166}],121:[function(require,module,exports){
+},{"./adler32":165}],120:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32528,7 +32456,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":59,"./Object.assign":73,"./ReactBrowserEventEmitter":77,"./ReactCurrentOwner":88,"./ReactDOMFeatureFlags":93,"./ReactElement":106,"./ReactEmptyComponentRegistry":109,"./ReactInstanceHandles":116,"./ReactInstanceMap":117,"./ReactMarkupChecksum":120,"./ReactPerf":127,"./ReactReconciler":133,"./ReactUpdateQueue":144,"./ReactUpdates":145,"./instantiateReactComponent":182,"./setInnerHTML":188,"./shouldUpdateReactComponent":191,"./validateDOMNesting":194,"_process":38,"fbjs/lib/containsNode":200,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],122:[function(require,module,exports){
+},{"./DOMProperty":58,"./Object.assign":72,"./ReactBrowserEventEmitter":76,"./ReactCurrentOwner":87,"./ReactDOMFeatureFlags":92,"./ReactElement":105,"./ReactEmptyComponentRegistry":108,"./ReactInstanceHandles":115,"./ReactInstanceMap":116,"./ReactMarkupChecksum":119,"./ReactPerf":126,"./ReactReconciler":132,"./ReactUpdateQueue":143,"./ReactUpdates":144,"./instantiateReactComponent":181,"./setInnerHTML":187,"./shouldUpdateReactComponent":190,"./validateDOMNesting":193,"_process":37,"fbjs/lib/containsNode":199,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33027,7 +32955,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":80,"./ReactComponentEnvironment":85,"./ReactCurrentOwner":88,"./ReactMultiChildUpdateTypes":123,"./ReactReconciler":133,"./flattenChildren":173,"_process":38}],123:[function(require,module,exports){
+},{"./ReactChildReconciler":79,"./ReactComponentEnvironment":84,"./ReactCurrentOwner":87,"./ReactMultiChildUpdateTypes":122,"./ReactReconciler":132,"./flattenChildren":172,"_process":37}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33060,7 +32988,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":215}],124:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":214}],123:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -33157,7 +33085,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"_process":38,"fbjs/lib/invariant":211}],125:[function(require,module,exports){
+},{"./Object.assign":72,"_process":37,"fbjs/lib/invariant":210}],124:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -33278,7 +33206,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/warning":223}],126:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/warning":222}],125:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33372,7 +33300,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],127:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],126:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33471,7 +33399,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":38}],128:[function(require,module,exports){
+},{"_process":37}],127:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33580,7 +33508,7 @@ var ReactPropTransferer = {
 };
 
 module.exports = ReactPropTransferer;
-},{"./Object.assign":73,"fbjs/lib/emptyFunction":203,"fbjs/lib/joinClasses":214}],129:[function(require,module,exports){
+},{"./Object.assign":72,"fbjs/lib/emptyFunction":202,"fbjs/lib/joinClasses":213}],128:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33607,7 +33535,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":38}],130:[function(require,module,exports){
+},{"_process":37}],129:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33630,7 +33558,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":215}],131:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":214}],130:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33987,7 +33915,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":106,"./ReactPropTypeLocationNames":129,"./getIteratorFn":179,"fbjs/lib/emptyFunction":203}],132:[function(require,module,exports){
+},{"./ReactElement":105,"./ReactPropTypeLocationNames":128,"./getIteratorFn":178,"fbjs/lib/emptyFunction":202}],131:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34139,7 +34067,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":55,"./Object.assign":73,"./PooledClass":74,"./ReactBrowserEventEmitter":77,"./ReactDOMFeatureFlags":93,"./ReactInputSelection":115,"./Transaction":163}],133:[function(require,module,exports){
+},{"./CallbackQueue":54,"./Object.assign":72,"./PooledClass":73,"./ReactBrowserEventEmitter":76,"./ReactDOMFeatureFlags":92,"./ReactInputSelection":114,"./Transaction":162}],132:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34247,7 +34175,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":134}],134:[function(require,module,exports){
+},{"./ReactRef":133}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34326,7 +34254,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":126}],135:[function(require,module,exports){
+},{"./ReactOwner":125}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34356,7 +34284,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],136:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -34380,7 +34308,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],137:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34466,7 +34394,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":102,"./ReactElement":106,"./ReactInstanceHandles":116,"./ReactMarkupChecksum":120,"./ReactServerBatchingStrategy":136,"./ReactServerRenderingTransaction":138,"./ReactUpdates":145,"./instantiateReactComponent":182,"_process":38,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211}],138:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":101,"./ReactElement":105,"./ReactInstanceHandles":115,"./ReactMarkupChecksum":119,"./ReactServerBatchingStrategy":135,"./ReactServerRenderingTransaction":137,"./ReactUpdates":144,"./instantiateReactComponent":181,"_process":37,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210}],137:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -34554,7 +34482,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":55,"./Object.assign":73,"./PooledClass":74,"./Transaction":163,"fbjs/lib/emptyFunction":203}],139:[function(require,module,exports){
+},{"./CallbackQueue":54,"./Object.assign":72,"./PooledClass":73,"./Transaction":162,"fbjs/lib/emptyFunction":202}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34659,7 +34587,7 @@ ReactStateSetters.Mixin = {
 };
 
 module.exports = ReactStateSetters;
-},{}],140:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -35135,7 +35063,7 @@ Object.keys(topLevelTypes).forEach(function (eventType) {
 
 module.exports = ReactTestUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":64,"./EventPluginHub":65,"./EventPropagators":68,"./Object.assign":73,"./React":75,"./ReactBrowserEventEmitter":77,"./ReactCompositeComponent":87,"./ReactDOM":89,"./ReactElement":106,"./ReactInstanceHandles":116,"./ReactInstanceMap":117,"./ReactMount":121,"./ReactUpdates":145,"./SyntheticEvent":155,"./findDOMNode":172,"_process":38,"fbjs/lib/emptyObject":204,"fbjs/lib/invariant":211}],141:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPluginHub":64,"./EventPropagators":67,"./Object.assign":72,"./React":74,"./ReactBrowserEventEmitter":76,"./ReactCompositeComponent":86,"./ReactDOM":88,"./ReactElement":105,"./ReactInstanceHandles":115,"./ReactInstanceMap":116,"./ReactMount":120,"./ReactUpdates":144,"./SyntheticEvent":154,"./findDOMNode":171,"_process":37,"fbjs/lib/emptyObject":203,"fbjs/lib/invariant":210}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35234,7 +35162,7 @@ var ReactTransitionChildMapping = {
 };
 
 module.exports = ReactTransitionChildMapping;
-},{"./flattenChildren":173}],142:[function(require,module,exports){
+},{"./flattenChildren":172}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35344,7 +35272,7 @@ var ReactTransitionEvents = {
 };
 
 module.exports = ReactTransitionEvents;
-},{"fbjs/lib/ExecutionEnvironment":197}],143:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":196}],142:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35550,7 +35478,7 @@ var ReactTransitionGroup = React.createClass({
 });
 
 module.exports = ReactTransitionGroup;
-},{"./Object.assign":73,"./React":75,"./ReactTransitionChildMapping":141,"fbjs/lib/emptyFunction":203}],144:[function(require,module,exports){
+},{"./Object.assign":72,"./React":74,"./ReactTransitionChildMapping":140,"fbjs/lib/emptyFunction":202}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -35810,7 +35738,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactCurrentOwner":88,"./ReactElement":106,"./ReactInstanceMap":117,"./ReactUpdates":145,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],145:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactCurrentOwner":87,"./ReactElement":105,"./ReactInstanceMap":116,"./ReactUpdates":144,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],144:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -36036,7 +35964,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":55,"./Object.assign":73,"./PooledClass":74,"./ReactPerf":127,"./ReactReconciler":133,"./Transaction":163,"_process":38,"fbjs/lib/invariant":211}],146:[function(require,module,exports){
+},{"./CallbackQueue":54,"./Object.assign":72,"./PooledClass":73,"./ReactPerf":126,"./ReactReconciler":132,"./Transaction":162,"_process":37,"fbjs/lib/invariant":210}],145:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36051,7 +35979,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],147:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -36114,7 +36042,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":71,"./React":75,"./ReactCSSTransitionGroup":78,"./ReactComponentWithPureRenderMixin":86,"./ReactDefaultPerf":104,"./ReactFragment":113,"./ReactTestUtils":140,"./ReactTransitionGroup":143,"./ReactUpdates":145,"./cloneWithProps":168,"./shallowCompare":190,"./update":193,"_process":38,"fbjs/lib/warning":223}],148:[function(require,module,exports){
+},{"./LinkedStateMixin":70,"./React":74,"./ReactCSSTransitionGroup":77,"./ReactComponentWithPureRenderMixin":85,"./ReactDefaultPerf":103,"./ReactFragment":112,"./ReactTestUtils":139,"./ReactTransitionGroup":142,"./ReactUpdates":144,"./cloneWithProps":167,"./shallowCompare":189,"./update":192,"_process":37,"fbjs/lib/warning":222}],147:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36242,7 +36170,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":59}],149:[function(require,module,exports){
+},{"./DOMProperty":58}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36444,7 +36372,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":64,"./EventPropagators":68,"./ReactInputSelection":115,"./SyntheticEvent":155,"./isTextInputElement":184,"fbjs/lib/ExecutionEnvironment":197,"fbjs/lib/getActiveElement":206,"fbjs/lib/keyOf":216,"fbjs/lib/shallowEqual":221}],150:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPropagators":67,"./ReactInputSelection":114,"./SyntheticEvent":154,"./isTextInputElement":183,"fbjs/lib/ExecutionEnvironment":196,"fbjs/lib/getActiveElement":205,"fbjs/lib/keyOf":215,"fbjs/lib/shallowEqual":220}],149:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36474,7 +36402,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],151:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37064,7 +36992,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":64,"./EventPropagators":68,"./ReactMount":121,"./SyntheticClipboardEvent":152,"./SyntheticDragEvent":154,"./SyntheticEvent":155,"./SyntheticFocusEvent":156,"./SyntheticKeyboardEvent":158,"./SyntheticMouseEvent":159,"./SyntheticTouchEvent":160,"./SyntheticUIEvent":161,"./SyntheticWheelEvent":162,"./getEventCharCode":175,"_process":38,"fbjs/lib/EventListener":196,"fbjs/lib/emptyFunction":203,"fbjs/lib/invariant":211,"fbjs/lib/keyOf":216}],152:[function(require,module,exports){
+},{"./EventConstants":63,"./EventPropagators":67,"./ReactMount":120,"./SyntheticClipboardEvent":151,"./SyntheticDragEvent":153,"./SyntheticEvent":154,"./SyntheticFocusEvent":155,"./SyntheticKeyboardEvent":157,"./SyntheticMouseEvent":158,"./SyntheticTouchEvent":159,"./SyntheticUIEvent":160,"./SyntheticWheelEvent":161,"./getEventCharCode":174,"_process":37,"fbjs/lib/EventListener":195,"fbjs/lib/emptyFunction":202,"fbjs/lib/invariant":210,"fbjs/lib/keyOf":215}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37104,7 +37032,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":155}],153:[function(require,module,exports){
+},{"./SyntheticEvent":154}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37142,7 +37070,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":155}],154:[function(require,module,exports){
+},{"./SyntheticEvent":154}],153:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37180,7 +37108,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":159}],155:[function(require,module,exports){
+},{"./SyntheticMouseEvent":158}],154:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37360,7 +37288,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./PooledClass":74,"_process":38,"fbjs/lib/emptyFunction":203,"fbjs/lib/warning":223}],156:[function(require,module,exports){
+},{"./Object.assign":72,"./PooledClass":73,"_process":37,"fbjs/lib/emptyFunction":202,"fbjs/lib/warning":222}],155:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37398,7 +37326,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":161}],157:[function(require,module,exports){
+},{"./SyntheticUIEvent":160}],156:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37437,7 +37365,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":155}],158:[function(require,module,exports){
+},{"./SyntheticEvent":154}],157:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37523,7 +37451,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":161,"./getEventCharCode":175,"./getEventKey":176,"./getEventModifierState":177}],159:[function(require,module,exports){
+},{"./SyntheticUIEvent":160,"./getEventCharCode":174,"./getEventKey":175,"./getEventModifierState":176}],158:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37597,7 +37525,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":161,"./ViewportMetrics":164,"./getEventModifierState":177}],160:[function(require,module,exports){
+},{"./SyntheticUIEvent":160,"./ViewportMetrics":163,"./getEventModifierState":176}],159:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37644,7 +37572,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":161,"./getEventModifierState":177}],161:[function(require,module,exports){
+},{"./SyntheticUIEvent":160,"./getEventModifierState":176}],160:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37705,7 +37633,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":155,"./getEventTarget":178}],162:[function(require,module,exports){
+},{"./SyntheticEvent":154,"./getEventTarget":177}],161:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37761,7 +37689,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":159}],163:[function(require,module,exports){
+},{"./SyntheticMouseEvent":158}],162:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37995,7 +37923,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],164:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],163:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38023,7 +37951,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],165:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -38085,7 +38013,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":38,"fbjs/lib/invariant":211}],166:[function(require,module,exports){
+},{"_process":37,"fbjs/lib/invariant":210}],165:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38128,7 +38056,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],167:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38155,7 +38083,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":38}],168:[function(require,module,exports){
+},{"_process":37}],167:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38212,7 +38140,7 @@ function cloneWithProps(child, props) {
 
 module.exports = cloneWithProps;
 }).call(this,require('_process'))
-},{"./ReactElement":106,"./ReactPropTransferer":128,"_process":38,"fbjs/lib/keyOf":216,"fbjs/lib/warning":223}],169:[function(require,module,exports){
+},{"./ReactElement":105,"./ReactPropTransferer":127,"_process":37,"fbjs/lib/keyOf":215,"fbjs/lib/warning":222}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38268,7 +38196,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":53}],170:[function(require,module,exports){
+},{"./CSSProperty":52}],169:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38319,7 +38247,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"_process":38,"fbjs/lib/warning":223}],171:[function(require,module,exports){
+},{"./Object.assign":72,"_process":37,"fbjs/lib/warning":222}],170:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38358,7 +38286,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],172:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38410,7 +38338,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":88,"./ReactInstanceMap":117,"./ReactMount":121,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],173:[function(require,module,exports){
+},{"./ReactCurrentOwner":87,"./ReactInstanceMap":116,"./ReactMount":120,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],172:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38461,7 +38389,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":192,"_process":38,"fbjs/lib/warning":223}],174:[function(require,module,exports){
+},{"./traverseAllChildren":191,"_process":37,"fbjs/lib/warning":222}],173:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38491,7 +38419,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],175:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38542,7 +38470,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],176:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38646,7 +38574,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":175}],177:[function(require,module,exports){
+},{"./getEventCharCode":174}],176:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38691,7 +38619,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],178:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38721,7 +38649,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],179:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38762,7 +38690,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],180:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38836,7 +38764,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],181:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38870,7 +38798,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":197}],182:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":196}],181:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38985,7 +38913,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"./ReactCompositeComponent":87,"./ReactEmptyComponent":108,"./ReactNativeComponent":124,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],183:[function(require,module,exports){
+},{"./Object.assign":72,"./ReactCompositeComponent":86,"./ReactEmptyComponent":107,"./ReactNativeComponent":123,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],182:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39046,7 +38974,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":197}],184:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":196}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39087,7 +39015,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],185:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39123,7 +39051,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":106,"_process":38,"fbjs/lib/invariant":211}],186:[function(require,module,exports){
+},{"./ReactElement":105,"_process":37,"fbjs/lib/invariant":210}],185:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39150,7 +39078,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":171}],187:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":170}],186:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39167,7 +39095,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":121}],188:[function(require,module,exports){
+},{"./ReactMount":120}],187:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39258,7 +39186,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":197}],189:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":196}],188:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39299,7 +39227,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":171,"./setInnerHTML":188,"fbjs/lib/ExecutionEnvironment":197}],190:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":170,"./setInnerHTML":187,"fbjs/lib/ExecutionEnvironment":196}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39324,7 +39252,7 @@ function shallowCompare(instance, nextProps, nextState) {
 }
 
 module.exports = shallowCompare;
-},{"fbjs/lib/shallowEqual":221}],191:[function(require,module,exports){
+},{"fbjs/lib/shallowEqual":220}],190:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39368,7 +39296,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],192:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39560,7 +39488,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":88,"./ReactElement":106,"./ReactInstanceHandles":116,"./getIteratorFn":179,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/warning":223}],193:[function(require,module,exports){
+},{"./ReactCurrentOwner":87,"./ReactElement":105,"./ReactInstanceHandles":115,"./getIteratorFn":178,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/warning":222}],192:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39670,7 +39598,7 @@ function update(value, spec) {
 
 module.exports = update;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"_process":38,"fbjs/lib/invariant":211,"fbjs/lib/keyOf":216}],194:[function(require,module,exports){
+},{"./Object.assign":72,"_process":37,"fbjs/lib/invariant":210,"fbjs/lib/keyOf":215}],193:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -40036,7 +39964,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":73,"_process":38,"fbjs/lib/emptyFunction":203,"fbjs/lib/warning":223}],195:[function(require,module,exports){
+},{"./Object.assign":72,"_process":37,"fbjs/lib/emptyFunction":202,"fbjs/lib/warning":222}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40136,7 +40064,7 @@ var CSSCore = {
 
 module.exports = CSSCore;
 }).call(this,require('_process'))
-},{"./invariant":211,"_process":38}],196:[function(require,module,exports){
+},{"./invariant":210,"_process":37}],195:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40223,7 +40151,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":203,"_process":38}],197:[function(require,module,exports){
+},{"./emptyFunction":202,"_process":37}],196:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40260,7 +40188,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],198:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40293,7 +40221,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],199:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40334,7 +40262,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":198}],200:[function(require,module,exports){
+},{"./camelize":197}],199:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40390,7 +40318,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":213}],201:[function(require,module,exports){
+},{"./isTextNode":212}],200:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40476,7 +40404,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":222}],202:[function(require,module,exports){
+},{"./toArray":221}],201:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40563,7 +40491,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":197,"./createArrayFromMixed":201,"./getMarkupWrap":207,"./invariant":211,"_process":38}],203:[function(require,module,exports){
+},{"./ExecutionEnvironment":196,"./createArrayFromMixed":200,"./getMarkupWrap":206,"./invariant":210,"_process":37}],202:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40602,7 +40530,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],204:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40625,7 +40553,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":38}],205:[function(require,module,exports){
+},{"_process":37}],204:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40652,7 +40580,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],206:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40686,7 +40614,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],207:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40784,7 +40712,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":197,"./invariant":211,"_process":38}],208:[function(require,module,exports){
+},{"./ExecutionEnvironment":196,"./invariant":210,"_process":37}],207:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40823,7 +40751,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],209:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40857,7 +40785,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],210:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40897,7 +40825,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":209}],211:[function(require,module,exports){
+},{"./hyphenate":208}],210:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40949,7 +40877,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":38}],212:[function(require,module,exports){
+},{"_process":37}],211:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40973,7 +40901,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],213:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40999,7 +40927,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":212}],214:[function(require,module,exports){
+},{"./isNode":211}],213:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41039,7 +40967,7 @@ function joinClasses(className /*, ... */) {
 }
 
 module.exports = joinClasses;
-},{}],215:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41090,7 +41018,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":211,"_process":38}],216:[function(require,module,exports){
+},{"./invariant":210,"_process":37}],215:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41126,7 +41054,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],217:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41178,7 +41106,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],218:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41210,7 +41138,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],219:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41234,7 +41162,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":197}],220:[function(require,module,exports){
+},{"./ExecutionEnvironment":196}],219:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41264,7 +41192,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":219}],221:[function(require,module,exports){
+},{"./performance":218}],220:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41315,7 +41243,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],222:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41375,7 +41303,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":211,"_process":38}],223:[function(require,module,exports){
+},{"./invariant":210,"_process":37}],222:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -41435,9 +41363,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":203,"_process":38}],224:[function(require,module,exports){
+},{"./emptyFunction":202,"_process":37}],223:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":75}]},{},[11]);
+},{"./lib/React":74}]},{},[10]);

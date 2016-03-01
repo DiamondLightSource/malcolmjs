@@ -253,7 +253,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-var blockStore = require('./blockStore');
+//var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;

@@ -36,7 +36,87 @@ var testingWebsocketActions = {
       })
     }
 
-  }
+  },
+
+  testAddWebsocketOnOpenCallback: function(){
+
+    WebAPIUtils.testAddWebsocketOnOpenCallback(this.testInitialDataFetch)
+
+  },
+
+  testInitialDataFetch: function(){
+
+    /* Listening for this in the store will allow me to show a loading icon while
+    the initial data is fetched form the server.
+    May have to implement waitFor in case the server request comes back quick enough?
+     */
+
+    AppDispatcher.handleAction({
+      //actionType: appConstants.SERVER_REQUESTPENDING,
+      actionType: appConstants.TEST_INITIALDATAFETCH_PENDING,
+      item: 'server request pending'
+    });
+
+    WebAPIUtils.testInitialDataFetch(successInitialDataFetchAction, failInitialDataFetchAction);
+
+    /* Callbacks for the entire data fetch */
+
+    function successInitialDataFetchAction(responseMessage) {
+      AppDispatcher.handleAction({
+        actionType: appConstants.TEST_INITIALDATAFETCH_SUCCESS,
+        item: responseMessage
+      })
+    }
+
+    function failInitialDataFetchAction(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.TEST_INITIALDATAFETCH_FAILURE,
+        item: responseMessage
+      })
+    }
+
+    /* Callbacks for each block data object fetch */
+
+    //function testFetchEveryInitialBlockObjectSuccess(responseMessage){
+    //  console.log("fetching block object");
+    //
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+    //    item: responseMessage
+    //  })
+    //}
+    //
+    //function testFetchEveryInitialBlockObjectFailure(responseMessage){
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+    //    item: responseMessage
+    //  })
+    //}
+
+  },
+
+  //testFetchEveryInitialBlockObject: function(blockName){
+  //
+  //  WebAPIUtils.testFetchEveryInitialBlockObject(blockName,
+  //    testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+  //
+  //  function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
+  //    console.log("fetching block object");
+  //
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  function testFetchEveryInitialBlockObjectFailure(responseMessage){
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //}
 
 
 };

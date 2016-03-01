@@ -103,6 +103,8 @@ function getBothPanesState(){
     favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
+    loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
+    loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
 
     /* SidePane's getter functions for stores */
     tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
@@ -141,7 +143,9 @@ var BothPanes = React.createClass({
 
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
-      nextState.configContent !== this.state.configContent
+      nextState.configContent !== this.state.configContent ||
+      nextState.loadingInitialData !== this.state.loadingInitialData ||
+      nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
     )
   },
@@ -185,6 +189,8 @@ var BothPanes = React.createClass({
                 <MainPane footers={this.state.footers}
                 favTabOpen={this.state.favTabOpen}
                 configTabOpen={this.state.configTabOpen}
+                loadingInitialData={this.state.loadingInitialData}
+                loadingInitialDataError={this.state.loadingInitialDataError}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 />
                 //</div>

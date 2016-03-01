@@ -80,6 +80,8 @@ var MainPane = React.createClass({
     favTabOpen: React.PropTypes.bool,
     //configPanelOpen: React.PropTypes.bool,
     configTabOpen: React.PropTypes.bool,
+    loadingInitialData: React.PropTypes.bool,
+    loadingInitialDataError: React.PropTypes.bool
     //theGraphDiamondState: React.PropTypes.object
   },
 
@@ -87,7 +89,9 @@ var MainPane = React.createClass({
     return (
       nextProps.footers !== this.props.footers ||
       nextProps.favTabOpen !== this.props.favTabOpen ||
-      nextProps.configTabOpen !== this.props.configTabOpen
+      nextProps.configTabOpen !== this.props.configTabOpen ||
+      nextProps.loadingInitialData !== this.props.loadingInitialData ||
+      nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
   },
 
@@ -145,6 +149,28 @@ var MainPane = React.createClass({
     };
     //console.log(this.state.newlyAddedNode);
     //console.log(this.state);
+
+    /* Using an if statement to check if we need to display the initial data fetch loading icon
+    instead of flowChart
+     */
+
+    var mainPaneContent;
+
+    if(this.props.loadingInitialData === true){
+      if(this.props.loadingInitialDataError === false) {
+        mainPaneContent = <i className="fa fa-spinner fa-spin fa-5x" ></i>
+      }
+      else if(this.props.loadingInitialDataError === true){
+        mainPaneContent = <i className="fa fa-exclamation-circle fa-5x" x="100" ></i>
+      }
+    }
+    else if(this.props.loadingInitialData === false){
+      mainPaneContent = <FlowChartControllerView/>
+    }
+    else if(this.props.loadingInitialData === 'Error'){
+      /* Perhaps have a nother icon show up if initial data fetch doesn't work? */
+    }
+
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
@@ -157,7 +183,7 @@ var MainPane = React.createClass({
         <Tab title="View" showFooter={this.props.footers} >
           <Content >
             <div style={contentStyling} >
-              <FlowChartControllerView/>
+              {mainPaneContent}
             </div>
           </Content>
 

@@ -7,9 +7,13 @@ var appConstants = require('../constants/appConstants.js');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('../../node_modules/object-assign/index.js');
 
+var WebAPIUtils = require('../utils/WebAPIUtils');
+
 var CHANGE_EVENT = 'change';
 
-
+var _stuff = {
+  initialBlockServerData: null
+};
 
 
 /* 'BLOCK' use */
@@ -616,178 +620,178 @@ var blockInfoTemplates = {
 
 /* 'FLOWCHART use' */
 
-var clickedEdge = null;
-var portThatHasBeenClicked = null;
-var storingFirstPortClicked = null;
-var portMouseOver = false;
-var edgePreview = null;
-var previousMouseCoordsOnZoom = null;
-
-var blockStyling = {
-  outerRectangleHeight: 76,
-  outerRectangleWidth: 72,
-  innerRectangleHeight: 70,
-  innerRectangleWidth: 66,
-  portRadius: 2.5,
-  portFill: 'grey',
-};
-
-var graphPosition = {
-  x: 0,
-  y: 0
-};
-
-var graphZoomScale = 2.0;
-
-var blockSelectedStates = {
-  Gate1: false,
-  TGen1: false,
-  PComp1: false
-};
-
-function appendToBlockSelectedStates(BlockId){
-  //console.log("blockSelectedStates before adding a new block:");
-  blockSelectedStates[BlockId] = false;
-  //console.log("blockSelectedStates after adding a new block:");
-}
-
-function deselectAllBlocks(){
-  for(var block in blockSelectedStates){
-    blockSelectedStates[block] = false
-  }
-}
-
-function checkIfAnyBlocksAreSelected(){
-  var areAnyBlocksSelected = null;
-  for(var block in blockSelectedStates){
-    if(blockSelectedStates[block] === true){
-      areAnyBlocksSelected = true;
-      break;
-    }
-    else{
-      //console.log("one of the blocks' state is false, check the next one if it is true");
-      areAnyBlocksSelected = false;
-    }
-  }
-  //console.log(areAnyNodesSelected);
-  return areAnyBlocksSelected;
-}
-
-var edgeSelectedStates = {
-  'Gate1outTGen1ena': false,
-  //Gate1OutTGen1Ena: false,
-  //TGen1PosnPComp1Posn: false,
-  //TGen1PosnPComp1Ena: false
-};
-
-function selectEdge(Edge){
-  edgeSelectedStates[Edge] = true;
-}
-
-function getAnyEdgeSelectedState(EdgeId){
-  if(edgeSelectedStates[EdgeId] === undefined || null){
-    //console.log("edge selected state is underfined or null, best check it out...");
-  }
-  else{
-    //console.log("that edge's state exists, hooray!");
-    return edgeSelectedStates[EdgeId];
-  }
-}
-
-function checkIfAnyEdgesAreSelected(){
-  var areAnyEdgesSelected;
-  var i = 0;
-  for(var edge in edgeSelectedStates){
-    i = i + 1;
-    if(edgeSelectedStates[edge] === true){
-      //console.log(edgeSelectedStates[edge]);
-      areAnyEdgesSelected = true;
-      break;
-    }
-    else{
-      areAnyEdgesSelected = false;
-    }
-  }
-  //console.log(areAnyEdgesSelected);
-  /* Taking care of if therer are no edges, so we return false instea dof undefined */
-  if(i === 0){
-    areAnyEdgesSelected = false;
-  }
-
-  return areAnyEdgesSelected;
-}
-
-function deselectAllEdges(){
-  for(var edge in edgeSelectedStates){
-    edgeSelectedStates[edge] = false
-  }
-}
-
-function updateEdgePreviewEndpoint(position){
-  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
-  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-  //console.log(edgePreview.endpointCoords);
-}
-
-
-var GateBlockStyling = {
-  rectangle: {
-    rectanglePosition: {
-      x : 0,
-      y : 0
-    },
-    rectangleStyling: {
-      height: 72,
-      width: 72,
-      rx: 8,
-      ry: 8
-    }
-  },
-  ports: {
-    portPositions: {
-      inportPositions: {
-        set: {
-          x: 0,
-          y: 23
-        },
-        reset: {
-          x: 0,
-          y: 38
-        }
-      },
-      outportPositions: {
-        out: {
-          x: 65,
-          y: 31
-        }
-      },
-    },
-    portStyling: {
-      portRadius: 2.5,
-      fill: 'grey',
-      //stroke: 'black',
-      //strokeWidth: 1.65
-    }
-  },
-  text: {
-    textPositions: {
-      set: {
-        x : 7,
-        y: 24.5
-      },
-      reset: {
-        x : 7,
-        y: 42.5
-      },
-      out: {
-        x: 42,
-        y: 33.5
-      }
-    }
-  }
-};
-
-var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
+//var clickedEdge = null;
+//var portThatHasBeenClicked = null;
+//var storingFirstPortClicked = null;
+//var portMouseOver = false;
+//var edgePreview = null;
+//var previousMouseCoordsOnZoom = null;
+//
+//var blockStyling = {
+//  outerRectangleHeight: 76,
+//  outerRectangleWidth: 72,
+//  innerRectangleHeight: 70,
+//  innerRectangleWidth: 66,
+//  portRadius: 2.5,
+//  portFill: 'grey',
+//};
+//
+//var graphPosition = {
+//  x: 0,
+//  y: 0
+//};
+//
+//var graphZoomScale = 2.0;
+//
+//var blockSelectedStates = {
+//  Gate1: false,
+//  TGen1: false,
+//  PComp1: false
+//};
+//
+//function appendToBlockSelectedStates(BlockId){
+//  //console.log("blockSelectedStates before adding a new block:");
+//  blockSelectedStates[BlockId] = false;
+//  //console.log("blockSelectedStates after adding a new block:");
+//}
+//
+//function deselectAllBlocks(){
+//  for(var block in blockSelectedStates){
+//    blockSelectedStates[block] = false
+//  }
+//}
+//
+//function checkIfAnyBlocksAreSelected(){
+//  var areAnyBlocksSelected = null;
+//  for(var block in blockSelectedStates){
+//    if(blockSelectedStates[block] === true){
+//      areAnyBlocksSelected = true;
+//      break;
+//    }
+//    else{
+//      //console.log("one of the blocks' state is false, check the next one if it is true");
+//      areAnyBlocksSelected = false;
+//    }
+//  }
+//  //console.log(areAnyNodesSelected);
+//  return areAnyBlocksSelected;
+//}
+//
+//var edgeSelectedStates = {
+//  'Gate1outTGen1ena': false,
+//  //Gate1OutTGen1Ena: false,
+//  //TGen1PosnPComp1Posn: false,
+//  //TGen1PosnPComp1Ena: false
+//};
+//
+//function selectEdge(Edge){
+//  edgeSelectedStates[Edge] = true;
+//}
+//
+//function getAnyEdgeSelectedState(EdgeId){
+//  if(edgeSelectedStates[EdgeId] === undefined || null){
+//    //console.log("edge selected state is underfined or null, best check it out...");
+//  }
+//  else{
+//    //console.log("that edge's state exists, hooray!");
+//    return edgeSelectedStates[EdgeId];
+//  }
+//}
+//
+//function checkIfAnyEdgesAreSelected(){
+//  var areAnyEdgesSelected;
+//  var i = 0;
+//  for(var edge in edgeSelectedStates){
+//    i = i + 1;
+//    if(edgeSelectedStates[edge] === true){
+//      //console.log(edgeSelectedStates[edge]);
+//      areAnyEdgesSelected = true;
+//      break;
+//    }
+//    else{
+//      areAnyEdgesSelected = false;
+//    }
+//  }
+//  //console.log(areAnyEdgesSelected);
+//  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+//  if(i === 0){
+//    areAnyEdgesSelected = false;
+//  }
+//
+//  return areAnyEdgesSelected;
+//}
+//
+//function deselectAllEdges(){
+//  for(var edge in edgeSelectedStates){
+//    edgeSelectedStates[edge] = false
+//  }
+//}
+//
+//function updateEdgePreviewEndpoint(position){
+//  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
+//  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
+//  //console.log(edgePreview.endpointCoords);
+//}
+//
+//
+//var GateBlockStyling = {
+//  rectangle: {
+//    rectanglePosition: {
+//      x : 0,
+//      y : 0
+//    },
+//    rectangleStyling: {
+//      height: 72,
+//      width: 72,
+//      rx: 8,
+//      ry: 8
+//    }
+//  },
+//  ports: {
+//    portPositions: {
+//      inportPositions: {
+//        set: {
+//          x: 0,
+//          y: 23
+//        },
+//        reset: {
+//          x: 0,
+//          y: 38
+//        }
+//      },
+//      outportPositions: {
+//        out: {
+//          x: 65,
+//          y: 31
+//        }
+//      },
+//    },
+//    portStyling: {
+//      portRadius: 2.5,
+//      fill: 'grey',
+//      //stroke: 'black',
+//      //strokeWidth: 1.65
+//    }
+//  },
+//  text: {
+//    textPositions: {
+//      set: {
+//        x : 7,
+//        y: 24.5
+//      },
+//      reset: {
+//        x : 7,
+//        y: 42.5
+//      },
+//      out: {
+//        x: 42,
+//        y: 33.5
+//      }
+//    }
+//  }
+//};
+//
+//var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
 
 
 
@@ -805,6 +809,49 @@ been returned/fetched to blockStore successfully?
 function addBlock(){
 
 }
+
+function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
+  console.log("fetching block object");
+
+  AppDispatcher.handleAction({
+    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+    item: responseMessage
+  })
+}
+
+function testFetchEveryInitialBlockObjectFailure(responseMessage){
+  AppDispatcher.handleAction({
+    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+    item: responseMessage
+  })
+}
+
+var testAllBlockInfo = {};
+
+
+//function processInitialBlockData(){
+//  //var blockArray = [];
+//
+//  /* No need to get the block name without Z: ! */
+//
+//  //for(var i = 0; i < _stuff.initialBlockServerData.length; i++){
+//  //  /* Need to remove the string 'Z:' at the start of every block port*/
+//  //  var blockName = _stuff.initialBlockServerData[i].slice(2);
+//  //  blockArray.push(blockName);
+//  //  /* Now we have an array of all the blocks, need to recreate
+//  //  allBlockInfo from this! */
+//  //  console.log(blockArray);
+//  //}
+//
+//  for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
+//    console.log(_stuff.initialBlockServerData[j]);
+//
+//    WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
+//      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+//    window.alert("hjwifhw");
+//  }
+//  //return blockArray;
+//}
 
 
 /* Testing a simple data fetch */
@@ -841,6 +888,27 @@ var blockStore = assign({}, EventEmitter.prototype, {
   getDataFetchTest: function(){
     return dataFetchTest;
   },
+
+  getInitialBlockStringArray: function(){
+    return _stuff.initialBlockServerData;
+  },
+  getTestAllBlockInfo: function(){
+
+    if(testAllBlockInfo === null){
+    for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
+      console.log(_stuff.initialBlockServerData[j]);
+
+      WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
+      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
+      }
+    /* Seems wrong to do this, but it'll emit a change easily for now! */
+    this.emitChange();
+    }
+    else{
+      return testAllBlockInfo;
+    }
+
+  }
 
 
 
@@ -908,23 +976,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
+  console.log(payload);
+  console.log(item);
+
   switch(action.actionType){
 
     /* BLOCK use */
 
 
     case appConstants.ADDTO_ALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
       appendToAllBlockInfo(item);
       //appendToAllPossibleBlocks(item);
-      appendToBlockSelectedStates(item);
+      //appendToBlockSelectedStates(item);
       //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
       blockStore.emitChange();
       break;
     case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      console.log(payload);
-      console.log(item);
       addEdgeToAllBlockInfo(item);
       blockStore.emitChange();
       console.log(allBlockInfo);
@@ -937,8 +1004,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     //  break;
 
     case appConstants.DELETE_EDGE:
-      console.log(payload);
-      console.log(item);
       removeEdgeFromAllBlockInfo(item);
       blockStore.emitChange();
       break;
@@ -946,33 +1011,48 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     /* serverActions */
 
     case appConstants.TEST_WEBSOCKET:
-      console.log(payload);
-      console.log(item);
       blockStore.emitChange();
       break;
 
     /* WebAPI use */
 
     case appConstants.TEST_DATAFETCH:
-      console.log(payload);
-      console.log(item);
       dataFetchTest = JSON.parse(JSON.stringify(item));
       blockStore.emitChange();
       break;
 
     case appConstants.TEST_SUBSCRIBECHANNEL:
-      console.log(payload);
-      console.log(item);
       blockStore.emitChange();
       break;
 
     /* WebAPI use, but flowChart will be using this to display a loading icon */
 
-    case appConstants.SERVER_REQUESTPENDING:
-      console.log(payload);
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      /* Creating the object holding all initial block data in the websocket
+      instead, then passing it to the client at the end
+       */
       console.log(item);
-      /* Do nothign yet, I don't got no loading icon */
+      testAllBlockInfo = JSON.parse(JSON.stringify(item));
+      console.log(testAllBlockInfo);
+
+      blockStore.emitChange();
       break;
+
+    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS:
+    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  var blockName = JSON.parse(JSON.stringify(item.value.name.slice(2)));
+    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.value));
+    //  ///* No need to emiChnage since I'm only fetching one block by one,
+    //  //emitChange at the end of initial data fetch succes above
+    //  // */
+    //  console.log(testAllBlockInfo);
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE:
+    //  window.alert("failed to fetch initial block object!");
+    //  blockStore.emitChange();
+    //  break;
 
 
 
