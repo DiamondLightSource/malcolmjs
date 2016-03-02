@@ -273,7 +273,10 @@ function removeEdgeFromAllBlockInfo(Info){
 
           /* Also need to remove it from the edgeSelectedStates object */
 
-          delete edgeSelectedStates[Info.edgeId];
+          /* edgeSelectedStates has been moved to flowChartStore, so there's
+          no need for it here anymore
+           */
+          //delete edgeSelectedStates[Info.edgeId];
           //window.alert("hsduiad");
 
           /* And also need to reset the port styling somehow too... */
