@@ -88,6 +88,7 @@ var Ports = React.createClass({
         if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
           || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
           target = e.currentTarget.parentNode.children[i];
+          console.log(target);
         }
       }
     }

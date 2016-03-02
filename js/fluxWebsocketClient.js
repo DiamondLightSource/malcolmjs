@@ -135,14 +135,24 @@ function Client(url){
 
           if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
             json.value.tags[1] === "instance:Device" ) {
+
+              /* Check the 'visibility' attribute of a block to see if
+              it should be shown in thr GUI
+               */
+              /* Use this to add just one or two blocks to test with,
+              rather than the whole list of 89 of them =P
+               */
+            if(json.value.name === "Z:CLOCKS") {
+
               var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
               blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
               //console.log(blockData);
-              if(json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]){
+              //if (json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]) {
                 /* Once all initial blocks are fetched, send the blockData object to the client */
                 console.log("ready to send the object containing all the block data!");
                 genericSuccessCallback(blockData);
-              }
+              //}
+            }
 
           }
         }

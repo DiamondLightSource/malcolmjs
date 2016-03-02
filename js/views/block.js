@@ -328,6 +328,7 @@ var Block = React.createClass({
   render: function(){
     console.log("render: block");
     console.log(this.props.id);
+    //console.log(this.props);
 
     var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 

@@ -263,14 +263,14 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
-      console.log(payload);
-      console.log(item);
-      _stuff["updatedBlockContent"] = item;
-      console.log(_stuff.updatedBlockContent);
-      compareCurrentPaneStoreBlockContentAndDeviceStore();
-      paneStore.emitChange();
-      break;
+    //case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
+    //  console.log(payload);
+    //  console.log(item);
+    //  _stuff["updatedBlockContent"] = item;
+    //  console.log(_stuff.updatedBlockContent);
+    //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+    //  paneStore.emitChange();
+    //  break;
 
     //case appConstants.FETCHINITIAL_BLOCKDATA:
     //  console.log(payload);
@@ -433,6 +433,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
+
+      for(var block in item){
+        appendToAllBlockTabProperties(block);
+      }
+
       _stuff.loadingInitialData = false;
       paneStore.emitChange();
       break;

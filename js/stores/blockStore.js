@@ -32,12 +32,14 @@ var allBlockInfo = {
       {
         name: 'set',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       },
       {
         name: 'reset',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       }
@@ -46,6 +48,7 @@ var allBlockInfo = {
       {
         name: 'out',
         type: 'boolean',
+        value: false,
         connected: true,
         connectedTo: [
           {
@@ -81,6 +84,7 @@ var allBlockInfo = {
       {
         name: 'ena',
         type: 'boolean',
+        value: false,
         connected: true,
         connectedTo: {
           block: 'Gate1',
@@ -92,6 +96,7 @@ var allBlockInfo = {
       {
         name: 'posn',
         type: 'int',
+        value: 1,
         connected: false,
         connectedTo:[]
       }
@@ -109,12 +114,14 @@ var allBlockInfo = {
       {
         name: 'ena',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       },
       {
         name: 'posn',
         type: 'int',
+        value: 1,
         connected: false,
         connectedTo: null
       }
@@ -123,18 +130,21 @@ var allBlockInfo = {
       {
         name: 'act',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       },
       {
         name: 'out',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       },
       {
         name: 'pulse',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       }
@@ -806,7 +816,54 @@ Depending on the action that triggered the data fetch from the server I'll know 
 it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
 been returned/fetched to blockStore successfully?
  */
-function addBlock(){
+function addBlock(blockId){
+
+  var blockType = blockId.replace(/[0-9]/g, '');
+  console.log(blockType);
+
+  var inports = [];
+  var outports = [];
+
+  for(var attribute in testAllBlockInfo[blockId]){
+    if(testAllBlockInfo[blockId][attribute].tags === undefined){
+      /* Add that outport to the outports array */
+
+      if(attribute.indexOf(":VAL") !== -1){
+        /* Could well be an inport since it has VAL in the title? */
+        /* Also, need to remove the VAL from the inport name in that case */
+        var inportName = attribute.replace(/:VAL/g, '');
+        inports.push(
+          {
+            name: inportName,
+            type: testAllBlockInfo[blockId][attribute].type.name,
+            value: String(testAllBlockInfo[blockId][attribute].value),
+            connected: false,
+            connectedTo: null
+          }
+        )
+      }
+      else {
+        outports.push(
+          {
+            name: attribute,
+            type: testAllBlockInfo[blockId][attribute].type.name,
+            value: String(testAllBlockInfo[blockId][attribute].value),
+            connected: false,
+            connectedTo: []
+          }
+        )
+      }
+    }
+  }
+
+  allBlockInfo[blockId] = {
+    type: blockType,
+    label: blockId,
+    name: '',
+    inports: inports,
+    outports: outports
+  };
+
 
 }
 
@@ -859,6 +916,8 @@ var testAllBlockInfo = {};
 var dataFetchTest = {
   value: true,
 };
+
+var flowChartStore = require('./flowChartStore');
 
 var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -1031,9 +1090,18 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Creating the object holding all initial block data in the websocket
       instead, then passing it to the client at the end
        */
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
       console.log(item);
       testAllBlockInfo = JSON.parse(JSON.stringify(item));
       console.log(testAllBlockInfo);
+
+      /* Try adding one new server block to allBlockInfo */
+
+      for(var block in item){
+        addBlock(block);
+      }
+
+      //addBlock('CLOCKS');
 
       blockStore.emitChange();
       break;

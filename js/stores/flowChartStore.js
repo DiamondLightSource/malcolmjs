@@ -66,9 +66,13 @@ function interactJsDrag(BlockInfo){
 
 function appendToBlockPositions(BlockId){
   blockPositions[BlockId] = {
-    x: 100,
-    y: 100
+    x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+    y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale
   }
+}
+
+function generateRandomBlockPosition(){
+  return Math.floor((Math.random() * 1300) + 1)
 }
 
 function appendToBlockSelectedStates(BlockId){
@@ -253,7 +257,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-//var blockStore = require('./blockStore');
+var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
@@ -387,6 +391,19 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
       previousMouseCoordsOnZoom = item;
+      flowChartStore.emitChange();
+      break;
+
+    /* WebAPI related stuff */
+
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]);
+      for(var block in item){
+        appendToBlockPositions(block);
+        appendToBlockSelectedStates(block);
+      }
+      //appendToBlockPositions('CLOCKS');
+      //appendToBlockSelectedStates('CLOCKS');
       flowChartStore.emitChange();
       break;
 

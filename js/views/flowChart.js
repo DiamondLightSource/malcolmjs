@@ -544,31 +544,56 @@ var FlowChart = React.createClass({
   var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
   var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
+  //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
+  //
+  if(document.getElementById(this.props.storingFirstPortClicked.id).parentNode.transform.animVal[0].matrix.e === 0){
+    //console.log("it's an inport, since the port's x value is zero!");
+    var fromBlockPortType = "inport";
+  }
+  else{
+    //console.log("it's an outport!");
+    var fromBlockPortType = "outport";
+  }
+
+  if(document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.transform.animVal[0].matrix.e === 0) {
+    var toBlockPortType = "inport";
+  }
+  else{
+    var toBlockPortType = "outport";
+  }
 
 
-  for(i = 0; i < fromBlockLibraryInfo.inports.length; i++){
-    if(fromBlockLibraryInfo.inports[i].name === edgeInfo.fromBlockPort){
+
+  /* Replacing for now with a check of the port position,
+  to determine if the clicked port is an inport or outport
+
+  /* Actually, don't need to replace it, can just remove the logic determining
+  the port type and still use it to find the inport index, just via allBlockInfo
+  NOT blockLibrary
+   */
+  for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
+    if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
       //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
-      var fromBlockPortType = "inport";
+    //  var fromBlockPortType = "inport";
       var inportIndex = i;
       break;
     }
     else{
       //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromBlockPortType = "outport";
+    //  var fromBlockPortType = "outport";
     }
   }
 
-  for(j = 0; j < toBlockLibraryInfo.inports.length; j++ ){
-    if(toBlockLibraryInfo.inports[j].name === edgeInfo.toBlockPort){
+  for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
+    if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
       //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
-      var toBlockPortType = "inport";
+    //  var toBlockPortType = "inport";
       var inportIndex = j;
       break;
     }
     else{
       //console.log("The toBlock isn't an inport, so it's an outport!");
-      var toBlockPortType = "outport";
+    //  var toBlockPortType = "outport";
     }
   }
 

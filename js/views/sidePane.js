@@ -211,8 +211,9 @@ var SidePane = React.createClass({
                 </p>
                 <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
                   <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-                  <input style={{position: 'relative', textAlign: 'left',}}
-                         value={'blank'} readOnly="readonly" maxLength="10" size="10" />
+                  <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+                         value={String(this.props.allBlockInfo[block].inports[j].value)}
+                         readOnly="readonly" maxLength="10" size="10" />
                 </div>
 
               </div>
@@ -277,9 +278,10 @@ var SidePane = React.createClass({
 
                   <button style={{position: 'relative', left: '160px',}}  >Icon</button>
                   <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                  boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
+                  //boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
                   }}
-                         value={'blank'} readOnly="readonly" maxLength="10" size="10" />
+                         value={String(this.props.allBlockInfo[block].outports[k].value)}
+                         readOnly="readonly" maxLength="10" size="10" />
                 </div>
 
               </div>

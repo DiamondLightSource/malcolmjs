@@ -1280,14 +1280,24 @@ function Client(url){
 
           if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
             json.value.tags[1] === "instance:Device" ) {
+
+              /* Check the 'visibility' attribute of a block to see if
+              it should be shown in thr GUI
+               */
+              /* Use this to add just one or two blocks to test with,
+              rather than the whole list of 89 of them =P
+               */
+            if(json.value.name === "Z:CLOCKS") {
+
               var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
               blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
               //console.log(blockData);
-              if(json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]){
+              //if (json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]) {
                 /* Once all initial blocks are fetched, send the blockData object to the client */
                 console.log("ready to send the object containing all the block data!");
                 genericSuccessCallback(blockData);
-              }
+              //}
+            }
 
           }
         }
@@ -1533,12 +1543,14 @@ var allBlockInfo = {
       {
         name: 'set',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       },
       {
         name: 'reset',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       }
@@ -1547,6 +1559,7 @@ var allBlockInfo = {
       {
         name: 'out',
         type: 'boolean',
+        value: false,
         connected: true,
         connectedTo: [
           {
@@ -1582,6 +1595,7 @@ var allBlockInfo = {
       {
         name: 'ena',
         type: 'boolean',
+        value: false,
         connected: true,
         connectedTo: {
           block: 'Gate1',
@@ -1593,6 +1607,7 @@ var allBlockInfo = {
       {
         name: 'posn',
         type: 'int',
+        value: 1,
         connected: false,
         connectedTo:[]
       }
@@ -1610,12 +1625,14 @@ var allBlockInfo = {
       {
         name: 'ena',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: null
       },
       {
         name: 'posn',
         type: 'int',
+        value: 1,
         connected: false,
         connectedTo: null
       }
@@ -1624,18 +1641,21 @@ var allBlockInfo = {
       {
         name: 'act',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       },
       {
         name: 'out',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       },
       {
         name: 'pulse',
         type: 'boolean',
+        value: false,
         connected: false,
         connectedTo: []
       }
@@ -2307,7 +2327,54 @@ Depending on the action that triggered the data fetch from the server I'll know 
 it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
 been returned/fetched to blockStore successfully?
  */
-function addBlock(){
+function addBlock(blockId){
+
+  var blockType = blockId.replace(/[0-9]/g, '');
+  console.log(blockType);
+
+  var inports = [];
+  var outports = [];
+
+  for(var attribute in testAllBlockInfo[blockId]){
+    if(testAllBlockInfo[blockId][attribute].tags === undefined){
+      /* Add that outport to the outports array */
+
+      if(attribute.indexOf(":VAL") !== -1){
+        /* Could well be an inport since it has VAL in the title? */
+        /* Also, need to remove the VAL from the inport name in that case */
+        var inportName = attribute.replace(/:VAL/g, '');
+        inports.push(
+          {
+            name: inportName,
+            type: testAllBlockInfo[blockId][attribute].type.name,
+            value: String(testAllBlockInfo[blockId][attribute].value),
+            connected: false,
+            connectedTo: null
+          }
+        )
+      }
+      else {
+        outports.push(
+          {
+            name: attribute,
+            type: testAllBlockInfo[blockId][attribute].type.name,
+            value: String(testAllBlockInfo[blockId][attribute].value),
+            connected: false,
+            connectedTo: []
+          }
+        )
+      }
+    }
+  }
+
+  allBlockInfo[blockId] = {
+    type: blockType,
+    label: blockId,
+    name: '',
+    inports: inports,
+    outports: outports
+  };
+
 
 }
 
@@ -2360,6 +2427,8 @@ var testAllBlockInfo = {};
 var dataFetchTest = {
   value: true,
 };
+
+var flowChartStore = require('./flowChartStore');
 
 var blockStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -2532,9 +2601,18 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       /* Creating the object holding all initial block data in the websocket
       instead, then passing it to the client at the end
        */
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
       console.log(item);
       testAllBlockInfo = JSON.parse(JSON.stringify(item));
       console.log(testAllBlockInfo);
+
+      /* Try adding one new server block to allBlockInfo */
+
+      for(var block in item){
+        addBlock(block);
+      }
+
+      //addBlock('CLOCKS');
 
       blockStore.emitChange();
       break;
@@ -3527,7 +3605,7 @@ module.exports = blockStore;
 //var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
 //var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
 
-},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"../utils/WebAPIUtils":20,"events":36}],15:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"../utils/WebAPIUtils":20,"./flowChartStore":16,"events":36}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 24/09/15.
  */
@@ -3740,9 +3818,13 @@ function interactJsDrag(BlockInfo){
 
 function appendToBlockPositions(BlockId){
   blockPositions[BlockId] = {
-    x: 100,
-    y: 100
+    x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+    y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale
   }
+}
+
+function generateRandomBlockPosition(){
+  return Math.floor((Math.random() * 1300) + 1)
 }
 
 function appendToBlockSelectedStates(BlockId){
@@ -3927,7 +4009,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-//var blockStore = require('./blockStore');
+var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
@@ -4064,6 +4146,19 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       flowChartStore.emitChange();
       break;
 
+    /* WebAPI related stuff */
+
+    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]);
+      for(var block in item){
+        appendToBlockPositions(block);
+        appendToBlockSelectedStates(block);
+      }
+      //appendToBlockPositions('CLOCKS');
+      //appendToBlockSelectedStates('CLOCKS');
+      flowChartStore.emitChange();
+      break;
+
     default:
       return true
   }
@@ -4072,7 +4167,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = flowChartStore;
 
-},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"events":36}],17:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":42,"../constants/appConstants.js":11,"../dispatcher/appDispatcher.js":12,"./blockStore":14,"events":36}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4424,14 +4519,14 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
-      console.log(payload);
-      console.log(item);
-      _stuff["updatedBlockContent"] = item;
-      console.log(_stuff.updatedBlockContent);
-      compareCurrentPaneStoreBlockContentAndDeviceStore();
-      paneStore.emitChange();
-      break;
+    //case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
+    //  console.log(payload);
+    //  console.log(item);
+    //  _stuff["updatedBlockContent"] = item;
+    //  console.log(_stuff.updatedBlockContent);
+    //  compareCurrentPaneStoreBlockContentAndDeviceStore();
+    //  paneStore.emitChange();
+    //  break;
 
     //case appConstants.FETCHINITIAL_BLOCKDATA:
     //  console.log(payload);
@@ -4594,6 +4689,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
       AppDispatcher.waitFor([blockStore.dispatchToken]);
+
+      for(var block in item){
+        appendToAllBlockTabProperties(block);
+      }
+
       _stuff.loadingInitialData = false;
       paneStore.emitChange();
       break;
@@ -5900,6 +6000,7 @@ var Block = React.createClass({displayName: "Block",
   render: function(){
     console.log("render: block");
     console.log(this.props.id);
+    //console.log(this.props);
 
     var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 
@@ -7495,31 +7596,56 @@ var FlowChart = React.createClass({displayName: "FlowChart",
   var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
   var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
+  //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
+  //
+  if(document.getElementById(this.props.storingFirstPortClicked.id).parentNode.transform.animVal[0].matrix.e === 0){
+    //console.log("it's an inport, since the port's x value is zero!");
+    var fromBlockPortType = "inport";
+  }
+  else{
+    //console.log("it's an outport!");
+    var fromBlockPortType = "outport";
+  }
+
+  if(document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.transform.animVal[0].matrix.e === 0) {
+    var toBlockPortType = "inport";
+  }
+  else{
+    var toBlockPortType = "outport";
+  }
 
 
-  for(i = 0; i < fromBlockLibraryInfo.inports.length; i++){
-    if(fromBlockLibraryInfo.inports[i].name === edgeInfo.fromBlockPort){
+
+  /* Replacing for now with a check of the port position,
+  to determine if the clicked port is an inport or outport
+
+  /* Actually, don't need to replace it, can just remove the logic determining
+  the port type and still use it to find the inport index, just via allBlockInfo
+  NOT blockLibrary
+   */
+  for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
+    if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
       //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
-      var fromBlockPortType = "inport";
+    //  var fromBlockPortType = "inport";
       var inportIndex = i;
       break;
     }
     else{
       //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
-      var fromBlockPortType = "outport";
+    //  var fromBlockPortType = "outport";
     }
   }
 
-  for(j = 0; j < toBlockLibraryInfo.inports.length; j++ ){
-    if(toBlockLibraryInfo.inports[j].name === edgeInfo.toBlockPort){
+  for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
+    if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
       //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
-      var toBlockPortType = "inport";
+    //  var toBlockPortType = "inport";
       var inportIndex = j;
       break;
     }
     else{
       //console.log("The toBlock isn't an inport, so it's an outport!");
-      var toBlockPortType = "outport";
+    //  var toBlockPortType = "outport";
     }
   }
 
@@ -9576,6 +9702,7 @@ var Ports = React.createClass({displayName: "Ports",
         if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
           || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
           target = e.currentTarget.parentNode.children[i];
+          console.log(target);
         }
       }
     }
@@ -9990,8 +10117,9 @@ var SidePane = React.createClass({displayName: "SidePane",
                 ), 
                 React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '70px'}}, 
                   React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
-                  React.createElement("input", {style: {position: 'relative', textAlign: 'left',}, 
-                         value: 'blank', readOnly: "readonly", maxLength: "10", size: "10"})
+                  React.createElement("input", {style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}, 
+                         value: String(this.props.allBlockInfo[block].inports[j].value), 
+                         readOnly: "readonly", maxLength: "10", size: "10"})
                 )
 
               )
@@ -10056,9 +10184,10 @@ var SidePane = React.createClass({displayName: "SidePane",
 
                   React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
                   React.createElement("input", {style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                  boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
+                  //boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
                   }, 
-                         value: 'blank', readOnly: "readonly", maxLength: "10", size: "10"})
+                         value: String(this.props.allBlockInfo[block].outports[k].value), 
+                         readOnly: "readonly", maxLength: "10", size: "10"})
                 )
 
               )
