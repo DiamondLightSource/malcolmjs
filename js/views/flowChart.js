@@ -1060,14 +1060,6 @@ var FlowChart = React.createClass({
              transform={matrixTransform}
              onWheel={this.wheelZoom}  >
 
-            <g transform="translate(100, 50)" >
-              <text>{String(this.props.dataFetchTest.value)}</text>
-            </g>
-
-            <g transform="translate(200, 50)"  >
-              <rect height="50" width="50" onClick={this.testingWebsocket} ></rect>
-            </g>
-
 
             <g id="EdgesGroup" >
 
@@ -1093,6 +1085,15 @@ var FlowChart = React.createClass({
 });
 
 module.exports = FlowChart;
+
+//<g transform="translate(100, 50)" >
+//  <text>{String(this.props.dataFetchTest.value)}</text>
+//</g>
+//
+//<g transform="translate(200, 50)"  >
+//  <rect height="50" width="50" onClick={this.testingWebsocket} ></rect>
+//</g>
+
 
 //<g transform="translate(50, 50)" >
 //  <text>{this.props.allBlockInfo['Gate1'].position.x}</text>

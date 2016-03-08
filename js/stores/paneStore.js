@@ -425,27 +425,62 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     /* WebAPI use */
 
-    case appConstants.TEST_INITIALDATAFETCH_PENDING:
-      /* Show the loading icon in the mainPane while the initial data is being fetched */
-      _stuff.loadingInitialData = true;
-      paneStore.emitChange();
-      break;
+    case appConstants.MALCOLM_GET_SUCCESS:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]);
+      //for(var block in item){
+      //  appendToBlockPositions(block);
+      //  appendToBlockSelectedStates(block);
+      //}
+      //appendToBlockPositions('CLOCKS');
+      //appendToBlockSelectedStates('CLOCKS');
 
-    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
+      /* No need to check the tags for if it's FlowGraph */
+      for(var j = 0; j < item.tags.length; j++){
+        console.log("one time round in the loop");
+        //if(item.tags[j] === 'instance:FlowGraph'){
+        //}
+        if(item.tags[j] === 'instance:Zebra2Block'){
 
-      for(var block in item){
-        appendToAllBlockTabProperties(block);
+          if(item.attributes.USE.value === true) {
+
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            appendToAllBlockTabProperties(blockName);
+          }
+          else{
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            appendToAllBlockTabProperties(blockName);
+            console.log("block isn't in use, don't add its info");
+
+          }
+
+        }
       }
 
-      _stuff.loadingInitialData = false;
       paneStore.emitChange();
       break;
 
-    case appConstants.TEST_INITIALDATAFETCH_FAILURE:
-      _stuff.loadingInitialDataError = true;
-      paneStore.emitChange();
-      break;
+    /* Not using loading screens for now */
+    //case appConstants.TEST_INITIALDATAFETCH_PENDING:
+    //  /* Show the loading icon in the mainPane while the initial data is being fetched */
+    //  _stuff.loadingInitialData = true;
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //
+    //  for(var block in item){
+    //    appendToAllBlockTabProperties(block);
+    //  }
+    //
+    //  _stuff.loadingInitialData = false;
+    //  paneStore.emitChange();
+    //  break;
+    //
+    //case appConstants.TEST_INITIALDATAFETCH_FAILURE:
+    //  _stuff.loadingInitialDataError = true;
+    //  paneStore.emitChange();
+    //  break;
 
     //case appConstants.REDBLOCKTAB_OPEN:
     //  console.log(payload);

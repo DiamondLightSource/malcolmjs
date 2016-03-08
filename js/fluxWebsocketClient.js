@@ -4,6 +4,8 @@
 
 /* Main Client constructor function */
 
+var idLookupTableFunctions = require('./utils/idLookupTable');
+
 function Client(url){
 
   var channelIDIndex = 0;
@@ -48,7 +50,15 @@ function Client(url){
     genericFailureCallback = callback;
   };
 
-  this.sendText = function(message, callback){
+  this.getNextAvailableId = function(){
+    return channelIDIndex;
+  };
+
+  this.incrementId = function(){
+    channelIDIndex += 1;
+  };
+
+  this.sendText = function(message){
     console.log(message);
     websocket.send(message);
 
@@ -104,8 +114,8 @@ function Client(url){
       //console.log("message has been received from server via websocket");
       var json;
       json = JSON.parse(evt.data);
-      //console.log("Here is the event:");
-      //console.log(evt);
+      console.log("Here is the event:");
+      console.log(evt);
 
       /* Time to check which channel callback to invoke based on the type! */
       //console.log(json.type);
@@ -113,55 +123,69 @@ function Client(url){
       /* First check if that channel id exists, if not then run the generic
       callbacks
        */
+      /* UPDATE: no need for channel objects I don't think, I have
+      the lookup table now? Or is it that I still wanna use that for subscription/monitor
+      purposes?
+       */
       if(channelObject[json.id] === undefined){
         //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
         if(json.type === 'Error'){
-          genericFailureCallback(json);
+          //genericFailureCallback(json);
+          console.log(json);
+          idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
         }
         else if(json.type === 'Return'){
-          if(json.value.descriptor === 'Child block names'){
-            initialBlockDataArray = JSON.parse(JSON.stringify(json.value.value));
-            console.log("initial block list, so need to do another call to fetch all block info?!")
-            for(var i = 0; i < json.value.value.length; i++){
+          /* Bad to do, trying something else */
+          //if(json.value.descriptor === 'Child block names'){
+          //  initialBlockDataArray = JSON.parse(JSON.stringify(json.value.value));
+          //  console.log("initial block list, so need to do another call to fetch all block info?!")
+          //  for(var i = 0; i < json.value.value.length; i++){
+          //
+          //    /* Send a get request for all blocks in the initial block array */
+          //    clientSelf.sendText(
+          //      JSON.stringify(
+          //        {type: 'Get', id: 0, endpoint: String(json.value.value[i])}
+          //      )
+          //    );
+          //  }
+          //}
+          //
+          //if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
+          //  json.value.tags[1] === "instance:Device" ) {
+          //
+          //    /* Check the 'visibility' attribute of a block to see if
+          //    it should be shown in thr GUI
+          //     */
+          //    /* Use this to add just one or two blocks to test with,
+          //    rather than the whole list of 89 of them =P
+          //     */
+          //  //if(json.value.name === "Z:CLOCKS" || json.value.name === "Z:PULSE1") {
+          //
+          //    var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
+          //    blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
+          //    //console.log(blockData);
+          //    if (json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]) {
+          //      /* Once all initial blocks are fetched, send the blockData object to the client */
+          //      console.log("ready to send the object containing all the block data!");
+          //      genericSuccessCallback(blockData);
+          //    }
+          //  //}
+          //
+          //}
 
-              /* Send a get request for all blocks in the initial block array */
-              clientSelf.sendText(
-                JSON.stringify(
-                  {type: 'Get', id: 0, endpoint: String(json.value.value[i])}
-                )
-              );
-            }
-          }
+          /* Invoking the corresponding id's callback */
+          console.log(json);
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
-          if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
-            json.value.tags[1] === "instance:Device" ) {
-
-              /* Check the 'visibility' attribute of a block to see if
-              it should be shown in thr GUI
-               */
-              /* Use this to add just one or two blocks to test with,
-              rather than the whole list of 89 of them =P
-               */
-            if(json.value.name === "Z:CLOCKS") {
-
-              var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
-              blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
-              //console.log(blockData);
-              //if (json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]) {
-                /* Once all initial blocks are fetched, send the blockData object to the client */
-                console.log("ready to send the object containing all the block data!");
-                genericSuccessCallback(blockData);
-              //}
-            }
-
-          }
         }
       }
       else {
         if (json.type === 'Error') {
+          /* Will replace soon with lookup table invoke instead */
           channelObject[json.id].failureCallback(json);
         }
         else if (json.type === 'Return') {
+          /* Will replace soon with lookup table invoke instead */
           channelObject[json.id].successCallback(json);
         }
       }
@@ -360,5 +384,6 @@ function Client(url){
 }
 
 //var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
-
-module.exports = Client;
+//module.exports = Client;
+var WebSocketClient = new Client('ws://localhost:8080/ws');
+module.exports = WebSocketClient;

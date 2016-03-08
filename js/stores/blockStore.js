@@ -8,11 +8,13 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('../../node_modules/object-assign/index.js');
 
 var WebAPIUtils = require('../utils/WebAPIUtils');
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  initialBlockServerData: null
+  initialBlockServerData: null,
+  blockList: null
 };
 
 
@@ -828,35 +830,84 @@ function addBlock(blockId){
   var outports = [];
 
   for(var attribute in testAllBlockInfo[blockId]){
-    if(testAllBlockInfo[blockId][attribute].tags === undefined){
-      /* Add that outport to the outports array */
+    /* Rewriting for proper inport & outport filtering */
+    //if(testAllBlockInfo[blockId][attribute].tags === undefined){
+    //  /* Add that outport to the outports array */
+    //
+    //  if(attribute.indexOf(":VAL") !== -1){
+    //    /* Could well be an inport since it has VAL in the title? */
+    //    /* Also, need to remove the VAL from the inport name in that case */
+    //    var inportName = attribute.replace(/:VAL/g, '');
+    //    inports.push(
+    //      {
+    //        name: inportName,
+    //        type: testAllBlockInfo[blockId][attribute].type.name,
+    //        value: String(testAllBlockInfo[blockId][attribute].value),
+    //        connected: false,
+    //        connectedTo: null
+    //      }
+    //    )
+    //  }
+    //  else {
+    //    outports.push(
+    //      {
+    //        name: attribute,
+    //        type: testAllBlockInfo[blockId][attribute].type.name,
+    //        value: String(testAllBlockInfo[blockId][attribute].value),
+    //        connected: false,
+    //        connectedTo: []
+    //      }
+    //    )
+    //  }
+    //}
 
-      if(attribute.indexOf(":VAL") !== -1){
-        /* Could well be an inport since it has VAL in the title? */
-        /* Also, need to remove the VAL from the inport name in that case */
-        var inportName = attribute.replace(/:VAL/g, '');
-        inports.push(
-          {
-            name: inportName,
-            type: testAllBlockInfo[blockId][attribute].type.name,
-            value: String(testAllBlockInfo[blockId][attribute].value),
-            connected: false,
-            connectedTo: null
-          }
-        )
-      }
-      else {
-        outports.push(
-          {
-            name: attribute,
-            type: testAllBlockInfo[blockId][attribute].type.name,
-            value: String(testAllBlockInfo[blockId][attribute].value),
-            connected: false,
-            connectedTo: []
-          }
-        )
+    console.log(testAllBlockInfo[blockId]);
+    console.log(attribute);
+    console.log(testAllBlockInfo[blockId][attribute]);
+
+    if(attribute === 'uptime'){
+      inports.push(
+        {
+          name: 'uptime',
+          type: testAllBlockInfo[blockId][attribute].type.name,
+          value: String(testAllBlockInfo[blockId][attribute].value),
+          connected: false,
+          connectedTo: null
+        }
+      )
+    }
+
+    if(testAllBlockInfo[blockId][attribute].tags !== undefined) {
+      for (var i = 0; i < testAllBlockInfo[blockId][attribute].tags.length; i++) {
+        var inportRegExp = /flowgraph:inport/;
+        var outportRegExp = /flowgraph:outport/;
+        if (inportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+          var inportName = attribute;
+          inports.push(
+            {
+              name: inportName,
+              type: testAllBlockInfo[blockId][attribute].type.name,
+              value: String(testAllBlockInfo[blockId][attribute].value),
+              connected: false,
+              connectedTo: null
+            }
+          )
+        }
+        else if (outportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+          var outportName = attribute;
+          outports.push(
+            {
+              name: outportName,
+              type: testAllBlockInfo[blockId][attribute].type.name,
+              value: String(testAllBlockInfo[blockId][attribute].value),
+              connected: false,
+              connectedTo: []
+            }
+          )
+        }
       }
     }
+
   }
 
   allBlockInfo[blockId] = {
@@ -870,23 +921,23 @@ function addBlock(blockId){
 
 }
 
-function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
-  console.log("fetching block object");
+//function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
+//  console.log("fetching block object");
+//
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+//    item: responseMessage
+//  })
+//}
+//
+//function testFetchEveryInitialBlockObjectFailure(responseMessage){
+//  AppDispatcher.handleAction({
+//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+//    item: responseMessage
+//  })
+//}
 
-  AppDispatcher.handleAction({
-    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
-    item: responseMessage
-  })
-}
-
-function testFetchEveryInitialBlockObjectFailure(responseMessage){
-  AppDispatcher.handleAction({
-    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
-    item: responseMessage
-  })
-}
-
-var testAllBlockInfo = {};
+var testAllBlockInfo = null;
 
 
 //function processInitialBlockData(){
@@ -957,20 +1008,28 @@ var blockStore = assign({}, EventEmitter.prototype, {
   getTestAllBlockInfo: function(){
 
     if(testAllBlockInfo === null){
-    for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
-      console.log(_stuff.initialBlockServerData[j]);
+      testAllBlockInfo = {};
 
-      WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
-      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
-      }
-    /* Seems wrong to do this, but it'll emit a change easily for now! */
-    this.emitChange();
+      MalcolmActionCreators.initialiseFlowChart('Z');
+      //MalcolmActionCreators.initialiseFlowChart('Z:DIV1.attributes.DIVISOR.value');
+
+
+      /* So then testAllBlockInfo is something in flowChartViewController */
+      return {};
+
+      //for(var j = 0; j < _stuff.blockList.length; j++) {
+      //  console.log(_stuff.blockList[j]);
+      //  MalcolmActionCreators.malcolmGet(_stuff.blockList[j]);
+      //}
     }
     else{
       return testAllBlockInfo;
     }
 
-  }
+  },
+  getTestAllBlockInfoCallback: function(){
+
+  },
 
 
 
@@ -1089,30 +1148,40 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
     /* WebAPI use, but flowChart will be using this to display a loading icon */
 
-    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-      /* Creating the object holding all initial block data in the websocket
-      instead, then passing it to the client at the end
-       */
-      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
-      console.log(item);
-      testAllBlockInfo = JSON.parse(JSON.stringify(item));
-      console.log(testAllBlockInfo);
+    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //  /* Creating the object holding all initial block data in the websocket
+    //  instead, then passing it to the client at the end
+    //   */
+    //  AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+    //  console.log(item);
+    //  testAllBlockInfo = JSON.parse(JSON.stringify(item));
+    //  console.log(testAllBlockInfo);
+    //
+    //  /* Try adding one new server block to allBlockInfo */
+    //
+    //  for(var block in item){
+    //    addBlock(block);
+    //  }
+    //
+    //  //addBlock('CLOCKS');
+    //
+    //  blockStore.emitChange();
+    //  break;
 
-      /* Try adding one new server block to allBlockInfo */
-
-      for(var block in item){
-        addBlock(block);
-      }
-
-      //addBlock('CLOCKS');
-
-      blockStore.emitChange();
-      break;
-
+    //case appConstants.GET_BLOCKLIST_SUCCESS:
+    //  console.log("got the block list, now to get each block object!");
+    //  //for(var i = 0; i < item.value.length; i++){
+    //  //  MalcolmActionCreators.getBlock(item.value[i]);
+    //  //}
+    //  blockStore.emitChange();
+    //
+    //  break;
+    //
     //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS:
     //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  var blockName = JSON.parse(JSON.stringify(item.value.name.slice(2)));
-    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.value));
+    //  console.log(item);
+    //  var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
     //  ///* No need to emiChnage since I'm only fetching one block by one,
     //  //emitChange at the end of initial data fetch succes above
     //  // */
@@ -1124,6 +1193,80 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     //  window.alert("failed to fetch initial block object!");
     //  blockStore.emitChange();
     //  break;
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+
+      /* Check if it's the initial FlowGraph structure, or
+      if it's something else
+       */
+
+      for(var i = 0; i < item.tags.length; i++){
+        /* No need to check the tags for if it's FlowGraph */
+        //if(item.tags[i] === 'instance:FlowGraph'){
+        //  /* Do the loop that gets every block */
+        //  /* UPDATE: try moving it to a store getter function */
+        //  //for(var j = 0; j < item.attributes.blocks.value.length; j++){
+        //  //  MalcolmActionCreators.malcolmGet(item.attributes.blocks.value[j]);
+        //  //}
+        //  //
+        //  //break;
+        //
+        //  //
+        //  //_stuff.blockList = JSON.parse(JSON.stringify(item.value));
+        //
+        //
+        //  //_stuff.blockList = JSON.parse(JSON.stringify(item.attributes.blocks.value));
+        //
+        //}
+        if(item.tags[i] === 'instance:Zebra2Block'){
+
+          /* Do the block adding to testAllBlockInfo stuff */
+
+          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          console.log(blockName);
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
+
+          /* Add the block to allBlockInfo! */
+
+          if(item.attributes.USE.value === true) {
+
+            addBlock(blockName);
+
+          }
+          else{
+            /* Putting it here just to test the blocks even if they're not in use */
+            addBlock(blockName);
+
+            console.log("block isn't in use, don't add its info");
+          }
+          console.log(testAllBlockInfo);
+        }
+
+      }
+
+
+
+      console.log(testAllBlockInfo);
+      console.log(_stuff.blockList);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("MALCOLM GET ERROR!");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("malcolmSubscribeSuccess");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
 
 
 

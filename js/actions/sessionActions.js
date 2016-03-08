@@ -8,7 +8,7 @@
 var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
-var WebSocketClient = require('../websocketClient');
+//var WebSocketClient = require('../websocketClient');
 
 var sessionActions = {
 

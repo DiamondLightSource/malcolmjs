@@ -16,7 +16,7 @@ var deviceActions = require('../actions/deviceActions');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
-var WebSocketClient = require('../websocketClient');
+//var WebSocketClient = require('../websocketClient');
 var sessionActions = require('../actions/sessionActions');
 
 var FlowChartControllerView = require('./flowChartControllerView');
@@ -153,23 +153,24 @@ var MainPane = React.createClass({
     /* Using an if statement to check if we need to display the initial data fetch loading icon
     instead of flowChart
      */
+    /* UPDATE: Don't use a loading screen for now */
 
-    var mainPaneContent;
-
-    if(this.props.loadingInitialData === true){
-      if(this.props.loadingInitialDataError === false) {
-        mainPaneContent = <i className="fa fa-spinner fa-spin fa-5x" ></i>
-      }
-      else if(this.props.loadingInitialDataError === true){
-        mainPaneContent = <i className="fa fa-exclamation-circle fa-5x" x="100" ></i>
-      }
-    }
-    else if(this.props.loadingInitialData === false){
-      mainPaneContent = <FlowChartControllerView/>
-    }
-    else if(this.props.loadingInitialData === 'Error'){
-      /* Perhaps have a nother icon show up if initial data fetch doesn't work? */
-    }
+    //var mainPaneContent;
+    //
+    //if(this.props.loadingInitialData === true){
+    //  if(this.props.loadingInitialDataError === false) {
+    //    mainPaneContent = <i className="fa fa-spinner fa-spin fa-5x" ></i>
+    //  }
+    //  else if(this.props.loadingInitialDataError === true){
+    //    mainPaneContent = <i className="fa fa-exclamation-circle fa-5x" x="100" ></i>
+    //  }
+    //}
+    //else if(this.props.loadingInitialData === false){
+    //  mainPaneContent = <FlowChartControllerView/>
+    //}
+    //else if(this.props.loadingInitialData === 'Error'){
+    //  /* Perhaps have another icon show up if initial data fetch doesn't work? */
+    //}
 
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
@@ -183,7 +184,7 @@ var MainPane = React.createClass({
         <Tab title="View" showFooter={this.props.footers} >
           <Content >
             <div style={contentStyling} >
-              {mainPaneContent}
+              <FlowChartControllerView/>
             </div>
           </Content>
 

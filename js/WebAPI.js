@@ -2,7 +2,7 @@
  * Created by twi18192 on 18/02/16.
  */
 
-var WebSocketClient = require('./websocketClient');
+//var WebSocketClient = require('./websocketClient');
 //var FluxWebSocketClient = require('./fluxWebsocketClient');
 
 var appConstants = require('./constants/appConstants');

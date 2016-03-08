@@ -64,15 +64,17 @@ function interactJsDrag(BlockInfo){
   }
 }
 
-function appendToBlockPositions(BlockId){
+function appendToBlockPositions(BlockId, xCoord, yCoord){
   blockPositions[BlockId] = {
-    x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-    y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale
+    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+    x: xCoord * 1/graphZoomScale,
+    y: yCoord * 1/graphZoomScale
   }
 }
 
 function generateRandomBlockPosition(){
-  return Math.floor((Math.random() * 1300) + 1)
+  return Math.floor((Math.random() * 500) + 1)
 }
 
 function appendToBlockSelectedStates(BlockId){
@@ -396,16 +398,57 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     /* WebAPI related stuff */
 
-    case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  for(var block in item){
+    //    appendToBlockPositions(block);
+    //    appendToBlockSelectedStates(block);
+    //  }
+    //  //appendToBlockPositions('CLOCKS');
+    //  //appendToBlockSelectedStates('CLOCKS');
+    //  flowChartStore.emitChange();
+    //  break;
+
+    case appConstants.MALCOLM_GET_SUCCESS:
       //AppDispatcher.waitFor([blockStore.dispatchToken]);
-      for(var block in item){
-        appendToBlockPositions(block);
-        appendToBlockSelectedStates(block);
-      }
+      //for(var block in item){
+      //  appendToBlockPositions(block);
+      //  appendToBlockSelectedStates(block);
+      //}
       //appendToBlockPositions('CLOCKS');
       //appendToBlockSelectedStates('CLOCKS');
+
+      console.log("");
+
+      for(var i = 0; i < item.tags.length; i++){
+        /* No need to check the tags for if it's FlowGraph */
+        //if(item.tags[i] === 'instance:FlowGraph'){
+        //}
+        if(item.tags[i] === 'instance:Zebra2Block'){
+          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          console.log(xCoord);
+
+          /* Check the block visibility attribute here
+            ie, check the 'USE' attribute */
+
+          if(item.attributes.USE.value === true) {
+            appendToBlockPositions(blockName, xCoord, yCoord);
+            appendToBlockSelectedStates(blockName);
+          }
+          else{
+            console.log("block isn't in use, don't add its info");
+
+            appendToBlockPositions(blockName, xCoord, yCoord);
+            appendToBlockSelectedStates(blockName);
+          }
+        }
+      }
+
       flowChartStore.emitChange();
       break;
+
 
     default:
       return true

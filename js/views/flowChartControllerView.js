@@ -45,7 +45,8 @@ function getFlowChartState(){
 
     /* WebAPI use */
 
-    dataFetchTest: JSON.parse(JSON.stringify(blockStore.getDataFetchTest()))
+    dataFetchTest: JSON.parse(JSON.stringify(blockStore.getDataFetchTest())),
+    testAllBlockInfo: JSON.parse(JSON.stringify(blockStore.getTestAllBlockInfo()))
   }
 }
 
