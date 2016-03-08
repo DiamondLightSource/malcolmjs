@@ -274,7 +274,7 @@ var MalcolmActionCreators = {
     if(requestedData === 'Z'){
       testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
-        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
+        for(var i = 0; i < 2; i++){
           //window.alert("ifhoief");
           /* Doing window.alert doesn't cause an InvariantViolation error like it does
           in the store with this method, unlike the other one with actions being created during the
@@ -304,13 +304,11 @@ var MalcolmActionCreators = {
                 /* Ohhh, I need to put a string of what I want, not just the value (blockResponseObject.attributes[attribute].value) I want! =P */
 
                 var blockName = blockResponseObject.attributes.BLOCKNAME.value;
-                var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
-                actionCreators.malcolmSubscribe(requestedAttributeDataPath);
+                //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+                actionCreators.malcolmSubscribe(blockName, attribute);
               //}
             }
           };
-
-          console.log(testBlockAttributeSubscribe);
 
           MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
           //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
@@ -336,25 +334,38 @@ var MalcolmActionCreators = {
 
   },
 
-  malcolmSubscribe: function(requestedData){
-
-    //console.log("dijef");
+  malcolmSubscribe: function(blockName, attribute){
 
     function malcolmSubscribeSuccess(responseMessage){
+      //console.log(requestedData);
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
       })
     }
 
     function malcolmSubscribeFailure(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_FAILURE,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
       })
     }
 
-    MalcolmUtils.malcolmSubscribe(requestedData, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+    var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+
+    MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
   }
 
@@ -1446,6 +1457,7 @@ function Client(url){
       json = JSON.parse(evt.data);
       console.log("Here is the event:");
       console.log(evt);
+      console.log(json);
 
       /* Time to check which channel callback to invoke based on the type! */
       //console.log(json.type);
@@ -1505,6 +1517,17 @@ function Client(url){
 
           /* Invoking the corresponding id's callback */
           console.log(json);
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
+
+        }
+        else if(json.type === 'Value'){
+          /* It's a message via a subscription/monitor, so invoke the
+          required callback.
+          I reckon this could easily be integrated into the above
+          statement with an OR operator, they do the same thing
+          (call the idLookupTable callback)?
+           */
+
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }
@@ -2642,6 +2665,22 @@ function addBlock(blockId){
 
 }
 
+function updateAttributeValue(blockId, attribute, newValue){
+  console.log("update attribute value");
+
+  for(var i = 0; i < allBlockInfo[blockId].inports.length; i++){
+    if(allBlockInfo[blockId].inports[i].name === attribute){
+      allBlockInfo[blockId].inports[i].value = newValue;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[blockId].outports.length; j++){
+    if(allBlockInfo[blockId].outports[j].name === attribute){
+      allBlockInfo[blockId].outports[j].value = newValue;
+    }
+  }
+}
+
 //function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
 //  console.log("fetching block object");
 //
@@ -2981,6 +3020,25 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("malcolmSubscribeSuccess");
+
+      /* First extract the block that the updated attribute
+      value belongs to
+      UPDATE: uneeded now that I move the malcolm request message
+      string creation to the action creator
+       */
+      //var sliceEndIndex = item.requestedData.indexOf('.');
+      //console.log(sliceEndIndex);
+      //var blockId = item.requestedData.slice(2, sliceEndIndex);
+      //console.log(blockId);
+      //var blockIdStringLength = blockId.length;
+      //console.log(blockIdStringLength);
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+      updateAttributeValue(requestedData.blockName,
+        requestedData.attribute, responseMessage.value);
+
       blockStore.emitChange();
       break;
 
@@ -11150,8 +11208,8 @@ function getBothPanesState(){
     favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
-    loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
-    loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
+    //loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
+    //loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
 
     /* SidePane's getter functions for stores */
     tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
@@ -11190,9 +11248,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
-      nextState.configContent !== this.state.configContent ||
-      nextState.loadingInitialData !== this.state.loadingInitialData ||
-      nextState.loadingInitialDataError !== this.state.loadingInitialDataError
+      nextState.configContent !== this.state.configContent
+      //nextState.loadingInitialData !== this.state.loadingInitialData ||
+      //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
     )
   },
@@ -11201,6 +11259,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
+    blockStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -11212,6 +11271,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
+    blockStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -11235,9 +11295,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                //<div id="MainTabbedView" style={MainTabbedViewStyle}>
                 React.createElement(MainPane, {footers: this.state.footers, 
                 favTabOpen: this.state.favTabOpen, 
-                configTabOpen: this.state.configTabOpen, 
-                loadingInitialData: this.state.loadingInitialData, 
-                loadingInitialDataError: this.state.loadingInitialDataError}
+                configTabOpen: this.state.configTabOpen}
+                //loadingInitialData={this.state.loadingInitialData}
+                //loadingInitialDataError={this.state.loadingInitialDataError}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 ), 
                 //</div>

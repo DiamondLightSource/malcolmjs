@@ -91,7 +91,7 @@ var MalcolmActionCreators = {
     if(requestedData === 'Z'){
       testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
-        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
+        for(var i = 0; i < 2; i++){
           //window.alert("ifhoief");
           /* Doing window.alert doesn't cause an InvariantViolation error like it does
           in the store with this method, unlike the other one with actions being created during the
@@ -121,13 +121,11 @@ var MalcolmActionCreators = {
                 /* Ohhh, I need to put a string of what I want, not just the value (blockResponseObject.attributes[attribute].value) I want! =P */
 
                 var blockName = blockResponseObject.attributes.BLOCKNAME.value;
-                var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
-                actionCreators.malcolmSubscribe(requestedAttributeDataPath);
+                //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+                actionCreators.malcolmSubscribe(blockName, attribute);
               //}
             }
           };
-
-          console.log(testBlockAttributeSubscribe);
 
           MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
           //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
@@ -153,25 +151,38 @@ var MalcolmActionCreators = {
 
   },
 
-  malcolmSubscribe: function(requestedData){
-
-    //console.log("dijef");
+  malcolmSubscribe: function(blockName, attribute){
 
     function malcolmSubscribeSuccess(responseMessage){
+      //console.log(requestedData);
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
       })
     }
 
     function malcolmSubscribeFailure(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_FAILURE,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
       })
     }
 
-    MalcolmUtils.malcolmSubscribe(requestedData, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+    var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+
+    MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
   }
 

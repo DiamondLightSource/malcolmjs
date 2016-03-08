@@ -103,8 +103,8 @@ function getBothPanesState(){
     favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
     //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
-    loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
-    loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
+    //loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
+    //loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
 
     /* SidePane's getter functions for stores */
     tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
@@ -143,9 +143,9 @@ var BothPanes = React.createClass({
 
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
-      nextState.configContent !== this.state.configContent ||
-      nextState.loadingInitialData !== this.state.loadingInitialData ||
-      nextState.loadingInitialDataError !== this.state.loadingInitialDataError
+      nextState.configContent !== this.state.configContent
+      //nextState.loadingInitialData !== this.state.loadingInitialData ||
+      //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
     )
   },
@@ -154,6 +154,7 @@ var BothPanes = React.createClass({
     mainPaneStore.addChangeListener(this._onChange);
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
+    blockStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -165,6 +166,7 @@ var BothPanes = React.createClass({
     mainPaneStore.removeChangeListener(this._onChange);
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
+    blockStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -189,8 +191,8 @@ var BothPanes = React.createClass({
                 <MainPane footers={this.state.footers}
                 favTabOpen={this.state.favTabOpen}
                 configTabOpen={this.state.configTabOpen}
-                loadingInitialData={this.state.loadingInitialData}
-                loadingInitialDataError={this.state.loadingInitialDataError}
+                //loadingInitialData={this.state.loadingInitialData}
+                //loadingInitialDataError={this.state.loadingInitialDataError}
                 //theGraphDiamondState={this.state.theGraphDiamondState}
                 />
                 //</div>

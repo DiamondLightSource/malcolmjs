@@ -921,6 +921,22 @@ function addBlock(blockId){
 
 }
 
+function updateAttributeValue(blockId, attribute, newValue){
+  console.log("update attribute value");
+
+  for(var i = 0; i < allBlockInfo[blockId].inports.length; i++){
+    if(allBlockInfo[blockId].inports[i].name === attribute){
+      allBlockInfo[blockId].inports[i].value = newValue;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[blockId].outports.length; j++){
+    if(allBlockInfo[blockId].outports[j].name === attribute){
+      allBlockInfo[blockId].outports[j].value = newValue;
+    }
+  }
+}
+
 //function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
 //  console.log("fetching block object");
 //
@@ -1260,6 +1276,25 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("malcolmSubscribeSuccess");
+
+      /* First extract the block that the updated attribute
+      value belongs to
+      UPDATE: uneeded now that I move the malcolm request message
+      string creation to the action creator
+       */
+      //var sliceEndIndex = item.requestedData.indexOf('.');
+      //console.log(sliceEndIndex);
+      //var blockId = item.requestedData.slice(2, sliceEndIndex);
+      //console.log(blockId);
+      //var blockIdStringLength = blockId.length;
+      //console.log(blockIdStringLength);
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+      updateAttributeValue(requestedData.blockName,
+        requestedData.attribute, responseMessage.value);
+
       blockStore.emitChange();
       break;
 

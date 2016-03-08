@@ -116,6 +116,7 @@ function Client(url){
       json = JSON.parse(evt.data);
       console.log("Here is the event:");
       console.log(evt);
+      console.log(json);
 
       /* Time to check which channel callback to invoke based on the type! */
       //console.log(json.type);
@@ -175,6 +176,17 @@ function Client(url){
 
           /* Invoking the corresponding id's callback */
           console.log(json);
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
+
+        }
+        else if(json.type === 'Value'){
+          /* It's a message via a subscription/monitor, so invoke the
+          required callback.
+          I reckon this could easily be integrated into the above
+          statement with an OR operator, they do the same thing
+          (call the idLookupTable callback)?
+           */
+
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }
