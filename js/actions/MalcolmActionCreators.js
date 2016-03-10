@@ -91,28 +91,30 @@ var MalcolmActionCreators = {
     if(requestedData === 'Z'){
       testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
-        for(var i = 0; i < 2; i++){
-          //window.alert("ifhoief");
-          /* Doing window.alert doesn't cause an InvariantViolation error like it does
-          in the store with this method, unlike the other one with actions being created during the
-          consumption of others in the store?
-           */
+        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
+          if(responseMessage.attributes.blocks.value[i].indexOf('6') !== -1 ||
+            responseMessage.attributes.blocks.value[i].indexOf("CLOCKS") !== -1) {
+            //window.alert("ifhoief");
+            /* Doing window.alert doesn't cause an InvariantViolation error like it does
+             in the store with this method, unlike the other one with actions being created during the
+             consumption of others in the store?
+             */
 
-          /* Now, for each block I want to do a 'get' and pass the block
-          object to the GUI. I ALSO want to do a subscribe on each of the
-          attributes in a block.
-          I only want to fetch each block once, so don't put the block get
-          inside the attribute subscribe loop!
-           */
+            /* Now, for each block I want to do a 'get' and pass the block
+             object to the GUI. I ALSO want to do a subscribe on each of the
+             attributes in a block.
+             I only want to fetch each block once, so don't put the block get
+             inside the attribute subscribe loop!
+             */
 
-          var block = responseMessage.attributes.blocks.value[i];
-          MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+            var block = responseMessage.attributes.blocks.value[i];
+            MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
 
-          testBlockAttributeSubscribe = function(blockResponseObject){
-            console.log(blockResponseObject.attributes);
-            for(var attribute in blockResponseObject.attributes) {
+            testBlockAttributeSubscribe = function (blockResponseObject) {
+              console.log(blockResponseObject.attributes);
+              for (var attribute in blockResponseObject.attributes) {
 
-              //if (attribute !== 'uptime') {
+                if (attribute !== 'uptime') {
                 console.log(blockResponseObject);
                 console.log(attribute);
                 console.log(blockResponseObject.attributes[attribute].value);
@@ -123,17 +125,21 @@ var MalcolmActionCreators = {
                 var blockName = blockResponseObject.attributes.BLOCKNAME.value;
                 //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
                 actionCreators.malcolmSubscribe(blockName, attribute);
-              //}
-            }
-          };
+                }
+              }
+            };
 
-          MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
-          //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
+            /* Comment out the subscribe while I'm testing server write for
+             block position
+             */
+            MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
+            //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
 
-          /* Also need to subscribe channels for each attribute in
-          a block, pass another loop as a callback to this? =P
-           */
+            /* Also need to subscribe channels for each attribute in
+             a block, pass another loop as a callback to this? =P
+             */
+          }
         }
       };
 
@@ -183,6 +189,46 @@ var MalcolmActionCreators = {
     var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
 
     MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+
+  },
+
+  malcolmCall: function(blockName, method, args){
+
+    function malcolmCallSuccess(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_SUCCESS,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    function malcolmCallFailure(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_FAILURE,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    /* AT this point I don't really know the syntax of the write request,
+    so this will likely be wrong and should be changed accordingly
+     */
+    var requestedDataToWritePath = "Z:" + blockName;
+
+    MalcolmUtils.malcolmCall(requestedDataToWritePath,
+      method, args, malcolmCallSuccess, malcolmCallFailure);
 
   }
 

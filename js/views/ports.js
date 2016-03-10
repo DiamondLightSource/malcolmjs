@@ -203,7 +203,7 @@ var Ports = React.createClass({
                 x={5}
                 y={3}
                 style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"10px", fontFamily: "Verdana"}}
+               fontSize:"8px", fontFamily: "Verdana"}}
           >
             {inportName}
           </text>
@@ -244,7 +244,7 @@ var Ports = React.createClass({
                 x={-5}
                 y={3}
                 style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"10px", fontFamily: "Verdana"}}
+               fontSize:"8px", fontFamily: "Verdana"}}
           >
             {outportName}
           </text>
@@ -258,17 +258,17 @@ var Ports = React.createClass({
     blockText.push([
       <text className="blockName" style={{MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}}
+        alignmentBaseline: 'middle', fontSize:"11px", fontFamily: "Verdana"}}
             transform="translate(36, 91)" >
-        {blockInfo.name}
+        {blockInfo.label}
       </text>,
 
-      <text className="blockText" style={{MozUserSelect: 'none',
-       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
-            transform="translate(36, 104)" >
-        {blockInfo.type}
-      </text>
+      //<text className="blockText" style={{MozUserSelect: 'none',
+      // cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+      //  alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+      //      transform="translate(36, 104)" >
+      //  {blockInfo.type}
+      //</text>
     ]);
 
     return (

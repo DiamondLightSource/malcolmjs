@@ -22,136 +22,136 @@ var _stuff = {
 
 var allBlockInfo = {
 
-  'Gate1': {
-    type: 'Gate',
-    label: 'Gate1',
-    name: "Arm",
-    //position: {
-    //  x: 50,
-    //  y: 100,
-    //},
-    inports: [
-      {
-        name: 'set',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'reset',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        type: 'boolean',
-        value: false,
-        connected: true,
-        connectedTo: [
-          {
-            block: 'TGen1',
-            port: 'ena'
-          }
-        ]
-      }
-    ]
-  },
-
-  'TGen1': {
-    type: 'TGen',
-    label: 'TGen1',
-    name: '',
-    //position: {
-    //  x: 250,
-    //  y: 10
-    //},
-    //inports: {
-    //  "ena": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "posn": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
-    inports: [
-      {
-        name: 'ena',
-        type: 'boolean',
-        value: false,
-        connected: true,
-        connectedTo: {
-          block: 'Gate1',
-          port: 'out'
-        }
-      }
-    ],
-    outports: [
-      {
-        name: 'posn',
-        type: 'int',
-        value: 1,
-        connected: false,
-        connectedTo:[]
-      }
-    ]
-  },
-  'PComp1': {
-    type: 'PComp',
-    label: 'PComp1',
-    name: "LinePulse",
-    //position: {
-    //  x: 350,
-    //  y: 150,
-    //},
-    inports: [
-      {
-        name: 'ena',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'posn',
-        type: 'int',
-        value: 1,
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'act',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      },
-      {
-        name: 'out',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      },
-      {
-        name: 'pulse',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      }
-    ]
-  },
+  //'Gate1': {
+  //  type: 'Gate',
+  //  label: 'Gate1',
+  //  name: "Arm",
+  //  //position: {
+  //  //  x: 50,
+  //  //  y: 100,
+  //  //},
+  //  inports: [
+  //    {
+  //      name: 'set',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      name: 'reset',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'out',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: true,
+  //      connectedTo: [
+  //        {
+  //          block: 'TGen1',
+  //          port: 'ena'
+  //        }
+  //      ]
+  //    }
+  //  ]
+  //},
+  //
+  //'TGen1': {
+  //  type: 'TGen',
+  //  label: 'TGen1',
+  //  name: '',
+  //  //position: {
+  //  //  x: 250,
+  //  //  y: 10
+  //  //},
+  //  //inports: {
+  //  //  "ena": {
+  //  //    connected: false,
+  //  //    connectedTo: null
+  //  //  }
+  //  //},
+  //  //outports: {
+  //  //  "posn": {
+  //  //    connected: false,
+  //  //    connectedTo: null
+  //  //  }
+  //  //}
+  //  inports: [
+  //    {
+  //      name: 'ena',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: true,
+  //      connectedTo: {
+  //        block: 'Gate1',
+  //        port: 'out'
+  //      }
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'posn',
+  //      type: 'int',
+  //      value: 1,
+  //      connected: false,
+  //      connectedTo:[]
+  //    }
+  //  ]
+  //},
+  //'PComp1': {
+  //  type: 'PComp',
+  //  label: 'PComp1',
+  //  name: "LinePulse",
+  //  //position: {
+  //  //  x: 350,
+  //  //  y: 150,
+  //  //},
+  //  inports: [
+  //    {
+  //      name: 'ena',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      name: 'posn',
+  //      type: 'int',
+  //      value: 1,
+  //      connected: false,
+  //      connectedTo: null
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'act',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    },
+  //    {
+  //      name: 'out',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    },
+  //    {
+  //      name: 'pulse',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    }
+  //  ]
+  //},
   //'7portblock': {
   //  type: '7port',
   //  label: '7port1',
@@ -829,7 +829,7 @@ function addBlock(blockId){
   var inports = [];
   var outports = [];
 
-  for(var attribute in testAllBlockInfo[blockId]){
+  for(var attribute in testAllBlockInfo[blockId].attributes){
     /* Rewriting for proper inport & outport filtering */
     //if(testAllBlockInfo[blockId][attribute].tags === undefined){
     //  /* Add that outport to the outports array */
@@ -861,45 +861,45 @@ function addBlock(blockId){
     //  }
     //}
 
-    console.log(testAllBlockInfo[blockId]);
+    console.log(testAllBlockInfo[blockId].attributes);
     console.log(attribute);
-    console.log(testAllBlockInfo[blockId][attribute]);
+    console.log(testAllBlockInfo[blockId].attributes[attribute]);
 
-    if(attribute === 'uptime'){
-      inports.push(
-        {
-          name: 'uptime',
-          type: testAllBlockInfo[blockId][attribute].type.name,
-          value: String(testAllBlockInfo[blockId][attribute].value),
-          connected: false,
-          connectedTo: null
-        }
-      )
-    }
+    //if(attribute === 'uptime'){
+    //  inports.push(
+    //    {
+    //      name: 'uptime',
+    //      type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+    //      value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+    //      connected: false,
+    //      connectedTo: null
+    //    }
+    //  )
+    //}
 
-    if(testAllBlockInfo[blockId][attribute].tags !== undefined) {
-      for (var i = 0; i < testAllBlockInfo[blockId][attribute].tags.length; i++) {
+    if(testAllBlockInfo[blockId].attributes[attribute].tags !== undefined) {
+      for (var i = 0; i < testAllBlockInfo[blockId].attributes[attribute].tags.length; i++) {
         var inportRegExp = /flowgraph:inport/;
         var outportRegExp = /flowgraph:outport/;
-        if (inportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+        if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var inportName = attribute;
           inports.push(
             {
               name: inportName,
-              type: testAllBlockInfo[blockId][attribute].type.name,
-              value: String(testAllBlockInfo[blockId][attribute].value),
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
               connected: false,
               connectedTo: null
             }
           )
         }
-        else if (outportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+        else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var outportName = attribute;
           outports.push(
             {
               name: outportName,
-              type: testAllBlockInfo[blockId][attribute].type.name,
-              value: String(testAllBlockInfo[blockId][attribute].value),
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
               connected: false,
               connectedTo: []
             }
@@ -910,12 +910,20 @@ function addBlock(blockId){
 
   }
 
+  var blockMethods = {};
+
+  for(var method in testAllBlockInfo[blockId].methods){
+    blockMethods[method] = testAllBlockInfo[blockId].methods[method]
+  }
+  console.log(blockMethods);
+
   allBlockInfo[blockId] = {
     type: blockType,
     label: blockId,
     name: '',
     inports: inports,
-    outports: outports
+    outports: outports,
+    methods: blockMethods
   };
 
 
@@ -923,6 +931,8 @@ function addBlock(blockId){
 
 function updateAttributeValue(blockId, attribute, newValue){
   console.log("update attribute value");
+
+  console.log(allBlockInfo);
 
   for(var i = 0; i < allBlockInfo[blockId].inports.length; i++){
     if(allBlockInfo[blockId].inports[i].name === attribute){
@@ -1242,7 +1252,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
           console.log(blockName);
-          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
 
           /* Add the block to allBlockInfo! */
 
@@ -1292,14 +1302,33 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
       var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-      updateAttributeValue(requestedData.blockName,
-        requestedData.attribute, responseMessage.value);
+      console.log(requestedData);
 
+      if(item.requestedData.attribute === 'X_COORD' ||
+        item.requestedData.attribute === 'Y_COORD'){
+
+      }
+      else {
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
+
+      }
       blockStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      console.log("malcolmCallSuccess");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+      console.log("malcolmCallFailure");
       blockStore.emitChange();
       break;
 

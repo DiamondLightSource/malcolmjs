@@ -192,9 +192,6 @@ var MainPane = React.createClass({
             <div id="buttonContainer">
               <FavButton favTabOpen={this.handleActionFavTabOpen}/>
               <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
-              <svg  width="100" height="100" ><rect x="10" y="15"
-                onClick={this.addBlockInfo}
-                height="50" width="50" /></svg>
             </div>
           </div>
           </Footer>
@@ -219,6 +216,10 @@ var MainPane = React.createClass({
 });
 
 module.exports = MainPane;
+
+//<svg  width="100" height="100" ><rect x="10" y="15"
+//                                      onClick={this.addBlockInfo}
+//                                      height="50" width="50" /></svg>
 
 //handleActionChangeRedBlockState: function(){
 //  sidePaneActions.redBlockStateChange("this is the item")

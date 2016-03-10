@@ -978,6 +978,7 @@ var FlowChart = React.createClass({
                deselect={this.deselect}
                blockStyling={this.props.blockStyling}
                blockPosition={this.props.blockPositions[block]}
+               graphZoomScale={this.props.graphZoomScale}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );

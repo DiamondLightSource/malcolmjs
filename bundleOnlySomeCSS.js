@@ -274,28 +274,30 @@ var MalcolmActionCreators = {
     if(requestedData === 'Z'){
       testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
-        for(var i = 0; i < 2; i++){
-          //window.alert("ifhoief");
-          /* Doing window.alert doesn't cause an InvariantViolation error like it does
-          in the store with this method, unlike the other one with actions being created during the
-          consumption of others in the store?
-           */
+        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
+          if(responseMessage.attributes.blocks.value[i].indexOf('6') !== -1 ||
+            responseMessage.attributes.blocks.value[i].indexOf("CLOCKS") !== -1) {
+            //window.alert("ifhoief");
+            /* Doing window.alert doesn't cause an InvariantViolation error like it does
+             in the store with this method, unlike the other one with actions being created during the
+             consumption of others in the store?
+             */
 
-          /* Now, for each block I want to do a 'get' and pass the block
-          object to the GUI. I ALSO want to do a subscribe on each of the
-          attributes in a block.
-          I only want to fetch each block once, so don't put the block get
-          inside the attribute subscribe loop!
-           */
+            /* Now, for each block I want to do a 'get' and pass the block
+             object to the GUI. I ALSO want to do a subscribe on each of the
+             attributes in a block.
+             I only want to fetch each block once, so don't put the block get
+             inside the attribute subscribe loop!
+             */
 
-          var block = responseMessage.attributes.blocks.value[i];
-          MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+            var block = responseMessage.attributes.blocks.value[i];
+            MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
 
-          testBlockAttributeSubscribe = function(blockResponseObject){
-            console.log(blockResponseObject.attributes);
-            for(var attribute in blockResponseObject.attributes) {
+            testBlockAttributeSubscribe = function (blockResponseObject) {
+              console.log(blockResponseObject.attributes);
+              for (var attribute in blockResponseObject.attributes) {
 
-              //if (attribute !== 'uptime') {
+                if (attribute !== 'uptime') {
                 console.log(blockResponseObject);
                 console.log(attribute);
                 console.log(blockResponseObject.attributes[attribute].value);
@@ -306,17 +308,21 @@ var MalcolmActionCreators = {
                 var blockName = blockResponseObject.attributes.BLOCKNAME.value;
                 //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
                 actionCreators.malcolmSubscribe(blockName, attribute);
-              //}
-            }
-          };
+                }
+              }
+            };
 
-          MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
-          //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
+            /* Comment out the subscribe while I'm testing server write for
+             block position
+             */
+            MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
+            //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
 
-          /* Also need to subscribe channels for each attribute in
-          a block, pass another loop as a callback to this? =P
-           */
+            /* Also need to subscribe channels for each attribute in
+             a block, pass another loop as a callback to this? =P
+             */
+          }
         }
       };
 
@@ -366,6 +372,46 @@ var MalcolmActionCreators = {
     var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
 
     MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+
+  },
+
+  malcolmCall: function(blockName, method, args){
+
+    function malcolmCallSuccess(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_SUCCESS,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    function malcolmCallFailure(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_FAILURE,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    /* AT this point I don't really know the syntax of the write request,
+    so this will likely be wrong and should be changed accordingly
+     */
+    var requestedDataToWritePath = "Z:" + blockName;
+
+    MalcolmUtils.malcolmCall(requestedDataToWritePath,
+      method, args, malcolmCallSuccess, malcolmCallFailure);
 
   }
 
@@ -1232,6 +1278,8 @@ var appConstants = {
   MALCOLM_GET_FAILURE: 'MALCOLM_GET_FAILURE',
   MALCOLM_SUBSCRIBE_SUCCESS: 'MALCOLM_SUBSCRIBE_SUCCESS',
   MALCOLM_SUBSCRIBE_FAILURE: 'MALCOLM_SUBSCRIBE_FAILURE',
+  MALCOLM_CALL_SUCCESS: 'MALCOLM_CALL_SUCCESS',
+  MALCOLM_CALL_FAILURE: 'MALCOLM_CALL_FAILURE',
 
   /* Constants from flowChart added here */
 
@@ -1766,136 +1814,136 @@ var _stuff = {
 
 var allBlockInfo = {
 
-  'Gate1': {
-    type: 'Gate',
-    label: 'Gate1',
-    name: "Arm",
-    //position: {
-    //  x: 50,
-    //  y: 100,
-    //},
-    inports: [
-      {
-        name: 'set',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'reset',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'out',
-        type: 'boolean',
-        value: false,
-        connected: true,
-        connectedTo: [
-          {
-            block: 'TGen1',
-            port: 'ena'
-          }
-        ]
-      }
-    ]
-  },
-
-  'TGen1': {
-    type: 'TGen',
-    label: 'TGen1',
-    name: '',
-    //position: {
-    //  x: 250,
-    //  y: 10
-    //},
-    //inports: {
-    //  "ena": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //},
-    //outports: {
-    //  "posn": {
-    //    connected: false,
-    //    connectedTo: null
-    //  }
-    //}
-    inports: [
-      {
-        name: 'ena',
-        type: 'boolean',
-        value: false,
-        connected: true,
-        connectedTo: {
-          block: 'Gate1',
-          port: 'out'
-        }
-      }
-    ],
-    outports: [
-      {
-        name: 'posn',
-        type: 'int',
-        value: 1,
-        connected: false,
-        connectedTo:[]
-      }
-    ]
-  },
-  'PComp1': {
-    type: 'PComp',
-    label: 'PComp1',
-    name: "LinePulse",
-    //position: {
-    //  x: 350,
-    //  y: 150,
-    //},
-    inports: [
-      {
-        name: 'ena',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: null
-      },
-      {
-        name: 'posn',
-        type: 'int',
-        value: 1,
-        connected: false,
-        connectedTo: null
-      }
-    ],
-    outports: [
-      {
-        name: 'act',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      },
-      {
-        name: 'out',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      },
-      {
-        name: 'pulse',
-        type: 'boolean',
-        value: false,
-        connected: false,
-        connectedTo: []
-      }
-    ]
-  },
+  //'Gate1': {
+  //  type: 'Gate',
+  //  label: 'Gate1',
+  //  name: "Arm",
+  //  //position: {
+  //  //  x: 50,
+  //  //  y: 100,
+  //  //},
+  //  inports: [
+  //    {
+  //      name: 'set',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      name: 'reset',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'out',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: true,
+  //      connectedTo: [
+  //        {
+  //          block: 'TGen1',
+  //          port: 'ena'
+  //        }
+  //      ]
+  //    }
+  //  ]
+  //},
+  //
+  //'TGen1': {
+  //  type: 'TGen',
+  //  label: 'TGen1',
+  //  name: '',
+  //  //position: {
+  //  //  x: 250,
+  //  //  y: 10
+  //  //},
+  //  //inports: {
+  //  //  "ena": {
+  //  //    connected: false,
+  //  //    connectedTo: null
+  //  //  }
+  //  //},
+  //  //outports: {
+  //  //  "posn": {
+  //  //    connected: false,
+  //  //    connectedTo: null
+  //  //  }
+  //  //}
+  //  inports: [
+  //    {
+  //      name: 'ena',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: true,
+  //      connectedTo: {
+  //        block: 'Gate1',
+  //        port: 'out'
+  //      }
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'posn',
+  //      type: 'int',
+  //      value: 1,
+  //      connected: false,
+  //      connectedTo:[]
+  //    }
+  //  ]
+  //},
+  //'PComp1': {
+  //  type: 'PComp',
+  //  label: 'PComp1',
+  //  name: "LinePulse",
+  //  //position: {
+  //  //  x: 350,
+  //  //  y: 150,
+  //  //},
+  //  inports: [
+  //    {
+  //      name: 'ena',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: null
+  //    },
+  //    {
+  //      name: 'posn',
+  //      type: 'int',
+  //      value: 1,
+  //      connected: false,
+  //      connectedTo: null
+  //    }
+  //  ],
+  //  outports: [
+  //    {
+  //      name: 'act',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    },
+  //    {
+  //      name: 'out',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    },
+  //    {
+  //      name: 'pulse',
+  //      type: 'boolean',
+  //      value: false,
+  //      connected: false,
+  //      connectedTo: []
+  //    }
+  //  ]
+  //},
   //'7portblock': {
   //  type: '7port',
   //  label: '7port1',
@@ -2573,7 +2621,7 @@ function addBlock(blockId){
   var inports = [];
   var outports = [];
 
-  for(var attribute in testAllBlockInfo[blockId]){
+  for(var attribute in testAllBlockInfo[blockId].attributes){
     /* Rewriting for proper inport & outport filtering */
     //if(testAllBlockInfo[blockId][attribute].tags === undefined){
     //  /* Add that outport to the outports array */
@@ -2605,45 +2653,45 @@ function addBlock(blockId){
     //  }
     //}
 
-    console.log(testAllBlockInfo[blockId]);
+    console.log(testAllBlockInfo[blockId].attributes);
     console.log(attribute);
-    console.log(testAllBlockInfo[blockId][attribute]);
+    console.log(testAllBlockInfo[blockId].attributes[attribute]);
 
-    if(attribute === 'uptime'){
-      inports.push(
-        {
-          name: 'uptime',
-          type: testAllBlockInfo[blockId][attribute].type.name,
-          value: String(testAllBlockInfo[blockId][attribute].value),
-          connected: false,
-          connectedTo: null
-        }
-      )
-    }
+    //if(attribute === 'uptime'){
+    //  inports.push(
+    //    {
+    //      name: 'uptime',
+    //      type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+    //      value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+    //      connected: false,
+    //      connectedTo: null
+    //    }
+    //  )
+    //}
 
-    if(testAllBlockInfo[blockId][attribute].tags !== undefined) {
-      for (var i = 0; i < testAllBlockInfo[blockId][attribute].tags.length; i++) {
+    if(testAllBlockInfo[blockId].attributes[attribute].tags !== undefined) {
+      for (var i = 0; i < testAllBlockInfo[blockId].attributes[attribute].tags.length; i++) {
         var inportRegExp = /flowgraph:inport/;
         var outportRegExp = /flowgraph:outport/;
-        if (inportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+        if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var inportName = attribute;
           inports.push(
             {
               name: inportName,
-              type: testAllBlockInfo[blockId][attribute].type.name,
-              value: String(testAllBlockInfo[blockId][attribute].value),
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
               connected: false,
               connectedTo: null
             }
           )
         }
-        else if (outportRegExp.test(testAllBlockInfo[blockId][attribute].tags[i]) === true) {
+        else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var outportName = attribute;
           outports.push(
             {
               name: outportName,
-              type: testAllBlockInfo[blockId][attribute].type.name,
-              value: String(testAllBlockInfo[blockId][attribute].value),
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
               connected: false,
               connectedTo: []
             }
@@ -2654,12 +2702,20 @@ function addBlock(blockId){
 
   }
 
+  var blockMethods = {};
+
+  for(var method in testAllBlockInfo[blockId].methods){
+    blockMethods[method] = testAllBlockInfo[blockId].methods[method]
+  }
+  console.log(blockMethods);
+
   allBlockInfo[blockId] = {
     type: blockType,
     label: blockId,
     name: '',
     inports: inports,
-    outports: outports
+    outports: outports,
+    methods: blockMethods
   };
 
 
@@ -2667,6 +2723,8 @@ function addBlock(blockId){
 
 function updateAttributeValue(blockId, attribute, newValue){
   console.log("update attribute value");
+
+  console.log(allBlockInfo);
 
   for(var i = 0; i < allBlockInfo[blockId].inports.length; i++){
     if(allBlockInfo[blockId].inports[i].name === attribute){
@@ -2986,7 +3044,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
           console.log(blockName);
-          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
 
           /* Add the block to allBlockInfo! */
 
@@ -3036,14 +3094,33 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
       var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-      updateAttributeValue(requestedData.blockName,
-        requestedData.attribute, responseMessage.value);
+      console.log(requestedData);
 
+      if(item.requestedData.attribute === 'X_COORD' ||
+        item.requestedData.attribute === 'Y_COORD'){
+
+      }
+      else {
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
+
+      }
       blockStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      console.log("malcolmCallSuccess");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+      console.log("malcolmCallFailure");
       blockStore.emitChange();
       break;
 
@@ -4469,6 +4546,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.INTERACTJS_DRAG:
       interactJsDrag(item);
+      console.log(blockPositions[item.target]);
       flowChartStore.emitChange();
       break;
 
@@ -4614,6 +4692,34 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
       flowChartStore.emitChange();
       break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("item");
+      if(item.requestedData.attribute === 'X_COORD' ||
+        item.requestedData.attribute === 'Y_COORD'){
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        if(item.requestedData.attribute === 'X_COORD'){
+          blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+        }
+        else if(item.requestedData.attribute === 'Y_COORD'){
+          blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
+        }
+
+        //blockPositions[requestedData.blockName] = {
+        //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
+        //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
+        //}
+
+      }
+      //console.log("nnnnnnnnnnnnnnnnnnnnnnnnnn");
+      //console.log(requestedData);
+      //console.log(blockPositions[requestedData.blockName]);
+      flowChartStore.emitChange();
+      break;
+
 
 
     default:
@@ -6175,6 +6281,25 @@ var MalcolmUtils = {
     });
 
     WebSocketClient.sendText(message);
+  },
+
+  malcolmCall: function(requestedDataToWrite, method, args, successCallback, failureCallback){
+    var id = WebSocketClient.getNextAvailableId();
+    WebSocketClient.incrementId();
+    var message = JSON.stringify({
+      type: 'Call',
+      id: id,
+      endpoint: requestedDataToWrite,
+      method: method,
+      arguments: args
+    });
+
+    idLookupTableFunctions.addIdCallbacks(id, {
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    });
+
+    WebSocketClient.sendText(message);
   }
 
 };
@@ -6316,6 +6441,7 @@ var interact = require('../../node_modules/interact.js');
 
 var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var Block = React.createClass({displayName: "Block",
 
@@ -6542,25 +6668,25 @@ var Block = React.createClass({displayName: "Block",
     this.handleInteractJsDrag(deltaMovement);
 
     /* For debouncing */
-    //if(this.startDrag === null || this.startDrag === undefined){
-    //  this.startDrag = {
-    //    x: 0,
-    //    y: 0
-    //  };
-    //}
-    //
-    //this.startDrag.x += e.dx;
-    //this.startDrag.y += e.dy;
-    //
-    //
-    //var deltaMovement = {
-    //  target: target,
-    //  x: this.startDrag.x,
-    //  y: this.startDrag.y
-    //};
-    //
-    //clearTimeout(this.timer);
-    //this.interactJsDragDebounce(deltaMovement);
+    if(this.startDrag === null || this.startDrag === undefined){
+      this.startDrag = {
+        x: 0,
+        y: 0
+      };
+    }
+
+    this.startDrag.x += e.dx;
+    this.startDrag.y += e.dy;
+
+
+    var deltaMovementDebounce = {
+      target: target,
+      x: this.startDrag.x,
+      y: this.startDrag.y
+    };
+
+    clearTimeout(this.timer);
+    this.interactJsDragDebounce(deltaMovementDebounce);
 
 
 
@@ -6589,7 +6715,17 @@ var Block = React.createClass({displayName: "Block",
     //console.log("debouncing");
     this.timer = setTimeout(function(){
       //console.log("inside setTimeout");
-      this.handleInteractJsDrag(dragMovement)}.bind(this), 500
+      console.log("testing drag debounce for server write request");
+      console.log(this.props.blockPosition);
+      //this.handleInteractJsDrag(dragMovement)
+      MalcolmActionCreators.malcolmCall(
+        this.props.id, this.props.blockInfo.methods._set_coords.name, {
+          X_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.x * this.props.graphZoomScale)),
+          Y_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.y * this.props.graphZoomScale))
+        }
+      );
+      console.log(dragMovement.target);
+    }.bind(this), 500
     );
   },
 
@@ -6628,7 +6764,7 @@ var Block = React.createClass({displayName: "Block",
   render: function(){
     console.log("render: block");
     console.log(this.props.id);
-    //console.log(this.props);
+    console.log(this.props.blockInfo);
 
     var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 
@@ -6750,7 +6886,7 @@ module.exports = Block;
 //  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 ///>
 
-},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/lib/ReactDefaultPerf.js":105,"../../node_modules/react/react":225,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":15,"./blockRectangle":25,"./ports.js":35}],25:[function(require,module,exports){
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/lib/ReactDefaultPerf.js":105,"../../node_modules/react/react":225,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":15,"./blockRectangle":25,"./ports.js":35}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -8657,7 +8793,8 @@ var FlowChart = React.createClass({displayName: "FlowChart",
                selected: flowChartStore.getAnyBlockSelectedState(block), 
                deselect: this.deselect, 
                blockStyling: this.props.blockStyling, 
-               blockPosition: this.props.blockPositions[block]}
+               blockPosition: this.props.blockPositions[block], 
+               graphZoomScale: this.props.graphZoomScale}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         )
       );
@@ -9958,10 +10095,7 @@ var MainPane = React.createClass({displayName: "MainPane",
           React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
             React.createElement("div", {id: "buttonContainer"}, 
               React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
-              React.createElement("svg", {width: "100", height: "100"}, React.createElement("rect", {x: "10", y: "15", 
-                onClick: this.addBlockInfo, 
-                height: "50", width: "50"}))
+              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
             )
           )
           )
@@ -9986,6 +10120,10 @@ var MainPane = React.createClass({displayName: "MainPane",
 });
 
 module.exports = MainPane;
+
+//<svg  width="100" height="100" ><rect x="10" y="15"
+//                                      onClick={this.addBlockInfo}
+//                                      height="50" width="50" /></svg>
 
 //handleActionChangeRedBlockState: function(){
 //  sidePaneActions.redBlockStateChange("this is the item")
@@ -10448,7 +10586,7 @@ var Ports = React.createClass({displayName: "Ports",
                 x: 5, 
                 y: 3, 
                 style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"10px", fontFamily: "Verdana"}
+               fontSize:"8px", fontFamily: "Verdana"}
           }, 
             inportName
           )
@@ -10489,7 +10627,7 @@ var Ports = React.createClass({displayName: "Ports",
                 x: -5, 
                 y: 3, 
                 style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"10px", fontFamily: "Verdana"}
+               fontSize:"8px", fontFamily: "Verdana"}
           }, 
             outportName
           )
@@ -10503,17 +10641,17 @@ var Ports = React.createClass({displayName: "Ports",
     blockText.push([
       React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize:"15px", fontFamily: "Verdana"}, 
+        alignmentBaseline: 'middle', fontSize:"11px", fontFamily: "Verdana"}, 
             transform: "translate(36, 91)"}, 
-        blockInfo.name
+        blockInfo.label
       ),
 
-      React.createElement("text", {className: "blockText", style: {MozUserSelect: 'none',
-       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}, 
-            transform: "translate(36, 104)"}, 
-        blockInfo.type
-      )
+      //<text className="blockText" style={{MozUserSelect: 'none',
+      // cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+      //  alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+      //      transform="translate(36, 104)" >
+      //  {blockInfo.type}
+      //</text>
     ]);
 
     return (

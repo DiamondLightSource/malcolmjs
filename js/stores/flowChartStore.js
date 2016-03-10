@@ -303,6 +303,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.INTERACTJS_DRAG:
       interactJsDrag(item);
+      console.log(blockPositions[item.target]);
       flowChartStore.emitChange();
       break;
 
@@ -448,6 +449,34 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
       flowChartStore.emitChange();
       break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("item");
+      if(item.requestedData.attribute === 'X_COORD' ||
+        item.requestedData.attribute === 'Y_COORD'){
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        if(item.requestedData.attribute === 'X_COORD'){
+          blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+        }
+        else if(item.requestedData.attribute === 'Y_COORD'){
+          blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
+        }
+
+        //blockPositions[requestedData.blockName] = {
+        //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
+        //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
+        //}
+
+      }
+      //console.log("nnnnnnnnnnnnnnnnnnnnnnnnnn");
+      //console.log(requestedData);
+      //console.log(blockPositions[requestedData.blockName]);
+      flowChartStore.emitChange();
+      break;
+
 
 
     default:

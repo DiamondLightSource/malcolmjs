@@ -87,6 +87,25 @@ var MalcolmUtils = {
     });
 
     WebSocketClient.sendText(message);
+  },
+
+  malcolmCall: function(requestedDataToWrite, method, args, successCallback, failureCallback){
+    var id = WebSocketClient.getNextAvailableId();
+    WebSocketClient.incrementId();
+    var message = JSON.stringify({
+      type: 'Call',
+      id: id,
+      endpoint: requestedDataToWrite,
+      method: method,
+      arguments: args
+    });
+
+    idLookupTableFunctions.addIdCallbacks(id, {
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    });
+
+    WebSocketClient.sendText(message);
   }
 
 };

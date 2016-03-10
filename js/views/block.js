@@ -16,6 +16,7 @@ var interact = require('../../node_modules/interact.js');
 
 var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var Block = React.createClass({
 
@@ -242,25 +243,25 @@ var Block = React.createClass({
     this.handleInteractJsDrag(deltaMovement);
 
     /* For debouncing */
-    //if(this.startDrag === null || this.startDrag === undefined){
-    //  this.startDrag = {
-    //    x: 0,
-    //    y: 0
-    //  };
-    //}
-    //
-    //this.startDrag.x += e.dx;
-    //this.startDrag.y += e.dy;
-    //
-    //
-    //var deltaMovement = {
-    //  target: target,
-    //  x: this.startDrag.x,
-    //  y: this.startDrag.y
-    //};
-    //
-    //clearTimeout(this.timer);
-    //this.interactJsDragDebounce(deltaMovement);
+    if(this.startDrag === null || this.startDrag === undefined){
+      this.startDrag = {
+        x: 0,
+        y: 0
+      };
+    }
+
+    this.startDrag.x += e.dx;
+    this.startDrag.y += e.dy;
+
+
+    var deltaMovementDebounce = {
+      target: target,
+      x: this.startDrag.x,
+      y: this.startDrag.y
+    };
+
+    clearTimeout(this.timer);
+    this.interactJsDragDebounce(deltaMovementDebounce);
 
 
 
@@ -289,7 +290,17 @@ var Block = React.createClass({
     //console.log("debouncing");
     this.timer = setTimeout(function(){
       //console.log("inside setTimeout");
-      this.handleInteractJsDrag(dragMovement)}.bind(this), 500
+      console.log("testing drag debounce for server write request");
+      console.log(this.props.blockPosition);
+      //this.handleInteractJsDrag(dragMovement)
+      MalcolmActionCreators.malcolmCall(
+        this.props.id, this.props.blockInfo.methods._set_coords.name, {
+          X_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.x * this.props.graphZoomScale)),
+          Y_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.y * this.props.graphZoomScale))
+        }
+      );
+      console.log(dragMovement.target);
+    }.bind(this), 500
     );
   },
 
@@ -328,7 +339,7 @@ var Block = React.createClass({
   render: function(){
     console.log("render: block");
     console.log(this.props.id);
-    //console.log(this.props);
+    console.log(this.props.blockInfo);
 
     var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 
