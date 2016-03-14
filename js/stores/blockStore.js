@@ -1284,43 +1284,43 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("malcolmSubscribeSuccess");
-
-      /* First extract the block that the updated attribute
-      value belongs to
-      UPDATE: uneeded now that I move the malcolm request message
-      string creation to the action creator
-       */
-      //var sliceEndIndex = item.requestedData.indexOf('.');
-      //console.log(sliceEndIndex);
-      //var blockId = item.requestedData.slice(2, sliceEndIndex);
-      //console.log(blockId);
-      //var blockIdStringLength = blockId.length;
-      //console.log(blockIdStringLength);
-
-      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
-
-      console.log(requestedData);
-
-      if(item.requestedData.attribute === 'X_COORD' ||
-        item.requestedData.attribute === 'Y_COORD'){
-
-      }
-      else {
-
-        updateAttributeValue(requestedData.blockName,
-          requestedData.attribute, responseMessage.value);
-
-      }
-      blockStore.emitChange();
-      break;
-
-    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
-      console.log("malcolmSubscribeFailure");
-      blockStore.emitChange();
-      break;
+    //case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+    //  console.log("malcolmSubscribeSuccess");
+    //
+    //  /* First extract the block that the updated attribute
+    //  value belongs to
+    //  UPDATE: uneeded now that I move the malcolm request message
+    //  string creation to the action creator
+    //   */
+    //  //var sliceEndIndex = item.requestedData.indexOf('.');
+    //  //console.log(sliceEndIndex);
+    //  //var blockId = item.requestedData.slice(2, sliceEndIndex);
+    //  //console.log(blockId);
+    //  //var blockIdStringLength = blockId.length;
+    //  //console.log(blockIdStringLength);
+    //
+    //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+    //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+    //
+    //  console.log(requestedData);
+    //
+    //  if(item.requestedData.attribute === 'X_COORD' ||
+    //    item.requestedData.attribute === 'Y_COORD'){
+    //
+    //  }
+    //  else {
+    //
+    //    updateAttributeValue(requestedData.blockName,
+    //      requestedData.attribute, responseMessage.value);
+    //
+    //  }
+    //  blockStore.emitChange();
+    //  break;
+    //
+    //case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+    //  console.log("malcolmSubscribeFailure");
+    //  blockStore.emitChange();
+    //  break;
 
     case appConstants.MALCOLM_CALL_SUCCESS:
       console.log("malcolmCallSuccess");

@@ -25,6 +25,8 @@ var interact = require('../../node_modules/interact.js');
 
 var blockActions = require('../actions/blockActions.js');
 
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
 var CustomButton = require('./button');
 
 function getSidePaneState(){
@@ -65,7 +67,8 @@ var SidePane = React.createClass({
       nextProps.tabState !== this.props.tabState ||
       nextProps.allBlockInfo !== this.props.allBlockInfo ||
       nextProps.favContent !== this.props.favContent ||
-      nextProps.configContent !== this.props.configContent
+      nextProps.configContent !== this.props.configContent ||
+      nextProps.allBlockAttributes !== this.props.allBlockAttributes
       //nextProps.blockPositions !== this.props.blockPositions
     )
   },
@@ -110,6 +113,10 @@ var SidePane = React.createClass({
     toBlockPortElement.style.fill = "grey";
   },
 
+  handleAttributeValueSubmit: function(blockName, method, args){
+    MalcolmActionCreators(blockName, method, args);
+  },
+
   componentDidMount: function(){
     //sidePaneStore.addChangeListener(this._onChange);
     //paneStore.addChangeListener(this._onChange);
@@ -129,6 +136,196 @@ var SidePane = React.createClass({
   componentWillUnmount: function(){
     //sidePaneStore.removeChangeListener(this._onChange);
     //paneStore.removeChangeListener(this._onChange);
+  },
+
+  selectedInputFieldText: function(inputFieldElementName, e){
+
+    var inputFieldElement = document.getElementById(inputFieldElementName);
+    inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
+
+  },
+
+  attributeFieldOnChange: function(blockInfo, e){
+    console.log("field changed, wait for the enter key?");
+    console.log(e);
+    console.log(blockInfo);
+
+    var blockAttributeInputField = document.getElementById(blockInfo.block + blockInfo.attribute + "inputField");
+
+    console.log(blockAttributeInputField);
+
+    var appContainerElement = document.getElementById('appContainer');
+    console.log(appContainerElement);
+
+    document.addEventListener('keyup', this.enterKeyUp.bind(null, blockInfo, blockAttributeInputField));
+    appContainerElement.addEventListener('mouseup', this.mouseUp.bind(null, blockInfo, blockAttributeInputField));
+
+  },
+
+  //enterKeyDown: function(blockInfo, inputFieldElement,e){
+  //  console.log(blockInfo);
+  //  console.log(inputFieldElement);
+  //  console.log(e);
+  //
+  //  //document.removeEventListener('onkeydown', this.enterKeyPress);
+  //
+  //  if(e.keyCode == 13){
+  //    var inputFieldValue = inputFieldElement.value;
+  //    console.log(inputFieldValue);
+  //
+  //    /* Now i need to pass malcolmCall the corresponding
+  //    method and arguments
+  //     */
+  //
+  //    var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+  //    var argsObject = {
+  //
+  //    };
+  //
+  //    for(var key in blockInfo){
+  //      if(blockInfo[key] === blockInfo.attribute){
+  //        argsObject[blockInfo.attribute] = inputFieldValue;
+  //      }
+  //    }
+  //
+  //    console.log(argsObject);
+  //
+  //    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+  //
+  //    document.removeEventListener('keydown', this.enterKeyDown);
+  //
+  //  }
+  //
+  //},
+
+  enterKeyUp: function(blockInfo, inputFieldElement, e){
+
+    /* Just put it all in keyup, that way I don't
+    have to deal with if the user holds the key down
+    and the GUI ends up firing off lots of keydown/call method
+    events
+     */
+
+    if(e.keyCode == 13) {
+
+      var inputFieldValue;
+
+      if(inputFieldElement.value === ""){
+        /* Set the value to 0, then send that to
+        malcolmCall
+         */
+
+        inputFieldElement.value = "0";
+        /* Had to use dot notation to set value, rather
+        than setAttribute
+         */
+
+        inputFieldValue = "0";
+
+      }
+      else{
+        //window.alert(inputFieldElement.value);
+        inputFieldValue = inputFieldElement.value;
+      }
+
+      /* Now i need to pass malcolmCall the corresponding
+       method and arguments
+       */
+
+      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+      var argsObject = {
+
+      };
+
+      for(var key in blockInfo){
+        if(blockInfo[key] === blockInfo.attribute){
+          argsObject[blockInfo.attribute] = inputFieldValue;
+        }
+      }
+
+      console.log(argsObject);
+
+      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+      //document.removeEventListener('keydown', this.enterKeyDown);
+
+      var appContainerElement = document.getElementById('appContainer');
+
+      inputFieldElement.blur();
+      document.removeEventListener('keyup', this.enterKeyUp);
+      appContainerElement.removeEventListener('mouseup', this.mouseUp);
+
+    }
+  },
+
+  mouseUp: function(blockInfo, inputFieldElement,e){
+
+    /* e.target can tell what exactly you clicked on,
+    so use it to check the id!
+     */
+
+    if(e.target.id !== inputFieldElement.id) {
+
+      var inputFieldValue;
+
+      if(inputFieldElement.value === ""){
+        /* Set the value to 0, then send that to
+         malcolmCall
+         */
+
+        inputFieldElement.value = "0";
+        /* Had to use dot notation to set value, rather
+         than setAttribute
+         */
+
+        inputFieldValue = "0";
+
+      }
+      else{
+        //window.alert(inputFieldElement.value);
+        inputFieldValue = inputFieldElement.value;
+      }
+
+      /* Now I need to pass malcolmCall the corresponding
+       method and arguments
+       */
+
+      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+      var argsObject = {};
+
+      for (var key in blockInfo) {
+        if (blockInfo[key] === blockInfo.attribute) {
+          argsObject[blockInfo.attribute] = inputFieldValue;
+        }
+      }
+
+      console.log(argsObject);
+
+      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+      var appContainerElement = document.getElementById('appContainer');
+
+      inputFieldElement.blur();
+      appContainerElement.removeEventListener('mouseup', this.mouseUp);
+      document.removeEventListener('keyup', this.enterKeyUp);
+    }
+    else if(e.target === inputFieldElement.id){
+      console.log("clicked on the field again, so don't submit it!");
+    }
+
+  },
+
+  //enterKeyPress: function(e){
+  //  if(e.keyCode == 13) {
+  //
+  //    window.alert("keypress!");
+  //
+  //  }
+  //},
+
+  handleMalcolmCall: function(blockName, method, args){
+    console.log("malcolmCall in sidePane");
+    MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
 
@@ -166,165 +363,259 @@ var SidePane = React.createClass({
 
           var tabLabel = block.label;
 
-
           tabContent.push(
             <button key={tabLabel + "edgeDeleteButton"} onClick={this.handleEdgeDeleteButton.bind(null, block)}
             >Delete edge</button>
           );
-
-          /* Trying out my refactored button, doesn't handle different text lengths at all =P */
-          //tabContent.push(
-          //  <CustomButton key={block.label + "edgeDeleteButton"}
-          //                buttonClick={this.handleEdgeDeleteButton.bind(null, block)}
-          //                buttonLabel="Delete edge"
-          //                buttonId={block.label + "edgeDeleteButton"}
-          //  />
-          //);
-
-          console.log(block);
-          console.log(document.getElementById(tabLabel));
-
-          /* onClick, run the edge delete blockAction */
-
-          /* Don't want any content here, just a 'delete edge' button */
         }
         else {
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          var inportDivs = [];
-          var outportDivs = [];
+          /* Shall replace the inports & outports treeviews with
+          the attributes and their values (the attributes will
+          be a treeview at some point too)
+           */
 
-          for (var j = 0; j < this.props.allBlockInfo[block].inports.length; j++) {
-                console.log(this.props.allBlockInfo[block]);
-                console.log(this.props.allBlockInfo[block].inports[j]);
+          /* Need to check if it's a readout or an
+           editable field
+           */
 
-            /* For getting the tree label to expand/collapse the treeview too */
-            var interactJsIdString = "#" + this.props.allBlockInfo[block].inports[j].name + "textContent";
+          var blockAttributesDivs = [];
 
-            inportDivs.push(
-              <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
-                <p key={this.props.allBlockInfo[block].inports[j].name + "textContent"}
-                   id={this.props.allBlockInfo[block].inports[j].name + "textContent"}
-                   style={{fontSize: '14px', position: 'relative', top: '5px'}} >
-                  {String(this.props.allBlockInfo[block].inports[j].name).toUpperCase()}
-                </p>
-                <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
-                  <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-                  <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-                         value={String(this.props.allBlockInfo[block].inports[j].value)}
-                         readOnly="readonly" maxLength="10" size="10" />
-                </div>
+          /* Each attribute needs a treeview, so I need
+          to put each attribute div inside a treeview tag?
+          Then I push that treeview into blockAttributeDivs,
+          which in turn gets pushed into tabContent at the very
+          end of the loop
+           */
 
-              </div>
-            );
+          for(var attribute in this.props.allBlockAttributes[block]){
+
+            var attributeDiv = [];
+
+            console.log(this.props.allBlockAttributes);
+            console.log(attribute);
+            console.log(this.props.allBlockAttributes[block][attribute]);
+            if(this.props.allBlockAttributes[block][attribute].tags !== undefined) {
+
+
+              for (var k = 0; k < this.props.allBlockAttributes[block][attribute].tags.length; k++) {
+                if (this.props.allBlockAttributes[block][attribute].tags[k].indexOf('method') !== -1) {
+                  /* Then we have a method, so need to include more stuff here */
+
+                  blockAttributesDivs.push(
+                    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                         style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+                        {String(attribute)}
+                      </p>
+                      <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                        <button style={{position: 'relative', left: '160px',}}>Icon</button>
+                        <input id={block + attribute + "inputField"}
+                          style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                          //contentEditable:"true"
+                          }}
+                          defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
+                          onChange={this.attributeFieldOnChange.bind(null, {
+                          block: block,
+                          attribute: attribute
+                          })}
+                          onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
+                          maxLength="10" size="10"/>
+                      </div>
+                    </div>
+                  );
+
+                }
+                else {
+                  /* It's simply a readout field, so nothing special is
+                   required here
+                   */
+
+                  console.log(this.props.allBlockAttributes[block][attribute].value);
+
+                  blockAttributesDivs.push(
+                    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                         style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+                        {String(attribute)}
+                      </p>
+                      <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                        <button style={{position: 'relative', left: '160px',}}>Icon</button>
+                        <input
+                          style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+                          value={String(this.props.allBlockAttributes[block][attribute].value)}
+                          readOnly="readonly" maxLength="10" size="10"/>
+                      </div>
+                    </div>
+                  );
+
+                }
+              }
+            }
+
+            //blockAttributesDivs.push(
+            //  <Treeview key={block + attribute + "treeview"}
+            //            nodeLabel={attribute}
+            //            defaultCollapsed={false}
+            //  >
+            //    {attributeDiv}
+            //  </Treeview>
+            //);
+
           }
 
-          tabContent.push(
-            <Treeview key={"InportsTreeview"}
-                      nodeLabel={<b>Inports</b>}
-                      defaultCollapsed={false}
-            >{inportDivs}
-            </Treeview>
-          );
+          tabContent.push(blockAttributesDivs);
 
-          /* Don't need to display position, not interested in it being seen */
-          //tabContent.push(<b>Position</b>);
-          //tabContent.push(<p>x: {block.position.x}</p>);
-          //tabContent.push(<p>y: {block.position.y}</p>);
+
+          //for (var j = 0; j < this.props.allBlockAttributes[block].tags; j++) {
+          //  if (this.props.allBlockAttributes[block].tags[j].indexOf('method') !== -1) {
+          //    /* Then we have a method, so need to include more stuff here */
+          //
+          //    for (var attribute in this.props.allBlockAttributes[block]) {
+          //
+          //      blockAttributesDivs.push(
+          //        <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+          //          <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //             id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //             style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+          //            {String(attribute)}
+          //          </p>
+          //          <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+          //            <button style={{position: 'relative', left: '160px',}}>Icon</button>
+          //            <input
+          //              style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+          //              value={String(this.props.allBlockAttributes[block][attribute].value)}
+          //              type="submit" size="10"/>
+          //          </div>
+          //        </div>
+          //      )
+          //    }
+          //
+          //  }
+          //  else{
+          //    /* It's simply a readout field, so nothing special is
+          //    required here
+          //     */
+          //
+          //    for (var attribute in this.props.allBlockAttributes[block]) {
+          //
+          //      blockAttributesDivs.push(
+          //        <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+          //          <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //             id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //             style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+          //            {String(attribute)}
+          //          </p>
+          //          <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+          //            <button style={{position: 'relative', left: '160px',}}>Icon</button>
+          //            <input
+          //              style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+          //              value={String(this.props.allBlockAttributes[block][attribute].value)}
+          //              readOnly="readonly" maxLength="10" size="10"/>
+          //          </div>
+          //        </div>
+          //      );
+          //    }
+          //  }
+          //}
+
+          //for (var attribute in this.props.allBlockAttributes[block]) {
+          //
+          //    blockAttributesDivs.push(
+          //      <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+          //        <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //           id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
+          //           style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+          //          {String(attribute)}
+          //        </p>
+          //        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+          //          <button style={{position: 'relative', left: '160px',}}>Icon</button>
+          //          <input
+          //            style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+          //            value={String(this.props.allBlockAttributes[block][attribute].value)}
+          //            readOnly="readonly" maxLength="10" size="10"/>
+          //        </div>
+          //      </div>
+          //    );
+          //  }
+
+          //tabContent.push(blockAttributesDivs);
+
+
+          //var inportDivs = [];
+          //var outportDivs = [];
+          //
+          //for (var j = 0; j < this.props.allBlockInfo[block].inports.length; j++) {
+          //      console.log(this.props.allBlockInfo[block]);
+          //      console.log(this.props.allBlockInfo[block].inports[j]);
+          //
+          //  /* For getting the tree label to expand/collapse the treeview too */
+          //  var interactJsIdString = "#" + this.props.allBlockInfo[block].inports[j].name + "textContent";
+          //
+          //  inportDivs.push(
+          //    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
+          //      <p key={this.props.allBlockInfo[block].inports[j].name + "textContent"}
+          //         id={this.props.allBlockInfo[block].inports[j].name + "textContent"}
+          //         style={{fontSize: '14px', position: 'relative', top: '5px'}} >
+          //        {String(this.props.allBlockInfo[block].inports[j].name).toUpperCase()}
+          //      </p>
+          //      <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
+          //        <button style={{position: 'relative', left: '160px',}}  >Icon</button>
+          //        <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+          //               value={String(this.props.allBlockInfo[block].inports[j].value)}
+          //               readOnly="readonly" maxLength="10" size="10" />
+          //      </div>
+          //
+          //    </div>
+          //  );
+          //}
+          //
+          //tabContent.push(
+          //  <Treeview key={"InportsTreeview"}
+          //            nodeLabel={<b>Inports</b>}
+          //            defaultCollapsed={false}
+          //  >{inportDivs}
+          //  </Treeview>
+          //);
           //
           //tabContent.push(<br/>);
-
-          /* Replacing by putting all inports in a treeview */
-          //tabContent.push(<b>Inports</b>);
-          //for (var j = 0; j < block.inports.length; j++) {
-          //  for (var attribute in block.inports[j]) {
-          //    if (attribute !== 'connectedTo') {
-          //      console.log(block);
-          //      console.log(block.inports[j][attribute]);
-          //      tabContent.push(<p>{attribute}: {String(block.inports[j][attribute])}</p>);
-          //    }
-          //    else if (attribute === 'connectedTo') {
-          //      tabContent.push(<p>connectedTo:</p>);
-          //      if (block.inports[j].connectedTo !== null) {
-          //        //for (var subAttribute in block.inports[j].connectedTo) {
-          //        tabContent.push(<p>block: {block.inports[j].connectedTo.block}</p>);
-          //        tabContent.push(<p>port: {block.inports[j].connectedTo.port}</p>);
-          //        //}
-          //      }
-          //      else if (block.inports[j].connectedTo === null) {
-          //        tabContent.push(<p>null</p>);
-          //      }
-          //    }
-          //  }
-          //  //tabContent.push(<p>, </p>);
+          //
+          //for (var k = 0; k < this.props.allBlockInfo[block].outports.length; k++){
+          //  outportDivs.push(
+          //    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
+          //
+          //      <p key={this.props.allBlockInfo[block].outports[k].name + "textContent"}
+          //         id={this.props.allBlockInfo[block].outports[k].name + "textContent"}
+          //         style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+          //        {String(this.props.allBlockInfo[block].outports[k].name).toUpperCase()}
+          //      </p>
+          //
+          //      <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
+          //
+          //        <button style={{position: 'relative', left: '160px',}}  >Icon</button>
+          //        <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+          //        //boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
+          //        }}
+          //               value={String(this.props.allBlockInfo[block].outports[k].value)}
+          //               readOnly="readonly" maxLength="10" size="10" />
+          //      </div>
+          //
+          //    </div>
+          //  )
           //}
+          //
+          //tabContent.push(
+          //  <Treeview key={"OutportTreeview"}
+          //            nodeLabel={<b>Outports</b>}
+          //            defaultCollapsed={false}
+          //            >{outportDivs}
+          //  </Treeview>
+          //);
 
-          //tabContent.push(<br/>);
-
-          tabContent.push(<br/>);
-
-          for (var k = 0; k < this.props.allBlockInfo[block].outports.length; k++){
-            outportDivs.push(
-              <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
-
-                <p key={this.props.allBlockInfo[block].outports[k].name + "textContent"}
-                   id={this.props.allBlockInfo[block].outports[k].name + "textContent"}
-                   style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-                  {String(this.props.allBlockInfo[block].outports[k].name).toUpperCase()}
-                </p>
-
-                <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
-
-                  <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-                  <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                  //boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
-                  }}
-                         value={String(this.props.allBlockInfo[block].outports[k].value)}
-                         readOnly="readonly" maxLength="10" size="10" />
-                </div>
-
-              </div>
-            )
-          }
-
-          tabContent.push(
-            <Treeview key={"OutportTreeview"}
-                      nodeLabel={<b>Outports</b>}
-                      defaultCollapsed={false}
-                      >{outportDivs}
-            </Treeview>
-          );
-
-          /* Replacing with treeview */
-          //tabContent.push(<b>Outports</b>);
-          //for (var k = 0; k < block.outports.length; k++) {
-          //  /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-          //  for (var attribute in block.outports[k]) {
-          //    if (attribute !== 'connectedTo') {
-          //      console.log(attribute);
-          //      tabContent.push(<p>{attribute}: {String(block.outports[k][attribute])}</p>);
-          //    }
-          //    else if (attribute === 'connectedTo') {
-          //      console.log(attribute);
-          //      tabContent.push(<p>connectedTo:</p>);
-          //      if (block.outports[k].connectedTo.length === 0) {
-          //        console.log("LENGTH OF ARRAY IS ZERO");
-          //        tabContent.push(<p>[]</p>);
-          //      }
-          //      else if (block.outports[k].connectedTo !== null) {
-          //        for (var l = 0; l < block.outports[k].connectedTo.length; l++) {
-          //          tabContent.push(<p>[block: {block.outports[k].connectedTo[l]['block']},</p>);
-          //          tabContent.push(<p>port: {block.outports[k].connectedTo[l]['port']}]</p>)
-          //        }
-          //      }
-          //      else if (block.outports[k].connectedTo === null) {
-          //        tabContent.push(<p>null</p>);
-          //      }
-          //    }
-          //  }
-          //  //tabContent.push(<p>, </p>);
-          //}
         }
         console.log(tabContent);
         return tabContent;

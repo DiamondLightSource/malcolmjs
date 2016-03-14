@@ -18,6 +18,8 @@ var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 //var flowChartStore = require('../stores/flowChartStore');
 
+var attributeStore = require('../stores/attributeStore');
+
 var SideBar = require('react-sidebar').default;
 
 var MainTabbedViewStyle = {
@@ -114,6 +116,7 @@ function getBothPanesState(){
     allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()))
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
@@ -143,7 +146,8 @@ var BothPanes = React.createClass({
 
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
-      nextState.configContent !== this.state.configContent
+      nextState.configContent !== this.state.configContent ||
+      nextState.allBlockAttributes !== this.state.allBlockAttributes
       //nextState.loadingInitialData !== this.state.loadingInitialData ||
       //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
@@ -155,6 +159,7 @@ var BothPanes = React.createClass({
     paneStore.addChangeListener(this._onChange);
     sidePaneStore.addChangeListener(this._onChange);
     blockStore.addChangeListener(this._onChange);
+    attributeStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -167,6 +172,7 @@ var BothPanes = React.createClass({
     paneStore.removeChangeListener(this._onChange);
     sidePaneStore.removeChangeListener(this._onChange);
     blockStore.removeChangeListener(this._onChange);
+    attributeStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -204,6 +210,7 @@ var BothPanes = React.createClass({
                allBlockInfo={this.state.allBlockInfo}
                favContent={this.state.favContent}
                configContent={this.state.configContent}
+               allBlockAttributes={this.state.allBlockAttributes}
                //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
                //allBlockTabInfo={this.state.allBlockTabInfo}
                />
