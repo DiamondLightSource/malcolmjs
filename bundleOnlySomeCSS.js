@@ -10806,38 +10806,9 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var CustomButton = require('./button');
 
-function getSidePaneState(){
-  return{
-    //tabState: paneStore.getTabState(),
-    //selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
-
 var SidePane = React.createClass({displayName: "SidePane",
 
-  //getInitialState: function(){
-  //  return getSidePaneState();
-  //},
-
-  _onChange: function(){
-    //this.setState(getSidePaneState());
-    //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
-    /* this works, but I'm not convinced that this is the 'Flux' way to do things...
-    UPDATE: actually it doesn't work, selected tab content jumps about!*/
-  },
-
   shouldComponentUpdate: function(nextProps, nextState){
-    //var same = true;
-    //
-    //for(var i = 0; i < this.props.tabState.length; i++){
-    //  if(nextProps.tabState[i] === undefined){
-    //    same = false;
-    //  }
-    //  else if(nextProps.tabState[i].label !== this.props.tabState[i].label){
-    //    same = false;
-    //  }
-    //}
-
     return (
       nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
       nextProps.listVisible !== this.props.listVisible ||
@@ -10895,11 +10866,10 @@ var SidePane = React.createClass({displayName: "SidePane",
   },
 
   componentDidMount: function(){
-    //sidePaneStore.addChangeListener(this._onChange);
-    //paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    //this.handleActionInitialFetchOfBlockData();
-    //this.handleActionPassingSidePaneOnMount()
+  },
+
+  componentWillUnmount: function(){
   },
 
   toggleTreeviewContent: function(){
@@ -10908,11 +10878,6 @@ var SidePane = React.createClass({displayName: "SidePane",
 
   collapseAllTreeviews: function(){
 
-  },
-
-  componentWillUnmount: function(){
-    //sidePaneStore.removeChangeListener(this._onChange);
-    //paneStore.removeChangeListener(this._onChange);
   },
 
   selectedInputFieldText: function(inputFieldElementName, e){
@@ -11105,6 +11070,30 @@ var SidePane = React.createClass({displayName: "SidePane",
     MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
+  onChangeBlockMethodDropdownOption: function(blockInfo, e){
+    console.log("onClickBlockMethodDropdownOption");
+    console.log(e);
+    console.log(e.currentTarget.value);
+    console.log(blockInfo);
+
+    /* Fairly similar to the code for pressing
+    enter for theeditable fields
+     */
+    var clickedOptionFromDropdownMenu = e.currentTarget.value;
+
+    var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+    var argsObject = {};
+
+    for (var key in blockInfo) {
+      if (blockInfo[key] === blockInfo.attribute) {
+        argsObject[blockInfo.attribute] = clickedOptionFromDropdownMenu;
+      }
+    }
+
+    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+  },
+
 
   render: function () {
 
@@ -11224,6 +11213,11 @@ var SidePane = React.createClass({displayName: "SidePane",
                   )
                 }
                 else{
+
+                  /* Need to create yet ANOTHER subtree for
+                  the attributes of the sub-attribute
+                   */
+
                   attributeDiv.push(
                     React.createElement("div", {style: {position: 'relative', left: '10', bottom: '0px', width: '230px', height: '25px'}}, 
                       React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent", 
@@ -11255,28 +11249,92 @@ var SidePane = React.createClass({displayName: "SidePane",
                 if (this.props.allBlockAttributes[block][attribute].tags[k].indexOf('method') !== -1) {
                   /* Then we have a method, so need to include more stuff here */
 
-                  attributeLabel =
-                    React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
-                      React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
-                         id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
-                         style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
-                        String(attribute)
-                      ), 
-                      React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
-                        React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
-                        React.createElement("input", {id: block + attribute + "inputField", 
-                               style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                            //contentEditable:"true"
-                            color: 'blue'}, 
-                               defaultValue: String(this.props.allBlockAttributes[block][attribute].value), 
-                               onChange: this.attributeFieldOnChange.bind(null, {
+                  /* Also need to check if the method requires
+                  a dropdown list, ie, fi the value type is 'VEnum'
+                   */
+
+                  if(this.props.allBlockAttributes[block][attribute].type.name === "VEnum"){
+                    /* Need to iterate through the list of options
+                    and create a <select> tag with all the <option>
+                    tags within it
+                     */
+
+                    var dropdownOptions = [];
+
+                    for(var m = 0; m < this.props.allBlockAttributes[block][attribute].type.labels.length; m++){
+                      /* Check which option needs to be selected
+                      on initial render by checking the value
+                      from the server?
+                       */
+
+                      if(this.props.allBlockAttributes[block][attribute].type.labels[m] ===
+                        this.props.allBlockAttributes[block][attribute].value){
+                        dropdownOptions.push(
+                          React.createElement("option", {value: this.props.allBlockAttributes[block][attribute].type.labels[m], 
+                                  selected: "selected"}, 
+                            this.props.allBlockAttributes[block][attribute].type.labels[m]
+                          )
+                        )
+                      }
+                      else {
+                        dropdownOptions.push(
+                          React.createElement("option", {value: this.props.allBlockAttributes[block][attribute].type.labels[m]
+                          }, 
+                            this.props.allBlockAttributes[block][attribute].type.labels[m]
+                          )
+                        )
+                      }
+                    }
+
+                    var dropdownList =
+                      React.createElement("select", {onChange: this.onChangeBlockMethodDropdownOption.bind(null, {
                             block: block,
                             attribute: attribute
                             }), 
-                               onClick: this.selectedInputFieldText.bind(null, block + attribute + "inputField"), 
-                               maxLength: "17", size: "17"})
-                      )
-                    );
+                              style: {width: '160px'}}, 
+                        dropdownOptions
+                      );
+
+                    attributeLabel =
+                      React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
+                        React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                           id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                           style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
+                          String(attribute)
+                        ), 
+                        React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
+                          React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+                          dropdownList
+                        )
+                      );
+
+                  }
+                  else {
+
+                    attributeLabel =
+                      React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
+                        React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                           id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                           style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
+                          String(attribute)
+                        ), 
+                        React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
+                          React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+                          React.createElement("input", {id: block + attribute + "inputField", 
+                                 style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                            //contentEditable:"true"
+                            color: 'blue'}, 
+                                 defaultValue: String(this.props.allBlockAttributes[block][attribute].value), 
+                                 onChange: this.attributeFieldOnChange.bind(null, {
+                            block: block,
+                            attribute: attribute
+                            }), 
+                                 onClick: this.selectedInputFieldText.bind(null, block + attribute + "inputField"), 
+                                 maxLength: "17", size: "17"})
+                        )
+                      );
+
+                  }
 
                   //attributeDiv.push(
                   //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
@@ -11646,110 +11704,6 @@ module.exports = SidePane;
 //<p style={{margin: '0px'}} >hello</p>
 //<p style={{margin: '0px'}} >yo</p>
 //<p style={{margin: '0px'}} >yes</p>
-
-//<div style={{position: 'relative', left: '120px', bottom: '32px', width: '230px', height: '50px'}} >
-//  <p key={block.inports[j].name + "textContent"}
-//     id={block.inports[j].name + "textContent"}
-//     style={{fontSize: '15px', position: 'relative'}} >
-//    {String(block.inports[j].name).toUpperCase()}
-//  </p>
-//  <button style={{position: 'relative', left: '165px'}}  >Icon</button>
-//  <input style={{position: 'relative', textAlign: 'center'}}
-//         value={'number'} readOnly="readonly" maxLength="10" size="10" />
-//
-//</div>
-
-//inportDivs.push(
-//  <input style={{float: 'right', margin: "0 30px 0 0"}} value="Hello" />
-//);
-
-//interact(interactJsIdString)
-//  .on('tap', function(e){
-//    e.stopPropagation();
-//    e.stopImmediatePropagation();
-//    /* I guess I'll be passing the parameter 'j' here to the function? */
-//    this.toggleTreeviewContent();
-//  }.bind(this));
-
-//tabContent.push(<p>, </p>);
-
-/* Using svg */
-//inportDivs.push(
-//  <svg key={block.inports[j].name + "content"} >
-//    <g transform="translate(0, 0)" >
-//
-//      <text key={block.inports[j].name + "textContent"}
-//         id={block.inports[j].name + "textContent"}
-//            style={{fill: "white", fontSize: "16"}}
-//      x="0" y="20">
-//        {String(block.inports[j].name).toUpperCase()}
-//      </text>
-//      <rect width="80" height="20" style={{fill: "white", stroke: "red"}} x="100" y="5"/>
-//      </g>
-//  </svg>
-//);
-
-//inportDivs.push(
-//  <p key={block.inports[j].name + "textContent"}
-//     id={block.inports[j].name + "textContent"}
-//     style={{fontSize: '15px'}} >
-//    {String(block.inports[j].name).toUpperCase()}
-//  </p>
-//);
-
-//
-//dropdownChange:function(tab) {
-//  this.refs.panel.setSelectedIndex(tab, null);
-//  console.log(tab)
-//  console.log("it ran correctly");
-//},
-//<Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[
-//
-//      //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-//      //  <i className="fa fa-plus"></i>
-//      //</Button>,
-//      <Button title="Remove active tab" onButtonClick={this.handleActionRemoveNodeTab}>
-//        <i className="fa fa-times"></i>
-//      </Button>,
-//      <Button title="Drop down menu">
-//      <div id="dropDown"><Dropdown changeTab={this.handleActionTabChangeViaOtherMeans} /></div>
-//      </Button>
-//    ]}>
-//  {tabs}
-//</Panel>
-//handleActionPassingSidePaneOnMount: function(){
-//  console.log(this);
-//  //sidePaneActions.passingSidePane(this)
-//},
-//<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-//  <i className="fa fa-plus"></i>
-//</Button>,
-
-/* This was for the tabs when I had coloured blocks instead of nodes */
-
-//var tabs = this.state.tabState.map(function(item, i) {
-//  var tabTitle = "Tab " + item.name;
-//  var tabIndex = i + 1;
-//  var tabContent = function(){
-//    var content = [];
-//    for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
-//      content.push(<br/>);
-//      content.push(<p>{outerkey}</p>);
-//      for (var key in item.info[outerkey])
-//        content.push(<p>{key}: {item.info[outerkey][key]}</p>)
-//    }
-//    return content
-//  };
-//  return (
-//    <Tab key={item.name} title={tabTitle}>
-//
-//      <Content>Content of {tabTitle} <br/> Tab number {tabIndex}
-//        {tabContent()}
-//      </Content>
-//
-//    </Tab>
-//  );
-//}.bind(this));
 
 },{"../../node_modules/interact.js":44,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/paneActions":7,"../actions/sidePaneActions":9,"../stores/paneStore":20,"../stores/sidePaneStore":21,"./button":27,"./dropdownMenu":29,"react":226,"react-panels":48,"react-treeview":51}],38:[function(require,module,exports){
 /**

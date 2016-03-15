@@ -293,6 +293,30 @@ var SidePane = React.createClass({
     MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
+  onChangeBlockMethodDropdownOption: function(blockInfo, e){
+    console.log("onClickBlockMethodDropdownOption");
+    console.log(e);
+    console.log(e.currentTarget.value);
+    console.log(blockInfo);
+
+    /* Fairly similar to the code for pressing
+    enter for theeditable fields
+     */
+    var clickedOptionFromDropdownMenu = e.currentTarget.value;
+
+    var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+    var argsObject = {};
+
+    for (var key in blockInfo) {
+      if (blockInfo[key] === blockInfo.attribute) {
+        argsObject[blockInfo.attribute] = clickedOptionFromDropdownMenu;
+      }
+    }
+
+    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+  },
+
 
   render: function () {
 
@@ -448,28 +472,92 @@ var SidePane = React.createClass({
                 if (this.props.allBlockAttributes[block][attribute].tags[k].indexOf('method') !== -1) {
                   /* Then we have a method, so need to include more stuff here */
 
-                  attributeLabel =
-                    <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
-                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                         style={{fontSize: '13px', position: 'relative', top: '5px'}}>
-                        {String(attribute)}
-                      </p>
-                      <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                        <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                        <input id={block + attribute + "inputField"}
-                               style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                            //contentEditable:"true"
-                            color: 'blue'}}
-                               defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
-                               onChange={this.attributeFieldOnChange.bind(null, {
+                  /* Also need to check if the method requires
+                  a dropdown list, ie, fi the value type is 'VEnum'
+                   */
+
+                  if(this.props.allBlockAttributes[block][attribute].type.name === "VEnum"){
+                    /* Need to iterate through the list of options
+                    and create a <select> tag with all the <option>
+                    tags within it
+                     */
+
+                    var dropdownOptions = [];
+
+                    for(var m = 0; m < this.props.allBlockAttributes[block][attribute].type.labels.length; m++){
+                      /* Check which option needs to be selected
+                      on initial render by checking the value
+                      from the server?
+                       */
+
+                      if(this.props.allBlockAttributes[block][attribute].type.labels[m] ===
+                        this.props.allBlockAttributes[block][attribute].value){
+                        dropdownOptions.push(
+                          <option value={this.props.allBlockAttributes[block][attribute].type.labels[m]}
+                                  selected="selected" >
+                            {this.props.allBlockAttributes[block][attribute].type.labels[m]}
+                          </option>
+                        )
+                      }
+                      else {
+                        dropdownOptions.push(
+                          <option value={this.props.allBlockAttributes[block][attribute].type.labels[m]}
+                          >
+                            {this.props.allBlockAttributes[block][attribute].type.labels[m]}
+                          </option>
+                        )
+                      }
+                    }
+
+                    var dropdownList =
+                      <select onChange={this.onChangeBlockMethodDropdownOption.bind(null, {
                             block: block,
                             attribute: attribute
                             })}
-                               onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
-                               maxLength="17" size="17"/>
-                      </div>
-                    </div>;
+                              style={{width: '160px'}} >
+                        {dropdownOptions}
+                      </select>;
+
+                    attributeLabel =
+                      <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
+                        <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                           id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                           style={{fontSize: '13px', position: 'relative', top: '5px'}}>
+                          {String(attribute)}
+                        </p>
+                        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                          <button style={{position: 'relative', left: '215px',}}>Icon</button>
+                          {dropdownList}
+                        </div>
+                      </div>;
+
+                  }
+                  else {
+
+                    attributeLabel =
+                      <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
+                        <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                           id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                           style={{fontSize: '13px', position: 'relative', top: '5px'}}>
+                          {String(attribute)}
+                        </p>
+                        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                          <button style={{position: 'relative', left: '215px',}}>Icon</button>
+                          <input id={block + attribute + "inputField"}
+                                 style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                            //contentEditable:"true"
+                            color: 'blue'}}
+                                 defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
+                                 onChange={this.attributeFieldOnChange.bind(null, {
+                            block: block,
+                            attribute: attribute
+                            })}
+                                 onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
+                                 maxLength="17" size="17"/>
+                        </div>
+                      </div>;
+
+                  }
 
                   //attributeDiv.push(
                   //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
