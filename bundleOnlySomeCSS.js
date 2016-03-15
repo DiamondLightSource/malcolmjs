@@ -4378,24 +4378,24 @@ var graphPosition = {
 var graphZoomScale = 2.0;
 
 var blockSelectedStates = {
-  Gate1: false,
-  TGen1: false,
-  PComp1: false
+  //Gate1: false,
+  //TGen1: false,
+  //PComp1: false
 };
 
 var blockPositions = {
-  'Gate1': {
-    x: 50,
-    y: 100,
-  },
-  'TGen1': {
-    x: 250,
-    y: 10
-  },
-  'PComp1': {
-    x: 350,
-    y: 150,
-  }
+  //'Gate1': {
+  //  x: 50,
+  //  y: 100,
+  //},
+  //'TGen1': {
+  //  x: 250,
+  //  y: 10
+  //},
+  //'PComp1': {
+  //  x: 350,
+  //  y: 150,
+  //}
 };
 
 function interactJsDrag(BlockInfo){
@@ -11169,41 +11169,138 @@ var SidePane = React.createClass({displayName: "SidePane",
 
           for(var attribute in this.props.allBlockAttributes[block]){
 
+            var attributeLabel;
             var attributeDiv = [];
 
             console.log(this.props.allBlockAttributes);
             console.log(attribute);
             console.log(this.props.allBlockAttributes[block][attribute]);
-            if(this.props.allBlockAttributes[block][attribute].tags !== undefined) {
 
+            if(this.props.allBlockAttributes[block][attribute].tags === undefined){
+              attributeLabel =
+                React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
+                  React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                     id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
+                     style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
+                    String(attribute)
+                  ), 
+                  React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
+                    React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+                    React.createElement("input", {
+                      style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}, 
+                      value: String(this.props.allBlockAttributes[block][attribute].value), 
+                      readOnly: "readonly", maxLength: "17", size: "17"})
+                  )
+                );
+
+              /* Now need to push the appropriate content
+              of a treeview element: ie, other readouts for methods,
+              alarm status etc
+               */
+
+              for(var subAttribute in this.props.allBlockAttributes[block][attribute]){
+                /* In a similar vain, need to check if it's
+                just a readout, or there's another subtree!
+                 */
+
+                if(typeof this.props.allBlockAttributes[block][attribute][subAttribute] === "string"){
+                  /* Just a readout, so no subtree needed */
+
+                  attributeDiv.push(
+                    React.createElement("div", {style: {position: 'relative', left: '10', bottom: '0px', width: '230px', height: '25px'}}, 
+                      React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent", 
+                         id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent", 
+                         style: {fontSize: '13px', position: 'relative', top: '0px', margin: '0px'}}, 
+                        String(subAttribute)
+                      ), 
+                      React.createElement("div", {style: {position: 'relative', bottom: '18px', left: '64px'}}, 
+                        React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+                        React.createElement("input", {
+                          style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}, 
+                          value: String(this.props.allBlockAttributes[block][attribute][subAttribute]), 
+                          readOnly: "readonly", maxLength: "17", size: "17"})
+                      )
+                    )
+                  )
+                }
+                else{
+                  attributeDiv.push(
+                    React.createElement("div", {style: {position: 'relative', left: '10', bottom: '0px', width: '230px', height: '25px'}}, 
+                      React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent", 
+                         id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent", 
+                         style: {fontSize: '13px', position: 'relative', top: '0px', margin: '0px'}}, 
+                        String(subAttribute)
+                      ), 
+                      React.createElement("div", {style: {position: 'relative', bottom: '18px', left: '64px'}}, 
+                        React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+                        React.createElement("input", {
+                          style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}, 
+                          value: String(this.props.allBlockAttributes[block][attribute][subAttribute]), 
+                          readOnly: "readonly", maxLength: "17", size: "17"})
+                      )
+                    )
+                  )
+                }
+
+              }
+
+            }
+            else if(this.props.allBlockAttributes[block][attribute].tags !== undefined) {
+
+              /* USE, BLOCKNAME, and uptime all are missing the tags field,
+              so I shall have to include them in in some other fashion
+               */
 
               for (var k = 0; k < this.props.allBlockAttributes[block][attribute].tags.length; k++) {
                 if (this.props.allBlockAttributes[block][attribute].tags[k].indexOf('method') !== -1) {
                   /* Then we have a method, so need to include more stuff here */
 
-                  blockAttributesDivs.push(
-                    React.createElement("div", {style: {position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}, 
+                  attributeLabel =
+                    React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
                       React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
                          id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
-                         style: {fontSize: '14px', position: 'relative', top: '5px'}}, 
+                         style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
                         String(attribute)
                       ), 
                       React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
-                        React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
+                        React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
                         React.createElement("input", {id: block + attribute + "inputField", 
-                          style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                          //contentEditable:"true"
-                          }, 
-                          defaultValue: String(this.props.allBlockAttributes[block][attribute].value), 
-                          onChange: this.attributeFieldOnChange.bind(null, {
-                          block: block,
-                          attribute: attribute
-                          }), 
-                          onClick: this.selectedInputFieldText.bind(null, block + attribute + "inputField"), 
-                          maxLength: "10", size: "10"})
+                               style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                            //contentEditable:"true"
+                            color: 'blue'}, 
+                               defaultValue: String(this.props.allBlockAttributes[block][attribute].value), 
+                               onChange: this.attributeFieldOnChange.bind(null, {
+                            block: block,
+                            attribute: attribute
+                            }), 
+                               onClick: this.selectedInputFieldText.bind(null, block + attribute + "inputField"), 
+                               maxLength: "17", size: "17"})
                       )
-                    )
-                  );
+                    );
+
+                  //attributeDiv.push(
+                  //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+                  //    <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                  //       id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                  //       style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+                  //      {String(attribute)}
+                  //    </p>
+                  //    <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                  //      <button style={{position: 'relative', left: '160px',}}>Icon</button>
+                  //      <input id={block + attribute + "inputField"}
+                  //        style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
+                  //        //contentEditable:"true"
+                  //        }}
+                  //        defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
+                  //        onChange={this.attributeFieldOnChange.bind(null, {
+                  //        block: block,
+                  //        attribute: attribute
+                  //        })}
+                  //        onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
+                  //        maxLength="10" size="10"/>
+                  //    </div>
+                  //  </div>
+                  //);
 
                 }
                 else {
@@ -11213,35 +11310,52 @@ var SidePane = React.createClass({displayName: "SidePane",
 
                   console.log(this.props.allBlockAttributes[block][attribute].value);
 
-                  blockAttributesDivs.push(
-                    React.createElement("div", {style: {position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}, 
+                  attributeLabel =
+                    React.createElement("div", {style: {position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}, 
                       React.createElement("p", {key: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
                          id: this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent", 
-                         style: {fontSize: '14px', position: 'relative', top: '5px'}}, 
+                         style: {fontSize: '13px', position: 'relative', top: '5px'}}, 
                         String(attribute)
                       ), 
                       React.createElement("div", {style: {position: 'relative', bottom: '30px', left: '90px'}}, 
-                        React.createElement("button", {style: {position: 'relative', left: '160px',}}, "Icon"), 
+                        React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
                         React.createElement("input", {
-                          style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}, 
+                          style: {position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}, 
                           value: String(this.props.allBlockAttributes[block][attribute].value), 
-                          readOnly: "readonly", maxLength: "10", size: "10"})
+                          readOnly: "readonly", maxLength: "17", size: "17"})
                       )
-                    )
-                  );
+                    );
+
+                  //attributeDiv.push(
+                  //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
+                  //    <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                  //       id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
+                  //       style={{fontSize: '14px', position: 'relative', top: '5px'}}>
+                  //      {String(attribute)}
+                  //    </p>
+                  //    <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
+                  //      <button style={{position: 'relative', left: '160px',}}>Icon</button>
+                  //      <input
+                  //        style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
+                  //        value={String(this.props.allBlockAttributes[block][attribute].value)}
+                  //        readOnly="readonly" maxLength="10" size="10"/>
+                  //    </div>
+                  //  </div>
+                  //);
 
                 }
               }
             }
 
-            //blockAttributesDivs.push(
-            //  <Treeview key={block + attribute + "treeview"}
-            //            nodeLabel={attribute}
-            //            defaultCollapsed={false}
-            //  >
-            //    {attributeDiv}
-            //  </Treeview>
-            //);
+            blockAttributesDivs.push(
+              //<div id={block + attribute + "treeviewContainer"} >
+                React.createElement(Treeview, {key: block + attribute + "treeview", 
+                          nodeLabel: attributeLabel, 
+                          defaultCollapsed: true
+                }, " ", attributeDiv
+                )
+              //</div>
+            );
 
           }
 
@@ -11528,6 +11642,10 @@ var SidePane = React.createClass({displayName: "SidePane",
 });
 
 module.exports = SidePane;
+
+//<p style={{margin: '0px'}} >hello</p>
+//<p style={{margin: '0px'}} >yo</p>
+//<p style={{margin: '0px'}} >yes</p>
 
 //<div style={{position: 'relative', left: '120px', bottom: '32px', width: '230px', height: '50px'}} >
 //  <p key={block.inports[j].name + "textContent"}
