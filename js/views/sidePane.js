@@ -29,6 +29,10 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var CustomButton = require('./button');
 
+var NonEditableReadoutField = require('./nonEditableReadoutField');
+var TextEditableReadoutField = require('./textEditableReadoutField');
+var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
+
 var SidePane = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
@@ -317,6 +321,101 @@ var SidePane = React.createClass({
 
   },
 
+  generateBlockTabContent: function(blockAttributes, blockName){
+
+    var blockAttributeDivs = [];
+
+    for(var attribute in blockAttributes){
+      var attributeLabel;
+      /* Not sure if this'll be needed ifI don't
+      need treeview for th subattributes?
+       */
+      //var attributeDiv = [];
+
+      if(blockAttributes[attribute].tags === undefined){
+        /* Then it's a readonly readout,
+         no methods or anything
+         */
+
+        attributeLabel =
+          <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                   blockName={blockName}
+                                   attributeName={attribute} />;
+
+
+      }
+      else if(blockAttributes[attribute].tags !== undefined){
+        /* Could be a readonly readout,
+         or could be a editable method
+         readout (text or dropdown)
+         */
+
+
+        var isMethod = false;
+
+        for(var k = 0; k < blockAttributes[attribute].tags.length; k++){
+          if(blockAttributes[attribute].tags[k].indexOf('method') !== -1){
+            isMethod = true;
+          }
+          else{
+            /* Do nothing, keep isMethod as false */
+          }
+        }
+
+        if(isMethod === false){
+          /* Normal readonly readout */
+
+          attributeLabel =
+            <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                     blockName={blockName}
+                                     attributeName={attribute} />;
+
+        }
+        else if(isMethod === true){
+          /* It's a method, now need to check
+          if it's a text one or a dropdown
+          one
+           */
+
+          if(blockAttributes[attribute].type.name === 'VEnum'){
+            /* Use the dropdown editable
+             readout field element
+             */
+
+            attributeLabel =
+              <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                            blockName={blockName}
+                                            attributeName={attribute}
+                                            onChangeBlockMethodDropdownOption={this.onChangeBlockMethodDropdownOption}  />;
+
+          }
+          else{
+            /* It's a text editable readout
+             field
+             */
+
+            attributeLabel =
+              <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                        blockName={blockName}
+                                        attributeName={attribute}
+                                        attributeFieldOnChange={this.attributeFieldOnChange}
+                                        selectedInputFieldText={this.selectedInputFieldText} />;
+
+          }
+
+        }
+
+
+      }
+
+      blockAttributeDivs.push(attributeLabel);
+
+    }
+
+    return blockAttributeDivs;
+
+  },
+
 
   render: function () {
 
@@ -361,433 +460,7 @@ var SidePane = React.createClass({
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          /* Shall replace the inports & outports treeviews with
-          the attributes and their values (the attributes will
-          be a treeview at some point too)
-           */
-
-          /* Need to check if it's a readout or an
-           editable field
-           */
-
-          var blockAttributesDivs = [];
-
-          /* Each attribute needs a treeview, so I need
-          to put each attribute div inside a treeview tag?
-          Then I push that treeview into blockAttributeDivs,
-          which in turn gets pushed into tabContent at the very
-          end of the loop
-           */
-
-          for(var attribute in this.props.allBlockAttributes[block]){
-
-            var attributeLabel;
-            var attributeDiv = [];
-
-            console.log(this.props.allBlockAttributes);
-            console.log(attribute);
-            console.log(this.props.allBlockAttributes[block][attribute]);
-
-            if(this.props.allBlockAttributes[block][attribute].tags === undefined){
-              attributeLabel =
-                <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
-                  <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                     id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                     style={{fontSize: '13px', position: 'relative', top: '5px'}}>
-                    {String(attribute)}
-                  </p>
-                  <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                    <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                    <input
-                      style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}}
-                      value={String(this.props.allBlockAttributes[block][attribute].value)}
-                      readOnly="readonly" maxLength="17" size="17"/>
-                  </div>
-                </div>;
-
-              /* Now need to push the appropriate content
-              of a treeview element: ie, other readouts for methods,
-              alarm status etc
-               */
-
-              for(var subAttribute in this.props.allBlockAttributes[block][attribute]){
-                /* In a similar vain, need to check if it's
-                just a readout, or there's another subtree!
-                 */
-
-                if(typeof this.props.allBlockAttributes[block][attribute][subAttribute] === "string"){
-                  /* Just a readout, so no subtree needed */
-
-                  attributeDiv.push(
-                    <div style={{position: 'relative', left: '10', bottom: '0px', width: '230px', height: '25px'}}>
-                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent"}
-                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent"}
-                         style={{fontSize: '13px', position: 'relative', top: '0px', margin: '0px' }}>
-                        {String(subAttribute)}
-                      </p>
-                      <div style={{position: 'relative', bottom: '18px', left: '64px'}}>
-                        <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                        <input
-                          style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}}
-                          value={String(this.props.allBlockAttributes[block][attribute][subAttribute])}
-                          readOnly="readonly" maxLength="17" size="17"/>
-                      </div>
-                    </div>
-                  )
-                }
-                else{
-
-                  /* Need to create yet ANOTHER subtree for
-                  the attributes of the sub-attribute
-                   */
-
-                  attributeDiv.push(
-                    <div style={{position: 'relative', left: '10', bottom: '0px', width: '230px', height: '25px'}}>
-                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent"}
-                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + subAttribute + "textContent"}
-                         style={{fontSize: '13px', position: 'relative', top: '0px', margin: '0px'}}>
-                        {String(subAttribute)}
-                      </p>
-                      <div style={{position: 'relative', bottom: '18px', left: '64px'}}>
-                        <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                        <input
-                          style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}}
-                          value={String(this.props.allBlockAttributes[block][attribute][subAttribute])}
-                          readOnly="readonly" maxLength="17" size="17"/>
-                      </div>
-                    </div>
-                  )
-                }
-
-              }
-
-            }
-            else if(this.props.allBlockAttributes[block][attribute].tags !== undefined) {
-
-              /* USE, BLOCKNAME, and uptime all are missing the tags field,
-              so I shall have to include them in in some other fashion
-               */
-
-              for (var k = 0; k < this.props.allBlockAttributes[block][attribute].tags.length; k++) {
-                if (this.props.allBlockAttributes[block][attribute].tags[k].indexOf('method') !== -1) {
-                  /* Then we have a method, so need to include more stuff here */
-
-                  /* Also need to check if the method requires
-                  a dropdown list, ie, fi the value type is 'VEnum'
-                   */
-
-                  if(this.props.allBlockAttributes[block][attribute].type.name === "VEnum"){
-                    /* Need to iterate through the list of options
-                    and create a <select> tag with all the <option>
-                    tags within it
-                     */
-
-                    var dropdownOptions = [];
-
-                    for(var m = 0; m < this.props.allBlockAttributes[block][attribute].type.labels.length; m++){
-                      /* Check which option needs to be selected
-                      on initial render by checking the value
-                      from the server?
-                       */
-
-                      if(this.props.allBlockAttributes[block][attribute].type.labels[m] ===
-                        this.props.allBlockAttributes[block][attribute].value){
-                        dropdownOptions.push(
-                          <option value={this.props.allBlockAttributes[block][attribute].type.labels[m]}
-                                  selected="selected" >
-                            {this.props.allBlockAttributes[block][attribute].type.labels[m]}
-                          </option>
-                        )
-                      }
-                      else {
-                        dropdownOptions.push(
-                          <option value={this.props.allBlockAttributes[block][attribute].type.labels[m]}
-                          >
-                            {this.props.allBlockAttributes[block][attribute].type.labels[m]}
-                          </option>
-                        )
-                      }
-                    }
-
-                    var dropdownList =
-                      <select onChange={this.onChangeBlockMethodDropdownOption.bind(null, {
-                            block: block,
-                            attribute: attribute
-                            })}
-                              style={{width: '160px'}} >
-                        {dropdownOptions}
-                      </select>;
-
-                    attributeLabel =
-                      <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
-                        <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                           id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                           style={{fontSize: '13px', position: 'relative', top: '5px'}}>
-                          {String(attribute)}
-                        </p>
-                        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                          <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                          {dropdownList}
-                        </div>
-                      </div>;
-
-                  }
-                  else {
-
-                    attributeLabel =
-                      <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
-                        <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                           id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                           style={{fontSize: '13px', position: 'relative', top: '5px'}}>
-                          {String(attribute)}
-                        </p>
-                        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                          <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                          <input id={block + attribute + "inputField"}
-                                 style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                            //contentEditable:"true"
-                            color: 'blue'}}
-                                 defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
-                                 onChange={this.attributeFieldOnChange.bind(null, {
-                            block: block,
-                            attribute: attribute
-                            })}
-                                 onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
-                                 maxLength="17" size="17"/>
-                        </div>
-                      </div>;
-
-                  }
-
-                  //attributeDiv.push(
-                  //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
-                  //    <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                  //       id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                  //       style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-                  //      {String(attribute)}
-                  //    </p>
-                  //    <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                  //      <button style={{position: 'relative', left: '160px',}}>Icon</button>
-                  //      <input id={block + attribute + "inputField"}
-                  //        style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-                  //        //contentEditable:"true"
-                  //        }}
-                  //        defaultValue={String(this.props.allBlockAttributes[block][attribute].value)}
-                  //        onChange={this.attributeFieldOnChange.bind(null, {
-                  //        block: block,
-                  //        attribute: attribute
-                  //        })}
-                  //        onClick={this.selectedInputFieldText.bind(null, block + attribute + "inputField")}
-                  //        maxLength="10" size="10"/>
-                  //    </div>
-                  //  </div>
-                  //);
-
-                }
-                else {
-                  /* It's simply a readout field, so nothing special is
-                   required here
-                   */
-
-                  console.log(this.props.allBlockAttributes[block][attribute].value);
-
-                  attributeLabel =
-                    <div style={{position: 'relative', left: '20', bottom: '38px', width: '230px', height: '25px'}}>
-                      <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                         id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                         style={{fontSize: '13px', position: 'relative', top: '5px'}}>
-                        {String(attribute)}
-                      </p>
-                      <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                        <button style={{position: 'relative', left: '215px',}}>Icon</button>
-                        <input
-                          style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999', color: 'green'}}
-                          value={String(this.props.allBlockAttributes[block][attribute].value)}
-                          readOnly="readonly" maxLength="17" size="17"/>
-                      </div>
-                    </div>;
-
-                  //attributeDiv.push(
-                  //  <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
-                  //    <p key={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                  //       id={this.props.allBlockAttributes[block].BLOCKNAME.value + attribute + "textContent"}
-                  //       style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-                  //      {String(attribute)}
-                  //    </p>
-                  //    <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-                  //      <button style={{position: 'relative', left: '160px',}}>Icon</button>
-                  //      <input
-                  //        style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-                  //        value={String(this.props.allBlockAttributes[block][attribute].value)}
-                  //        readOnly="readonly" maxLength="10" size="10"/>
-                  //    </div>
-                  //  </div>
-                  //);
-
-                }
-              }
-            }
-
-            blockAttributesDivs.push(
-              //<div id={block + attribute + "treeviewContainer"} >
-                <Treeview key={block + attribute + "treeview"}
-                          nodeLabel={attributeLabel}
-                          defaultCollapsed={true}
-                > {attributeDiv}
-                </Treeview>
-              //</div>
-            );
-
-          }
-
-          tabContent.push(blockAttributesDivs);
-
-
-          //for (var j = 0; j < this.props.allBlockAttributes[block].tags; j++) {
-          //  if (this.props.allBlockAttributes[block].tags[j].indexOf('method') !== -1) {
-          //    /* Then we have a method, so need to include more stuff here */
-          //
-          //    for (var attribute in this.props.allBlockAttributes[block]) {
-          //
-          //      blockAttributesDivs.push(
-          //        <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
-          //          <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //             id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //             style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-          //            {String(attribute)}
-          //          </p>
-          //          <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-          //            <button style={{position: 'relative', left: '160px',}}>Icon</button>
-          //            <input
-          //              style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-          //              value={String(this.props.allBlockAttributes[block][attribute].value)}
-          //              type="submit" size="10"/>
-          //          </div>
-          //        </div>
-          //      )
-          //    }
-          //
-          //  }
-          //  else{
-          //    /* It's simply a readout field, so nothing special is
-          //    required here
-          //     */
-          //
-          //    for (var attribute in this.props.allBlockAttributes[block]) {
-          //
-          //      blockAttributesDivs.push(
-          //        <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
-          //          <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //             id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //             style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-          //            {String(attribute)}
-          //          </p>
-          //          <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-          //            <button style={{position: 'relative', left: '160px',}}>Icon</button>
-          //            <input
-          //              style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-          //              value={String(this.props.allBlockAttributes[block][attribute].value)}
-          //              readOnly="readonly" maxLength="10" size="10"/>
-          //          </div>
-          //        </div>
-          //      );
-          //    }
-          //  }
-          //}
-
-          //for (var attribute in this.props.allBlockAttributes[block]) {
-          //
-          //    blockAttributesDivs.push(
-          //      <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}}>
-          //        <p key={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //           id={this.props.allBlockAttributes[block].BLOCKNAME.VALUE + attribute + "textContent"}
-          //           style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-          //          {String(attribute)}
-          //        </p>
-          //        <div style={{position: 'relative', bottom: '30px', left: '90px'}}>
-          //          <button style={{position: 'relative', left: '160px',}}>Icon</button>
-          //          <input
-          //            style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-          //            value={String(this.props.allBlockAttributes[block][attribute].value)}
-          //            readOnly="readonly" maxLength="10" size="10"/>
-          //        </div>
-          //      </div>
-          //    );
-          //  }
-
-          //tabContent.push(blockAttributesDivs);
-
-
-          //var inportDivs = [];
-          //var outportDivs = [];
-          //
-          //for (var j = 0; j < this.props.allBlockInfo[block].inports.length; j++) {
-          //      console.log(this.props.allBlockInfo[block]);
-          //      console.log(this.props.allBlockInfo[block].inports[j]);
-          //
-          //  /* For getting the tree label to expand/collapse the treeview too */
-          //  var interactJsIdString = "#" + this.props.allBlockInfo[block].inports[j].name + "textContent";
-          //
-          //  inportDivs.push(
-          //    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
-          //      <p key={this.props.allBlockInfo[block].inports[j].name + "textContent"}
-          //         id={this.props.allBlockInfo[block].inports[j].name + "textContent"}
-          //         style={{fontSize: '14px', position: 'relative', top: '5px'}} >
-          //        {String(this.props.allBlockInfo[block].inports[j].name).toUpperCase()}
-          //      </p>
-          //      <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
-          //        <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-          //        <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999'}}
-          //               value={String(this.props.allBlockInfo[block].inports[j].value)}
-          //               readOnly="readonly" maxLength="10" size="10" />
-          //      </div>
-          //
-          //    </div>
-          //  );
-          //}
-          //
-          //tabContent.push(
-          //  <Treeview key={"InportsTreeview"}
-          //            nodeLabel={<b>Inports</b>}
-          //            defaultCollapsed={false}
-          //  >{inportDivs}
-          //  </Treeview>
-          //);
-          //
-          //tabContent.push(<br/>);
-          //
-          //for (var k = 0; k < this.props.allBlockInfo[block].outports.length; k++){
-          //  outportDivs.push(
-          //    <div style={{position: 'relative', left: '0', bottom: '2px', width: '230px', height: '25px'}} >
-          //
-          //      <p key={this.props.allBlockInfo[block].outports[k].name + "textContent"}
-          //         id={this.props.allBlockInfo[block].outports[k].name + "textContent"}
-          //         style={{fontSize: '14px', position: 'relative', top: '5px'}}>
-          //        {String(this.props.allBlockInfo[block].outports[k].name).toUpperCase()}
-          //      </p>
-          //
-          //      <div style={{position: 'relative', bottom: '30px', left: '70px'}} >
-          //
-          //        <button style={{position: 'relative', left: '160px',}}  >Icon</button>
-          //        <input style={{position: 'relative', textAlign: 'left', borderRadius: '2px', border: '2px solid #999',
-          //        //boxShadow: '0px 0px 8px rgba(255, 255, 255, 0.3)'
-          //        }}
-          //               value={String(this.props.allBlockInfo[block].outports[k].value)}
-          //               readOnly="readonly" maxLength="10" size="10" />
-          //      </div>
-          //
-          //    </div>
-          //  )
-          //}
-          //
-          //tabContent.push(
-          //  <Treeview key={"OutportTreeview"}
-          //            nodeLabel={<b>Outports</b>}
-          //            defaultCollapsed={false}
-          //            >{outportDivs}
-          //  </Treeview>
-          //);
-
+          tabContent.push(this.generateBlockTabContent(this.props.allBlockAttributes[block], block));
         }
         console.log(tabContent);
         return tabContent;
@@ -803,104 +476,6 @@ var SidePane = React.createClass({
         </Tab>
       )
     }.bind(this));
-
-    //<b>Attributes of {tabLabel}</b> <br/>
-
-
-    /* Using allBlockTabInfo instead of going through the intermediate tabState array */
-    //var calculateTabsInfo = function() {
-    //  var i = 0;
-    //  var tabs = [];
-    //  console.log(this.props.allBlockTabInfo);
-    //  console.log(this.props.allBlockTabOpenStates);
-    //  for (var block in this.props.allBlockTabInfo) {
-    //    console.log(block);
-    //    i = i + 1;
-    //    console.log(this.props.allBlockTabOpenStates[block]);
-    //    console.log(block.label);
-    //    if (this.props.allBlockTabOpenStates[block] === true) {
-    //      console.log("a tab is open, time to calculate its contents");
-    //      var tabContent = [];
-    //
-    //      tabContent.push(<p>x: {this.props.allBlockTabInfo[block].position.x}</p>);
-    //      tabContent.push(<p>y: {this.props.allBlockTabInfo[block].position.y}</p>);
-    //      tabContent.push(<br/>);
-    //
-    //      tabContent.push(<p>Inports</p>);
-    //      for (var j = 0; j < this.props.allBlockTabInfo[block].inports.length; j++) {
-    //        for (var attribute in this.props.allBlockTabInfo[block].inports[j]) {
-    //          if (attribute !== 'connectedTo') {
-    //            console.log(block);
-    //            console.log(this.props.allBlockTabInfo[block].inports[j][attribute]);
-    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].inports[j][attribute])}</p>);
-    //          }
-    //          else if (attribute === 'connectedTo') {
-    //            tabContent.push(<p>connectedTo:</p>);
-    //            if (this.props.allBlockTabInfo[block].inports[j].connectedTo !== null) {
-    //              //for (var subAttribute in block.inports[j].connectedTo) {
-    //              tabContent.push(<p>block: {this.props.allBlockTabInfo[block].inports[j].connectedTo.block}</p>);
-    //              tabContent.push(<p>port: {this.props.allBlockTabInfo[block].inports[j].connectedTo.port}</p>);
-    //              //}
-    //            }
-    //            else if (this.props.allBlockTabInfo[block].inports[j].connectedTo === null) {
-    //              tabContent.push(<p>null</p>);
-    //            }
-    //          }
-    //        }
-    //        //tabContent.push(<p>, </p>);
-    //      }
-    //      tabContent.push(<br/>);
-    //
-    //      console.log(tabContent);
-    //
-    //      tabContent.push(<p>Outports</p>);
-    //      for (var k = 0; k < this.props.allBlockTabInfo[block].outports.length; k++) {
-    //        /* connectedTo for an outport is an array, so have to iterate through an array rather than using a for in loop */
-    //        for (var attribute in this.props.allBlockTabInfo[block].outports[k]) {
-    //          if (attribute !== 'connectedTo') {
-    //            console.log(attribute);
-    //            tabContent.push(<p>{attribute}: {String(this.props.allBlockTabInfo[block].outports[k][attribute])}</p>);
-    //          }
-    //          else if (attribute === 'connectedTo') {
-    //            console.log(attribute);
-    //            tabContent.push(<p>connectedTo:</p>);
-    //            if (this.props.allBlockTabInfo[block].outports[k].connectedTo.length === 0) {
-    //              console.log("LENGTH OF ARRAY IS ZERO");
-    //              tabContent.push(<p>[]</p>);
-    //            }
-    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo !== null) {
-    //              for (var l = 0; l < this.props.allBlockTabInfo[block].outports[k].connectedTo.length; l++) {
-    //                tabContent.push(<p>[block: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['block']},</p>);
-    //                tabContent.push(<p>port: {this.props.allBlockTabInfo[block].outports[k].connectedTo[l]['port']}]</p>)
-    //              }
-    //            }
-    //            else if (this.props.allBlockTabInfo[block].outports[k].connectedTo === null) {
-    //              tabContent.push(<p>null</p>);
-    //            }
-    //          }
-    //        }
-    //        //tabContent.push(<p>, </p>);
-    //      }
-    //      tabs.push(
-    //        <Tab title={this.props.allBlockTabInfo[block].label}>
-    //
-    //          <Content>Attributes of {this.props.allBlockTabInfo[block].label} <br/> Tab number {i}
-    //            {tabContent}
-    //          </Content>
-    //
-    //        </Tab>
-    //      )
-    //    }
-    //    else if (this.props.allBlockTabOpenStates[block] === false) {
-    //      console.log("that block tab wasn't open, so don't open the " + block.label + " tab");
-    //    }
-    //  }
-    //  console.log(tabs);
-    //
-    //  return(
-    //    tabs
-    //  )
-    //}.bind(this);
 
     return (
         <Panel ref="panel" theme="flexbox" skin={skin} useAvailableHeight={true} globals={globals} buttons={[

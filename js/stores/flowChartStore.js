@@ -470,11 +470,17 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
         //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
         //}
 
+        /* The only time I want
+        flowChart to emit a change
+        due to a subscribe message
+         */
+        flowChartStore.emitChange();
+
       }
       //console.log("nnnnnnnnnnnnnnnnnnnnnnnnnn");
       //console.log(requestedData);
       //console.log(blockPositions[requestedData.blockName]);
-      flowChartStore.emitChange();
+      //flowChartStore.emitChange();
       break;
 
 
