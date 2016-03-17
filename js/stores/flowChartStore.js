@@ -434,7 +434,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
-          if(item.attributes.USE.value === true) {
+            if(item.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }

@@ -441,7 +441,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
         //}
         if(item.tags[j] === 'instance:Zebra2Block'){
 
-          if(item.attributes.USE.value === true) {
+          if(item.attributes.VISIBLE.value === 'Show') {
 
             var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
             appendToAllBlockTabProperties(blockName);

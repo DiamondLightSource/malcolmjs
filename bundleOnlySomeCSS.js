@@ -3150,7 +3150,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
           /* Add the block to allBlockInfo! */
 
-          if(item.attributes.USE.value === true) {
+          if(item.attributes.VISIBLE.value === 'Show') {
 
             addBlock(blockName);
 
@@ -4779,7 +4779,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
-          if(item.attributes.USE.value === true) {
+            if(item.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }
@@ -5368,7 +5368,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
         //}
         if(item.tags[j] === 'instance:Zebra2Block'){
 
-          if(item.attributes.USE.value === true) {
+          if(item.attributes.VISIBLE.value === 'Show') {
 
             var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
             appendToAllBlockTabProperties(blockName);

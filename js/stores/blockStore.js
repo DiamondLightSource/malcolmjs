@@ -1256,7 +1256,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
           /* Add the block to allBlockInfo! */
 
-          if(item.attributes.USE.value === true) {
+          if(item.attributes.VISIBLE.value === 'Show') {
 
             addBlock(blockName);
 
