@@ -11,7 +11,7 @@ var NonEditableReadoutField = React.createClass({
   render: function(){
 
     return(
-      <div style={{position: 'relative', left: '20',
+      <div style={{position: 'relative', left: '5',
                    bottom: '0px', width: '230px', height: '25px'}}>
         <p key={this.props.blockName + this.props.attributeName + "textContent"}
            id={this.props.blockName + this.props.attributeName + "textContent"}

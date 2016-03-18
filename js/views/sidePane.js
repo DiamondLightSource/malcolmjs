@@ -3,6 +3,7 @@
  */
 
 var React = require('react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var ReactPanels = require('react-panels');
 var sidePaneStore = require('../stores/sidePaneStore');
 var sidePaneActions = require('../actions/sidePaneActions');
@@ -32,6 +33,8 @@ var CustomButton = require('./button');
 var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
+
+//var TreeviewComponent = require('react-treeview-component');
 
 var SidePane = React.createClass({
 
@@ -94,6 +97,7 @@ var SidePane = React.createClass({
 
   componentDidMount: function(){
     this.handleActionPassSidePane();
+    ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
   },
 
   componentWillUnmount: function(){
@@ -325,6 +329,8 @@ var SidePane = React.createClass({
 
     var blockAttributeDivs = [];
 
+    var groupsObject = {};
+
     for(var attribute in blockAttributes){
       var attributeLabel;
       /* Not sure if this'll be needed ifI don't
@@ -332,7 +338,31 @@ var SidePane = React.createClass({
        */
       //var attributeDiv = [];
 
-      if(blockAttributes[attribute].tags === undefined){
+      if(blockAttributes[attribute].tags === undefined &&
+        blockAttributes[attribute].alarm === undefined){
+        /* Then it's a group, so create a treeview */
+        /* The best I can do I think is to now do a
+        for loop in here through all the block attributes
+        to find all the attributes belonging to this
+        group?
+         */
+
+        /* Creating the array that I'll push the
+        treeview children to as the upper for loop
+        goes through all the attributes of the block
+         */
+        groupsObject[attribute] = [];
+
+        //attributeLabel =
+        //  <Treeview defaultCollapsed={true}
+        //            nodeLabel={
+        //            <b style={{marginLeft: '-47px'}}>{attribute}</b>
+        //            } >
+        //  </Treeview>
+
+      }
+      else if(blockAttributes[attribute].tags === undefined &&
+        blockAttributes[attribute].alarm !== undefined){
         /* Then it's a readonly readout,
          no methods or anything
          */
@@ -341,6 +371,9 @@ var SidePane = React.createClass({
           <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                    blockName={blockName}
                                    attributeName={attribute} />;
+
+        blockAttributeDivs.push(attributeLabel);
+
 
 
       }
@@ -360,15 +393,27 @@ var SidePane = React.createClass({
           else{
             /* Do nothing, keep isMethod as false */
           }
+
+          /* Need to find what group the
+           attribute belongs to as well
+           */
+
+          if(blockAttributes[attribute].tags[k].indexOf('group') !== -1 ){
+
+            var groupName = blockAttributes[attribute].tags[k].slice('group:'.length);
+
+          }
+
         }
 
         if(isMethod === false){
           /* Normal readonly readout */
 
-          attributeLabel =
+          groupsObject[groupName].push(
             <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                      blockName={blockName}
-                                     attributeName={attribute} />;
+                                     attributeName={attribute} />
+          )
 
         }
         else if(isMethod === true){
@@ -382,11 +427,14 @@ var SidePane = React.createClass({
              readout field element
              */
 
-            attributeLabel =
+            groupsObject[groupName].push(
               <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                             blockName={blockName}
                                             attributeName={attribute}
-                                            onChangeBlockMethodDropdownOption={this.onChangeBlockMethodDropdownOption}  />;
+                                            onChangeBlockMethodDropdownOption={
+                                            this.onChangeBlockMethodDropdownOption
+                                            }  />
+            )
 
           }
           else{
@@ -394,12 +442,13 @@ var SidePane = React.createClass({
              field
              */
 
-            attributeLabel =
+            groupsObject[groupName].push(
               <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                         blockName={blockName}
                                         attributeName={attribute}
                                         attributeFieldOnChange={this.attributeFieldOnChange}
-                                        selectedInputFieldText={this.selectedInputFieldText} />;
+                                        selectedInputFieldText={this.selectedInputFieldText} />
+            )
 
           }
 
@@ -408,12 +457,51 @@ var SidePane = React.createClass({
 
       }
 
-      blockAttributeDivs.push(attributeLabel);
+      //blockAttributeDivs.push(attributeLabel);
+
+      /* Then here have a for loop iterating through
+      the groupsObject, creating a treeview for each
+      one, then handing it a nodeLabel and its child
+      array with all the appropriate children
+       */
 
     }
 
+    for(var group in groupsObject){
+      blockAttributeDivs.push(
+        <Treeview defaultCollapsed={true}
+                  nodeLabel={
+                    <b style={{marginLeft: '-47px'}}>{group}</b>
+                    }
+        > {groupsObject[group]}
+        </Treeview>
+      )
+    }
+
+    //for(var group in groupsObject){
+    //  blockAttributeDivs.push(
+    //    <TreeviewComponent dataSource={{
+    //      id: group + "treeview",
+    //      text: group,
+    //      icon: group,
+    //      opened: true,
+    //      selected: true,
+    //      children: groupsObject[group]
+    //    }} onTreenodeClick={function(e){console.log("treenode click!")}}
+    //    />
+    //  )
+    //}
+
     return blockAttributeDivs;
 
+  },
+
+  disableTabKey: function(e){
+    console.log(e);
+    if(e.keyCode === 9){
+      console.log("tab key!");
+      e.preventDefault();
+    }
   },
 
 
