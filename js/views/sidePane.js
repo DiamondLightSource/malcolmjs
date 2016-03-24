@@ -34,6 +34,9 @@ var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
 
+var ToggleSwitch = require('react-toggle-switch');
+var BlockToggleSwitch = require('./blockToggleSwitch');
+
 //var TreeviewComponent = require('react-treeview-component');
 
 var SidePane = React.createClass({
@@ -46,7 +49,8 @@ var SidePane = React.createClass({
       nextProps.allBlockInfo !== this.props.allBlockInfo ||
       nextProps.favContent !== this.props.favContent ||
       nextProps.configContent !== this.props.configContent ||
-      nextProps.allBlockAttributes !== this.props.allBlockAttributes
+      nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
+      nextProps.blocksVisibility !== this.props.blocksVisibility
       //nextProps.blockPositions !== this.props.blockPositions
     )
   },
@@ -504,6 +508,53 @@ var SidePane = React.createClass({
     }
   },
 
+  toggleSwitch: function(blockName, value, e){
+    console.log(value);
+    console.log(blockName);
+
+    /* invoke malcolmCall to toggle the visible attribute
+    of the given block
+     */
+
+    /* If I'm toggling, I want to pass the OPPOSITE of
+    whatever the current value of the toggle is
+     */
+
+    var newValue;
+    var argsObject = {};
+
+    if(value === 'true'){
+      newValue = 'false';
+    }
+    else if(value === 'false'){
+      newValue = 'true'
+    }
+
+    var methodToInvoke = '_set_' + blockName + '_visible';
+
+    var argsValue;
+
+    if(newValue === 'true'){
+      argsValue = 'Show';
+    }
+    else if(newValue === 'false'){
+      argsValue = 'Hide';
+    }
+
+    argsObject[blockName] = argsValue;
+
+    console.log(argsValue);
+
+    /* Now invoke malcolmCall */
+
+    this.handleMalcolmCall('VISIBILITY', methodToInvoke, argsObject);
+    /* Note: the first argument is 'VISIBILITY' so then I am
+    invoking the method via Z:VISIBILITY rather than the block
+    itself, seems more organised to do it all through that
+     */
+
+  },
+
 
   render: function () {
 
@@ -532,6 +583,74 @@ var SidePane = React.createClass({
         else if(block === 'Configuration'){
           console.log("we have a config tab");
           tabContent.push(<p>{this.props.configContent.name}</p>);
+          var tabTitle = 'yh';
+        }
+        else if(block === 'BlockLookupTable'){
+          console.log("we have the blockLookupTable tab");
+
+          var sortedBlocksUnderGroupNames = {};
+
+          for(var m = 0; m < this.props.blockGroups.length; m++){
+            sortedBlocksUnderGroupNames[this.props.blockGroups[m]] = [];
+
+            for(var blockName in this.props.blocksVisibility){
+              if(blockName.indexOf(this.props.blockGroups[m]) !== -1){
+                sortedBlocksUnderGroupNames[this.props.blockGroups[m]].push(blockName)
+              }
+            }
+          }
+
+          for(var blockGroup in sortedBlocksUnderGroupNames){
+            if(sortedBlocksUnderGroupNames[blockGroup].length > 1){
+
+              var groupMembersToggleSwitches = [];
+
+              for(var i = 0; i < sortedBlocksUnderGroupNames[blockGroup].length; i++){
+
+                groupMembersToggleSwitches.push(
+                  <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][i]}
+                                     toggleSwitch={this.toggleSwitch}
+                                     toggleOrientation={
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
+                                     .value === 'Show'
+                                     }
+                                     />
+                )
+              }
+
+              tabContent.push(
+                <Treeview defaultCollapsed={true}
+                          nodeLabel={
+                          <b style={{}} >{blockGroup}</b>
+                          }
+                > {groupMembersToggleSwitches}
+                </Treeview>
+              )
+            }
+            else{
+              tabContent.push(
+                <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][0]}
+                                   toggleSwitch={this.toggleSwitch}
+                                   toggleOrientation={
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
+                                     .value === 'Show'
+                                     }
+                />
+              );
+            }
+          }
+
+          //for(var n = 0; n < this.props.blocksVisibility.length; n++){
+          //  /* Need to push to the correct treeview somehow,
+          //  perhaps nest this inside the block groups loop?
+          //   */
+          //  tabContent.push(
+          //    <BlockToggleSwitch toggleSwitch={this.toggleSwitch}
+          //                       blockName={this.props.blocksVisibility[n].slice(2)} />
+          //  );
+          //}
+
+
           var tabTitle = 'yh';
         }
         else if(block.tabType === 'edge'){

@@ -176,6 +176,8 @@ function Client(url){
 
           /* Invoking the corresponding id's callback */
           console.log(json);
+          //window.alert(json.id);
+          //window.alert(json.value);
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }

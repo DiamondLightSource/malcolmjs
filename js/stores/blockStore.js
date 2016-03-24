@@ -17,207 +17,11 @@ var _stuff = {
   blockList: null
 };
 
-
-/* 'BLOCK' use */
-
 var allBlockInfo = {
 
-  //'Gate1': {
-  //  type: 'Gate',
-  //  label: 'Gate1',
-  //  name: "Arm",
-  //  //position: {
-  //  //  x: 50,
-  //  //  y: 100,
-  //  //},
-  //  inports: [
-  //    {
-  //      name: 'set',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      name: 'reset',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: true,
-  //      connectedTo: [
-  //        {
-  //          block: 'TGen1',
-  //          port: 'ena'
-  //        }
-  //      ]
-  //    }
-  //  ]
-  //},
-  //
-  //'TGen1': {
-  //  type: 'TGen',
-  //  label: 'TGen1',
-  //  name: '',
-  //  //position: {
-  //  //  x: 250,
-  //  //  y: 10
-  //  //},
-  //  //inports: {
-  //  //  "ena": {
-  //  //    connected: false,
-  //  //    connectedTo: null
-  //  //  }
-  //  //},
-  //  //outports: {
-  //  //  "posn": {
-  //  //    connected: false,
-  //  //    connectedTo: null
-  //  //  }
-  //  //}
-  //  inports: [
-  //    {
-  //      name: 'ena',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: true,
-  //      connectedTo: {
-  //        block: 'Gate1',
-  //        port: 'out'
-  //      }
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'posn',
-  //      type: 'int',
-  //      value: 1,
-  //      connected: false,
-  //      connectedTo:[]
-  //    }
-  //  ]
-  //},
-  //'PComp1': {
-  //  type: 'PComp',
-  //  label: 'PComp1',
-  //  name: "LinePulse",
-  //  //position: {
-  //  //  x: 350,
-  //  //  y: 150,
-  //  //},
-  //  inports: [
-  //    {
-  //      name: 'ena',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      name: 'posn',
-  //      type: 'int',
-  //      value: 1,
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'act',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //    {
-  //      name: 'pulse',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    }
-  //  ]
-  //},
-  //'7portblock': {
-  //  type: '7port',
-  //  label: '7port1',
-  //  name: '',
-  //  position: {
-  //    x: 600,
-  //    y: 300
-  //  },
-  //  inports: [
-  //    {
-  //      name: 'inpa',
-  //      type: 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpb',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpc',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpd',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpe',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpf',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpg',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //  ]
-  //}
 };
 
 function addEdgeToAllBlockInfo(Info){
-
-  //console.log("Inside addEdgeToAllBlockInfo, here's the input:");
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
@@ -379,16 +183,25 @@ function appendToAllBlockInfo(BlockInfo){
   //console.log(randomNodePositionGenerator());
 }
 
-//function interactJsDrag(BlockInfo){
-//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-//  //console.log(allNodeInfo[NodeInfo.target].position);
-//
-//  allBlockInfo[BlockInfo.target].position = {
-//    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
-//    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
-//  }
-//}
+
+var blockPositions = {
+
+};
+
+function appendToBlockPositions(BlockId, xCoord, yCoord){
+  blockPositions[BlockId] = {
+    x: xCoord * 1/flowChartStore.getGraphZoomScale(),
+    y: yCoord * 1/flowChartStore.getGraphZoomScale()
+  }
+}
+
+function interactJsDrag(BlockInfo){
+
+  blockPositions[BlockInfo.target] = {
+    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
+    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
+  }
+}
 
 
 var blockLibrary = {
@@ -532,14 +345,6 @@ var allBlockTabInfo = {
   }
 };
 
-function generateNewBlockId(){
-  /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  blockIdCounter += 1;
-  var newGateId = "Gate" + blockIdCounter;
-  console.log(newGateId);
-  return newGateId;
-}
-
 var blockInfoTemplates = {
   'Gate': {
     type: 'Gate',
@@ -633,183 +438,6 @@ var blockInfoTemplates = {
 
 
 
-/* 'FLOWCHART use' */
-
-//var clickedEdge = null;
-//var portThatHasBeenClicked = null;
-//var storingFirstPortClicked = null;
-//var portMouseOver = false;
-//var edgePreview = null;
-//var previousMouseCoordsOnZoom = null;
-//
-//var blockStyling = {
-//  outerRectangleHeight: 76,
-//  outerRectangleWidth: 72,
-//  innerRectangleHeight: 70,
-//  innerRectangleWidth: 66,
-//  portRadius: 2.5,
-//  portFill: 'grey',
-//};
-//
-//var graphPosition = {
-//  x: 0,
-//  y: 0
-//};
-//
-//var graphZoomScale = 2.0;
-//
-//var blockSelectedStates = {
-//  Gate1: false,
-//  TGen1: false,
-//  PComp1: false
-//};
-//
-//function appendToBlockSelectedStates(BlockId){
-//  //console.log("blockSelectedStates before adding a new block:");
-//  blockSelectedStates[BlockId] = false;
-//  //console.log("blockSelectedStates after adding a new block:");
-//}
-//
-//function deselectAllBlocks(){
-//  for(var block in blockSelectedStates){
-//    blockSelectedStates[block] = false
-//  }
-//}
-//
-//function checkIfAnyBlocksAreSelected(){
-//  var areAnyBlocksSelected = null;
-//  for(var block in blockSelectedStates){
-//    if(blockSelectedStates[block] === true){
-//      areAnyBlocksSelected = true;
-//      break;
-//    }
-//    else{
-//      //console.log("one of the blocks' state is false, check the next one if it is true");
-//      areAnyBlocksSelected = false;
-//    }
-//  }
-//  //console.log(areAnyNodesSelected);
-//  return areAnyBlocksSelected;
-//}
-//
-//var edgeSelectedStates = {
-//  'Gate1outTGen1ena': false,
-//  //Gate1OutTGen1Ena: false,
-//  //TGen1PosnPComp1Posn: false,
-//  //TGen1PosnPComp1Ena: false
-//};
-//
-//function selectEdge(Edge){
-//  edgeSelectedStates[Edge] = true;
-//}
-//
-//function getAnyEdgeSelectedState(EdgeId){
-//  if(edgeSelectedStates[EdgeId] === undefined || null){
-//    //console.log("edge selected state is underfined or null, best check it out...");
-//  }
-//  else{
-//    //console.log("that edge's state exists, hooray!");
-//    return edgeSelectedStates[EdgeId];
-//  }
-//}
-//
-//function checkIfAnyEdgesAreSelected(){
-//  var areAnyEdgesSelected;
-//  var i = 0;
-//  for(var edge in edgeSelectedStates){
-//    i = i + 1;
-//    if(edgeSelectedStates[edge] === true){
-//      //console.log(edgeSelectedStates[edge]);
-//      areAnyEdgesSelected = true;
-//      break;
-//    }
-//    else{
-//      areAnyEdgesSelected = false;
-//    }
-//  }
-//  //console.log(areAnyEdgesSelected);
-//  /* Taking care of if therer are no edges, so we return false instea dof undefined */
-//  if(i === 0){
-//    areAnyEdgesSelected = false;
-//  }
-//
-//  return areAnyEdgesSelected;
-//}
-//
-//function deselectAllEdges(){
-//  for(var edge in edgeSelectedStates){
-//    edgeSelectedStates[edge] = false
-//  }
-//}
-//
-//function updateEdgePreviewEndpoint(position){
-//  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
-//  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-//  //console.log(edgePreview.endpointCoords);
-//}
-//
-//
-//var GateBlockStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        set: {
-//          x: 0,
-//          y: 23
-//        },
-//        reset: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        out: {
-//          x: 65,
-//          y: 31
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      set: {
-//        x : 7,
-//        y: 24.5
-//      },
-//      reset: {
-//        x : 7,
-//        y: 42.5
-//      },
-//      out: {
-//        x: 42,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
-
-
-
 
 /* Functions to do with data retrieval from the server */
 
@@ -883,6 +511,17 @@ function addBlock(blockId){
         var outportRegExp = /flowgraph:outport/;
         if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var inportName = attribute;
+          /* Need to check if the inport is connected to
+          anything as well, so then edges will be preserved
+          on a window refresh!
+           */
+          var inportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+
+          /* There'll be a 'disconnected' value at some point,
+          so I'll be checking whether it's connected to anything
+          at all here soon
+           */
+
           inports.push(
             {
               name: inportName,
@@ -891,7 +530,20 @@ function addBlock(blockId){
               connected: false,
               connectedTo: null
             }
-          )
+          );
+
+          //var inportBlock = blockId;
+          //var inportBlockPort = attribute;
+          //var connectedToBlock = inportValue.slice(0, inportValue.indexOf('.'));
+          //var connectedToBlockPort = inportValue.slice(inportValue.indexOf('.') + 1);
+          //
+          //addEdgeViaMalcolm({
+          //  inportBlock: inportBlock,
+          //  inportBlockPort: inportBlockPort,
+          //  outportBlock: connectedToBlock,
+          //  outportBlockPort: connectedToBlockPort
+          //});
+
         }
         else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var outportName = attribute;
@@ -929,6 +581,11 @@ function addBlock(blockId){
 
 }
 
+function removeBlock(blockId){
+  delete allBlockInfo[blockId];
+  delete blockPositions[blockId];
+}
+
 function updateAttributeValue(blockId, attribute, newValue){
   console.log("update attribute value");
 
@@ -947,48 +604,7 @@ function updateAttributeValue(blockId, attribute, newValue){
   }
 }
 
-//function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
-//  console.log("fetching block object");
-//
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
-//    item: responseMessage
-//  })
-//}
-//
-//function testFetchEveryInitialBlockObjectFailure(responseMessage){
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
-//    item: responseMessage
-//  })
-//}
-
 var testAllBlockInfo = null;
-
-
-//function processInitialBlockData(){
-//  //var blockArray = [];
-//
-//  /* No need to get the block name without Z: ! */
-//
-//  //for(var i = 0; i < _stuff.initialBlockServerData.length; i++){
-//  //  /* Need to remove the string 'Z:' at the start of every block port*/
-//  //  var blockName = _stuff.initialBlockServerData[i].slice(2);
-//  //  blockArray.push(blockName);
-//  //  /* Now we have an array of all the blocks, need to recreate
-//  //  allBlockInfo from this! */
-//  //  console.log(blockArray);
-//  //}
-//
-//  for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
-//    console.log(_stuff.initialBlockServerData[j]);
-//
-//    WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
-//      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
-//    window.alert("hjwifhw");
-//  }
-//  //return blockArray;
-//}
 
 
 /* Testing a simple data fetch */
@@ -996,6 +612,114 @@ var testAllBlockInfo = null;
 var dataFetchTest = {
   value: true,
 };
+
+function addEdgeViaMalcolm(Info){
+  console.log(Info);
+  //window.alert(allBlockInfo[Info.inportBlock.label]);
+  for(var i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++){
+    if(allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort){
+      var addEdgeToInportBlock = {
+        block: Info.outportBlock,
+        port: Info.outportBlockPort
+      };
+      allBlockInfo[Info.inportBlock].inports[i].connected = true;
+      allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++){
+    if(allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort){
+      var addEdgeToOutportBlock = {
+        block: Info.inportBlock,
+        port: Info.inportBlockPort
+      };
+      allBlockInfo[Info.outportBlock].outports[j].connected = true;
+      allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
+    }
+  }
+
+  console.log(allBlockInfo);
+
+}
+
+function addInitialEdges(){
+
+  /* This is essentially the same loop as addBlock,
+  but since you can't add edges without being certain
+  that both blocks exist, this seems like the only way
+  to ensure that edges are created only when both blocks
+  exist, and that means looping through the attributes of
+  every block in testAllBlockInfo after all blocks have
+  been fetched
+   */
+
+  var inportRegExp = /flowgraph:inport/;
+  var outportRegExp = /flowgraph:outport/;
+
+  console.log(allBlockInfo)
+
+  for(var block in testAllBlockInfo){
+    for(var attribute in testAllBlockInfo[block].attributes){
+      if(testAllBlockInfo[block].attributes[attribute].tags !== undefined){
+        for(var i = 0; i < testAllBlockInfo[block].attributes[attribute].tags.length; i++){
+          if(inportRegExp.test(testAllBlockInfo[block].attributes[attribute].tags[i]) === true){
+            /* Add to the corresponding block's inports array,
+            and also add to the corresponding connected block's
+            outports array
+             */
+
+            console.log(block);
+            console.log(attribute);
+            console.log(testAllBlockInfo[block].attributes[attribute]);
+
+            var inportBlock = block;
+            var inportBlockPort = attribute;
+            var outportBlock = testAllBlockInfo[block].attributes[attribute].value.slice(0,
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.'));
+            var outportBlockPort = testAllBlockInfo[block].attributes[attribute].value.slice(
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.') + 1);
+
+            addEdgeViaMalcolm({
+              inportBlock: inportBlock,
+              inportBlockPort: inportBlockPort,
+              outportBlock: outportBlock,
+              outportBlockPort: outportBlockPort
+            });
+
+            console.log(allBlockInfo[inportBlock]);
+            console.log(allBlockInfo[outportBlock]);
+            console.log(allBlockInfo);
+            console.log(testAllBlockInfo);
+            console.log(outportBlock);
+
+            //for(var k = 0; k < allBlockInfo[inportBlock].inports.length; k++){
+            //  if(allBlockInfo[inportBlock].inports[k].name === inportBlockPort){
+            //    var addEdgeToInportBlock = {
+            //      block: outportBlock,
+            //      port: outportBlockPort
+            //    };
+            //    allBlockInfo[inportBlock].inports[k].connected = true;
+            //    allBlockInfo[inportBlock].inports[k].connectedTo = addEdgeToInportBlock;
+            //  }
+            //}
+            //
+            //for(var l = 0; l < allBlockInfo[outportBlock].outports.length; l++){
+            //  if(allBlockInfo[outportBlock].outports[l].name === outportBlockPort){
+            //    var addEdgeToOutportBlock = {
+            //      block: inportBlock,
+            //      port: inportBlockPort
+            //    };
+            //    allBlockInfo[outportBlock].outports[l].connected = true;
+            //    allBlockInfo[outportBlock].outports[l].connectedTo.push(addEdgeToOutportBlock);
+            //  }
+            //}
+
+          }
+        }
+      }
+    }
+  }
+}
 
 var flowChartStore = require('./flowChartStore');
 
@@ -1057,65 +781,9 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   },
 
-
-
-  /* FLOWCHART use */
-
-  //getAnyBlockSelectedState:function(BlockId){
-  //  if(blockSelectedStates[BlockId] === undefined || null){
-  //    //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
-  //    //console.log(NodeId);
-  //    //console.log(nodeSelectedStates[NodeId]);
-  //  }
-  //  else{
-  //    //console.log("the state of that nod exists, passing it now");
-  //    //console.log(nodeSelectedStates[NodeId]);
-  //    return blockSelectedStates[BlockId];
-  //  }
-  //},
-  //getIfAnyBlocksAreSelected: function(){
-  //  return checkIfAnyBlocksAreSelected();
-  //},
-  //getIfEdgeIsSelected: function(EdgeId){
-  //  return getAnyEdgeSelectedState(EdgeId);
-  //},
-  //getIfAnyEdgesAreSelected: function(){
-  //  return checkIfAnyEdgesAreSelected();
-  //},
-  //
-  //
-  //getGraphPosition: function(){
-  //  return graphPosition;
-  //},
-  //getGraphZoomScale: function(){
-  //  return graphZoomScale;
-  //},
-  //
-  //
-  //getPortThatHasBeenClicked: function(){
-  //  return portThatHasBeenClicked;
-  //},
-  //getStoringFirstPortClicked: function(){
-  //  return storingFirstPortClicked;
-  //},
-  //getPortMouseOver: function(){
-  //  return portMouseOver;
-  //},
-  //
-  //getSubsetOfAllBlockInfo: function(){
-  //  return allBlockInfo.Gate1.inports;
-  //},
-  //
-  //getEdgePreview: function(){
-  //  return edgePreview;
-  //},
-  //getPreviousMouseCoordsOnZoom: function(){
-  //  return previousMouseCoordsOnZoom;
-  //},
-  //
-  //getBlockStyling: function(){
-  //  return blockStyling;
-  //},
+  getBlockPositions: function(){
+    return blockPositions;
+  }
 
 });
 
@@ -1143,12 +811,12 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       console.log(allBlockInfo);
       break;
-    //case appConstants.INTERACTJS_DRAG:
-    //  console.log(payload);
-    //  console.log(item);
-    //  interactJsDrag(item);
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
+      blockStore.emitChange();
+      break;
 
     case appConstants.DELETE_EDGE:
       removeEdgeFromAllBlockInfo(item);
@@ -1171,54 +839,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.TEST_SUBSCRIBECHANNEL:
       blockStore.emitChange();
       break;
-
-    /* WebAPI use, but flowChart will be using this to display a loading icon */
-
-    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-    //  /* Creating the object holding all initial block data in the websocket
-    //  instead, then passing it to the client at the end
-    //   */
-    //  AppDispatcher.waitFor([flowChartStore.dispatchToken]);
-    //  console.log(item);
-    //  testAllBlockInfo = JSON.parse(JSON.stringify(item));
-    //  console.log(testAllBlockInfo);
-    //
-    //  /* Try adding one new server block to allBlockInfo */
-    //
-    //  for(var block in item){
-    //    addBlock(block);
-    //  }
-    //
-    //  //addBlock('CLOCKS');
-    //
-    //  blockStore.emitChange();
-    //  break;
-
-    //case appConstants.GET_BLOCKLIST_SUCCESS:
-    //  console.log("got the block list, now to get each block object!");
-    //  //for(var i = 0; i < item.value.length; i++){
-    //  //  MalcolmActionCreators.getBlock(item.value[i]);
-    //  //}
-    //  blockStore.emitChange();
-    //
-    //  break;
-    //
-    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS:
-    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  console.log(item);
-    //  var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
-    //  ///* No need to emiChnage since I'm only fetching one block by one,
-    //  //emitChange at the end of initial data fetch succes above
-    //  // */
-    //  console.log(testAllBlockInfo);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE:
-    //  window.alert("failed to fetch initial block object!");
-    //  blockStore.emitChange();
-    //  break;
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
@@ -1251,19 +871,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Do the block adding to testAllBlockInfo stuff */
 
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+
           console.log(blockName);
           testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
 
           /* Add the block to allBlockInfo! */
 
           if(item.attributes.VISIBLE.value === 'Show') {
-
+            appendToBlockPositions(blockName, xCoord, yCoord);
             addBlock(blockName);
 
           }
           else{
             /* Putting it here just to test the blocks even if they're not in use */
-            addBlock(blockName);
+            //addBlock(blockName);
 
             console.log("block isn't in use, don't add its info");
           }
@@ -1284,43 +907,77 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    //case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-    //  console.log("malcolmSubscribeSuccess");
-    //
-    //  /* First extract the block that the updated attribute
-    //  value belongs to
-    //  UPDATE: uneeded now that I move the malcolm request message
-    //  string creation to the action creator
-    //   */
-    //  //var sliceEndIndex = item.requestedData.indexOf('.');
-    //  //console.log(sliceEndIndex);
-    //  //var blockId = item.requestedData.slice(2, sliceEndIndex);
-    //  //console.log(blockId);
-    //  //var blockIdStringLength = blockId.length;
-    //  //console.log(blockIdStringLength);
-    //
-    //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-    //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
-    //
-    //  console.log(requestedData);
-    //
-    //  if(item.requestedData.attribute === 'X_COORD' ||
-    //    item.requestedData.attribute === 'Y_COORD'){
-    //
-    //  }
-    //  else {
-    //
-    //    updateAttributeValue(requestedData.blockName,
-    //      requestedData.attribute, responseMessage.value);
-    //
-    //  }
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
-    //  console.log("malcolmSubscribeFailure");
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("blockStore malcolmSubscribeSuccess");
+
+      console.log(item);
+
+      /* Check the tags for 'widget:combo', it'll be
+      indicating that a dropdown was used (it'll also
+      cause things like the dropdowns with 'triggered'
+      and stuff to emit a change, but for now that'll
+      work just fine
+       */
+
+      //window.alert("dhi");
+
+      var isInportDropdown = false;
+
+      for(var p = 0; p < item.responseMessage.tags.length; p++){
+        if(item.responseMessage.tags[p].indexOf('widget:combo') !== -1){
+          isInportDropdown = true;
+        }
+        else if(item.responseMessage.tags[p] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             */
+
+            appendToBlockPositions(item.requestedData.attribute,
+            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+
+            addBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Should invoke a removeBlock function to remove
+            the info from allBlockInfo
+             */
+            removeBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+        }
+      }
+
+      if(isInportDropdown === true){
+        /* Then update allBlockInfo with the new edge! */
+
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+
+        var inportBlock = requestedData.blockName;
+        var inportBlockPort = requestedData.attribute;
+
+        var outportBlock = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
+        var outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
+
+        addEdgeViaMalcolm({
+          inportBlock: inportBlock,
+          inportBlockPort: inportBlockPort,
+          outportBlock: outportBlock,
+          outportBlockPort: outportBlockPort
+        });
+
+        blockStore.emitChange();
+      }
+
+
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
 
     case appConstants.MALCOLM_CALL_SUCCESS:
       console.log("malcolmCallSuccess");
@@ -1332,133 +989,16 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
+    case appConstants.INITIALISE_FLOWCHART_START:
+      //console.log("initialise flowChart start blockStore");
+      blockStore.emitChange();
+      break;
 
-
-    /* FLOWCHART use */
-
-
-    //case appConstants.SELECT_BLOCK:
-    //  console.log(payload);
-    //  console.log(item);
-    //  blockSelectedStates[item] = true;
-    //  console.log(blockSelectedStates);
-    //  //changeUnselectedNodesOpacity();
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLBLOCKS:
-    //  console.log(payload);
-    //  console.log(item);
-    //  deselectAllBlocks();
-    //  //console.log(nodeSelectedStates.Gate1);
-    //  //console.log(nodeSelectedStates.TGen1);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.SELECT_EDGE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
-    //  //console.log(areAnyEdgesSelected);
-    //  console.log(clickedEdge);
-    //  if(areAnyEdgesSelected === true && item !== clickedEdge){
-    //    deselectAllEdges();
-    //    selectEdge(item);
-    //  }
-    //  else if(areAnyEdgesSelected === false){
-    //    selectEdge(item);
-    //  }
-    //  console.log(edgeSelectedStates);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLEDGES:
-    //  console.log(payload);
-    //  console.log(item);
-    //  deselectAllEdges();
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.CHANGE_GRAPHPOSITION:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  graphPosition = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.GRAPH_ZOOM:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  graphZoomScale = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.GETANY_EDGESELECTEDSTATE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  getAnyEdgeSelectedState(item);
-    //  console.log(edgeSelectedStates[item]);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.CLICKED_EDGE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  clickedEdge = item;
-    //  console.log(clickedEdge);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.PASS_PORTMOUSEDOWN:
-    //  console.log(payload);
-    //  console.log(item);
-    //  portThatHasBeenClicked = item;
-    //  console.log(portThatHasBeenClicked);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLPORTS:
-    //  portThatHasBeenClicked = null;
-    //  console.log("portThatHasBeenClicked has been reset");
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.STORING_FIRSTPORTCLICKED:
-    //  console.log(payload);
-    //  console.log(item);
-    //  storingFirstPortClicked = item;
-    //  //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.APPEND_EDGESELECTEDSTATE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  edgeSelectedStates[item] = false;
-    //  blockStore.emitChange();
-    //  console.log(edgeSelectedStates);
-    //  break;
-    //
-    //case appConstants.ADD_EDGEPREVIEW:
-    //  console.log(payload);
-    //  console.log(item);
-    //  edgePreview = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  updateEdgePreviewEndpoint(item);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
-    //  console.log(payload);
-    //  console.log(item);
-    //  previousMouseCoordsOnZoom = item;
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.INITIALISE_FLOWCHART_END:
+      console.log("initialise flowChart end, blockStore");
+      addInitialEdges();
+      blockStore.emitChange();
+      break;
 
     default:
       return true
@@ -1467,839 +1007,3 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 });
 
 module.exports = blockStore;
-
-//var SelectedGateNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        set: {
-//          x: 0,
-//          y: 23
-//        },
-//        reset: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        out: {
-//          x: 65,
-//          y: 31
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      set: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      reset: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      out: {
-//        x: 39,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var TGenBlockStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 4,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 37,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedTGenNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 6,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 35,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var PCompBlockStyling = {
-//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
-//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
-//   */
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 7,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 7,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 42,
-//        y: 23
-//      },
-//      out: {
-//        x: 42,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 35,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedPCompNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 40,
-//        y: 23
-//      },
-//      out: {
-//        x: 40,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 33,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var allBlockTypesPortStyling = {
-//  'Gate': GateBlockStyling.ports.portPositions,
-//  'TGen': TGenBlockStyling.ports.portPositions,
-//  'PComp': PCompBlockStyling.ports.portPositions
-//};
-//
-//var allBlockTypesStyling = {
-//  'Gate': GateBlockStyling,
-//  'TGen': TGenBlockStyling,
-//  'PComp': PCompBlockStyling
-//};
-
-/* Put blockStore.dispatchToken in front of the whole switch case above */
-
-//blockStore.dispatchToken = AppDispatcher.register(function(payload){
-//  var action = payload.action;
-//  var item = action.item;
-//
-//  switch(action.actionType){
-//
-//    /* These are all the actions that result in a data change in allBlockInfo of some kind */
-//
-//    //case appConstants.ADDTO_ALLBLOCKINFO:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  appendToAllBlockInfo(item);
-//    //  //appendToAllPossibleBlocks(item);
-//    //  appendToBlockSelectedStates(item);
-//    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-//    //  blockStore.emitChange();
-//    //  break;
-//    //
-//    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  addEdgeToAllBlockInfo(item);
-//    //  blockStore.emitChange();
-//    //  console.log(allBlockInfo);
-//    //  break;
-//
-//    //case appConstants.INTERACTJS_DRAG:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  interactJsDrag(item);
-//    //  blockStore.emitChange();
-//    //  break;
-//
-//    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
-//    change at all first =P
-//     */
-//
-//    default:
-//          return 'blockStore: default';
-//
-//  }
-//});
-
-
-/* Port calculation to render the edges properly has been moved to the render function of an edge;
- this is to allow constant rerendering due to node position changes
- */
-
-//var portPositionsForEdges = {
-//    gateNode: {
-//        inports: {
-//            set: {
-//                x: nodePositions.gateNode.x + gateNodeInports.set.x,
-//                y: nodePositions.gateNode.y + gateNodeInports.set.y
-//            },
-//            reset: {
-//                x: nodePositions.gateNode.x + gateNodeInports.reset.x,
-//                y: nodePositions.gateNode.y + gateNodeInports.reset.y
-//            }
-//        },
-//        outports: {
-//            out: {
-//                x: nodePositions.gateNode.x + gateNodeOutports.out.x,
-//                y: nodePositions.gateNode.y + gateNodeOutports.out.y
-//            }
-//        }
-//    },
-//    tgenNode: {
-//        inports: {
-//            ena: {
-//                x: nodePositions.tgenNode.x + tgenNodeInports.ena.x,
-//                y: nodePositions.tgenNode.y + tgenNodeInports.ena.y
-//            }
-//        },
-//        outports: {
-//            posn: {
-//                x: nodePositions.tgenNode.x + tgenNodeOutports.posn.x,
-//                y: nodePositions.tgenNode.y + tgenNodeOutports.posn.y
-//            }
-//        }
-//    }
-//
-//};
-
-//getGate1SelectedState: function(){
-//  return nodeSelectedStates.Gate1;
-//},
-//getTGen1SelectedState: function(){
-//  return nodeSelectedStates.TGen1;
-//},
-//getPComp1SelectedState: function(){
-//  return nodeSelectedStates.PComp1;
-//},
-
-//getGate1CurrentStyling: function(){
-//  return checkGate1Styling();
-//},
-//function changeUnselectedNodesOpacity(){
-//    console.log(window.NodeContainerStyle);
-//    window.NodeContainerStyle = {
-//        'cursor': 'move',
-//        'draggable': 'true',
-//        'className': 'nodeContainer',
-//        'opacity': 0.5
-//    };
-//    console.log(window.NodeContainerStyle);
-//
-//}
-//function randomNodePositionGenerator(){
-//  console.log("random number is being generated");
-//  return (Math.random() * 1000) % 500;
-//}
-
-//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
-//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
-//
-//  var startNode;
-//  var startNodePort;
-//  var endNode;
-//  var endNodePort;
-//  var newEdge;
-//  var edgeLabel;
-//  if(portTypes.fromNodePortType === "outport"){
-//    console.log("outport to inport, so edge labelling is normal");
-//    startNode = edgeInfo.fromNode;
-//    startNodePort = edgeInfo.fromNodePort;
-//    endNode = edgeInfo.toNode;
-//    endNodePort = edgeInfo.toNodePort;
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//  else if(portTypes.fromNodePortType === "inport"){
-//    console.log("inport to outport, so have to flip the edge labelling direction");
-//    /* Note that you must also flip the ports too! */
-//    startNode = edgeInfo.toNode;
-//    startNodePort = edgeInfo.toNode;
-//    endNode = edgeInfo.fromNode;
-//    endNodePort = edgeInfo.fromNodePort;
-//    /* Don't need this in both loops, can just set this after the loops have completed! */
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//
-//  newEdge = {
-//    fromNode: startNode,
-//    fromNodePort: startNodePort,
-//    toNode: endNode,
-//    toNodePort: endNodePort
-//  };
-//
-//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  console.log("The newEdge's label is " + edgeLabel);
-//  newlyCreatedEdgeLabel = edgeLabel;
-//  edges[edgeLabel] = newEdge;
-//  console.log(edges);
-//
-//  /* Also need to add the selected states to edgeSelectedStates! */
-//
-//  edgeSelectedStates[edgeLabel] = false;
-//
-//
-//}
-
-//function checkPortCompatibility(edgeInfo){
-//  /* First need to check we have an inport and an outport */
-//  /* Find both port types, then compare them somehow */
-//
-//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
-//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
-//
-//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
-//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
-//
-//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-//      var fromNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-//      var fromNodePortType = "outport";
-//    }
-//  }
-//
-//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-//      var toNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The toNode isn't an inport, so it's an outport!");
-//      var toNodePortType = "outport";
-//    }
-//  }
-//
-//  /* Time to compare the fromNodePortType and toNodePortType */
-//
-//  if(fromNodeType === toNodePortType){
-//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-//    window.alert("Incompatible ports");
-//    /* Hence, don't add anything to allNodeInfo */
-//  }
-//  else if(fromNodePortType !== toNodePortType){
-//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
-//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-//    addEdgeToAllNodeInfo(edgeInfo);
-//
-//    /* Also need the equivalent of addToEdgesObject for single edges here! */
-//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-//    if it's an outport then it's a normal connection from an out to an in,
-//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
-//     */
-//
-//    var portTypes = {
-//      fromNodePortType: fromNodePortType,
-//      toNodePortType: toNodePortType
-//    };
-//
-//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
-//  }
-//
-//}
-
-//function createNewEdgeLabel(edgeInfo){
-//  var newEdge = edgeInfo;
-//  var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//  newlyCreatedEdgeLabel = newEdgeLabel;
-//}
-
-//function addNewEdge(EdgeInfo){
-//  var newEdge = EdgeInfo;
-//  var fromNode = newEdge.fromNode;
-//  var toNode = newEdge.toNode;
-//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
-//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
-//  console.log(newEdge);
-//
-//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  //newlyCreatedEdgeLabel = newEdgeLabel;
-//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
-//  edges[newlyCreatedEdgeLabel] = newEdge;
-//  console.log(edges);
-//
-//}
-
-//function appendToEdgeSelectedStates(EdgeId){
-//  edgeSelectedStates[EdgeId] = false;
-//  console.log("edgeSelectedStates is now:");
-//  console.log(edgeSelectedStates);
-//}
-
-//function selectNode(Node){
-//  nodeSelectedStates[Node] = true;
-//}
-
-///* Not using an edges object anymore, instead I create the edges directly from allNodeInfo */
-//
-//var edges = {
-//  //Gate1OutTGen1Ena: {
-//  //  fromNode: 'Gate1',
-//  //  fromNodeType: 'Gate',
-//  //  fromNodePort: 'out',
-//  //  toNode: 'TGen1',
-//  //  toNodeType: 'TGen',
-//  //  toNodePort: 'ena'
-//  //},
-//  //TGen1PosnPComp1Posn: {
-//  //  fromNode: 'TGen1',
-//  //  fromNodeType: 'TGen',
-//  //  fromNodePort: 'posn',
-//  //  toNode: 'PComp1',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'posn'
-//  //},
-//  //TGen1PosnPComp1Ena: {
-//  //  fromNode: 'TGen1',
-//  //  fromNodeType: 'TGen',
-//  //  fromNodePort: 'posn',
-//  //  toNode: 'PComp1',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'ena'
-//  //},
-//  //Gate1OutPComp2Ena: {
-//  //  fromNode: 'Gate1',
-//  //  fromNodeType: 'Gate',
-//  //  fromNodePort: 'out',
-//  //  toNode: 'PComp2',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'ena'
-//  //}
-//};
-
-///* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
-//
-//function addToEdgesObject(){
-//  for(var node in allNodeInfo){
-//    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
-//    for(i = 0; i < allNodeInfo[node].outports.length; i++){
-//      console.log(i);
-//      console.log(allNodeInfo[node].outports[i]);
-//      if(allNodeInfo[node].outports[i].connected === true){
-//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
-//        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
-//          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
-//          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
-//          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
-//          var newEdge = {
-//            fromNode: node,
-//            fromNodeType: allNodeInfo[node].type,
-//            fromNodePort: allNodeInfo[node].outports[i].name,
-//            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
-//            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
-//            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
-//          };
-//          console.log(newEdge);
-//          /* Then here I need to add this new edge to the edges object */
-//          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//          newlyCreatedEdgeLabel = newEdgeLabel;
-//          console.log(newlyCreatedEdgeLabel);
-//          console.log("The newEdge's label is " + newEdgeLabel);
-//          edges[newEdgeLabel] = newEdge;
-//          console.log(edges);
-//          /* Also need to add the selected states to edgeSelectedStates! */
-//
-//          edgeSelectedStates[newEdgeLabel] = false;
-//          console.log(edgeSelectedStates);
-//        }
-//      }
-//      else{
-//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
-//      }
-//    }
-//  }
-//}
-
-//function addOneSingleEdge(edgeLabel, edgeInfo){
-//  edges[edgeLabel] = edgeInfo;
-//}
-
-//function portMouseOverLeaveToggle(){
-//  if(portMouseOver === false){
-//    portMouseOver = true;
-//  }
-//  else if(portMouseOver === true){
-//    portMouseOver = false;
-//  }
-//  else{
-//    console.log("portMouseOver is neither true nor false, so something is up");
-//  }
-//}
-
-//function updateGate1Position(newCoordinates){
-//  /* Will be used to update the coordinates of a node when dragged, to then find the new location of the ports a connected edge needs to stick to */
-//  nodePositions.Gate1 = {
-//    x: nodePositions.Gate1.x + newCoordinates.x,
-//    y: nodePositions.Gate1.y + newCoordinates.y
-//  };
-//  /* Also need to update the port positions somehow! */
-//}
-
-//function updateNodePosition(NodeInfo){
-//  if(typeof allPossibleNodes[draggedElementID] !== 'function'){
-//    throw new Error('Invalid node id')
-//  }
-//  return allPossibleNodes[draggedElementID](NodeInfo)
-//}
-//
-//var allPossibleNodes = {
-//
-//  'Gate1': function(NodeInfo){
-//    allNodeInfo.Gate1.position = {
-//      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
-//      y: allNodeInfo.Gate1.position.y + NodeInfo.y
-//    };
-//  },
-//  'TGen1': function(NodeInfo){
-//    allNodeInfo.TGen1.position = {
-//      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
-//      y: allNodeInfo.TGen1.position.y + NodeInfo.y
-//    }
-//  },
-//  'PComp1': function(NodeInfo){
-//    allNodeInfo.PComp1.position = {
-//      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
-//      y: allNodeInfo.PComp1.position.y + NodeInfo.y
-//    }
-//  },
-//  //'PComp2': function(NodeInfo) {
-//  //  allNodeInfo.PComp2.position = {
-//  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
-//  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
-//  //  }
-//  //},
-//  //'PComp3': function(NodeInfo) {
-//  //  allNodeInfo.PComp3.position = {
-//  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
-//  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
-//  //  }
-//  //}
-//};
-//
-//var appendToAllPossibleNodes = function(Node){
-//  allPossibleNodes[Node] = function(NodeInfo){
-//    console.log(nodeInfoTemplates.Gate);
-//    allNodeInfo[Node].position = {
-//      x: allNodeInfo[Node].position.x + NodeInfo.x,
-//      y: allNodeInfo[Node].position.y + NodeInfo.y
-//    }
-//  };
-//  console.log("appended to allPossibleNodes");
-//  console.log(Node);
-//  console.log(allPossibleNodes);
-//  console.log(allPossibleNodes[Node]);
-//  console.log(allNodeInfo[Node]);
-//};
-
-//var nodePositions = {
-//  Gate1: {
-//    position: {
-//      x: 50,
-//      y: 100,
-//    },
-//    name: "Arm"
-//  },
-//
-//  TGen1: {
-//    position: {
-//      x: 450,
-//      y: 10
-//    }
-//  },
-//  PComp1: {
-//    position: {
-//      x: 650,
-//      y: 250,
-//    },
-//    name: "LinePulse"
-//  },
-//  ////LUT1: {
-//  ////  x: 250,
-//  ////  y: 150
-//  ////}
-//  //PComp2: {
-//  //  position: {
-//  //    x: 250,
-//  //    y: 150
-//  //  },
-//  //  name: "FwdLineGate"
-//  //},
-//  //PComp3: {
-//  //  position: {
-//  //    x: 250,
-//  //    y: 350
-//  //  },
-//  //  name: "BwdLineGate"
-//  //}
-//};
-//
-//function appendToNodePositions(NodeInfo){
-//  var nodePropertyName = function(){
-//    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
-//  };
-//  //nodePositions[nodePropertyName()] = NodeInfo;
-//}
-//
-//var portPositionsForNodes = {
-//  portRadius: 2,
-//  inportPositionRatio: 0,
-//  outportPositionRatio: 1,
-//  GateNodePortStyling: {
-//    inportPositions: {
-//      set: {
-//        x: 6,
-//        y: 25
-//      },
-//      reset: {
-//        x: 6,
-//        y: 40
-//      }
-//    },
-//    outportPositions: {
-//      out: {
-//        x: 68 + 3,
-//        y: 33
-//      }
-//    }
-//  },
-//  TGenNodePortStyling: {
-//    inportPositions: {
-//      ena: {
-//        x: 6,
-//        y: 33
-//      }
-//    },
-//    outportPositions: {
-//      posn: {
-//        x: 68 + 3,
-//        y: 33
-//      }
-//    }
-//  }
-//};
-
-//var gateNodeInports = portPositionsForNodes.GateNodePortStyling.inportPositions;
-//var gateNodeOutports = portPositionsForNodes.GateNodePortStyling.outportPositions;
-//var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
-//var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;

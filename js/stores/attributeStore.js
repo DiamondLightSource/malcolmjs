@@ -13,6 +13,12 @@ var allBlockAttributes = {
 
 };
 
+//var listOfAllPossibleBlocks = [];
+
+//var blocksVisibility = {};
+//
+//var blockGroups = [];
+
 function updateAttributeValue(blockId, attribute, newValue){
   allBlockAttributes[blockId][attribute].value = newValue;
   console.log(newValue);
@@ -31,7 +37,16 @@ var attributeStore = assign({}, EventEmitter.prototype, {
   },
   getAllBlockAttributes: function(){
     return allBlockAttributes;
-  }
+  },
+  //getListOfAllPossibleBlocks: function(){
+  //  return listOfAllPossibleBlocks;
+  //}
+  //getBlockGroups: function(){
+  //  return blockGroups;
+  //},
+  //getBlocksVisibility: function(){
+  //  return blocksVisibility;
+  //}
 
 });
 
@@ -53,12 +68,70 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(item);
 
       for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === "instance:Zebra2Block"){
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
-          console.log(allBlockAttributes);
+        if(item.tags[i] === "instance:Zebra2Block") {
+
+          /* Temporarily removing this condition to see
+          whether or not allBlockATtributes should have
+          all the blocks' attributes, even the not-visible
+          ones, they'll instead simply be static and
+          not subscribed to?
+           */
+
+          //if (item.attributes.VISIBLE.value === 'Show') {
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
+            console.log(allBlockAttributes);
+          //}
         }
+        //else if(item.tags[i] === "instance:Zebra2"){
+        //  /* Save the list of all possible blocks */
+        //  listOfAllPossibleBlocks = JSON.parse(JSON.stringify(item.attributes.blocks.value));
+        //  /* Note that they all have 'Z:' in front of the block
+        //  name in the array
+        //   */
+        //}
+        //else if(item.tags[i] === 'instance:Zebra2Visibility'){
+        //  /* Save the list of all possible blocks */
+        //  var zVisibility = JSON.parse(JSON.stringify(item));
+        //  for(var attribute in zVisibility.attributes){
+        //    if(zVisibility.attributes[attribute].tags !== undefined){
+        //      var isBlockToggle = false;
+        //      var doesBelongToGroup = false;
+        //
+        //      for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
+        //        if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
+        //          /* Then it's a block! */
+        //          //blocksVisibility.push(attribute);
+        //          isBlockToggle = true;
+        //        }
+        //        else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
+        //          doesBelongToGroup = true;
+        //        }
+        //      }
+        //
+        //      if(isBlockToggle === true && doesBelongToGroup === true){
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //      }
+        //      else if(isBlockToggle === true && doesBelongToGroup !== true){
+        //        /* It's a block that is the only instance of its
+        //        type, so add it to both blockGroups and
+        //        blocksVisibility, so then I can just check the length
+        //        of the array in the mapping of groups and group members
+        //         */
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //        blockGroups.push(attribute);
+        //      }
+        //    }
+        //    else if(zVisibility.attributes[attribute].tags === undefined &&
+        //      zVisibility.attributes[attribute].descriptor === attribute){
+        //      /* Then it's a group! */
+        //      blockGroups.push(attribute);
+        //    }
+        //  }
+        //}
       }
+      //console.log(blockGroups);
+      //console.log(blocksVisibility);
 
       attributeStore.emitChange();
       break;
@@ -72,13 +145,15 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log("malcolmSubscribeSuccess in attributeStore");
       console.log(item);
 
-      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      if(item.requestedData.blockName !== 'VISIBILITY') {
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-      updateAttributeValue(requestedData.blockName,
-      requestedData.attribute, responseMessage.value);
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
 
-      attributeStore.emitChange();
+        attributeStore.emitChange();
+      }
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:

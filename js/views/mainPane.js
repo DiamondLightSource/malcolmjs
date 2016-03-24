@@ -8,6 +8,7 @@ var mainPaneStore = require('../stores/mainPaneStore');
 var mainPaneActions = require('../actions/mainPaneActions');
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
+var FooterButton = require('./button');
 
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
@@ -115,6 +116,10 @@ var MainPane = React.createClass({
     paneActions.configTabOpen('this is the item')
   },
 
+  handleActionBlockLookupTableTabOpen: function(){
+    paneActions.blockLookupTableTabOpen('this is the item');
+  },
+
   handleActionToggleSidebar: function(){
     paneActions.toggleSidebar("toggle sidebar");
   },
@@ -172,6 +177,18 @@ var MainPane = React.createClass({
     //  /* Perhaps have another icon show up if initial data fetch doesn't work? */
     //}
 
+    var footer =
+      <Footer><div id="blockDock">
+        <div id="buttonContainer">
+          <FavButton favTabOpen={this.handleActionFavTabOpen}/>
+          <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
+          <FooterButton id="blockLookUpTableButton"
+                        buttonLabel="Blocks"
+                        buttonClick={this.handleActionBlockLookupTableTabOpen} />
+        </div>
+      </div>
+      </Footer>;
+
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
@@ -188,13 +205,7 @@ var MainPane = React.createClass({
             </div>
           </Content>
 
-          <Footer><div id="blockDock">
-            <div id="buttonContainer">
-              <FavButton favTabOpen={this.handleActionFavTabOpen}/>
-              <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
-            </div>
-          </div>
-          </Footer>
+          {footer}
         </Tab>
 
         <Tab title="Design" showFooter={this.props.footers}>
@@ -202,13 +213,7 @@ var MainPane = React.createClass({
             Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
 
           </Content>
-          <Footer><div id="blockDock">
-            <div id="buttonContainer">
-              <FavButton favTabOpen={this.handleActionFavTabOpen}/>
-              <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
-            </div>
-          </div>
-          </Footer>
+          {footer}
         </Tab>
       </Panel>
     )

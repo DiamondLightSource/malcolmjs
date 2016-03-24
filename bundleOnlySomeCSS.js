@@ -192,7 +192,22 @@ var MalcolmUtils = require('../utils/MalcolmUtils');
 var MalcolmActionCreators = {
 
   initialiseFlowChart: function(requestedData){
+
+    /* Try sending an initialise flowChart start action here */
+
+    AppDispatcher.handleAction({
+      actionType: appConstants.INITIALISE_FLOWCHART_START,
+      item: 'initialise flowChart start'
+    });
+
     MalcolmUtils.initialiseFlowChart(this.malcolmGet.bind(null, requestedData));
+
+    //window.alert("initialisation finished?");
+
+    //AppDispatcher.handleAction({
+    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //  item: "initialise flowChart end"
+    //});
 
     /* Testing subscribe */
     //MalcolmUtils.initialiseFlowChart(this.malcolmSubscribe.bind(null, requestedData));
@@ -274,9 +289,39 @@ var MalcolmActionCreators = {
     if(requestedData === 'Z'){
       testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
+
+        /* First, give the GUI the list of all possible blocks */
+
+        //malcolmGetSuccess(responseMessage);
+
+        /* Actually, fetch Z:VISIBILITY, it'll make it
+        easier to group the blocks by type for a treeview
+         */
+
+        /* Now also need to subscribe to all visible attributes in Z:VISIBILITY */
+
+        var zVisibilitySubscribe = function(zVisibility){
+          /* This is to return Z:VISIBILITY to the GUI, but I still
+          need to subscribe to all the blocks, so a for loop is
+          part of the callback too
+           */
+          malcolmGetSuccess(zVisibility);
+          for(var attribute in zVisibility.attributes){
+            if(zVisibility.attributes[attribute].tags !== undefined){
+              /* Then it's a block visible attribute, so subscribe to it */
+
+              actionCreators.malcolmSubscribe('VISIBILITY', attribute);
+
+            }
+          }
+        };
+
+        MalcolmUtils.malcolmGet('Z:VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+
         for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
-          if(responseMessage.attributes.blocks.value[i].indexOf('6') !== -1 ||
-            responseMessage.attributes.blocks.value[i].indexOf("CLOCKS") !== -1) {
+          //if(responseMessage.attributes.blocks.value[i].indexOf('6') !== -1 ||
+          //  responseMessage.attributes.blocks.value[i].indexOf("CLOCKS") !== -1 ||
+          //  responseMessage.attributes.blocks.value[i].indexOf("BITS") !== -1) {
             //window.alert("ifhoief");
             /* Doing window.alert doesn't cause an InvariantViolation error like it does
              in the store with this method, unlike the other one with actions being created during the
@@ -291,25 +336,42 @@ var MalcolmActionCreators = {
              */
 
             var block = responseMessage.attributes.blocks.value[i];
-            MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+            //MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
 
-            testBlockAttributeSubscribe = function (blockResponseObject) {
+            var testBlockAttributeSubscribe = function (blockResponseObject) {
+              /* This sends the block info to the blockStore,
+               and then proceeds to do the for loop subscription
+               to all the block's attributes, rather than doing
+               two separate gets (one to give blockStore the block
+               info, and then another to get the block info in order
+               to do a subscribe to all its attributes)
+               */
+              malcolmGetSuccess(blockResponseObject);
               console.log(blockResponseObject.attributes);
-              for (var attribute in blockResponseObject.attributes) {
+              if (blockResponseObject.attributes.VISIBLE.value === 'Show') {
+                for (var attribute in blockResponseObject.attributes) {
 
-                if (attribute !== 'uptime') {
-                console.log(blockResponseObject);
-                console.log(attribute);
-                console.log(blockResponseObject.attributes[attribute].value);
-                //window.alert(blockResponseObject.attributes[attribute]);
+                  if (attribute !== 'uptime') {
+                    console.log(blockResponseObject);
+                    console.log(attribute);
+                    //console.log(blockResponseObject.attributes[attribute].value);
+                    //window.alert(blockResponseObject.attributes[attribute]);
 
-                /* Ohhh, I need to put a string of what I want, not just the value (blockResponseObject.attributes[attribute].value) I want! =P */
+                    /* Ohhh, I need to put a string of what I want, not just the value (blockResponseObject.attributes[attribute].value) I want! =P */
 
-                var blockName = blockResponseObject.attributes.BLOCKNAME.value;
-                //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
-                actionCreators.malcolmSubscribe(blockName, attribute);
+                    var blockName = blockResponseObject.attributes.BLOCKNAME.value;
+                    //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+                    actionCreators.malcolmSubscribe(blockName, attribute);
+                  }
                 }
+
+                //AppDispatcher.handleAction({
+                //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+                //  item: "initialise flowChart end"
+                //});
+
               }
+
             };
 
             /* Comment out the subscribe while I'm testing server write for
@@ -322,11 +384,24 @@ var MalcolmActionCreators = {
             /* Also need to subscribe channels for each attribute in
              a block, pass another loop as a callback to this? =P
              */
-          }
+          //}
         }
+
+        //window.alert("send initalise flowChart end here?");
+
+        //AppDispatcher.handleAction({
+        //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+        //  item: "initialise flowChart end"
+        //})
+
       };
 
       MalcolmUtils.malcolmGet(requestedData, testMalcolmGetSuccess, malcolmGetFailure);
+
+      //AppDispatcher.handleAction({
+      //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+      //  item: "initialise flowChart end"
+      //});
 
     }
     else{
@@ -439,7 +514,7 @@ function malcolmSubscribeFailure(responseMessage){
 
 module.exports = MalcolmActionCreators;
 
-},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/MalcolmUtils":22}],3:[function(require,module,exports){
+},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/MalcolmUtils":23}],3:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -799,6 +874,12 @@ var paneActions = {
       item: item
     })
   },
+  blockLookupTableTabOpen: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.BLOCKLOOKUPTABLETAB_OPEN,
+      item: item
+    })
+  },
   updatePaneStoreBlockContentViaDeviceStore: function(blockContentObject){
     AppDispatcher.handleAction({
       actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
@@ -1153,7 +1234,7 @@ var testingWebsocketActions = {
 
 module.exports = testingWebsocketActions;
 
-},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/WebAPIUtils":23}],11:[function(require,module,exports){
+},{"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/WebAPIUtils":24}],11:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -1219,7 +1300,7 @@ ReactDOM.render(
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
 
-},{"./actions/MalcolmActionCreators":2,"./stores/blockStore.js":16,"./views/mainPane":36,"./views/sidePane":39,"./views/sidebar":40,"react":229,"react-dom":50,"react-panels":51}],12:[function(require,module,exports){
+},{"./actions/MalcolmActionCreators":2,"./stores/blockStore.js":16,"./views/mainPane":38,"./views/sidePane":41,"./views/sidebar":42,"react":232,"react-dom":52,"react-panels":53}],12:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -1236,6 +1317,7 @@ var appConstants = {
   DROPDOWN_SELECT: "DROPDOWN_SELECT",
   FAVTAB_OPEN: "FAVTAB_OPEN",
   CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
+  BLOCKLOOKUPTABLETAB_OPEN: 'BLOCKLOOKUPTABLETAB_OPEN',
 
   OPEN_BLOCKTAB: "OPEN_BLOCKTAB",
   REMOVE_BLOCKTAB: "REMOVE_BLOCKTAB",
@@ -1284,6 +1366,10 @@ var appConstants = {
   MALCOLM_SUBSCRIBE_FAILURE: 'MALCOLM_SUBSCRIBE_FAILURE',
   MALCOLM_CALL_SUCCESS: 'MALCOLM_CALL_SUCCESS',
   MALCOLM_CALL_FAILURE: 'MALCOLM_CALL_FAILURE',
+
+  INITIALISE_FLOWCHART_START: 'INITIALISE_FLOWCHART_START',
+  INITIALISE_FLOWCHART_END: 'INITIALISE_FLOWCHART_END',
+  INITIALISE_FLOWCHART_FAILURE: 'INITIALISE_FLOWCHART_FAILURE',
 
   /* Constants from flowChart added here */
 
@@ -1390,7 +1476,7 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":44,"object-assign":48}],14:[function(require,module,exports){
+},{"flux":46,"object-assign":50}],14:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -1569,6 +1655,8 @@ function Client(url){
 
           /* Invoking the corresponding id's callback */
           console.log(json);
+          //window.alert(json.id);
+          //window.alert(json.value);
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }
@@ -1793,7 +1881,7 @@ function Client(url){
 var WebSocketClient = new Client('ws://localhost:8080/ws');
 module.exports = WebSocketClient;
 
-},{"./utils/idLookupTable":24}],15:[function(require,module,exports){
+},{"./utils/idLookupTable":25}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/03/16.
  */
@@ -1808,6 +1896,12 @@ var CHANGE_EVENT = 'change';
 var allBlockAttributes = {
 
 };
+
+//var listOfAllPossibleBlocks = [];
+
+//var blocksVisibility = {};
+//
+//var blockGroups = [];
 
 function updateAttributeValue(blockId, attribute, newValue){
   allBlockAttributes[blockId][attribute].value = newValue;
@@ -1827,7 +1921,16 @@ var attributeStore = assign({}, EventEmitter.prototype, {
   },
   getAllBlockAttributes: function(){
     return allBlockAttributes;
-  }
+  },
+  //getListOfAllPossibleBlocks: function(){
+  //  return listOfAllPossibleBlocks;
+  //}
+  //getBlockGroups: function(){
+  //  return blockGroups;
+  //},
+  //getBlocksVisibility: function(){
+  //  return blocksVisibility;
+  //}
 
 });
 
@@ -1849,12 +1952,70 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log(item);
 
       for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === "instance:Zebra2Block"){
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
-          console.log(allBlockAttributes);
+        if(item.tags[i] === "instance:Zebra2Block") {
+
+          /* Temporarily removing this condition to see
+          whether or not allBlockATtributes should have
+          all the blocks' attributes, even the not-visible
+          ones, they'll instead simply be static and
+          not subscribed to?
+           */
+
+          //if (item.attributes.VISIBLE.value === 'Show') {
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
+            console.log(allBlockAttributes);
+          //}
         }
+        //else if(item.tags[i] === "instance:Zebra2"){
+        //  /* Save the list of all possible blocks */
+        //  listOfAllPossibleBlocks = JSON.parse(JSON.stringify(item.attributes.blocks.value));
+        //  /* Note that they all have 'Z:' in front of the block
+        //  name in the array
+        //   */
+        //}
+        //else if(item.tags[i] === 'instance:Zebra2Visibility'){
+        //  /* Save the list of all possible blocks */
+        //  var zVisibility = JSON.parse(JSON.stringify(item));
+        //  for(var attribute in zVisibility.attributes){
+        //    if(zVisibility.attributes[attribute].tags !== undefined){
+        //      var isBlockToggle = false;
+        //      var doesBelongToGroup = false;
+        //
+        //      for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
+        //        if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
+        //          /* Then it's a block! */
+        //          //blocksVisibility.push(attribute);
+        //          isBlockToggle = true;
+        //        }
+        //        else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
+        //          doesBelongToGroup = true;
+        //        }
+        //      }
+        //
+        //      if(isBlockToggle === true && doesBelongToGroup === true){
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //      }
+        //      else if(isBlockToggle === true && doesBelongToGroup !== true){
+        //        /* It's a block that is the only instance of its
+        //        type, so add it to both blockGroups and
+        //        blocksVisibility, so then I can just check the length
+        //        of the array in the mapping of groups and group members
+        //         */
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //        blockGroups.push(attribute);
+        //      }
+        //    }
+        //    else if(zVisibility.attributes[attribute].tags === undefined &&
+        //      zVisibility.attributes[attribute].descriptor === attribute){
+        //      /* Then it's a group! */
+        //      blockGroups.push(attribute);
+        //    }
+        //  }
+        //}
       }
+      //console.log(blockGroups);
+      //console.log(blocksVisibility);
 
       attributeStore.emitChange();
       break;
@@ -1868,13 +2029,15 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log("malcolmSubscribeSuccess in attributeStore");
       console.log(item);
 
-      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      if(item.requestedData.blockName !== 'VISIBILITY') {
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-      updateAttributeValue(requestedData.blockName,
-      requestedData.attribute, responseMessage.value);
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
 
-      attributeStore.emitChange();
+        attributeStore.emitChange();
+      }
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
@@ -1891,7 +2054,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = attributeStore;
 
-},{"../../node_modules/object-assign/index.js":48,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"./blockStore":16,"events":42}],16:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":50,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"./blockStore":16,"events":44}],16:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -1911,207 +2074,11 @@ var _stuff = {
   blockList: null
 };
 
-
-/* 'BLOCK' use */
-
 var allBlockInfo = {
 
-  //'Gate1': {
-  //  type: 'Gate',
-  //  label: 'Gate1',
-  //  name: "Arm",
-  //  //position: {
-  //  //  x: 50,
-  //  //  y: 100,
-  //  //},
-  //  inports: [
-  //    {
-  //      name: 'set',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      name: 'reset',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: true,
-  //      connectedTo: [
-  //        {
-  //          block: 'TGen1',
-  //          port: 'ena'
-  //        }
-  //      ]
-  //    }
-  //  ]
-  //},
-  //
-  //'TGen1': {
-  //  type: 'TGen',
-  //  label: 'TGen1',
-  //  name: '',
-  //  //position: {
-  //  //  x: 250,
-  //  //  y: 10
-  //  //},
-  //  //inports: {
-  //  //  "ena": {
-  //  //    connected: false,
-  //  //    connectedTo: null
-  //  //  }
-  //  //},
-  //  //outports: {
-  //  //  "posn": {
-  //  //    connected: false,
-  //  //    connectedTo: null
-  //  //  }
-  //  //}
-  //  inports: [
-  //    {
-  //      name: 'ena',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: true,
-  //      connectedTo: {
-  //        block: 'Gate1',
-  //        port: 'out'
-  //      }
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'posn',
-  //      type: 'int',
-  //      value: 1,
-  //      connected: false,
-  //      connectedTo:[]
-  //    }
-  //  ]
-  //},
-  //'PComp1': {
-  //  type: 'PComp',
-  //  label: 'PComp1',
-  //  name: "LinePulse",
-  //  //position: {
-  //  //  x: 350,
-  //  //  y: 150,
-  //  //},
-  //  inports: [
-  //    {
-  //      name: 'ena',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      name: 'posn',
-  //      type: 'int',
-  //      value: 1,
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'act',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //    {
-  //      name: 'pulse',
-  //      type: 'boolean',
-  //      value: false,
-  //      connected: false,
-  //      connectedTo: []
-  //    }
-  //  ]
-  //},
-  //'7portblock': {
-  //  type: '7port',
-  //  label: '7port1',
-  //  name: '',
-  //  position: {
-  //    x: 600,
-  //    y: 300
-  //  },
-  //  inports: [
-  //    {
-  //      name: 'inpa',
-  //      type: 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpb',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpc',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpd',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpe',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpf',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    },
-  //    {
-  //      'name': 'inpg',
-  //      'type': 'boolean',
-  //      connected: false,
-  //      connectedTo: null
-  //    }
-  //  ],
-  //  outports: [
-  //    {
-  //      name: 'out',
-  //      type: 'boolean',
-  //      connected: false,
-  //      connectedTo: []
-  //    },
-  //  ]
-  //}
 };
 
 function addEdgeToAllBlockInfo(Info){
-
-  //console.log("Inside addEdgeToAllBlockInfo, here's the input:");
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
 
@@ -2273,16 +2240,25 @@ function appendToAllBlockInfo(BlockInfo){
   //console.log(randomNodePositionGenerator());
 }
 
-//function interactJsDrag(BlockInfo){
-//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-//  //console.log(allNodeInfo[NodeInfo.target].position);
-//
-//  allBlockInfo[BlockInfo.target].position = {
-//    x: allBlockInfo[BlockInfo.target].position.x + BlockInfo.x * (1 / graphZoomScale),
-//    y: allBlockInfo[BlockInfo.target].position.y + BlockInfo.y * (1 / graphZoomScale)
-//  }
-//}
+
+var blockPositions = {
+
+};
+
+function appendToBlockPositions(BlockId, xCoord, yCoord){
+  blockPositions[BlockId] = {
+    x: xCoord * 1/flowChartStore.getGraphZoomScale(),
+    y: yCoord * 1/flowChartStore.getGraphZoomScale()
+  }
+}
+
+function interactJsDrag(BlockInfo){
+
+  blockPositions[BlockInfo.target] = {
+    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
+    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
+  }
+}
 
 
 var blockLibrary = {
@@ -2426,14 +2402,6 @@ var allBlockTabInfo = {
   }
 };
 
-function generateNewBlockId(){
-  /* Do it for just a Gate node for now, remember, small steps before big steps! */
-  blockIdCounter += 1;
-  var newGateId = "Gate" + blockIdCounter;
-  console.log(newGateId);
-  return newGateId;
-}
-
 var blockInfoTemplates = {
   'Gate': {
     type: 'Gate',
@@ -2527,183 +2495,6 @@ var blockInfoTemplates = {
 
 
 
-/* 'FLOWCHART use' */
-
-//var clickedEdge = null;
-//var portThatHasBeenClicked = null;
-//var storingFirstPortClicked = null;
-//var portMouseOver = false;
-//var edgePreview = null;
-//var previousMouseCoordsOnZoom = null;
-//
-//var blockStyling = {
-//  outerRectangleHeight: 76,
-//  outerRectangleWidth: 72,
-//  innerRectangleHeight: 70,
-//  innerRectangleWidth: 66,
-//  portRadius: 2.5,
-//  portFill: 'grey',
-//};
-//
-//var graphPosition = {
-//  x: 0,
-//  y: 0
-//};
-//
-//var graphZoomScale = 2.0;
-//
-//var blockSelectedStates = {
-//  Gate1: false,
-//  TGen1: false,
-//  PComp1: false
-//};
-//
-//function appendToBlockSelectedStates(BlockId){
-//  //console.log("blockSelectedStates before adding a new block:");
-//  blockSelectedStates[BlockId] = false;
-//  //console.log("blockSelectedStates after adding a new block:");
-//}
-//
-//function deselectAllBlocks(){
-//  for(var block in blockSelectedStates){
-//    blockSelectedStates[block] = false
-//  }
-//}
-//
-//function checkIfAnyBlocksAreSelected(){
-//  var areAnyBlocksSelected = null;
-//  for(var block in blockSelectedStates){
-//    if(blockSelectedStates[block] === true){
-//      areAnyBlocksSelected = true;
-//      break;
-//    }
-//    else{
-//      //console.log("one of the blocks' state is false, check the next one if it is true");
-//      areAnyBlocksSelected = false;
-//    }
-//  }
-//  //console.log(areAnyNodesSelected);
-//  return areAnyBlocksSelected;
-//}
-//
-//var edgeSelectedStates = {
-//  'Gate1outTGen1ena': false,
-//  //Gate1OutTGen1Ena: false,
-//  //TGen1PosnPComp1Posn: false,
-//  //TGen1PosnPComp1Ena: false
-//};
-//
-//function selectEdge(Edge){
-//  edgeSelectedStates[Edge] = true;
-//}
-//
-//function getAnyEdgeSelectedState(EdgeId){
-//  if(edgeSelectedStates[EdgeId] === undefined || null){
-//    //console.log("edge selected state is underfined or null, best check it out...");
-//  }
-//  else{
-//    //console.log("that edge's state exists, hooray!");
-//    return edgeSelectedStates[EdgeId];
-//  }
-//}
-//
-//function checkIfAnyEdgesAreSelected(){
-//  var areAnyEdgesSelected;
-//  var i = 0;
-//  for(var edge in edgeSelectedStates){
-//    i = i + 1;
-//    if(edgeSelectedStates[edge] === true){
-//      //console.log(edgeSelectedStates[edge]);
-//      areAnyEdgesSelected = true;
-//      break;
-//    }
-//    else{
-//      areAnyEdgesSelected = false;
-//    }
-//  }
-//  //console.log(areAnyEdgesSelected);
-//  /* Taking care of if therer are no edges, so we return false instea dof undefined */
-//  if(i === 0){
-//    areAnyEdgesSelected = false;
-//  }
-//
-//  return areAnyEdgesSelected;
-//}
-//
-//function deselectAllEdges(){
-//  for(var edge in edgeSelectedStates){
-//    edgeSelectedStates[edge] = false
-//  }
-//}
-//
-//function updateEdgePreviewEndpoint(position){
-//  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
-//  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
-//  //console.log(edgePreview.endpointCoords);
-//}
-//
-//
-//var GateBlockStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        set: {
-//          x: 0,
-//          y: 23
-//        },
-//        reset: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        out: {
-//          x: 65,
-//          y: 31
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      set: {
-//        x : 7,
-//        y: 24.5
-//      },
-//      reset: {
-//        x : 7,
-//        y: 42.5
-//      },
-//      out: {
-//        x: 42,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var blockIdCounter = 1; /* Starting off at 1 since there's already a Gate1 */
-
-
-
 
 /* Functions to do with data retrieval from the server */
 
@@ -2777,6 +2568,17 @@ function addBlock(blockId){
         var outportRegExp = /flowgraph:outport/;
         if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var inportName = attribute;
+          /* Need to check if the inport is connected to
+          anything as well, so then edges will be preserved
+          on a window refresh!
+           */
+          var inportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+
+          /* There'll be a 'disconnected' value at some point,
+          so I'll be checking whether it's connected to anything
+          at all here soon
+           */
+
           inports.push(
             {
               name: inportName,
@@ -2785,7 +2587,20 @@ function addBlock(blockId){
               connected: false,
               connectedTo: null
             }
-          )
+          );
+
+          //var inportBlock = blockId;
+          //var inportBlockPort = attribute;
+          //var connectedToBlock = inportValue.slice(0, inportValue.indexOf('.'));
+          //var connectedToBlockPort = inportValue.slice(inportValue.indexOf('.') + 1);
+          //
+          //addEdgeViaMalcolm({
+          //  inportBlock: inportBlock,
+          //  inportBlockPort: inportBlockPort,
+          //  outportBlock: connectedToBlock,
+          //  outportBlockPort: connectedToBlockPort
+          //});
+
         }
         else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var outportName = attribute;
@@ -2823,6 +2638,11 @@ function addBlock(blockId){
 
 }
 
+function removeBlock(blockId){
+  delete allBlockInfo[blockId];
+  delete blockPositions[blockId];
+}
+
 function updateAttributeValue(blockId, attribute, newValue){
   console.log("update attribute value");
 
@@ -2841,48 +2661,7 @@ function updateAttributeValue(blockId, attribute, newValue){
   }
 }
 
-//function testFetchEveryInitialBlockObjectSuccess(responseMessage) {
-//  console.log("fetching block object");
-//
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
-//    item: responseMessage
-//  })
-//}
-//
-//function testFetchEveryInitialBlockObjectFailure(responseMessage){
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
-//    item: responseMessage
-//  })
-//}
-
 var testAllBlockInfo = null;
-
-
-//function processInitialBlockData(){
-//  //var blockArray = [];
-//
-//  /* No need to get the block name without Z: ! */
-//
-//  //for(var i = 0; i < _stuff.initialBlockServerData.length; i++){
-//  //  /* Need to remove the string 'Z:' at the start of every block port*/
-//  //  var blockName = _stuff.initialBlockServerData[i].slice(2);
-//  //  blockArray.push(blockName);
-//  //  /* Now we have an array of all the blocks, need to recreate
-//  //  allBlockInfo from this! */
-//  //  console.log(blockArray);
-//  //}
-//
-//  for(var j = 0; j < _stuff.initialBlockServerData.length; j++) {
-//    console.log(_stuff.initialBlockServerData[j]);
-//
-//    WebAPIUtils.testFetchEveryInitialBlockObject(_stuff.initialBlockServerData[j],
-//      testFetchEveryInitialBlockObjectSuccess, testFetchEveryInitialBlockObjectFailure);
-//    window.alert("hjwifhw");
-//  }
-//  //return blockArray;
-//}
 
 
 /* Testing a simple data fetch */
@@ -2890,6 +2669,114 @@ var testAllBlockInfo = null;
 var dataFetchTest = {
   value: true,
 };
+
+function addEdgeViaMalcolm(Info){
+  console.log(Info);
+  //window.alert(allBlockInfo[Info.inportBlock.label]);
+  for(var i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++){
+    if(allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort){
+      var addEdgeToInportBlock = {
+        block: Info.outportBlock,
+        port: Info.outportBlockPort
+      };
+      allBlockInfo[Info.inportBlock].inports[i].connected = true;
+      allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++){
+    if(allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort){
+      var addEdgeToOutportBlock = {
+        block: Info.inportBlock,
+        port: Info.inportBlockPort
+      };
+      allBlockInfo[Info.outportBlock].outports[j].connected = true;
+      allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
+    }
+  }
+
+  console.log(allBlockInfo);
+
+}
+
+function addInitialEdges(){
+
+  /* This is essentially the same loop as addBlock,
+  but since you can't add edges without being certain
+  that both blocks exist, this seems like the only way
+  to ensure that edges are created only when both blocks
+  exist, and that means looping through the attributes of
+  every block in testAllBlockInfo after all blocks have
+  been fetched
+   */
+
+  var inportRegExp = /flowgraph:inport/;
+  var outportRegExp = /flowgraph:outport/;
+
+  console.log(allBlockInfo)
+
+  for(var block in testAllBlockInfo){
+    for(var attribute in testAllBlockInfo[block].attributes){
+      if(testAllBlockInfo[block].attributes[attribute].tags !== undefined){
+        for(var i = 0; i < testAllBlockInfo[block].attributes[attribute].tags.length; i++){
+          if(inportRegExp.test(testAllBlockInfo[block].attributes[attribute].tags[i]) === true){
+            /* Add to the corresponding block's inports array,
+            and also add to the corresponding connected block's
+            outports array
+             */
+
+            console.log(block);
+            console.log(attribute);
+            console.log(testAllBlockInfo[block].attributes[attribute]);
+
+            var inportBlock = block;
+            var inportBlockPort = attribute;
+            var outportBlock = testAllBlockInfo[block].attributes[attribute].value.slice(0,
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.'));
+            var outportBlockPort = testAllBlockInfo[block].attributes[attribute].value.slice(
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.') + 1);
+
+            addEdgeViaMalcolm({
+              inportBlock: inportBlock,
+              inportBlockPort: inportBlockPort,
+              outportBlock: outportBlock,
+              outportBlockPort: outportBlockPort
+            });
+
+            console.log(allBlockInfo[inportBlock]);
+            console.log(allBlockInfo[outportBlock]);
+            console.log(allBlockInfo);
+            console.log(testAllBlockInfo);
+            console.log(outportBlock);
+
+            //for(var k = 0; k < allBlockInfo[inportBlock].inports.length; k++){
+            //  if(allBlockInfo[inportBlock].inports[k].name === inportBlockPort){
+            //    var addEdgeToInportBlock = {
+            //      block: outportBlock,
+            //      port: outportBlockPort
+            //    };
+            //    allBlockInfo[inportBlock].inports[k].connected = true;
+            //    allBlockInfo[inportBlock].inports[k].connectedTo = addEdgeToInportBlock;
+            //  }
+            //}
+            //
+            //for(var l = 0; l < allBlockInfo[outportBlock].outports.length; l++){
+            //  if(allBlockInfo[outportBlock].outports[l].name === outportBlockPort){
+            //    var addEdgeToOutportBlock = {
+            //      block: inportBlock,
+            //      port: inportBlockPort
+            //    };
+            //    allBlockInfo[outportBlock].outports[l].connected = true;
+            //    allBlockInfo[outportBlock].outports[l].connectedTo.push(addEdgeToOutportBlock);
+            //  }
+            //}
+
+          }
+        }
+      }
+    }
+  }
+}
 
 var flowChartStore = require('./flowChartStore');
 
@@ -2951,65 +2838,9 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
   },
 
-
-
-  /* FLOWCHART use */
-
-  //getAnyBlockSelectedState:function(BlockId){
-  //  if(blockSelectedStates[BlockId] === undefined || null){
-  //    //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
-  //    //console.log(NodeId);
-  //    //console.log(nodeSelectedStates[NodeId]);
-  //  }
-  //  else{
-  //    //console.log("the state of that nod exists, passing it now");
-  //    //console.log(nodeSelectedStates[NodeId]);
-  //    return blockSelectedStates[BlockId];
-  //  }
-  //},
-  //getIfAnyBlocksAreSelected: function(){
-  //  return checkIfAnyBlocksAreSelected();
-  //},
-  //getIfEdgeIsSelected: function(EdgeId){
-  //  return getAnyEdgeSelectedState(EdgeId);
-  //},
-  //getIfAnyEdgesAreSelected: function(){
-  //  return checkIfAnyEdgesAreSelected();
-  //},
-  //
-  //
-  //getGraphPosition: function(){
-  //  return graphPosition;
-  //},
-  //getGraphZoomScale: function(){
-  //  return graphZoomScale;
-  //},
-  //
-  //
-  //getPortThatHasBeenClicked: function(){
-  //  return portThatHasBeenClicked;
-  //},
-  //getStoringFirstPortClicked: function(){
-  //  return storingFirstPortClicked;
-  //},
-  //getPortMouseOver: function(){
-  //  return portMouseOver;
-  //},
-  //
-  //getSubsetOfAllBlockInfo: function(){
-  //  return allBlockInfo.Gate1.inports;
-  //},
-  //
-  //getEdgePreview: function(){
-  //  return edgePreview;
-  //},
-  //getPreviousMouseCoordsOnZoom: function(){
-  //  return previousMouseCoordsOnZoom;
-  //},
-  //
-  //getBlockStyling: function(){
-  //  return blockStyling;
-  //},
+  getBlockPositions: function(){
+    return blockPositions;
+  }
 
 });
 
@@ -3037,12 +2868,12 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       console.log(allBlockInfo);
       break;
-    //case appConstants.INTERACTJS_DRAG:
-    //  console.log(payload);
-    //  console.log(item);
-    //  interactJsDrag(item);
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
+      blockStore.emitChange();
+      break;
 
     case appConstants.DELETE_EDGE:
       removeEdgeFromAllBlockInfo(item);
@@ -3065,54 +2896,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.TEST_SUBSCRIBECHANNEL:
       blockStore.emitChange();
       break;
-
-    /* WebAPI use, but flowChart will be using this to display a loading icon */
-
-    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-    //  /* Creating the object holding all initial block data in the websocket
-    //  instead, then passing it to the client at the end
-    //   */
-    //  AppDispatcher.waitFor([flowChartStore.dispatchToken]);
-    //  console.log(item);
-    //  testAllBlockInfo = JSON.parse(JSON.stringify(item));
-    //  console.log(testAllBlockInfo);
-    //
-    //  /* Try adding one new server block to allBlockInfo */
-    //
-    //  for(var block in item){
-    //    addBlock(block);
-    //  }
-    //
-    //  //addBlock('CLOCKS');
-    //
-    //  blockStore.emitChange();
-    //  break;
-
-    //case appConstants.GET_BLOCKLIST_SUCCESS:
-    //  console.log("got the block list, now to get each block object!");
-    //  //for(var i = 0; i < item.value.length; i++){
-    //  //  MalcolmActionCreators.getBlock(item.value[i]);
-    //  //}
-    //  blockStore.emitChange();
-    //
-    //  break;
-    //
-    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS:
-    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  console.log(item);
-    //  var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-    //  testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.attributes));
-    //  ///* No need to emiChnage since I'm only fetching one block by one,
-    //  //emitChange at the end of initial data fetch succes above
-    //  // */
-    //  console.log(testAllBlockInfo);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE:
-    //  window.alert("failed to fetch initial block object!");
-    //  blockStore.emitChange();
-    //  break;
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
@@ -3145,19 +2928,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Do the block adding to testAllBlockInfo stuff */
 
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+
           console.log(blockName);
           testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
 
           /* Add the block to allBlockInfo! */
 
           if(item.attributes.VISIBLE.value === 'Show') {
-
+            appendToBlockPositions(blockName, xCoord, yCoord);
             addBlock(blockName);
 
           }
           else{
             /* Putting it here just to test the blocks even if they're not in use */
-            addBlock(blockName);
+            //addBlock(blockName);
 
             console.log("block isn't in use, don't add its info");
           }
@@ -3178,43 +2964,77 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    //case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-    //  console.log("malcolmSubscribeSuccess");
-    //
-    //  /* First extract the block that the updated attribute
-    //  value belongs to
-    //  UPDATE: uneeded now that I move the malcolm request message
-    //  string creation to the action creator
-    //   */
-    //  //var sliceEndIndex = item.requestedData.indexOf('.');
-    //  //console.log(sliceEndIndex);
-    //  //var blockId = item.requestedData.slice(2, sliceEndIndex);
-    //  //console.log(blockId);
-    //  //var blockIdStringLength = blockId.length;
-    //  //console.log(blockIdStringLength);
-    //
-    //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-    //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
-    //
-    //  console.log(requestedData);
-    //
-    //  if(item.requestedData.attribute === 'X_COORD' ||
-    //    item.requestedData.attribute === 'Y_COORD'){
-    //
-    //  }
-    //  else {
-    //
-    //    updateAttributeValue(requestedData.blockName,
-    //      requestedData.attribute, responseMessage.value);
-    //
-    //  }
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
-    //  console.log("malcolmSubscribeFailure");
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("blockStore malcolmSubscribeSuccess");
+
+      console.log(item);
+
+      /* Check the tags for 'widget:combo', it'll be
+      indicating that a dropdown was used (it'll also
+      cause things like the dropdowns with 'triggered'
+      and stuff to emit a change, but for now that'll
+      work just fine
+       */
+
+      //window.alert("dhi");
+
+      var isInportDropdown = false;
+
+      for(var p = 0; p < item.responseMessage.tags.length; p++){
+        if(item.responseMessage.tags[p].indexOf('widget:combo') !== -1){
+          isInportDropdown = true;
+        }
+        else if(item.responseMessage.tags[p] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             */
+
+            appendToBlockPositions(item.requestedData.attribute,
+            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+
+            addBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Should invoke a removeBlock function to remove
+            the info from allBlockInfo
+             */
+            removeBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+        }
+      }
+
+      if(isInportDropdown === true){
+        /* Then update allBlockInfo with the new edge! */
+
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+
+        var inportBlock = requestedData.blockName;
+        var inportBlockPort = requestedData.attribute;
+
+        var outportBlock = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
+        var outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
+
+        addEdgeViaMalcolm({
+          inportBlock: inportBlock,
+          inportBlockPort: inportBlockPort,
+          outportBlock: outportBlock,
+          outportBlockPort: outportBlockPort
+        });
+
+        blockStore.emitChange();
+      }
+
+
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
 
     case appConstants.MALCOLM_CALL_SUCCESS:
       console.log("malcolmCallSuccess");
@@ -3226,133 +3046,16 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
+    case appConstants.INITIALISE_FLOWCHART_START:
+      //console.log("initialise flowChart start blockStore");
+      blockStore.emitChange();
+      break;
 
-
-    /* FLOWCHART use */
-
-
-    //case appConstants.SELECT_BLOCK:
-    //  console.log(payload);
-    //  console.log(item);
-    //  blockSelectedStates[item] = true;
-    //  console.log(blockSelectedStates);
-    //  //changeUnselectedNodesOpacity();
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLBLOCKS:
-    //  console.log(payload);
-    //  console.log(item);
-    //  deselectAllBlocks();
-    //  //console.log(nodeSelectedStates.Gate1);
-    //  //console.log(nodeSelectedStates.TGen1);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.SELECT_EDGE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
-    //  //console.log(areAnyEdgesSelected);
-    //  console.log(clickedEdge);
-    //  if(areAnyEdgesSelected === true && item !== clickedEdge){
-    //    deselectAllEdges();
-    //    selectEdge(item);
-    //  }
-    //  else if(areAnyEdgesSelected === false){
-    //    selectEdge(item);
-    //  }
-    //  console.log(edgeSelectedStates);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLEDGES:
-    //  console.log(payload);
-    //  console.log(item);
-    //  deselectAllEdges();
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.CHANGE_GRAPHPOSITION:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  graphPosition = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.GRAPH_ZOOM:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  graphZoomScale = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.GETANY_EDGESELECTEDSTATE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  getAnyEdgeSelectedState(item);
-    //  console.log(edgeSelectedStates[item]);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.CLICKED_EDGE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  clickedEdge = item;
-    //  console.log(clickedEdge);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.PASS_PORTMOUSEDOWN:
-    //  console.log(payload);
-    //  console.log(item);
-    //  portThatHasBeenClicked = item;
-    //  console.log(portThatHasBeenClicked);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.DESELECT_ALLPORTS:
-    //  portThatHasBeenClicked = null;
-    //  console.log("portThatHasBeenClicked has been reset");
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.STORING_FIRSTPORTCLICKED:
-    //  console.log(payload);
-    //  console.log(item);
-    //  storingFirstPortClicked = item;
-    //  //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.APPEND_EDGESELECTEDSTATE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  edgeSelectedStates[item] = false;
-    //  blockStore.emitChange();
-    //  console.log(edgeSelectedStates);
-    //  break;
-    //
-    //case appConstants.ADD_EDGEPREVIEW:
-    //  console.log(payload);
-    //  console.log(item);
-    //  edgePreview = item;
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-    //  //console.log(payload);
-    //  //console.log(item);
-    //  updateEdgePreviewEndpoint(item);
-    //  blockStore.emitChange();
-    //  break;
-    //
-    //case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
-    //  console.log(payload);
-    //  console.log(item);
-    //  previousMouseCoordsOnZoom = item;
-    //  blockStore.emitChange();
-    //  break;
+    case appConstants.INITIALISE_FLOWCHART_END:
+      console.log("initialise flowChart end, blockStore");
+      addInitialEdges();
+      blockStore.emitChange();
+      break;
 
     default:
       return true
@@ -3362,843 +3065,130 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = blockStore;
 
-//var SelectedGateNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        set: {
-//          x: 0,
-//          y: 23
-//        },
-//        reset: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        out: {
-//          x: 65,
-//          y: 31
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      set: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      reset: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      out: {
-//        x: 39,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var TGenBlockStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 4,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 37,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedTGenNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 31
-//        }
-//      },
-//      outportPositions: {
-//        posn: {
-//          x: 65,
-//          y: 31
-//        }
-//      }
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 6,
-//        y: 33.5
-//      },
-//      posn: {
-//        x: 35,
-//        y: 33.5
-//      }
-//    }
-//  }
-//};
-//
-//var PCompBlockStyling = {
-//  /* Changing this to see if I can just have the rectangle at (0,0), so then te ports will need to move.
-//  Didn't do this before since I didn't have the node container to dynamically resize if the ports got bigger, but now it's in a <g> container so it will resize automatically
-//   */
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 72,
-//      width: 72,
-//      rx: 8,
-//      ry: 8
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 2.5,
-//      fill: 'grey',
-//      //stroke: 'black',
-//      //strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 7,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 7,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 42,
-//        y: 23
-//      },
-//      out: {
-//        x: 42,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 35,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var SelectedPCompNodeStyling = {
-//  rectangle: {
-//    rectanglePosition: {
-//      x : 0,
-//      y : 0
-//    },
-//    rectangleStyling: {
-//      height: 65,
-//      width: 65,
-//      rx: 7,
-//      ry: 7
-//    }
-//  },
-//  ports: {
-//    portPositions: {
-//      inportPositions: {
-//        ena: {
-//          x: 0,
-//          y: 23
-//        },
-//        posn: {
-//          x: 0,
-//          y: 38
-//        }
-//      },
-//      outportPositions: {
-//        act: {
-//          x: 65,
-//          y: 23
-//        },
-//        out: {
-//          x: 65,
-//          y: 31
-//        },
-//        pulse: {
-//          x: 65,
-//          y: 38
-//        }
-//      },
-//    },
-//    portStyling: {
-//      portRadius: 4,
-//      fill: 'lightgrey',
-//      stroke: 'black',
-//      strokeWidth: 1.65
-//    }
-//  },
-//  text: {
-//    textPositions: {
-//      ena: {
-//        x : 9,
-//        y: 24.5
-//      },
-//      posn: {
-//        x : 9,
-//        y: 42.5
-//      },
-//      act: {
-//        x: 40,
-//        y: 23
-//      },
-//      out: {
-//        x: 40,
-//        y: 33.5
-//      },
-//      pulse: {
-//        x: 33,
-//        y: 43
-//      }
-//    }
-//  }
-//};
-//
-//var allBlockTypesPortStyling = {
-//  'Gate': GateBlockStyling.ports.portPositions,
-//  'TGen': TGenBlockStyling.ports.portPositions,
-//  'PComp': PCompBlockStyling.ports.portPositions
-//};
-//
-//var allBlockTypesStyling = {
-//  'Gate': GateBlockStyling,
-//  'TGen': TGenBlockStyling,
-//  'PComp': PCompBlockStyling
-//};
-
-/* Put blockStore.dispatchToken in front of the whole switch case above */
-
-//blockStore.dispatchToken = AppDispatcher.register(function(payload){
-//  var action = payload.action;
-//  var item = action.item;
-//
-//  switch(action.actionType){
-//
-//    /* These are all the actions that result in a data change in allBlockInfo of some kind */
-//
-//    //case appConstants.ADDTO_ALLBLOCKINFO:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  appendToAllBlockInfo(item);
-//    //  //appendToAllPossibleBlocks(item);
-//    //  appendToBlockSelectedStates(item);
-//    //  //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
-//    //  blockStore.emitChange();
-//    //  break;
-//    //
-//    //case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  addEdgeToAllBlockInfo(item);
-//    //  blockStore.emitChange();
-//    //  console.log(allBlockInfo);
-//    //  break;
-//
-//    //case appConstants.INTERACTJS_DRAG:
-//    //  console.log(payload);
-//    //  console.log(item);
-//    //  interactJsDrag(item);
-//    //  blockStore.emitChange();
-//    //  break;
-//
-//    /* Ok, technically graphZoom and graphPanning also changes position of blocks, but I just wanna see if it'll
-//    change at all first =P
-//     */
-//
-//    default:
-//          return 'blockStore: default';
-//
-//  }
-//});
-
-
-/* Port calculation to render the edges properly has been moved to the render function of an edge;
- this is to allow constant rerendering due to node position changes
+},{"../../node_modules/object-assign/index.js":50,"../actions/MalcolmActionCreators":2,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/WebAPIUtils":24,"./flowChartStore":19,"events":44}],17:[function(require,module,exports){
+/**
+ * Created by twi18192 on 24/03/16.
  */
 
-//var portPositionsForEdges = {
-//    gateNode: {
-//        inports: {
-//            set: {
-//                x: nodePositions.gateNode.x + gateNodeInports.set.x,
-//                y: nodePositions.gateNode.y + gateNodeInports.set.y
-//            },
-//            reset: {
-//                x: nodePositions.gateNode.x + gateNodeInports.reset.x,
-//                y: nodePositions.gateNode.y + gateNodeInports.reset.y
-//            }
-//        },
-//        outports: {
-//            out: {
-//                x: nodePositions.gateNode.x + gateNodeOutports.out.x,
-//                y: nodePositions.gateNode.y + gateNodeOutports.out.y
-//            }
-//        }
-//    },
-//    tgenNode: {
-//        inports: {
-//            ena: {
-//                x: nodePositions.tgenNode.x + tgenNodeInports.ena.x,
-//                y: nodePositions.tgenNode.y + tgenNodeInports.ena.y
-//            }
-//        },
-//        outports: {
-//            posn: {
-//                x: nodePositions.tgenNode.x + tgenNodeOutports.posn.x,
-//                y: nodePositions.tgenNode.y + tgenNodeOutports.posn.y
-//            }
-//        }
-//    }
-//
-//};
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('../../node_modules/object-assign/index.js');
 
-//getGate1SelectedState: function(){
-//  return nodeSelectedStates.Gate1;
-//},
-//getTGen1SelectedState: function(){
-//  return nodeSelectedStates.TGen1;
-//},
-//getPComp1SelectedState: function(){
-//  return nodeSelectedStates.PComp1;
-//},
+var CHANGE_EVENT = 'change';
 
-//getGate1CurrentStyling: function(){
-//  return checkGate1Styling();
-//},
-//function changeUnselectedNodesOpacity(){
-//    console.log(window.NodeContainerStyle);
-//    window.NodeContainerStyle = {
-//        'cursor': 'move',
-//        'draggable': 'true',
-//        'className': 'nodeContainer',
-//        'opacity': 0.5
-//    };
-//    console.log(window.NodeContainerStyle);
-//
-//}
-//function randomNodePositionGenerator(){
-//  console.log("random number is being generated");
-//  return (Math.random() * 1000) % 500;
-//}
+var blocksVisibility = {};
+var blockGroups = [];
 
-//function addOneEdgeToEdgesObject(edgeInfo, portTypes){
-//  /* I guess it could get messy now, since 'fromNode' before this meant 'the node that was clicked on first', but now I want it to mean the beginning node; ie, the node from which the port type is out */
-//
-//  var startNode;
-//  var startNodePort;
-//  var endNode;
-//  var endNodePort;
-//  var newEdge;
-//  var edgeLabel;
-//  if(portTypes.fromNodePortType === "outport"){
-//    console.log("outport to inport, so edge labelling is normal");
-//    startNode = edgeInfo.fromNode;
-//    startNodePort = edgeInfo.fromNodePort;
-//    endNode = edgeInfo.toNode;
-//    endNodePort = edgeInfo.toNodePort;
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//  else if(portTypes.fromNodePortType === "inport"){
-//    console.log("inport to outport, so have to flip the edge labelling direction");
-//    /* Note that you must also flip the ports too! */
-//    startNode = edgeInfo.toNode;
-//    startNodePort = edgeInfo.toNode;
-//    endNode = edgeInfo.fromNode;
-//    endNodePort = edgeInfo.fromNodePort;
-//    /* Don't need this in both loops, can just set this after the loops have completed! */
-//    //newEdge = {
-//    //  fromNode: startNode,
-//    //  fromNodePort: startNodePort,
-//    //  toNode: endNode,
-//    //  toNodePort: endNodePort
-//    //}
-//  }
-//
-//  newEdge = {
-//    fromNode: startNode,
-//    fromNodePort: startNodePort,
-//    toNode: endNode,
-//    toNodePort: endNodePort
-//  };
-//
-//  edgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  console.log("The newEdge's label is " + edgeLabel);
-//  newlyCreatedEdgeLabel = edgeLabel;
-//  edges[edgeLabel] = newEdge;
-//  console.log(edges);
-//
-//  /* Also need to add the selected states to edgeSelectedStates! */
-//
-//  edgeSelectedStates[edgeLabel] = false;
-//
-//
-//}
+function updateBlockVisibility(blockId, newValue){
+  blocksVisibility[blockId].value = newValue;
+}
 
-//function checkPortCompatibility(edgeInfo){
-//  /* First need to check we have an inport and an outport */
-//  /* Find both port types, then compare them somehow */
-//
-//  var fromNodeType = allNodeInfo[edgeInfo.fromNode].type;
-//  var toNodeType = allNodeInfo[edgeInfo.toNode].type;
-//
-//  var fromNodeLibraryInfo = nodeLibrary[fromNodeType];
-//  var toNodeLibraryInfo = nodeLibrary[toNodeType];
-//
-//  for(i = 0; i < fromNodeLibraryInfo.inports.length; i++){
-//    if(fromNodeLibraryInfo.inports[i].name === edgeInfo.fromNodePort){
-//      console.log("The fromNode is an inport:" + edgeInfo.fromNodePort);
-//      var fromNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The fromNode isn't an inport, so it's an outport, so no need to check the outports!");
-//      var fromNodePortType = "outport";
-//    }
-//  }
-//
-//  for(j = 0; j < toNodeLibraryInfo.inports.length; j++ ){
-//    if(toNodeLibraryInfo.inports[j].name === edgeInfo.toNodePort){
-//      console.log("The toNode is an inport: " + edgeInfo.toNodePort);
-//      var toNodePortType = "inport";
-//    }
-//    else{
-//      console.log("The toNode isn't an inport, so it's an outport!");
-//      var toNodePortType = "outport";
-//    }
-//  }
-//
-//  /* Time to compare the fromNodePortType and toNodePortType */
-//
-//  if(fromNodeType === toNodePortType){
-//    console.log("The fromNode and toNode ports are both " + fromNodePortType + "s, so can't connect them");
-//    window.alert("Incompatible ports");
-//    /* Hence, don't add anything to allNodeInfo */
-//  }
-//  else if(fromNodePortType !== toNodePortType){
-//    console.log("fromNodePortType is " + fromNodePortType + ", and toNodePortType is " + toNodePortType + ", so so far this connection is valid. Check if the ports themselves are compatible.");
-//    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-//    addEdgeToAllNodeInfo(edgeInfo);
-//
-//    /* Also need the equivalent of addToEdgesObject for single edges here! */
-//    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-//    if it's an outport then it's a normal connection from an out to an in,
-//    but if it's an inport, then it's a connection from a in to and out (ie, the other way around), so somehow need to compensate for that!
-//     */
-//
-//    var portTypes = {
-//      fromNodePortType: fromNodePortType,
-//      toNodePortType: toNodePortType
-//    };
-//
-//    addOneEdgeToEdgesObject(edgeInfo, portTypes);
-//  }
-//
-//}
+var blocksVisibleStore = assign({}, EventEmitter.prototype, {
 
-//function createNewEdgeLabel(edgeInfo){
-//  var newEdge = edgeInfo;
-//  var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//  newlyCreatedEdgeLabel = newEdgeLabel;
-//}
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+  getBlockGroups: function(){
+    return blockGroups;
+  },
+  getBlocksVisibility: function(){
+    return blocksVisibility;
+  }
 
-//function addNewEdge(EdgeInfo){
-//  var newEdge = EdgeInfo;
-//  var fromNode = newEdge.fromNode;
-//  var toNode = newEdge.toNode;
-//  newEdge['fromNodeType'] = allNodeInfo[fromNode].type;
-//  newEdge['toNodeType'] = allNodeInfo[toNode].type;
-//  console.log(newEdge);
-//
-//  //var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//
-//  //newlyCreatedEdgeLabel = newEdgeLabel;
-//  console.log("The newEdge's label is " + newlyCreatedEdgeLabel);
-//  edges[newlyCreatedEdgeLabel] = newEdge;
-//  console.log(edges);
-//
-//}
+});
 
-//function appendToEdgeSelectedStates(EdgeId){
-//  edgeSelectedStates[EdgeId] = false;
-//  console.log("edgeSelectedStates is now:");
-//  console.log(edgeSelectedStates);
-//}
+blocksVisibleStore.dispatchToken = AppDispatcher.register(function(payload){
 
-//function selectNode(Node){
-//  nodeSelectedStates[Node] = true;
-//}
+  var action = payload.action;
+  var item = action.item;
 
-///* Not using an edges object anymore, instead I create the edges directly from allNodeInfo */
-//
-//var edges = {
-//  //Gate1OutTGen1Ena: {
-//  //  fromNode: 'Gate1',
-//  //  fromNodeType: 'Gate',
-//  //  fromNodePort: 'out',
-//  //  toNode: 'TGen1',
-//  //  toNodeType: 'TGen',
-//  //  toNodePort: 'ena'
-//  //},
-//  //TGen1PosnPComp1Posn: {
-//  //  fromNode: 'TGen1',
-//  //  fromNodeType: 'TGen',
-//  //  fromNodePort: 'posn',
-//  //  toNode: 'PComp1',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'posn'
-//  //},
-//  //TGen1PosnPComp1Ena: {
-//  //  fromNode: 'TGen1',
-//  //  fromNodeType: 'TGen',
-//  //  fromNodePort: 'posn',
-//  //  toNode: 'PComp1',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'ena'
-//  //},
-//  //Gate1OutPComp2Ena: {
-//  //  fromNode: 'Gate1',
-//  //  fromNodeType: 'Gate',
-//  //  fromNodePort: 'out',
-//  //  toNode: 'PComp2',
-//  //  toNodeType: 'PComp',
-//  //  toNodePort: 'ena'
-//  //}
-//};
+  switch(action.actionType){
 
-///* NOTE: This function is currently just adding all edges that are there on INITIAL RENDER, so if I run it after initial render it'll go through all the nodes and their outports again... */
-//
-//function addToEdgesObject(){
-//  for(var node in allNodeInfo){
-//    /* Look at outports of each node and see which ones are connected, and what exactly they are conencted to */
-//    for(i = 0; i < allNodeInfo[node].outports.length; i++){
-//      console.log(i);
-//      console.log(allNodeInfo[node].outports[i]);
-//      if(allNodeInfo[node].outports[i].connected === true){
-//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " is connected, here are the inport(s) it is connected to:");
-//        for(j = 0; j < allNodeInfo[node].outports[i].connectedTo.length; j++){
-//          console.log(allNodeInfo[node].outports[i].connectedTo[j]);
-//          console.log("node: " + allNodeInfo[node].outports[i].connectedTo[j].node);
-//          console.log("port: " + allNodeInfo[node].outports[i].connectedTo[j].port);
-//          var newEdge = {
-//            fromNode: node,
-//            fromNodeType: allNodeInfo[node].type,
-//            fromNodePort: allNodeInfo[node].outports[i].name,
-//            toNode: allNodeInfo[node].outports[i].connectedTo[j].node,
-//            toNodeType: allNodeInfo[allNodeInfo[node].outports[i].connectedTo[j].node].type,
-//            toNodePort: allNodeInfo[node].outports[i].connectedTo[j].port
-//          };
-//          console.log(newEdge);
-//          /* Then here I need to add this new edge to the edges object */
-//          var newEdgeLabel = String(newEdge.fromNode) + String(newEdge.fromNodePort) + " -> " + String(newEdge.toNode) + String(newEdge.toNodePort);
-//          newlyCreatedEdgeLabel = newEdgeLabel;
-//          console.log(newlyCreatedEdgeLabel);
-//          console.log("The newEdge's label is " + newEdgeLabel);
-//          edges[newEdgeLabel] = newEdge;
-//          console.log(edges);
-//          /* Also need to add the selected states to edgeSelectedStates! */
-//
-//          edgeSelectedStates[newEdgeLabel] = false;
-//          console.log(edgeSelectedStates);
-//        }
-//      }
-//      else{
-//        console.log("The outport " + allNodeInfo[node].outports[i].name + " of node " + node + " isn't connected to any inports, move onto the next outport");
-//      }
-//    }
-//  }
-//}
+    case appConstants.MALCOLM_GET_SUCCESS:
 
-//function addOneSingleEdge(edgeLabel, edgeInfo){
-//  edges[edgeLabel] = edgeInfo;
-//}
+      for(var i = 0; i < item.tags.length; i++){
+        if(item.tags[i] === 'instance:Zebra2Visibility'){
+          /* Save the list of all possible blocks */
+          var zVisibility = JSON.parse(JSON.stringify(item));
+          for(var attribute in zVisibility.attributes){
+            if(zVisibility.attributes[attribute].tags !== undefined){
+              var isBlockToggle = false;
+              var doesBelongToGroup = false;
 
-//function portMouseOverLeaveToggle(){
-//  if(portMouseOver === false){
-//    portMouseOver = true;
-//  }
-//  else if(portMouseOver === true){
-//    portMouseOver = false;
-//  }
-//  else{
-//    console.log("portMouseOver is neither true nor false, so something is up");
-//  }
-//}
+              for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
+                if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
+                  /* Then it's a block! */
+                  //blocksVisibility.push(attribute);
+                  isBlockToggle = true;
+                }
+                else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
+                  doesBelongToGroup = true;
+                }
+              }
 
-//function updateGate1Position(newCoordinates){
-//  /* Will be used to update the coordinates of a node when dragged, to then find the new location of the ports a connected edge needs to stick to */
-//  nodePositions.Gate1 = {
-//    x: nodePositions.Gate1.x + newCoordinates.x,
-//    y: nodePositions.Gate1.y + newCoordinates.y
-//  };
-//  /* Also need to update the port positions somehow! */
-//}
+              if(isBlockToggle === true && doesBelongToGroup === true){
+                blocksVisibility[attribute] = zVisibility.attributes[attribute];
+              }
+              else if(isBlockToggle === true && doesBelongToGroup !== true){
+                /* It's a block that is the only instance of its
+                 type, so add it to both blockGroups and
+                 blocksVisibility, so then I can just check the length
+                 of the array in the mapping of groups and group members
+                 */
+                blocksVisibility[attribute] = zVisibility.attributes[attribute];
+                blockGroups.push(attribute);
+              }
+            }
+            else if(zVisibility.attributes[attribute].tags === undefined &&
+              zVisibility.attributes[attribute].descriptor === attribute){
+              /* Then it's a group! */
+              blockGroups.push(attribute);
+            }
+          }
+        }
+      }
 
-//function updateNodePosition(NodeInfo){
-//  if(typeof allPossibleNodes[draggedElementID] !== 'function'){
-//    throw new Error('Invalid node id')
-//  }
-//  return allPossibleNodes[draggedElementID](NodeInfo)
-//}
-//
-//var allPossibleNodes = {
-//
-//  'Gate1': function(NodeInfo){
-//    allNodeInfo.Gate1.position = {
-//      x: allNodeInfo.Gate1.position.x + NodeInfo.x,
-//      y: allNodeInfo.Gate1.position.y + NodeInfo.y
-//    };
-//  },
-//  'TGen1': function(NodeInfo){
-//    allNodeInfo.TGen1.position = {
-//      x: allNodeInfo.TGen1.position.x + NodeInfo.x,
-//      y: allNodeInfo.TGen1.position.y + NodeInfo.y
-//    }
-//  },
-//  'PComp1': function(NodeInfo){
-//    allNodeInfo.PComp1.position = {
-//      x: allNodeInfo.PComp1.position.x + NodeInfo.x,
-//      y: allNodeInfo.PComp1.position.y + NodeInfo.y
-//    }
-//  },
-//  //'PComp2': function(NodeInfo) {
-//  //  allNodeInfo.PComp2.position = {
-//  //    x: allNodeInfo.PComp2.position.x + NodeInfo.x,
-//  //    y: allNodeInfo.PComp2.position.y + NodeInfo.y
-//  //  }
-//  //},
-//  //'PComp3': function(NodeInfo) {
-//  //  allNodeInfo.PComp3.position = {
-//  //    x: allNodeInfo.PComp3.position.x + NodeInfo.x,
-//  //    y: allNodeInfo.PComp3.position.y + NodeInfo.y
-//  //  }
-//  //}
-//};
-//
-//var appendToAllPossibleNodes = function(Node){
-//  allPossibleNodes[Node] = function(NodeInfo){
-//    console.log(nodeInfoTemplates.Gate);
-//    allNodeInfo[Node].position = {
-//      x: allNodeInfo[Node].position.x + NodeInfo.x,
-//      y: allNodeInfo[Node].position.y + NodeInfo.y
-//    }
-//  };
-//  console.log("appended to allPossibleNodes");
-//  console.log(Node);
-//  console.log(allPossibleNodes);
-//  console.log(allPossibleNodes[Node]);
-//  console.log(allNodeInfo[Node]);
-//};
+      blocksVisibleStore.emitChange();
+      break;
 
-//var nodePositions = {
-//  Gate1: {
-//    position: {
-//      x: 50,
-//      y: 100,
-//    },
-//    name: "Arm"
-//  },
-//
-//  TGen1: {
-//    position: {
-//      x: 450,
-//      y: 10
-//    }
-//  },
-//  PComp1: {
-//    position: {
-//      x: 650,
-//      y: 250,
-//    },
-//    name: "LinePulse"
-//  },
-//  ////LUT1: {
-//  ////  x: 250,
-//  ////  y: 150
-//  ////}
-//  //PComp2: {
-//  //  position: {
-//  //    x: 250,
-//  //    y: 150
-//  //  },
-//  //  name: "FwdLineGate"
-//  //},
-//  //PComp3: {
-//  //  position: {
-//  //    x: 250,
-//  //    y: 350
-//  //  },
-//  //  name: "BwdLineGate"
-//  //}
-//};
-//
-//function appendToNodePositions(NodeInfo){
-//  var nodePropertyName = function(){
-//    /* Get a string version of the node name (ie, Gate2, PComp3 etc) */
-//  };
-//  //nodePositions[nodePropertyName()] = NodeInfo;
-//}
-//
-//var portPositionsForNodes = {
-//  portRadius: 2,
-//  inportPositionRatio: 0,
-//  outportPositionRatio: 1,
-//  GateNodePortStyling: {
-//    inportPositions: {
-//      set: {
-//        x: 6,
-//        y: 25
-//      },
-//      reset: {
-//        x: 6,
-//        y: 40
-//      }
-//    },
-//    outportPositions: {
-//      out: {
-//        x: 68 + 3,
-//        y: 33
-//      }
-//    }
-//  },
-//  TGenNodePortStyling: {
-//    inportPositions: {
-//      ena: {
-//        x: 6,
-//        y: 33
-//      }
-//    },
-//    outportPositions: {
-//      posn: {
-//        x: 68 + 3,
-//        y: 33
-//      }
-//    }
-//  }
-//};
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("MALCOLM GET ERROR!");
+      blocksVisibleStore.emitChange();
+      break;
 
-//var gateNodeInports = portPositionsForNodes.GateNodePortStyling.inportPositions;
-//var gateNodeOutports = portPositionsForNodes.GateNodePortStyling.outportPositions;
-//var tgenNodeInports = portPositionsForNodes.TGenNodePortStyling.inportPositions;
-//var tgenNodeOutports = portPositionsForNodes.TGenNodePortStyling.outportPositions;
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log(blocksVisibility);
+      if(item.requestedData.blockName === 'VISIBILITY') {
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        console.log(requestedData.blockName);
+        updateBlockVisibility(requestedData.attribute, responseMessage.value);
+        blocksVisibleStore.emitChange();
+      }
+      break;
 
-},{"../../node_modules/object-assign/index.js":48,"../actions/MalcolmActionCreators":2,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../utils/WebAPIUtils":23,"./flowChartStore":18,"events":42}],17:[function(require,module,exports){
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure in attributStore");
+      blocksVisibleStore.emitChange();
+      break;
+
+    default:
+      return true
+
+  }
+
+});
+
+module.exports = blocksVisibleStore;
+
+},{"../../node_modules/object-assign/index.js":50,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"events":44}],18:[function(require,module,exports){
 /**
  * Created by twi18192 on 24/09/15.
  */
@@ -4342,7 +3332,7 @@ deviceStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = deviceStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":42,"object-assign":48}],18:[function(require,module,exports){
+},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":44,"object-assign":50}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -4383,49 +3373,57 @@ var blockSelectedStates = {
   //PComp1: false
 };
 
-var blockPositions = {
-  //'Gate1': {
-  //  x: 50,
-  //  y: 100,
-  //},
-  //'TGen1': {
-  //  x: 250,
-  //  y: 10
-  //},
-  //'PComp1': {
-  //  x: 350,
-  //  y: 150,
-  //}
-};
+//var blockPositions = {
+//  //'Gate1': {
+//  //  x: 50,
+//  //  y: 100,
+//  //},
+//  //'TGen1': {
+//  //  x: 250,
+//  //  y: 10
+//  //},
+//  //'PComp1': {
+//  //  x: 350,
+//  //  y: 150,
+//  //}
+//};
 
-function interactJsDrag(BlockInfo){
-  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-  //console.log(allNodeInfo[NodeInfo.target].position);
+//function interactJsDrag(BlockInfo){
+//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+//  //console.log(allNodeInfo[NodeInfo.target].position);
+//
+//  blockPositions[BlockInfo.target] = {
+//    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
+//    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
+//  }
+//}
 
-  blockPositions[BlockInfo.target] = {
-    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
-    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
-  }
-}
-
-function appendToBlockPositions(BlockId, xCoord, yCoord){
-  blockPositions[BlockId] = {
-    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-    x: xCoord * 1/graphZoomScale,
-    y: yCoord * 1/graphZoomScale
-  }
-}
-
-function generateRandomBlockPosition(){
-  return Math.floor((Math.random() * 500) + 1)
-}
+//function appendToBlockPositions(BlockId, xCoord, yCoord){
+//  blockPositions[BlockId] = {
+//    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    x: xCoord * 1/graphZoomScale,
+//    y: yCoord * 1/graphZoomScale
+//  }
+//}
 
 function appendToBlockSelectedStates(BlockId){
   //console.log("blockSelectedStates before adding a new block:");
   blockSelectedStates[BlockId] = false;
   //console.log("blockSelectedStates after adding a new block:");
+}
+
+function removeBlock(blockId){
+  /* Remove block from blockPositions */
+  //delete blockPositions[blockId];
+
+  /* Remove from blockSelectedStates */
+  delete blockSelectedStates[blockId];
+}
+
+function generateRandomBlockPosition(){
+  return Math.floor((Math.random() * 500) + 1)
 }
 
 function deselectAllBlocks(){
@@ -4593,9 +3591,9 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
     return blockStyling;
   },
 
-  getBlockPositions: function(){
-    return blockPositions;
-  }
+  //getBlockPositions: function(){
+  //  return blockPositions;
+  //}
 
 });
 
@@ -4604,7 +3602,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-var blockStore = require('./blockStore');
+//var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
@@ -4619,7 +3617,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
     to the appropriate state objects, ie, selected, position */
     case appConstants.ADDTO_ALLBLOCKINFO:
       //AppDispatcher.waitFor([blockStore.dispatchToken]); /* NO need for waitFor, I'm just listening to a single action over multiple stores! */
-      appendToBlockPositions(item);
+      //appendToBlockPositions(item);
       appendToBlockSelectedStates(item);
       flowChartStore.emitChange();
       break;
@@ -4646,11 +3644,11 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
 
 
-    case appConstants.INTERACTJS_DRAG:
-      interactJsDrag(item);
-      console.log(blockPositions[item.target]);
-      flowChartStore.emitChange();
-      break;
+    //case appConstants.INTERACTJS_DRAG:
+    //  interactJsDrag(item);
+    //  console.log(blockPositions[item.target]);
+    //  flowChartStore.emitChange();
+    //  break;
 
 
     case appConstants.SELECT_BLOCK:
@@ -4772,22 +3770,22 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
         //}
         if(item.tags[i] === 'instance:Zebra2Block'){
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
-          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
-          console.log(xCoord);
+          //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          //console.log(xCoord);
 
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
             if(item.attributes.VISIBLE.value === 'Show') {
-            appendToBlockPositions(blockName, xCoord, yCoord);
+            //appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }
           else{
             console.log("block isn't in use, don't add its info");
 
-            appendToBlockPositions(blockName, xCoord, yCoord);
-            appendToBlockSelectedStates(blockName);
+            //appendToBlockPositions(blockName, xCoord, yCoord);
+            //appendToBlockSelectedStates(blockName);
           }
         }
       }
@@ -4796,36 +3794,61 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("item");
-      if(item.requestedData.attribute === 'X_COORD' ||
-        item.requestedData.attribute === 'Y_COORD'){
+      console.log("flowChartStore malcolmSubscribe success");
+      //if(item.requestedData.attribute === 'X_COORD' ||
+      //  item.requestedData.attribute === 'Y_COORD'){
+      //
+      //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      //
+      //  if(item.requestedData.attribute === 'X_COORD'){
+      //    blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //  else if(item.requestedData.attribute === 'Y_COORD'){
+      //    blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //
+      //  //blockPositions[requestedData.blockName] = {
+      //  //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
+      //  //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
+      //  //}
+      //
+      //  /* The only time I want
+      //  flowChart to emit a change
+      //  due to a subscribe message
+      //   */
+      //  flowChartStore.emitChange();
+      //
+      //}
 
-        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      for(var j = 0; j < item.responseMessage.tags.length; j++) {
+        if(item.responseMessage.tags[j] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
 
-        if(item.requestedData.attribute === 'X_COORD'){
-          blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             Hmm, how do I also get the coords from Z?
+             */
+            //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
+            appendToBlockSelectedStates(blockName);
+            //console.log(blockPositions);
+            flowChartStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Causes a circular dependency! */
+            //AppDispatcher.waitFor([blockStore.dispatchToken]);
+            //setTimeout(function(){
+            //  removeBlock(item.requestedData.attribute);
+            //
+            //}, 1000);
+            //removeBlock(item.requestedData.attribute);
+            flowChartStore.emitChange();
+          }
+
         }
-        else if(item.requestedData.attribute === 'Y_COORD'){
-          blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
-        }
-
-        //blockPositions[requestedData.blockName] = {
-        //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
-        //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
-        //}
-
-        /* The only time I want
-        flowChart to emit a change
-        due to a subscribe message
-         */
-        flowChartStore.emitChange();
-
       }
-      //console.log("nnnnnnnnnnnnnnnnnnnnnnnnnn");
-      //console.log(requestedData);
-      //console.log(blockPositions[requestedData.blockName]);
-      //flowChartStore.emitChange();
+
+
       break;
 
 
@@ -4838,7 +3861,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = flowChartStore;
 
-},{"../../node_modules/object-assign/index.js":48,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"./blockStore":16,"events":42}],19:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":50,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"events":44}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4924,7 +3947,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = mainPaneStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":42,"object-assign":48}],20:[function(require,module,exports){
+},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":44,"object-assign":50}],21:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -5030,6 +4053,10 @@ var configContent = {
       firmwareVersion: "numbers & letters"
     }
   }
+};
+
+var blockLookupTableContent = {
+  label: 'BlockLookupTable'
 };
 
 var dropdownMenuSelect = function(tab){
@@ -5187,6 +4214,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       //changeConfigTabState();
       setConfigTabStateTrue();
       console.log(allBlockTabProperties.Configuration);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.BLOCKLOOKUPTABLETAB_OPEN:
+      setBlockLookupTableTabStateTrue();
       paneStore.emitChange();
       break;
 
@@ -5526,9 +4558,10 @@ var allBlockTabInfo;
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
-  'Gate1': false,
-  'TGen1': false,
-  'PComp1': false
+  'BlockLookupTable': false,
+  //'Gate1': false,
+  //'TGen1': false,
+  //'PComp1': false
 };
 
 var allEdgeTabProperties = {
@@ -5611,6 +4644,19 @@ function setConfigTabStateTrue(){
 
     dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
+  }
+}
+
+function setBlockLookupTableTabStateTrue(){
+  if(allBlockTabProperties['BlockLookupTable'] === false){
+    allBlockTabProperties['BlockLookupTable'] = true;
+
+    _stuff.tabState.push('BlockLookupTable');
+
+    selectBlockOnClick();
+  }
+  else if(allBlockTabProperties['BlockLookupTable'] === true){
+    dropdownMenuSelect("BlockLookupTable");
   }
 }
 
@@ -6214,7 +5260,7 @@ module.exports = paneStore;
 //  return possibleBlockCases[dispatchMarker](dispatchMarker);
 //}
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"./blockStore":16,"events":42,"object-assign":48}],21:[function(require,module,exports){
+},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"./blockStore":16,"events":44,"object-assign":50}],22:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -6299,7 +5345,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = sidePaneStore;
 
-},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":42,"object-assign":48}],22:[function(require,module,exports){
+},{"../constants/appConstants":12,"../dispatcher/appDispatcher":13,"events":44,"object-assign":50}],23:[function(require,module,exports){
 /**
  * Created by twi18192 on 02/03/16.
  */
@@ -6419,7 +5465,7 @@ var MalcolmUtils = {
 
 module.exports = MalcolmUtils;
 
-},{"../fluxWebsocketClient":14,"./idLookupTable":24}],23:[function(require,module,exports){
+},{"../fluxWebsocketClient":14,"./idLookupTable":25}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -6495,7 +5541,7 @@ var WebAPIUtils = {
 
 module.exports = WebAPIUtils;
 
-},{"../WebAPI":1}],24:[function(require,module,exports){
+},{"../WebAPI":1}],25:[function(require,module,exports){
 /**
  * Created by twi18192 on 03/03/16.
  */
@@ -6509,6 +5555,8 @@ var idLookupTableFunctions = {
    and if it's false then invoke the failure callback
    */
     console.log(idLookupTable);
+
+    //window.alert("look at the lookup table!");
 
     if (success === true) {
       idLookupTable[id].successCallback(json)
@@ -6530,7 +5578,7 @@ var idLookupTable = {
 
 module.exports = idLookupTableFunctions;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 14/01/16.
  */
@@ -6994,7 +6042,7 @@ module.exports = Block;
 //  //onClick={this.nodeClick} onDragStart={this.nodeDrag}
 ///>
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/lib/ReactDefaultPerf.js":109,"../../node_modules/react/react":229,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16,"./blockRectangle":26,"./ports.js":38}],26:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/lib/ReactDefaultPerf.js":112,"../../node_modules/react/react":232,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16,"./blockRectangle":27,"./ports.js":40}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -7062,7 +6110,42 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
 
 module.exports = BlockRectangles;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/react":229,"../actions/blockActions.js":3,"../stores/blockStore.js":16}],27:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/react":232,"../actions/blockActions.js":3,"../stores/blockStore.js":16}],28:[function(require,module,exports){
+/**
+ * Created by twi18192 on 22/03/16.
+ */
+
+var React = require('react');
+
+var ToggleSwitch = require('react-toggle-switch');
+
+var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
+  render: function(){
+    /* 'on' is the default setting of the switch, shall be
+     from the server at some point (perhaps a ternary operator?)
+     */
+    console.log(this.props.toggleOrientation);
+    return(
+      React.createElement("div", {style: {position: 'relative', left: '0',
+                   bottom: '0px', width: '230px', height: '25px',
+                   display: 'flex', alignItems: 'flex-start'}}, 
+        React.createElement("b", {style: {margin: '0px', width: '100px'}}, this.props.blockName), 
+        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
+        React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
+                  height: '21', width: '50'}}, 
+          React.createElement(ToggleSwitch, {onClick: this.props.toggleSwitch.bind(null, this.props.blockName), 
+                        value: this.props.toggleOrientation === true ? 'true' : 'false', 
+                        on: this.props.toggleOrientation})
+        ), 
+        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
+      )
+    )
+  }
+});
+
+module.exports = BlockToggleSwitch;
+
+},{"react":232,"react-toggle-switch":56}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 16/02/16.
  */
@@ -7084,7 +6167,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  position: 'relative',
+  marginTop: '39px'
 
 };
 
@@ -7109,7 +6194,7 @@ var Button = React.createClass({displayName: "Button",
 
 module.exports = Button;
 
-},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":19,"react":229}],28:[function(require,module,exports){
+},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":20,"react":232}],30:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -7131,7 +6216,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  marginTop: '39px',
+  marginLeft: '10px'
 
 };
 
@@ -7183,7 +6270,7 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
 
 module.exports = ConfigButton;
 
-},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":19,"react":229}],29:[function(require,module,exports){
+},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":20,"react":232}],31:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/03/16.
  */
@@ -7252,7 +6339,7 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
 
 module.exports = DropdownEditableReadoutField;
 
-},{"../actions/MalcolmActionCreators":2,"react":229}],30:[function(require,module,exports){
+},{"../actions/MalcolmActionCreators":2,"react":232}],32:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -7469,7 +6556,7 @@ module.exports = Dropdown;
 //  this.props.changeTab(findTheIndex)
 //},
 
-},{"../../node_modules/interact.js":47,"../actions/sidePaneActions":9,"../stores/paneStore":20,"../stores/sidePaneStore":21,"react":229}],31:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../actions/sidePaneActions":9,"../stores/paneStore":21,"../stores/sidePaneStore":22,"react":232}],33:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -7715,7 +6802,7 @@ var Edge = React.createClass({displayName: "Edge",
 
 module.exports = Edge;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/react":229,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16}],32:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/react":232,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16}],34:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/02/16.
  */
@@ -7915,7 +7002,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
 module.exports= EdgePreview;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/lib/ReactDefaultPerf.js":109,"../../node_modules/react/react":229,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../stores/blockStore.js":16}],33:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/lib/ReactDefaultPerf.js":112,"../../node_modules/react/react":232,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../stores/blockStore.js":16}],35:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -7937,7 +7024,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  position: 'relative',
+  marginTop: '39px'
 
 };
 
@@ -7990,7 +7079,7 @@ var FavButton = React.createClass({displayName: "FavButton",
 
 module.exports = FavButton;
 
-},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":19,"react":229}],34:[function(require,module,exports){
+},{"../actions/mainPaneActions":6,"../stores/mainPaneStore":20,"react":232}],36:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -8017,6 +7106,11 @@ var WebAPIUtils = require('../utils/WebAPIUtils');
 
 var testingWebsocketActions = require('../actions/testingWebsocketActions');
 
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+var attributeStore = require('../stores/attributeStore');
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
 
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
@@ -8086,6 +7180,17 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
     //window.addEventListener('keydown', this.keyPress);
+
+    //window.alert("flowChart mount");
+
+    //setTimeout(function(){
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //    item: "initialise flowChart end"
+    //  });
+    //}, 1000);
+
+
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -8703,6 +7808,10 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       var newEdge;
       var edgeLabel;
 
+      /* For the malcolmCall that updates the dropdown menu list in the block's tab */
+      var inportBlock;
+      var inportBlockPort;
+
       if(types.portTypes.fromBlockPortType === 'outport'){
 
         //console.log("outport to inport, so edge labelling is normal");
@@ -8750,7 +7859,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
         }
       }
 
-      if(fromPortValueType === toPortValueType){
+      if(fromPortValueType === toPortValueType || fromPortValueType !== toPortValueType){
         /* Proceed with the connection as we have compatible port value types */
 
         //toPort.style.stroke = "black";
@@ -8815,8 +7924,27 @@ var FlowChart = React.createClass({displayName: "FlowChart",
           edgeLabel: edgeLabel
         };
 
-        blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+        /* Create new edges by writing to the server,
+        then blockStore updates allBlockInfo via info
+        from malcolm rather than being updated locally
+         */
+        //blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
         //flowChartActions.appendToEdgeSelectedState(edgeLabel);
+
+        /* Now send the malcolmCall */
+        inportBlock = endBlock; /* the 'blockName' argument */
+        inportBlockPort = endBlockPort;
+
+        var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+        var inputFieldSetMethod = "_set_" + endBlockPort; /* the 'method' argument */
+
+        var newDropdownValue = startBlock + "." + startBlockPort; /* the 'args' argument */
+
+        var argsObject = {};
+        argsObject[endBlockPort] = newDropdownValue;
+        console.log(argsObject);
+
+        MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
 
         /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
 
@@ -9962,7 +9090,7 @@ module.exports = FlowChart;
 //  onClick={this.addBlockInfo}
 //  height="50" width="50" /></g>
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/lib/ReactDefaultPerf.js":109,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/testingWebsocketActions":10,"../stores/blockStore.js":16,"../stores/flowChartStore":18,"../utils/WebAPIUtils":23,"./block.js":25,"./edge.js":31,"./edgePreview":32,"react":229}],35:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/lib/ReactDefaultPerf.js":112,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/testingWebsocketActions":10,"../constants/appConstants.js":12,"../dispatcher/appDispatcher.js":13,"../stores/attributeStore":15,"../stores/blockStore.js":16,"../stores/flowChartStore":19,"../utils/WebAPIUtils":24,"./block.js":26,"./edge.js":33,"./edgePreview":34,"react":232}],37:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -10001,7 +9129,7 @@ function getFlowChartState(){
     areAnyEdgesSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyEdgesAreSelected())),
     edgePreview: JSON.parse(JSON.stringify(flowChartStore.getEdgePreview())),
     blockStyling: JSON.parse(JSON.stringify(flowChartStore.getBlockStyling())),
-    blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions())),
+    blockPositions: JSON.parse(JSON.stringify(blockStore.getBlockPositions())),
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
 
 
@@ -10078,7 +9206,7 @@ var FlowChartControllerView = React.createClass({displayName: "FlowChartControll
 
 module.exports = FlowChartControllerView;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":49,"../stores/blockStore.js":16,"../stores/flowChartStore":18,"./flowChart":34,"react":229}],36:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":51,"../stores/blockStore.js":16,"../stores/flowChartStore":19,"./flowChart":36,"react":232}],38:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -10089,6 +9217,7 @@ var mainPaneStore = require('../stores/mainPaneStore');
 var mainPaneActions = require('../actions/mainPaneActions');
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
+var FooterButton = require('./button');
 
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
@@ -10196,6 +9325,10 @@ var MainPane = React.createClass({displayName: "MainPane",
     paneActions.configTabOpen('this is the item')
   },
 
+  handleActionBlockLookupTableTabOpen: function(){
+    paneActions.blockLookupTableTabOpen('this is the item');
+  },
+
   handleActionToggleSidebar: function(){
     paneActions.toggleSidebar("toggle sidebar");
   },
@@ -10253,6 +9386,18 @@ var MainPane = React.createClass({displayName: "MainPane",
     //  /* Perhaps have another icon show up if initial data fetch doesn't work? */
     //}
 
+    var footer =
+      React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
+        React.createElement("div", {id: "buttonContainer"}, 
+          React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+          React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
+          React.createElement(FooterButton, {id: "blockLookUpTableButton", 
+                        buttonLabel: "Blocks", 
+                        buttonClick: this.handleActionBlockLookupTableTabOpen})
+        )
+      )
+      );
+
     return(
       React.createElement(Panel, {theme: "flexbox", useAvailableHeight: true, buttons: [
           React.createElement(ToggleButton, {title: "Toggle sidebar", onClick: this.handleActionToggleSidebar}, 
@@ -10269,13 +9414,7 @@ var MainPane = React.createClass({displayName: "MainPane",
             )
           ), 
 
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
-            )
-          )
-          )
+          footer
         ), 
 
         React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
@@ -10283,13 +9422,7 @@ var MainPane = React.createClass({displayName: "MainPane",
             "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
 
           ), 
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
-            )
-          )
-          )
+          footer
         )
       )
     )
@@ -10557,7 +9690,7 @@ module.exports = MainPane;
 //
 //<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
 
-},{"../actions/blockActions.js":3,"../actions/deviceActions":4,"../actions/mainPaneActions":6,"../actions/paneActions":7,"../actions/sessionActions":8,"../stores/blockStore.js":16,"../stores/deviceStore":17,"../stores/mainPaneStore":19,"../stores/paneStore":20,"./configButton":28,"./favButton":33,"./flowChartControllerView":35,"react":229,"react-panels":51}],37:[function(require,module,exports){
+},{"../actions/blockActions.js":3,"../actions/deviceActions":4,"../actions/mainPaneActions":6,"../actions/paneActions":7,"../actions/sessionActions":8,"../stores/blockStore.js":16,"../stores/deviceStore":18,"../stores/mainPaneStore":20,"../stores/paneStore":21,"./button":29,"./configButton":30,"./favButton":35,"./flowChartControllerView":37,"react":232,"react-panels":53}],39:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/03/16.
  */
@@ -10601,7 +9734,7 @@ module.exports = NonEditableReadoutField;
 //  value={String(this.props.blockAttribute.value)}
 //  readOnly="readonly" maxLength="17" size="17"/>
 
-},{"../actions/MalcolmActionCreators":2,"react":229}],38:[function(require,module,exports){
+},{"../actions/MalcolmActionCreators":2,"react":232}],40:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/01/16.
  */
@@ -10893,7 +10026,7 @@ var Ports = React.createClass({displayName: "Ports",
 
 module.exports = Ports;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../../node_modules/react/react":229,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16}],39:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../../node_modules/react/react":232,"../actions/blockActions.js":3,"../actions/flowChartActions":5,"../actions/paneActions":7,"../stores/blockStore.js":16}],41:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -10930,6 +10063,9 @@ var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
 
+var ToggleSwitch = require('react-toggle-switch');
+var BlockToggleSwitch = require('./blockToggleSwitch');
+
 //var TreeviewComponent = require('react-treeview-component');
 
 var SidePane = React.createClass({displayName: "SidePane",
@@ -10942,7 +10078,8 @@ var SidePane = React.createClass({displayName: "SidePane",
       nextProps.allBlockInfo !== this.props.allBlockInfo ||
       nextProps.favContent !== this.props.favContent ||
       nextProps.configContent !== this.props.configContent ||
-      nextProps.allBlockAttributes !== this.props.allBlockAttributes
+      nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
+      nextProps.blocksVisibility !== this.props.blocksVisibility
       //nextProps.blockPositions !== this.props.blockPositions
     )
   },
@@ -11400,6 +10537,53 @@ var SidePane = React.createClass({displayName: "SidePane",
     }
   },
 
+  toggleSwitch: function(blockName, value, e){
+    console.log(value);
+    console.log(blockName);
+
+    /* invoke malcolmCall to toggle the visible attribute
+    of the given block
+     */
+
+    /* If I'm toggling, I want to pass the OPPOSITE of
+    whatever the current value of the toggle is
+     */
+
+    var newValue;
+    var argsObject = {};
+
+    if(value === 'true'){
+      newValue = 'false';
+    }
+    else if(value === 'false'){
+      newValue = 'true'
+    }
+
+    var methodToInvoke = '_set_' + blockName + '_visible';
+
+    var argsValue;
+
+    if(newValue === 'true'){
+      argsValue = 'Show';
+    }
+    else if(newValue === 'false'){
+      argsValue = 'Hide';
+    }
+
+    argsObject[blockName] = argsValue;
+
+    console.log(argsValue);
+
+    /* Now invoke malcolmCall */
+
+    this.handleMalcolmCall('VISIBILITY', methodToInvoke, argsObject);
+    /* Note: the first argument is 'VISIBILITY' so then I am
+    invoking the method via Z:VISIBILITY rather than the block
+    itself, seems more organised to do it all through that
+     */
+
+  },
+
 
   render: function () {
 
@@ -11428,6 +10612,74 @@ var SidePane = React.createClass({displayName: "SidePane",
         else if(block === 'Configuration'){
           console.log("we have a config tab");
           tabContent.push(React.createElement("p", null, this.props.configContent.name));
+          var tabTitle = 'yh';
+        }
+        else if(block === 'BlockLookupTable'){
+          console.log("we have the blockLookupTable tab");
+
+          var sortedBlocksUnderGroupNames = {};
+
+          for(var m = 0; m < this.props.blockGroups.length; m++){
+            sortedBlocksUnderGroupNames[this.props.blockGroups[m]] = [];
+
+            for(var blockName in this.props.blocksVisibility){
+              if(blockName.indexOf(this.props.blockGroups[m]) !== -1){
+                sortedBlocksUnderGroupNames[this.props.blockGroups[m]].push(blockName)
+              }
+            }
+          }
+
+          for(var blockGroup in sortedBlocksUnderGroupNames){
+            if(sortedBlocksUnderGroupNames[blockGroup].length > 1){
+
+              var groupMembersToggleSwitches = [];
+
+              for(var i = 0; i < sortedBlocksUnderGroupNames[blockGroup].length; i++){
+
+                groupMembersToggleSwitches.push(
+                  React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][i], 
+                                     toggleSwitch: this.toggleSwitch, 
+                                     toggleOrientation: 
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
+                                     .value === 'Show'
+                                     }
+                                     )
+                )
+              }
+
+              tabContent.push(
+                React.createElement(Treeview, {defaultCollapsed: true, 
+                          nodeLabel: 
+                          React.createElement("b", {style: {}}, blockGroup)
+                          
+                }, " ", groupMembersToggleSwitches
+                )
+              )
+            }
+            else{
+              tabContent.push(
+                React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][0], 
+                                   toggleSwitch: this.toggleSwitch, 
+                                   toggleOrientation: 
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
+                                     .value === 'Show'
+                                     }
+                )
+              );
+            }
+          }
+
+          //for(var n = 0; n < this.props.blocksVisibility.length; n++){
+          //  /* Need to push to the correct treeview somehow,
+          //  perhaps nest this inside the block groups loop?
+          //   */
+          //  tabContent.push(
+          //    <BlockToggleSwitch toggleSwitch={this.toggleSwitch}
+          //                       blockName={this.props.blocksVisibility[n].slice(2)} />
+          //  );
+          //}
+
+
           var tabTitle = 'yh';
         }
         else if(block.tabType === 'edge'){
@@ -11487,7 +10739,7 @@ module.exports = SidePane;
 //<p style={{margin: '0px'}} >yo</p>
 //<p style={{margin: '0px'}} >yes</p>
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react-dom/dist/react-dom.js":49,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/paneActions":7,"../actions/sidePaneActions":9,"../stores/paneStore":20,"../stores/sidePaneStore":21,"./button":27,"./dropdownEditableReadoutField":29,"./dropdownMenu":30,"./nonEditableReadoutField":37,"./textEditableReadoutField":41,"react":229,"react-panels":51,"react-treeview":54}],40:[function(require,module,exports){
+},{"../../node_modules/interact.js":49,"../../node_modules/react-dom/dist/react-dom.js":51,"../actions/MalcolmActionCreators":2,"../actions/blockActions.js":3,"../actions/paneActions":7,"../actions/sidePaneActions":9,"../stores/paneStore":21,"../stores/sidePaneStore":22,"./blockToggleSwitch":28,"./button":29,"./dropdownEditableReadoutField":31,"./dropdownMenu":32,"./nonEditableReadoutField":39,"./textEditableReadoutField":43,"react":232,"react-panels":53,"react-toggle-switch":56,"react-treeview":57}],42:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -11509,6 +10761,7 @@ var blockActions = require('../actions/blockActions.js');
 //var flowChartStore = require('../stores/flowChartStore');
 
 var attributeStore = require('../stores/attributeStore');
+var blocksVisibleStore = require('../stores/blocksVisibleStore');
 
 var SideBar = require('react-sidebar').default;
 
@@ -11606,7 +10859,10 @@ function getBothPanesState(){
     allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
-    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()))
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+
+    blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
+    blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
@@ -11637,7 +10893,8 @@ var BothPanes = React.createClass({displayName: "BothPanes",
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
       nextState.configContent !== this.state.configContent ||
-      nextState.allBlockAttributes !== this.state.allBlockAttributes
+      nextState.allBlockAttributes !== this.state.allBlockAttributes ||
+      nextState.blocksVisibility !== this.state.blocksVisibility
       //nextState.loadingInitialData !== this.state.loadingInitialData ||
       //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
@@ -11650,6 +10907,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     sidePaneStore.addChangeListener(this._onChange);
     blockStore.addChangeListener(this._onChange);
     attributeStore.addChangeListener(this._onChange);
+    blocksVisibleStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -11663,6 +10921,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
     sidePaneStore.removeChangeListener(this._onChange);
     blockStore.removeChangeListener(this._onChange);
     attributeStore.removeChangeListener(this._onChange);
+    blocksVisibleStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -11700,7 +10959,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                allBlockInfo: this.state.allBlockInfo, 
                favContent: this.state.favContent, 
                configContent: this.state.configContent, 
-               allBlockAttributes: this.state.allBlockAttributes}
+               allBlockAttributes: this.state.allBlockAttributes, 
+               blocksVisibility: this.state.blocksVisibility, 
+               blockGroups: this.state.blockGroups}
                //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
                //allBlockTabInfo={this.state.allBlockTabInfo}
                )
@@ -11713,7 +10974,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
 
 module.exports = BothPanes;
 
-},{"../actions/blockActions.js":3,"../actions/mainPaneActions":6,"../actions/paneActions":7,"../actions/sidePaneActions":9,"../stores/attributeStore":15,"../stores/blockStore.js":16,"../stores/mainPaneStore":19,"../stores/paneStore":20,"../stores/sidePaneStore":21,"./mainPane":36,"./sidePane":39,"react":229,"react-dom":50,"react-sidebar":52}],41:[function(require,module,exports){
+},{"../actions/blockActions.js":3,"../actions/mainPaneActions":6,"../actions/paneActions":7,"../actions/sidePaneActions":9,"../stores/attributeStore":15,"../stores/blockStore.js":16,"../stores/blocksVisibleStore":17,"../stores/mainPaneStore":20,"../stores/paneStore":21,"../stores/sidePaneStore":22,"./mainPane":38,"./sidePane":41,"react":232,"react-dom":52,"react-sidebar":54}],43:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/03/16.
  */
@@ -11757,7 +11018,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
 
 module.exports = TextEditableReadoutField;
 
-},{"../actions/MalcolmActionCreators":2,"react":229}],42:[function(require,module,exports){
+},{"../actions/MalcolmActionCreators":2,"react":232}],44:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -12060,7 +11321,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],43:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -12152,7 +11413,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -12164,7 +11425,7 @@ process.umask = function() { return 0; };
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":45}],45:[function(require,module,exports){
+},{"./lib/Dispatcher":47}],47:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -12416,7 +11677,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":46}],46:[function(require,module,exports){
+},{"./invariant":48}],48:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -12471,7 +11732,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -18449,7 +17710,7 @@ module.exports = invariant;
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -18490,7 +17751,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 (function (global){
 /**
  * ReactDOM v0.14.3
@@ -18536,12 +17797,12 @@ module.exports = Object.assign || function (target, source) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"react":229}],50:[function(require,module,exports){
+},{"react":232}],52:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":94}],51:[function(require,module,exports){
+},{"react/lib/ReactDOM":97}],53:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -21074,7 +20335,7 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react/addons":55}],52:[function(require,module,exports){
+},{"react/addons":58}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21088,7 +20349,7 @@ var _sidebar2 = _interopRequireDefault(_sidebar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _sidebar2.default;
-},{"./sidebar":53}],53:[function(require,module,exports){
+},{"./sidebar":55}],55:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -21526,7 +20787,79 @@ Sidebar.defaultProps = {
 };
 
 exports.default = Sidebar;
-},{"react":229,"react-dom":50}],54:[function(require,module,exports){
+},{"react":232,"react-dom":52}],56:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Switch = (function (_React$Component) {
+  _inherits(Switch, _React$Component);
+
+  _createClass(Switch, null, [{
+    key: 'propTypes',
+    value: {
+      value: _react2['default'].PropTypes.string,
+      on: _react2['default'].PropTypes.bool,
+      onClick: _react2['default'].PropTypes.func.isRequired
+    },
+    enumerable: true
+  }, {
+    key: 'defaultProps',
+    value: {
+      value: '',
+      on: false
+    },
+    enumerable: true
+  }]);
+
+  function Switch(props) {
+    _classCallCheck(this, Switch);
+
+    _get(Object.getPrototypeOf(Switch.prototype), 'constructor', this).call(this, props);
+    this.state = { on: this.props.on };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  _createClass(Switch, [{
+    key: 'handleClick',
+    value: function handleClick(e) {
+      e.preventDefault();
+      this.props.onClick(this.props.value);
+      this.setState({ on: !this.state.on });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { className: 'switch ' + (this.state.on ? 'on' : ''), onClick: this.handleClick },
+        _react2['default'].createElement('div', { className: "switch-toggle" })
+      );
+    }
+  }]);
+
+  return Switch;
+})(_react2['default'].Component);
+
+exports['default'] = Switch;
+module.exports = exports['default'];
+},{"react":232}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -21611,7 +20944,7 @@ var TreeView = _react2['default'].createClass({
 
 exports['default'] = TreeView;
 module.exports = exports['default'];
-},{"react":229}],55:[function(require,module,exports){
+},{"react":232}],58:[function(require,module,exports){
 'use strict';
 
 var warning = require('fbjs/lib/warning');
@@ -21626,7 +20959,7 @@ warning(
 
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":152,"fbjs/lib/warning":228}],56:[function(require,module,exports){
+},{"./lib/ReactWithAddons":155,"fbjs/lib/warning":231}],59:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21663,7 +20996,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":126,"./findDOMNode":177,"fbjs/lib/focusNode":210}],57:[function(require,module,exports){
+},{"./ReactMount":129,"./findDOMNode":180,"fbjs/lib/focusNode":213}],60:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -22069,7 +21402,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":69,"./EventPropagators":73,"./FallbackCompositionState":74,"./SyntheticCompositionEvent":158,"./SyntheticInputEvent":162,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/keyOf":221}],58:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPropagators":76,"./FallbackCompositionState":77,"./SyntheticCompositionEvent":161,"./SyntheticInputEvent":165,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/keyOf":224}],61:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22209,7 +21542,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],59:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22387,7 +21720,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":58,"./ReactPerf":132,"./dangerousStyleValue":174,"_process":43,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/camelizeStyleName":204,"fbjs/lib/hyphenateStyleName":215,"fbjs/lib/memoizeStringOnly":223,"fbjs/lib/warning":228}],60:[function(require,module,exports){
+},{"./CSSProperty":61,"./ReactPerf":135,"./dangerousStyleValue":177,"_process":45,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/camelizeStyleName":207,"fbjs/lib/hyphenateStyleName":218,"fbjs/lib/memoizeStringOnly":226,"fbjs/lib/warning":231}],63:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22483,7 +21816,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./PooledClass":79,"_process":43,"fbjs/lib/invariant":216}],61:[function(require,module,exports){
+},{"./Object.assign":81,"./PooledClass":82,"_process":45,"fbjs/lib/invariant":219}],64:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22805,7 +22138,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":69,"./EventPluginHub":70,"./EventPropagators":73,"./ReactUpdates":150,"./SyntheticEvent":160,"./getEventTarget":183,"./isEventSupported":188,"./isTextInputElement":189,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/keyOf":221}],62:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPluginHub":73,"./EventPropagators":76,"./ReactUpdates":153,"./SyntheticEvent":163,"./getEventTarget":186,"./isEventSupported":191,"./isTextInputElement":192,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/keyOf":224}],65:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22829,7 +22162,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],63:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22961,7 +22294,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":66,"./ReactMultiChildUpdateTypes":128,"./ReactPerf":132,"./setInnerHTML":193,"./setTextContent":194,"_process":43,"fbjs/lib/invariant":216}],64:[function(require,module,exports){
+},{"./Danger":69,"./ReactMultiChildUpdateTypes":131,"./ReactPerf":135,"./setInnerHTML":196,"./setTextContent":197,"_process":45,"fbjs/lib/invariant":219}],67:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23198,7 +22531,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],65:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],68:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23426,7 +22759,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":64,"./ReactPerf":132,"./quoteAttributeValueForBrowser":191,"_process":43,"fbjs/lib/warning":228}],66:[function(require,module,exports){
+},{"./DOMProperty":67,"./ReactPerf":135,"./quoteAttributeValueForBrowser":194,"_process":45,"fbjs/lib/warning":231}],69:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23574,7 +22907,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/createNodesFromMarkup":207,"fbjs/lib/emptyFunction":208,"fbjs/lib/getMarkupWrap":212,"fbjs/lib/invariant":216}],67:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/createNodesFromMarkup":210,"fbjs/lib/emptyFunction":211,"fbjs/lib/getMarkupWrap":215,"fbjs/lib/invariant":219}],70:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23602,7 +22935,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":221}],68:[function(require,module,exports){
+},{"fbjs/lib/keyOf":224}],71:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23727,7 +23060,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":69,"./EventPropagators":73,"./ReactMount":126,"./SyntheticMouseEvent":164,"fbjs/lib/keyOf":221}],69:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPropagators":76,"./ReactMount":129,"./SyntheticMouseEvent":167,"fbjs/lib/keyOf":224}],72:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23820,7 +23153,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":220}],70:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":223}],73:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24102,7 +23435,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":71,"./EventPluginUtils":72,"./ReactErrorUtils":115,"./accumulateInto":170,"./forEachAccumulated":179,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],71:[function(require,module,exports){
+},{"./EventPluginRegistry":74,"./EventPluginUtils":75,"./ReactErrorUtils":118,"./accumulateInto":173,"./forEachAccumulated":182,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24325,7 +23658,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],72:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],75:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24530,7 +23863,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":69,"./ReactErrorUtils":115,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],73:[function(require,module,exports){
+},{"./EventConstants":72,"./ReactErrorUtils":118,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],76:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24668,7 +24001,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":69,"./EventPluginHub":70,"./accumulateInto":170,"./forEachAccumulated":179,"_process":43,"fbjs/lib/warning":228}],74:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPluginHub":73,"./accumulateInto":173,"./forEachAccumulated":182,"_process":45,"fbjs/lib/warning":231}],77:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24764,7 +24097,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":78,"./PooledClass":79,"./getTextContentAccessor":186}],75:[function(require,module,exports){
+},{"./Object.assign":81,"./PooledClass":82,"./getTextContentAccessor":189}],78:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24997,7 +24330,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":64,"fbjs/lib/ExecutionEnvironment":202}],76:[function(require,module,exports){
+},{"./DOMProperty":67,"fbjs/lib/ExecutionEnvironment":205}],79:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25034,7 +24367,7 @@ var LinkedStateMixin = {
 };
 
 module.exports = LinkedStateMixin;
-},{"./ReactLink":124,"./ReactStateSetters":144}],77:[function(require,module,exports){
+},{"./ReactLink":127,"./ReactStateSetters":147}],80:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25171,7 +24504,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":135,"./ReactPropTypes":136,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],78:[function(require,module,exports){
+},{"./ReactPropTypeLocations":138,"./ReactPropTypes":139,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],81:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -25219,7 +24552,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],79:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25341,7 +24674,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],80:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],83:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25382,7 +24715,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":78,"./ReactDOM":94,"./ReactDOMServer":104,"./ReactIsomorphic":123,"./deprecated":175}],81:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactDOM":97,"./ReactDOMServer":107,"./ReactIsomorphic":126,"./deprecated":178}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25421,7 +24754,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":122,"./findDOMNode":177,"_process":43,"fbjs/lib/warning":228}],82:[function(require,module,exports){
+},{"./ReactInstanceMap":125,"./findDOMNode":180,"_process":45,"fbjs/lib/warning":231}],85:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25746,7 +25079,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":69,"./EventPluginHub":70,"./EventPluginRegistry":71,"./Object.assign":78,"./ReactEventEmitterMixin":116,"./ReactPerf":132,"./ViewportMetrics":169,"./isEventSupported":188}],83:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPluginHub":73,"./EventPluginRegistry":74,"./Object.assign":81,"./ReactEventEmitterMixin":119,"./ReactPerf":135,"./ViewportMetrics":172,"./isEventSupported":191}],86:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25830,7 +25163,7 @@ var ReactCSSTransitionGroup = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroup;
-},{"./Object.assign":78,"./React":80,"./ReactCSSTransitionGroupChild":84,"./ReactTransitionGroup":148}],84:[function(require,module,exports){
+},{"./Object.assign":81,"./React":83,"./ReactCSSTransitionGroupChild":87,"./ReactTransitionGroup":151}],87:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25996,7 +25329,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroupChild;
-},{"./React":80,"./ReactDOM":94,"./ReactTransitionEvents":147,"./onlyChild":190,"fbjs/lib/CSSCore":200}],85:[function(require,module,exports){
+},{"./React":83,"./ReactDOM":97,"./ReactTransitionEvents":150,"./onlyChild":193,"fbjs/lib/CSSCore":203}],88:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -26121,7 +25454,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":138,"./instantiateReactComponent":187,"./shouldUpdateReactComponent":196,"./traverseAllChildren":197,"_process":43,"fbjs/lib/warning":228}],86:[function(require,module,exports){
+},{"./ReactReconciler":141,"./instantiateReactComponent":190,"./shouldUpdateReactComponent":199,"./traverseAllChildren":200,"_process":45,"fbjs/lib/warning":231}],89:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26304,7 +25637,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":79,"./ReactElement":111,"./traverseAllChildren":197,"fbjs/lib/emptyFunction":208}],87:[function(require,module,exports){
+},{"./PooledClass":82,"./ReactElement":114,"./traverseAllChildren":200,"fbjs/lib/emptyFunction":211}],90:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27078,7 +26411,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactComponent":88,"./ReactElement":111,"./ReactNoopUpdateQueue":130,"./ReactPropTypeLocationNames":134,"./ReactPropTypeLocations":135,"_process":43,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216,"fbjs/lib/keyMirror":220,"fbjs/lib/keyOf":221,"fbjs/lib/warning":228}],88:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactComponent":91,"./ReactElement":114,"./ReactNoopUpdateQueue":133,"./ReactPropTypeLocationNames":137,"./ReactPropTypeLocations":138,"_process":45,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219,"fbjs/lib/keyMirror":223,"fbjs/lib/keyOf":224,"fbjs/lib/warning":231}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27203,7 +26536,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":130,"./canDefineProperty":172,"_process":43,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],89:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":133,"./canDefineProperty":175,"_process":45,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],92:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27245,7 +26578,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":99,"./ReactMount":126}],90:[function(require,module,exports){
+},{"./ReactDOMIDOperations":102,"./ReactMount":129}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -27299,7 +26632,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],91:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],94:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27346,7 +26679,7 @@ var ReactComponentWithPureRenderMixin = {
 };
 
 module.exports = ReactComponentWithPureRenderMixin;
-},{"./shallowCompare":195}],92:[function(require,module,exports){
+},{"./shallowCompare":198}],95:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28043,7 +27376,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactComponentEnvironment":90,"./ReactCurrentOwner":93,"./ReactElement":111,"./ReactInstanceMap":122,"./ReactPerf":132,"./ReactPropTypeLocationNames":134,"./ReactPropTypeLocations":135,"./ReactReconciler":138,"./ReactUpdateQueue":149,"./shouldUpdateReactComponent":196,"_process":43,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],93:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactComponentEnvironment":93,"./ReactCurrentOwner":96,"./ReactElement":114,"./ReactInstanceMap":125,"./ReactPerf":135,"./ReactPropTypeLocationNames":137,"./ReactPropTypeLocations":138,"./ReactReconciler":141,"./ReactUpdateQueue":152,"./shouldUpdateReactComponent":199,"_process":45,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],96:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28074,7 +27407,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],94:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -28169,7 +27502,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":93,"./ReactDOMTextComponent":105,"./ReactDefaultInjection":108,"./ReactInstanceHandles":121,"./ReactMount":126,"./ReactPerf":132,"./ReactReconciler":138,"./ReactUpdates":150,"./ReactVersion":151,"./findDOMNode":177,"./renderSubtreeIntoContainer":192,"_process":43,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/warning":228}],95:[function(require,module,exports){
+},{"./ReactCurrentOwner":96,"./ReactDOMTextComponent":108,"./ReactDefaultInjection":111,"./ReactInstanceHandles":124,"./ReactMount":129,"./ReactPerf":135,"./ReactReconciler":141,"./ReactUpdates":153,"./ReactVersion":154,"./findDOMNode":180,"./renderSubtreeIntoContainer":195,"_process":45,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/warning":231}],98:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28220,7 +27553,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],96:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29185,7 +28518,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":56,"./CSSPropertyOperations":59,"./DOMProperty":64,"./DOMPropertyOperations":65,"./EventConstants":69,"./Object.assign":78,"./ReactBrowserEventEmitter":82,"./ReactComponentBrowserEnvironment":89,"./ReactDOMButton":95,"./ReactDOMInput":100,"./ReactDOMOption":101,"./ReactDOMSelect":102,"./ReactDOMTextarea":106,"./ReactMount":126,"./ReactMultiChild":127,"./ReactPerf":132,"./ReactUpdateQueue":149,"./canDefineProperty":172,"./escapeTextContentForBrowser":176,"./isEventSupported":188,"./setInnerHTML":193,"./setTextContent":194,"./validateDOMNesting":199,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/keyOf":221,"fbjs/lib/shallowEqual":226,"fbjs/lib/warning":228}],97:[function(require,module,exports){
+},{"./AutoFocusUtils":59,"./CSSPropertyOperations":62,"./DOMProperty":67,"./DOMPropertyOperations":68,"./EventConstants":72,"./Object.assign":81,"./ReactBrowserEventEmitter":85,"./ReactComponentBrowserEnvironment":92,"./ReactDOMButton":98,"./ReactDOMInput":103,"./ReactDOMOption":104,"./ReactDOMSelect":105,"./ReactDOMTextarea":109,"./ReactMount":129,"./ReactMultiChild":130,"./ReactPerf":135,"./ReactUpdateQueue":152,"./canDefineProperty":175,"./escapeTextContentForBrowser":179,"./isEventSupported":191,"./setInnerHTML":196,"./setTextContent":197,"./validateDOMNesting":202,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/keyOf":224,"fbjs/lib/shallowEqual":229,"fbjs/lib/warning":231}],100:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29365,7 +28698,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":111,"./ReactElementValidator":112,"_process":43,"fbjs/lib/mapObject":222}],98:[function(require,module,exports){
+},{"./ReactElement":114,"./ReactElementValidator":115,"_process":45,"fbjs/lib/mapObject":225}],101:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29384,7 +28717,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],99:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29481,7 +28814,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":63,"./DOMPropertyOperations":65,"./ReactMount":126,"./ReactPerf":132,"_process":43,"fbjs/lib/invariant":216}],100:[function(require,module,exports){
+},{"./DOMChildrenOperations":66,"./DOMPropertyOperations":68,"./ReactMount":129,"./ReactPerf":135,"_process":45,"fbjs/lib/invariant":219}],103:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29637,7 +28970,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":77,"./Object.assign":78,"./ReactDOMIDOperations":99,"./ReactMount":126,"./ReactUpdates":150,"_process":43,"fbjs/lib/invariant":216}],101:[function(require,module,exports){
+},{"./LinkedValueUtils":80,"./Object.assign":81,"./ReactDOMIDOperations":102,"./ReactMount":129,"./ReactUpdates":153,"_process":45,"fbjs/lib/invariant":219}],104:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29726,7 +29059,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactChildren":86,"./ReactDOMSelect":102,"_process":43,"fbjs/lib/warning":228}],102:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactChildren":89,"./ReactDOMSelect":105,"_process":45,"fbjs/lib/warning":231}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29917,7 +29250,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":77,"./Object.assign":78,"./ReactMount":126,"./ReactUpdates":150,"_process":43,"fbjs/lib/warning":228}],103:[function(require,module,exports){
+},{"./LinkedValueUtils":80,"./Object.assign":81,"./ReactMount":129,"./ReactUpdates":153,"_process":45,"fbjs/lib/warning":231}],106:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30130,7 +29463,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":185,"./getTextContentAccessor":186,"fbjs/lib/ExecutionEnvironment":202}],104:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":188,"./getTextContentAccessor":189,"fbjs/lib/ExecutionEnvironment":205}],107:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30157,7 +29490,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":108,"./ReactServerRendering":142,"./ReactVersion":151}],105:[function(require,module,exports){
+},{"./ReactDefaultInjection":111,"./ReactServerRendering":145,"./ReactVersion":154}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30287,7 +29620,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":63,"./DOMPropertyOperations":65,"./Object.assign":78,"./ReactComponentBrowserEnvironment":89,"./ReactMount":126,"./escapeTextContentForBrowser":176,"./setTextContent":194,"./validateDOMNesting":199,"_process":43}],106:[function(require,module,exports){
+},{"./DOMChildrenOperations":66,"./DOMPropertyOperations":68,"./Object.assign":81,"./ReactComponentBrowserEnvironment":92,"./ReactMount":129,"./escapeTextContentForBrowser":179,"./setTextContent":197,"./validateDOMNesting":202,"_process":45}],109:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30403,7 +29736,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":77,"./Object.assign":78,"./ReactDOMIDOperations":99,"./ReactUpdates":150,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],107:[function(require,module,exports){
+},{"./LinkedValueUtils":80,"./Object.assign":81,"./ReactDOMIDOperations":102,"./ReactUpdates":153,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],110:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30471,7 +29804,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":78,"./ReactUpdates":150,"./Transaction":168,"fbjs/lib/emptyFunction":208}],108:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactUpdates":153,"./Transaction":171,"fbjs/lib/emptyFunction":211}],111:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -30571,7 +29904,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":57,"./ChangeEventPlugin":61,"./ClientReactRootIndex":62,"./DefaultEventPluginOrder":67,"./EnterLeaveEventPlugin":68,"./HTMLDOMPropertyConfig":75,"./ReactBrowserComponentMixin":81,"./ReactComponentBrowserEnvironment":89,"./ReactDOMComponent":96,"./ReactDOMTextComponent":105,"./ReactDefaultBatchingStrategy":107,"./ReactDefaultPerf":109,"./ReactEventListener":117,"./ReactInjection":119,"./ReactInstanceHandles":121,"./ReactMount":126,"./ReactReconcileTransaction":137,"./SVGDOMPropertyConfig":153,"./SelectEventPlugin":154,"./ServerReactRootIndex":155,"./SimpleEventPlugin":156,"_process":43,"fbjs/lib/ExecutionEnvironment":202}],109:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":60,"./ChangeEventPlugin":64,"./ClientReactRootIndex":65,"./DefaultEventPluginOrder":70,"./EnterLeaveEventPlugin":71,"./HTMLDOMPropertyConfig":78,"./ReactBrowserComponentMixin":84,"./ReactComponentBrowserEnvironment":92,"./ReactDOMComponent":99,"./ReactDOMTextComponent":108,"./ReactDefaultBatchingStrategy":110,"./ReactDefaultPerf":112,"./ReactEventListener":120,"./ReactInjection":122,"./ReactInstanceHandles":124,"./ReactMount":129,"./ReactReconcileTransaction":140,"./SVGDOMPropertyConfig":156,"./SelectEventPlugin":157,"./ServerReactRootIndex":158,"./SimpleEventPlugin":159,"_process":45,"fbjs/lib/ExecutionEnvironment":205}],112:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30809,7 +30142,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":64,"./ReactDefaultPerfAnalysis":110,"./ReactMount":126,"./ReactPerf":132,"fbjs/lib/performanceNow":225}],110:[function(require,module,exports){
+},{"./DOMProperty":67,"./ReactDefaultPerfAnalysis":113,"./ReactMount":129,"./ReactPerf":135,"fbjs/lib/performanceNow":228}],113:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31009,7 +30342,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":78}],111:[function(require,module,exports){
+},{"./Object.assign":81}],114:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -31259,7 +30592,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactCurrentOwner":93,"./canDefineProperty":172,"_process":43}],112:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactCurrentOwner":96,"./canDefineProperty":175,"_process":45}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -31543,7 +30876,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":93,"./ReactElement":111,"./ReactPropTypeLocationNames":134,"./ReactPropTypeLocations":135,"./canDefineProperty":172,"./getIteratorFn":184,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],113:[function(require,module,exports){
+},{"./ReactCurrentOwner":96,"./ReactElement":114,"./ReactPropTypeLocationNames":137,"./ReactPropTypeLocations":138,"./canDefineProperty":175,"./getIteratorFn":187,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],116:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -31595,7 +30928,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":78,"./ReactElement":111,"./ReactEmptyComponentRegistry":114,"./ReactReconciler":138}],114:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactElement":114,"./ReactEmptyComponentRegistry":117,"./ReactReconciler":141}],117:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -31644,7 +30977,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],115:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31724,7 +31057,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":43}],116:[function(require,module,exports){
+},{"_process":45}],119:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31763,7 +31096,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":70}],117:[function(require,module,exports){
+},{"./EventPluginHub":73}],120:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31975,7 +31308,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":78,"./PooledClass":79,"./ReactInstanceHandles":121,"./ReactMount":126,"./ReactUpdates":150,"./getEventTarget":183,"fbjs/lib/EventListener":201,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/getUnboundedScrollPosition":213}],118:[function(require,module,exports){
+},{"./Object.assign":81,"./PooledClass":82,"./ReactInstanceHandles":124,"./ReactMount":129,"./ReactUpdates":153,"./getEventTarget":186,"fbjs/lib/EventListener":204,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/getUnboundedScrollPosition":216}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -32042,7 +31375,7 @@ var ReactFragment = {
 
 module.exports = ReactFragment;
 }).call(this,require('_process'))
-},{"./ReactChildren":86,"./ReactElement":111,"_process":43,"fbjs/lib/emptyFunction":208,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],119:[function(require,module,exports){
+},{"./ReactChildren":89,"./ReactElement":114,"_process":45,"fbjs/lib/emptyFunction":211,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32081,7 +31414,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":64,"./EventPluginHub":70,"./ReactBrowserEventEmitter":82,"./ReactClass":87,"./ReactComponentEnvironment":90,"./ReactEmptyComponent":113,"./ReactNativeComponent":129,"./ReactPerf":132,"./ReactRootIndex":140,"./ReactUpdates":150}],120:[function(require,module,exports){
+},{"./DOMProperty":67,"./EventPluginHub":73,"./ReactBrowserEventEmitter":85,"./ReactClass":90,"./ReactComponentEnvironment":93,"./ReactEmptyComponent":116,"./ReactNativeComponent":132,"./ReactPerf":135,"./ReactRootIndex":143,"./ReactUpdates":153}],123:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32206,7 +31539,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":103,"fbjs/lib/containsNode":205,"fbjs/lib/focusNode":210,"fbjs/lib/getActiveElement":211}],121:[function(require,module,exports){
+},{"./ReactDOMSelection":106,"fbjs/lib/containsNode":208,"fbjs/lib/focusNode":213,"fbjs/lib/getActiveElement":214}],124:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32511,7 +31844,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":140,"_process":43,"fbjs/lib/invariant":216}],122:[function(require,module,exports){
+},{"./ReactRootIndex":143,"_process":45,"fbjs/lib/invariant":219}],125:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32559,7 +31892,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],123:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -32636,7 +31969,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactChildren":86,"./ReactClass":87,"./ReactComponent":88,"./ReactDOMFactories":97,"./ReactElement":111,"./ReactElementValidator":112,"./ReactPropTypes":136,"./ReactVersion":151,"./onlyChild":190,"_process":43}],124:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactChildren":89,"./ReactClass":90,"./ReactComponent":91,"./ReactDOMFactories":100,"./ReactElement":114,"./ReactElementValidator":115,"./ReactPropTypes":139,"./ReactVersion":154,"./onlyChild":193,"_process":45}],127:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32706,7 +32039,7 @@ ReactLink.PropTypes = {
 };
 
 module.exports = ReactLink;
-},{"./React":80}],125:[function(require,module,exports){
+},{"./React":83}],128:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32752,7 +32085,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":171}],126:[function(require,module,exports){
+},{"./adler32":174}],129:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33605,7 +32938,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":64,"./Object.assign":78,"./ReactBrowserEventEmitter":82,"./ReactCurrentOwner":93,"./ReactDOMFeatureFlags":98,"./ReactElement":111,"./ReactEmptyComponentRegistry":114,"./ReactInstanceHandles":121,"./ReactInstanceMap":122,"./ReactMarkupChecksum":125,"./ReactPerf":132,"./ReactReconciler":138,"./ReactUpdateQueue":149,"./ReactUpdates":150,"./instantiateReactComponent":187,"./setInnerHTML":193,"./shouldUpdateReactComponent":196,"./validateDOMNesting":199,"_process":43,"fbjs/lib/containsNode":205,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],127:[function(require,module,exports){
+},{"./DOMProperty":67,"./Object.assign":81,"./ReactBrowserEventEmitter":85,"./ReactCurrentOwner":96,"./ReactDOMFeatureFlags":101,"./ReactElement":114,"./ReactEmptyComponentRegistry":117,"./ReactInstanceHandles":124,"./ReactInstanceMap":125,"./ReactMarkupChecksum":128,"./ReactPerf":135,"./ReactReconciler":141,"./ReactUpdateQueue":152,"./ReactUpdates":153,"./instantiateReactComponent":190,"./setInnerHTML":196,"./shouldUpdateReactComponent":199,"./validateDOMNesting":202,"_process":45,"fbjs/lib/containsNode":208,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],130:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34104,7 +33437,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":85,"./ReactComponentEnvironment":90,"./ReactCurrentOwner":93,"./ReactMultiChildUpdateTypes":128,"./ReactReconciler":138,"./flattenChildren":178,"_process":43}],128:[function(require,module,exports){
+},{"./ReactChildReconciler":88,"./ReactComponentEnvironment":93,"./ReactCurrentOwner":96,"./ReactMultiChildUpdateTypes":131,"./ReactReconciler":141,"./flattenChildren":181,"_process":45}],131:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34137,7 +33470,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":220}],129:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":223}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -34234,7 +33567,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"_process":43,"fbjs/lib/invariant":216}],130:[function(require,module,exports){
+},{"./Object.assign":81,"_process":45,"fbjs/lib/invariant":219}],133:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -34355,7 +33688,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/warning":228}],131:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/warning":231}],134:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34449,7 +33782,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],132:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],135:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34548,7 +33881,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":43}],133:[function(require,module,exports){
+},{"_process":45}],136:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34657,7 +33990,7 @@ var ReactPropTransferer = {
 };
 
 module.exports = ReactPropTransferer;
-},{"./Object.assign":78,"fbjs/lib/emptyFunction":208,"fbjs/lib/joinClasses":219}],134:[function(require,module,exports){
+},{"./Object.assign":81,"fbjs/lib/emptyFunction":211,"fbjs/lib/joinClasses":222}],137:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34684,7 +34017,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":43}],135:[function(require,module,exports){
+},{"_process":45}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34707,7 +34040,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":220}],136:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":223}],139:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35064,7 +34397,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":111,"./ReactPropTypeLocationNames":134,"./getIteratorFn":184,"fbjs/lib/emptyFunction":208}],137:[function(require,module,exports){
+},{"./ReactElement":114,"./ReactPropTypeLocationNames":137,"./getIteratorFn":187,"fbjs/lib/emptyFunction":211}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35216,7 +34549,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":60,"./Object.assign":78,"./PooledClass":79,"./ReactBrowserEventEmitter":82,"./ReactDOMFeatureFlags":98,"./ReactInputSelection":120,"./Transaction":168}],138:[function(require,module,exports){
+},{"./CallbackQueue":63,"./Object.assign":81,"./PooledClass":82,"./ReactBrowserEventEmitter":85,"./ReactDOMFeatureFlags":101,"./ReactInputSelection":123,"./Transaction":171}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35324,7 +34657,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":139}],139:[function(require,module,exports){
+},{"./ReactRef":142}],142:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35403,7 +34736,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":131}],140:[function(require,module,exports){
+},{"./ReactOwner":134}],143:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35433,7 +34766,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],141:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -35457,7 +34790,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],142:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -35543,7 +34876,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":107,"./ReactElement":111,"./ReactInstanceHandles":121,"./ReactMarkupChecksum":125,"./ReactServerBatchingStrategy":141,"./ReactServerRenderingTransaction":143,"./ReactUpdates":150,"./instantiateReactComponent":187,"_process":43,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216}],143:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":110,"./ReactElement":114,"./ReactInstanceHandles":124,"./ReactMarkupChecksum":128,"./ReactServerBatchingStrategy":144,"./ReactServerRenderingTransaction":146,"./ReactUpdates":153,"./instantiateReactComponent":190,"_process":45,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219}],146:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -35631,7 +34964,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":60,"./Object.assign":78,"./PooledClass":79,"./Transaction":168,"fbjs/lib/emptyFunction":208}],144:[function(require,module,exports){
+},{"./CallbackQueue":63,"./Object.assign":81,"./PooledClass":82,"./Transaction":171,"fbjs/lib/emptyFunction":211}],147:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35736,7 +35069,7 @@ ReactStateSetters.Mixin = {
 };
 
 module.exports = ReactStateSetters;
-},{}],145:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -36212,7 +35545,7 @@ Object.keys(topLevelTypes).forEach(function (eventType) {
 
 module.exports = ReactTestUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":69,"./EventPluginHub":70,"./EventPropagators":73,"./Object.assign":78,"./React":80,"./ReactBrowserEventEmitter":82,"./ReactCompositeComponent":92,"./ReactDOM":94,"./ReactElement":111,"./ReactInstanceHandles":121,"./ReactInstanceMap":122,"./ReactMount":126,"./ReactUpdates":150,"./SyntheticEvent":160,"./findDOMNode":177,"_process":43,"fbjs/lib/emptyObject":209,"fbjs/lib/invariant":216}],146:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPluginHub":73,"./EventPropagators":76,"./Object.assign":81,"./React":83,"./ReactBrowserEventEmitter":85,"./ReactCompositeComponent":95,"./ReactDOM":97,"./ReactElement":114,"./ReactInstanceHandles":124,"./ReactInstanceMap":125,"./ReactMount":129,"./ReactUpdates":153,"./SyntheticEvent":163,"./findDOMNode":180,"_process":45,"fbjs/lib/emptyObject":212,"fbjs/lib/invariant":219}],149:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36311,7 +35644,7 @@ var ReactTransitionChildMapping = {
 };
 
 module.exports = ReactTransitionChildMapping;
-},{"./flattenChildren":178}],147:[function(require,module,exports){
+},{"./flattenChildren":181}],150:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36421,7 +35754,7 @@ var ReactTransitionEvents = {
 };
 
 module.exports = ReactTransitionEvents;
-},{"fbjs/lib/ExecutionEnvironment":202}],148:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":205}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -36627,7 +35960,7 @@ var ReactTransitionGroup = React.createClass({
 });
 
 module.exports = ReactTransitionGroup;
-},{"./Object.assign":78,"./React":80,"./ReactTransitionChildMapping":146,"fbjs/lib/emptyFunction":208}],149:[function(require,module,exports){
+},{"./Object.assign":81,"./React":83,"./ReactTransitionChildMapping":149,"fbjs/lib/emptyFunction":211}],152:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -36887,7 +36220,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactCurrentOwner":93,"./ReactElement":111,"./ReactInstanceMap":122,"./ReactUpdates":150,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],150:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactCurrentOwner":96,"./ReactElement":114,"./ReactInstanceMap":125,"./ReactUpdates":153,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],153:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37113,7 +36446,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":60,"./Object.assign":78,"./PooledClass":79,"./ReactPerf":132,"./ReactReconciler":138,"./Transaction":168,"_process":43,"fbjs/lib/invariant":216}],151:[function(require,module,exports){
+},{"./CallbackQueue":63,"./Object.assign":81,"./PooledClass":82,"./ReactPerf":135,"./ReactReconciler":141,"./Transaction":171,"_process":45,"fbjs/lib/invariant":219}],154:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37128,7 +36461,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],152:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -37191,7 +36524,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":76,"./React":80,"./ReactCSSTransitionGroup":83,"./ReactComponentWithPureRenderMixin":91,"./ReactDefaultPerf":109,"./ReactFragment":118,"./ReactTestUtils":145,"./ReactTransitionGroup":148,"./ReactUpdates":150,"./cloneWithProps":173,"./shallowCompare":195,"./update":198,"_process":43,"fbjs/lib/warning":228}],153:[function(require,module,exports){
+},{"./LinkedStateMixin":79,"./React":83,"./ReactCSSTransitionGroup":86,"./ReactComponentWithPureRenderMixin":94,"./ReactDefaultPerf":112,"./ReactFragment":121,"./ReactTestUtils":148,"./ReactTransitionGroup":151,"./ReactUpdates":153,"./cloneWithProps":176,"./shallowCompare":198,"./update":201,"_process":45,"fbjs/lib/warning":231}],156:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37319,7 +36652,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":64}],154:[function(require,module,exports){
+},{"./DOMProperty":67}],157:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37521,7 +36854,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":69,"./EventPropagators":73,"./ReactInputSelection":120,"./SyntheticEvent":160,"./isTextInputElement":189,"fbjs/lib/ExecutionEnvironment":202,"fbjs/lib/getActiveElement":211,"fbjs/lib/keyOf":221,"fbjs/lib/shallowEqual":226}],155:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPropagators":76,"./ReactInputSelection":123,"./SyntheticEvent":163,"./isTextInputElement":192,"fbjs/lib/ExecutionEnvironment":205,"fbjs/lib/getActiveElement":214,"fbjs/lib/keyOf":224,"fbjs/lib/shallowEqual":229}],158:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -37551,7 +36884,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],156:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38141,7 +37474,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":69,"./EventPropagators":73,"./ReactMount":126,"./SyntheticClipboardEvent":157,"./SyntheticDragEvent":159,"./SyntheticEvent":160,"./SyntheticFocusEvent":161,"./SyntheticKeyboardEvent":163,"./SyntheticMouseEvent":164,"./SyntheticTouchEvent":165,"./SyntheticUIEvent":166,"./SyntheticWheelEvent":167,"./getEventCharCode":180,"_process":43,"fbjs/lib/EventListener":201,"fbjs/lib/emptyFunction":208,"fbjs/lib/invariant":216,"fbjs/lib/keyOf":221}],157:[function(require,module,exports){
+},{"./EventConstants":72,"./EventPropagators":76,"./ReactMount":129,"./SyntheticClipboardEvent":160,"./SyntheticDragEvent":162,"./SyntheticEvent":163,"./SyntheticFocusEvent":164,"./SyntheticKeyboardEvent":166,"./SyntheticMouseEvent":167,"./SyntheticTouchEvent":168,"./SyntheticUIEvent":169,"./SyntheticWheelEvent":170,"./getEventCharCode":183,"_process":45,"fbjs/lib/EventListener":204,"fbjs/lib/emptyFunction":211,"fbjs/lib/invariant":219,"fbjs/lib/keyOf":224}],160:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38181,7 +37514,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":160}],158:[function(require,module,exports){
+},{"./SyntheticEvent":163}],161:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38219,7 +37552,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":160}],159:[function(require,module,exports){
+},{"./SyntheticEvent":163}],162:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38257,7 +37590,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":164}],160:[function(require,module,exports){
+},{"./SyntheticMouseEvent":167}],163:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -38437,7 +37770,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./PooledClass":79,"_process":43,"fbjs/lib/emptyFunction":208,"fbjs/lib/warning":228}],161:[function(require,module,exports){
+},{"./Object.assign":81,"./PooledClass":82,"_process":45,"fbjs/lib/emptyFunction":211,"fbjs/lib/warning":231}],164:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38475,7 +37808,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":166}],162:[function(require,module,exports){
+},{"./SyntheticUIEvent":169}],165:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38514,7 +37847,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":160}],163:[function(require,module,exports){
+},{"./SyntheticEvent":163}],166:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38600,7 +37933,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":166,"./getEventCharCode":180,"./getEventKey":181,"./getEventModifierState":182}],164:[function(require,module,exports){
+},{"./SyntheticUIEvent":169,"./getEventCharCode":183,"./getEventKey":184,"./getEventModifierState":185}],167:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38674,7 +38007,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":166,"./ViewportMetrics":169,"./getEventModifierState":182}],165:[function(require,module,exports){
+},{"./SyntheticUIEvent":169,"./ViewportMetrics":172,"./getEventModifierState":185}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38721,7 +38054,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":166,"./getEventModifierState":182}],166:[function(require,module,exports){
+},{"./SyntheticUIEvent":169,"./getEventModifierState":185}],169:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38782,7 +38115,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":160,"./getEventTarget":183}],167:[function(require,module,exports){
+},{"./SyntheticEvent":163,"./getEventTarget":186}],170:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -38838,7 +38171,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":164}],168:[function(require,module,exports){
+},{"./SyntheticMouseEvent":167}],171:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39072,7 +38405,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],169:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],172:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39100,7 +38433,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],170:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -39162,7 +38495,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":43,"fbjs/lib/invariant":216}],171:[function(require,module,exports){
+},{"_process":45,"fbjs/lib/invariant":219}],174:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39205,7 +38538,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],172:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39232,7 +38565,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":43}],173:[function(require,module,exports){
+},{"_process":45}],176:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39289,7 +38622,7 @@ function cloneWithProps(child, props) {
 
 module.exports = cloneWithProps;
 }).call(this,require('_process'))
-},{"./ReactElement":111,"./ReactPropTransferer":133,"_process":43,"fbjs/lib/keyOf":221,"fbjs/lib/warning":228}],174:[function(require,module,exports){
+},{"./ReactElement":114,"./ReactPropTransferer":136,"_process":45,"fbjs/lib/keyOf":224,"fbjs/lib/warning":231}],177:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39345,7 +38678,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":58}],175:[function(require,module,exports){
+},{"./CSSProperty":61}],178:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39396,7 +38729,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"_process":43,"fbjs/lib/warning":228}],176:[function(require,module,exports){
+},{"./Object.assign":81,"_process":45,"fbjs/lib/warning":231}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39435,7 +38768,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],177:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39487,7 +38820,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":93,"./ReactInstanceMap":122,"./ReactMount":126,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],178:[function(require,module,exports){
+},{"./ReactCurrentOwner":96,"./ReactInstanceMap":125,"./ReactMount":129,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],181:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -39538,7 +38871,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":197,"_process":43,"fbjs/lib/warning":228}],179:[function(require,module,exports){
+},{"./traverseAllChildren":200,"_process":45,"fbjs/lib/warning":231}],182:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39568,7 +38901,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],180:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39619,7 +38952,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],181:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39723,7 +39056,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":180}],182:[function(require,module,exports){
+},{"./getEventCharCode":183}],185:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39768,7 +39101,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],183:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39798,7 +39131,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],184:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39839,7 +39172,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],185:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39913,7 +39246,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],186:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -39947,7 +39280,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":202}],187:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":205}],190:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40062,7 +39395,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"./ReactCompositeComponent":92,"./ReactEmptyComponent":113,"./ReactNativeComponent":129,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],188:[function(require,module,exports){
+},{"./Object.assign":81,"./ReactCompositeComponent":95,"./ReactEmptyComponent":116,"./ReactNativeComponent":132,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],191:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40123,7 +39456,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":202}],189:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":205}],192:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40164,7 +39497,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],190:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40200,7 +39533,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":111,"_process":43,"fbjs/lib/invariant":216}],191:[function(require,module,exports){
+},{"./ReactElement":114,"_process":45,"fbjs/lib/invariant":219}],194:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40227,7 +39560,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":176}],192:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":179}],195:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40244,7 +39577,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":126}],193:[function(require,module,exports){
+},{"./ReactMount":129}],196:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40335,7 +39668,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":202}],194:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":205}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40376,7 +39709,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":176,"./setInnerHTML":193,"fbjs/lib/ExecutionEnvironment":202}],195:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":179,"./setInnerHTML":196,"fbjs/lib/ExecutionEnvironment":205}],198:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40401,7 +39734,7 @@ function shallowCompare(instance, nextProps, nextState) {
 }
 
 module.exports = shallowCompare;
-},{"fbjs/lib/shallowEqual":226}],196:[function(require,module,exports){
+},{"fbjs/lib/shallowEqual":229}],199:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -40445,7 +39778,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],197:[function(require,module,exports){
+},{}],200:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40637,7 +39970,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":93,"./ReactElement":111,"./ReactInstanceHandles":121,"./getIteratorFn":184,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/warning":228}],198:[function(require,module,exports){
+},{"./ReactCurrentOwner":96,"./ReactElement":114,"./ReactInstanceHandles":124,"./getIteratorFn":187,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/warning":231}],201:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -40747,7 +40080,7 @@ function update(value, spec) {
 
 module.exports = update;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"_process":43,"fbjs/lib/invariant":216,"fbjs/lib/keyOf":221}],199:[function(require,module,exports){
+},{"./Object.assign":81,"_process":45,"fbjs/lib/invariant":219,"fbjs/lib/keyOf":224}],202:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -41113,7 +40446,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":78,"_process":43,"fbjs/lib/emptyFunction":208,"fbjs/lib/warning":228}],200:[function(require,module,exports){
+},{"./Object.assign":81,"_process":45,"fbjs/lib/emptyFunction":211,"fbjs/lib/warning":231}],203:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41213,7 +40546,7 @@ var CSSCore = {
 
 module.exports = CSSCore;
 }).call(this,require('_process'))
-},{"./invariant":216,"_process":43}],201:[function(require,module,exports){
+},{"./invariant":219,"_process":45}],204:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41300,7 +40633,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":208,"_process":43}],202:[function(require,module,exports){
+},{"./emptyFunction":211,"_process":45}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41337,7 +40670,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],203:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41370,7 +40703,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],204:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41411,7 +40744,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":203}],205:[function(require,module,exports){
+},{"./camelize":206}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41467,7 +40800,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":218}],206:[function(require,module,exports){
+},{"./isTextNode":221}],209:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41553,7 +40886,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":227}],207:[function(require,module,exports){
+},{"./toArray":230}],210:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41640,7 +40973,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":202,"./createArrayFromMixed":206,"./getMarkupWrap":212,"./invariant":216,"_process":43}],208:[function(require,module,exports){
+},{"./ExecutionEnvironment":205,"./createArrayFromMixed":209,"./getMarkupWrap":215,"./invariant":219,"_process":45}],211:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41679,7 +41012,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],209:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41702,7 +41035,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":43}],210:[function(require,module,exports){
+},{"_process":45}],213:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41729,7 +41062,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],211:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41763,7 +41096,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],212:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -41861,7 +41194,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":202,"./invariant":216,"_process":43}],213:[function(require,module,exports){
+},{"./ExecutionEnvironment":205,"./invariant":219,"_process":45}],216:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41900,7 +41233,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],214:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41934,7 +41267,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],215:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -41974,7 +41307,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":214}],216:[function(require,module,exports){
+},{"./hyphenate":217}],219:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -42026,7 +41359,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":43}],217:[function(require,module,exports){
+},{"_process":45}],220:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42050,7 +41383,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],218:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42076,7 +41409,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":217}],219:[function(require,module,exports){
+},{"./isNode":220}],222:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42116,7 +41449,7 @@ function joinClasses(className /*, ... */) {
 }
 
 module.exports = joinClasses;
-},{}],220:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -42167,7 +41500,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":216,"_process":43}],221:[function(require,module,exports){
+},{"./invariant":219,"_process":45}],224:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42203,7 +41536,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],222:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42255,7 +41588,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],223:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42287,7 +41620,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],224:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42311,7 +41644,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":202}],225:[function(require,module,exports){
+},{"./ExecutionEnvironment":205}],228:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42341,7 +41674,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":224}],226:[function(require,module,exports){
+},{"./performance":227}],229:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -42392,7 +41725,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],227:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -42452,7 +41785,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":216,"_process":43}],228:[function(require,module,exports){
+},{"./invariant":219,"_process":45}],231:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -42512,9 +41845,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":208,"_process":43}],229:[function(require,module,exports){
+},{"./emptyFunction":211,"_process":45}],232:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":80}]},{},[11]);
+},{"./lib/React":83}]},{},[11]);

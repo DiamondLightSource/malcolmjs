@@ -105,6 +105,10 @@ var configContent = {
   }
 };
 
+var blockLookupTableContent = {
+  label: 'BlockLookupTable'
+};
+
 var dropdownMenuSelect = function(tab){
   //var findTheIndex = _stuff.tabState.indexOf(item);
   ////this.props.changeTab(findTheIndex)
@@ -260,6 +264,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       //changeConfigTabState();
       setConfigTabStateTrue();
       console.log(allBlockTabProperties.Configuration);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.BLOCKLOOKUPTABLETAB_OPEN:
+      setBlockLookupTableTabStateTrue();
       paneStore.emitChange();
       break;
 
@@ -599,9 +608,10 @@ var allBlockTabInfo;
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
-  'Gate1': false,
-  'TGen1': false,
-  'PComp1': false
+  'BlockLookupTable': false,
+  //'Gate1': false,
+  //'TGen1': false,
+  //'PComp1': false
 };
 
 var allEdgeTabProperties = {
@@ -684,6 +694,19 @@ function setConfigTabStateTrue(){
 
     dropdownMenuSelect("Configuration");
     /* dropdownMenuSelect uses the label attribute rather than the object key name */
+  }
+}
+
+function setBlockLookupTableTabStateTrue(){
+  if(allBlockTabProperties['BlockLookupTable'] === false){
+    allBlockTabProperties['BlockLookupTable'] = true;
+
+    _stuff.tabState.push('BlockLookupTable');
+
+    selectBlockOnClick();
+  }
+  else if(allBlockTabProperties['BlockLookupTable'] === true){
+    dropdownMenuSelect("BlockLookupTable");
   }
 }
 

@@ -24,6 +24,11 @@ var WebAPIUtils = require('../utils/WebAPIUtils');
 
 var testingWebsocketActions = require('../actions/testingWebsocketActions');
 
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+var attributeStore = require('../stores/attributeStore');
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
 
 var NodeStylingProperties = { /* Only here temporarily until I think of a better solution to make this global*/
   height: 65,
@@ -93,6 +98,17 @@ var FlowChart = React.createClass({
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
     //window.addEventListener('keydown', this.keyPress);
+
+    //window.alert("flowChart mount");
+
+    //setTimeout(function(){
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //    item: "initialise flowChart end"
+    //  });
+    //}, 1000);
+
+
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -710,6 +726,10 @@ var FlowChart = React.createClass({
       var newEdge;
       var edgeLabel;
 
+      /* For the malcolmCall that updates the dropdown menu list in the block's tab */
+      var inportBlock;
+      var inportBlockPort;
+
       if(types.portTypes.fromBlockPortType === 'outport'){
 
         //console.log("outport to inport, so edge labelling is normal");
@@ -757,7 +777,7 @@ var FlowChart = React.createClass({
         }
       }
 
-      if(fromPortValueType === toPortValueType){
+      if(fromPortValueType === toPortValueType || fromPortValueType !== toPortValueType){
         /* Proceed with the connection as we have compatible port value types */
 
         //toPort.style.stroke = "black";
@@ -822,8 +842,27 @@ var FlowChart = React.createClass({
           edgeLabel: edgeLabel
         };
 
-        blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+        /* Create new edges by writing to the server,
+        then blockStore updates allBlockInfo via info
+        from malcolm rather than being updated locally
+         */
+        //blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
         //flowChartActions.appendToEdgeSelectedState(edgeLabel);
+
+        /* Now send the malcolmCall */
+        inportBlock = endBlock; /* the 'blockName' argument */
+        inportBlockPort = endBlockPort;
+
+        var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+        var inputFieldSetMethod = "_set_" + endBlockPort; /* the 'method' argument */
+
+        var newDropdownValue = startBlock + "." + startBlockPort; /* the 'args' argument */
+
+        var argsObject = {};
+        argsObject[endBlockPort] = newDropdownValue;
+        console.log(argsObject);
+
+        MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
 
         /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
 

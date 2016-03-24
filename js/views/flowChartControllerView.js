@@ -36,7 +36,7 @@ function getFlowChartState(){
     areAnyEdgesSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyEdgesAreSelected())),
     edgePreview: JSON.parse(JSON.stringify(flowChartStore.getEdgePreview())),
     blockStyling: JSON.parse(JSON.stringify(flowChartStore.getBlockStyling())),
-    blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions())),
+    blockPositions: JSON.parse(JSON.stringify(blockStore.getBlockPositions())),
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
 
 

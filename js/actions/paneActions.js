@@ -36,6 +36,12 @@ var paneActions = {
       item: item
     })
   },
+  blockLookupTableTabOpen: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.BLOCKLOOKUPTABLETAB_OPEN,
+      item: item
+    })
+  },
   updatePaneStoreBlockContentViaDeviceStore: function(blockContentObject){
     AppDispatcher.handleAction({
       actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,

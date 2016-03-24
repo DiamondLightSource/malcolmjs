@@ -38,49 +38,57 @@ var blockSelectedStates = {
   //PComp1: false
 };
 
-var blockPositions = {
-  //'Gate1': {
-  //  x: 50,
-  //  y: 100,
-  //},
-  //'TGen1': {
-  //  x: 250,
-  //  y: 10
-  //},
-  //'PComp1': {
-  //  x: 350,
-  //  y: 150,
-  //}
-};
+//var blockPositions = {
+//  //'Gate1': {
+//  //  x: 50,
+//  //  y: 100,
+//  //},
+//  //'TGen1': {
+//  //  x: 250,
+//  //  y: 10
+//  //},
+//  //'PComp1': {
+//  //  x: 350,
+//  //  y: 150,
+//  //}
+//};
 
-function interactJsDrag(BlockInfo){
-  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-  //console.log(allNodeInfo[NodeInfo.target].position);
+//function interactJsDrag(BlockInfo){
+//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+//  //console.log(allNodeInfo[NodeInfo.target].position);
+//
+//  blockPositions[BlockInfo.target] = {
+//    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
+//    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
+//  }
+//}
 
-  blockPositions[BlockInfo.target] = {
-    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
-    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
-  }
-}
-
-function appendToBlockPositions(BlockId, xCoord, yCoord){
-  blockPositions[BlockId] = {
-    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-    x: xCoord * 1/graphZoomScale,
-    y: yCoord * 1/graphZoomScale
-  }
-}
-
-function generateRandomBlockPosition(){
-  return Math.floor((Math.random() * 500) + 1)
-}
+//function appendToBlockPositions(BlockId, xCoord, yCoord){
+//  blockPositions[BlockId] = {
+//    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    x: xCoord * 1/graphZoomScale,
+//    y: yCoord * 1/graphZoomScale
+//  }
+//}
 
 function appendToBlockSelectedStates(BlockId){
   //console.log("blockSelectedStates before adding a new block:");
   blockSelectedStates[BlockId] = false;
   //console.log("blockSelectedStates after adding a new block:");
+}
+
+function removeBlock(blockId){
+  /* Remove block from blockPositions */
+  //delete blockPositions[blockId];
+
+  /* Remove from blockSelectedStates */
+  delete blockSelectedStates[blockId];
+}
+
+function generateRandomBlockPosition(){
+  return Math.floor((Math.random() * 500) + 1)
 }
 
 function deselectAllBlocks(){
@@ -248,9 +256,9 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
     return blockStyling;
   },
 
-  getBlockPositions: function(){
-    return blockPositions;
-  }
+  //getBlockPositions: function(){
+  //  return blockPositions;
+  //}
 
 });
 
@@ -259,7 +267,7 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
 
 
 
-var blockStore = require('./blockStore');
+//var blockStore = require('./blockStore');
 
 flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
@@ -274,7 +282,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
     to the appropriate state objects, ie, selected, position */
     case appConstants.ADDTO_ALLBLOCKINFO:
       //AppDispatcher.waitFor([blockStore.dispatchToken]); /* NO need for waitFor, I'm just listening to a single action over multiple stores! */
-      appendToBlockPositions(item);
+      //appendToBlockPositions(item);
       appendToBlockSelectedStates(item);
       flowChartStore.emitChange();
       break;
@@ -301,11 +309,11 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
 
 
-    case appConstants.INTERACTJS_DRAG:
-      interactJsDrag(item);
-      console.log(blockPositions[item.target]);
-      flowChartStore.emitChange();
-      break;
+    //case appConstants.INTERACTJS_DRAG:
+    //  interactJsDrag(item);
+    //  console.log(blockPositions[item.target]);
+    //  flowChartStore.emitChange();
+    //  break;
 
 
     case appConstants.SELECT_BLOCK:
@@ -427,22 +435,22 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
         //}
         if(item.tags[i] === 'instance:Zebra2Block'){
           var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
-          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
-          console.log(xCoord);
+          //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          //console.log(xCoord);
 
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
             if(item.attributes.VISIBLE.value === 'Show') {
-            appendToBlockPositions(blockName, xCoord, yCoord);
+            //appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }
           else{
             console.log("block isn't in use, don't add its info");
 
-            appendToBlockPositions(blockName, xCoord, yCoord);
-            appendToBlockSelectedStates(blockName);
+            //appendToBlockPositions(blockName, xCoord, yCoord);
+            //appendToBlockSelectedStates(blockName);
           }
         }
       }
@@ -451,36 +459,61 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("item");
-      if(item.requestedData.attribute === 'X_COORD' ||
-        item.requestedData.attribute === 'Y_COORD'){
+      console.log("flowChartStore malcolmSubscribe success");
+      //if(item.requestedData.attribute === 'X_COORD' ||
+      //  item.requestedData.attribute === 'Y_COORD'){
+      //
+      //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      //
+      //  if(item.requestedData.attribute === 'X_COORD'){
+      //    blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //  else if(item.requestedData.attribute === 'Y_COORD'){
+      //    blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //
+      //  //blockPositions[requestedData.blockName] = {
+      //  //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
+      //  //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
+      //  //}
+      //
+      //  /* The only time I want
+      //  flowChart to emit a change
+      //  due to a subscribe message
+      //   */
+      //  flowChartStore.emitChange();
+      //
+      //}
 
-        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      for(var j = 0; j < item.responseMessage.tags.length; j++) {
+        if(item.responseMessage.tags[j] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
 
-        if(item.requestedData.attribute === 'X_COORD'){
-          blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             Hmm, how do I also get the coords from Z?
+             */
+            //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
+            appendToBlockSelectedStates(blockName);
+            //console.log(blockPositions);
+            flowChartStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Causes a circular dependency! */
+            //AppDispatcher.waitFor([blockStore.dispatchToken]);
+            //setTimeout(function(){
+            //  removeBlock(item.requestedData.attribute);
+            //
+            //}, 1000);
+            //removeBlock(item.requestedData.attribute);
+            flowChartStore.emitChange();
+          }
+
         }
-        else if(item.requestedData.attribute === 'Y_COORD'){
-          blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
-        }
-
-        //blockPositions[requestedData.blockName] = {
-        //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
-        //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
-        //}
-
-        /* The only time I want
-        flowChart to emit a change
-        due to a subscribe message
-         */
-        flowChartStore.emitChange();
-
       }
-      //console.log("nnnnnnnnnnnnnnnnnnnnnnnnnn");
-      //console.log(requestedData);
-      //console.log(blockPositions[requestedData.blockName]);
-      //flowChartStore.emitChange();
+
+
       break;
 
 

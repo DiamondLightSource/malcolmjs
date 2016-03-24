@@ -19,6 +19,7 @@ var blockActions = require('../actions/blockActions.js');
 //var flowChartStore = require('../stores/flowChartStore');
 
 var attributeStore = require('../stores/attributeStore');
+var blocksVisibleStore = require('../stores/blocksVisibleStore');
 
 var SideBar = require('react-sidebar').default;
 
@@ -116,7 +117,10 @@ function getBothPanesState(){
     allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
-    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()))
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+
+    blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
+    blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
@@ -147,7 +151,8 @@ var BothPanes = React.createClass({
       nextState.allBlockInfo !== this.state.allBlockInfo ||
       nextState.favContent !== this.state.favContent ||
       nextState.configContent !== this.state.configContent ||
-      nextState.allBlockAttributes !== this.state.allBlockAttributes
+      nextState.allBlockAttributes !== this.state.allBlockAttributes ||
+      nextState.blocksVisibility !== this.state.blocksVisibility
       //nextState.loadingInitialData !== this.state.loadingInitialData ||
       //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
@@ -160,6 +165,7 @@ var BothPanes = React.createClass({
     sidePaneStore.addChangeListener(this._onChange);
     blockStore.addChangeListener(this._onChange);
     attributeStore.addChangeListener(this._onChange);
+    blocksVisibleStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -173,6 +179,7 @@ var BothPanes = React.createClass({
     sidePaneStore.removeChangeListener(this._onChange);
     blockStore.removeChangeListener(this._onChange);
     attributeStore.removeChangeListener(this._onChange);
+    blocksVisibleStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -211,6 +218,8 @@ var BothPanes = React.createClass({
                favContent={this.state.favContent}
                configContent={this.state.configContent}
                allBlockAttributes={this.state.allBlockAttributes}
+               blocksVisibility={this.state.blocksVisibility}
+               blockGroups={this.state.blockGroups}
                //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
                //allBlockTabInfo={this.state.allBlockTabInfo}
                />

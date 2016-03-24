@@ -19,7 +19,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  position: 'relative',
+  marginTop: '39px'
 
 };
 
