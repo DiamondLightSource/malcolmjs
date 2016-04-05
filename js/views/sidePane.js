@@ -31,8 +31,9 @@ var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
 
-var ToggleSwitch = require('react-toggle-switch');
 var BlockToggleSwitch = require('./blockToggleSwitch');
+
+var BlockToggle = require('react-toggle');
 
 //var TreeviewComponent = require('react-treeview-component');
 
@@ -474,8 +475,8 @@ var SidePane = React.createClass({
     }
   },
 
-  toggleSwitch: function(blockName, value, e){
-    console.log(value);
+  toggleSwitch: function(blockName, toggleOrientation, e){
+    console.log(toggleOrientation);
     console.log(blockName);
 
     /* invoke malcolmCall to toggle the visible attribute
@@ -489,27 +490,27 @@ var SidePane = React.createClass({
     var newValue;
     var argsObject = {};
 
-    if(value === 'true'){
-      newValue = 'false';
+    if(toggleOrientation === 'Show'){
+      newValue = 'Hide';
     }
-    else if(value === 'false'){
-      newValue = 'true'
+    else if(toggleOrientation === 'Hide'){
+      newValue = 'Show'
     }
 
     var methodToInvoke = '_set_' + blockName + '_visible';
 
     var argsValue;
 
-    if(newValue === 'true'){
-      argsValue = 'Show';
-    }
-    else if(newValue === 'false'){
-      argsValue = 'Hide';
-    }
+    //if(newValue === 'true'){
+    //  argsValue = 'Show';
+    //}
+    //else if(newValue === 'false'){
+    //  argsValue = 'Hide';
+    //}
 
-    argsObject[blockName] = argsValue;
+    argsObject[blockName] = newValue;
 
-    console.log(argsValue);
+    console.log(newValue);
 
     /* Now invoke malcolmCall */
 
@@ -518,6 +519,8 @@ var SidePane = React.createClass({
     invoking the method via Z:VISIBILITY rather than the block
     itself, seems more organised to do it all through that
      */
+
+    /* Should also close the tab if I'm hiding a block maybe? */
 
   },
 
@@ -578,7 +581,7 @@ var SidePane = React.createClass({
                                      toggleSwitch={this.toggleSwitch}
                                      toggleOrientation={
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
-                                     .value === 'Show'
+                                     .value
                                      }
                                      />
                 )
@@ -599,23 +602,12 @@ var SidePane = React.createClass({
                                    toggleSwitch={this.toggleSwitch}
                                    toggleOrientation={
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
-                                     .value === 'Show'
+                                     .value
                                      }
                 />
               );
             }
           }
-
-          //for(var n = 0; n < this.props.blocksVisibility.length; n++){
-          //  /* Need to push to the correct treeview somehow,
-          //  perhaps nest this inside the block groups loop?
-          //   */
-          //  tabContent.push(
-          //    <BlockToggleSwitch toggleSwitch={this.toggleSwitch}
-          //                       blockName={this.props.blocksVisibility[n].slice(2)} />
-          //  );
-          //}
-
 
           var tabTitle = 'yh';
         }

@@ -4,7 +4,7 @@
 
 var React = require('react');
 
-var ToggleSwitch = require('react-toggle-switch');
+var ToggleSwitch = require('react-toggle');
 
 var BlockToggleSwitch = React.createClass({
   render: function(){
@@ -20,9 +20,12 @@ var BlockToggleSwitch = React.createClass({
         <p style={{margin: '0px', width: '40px', position: 'relative'}} >Hide</p>
         <div id="testToggleSwitch" style={{position: 'relative',
                   height: '21', width: '50'}} >
-          <ToggleSwitch onClick={this.props.toggleSwitch.bind(null, this.props.blockName)}
-                        value={this.props.toggleOrientation === true ? 'true' : 'false'}
-                        on={this.props.toggleOrientation} />
+          <ToggleSwitch onChange={this.props.toggleSwitch.bind(null, this.props.blockName,
+                                  this.props.toggleOrientation)}
+                        checked={this.props.toggleOrientation === 'Show'}
+                        defaultChecked={this.props.toggleOrientation === 'Show'}
+                        id={this.props.blockName + 'toggleSwitch'}
+                        on={this.props.toggleOrientation === 'Show'} />
         </div>
         <p style={{margin: '0px', width: '40px', position: 'relative'}} >Show</p>
       </div>

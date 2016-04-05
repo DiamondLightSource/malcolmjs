@@ -399,5 +399,5 @@ function Client(url){
 
 //var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
 //module.exports = Client;
-var WebSocketClient = new Client('ws://localhost:8080/ws');
+var WebSocketClient = new Client('ws://pc0090:8080/ws');
 module.exports = WebSocketClient;
