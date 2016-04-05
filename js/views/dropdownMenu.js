@@ -10,24 +10,7 @@ var paneStore = require('../stores/paneStore');
 
 var interact = require('../../node_modules/interact.js');
 
-//function getDropdownState(){
-//  return{
-//    listVisible: sidePaneStore.getDropdownState(),
-//    tabState: paneStore.getTabState(),
-//    selectedTabIndex: paneStore.getSelectedTabIndex()
-//  }
-//}
-
-
 var Dropdown = React.createClass({
-
-  //getInitialState: function() {
-  //  return getDropdownState();
-  //},
-
-  _onChange: function(){
-    //this.setState(getDropdownState())
-  },
 
   shouldComponentUpdate: function(nextProps, nextState){
     return (
@@ -186,30 +169,3 @@ var Dropdown = React.createClass({
 });
 
 module.exports = Dropdown;
-
-
-//handleActionDropdownSelect: function(item){
-//  sidePaneActions.dropdownMenuSelect(item);
-//  this.props.changeTab(this.state.selectedTabIndex);
-//  //this.handleActionReactPanelSelect()
-//},
-//
-//handleActionReactPanelSelect: function(){
-//  sidePaneActions.reactPanelSelect("this is the item")
-//},
-
-
-
-//select: function(item) {
-//  var test = item;
-//  console.log(item);
-//
-//  for(var i = 0; i < this.props.list.length; i++){
-//    if(this.props.list[i].name === item){
-//      var findTheIndex = i
-//    }
-//  }
-//  //
-//  //var findTheIndex = this.props.list.indexOf(item);
-//  this.props.changeTab(findTheIndex)
-//},

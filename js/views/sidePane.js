@@ -5,10 +5,7 @@
 var React = require('react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var ReactPanels = require('react-panels');
-var sidePaneStore = require('../stores/sidePaneStore');
-var sidePaneActions = require('../actions/sidePaneActions');
 var Dropdown = require('./dropdownMenu');
-//var mainPaneStore = require('../stores/mainPaneStore');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
@@ -139,42 +136,6 @@ var SidePane = React.createClass({
 
   },
 
-  //enterKeyDown: function(blockInfo, inputFieldElement,e){
-  //  console.log(blockInfo);
-  //  console.log(inputFieldElement);
-  //  console.log(e);
-  //
-  //  //document.removeEventListener('onkeydown', this.enterKeyPress);
-  //
-  //  if(e.keyCode == 13){
-  //    var inputFieldValue = inputFieldElement.value;
-  //    console.log(inputFieldValue);
-  //
-  //    /* Now i need to pass malcolmCall the corresponding
-  //    method and arguments
-  //     */
-  //
-  //    var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
-  //    var argsObject = {
-  //
-  //    };
-  //
-  //    for(var key in blockInfo){
-  //      if(blockInfo[key] === blockInfo.attribute){
-  //        argsObject[blockInfo.attribute] = inputFieldValue;
-  //      }
-  //    }
-  //
-  //    console.log(argsObject);
-  //
-  //    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
-  //
-  //    document.removeEventListener('keydown', this.enterKeyDown);
-  //
-  //  }
-  //
-  //},
-
   enterKeyUp: function(blockInfo, inputFieldElement, e){
 
     /* Just put it all in keyup, that way I don't
@@ -292,14 +253,6 @@ var SidePane = React.createClass({
 
   },
 
-  //enterKeyPress: function(e){
-  //  if(e.keyCode == 13) {
-  //
-  //    window.alert("keypress!");
-  //
-  //  }
-  //},
-
   handleMalcolmCall: function(blockName, method, args){
     console.log("malcolmCall in sidePane");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
@@ -316,7 +269,20 @@ var SidePane = React.createClass({
      */
     var clickedOptionFromDropdownMenu = e.currentTarget.value;
 
-    var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+    /* Testing 'VISIBLE' vs 'visible' for individual
+    block tabs' visibility dropdowns
+     */
+
+    var blockAttribute;
+
+    if(blockInfo.attribute === 'VISIBLE'){
+      blockAttribute = 'visible';
+    }
+    else{
+      blockAttribute = blockInfo.attribute;
+    }
+
+    var inputFieldSetMethodName = "_set_" + blockAttribute;
     var argsObject = {};
 
     for (var key in blockInfo) {
@@ -705,7 +671,3 @@ var SidePane = React.createClass({
 });
 
 module.exports = SidePane;
-
-//<p style={{margin: '0px'}} >hello</p>
-//<p style={{margin: '0px'}} >yo</p>
-//<p style={{margin: '0px'}} >yes</p>

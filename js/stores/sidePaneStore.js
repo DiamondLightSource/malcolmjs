@@ -10,14 +10,10 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  //tabState: [],
   dropdownListVisible: false,
-  //selectedTabIndex: 0
 };
 
 var dropdownMenuShow = function(){
-  //_stuff.dropdownListVisible = true;
-  //document.addEventListener("click", dropdownReference.handleActionHide)
 
   /* Want to have it so that you can toggle the dropdown menu if you click on the button more than once */
 
@@ -31,10 +27,6 @@ var dropdownMenuShow = function(){
 
 var dropdownMenuHide = function(){
   _stuff.dropdownListVisible = false;
-  //console.log("dropdown hide is doing something");
-  //console.log(_stuff.dropdownListVisible);
-  //sidePaneStore.emitChange();
-  //document.removeEventListener("click", dropdownReference.handleActionHide)
 };
 
 

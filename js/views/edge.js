@@ -11,35 +11,8 @@ var flowChartActions = require('../actions/flowChartActions');
 
 var interact = require('../../node_modules/interact.js');
 
-function getEdgeState(){
-  return {
-    //startNode: NodeStore.getGateNodeOutPort(),
-    //endNode: NodeStore.getTGenNodeEnaPort(),
-
-    //Gate1Position: NodeStore.getGate1Position(),
-    //TGen1Position: NodeStore.getTGen1Position(),
-    //gateNodeOut: NodeStore.getGateNodeOutportOut(),
-    //tgenNodeEna: NodeStore.getTGenNodeInportEna(),
-    //selected: NodeStore.getIfEdgeIsSelected(),
-    //allEdges: NodeStore.getAllEdges(),
-    //gateNodeStyling: NodeStore.getGateNodeStyling(),
-    //tgenNodeStyling: NodeStore.getTGenNodeStyling(),
-    //pcompNodeStyling: NodeStore.getPCompNodeStyling(),
-    //allNodePositions: NodeStore.getAllNodePositions(),
-    //allNodeTypesPortStyling: NodeStore.getAllNodeTypesPortStyling(),
-    //allNodeInfo: NodeStore.getAllNodeInfo(),
-    //areAnyEdgesSelected: NodeStore.getIfAnyEdgesAreSelected()
-  }
-}
-
 var Edge = React.createClass({
-  //getInitialState: function(){
-  //  return getEdgeState();
-  //},
-  _onChange: function(){
-    //this.setState(getEdgeState());
-    //this.setState({selected: NodeStore.getIfEdgeIsSelected(ReactDOM.findDOMNode(this).id)});
-  },
+
   componentDidMount: function(){
     ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
 
@@ -232,13 +205,5 @@ var Edge = React.createClass({
     )
   }
 });
-
-//var Line = React.createClass({
-//  render: function(){
-//    return(
-//      <line {...this.props}>{this.props.children}</line>
-//    )
-//  }
-//});
 
 module.exports = Edge;

@@ -13,12 +13,6 @@ var allBlockAttributes = {
 
 };
 
-//var listOfAllPossibleBlocks = [];
-
-//var blocksVisibility = {};
-//
-//var blockGroups = [];
-
 function updateAttributeValue(blockId, attribute, newValue){
   allBlockAttributes[blockId][attribute].value = newValue;
   console.log(newValue);
@@ -38,15 +32,6 @@ var attributeStore = assign({}, EventEmitter.prototype, {
   getAllBlockAttributes: function(){
     return allBlockAttributes;
   },
-  //getListOfAllPossibleBlocks: function(){
-  //  return listOfAllPossibleBlocks;
-  //}
-  //getBlockGroups: function(){
-  //  return blockGroups;
-  //},
-  //getBlocksVisibility: function(){
-  //  return blocksVisibility;
-  //}
 
 });
 

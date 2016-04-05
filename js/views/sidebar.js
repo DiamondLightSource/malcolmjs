@@ -9,17 +9,14 @@ var MainPane = require('./mainPane');
 var SidePane = require('./sidePane');
 
 var mainPaneStore = require('../stores/mainPaneStore');
-var mainPaneActions = require('../actions/mainPaneActions');
 var sidePaneStore = require('../stores/sidePaneStore');
-var sidePaneActions = require('../actions/sidePaneActions');
 var paneStore = require('../stores/paneStore');
-var paneActions = require('../actions/paneActions');
 var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
-//var flowChartStore = require('../stores/flowChartStore');
-
 var attributeStore = require('../stores/attributeStore');
 var blocksVisibleStore = require('../stores/blocksVisibleStore');
+
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
 
 var SideBar = require('react-sidebar').default;
 
@@ -102,9 +99,7 @@ function getBothPanesState(){
 
     /* MainPane's getter functions for stores */
     footers: JSON.parse(JSON.stringify(mainPaneStore.getFooterState())),
-    //favPanelOpen: mainPaneStore.getFavPanelState(),
     favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
-    //configPanelOpen: mainPaneStore.getConfigPanelState(),
     configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
     //loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
     //loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
@@ -125,7 +120,6 @@ function getBothPanesState(){
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
     //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
-    //allBlockTabInfo: paneStore.getAllBlockTabInfo()
   }
 }
 

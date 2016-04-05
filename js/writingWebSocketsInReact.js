@@ -2,7 +2,6 @@
  * Created by twi18192 on 28/09/15.
  */
 
-var serverActions = require('./actions/serverActions');
 var paneActions = require('./actions/paneActions');
 
 function Client(url, debug, maxRate, username, password){

@@ -18,16 +18,6 @@ function getFlowChartState(){
 
 
     /* flowChartStore */
-    //graphPosition: JSON.parse(JSON.stringify(blockStore.getGraphPosition())),
-    //graphZoomScale: JSON.parse(JSON.stringify(blockStore.getGraphZoomScale())),
-    //portThatHasBeenClicked: JSON.parse(JSON.stringify(blockStore.getPortThatHasBeenClicked())),
-    //storingFirstPortClicked: JSON.parse(JSON.stringify(blockStore.getStoringFirstPortClicked())),
-    //areAnyBlocksSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyBlocksAreSelected())),
-    //areAnyEdgesSelected: JSON.parse(JSON.stringify(blockStore.getIfAnyEdgesAreSelected())),
-    //edgePreview: JSON.parse(JSON.stringify(blockStore.getEdgePreview())),
-    //blockStyling: JSON.parse(JSON.stringify(blockStore.getBlockStyling())),
-    //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(blockStore.getPreviousMouseCoordsOnZoom())),
-
     graphPosition: JSON.parse(JSON.stringify(flowChartStore.getGraphPosition())),
     graphZoomScale: JSON.parse(JSON.stringify(flowChartStore.getGraphZoomScale())),
     portThatHasBeenClicked: flowChartStore.getPortThatHasBeenClicked(),

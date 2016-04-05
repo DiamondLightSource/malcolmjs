@@ -12,13 +12,10 @@ var FooterButton = require('./button');
 
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var deviceStore = require('../stores/deviceStore');
-var deviceActions = require('../actions/deviceActions');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
 //var WebSocketClient = require('../websocketClient');
-var sessionActions = require('../actions/sessionActions');
 
 var FlowChartControllerView = require('./flowChartControllerView');
 

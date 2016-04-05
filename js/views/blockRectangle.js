@@ -7,26 +7,7 @@ var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 
-function getBlockRectanglesState(){
-  return {
-    //portThatHasBeenClicked: NodeStore.getPortThatHasBeenClicked(),
-    //allNodeTypesStyling: NodeStore.getAllNodeTypesStyling(),
-  }
-}
-
 var BlockRectangles = React.createClass({
-  //getInitialState: function(){
-  //  return getNodeRectanglesState();
-  //},
-  //componentDidMount: function(){
-  //  NodeStore.addChangeListener(this._onChange);
-  //},
-  //componentWillUnmount: function(){
-  //  NodeStore.removeChangeListener(this._onChange);
-  //},
-  //_onChange: function(){
-  //  this.setState(getNodeRectanglesState());
-  //},
 
   shouldComponentUpdate: function(nextProps, nextState){
     return (

@@ -1,24 +1,504 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
- * Created by twi18192 on 24/09/15.
+ * Created by twi18192 on 02/03/16.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+var MalcolmUtils = require('../utils/MalcolmUtils');
 
-var deviceActions = {
-  mockServerRequest: function(item){
+var MalcolmActionCreators = {
+
+  initialiseFlowChart: function(requestedData){
+
+    /* Try sending an initialise flowChart start action here */
+
     AppDispatcher.handleAction({
-      actionType: appConstants.MOCK_SERVERREQUEST,
-      item: item
-    })
+      actionType: appConstants.INITIALISE_FLOWCHART_START,
+      item: 'initialise flowChart start'
+    });
+
+    MalcolmUtils.initialiseFlowChart(this.malcolmGet.bind(null, requestedData));
+
+    //window.alert("initialisation finished?");
+
+    //AppDispatcher.handleAction({
+    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //  item: "initialise flowChart end"
+    //});
+
+    /* Testing subscribe */
+    //MalcolmUtils.initialiseFlowChart(this.malcolmSubscribe.bind(null, requestedData));
+
+  },
+
+  //getBlockList: function(){
+  //
+  //  /* First notify the stores that we have an initial data fetch pending */
+  //
+  //  //AppDispatcher.handleAction({
+  //  //  //actionType: appConstants.SERVER_REQUESTPENDING,
+  //  //  actionType: appConstants.TEST_INITIALDATAFETCH_PENDING,
+  //  //  item: 'server request pending'
+  //  //});
+  //
+  //  function getBlockListSuccess(responseMessage){
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.GET_BLOCKLIST_SUCCESS,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  function getBlockListFailure(responseMessage){
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.GET_BLOCKLIST_FAILURE,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  MalcolmUtils.getBlockList(getBlockListSuccess, getBlockListFailure);
+  //
+  //},
+  //
+  //getBlock: function(block){
+  //
+  //  function testFetchEveryInitialBlockObjectSuccess(responseMessage){
+  //    console.log("fetching block object");
+  //
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_SUCCESS,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  function testFetchEveryInitialBlockObjectFailure(responseMessage){
+  //    AppDispatcher.handleAction({
+  //      actionType: appConstants.TEST_FETCHINITIALBLOCKOBJECT_FAILURE,
+  //      item: responseMessage
+  //    })
+  //  }
+  //
+  //  MalcolmUtils.getBlock(block, testFetchEveryInitialBlockObjectSuccess,
+  //    testFetchEveryInitialBlockObjectFailure)
+  //
+  //},
+
+  malcolmGet: function(requestedData){
+
+    var testMalcolmGetSuccess;
+    var testMalcolmGetFailure;
+
+    function malcolmGetSuccess(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_GET_SUCCESS,
+        item: responseMessage
+      })
+    }
+
+    function malcolmGetFailure(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_GET_FAILURE,
+        item: responseMessage
+      })
+    }
+
+    //window.alert(this);
+
+    if(requestedData === 'Z'){
+      testMalcolmGetSuccess = function(responseMessage){
+        console.log(responseMessage);
+
+        /* First, give the GUI the list of all possible blocks */
+
+        //malcolmGetSuccess(responseMessage);
+
+        /* Actually, fetch Z:VISIBILITY, it'll make it
+        easier to group the blocks by type for a treeview
+         */
+
+        /* Now also need to subscribe to all visible attributes in Z:VISIBILITY */
+
+        var zVisibilitySubscribe = function(zVisibility){
+          /* This is to return Z:VISIBILITY to the GUI, but I still
+          need to subscribe to all the blocks, so a for loop is
+          part of the callback too
+           */
+          malcolmGetSuccess(zVisibility);
+          for(var attribute in zVisibility.attributes){
+            if(zVisibility.attributes[attribute].tags !== undefined){
+              /* Then it's a block visible attribute, so subscribe to it */
+
+              actionCreators.malcolmSubscribe('VISIBILITY', attribute);
+
+            }
+          }
+        };
+
+        MalcolmUtils.malcolmGet('Z:VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+
+        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
+          //if(responseMessage.attributes.blocks.value[i].indexOf('6') !== -1 ||
+          //  responseMessage.attributes.blocks.value[i].indexOf("CLOCKS") !== -1 ||
+          //  responseMessage.attributes.blocks.value[i].indexOf("BITS") !== -1) {
+            //window.alert("ifhoief");
+            /* Doing window.alert doesn't cause an InvariantViolation error like it does
+             in the store with this method, unlike the other one with actions being created during the
+             consumption of others in the store?
+             */
+
+            /* Now, for each block I want to do a 'get' and pass the block
+             object to the GUI. I ALSO want to do a subscribe on each of the
+             attributes in a block.
+             I only want to fetch each block once, so don't put the block get
+             inside the attribute subscribe loop!
+             */
+
+            var block = responseMessage.attributes.blocks.value[i];
+            //MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+
+            var testBlockAttributeSubscribe = function (blockResponseObject) {
+              /* This sends the block info to the blockStore,
+               and then proceeds to do the for loop subscription
+               to all the block's attributes, rather than doing
+               two separate gets (one to give blockStore the block
+               info, and then another to get the block info in order
+               to do a subscribe to all its attributes)
+               */
+              malcolmGetSuccess(blockResponseObject);
+              console.log(blockResponseObject.attributes);
+              if (blockResponseObject.attributes.VISIBLE.value === 'Show') {
+                for (var attribute in blockResponseObject.attributes) {
+
+                  if (attribute !== 'uptime') {
+                    console.log(blockResponseObject);
+                    console.log(attribute);
+                    //console.log(blockResponseObject.attributes[attribute].value);
+                    //window.alert(blockResponseObject.attributes[attribute]);
+
+                    /* Ohhh, I need to put a string of what I want, not just the value (blockResponseObject.attributes[attribute].value) I want! =P */
+
+                    var blockName = blockResponseObject.attributes.BLOCKNAME.value;
+                    //var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+                    actionCreators.malcolmSubscribe(blockName, attribute);
+                  }
+                }
+
+                //AppDispatcher.handleAction({
+                //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+                //  item: "initialise flowChart end"
+                //});
+
+              }
+
+            };
+
+            /* Comment out the subscribe while I'm testing server write for
+             block position
+             */
+            MalcolmUtils.malcolmGet(responseMessage.attributes.blocks.value[i], testBlockAttributeSubscribe, malcolmGetFailure);
+            //MalcolmUtils.malcolmSubscribe('Z:CLOCKS.attributes.value', malcolmSubscribeSuccess, malcolmSubscribeFailure);
+
+
+            /* Also need to subscribe channels for each attribute in
+             a block, pass another loop as a callback to this? =P
+             */
+          //}
+        }
+
+        //window.alert("send initalise flowChart end here?");
+
+        //AppDispatcher.handleAction({
+        //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+        //  item: "initialise flowChart end"
+        //})
+
+      };
+
+      MalcolmUtils.malcolmGet(requestedData, testMalcolmGetSuccess, malcolmGetFailure);
+
+      //AppDispatcher.handleAction({
+      //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+      //  item: "initialise flowChart end"
+      //});
+
+    }
+    else{
+      MalcolmUtils.malcolmGet(requestedData, malcolmGetSuccess, malcolmGetFailure);
+    }
+
+    //MalcolmUtils.malcolmGet(requestedData, malcolmGetSuccess, malcolmGetFailure);
+    //
+    //window.alert("fijiwf");
+
+
+  },
+
+  malcolmSubscribe: function(blockName, attribute){
+
+    function malcolmSubscribeSuccess(responseMessage){
+      //console.log(requestedData);
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
+      })
+    }
+
+    function malcolmSubscribeFailure(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_SUBSCRIBE_FAILURE,
+        item: {
+          responseMessage: responseMessage,
+          requestedData: {
+            blockName: blockName,
+            attribute: attribute
+          }
+        }
+      })
+    }
+
+    var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+
+    MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+
+  },
+
+  malcolmCall: function(blockName, method, args){
+
+    console.log(blockName);
+    console.log(method);
+    console.log(args);
+
+    function malcolmCallSuccess(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_SUCCESS,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    function malcolmCallFailure(responseMessage){
+      AppDispatcher.handleAction({
+        actionType: appConstants.MALCOLM_CALL_FAILURE,
+        item: {
+          responseMessage: responseMessage,
+          requestedDataToWrite: {
+            blockName: blockName,
+            method: method,
+            args: args
+          }
+        }
+      })
+    }
+
+    /* AT this point I don't really know the syntax of the write request,
+    so this will likely be wrong and should be changed accordingly
+     */
+    var requestedDataToWritePath = "Z:" + blockName;
+
+    MalcolmUtils.malcolmCall(requestedDataToWritePath,
+      method, args, malcolmCallSuccess, malcolmCallFailure);
+
   }
 
 };
 
-module.exports = deviceActions;
+var actionCreators = MalcolmActionCreators;
 
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],2:[function(require,module,exports){
+function malcolmSubscribeSuccess(responseMessage){
+  AppDispatcher.handleAction({
+    actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
+    item: responseMessage
+  })
+}
+
+function malcolmSubscribeFailure(responseMessage){
+  AppDispatcher.handleAction({
+    actionType: appConstants.MALCOLM_SUBSCRIBE_FAILURE,
+    item: responseMessage
+  })
+}
+
+module.exports = MalcolmActionCreators;
+
+},{"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9,"../utils/MalcolmUtils":18}],2:[function(require,module,exports){
+/**
+ * Created by twi18192 on 10/12/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+
+var blockActions = {
+
+  /* BLOCK use */
+
+  addToAllBlockInfo: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADDTO_ALLBLOCKINFO,
+      item: item
+    })
+  },
+  //interactJsDrag: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.INTERACTJS_DRAG,
+  //    item: item
+  //  })
+  //},
+  addOneSingleEdgeToAllBlockInfo(edgeInfo){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
+      item: edgeInfo
+    })
+  },
+  deleteEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DELETE_EDGE,
+      item: item
+    })
+  },
+
+};
+
+module.exports = blockActions;
+
+},{"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9}],3:[function(require,module,exports){
+/**
+ * Created by twi18192 on 19/02/16.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+
+var flowChartActions = {
+
+  interactJsDrag: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.INTERACTJS_DRAG,
+      item: item
+    })
+  },
+
+
+  selectBlock: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.SELECT_BLOCK,
+      item: item
+    })
+  },
+  deselectAllBlocks: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLBLOCKS,
+      item: item
+    })
+  },
+  selectEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.SELECT_EDGE,
+      item: item
+    })
+  },
+  deselectAllEdges: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLEDGES,
+      item: item
+    })
+  },
+
+  changeGraphPosition: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CHANGE_GRAPHPOSITION,
+      item: item
+    })
+  },
+
+  graphZoom: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.GRAPH_ZOOM,
+      item: item
+    })
+  },
+
+  getAnyEdgeSelectedState: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.GETANY_EDGESELECTEDSTATE,
+      item: item
+    })
+  },
+  clickedEdge: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.CLICKED_EDGE,
+      item: item
+    })
+  },
+
+  passPortMouseDown: function(port){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PASS_PORTMOUSEDOWN,
+      item: port
+    })
+  },
+  deselectAllPorts: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.DESELECT_ALLPORTS,
+      item: item
+    })
+  },
+  storingFirstPortClicked: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.STORING_FIRSTPORTCLICKED,
+      item: item
+    })
+  },
+  //appendToEdgeSelectedState: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.APPEND_EDGESELECTEDSTATE,
+  //    item: item
+  //  })
+  //},
+  addEdgePreview: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_EDGEPREVIEW,
+      item: item
+    })
+  },
+  updateEdgePreviewEndpoint: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.UPDATE_EDGEPREVIEWENDPOINT,
+      item: item
+    })
+  },
+  previousMouseCoordsOnZoom: function(item){
+    AppDispatcher.handleAction({
+      actionType: appConstants.PREVIOUS_MOUSECOORDSONZOOM,
+      item: item
+    })
+  },
+
+
+
+  //appendToBlockSelectedStates: function(item){
+  //  AppDispatcher.handleAction({
+  //    actionType: appConstants.APPENDTO_BLOCKSELECTEDSTATES,
+  //    item: item
+  //  })
+  //}
+};
+
+module.exports = flowChartActions;
+
+},{"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9}],4:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -53,7 +533,7 @@ capital first letter in order for it to work
 
 module.exports = mainPaneActions;
 
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],3:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],5:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -62,13 +542,6 @@ var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var paneActions = {
-
-  addTab: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.ADD_TAB,
-      item: item
-    })
-  },
   removeTab: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.REMOVE_TAB,
@@ -99,21 +572,9 @@ var paneActions = {
       item: item
     })
   },
-  passDispatchMarker: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.PASS_DISPATCHMARKER,
-      item: item
-    })
-  },
-  appendStuffForNewBlock: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.APPENDSTUFF_FORNEWBLOCK,
-      item: item
-    })
-  },
-  changeSomeInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.CHANGE_INFO,
+  blockLookupTableTabOpen: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.BLOCKLOOKUPTABLETAB_OPEN,
       item: item
     })
   },
@@ -122,104 +583,52 @@ var paneActions = {
       actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
       item: blockContentObject
     })
+  },
+
+  initialFetchOfBlockDataFromBlockStore: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.FETCHINITIAL_BLOCKDATA,
+      item: item
+    })
+  },
+  openBlockTab: function(BlockId){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.OPEN_BLOCKTAB,
+      item: BlockId
+    })
+  },
+  removeBlockTab: function(SelectedBlockTabIndex){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.REMOVE_BLOCKTAB,
+      item: SelectedBlockTabIndex
+    })
+  },
+
+  toggleSidebar: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.TOGGLE_SIDEBAR,
+      item: item
+    })
+  },
+  windowWidthMediaQueryChanged: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED,
+      item: item
+    })
+  },
+
+  openEdgeTab: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.OPEN_EDGETAB,
+      item: item
+    })
   }
 
 };
 
 module.exports = paneActions;
 
-
-//redBlockTabOpen: function(item){
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.REDBLOCKTAB_OPEN,
-//    item: item
-//  })
-//},
-//blueBlockTabOpen: function(item){
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.BLUEBLOCKTAB_OPEN,
-//    item: item
-//  })
-//},
-//greenBlockTabOpen: function(item){
-//  AppDispatcher.handleAction({
-//    actionType: appConstants.GREENBLOCKTAB_OPEN,
-//    item: item
-//  })
-//},
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],4:[function(require,module,exports){
-/**
- * Created by twi18192 on 30/09/15.
- */
-
-/* Actions intended for communication from server to Client */
-
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-
-//var paneActions = require('./paneActions');
-
-var serverActions = {
-  passingUpdatedChannelValue: function(item){
-    AppDispatcher.handleServerAction({
-      actionType: appConstants.PASSUPDATEDCHANNEL_VALUE,
-      item: item
-    })
-  },
-
-  passingNameOfChannelThatsBeenAdded: function(item){
-    AppDispatcher.handleServerAction({
-      actionType: appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED,
-      item:item
-    });
-    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  }
-
-};
-
-module.exports = serverActions;
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],5:[function(require,module,exports){
-/**
- * Created by twi18192 on 30/09/15.
- */
-
-/* Actions intended for communication from Client to server */
-
-/* Don't forget that I need to import the WebAPIUtils module (ie, the module containing Websockets) here */
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-
-var WebSocketClient = require('../websocketClientTEST');
-
-var sessionActions = {
-
-  //fetchUpdatedChannelValue: function(item){
-  // AppDispatcher.handleViewAction({   /* Notifies the dispatcher, not sure why you do it, but stuff on the internet says you should, maybe I'll see the reason later :P */
-  //   actionType: appConstants.FETCHNEWCHANNEL_VALUE,
-  //   item: item
-  // });
-  // WebSocketClient.getChannel(0).setValue(1); /* Not the proper code, just a really basic mockup */
-  //},
-
-  properServerRequestToAddChannelChangeInfoTest: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO,
-      item: item
-    });
-    WebSocketClient.subscribeChannel("Test channel 1", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
-    WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Test channel 2 callback")}, false, "PV", "Version 0.1", 13);
-  }
-
-};
-
-module.exports = sessionActions;
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"../websocketClientTEST":22}],6:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9}],6:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -242,70 +651,6 @@ var sidePaneActions = {
     })
   },
 
-  //addTab: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.ADD_TAB,
-  //    item: item
-  //  })
-  //},
-  //removeTab: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.REMOVE_TAB,
-  //    item: item
-  //  })
-  //},
-  //dropdownMenuSelect: function(tab, ReactComponent){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.DROPDOWN_SELECT,
-  //    item: {item: tab, component: ReactComponent}
-  //  })
-  //},
-  //redBlockTabOpen: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.REDBLOCKTAB_OPEN,
-  //    item: item
-  //  })
-  //},
-  //blueBlockTabOpen: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.BLUEBLOCKTAB_OPEN,
-  //    item: item
-  //  })
-  //},
-  //greenBlockTabOpen: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.GREENBLOCKTAB_OPEN,
-  //    item: item
-  //  })
-  //},
-
-
-  //switchTabWhenTabOpens: function(tab){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.SWITCHTAB_WHENTABOPENS,
-  //    item: tab
-  //  })
-  //},
-  //passingSidePane: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.PASSING_SIDEPANE,
-  //    item: item
-  //  })
-  //}
-
-  //redBlockStateChange: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.REDBLOCKSTATE_CHANGE,
-  //    item: item
-  //  })
-  //},
-  //reactPanelSelect: function(item){
-  //  AppDispatcher.handleAction({
-  //    actionType: appConstants.REACTPANEL_SELECT,
-  //    item: item
-  //  })
-  //},
-
 };
 
 module.exports = sidePaneActions;
@@ -318,10 +663,16 @@ module.exports = sidePaneActions;
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
-var WebSocketClient = require('./websocketClientTEST');
+//var WebSocketClient = require('./websocketClient');
+//var testingWebsocketActions = require('./actions/testingWebsocketActions');
 
 var MainPane = require('./views/mainPane');
 var SidePane = require('./views/sidePane');
+var BothPanes = require('./views/sidebar');
+
+var blockStore = require('./stores/blockStore.js');
+
+var MalcolmActionCreators = require('./actions/MalcolmActionCreators');
 
 var AppContainerStyle = {
   margin: 0,
@@ -347,11 +698,16 @@ var SideTabbedViewStyle = {
 };
 
 var App = React.createClass({displayName: "App",
+
+  componentDidMount: function(){
+    //MalcolmActionCreators.addWebsocketOnOpenCallback('Z');
+  },
+
   render: function(){
+    console.log("render: app");
     return(
       React.createElement("div", {id: "appContainer", style: AppContainerStyle}, 
-        React.createElement("div", {id: "MainTabbedView", style: MainTabbedViewStyle}, React.createElement(MainPane, null)), 
-        React.createElement("div", {id: "SideTabbedView", style: SideTabbedViewStyle}, React.createElement(SidePane, null))
+        React.createElement(BothPanes, null)
       )
     )
   }
@@ -362,47 +718,123 @@ ReactDOM.render(
   document.getElementById('container')
 );
 
-},{"./views/mainPane":19,"./views/sidePane":21,"./websocketClientTEST":22,"react":206,"react-dom":30,"react-panels":31}],8:[function(require,module,exports){
+//<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
+//<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
+
+},{"./actions/MalcolmActionCreators":1,"./stores/blockStore.js":12,"./views/mainPane":32,"./views/sidePane":35,"./views/sidebar":36,"react":226,"react-dom":46,"react-panels":47}],8:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
 
 var appConstants = {
-  FOOTER_TOGGLE: "FOOTER_TOGGLE", /*mainPaneStore use*/
+  /*mainPaneStore use*/
+  FOOTER_TOGGLE: "FOOTER_TOGGLE",
   CONFIG_TOGGLE: "CONFIG_TOGGLE",
   FAV_TOGGLE: "FAV_TOGGLE",
 
-  ADD_TAB: "ADD_TAB", /*paneStore use*/
+  /*paneStore use*/
+
   REMOVE_TAB: "REMOVE_TAB",
   DROPDOWN_SELECT: "DROPDOWN_SELECT",
   FAVTAB_OPEN: "FAVTAB_OPEN",
   CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
-  PASS_DISPATCHMARKER: "PASS_DISPATCHMARKER",
-  APPENDSTUFF_FORNEWBLOCK: "APPENDSTUFF_FORNEWBLOCK",
-  CHANGE_INFO: "CHANGE_INFO",
+  BLOCKLOOKUPTABLETAB_OPEN: 'BLOCKLOOKUPTABLETAB_OPEN',
 
-  DROPDOWN_SHOW: "DROPDOWN_SHOW", /*sidePaneStore use*/
+  OPEN_BLOCKTAB: "OPEN_BLOCKTAB",
+  REMOVE_BLOCKTAB: "REMOVE_BLOCKTAB",
+  OPEN_EDGETAB: "OPEN_EDGETAB",
+
+
+  /*sidePaneStore use*/
+  DROPDOWN_SHOW: "DROPDOWN_SHOW",
   DROPDOWN_HIDE: "DROPDOWN_HIDE",
   PASS_SIDEPANE: "PASS_SIDEPANE",
 
-  MOCK_SERVERREQUEST: "MOCK_SERVERREQUEST", /* deviceStore use*/
-  UPDATEBLOCKCONTENT_VIASERVER: "UPDATEBLOCKCONTENT_VIASERVER",
-
-  FETCHNEWCHANNEL_VALUE: "FETCHNEWCHANNEL_VALUE", /* sessionActions use */
-  PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO: "PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO",
-
-  PASSUPDATEDCHANNEL_VALUE: "PASSUPDATEDCHANNEL_VALUE", /* serverActions use */
-  PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED: "PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED"
 
 
-  //REACTPANEL_SELECT: "REACTPANEL_SELECT",
-  //REDBLOCKSTATE_CHANGE: "REDBLOCKSTATE_CHANGE",
-  //SWITCHTAB_WHENTABOPENS: "SWITCHTAB_WHENTABOPENS",
-  //PASSING_SIDEPANE: "PASSING_SIDEPANE"
+  TEST_WEBSOCKET: "TEST_WEBSOCKET",
 
-  //REDBLOCKTAB_OPEN: "REDBLOCKTAB_OPEN",
-  //BLUEBLOCKTAB_OPEN: "BLUEBLOCKTAB_OPEN",
-  //GREENBLOCKTAB_OPEN: "GREENBLOCKTAB_OPEN",
+  /* WebAPI use */
+
+  SERVER_REQUESTPENDING: 'SERVER_REQUESTPENDING',
+  TEST_DATAFETCH:'TEST_DATAFETCH',
+  TEST_SUBSCRIBECHANNEL: 'TEST_SUBSCRIBECHANNEL',
+  TEST_WRITE_SUCCESS: 'TEST_WRITE_SUCCESS',
+  TEST_WRITE_FAILURE: 'TEST_WRITE_FAILURE',
+  TEST_INITIALDATAFETCH_PENDING: 'TEST_INITIALDATAFETCH_PENDING',
+  TEST_INITIALDATAFETCH_SUCCESS: 'TEST_INITIALDATAFETCH_SUCCESS',
+  TEST_INITIALDATAFETCH_FAILURE: 'TEST_INITIALDATAFETCH_FAILURE',
+  TEST_FETCHINITIALBLOCKOBJECT_SUCCESS: 'TEST_FETCHINITIALBLOCKOBJECT_SUCCESS',
+  TEST_FETCHINITIALBLOCKOBJECT_FAILURE: 'TEST_FETCHINITIALBLOCKOBJECT_FAILURE',
+  GET_BLOCKLIST_SUCCESS: 'GET_BLOCKLIST_SUCCESS',
+  GET_BLOCKLIST_FAILURE: 'GET_BLOCKLIST_FAILURE',
+  MALCOLM_GET_SUCCESS: 'MALCOLM_GET_SUCCESS',
+  MALCOLM_GET_FAILURE: 'MALCOLM_GET_FAILURE',
+  MALCOLM_SUBSCRIBE_SUCCESS: 'MALCOLM_SUBSCRIBE_SUCCESS',
+  MALCOLM_SUBSCRIBE_FAILURE: 'MALCOLM_SUBSCRIBE_FAILURE',
+  MALCOLM_CALL_SUCCESS: 'MALCOLM_CALL_SUCCESS',
+  MALCOLM_CALL_FAILURE: 'MALCOLM_CALL_FAILURE',
+
+  INITIALISE_FLOWCHART_START: 'INITIALISE_FLOWCHART_START',
+  INITIALISE_FLOWCHART_END: 'INITIALISE_FLOWCHART_END',
+  INITIALISE_FLOWCHART_FAILURE: 'INITIALISE_FLOWCHART_FAILURE',
+
+  /* Constants from flowChart added here */
+
+  /* BLOCK use */
+
+  ADDTO_ALLBLOCKINFO: "ADDTO_ALLBLOCKINFO",
+  INTERACTJS_DRAG: "INTERACTJS_DRAG",
+  ADD_ONESINGLEEDGETOALLBLOCKINFO: "ADD_ONESINGLEEDGETOALLBLOCKINFO",
+  DELETE_EDGE: "DELETE_EDGE",
+
+  FETCHINITIAL_BLOCKDATA: "FETCHINITIAL_BLOCKDATA",
+
+
+  GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
+  DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",
+  DRAGGED_ELEMENT: "DRAGGED_ELEMENT",
+  CHANGE_BLOCKPOSITION: "CHANGE_BLOCKPOSITION",
+
+
+
+  /* FLOWCHART use */
+
+  SELECT_BLOCK: "SELECT_BLOCK",
+  DESELECT_ALLBLOCKS: "DESELECT_ALLBLOCKS",
+  SELECT_EDGE: "SELECT_EDGE",
+  DESELECT_ALLEDGES: "DESELECT_ALLEDGES",
+
+  CHANGE_GRAPHPOSITION: "CHANGE_GRAPHPOSITION",
+  GRAPH_ZOOM: "GRAPH_ZOOM",
+
+  GETANY_EDGESELECTEDSTATE: "GETANY_EDGESELECTEDSTATE",
+  CLICKED_EDGE: "CLICKED_EDGE",
+
+  PASS_PORTMOUSEDOWN: "PASS_PORTMOUSEDOWN",
+  STORING_FIRSTPORTCLICKED: "STORING_FIRSTPORTCLICKED",
+  DESELECT_ALLPORTS: "DESELECT_ALLPORTS",
+
+
+
+  ADD_EDGEPREVIEW: "ADD_EDGEPREVIEW",
+  UPDATE_EDGEPREVIEWENDPOINT: "UPDATE_EDGEPREVIEWENDPOINT",
+
+
+
+
+  PORT_MOUSEOVERLEAVETOGGLE: "PORT_MOUSEOVERLEAVETOGGLE",
+  PREVIOUS_MOUSECOORDSONZOOM: "PREVIOUS_MOUSECOORDSONZOOM",
+
+  //APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
+  //APPENDTO_BLOCKSELECTEDSTATES: 'APPENDTO_BLOCKSELECTEDSTATES',
+
+
+
+  /* sidebar use */
+
+  TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
+  WINDOWWIDTH_MEDIAQUERYCHANGED: "WINDOWWIDTH_MEDIAQUERYCHANGED",
 };
 
 module.exports = appConstants;
@@ -452,73 +884,434 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"flux":26,"object-assign":29}],10:[function(require,module,exports){
+},{"flux":40,"object-assign":44}],10:[function(require,module,exports){
 /**
- * Created by twi18192 on 24/09/15.
+ * Created by twi18192 on 18/02/16.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
+/* Main Client constructor function */
+
+var idLookupTableFunctions = require('./utils/idLookupTable');
+
+function Client(url){
+
+  var channelIDIndex = 0;
+  var channelObject = {}; /* Presumably it holds all the different channels? */
+  var websocket = null;
+  var webSocketOnOpenCallbacks = [function(){console.log("function inside webSocketOnOpenCallbacks array")}, function(){console.log("another function in the array")}];
+  var webSocketOnCloseCallbacks = [];
+  var webSocketOnErrorCallbacks = [];
+  var onServerMessageCallbacks = [function(){console.log("message from the server callback array")}];
+  var clientSelf = this; /* Used as a handle for the Client when in other things like channels */
+  //var debug = debug;
+  var defaultTypeVersion = 1;
+  var isLive = false;
+  var forcedClose = false;
+  var jsonFilteredReceived = []; /* I have a feeling that this and the next array may have some relation to the data sent by the server */
+  var jsonSent = [];
+
+  /* Things I've added */
+  var blockData = {};
+  var initialBlockDataArray = {};
+
+  this.addWebSocketOnOpenCallback = function(callback){
+    webSocketOnOpenCallbacks.push(callback);
+    console.log(webSocketOnOpenCallbacks);
+  };
+
+  this.addWebSocketOnCloseCallback = function(callback){
+    webSocketOnCloseCallbacks.push(callback);
+  };
+
+
+  /* Adding generic callbacks for 'get' requests which have no channel id */
+
+  var genericSuccessCallback = null;
+  var genericFailureCallback = null;
+
+  this.setGenericSuccessCallback = function(callback){
+    genericSuccessCallback = callback;
+  };
+
+  this.setGenericFailureCallback = function(callback){
+    genericFailureCallback = callback;
+  };
+
+  this.getNextAvailableId = function(){
+    return channelIDIndex;
+  };
+
+  this.incrementId = function(){
+    channelIDIndex += 1;
+  };
+
+  this.sendText = function(message){
+    console.log(message);
+    websocket.send(message);
+
+    /* Pretty sure I'm not doing the callback thing right, but hey ho this is the best I got so far =P */
+    //this.addOnServerMessageCallback(callback);
+    //this.addWebSocketOnErrorCallback(callback);
+    /* UPDATE: use the type attribute of the response message instead of callbacks! */
+  };
+
+  this.close = function(){
+    websocket.close();
+  };
+
+  //this.addOnServerMessageCallback = function(callback){
+  //  onServerMessageCallbacks.push(callback);
+  //};
+  //
+  //this.addWebSocketOnErrorCallback = function(callback){
+  //  webSocketOnErrorCallbacks.push(callback);
+  //};
+
+  this.addWebSocketOnOpenCallback = function(callback){
+    webSocketOnOpenCallbacks.push(callback);
+  };
+
+  openWebSocket(url);
+
+  function openWebSocket(url){
+
+    if("WebSocket" in window){  /* The window object refers to an open window in a browser */
+      websocket = new WebSocket(url); /* new WebSocket is an inbuilt function of Javascript */
+    }
+    else if("MozWebSocket" in window){    /* I suppose these two cases are seeing if WebSockets are usable in the browser that the user is using? */
+      websocket = new MozWebSocket(url);
+    }
+    else{
+      throw new Error("WebSocket isn't supported by this browser.");
+    }
+    websocket.binaryType = "arraybuffer"; /* binaryType is associated with WebSockets */
+
+    /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
+
+    websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
+      console.log(evt);
+      //fireOnOpen(evt);
+      for(var i in webSocketOnOpenCallbacks){
+        webSocketOnOpenCallbacks[i](evt)
+      }
+      console.log("websocket has been opened")
+    };
+
+    websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
+      //console.log("message has been received from server via websocket");
+      var json;
+      json = JSON.parse(evt.data);
+      console.log("Here is the event:");
+      console.log(evt);
+      console.log(json);
+
+      /* Time to check which channel callback to invoke based on the type! */
+      //console.log(json.type);
+
+      /* First check if that channel id exists, if not then run the generic
+      callbacks
+       */
+      /* UPDATE: no need for channel objects I don't think, I have
+      the lookup table now? Or is it that I still wanna use that for subscription/monitor
+      purposes?
+       */
+      if(channelObject[json.id] === undefined){
+        //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
+        if(json.type === 'Error'){
+          //genericFailureCallback(json);
+          console.log(json);
+          idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
+        }
+        else if(json.type === 'Return'){
+          /* Bad to do, trying something else */
+          //if(json.value.descriptor === 'Child block names'){
+          //  initialBlockDataArray = JSON.parse(JSON.stringify(json.value.value));
+          //  console.log("initial block list, so need to do another call to fetch all block info?!")
+          //  for(var i = 0; i < json.value.value.length; i++){
+          //
+          //    /* Send a get request for all blocks in the initial block array */
+          //    clientSelf.sendText(
+          //      JSON.stringify(
+          //        {type: 'Get', id: 0, endpoint: String(json.value.value[i])}
+          //      )
+          //    );
+          //  }
+          //}
+          //
+          //if(json.value.tags !== undefined && json.value.tags[0] === "instance:Zebra2Block" &&
+          //  json.value.tags[1] === "instance:Device" ) {
+          //
+          //    /* Check the 'visibility' attribute of a block to see if
+          //    it should be shown in thr GUI
+          //     */
+          //    /* Use this to add just one or two blocks to test with,
+          //    rather than the whole list of 89 of them =P
+          //     */
+          //  //if(json.value.name === "Z:CLOCKS" || json.value.name === "Z:PULSE1") {
+          //
+          //    var blockName = JSON.parse(JSON.stringify(json.value.name.slice(2)));
+          //    blockData[blockName] = JSON.parse(JSON.stringify(json.value.attributes));
+          //    //console.log(blockData);
+          //    if (json.value.name === initialBlockDataArray[initialBlockDataArray.length - 1]) {
+          //      /* Once all initial blocks are fetched, send the blockData object to the client */
+          //      console.log("ready to send the object containing all the block data!");
+          //      genericSuccessCallback(blockData);
+          //    }
+          //  //}
+          //
+          //}
+
+          /* Invoking the corresponding id's callback */
+          console.log(json);
+          //window.alert(json.id);
+          //window.alert(json.value);
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
+
+        }
+        else if(json.type === 'Value'){
+          /* It's a message via a subscription/monitor, so invoke the
+          required callback.
+          I reckon this could easily be integrated into the above
+          statement with an OR operator, they do the same thing
+          (call the idLookupTable callback)?
+           */
+
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
+
+        }
+      }
+      else {
+        if (json.type === 'Error') {
+          /* Will replace soon with lookup table invoke instead */
+          channelObject[json.id].failureCallback(json);
+        }
+        else if (json.type === 'Return') {
+          /* Will replace soon with lookup table invoke instead */
+          channelObject[json.id].successCallback(json);
+        }
+      }
+    };
+
+    websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
+      //fireOnError(evt);
+      console.log("webocket error");
+      console.log(evt);
+    };
+
+    websocket.onclose = function(evt){
+      //fireOnClose(evt);
+      console.log("websocket has been closed")
+    };
+
+
+  }
+
+
+
+
+
+
+
+  this.subscribeChannel = function(name, callback, readOnly){
+    var typeJson; /* Not entirely sure what this is doing, it's creating a variable without a value? */
+    /* Yep, it implicitly is a variable of type 'undefined'; it's usually used to declare variables for later use */
+
+    /* what the subscribe message should look like */
+    //'{"type" : "Subscribe", "id" : ' + idSub + ', "endpoint" : "' + channelSub + '"}';
+
+    var json = '{"type" : "Subscribe", "id" : ' + channelIDIndex + ', "endpoint" : "' + name + '"}';
+
+    console.log(json);
+
+    var channel = new Channel(name); /* Creating a new channel, with its name attribute set as the input argument; note that the variable is called 'channel' though for ALL channels subscribed */ /* Also, not sure if it matters, but the other 'name' arguments above highlight as well when I hover over this argument? Are they connected? */
+    /* Haha, yep, they are connected, since this is all within one function, subscribeChannel()! :P */
+    channelObject[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
+    channel.id = channelIDIndex;
+    channel.name = name;
+    channel.readOnly = readOnly;
+    channel.connected = true;
+
+    //this.sendText(json, function(){console.log("send json to server")});
+    //console.log(channelObject);
+
+
+
+    channel.channelCallback = callback;
+    channelIDIndex++; /* Shorthand for incrementing channelIDIndex by one (happens each time the whole function subscribeChannel() gets called) */
+    /* Oh, so this is what prevents each channel from having the same id, the number inside the variable channelIDIndex is simply just to get it started, it's not used to keep track of every channel and its corresponding index, */
+    /* I suppose it's used to count how many channels there actually are */
+    return channel;
+  };
+
+
+
+
+
+
+
+  /* Channel constructor function */
+
+  function Channel(name){ /* Hmm, not sure the best way to get this to have state... */
+
+    this.name = name;
+    this.id = -1;   /* Look at the docs and their definition of getId, getValue: it says that they can have any data type, hence they can be strings, numbers, floats, objects etc */
+    this.value = null;
+    this.channelCallback = null; /* not sure why this gets 'unused definition' and the others don't? */ /* Update: it doesn't now, maybe it changed? */
+    this.connected = false;
+    this.readOnly = true;
+    /* Adding successCallback and failureCallback */
+    this.successCallback = null;
+    this.failureCallback = null;
+
+    /* Chucking all the prototype function additions in the constructor */
+    /* These internal methods of an object of the Channel class are used to return/access values of a channel object from OUTSIDE a channel,
+     hence, these functions are ALWAYS invoked from outside a channel */
+
+    this.channelValueType = function(){
+      console.log(typeof this.value);
+      console.log(this.value);
+    };
+
+    this.isConnected = function(){
+      return this.connected;
+    };
+
+    this.getId = function(){
+      return this.id;
+    };
+
+    this.isWriteAllowed = function(){
+      return !this.readOnly;  /* Why return the opposite of readOnly? I suppose read and write are related?*/
+      /* Oh, it's that if it's not just read only, it has to be able to write as well, since read only means you can only read and NOT write :P */
+    };
+
+    this.getValue = function(){
+      return this.value;
+    };
+
+    this.removeCallback = function(callback){ /* Not sure why it doesn't have 'this.' in front of it in the original JS file? */
+      this.channelCallback = null;            /* Plus, what's the point of having an input argument that isn't used in the function? */
+    };
+
+    this.setValue = function(value){  /*So, if the opposite of the value of readOnly is true, run this code */
+      if(!this.readOnly){
+        console.log("Inside setValue");
+        console.log(value);
+        setChannelValue(this.id, value);
+      }
+      else{
+        console.log("Channel is read only, cannot write")
+      }
+    };
+
+    /* What's the difference between setValue and updateValue? :/
+     I suppose at least they invoke the same function...
+     */
+
+    this.updateValue = function(){
+      if(!this.readOnly){
+        setChannelValue(this.id, this.value.value); /* No idea what this.value.value is referring to? */
+      }
+    };
+
+    this.unsubscribe = function(){
+      unsubscribe(this.id);
+    };
+
+    //this.fireChannelEventFunc = function(json){
+    //  console.log("firChanneklEventFunc is about to invoke processJsonForChannel, the thing that actually changes Channel attribute values!");
+    //  processJsonForChannel(json, this);  /* The only thing that invokes processJsonForChannel */
+    //  this.channelCallback(json, this); /* I suppose channelCallback is just a function that lets you know that
+    //   fireChannelEventFunc has occurred/ran (a console log will probably suffice)
+    //   Furthermore, since the inputs are 'this' and 'json', I guess it's pointing
+    //   to you logging which channel the info is travelling across, and what the info
+    //   travelling across is*/
+    //};
+
+  }
+
+
+  function unsubscribe(channelIDIndex){
+    console.log("unsubscribing a channel");
+    //console.log("the following is an update on channelArray");
+    //console.log(channelArray);
+    var json = JSON.stringify({
+      "message": "unsubscribe",
+      "id": channelIDIndex
+    });
+
+    clientSelf.sendText(json);
+    delete channelObject[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
+    //channelArray.splice(channelIDIndex,1);
+    //console.log(channelArray);
+  }
+
+  /* Ok, I'm starting to not understand this again: the function below is called setChannelValue, and one of
+   its inputs is the new value of the channel (presumably). After the json variable is set, a message goes to THE SERVER with this info;
+   Now, I thought the whole idea was that the new value was FETCHED FROM THE SERVER, and then the Client gets
+   notified that the new data has been fetched, but here it looks like the new value gets SET FIRST, and
+   THEN THE SERVER IS NOTIFIED OF THIS CHANGE?
+   */
+
+  function setChannelValue(channelIDIndex, value){
+    console.log("Inside setChannelValue");
+    console.log(channelIDIndex);
+    console.log(value);
+    var json = JSON.stringify({
+      "message": "write",
+      "id": channelIDIndex,
+      "value":value
+    });
+
+    clientSelf.sendText(json);  /* Don't worry, sendText is defined later (line 277 of original file) */
+
+  }
+
+  /* Add function to set any channel's successCallback and failureCallback */
+
+  function setChannelSuccessCallback(channelID, callback){
+    channelObject[channelID].successCallback = callback;
+  }
+
+  function setChannelFailureCallback(channelID, callback){
+    channelObject[channelID].failureCallback = callback;
+  }
+
+
+
+
+
+
+}
+
+//var FluxWebSocketClient = new Client('ws://pc0013.cs.diamond.ac.uk:8080/ws');
+//module.exports = Client;
+var WebSocketClient = new Client('ws://localhost:8080/ws');
+module.exports = WebSocketClient;
+
+},{"./utils/idLookupTable":19}],11:[function(require,module,exports){
+/**
+ * Created by twi18192 on 10/03/16.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
 var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+var assign = require('../../node_modules/object-assign/index.js');
 
 var CHANGE_EVENT = 'change';
 
-var allDeviceContent = {
-  /* Will contain all the blocks/devices, along with their attributes-key pairs*/
-  redBlockContent: {
-    name: "Red block",
-    hack: "redBlockTabOpen",
-    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
-  },
-  blueBlockContent: {
-    name: "Blue block",
-    hack: "blueBlockTabOpen",
-    info: {
-      work: {height: "20 pixels", width: "460 pixels"}
-    }
-  },
-  greenBlockContent: {
-    name: "Green block",
-    hack: "greenBlockTabOpen",
-    info: {work: {height: "10 pixels", width: "980 pixels"}
-    }
-  }
+var allBlockAttributes = {
 
 };
 
-var changeBlockContent = function(infoFromServer){
-  /* Code to alter/update the appropriate block object in allDeviceContent.
-  Not sure if I should filter out the 'message' type and all that from the
-  json that comes from the server before this, or do it in here to get the
-  actual changed value?
-   */
+function updateAttributeValue(blockId, attribute, newValue){
+  allBlockAttributes[blockId][attribute].value = newValue;
+  console.log(newValue);
+}
 
-  /* Also, I suppose it depends on if each Channel does indeed represent just one
-  block attribute, because then you could use probably some of the json to
-  distinguish which block and which attribute to change, making this function
-  easier to write
-   */
-};
+var attributeStore = assign({}, EventEmitter.prototype, {
 
-//var mockBlockContentPlayingWithServer = {
-//  redBlockContent: {
-//    name: "Red block",
-//    hack: "redBlockTabOpen",
-//    info: {work: {height: "400 pixels", width: "230 pixels", ChannelName: "Channel name"}}
-//  },
-//};
-
-var simpleChangeChannelName = function(name){
-  allDeviceContent.redBlockContent.info.work.ChannelName = name
-};
-
-
-
-
-
-
-var deviceStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
   },
@@ -528,75 +1321,1775 @@ var deviceStore = assign({}, EventEmitter.prototype, {
   emitChange: function(){
     this.emit(CHANGE_EVENT)
   },
-  getRedBlockContent: function(){
-    return allDeviceContent.redBlockContent;
+  getAllBlockAttributes: function(){
+    return allBlockAttributes;
   },
-  getBlueBlockContent: function(){
-    return allDeviceContent.blueBlockContent;
-  },
-  getGreenBlockContent: function(){
-    return allDeviceContent.greenBlockContent;
-  }
+
 });
 
-AppDispatcher.register(function(payload){
+var blockStore = require('./blockStore');
+
+attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
+
   switch(action.actionType){
 
-    case appConstants.MOCK_SERVERREQUEST:
-      console.log('mock server request running');
-          console.log(payload);
-          console.log(item);
-          /* just a mock, so do nothing :P*/
-          /* Just as a reference though, this'll be something like "you will have received an object of info, stick it into allDeviceContent/replace whatever it was with the newer object" */
-          deviceStore.emitChange();
-          break;
+    case appConstants.MALCOLM_GET_SUCCESS:
 
-    /* Testing/mocking up a case where info has been passed from server to the dispatcher, and now to deviceStore (ie, here :P) */
+      AppDispatcher.waitFor([blockStore.dispatchToken]);
 
-    case appConstants.PASSUPDATEDCHANNEL_VALUE:
-          console.log(payload);
-          console.log(action);
-          break;
+      //window.alert("shfi");
+      console.log("hfoiuhawoioFIFIF");
+
+      console.log(item);
+
+      for(var i = 0; i < item.tags.length; i++){
+        if(item.tags[i] === "instance:Zebra2Block") {
+
+          /* Temporarily removing this condition to see
+          whether or not allBlockATtributes should have
+          all the blocks' attributes, even the not-visible
+          ones, they'll instead simply be static and
+          not subscribed to?
+           */
+
+          //if (item.attributes.VISIBLE.value === 'Show') {
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
+            console.log(allBlockAttributes);
+          //}
+        }
+        //else if(item.tags[i] === "instance:Zebra2"){
+        //  /* Save the list of all possible blocks */
+        //  listOfAllPossibleBlocks = JSON.parse(JSON.stringify(item.attributes.blocks.value));
+        //  /* Note that they all have 'Z:' in front of the block
+        //  name in the array
+        //   */
+        //}
+        //else if(item.tags[i] === 'instance:Zebra2Visibility'){
+        //  /* Save the list of all possible blocks */
+        //  var zVisibility = JSON.parse(JSON.stringify(item));
+        //  for(var attribute in zVisibility.attributes){
+        //    if(zVisibility.attributes[attribute].tags !== undefined){
+        //      var isBlockToggle = false;
+        //      var doesBelongToGroup = false;
+        //
+        //      for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
+        //        if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
+        //          /* Then it's a block! */
+        //          //blocksVisibility.push(attribute);
+        //          isBlockToggle = true;
+        //        }
+        //        else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
+        //          doesBelongToGroup = true;
+        //        }
+        //      }
+        //
+        //      if(isBlockToggle === true && doesBelongToGroup === true){
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //      }
+        //      else if(isBlockToggle === true && doesBelongToGroup !== true){
+        //        /* It's a block that is the only instance of its
+        //        type, so add it to both blockGroups and
+        //        blocksVisibility, so then I can just check the length
+        //        of the array in the mapping of groups and group members
+        //         */
+        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
+        //        blockGroups.push(attribute);
+        //      }
+        //    }
+        //    else if(zVisibility.attributes[attribute].tags === undefined &&
+        //      zVisibility.attributes[attribute].descriptor === attribute){
+        //      /* Then it's a group! */
+        //      blockGroups.push(attribute);
+        //    }
+        //  }
+        //}
+      }
+      //console.log(blockGroups);
+      //console.log(blocksVisibility);
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("MALCOLM GET ERROR!");
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("malcolmSubscribeSuccess in attributeStore");
+      console.log(item);
+
+      if(item.requestedData.blockName !== 'VISIBILITY') {
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
+
+        attributeStore.emitChange();
+      }
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure in attributStore");
+      attributeStore.emitChange();
+      break;
+
+    default:
+      return true
+
+  }
+
+});
+
+module.exports = attributeStore;
+
+},{"../../node_modules/object-assign/index.js":44,"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9,"./blockStore":12,"events":38}],12:[function(require,module,exports){
+/**
+ * Created by twi18192 on 10/12/15.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('../../node_modules/object-assign/index.js');
+
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
+var CHANGE_EVENT = 'change';
+
+var _stuff = {
+  initialBlockServerData: null,
+  blockList: null
+};
+
+var allBlockInfo = {
+
+};
+
+function addEdgeToAllBlockInfo(Info){
+
+  /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
+
+  for(var i = 0; i < allBlockInfo[Info.fromBlock].outports.length; i++){
+    if(allBlockInfo[Info.fromBlock].outports[i].name === Info.fromBlockPort){
+      var newEdgeToFromBlock = {
+        block: Info.toBlock,
+        port: Info.toBlockPort
+      };
+      allBlockInfo[Info.fromBlock].outports[i].connected = true;
+      allBlockInfo[Info.fromBlock].outports[i].connectedTo.push(newEdgeToFromBlock);
+    }
+  }
+  /* Also need to add to the node whose inport we've connected that outport to! */
+
+  for(var j = 0; j < allBlockInfo[Info.toBlock].inports.length; j++){
+    if(allBlockInfo[Info.toBlock].inports[j].name === Info.toBlockPort){
+      var newEdgeToToBlock = {
+        block: Info.fromBlock,
+        port: Info.fromBlockPort
+      };
+      allBlockInfo[Info.toBlock].inports[j].connected = true;
+
+      /* Hmm, this'll then REPLACE the previous edge if it exists, it should really check if it's already connected before replacing the object */
+      allBlockInfo[Info.toBlock].inports[j].connectedTo = newEdgeToToBlock;
+    }
+  }
+}
+
+function removeEdgeFromAllBlockInfo(Info){
+
+  for(var i = 0; i < allBlockInfo[Info.toBlock].inports.length; i++){
+    if(allBlockInfo[Info.toBlock].inports[i].name === Info.toBlockPort){
+      /* Remove the info about the connection since we want to delete the edge */
+      allBlockInfo[Info.toBlock].inports[i].connected = false;
+      allBlockInfo[Info.toBlock].inports[i].connectedTo = null;
+    }
+    else if(allBlockInfo[Info.toBlock].inports[i].name !== Info.toBlockPort){
+      //console.log("not the right port, leave that info alone");
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.fromBlock].outports.length; j++){
+    if(allBlockInfo[Info.fromBlock].outports[j].name === Info.fromBlockPort){
+      /* First, remove it from the array; then check the length of the conenctedTo array:
+      if it's 0 then you can also reset the conencted attribute, but if the array is longer than 0 there are still
+      other connections, so don't set connected to false
+       */
+      for(var k = 0; k < allBlockInfo[Info.fromBlock].outports[j].connectedTo.length; k++){
+        /* Checking what the outport is CONNECTED TO, so it'll be the info of the fromBlock */
+        if(allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].block === Info.toBlock
+        && allBlockInfo[Info.fromBlock].outports[j].connectedTo[k].port === Info.toBlockPort){
+          /* Remove this particular object from the connectedTo array */
+          allBlockInfo[Info.fromBlock].outports[j].connectedTo.splice(k, 1);
+
+          /* Also need to remove it from the edgeSelectedStates object */
+
+          /* edgeSelectedStates has been moved to flowChartStore, so there's
+          no need for it here anymore
+           */
+          //delete edgeSelectedStates[Info.edgeId];
+          //window.alert("hsduiad");
+
+          /* And also need to reset the port styling somehow too... */
+
+          /* Now check the length of connectedTo to see if conencted needs to be reset too */
+          if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length === 0){
+            /* Reset connected */
+            allBlockInfo[Info.fromBlock].outports[j].connected = false;
+          }
+          else if(allBlockInfo[Info.fromBlock].outports[j].connectedTo.length > 0){
+            //console.log("don't reset connected, there are other connections to that outport still");
+          }
+        }
+        else{
+          //console.log("not the correct block or port (or both), so don't alter anything");
+        }
+      }
+    }
+    else if(allBlockInfo[Info.fromBlock].outports[j].name !== Info.fromBlockPort){
+      //console.log("not the correct outport, carry on");
+    }
+  }
+
+}
+
+function appendToAllBlockInfo(BlockInfo){
+  //if(allNodeInfo[NodeInfo] === undefined || allNodeInfo[NodeInfo] === null){
+  //
+  //}
+  /* This was for when I was generating the new gateNode id in the store rather than in theGraphDiamond */
+  //var newGateId = generateNewNodeId();
+  //console.log(newGateId);
+  //allNodeInfo[newGateId] = nodeInfoTemplates.Gate;
+  //console.log(allNodeInfo);
+  //newlyAddedNode = allNodeInfo[newGateId];
+  //console.log(newlyAddedNode);
+
+  //allNodeInfo[NodeInfo] = nodeInfoTemplates.Gate;
+  allBlockInfo[BlockInfo] = {
+    type: 'Gate',
+    label: BlockInfo,
+    name: "",
+    position: {
+      x: 400, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    /* Replacing inport and outport obejcts with arrays */
+    //inports: {
+    //  "set": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+    //  "reset": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //},
+    //outports: {
+    //  "out": {
+    //    connected: false,
+    //    connectedTo: null
+    //  }
+    //}
+    inports: [
+      {
+        name: 'set',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      },
+      {
+        name: 'reset',
+        type: 'boolean',
+        connected: false,
+        connectedTo: null
+      }
+    ],
+    outports: [
+      {
+        name: 'out',
+        type: 'boolean',
+        connected: false,
+        connectedTo: []
+      }
+    ]
+  };
+
+  /* Trying to use a for loop to copy over the template */
+  //for(var property in nodeInfoTemplates.Gate){
+  //  console.log(NodeInfo);
+  //  console.log(allNodeInfo);
+  //
+  //  allNodeInfo[NodeInfo][property] = nodeInfoTemplates.Gate[property];
+  //}
+  //allNodeInfo[NodeInfo].position.x = randomNodePositionGenerator();
+  //allNodeInfo[NodeInfo].position.y = randomNodePositionGenerator();
+  //console.log(randomNodePositionGenerator());
+  //console.log(randomNodePositionGenerator());
+}
+
+
+var blockPositions = {
+
+};
+
+function appendToBlockPositions(BlockId, xCoord, yCoord){
+  blockPositions[BlockId] = {
+    x: xCoord * 1/flowChartStore.getGraphZoomScale(),
+    y: yCoord * 1/flowChartStore.getGraphZoomScale()
+  }
+}
+
+function interactJsDrag(BlockInfo){
+
+  blockPositions[BlockInfo.target] = {
+    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
+    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
+  }
+}
+
+
+var blockLibrary = {
+  Gate: {
+    name: 'Gate',
+    description: 'SR Gate block',
+    icon: 'play-circle',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  EncIn: {
+    name: 'EncIn',
+    description: 'Encoder Input block',
+    icon: 'cogs',
+    inports: [
+    ],
+    outports: [
+      {'name': 'a', 'type': 'boolean'},
+      {'name': 'b', 'type': 'boolean'},
+      {'name': 'z', 'type': 'boolean'},
+      {'name': 'conn', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  PComp: {
+    name: 'PComp',
+    description: 'Position compare block',
+    icon: 'compass',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  },
+  TGen: {
+    name: 'TGen',
+    description: 'Time Generator block',
+    icon: 'clock-o',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  LUT: {
+    name: 'LUT',
+    description: 'Look up Table block',
+    icon: 'stop',
+    inports: [
+      {'name': 'inpa', 'type': 'boolean'},
+      {'name': 'inpb', 'type': 'boolean'},
+      {'name': 'inpc', 'type': 'boolean'},
+      {'name': 'inpd', 'type': 'boolean'},
+      {'name': 'inpe', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  Pulse: {
+    name: 'Pulse',
+    description: 'Pulse Generator block',
+    icon: 'bolt',
+    inports: [
+      {'name': 'inp', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'},
+      {'name': 'err', 'type': 'boolean'}
+    ]
+  },
+  TTLOut: {
+    name: 'TTLOut',
+    description: 'TTL Output block',
+    icon: 'toggle-on',
+    inports: [
+      {'name': 'val', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  },
+  PCap: {
+    name: 'PCap',
+    description: 'Position capture block',
+    icon: 'bar-chart',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'trig', 'type': 'boolean'}
+    ],
+    outports: [
+    ]
+  }
+};
+
+var allBlockTabInfo = {
+  'Gate1': {
+    type: 'Gate',
+    label: 'Gate1',
+    description: 'SR Gate block',
+    inports: [
+      {'name': 'set', 'type': 'boolean'},
+      {'name': 'reset', 'type': 'boolean'},
+    ],
+    outports: [
+      {'name': 'out', 'type': 'boolean'}
+    ]
+  },
+  'TGen1': {
+    type: 'TGen',
+    label: 'TGen1',
+    description: 'Time Generator block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'}
+    ],
+    outports: [
+      {'name': 'posn', 'type': 'int'}
+    ]
+  },
+  'PComp1': {
+    type: 'PComp',
+    label: 'PComp1',
+    description: 'Position compare block',
+    inports: [
+      {'name': 'ena', 'type': 'boolean'},
+      {'name': 'posn', 'type': 'int'},
+    ],
+    outports: [
+      {'name': 'act', 'type': 'boolean'},
+      {'name': 'pulse', 'type': 'boolean'}
+    ]
+  }
+};
+
+var blockInfoTemplates = {
+  'Gate': {
+    type: 'Gate',
+    name: "",
+    position: {
+      x: 900, /* Maybe have a random number generator generating an x and y coordinate? */
+      y: 50,
+    },
+    inports: {
+      "set": {
+        connected: false,
+        connectedTo: null
+      }, /* connectedTo should probably be an array, since outports can be connected to multiple inports on different nodes */
+      "reset": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "out": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'PComp': {
+    type: 'PComp',
+    name: "",
+    position: {
+      x: null,
+      y: null,
+    },
+    inports: {
+      'ena': {
+        connected: false,
+        connectedTo: null
+      },
+      'posn': {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      'act': {
+        connected: false,
+        connectedTo: null
+      },
+      'out': {
+        connected: false,
+        connectedTo: null
+      },
+      'pulse': {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'TGen': {
+    type: 'TGen',
+    name: '',
+    position: {
+      x: null,
+      y: null
+    },
+    inports: {
+      "ena": {
+        connected: false,
+        connectedTo: null
+      }
+    },
+    outports: {
+      "posn": {
+        connected: false,
+        connectedTo: null
+      }
+    }
+  },
+  'LUT': {
+
+  },
+  'Pulse': {
+
+  },
+  'TTLOut': {
+
+  },
+  'EncIn': {
+
+  }
+};
+
+
+
+
+/* Functions to do with data retrieval from the server */
+
+/* So what will happen is that an action will tell the server we want new info, it'll fetch it, and then
+return it to blockStore in the form of an object of some sort. From there you can do all sorts of things like update
+the value of a specific port of an existing block, add a port to an existing block etc.
+
+Depending on the action that triggered the data fetch from the server I'll know which one of these various things
+it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
+been returned/fetched to blockStore successfully?
+ */
+function addBlock(blockId){
+
+  var blockType = blockId.replace(/[0-9]/g, '');
+  console.log(blockType);
+
+  var inports = [];
+  var outports = [];
+
+  for(var attribute in testAllBlockInfo[blockId].attributes){
+    /* Rewriting for proper inport & outport filtering */
+    //if(testAllBlockInfo[blockId][attribute].tags === undefined){
+    //  /* Add that outport to the outports array */
+    //
+    //  if(attribute.indexOf(":VAL") !== -1){
+    //    /* Could well be an inport since it has VAL in the title? */
+    //    /* Also, need to remove the VAL from the inport name in that case */
+    //    var inportName = attribute.replace(/:VAL/g, '');
+    //    inports.push(
+    //      {
+    //        name: inportName,
+    //        type: testAllBlockInfo[blockId][attribute].type.name,
+    //        value: String(testAllBlockInfo[blockId][attribute].value),
+    //        connected: false,
+    //        connectedTo: null
+    //      }
+    //    )
+    //  }
+    //  else {
+    //    outports.push(
+    //      {
+    //        name: attribute,
+    //        type: testAllBlockInfo[blockId][attribute].type.name,
+    //        value: String(testAllBlockInfo[blockId][attribute].value),
+    //        connected: false,
+    //        connectedTo: []
+    //      }
+    //    )
+    //  }
+    //}
+
+    console.log(testAllBlockInfo[blockId].attributes);
+    console.log(attribute);
+    console.log(testAllBlockInfo[blockId].attributes[attribute]);
+
+    //if(attribute === 'uptime'){
+    //  inports.push(
+    //    {
+    //      name: 'uptime',
+    //      type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+    //      value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+    //      connected: false,
+    //      connectedTo: null
+    //    }
+    //  )
+    //}
+
+    if(testAllBlockInfo[blockId].attributes[attribute].tags !== undefined) {
+      for (var i = 0; i < testAllBlockInfo[blockId].attributes[attribute].tags.length; i++) {
+        var inportRegExp = /flowgraph:inport/;
+        var outportRegExp = /flowgraph:outport/;
+        if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
+          var inportName = attribute;
+          /* Need to check if the inport is connected to
+          anything as well, so then edges will be preserved
+          on a window refresh!
+           */
+          var inportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+
+          /* There'll be a 'disconnected' value at some point,
+          so I'll be checking whether it's connected to anything
+          at all here soon
+           */
+
+          inports.push(
+            {
+              name: inportName,
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+              connected: false,
+              connectedTo: null
+            }
+          );
+
+          //var inportBlock = blockId;
+          //var inportBlockPort = attribute;
+          //var connectedToBlock = inportValue.slice(0, inportValue.indexOf('.'));
+          //var connectedToBlockPort = inportValue.slice(inportValue.indexOf('.') + 1);
+          //
+          //addEdgeViaMalcolm({
+          //  inportBlock: inportBlock,
+          //  inportBlockPort: inportBlockPort,
+          //  outportBlock: connectedToBlock,
+          //  outportBlockPort: connectedToBlockPort
+          //});
+
+        }
+        else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
+          var outportName = attribute;
+          outports.push(
+            {
+              name: outportName,
+              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+              connected: false,
+              connectedTo: []
+            }
+          )
+        }
+      }
+    }
+
+  }
+
+  var blockMethods = {};
+
+  for(var method in testAllBlockInfo[blockId].methods){
+    blockMethods[method] = testAllBlockInfo[blockId].methods[method]
+  }
+  console.log(blockMethods);
+
+  allBlockInfo[blockId] = {
+    type: blockType,
+    label: blockId,
+    name: '',
+    inports: inports,
+    outports: outports,
+    methods: blockMethods
+  };
+
+
+}
+
+function removeBlock(blockId){
+  delete allBlockInfo[blockId];
+  delete blockPositions[blockId];
+}
+
+function updateAttributeValue(blockId, attribute, newValue){
+  console.log("update attribute value");
+
+  console.log(allBlockInfo);
+
+  for(var i = 0; i < allBlockInfo[blockId].inports.length; i++){
+    if(allBlockInfo[blockId].inports[i].name === attribute){
+      allBlockInfo[blockId].inports[i].value = newValue;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[blockId].outports.length; j++){
+    if(allBlockInfo[blockId].outports[j].name === attribute){
+      allBlockInfo[blockId].outports[j].value = newValue;
+    }
+  }
+}
+
+var testAllBlockInfo = null;
+
+
+/* Testing a simple data fetch */
+
+var dataFetchTest = {
+  value: true,
+};
+
+function addEdgeViaMalcolm(Info){
+  console.log(Info);
+  //window.alert(allBlockInfo[Info.inportBlock.label]);
+  for(var i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++){
+    if(allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort){
+      var addEdgeToInportBlock = {
+        block: Info.outportBlock,
+        port: Info.outportBlockPort
+      };
+      allBlockInfo[Info.inportBlock].inports[i].connected = true;
+      allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++){
+    if(allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort){
+      var addEdgeToOutportBlock = {
+        block: Info.inportBlock,
+        port: Info.inportBlockPort
+      };
+      allBlockInfo[Info.outportBlock].outports[j].connected = true;
+      allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
+    }
+  }
+
+  console.log(allBlockInfo);
+
+}
+
+function addInitialEdges(){
+
+  /* This is essentially the same loop as addBlock,
+  but since you can't add edges without being certain
+  that both blocks exist, this seems like the only way
+  to ensure that edges are created only when both blocks
+  exist, and that means looping through the attributes of
+  every block in testAllBlockInfo after all blocks have
+  been fetched
+   */
+
+  var inportRegExp = /flowgraph:inport/;
+  var outportRegExp = /flowgraph:outport/;
+
+  console.log(allBlockInfo)
+
+  for(var block in testAllBlockInfo){
+    for(var attribute in testAllBlockInfo[block].attributes){
+      if(testAllBlockInfo[block].attributes[attribute].tags !== undefined){
+        for(var i = 0; i < testAllBlockInfo[block].attributes[attribute].tags.length; i++){
+          if(inportRegExp.test(testAllBlockInfo[block].attributes[attribute].tags[i]) === true){
+            /* Add to the corresponding block's inports array,
+            and also add to the corresponding connected block's
+            outports array
+             */
+
+            console.log(block);
+            console.log(attribute);
+            console.log(testAllBlockInfo[block].attributes[attribute]);
+
+            var inportBlock = block;
+            var inportBlockPort = attribute;
+            var outportBlock = testAllBlockInfo[block].attributes[attribute].value.slice(0,
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.'));
+            var outportBlockPort = testAllBlockInfo[block].attributes[attribute].value.slice(
+              testAllBlockInfo[block].attributes[attribute].value.indexOf('.') + 1);
+
+            addEdgeViaMalcolm({
+              inportBlock: inportBlock,
+              inportBlockPort: inportBlockPort,
+              outportBlock: outportBlock,
+              outportBlockPort: outportBlockPort
+            });
+
+            console.log(allBlockInfo[inportBlock]);
+            console.log(allBlockInfo[outportBlock]);
+            console.log(allBlockInfo);
+            console.log(testAllBlockInfo);
+            console.log(outportBlock);
+
+            //for(var k = 0; k < allBlockInfo[inportBlock].inports.length; k++){
+            //  if(allBlockInfo[inportBlock].inports[k].name === inportBlockPort){
+            //    var addEdgeToInportBlock = {
+            //      block: outportBlock,
+            //      port: outportBlockPort
+            //    };
+            //    allBlockInfo[inportBlock].inports[k].connected = true;
+            //    allBlockInfo[inportBlock].inports[k].connectedTo = addEdgeToInportBlock;
+            //  }
+            //}
+            //
+            //for(var l = 0; l < allBlockInfo[outportBlock].outports.length; l++){
+            //  if(allBlockInfo[outportBlock].outports[l].name === outportBlockPort){
+            //    var addEdgeToOutportBlock = {
+            //      block: inportBlock,
+            //      port: inportBlockPort
+            //    };
+            //    allBlockInfo[outportBlock].outports[l].connected = true;
+            //    allBlockInfo[outportBlock].outports[l].connectedTo.push(addEdgeToOutportBlock);
+            //  }
+            //}
+
+          }
+        }
+      }
+    }
+  }
+}
+
+var flowChartStore = require('./flowChartStore');
+
+var blockStore = assign({}, EventEmitter.prototype, {
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+
+  /* BLOCK use */
+
+  getAllBlockInfo: function(){
+    return allBlockInfo;
+  },
+  getAllBlockInfoForInitialBlockData: function(){
+    return allBlockInfo;
+  },
+  getBlockLibrary: function(){
+    return blockLibrary;
+  },
+
+  /* WebAPI use */
+
+  getDataFetchTest: function(){
+    return dataFetchTest;
+  },
+
+  getInitialBlockStringArray: function(){
+    return _stuff.initialBlockServerData;
+  },
+  getTestAllBlockInfo: function(){
+
+    if(testAllBlockInfo === null){
+      testAllBlockInfo = {};
+
+      MalcolmActionCreators.initialiseFlowChart('Z');
+      //MalcolmActionCreators.initialiseFlowChart('Z:DIV1.attributes.DIVISOR.value');
+
+
+      /* So then testAllBlockInfo is something in flowChartViewController */
+      return {};
+
+      //for(var j = 0; j < _stuff.blockList.length; j++) {
+      //  console.log(_stuff.blockList[j]);
+      //  MalcolmActionCreators.malcolmGet(_stuff.blockList[j]);
+      //}
+    }
+    else{
+      return testAllBlockInfo;
+    }
+
+  },
+  getTestAllBlockInfoCallback: function(){
+
+  },
+
+  getBlockPositions: function(){
+    return blockPositions;
+  }
+
+});
+
+blockStore.dispatchToken = AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+
+  console.log(payload);
+  console.log(item);
+
+  switch(action.actionType){
+
+    /* BLOCK use */
+
+
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      appendToAllBlockInfo(item);
+      //appendToAllPossibleBlocks(item);
+      //appendToBlockSelectedStates(item);
+      //addToEdgesObject(); /* Just trying out my addToEdgesObject function */
+      blockStore.emitChange();
+      break;
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      addEdgeToAllBlockInfo(item);
+      blockStore.emitChange();
+      console.log(allBlockInfo);
+      break;
+    case appConstants.INTERACTJS_DRAG:
+      console.log(payload);
+      console.log(item);
+      interactJsDrag(item);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      removeEdgeFromAllBlockInfo(item);
+      blockStore.emitChange();
+      break;
+
+    /* serverActions */
+
+    case appConstants.TEST_WEBSOCKET:
+      blockStore.emitChange();
+      break;
+
+    /* WebAPI use */
+
+    case appConstants.TEST_DATAFETCH:
+      dataFetchTest = JSON.parse(JSON.stringify(item));
+      blockStore.emitChange();
+      break;
+
+    case appConstants.TEST_SUBSCRIBECHANNEL:
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+
+      /* Check if it's the initial FlowGraph structure, or
+      if it's something else
+       */
+
+      for(var i = 0; i < item.tags.length; i++){
+        /* No need to check the tags for if it's FlowGraph */
+        //if(item.tags[i] === 'instance:FlowGraph'){
+        //  /* Do the loop that gets every block */
+        //  /* UPDATE: try moving it to a store getter function */
+        //  //for(var j = 0; j < item.attributes.blocks.value.length; j++){
+        //  //  MalcolmActionCreators.malcolmGet(item.attributes.blocks.value[j]);
+        //  //}
+        //  //
+        //  //break;
+        //
+        //  //
+        //  //_stuff.blockList = JSON.parse(JSON.stringify(item.value));
+        //
+        //
+        //  //_stuff.blockList = JSON.parse(JSON.stringify(item.attributes.blocks.value));
+        //
+        //}
+        if(item.tags[i] === 'instance:Zebra2Block'){
+
+          /* Do the block adding to testAllBlockInfo stuff */
+
+          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+
+          console.log(blockName);
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
+
+          /* Add the block to allBlockInfo! */
+
+          if(item.attributes.VISIBLE.value === 'Show') {
+            appendToBlockPositions(blockName, xCoord, yCoord);
+            addBlock(blockName);
+
+          }
+          else{
+            /* Putting it here just to test the blocks even if they're not in use */
+            //addBlock(blockName);
+
+            console.log("block isn't in use, don't add its info");
+          }
+          console.log(testAllBlockInfo);
+        }
+
+      }
+
+
+
+      console.log(testAllBlockInfo);
+      console.log(_stuff.blockList);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("MALCOLM GET ERROR!");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("blockStore malcolmSubscribeSuccess");
+
+      console.log(item);
+
+      /* Check the tags for 'widget:combo', it'll be
+      indicating that a dropdown was used (it'll also
+      cause things like the dropdowns with 'triggered'
+      and stuff to emit a change, but for now that'll
+      work just fine
+       */
+
+      //window.alert("dhi");
+
+      var isInportDropdown = false;
+
+      for(var p = 0; p < item.responseMessage.tags.length; p++){
+        if(item.responseMessage.tags[p].indexOf('widget:combo') !== -1){
+          isInportDropdown = true;
+        }
+        else if(item.responseMessage.tags[p] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             */
+
+            appendToBlockPositions(item.requestedData.attribute,
+            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+
+            addBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Should invoke a removeBlock function to remove
+            the info from allBlockInfo
+             */
+            removeBlock(item.requestedData.attribute);
+            blockStore.emitChange();
+          }
+        }
+      }
+
+      if(isInportDropdown === true){
+        /* Then update allBlockInfo with the new edge! */
+
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+
+        var inportBlock = requestedData.blockName;
+        var inportBlockPort = requestedData.attribute;
+
+        var outportBlock = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
+        var outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
+
+        addEdgeViaMalcolm({
+          inportBlock: inportBlock,
+          inportBlockPort: inportBlockPort,
+          outportBlock: outportBlock,
+          outportBlockPort: outportBlockPort
+        });
+
+        blockStore.emitChange();
+      }
+
+
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      console.log("malcolmCallSuccess");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+      console.log("malcolmCallFailure");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.INITIALISE_FLOWCHART_START:
+      //console.log("initialise flowChart start blockStore");
+      blockStore.emitChange();
+      break;
+
+    case appConstants.INITIALISE_FLOWCHART_END:
+      console.log("initialise flowChart end, blockStore");
+      addInitialEdges();
+      blockStore.emitChange();
+      break;
+
+    default:
+      return true
+  }
+
+});
+
+module.exports = blockStore;
+
+},{"../../node_modules/object-assign/index.js":44,"../actions/MalcolmActionCreators":1,"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9,"./flowChartStore":14,"events":38}],13:[function(require,module,exports){
+/**
+ * Created by twi18192 on 24/03/16.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('../../node_modules/object-assign/index.js');
+
+var CHANGE_EVENT = 'change';
+
+var blocksVisibility = {};
+var blockGroups = [];
+
+function updateBlockVisibility(blockId, newValue){
+  blocksVisibility[blockId].value = newValue;
+}
+
+var blocksVisibleStore = assign({}, EventEmitter.prototype, {
+
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+  getBlockGroups: function(){
+    return blockGroups;
+  },
+  getBlocksVisibility: function(){
+    return blocksVisibility;
+  }
+
+});
+
+blocksVisibleStore.dispatchToken = AppDispatcher.register(function(payload){
+
+  var action = payload.action;
+  var item = action.item;
+
+  switch(action.actionType){
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+
+      for(var i = 0; i < item.tags.length; i++){
+        if(item.tags[i] === 'instance:Zebra2Visibility'){
+          /* Save the list of all possible blocks */
+          var zVisibility = JSON.parse(JSON.stringify(item));
+          for(var attribute in zVisibility.attributes){
+            if(zVisibility.attributes[attribute].tags !== undefined){
+              var isBlockToggle = false;
+              var doesBelongToGroup = false;
+
+              for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
+                if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
+                  /* Then it's a block! */
+                  //blocksVisibility.push(attribute);
+                  isBlockToggle = true;
+                }
+                else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
+                  doesBelongToGroup = true;
+                }
+              }
+
+              if(isBlockToggle === true && doesBelongToGroup === true){
+                blocksVisibility[attribute] = zVisibility.attributes[attribute];
+              }
+              else if(isBlockToggle === true && doesBelongToGroup !== true){
+                /* It's a block that is the only instance of its
+                 type, so add it to both blockGroups and
+                 blocksVisibility, so then I can just check the length
+                 of the array in the mapping of groups and group members
+                 */
+                blocksVisibility[attribute] = zVisibility.attributes[attribute];
+                blockGroups.push(attribute);
+              }
+            }
+            else if(zVisibility.attributes[attribute].tags === undefined &&
+              zVisibility.attributes[attribute].descriptor === attribute){
+              /* Then it's a group! */
+              blockGroups.push(attribute);
+            }
+          }
+        }
+      }
+
+      blocksVisibleStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("MALCOLM GET ERROR!");
+      blocksVisibleStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log(blocksVisibility);
+      if(item.requestedData.blockName === 'VISIBILITY') {
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        console.log(requestedData.blockName);
+        updateBlockVisibility(requestedData.attribute, responseMessage.value);
+        blocksVisibleStore.emitChange();
+      }
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
+      console.log("malcolmSubscribeFailure in attributStore");
+      blocksVisibleStore.emitChange();
+      break;
+
+    default:
+      return true
+
+  }
+
+});
+
+module.exports = blocksVisibleStore;
+
+},{"../../node_modules/object-assign/index.js":44,"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9,"events":38}],14:[function(require,module,exports){
+/**
+ * Created by twi18192 on 18/02/16.
+ */
+
+var AppDispatcher = require('../dispatcher/appDispatcher.js');
+var appConstants = require('../constants/appConstants.js');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('../../node_modules/object-assign/index.js');
+
+var CHANGE_EVENT = 'change';
+
+var clickedEdge = null;
+var portThatHasBeenClicked = null;
+var storingFirstPortClicked = null;
+var portMouseOver = false;
+var edgePreview = null;
+var previousMouseCoordsOnZoom = null;
+
+var blockStyling = {
+  outerRectangleHeight: 76,
+  outerRectangleWidth: 72,
+  innerRectangleHeight: 70,
+  innerRectangleWidth: 66,
+  portRadius: 2.5,
+  portFill: 'grey',
+};
+
+var graphPosition = {
+  x: 0,
+  y: 0
+};
+
+var graphZoomScale = 2.0;
+
+var blockSelectedStates = {
+
+};
+
+//var blockPositions = {
+//
+//};
+
+//function interactJsDrag(BlockInfo){
+//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
+//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
+//  //console.log(allNodeInfo[NodeInfo.target].position);
+//
+//  blockPositions[BlockInfo.target] = {
+//    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
+//    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
+//  }
+//}
+
+//function appendToBlockPositions(BlockId, xCoord, yCoord){
+//  blockPositions[BlockId] = {
+//    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
+//    x: xCoord * 1/graphZoomScale,
+//    y: yCoord * 1/graphZoomScale
+//  }
+//}
+
+function appendToBlockSelectedStates(BlockId){
+  //console.log("blockSelectedStates before adding a new block:");
+  blockSelectedStates[BlockId] = false;
+  //console.log("blockSelectedStates after adding a new block:");
+}
+
+function removeBlock(blockId){
+  /* Remove block from blockPositions */
+  //delete blockPositions[blockId];
+
+  /* Remove from blockSelectedStates */
+  delete blockSelectedStates[blockId];
+}
+
+function generateRandomBlockPosition(){
+  return Math.floor((Math.random() * 500) + 1)
+}
+
+function deselectAllBlocks(){
+  for(var block in blockSelectedStates){
+    blockSelectedStates[block] = false
+  }
+}
+
+function checkIfAnyBlocksAreSelected(){
+  var areAnyBlocksSelected = null;
+  for(var block in blockSelectedStates){
+    if(blockSelectedStates[block] === true){
+      areAnyBlocksSelected = true;
+      break;
+    }
+    else{
+      //console.log("one of the blocks' state is false, check the next one if it is true");
+      areAnyBlocksSelected = false;
+    }
+  }
+  //console.log(areAnyNodesSelected);
+  return areAnyBlocksSelected;
+}
+
+var edgeSelectedStates = {
+  'Gate1outTGen1ena': false,
+  //Gate1OutTGen1Ena: false,
+  //TGen1PosnPComp1Posn: false,
+  //TGen1PosnPComp1Ena: false
+};
+
+function appendToEdgeSelectedStates(EdgeId){
+  edgeSelectedStates[EdgeId] = false;
+}
+
+function removeFromEdgeSelectedStates(EdgeId){
+  delete edgeSelectedStates[EdgeId];
+}
+
+function selectEdge(Edge){
+  edgeSelectedStates[Edge] = true;
+}
+
+function getAnyEdgeSelectedState(EdgeId){
+  if(edgeSelectedStates[EdgeId] === undefined || null){
+    //console.log("edge selected state is underfined or null, best check it out...");
+  }
+  else{
+    //console.log("that edge's state exists, hooray!");
+    return edgeSelectedStates[EdgeId];
+  }
+}
+
+function checkIfAnyEdgesAreSelected(){
+  var areAnyEdgesSelected;
+  var i = 0;
+  for(var edge in edgeSelectedStates){
+    i = i + 1;
+    if(edgeSelectedStates[edge] === true){
+      //console.log(edgeSelectedStates[edge]);
+      areAnyEdgesSelected = true;
+      break;
+    }
+    else{
+      areAnyEdgesSelected = false;
+    }
+  }
+  //console.log(areAnyEdgesSelected);
+  /* Taking care of if therer are no edges, so we return false instea dof undefined */
+  if(i === 0){
+    areAnyEdgesSelected = false;
+  }
+
+  return areAnyEdgesSelected;
+}
+
+function deselectAllEdges(){
+  for(var edge in edgeSelectedStates){
+    edgeSelectedStates[edge] = false
+  }
+}
+
+function updateEdgePreviewEndpoint(position){
+  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1/graphZoomScale)*(position.x);
+  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1/graphZoomScale)*(position.y);
+  //console.log(edgePreview.endpointCoords);
+}
 
 
 
 
 
-    case appConstants.PROPERSERVERREQUEST_TOADDCHANNELCHANGEINFO:
-          console.log(payload);
-          console.log(action);
-          deviceStore.emitChange();
-          break;
 
-    //case appConstants.PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED:
-    //      console.log(payload);
-    //      console.log(action);
-    //      simpleChangeChannelName(item);
-    //      deviceStore.emitChange();
-    //      break;
+var flowChartStore = assign({}, EventEmitter.prototype, {
+  addChangeListener: function(cb){
+    this.on(CHANGE_EVENT, cb)
+  },
+  removeChangeListener: function(cb){
+    this.removeListener(CHANGE_EVENT, cb)
+  },
+  emitChange: function(){
+    this.emit(CHANGE_EVENT)
+  },
+
+
+
+  /* FLOWCHART use */
+
+  getAnyBlockSelectedState:function(BlockId){
+    if(blockSelectedStates[BlockId] === undefined || null){
+      //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
+      //console.log(NodeId);
+      //console.log(nodeSelectedStates[NodeId]);
+    }
+    else{
+      //console.log("the state of that nod exists, passing it now");
+      //console.log(nodeSelectedStates[NodeId]);
+      return blockSelectedStates[BlockId];
+    }
+  },
+  getIfAnyBlocksAreSelected: function(){
+    return checkIfAnyBlocksAreSelected();
+  },
+  getIfAnyEdgesAreSelected: function(){
+    return checkIfAnyEdgesAreSelected();
+  },
+
+  getIfEdgeIsSelected: function(EdgeId){
+    return getAnyEdgeSelectedState(EdgeId);
+  },
+
+
+
+  getGraphPosition: function(){
+    return graphPosition;
+  },
+  getGraphZoomScale: function(){
+    return graphZoomScale;
+  },
+
+
+  getPortThatHasBeenClicked: function(){
+    return portThatHasBeenClicked;
+  },
+  getStoringFirstPortClicked: function(){
+    return storingFirstPortClicked;
+  },
+  getPortMouseOver: function(){
+    return portMouseOver;
+  },
+
+
+  getEdgePreview: function(){
+    return edgePreview;
+  },
+
+  getBlockStyling: function(){
+    return blockStyling;
+  },
+
+  //getBlockPositions: function(){
+  //  return blockPositions;
+  //}
+
+});
+
+
+
+
+
+
+//var blockStore = require('./blockStore');
+
+flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
+  var action = payload.action;
+  var item = action.item;
+
+  console.log(payload);
+  console.log(item);
+
+  switch(action.actionType){
+
+    /* Need to listen to adding/removing blocks & edges so that I can append
+    to the appropriate state objects, ie, selected, position */
+    case appConstants.ADDTO_ALLBLOCKINFO:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]); /* NO need for waitFor, I'm just listening to a single action over multiple stores! */
+      //appendToBlockPositions(item);
+      appendToBlockSelectedStates(item);
+      flowChartStore.emitChange();
+      break;
+
+    /* Deleteing a block will go here at some point */
+
+    //case appConstants.APPEND_EDGESELECTEDSTATE:
+    //  edgeSelectedStates[item] = false;
+    //  flowChartStore.emitChange();
+    //  console.log(edgeSelectedStates);
+    //  break;
+
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      appendToEdgeSelectedStates(item.edgeLabel);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+      /* Delete edge from edge state function */
+      removeFromEdgeSelectedStates(item.edgeId);
+      flowChartStore.emitChange();
+      break;
+
+
+
+
+    //case appConstants.INTERACTJS_DRAG:
+    //  interactJsDrag(item);
+    //  console.log(blockPositions[item.target]);
+    //  flowChartStore.emitChange();
+    //  break;
+
+
+    case appConstants.SELECT_BLOCK:
+      blockSelectedStates[item] = true;
+      console.log(blockSelectedStates);
+      //changeUnselectedNodesOpacity();
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLBLOCKS:
+      deselectAllBlocks();
+      //console.log(nodeSelectedStates.Gate1);
+      //console.log(nodeSelectedStates.TGen1);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.SELECT_EDGE:
+      var areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
+      //console.log(areAnyEdgesSelected);
+      console.log(clickedEdge);
+      if(areAnyEdgesSelected === true && item !== clickedEdge){
+        deselectAllEdges();
+        selectEdge(item);
+      }
+      else if(areAnyEdgesSelected === false){
+        selectEdge(item);
+      }
+      console.log(edgeSelectedStates);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLEDGES:
+      deselectAllEdges();
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.CHANGE_GRAPHPOSITION:
+      graphPosition = item;
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.GRAPH_ZOOM:
+      graphZoomScale = item;
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.GETANY_EDGESELECTEDSTATE:
+      getAnyEdgeSelectedState(item);
+      console.log(edgeSelectedStates[item]);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.CLICKED_EDGE:
+      clickedEdge = item;
+      console.log(clickedEdge);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.PASS_PORTMOUSEDOWN:
+      portThatHasBeenClicked = item;
+      console.log(portThatHasBeenClicked);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.DESELECT_ALLPORTS:
+      portThatHasBeenClicked = null;
+      console.log("portThatHasBeenClicked has been reset");
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.STORING_FIRSTPORTCLICKED:
+      storingFirstPortClicked = item;
+      //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.ADD_EDGEPREVIEW:
+      edgePreview = item;
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
+      updateEdgePreviewEndpoint(item);
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
+      previousMouseCoordsOnZoom = item;
+      flowChartStore.emitChange();
+      break;
+
+    /* WebAPI related stuff */
+
+    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  for(var block in item){
+    //    appendToBlockPositions(block);
+    //    appendToBlockSelectedStates(block);
+    //  }
+    //  //appendToBlockPositions('CLOCKS');
+    //  //appendToBlockSelectedStates('CLOCKS');
+    //  flowChartStore.emitChange();
+    //  break;
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]);
+      //for(var block in item){
+      //  appendToBlockPositions(block);
+      //  appendToBlockSelectedStates(block);
+      //}
+      //appendToBlockPositions('CLOCKS');
+      //appendToBlockSelectedStates('CLOCKS');
+
+      console.log("");
+
+      for(var i = 0; i < item.tags.length; i++){
+        /* No need to check the tags for if it's FlowGraph */
+        //if(item.tags[i] === 'instance:FlowGraph'){
+        //}
+        if(item.tags[i] === 'instance:Zebra2Block'){
+          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+          //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
+          //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          //console.log(xCoord);
+
+          /* Check the block visibility attribute here
+            ie, check the 'USE' attribute */
+
+            if(item.attributes.VISIBLE.value === 'Show') {
+            //appendToBlockPositions(blockName, xCoord, yCoord);
+            appendToBlockSelectedStates(blockName);
+          }
+          else{
+            console.log("block isn't in use, don't add its info");
+
+            //appendToBlockPositions(blockName, xCoord, yCoord);
+            //appendToBlockSelectedStates(blockName);
+          }
+        }
+      }
+
+      flowChartStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("flowChartStore malcolmSubscribe success");
+      //if(item.requestedData.attribute === 'X_COORD' ||
+      //  item.requestedData.attribute === 'Y_COORD'){
+      //
+      //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+      //
+      //  if(item.requestedData.attribute === 'X_COORD'){
+      //    blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //  else if(item.requestedData.attribute === 'Y_COORD'){
+      //    blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
+      //  }
+      //
+      //  //blockPositions[requestedData.blockName] = {
+      //  //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
+      //  //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
+      //  //}
+      //
+      //  /* The only time I want
+      //  flowChart to emit a change
+      //  due to a subscribe message
+      //   */
+      //  flowChartStore.emitChange();
+      //
+      //}
+
+      for(var j = 0; j < item.responseMessage.tags.length; j++) {
+        if(item.responseMessage.tags[j] === 'widget:toggle'){
+          if(item.responseMessage.value === 'Show') {
+
+            /* Trying to add a block when its visibility is
+             changed to 'Show'
+             Hmm, how do I also get the coords from Z?
+             */
+            //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
+            appendToBlockSelectedStates(blockName);
+            //console.log(blockPositions);
+            flowChartStore.emitChange();
+          }
+          else if(item.responseMessage.value === 'Hide'){
+            /* Causes a circular dependency! */
+            //AppDispatcher.waitFor([blockStore.dispatchToken]);
+            //setTimeout(function(){
+            //  removeBlock(item.requestedData.attribute);
+            //
+            //}, 1000);
+            //removeBlock(item.requestedData.attribute);
+            flowChartStore.emitChange();
+          }
+
+        }
+      }
+
+
+      break;
+
 
 
     default:
-          return 'deviceStore: default'
+      return true
   }
+
 });
 
-/* Testing waitFor() to update the Channel value in RedBlock BEFORE PaneStore fetches the block object and runs its fucntion to check which attrubute values have changed */
+module.exports = flowChartStore;
 
-deviceStore.dispatchToken = AppDispatcher.register(function(payload){
-  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
-    console.log(payload);
-    console.log(payload.action.item);
-    simpleChangeChannelName(payload.action.item);
-    deviceStore.emitChange();
-  }
-});
-
-module.exports = deviceStore;
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":24,"object-assign":29}],11:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":44,"../constants/appConstants.js":8,"../dispatcher/appDispatcher.js":9,"events":38}],15:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -610,22 +3103,11 @@ var CHANGE_EVENT = 'change';
 
 var _stuff = {
     footerState: false,
-    configPanelOpen: false,
-    favPanelOpen: false
 };
 
 var toggleFooter = function(){
     _stuff.footerState = !_stuff.footerState
   };
-
-var toggleConfigPanel = function(){
-  _stuff.configPanelOpen = !_stuff.configPanelOpen
-};
-
-var toggleFavPanel = function(){
-  _stuff.favPanelOpen = !_stuff.favPanelOpen
-};
-
 
 var mainPaneStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb) {
@@ -640,12 +3122,6 @@ var mainPaneStore = assign({}, EventEmitter.prototype, {
   getFooterState: function(){
     return _stuff.footerState;
   },
-  getConfigPanelState: function(){
-    return _stuff.configPanelOpen;
-  },
-  getFavPanelState: function(){
-    return _stuff.favPanelOpen;
-  }
 });
 
 AppDispatcher.register(function(payload){
@@ -654,26 +3130,10 @@ AppDispatcher.register(function(payload){
     case appConstants.FOOTER_TOGGLE:
       console.log(payload);
       console.log(action);
-          toggleFooter();
-          mainPaneStore.emitChange();
+      toggleFooter();
+      mainPaneStore.emitChange();
       console.log(_stuff.footerState);
-          break;
-
-    case appConstants.CONFIG_TOGGLE:
-       console.log(payload);
-       console.log(action);
-          toggleConfigPanel();
-          mainPaneStore.emitChange();
-      console.log(_stuff.configPanelOpen);
-          break;
-
-    case appConstants.FAV_TOGGLE:
-      console.log(payload);
-      console.log(action);
-          toggleFavPanel();
-          mainPaneStore.emitChange();
-      console.log(_stuff.favPanelOpen);
-          break;
+      break;
 
     default:
           return true;
@@ -682,7 +3142,7 @@ AppDispatcher.register(function(payload){
 
 module.exports = mainPaneStore;
 
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":24,"object-assign":29}],12:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":38,"object-assign":44}],16:[function(require,module,exports){
 /**
  * Created by twi18192 on 17/09/15.
  */
@@ -698,7 +3158,11 @@ var _stuff = {
   tabState: [],
   selectedTabIndex: 0,
   //passSidePane: null
-  updatedBlockContent: null
+  updatedBlockContent: null,
+  blockTabState: [],
+  sidebarOpen: false,
+  loadingInitialData: true,
+  loadingInitialDataError: false
 };
 
 var _handles = {
@@ -706,66 +3170,35 @@ var _handles = {
 };
 
 var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
-  console.log(ReactComponent);
-  console.log(_handles.passSidePane);
+
   _handles.passSidePane = ReactComponent;
-  console.log(_handles.passSidePane);
 
   //selectBlockOnClick(ReactComponent)
 };
 
-var allBlockContent = {
-  redBlockContent: {
-    name: "Red block",
-    hack: "redBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels", ChannelName: "Channel name"}}
-  },
-  blueBlockContent: {
-    name: "Blue block",
-    hack: "blueBlockTabOpen",
-    info: {
-      work: {height: "100 pixels", width: "100 pixels"}
-    }
-  },
-  greenBlockContent: {
-    name: "Green block",
-    hack: "greenBlockTabOpen",
-    info: {work: {height: "100 pixels", width: "100 pixels"}
-    }
-  }
-};
+//var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
+//  for(var key in allBlockContent){
+//    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
+//      for(var subKey in allBlockContent[key].info.work){
+//        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
+//          /* Do nothing*/
+//          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
+//        }
+//        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
+//          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
+//          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
+//        }
+//      }
+//    }
+//    else{
+//      /* Do nothing */
+//    }
+//  }
+//};
 
-var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
-  for(var key in allBlockContent){
-    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
-      for(var subKey in allBlockContent[key].info.work){
-        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
-          /* Do nothing*/
-          console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
-        }
-        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-          console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
-          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
-        }
-      }
-    }
-    else{
-      /* Do nothing */
-    }
-  }
-};
-
-var appendToAllBlockContent = function(dispatchMarker){
-  allBlockContent[dispatchMarker] = {
-    name: "Whatever",
-    hack: dispatchMarker,
-    info: {work: {something: "something", alsoSomething: "alsoSomething"}}
-  }
-};
-
-
-var favContent = [{
+var favContent = {
   name: "Favourites tab",
+  label: 'Favourites',
   hack: "favTabOpen",
   info: {
     block1: {
@@ -779,10 +3212,11 @@ var favContent = [{
       stuff2: "blah"
     }
   }
-}];
+};
 
-var configContent = [{
+var configContent = {
   name: "Configuration tab",
+  label: 'Configuration',
   hack: "configTabOpen",
   info: {
     Configurations: {
@@ -793,299 +3227,21 @@ var configContent = [{
       firmwareVersion: "numbers & letters"
     }
   }
-}];
-
-var allBlockTabProperties = {
-  redBlockTabOpen: false,
-  blueBlockTabOpen: false,
-  greenBlockTabOpen: false,
-  favTabOpen: false,
-  configTabOpen: false
 };
-
-var appendToAllBlockTabProperties = function(dispatchMarker){
-  console.log('appending to allBlockTabProperties');
-  console.log(allBlockTabProperties);
-  allBlockTabProperties[dispatchMarker] = false;
-  console.log(allBlockTabProperties)
-};
-
-
-
-var changeFavTabState = function(){
-  console.log(allBlockTabProperties.favTabOpen);
-  if(allBlockTabProperties.favTabOpen === false) {
-    allBlockTabProperties.favTabOpen = true;
-    console.log(allBlockTabProperties.favTabOpen);
-    checkWhichBlockTabsOpen();
-    /* function that checks if fav tab or config are already open*/
-  }
-  else {
-
-  }
-};
-
-var changeConfigTabState = function(){
-  console.log(allBlockTabProperties.configTabOpen);
-  if(allBlockTabProperties.configTabOpen === false) {
-    allBlockTabProperties.configTabOpen = true;
-    console.log(allBlockTabProperties.configTabOpen);
-    checkWhichBlockTabsOpen()
-  }
-};
-
-//var checkFavAndConfigTabsOpen = function() {
-//  for (var key in favAndConfigTabProperties) {
-//    console.log(key);
-//    console.log(favAndConfigTabProperties[key]);
-//    if (favAndConfigTabProperties[key] === true) {
-//      console.log("just before starting the tabState checker loop");
-//      if (_stuff.tabState.length === 0) {
-//        console.log("tabState was empty, tab is now open");
-//        var blockTabsOpen = [];
-//        switch (key) {
-//          case 'favTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//            break;
-//          case 'configTabOpen':
-//            var updatedBlockTabsOpen = blockTabsOpen.concat();
-//            break;
-//          default:
-//            return 'default'
-//        }
-//        console.log(updatedBlockTabsOpen);
-//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//      }
-//      else {
-//        for (var i = 0; i < _stuff.tabState.length; i++) {
-//          console.log('in the non-empty tabState checker loop');
-//          console.log(_stuff.tabState.length);
-//          console.log(i);
-//          if (_stuff.tabState[i].hack === key) {
-//            console.log("tab is already open from before, don't add, break statement occurring");
-//            break
-//          }
-//          else if (_stuff.tabState[i].hack !== key) {
-//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-//            console.log(_stuff.tabState.length);
-//            console.log(i);
-//            if (i === _stuff.tabState.length - 1) {
-//              console.log('tabState didnt have this tab, tab is now open');
-//              var blockTabsOpen = [];
-//              switch (key) {
-//                case 'favTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-//                  break;
-//                case 'configTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat();
-//                  break;
-//                default:
-//                  return 'default'
-//              }
-//              console.log(updatedBlockTabsOpen);
-//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//            }
-//          }
-//        }
-//        console.log('finished the tabState checker loop')
-//      }
-//    }
-//    else {
-//      console.log('tab is not open');
-//      /* ie, the tab hasn't been clicked and it's state is false, so don't show the tab*/
-//    }
-//  }
-//};
-
-var checkWhichBlockTabsOpen = function(){
-  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
-  for (var key in allBlockTabProperties){
-    console.log(key);
-    console.log(allBlockTabProperties[key]);
-    if(allBlockTabProperties[key] === true) {
-      console.log('just before starting the tabState checker loop');
-      if(_stuff.tabState.length === 0){
-        console.log('tabState was empty, tab is now open');
-        var blockTabsOpen = [];
-        lookupWhichTabToOpen(key);/*Note that this by itself doesn't do anything in terms of the loop, instead it returns what was updatedTabBlocks in the old switch statement, so it needs to be wherever updateTabBlocks went before */
-
-        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-        console.log(lookupWhichTabToOpen(key));
-        console.log(blockTabsOpen);
-        _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
-      }
-      else{
-        for (var i = 0; i < _stuff.tabState.length; i++) {
-          console.log('in the non-empty tabState checker loop');
-          console.log(_stuff.tabState.length);
-          console.log(i);
-          if (_stuff.tabState[i].hack === key) {
-            console.log("tab is already open from before, don't add, break statement occurring");
-            break
-          }
-          else if(_stuff.tabState[i].hack !== key){
-            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-            console.log(_stuff.tabState.length);
-            console.log(i);
-            if(i === _stuff.tabState.length - 1){
-              console.log('tabState didnt have this tab, tab is now open');
-              var blockTabsOpen = [];
-              lookupWhichTabToOpen(key);
-
-              //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-              console.log(lookupWhichTabToOpen(key));
-              console.log(blockTabsOpen);
-              _stuff.tabState = _stuff.tabState.concat(lookupWhichTabToOpen(key));
-            }
-          }
-        }
-        console.log('finished the tabState checker loop')
-      }
-    }
-    else{
-      console.log('tab is not open')
-    }
-  }
-
-  console.log(blockTabsOpen);
-  console.log(lookupWhichTabToOpen(key));
-  console.log(_stuff.tabState);
-
-  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
-  // Actually, no need since at the start of the function it is reset*/
-
-  //return updatedBlockTabsOpen;
-
-  selectBlockOnClick()
-
-};
-
-var possibleTabsToOpen = {
-  'redBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent); /*not sure if blockTabsOpen will get passed through... :/*/
-    return updatedBlockTabsOpen
-  },
-  'blueBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-    return updatedBlockTabsOpen
-  },
-  'greenBlockTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-    return updatedBlockTabsOpen
-  },
-  'favTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(favContent);
-    return updatedBlockTabsOpen
-  },
-  'configTabOpen': function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(configContent);
-    return updatedBlockTabsOpen
-  }
-};
-
-var appendToPossibleTabsToOpen = function(dispatchMarker){
-  possibleTabsToOpen[dispatchMarker] = function(){
-    var blockTabsOpen = [];
-    var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent[dispatchMarker]);
-    return updatedBlockTabsOpen
-  }
-};
-
-
-function lookupWhichTabToOpen(key){ /*hopefully it'll get passed the key from the loop fine when it gets called :P*/
-/* perhaps pass blockTabsOpen to possibleTabsOpen somehow?*/
-  if(typeof possibleTabsToOpen[key] !== 'function'){
-    throw new Error('Invalid key');
-  }
-  console.log('deciding which tab to open lookup is working!');
-  return possibleTabsToOpen[key](key)
-}
-
-
-
-var addTab = function(newtab){
-  /* set state of tabs somewhere here*/
-  var newTabs = _stuff.tabState.concat(newtab);
-  _stuff.tabState = newTabs;
-  /* could you just skip the variable newTabs and set _stuff.tabState equal
-   itself concatenated?
-   */
-};
-
-var removeTab = function(item){
-
-  var tabName = _stuff.tabState[item].hack;
-  console.log(tabName);
-  lookupRemoveTab(tabName); /* Again, switch statement replaced by the lookup function to allow adding more items after initial render*/
-  /* code for removing tabs*/
-  console.log(tabName);
-  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-  newTabs.splice(item, 1);
-  _stuff.tabState = newTabs;
-};
-
-var possibleTabsToRemove = {
-  'redBlockTabOpen': function(){
-    allBlockTabProperties.redBlockTabOpen = false;
-    console.log(allBlockTabProperties.redBlockTabOpen);
-  },
-  'blueBlockTabOpen': function(){
-    allBlockTabProperties.blueBlockTabOpen = false;
-    console.log(allBlockTabProperties.blueBlockTabOpen);
-  },
-  'greenBlockTabOpen': function(){
-    allBlockTabProperties.greenBlockTabOpen = false;
-    console.log(allBlockTabProperties.greenBlockTabOpen);
-  },
-  'favTabOpen': function(){
-    allBlockTabProperties.favTabOpen = false;
-    console.log(allBlockTabProperties.favTabOpen);
-  },
-  'configTabOpen': function(){
-    allBlockTabProperties.configTabOpen = false;
-    console.log(allBlockTabProperties.configTabOpen);
-  }
-};
-
-var appendToPossibleTabsToRemove = function(dispatchMarker){
-  possibleTabsToRemove[dispatchMarker] = function(){
-    allBlockTabProperties[dispatchMarker] = false;
-    console.log(allBlockTabProperties[dispatchMarker]);
-  }
-};
-
-function lookupRemoveTab(item){
-  if(typeof possibleTabsToRemove[item] !== 'function'){
-    throw new Error('Invalid tab to remove')
-  }
-  console.log('remove tab lookup is working!');
-  return possibleTabsToRemove[item](item)
-}
-
-
 
 var dropdownMenuSelect = function(tab){
-  //var findTheIndex = _stuff.tabState.indexOf(item);
-  ////this.props.changeTab(findTheIndex)
-  //_stuff.selectedTabIndex = findTheIndex;
+  /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
-  var test = tab;
+  console.log("dropdown menu select");
   console.log(tab);
-  console.log(_handles.passSidePane);
-  //var keepingSidePane = ReactComponent;
-  //keepSidePane(ReactComponent);
-  //console.log(keepingSidePane);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
-    if(_stuff.tabState[i].name === tab){
+    console.log(_stuff.tabState[i]);
+    if(_stuff.tabState[i] === tab){              /* Changed from .name to .label */
       var findTheIndex = i
     }
   }
+  console.log(findTheIndex);
   //
   //var findTheIndex = this.props.list.indexOf(item);
   _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
@@ -1093,80 +3249,9 @@ var dropdownMenuSelect = function(tab){
 };
 
 var selectBlockOnClick = function(){
-  console.log(_handles.passSidePane);
   var tabStateLength = _stuff.tabState.length;
   _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
 };
-
-
-
-var possibleBlockCases = {
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.1': function(){
-    if(allBlockTabProperties.redBlockTabOpen === false) {
-      allBlockTabProperties.redBlockTabOpen = true;
-      checkWhichBlockTabsOpen();
-      console.log(_handles.passSidePane)
-    }
-    else{
-
-    }
-  },
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.2': function(){
-    if(allBlockTabProperties.blueBlockTabOpen === false){
-      allBlockTabProperties.blueBlockTabOpen = true;
-      checkWhichBlockTabsOpen()
-    }
-    else{
-
-    }
-  },
-  '.0.0.0.1.$tabb-0.$=1$0/=010.0.0.3': function(){
-    if(allBlockTabProperties.greenBlockTabOpen === false){
-      allBlockTabProperties.greenBlockTabOpen = true;
-      checkWhichBlockTabsOpen()
-    }
-    else{
-
-    }
-  }
-};
-
-var appendToPossibleBlockCases = function(dispatchMarker){ /*Hopefully this works... :P*/
-  //dispatchMarker = function () { I think this part was uneeded, I was just making it harder for myself!
-  possibleBlockCases[dispatchMarker] = function () {
-    if (allBlockTabProperties[dispatchMarker] === false) {
-      allBlockTabProperties[dispatchMarker] = true;
-      checkWhichBlockTabsOpen()
-    }
-    else {
-
-    }
-  }
-  console.log('appended to possibleBlockCases')
-  console.log(possibleBlockCases[dispatchMarker]);
-};
-
-function checkWhichBlockClicked(dispatchMarker){
-  if(typeof possibleBlockCases[dispatchMarker] !== 'function'){ /* need a better condition for an error :P*/
-    throw new Error('Invalid dispatch marker')
-  }
-  console.log('dispatch marker method lookup is working!!');
-  return possibleBlockCases[dispatchMarker](dispatchMarker);
-}
-
-var changeSomeInfo = function(){
-  allBlockContent.redBlockContent.info.work.height = "500 pixels";
-  allBlockContent.redBlockContent.info.work.width = "250 pixels";
-  allBlockContent.redBlockContent.info.work['depth'] = "10 pixels"
-};
-
-var updatePaneStoreAllBlockContent = function(newBlockContent){
-  console.log(newBlockContent);
-  allBlockContent = newBlockContent;
-};
-
-
-
 
 var paneStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
@@ -1181,57 +3266,57 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getTabState: function(){
     return _stuff.tabState;
   },
-  getRedBlockTabClicked: function(){
-    return allBlockTabProperties.redBlockTabOpen;
-  },
-  getBlueBlockTabClicked: function(){
-    return allBlockTabProperties.blueBlockTabOpen;
-  },
-  getGreenBlockTabClicked: function(){
-    return allBlockTabProperties.greenBlockTabOpen;
-  },
   getFavTabOpen:function(){
-    return allBlockTabProperties.favTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.favTabOpen;
+    return allBlockTabProperties.Favourites;
   },
   getConfigTabOpen: function(){
-    return allBlockTabProperties.configTabOpen;
+    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
+    //return allBlockTabProperties.configTabOpen;
+    return allBlockTabProperties.Configuration;
+  },
+  getFavContent: function(){
+    return favContent;
+  },
+  getConfigContent: function(){
+    return configContent;
   },
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
+  },
+
+  getSidebarOpenState: function(){
+    return _stuff.sidebarOpen;
+  },
+
+  getAllBlockTabOpenStates: function(){
+    return allBlockTabProperties;
+  },
+  getAllBlockTabInfo: function(){
+    return allBlockTabInfo;
+  },
+  getIfLoadingInitialData: function(){
+    return _stuff.loadingInitialData;
+  },
+  getIfLoadingInitialDataError: function(){
+    return _stuff.loadingInitialDataError;
   }
 });
 
 
 
-AppDispatcher.register(function(payload){
+paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
   switch(action.actionType){
 
     case appConstants.PASS_SIDEPANE:
-      console.log(payload);
-      console.log(action);
-      console.log(item);
+      //console.log(payload);
+      //console.log(action);
+      //console.log(item);
       passSidePane(item);
           break;
-
-    case appConstants.ADD_TAB:
-      console.log(payload);
-      console.log(action);
-      addTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      break;
-
-    case appConstants.REMOVE_TAB:
-      console.log(payload);
-      console.log(action);
-      console.log(item);
-      removeTab(item);
-      paneStore.emitChange();
-      console.log(_stuff.tabState);
-      console.log(allBlockTabProperties.redBlockTabOpen);
-      break;
 
     case appConstants.DROPDOWN_SELECT:
       //var tab = item.item;
@@ -1246,82 +3331,196 @@ AppDispatcher.register(function(payload){
     case appConstants.FAVTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeFavTabState();
-      console.log(allBlockTabProperties.favTabOpen);
+      /* Want to replace with a better version, now that I'm doing node tabs */
+      //changeFavTabState();
+      setFavTabStateTrue();
+      console.log(allBlockTabProperties.Favourites);
       paneStore.emitChange();
       break;
 
     case appConstants.CONFIGTAB_OPEN:
       console.log(payload);
       console.log(item);
-      changeConfigTabState();
-      console.log(allBlockTabProperties.configTabOpen);
+      /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
+      //changeConfigTabState();
+      setConfigTabStateTrue();
+      console.log(allBlockTabProperties.Configuration);
       paneStore.emitChange();
       break;
 
-    case appConstants.PASS_DISPATCHMARKER:
-      console.log(payload);
-      console.log(item);
-      checkWhichBlockClicked(item);
+    case appConstants.BLOCKLOOKUPTABLETAB_OPEN:
+      setBlockLookupTableTabStateTrue();
       paneStore.emitChange();
       break;
 
-    case appConstants.APPENDSTUFF_FORNEWBLOCK:
+    case appConstants.OPEN_BLOCKTAB:
       console.log(payload);
       console.log(item);
-      /*functions that append to the various objects I need to append*/
+
+      setBlockTabStateTrue(item);
+      //_stuff.tabState.push(allNodeTabInfo[item]);
+      /* Seeing if I can cut out checkWhichNodeTabsOpen and cut straight to adding to _stuff.tabState */
+      //checkWhichNodeTabsOpen();
+      //selectBlockOnClick();
+      console.log(_stuff.tabState);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.REMOVE_BLOCKTAB:
+      console.log(payload);
+      console.log(item);
+      removeBlockTab(item);
+      console.log(_stuff.tabState);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.TOGGLE_SIDEBAR:
+      console.log(payload);
+      console.log(item);
+      toggleSidebar();
+      paneStore.emitChange();
+      break;
+
+    case appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED:
+      console.log(payload);
+      console.log(item);
+      windowWidthMediaQueryChanged(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.OPEN_EDGETAB:
+      console.log(payload);
+      console.log(item);
+      if(allEdgeTabProperties[item.edgeId] === false){
+        allEdgeTabProperties[item.edgeId] = true;
+
+        createObjectForEdgeTabContent({
+          fromBlock: item.fromBlock,
+          fromBlockPort: item.fromBlockPort,
+          toBlock: item.toBlock,
+          toBlockPort: item.toBlockPort
+        });
+        selectBlockOnClick();
+      }
+      else{
+        //console.log("edge tab is already open, jump to it");
+        /* Tab is already open, so jump to it! */
+        /* Need to remove the spaces in the edge id first */
+
+
+        var spacelessEdgeId = item.edgeId.replace(/\s/g, '');
+
+        dropdownMenuSelect(spacelessEdgeId);
+      }
+      paneStore.emitChange();
+      break;
+
+    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
+      appendToAllEdgeTabProperties(item.edgeLabel);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.DELETE_EDGE:
+        if(allEdgeTabProperties[item.edgeId] === true){
+          console.log("need to remove edge tab too");
+          /* Do the tab removal stuff */
+          //console.log("that edge tab was open, so now we need to remove that tab");
+          for(var i = 0; i < _stuff.tabState.length; i++){
+            if(_stuff.tabState[i].tabType === 'edge'){
+              allEdgeTabProperties[item.edgeId] = false;
+              var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+              newTabs.splice(i, 1);
+              _stuff.tabState = newTabs;
+            }
+          }
+        }
+      paneStore.emitChange();
+      break;
+
+    case appConstants.ADDTO_ALLBLOCKINFO:
       appendToAllBlockTabProperties(item);
       paneStore.emitChange();
-      appendToAllBlockContent(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToOpen(item);
-      paneStore.emitChange();
-      appendToPossibleTabsToRemove(item);
-      paneStore.emitChange();
-      appendToPossibleBlockCases(item);
-      paneStore.emitChange();
-      checkWhichBlockClicked(item);
+      break;
+
+    //case appConstants.DELETE_EDGE:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //  console.log("delete edge");
+    //  getInitialBlockDataFromBlockStore();
+    //  resetTabStateReferences();
+    //  console.log(allEdgeTabProperties[item.edgeId]);
+    //  /* Also need to remove the edges tab if it is open */
+    //  if(allEdgeTabProperties[item.edgeId] === true){
+    //    console.log("need to remove edge tab too");
+    //    /* Do the tab removal stuff */
+    //    //console.log("that edge tab was open, so now we need to remove that tab");
+    //    for(var i = 0; i < _stuff.tabState.length; i++){
+    //      if(_stuff.tabState[i].tabType === 'edge'){
+    //        allEdgeTabProperties[item.edgeId] = false;
+    //        var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+    //        newTabs.splice(i, 1);
+    //        _stuff.tabState = newTabs;
+    //      }
+    //    }
+    //  }
       paneStore.emitChange();
       break;
 
-    case appConstants.CHANGE_INFO:
-      console.log(payload);
-      console.log(item);
-      changeSomeInfo();
+    /* WebAPI use */
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+      //AppDispatcher.waitFor([blockStore.dispatchToken]);
+      //for(var block in item){
+      //  appendToBlockPositions(block);
+      //  appendToBlockSelectedStates(block);
+      //}
+      //appendToBlockPositions('CLOCKS');
+      //appendToBlockSelectedStates('CLOCKS');
+
+      /* No need to check the tags for if it's FlowGraph */
+      for(var j = 0; j < item.tags.length; j++){
+        console.log("one time round in the loop");
+        //if(item.tags[j] === 'instance:FlowGraph'){
+        //}
+        if(item.tags[j] === 'instance:Zebra2Block'){
+
+          if(item.attributes.VISIBLE.value === 'Show') {
+
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            appendToAllBlockTabProperties(blockName);
+          }
+          else{
+            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            appendToAllBlockTabProperties(blockName);
+            console.log("block isn't in use, don't add its info");
+
+          }
+
+        }
+      }
+
       paneStore.emitChange();
       break;
 
-    case appConstants.UPDATEBLOCKCONTENT_VIASERVER:
-      console.log(payload);
-      console.log(item);
-      _stuff["updatedBlockContent"] = item;
-      console.log(_stuff.updatedBlockContent);
-      compareCurrentPaneStoreBlockContentAndDeviceStore();
-      paneStore.emitChange();
-      break;
-
-    //case appConstants.REDBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //  changeRedBlockTabState();
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //  //checkWhichBlockTabsOpen();
+    /* Not using loading screens for now */
+    //case appConstants.TEST_INITIALDATAFETCH_PENDING:
+    //  /* Show the loading icon in the mainPane while the initial data is being fetched */
+    //  _stuff.loadingInitialData = true;
     //  paneStore.emitChange();
     //  break;
     //
-    //case appConstants.BLUEBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //  changeBlueBlockTabState();
-    //  console.log(allBlockTabProperties.blueBlockTabOpen);
+    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
+    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
+    //
+    //  for(var block in item){
+    //    appendToAllBlockTabProperties(block);
+    //  }
+    //
+    //  _stuff.loadingInitialData = false;
     //  paneStore.emitChange();
     //  break;
     //
-    //case appConstants.GREENBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //  changeGreenBlockTabState();
-    //  console.log(allBlockTabProperties.greenBlockTabOpen);
+    //case appConstants.TEST_INITIALDATAFETCH_FAILURE:
+    //  _stuff.loadingInitialDataError = true;
     //  paneStore.emitChange();
     //  break;
 
@@ -1332,65 +3531,219 @@ AppDispatcher.register(function(payload){
 
 /* Importing a store into another store is the only way to use the dispatchToken of another store in order to use waitFor, so it must be ok! */
 
-var deviceStore = require('./deviceStore');
+/* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
-var getBlockContentFromDeviceStore = function(){
-  _stuff["updatedBlockContent"] = deviceStore.getRedBlockContent()
+var blockStore = require('./blockStore');
+
+var allBlockTabInfo;
+
+/* This will need an append function at some point */
+/* Yeahhh, this is why a new tab won't open when a new block is added, need to append to this somehow */
+var allBlockTabProperties = {
+  'Favourites': false,
+  'Configuration': false,
+  'BlockLookupTable': false,
+  //'Gate1': false,
+  //'TGen1': false,
+  //'PComp1': false
 };
 
-paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  if(payload.action.actionType === 'PASSNAMEOFCHANNELTHATSBEEN_SUBSCRIBED'){
+var allEdgeTabProperties = {
+  'Gate1outTGen1ena': false,
+};
 
-    AppDispatcher.waitFor([deviceStore.dispatchToken]);
+function appendToAllEdgeTabProperties(EdgeId){
+  allEdgeTabProperties[EdgeId] = false;
+}
 
-    console.log(payload);
-    console.log(payload.action.item);
-    getBlockContentFromDeviceStore();
-    compareCurrentPaneStoreBlockContentAndDeviceStore();
-    paneStore.emitChange();
+function appendToAllBlockTabProperties(BlockId){
+  allBlockTabProperties[BlockId] = false;
+}
+
+var setBlockTabStateTrue = function(BlockId){
+  if(allBlockTabProperties[BlockId] === false) {
+    allBlockTabProperties[BlockId] = true;
+    console.log(allBlockTabProperties);
+    /* Now need to run the function to check which tabs should be open */
+    /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
+
+    _stuff.tabState.push(BlockId);
+
+    /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
+
+    selectBlockOnClick();
+ }
+  else{
+    //console.log("tab state was already true, so don't bother changing it to true");
+    /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
+    /* Could try using dropdownMenuSelect? */
+
+    dropdownMenuSelect(BlockId);
   }
-});
+};
+
+//function setEdgeTabStateTrue(EdgeId){
+//  console.log(allEdgeTabProperties);
+//  if(allEdgeTabProperties[EdgeId] === false){
+//    allEdgeTabProperties[EdgeId] = true;
+//  }
+//  else{
+//    console.log("edge tab is already open, jump to it");
+//    /* Tab is already open, so jump to it! */
+//    /* Need to remove the spaces in the edge id first */
+//
+//    /* Changed edge id's to be spaceless to prevent this hassle, got too annoying when dealing with removing tabs */
+//    //var spacelessEdgeId = EdgeId.replace(/\s/g, '');
+//    //console.log(spacelessEdgeId);
+//
+//    dropdownMenuSelect(EdgeId);
+//  }
+//}
+
+function setFavTabStateTrue(){
+ if(allBlockTabProperties['Favourites'] === false){
+   allBlockTabProperties['Favourites'] = true;
+
+   _stuff.tabState.push('Favourites');
+
+   selectBlockOnClick()
+ }
+  else if(allBlockTabProperties['Favourites'] === true){
+   //console.log("fav tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+   dropdownMenuSelect("Favourites")
+ }
+}
+
+function setConfigTabStateTrue(){
+  if(allBlockTabProperties['Configuration'] === false){
+    allBlockTabProperties['Configuration'] = true;
+
+    _stuff.tabState.push('Configuration');
+
+    selectBlockOnClick();
+  }
+  else if(allBlockTabProperties['Configuration'] === true){
+    //console.log("config tab was already open, so don't bother setting the state, jump to that tab instead!");
+
+    dropdownMenuSelect("Configuration");
+    /* dropdownMenuSelect uses the label attribute rather than the object key name */
+  }
+}
+
+function setBlockLookupTableTabStateTrue(){
+  if(allBlockTabProperties['BlockLookupTable'] === false){
+    allBlockTabProperties['BlockLookupTable'] = true;
+
+    _stuff.tabState.push('BlockLookupTable');
+
+    selectBlockOnClick();
+  }
+  else if(allBlockTabProperties['BlockLookupTable'] === true){
+    dropdownMenuSelect("BlockLookupTable");
+  }
+}
+
+function createObjectForEdgeTabContent(EdgeInfo){
+  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
+  var edgeTabObject = {
+    'tabType': 'edge',
+    'label': edgeLabel,
+    'edgeId': edgeLabel
+  };
+  //for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
+  //  if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
+  //    edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
+  //  }
+  //}
+  //
+  //for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
+  //  if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
+  //    edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
+  //  }
+  //}
+
+  assign(edgeTabObject, EdgeInfo);
+
+  _stuff.tabState.push(edgeTabObject);
+}
+
+var removeBlockTab = function(selectedTabIndex){
+
+  if(_stuff.tabState[selectedTabIndex].label === undefined){
+    /* Tis a block tab, or a fav/config tab */
+    var tabName = _stuff.tabState[selectedTabIndex];
+    console.log(tabName);
+  }
+  else{
+    var tabName = _stuff.tabState[selectedTabIndex].label;
+
+  }
+  /* Checking if it's a edge tab or a block tab */
+
+  if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
+    //console.log("removing an edge tab");
+
+    //var spacelessEdgeTabName = tabName.replace(/\s/g, '');
+
+    /* Hmmm, I'm using the edge id WITH spaces in allEdgeTabProperties, but I'm using the spaceless
+    edge id in tabState, is that a good idea?...
+     */
+    allEdgeTabProperties[tabName] = false;
+  }
+  else{
+    //console.log("removing a block tab");
+    allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+  }
+
+  //allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
+  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
+  newTabs.splice(selectedTabIndex, 1);
+  _stuff.tabState = newTabs;
+};
+
+function toggleSidebar(){
+  if(_stuff.sidebarOpen === true){
+    _stuff.sidebarOpen = false;
+  }
+  else if(_stuff.sidebarOpen === false){
+    _stuff.sidebarOpen = true;
+  }
+}
+
+function windowWidthMediaQueryChanged(sidebarOpen){
+  //if(_stuff.sidebarOpen === true){
+  //  _stuff.sidebarOpen = false;
+  //}
+  //else if(_stuff.sidebarOpen === false){
+  //  console.log("sidebar was already closed, so don't bother setting it false even though the window width has changed");
+  //}
+  //console.log(_stuff.sidebarOpen)
+
+  _stuff.sidebarOpen = sidebarOpen;
+}
+
+function copyTabState(){
+  _stuff['newTabState'] = _stuff.tabState.slice();
+}
+
+function resetTabStateReferences(){
+  for(var i = 0; i < _stuff.tabState.length; i++){
+    if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
+      //console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
+    }
+    else if(_stuff.tabState[i].tabType === 'edge'){
+      //console.log("also do nothing, since this info is created from allBlockTabInfo");
+    }
+    else {
+      _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
+    }
+  }
+}
 
 module.exports = paneStore;
 
-
-//var favAndConfigTabProperties = {
-//  favTabOpen: false,
-//  configTabOpen: false
-//};
-
-//var changeRedBlockTabState = function(){
-//  if(allBlockTabProperties.redBlockTabOpen === false) {
-//    allBlockTabProperties.redBlockTabOpen = true;
-//    checkWhichBlockTabsOpen();
-//    console.log(_handles.passSidePane)
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeBlueBlockTabState = function(){
-//  if(allBlockTabProperties.blueBlockTabOpen === false){
-//    allBlockTabProperties.blueBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeGreenBlockTabState = function(){
-//  if(allBlockTabProperties.greenBlockTabOpen === false){
-//    allBlockTabProperties.greenBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"./deviceStore":10,"events":24,"object-assign":29}],13:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"./blockStore":12,"events":38,"object-assign":44}],17:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -1403,262 +3756,24 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
-  //tabState: [],
   dropdownListVisible: false,
-  //selectedTabIndex: 0
 };
 
 var dropdownMenuShow = function(){
-  _stuff.dropdownListVisible = true;
-  document.addEventListener("click", dropdownMenuHide)
+
+  /* Want to have it so that you can toggle the dropdown menu if you click on the button more than once */
+
+  if(_stuff.dropdownListVisible === false){
+    _stuff.dropdownListVisible = true;
+  }
+  else if(_stuff.dropdownListVisible === true){
+    _stuff.dropdownListVisible = false;
+  }
 };
 
 var dropdownMenuHide = function(){
   _stuff.dropdownListVisible = false;
-  //console.log("dropdown hide is doing something");
-  //console.log(_stuff.dropdownListVisible);
-  sidePaneStore.emitChange();
-  document.removeEventListener("click", dropdownMenuHide)
 };
-
-//var allBlockContent = {
-//  redBlockContent: {
-//    name: "Red block",
-//    hack: "redBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  },
-//  blueBlockContent: {
-//    name: "Blue block",
-//    hack: "blueBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  },
-//  greenBlockContent: {
-//    name: "Green block",
-//    hack: "greenBlockTabOpen",
-//    info: {height: "100 pixels", width: "100 pixels"}
-//  }
-//};
-//
-//var allBlockTabProperties = {
-//  redBlockTabOpen: false,
-//  blueBlockTabOpen: false,
-//  greenBlockTabOpen: false
-//};
-
-//var checkWhichBlockTabsOpen = function(){
-//  var blockTabsOpen = []; /* fill this array with all the block tabs open, and then proceed to concatenate the original tab list with this one*/
-//  for (var key in allBlockTabProperties){
-//    console.log(key)
-//    console.log(allBlockTabProperties[key]);
-//    if(allBlockTabProperties[key] === true) {
-//      console.log('just before starting the tabState checker loop');
-//      if(_stuff.tabState.length === 0){
-//        console.log('tabState was empty, tab is now open');
-//        var blockTabsOpen = [];
-//        switch(key){
-//          case 'redBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-//                break;
-//          case 'blueBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-//                break;
-//          case 'greenBlockTabOpen':
-//                var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-//                break;
-//          default:
-//                return 'default'
-//        }
-//        //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-//        console.log(updatedBlockTabsOpen);
-//        console.log(blockTabsOpen);
-//        _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//      }
-//      else{
-//        for (var i = 0; i < _stuff.tabState.length; i++) {
-//          console.log('in the non-empty tabState checker loop');
-//          console.log(_stuff.tabState.length);
-//          console.log(i);
-//          if (_stuff.tabState[i].hack === key) {
-//            console.log("tab is already open from before, don't add, break statement occurring");
-//            break
-//          }
-//          else if(_stuff.tabState[i].hack !== key){
-//            console.log('key isnt equal to the ith position, move onto the next value in tabState');
-//            console.log(_stuff.tabState.length);
-//            console.log(i);
-//            if(i === _stuff.tabState.length - 1){
-//              console.log('tabState didnt have this tab, tab is now open');
-//              var blockTabsOpen = [];
-//              switch(key){
-//                case 'redBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.redBlockContent);
-//                  break;
-//                case 'blueBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.blueBlockContent);
-//                  break;
-//                case 'greenBlockTabOpen':
-//                  var updatedBlockTabsOpen = blockTabsOpen.concat(allBlockContent.greenBlockContent);
-//                  break;
-//                default:
-//                  return 'default'
-//              }
-//              //var updatedBlockTabsOpen = blockTabsOpen.concat(key);
-//              console.log(updatedBlockTabsOpen);
-//              console.log(blockTabsOpen);
-//              _stuff.tabState = _stuff.tabState.concat(updatedBlockTabsOpen);
-//            }
-//          }
-//        }
-//        console.log('finished the tabState checker loop')
-//      }
-//    }
-//    else{
-//    console.log('tab is not open')
-//    }
-//  }
-//
-//  console.log(blockTabsOpen);
-//  console.log(updatedBlockTabsOpen);
-//  console.log(_stuff.tabState);
-//
-//  //blockTabsOpen = []; /* resetting blockTabsOpen for the next time a tab is opened
-//  // Actually, no need since at the start of the function it is reset*/
-//
-//  //return updatedBlockTabsOpen;
-//
-//};
-
-//var changeRedBlockTabState = function(){
-//  if(allBlockTabProperties.redBlockTabOpen === false) {
-//    allBlockTabProperties.redBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeBlueBlockTabState = function(){
-//  if(allBlockTabProperties.blueBlockTabOpen === false){
-//    allBlockTabProperties.blueBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-//
-//var changeGreenBlockTabState = function(){
-//  if(allBlockTabProperties.greenBlockTabOpen === false){
-//    allBlockTabProperties.greenBlockTabOpen = true;
-//    checkWhichBlockTabsOpen()
-//  }
-//  else{
-//
-//  }
-//};
-
-
-
-
-
-
-
-//var addTab = function(newtab){
-//  /* set state of tabs somewhere here*/
-//  var newTabs = _stuff.tabState.concat(newtab);
-//  _stuff.tabState = newTabs;
-//  /* could you just skip the variable newTabs and set _stuff.tabState equal
-//  itself concatenated?
-//   */
-//};
-//
-//var removeTab = function(item){
-//
-//  var tabName = _stuff.tabState[item].hack;
-//  switch(tabName){
-//
-//    case 'redBlockTabOpen':
-//      allBlockTabProperties.redBlockTabOpen = false;
-//      console.log(allBlockTabProperties.redBlockTabOpen);
-//          break;
-//
-//    case 'blueBlockTabOpen':
-//      allBlockTabProperties.blueBlockTabOpen = false;
-//      console.log(allBlockTabProperties.blueBlockTabOpen);
-//          break;
-//
-//    case 'greenBlockTabOpen':
-//      allBlockTabProperties.greenBlockTabOpen = false;
-//      console.log(allBlockTabProperties.greenBlockTabOpen);
-//          break;
-//
-//    default:
-//      console.log('default');
-//      return 'default'
-//  }
-//  /* code for removing tabs*/
-//  console.log(tabName);
-//  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-//  newTabs.splice(item, 1);
-//  _stuff.tabState = newTabs;
-//};
-
-
-
-
-
-
-
-
-
-//var dropdownMenuSelect = function(tab, ReactComponent){
-//  //var findTheIndex = _stuff.tabState.indexOf(item);
-//  ////this.props.changeTab(findTheIndex)
-//  //_stuff.selectedTabIndex = findTheIndex;
-//
-//  var test = tab;
-//  console.log(tab);
-//  console.log(ReactComponent);
-//  //var keepingSidePane = ReactComponent;
-//  //keepSidePane(ReactComponent);
-//  //console.log(keepingSidePane);
-//
-//  for(var i = 0; i < _stuff.tabState.length; i++){
-//    if(_stuff.tabState[i].name === tab){
-//      var findTheIndex = i
-//    }
-//  }
-//  //
-//  //var findTheIndex = this.props.list.indexOf(item);
-//  ReactComponent.refs.panel.setSelectedIndex(findTheIndex);
-//  //keepSidePane(ReactComponent)
-//};
-
-//var keepSidePane = function(testSidePane){ /*Ok, this saves 'SidePane' how I want it, so I can refer to it via this.refs.panel to use the select tab function*/
-//  console.log('alternative select function is running');
-//  console.log(testSidePane);               /* Not sure if/how this'll actually work, since it relies on dropdownMenuSelect running first? */
-//  return testSidePane
-//};
-//
-//var switchTabWhenTabOpens = function(tab){
-//  var passedComponent = passedSidePane;
-//  console.log(passedComponent);
-//  console.log(tab);
-//
-//  for(var i = 0; i < _stuff.tabState.length; i++){
-//    if(_stuff.tabState[i].name === tab){
-//      var findTheIndex = i
-//    }
-//  }
-//  passedComponent.refs.panel.setSelectedIndex(findTheIndex);
-//};
-//
-//var passSidePane = function(component){
-//  var passedComponent = {component: component}
-//};
-
-
 
 
 var sidePaneStore = assign({}, EventEmitter.prototype, {
@@ -1675,25 +3790,6 @@ var sidePaneStore = assign({}, EventEmitter.prototype, {
     return _stuff.dropdownListVisible;
   }
 
-
-  //getTabState: function(){
-  //  return _stuff.tabState;
-  //},
-  //getCalculateTabs: function(){
-  //  calculateTabs()
-  //},
-  //getSelectedTabIndex: function(){
-  //  return _stuff.selectedTabIndex;
-  //},
-  //getRedBlockTabClicked: function(){
-  //  return allBlockTabProperties.redBlockTabOpen;
-  //},
-  //getBlueBlockTabClicked: function(){
-  //  return allBlockTabProperties.blueBlockTabOpen;
-  //},
-  //getGreenBlockTabClicked: function(){
-  //  return allBlockTabProperties.greenBlockTabOpen;
-  //},
 });
 
 AppDispatcher.register(function(payload){
@@ -1717,86 +3813,6 @@ AppDispatcher.register(function(payload){
       console.log(_stuff.dropdownListVisible);
       break;
 
-    //case appConstants.ADD_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //      addTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //      break;
-    //
-    //case appConstants.REMOVE_TAB:
-    //  console.log(payload);
-    //  console.log(action);
-    //  console.log(item);
-    //      removeTab(item);
-    //      sidePaneStore.emitChange();
-    //  console.log(_stuff.tabState);
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      break;
-
-
-
-    //case appConstants.DROPDOWN_SELECT:
-    //  var tab = item.item;
-    //  var component = item.component;
-    //
-    //  console.log(payload);
-    //  console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
-    //      dropdownMenuSelect(tab, component);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REDBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //  console.log(allBlockTabProperties.redBlockTabOpen);
-    //      //checkWhichBlockTabsOpen();
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.BLUEBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeBlueBlockTabState();
-    //  console.log(allBlockTabProperties.blueBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-    //
-    //case appConstants.GREENBLOCKTAB_OPEN:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeGreenBlockTabState();
-    //  console.log(allBlockTabProperties.greenBlockTabOpen);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.SWITCHTAB_WHENTABOPENS:
-    //  console.log(payload);
-    //  console.log(action);
-    //      switchTabWhenTabOpens(item);
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.PASSING_SIDEPANE:
-    //  console.log(payload);
-    //  console.log(item);
-    //  var passedSidePane = item;
-    //  return passedSidePane;
-    //      sidePaneStore.emitChange();
-    //      break;
-
-    //case appConstants.REACTPANEL_SELECT:
-    //      break;
-
-    //case appConstants.REDBLOCKSTATE_CHANGE:
-    //  console.log(payload);
-    //  console.log(action);
-    //      changeRedBlockTabState();
-    //      sidePaneStore.emitChange();
-    //      break;
-
     default:
           return true;
   }
@@ -1804,39 +3820,502 @@ AppDispatcher.register(function(payload){
 
 module.exports = sidePaneStore;
 
-
-//var reactPanelSelect = function(){
-//  /* need this to somehow invoke the dropdownmenuchange function in SidePane! */
-//};
-
-
-//var calculateTabs = function(){
-//  var tabs = _stuff.tabState.map(function(item, i){
-//    var tabTitle = "Tab " + item;
-//    var tabIndex = i + 1;
-//  })
-//};
-
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":24,"object-assign":29}],14:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"events":38,"object-assign":44}],18:[function(require,module,exports){
 /**
- * Created by twi18192 on 07/09/15.
+ * Created by twi18192 on 02/03/16.
  */
 
-var BlueBlockInfo = {
-  name: "Blue block",
-  height: "100 pixels",
-  width: "100 pixels"
+var WebSocketClient = require('../fluxWebsocketClient');
+var idLookupTableFunctions = require('./idLookupTable');
+
+console.log(WebSocketClient);
+
+var MalcolmUtils = {
+
+  initialiseFlowChart: function(callback){
+    WebSocketClient.addWebSocketOnOpenCallback(callback);
+  },
+
+  malcolmGet: function(requestedData, successCallback, failureCallback){
+    var id = WebSocketClient.getNextAvailableId();
+    WebSocketClient.incrementId();
+    var message = JSON.stringify({type: 'Get', id: id, endpoint: requestedData});
+
+    idLookupTableFunctions.addIdCallbacks(id, {
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    });
+
+    WebSocketClient.sendText(message);
+  },
+
+  malcolmSubscribe: function(requestedData, successCallback, failureCallback){
+    var id = WebSocketClient.getNextAvailableId();
+    WebSocketClient.incrementId();
+    var message = JSON.stringify({type: 'Subscribe', id: id, endpoint: requestedData});
+
+    idLookupTableFunctions.addIdCallbacks(id, {
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    });
+
+    WebSocketClient.sendText(message);
+  },
+
+  malcolmCall: function(requestedDataToWrite, method, args, successCallback, failureCallback){
+    var id = WebSocketClient.getNextAvailableId();
+    WebSocketClient.incrementId();
+    var message = JSON.stringify({
+      type: 'Call',
+      id: id,
+      endpoint: requestedDataToWrite,
+      method: method,
+      arguments: args
+    });
+
+    idLookupTableFunctions.addIdCallbacks(id, {
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    });
+
+    WebSocketClient.sendText(message);
+  }
+
 };
 
-var BlueBlock = {
-  getBlueBlockInfo: function(){
-    return BlueBlockInfo;
+module.exports = MalcolmUtils;
+
+},{"../fluxWebsocketClient":10,"./idLookupTable":19}],19:[function(require,module,exports){
+/**
+ * Created by twi18192 on 03/03/16.
+ */
+
+
+var idLookupTableFunctions = {
+
+  invokeIdCallback: function(id, success, json) {
+  /* 'success' will be a boolean value;
+   if 'success' is true then invoke the success callback,
+   and if it's false then invoke the failure callback
+   */
+    console.log(idLookupTable);
+
+    //window.alert("look at the lookup table!");
+
+    if (success === true) {
+      idLookupTable[id].successCallback(json)
+    }
+    else if (success === false) {
+      idLookupTable[id].failureCallback(json)
+    }
+  },
+
+  addIdCallbacks: function(id, callbacks){
+    idLookupTable[id] = callbacks;
   }
-} ;
 
-module.exports = BlueBlock;
+};
 
-},{}],15:[function(require,module,exports){
+var idLookupTable = {
+
+};
+
+module.exports = idLookupTableFunctions;
+
+},{}],20:[function(require,module,exports){
+/**
+ * Created by twi18192 on 14/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
+var Ports = require('./ports.js');
+var BlockRectangle = require('./blockRectangle');
+
+var interact = require('../../node_modules/interact.js');
+
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+var Block = React.createClass({displayName: "Block",
+
+  componentDidMount: function(){
+    //NodeStore.addChangeListener(this._onChange);
+
+    //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
+    //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
+    //  console.log(this.props.selected);
+    //
+    //  console.log("A node has been mounted"); });
+    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
+    //  console.log(this.state.nodePosition);
+    //});
+
+    //interact('.node')
+    //  .draggable({
+    //    onmove: this.interactJsDrag
+    //  });
+
+    interact(ReactDOM.findDOMNode(this))
+      .draggable({
+        restrict: {
+          restriction: '#appAndDragAreaContainer',
+        },
+        onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          Perf.start();
+          //console.log("interactjs dragstart");
+        },
+        onmove: this.interactJsDrag,
+        onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          //console.log("interactjs dragend");
+          Perf.stop();
+          Perf.printWasted(Perf.getLastMeasurements());
+        }
+      });
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.blockSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .styleCursor(false);
+
+    /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
+    //interact
+    //  .pointerMoveTolerance(5);
+  },
+
+  componentWillUnmount: function(){
+    //NodeStore.removeChangeListener(this._onChange);
+    //this.interactable.unset();
+    //this.interactable = null;
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.blockSelect);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+
+    if(this.props.portThatHasBeenClicked === null){
+      console.log("portThatHasBeenClicked isn't anything");
+      return (
+        nextProps.blockPosition.x !== this.props.blockPosition.x ||
+        nextProps.blockPosition.y !== this.props.blockPosition.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null ||
+            this.props.portThatHasBeenClicked !== null ||
+            nextProps.storingFirstPortClicked !== null ||
+            this.props.storingFirstPortClicked !== null){
+      console.log("portThatHasBeenClicked is something");
+
+      return (
+        nextProps.blockPosition.x !== this.props.blockPosition.x ||
+        nextProps.blockPosition.y !== this.props.blockPosition.y ||
+        nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+    else{
+      console.log("SOMETHING CRAY CRAY IN SHOULDCOMPONENTUPDATE");
+    }
+  },
+
+  handleInteractJsDrag: function(item){
+    //console.log("interactJs drag is occurring");
+    flowChartActions.interactJsDrag(item);
+
+    /* For debouncing */
+    //this.startDrag = null;
+  },
+
+  blockSelect: function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    if(this.props.areAnyBlocksSelected === false){
+      flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+    }
+    else{
+      /* Need to run deselect before I select the current node */
+      this.props.deselect();
+      flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
+      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+    }
+
+    /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
+
+
+
+  },
+
+  interactJsDrag: function(e){
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var target = e.target.id;
+
+
+    var deltaMovement = {
+      target: target,
+      x: e.dx,
+      y: e.dy
+    };
+
+    this.handleInteractJsDrag(deltaMovement);
+
+    /* For debouncing */
+    if(this.startDrag === null || this.startDrag === undefined){
+      this.startDrag = {
+        x: 0,
+        y: 0
+      };
+    }
+
+    this.startDrag.x += e.dx;
+    this.startDrag.y += e.dy;
+
+
+    var deltaMovementDebounce = {
+      target: target,
+      x: this.startDrag.x,
+      y: this.startDrag.y
+    };
+
+    clearTimeout(this.timer);
+    this.interactJsDragDebounce(deltaMovementDebounce);
+
+
+
+
+    /* Currently doesn't work very well, selects a node after dragging a bit... */
+    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
+
+    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
+    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
+    //  this.nodeSelect(e);
+    //}
+    //else{
+    //  console.log("Drag movement is large enough, so do a drag");
+    //  this.handleInteractJsDrag(deltaMovement);
+    //}
+
+    /* Need to have some code here to check if the movement is large anough for a drag:
+    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
+     */
+
+    //this.handleInteractJsDrag(deltaMovement);
+
+  },
+
+  interactJsDragDebounce: function(dragMovement){
+    //console.log("debouncing");
+    this.timer = setTimeout(function(){
+      //console.log("inside setTimeout");
+      console.log("testing drag debounce for server write request");
+      console.log(this.props.blockPosition);
+      //this.handleInteractJsDrag(dragMovement)
+      MalcolmActionCreators.malcolmCall(
+        this.props.id, this.props.blockInfo.methods._set_coords.name, {
+          X_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.x * this.props.graphZoomScale)),
+          Y_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.y * this.props.graphZoomScale))
+        }
+      );
+      console.log(dragMovement.target);
+    }.bind(this), 500
+    );
+  },
+
+
+  render: function(){
+    console.log("render: block");
+    console.log(this.props.id);
+    console.log(this.props.blockInfo);
+
+    var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
+
+    return (
+      React.createElement("g", React.__spread({},  this.props, 
+          //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+                         //style={this.props.selected && this.props.areAnyBlocksSelected || !this.props.selected && !this.props.areAnyBlocksSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
+                         {transform: blockTranslate
+      }), 
+
+        React.createElement("g", {style: {MozUserSelect: 'none'}
+           //onMouseDown={this.mouseDown}
+        }, 
+          React.createElement("rect", {id: "blockBackground", height: "105", width: "65", style: {fill: 'transparent',
+          cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}), 
+          "/* To allow the cursor to change when hovering over the entire block container */", 
+
+          React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, 
+                          portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+                          selected: this.props.selected, 
+                          blockStyling: this.props.blockStyling}), 
+
+          React.createElement(Ports, {blockId: this.props.id, blockInfo: this.props.blockInfo, 
+                 portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+                 storingFirstPortClicked: this.props.storingFirstPortClicked, 
+                 selected: this.props.selected, 
+                 blockStyling: this.props.blockStyling})
+
+        )
+
+      )
+    )
+  }
+});
+
+module.exports = Block;
+
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/lib/ReactDefaultPerf.js":106,"../../node_modules/react/react":226,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12,"./blockRectangle":21,"./ports.js":34}],21:[function(require,module,exports){
+/**
+ * Created by twi18192 on 18/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+
+var BlockRectangles = React.createClass({displayName: "BlockRectangles",
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected
+    )
+  },
+
+  render: function(){
+    //console.log("render: blockRectangles");
+
+    var blockStyling = this.props.blockStyling;
+
+    return(
+      React.createElement("g", null, 
+        React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
+              height: blockStyling.outerRectangleHeight, width: blockStyling.outerRectangleWidth, 
+              x: 0, y: 0, rx: 8, ry: 8, 
+              style: {fill: 'white', 'strokeWidth': 2,
+               stroke: this.props.selected ? '#797979' : 'black',
+               cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+               }}
+          //onClick={this.nodeClick} onDragStart={this.nodeDrag}
+        ), 
+        React.createElement("rect", {id: this.props.blockId.concat("InnerRectangle"), 
+              height: blockStyling.innerRectangleHeight, width: blockStyling.innerRectangleWidth, 
+              x: 3, y: 3, rx: 6, ry: 6, 
+              style: {fill: 'rgba(230,238,240,0.94)',
+                       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
+                       }}
+        )
+      )
+    )
+  }
+
+});
+
+module.exports = BlockRectangles;
+
+},{"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/react":226,"../actions/blockActions.js":2,"../stores/blockStore.js":12}],22:[function(require,module,exports){
+/**
+ * Created by twi18192 on 22/03/16.
+ */
+
+var React = require('react');
+
+var ToggleSwitch = require('react-toggle-switch');
+
+var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
+  render: function(){
+    /* 'on' is the default setting of the switch, shall be
+     from the server at some point (perhaps a ternary operator?)
+     */
+    console.log(this.props.toggleOrientation);
+    return(
+      React.createElement("div", {style: {position: 'relative', left: '0',
+                   bottom: '0px', width: '230px', height: '25px',
+                   display: 'flex', alignItems: 'flex-start'}}, 
+        React.createElement("b", {style: {margin: '0px', width: '100px'}}, this.props.blockName), 
+        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
+        React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
+                  height: '21', width: '50'}}, 
+          React.createElement(ToggleSwitch, {onClick: this.props.toggleSwitch.bind(null, this.props.blockName), 
+                        value: this.props.toggleOrientation === true ? 'true' : 'false', 
+                        on: this.props.toggleOrientation})
+        ), 
+        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
+      )
+    )
+  }
+});
+
+module.exports = BlockToggleSwitch;
+
+},{"react":226,"react-toggle-switch":50}],23:[function(require,module,exports){
+/**
+ * Created by twi18192 on 16/02/16.
+ */
+
+var React = require('react');
+var mainPaneStore = require('../stores/mainPaneStore');
+var mainPaneActions = require('../actions/mainPaneActions');
+
+var ButtonStyle = {
+  backgroundColor: 'grey',
+  height: 25,
+  width: 70,
+  borderRadius: 8,
+  borderStyle:'solid',
+  borderWidth: 1,
+  borderColor: 'black',
+  fontFamily: 'Verdana',
+//    color: 'white',
+  textAlign: 'center',
+  display: 'inline-block',
+  cursor: 'pointer',
+  MozUserSelect: 'none',
+  position: 'relative',
+  marginTop: '39px'
+
+};
+
+var ButtonTitlePadding = {
+  position: 'relative',
+  top: -6
+
+};
+
+var Button = React.createClass({displayName: "Button",
+
+  render: function() {
+    return(
+      React.createElement("div", null, 
+        React.createElement("div", {id: this.props.buttonId, style: ButtonStyle, onClick: this.props.buttonClick}, 
+          React.createElement("span", {style: ButtonTitlePadding}, this.props.buttonLabel)
+        )
+
+      )
+    )}
+});
+
+module.exports = Button;
+
+},{"../actions/mainPaneActions":4,"../stores/mainPaneStore":15,"react":226}],24:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -1858,7 +4337,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  marginTop: '39px',
+  marginLeft: '10px'
 
 };
 
@@ -1868,20 +4349,20 @@ var ButtonTitlePadding = {
 
 };
 
-function getConfigButtonState(){
-  return {
-    configPanelOpen:mainPaneStore.getConfigPanelState()
-  }
-}
+//function getConfigButtonState(){
+//  return {
+//    configPanelOpen:mainPaneStore.getConfigPanelState()
+//  }
+//}
 
 var ConfigButton = React.createClass({displayName: "ConfigButton",
-  getInitialState: function(){
-    return getConfigButtonState();
-  },
+  //getInitialState: function(){
+  //  return getConfigButtonState();
+  //},
 
-  _onChange: function(){
-    this.setState(getConfigButtonState)
-  },
+  //_onChange: function(){
+  //  this.setState(getConfigButtonState)
+  //},
 
   handleActionConfigToggle:function(){
     mainPaneActions.toggleConfigPanel("this is the item");
@@ -1889,11 +4370,11 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function() {
@@ -1910,7 +4391,76 @@ var ConfigButton = React.createClass({displayName: "ConfigButton",
 
 module.exports = ConfigButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":11,"react":206}],16:[function(require,module,exports){
+},{"../actions/mainPaneActions":4,"../stores/mainPaneStore":15,"react":226}],25:[function(require,module,exports){
+/**
+ * Created by twi18192 on 15/03/16.
+ */
+
+var React = require('react');
+
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
+var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEditableReadoutField",
+
+  render: function(){
+
+    var dropdownOptions = [];
+
+    for(var m = 0; m < this.props.blockAttribute.type.labels.length; m++){
+      /* Check which option needs to be selected
+       on initial render by checking the value
+       from the server?
+       */
+
+      if(this.props.blockAttribute.type.labels[m] ===
+        this.props.blockAttribute.value){
+        dropdownOptions.push(
+          React.createElement("option", {value: this.props.blockAttribute.type.labels[m], 
+                  selected: "selected"}, 
+            this.props.blockAttribute.type.labels[m]
+          )
+        )
+      }
+      else {
+        dropdownOptions.push(
+          React.createElement("option", {value: this.props.blockAttribute.type.labels[m]
+          }, 
+            this.props.blockAttribute.type.labels[m]
+          )
+        )
+      }
+    }
+
+    var dropdownList =
+      React.createElement("select", {onChange: this.props.onChangeBlockMethodDropdownOption.bind(null, {
+                            block: this.props.blockName,
+                            attribute: this.props.attributeName
+                            }), 
+              style: {width: '160px'}}, 
+        dropdownOptions
+      );
+
+    return(
+      React.createElement("div", {style: {position: 'relative', left: '5',
+                   bottom: '0px', width: '230px', height: '25px'}}, 
+        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
+           id: this.props.blockName + this.props.attributeName + "textContent", 
+           style: {fontSize: '13px', position: 'relative'}}, 
+          String(this.props.attributeName)
+        ), 
+        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '90px'}}, 
+          React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+          dropdownList
+        )
+      )
+    )
+  }
+
+});
+
+module.exports = DropdownEditableReadoutField;
+
+},{"../actions/MalcolmActionCreators":1,"react":226}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -1921,52 +4471,107 @@ var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
 
-function getDropdownState(){
-  return{
-    listVisible: sidePaneStore.getDropdownState(),
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
-
+var interact = require('../../node_modules/interact.js');
 
 var Dropdown = React.createClass({displayName: "Dropdown",
 
-  getInitialState: function() {
-    return getDropdownState();
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState ||
+      nextProps.changeTab !== this.props.changeTab
+    )
   },
 
-  _onChange: function(){
-    this.setState(getDropdownState())
+  handleActionShow: function(e){
+    console.log(e);
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    if(this.props.tabState.length === 0){
+      console.log("tabState is empty, so there are no tabs, so don't show the dropdown menu");
+    }
+    else if(this.props.tabState.length > 0){
+      console.log("tabState wasn't empty, so go ahead and show the dropdown menu");
+      sidePaneActions.dropdownMenuShow("This is the item");
+      //document.addEventListener("click", this.handleActionHide)
+
+      interact('#container')
+        .on('tap', this.handleActionHide);
+    }
+
   },
 
-  handleActionShow: function(){
-    sidePaneActions.dropdownMenuShow("this is the item")
-  },
+  handleActionHide: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    console.log(arguments);
+    sidePaneActions.dropdownMenuHide("This is the item");
+    //document.removeEventListener("click", this.handleActionHide)
 
-  handleActionHide: function(){
-    sidePaneActions.dropdownMenuHide("this is the item")
+    interact('#container')
+      .off('tap', this.handleActionHide);
   },
 
   testSelectInvokeSidePane: function(item){
-    this.props.changeTab(item)
+    this.props.changeTab(item);
+    console.log("inside testSelectInvokeSidePane");
   },
 
   componentDidMount: function(){
-    sidePaneStore.addChangeListener(this._onChange)
+    console.log("dropdown is mounted");
+    //sidePaneStore.addChangeListener(this._onChange);
+
+    //interact('.dropdown-display')
+    //  .on('tap', this.handleActionShow)
+
+    interact('#dropdownButton')
+      .on('tap', this.handleActionShow)
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange)
+    //sidePaneStore.removeChangeListener(this._onChange);
+    console.log("dropdown is unmounting");
+
+    //interact('.dropdown-display')
+    //  .off('tap', this.handleActionShow)
+
+    interact('#dropdownButton')
+      .off('tap', this.handleActionShow);
+
+    interact('#container')
+      .off('tap', this.handleActionHide);
   },
 
   renderListItems: function() {
     var items = [];
-    for (var i = 0; i < this.state.tabState.length; i++) {
-      var item = this.state.tabState[i].name;
-      items.push(React.createElement("div", {onClick: this.testSelectInvokeSidePane.bind(null, item)}, 
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      var item = this.props.tabState[i].label;
+      var interactIdString = "#" + "dropdownTab" + item;
+
+      items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
+                      //onClick={this.testSelectInvokeSidePane.bind(null, item)}
+      }, 
         React.createElement("span", null, item)
       ));
+
+      //interact(interactIdString)
+      //  .on('tap',
+      //    function(e){
+      //      //e.stopImmediatePropagation();
+      //      //e.stopPropagation();
+      //      this.testSelectInvokeSidePane.bind(null, item);
+      //      console.log(e);
+      //      console.log(this);
+      //      console.log(this.testSelectInvokeSidePane.bind(null, item));
+      //    }.bind(this)
+      //  );
+
+      /* Works, but gets increasingly slow the more you select from it */
+      //interact(interactIdString)
+      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+
+      interact(interactIdString)
+        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
     }
 
     return items;
@@ -1974,15 +4579,51 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
   render: function(){
 
+    var items = [];
+    for (var i = 0; i < this.props.tabState.length; i++) {
+      if(this.props.tabState[i].label !== undefined) {
+        var item = this.props.tabState[i].label;
+        console.log(item);
+        var interactIdString = "#" + "dropdownTab" + item;
+      }
+      else if(this.props.tabState[i].label === undefined){
+        var item = this.props.tabState[i];
+        console.log(item);
+        var interactIdString = "#" + "dropdownTab" + item;
+      }
+      console.log(interactIdString);
 
-    return React.createElement("div", {className: "dropdown-container" + (this.state.listVisible ? " handleActionShow" : "")}, 
-      React.createElement("div", {className: "dropdown-display" + (this.state.listVisible ? " clicked": ""), onClick: this.handleActionShow}, 
+      items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
+        //onClick={this.testSelectInvokeSidePane.bind(null, item)}
+      }, 
+        React.createElement("span", null, item)
+      ));
+
+      //interact(interactIdString)
+      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+
+      interact(interactIdString)
+        .on('tap', function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        console.log("dropdownMenu item click");
+        console.log(item);
+        this.testSelectInvokeSidePane(item);
+        this.handleActionHide(e);
+      }.bind(this));
+      console.log(document.getElementById("dropdownTab" + item));
+    }
+
+    return React.createElement("div", {className: "dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}, 
+      React.createElement("div", {className: "dropdown-display" + (this.props.listVisible ? " clicked": ""), id: "dropdownButton"
+           //onClick={this.handleActionShow}
+      }, 
         React.createElement("span", null), 
         React.createElement("i", {className: "fa fa-angle-down"})
       ), 
       React.createElement("div", {className: "dropdown-list"}, 
         React.createElement("div", null, 
-          this.renderListItems()
+          items
         )
       )
     );
@@ -1992,34 +4633,419 @@ var Dropdown = React.createClass({displayName: "Dropdown",
 
 module.exports = Dropdown;
 
+},{"../../node_modules/interact.js":43,"../actions/sidePaneActions":6,"../stores/paneStore":16,"../stores/sidePaneStore":17,"react":226}],27:[function(require,module,exports){
+/**
+ * Created by twi18192 on 10/12/15.
+ */
 
-//handleActionDropdownSelect: function(item){
-//  sidePaneActions.dropdownMenuSelect(item);
-//  this.props.changeTab(this.state.selectedTabIndex);
-//  //this.handleActionReactPanelSelect()
-//},
-//
-//handleActionReactPanelSelect: function(){
-//  sidePaneActions.reactPanelSelect("this is the item")
-//},
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
+
+var interact = require('../../node_modules/interact.js');
+
+var Edge = React.createClass({displayName: "Edge",
+
+  componentDidMount: function(){
+    ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.edgeSelect);
+
+    window.addEventListener('keydown', this.keyPress);
+
+  },
+  componentWillUnmount: function(){
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.edgeSelect);
+
+    window.removeEventListener('keydown', this.keyPress);
+
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selected !== this.props.selected ||
+      nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
+      nextProps.fromBlockPosition.x !== this.props.fromBlockPosition.x ||
+      nextProps.fromBlockPosition.y !== this.props.fromBlockPosition.y ||
+      nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
+      nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
+    )
+  },
+
+  mouseOver: function(){
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
+    if(this.props.selected === true){
+
+    }
+    else{
+      test.style.stroke = '#797979'
+    }
+  },
+  mouseLeave: function(){
+    var outerLineName = this.props.id.concat("-outerline");
+    var test = document.getElementById(outerLineName);
+    if(this.props.selected === true){
+      //console.log("this.props.selected is true, so don't reset the border colour");
+    }
+    else{
+      //console.log("this.props.selected is false");
+      test.style.stroke = 'lightgrey'
+    }
+  },
+  edgeSelect: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    //console.log("edge has been selected");
+    flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
+    paneActions.openEdgeTab({
+      edgeId: ReactDOM.findDOMNode(this).id,
+      fromBlock: this.props.fromBlock,
+      fromBlockPort: this.props.fromBlockPort,
+      toBlock: this.props.toBlock,
+      toBlockPort: this.props.toBlockPort
+    });
+  },
+
+  keyPress: function(e){
+    //console.log("key press!");
+    //console.log(e);
+
+    if(e.keyCode === 46){
+      //console.log("delete key has been pressed");
+      if(this.props.areAnyEdgesSelected === true){
+        if(this.props.selected === true){
+          /* Delete this particular edge */
+
+          /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
+          switching it around
+           */
+          blockActions.deleteEdge({
+            fromBlock: this.props.fromBlock,
+            fromBlockPort: this.props.fromBlockPort,
+            toBlock: this.props.toBlock,
+            toBlockPort: this.props.toBlockPort,
+            edgeId: this.props.id
+          });
+
+          /* Reset both ports' styling to normal again */
+
+          var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
+
+          var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
+
+          //fromBlockPortElement.style.stroke = "black";
+          fromBlockPortElement.style.fill = "grey";
+          //fromBlockPortElement.setAttribute('r', 2);
+
+          //toBlockPortElement.style.stroke = "black";
+          toBlockPortElement.style.fill = "grey";
+          //toBlockPortElement.setAttribute('r', 2);
+
+        }
+
+        else if(this.props.selected === false){
+          /* Do nothing to this edge since it isn't the selected edge */
+        }
+      }
+      else if(this.props.areAnyEdgesSelected === false){
+        //console.log("no edges are selected, so don't delete anything");
+      }
+    }
+  },
+
+  render:function(){
+    console.log("render: edges");
+
+    var blockStyling = this.props.blockStyling;
+
+    /* Retiring allEdges in favour of calculating everything from allNodeInfo */
+    //var edgeInfo = this.props.allEdges[this.props.id];
+    //console.log(this.props.id);
+    //console.log(edgeInfo);
+    //
+    //var allEdges = this.props.allEdges;
+    //console.log(allEdges);
+    var fromBlock = this.props.fromBlock;
+    var toBlock = this.props.toBlock;
+    //console.log(fromNode);
+    //console.log(toNode);
+    var fromBlockPort = this.props.fromBlockPort;
+    var toBlockPort = this.props.toBlockPort;
+
+    var fromBlockType = this.props.fromBlockType;
+    var toBlockType = this.props.toBlockType;
+
+    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
+    //console.log(this.props.allNodePositions[toNode].position);
+
+    var fromBlockPositionX = this.props.fromBlockPosition.x;
+    var fromBlockPositionY = this.props.fromBlockPosition.y;
+    var toBlockPositionX = this.props.toBlockPosition.x;
+    var toBlockPositionY = this.props.toBlockPosition.y;
+    //console.log(fromNodePositionX);
+    //console.log(fromNodePositionY);
+    //
+    //console.log(allNodeTypesPortStyling[fromNodeType]);
+    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
+    //console.log(fromNodePort);
+
+    var outportArrayLength = this.props.fromBlockInfo.outports.length;
+    var outportArrayIndex;
+    for(var i = 0; i < outportArrayLength; i++){
+      if(this.props.fromBlockInfo.outports[i].name === fromBlockPort){
+        outportArrayIndex = JSON.parse(JSON.stringify(i));
+      }
+    }
+
+    var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
+    var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
+
+    var endOfEdgePortOffsetX = 0;
+    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+    var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
+    var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
+
+    var innerLineString = "-innerline";
+    var outerLineString = "-outerline";
+    var innerLineName = this.props.id.concat(innerLineString);
+    var outerLineName = this.props.id.concat(outerLineString);
 
 
+    return(
+      React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
-//select: function(item) {
-//  var test = item;
-//  console.log(item);
-//
-//  for(var i = 0; i < this.props.list.length; i++){
-//    if(this.props.list[i].name === item){
-//      var findTheIndex = i
-//    }
-//  }
-//  //
-//  //var findTheIndex = this.props.list.indexOf(item);
-//  this.props.changeTab(findTheIndex)
-//},
+        React.createElement("line", {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+              //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
+              style: {strokeWidth: this.props.selected === true ? "10" : "7",
+               stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round",
+               cursor: 'default'}}), 
 
-},{"../actions/sidePaneActions":6,"../stores/paneStore":12,"../stores/sidePaneStore":13,"react":206}],17:[function(require,module,exports){
+        React.createElement("line", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
+          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
+              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
+
+
+      )
+    )
+  }
+});
+
+module.exports = Edge;
+
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/react":226,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12}],28:[function(require,module,exports){
+/**
+ * Created by twi18192 on 04/02/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var flowChartActions = require('../actions/flowChartActions');
+
+var interact = require('../../node_modules/interact.js');
+
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+
+var EdgePreview = React.createClass({displayName: "EdgePreview",
+
+  componentDidMount: function(){
+
+    Perf.start();
+    interact('#appAndDragAreaContainer')
+      .on('move', this.interactJSMouseMoveForEdgePreview);
+
+    this.noPanning = true;
+
+    interact(ReactDOM.findDOMNode(this))
+      .draggable({
+        onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          interact('#appAndDragAreaContainer')
+            .off('move', this.interactJSMouseMoveForEdgePreview);
+          //console.log("drag start");
+        }.bind(this),
+        onmove: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          this.props.interactJsDragPan(e);
+        }.bind(this),
+        onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          //console.log("drag end");
+          this.noPanning = true;
+          interact('#appAndDragAreaContainer')
+            .on('move', this.interactJSMouseMoveForEdgePreview);
+          //console.log(e);
+          /* No need for this after changing mousemove to move for some reason? */
+          flowChartActions.updateEdgePreviewEndpoint({
+            x: e.dx,
+            y: e.dy
+          })
+        }.bind(this)
+      });
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('tap', this.onTap);
+
+    interact(ReactDOM.findDOMNode(this))
+      .on('down', this.onMouseDown);
+  },
+  componentWillUnmount: function(){
+    //console.log("edge preview unmounting!");
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('tap', this.onTap);
+
+    interact(ReactDOM.findDOMNode(this))
+      .off('down', this.onMouseDown);
+
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+
+    Perf.stop();
+    Perf.printWasted(Perf.getLastMeasurements());
+  },
+
+  shouldComponentUpdate: function(){
+    return this.noPanning
+  },
+
+  interactJSMouseMoveForEdgePreview: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    var mousePositionChange = {
+      x: e.mozMovementX,
+      y: e.mozMovementY
+    };
+
+    flowChartActions.updateEdgePreviewEndpoint(mousePositionChange);
+
+  },
+
+  onTap: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    //console.log("tapped!");
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+    this.props.failedPortConnection();
+  },
+
+  onMouseDown: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    this.noPanning = false;
+
+    /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
+     update the mouse position?
+     UPDATE: nice, it actually improved the performance!! :)
+     */
+
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
+  },
+
+  render:function(){
+    console.log("render: edgePreview");
+
+    var blockStyling = this.props.blockStyling;
+
+    //console.log(this.props.id);
+    //console.log(this.props.interactJsDragPan);
+    var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
+
+    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
+    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
+    //console.log(this.props.allNodePositions[toNode].position);
+
+    var fromBlockPositionX = this.props.fromBlockPosition.x;
+    var fromBlockPositionY = this.props.fromBlockPosition.y;
+    //console.log(fromNodePositionX);
+    //console.log(fromNodePositionY);
+    //
+    //console.log(allNodeTypesPortStyling[fromNodeType]);
+    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
+    //console.log(fromNodePort);
+
+    if(fromBlockInfo.fromBlockPortType === "inport"){
+      var inportArrayLength = this.props.fromBlockInfo.inports.length;
+      var inportArrayIndex;
+      for(var j = 0; j < inportArrayLength; j++){
+        if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      var startOfEdgePortOffsetX = 0;
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    }
+    else if(fromBlockInfo.fromBlockPortType === "outport") {
+      var outportArrayLength = this.props.fromBlockInfo.outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+      var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    }
+    else{
+      window.alert("the port type is neither an inport or outport...");
+    }
+    var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
+    var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
+
+    var endOfEdgeX = this.props.edgePreview.endpointCoords.x;
+    var endOfEdgeY = this.props.edgePreview.endpointCoords.y;
+
+    var innerLineString = "-innerline";
+    var outerLineString = "-outerline";
+    var innerLineName = this.props.id.concat(innerLineString);
+    var outerLineName = this.props.id.concat(outerLineString);
+
+
+    return(
+      React.createElement("g", React.__spread({id: "edgePreviewContainer"},  this.props), 
+
+        React.createElement("line", {id: outerLineName, 
+          //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
+              style: {strokeWidth: "7", stroke: "lightgrey", strokeLinecap: "round", cursor: 'default'}}), 
+
+        React.createElement("line", {id: innerLineName, 
+          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
+          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
+              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
+              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
+
+
+      )
+    )
+  }
+});
+
+module.exports= EdgePreview;
+
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/lib/ReactDefaultPerf.js":106,"../../node_modules/react/react":226,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../stores/blockStore.js":12}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -2041,7 +5067,9 @@ var ButtonStyle = {
   textAlign: 'center',
   display: 'inline-block',
   cursor: 'pointer',
-  MozUserSelect: 'none'
+  MozUserSelect: 'none',
+  position: 'relative',
+  marginTop: '39px'
 
 };
 
@@ -2051,19 +5079,19 @@ var ButtonTitlePadding = {
 
 };
 
-function getFavButtonState(){
-  return{
-    favPanelOpen: mainPaneStore.getFavPanelState()
-  }
-}
+//function getFavButtonState(){
+//  return{
+//    favPanelOpen: mainPaneStore.getFavPanelState()
+//  }
+//}
 
 var FavButton = React.createClass({displayName: "FavButton",
-  getInitialState: function(){
-    return getFavButtonState();
-  },
+  //getInitialState: function(){
+  //  return getFavButtonState();
+  //},
 
   _onChange: function(){
-    this.setState(getFavButtonState)
+    //this.setState(getFavButtonState)
   },
 
   handleActionFavToggle: function(){
@@ -2072,11 +5100,11 @@ var FavButton = React.createClass({displayName: "FavButton",
   },
 
   componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange)
+    //mainPaneStore.addChangeListener(this._onChange)
   },
 
   componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange)
+    //mainPaneStore.removeChangeListener(this._onChange)
   },
 
   render: function(){
@@ -2094,26 +5122,1106 @@ var FavButton = React.createClass({displayName: "FavButton",
 
 module.exports = FavButton;
 
-},{"../actions/mainPaneActions":2,"../stores/mainPaneStore":11,"react":206}],18:[function(require,module,exports){
+},{"../actions/mainPaneActions":4,"../stores/mainPaneStore":15,"react":226}],30:[function(require,module,exports){
 /**
- * Created by twi18192 on 08/09/15.
+ * Created by twi18192 on 10/12/15.
  */
 
-var GreenBlockInfo = {
-  name: "Green block",
-  height: "100 pixels",
-  width: "100 pixels"
+var React = require('react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+
+var appConstants = require('../constants/appConstants.js');
+
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+var attributeStore = require('../stores/attributeStore');
+var flowChartStore = require('../stores/flowChartStore');
+var flowChartActions = require('../actions/flowChartActions');
+
+var Edge = require('./edge.js');
+var EdgePreview = require('./edgePreview');
+var Block = require('./block.js');
+
+var interact = require('../../node_modules/interact.js');
+
+var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+
+var AppContainerStyle = {
+  "height": "100%",
+  "width": "100%",
+  //'backgroundColor': "green"
 };
 
-var GreenBlock = {
-  getGreenBlockInfo: function(){
-    return GreenBlockInfo;
+var FlowChart = React.createClass({displayName: "FlowChart",
+
+  propTypes: {
+    graphPosition: React.PropTypes.object,
+    graphZoomScale: React.PropTypes.number,
+    allBlockInfo: React.PropTypes.object,
+    blockLibrary: React.PropTypes.object,
+    areAnyBlocksSelected: React.PropTypes.bool,
+    areAnyEdgesSelected: React.PropTypes.bool,
+  },
+
+  //componentWillMount: function(){
+  //  window.alert("flowChart will mount")
+  //},
+
+  componentDidMount: function () {
+    //Perf.start();
+
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+    //window.addEventListener('keydown', this.keyPress);
+
+    //window.alert("flowChart mount");
+
+    //setTimeout(function(){
+    //  AppDispatcher.handleAction({
+    //    actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //    item: "initialise flowChart end"
+    //  });
+    //}, 1000);
+
+    //AppDispatcher.handleAction({
+    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //  item: "initialise flowChart end"
+    //});
+
+
+
+    interact('#dragArea')
+      .on('tap', this.deselect);
+
+    interact('#dragArea')
+      .draggable({
+        onstart: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          //console.log("drag start");
+
+        },
+        onmove: this.interactJsDragPan,
+        onend: function(e){
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          //console.log("drag end");
+        }
+      })
+      .gesturable({
+        onmove: this.interactJsPinchZoom
+      });
+
+    interact('#dragArea')
+      .styleCursor(false);
+  },
+  componentWillUnmount: function () {
+
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
+
+    interact('#dragArea')
+      .off('tap', this.deselect);
+  },
+
+  deselect: function (e) {
+    flowChartActions.deselectAllBlocks("deselect all blocks");
+    flowChartActions.deselectAllEdges("deselect all edges");
+
+    if(this.props.portThatHasBeenClicked !== null){
+      this.portDeselectRemoveHighlight();
+      flowChartActions.deselectAllPorts("deselect all ports");
+      this.resetPortClickStorage();
+
+      //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+      flowChartActions.addEdgePreview(null);
+      //interact('#appAndDragAreaContainer')
+      //  .off('move', this.interactJSMouseMoveForEdgePreview)
+    }
+    else{
+      //console.log("this.props.portThatHasBeenSelected is null, so no need to run port deselection process");
+    }
+
+  },
+
+  wheelZoom: function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.nativeEvent.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
+    var currentZoomScale = this.props.graphZoomScale;
+    var currentGraphPositionX = this.props.graphPosition.x;
+    var currentGraphPositionY = this.props.graphPosition.y;
+
+
+    var ZOOM_STEP = 0.05;
+    var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
+
+    if(zoomDirection === 'up'){
+      var newZoomScale = this.props.graphZoomScale + ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+    else{
+      var newZoomScale = this.props.graphZoomScale - ZOOM_STEP;
+      //nodeActions.graphZoom(newScaleFactor);
+    }
+
+    /* Lets start again with the zoom and build up my own understanding of it */
+
+    var zoomFactor = newZoomScale / -50;
+    var scaleBasedOnZoomFactor = 1 + (1 * zoomFactor);
+
+    /* Trying another definition of scaleDelta */
+    //var scaleDelta = newZoomScale / currentZoomScale;
+    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+    //this.lastScale = newZoomScale;
+
+    var scale = scaleDelta * currentZoomScale;
+
+    var mouseOnZoomX = e.nativeEvent.clientX;
+    var mouseOnZoomY = e.nativeEvent.clientY;
+
+    /* I'm missing the deltaX and deltaY variables that are in the-graph-app.js at line 195 & 196
+    Need the previous position of the mouse when wheel zoom was fired */
+    /* UPDATE: I don't think it's because of the lack of deltaX and deltaY, they don't work how I want so I reckon I
+    was looking at the wrong zoom, it's the one above!
+    So I reckon I'm not calculating the scale variable correctly, I need to be dividing by my previous scale I think?
+     */
+
+    //if(this.props.previousMouseCoordsOnZoom !== null){
+    //  var deltaX = mouseOnZoomX - this.props.previousMouseCoordsOnZoom.x;
+    //  var deltaY = mouseOnZoomY - this.props.previousMouseCoordsOnZoom.y;
+    //}
+    //else if(this.props.previousMouseCoordsOnZoom === null){
+    //  console.log("at the very first mouse wheel zoom, so the first offset is zero?");
+    //  var deltaX = 0;
+    //  var deltaY = 0;
+    //}
+
+     var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX) + mouseOnZoomX;
+     var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY) + mouseOnZoomY;
+
+     var newGraphPosition = {
+       x: newGraphPositionX,
+       y: newGraphPositionY
+     };
+
+     flowChartActions.graphZoom(scale);
+     flowChartActions.changeGraphPosition(newGraphPosition);
+
+    //var previousMouseCoordsOnZoom = {
+    //  x: e.nativeEvent.clientX,
+    //  y: e.nativeEvent.clientY
+    //};
+    //
+    //blockActions.previousMouseCoordsOnZoom(previousMouseCoordsOnZoom);
+
+    //if(zoomDirection === 'up') {
+    //  var newGraphPosition = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
+    //else{
+    //  var newGraphPosition = {
+    //    x: 0,
+    //    y: 0
+    //  };
+    //}
+    //
+    //var newGraphPosition = {
+    //    x: currentGraphPositionX - deltaXMovement,
+    //    y: currentGraphPositionY - deltaYMovement
+    //};
+    //
+    //blockActions.graphZoom(newZoomScale);
+    //blockActions.changeGraphPosition(newGraphPosition);
+
+  },
+
+  isZoomNegative: function(n){
+    return ((n =+n) || 1/n) < 0;
+  },
+
+  addEdgePreview: function(){
+    //console.log("addEdgePreview in flowChart has been invoked!");
+
+    console.log(this.props.portThatHasBeenClicked);
+    console.log(document.getElementById(this.props.portThatHasBeenClicked.id));
+    var fromBlockId = document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(fromBlockId);
+
+    var portStringSliceIndex = fromBlockId.length;
+    var portName = document.getElementById(this.props.portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
+
+    var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
+
+    /* Slightly confusing since the end of the edge is the same as the start of the edge at the very beginning
+    of an edgePreview, but this is only to do the initial render, this'll be updated by windowMouseMoveForEdgePreview()
+     */
+
+    //console.log(this.props.portThatHasBeenClicked.cx.baseVal.value);
+    //console.log(this.props.portThatHasBeenClicked.className);
+
+    if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "inport"){
+      //console.log("port clicked is an inport");
+
+      var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
+      var inportArrayIndex;
+      for(var j = 0; j < inportArrayLength; j++){
+        //console.log(this.props.allBlockInfo[fromBlockId].inports[j].name);
+        if(this.props.allBlockInfo[fromBlockId].inports[j].name === portName){
+          inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+      var endOfEdgePortOffsetX = 0;
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      var portType = "inport";
+    }
+    else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "outport") {
+      //console.log("port clicked is an outport");
+
+      var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
+      var outportArrayIndex;
+
+      for(var i = 0; i < outportArrayLength; i++){
+        if(this.props.allBlockInfo[fromBlockId].outports[i].name === portName){
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+
+      var endOfEdgePortOffsetX = this.props.blockStyling.outerRectangleWidth;
+      var endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      var portType = "outport";
+    }
+    var endOfEdgeX = this.props.blockPositions[fromBlockId].x + endOfEdgePortOffsetX;
+    var endOfEdgeY = this.props.blockPositions[fromBlockId].y + endOfEdgePortOffsetY;
+
+    var edgePreviewInfo = {
+      fromBlockInfo: {
+        fromBlock: fromBlockId,
+        fromBlockType: fromBlockType,
+        fromBlockPort: portName,
+        fromBlockPortType: portType
+      },
+      /* At the very start this'll be the same as the fromBlockPort position, then I'll update it with
+      windowMouseMoveForEdgePreview() */
+      endpointCoords: {
+        x: endOfEdgeX,
+        y: endOfEdgeY
+      }
+    };
+
+    flowChartActions.addEdgePreview(edgePreviewInfo);
+
+    //Perf.stop();
+    //Perf.printDOM(Perf.getLastMeasurements());
+    //Perf.printWasted(Perf.getLastMeasurements());
+
+    /* Trying to replace with interactjs using mousemove */
+    //window.addEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+
+    //interact('#appAndDragAreaContainer')
+    //  .on('move', this.interactJSMouseMoveForEdgePreview);
+
+  },
+
+  portSelectHighlight: function(){
+    console.log("portSelectHighlight");
+
+    flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
+
+    var port = document.getElementById(this.props.portThatHasBeenClicked.id);
+    /* Need an if loop to check if we're hovering the port already
+    Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
+     */
+    //port.style.cursor = "default";
+    //port.style.fill = "yellow";
+    //port.style.stroke = "yellow";
+
+    //port.style.stroke = "black";
+    port.style.fill = "#00c9cc";
+
+    //port.setAttribute('r', 4);
+
+    //console.log(port.style.fill);
+    //console.log(port.style.stroke);
+    /* Node select is also messing with the port styling... */
+  },
+
+  portDeselectRemoveHighlight: function(){
+    //console.log("before resetting portThatHasBeenSelected, use it to reset the port highlight");
+    var port = document.getElementById(this.props.portThatHasBeenClicked.id);
+    /* No need to change the cursor back, since if you go back to hovering over a node it'll change to a hand, and if not default is fine
+    Actually no, if you then hover over the port again it'll still be an arrow, want a hand again, so change it back to a hand!
+    */
+    /* Problem is now that if you have clicked a port and have it selected, if you hover over a node it'll go back to being a hand...
+    Need some way of checking that if a port is selected, don't override the cursor until a drop or deselection occurs
+     */
+    //port.style.cursor = "default";
+    //port.style.fill = "black";
+    //port.style.stroke = "black";
+
+    //port.style.stroke = "black";
+    port.style.fill = "grey";
+
+    //port.setAttribute('r', 2);
+
+    /* Added to fix if, when having an edgePreview where the mouse doesn't hover over the edge due to
+    clicking near the boundary of where a portClick can occur on the invisibleCirclePort and you deselect
+    the edgePreview by clicking on the BACKGROUND rather than the EDGE, you don't get an error with
+    storingFirstPortClicked not being null in ports.js but is null in flowChart.js
+     */
+    this.resetPortClickStorage();
+
+    /* Reset edgePreview in flowChartStore */
+
+    flowChartActions.addEdgePreview(null);
+
+  },
+
+  checkBothClickedPorts: function(){
+    /* This function will run whenever we have dispatched a PortSelect event
+    An if loop will check if this.state.portThatHasBeenClicked is null:
+    if it is null we simply do a highlight of the port we have selected, then edgePreview should occur.
+    if it ISN'T null and it isn't the same port you already clicked, then you run the addEdgeInfo function, passing in the relevant nodes and ports
+    To check if portThatHasBeenClicked has a different value, how about I store the value of it in a separate state when the first port click comes in,
+    so then you can compare the two in some form or another?
+     */
+    /* Wait, this.state.portThatHasBeenClicked will never be null when portClick() is run, since we set it in the node to be something in the node file? */
+    //console.log("checkBothClickedPorts has been called");
+    //if(this.state.storingFirstPortClicked !== null){
+    //  var firstPort = this.state.storingFirstPortClicked;
+    //  var secondPort = this.state.portThatHasBeenClicked;
+    //  console.log(firstPort);
+    //  console.log(secondPort);
+    //
+    //  if(firstPort.parentNode.id === secondPort.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
+    //    console.log("the two clicked ports are the same port, you clicked on the same port twice!");
+    //  }
+    //  else{
+    //    console.log("something else is afoot! =P");
+    //  }
+    //}
+    //else if(this.state.storingFirstPortClicked === null){
+    //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
+    //}
+    var firstPort = document.getElementById(this.props.storingFirstPortClicked.id);
+    var secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
+
+
+    /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
+     Or I could simply remove those <g> containers for the time being =P */
+    /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
+
+    /* Trying to use id instead of class to then allow class for interactjs use */
+    /* Need the length of the name of the node, then slice the firstPort id string until the end of the node name length */
+
+    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
+    var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
+    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
+    var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
+
+
+    if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
+      //console.log("the two clicked ports are the same port, you clicked on the same port twice!");
+    }
+    else{
+      //console.log("something else is afoot, time to look at adding the edge! =P");
+      var edge = {
+        fromBlock: firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+        fromBlockPort: firstPortName,
+        toBlock: secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+        toBlockPort: secondPortName
+      };
+      /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
+      //this.createNewEdge(edge);
+
+      this.checkPortCompatibility(edge);
+    }
+
+  },
+
+  checkPortCompatibility: function(edgeInfo){
+  /* First need to check we have an inport and an outport */
+  /* Find both port types, then compare them somehow */
+
+  var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
+  var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
+
+  /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
+  var blockTypes = {
+    fromBlockType: fromBlockType,
+    toBlockType: toBlockType
+  };
+
+
+  var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
+  var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
+
+  //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
+  //
+  if(document.getElementById(this.props.storingFirstPortClicked.id).parentNode.transform.animVal[0].matrix.e === 0){
+    //console.log("it's an inport, since the port's x value is zero!");
+    var fromBlockPortType = "inport";
   }
-};
+  else{
+    //console.log("it's an outport!");
+    var fromBlockPortType = "outport";
+  }
 
-module.exports = GreenBlock;
+  if(document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.transform.animVal[0].matrix.e === 0) {
+    var toBlockPortType = "inport";
+  }
+  else{
+    var toBlockPortType = "outport";
+  }
 
-},{}],19:[function(require,module,exports){
+
+
+  /* Replacing for now with a check of the port position,
+  to determine if the clicked port is an inport or outport
+
+  /* Actually, don't need to replace it, can just remove the logic determining
+  the port type and still use it to find the inport index, just via allBlockInfo
+  NOT blockLibrary
+   */
+  for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
+    if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
+      //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
+    //  var fromBlockPortType = "inport";
+      var inportIndex = i;
+      break;
+    }
+    else{
+      //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
+    //  var fromBlockPortType = "outport";
+    }
+  }
+
+  for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
+    if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
+      //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
+    //  var toBlockPortType = "inport";
+      var inportIndex = j;
+      break;
+    }
+    else{
+      //console.log("The toBlock isn't an inport, so it's an outport!");
+    //  var toBlockPortType = "outport";
+    }
+  }
+
+  var portTypes = {
+    fromBlockPortType: fromBlockPortType,
+    toBlockPortType: toBlockPortType
+  };
+
+  var types = {
+    blockTypes: blockTypes,
+    portTypes: portTypes
+  };
+
+  /* Time to compare the fromNodePortType and toNodePortType */
+
+  var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
+
+  /* Turns out that this is sctually allowed */
+  //if(edgeInfo.fromBlock === edgeInfo.toBlock){
+  //  window.alert("Incompatible ports, they are part of the same block.");
+  //  //var fromPort = this.state.storingFirstPortClicked;
+  //  fromPort.style.stroke = "black";
+  //  fromPort.style.fill = "black";
+  //  fromPort.setAttribute('r', 2);
+  //  this.resetPortClickStorage();
+  //
+  //  blockActions.addEdgePreview(null);
+  //  interact('#appAndDragAreaContainer')
+  //    .off('mousemove', this.interactJSMouseMoveForEdgePreview)
+  //}
+  if(fromBlockPortType === toBlockPortType){
+    //console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
+    window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
+    /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
+    //var fromPort = this.state.storingFirstPortClicked;
+
+    //fromPort.style.stroke = "black";
+    fromPort.style.fill = "grey";
+    //fromPort.setAttribute('r', 2);
+
+    this.resetPortClickStorage();
+    /* Hence, don't add anything to allNodeInfo */
+
+    flowChartActions.addEdgePreview(null);
+    //interact('#appAndDragAreaContainer')
+    //  .off('move', this.interactJSMouseMoveForEdgePreview)
+  }
+  else if(fromBlockPortType !== toBlockPortType){
+    //console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
+    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
+    if(fromBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
+    }
+    else if(toBlockPortType === "inport"){
+      this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
+    }
+    else{
+      //console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
+    }
+    /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
+    //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+
+    /* Also need the equivalent of addToEdgesObject for single edges here! */
+    /* Now, the point of this was also to find if the fromNode was an inport or outport:
+     if it's an outport then it's a normal connection from an out to an in,
+     but if it's an inport, then it's a connection from an in to an out (ie, the other way around), so somehow need to compensate for that!
+     */
+
+  }
+
+  },
+
+  isInportConnected: function(inport, inportIndex, block, edgeInfo, types){
+    //console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
+    if(this.props.allBlockInfo[block].inports[inportIndex].connected === true){
+      //console.log("That inport is already connected, so another connection cannot be made");
+      window.alert("The inport " + inport + " of the block " + block + " is already connected, so another connection cannot be made");
+      /* Set the styling of the first port back to normal */
+      //console.log(edgeInfo);
+      //console.log(this.state.storingFirstPortClicked);
+      var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
+
+      //fromPort.style.stroke = "black";
+      fromPort.style.fill = "grey";
+      //fromPort.setAttribute('r', 2);
+
+      this.resetPortClickStorage();
+
+      flowChartActions.addEdgePreview(null);
+      //interact('#appAndDragAreaContainer')
+      //  .off('move', this.interactJSMouseMoveForEdgePreview)
+    }
+    else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
+      //console.log("That inport isn't connected to anything, so proceed with the port connection process");
+      var toPort = document.getElementById(this.props.portThatHasBeenClicked.id);
+
+      /* Put this styling later, sicne I've now added the port value type checker */
+      //toPort.style.stroke = "black";
+      //toPort.style.fill = "lightgrey";
+      //toPort.setAttribute('r', 4);
+
+      /* Putting later, since I need to check if the start node was an inport or outport */
+      //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
+      //this.addOneEdgeToEdgesObject(edgeInfo, types.portTypes, types.nodeTypes);
+
+      /* Now check if the port value types are compatible (ie, if they're the same) */
+
+      var startBlock;
+      var startBlockType;
+      var startBlockPort;
+      var endBlock;
+      var endBlockType;
+      var endBlockPort;
+      var newEdge;
+      var edgeLabel;
+
+      /* For the malcolmCall that updates the dropdown menu list in the block's tab */
+      var inportBlock;
+      var inportBlockPort;
+
+      if(types.portTypes.fromBlockPortType === 'outport'){
+
+        //console.log("outport to inport, so edge labelling is normal");
+        startBlock = edgeInfo.fromBlock;
+        startBlockType = types.blockTypes.fromBlockType;
+        startBlockPort = edgeInfo.fromBlockPort;
+        endBlock = edgeInfo.toBlock;
+        endBlockType = types.blockTypes.toBlockType;
+        endBlockPort = edgeInfo.toBlockPort;
+
+        /* Then we know that the toBlockPortType is an inport, so then we can check their port VALUE types accordingly */
+        for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
+          }
+        }
+
+        for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].inports[j].type;
+          }
+        }
+      }
+      else if(types.portTypes.fromBlockPortType === 'inport'){
+
+        //console.log("inport to outport, so have to flip the edge labelling direction");
+        /* Note that you must also flip the ports too! */
+        startBlock = edgeInfo.toBlock;
+        startBlockType = types.blockTypes.toBlockType;
+        startBlockPort = edgeInfo.toBlockPort;
+        endBlock = edgeInfo.fromBlock;
+        endBlockType = types.blockTypes.fromBlockType;
+        endBlockPort = edgeInfo.fromBlockPort;
+
+        /* Then we know that the toBlockPortType is an outport */
+        for(var k = 0; k < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; k++){
+          if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].name === edgeInfo.fromBlockPort){
+            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].type;
+          }
+        }
+        for(var l = 0; l < this.props.allBlockInfo[edgeInfo.toBlock].outports.length; l++){
+          if(this.props.allBlockInfo[edgeInfo.toBlock].outports[l].name === edgeInfo.toBlockPort){
+            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].outports[l].type;
+          }
+        }
+      }
+
+      if(fromPortValueType === toPortValueType || fromPortValueType !== toPortValueType){
+        /* Proceed with the connection as we have compatible port value types */
+
+        //toPort.style.stroke = "black";
+        toPort.style.fill = "#00c9cc";
+        //toPort.setAttribute('r', 4);
+
+
+        /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
+        /* Now need to implement the logic that checks if the start port was an inport or outport */
+
+        //var startBlock;
+        //var startBlockType;
+        //var startBlockPort;
+        //var endBlock;
+        //var endBlockType;
+        //var endBlockPort;
+        //var newEdge;
+        //var edgeLabel;
+        //if(types.portTypes.fromBlockPortType === "outport"){
+        //  console.log("outport to inport, so edge labelling is normal");
+        //  startBlock = edgeInfo.fromBlock;
+        //  startBlockType = types.blockTypes.fromBlockType;
+        //  startBlockPort = edgeInfo.fromBlockPort;
+        //  endBlock = edgeInfo.toBlock;
+        //  endBlockType = types.blockTypes.toBlockType;
+        //  endBlockPort = edgeInfo.toBlockPort;
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+        //else if(types.portTypes.fromBlockPortType === "inport"){
+        //  console.log("inport to outport, so have to flip the edge labelling direction");
+        //  /* Note that you must also flip the ports too! */
+        //  startBlock = edgeInfo.toBlock;
+        //  startBlockType = types.blockTypes.toBlockType;
+        //  startBlockPort = edgeInfo.toBlockPort;
+        //  endBlock = edgeInfo.fromBlock;
+        //  endBlockType = types.blockTypes.fromBlockType;
+        //  endBlockPort = edgeInfo.fromBlockPort;
+        //  /* Don't need this in both loops, can just set this after the loops have completed! */
+        //  //newEdge = {
+        //  //  fromNode: startNode,
+        //  //  fromNodePort: startNodePort,
+        //  //  toNode: endNode,
+        //  //  toNodePort: endNodePort
+        //  //}
+        //}
+
+
+        edgeLabel = String(startBlock) + String(startBlockPort) +  String(endBlock) + String(endBlockPort);
+
+        newEdge = {
+          fromBlock: startBlock,
+          fromBlockType: startBlockType,
+          fromBlockPort: startBlockPort,
+          toBlock: endBlock,
+          toBlockType: endBlockType,
+          toBlockPort: endBlockPort,
+          edgeLabel: edgeLabel
+        };
+
+        /* Create new edges by writing to the server,
+        then blockStore updates allBlockInfo via info
+        from malcolm rather than being updated locally
+         */
+        //blockActions.addOneSingleEdgeToAllBlockInfo(newEdge);
+        //flowChartActions.appendToEdgeSelectedState(edgeLabel);
+
+        /* Now send the malcolmCall */
+        inportBlock = endBlock; /* the 'blockName' argument */
+        inportBlockPort = endBlockPort;
+
+        var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+        var inputFieldSetMethod = "_set_" + endBlockPort; /* the 'method' argument */
+
+        var newDropdownValue = startBlock + "." + startBlockPort; /* the 'args' argument */
+
+        var argsObject = {};
+        argsObject[endBlockPort] = newDropdownValue;
+        console.log(argsObject);
+
+        MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+
+        /* Cutting out appending to the edges object, so need to finish here pretty much, so reset the port selection etc */
+
+        this.resetPortClickStorage();
+        //window.removeEventListener('mousemove', this.windowMouseMoveForEdgePreview);
+        /* Can now safely delete the edgePreview by setting it back to null */
+        flowChartActions.addEdgePreview(null);
+        //interact('#appAndDragAreaContainer')
+        //  .off('move', this.interactJSMouseMoveForEdgePreview)
+      }
+      else if(fromPortValueType !== toPortValueType){
+        window.alert("Incompatible port value types: the port " + edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
+          " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " + edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
+          " has value type " + toPortValueType.toUpperCase() + ".");
+
+        /* Do all the resetting jazz */
+
+        var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
+
+        //fromPort.style.stroke = "black";
+        fromPort.style.fill = "grey";
+        //fromPort.setAttribute('r', 2);
+
+        this.resetPortClickStorage();
+
+        flowChartActions.addEdgePreview(null);
+        //interact('#appAndDragAreaContainer')
+        //  .off('move', this.interactJSMouseMoveForEdgePreview)
+      }
+
+    }
+  },
+
+  failedPortConnection: function(){
+    //this.props.storingFirstPortClicked.style.stroke = "black";
+    document.getElementById(this.props.storingFirstPortClicked.id).style.fill = "grey";
+    //this.props.storingFirstPortClicked.setAttribute('r', 2);
+    this.resetPortClickStorage();
+    /* Hence, don't add anything to allNodeInfo */
+
+    document.getElementById('dragArea').style.cursor = 'default';
+    flowChartActions.addEdgePreview(null);
+    //interact('#appAndDragAreaContainer')
+    //  .off('move', this.interactJSMouseMoveForEdgePreview)
+  },
+
+  resetPortClickStorage: function(){
+    /* The same as what I would expect a portDeselect function to do I think */
+    //console.log("Resetting port click storage");
+    flowChartActions.storingFirstPortClicked(null);
+    flowChartActions.passPortMouseDown(null);
+  },
+
+  interactJsDragPan: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    var xChange = this.props.graphPosition.x + e.dx;
+    var yChange = this.props.graphPosition.y + e.dy;
+
+    flowChartActions.changeGraphPosition({
+      x: xChange,
+      y: yChange
+    });
+
+    if(this.props.edgePreview !== null) {
+      flowChartActions.updateEdgePreviewEndpoint({
+        x: -e.dx,
+        y: -e.dy
+      })
+    }
+  },
+
+  interactJsPinchZoom: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+
+    var currentZoomScale = this.props.graphZoomScale;
+    var newZoomScale = currentZoomScale + e.ds;
+
+    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+
+    //var scale = scaleDelta * currentZoomScale;
+
+    var pinchZoomX = e.clientX;
+    var pinchZoomY = e.clientY;
+
+    var newGraphPositionX = scaleDelta * (this.props.graphPosition.x - pinchZoomX) + pinchZoomX ;
+    var newGraphPositionY = scaleDelta * (this.props.graphPosition.y - pinchZoomY) + pinchZoomY ;
+
+    var newGraphPosition = {
+      x: newGraphPositionX,
+      y: newGraphPositionY
+    };
+
+    flowChartActions.graphZoom(newZoomScale);
+    flowChartActions.changeGraphPosition(newGraphPosition);
+  },
+
+  //keyPress: function(e){
+  //  console.log("key press!");
+  //  console.log(e);
+  //
+  //  if(e.keyCode === 46){
+  //    console.log("delete key has been pressed");
+  //    if(this.props.areAnyEdgesSelected === true){
+  //
+  //    }
+  //    else if(this.props.areAnyEdgesSelected === false){
+  //
+  //    }
+  //  }
+  //},
+
+
+  render: function(){
+    console.log("render: flowChart");
+
+    //console.log("inside theGraphDiamond's render function");
+    //console.log(this.props);
+
+    var x = this.props.graphPosition.x;
+    var y = this.props.graphPosition.y;
+    var scale = this.props.graphZoomScale;
+    var transform = "translate(" + x + "," + y + ")";
+    var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
+
+    var blocks = [];
+    var edges = [];
+
+    for(var block in this.props.allBlockInfo){
+      blocks.push(
+        React.createElement(Block, {key: block, id: block, className: "block", 
+               blockInfo: this.props.allBlockInfo[block], 
+               areAnyBlocksSelected: this.props.areAnyBlocksSelected, 
+               portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
+               storingFirstPortClicked: this.props.storingFirstPortClicked, 
+               //portMouseOver={this.props.portMouseOver}
+               selected: flowChartStore.getAnyBlockSelectedState(block), 
+               deselect: this.deselect, 
+               blockStyling: this.props.blockStyling, 
+               blockPosition: this.props.blockPositions[block], 
+               graphZoomScale: this.props.graphZoomScale}
+          //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
+        )
+      );
+
+      for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
+        if(this.props.allBlockInfo[block].inports[i].connected === true){
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
+          /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
+          var toBlock = block;
+          var toBlockType = this.props.allBlockInfo[block].type;
+          var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+          var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
+          //console.log(this.props.allBlockInfo);
+          var fromBlockType = this.props.allBlockInfo[fromBlock].type;
+          var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
+
+          var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
+
+          edges.push(
+            React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 
+                  fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, fromBlockPosition: this.props.blockPositions[fromBlock], 
+                  toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, toBlockPosition: this.props.blockPositions[toBlock], 
+                  fromBlockInfo: this.props.allBlockInfo[fromBlock], 
+                  toBlockInfo: this.props.allBlockInfo[toBlock], 
+                  areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
+                  selected: flowChartStore.getIfEdgeIsSelected(edgeLabel), 
+                  inportArrayIndex: i, inportArrayLength: this.props.allBlockInfo[block].inports.length, 
+                  blockStyling: this.props.blockStyling}
+            )
+          )
+        }
+        else if(this.props.allBlockInfo[block].inports[i].connected === false){
+          //console.log(this.props.allBlockInfo[block].inports[i]);
+          //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is NOT connected, so move on to the next inport/block");
+        }
+      }
+
+    }
+
+    var edgePreview = [];
+
+    if(this.props.edgePreview !== null){
+      /* Render the edgePreview component! */
+
+      var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock + this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
+
+      edgePreview.push(
+        React.createElement(EdgePreview, {key: edgePreviewLabel, id: edgePreviewLabel, interactJsDragPan: this.interactJsDragPan, 
+                     failedPortConnection: this.failedPortConnection, 
+                     edgePreview: this.props.edgePreview, 
+                     fromBlockPosition: this.props.blockPositions[this.props.edgePreview.fromBlockInfo.fromBlock], 
+                     fromBlockInfo: this.props.allBlockInfo[this.props.edgePreview.fromBlockInfo.fromBlock], 
+                     blockStyling: this.props.blockStyling}
+
+        )
+      )
+
+    }
+    else if(this.props.edgePreview === null){
+      //console.log("edgePreview is null, so don't render one");
+    }
+
+    return(
+      React.createElement("svg", {id: "appAndDragAreaContainer", height: "100%", width: "100%", 
+           //onMouseMove={this.state.moveFunction} onMouseLeave={this.mouseLeave}
+           style: AppContainerStyle}, 
+
+        React.createElement("rect", {id: "dragArea", height: "100%", width: "100%", fill: "transparent", style: {MozUserSelect: 'none'}, 
+              //onClick={this.dragging === true ? this.defaultMoveFunction: this.deselect}
+              //onMouseDown={this.panMouseDown} onMouseUp={this.panMouseUp} onMouseMove={this.state.panMoveFunction}
+              onWheel: this.wheelZoom}
+        ), 
+        React.createElement("svg", {id: "appContainer", style: AppContainerStyle
+          //x={this.state.graphPosition.x} y={this.state.graphPosition.y}
+          //onDragOver={this.dragOver} onDragEnter={this.dragEnter} onDrop={this.drop}
+        }, 
+
+          React.createElement("g", {id: "testPanGroup", 
+             transform: matrixTransform, 
+             onWheel: this.wheelZoom}, 
+
+
+            React.createElement("g", {id: "EdgesGroup"}, 
+
+              edges, 
+              edgePreview
+
+            ), 
+
+            React.createElement("g", {id: "BlocksGroup"}, 
+
+              blocks
+
+            )
+
+
+          )
+
+        )
+      )
+
+    )
+  }
+});
+
+module.exports = FlowChart;
+
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/lib/ReactDefaultPerf.js":106,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":3,"../constants/appConstants.js":8,"../stores/attributeStore":11,"../stores/flowChartStore":14,"./block.js":20,"./edge.js":27,"./edgePreview":28,"react":226}],31:[function(require,module,exports){
+/**
+ * Created by twi18192 on 26/01/16.
+ */
+
+var React = require('react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+
+var FlowChart = require('./flowChart');
+
+var blockStore = require('../stores/blockStore.js');
+var flowChartStore = require('../stores/flowChartStore');
+
+function getFlowChartState(){
+  return{
+    /* blockStore */
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    blockLibrary: JSON.parse(JSON.stringify(blockStore.getBlockLibrary())),
+
+
+    /* flowChartStore */
+    graphPosition: JSON.parse(JSON.stringify(flowChartStore.getGraphPosition())),
+    graphZoomScale: JSON.parse(JSON.stringify(flowChartStore.getGraphZoomScale())),
+    portThatHasBeenClicked: flowChartStore.getPortThatHasBeenClicked(),
+    storingFirstPortClicked: flowChartStore.getStoringFirstPortClicked(),
+    areAnyBlocksSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyBlocksAreSelected())),
+    areAnyEdgesSelected: JSON.parse(JSON.stringify(flowChartStore.getIfAnyEdgesAreSelected())),
+    edgePreview: JSON.parse(JSON.stringify(flowChartStore.getEdgePreview())),
+    blockStyling: JSON.parse(JSON.stringify(flowChartStore.getBlockStyling())),
+    blockPositions: JSON.parse(JSON.stringify(blockStore.getBlockPositions())),
+    //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
+
+
+    //portMouseOver: JSON.parse(JSON.stringify(blockStore.getPortMouseOver())),
+
+
+    /* WebAPI use */
+
+    dataFetchTest: JSON.parse(JSON.stringify(blockStore.getDataFetchTest())),
+    testAllBlockInfo: JSON.parse(JSON.stringify(blockStore.getTestAllBlockInfo()))
+  }
+}
+
+var FlowChartControllerView = React.createClass({displayName: "FlowChartControllerView",
+
+  getInitialState: function(){
+    return getFlowChartState();
+  },
+
+  _onChange: function(){
+    this.setState(getFlowChartState());
+  },
+
+  componentDidMount: function(){
+    blockStore.addChangeListener(this._onChange);
+    flowChartStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function(){
+    blockStore.removeChangeListener(this._onChange);
+    flowChartStore.removeChangeListener(this._onChange);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextState.allBlockInfo !== this.state.allBlockInfo ||
+      nextState.blockLibrary !== this.state.blockLibrary ||
+
+      nextState.graphZoomScale !== this.state.graphZoomScale ||
+      nextState.graphPosition.x !== this.state.graphPosition.x ||
+      nextState.graphPosition.y !== this.state.graphPosition.y ||
+      nextState.portThatHasBeenClicked !== this.state.portThatHasBeenClicked ||
+      nextState.storingFirstPortClicked !== this.state.storingFirstPortClicked ||
+      nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
+      nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
+      nextState.edgePreview !== this.state.edgePreview ||
+      nextState.dataFetchTest !== this.state.dataFetchTest ||
+      nextState.blockPositions !== this.state.blockPositions
+    )
+  },
+
+  render: function(){
+    return(
+      React.createElement(FlowChart, {
+        allBlockInfo: this.state.allBlockInfo, 
+        blockLibrary: this.state.blockLibrary, 
+
+        graphZoomScale: this.state.graphZoomScale, 
+        graphPosition: this.state.graphPosition, 
+        portThatHasBeenClicked: this.state.portThatHasBeenClicked, 
+        storingFirstPortClicked: this.state.storingFirstPortClicked, 
+        areAnyBlocksSelected: this.state.areAnyBlocksSelected, 
+        areAnyEdgesSelected: this.state.areAnyEdgesSelected, 
+        //portMouseOver={this.state.portMouseOver}
+        edgePreview: this.state.edgePreview, 
+        previousMouseCoordsOnZoom: this.state.previousMouseCoordsOnZoom, 
+        blockStyling: this.state.blockStyling, 
+        dataFetchTest: this.state.dataFetchTest, 
+        blockPositions: this.state.blockPositions}
+      )
+    )
+  }
+});
+
+module.exports = FlowChartControllerView;
+
+},{"../../node_modules/react-dom/dist/react-dom.js":45,"../stores/blockStore.js":12,"../stores/flowChartStore":14,"./flowChart":30,"react":226}],32:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -2124,22 +6232,21 @@ var mainPaneStore = require('../stores/mainPaneStore');
 var mainPaneActions = require('../actions/mainPaneActions');
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
-var RedBlock = require('./redBlock');
-var BlueBlock = require('./blueBlock');
-var GreenBlock = require('./greenBlock');
-
-//var SidePane = require('./sidePane');
-//var sidePaneActions = require('../actions/sidePaneActions');
-//var sidePaneStore = require('../stores/sidePaneStore'); /*not sure if this is allowed, but I'll give it a whirl :P*/
+var FooterButton = require('./button');
 
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
 
-var deviceStore = require('../stores/deviceStore');
-var deviceActions = require('../actions/deviceActions');
+//var WebSocketClient = require('../websocketClient');
 
-var WebSocketClient = require('../websocketClientTEST');
-var sessionActions = require('../actions/sessionActions');
+var FlowChartControllerView = require('./flowChartControllerView');
+
+//var GateNode = require('./gateNode.js');
+//var TGenNode = require('./tgenNode.js');
+//var PCompNode = require('./pcompNode.js');
+//var LUTNode = require('./lutNode.js');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
@@ -2151,247 +6258,183 @@ var Button = ReactPanels.Button;
 
 function getMainPaneState(){
   return {
-    footers: mainPaneStore.getFooterState(),
-    configPanelOpen: mainPaneStore.getConfigPanelState(),
-    favPanelOpen: mainPaneStore.getFavPanelState(),
-    redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
-    blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
-    greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
-    favTabOpen: paneStore.getFavTabOpen(),
-    configTabOpen: paneStore.getConfigTabOpen(),
+    //redBlockPropertiesClicked: paneStore.getRedBlockTabClicked(),
+    //blueBlockPropertiesClicked: paneStore.getBlueBlockTabClicked(),
+    //greenBlockPropertiesClicked: paneStore.getGreenBlockTabClicked(),
 
-    updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
-    updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
-    updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent()
+    //footers: mainPaneStore.getFooterState(),
+    //favPanelOpen: mainPaneStore.getFavPanelState(),
+    //favTabOpen: paneStore.getFavTabOpen(),
+    //configPanelOpen: mainPaneStore.getConfigPanelState(),
+    //configTabOpen: paneStore.getConfigTabOpen(),
+
+    //updatedRedBlockContentFromServer: deviceStore.getRedBlockContent(),
+    //updatedBlueBlockContentFromServer: deviceStore.getBlueBlockContent(),
+    //updatedGreenBlockContentFromServer: deviceStore.getGreenBlockContent(),
   }
 }
 
 var MainPane = React.createClass({displayName: "MainPane",
 
-  getInitialState: function(){
-    return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
+  //getInitialState: function(){
+  //  //return getMainPaneState(); /* can just return the function that updates state when _onChange runs, rather than retyping the whole thing!*/
+  //},
+
+  componentDidMount: function(){
+    //mainPaneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    this.setState({gateBlockIdCounter: 1});  },
+
+  componentWillUnmount: function(){
+    //mainPaneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function(){
-    this.setState(getMainPaneState())
+    //this.setState(getMainPaneState(), function(){
+    //  console.log("mainpane's state has been mutated");
+    //})
+  },
+
+  propTypes: {
+    footers: React.PropTypes.bool,
+    //favPanelOpen: React.PropTypes.bool,
+    favTabOpen: React.PropTypes.bool,
+    //configPanelOpen: React.PropTypes.bool,
+    configTabOpen: React.PropTypes.bool,
+    loadingInitialData: React.PropTypes.bool,
+    loadingInitialDataError: React.PropTypes.bool
+    //theGraphDiamondState: React.PropTypes.object
+  },
+
+  shouldComponentUpdate(nextProps, nextState){
+    return (
+      nextProps.footers !== this.props.footers ||
+      nextProps.favTabOpen !== this.props.favTabOpen ||
+      nextProps.configTabOpen !== this.props.configTabOpen ||
+      nextProps.loadingInitialData !== this.props.loadingInitialData ||
+      nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
+    )
   },
 
   handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")
   },
 
-  handleActionAddTab: function(stuff){
-    paneActions.addTab(stuff)
-  },
-
-  handleActionPassDispatchMarker: function(selectedObject){
-    var selectedObject = selectedObject;
-    var selectedDispatchMarker = selectedObject.dispatchMarker;
-    console.log(selectedDispatchMarker);
-    paneActions.passDispatchMarker(selectedDispatchMarker)
-  },
-
-  //handleActionAppendStuffForNewBlock: function(selectedObject){
-  //
+  //handleActionMockServerRequest: function(){
+  //  deviceActions.mockServerRequest('this is the item');
+  //  console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+  //  paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   //},
 
-  handleActionChangeSomeInfo: function(){
-    paneActions.changeSomeInfo('this is the item')
-  },
-
-  handleActionMockServerRequest: function(){
-    deviceActions.mockServerRequest('this is the item');
-    console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
-  },
-
   handleActionFavTabOpen: function(){
-    console.log('favTabOpen is a go');
     paneActions.favTabOpen("this is the item")
   },
 
   handleActionConfigTabOpen: function(){
-    console.log('configTabOpen is a go');
     paneActions.configTabOpen('this is the item')
   },
 
-  //handleActionTabChangeViaOtherMeans: function(tab){
-  //  sidePaneActions.switchTabWhenTabOpens(tab)
-  //},
-
-  componentDidMount: function(){
-    mainPaneStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
+  handleActionBlockLookupTableTabOpen: function(){
+    paneActions.blockLookupTableTabOpen('this is the item');
   },
 
-  componentWillUnmount: function(){
-    mainPaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
+  handleActionToggleSidebar: function(){
+    paneActions.toggleSidebar("toggle sidebar");
   },
 
-  addDivToContent: function(selectedObject){
-    var selectedObject = selectedObject;
-    var selectedDispatchMarker = selectedObject.dispatchMarker;
-    console.log(selectedObject);
-    console.log(selectedObject.dispatchMarker);
-
-    function getRandomColor() {
-      var letters = '0123456789ABCDEF'.split('');
-      var color = '#';
-      for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
-    var YES = document.createElement('DIV');
-
-    YES.addEventListener("click", function(){
-      console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
-      console.log(selectedObject.dispatchMarker);
-      //var selectedObject = selectedObject;
-      //var selectedDispatchMarker = selectedObject.dispatchMarker;
-      console.log(selectedDispatchMarker);
-      paneActions.appendStuffForNewBlock(selectedDispatchMarker);
-    });
-    YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
-    YES.style.backgroundColor = getRandomColor();
-    //YES.setAttribute('draggable', 'true'); No need for this anymore!
-    //YES.id = selectedObject;
-
-    var testDivStyling = {
-      float: 'right',
-      backgroundColor: "magenta",
-      height: 100,
-      width: 100,
-      marginTop: 10,
-      marginBottom: 10
-    };
-    var ComeOn = React.createClass({displayName: "ComeOn",render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
-      return(
-        React.createElement("div", null)
-      )
-    }});
-    //ComeOn.id = "meh";
-    //document.getElementById('TEST').appendChild(comeOn)
-    React.render(React.createElement(ComeOn, {style: testDivStyling}), document.getElementById('TEST').appendChild(YES));
-    console.log(ComeOn)
+  generateNewBlockId: function(){
+    /* Do it for just a Gate node for now, remember, small steps before big steps! */
+    var gateBlockIdCounter = this.state.gateBlockIdCounter;
+    gateBlockIdCounter += 1;
+    var newGateId = "Gate" + gateBlockIdCounter;
+    this.setState({gateBlockIdCounter: gateBlockIdCounter});
+    return newGateId;
   },
 
+  addBlockInfo: function(){
+    var newGateBlockId = this.generateNewBlockId();
 
+    blockActions.addToAllBlockInfo(newGateBlockId);
 
-
-
-  //testingChannelUnsubscription: function(){
-  //  //console.log("checking state of websocket connection:");
-  //  //WebSocketClient.checkStateOfWebSocketConnection();
-  //  //console.log("seeing what WebSocket.getchannel(0) returns");
-  //  //console.log(WebSocketClient.getChannel(0));
-  //  //console.log("getting channel 0, seeing if it's undefined");
-  //  WebSocketClient.getChannel(0).unsubscribe();
-  //
-  //  //WebSocketClient.getAllChannels()
-  //
-  //},
-  //
-  //testingChannelResubscription: function(){
-  //  WebSocketClient.resubscribeChannel(0);
-  //},
-  //
-  //testingChannelValueType: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  testChannel.setValue({test: "Test"});
-  //  console.log(testChannel.getValue());
-  //  testChannel.channelValueType()
-  //},
-  //
-  //testingChannelPause: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  console.log("Attempting to pause the channel");
-  //  testChannel.pause()
-  //},
-  //
-  //testingChannelSetValue: function(){
-  //  var testChannel = WebSocketClient.getChannel(0);
-  //  console.log("Attempting to use Channel.setValue");
-  //  testChannel.setValue(2);
-  //  //console.log("Hopefully the value of the Channel has changed, let's see:");
-  //  //console.log(testChannel.getValue())
-  //  //Doesn't work, it runs before the server responds!
-  //
-  //},
-
-  testingAddChannelChangeInfoViaProperServerRequest: function(){
-    sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
-    //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
-    //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
   },
-
-
 
   render: function() {
+    console.log("render: mainPane");
     var TESTStyling = {
       height: 1000,
       width: 1000,
       //backgroundColor: 'darkmagenta'
     };
+
+    var contentStyling = {
+      'height': '1476',
+      'width': '1494'
+    };
+    //console.log(this.state.newlyAddedNode);
+    //console.log(this.state);
+
+    /* Using an if statement to check if we need to display the initial data fetch loading icon
+    instead of flowChart
+     */
+    /* UPDATE: Don't use a loading screen for now */
+
+    //var mainPaneContent;
+    //
+    //if(this.props.loadingInitialData === true){
+    //  if(this.props.loadingInitialDataError === false) {
+    //    mainPaneContent = <i className="fa fa-spinner fa-spin fa-5x" ></i>
+    //  }
+    //  else if(this.props.loadingInitialDataError === true){
+    //    mainPaneContent = <i className="fa fa-exclamation-circle fa-5x" x="100" ></i>
+    //  }
+    //}
+    //else if(this.props.loadingInitialData === false){
+    //  mainPaneContent = <FlowChartControllerView/>
+    //}
+    //else if(this.props.loadingInitialData === 'Error'){
+    //  /* Perhaps have another icon show up if initial data fetch doesn't work? */
+    //}
+
+    var footer =
+      React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
+        React.createElement("div", {id: "buttonContainer"}, 
+          React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
+          React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
+          React.createElement(FooterButton, {id: "blockLookUpTableButton", 
+                        buttonLabel: "Blocks", 
+                        buttonClick: this.handleActionBlockLookupTableTabOpen})
+        )
+      )
+      );
+
     return(
       React.createElement(Panel, {theme: "flexbox", useAvailableHeight: true, buttons: [
+          React.createElement(ToggleButton, {title: "Toggle sidebar", onClick: this.handleActionToggleSidebar}, 
+            React.createElement("i", {className: "fa fa-bars"})
+          ),
           React.createElement(ToggleButton, {title: "Toggle Footer", onChange: this.handleActionFooterToggle}, 
             React.createElement("i", {className: "fa fa-wrench"})
           )
         ]}, 
-        React.createElement(Tab, {title: "View", showFooter: this.state.footers}, 
+        React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
           React.createElement(Content, null, 
-            React.createElement("p", null, "Content of View Tab"), 
-            React.createElement("div", {id: "redBlock", onClick: this.handleActionPassDispatchMarker}, 
-              React.createElement(RedBlock, null)
-            ), 
-            React.createElement("div", {id: "blueBlock", onClick: this.handleActionPassDispatchMarker}
-            ), 
-            React.createElement("div", {id: "greenBlock", onClick: this.handleActionPassDispatchMarker}
-            ), 
-            React.createElement("div", {style: TESTStyling, id: "TEST"})
-
-
-
-
-
+            React.createElement("div", {style: contentStyling}, 
+              React.createElement(FlowChartControllerView, null)
+            )
           ), 
 
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
-              React.createElement("button", {type: "button", onClick: this.addDivToContent}, "Add block"), 
-              React.createElement("button", {type: "button", onClick: this.testingAddChannelChangeInfoViaProperServerRequest}, "Proper server request")
-
-            )
-          )
-          )
+          footer
         ), 
 
-        React.createElement(Tab, {title: "Design", showFooter: this.state.footers}, 
+        React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
           React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
-            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null), 
-            React.createElement("p", null, "Config panel is ", this.state.configTabOpen ? 'open' : 'closed'), 
-
-            React.createElement("div", {className: this.state.configTabOpen ? "border" : ""}), 
-
-            React.createElement("p", null, "Fav panel is ", this.state.favTabOpen ? 'open' : 'closed')
+            "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
 
           ), 
-          React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
-            React.createElement("div", {id: "buttonContainer"}, 
-              React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-              React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen})
-            )
-          )
-          )
+          footer
         )
       )
     )
@@ -2400,10 +6443,13 @@ var MainPane = React.createClass({displayName: "MainPane",
 
 module.exports = MainPane;
 
+//<svg  width="100" height="100" ><rect x="10" y="15"
+//                                      onClick={this.addBlockInfo}
+//                                      height="50" width="50" /></svg>
+
 //handleActionChangeRedBlockState: function(){
 //  sidePaneActions.redBlockStateChange("this is the item")
 //},
-
 //showObjectProperties: function(selectedObject){
 //  console.log(selectedObject);
 //  var objectProperties = selectedObject; /* currently the div that contains the object, not the actual React component*/
@@ -2417,7 +6463,6 @@ module.exports = MainPane;
 //    return "uihy"
 //  }
 //},
-
 //changeClickedObjectProperties: function(selectedObject){ /*replaced by handleActionPassDispatchMarker*/
 //  var selectedObject = selectedObject;
 //  var selectedDiv = selectedObject.target;
@@ -2461,51 +6506,547 @@ module.exports = MainPane;
 //  //var selectedObjectProperties = redBlock.name; not sure if needed, can access the redBlock object simply through the imported module
 //  //this.showObjectProperties(selectedObject) /*use it to pass the clicked block object info to the showObjectProperties function*/
 //},
+//<button type="button" onClick={this.addDivToContent}>Add block</button>
+//<button type="button" onClick={this.testingAddChannelChangeInfoViaProperServerRequest}>Proper server request</button>
+//<button type="button" onClick={this.addNodeInfo}>Add node</button>
+//var RedBlock = require('./redBlock');
+//var BlueBlock = require('./blueBlock');
+//var GreenBlock = require('./greenBlock');
+//addDivToContent: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedObject);
+//  console.log(selectedObject.dispatchMarker);
+//
+//  function getRandomColor() {
+//    var letters = '0123456789ABCDEF'.split('');
+//    var color = '#';
+//    for (var i = 0; i < 6; i++ ) {
+//      color += letters[Math.floor(Math.random() * 16)];
+//    }
+//    return color;
+//  }
+//
+//  var YES = document.createElement('DIV');
+//
+//  YES.addEventListener("click", function(){
+//    console.log(selectedObject);/* selectedObject has now changed, that's the problem here!*/
+//    console.log(selectedObject.dispatchMarker);
+//    //var selectedObject = selectedObject;
+//    //var selectedDispatchMarker = selectedObject.dispatchMarker;
+//    console.log(selectedDispatchMarker);
+//    paneActions.appendStuffForNewBlock(selectedDispatchMarker);
+//  });
+//  YES.style.cssText = 'height: 100px; width: 100px; margin-top: 10px; margin-bottom: 10px; ';
+//  YES.style.backgroundColor = getRandomColor();
+//  //YES.setAttribute('draggable', 'true'); No need for this anymore!
+//  //YES.id = selectedObject;
+//
+//  var testDivStyling = {
+//    float: 'right',
+//    backgroundColor: "magenta",
+//    height: 100,
+//    width: 100,
+//    marginTop: 10,
+//    marginBottom: 10
+//  };
+//  var ComeOn = React.createClass({render: function(){ /* around here is where I would need to generate a new object in the 'Block' class via a constructor*/
+//    return(
+//      <div></div>
+//    )
+//  }});
+//  //ComeOn.id = "meh";
+//  //document.getElementById('TEST').appendChild(comeOn)
+//  React.render(<ComeOn style={testDivStyling}/>, document.getElementById('TEST').appendChild(YES));
+//  console.log(ComeOn)
+//},
+//testingChannelUnsubscription: function(){
+//  //console.log("checking state of websocket connection:");
+//  //WebSocketClient.checkStateOfWebSocketConnection();
+//  //console.log("seeing what WebSocket.getchannel(0) returns");
+//  //console.log(WebSocketClient.getChannel(0));
+//  //console.log("getting channel 0, seeing if it's undefined");
+//  WebSocketClient.getChannel(0).unsubscribe();
+//
+//  //WebSocketClient.getAllChannels()
+//
+//},
+//
+//testingChannelResubscription: function(){
+//  WebSocketClient.resubscribeChannel(0);
+//},
+//
+//testingChannelValueType: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  testChannel.setValue({test: "Test"});
+//  console.log(testChannel.getValue());
+//  testChannel.channelValueType()
+//},
+//
+//testingChannelPause: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to pause the channel");
+//  testChannel.pause()
+//},
+//
+//testingChannelSetValue: function(){
+//  var testChannel = WebSocketClient.getChannel(0);
+//  console.log("Attempting to use Channel.setValue");
+//  testChannel.setValue(2);
+//  //console.log("Hopefully the value of the Channel has changed, let's see:");
+//  //console.log(testChannel.getValue())
+//  //Doesn't work, it runs before the server responds!
+//
+//},
+//testingAddChannelChangeInfoViaProperServerRequest: function(){
+//  sessionActions.properServerRequestToAddChannelChangeInfoTest("this is the item");
+//  //console.log('new block content has been transferred to MainPane, now invoking action to pass to paneStore');
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedRedBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedBlueBlockContentFromServer);
+//  //paneActions.updatePaneStoreBlockContentViaDeviceStore(this.state.updatedGreenBlockContentFromServer);
+//},
+//handleActionChangeSomeInfo: function(){
+//  paneActions.changeSomeInfo('this is the item')
+//},
+//handleActionTabChangeViaOtherMeans: function(tab){
+//  sidePaneActions.switchTabWhenTabOpens(tab)
+//},
+//handleActionAddTab: function(stuff){
+//  paneActions.addTab(stuff)
+//},
+//handleActionPassDispatchMarker: function(selectedObject){
+//  var selectedObject = selectedObject;
+//  var selectedDispatchMarker = selectedObject.dispatchMarker;
+//  console.log(selectedDispatchMarker);
+//  paneActions.passDispatchMarker(selectedDispatchMarker)
+//},
+//handleActionAppendStuffForNewBlock: function(selectedObject){
+//
+//},
 
-},{"../actions/deviceActions":1,"../actions/mainPaneActions":2,"../actions/paneActions":3,"../actions/sessionActions":5,"../stores/deviceStore":10,"../stores/mainPaneStore":11,"../stores/paneStore":12,"../websocketClientTEST":22,"./blueBlock":14,"./configButton":15,"./favButton":17,"./greenBlock":18,"./redBlock":20,"react":206,"react-panels":31}],20:[function(require,module,exports){
+//addGateNode: function(){
+//  nodeActions.addToAllNodeInfo("adding gate node");
+//},
+//
+//generateNewNodeId: function(){
+//  /* Do it for just a Gate node for now, remember, small steps before big steps! */
+//  var gateNodeIdCounter = this.state.gateNodeIdCounter;
+//  gateNodeIdCounter += 1;
+//  var newGateId = "Gate" + gateNodeIdCounter;
+//  console.log(newGateId);
+//  this.setState({gateNodeIdCounter: gateNodeIdCounter});
+//  return newGateId;
+//
+//},
+//
+//addNodeInfo: function(){
+//  console.log("addNodeInfo");
+//  var gateNodeRegExp = /Gate/;
+//  var tgenNodeRegExp = /TGen/;
+//  var pcompNodeRegExp = /PComp/;
+//  var lutNodeRegExp = /LUT/;
+//
+//  var newGateNodeId = this.generateNewNodeId();
+//  console.log(newGateNodeId);
+//
+//  nodeActions.addToAllNodeInfo(newGateNodeId);
+//
+//  //ReactDOM.findDOMNode(this).dispatchEvent(AddNode);
+//
+//  //var newNode = this.state.newlyAddedNode;
+//  //console.log(newNode);
+//  //console.log(this.state.newlyAddedNode);
+//  //newNode = "Gate2";
+//
+//  if(gateNodeRegExp.test(newGateNodeId) === true){
+//    nodeActions.pushNodeToArray(<GateNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(tgenNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a tgen node!");
+//    nodeActions.pushNodeToArray(<TGenNode id={newGateNodeId}
+//                                          onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(pcompNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have a pcomp node!");
+//    nodeActions.pushNodeToArray(<PCompNode id={newGateNodeId}
+//                                           onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else if(lutNodeRegExp.test(newGateNodeId) === true){
+//    //console.log("we have an lut node!");
+//    nodeActions.pushNodeToArray(<LUTNode id={newGateNodeId} height={NodeStylingProperties.height + 40} width={NodeStylingProperties.width + 13} transform={nodeTranslate}
+//      //NodeName={nodeName} RectangleName={rectangleName}
+//                                         onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}/>)
+//  }
+//  else{
+//    console.log("no match to any node type, something's wrong?");
+//  }
+//  console.log(this.state.nodesToRender);
+//
+//
+//},
+
+//<TheGraphDiamond
+//  graphPosition={this.props.theGraphDiamondState.graphPosition} graphZoomScale={this.props.theGraphDiamondState.graphZoomScale} allEdges={this.props.theGraphDiamondState.allEdges}
+//  nodesToRender={this.props.theGraphDiamondState.nodesToRender} edgesToRender={this.props.theGraphDiamondState.edgesToRender} allNodeInfo={this.props.theGraphDiamondState.allNodeInfo}
+//  portThatHasBeenClicked={this.props.theGraphDiamondState.portThatHasBeenClicked} storingFirstPortClicked={this.props.theGraphDiamondState.storingFirstPortClicked}
+//  newlyCreatedEdgeLabel={this.props.theGraphDiamondState.newlyCreatedEdgeLabel} nodeLibrary={this.props.theGraphDiamondState.nodeLibrary}
+//  allNodeTypesStyling={this.props.theGraphDiamondState.allNodeTypesStyling} areAnyNodesSelected={this.props.theGraphDiamondState.areAnyNodesSelected}
+//  areAnyEdgesSelected={this.props.theGraphDiamondState.areAnyEdgesSelected} allNodeTypesPortStyling={this.props.theGraphDiamondState.allNodeTypesPortStyling}
+//  portMouseOver={this.props.theGraphDiamondState.portMouseOver}
+///>
+
+//<p>Config panel is {this.props.configTabOpen ? 'open' : 'closed'}</p>
+//
+//<div className={this.props.configTabOpen ? "border" : ""}></div>
+//
+//<p>Fav panel is {this.props.favTabOpen ? 'open' : 'closed'}</p>
+
+},{"../actions/blockActions.js":2,"../actions/mainPaneActions":4,"../actions/paneActions":5,"../stores/blockStore.js":12,"../stores/mainPaneStore":15,"../stores/paneStore":16,"./button":23,"./configButton":24,"./favButton":29,"./flowChartControllerView":31,"react":226,"react-panels":47}],33:[function(require,module,exports){
 /**
- * Created by twi18192 on 04/09/15.
+ * Created by twi18192 on 15/03/16.
  */
 
 var React = require('react');
 
-var RedBlockInfo = {
-  name: "Red block",
-  height: "100 pixels",
-  width: "100 pixels",
-  maxLength: "400 pixels",
-  hello: function(){
-    console.log("hello")
-  }
-};
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
-var RedBlock = React.createClass({displayName: "RedBlock",
+var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadoutField",
 
-  getRedBlockInfo: function(){
-    return RedBlockInfo;
-  },
   render: function(){
-    return(
-      React.createElement("div", null)
-    )
 
+    return(
+      React.createElement("div", {style: {position: 'relative', left: '5',
+                   bottom: '0px', width: '230px', height: '25px'}}, 
+        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
+           id: this.props.blockName + this.props.attributeName + "textContent", 
+           style: {fontSize: '13px', position: 'relative'}}, 
+          String(this.props.attributeName)
+        ), 
+        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '140px'}}, 
+          React.createElement("button", {style: {position: 'relative', left: '165px',}}, "Icon"), 
+          React.createElement("div", {style: {position: 'relative', backgroundColor: 'black', borderRadius: '2px',
+          bottom: '23px', height: '23px', width: '162px'}}, 
+            React.createElement("b", {style: {color: 'cyan', paddingLeft: '4px', paddingTop: '3px'}}, 
+              String(this.props.blockAttribute.value)
+            )
+          )
+        )
+      )
+    )
   }
 
 });
 
-module.exports = RedBlock;
+module.exports = NonEditableReadoutField;
 
-},{"react":206}],21:[function(require,module,exports){
+//<input
+//  style={{position: 'relative', textAlign: 'left', borderRadius: '2px',
+//                    border: '2px solid #999', color: 'green'}}
+//  value={String(this.props.blockAttribute.value)}
+//  readOnly="readonly" maxLength="17" size="17"/>
+
+},{"../actions/MalcolmActionCreators":1,"react":226}],34:[function(require,module,exports){
+/**
+ * Created by twi18192 on 15/01/16.
+ */
+
+var React = require('../../node_modules/react/react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var blockStore = require('../stores/blockStore.js');
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+var flowChartActions = require('../actions/flowChartActions');
+
+
+var interact = require('../../node_modules/interact.js');
+
+var Ports = React.createClass({displayName: "Ports",
+
+  componentDidMount: function(){
+    //interact('.inport')
+    //  .on('tap', this.portClick);
+    //interact('.outport')
+    //  .on('tap', this.portClick);
+    //interact('.portArc')
+    //  .on('tap', this.portClick);
+    interact('.invisiblePortCircle')
+      .on('tap', this.portClick);
+
+    interact('.inport')
+      .styleCursor(false);
+    interact('.outport')
+      .styleCursor(false);
+    interact('.portArc')
+      .styleCursor(false);
+    interact('.invisiblePortCircle')
+      .styleCursor(false);
+  },
+
+  componentWillUnmount: function(){
+    //interact('.inport')
+    //  .off('tap', this.portClick);
+    //interact('.outport')
+    //  .off('tap', this.portClick);
+    //interact('.portArc')
+    //  .off('tap', this.portClick);
+    interact('.invisiblePortCircle')
+      .off('tap', this.portClick);
+  },
+
+  shouldComponentUpdate(nextProps, nextState){
+    console.log("port's shouldComponentUpdate");
+    if(this.props.portThatHasBeenClicked === null){
+      return (
+        nextProps.selected !== this.props.selected
+      )
+    }
+    else if(nextProps.portThatHasBeenClicked !== null ||
+      this.props.portThatHasBeenClicked !== null ||
+      nextProps.storingFirstPortClicked !== null ||
+      this.props.storingFirstPortClicked !== null){
+
+      return (
+        nextProps.selected !== this.props.selected ||
+        nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
+        nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
+      );
+    }
+  },
+
+  portClick: function(e){
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    /* Need to either invoke an action or fire an event to cause an edge to be drawn */
+    /* Also, best have theGraphDiamond container emit the event, not just the port or the node, since then the listener will be in theGraphDiamond to then invoke the edge create function */
+
+    var target;
+
+    console.log(e.currentTarget);
+
+    /* Doing the stuff to accomodate te invisiblePortCircle, instead of giving portClick
+    to both portCircle and portArc
+     */
+
+    if(e.currentTarget.className.animVal === "invisiblePortCircle"){
+      console.log("clicked on invisiblePortCircle, so need to find the corresponding port");
+      console.log(e.currentTarget.parentNode);
+      console.log(e.currentTarget.parentNode.children);
+      for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
+        //console.log(e.currentTarget.parentNode.children[i]);
+        if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
+          || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+          target = e.currentTarget.parentNode.children[i];
+          console.log(target);
+        }
+      }
+    }
+
+
+    //if(e.currentTarget.className.animVal === "portArc"){
+    //  console.log("clicked on an arc, so need to find the corresponding port");
+    //  console.log(e.currentTarget.parentNode);
+    //  console.log(e.currentTarget.parentNode.children);
+    //  for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
+    //    //console.log(e.currentTarget.parentNode.children[i]);
+    //    if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
+    //      || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+    //      target = e.currentTarget.parentNode.children[i];
+    //    }
+    //  }
+    //}
+    //else{
+    //  //console.log("clicked on a port, makes it easier");
+    //  target = e.currentTarget.id;
+    //}
+    console.log(target);
+    flowChartActions.passPortMouseDown(target);
+    var theGraphDiamondHandle = document.getElementById('appAndDragAreaContainer');
+    var passingEvent = e;
+    console.log(this.props.storingFirstPortClicked);
+    if(this.props.storingFirstPortClicked === null){
+      //console.log("storingFirstPortClicked is null, so will be running just edgePreview rather than connectEdge");
+      theGraphDiamondHandle.dispatchEvent(EdgePreview);
+    }
+    else if(this.props.storingFirstPortClicked !== null){
+      //console.log("a port has already been clicked before, so dispatch TwoPortClicks");
+      theGraphDiamondHandle.dispatchEvent(TwoPortClicks)
+    }
+    //theGraphDiamondHandle.dispatchEvent(PortSelect);
+  },
+
+  /* From the-graph */
+
+  angleToX: function (percent, radius) {
+    return radius * Math.cos(2*Math.PI * percent);
+  },
+  angleToY: function (percent, radius) {
+  return radius * Math.sin(2*Math.PI * percent);
+  },
+  makeArcPath: function (port) {
+
+    if(port === "inport"){
+      return [
+        "M", this.angleToX(-1/4, 4), this.angleToY(-1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(1/4, 4), this.angleToY(1/4, 4)
+      ].join(" ");
+    }
+    else if(port === "outport"){
+      return [
+        "M", this.angleToX(1/4, 4), this.angleToY(1/4, 4),
+        "A", 4, 4, 0, 0, 0, this.angleToX(-1/4, 4), this.angleToY(-1/4, 4)
+      ].join(" ");
+    }
+  },
+
+  render: function(){
+    console.log("render: ports");
+
+    var blockId = this.props.blockId;
+    var blockInfo = this.props.blockInfo;
+
+    /* Getting rid of the use of allBlockTypesStyling */
+
+    //var allBlockTypesStyling = this.props.allBlockTypesStyling;
+    var blockType = blockInfo.type;
+    var inports = [];
+    var inportsXCoord;
+    var outports = [];
+    var outportsXCoord;
+    var inportsText = [];
+    var outportsText = [];
+    var blockText = [];
+
+    var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
+
+    for(var i = 0; i < blockInfo.inports.length; i++){
+      var len = blockInfo.inports.length;
+      var inportName = blockInfo.inports[i].name;
+      var portAndTextTransform = "translate(" + 0 + "," + blockStyling.outerRectangleHeight / (len + 1) * (i + 1) + ")";
+      //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
+      inports.push(
+        React.createElement("g", {key: blockId + inportName + "portAndText", id: blockId + inportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {key: blockId + inportName + "-arc", d: this.makeArcPath("inport"), className: "portArc", 
+                style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
+          React.createElement("circle", {key: blockId + inportName, className: "inport", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: blockStyling.portRadius, //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style: {fill: blockStyling.portFill, cursor: 'default'//allBlockTypesStyling[blockType].ports.portStyling.fill
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65, cursor: 'default'
+                    }, 
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + inportName}
+          ), 
+          React.createElement("circle", {key: blockId + inportName + 'invisiblePortCircle', className: "invisiblePortCircle", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: blockStyling.portRadius + 2, 
+                  style: {fill: 'transparent', cursor: 'default'
+                    }, 
+            //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + inportName + 'invisiblePortCircle'}
+          ), 
+          React.createElement("text", {key: blockId + inportName + "-text", textAnchor: "start", 
+                x: 5, 
+                y: 3, 
+                style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"8px", fontFamily: "Verdana"}
+          }, 
+            inportName
+          )
+        )
+      );
+    }
+
+    for(var j = 0; j < blockInfo.outports.length; j++){
+      var len = blockInfo.outports.length;
+      var outportName = blockInfo.outports[j].name;
+      var portAndTextTransform = "translate(" + blockStyling.outerRectangleWidth //allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
+        + "," + blockStyling.outerRectangleHeight / (len + 1) * (j + 1) + ")"; //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
+      outports.push(
+        React.createElement("g", {key: blockId + outportName + "portAndText", id: blockId + outportName + "portAndText", transform: portAndTextTransform}, 
+          React.createElement("path", {key: blockId + outportName + "-arc", d: this.makeArcPath("outport"), className: "portArc", 
+                style: {fill: this.props.selected ? '#797979' : 'black', cursor: 'default'}}), 
+          React.createElement("circle", {key: blockId + outportName, className: "outport", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: blockStyling.portRadius, //allBlockTypesStyling[blockType].ports.portStyling.portRadius
+                  style: {fill: blockStyling.portFill, //allBlockTypesStyling[blockType].ports.portStyling.fill
+                   //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
+                   // strokeWidth: 1.65,
+                    cursor: 'default'}, 
+                  //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + outportName}
+          ), 
+          React.createElement("circle", {key: blockId + outportName + 'invisiblePortCircle', className: "invisiblePortCircle", 
+                  cx: 0, 
+                  cy: 0, 
+                  r: blockStyling.portRadius + 2, 
+                  style: {fill: 'transparent', cursor: 'default'
+                    }, 
+            //onMouseDown={this.portMouseDown} onMouseUp={this.portMouseUp}
+                  id: this.props.blockId + outportName + 'invisiblePortCircle'}
+          ), 
+          React.createElement("text", {key: blockId + outportName + "-text", textAnchor: "end", 
+                x: -5, 
+                y: 3, 
+                style: {MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               fontSize:"8px", fontFamily: "Verdana"}
+          }, 
+            outportName
+          )
+        )
+      );
+    }
+
+    /* Now just need to add the node name and node type text as well */
+    /* Hmm, where should I get/calculate their position & height from?... */
+
+    blockText.push([
+      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
+       cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+        alignmentBaseline: 'middle', fontSize:"11px", fontFamily: "Verdana"}, 
+            transform: "translate(36, 91)"}, 
+        blockInfo.label
+      ),
+
+      //<text className="blockText" style={{MozUserSelect: 'none',
+      // cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
+      //  alignmentBaseline: 'middle', fontSize: "8px", fontFamily: "Verdana"}}
+      //      transform="translate(36, 104)" >
+      //  {blockInfo.type}
+      //</text>
+    ]);
+
+    return (
+      React.createElement("g", {id: blockId + "-ports"}, 
+        React.createElement("g", {id: blockId + "-inports"}, 
+          inports
+        ), 
+        React.createElement("g", {id: blockId + "-outports"}, 
+          outports
+        ), 
+        blockText
+      )
+
+
+    )
+  }
+});
+
+module.exports = Ports;
+
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../../node_modules/react/react":226,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12}],35:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
 
 var React = require('react');
+var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var ReactPanels = require('react-panels');
-var sidePaneStore = require('../stores/sidePaneStore');
-var sidePaneActions = require('../actions/sidePaneActions');
 var Dropdown = require('./dropdownMenu');
-//var mainPaneStore = require('../stores/mainPaneStore');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
@@ -2518,24 +7059,38 @@ var Button = ReactPanels.Button;
 var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 
-function getSidePaneState(){
-  return{
-    tabState: paneStore.getTabState(),
-    selectedTabIndex: paneStore.getSelectedTabIndex()
-  }
-}
+var Treeview = require('react-treeview');
+var interact = require('../../node_modules/interact.js');
+
+var blockActions = require('../actions/blockActions.js');
+
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
+var CustomButton = require('./button');
+
+var NonEditableReadoutField = require('./nonEditableReadoutField');
+var TextEditableReadoutField = require('./textEditableReadoutField');
+var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
+
+var ToggleSwitch = require('react-toggle-switch');
+var BlockToggleSwitch = require('./blockToggleSwitch');
+
+//var TreeviewComponent = require('react-treeview-component');
 
 var SidePane = React.createClass({displayName: "SidePane",
 
-  getInitialState: function(){
-    return getSidePaneState();
-  },
-
-  _onChange: function(){
-    this.setState(getSidePaneState());
-    //this.refs.panel.setSelectedIndex(this.state.selectedTabIndex, null);
-    /* this works, but I'm not convinced that this is the 'Flux' way to do things...
-    UPDATE: actually it doesn't work, selected tab content jumps about!*/
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
+      nextProps.listVisible !== this.props.listVisible ||
+      nextProps.tabState !== this.props.tabState ||
+      nextProps.allBlockInfo !== this.props.allBlockInfo ||
+      nextProps.favContent !== this.props.favContent ||
+      nextProps.configContent !== this.props.configContent ||
+      nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
+      nextProps.blocksVisibility !== this.props.blocksVisibility
+      //nextProps.blockPositions !== this.props.blockPositions
+    )
   },
 
   handleActionPassSidePane: function(){
@@ -2557,837 +7112,881 @@ var SidePane = React.createClass({displayName: "SidePane",
     console.log("action function for changing tab via other means ran correctly");
   },
 
-  //handleActionPassingSidePaneOnMount: function(){
-  //  console.log(this);
-  //  //sidePaneActions.passingSidePane(this)
-  //},
+  handleActionInitialFetchOfBlockData: function(){
+    paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
+  },
+  handleActionRemoveBlockTab: function(){
+    var selectedIndex = this.refs.panel.getSelectedIndex();
+    paneActions.removeBlockTab(selectedIndex);
+  },
+
+  handleEdgeDeleteButton: function(EdgeInfo){
+    console.log(EdgeInfo);
+    blockActions.deleteEdge(EdgeInfo);
+
+    /* Reset port styling too */
+
+    var fromBlockPortElement = document.getElementById(EdgeInfo.fromBlock + EdgeInfo.fromBlockPort);
+    var toBlockPortElement = document.getElementById(EdgeInfo.toBlock + EdgeInfo.toBlockPort);
+
+    fromBlockPortElement.style.fill = "grey";
+    toBlockPortElement.style.fill = "grey";
+  },
+
+  handleAttributeValueSubmit: function(blockName, method, args){
+    MalcolmActionCreators(blockName, method, args);
+  },
 
   componentDidMount: function(){
-    sidePaneStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
     this.handleActionPassSidePane();
-    //this.handleActionPassingSidePaneOnMount()
+    ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
   },
 
   componentWillUnmount: function(){
-    sidePaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
+  },
+
+  toggleTreeviewContent: function(){
+
+  },
+
+  collapseAllTreeviews: function(){
+
+  },
+
+  selectedInputFieldText: function(inputFieldElementName, e){
+
+    var inputFieldElement = document.getElementById(inputFieldElementName);
+    inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
+
+  },
+
+  attributeFieldOnChange: function(blockInfo, e){
+    console.log("field changed, wait for the enter key?");
+    console.log(e);
+    console.log(blockInfo);
+
+    var blockAttributeInputField = document.getElementById(blockInfo.block + blockInfo.attribute + "inputField");
+
+    console.log(blockAttributeInputField);
+
+    var appContainerElement = document.getElementById('appContainer');
+    console.log(appContainerElement);
+
+    document.addEventListener('keyup', this.enterKeyUp.bind(null, blockInfo, blockAttributeInputField));
+    appContainerElement.addEventListener('mouseup', this.mouseUp.bind(null, blockInfo, blockAttributeInputField));
+
+  },
+
+  enterKeyUp: function(blockInfo, inputFieldElement, e){
+
+    /* Just put it all in keyup, that way I don't
+    have to deal with if the user holds the key down
+    and the GUI ends up firing off lots of keydown/call method
+    events
+     */
+
+    if(e.keyCode == 13) {
+
+      var inputFieldValue;
+
+      if(inputFieldElement.value === ""){
+        /* Set the value to 0, then send that to
+        malcolmCall
+         */
+
+        inputFieldElement.value = "0";
+        /* Had to use dot notation to set value, rather
+        than setAttribute
+         */
+
+        inputFieldValue = "0";
+
+      }
+      else{
+        //window.alert(inputFieldElement.value);
+        inputFieldValue = inputFieldElement.value;
+      }
+
+      /* Now i need to pass malcolmCall the corresponding
+       method and arguments
+       */
+
+      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+      var argsObject = {
+
+      };
+
+      for(var key in blockInfo){
+        if(blockInfo[key] === blockInfo.attribute){
+          argsObject[blockInfo.attribute] = inputFieldValue;
+        }
+      }
+
+      console.log(argsObject);
+
+      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+      //document.removeEventListener('keydown', this.enterKeyDown);
+
+      var appContainerElement = document.getElementById('appContainer');
+
+      inputFieldElement.blur();
+      document.removeEventListener('keyup', this.enterKeyUp);
+      appContainerElement.removeEventListener('mouseup', this.mouseUp);
+
+    }
+  },
+
+  mouseUp: function(blockInfo, inputFieldElement,e){
+
+    /* e.target can tell what exactly you clicked on,
+    so use it to check the id!
+     */
+
+    if(e.target.id !== inputFieldElement.id) {
+
+      var inputFieldValue;
+
+      if(inputFieldElement.value === ""){
+        /* Set the value to 0, then send that to
+         malcolmCall
+         */
+
+        inputFieldElement.value = "0";
+        /* Had to use dot notation to set value, rather
+         than setAttribute
+         */
+
+        inputFieldValue = "0";
+
+      }
+      else{
+        //window.alert(inputFieldElement.value);
+        inputFieldValue = inputFieldElement.value;
+      }
+
+      /* Now I need to pass malcolmCall the corresponding
+       method and arguments
+       */
+
+      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
+      var argsObject = {};
+
+      for (var key in blockInfo) {
+        if (blockInfo[key] === blockInfo.attribute) {
+          argsObject[blockInfo.attribute] = inputFieldValue;
+        }
+      }
+
+      console.log(argsObject);
+
+      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+      var appContainerElement = document.getElementById('appContainer');
+
+      inputFieldElement.blur();
+      appContainerElement.removeEventListener('mouseup', this.mouseUp);
+      document.removeEventListener('keyup', this.enterKeyUp);
+    }
+    else if(e.target === inputFieldElement.id){
+      console.log("clicked on the field again, so don't submit it!");
+    }
+
+  },
+
+  handleMalcolmCall: function(blockName, method, args){
+    console.log("malcolmCall in sidePane");
+    MalcolmActionCreators.malcolmCall(blockName, method, args)
+  },
+
+  onChangeBlockMethodDropdownOption: function(blockInfo, e){
+    console.log("onClickBlockMethodDropdownOption");
+    console.log(e);
+    console.log(e.currentTarget.value);
+    console.log(blockInfo);
+
+    /* Fairly similar to the code for pressing
+    enter for theeditable fields
+     */
+    var clickedOptionFromDropdownMenu = e.currentTarget.value;
+
+    /* Testing 'VISIBLE' vs 'visible' for individual
+    block tabs' visibility dropdowns
+     */
+
+    var blockAttribute;
+
+    if(blockInfo.attribute === 'VISIBLE'){
+      blockAttribute = 'visible';
+    }
+    else{
+      blockAttribute = blockInfo.attribute;
+    }
+
+    var inputFieldSetMethodName = "_set_" + blockAttribute;
+    var argsObject = {};
+
+    for (var key in blockInfo) {
+      if (blockInfo[key] === blockInfo.attribute) {
+        argsObject[blockInfo.attribute] = clickedOptionFromDropdownMenu;
+      }
+    }
+
+    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
+
+  },
+
+  generateBlockTabContent: function(blockAttributes, blockName){
+
+    var blockAttributeDivs = [];
+
+    var groupsObject = {};
+
+    for(var attribute in blockAttributes){
+      var attributeLabel;
+      /* Not sure if this'll be needed ifI don't
+      need treeview for th subattributes?
+       */
+      //var attributeDiv = [];
+
+      if(blockAttributes[attribute].tags === undefined &&
+        blockAttributes[attribute].alarm === undefined){
+        /* Then it's a group, so create a treeview */
+        /* The best I can do I think is to now do a
+        for loop in here through all the block attributes
+        to find all the attributes belonging to this
+        group?
+         */
+
+        /* Creating the array that I'll push the
+        treeview children to as the upper for loop
+        goes through all the attributes of the block
+         */
+        groupsObject[attribute] = [];
+
+        //attributeLabel =
+        //  <Treeview defaultCollapsed={true}
+        //            nodeLabel={
+        //            <b style={{marginLeft: '-47px'}}>{attribute}</b>
+        //            } >
+        //  </Treeview>
+
+      }
+      else if(blockAttributes[attribute].tags === undefined &&
+        blockAttributes[attribute].alarm !== undefined){
+        /* Then it's a readonly readout,
+         no methods or anything
+         */
+
+        attributeLabel =
+          React.createElement(NonEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                   blockName: blockName, 
+                                   attributeName: attribute});
+
+        blockAttributeDivs.push(attributeLabel);
+
+
+
+      }
+      else if(blockAttributes[attribute].tags !== undefined){
+        /* Could be a readonly readout,
+         or could be a editable method
+         readout (text or dropdown)
+         */
+
+
+        var isMethod = false;
+
+        for(var k = 0; k < blockAttributes[attribute].tags.length; k++){
+          if(blockAttributes[attribute].tags[k].indexOf('method') !== -1){
+            isMethod = true;
+          }
+          else{
+            /* Do nothing, keep isMethod as false */
+          }
+
+          /* Need to find what group the
+           attribute belongs to as well
+           */
+
+          if(blockAttributes[attribute].tags[k].indexOf('group') !== -1 ){
+
+            var groupName = blockAttributes[attribute].tags[k].slice('group:'.length);
+
+          }
+
+        }
+
+        if(isMethod === false){
+          /* Normal readonly readout */
+
+          groupsObject[groupName].push(
+            React.createElement(NonEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                     blockName: blockName, 
+                                     attributeName: attribute})
+          )
+
+        }
+        else if(isMethod === true){
+          /* It's a method, now need to check
+          if it's a text one or a dropdown
+          one
+           */
+
+          if(blockAttributes[attribute].type.name === 'VEnum'){
+            /* Use the dropdown editable
+             readout field element
+             */
+
+            groupsObject[groupName].push(
+              React.createElement(DropdownEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                            blockName: blockName, 
+                                            attributeName: attribute, 
+                                            onChangeBlockMethodDropdownOption: 
+                                            this.onChangeBlockMethodDropdownOption
+                                            })
+            )
+
+          }
+          else{
+            /* It's a text editable readout
+             field
+             */
+
+            groupsObject[groupName].push(
+              React.createElement(TextEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                        blockName: blockName, 
+                                        attributeName: attribute, 
+                                        attributeFieldOnChange: this.attributeFieldOnChange, 
+                                        selectedInputFieldText: this.selectedInputFieldText})
+            )
+
+          }
+
+        }
+
+
+      }
+
+      //blockAttributeDivs.push(attributeLabel);
+
+      /* Then here have a for loop iterating through
+      the groupsObject, creating a treeview for each
+      one, then handing it a nodeLabel and its child
+      array with all the appropriate children
+       */
+
+    }
+
+    for(var group in groupsObject){
+      blockAttributeDivs.push(
+        React.createElement(Treeview, {defaultCollapsed: true, 
+                  nodeLabel: 
+                    React.createElement("b", {style: {marginLeft: '-47px'}}, group)
+                    
+        }, " ", groupsObject[group]
+        )
+      )
+    }
+
+    //for(var group in groupsObject){
+    //  blockAttributeDivs.push(
+    //    <TreeviewComponent dataSource={{
+    //      id: group + "treeview",
+    //      text: group,
+    //      icon: group,
+    //      opened: true,
+    //      selected: true,
+    //      children: groupsObject[group]
+    //    }} onTreenodeClick={function(e){console.log("treenode click!")}}
+    //    />
+    //  )
+    //}
+
+    return blockAttributeDivs;
+
+  },
+
+  disableTabKey: function(e){
+    console.log(e);
+    if(e.keyCode === 9){
+      console.log("tab key!");
+      e.preventDefault();
+    }
+  },
+
+  toggleSwitch: function(blockName, value, e){
+    console.log(value);
+    console.log(blockName);
+
+    /* invoke malcolmCall to toggle the visible attribute
+    of the given block
+     */
+
+    /* If I'm toggling, I want to pass the OPPOSITE of
+    whatever the current value of the toggle is
+     */
+
+    var newValue;
+    var argsObject = {};
+
+    if(value === 'true'){
+      newValue = 'false';
+    }
+    else if(value === 'false'){
+      newValue = 'true'
+    }
+
+    var methodToInvoke = '_set_' + blockName + '_visible';
+
+    var argsValue;
+
+    if(newValue === 'true'){
+      argsValue = 'Show';
+    }
+    else if(newValue === 'false'){
+      argsValue = 'Hide';
+    }
+
+    argsObject[blockName] = argsValue;
+
+    console.log(argsValue);
+
+    /* Now invoke malcolmCall */
+
+    this.handleMalcolmCall('VISIBILITY', methodToInvoke, argsObject);
+    /* Note: the first argument is 'VISIBILITY' so then I am
+    invoking the method via Z:VISIBILITY rather than the block
+    itself, seems more organised to do it all through that
+     */
+
   },
 
 
   render: function () {
+
+    console.log("render: sidePane");
+    console.log(this.props.tabState);
+
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
-    var tabs = this.state.tabState.map(function(item, i) {
-      var tabTitle = "Tab " + item.name;
-      var tabIndex = i + 1;
-      var tabContent = function(){
-        var content = [];
-        for (var outerkey in item.info){                      /*can't use .map since item.info is an object, not an array*/
-          content.push(React.createElement("br", null));
-          content.push(React.createElement("p", null, outerkey));
-          for (var key in item.info[outerkey])
-            content.push(React.createElement("p", null, key, ": ", item.info[outerkey][key]))
-        }
-        return {content}
-      };
-      return (
-        React.createElement(Tab, {key: item.name, title: tabTitle}, 
 
-          React.createElement(Content, null, "Content of ", tabTitle, " ", React.createElement("br", null), " Tab number ", tabIndex, 
-            "React.addons.createFragment(", tabContent(), ")"
+    var betterTabs = this.props.tabState.map(function(block, i){
+      /* Using strings in tabState instead of obejct so I can just point to this.props.allBlockInfo[block] to show
+      the data, rather than having to redupdate allBlockTabInfo via waitFor every time blockStore's allBlockInfo changes
+       */
+      //var tabLabel = block.label;
+      var tabIndex = i + 1;
+
+      var betterTabContent = function() {
+
+        var tabContent = [];
+
+        if(block === "Favourites"){
+          console.log("we have a favourites tab");
+          tabContent.push(React.createElement("p", null, this.props.favContent.name));
+          var tabTitle = 'yh';
+        }
+        else if(block === 'Configuration'){
+          console.log("we have a config tab");
+          tabContent.push(React.createElement("p", null, this.props.configContent.name));
+          var tabTitle = 'yh';
+        }
+        else if(block === 'BlockLookupTable'){
+          console.log("we have the blockLookupTable tab");
+
+          var sortedBlocksUnderGroupNames = {};
+
+          for(var m = 0; m < this.props.blockGroups.length; m++){
+            sortedBlocksUnderGroupNames[this.props.blockGroups[m]] = [];
+
+            for(var blockName in this.props.blocksVisibility){
+              if(blockName.indexOf(this.props.blockGroups[m]) !== -1){
+                sortedBlocksUnderGroupNames[this.props.blockGroups[m]].push(blockName)
+              }
+            }
+          }
+
+          for(var blockGroup in sortedBlocksUnderGroupNames){
+            if(sortedBlocksUnderGroupNames[blockGroup].length > 1){
+
+              var groupMembersToggleSwitches = [];
+
+              for(var i = 0; i < sortedBlocksUnderGroupNames[blockGroup].length; i++){
+
+                groupMembersToggleSwitches.push(
+                  React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][i], 
+                                     toggleSwitch: this.toggleSwitch, 
+                                     toggleOrientation: 
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
+                                     .value === 'Show'
+                                     }
+                                     )
+                )
+              }
+
+              tabContent.push(
+                React.createElement(Treeview, {defaultCollapsed: true, 
+                          nodeLabel: 
+                          React.createElement("b", {style: {}}, blockGroup)
+                          
+                }, " ", groupMembersToggleSwitches
+                )
+              )
+            }
+            else{
+              tabContent.push(
+                React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][0], 
+                                   toggleSwitch: this.toggleSwitch, 
+                                   toggleOrientation: 
+                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
+                                     .value === 'Show'
+                                     }
+                )
+              );
+            }
+          }
+
+          //for(var n = 0; n < this.props.blocksVisibility.length; n++){
+          //  /* Need to push to the correct treeview somehow,
+          //  perhaps nest this inside the block groups loop?
+          //   */
+          //  tabContent.push(
+          //    <BlockToggleSwitch toggleSwitch={this.toggleSwitch}
+          //                       blockName={this.props.blocksVisibility[n].slice(2)} />
+          //  );
+          //}
+
+
+          var tabTitle = 'yh';
+        }
+        else if(block.tabType === 'edge'){
+          console.log("we have an edge tab!!");
+
+          var tabLabel = block.label;
+
+          tabContent.push(
+            React.createElement("button", {key: tabLabel + "edgeDeleteButton", onClick: this.handleEdgeDeleteButton.bind(null, block)
+            }, "Delete edge")
+          );
+        }
+        else {
+          console.log("normal block tab");
+          var tabTitle = "Attributes of " + tabLabel;
+
+          tabContent.push(this.generateBlockTabContent(this.props.allBlockAttributes[block], block));
+        }
+        console.log(tabContent);
+        return tabContent;
+      }.bind(this);
+
+      return (
+        React.createElement(Tab, {key: block + "tab", title: block}, 
+
+          React.createElement(Content, {key: block + "content"}, 
+            betterTabContent()
           )
 
         )
-      );
-    }.bind(this));
-    return (
-      React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
-
-          //<Button title="Add another tab" onButtonClick={this.handleActionAddTab}>
-          //  <i className="fa fa-plus"></i>
-          //</Button>,
-          React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveTab}, 
-            React.createElement("i", {className: "fa fa-times"})
-          ),
-          React.createElement(Button, {title: "Drop down menu"}, 
-          React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans}))
-          )
-        ]}, 
-        tabs
       )
+    }.bind(this));
+
+    return (
+        React.createElement(Panel, {ref: "panel", theme: "flexbox", skin: skin, useAvailableHeight: true, globals: globals, buttons: [
+
+
+            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveBlockTab}, 
+              React.createElement("i", {className: "fa fa-times"})
+            ),
+            React.createElement(Button, {title: "Drop down menu"}, 
+            React.createElement("div", {id: "dropDown"}, React.createElement(Dropdown, {changeTab: this.handleActionTabChangeViaOtherMeans, 
+            tabState: this.props.tabState, 
+            listVisible: this.props.listVisible}
+            ))
+            )
+          ]}, 
+          betterTabs
+        )
     );
   }
 });
 
 module.exports = SidePane;
 
-//
-//dropdownChange:function(tab) {
-//  this.refs.panel.setSelectedIndex(tab, null);
-//  console.log(tab)
-//  console.log("it ran correctly");
-//},
-
-},{"../actions/paneActions":3,"../actions/sidePaneActions":6,"../stores/paneStore":12,"../stores/sidePaneStore":13,"./dropdownMenu":16,"react":206,"react-panels":31}],22:[function(require,module,exports){
+},{"../../node_modules/interact.js":43,"../../node_modules/react-dom/dist/react-dom.js":45,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/paneActions":5,"../stores/paneStore":16,"./blockToggleSwitch":22,"./button":23,"./dropdownEditableReadoutField":25,"./dropdownMenu":26,"./nonEditableReadoutField":33,"./textEditableReadoutField":37,"react":226,"react-panels":47,"react-toggle-switch":50,"react-treeview":51}],36:[function(require,module,exports){
 /**
- * Created by twi18192 on 01/10/15.
+ * Created by twi18192 on 25/01/16.
  */
 
-var Client = require('./writingWebSocketsInReact');
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var MainPane = require('./mainPane');
+var SidePane = require('./sidePane');
+
+var mainPaneStore = require('../stores/mainPaneStore');
+var sidePaneStore = require('../stores/sidePaneStore');
+var paneStore = require('../stores/paneStore');
+var blockStore = require('../stores/blockStore.js');
+var attributeStore = require('../stores/attributeStore');
+var blocksVisibleStore = require('../stores/blocksVisibleStore');
+
+var blockActions = require('../actions/blockActions.js');
+var paneActions = require('../actions/paneActions');
+
+var SideBar = require('react-sidebar').default;
+
+var MainTabbedViewStyle = {
+  "height": "100%",
+  "width": "100%",
+  minWidth: 200,
+  minHeight: 500,
+  display: 'inlineBlock'
+};
+
+var SideTabbedViewStyle = {
+  float: 'right',
+  "height": "100%",
+  "width": "100%",
+  maxWidth:400
+};
+
+var SidebarStyling = {
+  root: {
+    position: 'absolute',
+    id: "root",
+    //minWidth: 900, /* For the 500 minWidth of mainpane, and then the 400 that the sidepane will always be*/
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden',
+  },
+  sidebar: {
+    zIndex: 2,
+    id: "sidebar",
+    width: "400px",
+    position: 'absolute',
+    top: 0,
+    //left: "400px",
+    bottom: 0,
+    transition: 'transform .3s ease-out',
+    WebkitTransition: '-webkit-transform .3s ease-out',
+    willChange: 'transform',
+    overflowY: 'auto',
+  },
+  content: {
+    position: 'absolute',
+    id: "content",
+    //minWidth: 500,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'auto',
+    transition: 'left .3s ease-out, right .3s ease-out',
+  },
+  overlay: {
+    zIndex: 1,
+    id: "overlay",
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity .3s ease-out',
+    backgroundColor: 'rgba(0,0,0,.3)',
+  },
+  dragHandle: {
+    zIndex: 1,
+    id: "draghandle",
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+  },
+};
+
+function getBothPanesState(){
+  return{
+    /* Its own getter functions first */
+    sidebarOpen: JSON.parse(JSON.stringify(paneStore.getSidebarOpenState())),
+
+    /* MainPane's getter functions for stores */
+    footers: JSON.parse(JSON.stringify(mainPaneStore.getFooterState())),
+    favTabOpen: JSON.parse(JSON.stringify(paneStore.getFavTabOpen())),
+    configTabOpen: JSON.parse(JSON.stringify(paneStore.getConfigTabOpen())),
+    //loadingInitialData: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialData())),
+    //loadingInitialDataError: JSON.parse(JSON.stringify(paneStore.getIfLoadingInitialDataError())),
 
-var WebSocketClient = new Client("wss://echo.websocket.org", null, 10, null, null);
+    /* SidePane's getter functions for stores */
+    tabState: JSON.parse(JSON.stringify(paneStore.getTabState())),
+    selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
+    listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
-console.log("trying to show all channels");
-console.log(WebSocketClient.getAllChannels());
-/* This works correctly! :) */
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
+    configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
 
-WebSocketClient.addWebSocketOnErrorCallback(function(){
-  console.log("just a simple error")
-});
+    blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
+    blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
 
-//WebSocketClient.close();
-//WebSocketClient.sendText("Hello");
+    //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
-//console.log(WebSocketClient.getSentMessages());
-
-//WebSocketClient.subscribeChannel("Test channel", function(){console.log("Test channel 1 callback")}, false, "PV", "Version 0.1", 13);
-
-
-//WebSocketClient.subscribeChannel("Test channel 2", function(){console.log("Created another test channel")}, false, "PV", "Version 0.2", 16);
-
-//console.log(WebSocketClient.getAllChannels());
-
-
-
-
-module.exports = WebSocketClient;
-
-},{"./writingWebSocketsInReact":23}],23:[function(require,module,exports){
-/**
- * Created by twi18192 on 28/09/15.
- */
-
-var serverActions = require('./actions/serverActions');
-var paneActions = require('./actions/paneActions');
-
-function Client(url, debug, maxRate, username, password){
-
-  //this.getInitialState = function(){ /* No idea if this is the right thing to do, but I suppose it's a start :P */
-  //  return {
-  //    channelIDIndex: 0,
-  //    channelArray: [],
-  //    websocket: null,
-  //    webSocketOnOpenCallbacks: [],
-  //    webSocketOnCloseCallbacks: [],
-  //    onServerMessageCallbacks: [],
-  //    clientSelf: this,
-  //    debug: debug,
-  //    defaultTypeVersion: 1,
-  //      isLive: false,
-  //      forcedClose: false,
-  //      jsonFilteredReceived: [],  /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  //      jsonSent: []
-  //  };
-  //};
-
-  //var _state = {
-  //  channelIDIndex: 0,
-  //  channelArray: [],  /* Presumably it holds all the different channels? */
-  //  websocket: null,
-  //  webSocketOnOpenCallbacks: [],
-  //  webSocketOnCloseCallbacks: [],
-  //  webSocketOnErrorCallbacks: [],
-  //  onServerMessageCallbacks: [],
-  //  clientSelf: this,  /* Used as a handle for the Client when in other things like channels */
-  //  debug: debug,
-  //  defaultTypeVersion: 1,
-  //  isLive: false,
-  //  forcedClose: false,
-  //  jsonFilteredReceived: [],  /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  //  jsonSent: []
-  //};
-
-      var channelIDIndex = 0;
-      var channelArray = []; /* Presumably it holds all the different channels? */
-      var websocket = null;
-      var webSocketOnOpenCallbacks = [function(){console.log("function inside webSocketOnOpenCallbacks array")}, function(){console.log("another function in the array")}];
-      var webSocketOnCloseCallbacks = [];
-      var webSocketOnErrorCallbacks = [];
-      var onServerMessageCallbacks = [function(){console.log("message from the server callback array")}];
-      var clientSelf = this; /* Used as a handle for the Client when in other things like channels */
-      var debug = debug;
-      var defaultTypeVersion = 1;
-  var isLive = false;
-  var forcedClose = false;
-  var jsonFilteredReceived = []; /* I have a feeling that this and the next array may have some relation to the data sent by the server */
-  var jsonSent = [];
-
-  this.checkStateOfWebSocketConnection = function(){
-    console.log(websocket.readyState)
-  };
-
-
-
-  openWebSocket(url, username, password, maxRate);/* This gets its arguments from the input of the Client constructor! */
-  /// Oh, so this runs as soon as the constructor is called! ///
-
-  /* Adding the argument 'callback' to the webSocketOnOpenCallbacks array */
-
-  this.addWebSocketOnOpenCallback = function(callback){
-    webSocketOnOpenCallbacks.push(callback);
-  };
-
-  /* Removing the argument 'callback' from the array webSocketOnOpenCallbacks via the splice method, similarly to how the removeTab function in SidePane works */
-
-  this.removeWebSocketOnOpenCallback = function(callback){
-    webSocketOnOpenCallbacks.splice(webSocketOnOpenCallbacks.indexOf(callback), 1);
-  };
-
-  /* Adding the argument 'callback' to the webSocketOnCloseCallbacks array */
-  /* So when websocket.onclose runs, it then runs fireOnClose, which then looks at the array
-  webSocketOnCloseCallbacks and runs all the functions inside that array, one by one;
-  this function is essentially adding more callback functions to that array.
-  Same for all the other functions here really (apart from removeWebSocketOnCallback,
-  but in principle it's the same idea, just removing a callback instead of adding one)
-   */
-
-  this.addWebSocketOnCloseCallback = function(callback){
-    webSocketOnCloseCallbacks.push(callback);
-  };
-
-  /* Adding the argument 'callback' to the webSocketOnErrorCallbacks array */
-
-  this.addWebSocketOnErrorCallback = function(callback){
-    webSocketOnErrorCallbacks.push(callback);
-  };
-
-  /* Adding the argument 'callback' to the onServerMessageCallbacks array */
-  /* So this adds a callback function that is notified when the Websocket receives a message from the server */
-
-  this.addOnServerMessageCallback = function(callback){
-    onServerMessageCallbacks.push(callback);
-  };
-
-
-
-  /* Stuff to do with channels? :P */
-  /* More importantly, the two functions that create new Channel objects! */
-
-  this.subscribeChannel = function(name, callback, readOnly, type, version, maxRate){
-    var typeJson; /* Not entirely sure what this is doing, it's creating a variable without a value? */
-                  /* Yep, it implicitly is a variable of type 'undefined'; it's usually used to declare variables for later use */
-
-    if(readOnly !== false){
-      readOnly = true;
-    }
-
-    if(type !== null){
-      if(version === null){
-        version = defaultVersion; /* defaultVersion isn't located anywhere else in the file? */ /* Well, it's unknown in the original file too, so I guess it's fine? */ /* There's an unused variable (and in the original file): defaultTypeVersion? */
-
-        typeJson = JSON.stringify({ /* I have a feeling this has something to do with the data from the server, since it's converting a Javascript value to a JSON string */
-          "name": type,
-          "version": version
-        });
-      }
-    }
-
-    var json = JSON.stringify({ /* I have a feeling that this also relates to the info from the server */
-      "message": "subscribe",
-      "id": channelIDIndex,
-      "channel": name,
-      "readOnly": readOnly,
-      "maxRate": maxRate,
-      "type": typeJson
-    });
-
-    var channel = new Channel(name); /* Creating a new channel, with its name attribute set as the input argument; note that the variable is called 'channel' though for ALL channels subscribed */ /* Also, not sure if it matters, but the other 'name' arguments above highlight as well when I hover over this argument? Are they connected? */
-                                     /* Haha, yep, they are connected, since this is all within one function, subscribeChannel()! :P */
-    channelArray[channelIDIndex] = channel; /* For whatever value/number/index channelIDIndex is, that index gets the value of this new channel */
-    channel.id = channelIDIndex;
-    channel.name = name;
-    channel.readOnly = readOnly;
-    channel.connected = true;
-
-    if(this.isLive){  /* Hmm, is this referring to the state of the Client, since the Channel constructor doesn't have a property or method entitled isLive? */ /* Not entirely sure what 'this' is referring to in this case... */
-      this.sendText(json);  /* Either way, it's a'saying to check if a value is true, and if so, do this, and if not, do the stuff below */
-                            /* Another note, this sendText command is simply to tell ther server that another
-                            channel has been subscribed
-                             */
-                            /* UPDATE: Oh ok, so if the websocket connection is already live, just send a message
-                            to the server telling it that another Channel has been subscribed, but if the websocket
-                            conenction ISN'T open, do the else block of code and add a callback to run when the websocket
-                            connection DOES open to let the user know that this particular Channel exists and is subscribed!
-                             */
-    }
-    else{
-      var webpdaSelf = this; /* No idea what this is for? */ /* So WebPDA is something to do with accessing data in realtime via websockets, look it up again if you want more info! */
-      var listener = null;
-      listener = function(evt){  /* Is evt short for event? */ /* Also, is this just redefining the variable listener to be a function rather than null as it is the line previously? */
-        clientSelf.sendText(json);
-
-        setTimeout(function(){  /* A function inside another function, but evt never gets passed, so what's the point of giving 'listener' and input argument? */
-          clientSelf.removeWebSocketOnOpenCallback(listener); /* Ok, so setTimeout is an internal Javascript function that runs the given function after the number of milliseconds (the 2nd argument) */
-        }, 0);                                                /* What's the point of using setTimeout if it's gonna run after 0 milliseconds (ie, immediately)? */
-      };
-
-      this.addWebSocketOnOpenCallback(listener);
-    } /* What is the point of this else part of the loop; all it does is sendText(json) just like the if part,
-    removes a callback from webSocketOnOpenCallbacks after 0 milliseconds,and then adds the SAME callback
-    back again to the SAME array??? Perhaps cleanup? */
-    /* On a separate note, I guess adding a callback for when the websocket connections is open is to be
-    able to then print to console that this particular channel is active
-     */
-
-    if(debug){   /* If debug is true, do the below */ /* Also, it doesn't appear that there's any else or else if statement to follow this? */
-      jsonFilteredReceived.unshift([json]); /* .unshift adds the element to the beginning of the given array */
-    }
-
-    channel.channelCallback = callback;
-    channelIDIndex++; /* Shorthand for incrementing channelIDIndex by one (happens each time the whole function subscribeChannel() gets called) */
-    /* Oh, so this is what prevents each channel from having the same id, the number inside the variable channelIDIndex is simply just to get it started, it's not used to keep track of every channel and its corresponding index, */
-    /* I suppose it's used to count how many channels there actually are */
-    return channel;
-  };
-
-
-
-  this.resubscribeChannel = function(ch){ /* Seems fairly similar to this.subscribeChannel() */
-                                          /* However, not that its sole input argument is a Channel, not like subscribe where it had 5 parameters! */
-                                          /* So this must somehow 'undo' the unsubscribe function? */
-                                          /* Ah ok, unsubscribe simply removes the channel object from channelArray (or more accurately, it sets it as undefined within the array),
-                                            but the Channel object still exists, so you can still use the usual Channel methods and everything else to refer to that particular Channel object.
-                                            Also note that it could potentially still keep its original index/channelIDIndex value from before it was unsubscribed!!
-                                             */
-
-    console.log("resubscribing channel");
-
-    var typeJson;
-
-    if(ch.value.type !== null){     /* I'm not entirely sure what ch.value.type is; like, a '.type' Javascript method doesn't exist so it can't simply be checking the data type can it (even thought that definitely is what it lookes like it's doing! :P)? */
-      typeJson = JSON.stringify({
-        "name": ch.value.type.name,
-        "version": ch.value.type.version
-      });
-    }
-
-    /* As the input Channel already existed, it already has all these attributes/properties that are part of the object, so this
-    is simply reattaching these attribute values to the variable 'json' that is associated with the channel
-     */
-
-    var json = JSON.stringify({
-      "message": "subscribe",
-      "id": ch.id,
-      "channel": ch.name,
-      "readOnly": ch.readOnly,
-      "maxRate": ch.maxRate,
-      "type": typeJson
-    });
-
-    /* Hmm, this part contradicts my statement just above; if the Channel objects still exists, and is just undefined inside
-    channelArray, then why is it creating a new Channel object here, and then setting the properties of this new
-    Channel object to have the same properties as the old Channel object? Surely if that old Channel object still
-    existed and had all its properties still intact outside channelArray, you could just set the corresponding index
-    of channelArray equal to this old Channel object again without creating a new one and transferring all
-    the old properties to this new one? Because then if both of these Channel objects exist, they'll both have the
-    same name and everything, causing conflict when referring to one or the either?
-     */
-
-    var channel = new Channel(ch.name);
-    channelArray[ch.id] = channel;
-    channel.id = ch.id;
-    channel.name = ch.name;
-    channel.readOnly = ch.readOnly;
-    channel.connected = true;
-
-    if(this.isLive){
-      this.sendText(json);
-    }
-    else{
-      var webpdaSelf = this;
-      var listener = null;
-      listener = function(evt){
-        clientSelf.sendText(json);
-
-        setTimeout(function(){
-          clientSelf.removeWebSocketOnOpenCallback(listener)
-        }, 0)
-      };
-
-      this.addWebSocketOnOpenCallback(listener); /* After this, it's simpler than this.subscribeChannel() */
-
-    }
-    channel.channelCallback = ch.channelCallback;
-    return channel; /* Hmm, in subscribeChannel at the end it raised channelIDIndex by 1, but here it doesn't?*/
-    /* Is it because it's called resubscribeChannel, so that means the Client is already aware of this channel, thus it's already got an associated channelIDIndex inside channelArray? */ /* UPDATE: Basically, yeah :P */
-    /* Surely that means that at one point that it was subscribed and then it wasn't? So then there must be an 'unsubscribe' function somewhere? */ /* UPDATE: Again, basically yeah :P */
-  };
-
-
-
-
-
-
-
-  /* Other methods of Client that were further down the page */
-
-  this.getReceivedMessagesPerChannel = function(channelID){
-    if(channelID === "*"){
-      return jsonFilteredReceived.join("\n");  /* Joins all the elements of the array jsonFilteredReceived into a single string with commas between the elements, no spaces */
-                                                      /* Actually, not sure what the "\n" inside the brackets does? */
-    }
-    else{
-      return jsonFilteredReceived[channelID].join("\n"); /* As this is just one element of the array, does it just turn the element into a string? */
-                                                         /* UPDATE: I have a feeling that the array jsonFilteredReceived will have arrays as
-                                                         its elements, so the asterix * in the code above this line is used to specify that you want
-                                                         the json messages received by the client from the server by EVERY channel,
-                                                         and if you just want the json messages received by a particular channel you specify that channel's
-                                                         channelID!
-                                                          */
-    }
-  };
-
-  this.getSentMessages = function(){
-    return jsonSent.join("\n"); /* Ohhh, the 2nd argument is the separator between each element in the string that gets outputted, so is "\n" adding a new line/line break after each element? */
-  };
-
-  this.close = function(){
-    forcedClose = true;
-    if(websocket !== null){
-      websocket.close();
-    }
-    websocket = null;
-  };
-
-  this.sendText = function(text){
-    //console.log("inside sendText");
-    //console.log("channelArray state again");
-    //console.log(channelArray);
-    websocket.send(text);  /* Should this refer to the websocket variable, or something else? */
-    //console.log("ok, after sendText now!");
-    if(debug){
-
-      jsonSent.unshift(text); /* Basically, I think this is to aid debugging: if debug is set to true,
-                              the array jsonSent gets another entry added to the beginning of itself */
-    }
-  };
-
-  /* Find a channel from its id */
-
-  this.getChannel = function(id){
-    console.log(channelArray[0]);
-    return channelArray[id];
-  };
-
-  /* Self explanatory, lets you get all the channels currently available */
-
-  this.getAllChannels = function(){
-    console.log("the following is the channelArray");
-    console.log(channelArray);
-    return channelArray;
-  };
-
-
-
-
-  /* The functions that aren't methods of the Client, but can be used by everything in here I guess? */
-
-
-  function openWebSocket(url, username, password, maxRate){
-    //var test = "test"
-    //console.log(typeof test)
-    //console.log(url)
-    //console.log("what is this...")
-    if((url.indexOf("wss://") !== -1 && username !== null) || maxRate !== null){ /* So there's two options for this loop to go to the code that executes on a 'true' output:
-                                                                                 /* Either, the string "wss://" can be found (ie, output of indexOf("wss://") is NOT equal to -1) AND (double ampersand) the input 'username' is not null */
-                                                                                 /* Or the input maxRate is not null; either of those scenarios will allow the 'true' block of code to execute */
-      url = url + "?";
-
-      if(maxRate !== null){     /* these are additional sub-checks if you will, to check individual inputs and their values */
-        url = url + "maxRate=" + maxRate;
-      }
-
-      if(url.indexOf("wss://") !== -1){ /* This is basically saying that, if all the inputs apart from password are valid and not null, run the given code */
-        if(username !== null){
-          if(maxRate !== null){
-            url = url + "&";
-          }
-
-          url = url + "user=" + username + "&password=" + password;  /* This statement only relies on the url and username inputs being valid, it doesn't depend on the maxRate input like the statement further inside this loop */
-
-        }
-      }
-    }
-
-    if("WebSocket" in window){  /* The window object refers to an open window in a browser */
-      websocket = new WebSocket(url); /* new WebSocket is an inbuilt function of Javascript */
-    }
-    else if("MozWebSocket" in window){    /* I suppose these two cases are seeing if WebSockets are usable in the browser that the user is using? */
-      websocket = new MozWebSocket(url);
-    }
-    else{
-      throw new Error("WebSocket isn't supported by this browser.");
-    }
-    websocket.binaryType = "arraybuffer"; /* binaryType is associated with WebSockets */
-
-    /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
-
-    websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
-      console.log(evt);
-      fireOnOpen(evt);
-      console.log("websocket has been opened")
-    };
-
-    websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
-      console.log("message has been received from server via websocket");
-      var json;
-      json = JSON.parse(evt.data);
-      console.log("Here is the event:");
-      console.log(evt);
-      dispatchMessage(json);
-    };
-
-    websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
-      fireOnError(evt);
-    };
-
-    websocket.onclose = function(evt){
-      fireOnClose(evt);
-      console.log("websocket has been closed")
-    };
-
-    if(debug){
-      onServerMessageCallbacks.push(function(json){
-        jsonFilteredReceived[json.id].unshift(JSON.stringify(json)); /* Adds a function that runs whenever a message from
-                                                                      the server is received, and the function adds another entry
-                                                                      to jsonFilteredReceived,and the entry consists of
-                                                                      ?? a filtered version of the json message received from the server ??
-                                                                      */
-      });
-      webSocketOnErrorCallbacks.push(function(evt){
-        jsonFilteredReceived[json.id].unshift(JSON.stringify(json)); /* Should this be evt instead of json? */
-      }); /* Don't get confused, both of these run if the if statement returns as true */
-    }
+    //allBlockTabOpenStates: paneStore.getAllBlockTabOpenStates(),
   }
-
-
-
-  function dispatchMessage(json){
-    //console.log("in dispatchMessage, one more update");
-    //console.log(json);
-    //console.log(json.id);
-    //console.log(channelArray);
-    //console.log(channelArray[0]);
-
-    console.log("websocket.onmessage has invoked dispatchMessage, here's the full json and json.message from the server:");
-    console.log(json);
-    console.log(json.message);
-
-    if(json.message !== null){ /* There's no else prt to this outer loops, so I guess if json.message is null then don't do anything? */
-      if(channelArray[json.id] === undefined){
-        console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore")
-      }
-      else{
-        handleServerMessage(json);
-      }
-    }
-
-    if(json.id !== null){
-      if(channelArray[json.id] !== null){
-        if(channelArray[json.id] === undefined){
-          console.log("channel was unsubscribed, so channelArray[json.id] doesn't exist anymore")
-        }
-        else {
-          console.log("dispatchMessage is now about to invoke fireChannelEventFunc");
-          channelArray[json.id].fireChannelEventFunc(json);  /* The only thing that invokes fireChannelEventFunc,which in turn is the only
-                                                              thing that invokes processJsonForChannel, which is what is used for updating
-                                                              Channel values */
-                                                             /* This only invokes after websocket.onmessage, ie after a message from the server
-                                                             is received (and presumably, this message from the server contains the updated data/value)
-                                                              */
-          }
-        }
-      }
-    }
-
-
-  function handleServerMessage(json){
-    if(json.type === "error"){
-      console.log("Error: " + json.error); /* Provides an error related to the input to make debugging easier I suppose? */
-    }
-    fireOnServerMessage(json);
-  }
-
-  function fireOnError(evt){  /* If an error occurs, run the error messages from all the function inside webSocketErrorCallbacks */
-    for(var i in webSocketOnErrorCallbacks){
-      webSocketOnErrorCallbacks[i](evt);
-    }
-  }
-
-  function fireOnServerMessage(json){ /*If a message is received (not sure where from), run all the functions in the array onServerMessageCallbacks */
-    for(var i in onServerMessageCallbacks){
-      onServerMessageCallbacks[i](json)
-    }
-  }
-
-  function processJsonForChannel(json, Channel){ /* Could potentially replace this with the lookup method I used for paneStore */
-                                                 /* Also, I think this may also potentially be the function that alters/updates the Channel attribute value,
-                                                    since it runs after a message/data from the server is received and it has a json and channel input!
-                                                     */
-    console.log("Inside processJsonForChannel, here's the Channel whose value we're changing and the json too:");
-    console.log(Channel);
-    console.log(json);
-    switch(json.type){
-
-      case "connection":
-            Channel.connected = json.connected;
-            Channel.readOnly = !json.writeConnected;
-            break;
-
-      case "value":
-            Channel.value = json.value;
-            break;
-
-      default:
-        console.log("Switch statement runs the default case, something's up?");
-            break;
-    }
-    //console.log("Here's the new Channel value:");
-    //console.log(Channel.value);
-    //console.log("Here's channelArray:");
-    //console.log(channelArray);
-
-
-    console.log("Forget trying all the hard stuff, all I'm gonna do is pass the channel name!");
-
-    /* So I guess here (or more specifically, inside ths witch statement in the future) would be where the action to pass the data to deviceStore.
-     Not sure if I'm meant to out this function into WebAPIUtils, but for now I'll just try and get this working before I start to get fancy :P */
-
-    serverActions.passingNameOfChannelThatsBeenAdded(json.channel)
-
-
-  }
-
-  function fireOnOpen(evt){
-    console.log(evt);
-    //var _clientSelf = clientSelf; /* Not needed anymore I don't think, now that I eliminated _state */
-    //var _isLive = isLive;
-    console.log("inside fireOnOpen function");
-    clientSelf.isLive = true; /* I have a feeling that this won't work, since isLive lives inside _state too? */
-                                     /* Perhaps it should just be _state.isLive? */ /* Oh ok, no, I think this is right, since _state.clintSelf is a handle on the Client when the keyword 'this' could be something else (ie, when you're inside a function like now!)
-                                     /* So it's the same as 'this.isLive' when used in the scope of Client, except you have to refer to 'this' as _state.clientSelf since we AREN'T in the scope of Client, we're in a function! */
-                                     /* Haha, back and forth, but actually I don't think this works, since once you have the handle on Client, you STILL need to access _state.isLive!?! */
-                                     /* Ok, I think that may have fixed it, but who knows? :P */
-    for(var i in webSocketOnOpenCallbacks){
-      //console.log(webSocketOnOpenCallbacks[i](evt));
-      //console.log(webSocketOnOpenCallbacks[i]);
-      webSocketOnOpenCallbacks[i](evt);  /* Every function in this array gets passed the input 'evt' */
-    }
-  }
-
-  function fireOnClose(evt){
-    isLive = false; /* Trying the other way! */
-    var url = evt.currentTarget.url; /* Look back at the .currentTarget method */
-
-    if(forcedClose){
-      for(var c in channelArray){
-        channelArray[c].unsubscribe(); /* Is this referring to the Channel method, or the function a bit later on? */
-                                       /* UPDATE: It's the Channel method, but it didn't really matter, the method invokes
-                                       the other function I was thinking of anyway!
-                                       Also, this makes it look like forcedClose (when its value is 'true') is used
-                                       to unsubscribe ALL Channels
-                                        */
-      }
-      for(var i in webSocketOnCloseCallbacks){
-        webSocketOnCloseCallbacks[i](evt);
-      }
-    }
-
-    /* So if forcedClose set to 'false' wasn't used, then this following block runs, and this essentially (after 10,000 milliseconds)
-    opens the websocket connection again with the same server url as before, and resubscribes all the
-    channels that are in channelArray.
-     */
-
-    else{
-      setTimeout(function(){
-        openWebSocket(url); /* Define this later */ /* Hmm, I don't get the 'invalid no. of input arguments' when I should, like the original file has? */
-
-        for(var c in channelArray){  /* So this function runs after 10000 milliseconds */ /* So I suppose this has something to do with resubscribing channels after a set interval of time (whatever that means :P)? */
-          clientSelf.resubscribeChannel(channelArray[c]);
-        }
-      }, 10000);
-    }
-  }
-
-
-
-
-
-
-
-
-  /* Defining the Channel constructor */
-
-  function Channel(name){ /* Hmm, not sure the best way to get this to have state... */
-
-    this.name = name;
-    this.id = -1;   /* Look at the docs and their definition of getId, getValue: it says that they can have any data type, hence they can be strings, numbers, floats, objects etc */
-    this.value = null;
-    this.channelCallback = null; /* not sure why this gets 'unused definition' and the others don't? */ /* Update: it doesn't now, maybe it changed? */
-    this.paused = false;
-    this.connected = false;
-    this.readOnly = true;
-
-    /* Chucking all the prototype function additions in the constructor */
-    /* These internal methods of an object of the Channel class are used to return/access values of a channel object from OUTSIDE a channel,
-    hence, these functions are ALWAYS invoked from outside a channel */
-
-    this.channelValueType = function(){
-      console.log(typeof this.value);
-      console.log(this.value);
-    };
-
-    this.isConnected = function(){
-      return this.connected;
-    };
-
-    this.getId = function(){
-      return this.id;
-    };
-
-    this.isWriteAllowed = function(){
-      return !this.readOnly;  /* Why return the opposite of readOnly? I suppose read and write are related?*/
-                              /* Oh, it's that if it's not just read only, it has to be able to write as well, since read only means you can only read and NOT write :P */
-    };
-
-    this.isPaused = function(){
-      return this.paused;
-    };
-
-    this.getValue = function(){
-      return this.value;
-    };
-
-    this.removeCallback = function(callback){ /* Not sure why it doesn't have 'this.' in front of it in the original JS file? */
-      this.channelCallback = null;            /* Plus, what's the point of having an input argument that isn't used in the function? */
-    };
-
-    this.setValue = function(value){  /*So, if the opposite of the value of readOnly is true, run this code */
-      if(!this.readOnly){
-        console.log("Inside setValue");
-        console.log(value);
-        setChannelValue(this.id, value);
-      }
-      else{
-        console.log("Channel is read only, cannot write")
-      }
-    };
-
-    /* What's the difference between setValue and updateValue? :/
-    I suppose at least they invoke the same function...
-     */
-
-    this.updateValue = function(){
-      if(!this.readOnly){
-        setChannelValue(this.id, this.value.value); /* No idea what this.value.value is referring to? */
-      }
-    };
-
-    this.unsubscribe = function(){
-      unsubscribe(this.id);
-    };
-
-    this.pause = function(){
-      this.paused = true;
-      pauseChannel(this.id);
-    };
-
-    this.resume = function(){
-      this.paused = false;
-      resumeChannel(this.id);
-    };
-
-    /* On a side note, what do pause and resume actually 'mean' when it comes to a channel?
-    Does it mean that you temporarily cannot send data across that particular channel when paused?
-    UPDATE: answer is in the docs :P; pause means to pause receiving notifications about that particular channel.
-     */
-
-    this.fireChannelEventFunc = function(json){
-      console.log("firChanneklEventFunc is about to invoke processJsonForChannel, the thing that actually changes Channel attribute values!");
-      processJsonForChannel(json, this);  /* The only thing that invokes processJsonForChannel */
-      this.channelCallback(json, this); /* I suppose channelCallback is just a function that lets you know that
-                                          fireChannelEventFunc has occurred/ran (a console log will probably suffice)
-                                          Furthermore, since the inputs are 'this' and 'json', I guess it's pointing
-                                          to you logging which channel the info is travelling across, and what the info
-                                          travelling across is*/
-    };
-
-  }
-
-  /* All these functions are related to channels and interaction with them; ie, relaying messages to different channels, and the channels are distinguished by their id? */
-
-  function unsubscribe(channelIDIndex){
-    console.log("unsubscribing a channel");
-    //console.log("the following is an update on channelArray");
-    //console.log(channelArray);
-    var json = JSON.stringify({
-      "message": "unsubscribe",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json);
-    delete channelArray[channelIDIndex]; /* delete sets the desired object as undefined instead of removing, and also doesn't shorten the array length? */
-    //channelArray.splice(channelIDIndex,1);
-    //console.log(channelArray);
-  }
-
-  function pauseChannel(channelIDIndex){
-    var json = JSON.stringify({
-      "message": "pause",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json);
-  }
-
-  function resumeChannel(channelIDIndex){
-    var json = JSON.stringify({
-      "message": "resume",
-      "id": channelIDIndex
-    });
-
-    clientSelf.sendText(json)
-  }
-
-  /* Ok, I'm starting to not understand this again: the function below is called setChannelValue, and one of
-  its inputs is the new value of the channel (presumably). After the json variable is set, a message goes to THE SERVER with this info;
-  Now, I thought the whole idea was that the new value was FETCHED FROM THE SERVER, and then the Client gets
-  notified that the new data has been fetched, but here it looks like the new value gets SET FIRST, and
-  THEN THE SERVER IS NOTIFIED OF THIS CHANGE?
-   */
-
-  function setChannelValue(channelIDIndex, value){
-    console.log("Inside setChannelValue");
-    console.log(channelIDIndex);
-    console.log(value);
-    var json = JSON.stringify({
-      "message": "write",
-      "id": channelIDIndex,
-      "value":value
-    });
-
-    clientSelf.sendText(json);  /* Don't worry, sendText is defined later (line 277 of original file) */
-
-  }
-
 }
 
-module.exports = Client;
+var BothPanes = React.createClass({displayName: "BothPanes",
+  getInitialState: function(){
+    return getBothPanesState();
+  },
 
-//var ReactClient = new Client("wss://echo.websocket.org", null, 10, null, null);
+  _onChange: function(){
+    this.setState(getBothPanesState());
+  },
 
-},{"./actions/paneActions":3,"./actions/serverActions":4}],24:[function(require,module,exports){
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (
+      nextState.sidebarOpen !== this.state.sidebarOpen ||
+      nextState.selectedTabIndex !== this.state.selectedTabIndex ||
+      nextState.listVisible !== this.state.listVisible ||
+      nextState.tabState !== this.state.tabState ||
+      nextState.footers !== this.state.footers ||
+      nextState.favTabOpen !== this.state.favTabOpen ||
+      nextState.configTabOpen !== this.state.configTabOpen ||
+
+      nextState.allBlockInfo !== this.state.allBlockInfo ||
+      nextState.favContent !== this.state.favContent ||
+      nextState.configContent !== this.state.configContent ||
+      nextState.allBlockAttributes !== this.state.allBlockAttributes ||
+      nextState.blocksVisibility !== this.state.blocksVisibility
+      //nextState.loadingInitialData !== this.state.loadingInitialData ||
+      //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
+      //nextState.blockPositions !== this.state.blockPositions
+    )
+  },
+
+  componentDidMount: function(){
+    mainPaneStore.addChangeListener(this._onChange);
+    paneStore.addChangeListener(this._onChange);
+    sidePaneStore.addChangeListener(this._onChange);
+    blockStore.addChangeListener(this._onChange);
+    attributeStore.addChangeListener(this._onChange);
+    blocksVisibleStore.addChangeListener(this._onChange);
+    //flowChartStore.addChangeListener(this._onChange);
+    var mql = window.matchMedia(`(min-width: 800px)`);
+    mql.addListener(this.windowWidthMediaQueryChanged);
+    this.setState({mql: mql}, function(){
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    });
+  },
+  componentWillUnmount(){
+    mainPaneStore.removeChangeListener(this._onChange);
+    paneStore.removeChangeListener(this._onChange);
+    sidePaneStore.removeChangeListener(this._onChange);
+    blockStore.removeChangeListener(this._onChange);
+    attributeStore.removeChangeListener(this._onChange);
+    blocksVisibleStore.removeChangeListener(this._onChange);
+    //flowChartStore.removeChangeListener(this._onChange);
+    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
+  },
+
+  windowWidthMediaQueryChanged: function(){
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+  },
+
+  render: function(){
+
+    console.log("render: sidebar");
+    //if(this.state.tabState[0]) {
+    //  console.log(this.state.tabState[0].position.x);
+    //}
+
+    return(
+      React.createElement(SideBar, {sidebarClassName: "sidebar", styles: SidebarStyling, docked: this.state.sidebarOpen, 
+               //open={this.state.sidebarOpen}
+               pullRight: true, touchHandleWidth: 5, 
+               children: 
+               //<div id="MainTabbedView" style={MainTabbedViewStyle}>
+                React.createElement(MainPane, {footers: this.state.footers, 
+                favTabOpen: this.state.favTabOpen, 
+                configTabOpen: this.state.configTabOpen}
+                //loadingInitialData={this.state.loadingInitialData}
+                //loadingInitialDataError={this.state.loadingInitialDataError}
+                //theGraphDiamondState={this.state.theGraphDiamondState}
+                ), 
+                //</div>
+                
+               sidebar: 
+               //<div id="SideTabbedView" style={SideTabbedViewStyle}>
+               React.createElement(SidePane, {tabState: this.state.tabState, selectedTabIndex: this.state.selectedTabIndex, 
+               listVisible: this.state.listVisible, 
+               allBlockInfo: this.state.allBlockInfo, 
+               favContent: this.state.favContent, 
+               configContent: this.state.configContent, 
+               allBlockAttributes: this.state.allBlockAttributes, 
+               blocksVisibility: this.state.blocksVisibility, 
+               blockGroups: this.state.blockGroups}
+               //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
+               //allBlockTabInfo={this.state.allBlockTabInfo}
+               )
+               //</div>
+               }
+      )
+    )
+  }
+});
+
+module.exports = BothPanes;
+
+},{"../actions/blockActions.js":2,"../actions/paneActions":5,"../stores/attributeStore":11,"../stores/blockStore.js":12,"../stores/blocksVisibleStore":13,"../stores/mainPaneStore":15,"../stores/paneStore":16,"../stores/sidePaneStore":17,"./mainPane":32,"./sidePane":35,"react":226,"react-dom":46,"react-sidebar":48}],37:[function(require,module,exports){
+/**
+ * Created by twi18192 on 15/03/16.
+ */
+
+var React = require('react');
+
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+
+var TextEditableReadoutField = React.createClass({displayName: "TextEditableReadoutField",
+
+  render: function(){
+    return(
+      React.createElement("div", {style: {position: 'relative', left: '5',
+                   bottom: '0px', width: '230px', height: '25px'}}, 
+        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
+           id: this.props.blockName + this.props.attributeName + "textContent", 
+           style: {fontSize: '13px', position: 'relative'}}, 
+          String(this.props.attributeName)
+        ), 
+        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '90px'}}, 
+          React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
+          React.createElement("input", {id: this.props.blockName + this.props.attributeName + "inputField", 
+                 style: {position: 'relative', textAlign: 'left',
+                         borderRadius: '2px', border: '2px solid #999',
+                            //contentEditable:"true"
+                            color: 'blue'}, 
+                 defaultValue: String(this.props.blockAttribute.value), /* pass the specific block attribute to each readout! */
+                 onChange: this.props.attributeFieldOnChange.bind(null, {
+                            block: this.props.blockName,
+                            attribute: this.props.attributeName
+                            }), 
+                 onClick: this.props.selectedInputFieldText.bind(null,
+                 this.props.blockName + this.props.attributeName + "inputField"), 
+                 maxLength: "17", size: "17"})
+        )
+      )
+    )
+  }
+
+});
+
+module.exports = TextEditableReadoutField;
+
+},{"../actions/MalcolmActionCreators":1,"react":226}],38:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -3690,7 +8289,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],25:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -3782,7 +8381,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],26:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -3794,7 +8393,7 @@ process.umask = function() { return 0; };
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":27}],27:[function(require,module,exports){
+},{"./lib/Dispatcher":41}],41:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -4046,7 +8645,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":28}],28:[function(require,module,exports){
+},{"./invariant":42}],42:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -4101,7 +8700,5985 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],29:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
+/**
+ * interact.js v1.2.6
+ *
+ * Copyright (c) 2012-2015 Taye Adeyemi <dev@taye.me>
+ * Open source under the MIT License.
+ * https://raw.github.com/taye/interact.js/master/LICENSE
+ */
+(function (realWindow) {
+    'use strict';
+
+    // return early if there's no window to work with (eg. Node.js)
+    if (!realWindow) { return; }
+
+    var // get wrapped window if using Shadow DOM polyfill
+        window = (function () {
+            // create a TextNode
+            var el = realWindow.document.createTextNode('');
+
+            // check if it's wrapped by a polyfill
+            if (el.ownerDocument !== realWindow.document
+                && typeof realWindow.wrap === 'function'
+                && realWindow.wrap(el) === el) {
+                // return wrapped window
+                return realWindow.wrap(realWindow);
+            }
+
+            // no Shadow DOM polyfil or native implementation
+            return realWindow;
+        }()),
+
+        document           = window.document,
+        DocumentFragment   = window.DocumentFragment   || blank,
+        SVGElement         = window.SVGElement         || blank,
+        SVGSVGElement      = window.SVGSVGElement      || blank,
+        SVGElementInstance = window.SVGElementInstance || blank,
+        HTMLElement        = window.HTMLElement        || window.Element,
+
+        PointerEvent = (window.PointerEvent || window.MSPointerEvent),
+        pEventTypes,
+
+        hypot = Math.hypot || function (x, y) { return Math.sqrt(x * x + y * y); },
+
+        tmpXY = {},     // reduce object creation in getXY()
+
+        documents       = [],   // all documents being listened to
+
+        interactables   = [],   // all set interactables
+        interactions    = [],   // all interactions
+
+        dynamicDrop     = false,
+
+        // {
+        //      type: {
+        //          selectors: ['selector', ...],
+        //          contexts : [document, ...],
+        //          listeners: [[listener, useCapture], ...]
+        //      }
+        //  }
+        delegatedEvents = {},
+
+        defaultOptions = {
+            base: {
+                accept        : null,
+                actionChecker : null,
+                styleCursor   : true,
+                preventDefault: 'auto',
+                origin        : { x: 0, y: 0 },
+                deltaSource   : 'page',
+                allowFrom     : null,
+                ignoreFrom    : null,
+                _context      : document,
+                dropChecker   : null
+            },
+
+            drag: {
+                enabled: false,
+                manualStart: true,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: null,
+                restrict: null,
+                inertia: null,
+                autoScroll: null,
+
+                axis: 'xy'
+            },
+
+            drop: {
+                enabled: false,
+                accept: null,
+                overlap: 'pointer'
+            },
+
+            resize: {
+                enabled: false,
+                manualStart: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: null,
+                restrict: null,
+                inertia: null,
+                autoScroll: null,
+
+                square: false,
+                preserveAspectRatio: false,
+                axis: 'xy',
+
+                // use default margin
+                margin: NaN,
+
+                // object with props left, right, top, bottom which are
+                // true/false values to resize when the pointer is over that edge,
+                // CSS selectors to match the handles for each direction
+                // or the Elements for each handle
+                edges: null,
+
+                // a value of 'none' will limit the resize rect to a minimum of 0x0
+                // 'negate' will alow the rect to have negative width/height
+                // 'reposition' will keep the width/height positive by swapping
+                // the top and bottom edges and/or swapping the left and right edges
+                invert: 'none'
+            },
+
+            gesture: {
+                manualStart: false,
+                enabled: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                restrict: null
+            },
+
+            perAction: {
+                manualStart: false,
+                max: Infinity,
+                maxPerElement: 1,
+
+                snap: {
+                    enabled     : false,
+                    endOnly     : false,
+                    range       : Infinity,
+                    targets     : null,
+                    offsets     : null,
+
+                    relativePoints: null
+                },
+
+                restrict: {
+                    enabled: false,
+                    endOnly: false
+                },
+
+                autoScroll: {
+                    enabled     : false,
+                    container   : null,     // the item that is scrolled (Window or HTMLElement)
+                    margin      : 60,
+                    speed       : 300       // the scroll speed in pixels per second
+                },
+
+                inertia: {
+                    enabled          : false,
+                    resistance       : 10,    // the lambda in exponential decay
+                    minSpeed         : 100,   // target speed must be above this for inertia to start
+                    endSpeed         : 10,    // the speed at which inertia is slow enough to stop
+                    allowResume      : true,  // allow resuming an action in inertia phase
+                    zeroResumeDelta  : true,  // if an action is resumed after launch, set dx/dy to 0
+                    smoothEndDuration: 300    // animate to snap/restrict endOnly if there's no inertia
+                }
+            },
+
+            _holdDuration: 600
+        },
+
+        // Things related to autoScroll
+        autoScroll = {
+            interaction: null,
+            i: null,    // the handle returned by window.setInterval
+            x: 0, y: 0, // Direction each pulse is to scroll in
+
+            // scroll the window by the values in scroll.x/y
+            scroll: function () {
+                var options = autoScroll.interaction.target.options[autoScroll.interaction.prepared.name].autoScroll,
+                    container = options.container || getWindow(autoScroll.interaction.element),
+                    now = new Date().getTime(),
+                    // change in time in seconds
+                    dtx = (now - autoScroll.prevTimeX) / 1000,
+                    dty = (now - autoScroll.prevTimeY) / 1000,
+                    vx, vy, sx, sy;
+
+                // displacement
+                if (options.velocity) {
+                  vx = options.velocity.x;
+                  vy = options.velocity.y;
+                }
+                else {
+                  vx = vy = options.speed
+                }
+ 
+                sx = vx * dtx;
+                sy = vy * dty;
+
+                if (sx >= 1 || sy >= 1) {
+                    if (isWindow(container)) {
+                        container.scrollBy(autoScroll.x * sx, autoScroll.y * sy);
+                    }
+                    else if (container) {
+                        container.scrollLeft += autoScroll.x * sx;
+                        container.scrollTop  += autoScroll.y * sy;
+                    }
+
+                    if (sx >=1) autoScroll.prevTimeX = now;
+                    if (sy >= 1) autoScroll.prevTimeY = now;
+                }
+
+                if (autoScroll.isScrolling) {
+                    cancelFrame(autoScroll.i);
+                    autoScroll.i = reqFrame(autoScroll.scroll);
+                }
+            },
+
+            isScrolling: false,
+            prevTimeX: 0,
+            prevTimeY: 0,
+
+            start: function (interaction) {
+                autoScroll.isScrolling = true;
+                cancelFrame(autoScroll.i);
+
+                autoScroll.interaction = interaction;
+                autoScroll.prevTimeX = new Date().getTime();
+                autoScroll.prevTimeY = new Date().getTime();
+                autoScroll.i = reqFrame(autoScroll.scroll);
+            },
+
+            stop: function () {
+                autoScroll.isScrolling = false;
+                cancelFrame(autoScroll.i);
+            }
+        },
+
+        // Does the browser support touch input?
+        supportsTouch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch),
+
+        // Does the browser support PointerEvents
+        supportsPointerEvent = !!PointerEvent,
+
+        // Less Precision with touch input
+        margin = supportsTouch || supportsPointerEvent? 20: 10,
+
+        pointerMoveTolerance = 1,
+
+        // for ignoring browser's simulated mouse events
+        prevTouchTime = 0,
+
+        // Allow this many interactions to happen simultaneously
+        maxInteractions = Infinity,
+
+        // Check if is IE9 or older
+        actionCursors = (document.all && !window.atob) ? {
+            drag    : 'move',
+            resizex : 'e-resize',
+            resizey : 's-resize',
+            resizexy: 'se-resize',
+
+            resizetop        : 'n-resize',
+            resizeleft       : 'w-resize',
+            resizebottom     : 's-resize',
+            resizeright      : 'e-resize',
+            resizetopleft    : 'se-resize',
+            resizebottomright: 'se-resize',
+            resizetopright   : 'ne-resize',
+            resizebottomleft : 'ne-resize',
+
+            gesture : ''
+        } : {
+            drag    : 'move',
+            resizex : 'ew-resize',
+            resizey : 'ns-resize',
+            resizexy: 'nwse-resize',
+
+            resizetop        : 'ns-resize',
+            resizeleft       : 'ew-resize',
+            resizebottom     : 'ns-resize',
+            resizeright      : 'ew-resize',
+            resizetopleft    : 'nwse-resize',
+            resizebottomright: 'nwse-resize',
+            resizetopright   : 'nesw-resize',
+            resizebottomleft : 'nesw-resize',
+
+            gesture : ''
+        },
+
+        actionIsEnabled = {
+            drag   : true,
+            resize : true,
+            gesture: true
+        },
+
+        // because Webkit and Opera still use 'mousewheel' event type
+        wheelEvent = 'onmousewheel' in document? 'mousewheel': 'wheel',
+
+        eventTypes = [
+            'dragstart',
+            'dragmove',
+            'draginertiastart',
+            'dragend',
+            'dragenter',
+            'dragleave',
+            'dropactivate',
+            'dropdeactivate',
+            'dropmove',
+            'drop',
+            'resizestart',
+            'resizemove',
+            'resizeinertiastart',
+            'resizeend',
+            'gesturestart',
+            'gesturemove',
+            'gestureinertiastart',
+            'gestureend',
+
+            'down',
+            'move',
+            'up',
+            'cancel',
+            'tap',
+            'doubletap',
+            'hold'
+        ],
+
+        globalEvents = {},
+
+        // Opera Mobile must be handled differently
+        isOperaMobile = navigator.appName == 'Opera' &&
+            supportsTouch &&
+            navigator.userAgent.match('Presto'),
+
+        // scrolling doesn't change the result of getClientRects on iOS 7
+        isIOS7 = (/iP(hone|od|ad)/.test(navigator.platform)
+                         && /OS 7[^\d]/.test(navigator.appVersion)),
+
+        // prefix matchesSelector
+        prefixedMatchesSelector = 'matches' in Element.prototype?
+                'matches': 'webkitMatchesSelector' in Element.prototype?
+                    'webkitMatchesSelector': 'mozMatchesSelector' in Element.prototype?
+                        'mozMatchesSelector': 'oMatchesSelector' in Element.prototype?
+                            'oMatchesSelector': 'msMatchesSelector',
+
+        // will be polyfill function if browser is IE8
+        ie8MatchesSelector,
+
+        // native requestAnimationFrame or polyfill
+        reqFrame = realWindow.requestAnimationFrame,
+        cancelFrame = realWindow.cancelAnimationFrame,
+
+        // Events wrapper
+        events = (function () {
+            var useAttachEvent = ('attachEvent' in window) && !('addEventListener' in window),
+                addEvent       = useAttachEvent?  'attachEvent': 'addEventListener',
+                removeEvent    = useAttachEvent?  'detachEvent': 'removeEventListener',
+                on             = useAttachEvent? 'on': '',
+
+                elements          = [],
+                targets           = [],
+                attachedListeners = [];
+
+            function add (element, type, listener, useCapture) {
+                var elementIndex = indexOf(elements, element),
+                    target = targets[elementIndex];
+
+                if (!target) {
+                    target = {
+                        events: {},
+                        typeCount: 0
+                    };
+
+                    elementIndex = elements.push(element) - 1;
+                    targets.push(target);
+
+                    attachedListeners.push((useAttachEvent ? {
+                            supplied: [],
+                            wrapped : [],
+                            useCount: []
+                        } : null));
+                }
+
+                if (!target.events[type]) {
+                    target.events[type] = [];
+                    target.typeCount++;
+                }
+
+                if (!contains(target.events[type], listener)) {
+                    var ret;
+
+                    if (useAttachEvent) {
+                        var listeners = attachedListeners[elementIndex],
+                            listenerIndex = indexOf(listeners.supplied, listener);
+
+                        var wrapped = listeners.wrapped[listenerIndex] || function (event) {
+                            if (!event.immediatePropagationStopped) {
+                                event.target = event.srcElement;
+                                event.currentTarget = element;
+
+                                event.preventDefault = event.preventDefault || preventDef;
+                                event.stopPropagation = event.stopPropagation || stopProp;
+                                event.stopImmediatePropagation = event.stopImmediatePropagation || stopImmProp;
+
+                                if (/mouse|click/.test(event.type)) {
+                                    event.pageX = event.clientX + getWindow(element).document.documentElement.scrollLeft;
+                                    event.pageY = event.clientY + getWindow(element).document.documentElement.scrollTop;
+                                }
+
+                                listener(event);
+                            }
+                        };
+
+                        ret = element[addEvent](on + type, wrapped, Boolean(useCapture));
+
+                        if (listenerIndex === -1) {
+                            listeners.supplied.push(listener);
+                            listeners.wrapped.push(wrapped);
+                            listeners.useCount.push(1);
+                        }
+                        else {
+                            listeners.useCount[listenerIndex]++;
+                        }
+                    }
+                    else {
+                        ret = element[addEvent](type, listener, useCapture || false);
+                    }
+                    target.events[type].push(listener);
+
+                    return ret;
+                }
+            }
+
+            function remove (element, type, listener, useCapture) {
+                var i,
+                    elementIndex = indexOf(elements, element),
+                    target = targets[elementIndex],
+                    listeners,
+                    listenerIndex,
+                    wrapped = listener;
+
+                if (!target || !target.events) {
+                    return;
+                }
+
+                if (useAttachEvent) {
+                    listeners = attachedListeners[elementIndex];
+                    listenerIndex = indexOf(listeners.supplied, listener);
+                    wrapped = listeners.wrapped[listenerIndex];
+                }
+
+                if (type === 'all') {
+                    for (type in target.events) {
+                        if (target.events.hasOwnProperty(type)) {
+                            remove(element, type, 'all');
+                        }
+                    }
+                    return;
+                }
+
+                if (target.events[type]) {
+                    var len = target.events[type].length;
+
+                    if (listener === 'all') {
+                        for (i = 0; i < len; i++) {
+                            remove(element, type, target.events[type][i], Boolean(useCapture));
+                        }
+                        return;
+                    } else {
+                        for (i = 0; i < len; i++) {
+                            if (target.events[type][i] === listener) {
+                                element[removeEvent](on + type, wrapped, useCapture || false);
+                                target.events[type].splice(i, 1);
+
+                                if (useAttachEvent && listeners) {
+                                    listeners.useCount[listenerIndex]--;
+                                    if (listeners.useCount[listenerIndex] === 0) {
+                                        listeners.supplied.splice(listenerIndex, 1);
+                                        listeners.wrapped.splice(listenerIndex, 1);
+                                        listeners.useCount.splice(listenerIndex, 1);
+                                    }
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (target.events[type] && target.events[type].length === 0) {
+                        target.events[type] = null;
+                        target.typeCount--;
+                    }
+                }
+
+                if (!target.typeCount) {
+                    targets.splice(elementIndex, 1);
+                    elements.splice(elementIndex, 1);
+                    attachedListeners.splice(elementIndex, 1);
+                }
+            }
+
+            function preventDef () {
+                this.returnValue = false;
+            }
+
+            function stopProp () {
+                this.cancelBubble = true;
+            }
+
+            function stopImmProp () {
+                this.cancelBubble = true;
+                this.immediatePropagationStopped = true;
+            }
+
+            return {
+                add: add,
+                remove: remove,
+                useAttachEvent: useAttachEvent,
+
+                _elements: elements,
+                _targets: targets,
+                _attachedListeners: attachedListeners
+            };
+        }());
+
+    function blank () {}
+
+    function isElement (o) {
+        if (!o || (typeof o !== 'object')) { return false; }
+
+        var _window = getWindow(o) || window;
+
+        return (/object|function/.test(typeof _window.Element)
+            ? o instanceof _window.Element //DOM2
+            : o.nodeType === 1 && typeof o.nodeName === "string");
+    }
+    function isWindow (thing) { return thing === window || !!(thing && thing.Window) && (thing instanceof thing.Window); }
+    function isDocFrag (thing) { return !!thing && thing instanceof DocumentFragment; }
+    function isArray (thing) {
+        return isObject(thing)
+                && (typeof thing.length !== undefined)
+                && isFunction(thing.splice);
+    }
+    function isObject   (thing) { return !!thing && (typeof thing === 'object'); }
+    function isFunction (thing) { return typeof thing === 'function'; }
+    function isNumber   (thing) { return typeof thing === 'number'  ; }
+    function isBool     (thing) { return typeof thing === 'boolean' ; }
+    function isString   (thing) { return typeof thing === 'string'  ; }
+
+    function trySelector (value) {
+        if (!isString(value)) { return false; }
+
+        // an exception will be raised if it is invalid
+        document.querySelector(value);
+        return true;
+    }
+
+    function extend (dest, source) {
+        for (var prop in source) {
+            dest[prop] = source[prop];
+        }
+        return dest;
+    }
+
+    var prefixedPropREs = {
+      webkit: /(Movement[XY]|Radius[XY]|RotationAngle|Force)$/
+    };
+
+    function pointerExtend (dest, source) {
+        for (var prop in source) {
+          var deprecated = false;
+
+          // skip deprecated prefixed properties
+          for (var vendor in prefixedPropREs) {
+            if (prop.indexOf(vendor) === 0 && prefixedPropREs[vendor].test(prop)) {
+              deprecated = true;
+              break;
+            }
+          }
+
+          if (!deprecated) {
+            dest[prop] = source[prop];
+          }
+        }
+        return dest;
+    }
+
+    function copyCoords (dest, src) {
+        dest.page = dest.page || {};
+        dest.page.x = src.page.x;
+        dest.page.y = src.page.y;
+
+        dest.client = dest.client || {};
+        dest.client.x = src.client.x;
+        dest.client.y = src.client.y;
+
+        dest.timeStamp = src.timeStamp;
+    }
+
+    function setEventXY (targetObj, pointers, interaction) {
+        var pointer = (pointers.length > 1
+                       ? pointerAverage(pointers)
+                       : pointers[0]);
+
+        getPageXY(pointer, tmpXY, interaction);
+        targetObj.page.x = tmpXY.x;
+        targetObj.page.y = tmpXY.y;
+
+        getClientXY(pointer, tmpXY, interaction);
+        targetObj.client.x = tmpXY.x;
+        targetObj.client.y = tmpXY.y;
+
+        targetObj.timeStamp = new Date().getTime();
+    }
+
+    function setEventDeltas (targetObj, prev, cur) {
+        targetObj.page.x     = cur.page.x      - prev.page.x;
+        targetObj.page.y     = cur.page.y      - prev.page.y;
+        targetObj.client.x   = cur.client.x    - prev.client.x;
+        targetObj.client.y   = cur.client.y    - prev.client.y;
+        targetObj.timeStamp = new Date().getTime() - prev.timeStamp;
+
+        // set pointer velocity
+        var dt = Math.max(targetObj.timeStamp / 1000, 0.001);
+        targetObj.page.speed   = hypot(targetObj.page.x, targetObj.page.y) / dt;
+        targetObj.page.vx      = targetObj.page.x / dt;
+        targetObj.page.vy      = targetObj.page.y / dt;
+
+        targetObj.client.speed = hypot(targetObj.client.x, targetObj.page.y) / dt;
+        targetObj.client.vx    = targetObj.client.x / dt;
+        targetObj.client.vy    = targetObj.client.y / dt;
+    }
+
+    function isNativePointer (pointer) {
+        return (pointer instanceof window.Event
+            || (supportsTouch && window.Touch && pointer instanceof window.Touch));
+    }
+
+    // Get specified X/Y coords for mouse or event.touches[0]
+    function getXY (type, pointer, xy) {
+        xy = xy || {};
+        type = type || 'page';
+
+        xy.x = pointer[type + 'X'];
+        xy.y = pointer[type + 'Y'];
+
+        return xy;
+    }
+
+    function getPageXY (pointer, page) {
+        page = page || {};
+
+        // Opera Mobile handles the viewport and scrolling oddly
+        if (isOperaMobile && isNativePointer(pointer)) {
+            getXY('screen', pointer, page);
+
+            page.x += window.scrollX;
+            page.y += window.scrollY;
+        }
+        else {
+            getXY('page', pointer, page);
+        }
+
+        return page;
+    }
+
+    function getClientXY (pointer, client) {
+        client = client || {};
+
+        if (isOperaMobile && isNativePointer(pointer)) {
+            // Opera Mobile handles the viewport and scrolling oddly
+            getXY('screen', pointer, client);
+        }
+        else {
+          getXY('client', pointer, client);
+        }
+
+        return client;
+    }
+
+    function getScrollXY (win) {
+        win = win || window;
+        return {
+            x: win.scrollX || win.document.documentElement.scrollLeft,
+            y: win.scrollY || win.document.documentElement.scrollTop
+        };
+    }
+
+    function getPointerId (pointer) {
+        return isNumber(pointer.pointerId)? pointer.pointerId : pointer.identifier;
+    }
+
+    function getActualElement (element) {
+        return (element instanceof SVGElementInstance
+            ? element.correspondingUseElement
+            : element);
+    }
+
+    function getWindow (node) {
+        if (isWindow(node)) {
+            return node;
+        }
+
+        var rootNode = (node.ownerDocument || node);
+
+        return rootNode.defaultView || rootNode.parentWindow || window;
+    }
+
+    function getElementClientRect (element) {
+        var clientRect = (element instanceof SVGElement
+                            ? element.getBoundingClientRect()
+                            : element.getClientRects()[0]);
+
+        return clientRect && {
+            left  : clientRect.left,
+            right : clientRect.right,
+            top   : clientRect.top,
+            bottom: clientRect.bottom,
+            width : clientRect.width || clientRect.right - clientRect.left,
+            height: clientRect.height || clientRect.bottom - clientRect.top
+        };
+    }
+
+    function getElementRect (element) {
+        var clientRect = getElementClientRect(element);
+
+        if (!isIOS7 && clientRect) {
+            var scroll = getScrollXY(getWindow(element));
+
+            clientRect.left   += scroll.x;
+            clientRect.right  += scroll.x;
+            clientRect.top    += scroll.y;
+            clientRect.bottom += scroll.y;
+        }
+
+        return clientRect;
+    }
+
+    function getTouchPair (event) {
+        var touches = [];
+
+        // array of touches is supplied
+        if (isArray(event)) {
+            touches[0] = event[0];
+            touches[1] = event[1];
+        }
+        // an event
+        else {
+            if (event.type === 'touchend') {
+                if (event.touches.length === 1) {
+                    touches[0] = event.touches[0];
+                    touches[1] = event.changedTouches[0];
+                }
+                else if (event.touches.length === 0) {
+                    touches[0] = event.changedTouches[0];
+                    touches[1] = event.changedTouches[1];
+                }
+            }
+            else {
+                touches[0] = event.touches[0];
+                touches[1] = event.touches[1];
+            }
+        }
+
+        return touches;
+    }
+
+    function pointerAverage (pointers) {
+        var average = {
+            pageX  : 0,
+            pageY  : 0,
+            clientX: 0,
+            clientY: 0,
+            screenX: 0,
+            screenY: 0
+        };
+        var prop;
+
+        for (var i = 0; i < pointers.length; i++) {
+            for (prop in average) {
+                average[prop] += pointers[i][prop];
+            }
+        }
+        for (prop in average) {
+            average[prop] /= pointers.length;
+        }
+
+        return average;
+    }
+
+    function touchBBox (event) {
+        if (!event.length && !(event.touches && event.touches.length > 1)) {
+            return;
+        }
+
+        var touches = getTouchPair(event),
+            minX = Math.min(touches[0].pageX, touches[1].pageX),
+            minY = Math.min(touches[0].pageY, touches[1].pageY),
+            maxX = Math.max(touches[0].pageX, touches[1].pageX),
+            maxY = Math.max(touches[0].pageY, touches[1].pageY);
+
+        return {
+            x: minX,
+            y: minY,
+            left: minX,
+            top: minY,
+            width: maxX - minX,
+            height: maxY - minY
+        };
+    }
+
+    function touchDistance (event, deltaSource) {
+        deltaSource = deltaSource || defaultOptions.deltaSource;
+
+        var sourceX = deltaSource + 'X',
+            sourceY = deltaSource + 'Y',
+            touches = getTouchPair(event);
+
+
+        var dx = touches[0][sourceX] - touches[1][sourceX],
+            dy = touches[0][sourceY] - touches[1][sourceY];
+
+        return hypot(dx, dy);
+    }
+
+    function touchAngle (event, prevAngle, deltaSource) {
+        deltaSource = deltaSource || defaultOptions.deltaSource;
+
+        var sourceX = deltaSource + 'X',
+            sourceY = deltaSource + 'Y',
+            touches = getTouchPair(event),
+            dx = touches[0][sourceX] - touches[1][sourceX],
+            dy = touches[0][sourceY] - touches[1][sourceY],
+            angle = 180 * Math.atan(dy / dx) / Math.PI;
+
+        if (isNumber(prevAngle)) {
+            var dr = angle - prevAngle,
+                drClamped = dr % 360;
+
+            if (drClamped > 315) {
+                angle -= 360 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped > 135) {
+                angle -= 180 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped < -315) {
+                angle += 360 + (angle / 360)|0 * 360;
+            }
+            else if (drClamped < -135) {
+                angle += 180 + (angle / 360)|0 * 360;
+            }
+        }
+
+        return  angle;
+    }
+
+    function getOriginXY (interactable, element) {
+        var origin = interactable
+                ? interactable.options.origin
+                : defaultOptions.origin;
+
+        if (origin === 'parent') {
+            origin = parentElement(element);
+        }
+        else if (origin === 'self') {
+            origin = interactable.getRect(element);
+        }
+        else if (trySelector(origin)) {
+            origin = closest(element, origin) || { x: 0, y: 0 };
+        }
+
+        if (isFunction(origin)) {
+            origin = origin(interactable && element);
+        }
+
+        if (isElement(origin))  {
+            origin = getElementRect(origin);
+        }
+
+        origin.x = ('x' in origin)? origin.x : origin.left;
+        origin.y = ('y' in origin)? origin.y : origin.top;
+
+        return origin;
+    }
+
+    // http://stackoverflow.com/a/5634528/2280888
+    function _getQBezierValue(t, p1, p2, p3) {
+        var iT = 1 - t;
+        return iT * iT * p1 + 2 * iT * t * p2 + t * t * p3;
+    }
+
+    function getQuadraticCurvePoint(startX, startY, cpX, cpY, endX, endY, position) {
+        return {
+            x:  _getQBezierValue(position, startX, cpX, endX),
+            y:  _getQBezierValue(position, startY, cpY, endY)
+        };
+    }
+
+    // http://gizma.com/easing/
+    function easeOutQuad (t, b, c, d) {
+        t /= d;
+        return -c * t*(t-2) + b;
+    }
+
+    function nodeContains (parent, child) {
+        while (child) {
+            if (child === parent) {
+                return true;
+            }
+
+            child = child.parentNode;
+        }
+
+        return false;
+    }
+
+    function closest (child, selector) {
+        var parent = parentElement(child);
+
+        while (isElement(parent)) {
+            if (matchesSelector(parent, selector)) { return parent; }
+
+            parent = parentElement(parent);
+        }
+
+        return null;
+    }
+
+    function parentElement (node) {
+        var parent = node.parentNode;
+
+        if (isDocFrag(parent)) {
+            // skip past #shado-root fragments
+            while ((parent = parent.host) && isDocFrag(parent)) {}
+
+            return parent;
+        }
+
+        return parent;
+    }
+
+    function inContext (interactable, element) {
+        return interactable._context === element.ownerDocument
+                || nodeContains(interactable._context, element);
+    }
+
+    function testIgnore (interactable, interactableElement, element) {
+        var ignoreFrom = interactable.options.ignoreFrom;
+
+        if (!ignoreFrom || !isElement(element)) { return false; }
+
+        if (isString(ignoreFrom)) {
+            return matchesUpTo(element, ignoreFrom, interactableElement);
+        }
+        else if (isElement(ignoreFrom)) {
+            return nodeContains(ignoreFrom, element);
+        }
+
+        return false;
+    }
+
+    function testAllow (interactable, interactableElement, element) {
+        var allowFrom = interactable.options.allowFrom;
+
+        if (!allowFrom) { return true; }
+
+        if (!isElement(element)) { return false; }
+
+        if (isString(allowFrom)) {
+            return matchesUpTo(element, allowFrom, interactableElement);
+        }
+        else if (isElement(allowFrom)) {
+            return nodeContains(allowFrom, element);
+        }
+
+        return false;
+    }
+
+    function checkAxis (axis, interactable) {
+        if (!interactable) { return false; }
+
+        var thisAxis = interactable.options.drag.axis;
+
+        return (axis === 'xy' || thisAxis === 'xy' || thisAxis === axis);
+    }
+
+    function checkSnap (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return options[action].snap && options[action].snap.enabled;
+    }
+
+    function checkRestrict (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return  options[action].restrict && options[action].restrict.enabled;
+    }
+
+    function checkAutoScroll (interactable, action) {
+        var options = interactable.options;
+
+        if (/^resize/.test(action)) {
+            action = 'resize';
+        }
+
+        return  options[action].autoScroll && options[action].autoScroll.enabled;
+    }
+
+    function withinInteractionLimit (interactable, element, action) {
+        var options = interactable.options,
+            maxActions = options[action.name].max,
+            maxPerElement = options[action.name].maxPerElement,
+            activeInteractions = 0,
+            targetCount = 0,
+            targetElementCount = 0;
+
+        for (var i = 0, len = interactions.length; i < len; i++) {
+            var interaction = interactions[i],
+                otherAction = interaction.prepared.name,
+                active = interaction.interacting();
+
+            if (!active) { continue; }
+
+            activeInteractions++;
+
+            if (activeInteractions >= maxInteractions) {
+                return false;
+            }
+
+            if (interaction.target !== interactable) { continue; }
+
+            targetCount += (otherAction === action.name)|0;
+
+            if (targetCount >= maxActions) {
+                return false;
+            }
+
+            if (interaction.element === element) {
+                targetElementCount++;
+
+                if (otherAction !== action.name || targetElementCount >= maxPerElement) {
+                    return false;
+                }
+            }
+        }
+
+        return maxInteractions > 0;
+    }
+
+    // Test for the element that's "above" all other qualifiers
+    function indexOfDeepestElement (elements) {
+        var dropzone,
+            deepestZone = elements[0],
+            index = deepestZone? 0: -1,
+            parent,
+            deepestZoneParents = [],
+            dropzoneParents = [],
+            child,
+            i,
+            n;
+
+        for (i = 1; i < elements.length; i++) {
+            dropzone = elements[i];
+
+            // an element might belong to multiple selector dropzones
+            if (!dropzone || dropzone === deepestZone) {
+                continue;
+            }
+
+            if (!deepestZone) {
+                deepestZone = dropzone;
+                index = i;
+                continue;
+            }
+
+            // check if the deepest or current are document.documentElement or document.rootElement
+            // - if the current dropzone is, do nothing and continue
+            if (dropzone.parentNode === dropzone.ownerDocument) {
+                continue;
+            }
+            // - if deepest is, update with the current dropzone and continue to next
+            else if (deepestZone.parentNode === dropzone.ownerDocument) {
+                deepestZone = dropzone;
+                index = i;
+                continue;
+            }
+
+            if (!deepestZoneParents.length) {
+                parent = deepestZone;
+                while (parent.parentNode && parent.parentNode !== parent.ownerDocument) {
+                    deepestZoneParents.unshift(parent);
+                    parent = parent.parentNode;
+                }
+            }
+
+            // if this element is an svg element and the current deepest is
+            // an HTMLElement
+            if (deepestZone instanceof HTMLElement
+                && dropzone instanceof SVGElement
+                && !(dropzone instanceof SVGSVGElement)) {
+
+                if (dropzone === deepestZone.parentNode) {
+                    continue;
+                }
+
+                parent = dropzone.ownerSVGElement;
+            }
+            else {
+                parent = dropzone;
+            }
+
+            dropzoneParents = [];
+
+            while (parent.parentNode !== parent.ownerDocument) {
+                dropzoneParents.unshift(parent);
+                parent = parent.parentNode;
+            }
+
+            n = 0;
+
+            // get (position of last common ancestor) + 1
+            while (dropzoneParents[n] && dropzoneParents[n] === deepestZoneParents[n]) {
+                n++;
+            }
+
+            var parents = [
+                dropzoneParents[n - 1],
+                dropzoneParents[n],
+                deepestZoneParents[n]
+            ];
+
+            child = parents[0].lastChild;
+
+            while (child) {
+                if (child === parents[1]) {
+                    deepestZone = dropzone;
+                    index = i;
+                    deepestZoneParents = [];
+
+                    break;
+                }
+                else if (child === parents[2]) {
+                    break;
+                }
+
+                child = child.previousSibling;
+            }
+        }
+
+        return index;
+    }
+
+    function Interaction () {
+        this.target          = null; // current interactable being interacted with
+        this.element         = null; // the target element of the interactable
+        this.dropTarget      = null; // the dropzone a drag target might be dropped into
+        this.dropElement     = null; // the element at the time of checking
+        this.prevDropTarget  = null; // the dropzone that was recently dragged away from
+        this.prevDropElement = null; // the element at the time of checking
+
+        this.prepared        = {     // action that's ready to be fired on next move event
+            name : null,
+            axis : null,
+            edges: null
+        };
+
+        this.matches         = [];   // all selectors that are matched by target element
+        this.matchElements   = [];   // corresponding elements
+
+        this.inertiaStatus = {
+            active       : false,
+            smoothEnd    : false,
+            ending       : false,
+
+            startEvent: null,
+            upCoords: {},
+
+            xe: 0, ye: 0,
+            sx: 0, sy: 0,
+
+            t0: 0,
+            vx0: 0, vys: 0,
+            duration: 0,
+
+            resumeDx: 0,
+            resumeDy: 0,
+
+            lambda_v0: 0,
+            one_ve_v0: 0,
+            i  : null
+        };
+
+        if (isFunction(Function.prototype.bind)) {
+            this.boundInertiaFrame = this.inertiaFrame.bind(this);
+            this.boundSmoothEndFrame = this.smoothEndFrame.bind(this);
+        }
+        else {
+            var that = this;
+
+            this.boundInertiaFrame = function () { return that.inertiaFrame(); };
+            this.boundSmoothEndFrame = function () { return that.smoothEndFrame(); };
+        }
+
+        this.activeDrops = {
+            dropzones: [],      // the dropzones that are mentioned below
+            elements : [],      // elements of dropzones that accept the target draggable
+            rects    : []       // the rects of the elements mentioned above
+        };
+
+        // keep track of added pointers
+        this.pointers    = [];
+        this.pointerIds  = [];
+        this.downTargets = [];
+        this.downTimes   = [];
+        this.holdTimers  = [];
+
+        // Previous native pointer move event coordinates
+        this.prevCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+        // current native pointer move event coordinates
+        this.curCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+
+        // Starting InteractEvent pointer coordinates
+        this.startCoords = {
+            page     : { x: 0, y: 0 },
+            client   : { x: 0, y: 0 },
+            timeStamp: 0
+        };
+
+        // Change in coordinates and time of the pointer
+        this.pointerDelta = {
+            page     : { x: 0, y: 0, vx: 0, vy: 0, speed: 0 },
+            client   : { x: 0, y: 0, vx: 0, vy: 0, speed: 0 },
+            timeStamp: 0
+        };
+
+        this.downEvent   = null;    // pointerdown/mousedown/touchstart event
+        this.downPointer = {};
+
+        this._eventTarget    = null;
+        this._curEventTarget = null;
+
+        this.prevEvent = null;      // previous action event
+        this.tapTime   = 0;         // time of the most recent tap event
+        this.prevTap   = null;
+
+        this.startOffset    = { left: 0, right: 0, top: 0, bottom: 0 };
+        this.restrictOffset = { left: 0, right: 0, top: 0, bottom: 0 };
+        this.snapOffsets    = [];
+
+        this.gesture = {
+            start: { x: 0, y: 0 },
+
+            startDistance: 0,   // distance between two touches of touchStart
+            prevDistance : 0,
+            distance     : 0,
+
+            scale: 1,           // gesture.distance / gesture.startDistance
+
+            startAngle: 0,      // angle of line joining two touches
+            prevAngle : 0       // angle of the previous gesture event
+        };
+
+        this.snapStatus = {
+            x       : 0, y       : 0,
+            dx      : 0, dy      : 0,
+            realX   : 0, realY   : 0,
+            snappedX: 0, snappedY: 0,
+            targets : [],
+            locked  : false,
+            changed : false
+        };
+
+        this.restrictStatus = {
+            dx         : 0, dy         : 0,
+            restrictedX: 0, restrictedY: 0,
+            snap       : null,
+            restricted : false,
+            changed    : false
+        };
+
+        this.restrictStatus.snap = this.snapStatus;
+
+        this.pointerIsDown   = false;
+        this.pointerWasMoved = false;
+        this.gesturing       = false;
+        this.dragging        = false;
+        this.resizing        = false;
+        this.resizeAxes      = 'xy';
+
+        this.mouse = false;
+
+        interactions.push(this);
+    }
+
+    Interaction.prototype = {
+        getPageXY  : function (pointer, xy) { return   getPageXY(pointer, xy, this); },
+        getClientXY: function (pointer, xy) { return getClientXY(pointer, xy, this); },
+        setEventXY : function (target, ptr) { return  setEventXY(target, ptr, this); },
+
+        pointerOver: function (pointer, event, eventTarget) {
+            if (this.prepared.name || !this.mouse) { return; }
+
+            var curMatches = [],
+                curMatchElements = [],
+                prevTargetElement = this.element;
+
+            this.addPointer(pointer);
+
+            if (this.target
+                && (testIgnore(this.target, this.element, eventTarget)
+                    || !testAllow(this.target, this.element, eventTarget))) {
+                // if the eventTarget should be ignored or shouldn't be allowed
+                // clear the previous target
+                this.target = null;
+                this.element = null;
+                this.matches = [];
+                this.matchElements = [];
+            }
+
+            var elementInteractable = interactables.get(eventTarget),
+                elementAction = (elementInteractable
+                                 && !testIgnore(elementInteractable, eventTarget, eventTarget)
+                                 && testAllow(elementInteractable, eventTarget, eventTarget)
+                                 && validateAction(
+                                     elementInteractable.getAction(pointer, event, this, eventTarget),
+                                     elementInteractable));
+
+            if (elementAction && !withinInteractionLimit(elementInteractable, eventTarget, elementAction)) {
+                 elementAction = null;
+            }
+
+            function pushCurMatches (interactable, selector) {
+                if (interactable
+                    && inContext(interactable, eventTarget)
+                    && !testIgnore(interactable, eventTarget, eventTarget)
+                    && testAllow(interactable, eventTarget, eventTarget)
+                    && matchesSelector(eventTarget, selector)) {
+
+                    curMatches.push(interactable);
+                    curMatchElements.push(eventTarget);
+                }
+            }
+
+            if (elementAction) {
+                this.target = elementInteractable;
+                this.element = eventTarget;
+                this.matches = [];
+                this.matchElements = [];
+            }
+            else {
+                interactables.forEachSelector(pushCurMatches);
+
+                if (this.validateSelector(pointer, event, curMatches, curMatchElements)) {
+                    this.matches = curMatches;
+                    this.matchElements = curMatchElements;
+
+                    this.pointerHover(pointer, event, this.matches, this.matchElements);
+                    events.add(eventTarget,
+                                        PointerEvent? pEventTypes.move : 'mousemove',
+                                        listeners.pointerHover);
+                }
+                else if (this.target) {
+                    if (nodeContains(prevTargetElement, eventTarget)) {
+                        this.pointerHover(pointer, event, this.matches, this.matchElements);
+                        events.add(this.element,
+                                            PointerEvent? pEventTypes.move : 'mousemove',
+                                            listeners.pointerHover);
+                    }
+                    else {
+                        this.target = null;
+                        this.element = null;
+                        this.matches = [];
+                        this.matchElements = [];
+                    }
+                }
+            }
+        },
+
+        // Check what action would be performed on pointerMove target if a mouse
+        // button were pressed and change the cursor accordingly
+        pointerHover: function (pointer, event, eventTarget, curEventTarget, matches, matchElements) {
+            var target = this.target;
+
+            if (!this.prepared.name && this.mouse) {
+
+                var action;
+
+                // update pointer coords for defaultActionChecker to use
+                this.setEventXY(this.curCoords, [pointer]);
+
+                if (matches) {
+                    action = this.validateSelector(pointer, event, matches, matchElements);
+                }
+                else if (target) {
+                    action = validateAction(target.getAction(this.pointers[0], event, this, this.element), this.target);
+                }
+
+                if (target && target.options.styleCursor) {
+                    if (action) {
+                        target._doc.documentElement.style.cursor = getActionCursor(action);
+                    }
+                    else {
+                        target._doc.documentElement.style.cursor = '';
+                    }
+                }
+            }
+            else if (this.prepared.name) {
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+        },
+
+        pointerOut: function (pointer, event, eventTarget) {
+            if (this.prepared.name) { return; }
+
+            // Remove temporary event listeners for selector Interactables
+            if (!interactables.get(eventTarget)) {
+                events.remove(eventTarget,
+                                       PointerEvent? pEventTypes.move : 'mousemove',
+                                       listeners.pointerHover);
+            }
+
+            if (this.target && this.target.options.styleCursor && !this.interacting()) {
+                this.target._doc.documentElement.style.cursor = '';
+            }
+        },
+
+        selectorDown: function (pointer, event, eventTarget, curEventTarget) {
+            var that = this,
+                // copy event to be used in timeout for IE8
+                eventCopy = events.useAttachEvent? extend({}, event) : event,
+                element = eventTarget,
+                pointerIndex = this.addPointer(pointer),
+                action;
+
+            this.holdTimers[pointerIndex] = setTimeout(function () {
+                that.pointerHold(events.useAttachEvent? eventCopy : pointer, eventCopy, eventTarget, curEventTarget);
+            }, defaultOptions._holdDuration);
+
+            this.pointerIsDown = true;
+
+            // Check if the down event hits the current inertia target
+            if (this.inertiaStatus.active && this.target.selector) {
+                // climb up the DOM tree from the event target
+                while (isElement(element)) {
+
+                    // if this element is the current inertia target element
+                    if (element === this.element
+                        // and the prospective action is the same as the ongoing one
+                        && validateAction(this.target.getAction(pointer, event, this, this.element), this.target).name === this.prepared.name) {
+
+                        // stop inertia so that the next move will be a normal one
+                        cancelFrame(this.inertiaStatus.i);
+                        this.inertiaStatus.active = false;
+
+                        this.collectEventTargets(pointer, event, eventTarget, 'down');
+                        return;
+                    }
+                    element = parentElement(element);
+                }
+            }
+
+            // do nothing if interacting
+            if (this.interacting()) {
+                this.collectEventTargets(pointer, event, eventTarget, 'down');
+                return;
+            }
+
+            function pushMatches (interactable, selector, context) {
+                var elements = ie8MatchesSelector
+                    ? context.querySelectorAll(selector)
+                    : undefined;
+
+                if (inContext(interactable, element)
+                    && !testIgnore(interactable, element, eventTarget)
+                    && testAllow(interactable, element, eventTarget)
+                    && matchesSelector(element, selector, elements)) {
+
+                    that.matches.push(interactable);
+                    that.matchElements.push(element);
+                }
+            }
+
+            // update pointer coords for defaultActionChecker to use
+            this.setEventXY(this.curCoords, [pointer]);
+            this.downEvent = event;
+
+            while (isElement(element) && !action) {
+                this.matches = [];
+                this.matchElements = [];
+
+                interactables.forEachSelector(pushMatches);
+
+                action = this.validateSelector(pointer, event, this.matches, this.matchElements);
+                element = parentElement(element);
+            }
+
+            if (action) {
+                this.prepared.name  = action.name;
+                this.prepared.axis  = action.axis;
+                this.prepared.edges = action.edges;
+
+                this.collectEventTargets(pointer, event, eventTarget, 'down');
+
+                return this.pointerDown(pointer, event, eventTarget, curEventTarget, action);
+            }
+            else {
+                // do these now since pointerDown isn't being called from here
+                this.downTimes[pointerIndex] = new Date().getTime();
+                this.downTargets[pointerIndex] = eventTarget;
+                pointerExtend(this.downPointer, pointer);
+
+                copyCoords(this.prevCoords, this.curCoords);
+                this.pointerWasMoved = false;
+            }
+
+            this.collectEventTargets(pointer, event, eventTarget, 'down');
+        },
+
+        // Determine action to be performed on next pointerMove and add appropriate
+        // style and event Listeners
+        pointerDown: function (pointer, event, eventTarget, curEventTarget, forceAction) {
+            if (!forceAction && !this.inertiaStatus.active && this.pointerWasMoved && this.prepared.name) {
+                this.checkAndPreventDefault(event, this.target, this.element);
+
+                return;
+            }
+
+            this.pointerIsDown = true;
+            this.downEvent = event;
+
+            var pointerIndex = this.addPointer(pointer),
+                action;
+
+            // If it is the second touch of a multi-touch gesture, keep the
+            // target the same and get a new action if a target was set by the
+            // first touch
+            if (this.pointerIds.length > 1 && this.target._element === this.element) {
+                var newAction = validateAction(forceAction || this.target.getAction(pointer, event, this, this.element), this.target);
+
+                if (withinInteractionLimit(this.target, this.element, newAction)) {
+                    action = newAction;
+                }
+
+                this.prepared.name = null;
+            }
+            // Otherwise, set the target if there is no action prepared
+            else if (!this.prepared.name) {
+                var interactable = interactables.get(curEventTarget);
+
+                if (interactable
+                    && !testIgnore(interactable, curEventTarget, eventTarget)
+                    && testAllow(interactable, curEventTarget, eventTarget)
+                    && (action = validateAction(forceAction || interactable.getAction(pointer, event, this, curEventTarget), interactable, eventTarget))
+                    && withinInteractionLimit(interactable, curEventTarget, action)) {
+                    this.target = interactable;
+                    this.element = curEventTarget;
+                }
+            }
+
+            var target = this.target,
+                options = target && target.options;
+
+            if (target && (forceAction || !this.prepared.name)) {
+                action = action || validateAction(forceAction || target.getAction(pointer, event, this, curEventTarget), target, this.element);
+
+                this.setEventXY(this.startCoords, this.pointers);
+
+                if (!action) { return; }
+
+                if (options.styleCursor) {
+                    target._doc.documentElement.style.cursor = getActionCursor(action);
+                }
+
+                this.resizeAxes = action.name === 'resize'? action.axis : null;
+
+                if (action === 'gesture' && this.pointerIds.length < 2) {
+                    action = null;
+                }
+
+                this.prepared.name  = action.name;
+                this.prepared.axis  = action.axis;
+                this.prepared.edges = action.edges;
+
+                this.snapStatus.snappedX = this.snapStatus.snappedY =
+                    this.restrictStatus.restrictedX = this.restrictStatus.restrictedY = NaN;
+
+                this.downTimes[pointerIndex] = new Date().getTime();
+                this.downTargets[pointerIndex] = eventTarget;
+                pointerExtend(this.downPointer, pointer);
+
+                copyCoords(this.prevCoords, this.startCoords);
+                this.pointerWasMoved = false;
+
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+            // if inertia is active try to resume action
+            else if (this.inertiaStatus.active
+                && curEventTarget === this.element
+                && validateAction(target.getAction(pointer, event, this, this.element), target).name === this.prepared.name) {
+
+                cancelFrame(this.inertiaStatus.i);
+                this.inertiaStatus.active = false;
+
+                this.checkAndPreventDefault(event, target, this.element);
+            }
+        },
+
+        setModifications: function (coords, preEnd) {
+            var target         = this.target,
+                shouldMove     = true,
+                shouldSnap     = checkSnap(target, this.prepared.name)     && (!target.options[this.prepared.name].snap.endOnly     || preEnd),
+                shouldRestrict = checkRestrict(target, this.prepared.name) && (!target.options[this.prepared.name].restrict.endOnly || preEnd);
+
+            if (shouldSnap    ) { this.setSnapping   (coords); } else { this.snapStatus    .locked     = false; }
+            if (shouldRestrict) { this.setRestriction(coords); } else { this.restrictStatus.restricted = false; }
+
+            if (shouldSnap && this.snapStatus.locked && !this.snapStatus.changed) {
+                shouldMove = shouldRestrict && this.restrictStatus.restricted && this.restrictStatus.changed;
+            }
+            else if (shouldRestrict && this.restrictStatus.restricted && !this.restrictStatus.changed) {
+                shouldMove = false;
+            }
+
+            return shouldMove;
+        },
+
+        setStartOffsets: function (action, interactable, element) {
+            var rect = interactable.getRect(element),
+                origin = getOriginXY(interactable, element),
+                snap = interactable.options[this.prepared.name].snap,
+                restrict = interactable.options[this.prepared.name].restrict,
+                width, height;
+
+            if (rect) {
+                this.startOffset.left = this.startCoords.page.x - rect.left;
+                this.startOffset.top  = this.startCoords.page.y - rect.top;
+
+                this.startOffset.right  = rect.right  - this.startCoords.page.x;
+                this.startOffset.bottom = rect.bottom - this.startCoords.page.y;
+
+                if ('width' in rect) { width = rect.width; }
+                else { width = rect.right - rect.left; }
+                if ('height' in rect) { height = rect.height; }
+                else { height = rect.bottom - rect.top; }
+            }
+            else {
+                this.startOffset.left = this.startOffset.top = this.startOffset.right = this.startOffset.bottom = 0;
+            }
+
+            this.snapOffsets.splice(0);
+
+            var snapOffset = snap && snap.offset === 'startCoords'
+                                ? {
+                                    x: this.startCoords.page.x - origin.x,
+                                    y: this.startCoords.page.y - origin.y
+                                }
+                                : snap && snap.offset || { x: 0, y: 0 };
+
+            if (rect && snap && snap.relativePoints && snap.relativePoints.length) {
+                for (var i = 0; i < snap.relativePoints.length; i++) {
+                    this.snapOffsets.push({
+                        x: this.startOffset.left - (width  * snap.relativePoints[i].x) + snapOffset.x,
+                        y: this.startOffset.top  - (height * snap.relativePoints[i].y) + snapOffset.y
+                    });
+                }
+            }
+            else {
+                this.snapOffsets.push(snapOffset);
+            }
+
+            if (rect && restrict.elementRect) {
+                this.restrictOffset.left = this.startOffset.left - (width  * restrict.elementRect.left);
+                this.restrictOffset.top  = this.startOffset.top  - (height * restrict.elementRect.top);
+
+                this.restrictOffset.right  = this.startOffset.right  - (width  * (1 - restrict.elementRect.right));
+                this.restrictOffset.bottom = this.startOffset.bottom - (height * (1 - restrict.elementRect.bottom));
+            }
+            else {
+                this.restrictOffset.left = this.restrictOffset.top = this.restrictOffset.right = this.restrictOffset.bottom = 0;
+            }
+        },
+
+        /*\
+         * Interaction.start
+         [ method ]
+         *
+         * Start an action with the given Interactable and Element as tartgets. The
+         * action must be enabled for the target Interactable and an appropriate number
+         * of pointers must be held down – 1 for drag/resize, 2 for gesture.
+         *
+         * Use it with `interactable.<action>able({ manualStart: false })` to always
+         * [start actions manually](https://github.com/taye/interact.js/issues/114)
+         *
+         - action       (object)  The action to be performed - drag, resize, etc.
+         - interactable (Interactable) The Interactable to target
+         - element      (Element) The DOM Element to target
+         = (object) interact
+         **
+         | interact(target)
+         |   .draggable({
+         |     // disable the default drag start by down->move
+         |     manualStart: true
+         |   })
+         |   // start dragging after the user holds the pointer down
+         |   .on('hold', function (event) {
+         |     var interaction = event.interaction;
+         |
+         |     if (!interaction.interacting()) {
+         |       interaction.start({ name: 'drag' },
+         |                         event.interactable,
+         |                         event.currentTarget);
+         |     }
+         | });
+        \*/
+        start: function (action, interactable, element) {
+            if (this.interacting()
+                || !this.pointerIsDown
+                || this.pointerIds.length < (action.name === 'gesture'? 2 : 1)) {
+                return;
+            }
+
+            // if this interaction had been removed after stopping
+            // add it back
+            if (indexOf(interactions, this) === -1) {
+                interactions.push(this);
+            }
+
+            // set the startCoords if there was no prepared action
+            if (!this.prepared.name) {
+                this.setEventXY(this.startCoords);
+            }
+
+            this.prepared.name  = action.name;
+            this.prepared.axis  = action.axis;
+            this.prepared.edges = action.edges;
+            this.target         = interactable;
+            this.element        = element;
+
+            this.setStartOffsets(action.name, interactable, element);
+            this.setModifications(this.startCoords.page);
+
+            this.prevEvent = this[this.prepared.name + 'Start'](this.downEvent);
+        },
+
+        pointerMove: function (pointer, event, eventTarget, curEventTarget, preEnd) {
+            if (this.inertiaStatus.active) {
+                var pageUp   = this.inertiaStatus.upCoords.page;
+                var clientUp = this.inertiaStatus.upCoords.client;
+
+                var inertiaPosition = {
+                    pageX  : pageUp.x   + this.inertiaStatus.sx,
+                    pageY  : pageUp.y   + this.inertiaStatus.sy,
+                    clientX: clientUp.x + this.inertiaStatus.sx,
+                    clientY: clientUp.y + this.inertiaStatus.sy
+                };
+
+                this.setEventXY(this.curCoords, [inertiaPosition]);
+            }
+            else {
+                this.recordPointer(pointer);
+                this.setEventXY(this.curCoords, this.pointers);
+            }
+
+            var duplicateMove = (this.curCoords.page.x === this.prevCoords.page.x
+                                 && this.curCoords.page.y === this.prevCoords.page.y
+                                 && this.curCoords.client.x === this.prevCoords.client.x
+                                 && this.curCoords.client.y === this.prevCoords.client.y);
+
+            var dx, dy,
+                pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            // register movement greater than pointerMoveTolerance
+            if (this.pointerIsDown && !this.pointerWasMoved) {
+                dx = this.curCoords.client.x - this.startCoords.client.x;
+                dy = this.curCoords.client.y - this.startCoords.client.y;
+
+                this.pointerWasMoved = hypot(dx, dy) > pointerMoveTolerance;
+            }
+
+            if (!duplicateMove && (!this.pointerIsDown || this.pointerWasMoved)) {
+                if (this.pointerIsDown) {
+                    clearTimeout(this.holdTimers[pointerIndex]);
+                }
+
+                this.collectEventTargets(pointer, event, eventTarget, 'move');
+            }
+
+            if (!this.pointerIsDown) { return; }
+
+            if (duplicateMove && this.pointerWasMoved && !preEnd) {
+                this.checkAndPreventDefault(event, this.target, this.element);
+                return;
+            }
+
+            // set pointer coordinate, time changes and speeds
+            setEventDeltas(this.pointerDelta, this.prevCoords, this.curCoords);
+
+            if (!this.prepared.name) { return; }
+
+            if (this.pointerWasMoved
+                // ignore movement while inertia is active
+                && (!this.inertiaStatus.active || (pointer instanceof InteractEvent && /inertiastart/.test(pointer.type)))) {
+
+                // if just starting an action, calculate the pointer speed now
+                if (!this.interacting()) {
+                    setEventDeltas(this.pointerDelta, this.prevCoords, this.curCoords);
+
+                    // check if a drag is in the correct axis
+                    if (this.prepared.name === 'drag') {
+                        var absX = Math.abs(dx),
+                            absY = Math.abs(dy),
+                            targetAxis = this.target.options.drag.axis,
+                            axis = (absX > absY ? 'x' : absX < absY ? 'y' : 'xy');
+
+                        // if the movement isn't in the axis of the interactable
+                        if (axis !== 'xy' && targetAxis !== 'xy' && targetAxis !== axis) {
+                            // cancel the prepared action
+                            this.prepared.name = null;
+
+                            // then try to get a drag from another ineractable
+
+                            var element = eventTarget;
+
+                            // check element interactables
+                            while (isElement(element)) {
+                                var elementInteractable = interactables.get(element);
+
+                                if (elementInteractable
+                                    && elementInteractable !== this.target
+                                    && !elementInteractable.options.drag.manualStart
+                                    && elementInteractable.getAction(this.downPointer, this.downEvent, this, element).name === 'drag'
+                                    && checkAxis(axis, elementInteractable)) {
+
+                                    this.prepared.name = 'drag';
+                                    this.target = elementInteractable;
+                                    this.element = element;
+                                    break;
+                                }
+
+                                element = parentElement(element);
+                            }
+
+                            // if there's no drag from element interactables,
+                            // check the selector interactables
+                            if (!this.prepared.name) {
+                                var thisInteraction = this;
+
+                                var getDraggable = function (interactable, selector, context) {
+                                    var elements = ie8MatchesSelector
+                                        ? context.querySelectorAll(selector)
+                                        : undefined;
+
+                                    if (interactable === thisInteraction.target) { return; }
+
+                                    if (inContext(interactable, eventTarget)
+                                        && !interactable.options.drag.manualStart
+                                        && !testIgnore(interactable, element, eventTarget)
+                                        && testAllow(interactable, element, eventTarget)
+                                        && matchesSelector(element, selector, elements)
+                                        && interactable.getAction(thisInteraction.downPointer, thisInteraction.downEvent, thisInteraction, element).name === 'drag'
+                                        && checkAxis(axis, interactable)
+                                        && withinInteractionLimit(interactable, element, 'drag')) {
+
+                                        return interactable;
+                                    }
+                                };
+
+                                element = eventTarget;
+
+                                while (isElement(element)) {
+                                    var selectorInteractable = interactables.forEachSelector(getDraggable);
+
+                                    if (selectorInteractable) {
+                                        this.prepared.name = 'drag';
+                                        this.target = selectorInteractable;
+                                        this.element = element;
+                                        break;
+                                    }
+
+                                    element = parentElement(element);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                var starting = !!this.prepared.name && !this.interacting();
+
+                if (starting
+                    && (this.target.options[this.prepared.name].manualStart
+                        || !withinInteractionLimit(this.target, this.element, this.prepared))) {
+                    this.stop(event);
+                    return;
+                }
+
+                if (this.prepared.name && this.target) {
+                    if (starting) {
+                        this.start(this.prepared, this.target, this.element);
+                    }
+
+                    var shouldMove = this.setModifications(this.curCoords.page, preEnd);
+
+                    // move if snapping or restriction doesn't prevent it
+                    if (shouldMove || starting) {
+                        this.prevEvent = this[this.prepared.name + 'Move'](event);
+                    }
+
+                    this.checkAndPreventDefault(event, this.target, this.element);
+                }
+            }
+
+            copyCoords(this.prevCoords, this.curCoords);
+
+            if (this.dragging || this.resizing) {
+                this.autoScrollMove(pointer);
+            }
+        },
+
+        dragStart: function (event) {
+            var dragEvent = new InteractEvent(this, event, 'drag', 'start', this.element);
+
+            this.dragging = true;
+            this.target.fire(dragEvent);
+
+            // reset active dropzones
+            this.activeDrops.dropzones = [];
+            this.activeDrops.elements  = [];
+            this.activeDrops.rects     = [];
+
+            if (!this.dynamicDrop) {
+                this.setActiveDrops(this.element);
+            }
+
+            var dropEvents = this.getDropEvents(event, dragEvent);
+
+            if (dropEvents.activate) {
+                this.fireActiveDrops(dropEvents.activate);
+            }
+
+            return dragEvent;
+        },
+
+        dragMove: function (event) {
+            var target = this.target,
+                dragEvent  = new InteractEvent(this, event, 'drag', 'move', this.element),
+                draggableElement = this.element,
+                drop = this.getDrop(dragEvent, event, draggableElement);
+
+            this.dropTarget = drop.dropzone;
+            this.dropElement = drop.element;
+
+            var dropEvents = this.getDropEvents(event, dragEvent);
+
+            target.fire(dragEvent);
+
+            if (dropEvents.leave) { this.prevDropTarget.fire(dropEvents.leave); }
+            if (dropEvents.enter) {     this.dropTarget.fire(dropEvents.enter); }
+            if (dropEvents.move ) {     this.dropTarget.fire(dropEvents.move ); }
+
+            this.prevDropTarget  = this.dropTarget;
+            this.prevDropElement = this.dropElement;
+
+            return dragEvent;
+        },
+
+        resizeStart: function (event) {
+            var resizeEvent = new InteractEvent(this, event, 'resize', 'start', this.element);
+
+            if (this.prepared.edges) {
+                var startRect = this.target.getRect(this.element);
+
+                /*
+                 * When using the `resizable.square` or `resizable.preserveAspectRatio` options, resizing from one edge
+                 * will affect another. E.g. with `resizable.square`, resizing to make the right edge larger will make
+                 * the bottom edge larger by the same amount. We call these 'linked' edges. Any linked edges will depend
+                 * on the active edges and the edge being interacted with.
+                 */
+                if (this.target.options.resize.square || this.target.options.resize.preserveAspectRatio) {
+                    var linkedEdges = extend({}, this.prepared.edges);
+
+                    linkedEdges.top    = linkedEdges.top    || (linkedEdges.left   && !linkedEdges.bottom);
+                    linkedEdges.left   = linkedEdges.left   || (linkedEdges.top    && !linkedEdges.right );
+                    linkedEdges.bottom = linkedEdges.bottom || (linkedEdges.right  && !linkedEdges.top   );
+                    linkedEdges.right  = linkedEdges.right  || (linkedEdges.bottom && !linkedEdges.left  );
+
+                    this.prepared._linkedEdges = linkedEdges;
+                }
+                else {
+                    this.prepared._linkedEdges = null;
+                }
+
+                // if using `resizable.preserveAspectRatio` option, record aspect ratio at the start of the resize
+                if (this.target.options.resize.preserveAspectRatio) {
+                    this.resizeStartAspectRatio = startRect.width / startRect.height;
+                }
+
+                this.resizeRects = {
+                    start     : startRect,
+                    current   : extend({}, startRect),
+                    restricted: extend({}, startRect),
+                    previous  : extend({}, startRect),
+                    delta     : {
+                        left: 0, right : 0, width : 0,
+                        top : 0, bottom: 0, height: 0
+                    }
+                };
+
+                resizeEvent.rect = this.resizeRects.restricted;
+                resizeEvent.deltaRect = this.resizeRects.delta;
+            }
+
+            this.target.fire(resizeEvent);
+
+            this.resizing = true;
+
+            return resizeEvent;
+        },
+
+        resizeMove: function (event) {
+            var resizeEvent = new InteractEvent(this, event, 'resize', 'move', this.element);
+
+            var edges = this.prepared.edges,
+                invert = this.target.options.resize.invert,
+                invertible = invert === 'reposition' || invert === 'negate';
+
+            if (edges) {
+                var dx = resizeEvent.dx,
+                    dy = resizeEvent.dy,
+
+                    start      = this.resizeRects.start,
+                    current    = this.resizeRects.current,
+                    restricted = this.resizeRects.restricted,
+                    delta      = this.resizeRects.delta,
+                    previous   = extend(this.resizeRects.previous, restricted),
+
+                    originalEdges = edges;
+
+                // `resize.preserveAspectRatio` takes precedence over `resize.square`
+                if (this.target.options.resize.preserveAspectRatio) {
+                    var resizeStartAspectRatio = this.resizeStartAspectRatio;
+
+                    edges = this.prepared._linkedEdges;
+
+                    if ((originalEdges.left && originalEdges.bottom)
+                        || (originalEdges.right && originalEdges.top)) {
+                        dy = -dx / resizeStartAspectRatio;
+                    }
+                    else if (originalEdges.left || originalEdges.right) { dy = dx / resizeStartAspectRatio; }
+                    else if (originalEdges.top || originalEdges.bottom) { dx = dy * resizeStartAspectRatio; }
+                }
+                else if (this.target.options.resize.square) {
+                    edges = this.prepared._linkedEdges;
+
+                    if ((originalEdges.left && originalEdges.bottom)
+                        || (originalEdges.right && originalEdges.top)) {
+                        dy = -dx;
+                    }
+                    else if (originalEdges.left || originalEdges.right) { dy = dx; }
+                    else if (originalEdges.top || originalEdges.bottom) { dx = dy; }
+                }
+
+                // update the 'current' rect without modifications
+                if (edges.top   ) { current.top    += dy; }
+                if (edges.bottom) { current.bottom += dy; }
+                if (edges.left  ) { current.left   += dx; }
+                if (edges.right ) { current.right  += dx; }
+
+                if (invertible) {
+                    // if invertible, copy the current rect
+                    extend(restricted, current);
+
+                    if (invert === 'reposition') {
+                        // swap edge values if necessary to keep width/height positive
+                        var swap;
+
+                        if (restricted.top > restricted.bottom) {
+                            swap = restricted.top;
+
+                            restricted.top = restricted.bottom;
+                            restricted.bottom = swap;
+                        }
+                        if (restricted.left > restricted.right) {
+                            swap = restricted.left;
+
+                            restricted.left = restricted.right;
+                            restricted.right = swap;
+                        }
+                    }
+                }
+                else {
+                    // if not invertible, restrict to minimum of 0x0 rect
+                    restricted.top    = Math.min(current.top, start.bottom);
+                    restricted.bottom = Math.max(current.bottom, start.top);
+                    restricted.left   = Math.min(current.left, start.right);
+                    restricted.right  = Math.max(current.right, start.left);
+                }
+
+                restricted.width  = restricted.right  - restricted.left;
+                restricted.height = restricted.bottom - restricted.top ;
+
+                for (var edge in restricted) {
+                    delta[edge] = restricted[edge] - previous[edge];
+                }
+
+                resizeEvent.edges = this.prepared.edges;
+                resizeEvent.rect = restricted;
+                resizeEvent.deltaRect = delta;
+            }
+
+            this.target.fire(resizeEvent);
+
+            return resizeEvent;
+        },
+
+        gestureStart: function (event) {
+            var gestureEvent = new InteractEvent(this, event, 'gesture', 'start', this.element);
+
+            gestureEvent.ds = 0;
+
+            this.gesture.startDistance = this.gesture.prevDistance = gestureEvent.distance;
+            this.gesture.startAngle = this.gesture.prevAngle = gestureEvent.angle;
+            this.gesture.scale = 1;
+
+            this.gesturing = true;
+
+            this.target.fire(gestureEvent);
+
+            return gestureEvent;
+        },
+
+        gestureMove: function (event) {
+            if (!this.pointerIds.length) {
+                return this.prevEvent;
+            }
+
+            var gestureEvent;
+
+            gestureEvent = new InteractEvent(this, event, 'gesture', 'move', this.element);
+            gestureEvent.ds = gestureEvent.scale - this.gesture.scale;
+
+            this.target.fire(gestureEvent);
+
+            this.gesture.prevAngle = gestureEvent.angle;
+            this.gesture.prevDistance = gestureEvent.distance;
+
+            if (gestureEvent.scale !== Infinity &&
+                gestureEvent.scale !== null &&
+                gestureEvent.scale !== undefined  &&
+                !isNaN(gestureEvent.scale)) {
+
+                this.gesture.scale = gestureEvent.scale;
+            }
+
+            return gestureEvent;
+        },
+
+        pointerHold: function (pointer, event, eventTarget) {
+            this.collectEventTargets(pointer, event, eventTarget, 'hold');
+        },
+
+        pointerUp: function (pointer, event, eventTarget, curEventTarget) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            clearTimeout(this.holdTimers[pointerIndex]);
+
+            this.collectEventTargets(pointer, event, eventTarget, 'up' );
+            this.collectEventTargets(pointer, event, eventTarget, 'tap');
+
+            this.pointerEnd(pointer, event, eventTarget, curEventTarget);
+
+            this.removePointer(pointer);
+        },
+
+        pointerCancel: function (pointer, event, eventTarget, curEventTarget) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            clearTimeout(this.holdTimers[pointerIndex]);
+
+            this.collectEventTargets(pointer, event, eventTarget, 'cancel');
+            this.pointerEnd(pointer, event, eventTarget, curEventTarget);
+
+            this.removePointer(pointer);
+        },
+
+        // http://www.quirksmode.org/dom/events/click.html
+        // >Events leading to dblclick
+        //
+        // IE8 doesn't fire down event before dblclick.
+        // This workaround tries to fire a tap and doubletap after dblclick
+        ie8Dblclick: function (pointer, event, eventTarget) {
+            if (this.prevTap
+                && event.clientX === this.prevTap.clientX
+                && event.clientY === this.prevTap.clientY
+                && eventTarget   === this.prevTap.target) {
+
+                this.downTargets[0] = eventTarget;
+                this.downTimes[0] = new Date().getTime();
+                this.collectEventTargets(pointer, event, eventTarget, 'tap');
+            }
+        },
+
+        // End interact move events and stop auto-scroll unless inertia is enabled
+        pointerEnd: function (pointer, event, eventTarget, curEventTarget) {
+            var endEvent,
+                target = this.target,
+                options = target && target.options,
+                inertiaOptions = options && this.prepared.name && options[this.prepared.name].inertia,
+                inertiaStatus = this.inertiaStatus;
+
+            if (this.interacting()) {
+
+                if (inertiaStatus.active && !inertiaStatus.ending) { return; }
+
+                var pointerSpeed,
+                    now = new Date().getTime(),
+                    inertiaPossible = false,
+                    inertia = false,
+                    smoothEnd = false,
+                    endSnap = checkSnap(target, this.prepared.name) && options[this.prepared.name].snap.endOnly,
+                    endRestrict = checkRestrict(target, this.prepared.name) && options[this.prepared.name].restrict.endOnly,
+                    dx = 0,
+                    dy = 0,
+                    startEvent;
+
+                if (this.dragging) {
+                    if      (options.drag.axis === 'x' ) { pointerSpeed = Math.abs(this.pointerDelta.client.vx); }
+                    else if (options.drag.axis === 'y' ) { pointerSpeed = Math.abs(this.pointerDelta.client.vy); }
+                    else   /*options.drag.axis === 'xy'*/{ pointerSpeed = this.pointerDelta.client.speed; }
+                }
+                else {
+                    pointerSpeed = this.pointerDelta.client.speed;
+                }
+
+                // check if inertia should be started
+                inertiaPossible = (inertiaOptions && inertiaOptions.enabled
+                                   && this.prepared.name !== 'gesture'
+                                   && event !== inertiaStatus.startEvent);
+
+                inertia = (inertiaPossible
+                           && (now - this.curCoords.timeStamp) < 50
+                           && pointerSpeed > inertiaOptions.minSpeed
+                           && pointerSpeed > inertiaOptions.endSpeed);
+
+                if (inertiaPossible && !inertia && (endSnap || endRestrict)) {
+
+                    var snapRestrict = {};
+
+                    snapRestrict.snap = snapRestrict.restrict = snapRestrict;
+
+                    if (endSnap) {
+                        this.setSnapping(this.curCoords.page, snapRestrict);
+                        if (snapRestrict.locked) {
+                            dx += snapRestrict.dx;
+                            dy += snapRestrict.dy;
+                        }
+                    }
+
+                    if (endRestrict) {
+                        this.setRestriction(this.curCoords.page, snapRestrict);
+                        if (snapRestrict.restricted) {
+                            dx += snapRestrict.dx;
+                            dy += snapRestrict.dy;
+                        }
+                    }
+
+                    if (dx || dy) {
+                        smoothEnd = true;
+                    }
+                }
+
+                if (inertia || smoothEnd) {
+                    copyCoords(inertiaStatus.upCoords, this.curCoords);
+
+                    this.pointers[0] = inertiaStatus.startEvent = startEvent =
+                        new InteractEvent(this, event, this.prepared.name, 'inertiastart', this.element);
+
+                    inertiaStatus.t0 = now;
+
+                    target.fire(inertiaStatus.startEvent);
+
+                    if (inertia) {
+                        inertiaStatus.vx0 = this.pointerDelta.client.vx;
+                        inertiaStatus.vy0 = this.pointerDelta.client.vy;
+                        inertiaStatus.v0 = pointerSpeed;
+
+                        this.calcInertia(inertiaStatus);
+
+                        var page = extend({}, this.curCoords.page),
+                            origin = getOriginXY(target, this.element),
+                            statusObject;
+
+                        page.x = page.x + inertiaStatus.xe - origin.x;
+                        page.y = page.y + inertiaStatus.ye - origin.y;
+
+                        statusObject = {
+                            useStatusXY: true,
+                            x: page.x,
+                            y: page.y,
+                            dx: 0,
+                            dy: 0,
+                            snap: null
+                        };
+
+                        statusObject.snap = statusObject;
+
+                        dx = dy = 0;
+
+                        if (endSnap) {
+                            var snap = this.setSnapping(this.curCoords.page, statusObject);
+
+                            if (snap.locked) {
+                                dx += snap.dx;
+                                dy += snap.dy;
+                            }
+                        }
+
+                        if (endRestrict) {
+                            var restrict = this.setRestriction(this.curCoords.page, statusObject);
+
+                            if (restrict.restricted) {
+                                dx += restrict.dx;
+                                dy += restrict.dy;
+                            }
+                        }
+
+                        inertiaStatus.modifiedXe += dx;
+                        inertiaStatus.modifiedYe += dy;
+
+                        inertiaStatus.i = reqFrame(this.boundInertiaFrame);
+                    }
+                    else {
+                        inertiaStatus.smoothEnd = true;
+                        inertiaStatus.xe = dx;
+                        inertiaStatus.ye = dy;
+
+                        inertiaStatus.sx = inertiaStatus.sy = 0;
+
+                        inertiaStatus.i = reqFrame(this.boundSmoothEndFrame);
+                    }
+
+                    inertiaStatus.active = true;
+                    return;
+                }
+
+                if (endSnap || endRestrict) {
+                    // fire a move event at the snapped coordinates
+                    this.pointerMove(pointer, event, eventTarget, curEventTarget, true);
+                }
+            }
+
+            if (this.dragging) {
+                endEvent = new InteractEvent(this, event, 'drag', 'end', this.element);
+
+                var draggableElement = this.element,
+                    drop = this.getDrop(endEvent, event, draggableElement);
+
+                this.dropTarget = drop.dropzone;
+                this.dropElement = drop.element;
+
+                var dropEvents = this.getDropEvents(event, endEvent);
+
+                if (dropEvents.leave) { this.prevDropTarget.fire(dropEvents.leave); }
+                if (dropEvents.enter) {     this.dropTarget.fire(dropEvents.enter); }
+                if (dropEvents.drop ) {     this.dropTarget.fire(dropEvents.drop ); }
+                if (dropEvents.deactivate) {
+                    this.fireActiveDrops(dropEvents.deactivate);
+                }
+
+                target.fire(endEvent);
+            }
+            else if (this.resizing) {
+                endEvent = new InteractEvent(this, event, 'resize', 'end', this.element);
+                target.fire(endEvent);
+            }
+            else if (this.gesturing) {
+                endEvent = new InteractEvent(this, event, 'gesture', 'end', this.element);
+                target.fire(endEvent);
+            }
+
+            this.stop(event);
+        },
+
+        collectDrops: function (element) {
+            var drops = [],
+                elements = [],
+                i;
+
+            element = element || this.element;
+
+            // collect all dropzones and their elements which qualify for a drop
+            for (i = 0; i < interactables.length; i++) {
+                if (!interactables[i].options.drop.enabled) { continue; }
+
+                var current = interactables[i],
+                    accept = current.options.drop.accept;
+
+                // test the draggable element against the dropzone's accept setting
+                if ((isElement(accept) && accept !== element)
+                    || (isString(accept)
+                        && !matchesSelector(element, accept))) {
+
+                    continue;
+                }
+
+                // query for new elements if necessary
+                var dropElements = current.selector? current._context.querySelectorAll(current.selector) : [current._element];
+
+                for (var j = 0, len = dropElements.length; j < len; j++) {
+                    var currentElement = dropElements[j];
+
+                    if (currentElement === element) {
+                        continue;
+                    }
+
+                    drops.push(current);
+                    elements.push(currentElement);
+                }
+            }
+
+            return {
+                dropzones: drops,
+                elements: elements
+            };
+        },
+
+        fireActiveDrops: function (event) {
+            var i,
+                current,
+                currentElement,
+                prevElement;
+
+            // loop through all active dropzones and trigger event
+            for (i = 0; i < this.activeDrops.dropzones.length; i++) {
+                current = this.activeDrops.dropzones[i];
+                currentElement = this.activeDrops.elements [i];
+
+                // prevent trigger of duplicate events on same element
+                if (currentElement !== prevElement) {
+                    // set current element as event target
+                    event.target = currentElement;
+                    current.fire(event);
+                }
+                prevElement = currentElement;
+            }
+        },
+
+        // Collect a new set of possible drops and save them in activeDrops.
+        // setActiveDrops should always be called when a drag has just started or a
+        // drag event happens while dynamicDrop is true
+        setActiveDrops: function (dragElement) {
+            // get dropzones and their elements that could receive the draggable
+            var possibleDrops = this.collectDrops(dragElement, true);
+
+            this.activeDrops.dropzones = possibleDrops.dropzones;
+            this.activeDrops.elements  = possibleDrops.elements;
+            this.activeDrops.rects     = [];
+
+            for (var i = 0; i < this.activeDrops.dropzones.length; i++) {
+                this.activeDrops.rects[i] = this.activeDrops.dropzones[i].getRect(this.activeDrops.elements[i]);
+            }
+        },
+
+        getDrop: function (dragEvent, event, dragElement) {
+            var validDrops = [];
+
+            if (dynamicDrop) {
+                this.setActiveDrops(dragElement);
+            }
+
+            // collect all dropzones and their elements which qualify for a drop
+            for (var j = 0; j < this.activeDrops.dropzones.length; j++) {
+                var current        = this.activeDrops.dropzones[j],
+                    currentElement = this.activeDrops.elements [j],
+                    rect           = this.activeDrops.rects    [j];
+
+                validDrops.push(current.dropCheck(dragEvent, event, this.target, dragElement, currentElement, rect)
+                                ? currentElement
+                                : null);
+            }
+
+            // get the most appropriate dropzone based on DOM depth and order
+            var dropIndex = indexOfDeepestElement(validDrops),
+                dropzone  = this.activeDrops.dropzones[dropIndex] || null,
+                element   = this.activeDrops.elements [dropIndex] || null;
+
+            return {
+                dropzone: dropzone,
+                element: element
+            };
+        },
+
+        getDropEvents: function (pointerEvent, dragEvent) {
+            var dropEvents = {
+                enter     : null,
+                leave     : null,
+                activate  : null,
+                deactivate: null,
+                move      : null,
+                drop      : null
+            };
+
+            if (this.dropElement !== this.prevDropElement) {
+                // if there was a prevDropTarget, create a dragleave event
+                if (this.prevDropTarget) {
+                    dropEvents.leave = {
+                        target       : this.prevDropElement,
+                        dropzone     : this.prevDropTarget,
+                        relatedTarget: dragEvent.target,
+                        draggable    : dragEvent.interactable,
+                        dragEvent    : dragEvent,
+                        interaction  : this,
+                        timeStamp    : dragEvent.timeStamp,
+                        type         : 'dragleave'
+                    };
+
+                    dragEvent.dragLeave = this.prevDropElement;
+                    dragEvent.prevDropzone = this.prevDropTarget;
+                }
+                // if the dropTarget is not null, create a dragenter event
+                if (this.dropTarget) {
+                    dropEvents.enter = {
+                        target       : this.dropElement,
+                        dropzone     : this.dropTarget,
+                        relatedTarget: dragEvent.target,
+                        draggable    : dragEvent.interactable,
+                        dragEvent    : dragEvent,
+                        interaction  : this,
+                        timeStamp    : dragEvent.timeStamp,
+                        type         : 'dragenter'
+                    };
+
+                    dragEvent.dragEnter = this.dropElement;
+                    dragEvent.dropzone = this.dropTarget;
+                }
+            }
+
+            if (dragEvent.type === 'dragend' && this.dropTarget) {
+                dropEvents.drop = {
+                    target       : this.dropElement,
+                    dropzone     : this.dropTarget,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'drop'
+                };
+
+                dragEvent.dropzone = this.dropTarget;
+            }
+            if (dragEvent.type === 'dragstart') {
+                dropEvents.activate = {
+                    target       : null,
+                    dropzone     : null,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropactivate'
+                };
+            }
+            if (dragEvent.type === 'dragend') {
+                dropEvents.deactivate = {
+                    target       : null,
+                    dropzone     : null,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropdeactivate'
+                };
+            }
+            if (dragEvent.type === 'dragmove' && this.dropTarget) {
+                dropEvents.move = {
+                    target       : this.dropElement,
+                    dropzone     : this.dropTarget,
+                    relatedTarget: dragEvent.target,
+                    draggable    : dragEvent.interactable,
+                    dragEvent    : dragEvent,
+                    interaction  : this,
+                    dragmove     : dragEvent,
+                    timeStamp    : dragEvent.timeStamp,
+                    type         : 'dropmove'
+                };
+                dragEvent.dropzone = this.dropTarget;
+            }
+
+            return dropEvents;
+        },
+
+        currentAction: function () {
+            return (this.dragging && 'drag') || (this.resizing && 'resize') || (this.gesturing && 'gesture') || null;
+        },
+
+        interacting: function () {
+            return this.dragging || this.resizing || this.gesturing;
+        },
+
+        clearTargets: function () {
+            this.target = this.element = null;
+
+            this.dropTarget = this.dropElement = this.prevDropTarget = this.prevDropElement = null;
+        },
+
+        stop: function (event) {
+            if (this.interacting()) {
+                autoScroll.stop();
+                this.matches = [];
+                this.matchElements = [];
+
+                var target = this.target;
+
+                if (target.options.styleCursor) {
+                    target._doc.documentElement.style.cursor = '';
+                }
+
+                // prevent Default only if were previously interacting
+                if (event && isFunction(event.preventDefault)) {
+                    this.checkAndPreventDefault(event, target, this.element);
+                }
+
+                if (this.dragging) {
+                    this.activeDrops.dropzones = this.activeDrops.elements = this.activeDrops.rects = null;
+                }
+            }
+
+            this.clearTargets();
+
+            this.pointerIsDown = this.snapStatus.locked = this.dragging = this.resizing = this.gesturing = false;
+            this.prepared.name = this.prevEvent = null;
+            this.inertiaStatus.resumeDx = this.inertiaStatus.resumeDy = 0;
+
+            // remove pointers if their ID isn't in this.pointerIds
+            for (var i = 0; i < this.pointers.length; i++) {
+                if (indexOf(this.pointerIds, getPointerId(this.pointers[i])) === -1) {
+                    this.pointers.splice(i, 1);
+                }
+            }
+        },
+
+        inertiaFrame: function () {
+            var inertiaStatus = this.inertiaStatus,
+                options = this.target.options[this.prepared.name].inertia,
+                lambda = options.resistance,
+                t = new Date().getTime() / 1000 - inertiaStatus.t0;
+
+            if (t < inertiaStatus.te) {
+
+                var progress =  1 - (Math.exp(-lambda * t) - inertiaStatus.lambda_v0) / inertiaStatus.one_ve_v0;
+
+                if (inertiaStatus.modifiedXe === inertiaStatus.xe && inertiaStatus.modifiedYe === inertiaStatus.ye) {
+                    inertiaStatus.sx = inertiaStatus.xe * progress;
+                    inertiaStatus.sy = inertiaStatus.ye * progress;
+                }
+                else {
+                    var quadPoint = getQuadraticCurvePoint(
+                            0, 0,
+                            inertiaStatus.xe, inertiaStatus.ye,
+                            inertiaStatus.modifiedXe, inertiaStatus.modifiedYe,
+                            progress);
+
+                    inertiaStatus.sx = quadPoint.x;
+                    inertiaStatus.sy = quadPoint.y;
+                }
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.i = reqFrame(this.boundInertiaFrame);
+            }
+            else {
+                inertiaStatus.ending = true;
+
+                inertiaStatus.sx = inertiaStatus.modifiedXe;
+                inertiaStatus.sy = inertiaStatus.modifiedYe;
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+                this.pointerEnd(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.active = inertiaStatus.ending = false;
+            }
+        },
+
+        smoothEndFrame: function () {
+            var inertiaStatus = this.inertiaStatus,
+                t = new Date().getTime() - inertiaStatus.t0,
+                duration = this.target.options[this.prepared.name].inertia.smoothEndDuration;
+
+            if (t < duration) {
+                inertiaStatus.sx = easeOutQuad(t, 0, inertiaStatus.xe, duration);
+                inertiaStatus.sy = easeOutQuad(t, 0, inertiaStatus.ye, duration);
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.i = reqFrame(this.boundSmoothEndFrame);
+            }
+            else {
+                inertiaStatus.ending = true;
+
+                inertiaStatus.sx = inertiaStatus.xe;
+                inertiaStatus.sy = inertiaStatus.ye;
+
+                this.pointerMove(inertiaStatus.startEvent, inertiaStatus.startEvent);
+                this.pointerEnd(inertiaStatus.startEvent, inertiaStatus.startEvent);
+
+                inertiaStatus.smoothEnd =
+                  inertiaStatus.active = inertiaStatus.ending = false;
+            }
+        },
+
+        addPointer: function (pointer) {
+            var id = getPointerId(pointer),
+                index = this.mouse? 0 : indexOf(this.pointerIds, id);
+
+            if (index === -1) {
+                index = this.pointerIds.length;
+            }
+
+            this.pointerIds[index] = id;
+            this.pointers[index] = pointer;
+
+            return index;
+        },
+
+        removePointer: function (pointer) {
+            var id = getPointerId(pointer),
+                index = this.mouse? 0 : indexOf(this.pointerIds, id);
+
+            if (index === -1) { return; }
+
+            this.pointers   .splice(index, 1);
+            this.pointerIds .splice(index, 1);
+            this.downTargets.splice(index, 1);
+            this.downTimes  .splice(index, 1);
+            this.holdTimers .splice(index, 1);
+        },
+
+        recordPointer: function (pointer) {
+            var index = this.mouse? 0: indexOf(this.pointerIds, getPointerId(pointer));
+
+            if (index === -1) { return; }
+
+            this.pointers[index] = pointer;
+        },
+
+        collectEventTargets: function (pointer, event, eventTarget, eventType) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer));
+
+            // do not fire a tap event if the pointer was moved before being lifted
+            if (eventType === 'tap' && (this.pointerWasMoved
+                // or if the pointerup target is different to the pointerdown target
+                || !(this.downTargets[pointerIndex] && this.downTargets[pointerIndex] === eventTarget))) {
+                return;
+            }
+
+            var targets = [],
+                elements = [],
+                element = eventTarget;
+
+            function collectSelectors (interactable, selector, context) {
+                var els = ie8MatchesSelector
+                        ? context.querySelectorAll(selector)
+                        : undefined;
+
+                if (interactable._iEvents[eventType]
+                    && isElement(element)
+                    && inContext(interactable, element)
+                    && !testIgnore(interactable, element, eventTarget)
+                    && testAllow(interactable, element, eventTarget)
+                    && matchesSelector(element, selector, els)) {
+
+                    targets.push(interactable);
+                    elements.push(element);
+                }
+            }
+
+            while (element) {
+                if (interact.isSet(element) && interact(element)._iEvents[eventType]) {
+                    targets.push(interact(element));
+                    elements.push(element);
+                }
+
+                interactables.forEachSelector(collectSelectors);
+
+                element = parentElement(element);
+            }
+
+            // create the tap event even if there are no listeners so that
+            // doubletap can still be created and fired
+            if (targets.length || eventType === 'tap') {
+                this.firePointers(pointer, event, eventTarget, targets, elements, eventType);
+            }
+        },
+
+        firePointers: function (pointer, event, eventTarget, targets, elements, eventType) {
+            var pointerIndex = this.mouse? 0 : indexOf(this.pointerIds, getPointerId(pointer)),
+                pointerEvent = {},
+                i,
+                // for tap events
+                interval, createNewDoubleTap;
+
+            // if it's a doubletap then the event properties would have been
+            // copied from the tap event and provided as the pointer argument
+            if (eventType === 'doubletap') {
+                pointerEvent = pointer;
+            }
+            else {
+                pointerExtend(pointerEvent, event);
+                if (event !== pointer) {
+                    pointerExtend(pointerEvent, pointer);
+                }
+
+                pointerEvent.preventDefault           = preventOriginalDefault;
+                pointerEvent.stopPropagation          = InteractEvent.prototype.stopPropagation;
+                pointerEvent.stopImmediatePropagation = InteractEvent.prototype.stopImmediatePropagation;
+                pointerEvent.interaction              = this;
+
+                pointerEvent.timeStamp       = new Date().getTime();
+                pointerEvent.originalEvent   = event;
+                pointerEvent.originalPointer = pointer;
+                pointerEvent.type            = eventType;
+                pointerEvent.pointerId       = getPointerId(pointer);
+                pointerEvent.pointerType     = this.mouse? 'mouse' : !supportsPointerEvent? 'touch'
+                                                    : isString(pointer.pointerType)
+                                                        ? pointer.pointerType
+                                                        : [,,'touch', 'pen', 'mouse'][pointer.pointerType];
+            }
+
+            if (eventType === 'tap') {
+                pointerEvent.dt = pointerEvent.timeStamp - this.downTimes[pointerIndex];
+
+                interval = pointerEvent.timeStamp - this.tapTime;
+                createNewDoubleTap = !!(this.prevTap && this.prevTap.type !== 'doubletap'
+                       && this.prevTap.target === pointerEvent.target
+                       && interval < 500);
+
+                pointerEvent.double = createNewDoubleTap;
+
+                this.tapTime = pointerEvent.timeStamp;
+            }
+
+            for (i = 0; i < targets.length; i++) {
+                pointerEvent.currentTarget = elements[i];
+                pointerEvent.interactable = targets[i];
+                targets[i].fire(pointerEvent);
+
+                if (pointerEvent.immediatePropagationStopped
+                    ||(pointerEvent.propagationStopped && elements[i + 1] !== pointerEvent.currentTarget)) {
+                    break;
+                }
+            }
+
+            if (createNewDoubleTap) {
+                var doubleTap = {};
+
+                extend(doubleTap, pointerEvent);
+
+                doubleTap.dt   = interval;
+                doubleTap.type = 'doubletap';
+
+                this.collectEventTargets(doubleTap, event, eventTarget, 'doubletap');
+
+                this.prevTap = doubleTap;
+            }
+            else if (eventType === 'tap') {
+                this.prevTap = pointerEvent;
+            }
+        },
+
+        validateSelector: function (pointer, event, matches, matchElements) {
+            for (var i = 0, len = matches.length; i < len; i++) {
+                var match = matches[i],
+                    matchElement = matchElements[i],
+                    action = validateAction(match.getAction(pointer, event, this, matchElement), match);
+
+                if (action && withinInteractionLimit(match, matchElement, action)) {
+                    this.target = match;
+                    this.element = matchElement;
+
+                    return action;
+                }
+            }
+        },
+
+        setSnapping: function (pageCoords, status) {
+            var snap = this.target.options[this.prepared.name].snap,
+                targets = [],
+                target,
+                page,
+                i;
+
+            status = status || this.snapStatus;
+
+            if (status.useStatusXY) {
+                page = { x: status.x, y: status.y };
+            }
+            else {
+                var origin = getOriginXY(this.target, this.element);
+
+                page = extend({}, pageCoords);
+
+                page.x -= origin.x;
+                page.y -= origin.y;
+            }
+
+            status.realX = page.x;
+            status.realY = page.y;
+
+            page.x = page.x - this.inertiaStatus.resumeDx;
+            page.y = page.y - this.inertiaStatus.resumeDy;
+
+            var len = snap.targets? snap.targets.length : 0;
+
+            for (var relIndex = 0; relIndex < this.snapOffsets.length; relIndex++) {
+                var relative = {
+                    x: page.x - this.snapOffsets[relIndex].x,
+                    y: page.y - this.snapOffsets[relIndex].y
+                };
+
+                for (i = 0; i < len; i++) {
+                    if (isFunction(snap.targets[i])) {
+                        target = snap.targets[i](relative.x, relative.y, this);
+                    }
+                    else {
+                        target = snap.targets[i];
+                    }
+
+                    if (!target) { continue; }
+
+                    targets.push({
+                        x: isNumber(target.x) ? (target.x + this.snapOffsets[relIndex].x) : relative.x,
+                        y: isNumber(target.y) ? (target.y + this.snapOffsets[relIndex].y) : relative.y,
+
+                        range: isNumber(target.range)? target.range: snap.range
+                    });
+                }
+            }
+
+            var closest = {
+                    target: null,
+                    inRange: false,
+                    distance: 0,
+                    range: 0,
+                    dx: 0,
+                    dy: 0
+                };
+
+            for (i = 0, len = targets.length; i < len; i++) {
+                target = targets[i];
+
+                var range = target.range,
+                    dx = target.x - page.x,
+                    dy = target.y - page.y,
+                    distance = hypot(dx, dy),
+                    inRange = distance <= range;
+
+                // Infinite targets count as being out of range
+                // compared to non infinite ones that are in range
+                if (range === Infinity && closest.inRange && closest.range !== Infinity) {
+                    inRange = false;
+                }
+
+                if (!closest.target || (inRange
+                    // is the closest target in range?
+                    ? (closest.inRange && range !== Infinity
+                        // the pointer is relatively deeper in this target
+                        ? distance / range < closest.distance / closest.range
+                        // this target has Infinite range and the closest doesn't
+                        : (range === Infinity && closest.range !== Infinity)
+                            // OR this target is closer that the previous closest
+                            || distance < closest.distance)
+                    // The other is not in range and the pointer is closer to this target
+                    : (!closest.inRange && distance < closest.distance))) {
+
+                    if (range === Infinity) {
+                        inRange = true;
+                    }
+
+                    closest.target = target;
+                    closest.distance = distance;
+                    closest.range = range;
+                    closest.inRange = inRange;
+                    closest.dx = dx;
+                    closest.dy = dy;
+
+                    status.range = range;
+                }
+            }
+
+            var snapChanged;
+
+            if (closest.target) {
+                snapChanged = (status.snappedX !== closest.target.x || status.snappedY !== closest.target.y);
+
+                status.snappedX = closest.target.x;
+                status.snappedY = closest.target.y;
+            }
+            else {
+                snapChanged = true;
+
+                status.snappedX = NaN;
+                status.snappedY = NaN;
+            }
+
+            status.dx = closest.dx;
+            status.dy = closest.dy;
+
+            status.changed = (snapChanged || (closest.inRange && !status.locked));
+            status.locked = closest.inRange;
+
+            return status;
+        },
+
+        setRestriction: function (pageCoords, status) {
+            var target = this.target,
+                restrict = target && target.options[this.prepared.name].restrict,
+                restriction = restrict && restrict.restriction,
+                page;
+
+            if (!restriction) {
+                return status;
+            }
+
+            status = status || this.restrictStatus;
+
+            page = status.useStatusXY
+                    ? page = { x: status.x, y: status.y }
+                    : page = extend({}, pageCoords);
+
+            if (status.snap && status.snap.locked) {
+                page.x += status.snap.dx || 0;
+                page.y += status.snap.dy || 0;
+            }
+
+            page.x -= this.inertiaStatus.resumeDx;
+            page.y -= this.inertiaStatus.resumeDy;
+
+            status.dx = 0;
+            status.dy = 0;
+            status.restricted = false;
+
+            var rect, restrictedX, restrictedY;
+
+            if (isString(restriction)) {
+                if (restriction === 'parent') {
+                    restriction = parentElement(this.element);
+                }
+                else if (restriction === 'self') {
+                    restriction = target.getRect(this.element);
+                }
+                else {
+                    restriction = closest(this.element, restriction);
+                }
+
+                if (!restriction) { return status; }
+            }
+
+            if (isFunction(restriction)) {
+                restriction = restriction(page.x, page.y, this.element);
+            }
+
+            if (isElement(restriction)) {
+                restriction = getElementRect(restriction);
+            }
+
+            rect = restriction;
+
+            if (!restriction) {
+                restrictedX = page.x;
+                restrictedY = page.y;
+            }
+            // object is assumed to have
+            // x, y, width, height or
+            // left, top, right, bottom
+            else if ('x' in restriction && 'y' in restriction) {
+                restrictedX = Math.max(Math.min(rect.x + rect.width  - this.restrictOffset.right , page.x), rect.x + this.restrictOffset.left);
+                restrictedY = Math.max(Math.min(rect.y + rect.height - this.restrictOffset.bottom, page.y), rect.y + this.restrictOffset.top );
+            }
+            else {
+                restrictedX = Math.max(Math.min(rect.right  - this.restrictOffset.right , page.x), rect.left + this.restrictOffset.left);
+                restrictedY = Math.max(Math.min(rect.bottom - this.restrictOffset.bottom, page.y), rect.top  + this.restrictOffset.top );
+            }
+
+            status.dx = restrictedX - page.x;
+            status.dy = restrictedY - page.y;
+
+            status.changed = status.restrictedX !== restrictedX || status.restrictedY !== restrictedY;
+            status.restricted = !!(status.dx || status.dy);
+
+            status.restrictedX = restrictedX;
+            status.restrictedY = restrictedY;
+
+            return status;
+        },
+
+        checkAndPreventDefault: function (event, interactable, element) {
+            if (!(interactable = interactable || this.target)) { return; }
+
+            var options = interactable.options,
+                prevent = options.preventDefault;
+
+            if (prevent === 'auto' && element && !/^(input|select|textarea)$/i.test(event.target.nodeName)) {
+                // do not preventDefault on pointerdown if the prepared action is a drag
+                // and dragging can only start from a certain direction - this allows
+                // a touch to pan the viewport if a drag isn't in the right direction
+                if (/down|start/i.test(event.type)
+                    && this.prepared.name === 'drag' && options.drag.axis !== 'xy') {
+
+                    return;
+                }
+
+                // with manualStart, only preventDefault while interacting
+                if (options[this.prepared.name] && options[this.prepared.name].manualStart
+                    && !this.interacting()) {
+                    return;
+                }
+
+                event.preventDefault();
+                return;
+            }
+
+            if (prevent === 'always') {
+                event.preventDefault();
+                return;
+            }
+        },
+
+        calcInertia: function (status) {
+            var inertiaOptions = this.target.options[this.prepared.name].inertia,
+                lambda = inertiaOptions.resistance,
+                inertiaDur = -Math.log(inertiaOptions.endSpeed / status.v0) / lambda;
+
+            status.x0 = this.prevEvent.pageX;
+            status.y0 = this.prevEvent.pageY;
+            status.t0 = status.startEvent.timeStamp / 1000;
+            status.sx = status.sy = 0;
+
+            status.modifiedXe = status.xe = (status.vx0 - inertiaDur) / lambda;
+            status.modifiedYe = status.ye = (status.vy0 - inertiaDur) / lambda;
+            status.te = inertiaDur;
+
+            status.lambda_v0 = lambda / status.v0;
+            status.one_ve_v0 = 1 - inertiaOptions.endSpeed / status.v0;
+        },
+
+        autoScrollMove: function (pointer) {
+            if (!(this.interacting()
+                && checkAutoScroll(this.target, this.prepared.name))) {
+                return;
+            }
+
+            if (this.inertiaStatus.active) {
+                autoScroll.x = autoScroll.y = 0;
+                return;
+            }
+
+            var top,
+                right,
+                bottom,
+                left,
+                options = this.target.options[this.prepared.name].autoScroll,
+                container = options.container || getWindow(this.element);
+
+            if (isWindow(container)) {
+                left   = pointer.clientX < autoScroll.margin;
+                top    = pointer.clientY < autoScroll.margin;
+                right  = pointer.clientX > container.innerWidth  - autoScroll.margin;
+                bottom = pointer.clientY > container.innerHeight - autoScroll.margin;
+            }
+            else {
+                var rect = getElementClientRect(container);
+
+                left   = pointer.clientX < rect.left   + autoScroll.margin;
+                top    = pointer.clientY < rect.top    + autoScroll.margin;
+                right  = pointer.clientX > rect.right  - autoScroll.margin;
+                bottom = pointer.clientY > rect.bottom - autoScroll.margin;
+            }
+
+            autoScroll.x = (right ? 1: left? -1: 0);
+            autoScroll.y = (bottom? 1:  top? -1: 0);
+
+            if (!autoScroll.isScrolling) {
+                // set the autoScroll properties to those of the target
+                autoScroll.margin = options.margin;
+                autoScroll.speed  = options.speed;
+
+                autoScroll.start(this);
+            }
+        },
+
+        _updateEventTargets: function (target, currentTarget) {
+            this._eventTarget    = target;
+            this._curEventTarget = currentTarget;
+        }
+
+    };
+
+    function getInteractionFromPointer (pointer, eventType, eventTarget) {
+        var i = 0, len = interactions.length,
+            mouseEvent = (/mouse/i.test(pointer.pointerType || eventType)
+                          // MSPointerEvent.MSPOINTER_TYPE_MOUSE
+                          || pointer.pointerType === 4),
+            interaction;
+
+        var id = getPointerId(pointer);
+
+        // try to resume inertia with a new pointer
+        if (/down|start/i.test(eventType)) {
+            for (i = 0; i < len; i++) {
+                interaction = interactions[i];
+
+                var element = eventTarget;
+
+                if (interaction.inertiaStatus.active && interaction.target.options[interaction.prepared.name].inertia.allowResume
+                    && (interaction.mouse === mouseEvent)) {
+                    while (element) {
+                        // if the element is the interaction element
+                        if (element === interaction.element) {
+                            return interaction;
+                        }
+                        element = parentElement(element);
+                    }
+                }
+            }
+        }
+
+        // if it's a mouse interaction
+        if (mouseEvent || !(supportsTouch || supportsPointerEvent)) {
+
+            // find a mouse interaction that's not in inertia phase
+            for (i = 0; i < len; i++) {
+                if (interactions[i].mouse && !interactions[i].inertiaStatus.active) {
+                    return interactions[i];
+                }
+            }
+
+            // find any interaction specifically for mouse.
+            // if the eventType is a mousedown, and inertia is active
+            // ignore the interaction
+            for (i = 0; i < len; i++) {
+                if (interactions[i].mouse && !(/down/.test(eventType) && interactions[i].inertiaStatus.active)) {
+                    return interaction;
+                }
+            }
+
+            // create a new interaction for mouse
+            interaction = new Interaction();
+            interaction.mouse = true;
+
+            return interaction;
+        }
+
+        // get interaction that has this pointer
+        for (i = 0; i < len; i++) {
+            if (contains(interactions[i].pointerIds, id)) {
+                return interactions[i];
+            }
+        }
+
+        // at this stage, a pointerUp should not return an interaction
+        if (/up|end|out/i.test(eventType)) {
+            return null;
+        }
+
+        // get first idle interaction
+        for (i = 0; i < len; i++) {
+            interaction = interactions[i];
+
+            if ((!interaction.prepared.name || (interaction.target.options.gesture.enabled))
+                && !interaction.interacting()
+                && !(!mouseEvent && interaction.mouse)) {
+
+                return interaction;
+            }
+        }
+
+        return new Interaction();
+    }
+
+    function doOnInteractions (method) {
+        return (function (event) {
+            var interaction,
+                eventTarget = getActualElement(event.path
+                                               ? event.path[0]
+                                               : event.target),
+                curEventTarget = getActualElement(event.currentTarget),
+                i;
+
+            if (supportsTouch && /touch/.test(event.type)) {
+                prevTouchTime = new Date().getTime();
+
+                for (i = 0; i < event.changedTouches.length; i++) {
+                    var pointer = event.changedTouches[i];
+
+                    interaction = getInteractionFromPointer(pointer, event.type, eventTarget);
+
+                    if (!interaction) { continue; }
+
+                    interaction._updateEventTargets(eventTarget, curEventTarget);
+
+                    interaction[method](pointer, event, eventTarget, curEventTarget);
+                }
+            }
+            else {
+                if (!supportsPointerEvent && /mouse/.test(event.type)) {
+                    // ignore mouse events while touch interactions are active
+                    for (i = 0; i < interactions.length; i++) {
+                        if (!interactions[i].mouse && interactions[i].pointerIsDown) {
+                            return;
+                        }
+                    }
+
+                    // try to ignore mouse events that are simulated by the browser
+                    // after a touch event
+                    if (new Date().getTime() - prevTouchTime < 500) {
+                        return;
+                    }
+                }
+
+                interaction = getInteractionFromPointer(event, event.type, eventTarget);
+
+                if (!interaction) { return; }
+
+                interaction._updateEventTargets(eventTarget, curEventTarget);
+
+                interaction[method](event, event, eventTarget, curEventTarget);
+            }
+        });
+    }
+
+    function InteractEvent (interaction, event, action, phase, element, related) {
+        var client,
+            page,
+            target      = interaction.target,
+            snapStatus  = interaction.snapStatus,
+            restrictStatus  = interaction.restrictStatus,
+            pointers    = interaction.pointers,
+            deltaSource = (target && target.options || defaultOptions).deltaSource,
+            sourceX     = deltaSource + 'X',
+            sourceY     = deltaSource + 'Y',
+            options     = target? target.options: defaultOptions,
+            origin      = getOriginXY(target, element),
+            starting    = phase === 'start',
+            ending      = phase === 'end',
+            coords      = starting? interaction.startCoords : interaction.curCoords;
+
+        element = element || interaction.element;
+
+        page   = extend({}, coords.page);
+        client = extend({}, coords.client);
+
+        page.x -= origin.x;
+        page.y -= origin.y;
+
+        client.x -= origin.x;
+        client.y -= origin.y;
+
+        var relativePoints = options[action].snap && options[action].snap.relativePoints ;
+
+        if (checkSnap(target, action) && !(starting && relativePoints && relativePoints.length)) {
+            this.snap = {
+                range  : snapStatus.range,
+                locked : snapStatus.locked,
+                x      : snapStatus.snappedX,
+                y      : snapStatus.snappedY,
+                realX  : snapStatus.realX,
+                realY  : snapStatus.realY,
+                dx     : snapStatus.dx,
+                dy     : snapStatus.dy
+            };
+
+            if (snapStatus.locked) {
+                page.x += snapStatus.dx;
+                page.y += snapStatus.dy;
+                client.x += snapStatus.dx;
+                client.y += snapStatus.dy;
+            }
+        }
+
+        if (checkRestrict(target, action) && !(starting && options[action].restrict.elementRect) && restrictStatus.restricted) {
+            page.x += restrictStatus.dx;
+            page.y += restrictStatus.dy;
+            client.x += restrictStatus.dx;
+            client.y += restrictStatus.dy;
+
+            this.restrict = {
+                dx: restrictStatus.dx,
+                dy: restrictStatus.dy
+            };
+        }
+
+        this.pageX     = page.x;
+        this.pageY     = page.y;
+        this.clientX   = client.x;
+        this.clientY   = client.y;
+
+        this.x0        = interaction.startCoords.page.x - origin.x;
+        this.y0        = interaction.startCoords.page.y - origin.y;
+        this.clientX0  = interaction.startCoords.client.x - origin.x;
+        this.clientY0  = interaction.startCoords.client.y - origin.y;
+        this.ctrlKey   = event.ctrlKey;
+        this.altKey    = event.altKey;
+        this.shiftKey  = event.shiftKey;
+        this.metaKey   = event.metaKey;
+        this.button    = event.button;
+        this.buttons   = event.buttons;
+        this.target    = element;
+        this.t0        = interaction.downTimes[0];
+        this.type      = action + (phase || '');
+
+        this.interaction = interaction;
+        this.interactable = target;
+
+        var inertiaStatus = interaction.inertiaStatus;
+
+        if (inertiaStatus.active) {
+            this.detail = 'inertia';
+        }
+
+        if (related) {
+            this.relatedTarget = related;
+        }
+
+        // end event dx, dy is difference between start and end points
+        if (ending) {
+            if (deltaSource === 'client') {
+                this.dx = client.x - interaction.startCoords.client.x;
+                this.dy = client.y - interaction.startCoords.client.y;
+            }
+            else {
+                this.dx = page.x - interaction.startCoords.page.x;
+                this.dy = page.y - interaction.startCoords.page.y;
+            }
+        }
+        else if (starting) {
+            this.dx = 0;
+            this.dy = 0;
+        }
+        // copy properties from previousmove if starting inertia
+        else if (phase === 'inertiastart') {
+            this.dx = interaction.prevEvent.dx;
+            this.dy = interaction.prevEvent.dy;
+        }
+        else {
+            if (deltaSource === 'client') {
+                this.dx = client.x - interaction.prevEvent.clientX;
+                this.dy = client.y - interaction.prevEvent.clientY;
+            }
+            else {
+                this.dx = page.x - interaction.prevEvent.pageX;
+                this.dy = page.y - interaction.prevEvent.pageY;
+            }
+        }
+        if (interaction.prevEvent && interaction.prevEvent.detail === 'inertia'
+            && !inertiaStatus.active
+            && options[action].inertia && options[action].inertia.zeroResumeDelta) {
+
+            inertiaStatus.resumeDx += this.dx;
+            inertiaStatus.resumeDy += this.dy;
+
+            this.dx = this.dy = 0;
+        }
+
+        if (action === 'resize' && interaction.resizeAxes) {
+            if (options.resize.square) {
+                if (interaction.resizeAxes === 'y') {
+                    this.dx = this.dy;
+                }
+                else {
+                    this.dy = this.dx;
+                }
+                this.axes = 'xy';
+            }
+            else {
+                this.axes = interaction.resizeAxes;
+
+                if (interaction.resizeAxes === 'x') {
+                    this.dy = 0;
+                }
+                else if (interaction.resizeAxes === 'y') {
+                    this.dx = 0;
+                }
+            }
+        }
+        else if (action === 'gesture') {
+            this.touches = [pointers[0], pointers[1]];
+
+            if (starting) {
+                this.distance = touchDistance(pointers, deltaSource);
+                this.box      = touchBBox(pointers);
+                this.scale    = 1;
+                this.ds       = 0;
+                this.angle    = touchAngle(pointers, undefined, deltaSource);
+                this.da       = 0;
+            }
+            else if (ending || event instanceof InteractEvent) {
+                this.distance = interaction.prevEvent.distance;
+                this.box      = interaction.prevEvent.box;
+                this.scale    = interaction.prevEvent.scale;
+                this.ds       = this.scale - 1;
+                this.angle    = interaction.prevEvent.angle;
+                this.da       = this.angle - interaction.gesture.startAngle;
+            }
+            else {
+                this.distance = touchDistance(pointers, deltaSource);
+                this.box      = touchBBox(pointers);
+                this.scale    = this.distance / interaction.gesture.startDistance;
+                this.angle    = touchAngle(pointers, interaction.gesture.prevAngle, deltaSource);
+
+                this.ds = this.scale - interaction.gesture.prevScale;
+                this.da = this.angle - interaction.gesture.prevAngle;
+            }
+        }
+
+        if (starting) {
+            this.timeStamp = interaction.downTimes[0];
+            this.dt        = 0;
+            this.duration  = 0;
+            this.speed     = 0;
+            this.velocityX = 0;
+            this.velocityY = 0;
+        }
+        else if (phase === 'inertiastart') {
+            this.timeStamp = interaction.prevEvent.timeStamp;
+            this.dt        = interaction.prevEvent.dt;
+            this.duration  = interaction.prevEvent.duration;
+            this.speed     = interaction.prevEvent.speed;
+            this.velocityX = interaction.prevEvent.velocityX;
+            this.velocityY = interaction.prevEvent.velocityY;
+        }
+        else {
+            this.timeStamp = new Date().getTime();
+            this.dt        = this.timeStamp - interaction.prevEvent.timeStamp;
+            this.duration  = this.timeStamp - interaction.downTimes[0];
+
+            if (event instanceof InteractEvent) {
+                var dx = this[sourceX] - interaction.prevEvent[sourceX],
+                    dy = this[sourceY] - interaction.prevEvent[sourceY],
+                    dt = this.dt / 1000;
+
+                this.speed = hypot(dx, dy) / dt;
+                this.velocityX = dx / dt;
+                this.velocityY = dy / dt;
+            }
+            // if normal move or end event, use previous user event coords
+            else {
+                // speed and velocity in pixels per second
+                this.speed = interaction.pointerDelta[deltaSource].speed;
+                this.velocityX = interaction.pointerDelta[deltaSource].vx;
+                this.velocityY = interaction.pointerDelta[deltaSource].vy;
+            }
+        }
+
+        if ((ending || phase === 'inertiastart')
+            && interaction.prevEvent.speed > 600 && this.timeStamp - interaction.prevEvent.timeStamp < 150) {
+
+            var angle = 180 * Math.atan2(interaction.prevEvent.velocityY, interaction.prevEvent.velocityX) / Math.PI,
+                overlap = 22.5;
+
+            if (angle < 0) {
+                angle += 360;
+            }
+
+            var left = 135 - overlap <= angle && angle < 225 + overlap,
+                up   = 225 - overlap <= angle && angle < 315 + overlap,
+
+                right = !left && (315 - overlap <= angle || angle <  45 + overlap),
+                down  = !up   &&   45 - overlap <= angle && angle < 135 + overlap;
+
+            this.swipe = {
+                up   : up,
+                down : down,
+                left : left,
+                right: right,
+                angle: angle,
+                speed: interaction.prevEvent.speed,
+                velocity: {
+                    x: interaction.prevEvent.velocityX,
+                    y: interaction.prevEvent.velocityY
+                }
+            };
+        }
+    }
+
+    InteractEvent.prototype = {
+        preventDefault: blank,
+        stopImmediatePropagation: function () {
+            this.immediatePropagationStopped = this.propagationStopped = true;
+        },
+        stopPropagation: function () {
+            this.propagationStopped = true;
+        }
+    };
+
+    function preventOriginalDefault () {
+        this.originalEvent.preventDefault();
+    }
+
+    function getActionCursor (action) {
+        var cursor = '';
+
+        if (action.name === 'drag') {
+            cursor =  actionCursors.drag;
+        }
+        if (action.name === 'resize') {
+            if (action.axis) {
+                cursor =  actionCursors[action.name + action.axis];
+            }
+            else if (action.edges) {
+                var cursorKey = 'resize',
+                    edgeNames = ['top', 'bottom', 'left', 'right'];
+
+                for (var i = 0; i < 4; i++) {
+                    if (action.edges[edgeNames[i]]) {
+                        cursorKey += edgeNames[i];
+                    }
+                }
+
+                cursor = actionCursors[cursorKey];
+            }
+        }
+
+        return cursor;
+    }
+
+    function checkResizeEdge (name, value, page, element, interactableElement, rect, margin) {
+        // false, '', undefined, null
+        if (!value) { return false; }
+
+        // true value, use pointer coords and element rect
+        if (value === true) {
+            // if dimensions are negative, "switch" edges
+            var width = isNumber(rect.width)? rect.width : rect.right - rect.left,
+                height = isNumber(rect.height)? rect.height : rect.bottom - rect.top;
+
+            if (width < 0) {
+                if      (name === 'left' ) { name = 'right'; }
+                else if (name === 'right') { name = 'left' ; }
+            }
+            if (height < 0) {
+                if      (name === 'top'   ) { name = 'bottom'; }
+                else if (name === 'bottom') { name = 'top'   ; }
+            }
+
+            if (name === 'left'  ) { return page.x < ((width  >= 0? rect.left: rect.right ) + margin); }
+            if (name === 'top'   ) { return page.y < ((height >= 0? rect.top : rect.bottom) + margin); }
+
+            if (name === 'right' ) { return page.x > ((width  >= 0? rect.right : rect.left) - margin); }
+            if (name === 'bottom') { return page.y > ((height >= 0? rect.bottom: rect.top ) - margin); }
+        }
+
+        // the remaining checks require an element
+        if (!isElement(element)) { return false; }
+
+        return isElement(value)
+                    // the value is an element to use as a resize handle
+                    ? value === element
+                    // otherwise check if element matches value as selector
+                    : matchesUpTo(element, value, interactableElement);
+    }
+
+    function defaultActionChecker (pointer, interaction, element) {
+        var rect = this.getRect(element),
+            shouldResize = false,
+            action = null,
+            resizeAxes = null,
+            resizeEdges,
+            page = extend({}, interaction.curCoords.page),
+            options = this.options;
+
+        if (!rect) { return null; }
+
+        if (actionIsEnabled.resize && options.resize.enabled) {
+            var resizeOptions = options.resize;
+
+            resizeEdges = {
+                left: false, right: false, top: false, bottom: false
+            };
+
+            // if using resize.edges
+            if (isObject(resizeOptions.edges)) {
+                for (var edge in resizeEdges) {
+                    resizeEdges[edge] = checkResizeEdge(edge,
+                                                        resizeOptions.edges[edge],
+                                                        page,
+                                                        interaction._eventTarget,
+                                                        element,
+                                                        rect,
+                                                        resizeOptions.margin || margin);
+                }
+
+                resizeEdges.left = resizeEdges.left && !resizeEdges.right;
+                resizeEdges.top  = resizeEdges.top  && !resizeEdges.bottom;
+
+                shouldResize = resizeEdges.left || resizeEdges.right || resizeEdges.top || resizeEdges.bottom;
+            }
+            else {
+                var right  = options.resize.axis !== 'y' && page.x > (rect.right  - margin),
+                    bottom = options.resize.axis !== 'x' && page.y > (rect.bottom - margin);
+
+                shouldResize = right || bottom;
+                resizeAxes = (right? 'x' : '') + (bottom? 'y' : '');
+            }
+        }
+
+        action = shouldResize
+            ? 'resize'
+            : actionIsEnabled.drag && options.drag.enabled
+                ? 'drag'
+                : null;
+
+        if (actionIsEnabled.gesture
+            && interaction.pointerIds.length >=2
+            && !(interaction.dragging || interaction.resizing)) {
+            action = 'gesture';
+        }
+
+        if (action) {
+            return {
+                name: action,
+                axis: resizeAxes,
+                edges: resizeEdges
+            };
+        }
+
+        return null;
+    }
+
+    // Check if action is enabled globally and the current target supports it
+    // If so, return the validated action. Otherwise, return null
+    function validateAction (action, interactable) {
+        if (!isObject(action)) { return null; }
+
+        var actionName = action.name,
+            options = interactable.options;
+
+        if ((  (actionName  === 'resize'   && options.resize.enabled )
+            || (actionName      === 'drag'     && options.drag.enabled  )
+            || (actionName      === 'gesture'  && options.gesture.enabled))
+            && actionIsEnabled[actionName]) {
+
+            if (actionName === 'resize' || actionName === 'resizeyx') {
+                actionName = 'resizexy';
+            }
+
+            return action;
+        }
+        return null;
+    }
+
+    var listeners = {},
+        interactionListeners = [
+            'dragStart', 'dragMove', 'resizeStart', 'resizeMove', 'gestureStart', 'gestureMove',
+            'pointerOver', 'pointerOut', 'pointerHover', 'selectorDown',
+            'pointerDown', 'pointerMove', 'pointerUp', 'pointerCancel', 'pointerEnd',
+            'addPointer', 'removePointer', 'recordPointer', 'autoScrollMove'
+        ];
+
+    for (var i = 0, len = interactionListeners.length; i < len; i++) {
+        var name = interactionListeners[i];
+
+        listeners[name] = doOnInteractions(name);
+    }
+
+    // bound to the interactable context when a DOM event
+    // listener is added to a selector interactable
+    function delegateListener (event, useCapture) {
+        var fakeEvent = {},
+            delegated = delegatedEvents[event.type],
+            eventTarget = getActualElement(event.path
+                                           ? event.path[0]
+                                           : event.target),
+            element = eventTarget;
+
+        useCapture = useCapture? true: false;
+
+        // duplicate the event so that currentTarget can be changed
+        for (var prop in event) {
+            fakeEvent[prop] = event[prop];
+        }
+
+        fakeEvent.originalEvent = event;
+        fakeEvent.preventDefault = preventOriginalDefault;
+
+        // climb up document tree looking for selector matches
+        while (isElement(element)) {
+            for (var i = 0; i < delegated.selectors.length; i++) {
+                var selector = delegated.selectors[i],
+                    context = delegated.contexts[i];
+
+                if (matchesSelector(element, selector)
+                    && nodeContains(context, eventTarget)
+                    && nodeContains(context, element)) {
+
+                    var listeners = delegated.listeners[i];
+
+                    fakeEvent.currentTarget = element;
+
+                    for (var j = 0; j < listeners.length; j++) {
+                        if (listeners[j][1] === useCapture) {
+                            listeners[j][0](fakeEvent);
+                        }
+                    }
+                }
+            }
+
+            element = parentElement(element);
+        }
+    }
+
+    function delegateUseCapture (event) {
+        return delegateListener.call(this, event, true);
+    }
+
+    interactables.indexOfElement = function indexOfElement (element, context) {
+        context = context || document;
+
+        for (var i = 0; i < this.length; i++) {
+            var interactable = this[i];
+
+            if ((interactable.selector === element
+                && (interactable._context === context))
+                || (!interactable.selector && interactable._element === element)) {
+
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    interactables.get = function interactableGet (element, options) {
+        return this[this.indexOfElement(element, options && options.context)];
+    };
+
+    interactables.forEachSelector = function (callback) {
+        for (var i = 0; i < this.length; i++) {
+            var interactable = this[i];
+
+            if (!interactable.selector) {
+                continue;
+            }
+
+            var ret = callback(interactable, interactable.selector, interactable._context, i, this);
+
+            if (ret !== undefined) {
+                return ret;
+            }
+        }
+    };
+
+    /*\
+     * interact
+     [ method ]
+     *
+     * The methods of this variable can be used to set elements as
+     * interactables and also to change various default settings.
+     *
+     * Calling it as a function and passing an element or a valid CSS selector
+     * string returns an Interactable object which has various methods to
+     * configure it.
+     *
+     - element (Element | string) The HTML or SVG Element to interact with or CSS selector
+     = (object) An @Interactable
+     *
+     > Usage
+     | interact(document.getElementById('draggable')).draggable(true);
+     |
+     | var rectables = interact('rect');
+     | rectables
+     |     .gesturable(true)
+     |     .on('gesturemove', function (event) {
+     |         // something cool...
+     |     })
+     |     .autoScroll(true);
+    \*/
+    function interact (element, options) {
+        return interactables.get(element, options) || new Interactable(element, options);
+    }
+
+    /*\
+     * Interactable
+     [ property ]
+     **
+     * Object type returned by @interact
+    \*/
+    function Interactable (element, options) {
+        this._element = element;
+        this._iEvents = this._iEvents || {};
+
+        var _window;
+
+        if (trySelector(element)) {
+            this.selector = element;
+
+            var context = options && options.context;
+
+            _window = context? getWindow(context) : window;
+
+            if (context && (_window.Node
+                    ? context instanceof _window.Node
+                    : (isElement(context) || context === _window.document))) {
+
+                this._context = context;
+            }
+        }
+        else {
+            _window = getWindow(element);
+
+            if (isElement(element, _window)) {
+
+                if (PointerEvent) {
+                    events.add(this._element, pEventTypes.down, listeners.pointerDown );
+                    events.add(this._element, pEventTypes.move, listeners.pointerHover);
+                }
+                else {
+                    events.add(this._element, 'mousedown' , listeners.pointerDown );
+                    events.add(this._element, 'mousemove' , listeners.pointerHover);
+                    events.add(this._element, 'touchstart', listeners.pointerDown );
+                    events.add(this._element, 'touchmove' , listeners.pointerHover);
+                }
+            }
+        }
+
+        this._doc = _window.document;
+
+        if (!contains(documents, this._doc)) {
+            listenToDocument(this._doc);
+        }
+
+        interactables.push(this);
+
+        this.set(options);
+    }
+
+    Interactable.prototype = {
+        setOnEvents: function (action, phases) {
+            if (action === 'drop') {
+                if (isFunction(phases.ondrop)          ) { this.ondrop           = phases.ondrop          ; }
+                if (isFunction(phases.ondropactivate)  ) { this.ondropactivate   = phases.ondropactivate  ; }
+                if (isFunction(phases.ondropdeactivate)) { this.ondropdeactivate = phases.ondropdeactivate; }
+                if (isFunction(phases.ondragenter)     ) { this.ondragenter      = phases.ondragenter     ; }
+                if (isFunction(phases.ondragleave)     ) { this.ondragleave      = phases.ondragleave     ; }
+                if (isFunction(phases.ondropmove)      ) { this.ondropmove       = phases.ondropmove      ; }
+            }
+            else {
+                action = 'on' + action;
+
+                if (isFunction(phases.onstart)       ) { this[action + 'start'         ] = phases.onstart         ; }
+                if (isFunction(phases.onmove)        ) { this[action + 'move'          ] = phases.onmove          ; }
+                if (isFunction(phases.onend)         ) { this[action + 'end'           ] = phases.onend           ; }
+                if (isFunction(phases.oninertiastart)) { this[action + 'inertiastart'  ] = phases.oninertiastart  ; }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.draggable
+         [ method ]
+         *
+         * Gets or sets whether drag actions can be performed on the
+         * Interactable
+         *
+         = (boolean) Indicates if this can be the target of drag events
+         | var isDraggable = interact('ul li').draggable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on drag events (object makes the Interactable draggable)
+         = (object) This Interactable
+         | interact(element).draggable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     // the axis in which the first movement must be
+         |     // for the drag sequence to start
+         |     // 'xy' by default - any direction
+         |     axis: 'x' || 'y' || 'xy',
+         |
+         |     // max number of drags that can happen concurrently
+         |     // with elements of this Interactable. Infinity by default
+         |     max: Infinity,
+         |
+         |     // max number of drags that can target the same element+Interactable
+         |     // 1 by default
+         |     maxPerElement: 2
+         | });
+        \*/
+        draggable: function (options) {
+            if (isObject(options)) {
+                this.options.drag.enabled = options.enabled === false? false: true;
+                this.setPerAction('drag', options);
+                this.setOnEvents('drag', options);
+
+                if (/^x$|^y$|^xy$/.test(options.axis)) {
+                    this.options.drag.axis = options.axis;
+                }
+                else if (options.axis === null) {
+                    delete this.options.drag.axis;
+                }
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.drag.enabled = options;
+
+                return this;
+            }
+
+            return this.options.drag;
+        },
+
+        setPerAction: function (action, options) {
+            // for all the default per-action options
+            for (var option in options) {
+                // if this option exists for this action
+                if (option in defaultOptions[action]) {
+                    // if the option in the options arg is an object value
+                    if (isObject(options[option])) {
+                        // duplicate the object
+                        this.options[action][option] = extend(this.options[action][option] || {}, options[option]);
+
+                        if (isObject(defaultOptions.perAction[option]) && 'enabled' in defaultOptions.perAction[option]) {
+                            this.options[action][option].enabled = options[option].enabled === false? false : true;
+                        }
+                    }
+                    else if (isBool(options[option]) && isObject(defaultOptions.perAction[option])) {
+                        this.options[action][option].enabled = options[option];
+                    }
+                    else if (options[option] !== undefined) {
+                        // or if it's not undefined, do a plain assignment
+                        this.options[action][option] = options[option];
+                    }
+                }
+            }
+        },
+
+        /*\
+         * Interactable.dropzone
+         [ method ]
+         *
+         * Returns or sets whether elements can be dropped onto this
+         * Interactable to trigger drop events
+         *
+         * Dropzones can receive the following events:
+         *  - `dropactivate` and `dropdeactivate` when an acceptable drag starts and ends
+         *  - `dragenter` and `dragleave` when a draggable enters and leaves the dropzone
+         *  - `dragmove` when a draggable that has entered the dropzone is moved
+         *  - `drop` when a draggable is dropped into this dropzone
+         *
+         *  Use the `accept` option to allow only elements that match the given CSS selector or element.
+         *
+         *  Use the `overlap` option to set how drops are checked for. The allowed values are:
+         *   - `'pointer'`, the pointer must be over the dropzone (default)
+         *   - `'center'`, the draggable element's center must be over the dropzone
+         *   - a number from 0-1 which is the `(intersection area) / (draggable area)`.
+         *       e.g. `0.5` for drop to happen when half of the area of the
+         *       draggable is over the dropzone
+         *
+         - options (boolean | object | null) #optional The new value to be set.
+         | interact('.drop').dropzone({
+         |   accept: '.can-drop' || document.getElementById('single-drop'),
+         |   overlap: 'pointer' || 'center' || zeroToOne
+         | }
+         = (boolean | object) The current setting or this Interactable
+        \*/
+        dropzone: function (options) {
+            if (isObject(options)) {
+                this.options.drop.enabled = options.enabled === false? false: true;
+                this.setOnEvents('drop', options);
+
+                if (/^(pointer|center)$/.test(options.overlap)) {
+                    this.options.drop.overlap = options.overlap;
+                }
+                else if (isNumber(options.overlap)) {
+                    this.options.drop.overlap = Math.max(Math.min(1, options.overlap), 0);
+                }
+                if ('accept' in options) {
+                  this.options.drop.accept = options.accept;
+                }
+                if ('checker' in options) {
+                  this.options.drop.checker = options.checker;
+                }
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.drop.enabled = options;
+
+                return this;
+            }
+
+            return this.options.drop;
+        },
+
+        dropCheck: function (dragEvent, event, draggable, draggableElement, dropElement, rect) {
+            var dropped = false;
+
+            // if the dropzone has no rect (eg. display: none)
+            // call the custom dropChecker or just return false
+            if (!(rect = rect || this.getRect(dropElement))) {
+                return (this.options.drop.checker
+                    ? this.options.drop.checker(dragEvent, event, dropped, this, dropElement, draggable, draggableElement)
+                    : false);
+            }
+
+            var dropOverlap = this.options.drop.overlap;
+
+            if (dropOverlap === 'pointer') {
+                var page = getPageXY(dragEvent),
+                    origin = getOriginXY(draggable, draggableElement),
+                    horizontal,
+                    vertical;
+
+                page.x += origin.x;
+                page.y += origin.y;
+
+                horizontal = (page.x > rect.left) && (page.x < rect.right);
+                vertical   = (page.y > rect.top ) && (page.y < rect.bottom);
+
+                dropped = horizontal && vertical;
+            }
+
+            var dragRect = draggable.getRect(draggableElement);
+
+            if (dropOverlap === 'center') {
+                var cx = dragRect.left + dragRect.width  / 2,
+                    cy = dragRect.top  + dragRect.height / 2;
+
+                dropped = cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
+            }
+
+            if (isNumber(dropOverlap)) {
+                var overlapArea  = (Math.max(0, Math.min(rect.right , dragRect.right ) - Math.max(rect.left, dragRect.left))
+                                  * Math.max(0, Math.min(rect.bottom, dragRect.bottom) - Math.max(rect.top , dragRect.top ))),
+                    overlapRatio = overlapArea / (dragRect.width * dragRect.height);
+
+                dropped = overlapRatio >= dropOverlap;
+            }
+
+            if (this.options.drop.checker) {
+                dropped = this.options.drop.checker(dragEvent, event, dropped, this, dropElement, draggable, draggableElement);
+            }
+
+            return dropped;
+        },
+
+        /*\
+         * Interactable.dropChecker
+         [ method ]
+         *
+         * DEPRECATED. Use interactable.dropzone({ checker: function... }) instead.
+         *
+         * Gets or sets the function used to check if a dragged element is
+         * over this Interactable.
+         *
+         - checker (function) #optional The function that will be called when checking for a drop
+         = (Function | Interactable) The checker function or this Interactable
+         *
+         * The checker function takes the following arguments:
+         *
+         - dragEvent (InteractEvent) The related dragmove or dragend event
+         - event (TouchEvent | PointerEvent | MouseEvent) The user move/up/end Event related to the dragEvent
+         - dropped (boolean) The value from the default drop checker
+         - dropzone (Interactable) The dropzone interactable
+         - dropElement (Element) The dropzone element
+         - draggable (Interactable) The Interactable being dragged
+         - draggableElement (Element) The actual element that's being dragged
+         *
+         > Usage:
+         | interact(target)
+         | .dropChecker(function(dragEvent,         // related dragmove or dragend event
+         |                       event,             // TouchEvent/PointerEvent/MouseEvent
+         |                       dropped,           // bool result of the default checker
+         |                       dropzone,          // dropzone Interactable
+         |                       dropElement,       // dropzone elemnt
+         |                       draggable,         // draggable Interactable
+         |                       draggableElement) {// draggable element
+         |
+         |   return dropped && event.target.hasAttribute('allow-drop');
+         | }
+        \*/
+        dropChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.options.drop.checker = checker;
+
+                return this;
+            }
+            if (checker === null) {
+                delete this.options.getRect;
+
+                return this;
+            }
+
+            return this.options.drop.checker;
+        },
+
+        /*\
+         * Interactable.accept
+         [ method ]
+         *
+         * Deprecated. add an `accept` property to the options object passed to
+         * @Interactable.dropzone instead.
+         *
+         * Gets or sets the Element or CSS selector match that this
+         * Interactable accepts if it is a dropzone.
+         *
+         - newValue (Element | string | null) #optional
+         * If it is an Element, then only that element can be dropped into this dropzone.
+         * If it is a string, the element being dragged must match it as a selector.
+         * If it is null, the accept options is cleared - it accepts any element.
+         *
+         = (string | Element | null | Interactable) The current accept option if given `undefined` or this Interactable
+        \*/
+        accept: function (newValue) {
+            if (isElement(newValue)) {
+                this.options.drop.accept = newValue;
+
+                return this;
+            }
+
+            // test if it is a valid CSS selector
+            if (trySelector(newValue)) {
+                this.options.drop.accept = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.drop.accept;
+
+                return this;
+            }
+
+            return this.options.drop.accept;
+        },
+
+        /*\
+         * Interactable.resizable
+         [ method ]
+         *
+         * Gets or sets whether resize actions can be performed on the
+         * Interactable
+         *
+         = (boolean) Indicates if this can be the target of resize elements
+         | var isResizeable = interact('input[type=text]').resizable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on resize events (object makes the Interactable resizable)
+         = (object) This Interactable
+         | interact(element).resizable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     edges: {
+         |       top   : true,       // Use pointer coords to check for resize.
+         |       left  : false,      // Disable resizing from left edge.
+         |       bottom: '.resize-s',// Resize if pointer target matches selector
+         |       right : handleEl    // Resize if pointer target is the given Element
+         |     },
+         |
+         |     // Width and height can be adjusted independently. When `true`, width and
+         |     // height are adjusted at a 1:1 ratio.
+         |     square: false,
+         |
+         |     // Width and height can be adjusted independently. When `true`, width and
+         |     // height maintain the aspect ratio they had when resizing started.
+         |     preserveAspectRatio: false,
+         |
+         |     // a value of 'none' will limit the resize rect to a minimum of 0x0
+         |     // 'negate' will allow the rect to have negative width/height
+         |     // 'reposition' will keep the width/height positive by swapping
+         |     // the top and bottom edges and/or swapping the left and right edges
+         |     invert: 'none' || 'negate' || 'reposition'
+         |
+         |     // limit multiple resizes.
+         |     // See the explanation in the @Interactable.draggable example
+         |     max: Infinity,
+         |     maxPerElement: 1,
+         | });
+        \*/
+        resizable: function (options) {
+            if (isObject(options)) {
+                this.options.resize.enabled = options.enabled === false? false: true;
+                this.setPerAction('resize', options);
+                this.setOnEvents('resize', options);
+
+                if (/^x$|^y$|^xy$/.test(options.axis)) {
+                    this.options.resize.axis = options.axis;
+                }
+                else if (options.axis === null) {
+                    this.options.resize.axis = defaultOptions.resize.axis;
+                }
+
+                if (isBool(options.preserveAspectRatio)) {
+                    this.options.resize.preserveAspectRatio = options.preserveAspectRatio;
+                }
+                else if (isBool(options.square)) {
+                    this.options.resize.square = options.square;
+                }
+
+                return this;
+            }
+            if (isBool(options)) {
+                this.options.resize.enabled = options;
+
+                return this;
+            }
+            return this.options.resize;
+        },
+
+        /*\
+         * Interactable.squareResize
+         [ method ]
+         *
+         * Deprecated. Add a `square: true || false` property to @Interactable.resizable instead
+         *
+         * Gets or sets whether resizing is forced 1:1 aspect
+         *
+         = (boolean) Current setting
+         *
+         * or
+         *
+         - newValue (boolean) #optional
+         = (object) this Interactable
+        \*/
+        squareResize: function (newValue) {
+            if (isBool(newValue)) {
+                this.options.resize.square = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.resize.square;
+
+                return this;
+            }
+
+            return this.options.resize.square;
+        },
+
+        /*\
+         * Interactable.gesturable
+         [ method ]
+         *
+         * Gets or sets whether multitouch gestures can be performed on the
+         * Interactable's element
+         *
+         = (boolean) Indicates if this can be the target of gesture events
+         | var isGestureable = interact(element).gesturable();
+         * or
+         - options (boolean | object) #optional true/false or An object with event listeners to be fired on gesture events (makes the Interactable gesturable)
+         = (object) this Interactable
+         | interact(element).gesturable({
+         |     onstart: function (event) {},
+         |     onmove : function (event) {},
+         |     onend  : function (event) {},
+         |
+         |     // limit multiple gestures.
+         |     // See the explanation in @Interactable.draggable example
+         |     max: Infinity,
+         |     maxPerElement: 1,
+         | });
+        \*/
+        gesturable: function (options) {
+            if (isObject(options)) {
+                this.options.gesture.enabled = options.enabled === false? false: true;
+                this.setPerAction('gesture', options);
+                this.setOnEvents('gesture', options);
+
+                return this;
+            }
+
+            if (isBool(options)) {
+                this.options.gesture.enabled = options;
+
+                return this;
+            }
+
+            return this.options.gesture;
+        },
+
+        /*\
+         * Interactable.autoScroll
+         [ method ]
+         **
+         * Deprecated. Add an `autoscroll` property to the options object
+         * passed to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets whether dragging and resizing near the edges of the
+         * window/container trigger autoScroll for this Interactable
+         *
+         = (object) Object with autoScroll properties
+         *
+         * or
+         *
+         - options (object | boolean) #optional
+         * options can be:
+         * - an object with margin, distance and interval properties,
+         * - true or false to enable or disable autoScroll or
+         = (Interactable) this Interactable
+        \*/
+        autoScroll: function (options) {
+            if (isObject(options)) {
+                options = extend({ actions: ['drag', 'resize']}, options);
+            }
+            else if (isBool(options)) {
+                options = { actions: ['drag', 'resize'], enabled: options };
+            }
+
+            return this.setOptions('autoScroll', options);
+        },
+
+        /*\
+         * Interactable.snap
+         [ method ]
+         **
+         * Deprecated. Add a `snap` property to the options object passed
+         * to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets if and how action coordinates are snapped. By
+         * default, snapping is relative to the pointer coordinates. You can
+         * change this by setting the
+         * [`elementOrigin`](https://github.com/taye/interact.js/pull/72).
+         **
+         = (boolean | object) `false` if snap is disabled; object with snap properties if snap is enabled
+         **
+         * or
+         **
+         - options (object | boolean | null) #optional
+         = (Interactable) this Interactable
+         > Usage
+         | interact(document.querySelector('#thing')).snap({
+         |     targets: [
+         |         // snap to this specific point
+         |         {
+         |             x: 100,
+         |             y: 100,
+         |             range: 25
+         |         },
+         |         // give this function the x and y page coords and snap to the object returned
+         |         function (x, y) {
+         |             return {
+         |                 x: x,
+         |                 y: (75 + 50 * Math.sin(x * 0.04)),
+         |                 range: 40
+         |             };
+         |         },
+         |         // create a function that snaps to a grid
+         |         interact.createSnapGrid({
+         |             x: 50,
+         |             y: 50,
+         |             range: 10,              // optional
+         |             offset: { x: 5, y: 10 } // optional
+         |         })
+         |     ],
+         |     // do not snap during normal movement.
+         |     // Instead, trigger only one snapped move event
+         |     // immediately before the end event.
+         |     endOnly: true,
+         |
+         |     relativePoints: [
+         |         { x: 0, y: 0 },  // snap relative to the top left of the element
+         |         { x: 1, y: 1 },  // and also to the bottom right
+         |     ],  
+         |
+         |     // offset the snap target coordinates
+         |     // can be an object with x/y or 'startCoords'
+         |     offset: { x: 50, y: 50 }
+         |   }
+         | });
+        \*/
+        snap: function (options) {
+            var ret = this.setOptions('snap', options);
+
+            if (ret === this) { return this; }
+
+            return ret.drag;
+        },
+
+        setOptions: function (option, options) {
+            var actions = options && isArray(options.actions)
+                    ? options.actions
+                    : ['drag'];
+
+            var i;
+
+            if (isObject(options) || isBool(options)) {
+                for (i = 0; i < actions.length; i++) {
+                    var action = /resize/.test(actions[i])? 'resize' : actions[i];
+
+                    if (!isObject(this.options[action])) { continue; }
+
+                    var thisOption = this.options[action][option];
+
+                    if (isObject(options)) {
+                        extend(thisOption, options);
+                        thisOption.enabled = options.enabled === false? false: true;
+
+                        if (option === 'snap') {
+                            if (thisOption.mode === 'grid') {
+                                thisOption.targets = [
+                                    interact.createSnapGrid(extend({
+                                        offset: thisOption.gridOffset || { x: 0, y: 0 }
+                                    }, thisOption.grid || {}))
+                                ];
+                            }
+                            else if (thisOption.mode === 'anchor') {
+                                thisOption.targets = thisOption.anchors;
+                            }
+                            else if (thisOption.mode === 'path') {
+                                thisOption.targets = thisOption.paths;
+                            }
+
+                            if ('elementOrigin' in options) {
+                                thisOption.relativePoints = [options.elementOrigin];
+                            }
+                        }
+                    }
+                    else if (isBool(options)) {
+                        thisOption.enabled = options;
+                    }
+                }
+
+                return this;
+            }
+
+            var ret = {},
+                allActions = ['drag', 'resize', 'gesture'];
+
+            for (i = 0; i < allActions.length; i++) {
+                if (option in defaultOptions[allActions[i]]) {
+                    ret[allActions[i]] = this.options[allActions[i]][option];
+                }
+            }
+
+            return ret;
+        },
+
+
+        /*\
+         * Interactable.inertia
+         [ method ]
+         **
+         * Deprecated. Add an `inertia` property to the options object passed
+         * to @Interactable.draggable or @Interactable.resizable instead.
+         *
+         * Returns or sets if and how events continue to run after the pointer is released
+         **
+         = (boolean | object) `false` if inertia is disabled; `object` with inertia properties if inertia is enabled
+         **
+         * or
+         **
+         - options (object | boolean | null) #optional
+         = (Interactable) this Interactable
+         > Usage
+         | // enable and use default settings
+         | interact(element).inertia(true);
+         |
+         | // enable and use custom settings
+         | interact(element).inertia({
+         |     // value greater than 0
+         |     // high values slow the object down more quickly
+         |     resistance     : 16,
+         |
+         |     // the minimum launch speed (pixels per second) that results in inertia start
+         |     minSpeed       : 200,
+         |
+         |     // inertia will stop when the object slows down to this speed
+         |     endSpeed       : 20,
+         |
+         |     // boolean; should actions be resumed when the pointer goes down during inertia
+         |     allowResume    : true,
+         |
+         |     // boolean; should the jump when resuming from inertia be ignored in event.dx/dy
+         |     zeroResumeDelta: false,
+         |
+         |     // if snap/restrict are set to be endOnly and inertia is enabled, releasing
+         |     // the pointer without triggering inertia will animate from the release
+         |     // point to the snaped/restricted point in the given amount of time (ms)
+         |     smoothEndDuration: 300,
+         |
+         |     // an array of action types that can have inertia (no gesture)
+         |     actions        : ['drag', 'resize']
+         | });
+         |
+         | // reset custom settings and use all defaults
+         | interact(element).inertia(null);
+        \*/
+        inertia: function (options) {
+            var ret = this.setOptions('inertia', options);
+
+            if (ret === this) { return this; }
+
+            return ret.drag;
+        },
+
+        getAction: function (pointer, event, interaction, element) {
+            var action = this.defaultActionChecker(pointer, interaction, element);
+
+            if (this.options.actionChecker) {
+                return this.options.actionChecker(pointer, event, action, this, element, interaction);
+            }
+
+            return action;
+        },
+
+        defaultActionChecker: defaultActionChecker,
+
+        /*\
+         * Interactable.actionChecker
+         [ method ]
+         *
+         * Gets or sets the function used to check action to be performed on
+         * pointerDown
+         *
+         - checker (function | null) #optional A function which takes a pointer event, defaultAction string, interactable, element and interaction as parameters and returns an object with name property 'drag' 'resize' or 'gesture' and optionally an `edges` object with boolean 'top', 'left', 'bottom' and right props.
+         = (Function | Interactable) The checker function or this Interactable
+         *
+         | interact('.resize-drag')
+         |   .resizable(true)
+         |   .draggable(true)
+         |   .actionChecker(function (pointer, event, action, interactable, element, interaction) {
+         |
+         |   if (interact.matchesSelector(event.target, '.drag-handle') {
+         |     // force drag with handle target
+         |     action.name = drag;
+         |   }
+         |   else {
+         |     // resize from the top and right edges
+         |     action.name  = 'resize';
+         |     action.edges = { top: true, right: true };
+         |   }
+         |
+         |   return action;
+         | });
+        \*/
+        actionChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.options.actionChecker = checker;
+
+                return this;
+            }
+
+            if (checker === null) {
+                delete this.options.actionChecker;
+
+                return this;
+            }
+
+            return this.options.actionChecker;
+        },
+
+        /*\
+         * Interactable.getRect
+         [ method ]
+         *
+         * The default function to get an Interactables bounding rect. Can be
+         * overridden using @Interactable.rectChecker.
+         *
+         - element (Element) #optional The element to measure.
+         = (object) The object's bounding rectangle.
+         o {
+         o     top   : 0,
+         o     left  : 0,
+         o     bottom: 0,
+         o     right : 0,
+         o     width : 0,
+         o     height: 0
+         o }
+        \*/
+        getRect: function rectCheck (element) {
+            element = element || this._element;
+
+            if (this.selector && !(isElement(element))) {
+                element = this._context.querySelector(this.selector);
+            }
+
+            return getElementRect(element);
+        },
+
+        /*\
+         * Interactable.rectChecker
+         [ method ]
+         *
+         * Returns or sets the function used to calculate the interactable's
+         * element's rectangle
+         *
+         - checker (function) #optional A function which returns this Interactable's bounding rectangle. See @Interactable.getRect
+         = (function | object) The checker function or this Interactable
+        \*/
+        rectChecker: function (checker) {
+            if (isFunction(checker)) {
+                this.getRect = checker;
+
+                return this;
+            }
+
+            if (checker === null) {
+                delete this.options.getRect;
+
+                return this;
+            }
+
+            return this.getRect;
+        },
+
+        /*\
+         * Interactable.styleCursor
+         [ method ]
+         *
+         * Returns or sets whether the action that would be performed when the
+         * mouse on the element are checked on `mousemove` so that the cursor
+         * may be styled appropriately
+         *
+         - newValue (boolean) #optional
+         = (boolean | Interactable) The current setting or this Interactable
+        \*/
+        styleCursor: function (newValue) {
+            if (isBool(newValue)) {
+                this.options.styleCursor = newValue;
+
+                return this;
+            }
+
+            if (newValue === null) {
+                delete this.options.styleCursor;
+
+                return this;
+            }
+
+            return this.options.styleCursor;
+        },
+
+        /*\
+         * Interactable.preventDefault
+         [ method ]
+         *
+         * Returns or sets whether to prevent the browser's default behaviour
+         * in response to pointer events. Can be set to:
+         *  - `'always'` to always prevent
+         *  - `'never'` to never prevent
+         *  - `'auto'` to let interact.js try to determine what would be best
+         *
+         - newValue (string) #optional `true`, `false` or `'auto'`
+         = (string | Interactable) The current setting or this Interactable
+        \*/
+        preventDefault: function (newValue) {
+            if (/^(always|never|auto)$/.test(newValue)) {
+                this.options.preventDefault = newValue;
+                return this;
+            }
+
+            if (isBool(newValue)) {
+                this.options.preventDefault = newValue? 'always' : 'never';
+                return this;
+            }
+
+            return this.options.preventDefault;
+        },
+
+        /*\
+         * Interactable.origin
+         [ method ]
+         *
+         * Gets or sets the origin of the Interactable's element.  The x and y
+         * of the origin will be subtracted from action event coordinates.
+         *
+         - origin (object | string) #optional An object eg. { x: 0, y: 0 } or string 'parent', 'self' or any CSS selector
+         * OR
+         - origin (Element) #optional An HTML or SVG Element whose rect will be used
+         **
+         = (object) The current origin or this Interactable
+        \*/
+        origin: function (newValue) {
+            if (trySelector(newValue)) {
+                this.options.origin = newValue;
+                return this;
+            }
+            else if (isObject(newValue)) {
+                this.options.origin = newValue;
+                return this;
+            }
+
+            return this.options.origin;
+        },
+
+        /*\
+         * Interactable.deltaSource
+         [ method ]
+         *
+         * Returns or sets the mouse coordinate types used to calculate the
+         * movement of the pointer.
+         *
+         - newValue (string) #optional Use 'client' if you will be scrolling while interacting; Use 'page' if you want autoScroll to work
+         = (string | object) The current deltaSource or this Interactable
+        \*/
+        deltaSource: function (newValue) {
+            if (newValue === 'page' || newValue === 'client') {
+                this.options.deltaSource = newValue;
+
+                return this;
+            }
+
+            return this.options.deltaSource;
+        },
+
+        /*\
+         * Interactable.restrict
+         [ method ]
+         **
+         * Deprecated. Add a `restrict` property to the options object passed to
+         * @Interactable.draggable, @Interactable.resizable or @Interactable.gesturable instead.
+         *
+         * Returns or sets the rectangles within which actions on this
+         * interactable (after snap calculations) are restricted. By default,
+         * restricting is relative to the pointer coordinates. You can change
+         * this by setting the
+         * [`elementRect`](https://github.com/taye/interact.js/pull/72).
+         **
+         - options (object) #optional an object with keys drag, resize, and/or gesture whose values are rects, Elements, CSS selectors, or 'parent' or 'self'
+         = (object) The current restrictions object or this Interactable
+         **
+         | interact(element).restrict({
+         |     // the rect will be `interact.getElementRect(element.parentNode)`
+         |     drag: element.parentNode,
+         |
+         |     // x and y are relative to the the interactable's origin
+         |     resize: { x: 100, y: 100, width: 200, height: 200 }
+         | })
+         |
+         | interact('.draggable').restrict({
+         |     // the rect will be the selected element's parent
+         |     drag: 'parent',
+         |
+         |     // do not restrict during normal movement.
+         |     // Instead, trigger only one restricted move event
+         |     // immediately before the end event.
+         |     endOnly: true,
+         |
+         |     // https://github.com/taye/interact.js/pull/72#issue-41813493
+         |     elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+         | });
+        \*/
+        restrict: function (options) {
+            if (!isObject(options)) {
+                return this.setOptions('restrict', options);
+            }
+
+            var actions = ['drag', 'resize', 'gesture'],
+                ret;
+
+            for (var i = 0; i < actions.length; i++) {
+                var action = actions[i];
+
+                if (action in options) {
+                    var perAction = extend({
+                            actions: [action],
+                            restriction: options[action]
+                        }, options);
+
+                    ret = this.setOptions('restrict', perAction);
+                }
+            }
+
+            return ret;
+        },
+
+        /*\
+         * Interactable.context
+         [ method ]
+         *
+         * Gets the selector context Node of the Interactable. The default is `window.document`.
+         *
+         = (Node) The context Node of this Interactable
+         **
+        \*/
+        context: function () {
+            return this._context;
+        },
+
+        _context: document,
+
+        /*\
+         * Interactable.ignoreFrom
+         [ method ]
+         *
+         * If the target of the `mousedown`, `pointerdown` or `touchstart`
+         * event or any of it's parents match the given CSS selector or
+         * Element, no drag/resize/gesture is started.
+         *
+         - newValue (string | Element | null) #optional a CSS selector string, an Element or `null` to not ignore any elements
+         = (string | Element | object) The current ignoreFrom value or this Interactable
+         **
+         | interact(element, { ignoreFrom: document.getElementById('no-action') });
+         | // or
+         | interact(element).ignoreFrom('input, textarea, a');
+        \*/
+        ignoreFrom: function (newValue) {
+            if (trySelector(newValue)) {            // CSS selector to match event.target
+                this.options.ignoreFrom = newValue;
+                return this;
+            }
+
+            if (isElement(newValue)) {              // specific element
+                this.options.ignoreFrom = newValue;
+                return this;
+            }
+
+            return this.options.ignoreFrom;
+        },
+
+        /*\
+         * Interactable.allowFrom
+         [ method ]
+         *
+         * A drag/resize/gesture is started only If the target of the
+         * `mousedown`, `pointerdown` or `touchstart` event or any of it's
+         * parents match the given CSS selector or Element.
+         *
+         - newValue (string | Element | null) #optional a CSS selector string, an Element or `null` to allow from any element
+         = (string | Element | object) The current allowFrom value or this Interactable
+         **
+         | interact(element, { allowFrom: document.getElementById('drag-handle') });
+         | // or
+         | interact(element).allowFrom('.handle');
+        \*/
+        allowFrom: function (newValue) {
+            if (trySelector(newValue)) {            // CSS selector to match event.target
+                this.options.allowFrom = newValue;
+                return this;
+            }
+
+            if (isElement(newValue)) {              // specific element
+                this.options.allowFrom = newValue;
+                return this;
+            }
+
+            return this.options.allowFrom;
+        },
+
+        /*\
+         * Interactable.element
+         [ method ]
+         *
+         * If this is not a selector Interactable, it returns the element this
+         * interactable represents
+         *
+         = (Element) HTML / SVG Element
+        \*/
+        element: function () {
+            return this._element;
+        },
+
+        /*\
+         * Interactable.fire
+         [ method ]
+         *
+         * Calls listeners for the given InteractEvent type bound globally
+         * and directly to this Interactable
+         *
+         - iEvent (InteractEvent) The InteractEvent object to be fired on this Interactable
+         = (Interactable) this Interactable
+        \*/
+        fire: function (iEvent) {
+            if (!(iEvent && iEvent.type) || !contains(eventTypes, iEvent.type)) {
+                return this;
+            }
+
+            var listeners,
+                i,
+                len,
+                onEvent = 'on' + iEvent.type,
+                funcName = '';
+
+            // Interactable#on() listeners
+            if (iEvent.type in this._iEvents) {
+                listeners = this._iEvents[iEvent.type];
+
+                for (i = 0, len = listeners.length; i < len && !iEvent.immediatePropagationStopped; i++) {
+                    funcName = listeners[i].name;
+                    listeners[i](iEvent);
+                }
+            }
+
+            // interactable.onevent listener
+            if (isFunction(this[onEvent])) {
+                funcName = this[onEvent].name;
+                this[onEvent](iEvent);
+            }
+
+            // interact.on() listeners
+            if (iEvent.type in globalEvents && (listeners = globalEvents[iEvent.type]))  {
+
+                for (i = 0, len = listeners.length; i < len && !iEvent.immediatePropagationStopped; i++) {
+                    funcName = listeners[i].name;
+                    listeners[i](iEvent);
+                }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.on
+         [ method ]
+         *
+         * Binds a listener for an InteractEvent or DOM event.
+         *
+         - eventType  (string | array | object) The types of events to listen for
+         - listener   (function) The function to be called on the given event(s)
+         - useCapture (boolean) #optional useCapture flag for addEventListener
+         = (object) This Interactable
+        \*/
+        on: function (eventType, listener, useCapture) {
+            var i;
+
+            if (isString(eventType) && eventType.search(' ') !== -1) {
+                eventType = eventType.trim().split(/ +/);
+            }
+
+            if (isArray(eventType)) {
+                for (i = 0; i < eventType.length; i++) {
+                    this.on(eventType[i], listener, useCapture);
+                }
+
+                return this;
+            }
+
+            if (isObject(eventType)) {
+                for (var prop in eventType) {
+                    this.on(prop, eventType[prop], listener);
+                }
+
+                return this;
+            }
+
+            if (eventType === 'wheel') {
+                eventType = wheelEvent;
+            }
+
+            // convert to boolean
+            useCapture = useCapture? true: false;
+
+            if (contains(eventTypes, eventType)) {
+                // if this type of event was never bound to this Interactable
+                if (!(eventType in this._iEvents)) {
+                    this._iEvents[eventType] = [listener];
+                }
+                else {
+                    this._iEvents[eventType].push(listener);
+                }
+            }
+            // delegated event for selector
+            else if (this.selector) {
+                if (!delegatedEvents[eventType]) {
+                    delegatedEvents[eventType] = {
+                        selectors: [],
+                        contexts : [],
+                        listeners: []
+                    };
+
+                    // add delegate listener functions
+                    for (i = 0; i < documents.length; i++) {
+                        events.add(documents[i], eventType, delegateListener);
+                        events.add(documents[i], eventType, delegateUseCapture, true);
+                    }
+                }
+
+                var delegated = delegatedEvents[eventType],
+                    index;
+
+                for (index = delegated.selectors.length - 1; index >= 0; index--) {
+                    if (delegated.selectors[index] === this.selector
+                        && delegated.contexts[index] === this._context) {
+                        break;
+                    }
+                }
+
+                if (index === -1) {
+                    index = delegated.selectors.length;
+
+                    delegated.selectors.push(this.selector);
+                    delegated.contexts .push(this._context);
+                    delegated.listeners.push([]);
+                }
+
+                // keep listener and useCapture flag
+                delegated.listeners[index].push([listener, useCapture]);
+            }
+            else {
+                events.add(this._element, eventType, listener, useCapture);
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.off
+         [ method ]
+         *
+         * Removes an InteractEvent or DOM event listener
+         *
+         - eventType  (string | array | object) The types of events that were listened for
+         - listener   (function) The listener function to be removed
+         - useCapture (boolean) #optional useCapture flag for removeEventListener
+         = (object) This Interactable
+        \*/
+        off: function (eventType, listener, useCapture) {
+            var i;
+
+            if (isString(eventType) && eventType.search(' ') !== -1) {
+                eventType = eventType.trim().split(/ +/);
+            }
+
+            if (isArray(eventType)) {
+                for (i = 0; i < eventType.length; i++) {
+                    this.off(eventType[i], listener, useCapture);
+                }
+
+                return this;
+            }
+
+            if (isObject(eventType)) {
+                for (var prop in eventType) {
+                    this.off(prop, eventType[prop], listener);
+                }
+
+                return this;
+            }
+
+            var eventList,
+                index = -1;
+
+            // convert to boolean
+            useCapture = useCapture? true: false;
+
+            if (eventType === 'wheel') {
+                eventType = wheelEvent;
+            }
+
+            // if it is an action event type
+            if (contains(eventTypes, eventType)) {
+                eventList = this._iEvents[eventType];
+
+                if (eventList && (index = indexOf(eventList, listener)) !== -1) {
+                    this._iEvents[eventType].splice(index, 1);
+                }
+            }
+            // delegated event
+            else if (this.selector) {
+                var delegated = delegatedEvents[eventType],
+                    matchFound = false;
+
+                if (!delegated) { return this; }
+
+                // count from last index of delegated to 0
+                for (index = delegated.selectors.length - 1; index >= 0; index--) {
+                    // look for matching selector and context Node
+                    if (delegated.selectors[index] === this.selector
+                        && delegated.contexts[index] === this._context) {
+
+                        var listeners = delegated.listeners[index];
+
+                        // each item of the listeners array is an array: [function, useCaptureFlag]
+                        for (i = listeners.length - 1; i >= 0; i--) {
+                            var fn = listeners[i][0],
+                                useCap = listeners[i][1];
+
+                            // check if the listener functions and useCapture flags match
+                            if (fn === listener && useCap === useCapture) {
+                                // remove the listener from the array of listeners
+                                listeners.splice(i, 1);
+
+                                // if all listeners for this interactable have been removed
+                                // remove the interactable from the delegated arrays
+                                if (!listeners.length) {
+                                    delegated.selectors.splice(index, 1);
+                                    delegated.contexts .splice(index, 1);
+                                    delegated.listeners.splice(index, 1);
+
+                                    // remove delegate function from context
+                                    events.remove(this._context, eventType, delegateListener);
+                                    events.remove(this._context, eventType, delegateUseCapture, true);
+
+                                    // remove the arrays if they are empty
+                                    if (!delegated.selectors.length) {
+                                        delegatedEvents[eventType] = null;
+                                    }
+                                }
+
+                                // only remove one listener
+                                matchFound = true;
+                                break;
+                            }
+                        }
+
+                        if (matchFound) { break; }
+                    }
+                }
+            }
+            // remove listener from this Interatable's element
+            else {
+                events.remove(this._element, eventType, listener, useCapture);
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.set
+         [ method ]
+         *
+         * Reset the options of this Interactable
+         - options (object) The new settings to apply
+         = (object) This Interactable
+        \*/
+        set: function (options) {
+            if (!isObject(options)) {
+                options = {};
+            }
+
+            this.options = extend({}, defaultOptions.base);
+
+            var i,
+                actions = ['drag', 'drop', 'resize', 'gesture'],
+                methods = ['draggable', 'dropzone', 'resizable', 'gesturable'],
+                perActions = extend(extend({}, defaultOptions.perAction), options[action] || {});
+
+            for (i = 0; i < actions.length; i++) {
+                var action = actions[i];
+
+                this.options[action] = extend({}, defaultOptions[action]);
+
+                this.setPerAction(action, perActions);
+
+                this[methods[i]](options[action]);
+            }
+
+            var settings = [
+                    'accept', 'actionChecker', 'allowFrom', 'deltaSource',
+                    'dropChecker', 'ignoreFrom', 'origin', 'preventDefault',
+                    'rectChecker', 'styleCursor'
+                ];
+
+            for (i = 0, len = settings.length; i < len; i++) {
+                var setting = settings[i];
+
+                this.options[setting] = defaultOptions.base[setting];
+
+                if (setting in options) {
+                    this[setting](options[setting]);
+                }
+            }
+
+            return this;
+        },
+
+        /*\
+         * Interactable.unset
+         [ method ]
+         *
+         * Remove this interactable from the list of interactables and remove
+         * it's drag, drop, resize and gesture capabilities
+         *
+         = (object) @interact
+        \*/
+        unset: function () {
+            events.remove(this._element, 'all');
+
+            if (!isString(this.selector)) {
+                events.remove(this, 'all');
+                if (this.options.styleCursor) {
+                    this._element.style.cursor = '';
+                }
+            }
+            else {
+                // remove delegated events
+                for (var type in delegatedEvents) {
+                    var delegated = delegatedEvents[type];
+
+                    for (var i = 0; i < delegated.selectors.length; i++) {
+                        if (delegated.selectors[i] === this.selector
+                            && delegated.contexts[i] === this._context) {
+
+                            delegated.selectors.splice(i, 1);
+                            delegated.contexts .splice(i, 1);
+                            delegated.listeners.splice(i, 1);
+
+                            // remove the arrays if they are empty
+                            if (!delegated.selectors.length) {
+                                delegatedEvents[type] = null;
+                            }
+                        }
+
+                        events.remove(this._context, type, delegateListener);
+                        events.remove(this._context, type, delegateUseCapture, true);
+
+                        break;
+                    }
+                }
+            }
+
+            this.dropzone(false);
+
+            interactables.splice(indexOf(interactables, this), 1);
+
+            return interact;
+        }
+    };
+
+    function warnOnce (method, message) {
+        var warned = false;
+
+        return function () {
+            if (!warned) {
+                window.console.warn(message);
+                warned = true;
+            }
+
+            return method.apply(this, arguments);
+        };
+    }
+
+    Interactable.prototype.snap = warnOnce(Interactable.prototype.snap,
+         'Interactable#snap is deprecated. See the new documentation for snapping at http://interactjs.io/docs/snapping');
+    Interactable.prototype.restrict = warnOnce(Interactable.prototype.restrict,
+         'Interactable#restrict is deprecated. See the new documentation for resticting at http://interactjs.io/docs/restriction');
+    Interactable.prototype.inertia = warnOnce(Interactable.prototype.inertia,
+         'Interactable#inertia is deprecated. See the new documentation for inertia at http://interactjs.io/docs/inertia');
+    Interactable.prototype.autoScroll = warnOnce(Interactable.prototype.autoScroll,
+         'Interactable#autoScroll is deprecated. See the new documentation for autoScroll at http://interactjs.io/docs/#autoscroll');
+    Interactable.prototype.squareResize = warnOnce(Interactable.prototype.squareResize,
+         'Interactable#squareResize is deprecated. See http://interactjs.io/docs/#resize-square');
+
+    Interactable.prototype.accept = warnOnce(Interactable.prototype.accept,
+         'Interactable#accept is deprecated. use Interactable#dropzone({ accept: target }) instead');
+    Interactable.prototype.dropChecker = warnOnce(Interactable.prototype.dropChecker,
+         'Interactable#dropChecker is deprecated. use Interactable#dropzone({ dropChecker: checkerFunction }) instead');
+    Interactable.prototype.context = warnOnce(Interactable.prototype.context,
+         'Interactable#context as a method is deprecated. It will soon be a DOM Node instead');
+
+    /*\
+     * interact.isSet
+     [ method ]
+     *
+     * Check if an element has been set
+     - element (Element) The Element being searched for
+     = (boolean) Indicates if the element or CSS selector was previously passed to interact
+    \*/
+    interact.isSet = function(element, options) {
+        return interactables.indexOfElement(element, options && options.context) !== -1;
+    };
+
+    /*\
+     * interact.on
+     [ method ]
+     *
+     * Adds a global listener for an InteractEvent or adds a DOM event to
+     * `document`
+     *
+     - type       (string | array | object) The types of events to listen for
+     - listener   (function) The function to be called on the given event(s)
+     - useCapture (boolean) #optional useCapture flag for addEventListener
+     = (object) interact
+    \*/
+    interact.on = function (type, listener, useCapture) {
+        if (isString(type) && type.search(' ') !== -1) {
+            type = type.trim().split(/ +/);
+        }
+
+        if (isArray(type)) {
+            for (var i = 0; i < type.length; i++) {
+                interact.on(type[i], listener, useCapture);
+            }
+
+            return interact;
+        }
+
+        if (isObject(type)) {
+            for (var prop in type) {
+                interact.on(prop, type[prop], listener);
+            }
+
+            return interact;
+        }
+
+        // if it is an InteractEvent type, add listener to globalEvents
+        if (contains(eventTypes, type)) {
+            // if this type of event was never bound
+            if (!globalEvents[type]) {
+                globalEvents[type] = [listener];
+            }
+            else {
+                globalEvents[type].push(listener);
+            }
+        }
+        // If non InteractEvent type, addEventListener to document
+        else {
+            events.add(document, type, listener, useCapture);
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.off
+     [ method ]
+     *
+     * Removes a global InteractEvent listener or DOM event from `document`
+     *
+     - type       (string | array | object) The types of events that were listened for
+     - listener   (function) The listener function to be removed
+     - useCapture (boolean) #optional useCapture flag for removeEventListener
+     = (object) interact
+     \*/
+    interact.off = function (type, listener, useCapture) {
+        if (isString(type) && type.search(' ') !== -1) {
+            type = type.trim().split(/ +/);
+        }
+
+        if (isArray(type)) {
+            for (var i = 0; i < type.length; i++) {
+                interact.off(type[i], listener, useCapture);
+            }
+
+            return interact;
+        }
+
+        if (isObject(type)) {
+            for (var prop in type) {
+                interact.off(prop, type[prop], listener);
+            }
+
+            return interact;
+        }
+
+        if (!contains(eventTypes, type)) {
+            events.remove(document, type, listener, useCapture);
+        }
+        else {
+            var index;
+
+            if (type in globalEvents
+                && (index = indexOf(globalEvents[type], listener)) !== -1) {
+                globalEvents[type].splice(index, 1);
+            }
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.enableDragging
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether dragging is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableDragging = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.drag = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.drag;
+    }, 'interact.enableDragging is deprecated and will soon be removed.');
+
+    /*\
+     * interact.enableResizing
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether resizing is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableResizing = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.resize = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.resize;
+    }, 'interact.enableResizing is deprecated and will soon be removed.');
+
+    /*\
+     * interact.enableGesturing
+     [ method ]
+     *
+     * Deprecated.
+     *
+     * Returns or sets whether gesturing is enabled for any Interactables
+     *
+     - newValue (boolean) #optional `true` to allow the action; `false` to disable action for all Interactables
+     = (boolean | object) The current setting or interact
+    \*/
+    interact.enableGesturing = warnOnce(function (newValue) {
+        if (newValue !== null && newValue !== undefined) {
+            actionIsEnabled.gesture = newValue;
+
+            return interact;
+        }
+        return actionIsEnabled.gesture;
+    }, 'interact.enableGesturing is deprecated and will soon be removed.');
+
+    interact.eventTypes = eventTypes;
+
+    /*\
+     * interact.debug
+     [ method ]
+     *
+     * Returns debugging data
+     = (object) An object with properties that outline the current state and expose internal functions and variables
+    \*/
+    interact.debug = function () {
+        var interaction = interactions[0] || new Interaction();
+
+        return {
+            interactions          : interactions,
+            target                : interaction.target,
+            dragging              : interaction.dragging,
+            resizing              : interaction.resizing,
+            gesturing             : interaction.gesturing,
+            prepared              : interaction.prepared,
+            matches               : interaction.matches,
+            matchElements         : interaction.matchElements,
+
+            prevCoords            : interaction.prevCoords,
+            startCoords           : interaction.startCoords,
+
+            pointerIds            : interaction.pointerIds,
+            pointers              : interaction.pointers,
+            addPointer            : listeners.addPointer,
+            removePointer         : listeners.removePointer,
+            recordPointer        : listeners.recordPointer,
+
+            snap                  : interaction.snapStatus,
+            restrict              : interaction.restrictStatus,
+            inertia               : interaction.inertiaStatus,
+
+            downTime              : interaction.downTimes[0],
+            downEvent             : interaction.downEvent,
+            downPointer           : interaction.downPointer,
+            prevEvent             : interaction.prevEvent,
+
+            Interactable          : Interactable,
+            interactables         : interactables,
+            pointerIsDown         : interaction.pointerIsDown,
+            defaultOptions        : defaultOptions,
+            defaultActionChecker  : defaultActionChecker,
+
+            actionCursors         : actionCursors,
+            dragMove              : listeners.dragMove,
+            resizeMove            : listeners.resizeMove,
+            gestureMove           : listeners.gestureMove,
+            pointerUp             : listeners.pointerUp,
+            pointerDown           : listeners.pointerDown,
+            pointerMove           : listeners.pointerMove,
+            pointerHover          : listeners.pointerHover,
+
+            eventTypes            : eventTypes,
+
+            events                : events,
+            globalEvents          : globalEvents,
+            delegatedEvents       : delegatedEvents,
+
+            prefixedPropREs       : prefixedPropREs
+        };
+    };
+
+    // expose the functions used to calculate multi-touch properties
+    interact.getPointerAverage = pointerAverage;
+    interact.getTouchBBox     = touchBBox;
+    interact.getTouchDistance = touchDistance;
+    interact.getTouchAngle    = touchAngle;
+
+    interact.getElementRect         = getElementRect;
+    interact.getElementClientRect   = getElementClientRect;
+    interact.matchesSelector        = matchesSelector;
+    interact.closest                = closest;
+
+    /*\
+     * interact.margin
+     [ method ]
+     *
+     * Deprecated. Use `interact(target).resizable({ margin: number });` instead.
+     * Returns or sets the margin for autocheck resizing used in
+     * @Interactable.getAction. That is the distance from the bottom and right
+     * edges of an element clicking in which will start resizing
+     *
+     - newValue (number) #optional
+     = (number | interact) The current margin value or interact
+    \*/
+    interact.margin = warnOnce(function (newvalue) {
+        if (isNumber(newvalue)) {
+            margin = newvalue;
+
+            return interact;
+        }
+        return margin;
+    },
+    'interact.margin is deprecated. Use interact(target).resizable({ margin: number }); instead.') ;
+
+    /*\
+     * interact.supportsTouch
+     [ method ]
+     *
+     = (boolean) Whether or not the browser supports touch input
+    \*/
+    interact.supportsTouch = function () {
+        return supportsTouch;
+    };
+
+    /*\
+     * interact.supportsPointerEvent
+     [ method ]
+     *
+     = (boolean) Whether or not the browser supports PointerEvents
+    \*/
+    interact.supportsPointerEvent = function () {
+        return supportsPointerEvent;
+    };
+
+    /*\
+     * interact.stop
+     [ method ]
+     *
+     * Cancels all interactions (end events are not fired)
+     *
+     - event (Event) An event on which to call preventDefault()
+     = (object) interact
+    \*/
+    interact.stop = function (event) {
+        for (var i = interactions.length - 1; i >= 0; i--) {
+            interactions[i].stop(event);
+        }
+
+        return interact;
+    };
+
+    /*\
+     * interact.dynamicDrop
+     [ method ]
+     *
+     * Returns or sets whether the dimensions of dropzone elements are
+     * calculated on every dragmove or only on dragstart for the default
+     * dropChecker
+     *
+     - newValue (boolean) #optional True to check on each move. False to check only before start
+     = (boolean | interact) The current setting or interact
+    \*/
+    interact.dynamicDrop = function (newValue) {
+        if (isBool(newValue)) {
+            //if (dragging && dynamicDrop !== newValue && !newValue) {
+                //calcRects(dropzones);
+            //}
+
+            dynamicDrop = newValue;
+
+            return interact;
+        }
+        return dynamicDrop;
+    };
+
+    /*\
+     * interact.pointerMoveTolerance
+     [ method ]
+     * Returns or sets the distance the pointer must be moved before an action
+     * sequence occurs. This also affects tolerance for tap events.
+     *
+     - newValue (number) #optional The movement from the start position must be greater than this value
+     = (number | Interactable) The current setting or interact
+    \*/
+    interact.pointerMoveTolerance = function (newValue) {
+        if (isNumber(newValue)) {
+            pointerMoveTolerance = newValue;
+
+            return this;
+        }
+
+        return pointerMoveTolerance;
+    };
+
+    /*\
+     * interact.maxInteractions
+     [ method ]
+     **
+     * Returns or sets the maximum number of concurrent interactions allowed.
+     * By default only 1 interaction is allowed at a time (for backwards
+     * compatibility). To allow multiple interactions on the same Interactables
+     * and elements, you need to enable it in the draggable, resizable and
+     * gesturable `'max'` and `'maxPerElement'` options.
+     **
+     - newValue (number) #optional Any number. newValue <= 0 means no interactions.
+    \*/
+    interact.maxInteractions = function (newValue) {
+        if (isNumber(newValue)) {
+            maxInteractions = newValue;
+
+            return this;
+        }
+
+        return maxInteractions;
+    };
+
+    interact.createSnapGrid = function (grid) {
+        return function (x, y) {
+            var offsetX = 0,
+                offsetY = 0;
+
+            if (isObject(grid.offset)) {
+                offsetX = grid.offset.x;
+                offsetY = grid.offset.y;
+            }
+
+            var gridx = Math.round((x - offsetX) / grid.x),
+                gridy = Math.round((y - offsetY) / grid.y),
+
+                newX = gridx * grid.x + offsetX,
+                newY = gridy * grid.y + offsetY;
+
+            return {
+                x: newX,
+                y: newY,
+                range: grid.range
+            };
+        };
+    };
+
+    function endAllInteractions (event) {
+        for (var i = 0; i < interactions.length; i++) {
+            interactions[i].pointerEnd(event, event);
+        }
+    }
+
+    function listenToDocument (doc) {
+        if (contains(documents, doc)) { return; }
+
+        var win = doc.defaultView || doc.parentWindow;
+
+        // add delegate event listener
+        for (var eventType in delegatedEvents) {
+            events.add(doc, eventType, delegateListener);
+            events.add(doc, eventType, delegateUseCapture, true);
+        }
+
+        if (PointerEvent) {
+            if (PointerEvent === win.MSPointerEvent) {
+                pEventTypes = {
+                    up: 'MSPointerUp', down: 'MSPointerDown', over: 'mouseover',
+                    out: 'mouseout', move: 'MSPointerMove', cancel: 'MSPointerCancel' };
+            }
+            else {
+                pEventTypes = {
+                    up: 'pointerup', down: 'pointerdown', over: 'pointerover',
+                    out: 'pointerout', move: 'pointermove', cancel: 'pointercancel' };
+            }
+
+            events.add(doc, pEventTypes.down  , listeners.selectorDown );
+            events.add(doc, pEventTypes.move  , listeners.pointerMove  );
+            events.add(doc, pEventTypes.over  , listeners.pointerOver  );
+            events.add(doc, pEventTypes.out   , listeners.pointerOut   );
+            events.add(doc, pEventTypes.up    , listeners.pointerUp    );
+            events.add(doc, pEventTypes.cancel, listeners.pointerCancel);
+
+            // autoscroll
+            events.add(doc, pEventTypes.move, listeners.autoScrollMove);
+        }
+        else {
+            events.add(doc, 'mousedown', listeners.selectorDown);
+            events.add(doc, 'mousemove', listeners.pointerMove );
+            events.add(doc, 'mouseup'  , listeners.pointerUp   );
+            events.add(doc, 'mouseover', listeners.pointerOver );
+            events.add(doc, 'mouseout' , listeners.pointerOut  );
+
+            events.add(doc, 'touchstart' , listeners.selectorDown );
+            events.add(doc, 'touchmove'  , listeners.pointerMove  );
+            events.add(doc, 'touchend'   , listeners.pointerUp    );
+            events.add(doc, 'touchcancel', listeners.pointerCancel);
+
+            // autoscroll
+            events.add(doc, 'mousemove', listeners.autoScrollMove);
+            events.add(doc, 'touchmove', listeners.autoScrollMove);
+        }
+
+        events.add(win, 'blur', endAllInteractions);
+
+        try {
+            if (win.frameElement) {
+                var parentDoc = win.frameElement.ownerDocument,
+                    parentWindow = parentDoc.defaultView;
+
+                events.add(parentDoc   , 'mouseup'      , listeners.pointerEnd);
+                events.add(parentDoc   , 'touchend'     , listeners.pointerEnd);
+                events.add(parentDoc   , 'touchcancel'  , listeners.pointerEnd);
+                events.add(parentDoc   , 'pointerup'    , listeners.pointerEnd);
+                events.add(parentDoc   , 'MSPointerUp'  , listeners.pointerEnd);
+                events.add(parentWindow, 'blur'         , endAllInteractions );
+            }
+        }
+        catch (error) {
+            interact.windowParentError = error;
+        }
+
+        // prevent native HTML5 drag on interact.js target elements
+        events.add(doc, 'dragstart', function (event) {
+            for (var i = 0; i < interactions.length; i++) {
+                var interaction = interactions[i];
+
+                if (interaction.element
+                    && (interaction.element === event.target
+                        || nodeContains(interaction.element, event.target))) {
+
+                    interaction.checkAndPreventDefault(event, interaction.target, interaction.element);
+                    return;
+                }
+            }
+        });
+
+        if (events.useAttachEvent) {
+            // For IE's lack of Event#preventDefault
+            events.add(doc, 'selectstart', function (event) {
+                var interaction = interactions[0];
+
+                if (interaction.currentAction()) {
+                    interaction.checkAndPreventDefault(event);
+                }
+            });
+
+            // For IE's bad dblclick event sequence
+            events.add(doc, 'dblclick', doOnInteractions('ie8Dblclick'));
+        }
+
+        documents.push(doc);
+    }
+
+    listenToDocument(document);
+
+    function indexOf (array, target) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            if (array[i] === target) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    function contains (array, target) {
+        return indexOf(array, target) !== -1;
+    }
+
+    function matchesSelector (element, selector, nodeList) {
+        if (ie8MatchesSelector) {
+            return ie8MatchesSelector(element, selector, nodeList);
+        }
+
+        // remove /deep/ from selectors if shadowDOM polyfill is used
+        if (window !== realWindow) {
+            selector = selector.replace(/\/deep\//g, ' ');
+        }
+
+        return element[prefixedMatchesSelector](selector);
+    }
+
+    function matchesUpTo (element, selector, limit) {
+        while (isElement(element)) {
+            if (matchesSelector(element, selector)) {
+                return true;
+            }
+
+            element = parentElement(element);
+
+            if (element === limit) {
+                return matchesSelector(element, selector);
+            }
+        }
+
+        return false;
+    }
+
+    // For IE8's lack of an Element#matchesSelector
+    // taken from http://tanalin.com/en/blog/2012/12/matches-selector-ie8/ and modified
+    if (!(prefixedMatchesSelector in Element.prototype) || !isFunction(Element.prototype[prefixedMatchesSelector])) {
+        ie8MatchesSelector = function (element, selector, elems) {
+            elems = elems || element.parentNode.querySelectorAll(selector);
+
+            for (var i = 0, len = elems.length; i < len; i++) {
+                if (elems[i] === element) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    }
+
+    // requestAnimationFrame polyfill
+    (function() {
+        var lastTime = 0,
+            vendors = ['ms', 'moz', 'webkit', 'o'];
+
+        for(var x = 0; x < vendors.length && !realWindow.requestAnimationFrame; ++x) {
+            reqFrame = realWindow[vendors[x]+'RequestAnimationFrame'];
+            cancelFrame = realWindow[vendors[x]+'CancelAnimationFrame'] || realWindow[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!reqFrame) {
+            reqFrame = function(callback) {
+                var currTime = new Date().getTime(),
+                    timeToCall = Math.max(0, 16 - (currTime - lastTime)),
+                    id = setTimeout(function() { callback(currTime + timeToCall); },
+                  timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+
+        if (!cancelFrame) {
+            cancelFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+    }());
+
+    /* global exports: true, module, define */
+
+    // http://documentcloud.github.io/underscore/docs/underscore.html#section-11
+    if (typeof exports !== 'undefined') {
+        if (typeof module !== 'undefined' && module.exports) {
+            exports = module.exports = interact;
+        }
+        exports.interact = interact;
+    }
+    // AMD
+    else if (typeof define === 'function' && define.amd) {
+        define('interact', function() {
+            return interact;
+        });
+    }
+    else {
+        realWindow.interact = interact;
+    }
+
+} (typeof window === 'undefined'? undefined : window));
+
+},{}],44:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -4142,12 +14719,58 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],30:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
+(function (global){
+/**
+ * ReactDOM v0.14.3
+ *
+ * Copyright 2013-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+// Based off https://github.com/ForbesLindesay/umd/blob/master/template.js
+;(function(f) {
+  // CommonJS
+  if (typeof exports === "object" && typeof module !== "undefined") {
+    module.exports = f(require('react'));
+
+  // RequireJS
+  } else if (typeof define === "function" && define.amd) {
+    define(['react'], f);
+
+  // <script>
+  } else {
+    var g
+    if (typeof window !== "undefined") {
+      g = window;
+    } else if (typeof global !== "undefined") {
+      g = global;
+    } else if (typeof self !== "undefined") {
+      g = self;
+    } else {
+      // works providing we're not in "use strict";
+      // needed for Java 8 Nashorn
+      // see https://github.com/facebook/react/issues/3037
+      g = this;
+    }
+    g.ReactDOM = f(g.React);
+  }
+
+})(function(React) {
+  return React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+});
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"react":226}],46:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":71}],31:[function(require,module,exports){
+},{"react/lib/ReactDOM":91}],47:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -4157,7 +14780,7 @@ module.exports = require('react/lib/ReactDOM');
  */
 
 var React = require('react/addons');
-
+//var React = require('../react/dist/react-with-addons.js');
 
 var flexbox2Skin = function (skin) {
   switch (skin || "") {
@@ -5601,6 +16224,8 @@ Mixins.PanelWrapper = {
       renderPanelBorder: this.props.renderPanelBorder,
       activeTabHeaderBorder: this.props.activeTabHeaderBorder
     };
+    console.log("here's 'opts' in react-panels");
+    console.log(opts);
     this._sheet = createSheet(opts);
     this.config = this._sheet("PanelWrapper").config;
 
@@ -5803,7 +16428,7 @@ var FloatingPanel = React.createClass({
     style:React.PropTypes.object,
     onClick:React.PropTypes.func,
   },
-  
+
   getDefaultProps: function () {
     return {
       "left": 0,
@@ -5825,7 +16450,7 @@ var FloatingPanel = React.createClass({
   componentWillReceiveProps:function(nextProps) {
     this.setState({width:nextProps.width});
   },
-  
+
   dragStart: function (e) {
     this.panelBounds = {
       startLeft: this.state.left,
@@ -5862,12 +16487,12 @@ var FloatingPanel = React.createClass({
       this.setState({ left: left, top: top });
     }
   },
-  
+
   handleMouseClick: function (e) {
     if (typeof this.props.onClick === "function") {
       this.props.onClick(e);
     }
-  },  
+  },
 
   render: function() {
     var transform = "translate3d(" + Utils.pixelsOf(this.state.left) + ", " + Utils.pixelsOf(this.state.top) + ", 0)",
@@ -6499,7 +17124,7 @@ var Tab = React.createClass({
 
     this.mounted = (this.mounted || false) || this.props.automount || active;
     this.hasToolbar=this.hasFooter=false;
-    
+
     var innerContent = (this.mounted) ? React.Children.map(self.props.children, function(child, i) {
       var type = (i == 0 && numChilds >= 2) ? 0 : 1;   // 0: Toolbar, 1: Content, 2: Footer
       if (React.isValidElement(child) && (typeof child.props.panelComponentType !== "undefined")) {
@@ -6678,7 +17303,616 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react/addons":32}],32:[function(require,module,exports){
+},{"react/addons":52}],48:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _sidebar = require('./sidebar');
+
+var _sidebar2 = _interopRequireDefault(_sidebar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _sidebar2.default;
+},{"./sidebar":49}],49:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CANCEL_DISTANCE_ON_SCROLL = 20;
+
+var defaultStyles = {
+  root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'hidden'
+  },
+  sidebar: {
+    zIndex: 2,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    transition: 'transform .3s ease-out',
+    WebkitTransition: '-webkit-transform .3s ease-out',
+    willChange: 'transform',
+    overflowY: 'auto'
+  },
+  content: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    overflow: 'auto',
+    transition: 'left .3s ease-out, right .3s ease-out'
+  },
+  overlay: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0,
+    visibility: 'hidden',
+    transition: 'opacity .3s ease-out',
+    backgroundColor: 'rgba(0,0,0,.3)'
+  },
+  dragHandle: {
+    zIndex: 1,
+    position: 'fixed',
+    top: 0,
+    bottom: 0
+  }
+};
+
+var Sidebar = (function (_React$Component) {
+  _inherits(Sidebar, _React$Component);
+
+  function Sidebar(props) {
+    _classCallCheck(this, Sidebar);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sidebar).call(this, props));
+
+    _this.state = {
+      // the detected width of the sidebar in pixels
+      sidebarWidth: 0,
+
+      // keep track of touching params
+      touchIdentifier: null,
+      touchStartX: null,
+      touchStartY: null,
+      touchCurrentX: null,
+      touchCurrentY: null,
+
+      // if touch is supported by the browser
+      dragSupported: (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && 'ontouchstart' in window
+    };
+
+    _this.overlayClicked = _this.overlayClicked.bind(_this);
+    _this.onTouchStart = _this.onTouchStart.bind(_this);
+    _this.onTouchMove = _this.onTouchMove.bind(_this);
+    _this.onTouchEnd = _this.onTouchEnd.bind(_this);
+    _this.onScroll = _this.onScroll.bind(_this);
+    return _this;
+  }
+
+  _createClass(Sidebar, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.saveSidebarWidth();
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      // filter out the updates when we're touching
+      if (!this.isTouching()) {
+        this.saveSidebarWidth();
+      }
+    }
+  }, {
+    key: 'onTouchStart',
+    value: function onTouchStart(ev) {
+      // filter out if a user starts swiping with a second finger
+      if (!this.isTouching()) {
+        var touch = ev.targetTouches[0];
+        this.setState({
+          touchIdentifier: touch.identifier,
+          touchStartX: touch.clientX,
+          touchStartY: touch.clientY,
+          touchCurrentX: touch.clientX,
+          touchCurrentY: touch.clientY
+        });
+      }
+    }
+  }, {
+    key: 'onTouchMove',
+    value: function onTouchMove(ev) {
+      if (this.isTouching()) {
+        for (var ind = 0; ind < ev.targetTouches.length; ind++) {
+          // we only care about the finger that we are tracking
+          if (ev.targetTouches[ind].identifier === this.state.touchIdentifier) {
+            this.setState({
+              touchCurrentX: ev.targetTouches[ind].clientX,
+              touchCurrentY: ev.targetTouches[ind].clientY
+            });
+            break;
+          }
+        }
+      }
+    }
+  }, {
+    key: 'onTouchEnd',
+    value: function onTouchEnd() {
+      if (this.isTouching()) {
+        // trigger a change to open if sidebar has been dragged beyond dragToggleDistance
+        var touchWidth = this.touchSidebarWidth();
+
+        if (this.props.open && touchWidth < this.state.sidebarWidth - this.props.dragToggleDistance || !this.props.open && touchWidth > this.props.dragToggleDistance) {
+          this.props.onSetOpen(!this.props.open);
+        }
+
+        this.setState({
+          touchIdentifier: null,
+          touchStartX: null,
+          touchStartY: null,
+          touchCurrentX: null,
+          touchCurrentY: null
+        });
+      }
+    }
+
+    // This logic helps us prevents the user from sliding the sidebar horizontally
+    // while scrolling the sidebar vertically. When a scroll event comes in, we're
+    // cancelling the ongoing gesture if it did not move horizontally much.
+
+  }, {
+    key: 'onScroll',
+    value: function onScroll() {
+      if (this.isTouching() && this.inCancelDistanceOnScroll()) {
+        this.setState({
+          touchIdentifier: null,
+          touchStartX: null,
+          touchStartY: null,
+          touchCurrentX: null,
+          touchCurrentY: null
+        });
+      }
+    }
+
+    // True if the on going gesture X distance is less than the cancel distance
+
+  }, {
+    key: 'inCancelDistanceOnScroll',
+    value: function inCancelDistanceOnScroll() {
+      var cancelDistanceOnScroll = undefined;
+
+      if (this.props.pullRight) {
+        cancelDistanceOnScroll = Math.abs(this.state.touchCurrentX - this.state.touchStartX) < CANCEL_DISTANCE_ON_SCROLL;
+      } else {
+        cancelDistanceOnScroll = Math.abs(this.state.touchStartX - this.state.touchCurrentX) < CANCEL_DISTANCE_ON_SCROLL;
+      }
+      return cancelDistanceOnScroll;
+    }
+  }, {
+    key: 'isTouching',
+    value: function isTouching() {
+      return this.state.touchIdentifier !== null;
+    }
+  }, {
+    key: 'overlayClicked',
+    value: function overlayClicked() {
+      if (this.props.open) {
+        this.props.onSetOpen(false);
+      }
+    }
+  }, {
+    key: 'saveSidebarWidth',
+    value: function saveSidebarWidth() {
+      var width = _reactDom2.default.findDOMNode(this.refs.sidebar).offsetWidth;
+
+      if (width !== this.state.sidebarWidth) {
+        this.setState({ sidebarWidth: width });
+      }
+    }
+
+    // calculate the sidebarWidth based on current touch info
+
+  }, {
+    key: 'touchSidebarWidth',
+    value: function touchSidebarWidth() {
+      // if the sidebar is open and start point of drag is inside the sidebar
+      // we will only drag the distance they moved their finger
+      // otherwise we will move the sidebar to be below the finger.
+      if (this.props.pullRight) {
+        if (this.props.open && window.innerWidth - this.state.touchStartX < this.state.sidebarWidth) {
+          if (this.state.touchCurrentX > this.state.touchStartX) {
+            return this.state.sidebarWidth + this.state.touchStartX - this.state.touchCurrentX;
+          }
+          return this.state.sidebarWidth;
+        }
+        return Math.min(window.innerWidth - this.state.touchCurrentX, this.state.sidebarWidth);
+      }
+
+      if (this.props.open && this.state.touchStartX < this.state.sidebarWidth) {
+        if (this.state.touchCurrentX > this.state.touchStartX) {
+          return this.state.sidebarWidth;
+        }
+        return this.state.sidebarWidth - this.state.touchStartX + this.state.touchCurrentX;
+      }
+      return Math.min(this.state.touchCurrentX, this.state.sidebarWidth);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var sidebarStyle = _extends({}, defaultStyles.sidebar, this.props.styles.sidebar);
+      var contentStyle = _extends({}, defaultStyles.content, this.props.styles.content);
+      var overlayStyle = _extends({}, defaultStyles.overlay, this.props.styles.overlay);
+      var useTouch = this.state.dragSupported && this.props.touch;
+      var isTouching = this.isTouching();
+      var rootProps = {
+        style: _extends({}, defaultStyles.root, this.props.styles.root)
+      };
+      var dragHandle = undefined;
+
+      // sidebarStyle right/left
+      if (this.props.pullRight) {
+        sidebarStyle.right = 0;
+        sidebarStyle.transform = 'translateX(100%)';
+        sidebarStyle.WebkitTransform = 'translateX(100%)';
+        if (this.props.shadow) {
+          sidebarStyle.boxShadow = '-2px 2px 4px rgba(0, 0, 0, 0.15)';
+        }
+      } else {
+        sidebarStyle.left = 0;
+        sidebarStyle.transform = 'translateX(-100%)';
+        sidebarStyle.WebkitTransform = 'translateX(-100%)';
+        if (this.props.shadow) {
+          sidebarStyle.boxShadow = '2px 2px 4px rgba(0, 0, 0, 0.15)';
+        }
+      }
+
+      if (isTouching) {
+        var percentage = this.touchSidebarWidth() / this.state.sidebarWidth;
+
+        // slide open to what we dragged
+        if (this.props.pullRight) {
+          sidebarStyle.transform = 'translateX(' + (1 - percentage) * 100 + '%)';
+          sidebarStyle.WebkitTransform = 'translateX(' + (1 - percentage) * 100 + '%)';
+        } else {
+          sidebarStyle.transform = 'translateX(-' + (1 - percentage) * 100 + '%)';
+          sidebarStyle.WebkitTransform = 'translateX(-' + (1 - percentage) * 100 + '%)';
+        }
+
+        // fade overlay to match distance of drag
+        overlayStyle.opacity = percentage;
+        overlayStyle.visibility = 'visible';
+      } else if (this.props.docked) {
+        // show sidebar
+        if (this.state.sidebarWidth !== 0) {
+          sidebarStyle.transform = 'translateX(0%)';
+          sidebarStyle.WebkitTransform = 'translateX(0%)';
+        }
+
+        // make space on the left/right side of the content for the sidebar
+        if (this.props.pullRight) {
+          contentStyle.right = this.state.sidebarWidth + 'px';
+        } else {
+          contentStyle.left = this.state.sidebarWidth + 'px';
+        }
+      } else if (this.props.open) {
+        // slide open sidebar
+        sidebarStyle.transform = 'translateX(0%)';
+        sidebarStyle.WebkitTransform = 'translateX(0%)';
+
+        // show overlay
+        overlayStyle.opacity = 1;
+        overlayStyle.visibility = 'visible';
+      }
+
+      if (isTouching || !this.props.transitions) {
+        sidebarStyle.transition = 'none';
+        sidebarStyle.WebkitTransition = 'none';
+        contentStyle.transition = 'none';
+        overlayStyle.transition = 'none';
+      }
+
+      if (useTouch) {
+        if (this.props.open) {
+          rootProps.onTouchStart = this.onTouchStart;
+          rootProps.onTouchMove = this.onTouchMove;
+          rootProps.onTouchEnd = this.onTouchEnd;
+          rootProps.onTouchCancel = this.onTouchEnd;
+          rootProps.onScroll = this.onScroll;
+        } else {
+          var dragHandleStyle = _extends({}, defaultStyles.dragHandle, this.props.styles.dragHandle);
+          dragHandleStyle.width = this.props.touchHandleWidth;
+
+          // dragHandleStyle right/left
+          if (this.props.pullRight) {
+            dragHandleStyle.right = 0;
+          } else {
+            dragHandleStyle.left = 0;
+          }
+
+          dragHandle = _react2.default.createElement('div', { style: dragHandleStyle,
+            onTouchStart: this.onTouchStart, onTouchMove: this.onTouchMove,
+            onTouchEnd: this.onTouchEnd, onTouchCancel: this.onTouchEnd });
+        }
+      }
+
+      return _react2.default.createElement(
+        'div',
+        rootProps,
+        _react2.default.createElement(
+          'div',
+          { className: this.props.sidebarClassName, style: sidebarStyle, ref: 'sidebar' },
+          this.props.sidebar
+        ),
+        _react2.default.createElement('div', { style: overlayStyle,
+          onClick: this.overlayClicked, onTouchTap: this.overlayClicked }),
+        _react2.default.createElement(
+          'div',
+          { style: contentStyle },
+          dragHandle,
+          this.props.children
+        )
+      );
+    }
+  }]);
+
+  return Sidebar;
+})(_react2.default.Component);
+
+Sidebar.propTypes = {
+  // main content to render
+  children: _react2.default.PropTypes.node.isRequired,
+
+  // styles
+  styles: _react2.default.PropTypes.shape({
+    root: _react2.default.PropTypes.object,
+    sidebar: _react2.default.PropTypes.object,
+    content: _react2.default.PropTypes.object,
+    overlay: _react2.default.PropTypes.object,
+    dragHandle: _react2.default.PropTypes.object
+  }),
+
+  // sidebar optional class
+  sidebarClassName: _react2.default.PropTypes.string,
+
+  // sidebar content to render
+  sidebar: _react2.default.PropTypes.node.isRequired,
+
+  // boolean if sidebar should be docked
+  docked: _react2.default.PropTypes.bool,
+
+  // boolean if sidebar should slide open
+  open: _react2.default.PropTypes.bool,
+
+  // boolean if transitions should be disabled
+  transitions: _react2.default.PropTypes.bool,
+
+  // boolean if touch gestures are enabled
+  touch: _react2.default.PropTypes.bool,
+
+  // max distance from the edge we can start touching
+  touchHandleWidth: _react2.default.PropTypes.number,
+
+  // Place the sidebar on the right
+  pullRight: _react2.default.PropTypes.bool,
+
+  // Enable/Disable sidebar shadow
+  shadow: _react2.default.PropTypes.bool,
+
+  // distance we have to drag the sidebar to toggle open state
+  dragToggleDistance: _react2.default.PropTypes.number,
+
+  // callback called when the overlay is clicked
+  onSetOpen: _react2.default.PropTypes.func
+};
+
+Sidebar.defaultProps = {
+  docked: false,
+  open: false,
+  transitions: true,
+  touch: true,
+  touchHandleWidth: 20,
+  pullRight: false,
+  shadow: true,
+  dragToggleDistance: 30,
+  onSetOpen: function onSetOpen() {},
+  styles: {}
+};
+
+exports.default = Sidebar;
+},{"react":226,"react-dom":46}],50:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var Switch = (function (_React$Component) {
+  _inherits(Switch, _React$Component);
+
+  _createClass(Switch, null, [{
+    key: 'propTypes',
+    value: {
+      value: _react2['default'].PropTypes.string,
+      on: _react2['default'].PropTypes.bool,
+      onClick: _react2['default'].PropTypes.func.isRequired
+    },
+    enumerable: true
+  }, {
+    key: 'defaultProps',
+    value: {
+      value: '',
+      on: false
+    },
+    enumerable: true
+  }]);
+
+  function Switch(props) {
+    _classCallCheck(this, Switch);
+
+    _get(Object.getPrototypeOf(Switch.prototype), 'constructor', this).call(this, props);
+    this.state = { on: this.props.on };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  _createClass(Switch, [{
+    key: 'handleClick',
+    value: function handleClick(e) {
+      e.preventDefault();
+      this.props.onClick(this.props.value);
+      this.setState({ on: !this.state.on });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2['default'].createElement(
+        'div',
+        { className: 'switch ' + (this.state.on ? 'on' : ''), onClick: this.handleClick },
+        _react2['default'].createElement('div', { className: "switch-toggle" })
+      );
+    }
+  }]);
+
+  return Switch;
+})(_react2['default'].Component);
+
+exports['default'] = Switch;
+module.exports = exports['default'];
+},{"react":226}],51:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var TreeView = _react2['default'].createClass({
+  displayName: 'TreeView',
+
+  propTypes: {
+    collapsed: _react.PropTypes.bool,
+    defaultCollapsed: _react.PropTypes.bool,
+    nodeLabel: _react.PropTypes.node.isRequired,
+    className: _react.PropTypes.string,
+    itemClassName: _react.PropTypes.string
+  },
+
+  getInitialState: function getInitialState() {
+    return { collapsed: this.props.defaultCollapsed };
+  },
+
+  handleClick: function handleClick() {
+    this.setState({ collapsed: !this.state.collapsed });
+    if (this.props.onClick) {
+      var _props;
+
+      (_props = this.props).onClick.apply(_props, arguments);
+    }
+  },
+
+  render: function render() {
+    var _props2 = this.props;
+    var _props2$collapsed = _props2.collapsed;
+    var collapsed = _props2$collapsed === undefined ? this.state.collapsed : _props2$collapsed;
+    var _props2$className = _props2.className;
+    var className = _props2$className === undefined ? '' : _props2$className;
+    var _props2$itemClassName = _props2.itemClassName;
+    var itemClassName = _props2$itemClassName === undefined ? '' : _props2$itemClassName;
+    var nodeLabel = _props2.nodeLabel;
+    var children = _props2.children;
+
+    var rest = _objectWithoutProperties(_props2, ['collapsed', 'className', 'itemClassName', 'nodeLabel', 'children']);
+
+    var arrowClassName = 'tree-view_arrow';
+    var containerClassName = 'tree-view_children';
+    if (collapsed) {
+      arrowClassName += ' tree-view_arrow-collapsed';
+      containerClassName += ' tree-view_children-collapsed';
+    }
+
+    var arrow = _react2['default'].createElement('div', _extends({}, rest, {
+      className: className + ' ' + arrowClassName,
+      onClick: this.handleClick }));
+
+    return _react2['default'].createElement(
+      'div',
+      { className: 'tree-view' },
+      _react2['default'].createElement(
+        'div',
+        { className: 'tree-view_item ' + itemClassName },
+        arrow,
+        nodeLabel
+      ),
+      _react2['default'].createElement(
+        'div',
+        { className: containerClassName },
+        children
+      )
+    );
+  }
+});
+
+exports['default'] = TreeView;
+module.exports = exports['default'];
+},{"react":226}],52:[function(require,module,exports){
 'use strict';
 
 var warning = require('fbjs/lib/warning');
@@ -6693,7 +17927,7 @@ warning(
 
 module.exports = require('./lib/ReactWithAddons');
 
-},{"./lib/ReactWithAddons":129,"fbjs/lib/warning":205}],33:[function(require,module,exports){
+},{"./lib/ReactWithAddons":149,"fbjs/lib/warning":225}],53:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -6730,7 +17964,7 @@ var AutoFocusUtils = {
 };
 
 module.exports = AutoFocusUtils;
-},{"./ReactMount":103,"./findDOMNode":154,"fbjs/lib/focusNode":187}],34:[function(require,module,exports){
+},{"./ReactMount":123,"./findDOMNode":174,"fbjs/lib/focusNode":207}],54:[function(require,module,exports){
 /**
  * Copyright 2013-2015 Facebook, Inc.
  * All rights reserved.
@@ -7136,7 +18370,7 @@ var BeforeInputEventPlugin = {
 };
 
 module.exports = BeforeInputEventPlugin;
-},{"./EventConstants":46,"./EventPropagators":50,"./FallbackCompositionState":51,"./SyntheticCompositionEvent":135,"./SyntheticInputEvent":139,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/keyOf":198}],35:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPropagators":70,"./FallbackCompositionState":71,"./SyntheticCompositionEvent":155,"./SyntheticInputEvent":159,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/keyOf":218}],55:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -7276,7 +18510,7 @@ var CSSProperty = {
 };
 
 module.exports = CSSProperty;
-},{}],36:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -7454,7 +18688,7 @@ ReactPerf.measureMethods(CSSPropertyOperations, 'CSSPropertyOperations', {
 
 module.exports = CSSPropertyOperations;
 }).call(this,require('_process'))
-},{"./CSSProperty":35,"./ReactPerf":109,"./dangerousStyleValue":151,"_process":25,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/camelizeStyleName":181,"fbjs/lib/hyphenateStyleName":192,"fbjs/lib/memoizeStringOnly":200,"fbjs/lib/warning":205}],37:[function(require,module,exports){
+},{"./CSSProperty":55,"./ReactPerf":129,"./dangerousStyleValue":171,"_process":39,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/camelizeStyleName":201,"fbjs/lib/hyphenateStyleName":212,"fbjs/lib/memoizeStringOnly":220,"fbjs/lib/warning":225}],57:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -7550,7 +18784,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 
 module.exports = CallbackQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./PooledClass":56,"_process":25,"fbjs/lib/invariant":193}],38:[function(require,module,exports){
+},{"./Object.assign":75,"./PooledClass":76,"_process":39,"fbjs/lib/invariant":213}],58:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -7872,7 +19106,7 @@ var ChangeEventPlugin = {
 };
 
 module.exports = ChangeEventPlugin;
-},{"./EventConstants":46,"./EventPluginHub":47,"./EventPropagators":50,"./ReactUpdates":127,"./SyntheticEvent":137,"./getEventTarget":160,"./isEventSupported":165,"./isTextInputElement":166,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/keyOf":198}],39:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPluginHub":67,"./EventPropagators":70,"./ReactUpdates":147,"./SyntheticEvent":157,"./getEventTarget":180,"./isEventSupported":185,"./isTextInputElement":186,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/keyOf":218}],59:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -7896,7 +19130,7 @@ var ClientReactRootIndex = {
 };
 
 module.exports = ClientReactRootIndex;
-},{}],40:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -8028,7 +19262,7 @@ ReactPerf.measureMethods(DOMChildrenOperations, 'DOMChildrenOperations', {
 
 module.exports = DOMChildrenOperations;
 }).call(this,require('_process'))
-},{"./Danger":43,"./ReactMultiChildUpdateTypes":105,"./ReactPerf":109,"./setInnerHTML":170,"./setTextContent":171,"_process":25,"fbjs/lib/invariant":193}],41:[function(require,module,exports){
+},{"./Danger":63,"./ReactMultiChildUpdateTypes":125,"./ReactPerf":129,"./setInnerHTML":190,"./setTextContent":191,"_process":39,"fbjs/lib/invariant":213}],61:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -8265,7 +19499,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],42:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],62:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -8493,7 +19727,7 @@ ReactPerf.measureMethods(DOMPropertyOperations, 'DOMPropertyOperations', {
 
 module.exports = DOMPropertyOperations;
 }).call(this,require('_process'))
-},{"./DOMProperty":41,"./ReactPerf":109,"./quoteAttributeValueForBrowser":168,"_process":25,"fbjs/lib/warning":205}],43:[function(require,module,exports){
+},{"./DOMProperty":61,"./ReactPerf":129,"./quoteAttributeValueForBrowser":188,"_process":39,"fbjs/lib/warning":225}],63:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -8641,7 +19875,7 @@ var Danger = {
 
 module.exports = Danger;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/createNodesFromMarkup":184,"fbjs/lib/emptyFunction":185,"fbjs/lib/getMarkupWrap":189,"fbjs/lib/invariant":193}],44:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/createNodesFromMarkup":204,"fbjs/lib/emptyFunction":205,"fbjs/lib/getMarkupWrap":209,"fbjs/lib/invariant":213}],64:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -8669,7 +19903,7 @@ var keyOf = require('fbjs/lib/keyOf');
 var DefaultEventPluginOrder = [keyOf({ ResponderEventPlugin: null }), keyOf({ SimpleEventPlugin: null }), keyOf({ TapEventPlugin: null }), keyOf({ EnterLeaveEventPlugin: null }), keyOf({ ChangeEventPlugin: null }), keyOf({ SelectEventPlugin: null }), keyOf({ BeforeInputEventPlugin: null })];
 
 module.exports = DefaultEventPluginOrder;
-},{"fbjs/lib/keyOf":198}],45:[function(require,module,exports){
+},{"fbjs/lib/keyOf":218}],65:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -8794,7 +20028,7 @@ var EnterLeaveEventPlugin = {
 };
 
 module.exports = EnterLeaveEventPlugin;
-},{"./EventConstants":46,"./EventPropagators":50,"./ReactMount":103,"./SyntheticMouseEvent":141,"fbjs/lib/keyOf":198}],46:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPropagators":70,"./ReactMount":123,"./SyntheticMouseEvent":161,"fbjs/lib/keyOf":218}],66:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -8887,7 +20121,7 @@ var EventConstants = {
 };
 
 module.exports = EventConstants;
-},{"fbjs/lib/keyMirror":197}],47:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":217}],67:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -9169,7 +20403,7 @@ var EventPluginHub = {
 
 module.exports = EventPluginHub;
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":48,"./EventPluginUtils":49,"./ReactErrorUtils":92,"./accumulateInto":147,"./forEachAccumulated":156,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],48:[function(require,module,exports){
+},{"./EventPluginRegistry":68,"./EventPluginUtils":69,"./ReactErrorUtils":112,"./accumulateInto":167,"./forEachAccumulated":176,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],68:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -9392,7 +20626,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],49:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],69:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -9597,7 +20831,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":46,"./ReactErrorUtils":92,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],50:[function(require,module,exports){
+},{"./EventConstants":66,"./ReactErrorUtils":112,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],70:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -9735,7 +20969,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 }).call(this,require('_process'))
-},{"./EventConstants":46,"./EventPluginHub":47,"./accumulateInto":147,"./forEachAccumulated":156,"_process":25,"fbjs/lib/warning":205}],51:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPluginHub":67,"./accumulateInto":167,"./forEachAccumulated":176,"_process":39,"fbjs/lib/warning":225}],71:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -9831,7 +21065,7 @@ assign(FallbackCompositionState.prototype, {
 PooledClass.addPoolingTo(FallbackCompositionState);
 
 module.exports = FallbackCompositionState;
-},{"./Object.assign":55,"./PooledClass":56,"./getTextContentAccessor":163}],52:[function(require,module,exports){
+},{"./Object.assign":75,"./PooledClass":76,"./getTextContentAccessor":183}],72:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -10064,7 +21298,7 @@ var HTMLDOMPropertyConfig = {
 };
 
 module.exports = HTMLDOMPropertyConfig;
-},{"./DOMProperty":41,"fbjs/lib/ExecutionEnvironment":179}],53:[function(require,module,exports){
+},{"./DOMProperty":61,"fbjs/lib/ExecutionEnvironment":199}],73:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -10101,7 +21335,7 @@ var LinkedStateMixin = {
 };
 
 module.exports = LinkedStateMixin;
-},{"./ReactLink":101,"./ReactStateSetters":121}],54:[function(require,module,exports){
+},{"./ReactLink":121,"./ReactStateSetters":141}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -10238,7 +21472,7 @@ var LinkedValueUtils = {
 
 module.exports = LinkedValueUtils;
 }).call(this,require('_process'))
-},{"./ReactPropTypeLocations":112,"./ReactPropTypes":113,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],55:[function(require,module,exports){
+},{"./ReactPropTypeLocations":132,"./ReactPropTypes":133,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],75:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -10286,7 +21520,7 @@ function assign(target, sources) {
 }
 
 module.exports = assign;
-},{}],56:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -10408,7 +21642,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],57:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],77:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -10449,7 +21683,7 @@ React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
 React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 module.exports = React;
-},{"./Object.assign":55,"./ReactDOM":71,"./ReactDOMServer":81,"./ReactIsomorphic":100,"./deprecated":152}],58:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactDOM":91,"./ReactDOMServer":101,"./ReactIsomorphic":120,"./deprecated":172}],78:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -10488,7 +21722,7 @@ var ReactBrowserComponentMixin = {
 
 module.exports = ReactBrowserComponentMixin;
 }).call(this,require('_process'))
-},{"./ReactInstanceMap":99,"./findDOMNode":154,"_process":25,"fbjs/lib/warning":205}],59:[function(require,module,exports){
+},{"./ReactInstanceMap":119,"./findDOMNode":174,"_process":39,"fbjs/lib/warning":225}],79:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -10813,7 +22047,7 @@ ReactPerf.measureMethods(ReactBrowserEventEmitter, 'ReactBrowserEventEmitter', {
 });
 
 module.exports = ReactBrowserEventEmitter;
-},{"./EventConstants":46,"./EventPluginHub":47,"./EventPluginRegistry":48,"./Object.assign":55,"./ReactEventEmitterMixin":93,"./ReactPerf":109,"./ViewportMetrics":146,"./isEventSupported":165}],60:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPluginHub":67,"./EventPluginRegistry":68,"./Object.assign":75,"./ReactEventEmitterMixin":113,"./ReactPerf":129,"./ViewportMetrics":166,"./isEventSupported":185}],80:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -10897,7 +22131,7 @@ var ReactCSSTransitionGroup = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroup;
-},{"./Object.assign":55,"./React":57,"./ReactCSSTransitionGroupChild":61,"./ReactTransitionGroup":125}],61:[function(require,module,exports){
+},{"./Object.assign":75,"./React":77,"./ReactCSSTransitionGroupChild":81,"./ReactTransitionGroup":145}],81:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -11063,7 +22297,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 });
 
 module.exports = ReactCSSTransitionGroupChild;
-},{"./React":57,"./ReactDOM":71,"./ReactTransitionEvents":124,"./onlyChild":167,"fbjs/lib/CSSCore":177}],62:[function(require,module,exports){
+},{"./React":77,"./ReactDOM":91,"./ReactTransitionEvents":144,"./onlyChild":187,"fbjs/lib/CSSCore":197}],82:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -11188,7 +22422,7 @@ var ReactChildReconciler = {
 
 module.exports = ReactChildReconciler;
 }).call(this,require('_process'))
-},{"./ReactReconciler":115,"./instantiateReactComponent":164,"./shouldUpdateReactComponent":173,"./traverseAllChildren":174,"_process":25,"fbjs/lib/warning":205}],63:[function(require,module,exports){
+},{"./ReactReconciler":135,"./instantiateReactComponent":184,"./shouldUpdateReactComponent":193,"./traverseAllChildren":194,"_process":39,"fbjs/lib/warning":225}],83:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -11371,7 +22605,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":56,"./ReactElement":88,"./traverseAllChildren":174,"fbjs/lib/emptyFunction":185}],64:[function(require,module,exports){
+},{"./PooledClass":76,"./ReactElement":108,"./traverseAllChildren":194,"fbjs/lib/emptyFunction":205}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12145,7 +23379,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactComponent":65,"./ReactElement":88,"./ReactNoopUpdateQueue":107,"./ReactPropTypeLocationNames":111,"./ReactPropTypeLocations":112,"_process":25,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193,"fbjs/lib/keyMirror":197,"fbjs/lib/keyOf":198,"fbjs/lib/warning":205}],65:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactComponent":85,"./ReactElement":108,"./ReactNoopUpdateQueue":127,"./ReactPropTypeLocationNames":131,"./ReactPropTypeLocations":132,"_process":39,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213,"fbjs/lib/keyMirror":217,"fbjs/lib/keyOf":218,"fbjs/lib/warning":225}],85:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -12270,7 +23504,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactNoopUpdateQueue":107,"./canDefineProperty":149,"_process":25,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],66:[function(require,module,exports){
+},{"./ReactNoopUpdateQueue":127,"./canDefineProperty":169,"_process":39,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],86:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -12312,7 +23546,7 @@ var ReactComponentBrowserEnvironment = {
 };
 
 module.exports = ReactComponentBrowserEnvironment;
-},{"./ReactDOMIDOperations":76,"./ReactMount":103}],67:[function(require,module,exports){
+},{"./ReactDOMIDOperations":96,"./ReactMount":123}],87:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -12366,7 +23600,7 @@ var ReactComponentEnvironment = {
 
 module.exports = ReactComponentEnvironment;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],68:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],88:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -12413,7 +23647,7 @@ var ReactComponentWithPureRenderMixin = {
 };
 
 module.exports = ReactComponentWithPureRenderMixin;
-},{"./shallowCompare":172}],69:[function(require,module,exports){
+},{"./shallowCompare":192}],89:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13110,7 +24344,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactComponentEnvironment":67,"./ReactCurrentOwner":70,"./ReactElement":88,"./ReactInstanceMap":99,"./ReactPerf":109,"./ReactPropTypeLocationNames":111,"./ReactPropTypeLocations":112,"./ReactReconciler":115,"./ReactUpdateQueue":126,"./shouldUpdateReactComponent":173,"_process":25,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],70:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactComponentEnvironment":87,"./ReactCurrentOwner":90,"./ReactElement":108,"./ReactInstanceMap":119,"./ReactPerf":129,"./ReactPropTypeLocationNames":131,"./ReactPropTypeLocations":132,"./ReactReconciler":135,"./ReactUpdateQueue":146,"./shouldUpdateReactComponent":193,"_process":39,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],90:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13141,7 +24375,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],71:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -13236,7 +24470,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":70,"./ReactDOMTextComponent":82,"./ReactDefaultInjection":85,"./ReactInstanceHandles":98,"./ReactMount":103,"./ReactPerf":109,"./ReactReconciler":115,"./ReactUpdates":127,"./ReactVersion":128,"./findDOMNode":154,"./renderSubtreeIntoContainer":169,"_process":25,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/warning":205}],72:[function(require,module,exports){
+},{"./ReactCurrentOwner":90,"./ReactDOMTextComponent":102,"./ReactDefaultInjection":105,"./ReactInstanceHandles":118,"./ReactMount":123,"./ReactPerf":129,"./ReactReconciler":135,"./ReactUpdates":147,"./ReactVersion":148,"./findDOMNode":174,"./renderSubtreeIntoContainer":189,"_process":39,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/warning":225}],92:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -13287,7 +24521,7 @@ var ReactDOMButton = {
 };
 
 module.exports = ReactDOMButton;
-},{}],73:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14252,7 +25486,7 @@ assign(ReactDOMComponent.prototype, ReactDOMComponent.Mixin, ReactMultiChild.Mix
 
 module.exports = ReactDOMComponent;
 }).call(this,require('_process'))
-},{"./AutoFocusUtils":33,"./CSSPropertyOperations":36,"./DOMProperty":41,"./DOMPropertyOperations":42,"./EventConstants":46,"./Object.assign":55,"./ReactBrowserEventEmitter":59,"./ReactComponentBrowserEnvironment":66,"./ReactDOMButton":72,"./ReactDOMInput":77,"./ReactDOMOption":78,"./ReactDOMSelect":79,"./ReactDOMTextarea":83,"./ReactMount":103,"./ReactMultiChild":104,"./ReactPerf":109,"./ReactUpdateQueue":126,"./canDefineProperty":149,"./escapeTextContentForBrowser":153,"./isEventSupported":165,"./setInnerHTML":170,"./setTextContent":171,"./validateDOMNesting":176,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/keyOf":198,"fbjs/lib/shallowEqual":203,"fbjs/lib/warning":205}],74:[function(require,module,exports){
+},{"./AutoFocusUtils":53,"./CSSPropertyOperations":56,"./DOMProperty":61,"./DOMPropertyOperations":62,"./EventConstants":66,"./Object.assign":75,"./ReactBrowserEventEmitter":79,"./ReactComponentBrowserEnvironment":86,"./ReactDOMButton":92,"./ReactDOMInput":97,"./ReactDOMOption":98,"./ReactDOMSelect":99,"./ReactDOMTextarea":103,"./ReactMount":123,"./ReactMultiChild":124,"./ReactPerf":129,"./ReactUpdateQueue":146,"./canDefineProperty":169,"./escapeTextContentForBrowser":173,"./isEventSupported":185,"./setInnerHTML":190,"./setTextContent":191,"./validateDOMNesting":196,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/keyOf":218,"fbjs/lib/shallowEqual":223,"fbjs/lib/warning":225}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14432,7 +25666,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":88,"./ReactElementValidator":89,"_process":25,"fbjs/lib/mapObject":199}],75:[function(require,module,exports){
+},{"./ReactElement":108,"./ReactElementValidator":109,"_process":39,"fbjs/lib/mapObject":219}],95:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -14451,7 +25685,7 @@ var ReactDOMFeatureFlags = {
 };
 
 module.exports = ReactDOMFeatureFlags;
-},{}],76:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14548,7 +25782,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 
 module.exports = ReactDOMIDOperations;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":40,"./DOMPropertyOperations":42,"./ReactMount":103,"./ReactPerf":109,"_process":25,"fbjs/lib/invariant":193}],77:[function(require,module,exports){
+},{"./DOMChildrenOperations":60,"./DOMPropertyOperations":62,"./ReactMount":123,"./ReactPerf":129,"_process":39,"fbjs/lib/invariant":213}],97:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14704,7 +25938,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMInput;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":54,"./Object.assign":55,"./ReactDOMIDOperations":76,"./ReactMount":103,"./ReactUpdates":127,"_process":25,"fbjs/lib/invariant":193}],78:[function(require,module,exports){
+},{"./LinkedValueUtils":74,"./Object.assign":75,"./ReactDOMIDOperations":96,"./ReactMount":123,"./ReactUpdates":147,"_process":39,"fbjs/lib/invariant":213}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14793,7 +26027,7 @@ var ReactDOMOption = {
 
 module.exports = ReactDOMOption;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactChildren":63,"./ReactDOMSelect":79,"_process":25,"fbjs/lib/warning":205}],79:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactChildren":83,"./ReactDOMSelect":99,"_process":39,"fbjs/lib/warning":225}],99:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -14984,7 +26218,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMSelect;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":54,"./Object.assign":55,"./ReactMount":103,"./ReactUpdates":127,"_process":25,"fbjs/lib/warning":205}],80:[function(require,module,exports){
+},{"./LinkedValueUtils":74,"./Object.assign":75,"./ReactMount":123,"./ReactUpdates":147,"_process":39,"fbjs/lib/warning":225}],100:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15197,7 +26431,7 @@ var ReactDOMSelection = {
 };
 
 module.exports = ReactDOMSelection;
-},{"./getNodeForCharacterOffset":162,"./getTextContentAccessor":163,"fbjs/lib/ExecutionEnvironment":179}],81:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":182,"./getTextContentAccessor":183,"fbjs/lib/ExecutionEnvironment":199}],101:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15224,7 +26458,7 @@ var ReactDOMServer = {
 };
 
 module.exports = ReactDOMServer;
-},{"./ReactDefaultInjection":85,"./ReactServerRendering":119,"./ReactVersion":128}],82:[function(require,module,exports){
+},{"./ReactDefaultInjection":105,"./ReactServerRendering":139,"./ReactVersion":148}],102:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15354,7 +26588,7 @@ assign(ReactDOMTextComponent.prototype, {
 
 module.exports = ReactDOMTextComponent;
 }).call(this,require('_process'))
-},{"./DOMChildrenOperations":40,"./DOMPropertyOperations":42,"./Object.assign":55,"./ReactComponentBrowserEnvironment":66,"./ReactMount":103,"./escapeTextContentForBrowser":153,"./setTextContent":171,"./validateDOMNesting":176,"_process":25}],83:[function(require,module,exports){
+},{"./DOMChildrenOperations":60,"./DOMPropertyOperations":62,"./Object.assign":75,"./ReactComponentBrowserEnvironment":86,"./ReactMount":123,"./escapeTextContentForBrowser":173,"./setTextContent":191,"./validateDOMNesting":196,"_process":39}],103:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15470,7 +26704,7 @@ function _handleChange(event) {
 
 module.exports = ReactDOMTextarea;
 }).call(this,require('_process'))
-},{"./LinkedValueUtils":54,"./Object.assign":55,"./ReactDOMIDOperations":76,"./ReactUpdates":127,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],84:[function(require,module,exports){
+},{"./LinkedValueUtils":74,"./Object.assign":75,"./ReactDOMIDOperations":96,"./ReactUpdates":147,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],104:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15538,7 +26772,7 @@ var ReactDefaultBatchingStrategy = {
 };
 
 module.exports = ReactDefaultBatchingStrategy;
-},{"./Object.assign":55,"./ReactUpdates":127,"./Transaction":145,"fbjs/lib/emptyFunction":185}],85:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactUpdates":147,"./Transaction":165,"fbjs/lib/emptyFunction":205}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -15638,7 +26872,7 @@ module.exports = {
   inject: inject
 };
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":34,"./ChangeEventPlugin":38,"./ClientReactRootIndex":39,"./DefaultEventPluginOrder":44,"./EnterLeaveEventPlugin":45,"./HTMLDOMPropertyConfig":52,"./ReactBrowserComponentMixin":58,"./ReactComponentBrowserEnvironment":66,"./ReactDOMComponent":73,"./ReactDOMTextComponent":82,"./ReactDefaultBatchingStrategy":84,"./ReactDefaultPerf":86,"./ReactEventListener":94,"./ReactInjection":96,"./ReactInstanceHandles":98,"./ReactMount":103,"./ReactReconcileTransaction":114,"./SVGDOMPropertyConfig":130,"./SelectEventPlugin":131,"./ServerReactRootIndex":132,"./SimpleEventPlugin":133,"_process":25,"fbjs/lib/ExecutionEnvironment":179}],86:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":54,"./ChangeEventPlugin":58,"./ClientReactRootIndex":59,"./DefaultEventPluginOrder":64,"./EnterLeaveEventPlugin":65,"./HTMLDOMPropertyConfig":72,"./ReactBrowserComponentMixin":78,"./ReactComponentBrowserEnvironment":86,"./ReactDOMComponent":93,"./ReactDOMTextComponent":102,"./ReactDefaultBatchingStrategy":104,"./ReactDefaultPerf":106,"./ReactEventListener":114,"./ReactInjection":116,"./ReactInstanceHandles":118,"./ReactMount":123,"./ReactReconcileTransaction":134,"./SVGDOMPropertyConfig":150,"./SelectEventPlugin":151,"./ServerReactRootIndex":152,"./SimpleEventPlugin":153,"_process":39,"fbjs/lib/ExecutionEnvironment":199}],106:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -15876,7 +27110,7 @@ var ReactDefaultPerf = {
 };
 
 module.exports = ReactDefaultPerf;
-},{"./DOMProperty":41,"./ReactDefaultPerfAnalysis":87,"./ReactMount":103,"./ReactPerf":109,"fbjs/lib/performanceNow":202}],87:[function(require,module,exports){
+},{"./DOMProperty":61,"./ReactDefaultPerfAnalysis":107,"./ReactMount":123,"./ReactPerf":129,"fbjs/lib/performanceNow":222}],107:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16076,7 +27310,7 @@ var ReactDefaultPerfAnalysis = {
 };
 
 module.exports = ReactDefaultPerfAnalysis;
-},{"./Object.assign":55}],88:[function(require,module,exports){
+},{"./Object.assign":75}],108:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -16326,7 +27560,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactCurrentOwner":70,"./canDefineProperty":149,"_process":25}],89:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactCurrentOwner":90,"./canDefineProperty":169,"_process":39}],109:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -16610,7 +27844,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":70,"./ReactElement":88,"./ReactPropTypeLocationNames":111,"./ReactPropTypeLocations":112,"./canDefineProperty":149,"./getIteratorFn":161,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],90:[function(require,module,exports){
+},{"./ReactCurrentOwner":90,"./ReactElement":108,"./ReactPropTypeLocationNames":131,"./ReactPropTypeLocations":132,"./canDefineProperty":169,"./getIteratorFn":181,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],110:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -16662,7 +27896,7 @@ assign(ReactEmptyComponent.prototype, {
 ReactEmptyComponent.injection = ReactEmptyComponentInjection;
 
 module.exports = ReactEmptyComponent;
-},{"./Object.assign":55,"./ReactElement":88,"./ReactEmptyComponentRegistry":91,"./ReactReconciler":115}],91:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactElement":108,"./ReactEmptyComponentRegistry":111,"./ReactReconciler":135}],111:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -16711,7 +27945,7 @@ var ReactEmptyComponentRegistry = {
 };
 
 module.exports = ReactEmptyComponentRegistry;
-},{}],92:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16791,7 +28025,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactErrorUtils;
 }).call(this,require('_process'))
-},{"_process":25}],93:[function(require,module,exports){
+},{"_process":39}],113:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -16830,7 +28064,7 @@ var ReactEventEmitterMixin = {
 };
 
 module.exports = ReactEventEmitterMixin;
-},{"./EventPluginHub":47}],94:[function(require,module,exports){
+},{"./EventPluginHub":67}],114:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17042,7 +28276,7 @@ var ReactEventListener = {
 };
 
 module.exports = ReactEventListener;
-},{"./Object.assign":55,"./PooledClass":56,"./ReactInstanceHandles":98,"./ReactMount":103,"./ReactUpdates":127,"./getEventTarget":160,"fbjs/lib/EventListener":178,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/getUnboundedScrollPosition":190}],95:[function(require,module,exports){
+},{"./Object.assign":75,"./PooledClass":76,"./ReactInstanceHandles":118,"./ReactMount":123,"./ReactUpdates":147,"./getEventTarget":180,"fbjs/lib/EventListener":198,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/getUnboundedScrollPosition":210}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -17109,7 +28343,7 @@ var ReactFragment = {
 
 module.exports = ReactFragment;
 }).call(this,require('_process'))
-},{"./ReactChildren":63,"./ReactElement":88,"_process":25,"fbjs/lib/emptyFunction":185,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],96:[function(require,module,exports){
+},{"./ReactChildren":83,"./ReactElement":108,"_process":39,"fbjs/lib/emptyFunction":205,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],116:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17148,7 +28382,7 @@ var ReactInjection = {
 };
 
 module.exports = ReactInjection;
-},{"./DOMProperty":41,"./EventPluginHub":47,"./ReactBrowserEventEmitter":59,"./ReactClass":64,"./ReactComponentEnvironment":67,"./ReactEmptyComponent":90,"./ReactNativeComponent":106,"./ReactPerf":109,"./ReactRootIndex":117,"./ReactUpdates":127}],97:[function(require,module,exports){
+},{"./DOMProperty":61,"./EventPluginHub":67,"./ReactBrowserEventEmitter":79,"./ReactClass":84,"./ReactComponentEnvironment":87,"./ReactEmptyComponent":110,"./ReactNativeComponent":126,"./ReactPerf":129,"./ReactRootIndex":137,"./ReactUpdates":147}],117:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17273,7 +28507,7 @@ var ReactInputSelection = {
 };
 
 module.exports = ReactInputSelection;
-},{"./ReactDOMSelection":80,"fbjs/lib/containsNode":182,"fbjs/lib/focusNode":187,"fbjs/lib/getActiveElement":188}],98:[function(require,module,exports){
+},{"./ReactDOMSelection":100,"fbjs/lib/containsNode":202,"fbjs/lib/focusNode":207,"fbjs/lib/getActiveElement":208}],118:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17578,7 +28812,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 }).call(this,require('_process'))
-},{"./ReactRootIndex":117,"_process":25,"fbjs/lib/invariant":193}],99:[function(require,module,exports){
+},{"./ReactRootIndex":137,"_process":39,"fbjs/lib/invariant":213}],119:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17626,7 +28860,7 @@ var ReactInstanceMap = {
 };
 
 module.exports = ReactInstanceMap;
-},{}],100:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17703,7 +28937,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactChildren":63,"./ReactClass":64,"./ReactComponent":65,"./ReactDOMFactories":74,"./ReactElement":88,"./ReactElementValidator":89,"./ReactPropTypes":113,"./ReactVersion":128,"./onlyChild":167,"_process":25}],101:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactChildren":83,"./ReactClass":84,"./ReactComponent":85,"./ReactDOMFactories":94,"./ReactElement":108,"./ReactElementValidator":109,"./ReactPropTypes":133,"./ReactVersion":148,"./onlyChild":187,"_process":39}],121:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17773,7 +29007,7 @@ ReactLink.PropTypes = {
 };
 
 module.exports = ReactLink;
-},{"./React":57}],102:[function(require,module,exports){
+},{"./React":77}],122:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17819,7 +29053,7 @@ var ReactMarkupChecksum = {
 };
 
 module.exports = ReactMarkupChecksum;
-},{"./adler32":148}],103:[function(require,module,exports){
+},{"./adler32":168}],123:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18672,7 +29906,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 
 module.exports = ReactMount;
 }).call(this,require('_process'))
-},{"./DOMProperty":41,"./Object.assign":55,"./ReactBrowserEventEmitter":59,"./ReactCurrentOwner":70,"./ReactDOMFeatureFlags":75,"./ReactElement":88,"./ReactEmptyComponentRegistry":91,"./ReactInstanceHandles":98,"./ReactInstanceMap":99,"./ReactMarkupChecksum":102,"./ReactPerf":109,"./ReactReconciler":115,"./ReactUpdateQueue":126,"./ReactUpdates":127,"./instantiateReactComponent":164,"./setInnerHTML":170,"./shouldUpdateReactComponent":173,"./validateDOMNesting":176,"_process":25,"fbjs/lib/containsNode":182,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],104:[function(require,module,exports){
+},{"./DOMProperty":61,"./Object.assign":75,"./ReactBrowserEventEmitter":79,"./ReactCurrentOwner":90,"./ReactDOMFeatureFlags":95,"./ReactElement":108,"./ReactEmptyComponentRegistry":111,"./ReactInstanceHandles":118,"./ReactInstanceMap":119,"./ReactMarkupChecksum":122,"./ReactPerf":129,"./ReactReconciler":135,"./ReactUpdateQueue":146,"./ReactUpdates":147,"./instantiateReactComponent":184,"./setInnerHTML":190,"./shouldUpdateReactComponent":193,"./validateDOMNesting":196,"_process":39,"fbjs/lib/containsNode":202,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],124:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19171,7 +30405,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 }).call(this,require('_process'))
-},{"./ReactChildReconciler":62,"./ReactComponentEnvironment":67,"./ReactCurrentOwner":70,"./ReactMultiChildUpdateTypes":105,"./ReactReconciler":115,"./flattenChildren":155,"_process":25}],105:[function(require,module,exports){
+},{"./ReactChildReconciler":82,"./ReactComponentEnvironment":87,"./ReactCurrentOwner":90,"./ReactMultiChildUpdateTypes":125,"./ReactReconciler":135,"./flattenChildren":175,"_process":39}],125:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19204,7 +30438,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 });
 
 module.exports = ReactMultiChildUpdateTypes;
-},{"fbjs/lib/keyMirror":197}],106:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":217}],126:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -19301,7 +30535,7 @@ var ReactNativeComponent = {
 
 module.exports = ReactNativeComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"_process":25,"fbjs/lib/invariant":193}],107:[function(require,module,exports){
+},{"./Object.assign":75,"_process":39,"fbjs/lib/invariant":213}],127:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -19422,7 +30656,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/warning":205}],108:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/warning":225}],128:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19516,7 +30750,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],109:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],129:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19615,7 +30849,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 }).call(this,require('_process'))
-},{"_process":25}],110:[function(require,module,exports){
+},{"_process":39}],130:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19724,7 +30958,7 @@ var ReactPropTransferer = {
 };
 
 module.exports = ReactPropTransferer;
-},{"./Object.assign":55,"fbjs/lib/emptyFunction":185,"fbjs/lib/joinClasses":196}],111:[function(require,module,exports){
+},{"./Object.assign":75,"fbjs/lib/emptyFunction":205,"fbjs/lib/joinClasses":216}],131:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19751,7 +30985,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":25}],112:[function(require,module,exports){
+},{"_process":39}],132:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19774,7 +31008,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":197}],113:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":217}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20131,7 +31365,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":88,"./ReactPropTypeLocationNames":111,"./getIteratorFn":161,"fbjs/lib/emptyFunction":185}],114:[function(require,module,exports){
+},{"./ReactElement":108,"./ReactPropTypeLocationNames":131,"./getIteratorFn":181,"fbjs/lib/emptyFunction":205}],134:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20283,7 +31517,7 @@ assign(ReactReconcileTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
-},{"./CallbackQueue":37,"./Object.assign":55,"./PooledClass":56,"./ReactBrowserEventEmitter":59,"./ReactDOMFeatureFlags":75,"./ReactInputSelection":97,"./Transaction":145}],115:[function(require,module,exports){
+},{"./CallbackQueue":57,"./Object.assign":75,"./PooledClass":76,"./ReactBrowserEventEmitter":79,"./ReactDOMFeatureFlags":95,"./ReactInputSelection":117,"./Transaction":165}],135:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20391,7 +31625,7 @@ var ReactReconciler = {
 };
 
 module.exports = ReactReconciler;
-},{"./ReactRef":116}],116:[function(require,module,exports){
+},{"./ReactRef":136}],136:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20470,7 +31704,7 @@ ReactRef.detachRefs = function (instance, element) {
 };
 
 module.exports = ReactRef;
-},{"./ReactOwner":108}],117:[function(require,module,exports){
+},{"./ReactOwner":128}],137:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20500,7 +31734,7 @@ var ReactRootIndex = {
 };
 
 module.exports = ReactRootIndex;
-},{}],118:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -20524,7 +31758,7 @@ var ReactServerBatchingStrategy = {
 };
 
 module.exports = ReactServerBatchingStrategy;
-},{}],119:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20610,7 +31844,7 @@ module.exports = {
   renderToStaticMarkup: renderToStaticMarkup
 };
 }).call(this,require('_process'))
-},{"./ReactDefaultBatchingStrategy":84,"./ReactElement":88,"./ReactInstanceHandles":98,"./ReactMarkupChecksum":102,"./ReactServerBatchingStrategy":118,"./ReactServerRenderingTransaction":120,"./ReactUpdates":127,"./instantiateReactComponent":164,"_process":25,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193}],120:[function(require,module,exports){
+},{"./ReactDefaultBatchingStrategy":104,"./ReactElement":108,"./ReactInstanceHandles":118,"./ReactMarkupChecksum":122,"./ReactServerBatchingStrategy":138,"./ReactServerRenderingTransaction":140,"./ReactUpdates":147,"./instantiateReactComponent":184,"_process":39,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213}],140:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -20698,7 +31932,7 @@ assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
 PooledClass.addPoolingTo(ReactServerRenderingTransaction);
 
 module.exports = ReactServerRenderingTransaction;
-},{"./CallbackQueue":37,"./Object.assign":55,"./PooledClass":56,"./Transaction":145,"fbjs/lib/emptyFunction":185}],121:[function(require,module,exports){
+},{"./CallbackQueue":57,"./Object.assign":75,"./PooledClass":76,"./Transaction":165,"fbjs/lib/emptyFunction":205}],141:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20803,7 +32037,7 @@ ReactStateSetters.Mixin = {
 };
 
 module.exports = ReactStateSetters;
-},{}],122:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21279,7 +32513,7 @@ Object.keys(topLevelTypes).forEach(function (eventType) {
 
 module.exports = ReactTestUtils;
 }).call(this,require('_process'))
-},{"./EventConstants":46,"./EventPluginHub":47,"./EventPropagators":50,"./Object.assign":55,"./React":57,"./ReactBrowserEventEmitter":59,"./ReactCompositeComponent":69,"./ReactDOM":71,"./ReactElement":88,"./ReactInstanceHandles":98,"./ReactInstanceMap":99,"./ReactMount":103,"./ReactUpdates":127,"./SyntheticEvent":137,"./findDOMNode":154,"_process":25,"fbjs/lib/emptyObject":186,"fbjs/lib/invariant":193}],123:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPluginHub":67,"./EventPropagators":70,"./Object.assign":75,"./React":77,"./ReactBrowserEventEmitter":79,"./ReactCompositeComponent":89,"./ReactDOM":91,"./ReactElement":108,"./ReactInstanceHandles":118,"./ReactInstanceMap":119,"./ReactMount":123,"./ReactUpdates":147,"./SyntheticEvent":157,"./findDOMNode":174,"_process":39,"fbjs/lib/emptyObject":206,"fbjs/lib/invariant":213}],143:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21378,7 +32612,7 @@ var ReactTransitionChildMapping = {
 };
 
 module.exports = ReactTransitionChildMapping;
-},{"./flattenChildren":155}],124:[function(require,module,exports){
+},{"./flattenChildren":175}],144:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21488,7 +32722,7 @@ var ReactTransitionEvents = {
 };
 
 module.exports = ReactTransitionEvents;
-},{"fbjs/lib/ExecutionEnvironment":179}],125:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":199}],145:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21694,7 +32928,7 @@ var ReactTransitionGroup = React.createClass({
 });
 
 module.exports = ReactTransitionGroup;
-},{"./Object.assign":55,"./React":57,"./ReactTransitionChildMapping":123,"fbjs/lib/emptyFunction":185}],126:[function(require,module,exports){
+},{"./Object.assign":75,"./React":77,"./ReactTransitionChildMapping":143,"fbjs/lib/emptyFunction":205}],146:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -21954,7 +33188,7 @@ var ReactUpdateQueue = {
 
 module.exports = ReactUpdateQueue;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactCurrentOwner":70,"./ReactElement":88,"./ReactInstanceMap":99,"./ReactUpdates":127,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],127:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactCurrentOwner":90,"./ReactElement":108,"./ReactInstanceMap":119,"./ReactUpdates":147,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],147:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22180,7 +33414,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 }).call(this,require('_process'))
-},{"./CallbackQueue":37,"./Object.assign":55,"./PooledClass":56,"./ReactPerf":109,"./ReactReconciler":115,"./Transaction":145,"_process":25,"fbjs/lib/invariant":193}],128:[function(require,module,exports){
+},{"./CallbackQueue":57,"./Object.assign":75,"./PooledClass":76,"./ReactPerf":129,"./ReactReconciler":135,"./Transaction":165,"_process":39,"fbjs/lib/invariant":213}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22195,7 +33429,7 @@ module.exports = ReactUpdates;
 'use strict';
 
 module.exports = '0.14.3';
-},{}],129:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22258,7 +33492,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":53,"./React":57,"./ReactCSSTransitionGroup":60,"./ReactComponentWithPureRenderMixin":68,"./ReactDefaultPerf":86,"./ReactFragment":95,"./ReactTestUtils":122,"./ReactTransitionGroup":125,"./ReactUpdates":127,"./cloneWithProps":150,"./shallowCompare":172,"./update":175,"_process":25,"fbjs/lib/warning":205}],130:[function(require,module,exports){
+},{"./LinkedStateMixin":73,"./React":77,"./ReactCSSTransitionGroup":80,"./ReactComponentWithPureRenderMixin":88,"./ReactDefaultPerf":106,"./ReactFragment":115,"./ReactTestUtils":142,"./ReactTransitionGroup":145,"./ReactUpdates":147,"./cloneWithProps":170,"./shallowCompare":192,"./update":195,"_process":39,"fbjs/lib/warning":225}],150:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22386,7 +33620,7 @@ var SVGDOMPropertyConfig = {
 };
 
 module.exports = SVGDOMPropertyConfig;
-},{"./DOMProperty":41}],131:[function(require,module,exports){
+},{"./DOMProperty":61}],151:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22588,7 +33822,7 @@ var SelectEventPlugin = {
 };
 
 module.exports = SelectEventPlugin;
-},{"./EventConstants":46,"./EventPropagators":50,"./ReactInputSelection":97,"./SyntheticEvent":137,"./isTextInputElement":166,"fbjs/lib/ExecutionEnvironment":179,"fbjs/lib/getActiveElement":188,"fbjs/lib/keyOf":198,"fbjs/lib/shallowEqual":203}],132:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPropagators":70,"./ReactInputSelection":117,"./SyntheticEvent":157,"./isTextInputElement":186,"fbjs/lib/ExecutionEnvironment":199,"fbjs/lib/getActiveElement":208,"fbjs/lib/keyOf":218,"fbjs/lib/shallowEqual":223}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22618,7 +33852,7 @@ var ServerReactRootIndex = {
 };
 
 module.exports = ServerReactRootIndex;
-},{}],133:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23208,7 +34442,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 }).call(this,require('_process'))
-},{"./EventConstants":46,"./EventPropagators":50,"./ReactMount":103,"./SyntheticClipboardEvent":134,"./SyntheticDragEvent":136,"./SyntheticEvent":137,"./SyntheticFocusEvent":138,"./SyntheticKeyboardEvent":140,"./SyntheticMouseEvent":141,"./SyntheticTouchEvent":142,"./SyntheticUIEvent":143,"./SyntheticWheelEvent":144,"./getEventCharCode":157,"_process":25,"fbjs/lib/EventListener":178,"fbjs/lib/emptyFunction":185,"fbjs/lib/invariant":193,"fbjs/lib/keyOf":198}],134:[function(require,module,exports){
+},{"./EventConstants":66,"./EventPropagators":70,"./ReactMount":123,"./SyntheticClipboardEvent":154,"./SyntheticDragEvent":156,"./SyntheticEvent":157,"./SyntheticFocusEvent":158,"./SyntheticKeyboardEvent":160,"./SyntheticMouseEvent":161,"./SyntheticTouchEvent":162,"./SyntheticUIEvent":163,"./SyntheticWheelEvent":164,"./getEventCharCode":177,"_process":39,"fbjs/lib/EventListener":198,"fbjs/lib/emptyFunction":205,"fbjs/lib/invariant":213,"fbjs/lib/keyOf":218}],154:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23248,7 +34482,7 @@ function SyntheticClipboardEvent(dispatchConfig, dispatchMarker, nativeEvent, na
 SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 
 module.exports = SyntheticClipboardEvent;
-},{"./SyntheticEvent":137}],135:[function(require,module,exports){
+},{"./SyntheticEvent":157}],155:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23286,7 +34520,7 @@ function SyntheticCompositionEvent(dispatchConfig, dispatchMarker, nativeEvent, 
 SyntheticEvent.augmentClass(SyntheticCompositionEvent, CompositionEventInterface);
 
 module.exports = SyntheticCompositionEvent;
-},{"./SyntheticEvent":137}],136:[function(require,module,exports){
+},{"./SyntheticEvent":157}],156:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23324,7 +34558,7 @@ function SyntheticDragEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeE
 SyntheticMouseEvent.augmentClass(SyntheticDragEvent, DragEventInterface);
 
 module.exports = SyntheticDragEvent;
-},{"./SyntheticMouseEvent":141}],137:[function(require,module,exports){
+},{"./SyntheticMouseEvent":161}],157:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23504,7 +34738,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
 module.exports = SyntheticEvent;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./PooledClass":56,"_process":25,"fbjs/lib/emptyFunction":185,"fbjs/lib/warning":205}],138:[function(require,module,exports){
+},{"./Object.assign":75,"./PooledClass":76,"_process":39,"fbjs/lib/emptyFunction":205,"fbjs/lib/warning":225}],158:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23542,7 +34776,7 @@ function SyntheticFocusEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
-},{"./SyntheticUIEvent":143}],139:[function(require,module,exports){
+},{"./SyntheticUIEvent":163}],159:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23581,7 +34815,7 @@ function SyntheticInputEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticEvent.augmentClass(SyntheticInputEvent, InputEventInterface);
 
 module.exports = SyntheticInputEvent;
-},{"./SyntheticEvent":137}],140:[function(require,module,exports){
+},{"./SyntheticEvent":157}],160:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23667,7 +34901,7 @@ function SyntheticKeyboardEvent(dispatchConfig, dispatchMarker, nativeEvent, nat
 SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
-},{"./SyntheticUIEvent":143,"./getEventCharCode":157,"./getEventKey":158,"./getEventModifierState":159}],141:[function(require,module,exports){
+},{"./SyntheticUIEvent":163,"./getEventCharCode":177,"./getEventKey":178,"./getEventModifierState":179}],161:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23741,7 +34975,7 @@ function SyntheticMouseEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
-},{"./SyntheticUIEvent":143,"./ViewportMetrics":146,"./getEventModifierState":159}],142:[function(require,module,exports){
+},{"./SyntheticUIEvent":163,"./ViewportMetrics":166,"./getEventModifierState":179}],162:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23788,7 +35022,7 @@ function SyntheticTouchEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
-},{"./SyntheticUIEvent":143,"./getEventModifierState":159}],143:[function(require,module,exports){
+},{"./SyntheticUIEvent":163,"./getEventModifierState":179}],163:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23849,7 +35083,7 @@ function SyntheticUIEvent(dispatchConfig, dispatchMarker, nativeEvent, nativeEve
 SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
-},{"./SyntheticEvent":137,"./getEventTarget":160}],144:[function(require,module,exports){
+},{"./SyntheticEvent":157,"./getEventTarget":180}],164:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23905,7 +35139,7 @@ function SyntheticWheelEvent(dispatchConfig, dispatchMarker, nativeEvent, native
 SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
-},{"./SyntheticMouseEvent":141}],145:[function(require,module,exports){
+},{"./SyntheticMouseEvent":161}],165:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24139,7 +35373,7 @@ var Transaction = {
 
 module.exports = Transaction;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],146:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],166:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24167,7 +35401,7 @@ var ViewportMetrics = {
 };
 
 module.exports = ViewportMetrics;
-},{}],147:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -24229,7 +35463,7 @@ function accumulateInto(current, next) {
 
 module.exports = accumulateInto;
 }).call(this,require('_process'))
-},{"_process":25,"fbjs/lib/invariant":193}],148:[function(require,module,exports){
+},{"_process":39,"fbjs/lib/invariant":213}],168:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24272,7 +35506,7 @@ function adler32(data) {
 }
 
 module.exports = adler32;
-},{}],149:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24299,7 +35533,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":25}],150:[function(require,module,exports){
+},{"_process":39}],170:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24356,7 +35590,7 @@ function cloneWithProps(child, props) {
 
 module.exports = cloneWithProps;
 }).call(this,require('_process'))
-},{"./ReactElement":88,"./ReactPropTransferer":110,"_process":25,"fbjs/lib/keyOf":198,"fbjs/lib/warning":205}],151:[function(require,module,exports){
+},{"./ReactElement":108,"./ReactPropTransferer":130,"_process":39,"fbjs/lib/keyOf":218,"fbjs/lib/warning":225}],171:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24412,7 +35646,7 @@ function dangerousStyleValue(name, value) {
 }
 
 module.exports = dangerousStyleValue;
-},{"./CSSProperty":35}],152:[function(require,module,exports){
+},{"./CSSProperty":55}],172:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24463,7 +35697,7 @@ function deprecated(fnName, newModule, newPackage, ctx, fn) {
 
 module.exports = deprecated;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"_process":25,"fbjs/lib/warning":205}],153:[function(require,module,exports){
+},{"./Object.assign":75,"_process":39,"fbjs/lib/warning":225}],173:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24502,7 +35736,7 @@ function escapeTextContentForBrowser(text) {
 }
 
 module.exports = escapeTextContentForBrowser;
-},{}],154:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24554,7 +35788,7 @@ function findDOMNode(componentOrElement) {
 
 module.exports = findDOMNode;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":70,"./ReactInstanceMap":99,"./ReactMount":103,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],155:[function(require,module,exports){
+},{"./ReactCurrentOwner":90,"./ReactInstanceMap":119,"./ReactMount":123,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],175:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24605,7 +35839,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 }).call(this,require('_process'))
-},{"./traverseAllChildren":174,"_process":25,"fbjs/lib/warning":205}],156:[function(require,module,exports){
+},{"./traverseAllChildren":194,"_process":39,"fbjs/lib/warning":225}],176:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24635,7 +35869,7 @@ var forEachAccumulated = function (arr, cb, scope) {
 };
 
 module.exports = forEachAccumulated;
-},{}],157:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24686,7 +35920,7 @@ function getEventCharCode(nativeEvent) {
 }
 
 module.exports = getEventCharCode;
-},{}],158:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24790,7 +36024,7 @@ function getEventKey(nativeEvent) {
 }
 
 module.exports = getEventKey;
-},{"./getEventCharCode":157}],159:[function(require,module,exports){
+},{"./getEventCharCode":177}],179:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24835,7 +36069,7 @@ function getEventModifierState(nativeEvent) {
 }
 
 module.exports = getEventModifierState;
-},{}],160:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24865,7 +36099,7 @@ function getEventTarget(nativeEvent) {
 }
 
 module.exports = getEventTarget;
-},{}],161:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24906,7 +36140,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],162:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24980,7 +36214,7 @@ function getNodeForCharacterOffset(root, offset) {
 }
 
 module.exports = getNodeForCharacterOffset;
-},{}],163:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25014,7 +36248,7 @@ function getTextContentAccessor() {
 }
 
 module.exports = getTextContentAccessor;
-},{"fbjs/lib/ExecutionEnvironment":179}],164:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":199}],184:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25129,7 +36363,7 @@ function instantiateReactComponent(node) {
 
 module.exports = instantiateReactComponent;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"./ReactCompositeComponent":69,"./ReactEmptyComponent":90,"./ReactNativeComponent":106,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],165:[function(require,module,exports){
+},{"./Object.assign":75,"./ReactCompositeComponent":89,"./ReactEmptyComponent":110,"./ReactNativeComponent":126,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],185:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25190,7 +36424,7 @@ function isEventSupported(eventNameSuffix, capture) {
 }
 
 module.exports = isEventSupported;
-},{"fbjs/lib/ExecutionEnvironment":179}],166:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":199}],186:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25231,7 +36465,7 @@ function isTextInputElement(elem) {
 }
 
 module.exports = isTextInputElement;
-},{}],167:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25267,7 +36501,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":88,"_process":25,"fbjs/lib/invariant":193}],168:[function(require,module,exports){
+},{"./ReactElement":108,"_process":39,"fbjs/lib/invariant":213}],188:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25294,7 +36528,7 @@ function quoteAttributeValueForBrowser(value) {
 }
 
 module.exports = quoteAttributeValueForBrowser;
-},{"./escapeTextContentForBrowser":153}],169:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":173}],189:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25311,7 +36545,7 @@ module.exports = quoteAttributeValueForBrowser;
 var ReactMount = require('./ReactMount');
 
 module.exports = ReactMount.renderSubtreeIntoContainer;
-},{"./ReactMount":103}],170:[function(require,module,exports){
+},{"./ReactMount":123}],190:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25402,7 +36636,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-},{"fbjs/lib/ExecutionEnvironment":179}],171:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":199}],191:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25443,7 +36677,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setTextContent;
-},{"./escapeTextContentForBrowser":153,"./setInnerHTML":170,"fbjs/lib/ExecutionEnvironment":179}],172:[function(require,module,exports){
+},{"./escapeTextContentForBrowser":173,"./setInnerHTML":190,"fbjs/lib/ExecutionEnvironment":199}],192:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25468,7 +36702,7 @@ function shallowCompare(instance, nextProps, nextState) {
 }
 
 module.exports = shallowCompare;
-},{"fbjs/lib/shallowEqual":203}],173:[function(require,module,exports){
+},{"fbjs/lib/shallowEqual":223}],193:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25512,7 +36746,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 }
 
 module.exports = shouldUpdateReactComponent;
-},{}],174:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25704,7 +36938,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":70,"./ReactElement":88,"./ReactInstanceHandles":98,"./getIteratorFn":161,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/warning":205}],175:[function(require,module,exports){
+},{"./ReactCurrentOwner":90,"./ReactElement":108,"./ReactInstanceHandles":118,"./getIteratorFn":181,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/warning":225}],195:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -25814,7 +37048,7 @@ function update(value, spec) {
 
 module.exports = update;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"_process":25,"fbjs/lib/invariant":193,"fbjs/lib/keyOf":198}],176:[function(require,module,exports){
+},{"./Object.assign":75,"_process":39,"fbjs/lib/invariant":213,"fbjs/lib/keyOf":218}],196:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015, Facebook, Inc.
@@ -26180,7 +37414,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = validateDOMNesting;
 }).call(this,require('_process'))
-},{"./Object.assign":55,"_process":25,"fbjs/lib/emptyFunction":185,"fbjs/lib/warning":205}],177:[function(require,module,exports){
+},{"./Object.assign":75,"_process":39,"fbjs/lib/emptyFunction":205,"fbjs/lib/warning":225}],197:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26280,7 +37514,7 @@ var CSSCore = {
 
 module.exports = CSSCore;
 }).call(this,require('_process'))
-},{"./invariant":193,"_process":25}],178:[function(require,module,exports){
+},{"./invariant":213,"_process":39}],198:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26367,7 +37601,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":185,"_process":25}],179:[function(require,module,exports){
+},{"./emptyFunction":205,"_process":39}],199:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26404,7 +37638,7 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-},{}],180:[function(require,module,exports){
+},{}],200:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26437,7 +37671,7 @@ function camelize(string) {
 }
 
 module.exports = camelize;
-},{}],181:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26478,7 +37712,7 @@ function camelizeStyleName(string) {
 }
 
 module.exports = camelizeStyleName;
-},{"./camelize":180}],182:[function(require,module,exports){
+},{"./camelize":200}],202:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26534,7 +37768,7 @@ function containsNode(_x, _x2) {
 }
 
 module.exports = containsNode;
-},{"./isTextNode":195}],183:[function(require,module,exports){
+},{"./isTextNode":215}],203:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26620,7 +37854,7 @@ function createArrayFromMixed(obj) {
 }
 
 module.exports = createArrayFromMixed;
-},{"./toArray":204}],184:[function(require,module,exports){
+},{"./toArray":224}],204:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26707,7 +37941,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":179,"./createArrayFromMixed":183,"./getMarkupWrap":189,"./invariant":193,"_process":25}],185:[function(require,module,exports){
+},{"./ExecutionEnvironment":199,"./createArrayFromMixed":203,"./getMarkupWrap":209,"./invariant":213,"_process":39}],205:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26746,7 +37980,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],186:[function(require,module,exports){
+},{}],206:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26769,7 +38003,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":25}],187:[function(require,module,exports){
+},{"_process":39}],207:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26796,7 +38030,7 @@ function focusNode(node) {
 }
 
 module.exports = focusNode;
-},{}],188:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26830,7 +38064,7 @@ function getActiveElement() /*?DOMElement*/{
 }
 
 module.exports = getActiveElement;
-},{}],189:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -26928,7 +38162,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":179,"./invariant":193,"_process":25}],190:[function(require,module,exports){
+},{"./ExecutionEnvironment":199,"./invariant":213,"_process":39}],210:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26967,7 +38201,7 @@ function getUnboundedScrollPosition(scrollable) {
 }
 
 module.exports = getUnboundedScrollPosition;
-},{}],191:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27001,7 +38235,7 @@ function hyphenate(string) {
 }
 
 module.exports = hyphenate;
-},{}],192:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27041,7 +38275,7 @@ function hyphenateStyleName(string) {
 }
 
 module.exports = hyphenateStyleName;
-},{"./hyphenate":191}],193:[function(require,module,exports){
+},{"./hyphenate":211}],213:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27093,7 +38327,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":25}],194:[function(require,module,exports){
+},{"_process":39}],214:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27117,7 +38351,7 @@ function isNode(object) {
 }
 
 module.exports = isNode;
-},{}],195:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27143,7 +38377,7 @@ function isTextNode(object) {
 }
 
 module.exports = isTextNode;
-},{"./isNode":194}],196:[function(require,module,exports){
+},{"./isNode":214}],216:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27183,7 +38417,7 @@ function joinClasses(className /*, ... */) {
 }
 
 module.exports = joinClasses;
-},{}],197:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27234,7 +38468,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":193,"_process":25}],198:[function(require,module,exports){
+},{"./invariant":213,"_process":39}],218:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27270,7 +38504,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],199:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27322,7 +38556,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],200:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27354,7 +38588,7 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-},{}],201:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27378,7 +38612,7 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = performance || {};
-},{"./ExecutionEnvironment":179}],202:[function(require,module,exports){
+},{"./ExecutionEnvironment":199}],222:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27408,7 +38642,7 @@ if (!curPerformance || !curPerformance.now) {
 var performanceNow = curPerformance.now.bind(curPerformance);
 
 module.exports = performanceNow;
-},{"./performance":201}],203:[function(require,module,exports){
+},{"./performance":221}],223:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27459,7 +38693,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-},{}],204:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -27519,7 +38753,7 @@ function toArray(obj) {
 
 module.exports = toArray;
 }).call(this,require('_process'))
-},{"./invariant":193,"_process":25}],205:[function(require,module,exports){
+},{"./invariant":213,"_process":39}],225:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -27579,9 +38813,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":185,"_process":25}],206:[function(require,module,exports){
+},{"./emptyFunction":205,"_process":39}],226:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":57}]},{},[7]);
+},{"./lib/React":77}]},{},[7]);

@@ -33,24 +33,11 @@ var graphPosition = {
 var graphZoomScale = 2.0;
 
 var blockSelectedStates = {
-  //Gate1: false,
-  //TGen1: false,
-  //PComp1: false
+
 };
 
 //var blockPositions = {
-//  //'Gate1': {
-//  //  x: 50,
-//  //  y: 100,
-//  //},
-//  //'TGen1': {
-//  //  x: 250,
-//  //  y: 10
-//  //},
-//  //'PComp1': {
-//  //  x: 350,
-//  //  y: 150,
-//  //}
+//
 //};
 
 //function interactJsDrag(BlockInfo){
@@ -244,13 +231,6 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
   getEdgePreview: function(){
     return edgePreview;
   },
-
-  //getPreviousMouseCoordsOnZoom: function(){
-  //  return previousMouseCoordsOnZoom;
-  //},
-  //getSubsetOfAllBlockInfo: function(){
-  //  return allBlockInfo.Gate1.inports;
-  //},
 
   getBlockStyling: function(){
     return blockStyling;

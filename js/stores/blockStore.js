@@ -7,7 +7,6 @@ var appConstants = require('../constants/appConstants.js');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('../../node_modules/object-assign/index.js');
 
-var WebAPIUtils = require('../utils/WebAPIUtils');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var CHANGE_EVENT = 'change';
