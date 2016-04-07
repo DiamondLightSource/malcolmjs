@@ -4277,18 +4277,21 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
       React.createElement("div", {style: {position: 'relative', left: '0',
                    bottom: '0px', width: '230px', height: '25px',
                    display: 'flex', alignItems: 'flex-start'}}, 
-        React.createElement("b", {style: {margin: '0px', width: '100px'}}, this.props.blockName), 
-        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
-        React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
-                  height: '21', width: '50'}}, 
-          React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
-                                  this.props.toggleOrientation), 
-                        checked: this.props.toggleOrientation === 'Show', 
-                        defaultChecked: this.props.toggleOrientation === 'Show', 
-                        id: this.props.blockName + 'toggleSwitch', 
-                        on: this.props.toggleOrientation === 'Show'})
-        ), 
-        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
+        React.createElement("b", {style: {margin: '0px', width: '100px'}}, this.props.attribute), 
+          React.createElement("div", {style: {position: 'relative', display: 'flex',
+                       alignItems: 'flex-start', left: '45'}}, 
+            React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
+            React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
+                      height: '21', width: '50'}}, 
+              React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
+                                      this.props.toggleOrientation), 
+                            checked: this.props.toggleOrientation === 'Show', 
+                            defaultChecked: this.props.toggleOrientation === 'Show', 
+                            id: this.props.blockName + 'toggleSwitch', 
+                            on: this.props.toggleOrientation === 'Show'})
+            ), 
+            React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
+          )
       )
     )
   }
@@ -7177,7 +7180,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
           }
         }
-        
+
         if(isWidget === true){
 
           /* Want a switch statement going through all
@@ -7242,6 +7245,7 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'toggle':
                   blockAttributeDivs.push(
                     React.createElement(BlockToggleSwitch, {blockName: blockName, 
+                                       attribute: attribute, 
                                        toggleSwitch: this.toggleSwitch, 
                                        toggleOrientation: blockAttributes[attribute].value, 
                                        key: blockName + 'toggleSwitch'}
@@ -7408,6 +7412,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
                 groupMembersToggleSwitches.push(
                   React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][i], 
+                                     attribute: sortedBlocksUnderGroupNames[blockGroup][i], 
                                      toggleSwitch: this.toggleSwitch, 
                                      toggleOrientation: 
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
@@ -7431,6 +7436,7 @@ var SidePane = React.createClass({displayName: "SidePane",
             else{
               tabContent.push(
                 React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][0], 
+                                   attribute: sortedBlocksUnderGroupNames[blockGroup][0], 
                                    toggleSwitch: this.toggleSwitch, 
                                    toggleOrientation: 
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]

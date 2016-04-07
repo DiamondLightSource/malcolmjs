@@ -442,6 +442,7 @@ var SidePane = React.createClass({
             case 'toggle':
                   blockAttributeDivs.push(
                     <BlockToggleSwitch blockName={blockName}
+                                       attribute={attribute}
                                        toggleSwitch={this.toggleSwitch}
                                        toggleOrientation={blockAttributes[attribute].value}
                                        key={blockName + 'toggleSwitch'}
@@ -608,6 +609,7 @@ var SidePane = React.createClass({
 
                 groupMembersToggleSwitches.push(
                   <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][i]}
+                                     attribute={sortedBlocksUnderGroupNames[blockGroup][i]}
                                      toggleSwitch={this.toggleSwitch}
                                      toggleOrientation={
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
@@ -631,6 +633,7 @@ var SidePane = React.createClass({
             else{
               tabContent.push(
                 <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][0]}
+                                   attribute={sortedBlocksUnderGroupNames[blockGroup][0]}
                                    toggleSwitch={this.toggleSwitch}
                                    toggleOrientation={
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
