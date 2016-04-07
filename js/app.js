@@ -14,6 +14,9 @@ var BothPanes = require('./views/sidebar');
 
 var blockStore = require('./stores/blockStore.js');
 
+var AppDispatcher = require('./dispatcher/appDispatcher');
+var appConstants = require('./constants/appConstants.js');
+
 var MalcolmActionCreators = require('./actions/MalcolmActionCreators');
 
 var AppContainerStyle = {
@@ -43,6 +46,10 @@ var App = React.createClass({
 
   componentDidMount: function(){
     //MalcolmActionCreators.addWebsocketOnOpenCallback('Z');
+    //AppDispatcher.handleAction({
+    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+    //  item: "initialise flowChart end"
+    //});
   },
 
   render: function(){

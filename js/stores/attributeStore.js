@@ -139,6 +139,21 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
         attributeStore.emitChange();
       }
+      /* This is for when a block has been changed from
+      hide to show for the first time via the block palette
+      so the GUI isn't yet subscribed to any of the blocks'
+      attributes (or at least something along those lines)
+       */
+      else if(item.requestedData.blockName === 'VISIBILITY'){
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        updateAttributeValue(requestedData.attribute, 'VISIBLE',
+          responseMessage.value);
+
+        attributeStore.emitChange();
+
+      }
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:

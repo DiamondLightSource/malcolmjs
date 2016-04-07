@@ -17,11 +17,13 @@
 /* style for the children nodes container */
 .tree-view_children {
   /*margin-left: 36px;*/
-  padding-top: 5px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .tree-view_children-collapsed {
   height: 0px;
+  overflow-y: hidden;
 }
 
 .tree-view_arrow {

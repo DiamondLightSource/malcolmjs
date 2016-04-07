@@ -18,23 +18,38 @@ var DropdownEditableReadoutField = React.createClass({
        from the server?
        */
 
-      if(this.props.blockAttribute.type.labels[m] ===
-        this.props.blockAttribute.value){
-        dropdownOptions.push(
-          <option value={this.props.blockAttribute.type.labels[m]}
-                  selected="selected" >
-            {this.props.blockAttribute.type.labels[m]}
-          </option>
-        )
-      }
-      else {
-        dropdownOptions.push(
-          <option value={this.props.blockAttribute.type.labels[m]}
-          >
-            {this.props.blockAttribute.type.labels[m]}
-          </option>
-        )
-      }
+      //if(this.props.blockAttribute.type.labels[m] ===
+      //  this.props.blockAttribute.value){
+      //  dropdownOptions.push(
+      //    <option value={this.props.blockAttribute.type.labels[m]}
+      //            selected="selected"
+      //            key={this.props.blockAttribute.type.labels[m] + 'dropdownOption'}  >
+      //      {this.props.blockAttribute.type.labels[m]}
+      //    </option>
+      //  )
+      //}
+      //else {
+      //  dropdownOptions.push(
+      //    <option value={this.props.blockAttribute.type.labels[m]}
+      //            key={this.props.blockAttribute.type.labels[m] + 'dropdownOption'}
+      //    >
+      //      {this.props.blockAttribute.type.labels[m]}
+      //    </option>
+      //  )
+      //}
+
+      /* Try using the value attribute of <select>,
+      rather than setting selected on an <option>
+       */
+
+      dropdownOptions.push(
+        <option value={this.props.blockAttribute.type.labels[m]}
+                key={this.props.blockAttribute.type.labels[m] + 'dropdownOption'}
+        >
+          {this.props.blockAttribute.type.labels[m]}
+        </option>
+      )
+
     }
 
     var dropdownList =
@@ -42,7 +57,8 @@ var DropdownEditableReadoutField = React.createClass({
                             block: this.props.blockName,
                             attribute: this.props.attributeName
                             })}
-              style={{width: '160px'}} >
+              style={{width: '160px'}}
+              value={this.props.blockAttribute.value} >
         {dropdownOptions}
       </select>;
 

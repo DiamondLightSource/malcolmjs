@@ -30,6 +30,7 @@ var CustomButton = require('./button');
 var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
+var LEDWidget = require('./ledWidget');
 
 var BlockToggleSwitch = require('./blockToggleSwitch');
 
@@ -332,22 +333,22 @@ var SidePane = React.createClass({
         //  </Treeview>
 
       }
-      else if(blockAttributes[attribute].tags === undefined &&
-        blockAttributes[attribute].alarm !== undefined){
-        /* Then it's a readonly readout,
-         no methods or anything
-         */
-
-        attributeLabel =
-          <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                   blockName={blockName}
-                                   attributeName={attribute} />;
-
-        blockAttributeDivs.push(attributeLabel);
-
-
-
-      }
+      /* Don't need since they're non-widget attributes */
+      //else if(blockAttributes[attribute].tags === undefined &&
+      //  blockAttributes[attribute].alarm !== undefined){
+      //  /* Then it's a readonly readout,
+      //   no methods or anything
+      //   */
+      //
+      //  attributeLabel =
+      //    <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
+      //                             blockName={blockName}
+      //                             attributeName={attribute}
+      //                             key={blockName + attribute + 'readonlyField'} />;
+      //
+      //  blockAttributeDivs.push(attributeLabel);
+      //
+      //}
       else if(blockAttributes[attribute].tags !== undefined){
         /* Could be a readonly readout,
          or could be a editable method
@@ -355,73 +356,101 @@ var SidePane = React.createClass({
          */
 
 
-        var isMethod = false;
+        var isWidget = false;
+        var isInAGroup = false;
+        var widgetType;
 
         for(var k = 0; k < blockAttributes[attribute].tags.length; k++){
-          if(blockAttributes[attribute].tags[k].indexOf('method') !== -1){
-            isMethod = true;
-          }
-          else{
-            /* Do nothing, keep isMethod as false */
+          if(blockAttributes[attribute].tags[k].indexOf('widget') !== -1){
+            isWidget = true;
+            widgetType = blockAttributes[attribute].tags[k].slice('widget:'.length);
           }
 
           /* Need to find what group the
            attribute belongs to as well
            */
 
-          if(blockAttributes[attribute].tags[k].indexOf('group') !== -1 ){
+          else if(blockAttributes[attribute].tags[k].indexOf('group') !== -1 ){
 
+            isInAGroup = true;
             var groupName = blockAttributes[attribute].tags[k].slice('group:'.length);
 
           }
-
         }
 
-        if(isMethod === false){
-          /* Normal readonly readout */
+        if(isWidget === true){
 
-          groupsObject[groupName].push(
-            <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                     blockName={blockName}
-                                     attributeName={attribute} />
-          )
-
-        }
-        else if(isMethod === true){
-          /* It's a method, now need to check
-          if it's a text one or a dropdown
-          one
+          /* Want a switch statement going through all
+          the possible widget types
            */
 
-          if(blockAttributes[attribute].type.name === 'VEnum'){
-            /* Use the dropdown editable
-             readout field element
-             */
+          switch(widgetType){
 
-            groupsObject[groupName].push(
-              <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                            blockName={blockName}
-                                            attributeName={attribute}
-                                            onChangeBlockMethodDropdownOption={
+            case 'led':
+                  groupsObject[groupName].push(
+                    <LEDWidget blockAttribute={blockAttributes[attribute]}
+                               blockName={blockName}
+                               attributeName={attribute}
+                               key={blockName + attribute + 'led'} />
+                  );
+                  break;
+
+            case 'textupdate':
+                  groupsObject[groupName].push(
+                    <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                             blockName={blockName}
+                                             attributeName={attribute}
+                                             key={blockName + attribute + 'readonlyField'} />
+                  );
+                  break;
+
+            case 'textinput':
+              groupsObject[groupName].push(
+                <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                          blockName={blockName}
+                                          attributeName={attribute}
+                                          attributeFieldOnChange={this.attributeFieldOnChange}
+                                          selectedInputFieldText={this.selectedInputFieldText}
+                                          key={blockName + attribute + 'textEditField'}  />
+                  );
+                  break;
+
+            case 'choice':
+              groupsObject[groupName].push(
+                <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                              blockName={blockName}
+                                              attributeName={attribute}
+                                              onChangeBlockMethodDropdownOption={
                                             this.onChangeBlockMethodDropdownOption
-                                            }  />
-            )
+                                            }
+                                              key={blockName + attribute + 'dropdownField'}  />
+                  );
+                  break;
+
+            case 'combo':
+              groupsObject[groupName].push(
+                <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                              blockName={blockName}
+                                              attributeName={attribute}
+                                              onChangeBlockMethodDropdownOption={
+                                            this.onChangeBlockMethodDropdownOption
+                                            }
+                                              key={blockName + attribute + 'dropdownField'}  />
+                  );
+                  break;
+
+            case 'toggle':
+                  blockAttributeDivs.push(
+                    <BlockToggleSwitch blockName={blockName}
+                                       toggleSwitch={this.toggleSwitch}
+                                       toggleOrientation={blockAttributes[attribute].value}
+                                       key={blockName + 'toggleSwitch'}
+                    />
+                  );
+                  break;
 
           }
-          else{
-            /* It's a text editable readout
-             field
-             */
 
-            groupsObject[groupName].push(
-              <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                        blockName={blockName}
-                                        attributeName={attribute}
-                                        attributeFieldOnChange={this.attributeFieldOnChange}
-                                        selectedInputFieldText={this.selectedInputFieldText} />
-            )
-
-          }
 
         }
 
@@ -444,6 +473,7 @@ var SidePane = React.createClass({
                   nodeLabel={
                     <b style={{marginLeft: '-47px'}}>{group}</b>
                     }
+                  key={group + 'blockToggleSwitchesTreeview'}
         > {groupsObject[group]}
         </Treeview>
       )
@@ -583,6 +613,7 @@ var SidePane = React.createClass({
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
                                      .value
                                      }
+                                     key={sortedBlocksUnderGroupNames[blockGroup][i] + 'toggleSwitch'}
                                      />
                 )
               }
@@ -592,6 +623,7 @@ var SidePane = React.createClass({
                           nodeLabel={
                           <b style={{}} >{blockGroup}</b>
                           }
+                          key={blockGroup + 'toggleSwitches'}
                 > {groupMembersToggleSwitches}
                 </Treeview>
               )
@@ -604,6 +636,7 @@ var SidePane = React.createClass({
                                      this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
                                      .value
                                      }
+                                   key={sortedBlocksUnderGroupNames[blockGroup][0] + 'toggleSwitch'}
                 />
               );
             }

@@ -12,6 +12,8 @@ var attributeStore = require('../stores/attributeStore');
 var flowChartStore = require('../stores/flowChartStore');
 var flowChartActions = require('../actions/flowChartActions');
 
+var AppDispatcher = require('../dispatcher/appDispatcher');
+
 var Edge = require('./edge.js');
 var EdgePreview = require('./edgePreview');
 var Block = require('./block.js');
@@ -50,6 +52,8 @@ var FlowChart = React.createClass({
     //window.addEventListener('keydown', this.keyPress);
 
     //window.alert("flowChart mount");
+
+    //window.alert(React.Children.count());
 
     //setTimeout(function(){
     //  AppDispatcher.handleAction({

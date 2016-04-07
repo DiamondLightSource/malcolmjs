@@ -11,7 +11,7 @@ var BlockToggleSwitch = React.createClass({
     /* 'on' is the default setting of the switch, shall be
      from the server at some point (perhaps a ternary operator?)
      */
-    console.log(this.props.toggleOrientation);
+    //console.log(this.props.toggleOrientation);
     return(
       <div style={{position: 'relative', left: '0',
                    bottom: '0px', width: '230px', height: '25px',

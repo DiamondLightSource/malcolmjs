@@ -456,6 +456,9 @@ function addBlock(blockId){
   var inports = [];
   var outports = [];
 
+  console.log(testAllBlockInfo);
+  console.log(blockId);
+
   for(var attribute in testAllBlockInfo[blockId].attributes){
     /* Rewriting for proper inport & outport filtering */
     //if(testAllBlockInfo[blockId][attribute].tags === undefined){
@@ -678,12 +681,12 @@ function addInitialEdges(){
             var outportBlockPort = testAllBlockInfo[block].attributes[attribute].value.slice(
               testAllBlockInfo[block].attributes[attribute].value.indexOf('.') + 1);
 
-            addEdgeViaMalcolm({
-              inportBlock: inportBlock,
-              inportBlockPort: inportBlockPort,
-              outportBlock: outportBlock,
-              outportBlockPort: outportBlockPort
-            });
+            //addEdgeViaMalcolm({
+            //  inportBlock: inportBlock,
+            //  inportBlockPort: inportBlockPort,
+            //  outportBlock: outportBlock,
+            //  outportBlockPort: outportBlockPort
+            //});
 
             console.log(allBlockInfo[inportBlock]);
             console.log(allBlockInfo[outportBlock]);
@@ -927,23 +930,25 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           isInportDropdown = true;
         }
         else if(item.responseMessage.tags[p] === 'widget:toggle'){
-          if(item.responseMessage.value === 'Show') {
-            /* Trying to add a block when its visibility is
-             changed to 'Show'
-             */
+          if(item.requestedData.blockName === 'VISIBILITY') {
+            if (item.responseMessage.value === 'Show') {
+              /* Trying to add a block when its visibility is
+               changed to 'Show'
+               */
 
-            appendToBlockPositions(item.requestedData.attribute,
-            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+              appendToBlockPositions(item.requestedData.attribute,
+                flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
-            addBlock(item.requestedData.attribute);
-            blockStore.emitChange();
-          }
-          else if(item.responseMessage.value === 'Hide'){
-            /* Should invoke a removeBlock function to remove
-            the info from allBlockInfo
-             */
-            removeBlock(item.requestedData.attribute);
-            blockStore.emitChange();
+              addBlock(item.requestedData.attribute);
+              blockStore.emitChange();
+            }
+            else if (item.responseMessage.value === 'Hide') {
+              /* Should invoke a removeBlock function to remove
+               the info from allBlockInfo
+               */
+              removeBlock(item.requestedData.attribute);
+              blockStore.emitChange();
+            }
           }
         }
       }
@@ -960,12 +965,12 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         var outportBlock = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
         var outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
 
-        addEdgeViaMalcolm({
-          inportBlock: inportBlock,
-          inportBlockPort: inportBlockPort,
-          outportBlock: outportBlock,
-          outportBlockPort: outportBlockPort
-        });
+        //addEdgeViaMalcolm({
+        //  inportBlock: inportBlock,
+        //  inportBlockPort: inportBlockPort,
+        //  outportBlock: outportBlock,
+        //  outportBlockPort: outportBlockPort
+        //});
 
         blockStore.emitChange();
       }
