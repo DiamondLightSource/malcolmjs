@@ -45,44 +45,18 @@ blocksVisibleStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
-      for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === 'instance:Zebra2Visibility'){
-          /* Save the list of all possible blocks */
-          var zVisibility = JSON.parse(JSON.stringify(item));
+      /* Not sorting the attributes into groups and just
+      passing a whole object of the attributes like I did
+      for normal block tabs, groups and all
+       */
+
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Visibility'){
+
+          var zVisibility = JSON.parse(JSON.stringify(item.responseMessage));
+
           for(var attribute in zVisibility.attributes){
-            if(zVisibility.attributes[attribute].tags !== undefined){
-              var isBlockToggle = false;
-              var doesBelongToGroup = false;
-
-              for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
-                if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
-                  /* Then it's a block! */
-                  //blocksVisibility.push(attribute);
-                  isBlockToggle = true;
-                }
-                else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
-                  doesBelongToGroup = true;
-                }
-              }
-
-              if(isBlockToggle === true && doesBelongToGroup === true){
-                blocksVisibility[attribute] = zVisibility.attributes[attribute];
-              }
-              else if(isBlockToggle === true && doesBelongToGroup !== true){
-                /* It's a block that is the only instance of its
-                 type, so add it to both blockGroups and
-                 blocksVisibility, so then I can just check the length
-                 of the array in the mapping of groups and group members
-                 */
-                blocksVisibility[attribute] = zVisibility.attributes[attribute];
-                blockGroups.push(attribute);
-              }
-            }
-            else if(zVisibility.attributes[attribute].tags === undefined &&
-              zVisibility.attributes[attribute].descriptor === attribute){
-              /* Then it's a group! */
-              blockGroups.push(attribute);
-            }
+            blocksVisibility[attribute] = zVisibility.attributes[attribute];
           }
         }
       }

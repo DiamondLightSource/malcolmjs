@@ -850,7 +850,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       if it's something else
        */
 
-      for(var i = 0; i < item.tags.length; i++){
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
         /* No need to check the tags for if it's FlowGraph */
         //if(item.tags[i] === 'instance:FlowGraph'){
         //  /* Do the loop that gets every block */
@@ -868,20 +868,20 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         //  //_stuff.blockList = JSON.parse(JSON.stringify(item.attributes.blocks.value));
         //
         //}
-        if(item.tags[i] === 'instance:Zebra2Block'){
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Block'){
 
           /* Do the block adding to testAllBlockInfo stuff */
 
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
-          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.Y_COORD.value));
 
           console.log(blockName);
-          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.responseMessage));
 
           /* Add the block to allBlockInfo! */
 
-          if(item.attributes.VISIBLE.value === 'Show') {
+          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
             addBlock(blockName);
 

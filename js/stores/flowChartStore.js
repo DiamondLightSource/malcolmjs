@@ -409,12 +409,12 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
       console.log("");
 
-      for(var i = 0; i < item.tags.length; i++){
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
         /* No need to check the tags for if it's FlowGraph */
         //if(item.tags[i] === 'instance:FlowGraph'){
         //}
-        if(item.tags[i] === 'instance:Zebra2Block'){
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Block'){
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
           //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
           //console.log(xCoord);
@@ -422,7 +422,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
-            if(item.attributes.VISIBLE.value === 'Show') {
+            if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             //appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }

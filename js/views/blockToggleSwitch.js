@@ -11,10 +11,6 @@ var BlockToggleSwitch = React.createClass({
     /* 'on' is the default setting of the switch, shall be
      from the server at some point (perhaps a ternary operator?)
      */
-    /* Note that a block tab's instance of this component
-    will invoke the Z:VISIBILITY method for showing/hiding,
-    rather than the block's own specific method
-     */
     return(
       <div style={{position: 'relative', left: '0',
                    bottom: '0px', width: '230px', height: '25px',
@@ -26,11 +22,14 @@ var BlockToggleSwitch = React.createClass({
             <div id="testToggleSwitch" style={{position: 'relative',
                       height: '21', width: '50'}} >
               <ToggleSwitch onChange={this.props.toggleSwitch.bind(null, this.props.blockName,
-                                      this.props.toggleOrientation)}
-                            checked={this.props.toggleOrientation === 'Show'}
-                            defaultChecked={this.props.toggleOrientation === 'Show'}
+                                      this.props.attribute, this.props.toggleOrientation)}
+                            checked={this.props.toggleOrientation === 'Show' ||
+                                     this.props.toggleOrientation === true}
+                            defaultChecked={this.props.toggleOrientation === 'Show' ||
+                                            this.props.toggleOrientation === true}
                             id={this.props.blockName + 'toggleSwitch'}
-                            on={this.props.toggleOrientation === 'Show'} />
+                            on={this.props.toggleOrientation === 'Show' ||
+                                this.props.toggleOrientation === true} />
             </div>
             <p style={{margin: '0px', width: '40px', position: 'relative'}} >Show</p>
           </div>

@@ -91,14 +91,20 @@ var MalcolmActionCreators = {
     function malcolmGetSuccess(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_GET_SUCCESS,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: requestedData
+        }
       })
     }
 
     function malcolmGetFailure(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_GET_FAILURE,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: requestedData
+        }
       })
     }
 
@@ -1351,8 +1357,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       console.log(item);
 
-      for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === "instance:Zebra2Block") {
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
+        if(item.responseMessage.tags[i] === "instance:Zebra2Block") {
 
           /* Temporarily removing this condition to see
           whether or not allBlockATtributes should have
@@ -1362,8 +1368,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
            */
 
           //if (item.attributes.VISIBLE.value === 'Show') {
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
             console.log(allBlockAttributes);
           //}
         }
@@ -2322,7 +2328,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       if it's something else
        */
 
-      for(var i = 0; i < item.tags.length; i++){
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
         /* No need to check the tags for if it's FlowGraph */
         //if(item.tags[i] === 'instance:FlowGraph'){
         //  /* Do the loop that gets every block */
@@ -2340,20 +2346,20 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         //  //_stuff.blockList = JSON.parse(JSON.stringify(item.attributes.blocks.value));
         //
         //}
-        if(item.tags[i] === 'instance:Zebra2Block'){
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Block'){
 
           /* Do the block adding to testAllBlockInfo stuff */
 
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-          var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
-          var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+          var xCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.X_COORD.value));
+          var yCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.Y_COORD.value));
 
           console.log(blockName);
-          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item));
+          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.responseMessage));
 
           /* Add the block to allBlockInfo! */
 
-          if(item.attributes.VISIBLE.value === 'Show') {
+          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
             addBlock(blockName);
 
@@ -2532,44 +2538,18 @@ blocksVisibleStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
-      for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === 'instance:Zebra2Visibility'){
-          /* Save the list of all possible blocks */
-          var zVisibility = JSON.parse(JSON.stringify(item));
+      /* Not sorting the attributes into groups and just
+      passing a whole object of the attributes like I did
+      for normal block tabs, groups and all
+       */
+
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Visibility'){
+
+          var zVisibility = JSON.parse(JSON.stringify(item.responseMessage));
+
           for(var attribute in zVisibility.attributes){
-            if(zVisibility.attributes[attribute].tags !== undefined){
-              var isBlockToggle = false;
-              var doesBelongToGroup = false;
-
-              for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
-                if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
-                  /* Then it's a block! */
-                  //blocksVisibility.push(attribute);
-                  isBlockToggle = true;
-                }
-                else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
-                  doesBelongToGroup = true;
-                }
-              }
-
-              if(isBlockToggle === true && doesBelongToGroup === true){
-                blocksVisibility[attribute] = zVisibility.attributes[attribute];
-              }
-              else if(isBlockToggle === true && doesBelongToGroup !== true){
-                /* It's a block that is the only instance of its
-                 type, so add it to both blockGroups and
-                 blocksVisibility, so then I can just check the length
-                 of the array in the mapping of groups and group members
-                 */
-                blocksVisibility[attribute] = zVisibility.attributes[attribute];
-                blockGroups.push(attribute);
-              }
-            }
-            else if(zVisibility.attributes[attribute].tags === undefined &&
-              zVisibility.attributes[attribute].descriptor === attribute){
-              /* Then it's a group! */
-              blockGroups.push(attribute);
-            }
+            blocksVisibility[attribute] = zVisibility.attributes[attribute];
           }
         }
       }
@@ -3019,12 +2999,12 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
       console.log("");
 
-      for(var i = 0; i < item.tags.length; i++){
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
         /* No need to check the tags for if it's FlowGraph */
         //if(item.tags[i] === 'instance:FlowGraph'){
         //}
-        if(item.tags[i] === 'instance:Zebra2Block'){
-          var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+        if(item.responseMessage.tags[i] === 'instance:Zebra2Block'){
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
           //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
           //console.log(xCoord);
@@ -3032,7 +3012,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
-            if(item.attributes.VISIBLE.value === 'Show') {
+            if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             //appendToBlockPositions(blockName, xCoord, yCoord);
             appendToBlockSelectedStates(blockName);
           }
@@ -3504,19 +3484,19 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       //appendToBlockSelectedStates('CLOCKS');
 
       /* No need to check the tags for if it's FlowGraph */
-      for(var j = 0; j < item.tags.length; j++){
+      for(var j = 0; j < item.responseMessage.tags.length; j++){
         console.log("one time round in the loop");
         //if(item.tags[j] === 'instance:FlowGraph'){
         //}
-        if(item.tags[j] === 'instance:Zebra2Block'){
+        if(item.responseMessage.tags[j] === 'instance:Zebra2Block'){
 
-          if(item.attributes.VISIBLE.value === 'Show') {
+          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
 
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
           }
           else{
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
             console.log("block isn't in use, don't add its info");
 
@@ -4272,7 +4252,6 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
     /* 'on' is the default setting of the switch, shall be
      from the server at some point (perhaps a ternary operator?)
      */
-    //console.log(this.props.toggleOrientation);
     return(
       React.createElement("div", {style: {position: 'relative', left: '0',
                    bottom: '0px', width: '230px', height: '25px',
@@ -4284,11 +4263,14 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
             React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
                       height: '21', width: '50'}}, 
               React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
-                                      this.props.toggleOrientation), 
-                            checked: this.props.toggleOrientation === 'Show', 
-                            defaultChecked: this.props.toggleOrientation === 'Show', 
+                                      this.props.attribute, this.props.toggleOrientation), 
+                            checked: this.props.toggleOrientation === 'Show' ||
+                                     this.props.toggleOrientation === true, 
+                            defaultChecked: this.props.toggleOrientation === 'Show' ||
+                                            this.props.toggleOrientation === true, 
                             id: this.props.blockName + 'toggleSwitch', 
-                            on: this.props.toggleOrientation === 'Show'})
+                            on: this.props.toggleOrientation === 'Show' ||
+                                this.props.toggleOrientation === true})
             ), 
             React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
           )
@@ -7100,27 +7082,19 @@ var SidePane = React.createClass({displayName: "SidePane",
 
   },
 
-  generateBlockTabContent: function(blockAttributes, blockName){
+  generateTabContent: function(blockAttributes, blockName){
 
     var blockAttributeDivs = [];
 
     var groupsObject = {};
 
+    console.log(blockAttributes);
+    console.log(blockName);
+
     for(var attribute in blockAttributes){
-      var attributeLabel;
-      /* Not sure if this'll be needed ifI don't
-      need treeview for th subattributes?
-       */
-      //var attributeDiv = [];
 
       if(blockAttributes[attribute].tags === undefined &&
         blockAttributes[attribute].alarm === undefined){
-        /* Then it's a group, so create a treeview */
-        /* The best I can do I think is to now do a
-        for loop in here through all the block attributes
-        to find all the attributes belonging to this
-        group?
-         */
 
         /* Creating the array that I'll push the
         treeview children to as the upper for loop
@@ -7128,40 +7102,13 @@ var SidePane = React.createClass({displayName: "SidePane",
          */
         groupsObject[attribute] = [];
 
-        //attributeLabel =
-        //  <Treeview defaultCollapsed={true}
-        //            nodeLabel={
-        //            <b style={{marginLeft: '-47px'}}>{attribute}</b>
-        //            } >
-        //  </Treeview>
-
       }
-      /* Don't need since they're non-widget attributes */
-      //else if(blockAttributes[attribute].tags === undefined &&
-      //  blockAttributes[attribute].alarm !== undefined){
-      //  /* Then it's a readonly readout,
-      //   no methods or anything
-      //   */
-      //
-      //  attributeLabel =
-      //    <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
-      //                             blockName={blockName}
-      //                             attributeName={attribute}
-      //                             key={blockName + attribute + 'readonlyField'} />;
-      //
-      //  blockAttributeDivs.push(attributeLabel);
-      //
-      //}
       else if(blockAttributes[attribute].tags !== undefined){
-        /* Could be a readonly readout,
-         or could be a editable method
-         readout (text or dropdown)
-         */
-
 
         var isWidget = false;
-        var isInAGroup = false;
         var widgetType;
+        var isInAGroup = false;
+        var widgetParent;
 
         for(var k = 0; k < blockAttributes[attribute].tags.length; k++){
           if(blockAttributes[attribute].tags[k].indexOf('widget') !== -1){
@@ -7187,10 +7134,23 @@ var SidePane = React.createClass({displayName: "SidePane",
           the possible widget types
            */
 
+          /* Also want to take into account whether or
+          not the widget is part of a group, so do a check
+          on isInAGroup with some sort of logic to decided
+          what to 'push' to in each case
+           */
+
+          if(isInAGroup === true){
+            widgetParent = groupsObject[groupName];
+          }
+          else if(isInAGroup === false){
+            widgetParent = blockAttributeDivs;
+          }
+
           switch(widgetType){
 
             case 'led':
-                  groupsObject[groupName].push(
+                  widgetParent.push(
                     React.createElement(LEDWidget, {blockAttribute: blockAttributes[attribute], 
                                blockName: blockName, 
                                attributeName: attribute, 
@@ -7199,7 +7159,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                   break;
 
             case 'textupdate':
-                  groupsObject[groupName].push(
+                  widgetParent.push(
                     React.createElement(NonEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
                                              blockName: blockName, 
                                              attributeName: attribute, 
@@ -7208,7 +7168,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                   break;
 
             case 'textinput':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 React.createElement(TextEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
                                           blockName: blockName, 
                                           attributeName: attribute, 
@@ -7219,7 +7179,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                   break;
 
             case 'choice':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 React.createElement(DropdownEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
                                               blockName: blockName, 
                                               attributeName: attribute, 
@@ -7231,7 +7191,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                   break;
 
             case 'combo':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 React.createElement(DropdownEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
                                               blockName: blockName, 
                                               attributeName: attribute, 
@@ -7243,12 +7203,12 @@ var SidePane = React.createClass({displayName: "SidePane",
                   break;
 
             case 'toggle':
-                  blockAttributeDivs.push(
+                  widgetParent.push(
                     React.createElement(BlockToggleSwitch, {blockName: blockName, 
                                        attribute: attribute, 
                                        toggleSwitch: this.toggleSwitch, 
                                        toggleOrientation: blockAttributes[attribute].value, 
-                                       key: blockName + 'toggleSwitch'}
+                                       key: blockName + attribute + 'toggleSwitch'}
                     )
                   );
                   break;
@@ -7260,8 +7220,6 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 
       }
-
-      //blockAttributeDivs.push(attributeLabel);
 
       /* Then here have a for loop iterating through
       the groupsObject, creating a treeview for each
@@ -7277,25 +7235,11 @@ var SidePane = React.createClass({displayName: "SidePane",
                   nodeLabel: 
                     React.createElement("b", {style: {marginLeft: '-47px'}}, group), 
                     
-                  key: group + 'blockToggleSwitchesTreeview'
+                  key: group + 'treeview'
         }, " ", groupsObject[group]
         )
       )
     }
-
-    //for(var group in groupsObject){
-    //  blockAttributeDivs.push(
-    //    <TreeviewComponent dataSource={{
-    //      id: group + "treeview",
-    //      text: group,
-    //      icon: group,
-    //      opened: true,
-    //      selected: true,
-    //      children: groupsObject[group]
-    //    }} onTreenodeClick={function(e){console.log("treenode click!")}}
-    //    />
-    //  )
-    //}
 
     return blockAttributeDivs;
 
@@ -7309,9 +7253,31 @@ var SidePane = React.createClass({displayName: "SidePane",
     }
   },
 
-  toggleSwitch: function(blockName, toggleOrientation, e){
+  toggleSwitch: function(blockName, attribute, toggleOrientation, e){
     console.log(toggleOrientation);
     console.log(blockName);
+
+    var methodToInvoke;
+
+    /* Check the blockName if it's VISIBILITY or not */
+
+    if(blockName === 'VISIBILITY'){
+      /* WHat may cause some confusion is that in the context
+      of VISIBILITY, the name of a block is one of its attributes,
+      but in the context of a block its attributes will be
+      inputs, outputs, parameters etc
+       */
+      methodToInvoke = '_set_' + attribute + '_visible';
+      console.log("in visibility");
+    }
+    else{
+      if(attribute === 'VISIBLE'){
+        methodToInvoke = '_set_' + attribute.toLowerCase();
+      }
+      else{
+        methodToInvoke = '_set_' + attribute;
+      }
+    }
 
     /* invoke malcolmCall to toggle the visible attribute
     of the given block
@@ -7324,35 +7290,25 @@ var SidePane = React.createClass({displayName: "SidePane",
     var newValue;
     var argsObject = {};
 
-    if(toggleOrientation === 'Show'){
-      newValue = 'Hide';
+    if(typeof toggleOrientation === 'string') {
+      if (toggleOrientation === 'Show') {
+        newValue = 'Hide';
+      }
+      else if (toggleOrientation === 'Hide') {
+        newValue = 'Show'
+      }
     }
-    else if(toggleOrientation === 'Hide'){
-      newValue = 'Show'
+    else if(typeof toggleOrientation === 'boolean'){
+      newValue = !toggleOrientation;
     }
 
-    var methodToInvoke = '_set_' + blockName + '_visible';
-
-    var argsValue;
-
-    //if(newValue === 'true'){
-    //  argsValue = 'Show';
-    //}
-    //else if(newValue === 'false'){
-    //  argsValue = 'Hide';
-    //}
-
-    argsObject[blockName] = newValue;
+    argsObject[attribute] = newValue;
 
     console.log(newValue);
 
     /* Now invoke malcolmCall */
 
-    this.handleMalcolmCall('VISIBILITY', methodToInvoke, argsObject);
-    /* Note: the first argument is 'VISIBILITY' so then I am
-    invoking the method via Z:VISIBILITY rather than the block
-    itself, seems more organised to do it all through that
-     */
+    this.handleMalcolmCall(blockName, methodToInvoke, argsObject);
 
     /* Should also close the tab if I'm hiding a block maybe? */
 
@@ -7391,62 +7347,11 @@ var SidePane = React.createClass({displayName: "SidePane",
         else if(block === 'BlockLookupTable'){
           console.log("we have the blockLookupTable tab");
 
-          var sortedBlocksUnderGroupNames = {};
+          /* Making the tab content generator more generic */
 
-          for(var m = 0; m < this.props.blockGroups.length; m++){
-            sortedBlocksUnderGroupNames[this.props.blockGroups[m]] = [];
-
-            for(var blockName in this.props.blocksVisibility){
-              if(blockName.indexOf(this.props.blockGroups[m]) !== -1){
-                sortedBlocksUnderGroupNames[this.props.blockGroups[m]].push(blockName)
-              }
-            }
-          }
-
-          for(var blockGroup in sortedBlocksUnderGroupNames){
-            if(sortedBlocksUnderGroupNames[blockGroup].length > 1){
-
-              var groupMembersToggleSwitches = [];
-
-              for(var i = 0; i < sortedBlocksUnderGroupNames[blockGroup].length; i++){
-
-                groupMembersToggleSwitches.push(
-                  React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][i], 
-                                     attribute: sortedBlocksUnderGroupNames[blockGroup][i], 
-                                     toggleSwitch: this.toggleSwitch, 
-                                     toggleOrientation: 
-                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
-                                     .value, 
-                                     
-                                     key: sortedBlocksUnderGroupNames[blockGroup][i] + 'toggleSwitch'}
-                                     )
-                )
-              }
-
-              tabContent.push(
-                React.createElement(Treeview, {defaultCollapsed: true, 
-                          nodeLabel: 
-                          React.createElement("b", {style: {}}, blockGroup), 
-                          
-                          key: blockGroup + 'toggleSwitches'
-                }, " ", groupMembersToggleSwitches
-                )
-              )
-            }
-            else{
-              tabContent.push(
-                React.createElement(BlockToggleSwitch, {blockName: sortedBlocksUnderGroupNames[blockGroup][0], 
-                                   attribute: sortedBlocksUnderGroupNames[blockGroup][0], 
-                                   toggleSwitch: this.toggleSwitch, 
-                                   toggleOrientation: 
-                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
-                                     .value, 
-                                     
-                                   key: sortedBlocksUnderGroupNames[blockGroup][0] + 'toggleSwitch'}
-                )
-              );
-            }
-          }
+          tabContent.push(
+            this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
+          );
 
           var tabTitle = 'yh';
         }
@@ -7464,7 +7369,7 @@ var SidePane = React.createClass({displayName: "SidePane",
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          tabContent.push(this.generateBlockTabContent(this.props.allBlockAttributes[block], block));
+          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block], block));
         }
         console.log(tabContent);
         return tabContent;

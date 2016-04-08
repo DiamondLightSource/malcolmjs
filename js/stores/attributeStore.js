@@ -52,8 +52,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       console.log(item);
 
-      for(var i = 0; i < item.tags.length; i++){
-        if(item.tags[i] === "instance:Zebra2Block") {
+      for(var i = 0; i < item.responseMessage.tags.length; i++){
+        if(item.responseMessage.tags[i] === "instance:Zebra2Block") {
 
           /* Temporarily removing this condition to see
           whether or not allBlockATtributes should have
@@ -63,8 +63,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
            */
 
           //if (item.attributes.VISIBLE.value === 'Show') {
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
-            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.attributes));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
             console.log(allBlockAttributes);
           //}
         }

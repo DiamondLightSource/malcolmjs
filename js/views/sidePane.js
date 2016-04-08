@@ -297,27 +297,19 @@ var SidePane = React.createClass({
 
   },
 
-  generateBlockTabContent: function(blockAttributes, blockName){
+  generateTabContent: function(blockAttributes, blockName){
 
     var blockAttributeDivs = [];
 
     var groupsObject = {};
 
+    console.log(blockAttributes);
+    console.log(blockName);
+
     for(var attribute in blockAttributes){
-      var attributeLabel;
-      /* Not sure if this'll be needed ifI don't
-      need treeview for th subattributes?
-       */
-      //var attributeDiv = [];
 
       if(blockAttributes[attribute].tags === undefined &&
         blockAttributes[attribute].alarm === undefined){
-        /* Then it's a group, so create a treeview */
-        /* The best I can do I think is to now do a
-        for loop in here through all the block attributes
-        to find all the attributes belonging to this
-        group?
-         */
 
         /* Creating the array that I'll push the
         treeview children to as the upper for loop
@@ -325,40 +317,13 @@ var SidePane = React.createClass({
          */
         groupsObject[attribute] = [];
 
-        //attributeLabel =
-        //  <Treeview defaultCollapsed={true}
-        //            nodeLabel={
-        //            <b style={{marginLeft: '-47px'}}>{attribute}</b>
-        //            } >
-        //  </Treeview>
-
       }
-      /* Don't need since they're non-widget attributes */
-      //else if(blockAttributes[attribute].tags === undefined &&
-      //  blockAttributes[attribute].alarm !== undefined){
-      //  /* Then it's a readonly readout,
-      //   no methods or anything
-      //   */
-      //
-      //  attributeLabel =
-      //    <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
-      //                             blockName={blockName}
-      //                             attributeName={attribute}
-      //                             key={blockName + attribute + 'readonlyField'} />;
-      //
-      //  blockAttributeDivs.push(attributeLabel);
-      //
-      //}
       else if(blockAttributes[attribute].tags !== undefined){
-        /* Could be a readonly readout,
-         or could be a editable method
-         readout (text or dropdown)
-         */
-
 
         var isWidget = false;
-        var isInAGroup = false;
         var widgetType;
+        var isInAGroup = false;
+        var widgetParent;
 
         for(var k = 0; k < blockAttributes[attribute].tags.length; k++){
           if(blockAttributes[attribute].tags[k].indexOf('widget') !== -1){
@@ -384,10 +349,23 @@ var SidePane = React.createClass({
           the possible widget types
            */
 
+          /* Also want to take into account whether or
+          not the widget is part of a group, so do a check
+          on isInAGroup with some sort of logic to decided
+          what to 'push' to in each case
+           */
+
+          if(isInAGroup === true){
+            widgetParent = groupsObject[groupName];
+          }
+          else if(isInAGroup === false){
+            widgetParent = blockAttributeDivs;
+          }
+
           switch(widgetType){
 
             case 'led':
-                  groupsObject[groupName].push(
+                  widgetParent.push(
                     <LEDWidget blockAttribute={blockAttributes[attribute]}
                                blockName={blockName}
                                attributeName={attribute}
@@ -396,7 +374,7 @@ var SidePane = React.createClass({
                   break;
 
             case 'textupdate':
-                  groupsObject[groupName].push(
+                  widgetParent.push(
                     <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                              blockName={blockName}
                                              attributeName={attribute}
@@ -405,7 +383,7 @@ var SidePane = React.createClass({
                   break;
 
             case 'textinput':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                           blockName={blockName}
                                           attributeName={attribute}
@@ -416,7 +394,7 @@ var SidePane = React.createClass({
                   break;
 
             case 'choice':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                               blockName={blockName}
                                               attributeName={attribute}
@@ -428,7 +406,7 @@ var SidePane = React.createClass({
                   break;
 
             case 'combo':
-              groupsObject[groupName].push(
+              widgetParent.push(
                 <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
                                               blockName={blockName}
                                               attributeName={attribute}
@@ -440,12 +418,12 @@ var SidePane = React.createClass({
                   break;
 
             case 'toggle':
-                  blockAttributeDivs.push(
+                  widgetParent.push(
                     <BlockToggleSwitch blockName={blockName}
                                        attribute={attribute}
                                        toggleSwitch={this.toggleSwitch}
                                        toggleOrientation={blockAttributes[attribute].value}
-                                       key={blockName + 'toggleSwitch'}
+                                       key={blockName + attribute + 'toggleSwitch'}
                     />
                   );
                   break;
@@ -457,8 +435,6 @@ var SidePane = React.createClass({
 
 
       }
-
-      //blockAttributeDivs.push(attributeLabel);
 
       /* Then here have a for loop iterating through
       the groupsObject, creating a treeview for each
@@ -474,25 +450,11 @@ var SidePane = React.createClass({
                   nodeLabel={
                     <b style={{marginLeft: '-47px'}}>{group}</b>
                     }
-                  key={group + 'blockToggleSwitchesTreeview'}
+                  key={group + 'treeview'}
         > {groupsObject[group]}
         </Treeview>
       )
     }
-
-    //for(var group in groupsObject){
-    //  blockAttributeDivs.push(
-    //    <TreeviewComponent dataSource={{
-    //      id: group + "treeview",
-    //      text: group,
-    //      icon: group,
-    //      opened: true,
-    //      selected: true,
-    //      children: groupsObject[group]
-    //    }} onTreenodeClick={function(e){console.log("treenode click!")}}
-    //    />
-    //  )
-    //}
 
     return blockAttributeDivs;
 
@@ -506,9 +468,31 @@ var SidePane = React.createClass({
     }
   },
 
-  toggleSwitch: function(blockName, toggleOrientation, e){
+  toggleSwitch: function(blockName, attribute, toggleOrientation, e){
     console.log(toggleOrientation);
     console.log(blockName);
+
+    var methodToInvoke;
+
+    /* Check the blockName if it's VISIBILITY or not */
+
+    if(blockName === 'VISIBILITY'){
+      /* WHat may cause some confusion is that in the context
+      of VISIBILITY, the name of a block is one of its attributes,
+      but in the context of a block its attributes will be
+      inputs, outputs, parameters etc
+       */
+      methodToInvoke = '_set_' + attribute + '_visible';
+      console.log("in visibility");
+    }
+    else{
+      if(attribute === 'VISIBLE'){
+        methodToInvoke = '_set_' + attribute.toLowerCase();
+      }
+      else{
+        methodToInvoke = '_set_' + attribute;
+      }
+    }
 
     /* invoke malcolmCall to toggle the visible attribute
     of the given block
@@ -521,35 +505,25 @@ var SidePane = React.createClass({
     var newValue;
     var argsObject = {};
 
-    if(toggleOrientation === 'Show'){
-      newValue = 'Hide';
+    if(typeof toggleOrientation === 'string') {
+      if (toggleOrientation === 'Show') {
+        newValue = 'Hide';
+      }
+      else if (toggleOrientation === 'Hide') {
+        newValue = 'Show'
+      }
     }
-    else if(toggleOrientation === 'Hide'){
-      newValue = 'Show'
+    else if(typeof toggleOrientation === 'boolean'){
+      newValue = !toggleOrientation;
     }
 
-    var methodToInvoke = '_set_' + blockName + '_visible';
-
-    var argsValue;
-
-    //if(newValue === 'true'){
-    //  argsValue = 'Show';
-    //}
-    //else if(newValue === 'false'){
-    //  argsValue = 'Hide';
-    //}
-
-    argsObject[blockName] = newValue;
+    argsObject[attribute] = newValue;
 
     console.log(newValue);
 
     /* Now invoke malcolmCall */
 
-    this.handleMalcolmCall('VISIBILITY', methodToInvoke, argsObject);
-    /* Note: the first argument is 'VISIBILITY' so then I am
-    invoking the method via Z:VISIBILITY rather than the block
-    itself, seems more organised to do it all through that
-     */
+    this.handleMalcolmCall(blockName, methodToInvoke, argsObject);
 
     /* Should also close the tab if I'm hiding a block maybe? */
 
@@ -588,62 +562,11 @@ var SidePane = React.createClass({
         else if(block === 'BlockLookupTable'){
           console.log("we have the blockLookupTable tab");
 
-          var sortedBlocksUnderGroupNames = {};
+          /* Making the tab content generator more generic */
 
-          for(var m = 0; m < this.props.blockGroups.length; m++){
-            sortedBlocksUnderGroupNames[this.props.blockGroups[m]] = [];
-
-            for(var blockName in this.props.blocksVisibility){
-              if(blockName.indexOf(this.props.blockGroups[m]) !== -1){
-                sortedBlocksUnderGroupNames[this.props.blockGroups[m]].push(blockName)
-              }
-            }
-          }
-
-          for(var blockGroup in sortedBlocksUnderGroupNames){
-            if(sortedBlocksUnderGroupNames[blockGroup].length > 1){
-
-              var groupMembersToggleSwitches = [];
-
-              for(var i = 0; i < sortedBlocksUnderGroupNames[blockGroup].length; i++){
-
-                groupMembersToggleSwitches.push(
-                  <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][i]}
-                                     attribute={sortedBlocksUnderGroupNames[blockGroup][i]}
-                                     toggleSwitch={this.toggleSwitch}
-                                     toggleOrientation={
-                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][i]]
-                                     .value
-                                     }
-                                     key={sortedBlocksUnderGroupNames[blockGroup][i] + 'toggleSwitch'}
-                                     />
-                )
-              }
-
-              tabContent.push(
-                <Treeview defaultCollapsed={true}
-                          nodeLabel={
-                          <b style={{}} >{blockGroup}</b>
-                          }
-                          key={blockGroup + 'toggleSwitches'}
-                > {groupMembersToggleSwitches}
-                </Treeview>
-              )
-            }
-            else{
-              tabContent.push(
-                <BlockToggleSwitch blockName={sortedBlocksUnderGroupNames[blockGroup][0]}
-                                   attribute={sortedBlocksUnderGroupNames[blockGroup][0]}
-                                   toggleSwitch={this.toggleSwitch}
-                                   toggleOrientation={
-                                     this.props.blocksVisibility[sortedBlocksUnderGroupNames[blockGroup][0]]
-                                     .value
-                                     }
-                                   key={sortedBlocksUnderGroupNames[blockGroup][0] + 'toggleSwitch'}
-                />
-              );
-            }
-          }
+          tabContent.push(
+            this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
+          );
 
           var tabTitle = 'yh';
         }
@@ -661,7 +584,7 @@ var SidePane = React.createClass({
           console.log("normal block tab");
           var tabTitle = "Attributes of " + tabLabel;
 
-          tabContent.push(this.generateBlockTabContent(this.props.allBlockAttributes[block], block));
+          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block], block));
         }
         console.log(tabContent);
         return tabContent;

@@ -332,19 +332,19 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       //appendToBlockSelectedStates('CLOCKS');
 
       /* No need to check the tags for if it's FlowGraph */
-      for(var j = 0; j < item.tags.length; j++){
+      for(var j = 0; j < item.responseMessage.tags.length; j++){
         console.log("one time round in the loop");
         //if(item.tags[j] === 'instance:FlowGraph'){
         //}
-        if(item.tags[j] === 'instance:Zebra2Block'){
+        if(item.responseMessage.tags[j] === 'instance:Zebra2Block'){
 
-          if(item.attributes.VISIBLE.value === 'Show') {
+          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
 
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
           }
           else{
-            var blockName = JSON.parse(JSON.stringify(item.name.slice(2)));
+            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
             console.log("block isn't in use, don't add its info");
 

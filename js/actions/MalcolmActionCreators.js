@@ -90,14 +90,20 @@ var MalcolmActionCreators = {
     function malcolmGetSuccess(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_GET_SUCCESS,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: requestedData
+        }
       })
     }
 
     function malcolmGetFailure(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_GET_FAILURE,
-        item: responseMessage
+        item: {
+          responseMessage: responseMessage,
+          requestedData: requestedData
+        }
       })
     }
 
