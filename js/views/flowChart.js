@@ -43,6 +43,23 @@ var FlowChart = React.createClass({
   //  window.alert("flowChart will mount")
   //},
 
+  componentDidUpdate: function(nextProps, nextState){
+    console.log(nextProps);
+    console.log(document.getElementById('BlocksGroup').children.length);
+    console.log(Object.keys(nextProps.allBlockInfo).length);
+
+    /* Doesn't work, blocks don't get rendered before the window alert? */
+    /* Actually, it was catching it when both were equal to zero =P */
+    if(document.getElementById('BlocksGroup').children.length ===
+      Object.keys(nextProps.allBlockInfo).length &&
+      document.getElementById('BlocksGroup').children.length !== 0){
+      //AppDispatcher.handleAction({
+      //  actionType: appConstants.INITIALISE_FLOWCHART_END,
+      //  item: "initialise flowChart end"
+      //});
+    }
+  },
+
   componentDidMount: function () {
     //Perf.start();
 
@@ -313,20 +330,7 @@ var FlowChart = React.createClass({
     flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
 
     var port = document.getElementById(this.props.portThatHasBeenClicked.id);
-    /* Need an if loop to check if we're hovering the port already
-    Well actually, to clikc it you must be hovering, it's in the portMouseLeave that if the port is selected that you dont reset the fill & stroke colour
-     */
-    //port.style.cursor = "default";
-    //port.style.fill = "yellow";
-    //port.style.stroke = "yellow";
 
-    //port.style.stroke = "black";
-    port.style.fill = "#00c9cc";
-
-    //port.setAttribute('r', 4);
-
-    //console.log(port.style.fill);
-    //console.log(port.style.stroke);
     /* Node select is also messing with the port styling... */
   },
 
@@ -339,14 +343,6 @@ var FlowChart = React.createClass({
     /* Problem is now that if you have clicked a port and have it selected, if you hover over a node it'll go back to being a hand...
     Need some way of checking that if a port is selected, don't override the cursor until a drop or deselection occurs
      */
-    //port.style.cursor = "default";
-    //port.style.fill = "black";
-    //port.style.stroke = "black";
-
-    //port.style.stroke = "black";
-    port.style.fill = "grey";
-
-    //port.setAttribute('r', 2);
 
     /* Added to fix if, when having an edgePreview where the mouse doesn't hover over the edge due to
     clicking near the boundary of where a portClick can occur on the invisibleCirclePort and you deselect
@@ -362,41 +358,20 @@ var FlowChart = React.createClass({
   },
 
   checkBothClickedPorts: function(){
-    /* This function will run whenever we have dispatched a PortSelect event
-    An if loop will check if this.state.portThatHasBeenClicked is null:
-    if it is null we simply do a highlight of the port we have selected, then edgePreview should occur.
-    if it ISN'T null and it isn't the same port you already clicked, then you run the addEdgeInfo function, passing in the relevant nodes and ports
-    To check if portThatHasBeenClicked has a different value, how about I store the value of it in a separate state when the first port click comes in,
-    so then you can compare the two in some form or another?
-     */
-    /* Wait, this.state.portThatHasBeenClicked will never be null when portClick() is run, since we set it in the node to be something in the node file? */
-    //console.log("checkBothClickedPorts has been called");
-    //if(this.state.storingFirstPortClicked !== null){
-    //  var firstPort = this.state.storingFirstPortClicked;
-    //  var secondPort = this.state.portThatHasBeenClicked;
-    //  console.log(firstPort);
-    //  console.log(secondPort);
-    //
-    //  if(firstPort.parentNode.id === secondPort.parentNode.id && firstPort.className.animVal === secondPort.className.animVal ){
-    //    console.log("the two clicked ports are the same port, you clicked on the same port twice!");
-    //  }
-    //  else{
-    //    console.log("something else is afoot! =P");
-    //  }
-    //}
-    //else if(this.state.storingFirstPortClicked === null){
-    //  console.log("this.state.storingFirstPortClicked is null, so this is just initial render right now");
-    //}
+    /* This function will run whenever we have dispatched a PortSelect event */
+
     var firstPort = document.getElementById(this.props.storingFirstPortClicked.id);
     var secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
 
-    /* For my refactored block.js file, I added another parent container to hold the ports etc, so another level of parentNode is needed here if I keep that
+    /* For my refactored block.js file, I added another parent container to hold the ports etc,
+    so another level of parentNode is needed here if I keep that
      Or I could simply remove those <g> containers for the time being =P */
     /* Added another <g> element in the ports.js file, so yet another .parentNode makes it on here =P */
 
     /* Trying to use id instead of class to then allow class for interactjs use */
-    /* Need the length of the name of the node, then slice the firstPort id string until the end of the node name length */
+    /* Need the length of the name of the node, then slice the firstPort id string
+    until the end of the node name length */
 
     var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
     var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
@@ -404,7 +379,9 @@ var FlowChart = React.createClass({
     var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
 
 
-    if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id === secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id && firstPort.id === secondPort.id ){
+    if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
+      secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
+      firstPort.id === secondPort.id ){
       //console.log("the two clicked ports are the same port, you clicked on the same port twice!");
     }
     else{
@@ -415,7 +392,7 @@ var FlowChart = React.createClass({
         toBlock: secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         toBlockPort: secondPortName
       };
-      /* Now using checkPortCompatibility in theGraphDiamond instead of in the store */
+      /* Now using checkPortCompatibility in flowChart instead of in the store */
       //this.createNewEdge(edge);
 
       this.checkPortCompatibility(edge);
@@ -424,157 +401,134 @@ var FlowChart = React.createClass({
   },
 
   checkPortCompatibility: function(edgeInfo){
-  /* First need to check we have an inport and an outport */
-  /* Find both port types, then compare them somehow */
+    /* First need to check we have an inport and an outport */
+    /* Find both port types, then compare them somehow */
 
-  var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
-  var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
+    var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
+    var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
 
-  /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
-  var blockTypes = {
-    fromBlockType: fromBlockType,
-    toBlockType: toBlockType
-  };
-
-
-  var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
-  var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
-
-  //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
-  //
-  if(document.getElementById(this.props.storingFirstPortClicked.id).parentNode.transform.animVal[0].matrix.e === 0){
-    //console.log("it's an inport, since the port's x value is zero!");
-    var fromBlockPortType = "inport";
-  }
-  else{
-    //console.log("it's an outport!");
-    var fromBlockPortType = "outport";
-  }
-
-  if(document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.transform.animVal[0].matrix.e === 0) {
-    var toBlockPortType = "inport";
-  }
-  else{
-    var toBlockPortType = "outport";
-  }
+    /* Remember, this is BEFORE any swapping occurs, but be aware that these may have to swap later on */
+    var blockTypes = {
+      fromBlockType: fromBlockType,
+      toBlockType: toBlockType
+    };
 
 
+    var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
+    var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
-  /* Replacing for now with a check of the port position,
-  to determine if the clicked port is an inport or outport
-
-  /* Actually, don't need to replace it, can just remove the logic determining
-  the port type and still use it to find the inport index, just via allBlockInfo
-  NOT blockLibrary
-   */
-  for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
-    if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
-      //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
-    //  var fromBlockPortType = "inport";
-      var inportIndex = i;
-      break;
+    //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
+    //
+    if(document.getElementById(this.props.storingFirstPortClicked.id).parentNode.transform.animVal[0].matrix.e === 0){
+      //console.log("it's an inport, since the port's x value is zero!");
+      var fromBlockPortType = "inport";
     }
     else{
-      //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
-    //  var fromBlockPortType = "outport";
+      //console.log("it's an outport!");
+      var fromBlockPortType = "outport";
     }
-  }
 
-  for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
-    if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
-      //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
-    //  var toBlockPortType = "inport";
-      var inportIndex = j;
-      break;
+    if(document.getElementById(this.props.portThatHasBeenClicked.id).parentNode.transform.animVal[0].matrix.e === 0) {
+      var toBlockPortType = "inport";
     }
     else{
-      //console.log("The toBlock isn't an inport, so it's an outport!");
-    //  var toBlockPortType = "outport";
+      var toBlockPortType = "outport";
     }
-  }
 
-  var portTypes = {
-    fromBlockPortType: fromBlockPortType,
-    toBlockPortType: toBlockPortType
-  };
 
-  var types = {
-    blockTypes: blockTypes,
-    portTypes: portTypes
-  };
 
-  /* Time to compare the fromNodePortType and toNodePortType */
+    /* Replacing for now with a check of the port position,
+    to determine if the clicked port is an inport or outport */
 
-  var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
-
-  /* Turns out that this is sctually allowed */
-  //if(edgeInfo.fromBlock === edgeInfo.toBlock){
-  //  window.alert("Incompatible ports, they are part of the same block.");
-  //  //var fromPort = this.state.storingFirstPortClicked;
-  //  fromPort.style.stroke = "black";
-  //  fromPort.style.fill = "black";
-  //  fromPort.setAttribute('r', 2);
-  //  this.resetPortClickStorage();
-  //
-  //  blockActions.addEdgePreview(null);
-  //  interact('#appAndDragAreaContainer')
-  //    .off('mousemove', this.interactJSMouseMoveForEdgePreview)
-  //}
-  if(fromBlockPortType === toBlockPortType){
-    //console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
-    window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
-    /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
-    //var fromPort = this.state.storingFirstPortClicked;
-
-    //fromPort.style.stroke = "black";
-    fromPort.style.fill = "grey";
-    //fromPort.setAttribute('r', 2);
-
-    this.resetPortClickStorage();
-    /* Hence, don't add anything to allNodeInfo */
-
-    flowChartActions.addEdgePreview(null);
-    //interact('#appAndDragAreaContainer')
-    //  .off('move', this.interactJSMouseMoveForEdgePreview)
-  }
-  else if(fromBlockPortType !== toBlockPortType){
-    //console.log("fromBlockPortType is " + fromBlockPortType + ", and toBlockPortType is " + toBlockPortType + ", so so far this connection is valid. Check if the ports and their respective blocks are compatible.");
-    /* So, for now, just run the function that adds to allNodeInfo, but there will be more checks here, or perhaps a separate function to check for further port compatibility */
-    if(fromBlockPortType === "inport"){
-      this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
-    }
-    else if(toBlockPortType === "inport"){
-      this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
-    }
-    else{
-      //console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
-    }
-    /* Introducing other port compatibility checks, so this will get put further and further back until the very last check function; only if all these checks are passed is this node action invoked */
-    //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
-
-    /* Also need the equivalent of addToEdgesObject for single edges here! */
-    /* Now, the point of this was also to find if the fromNode was an inport or outport:
-     if it's an outport then it's a normal connection from an out to an in,
-     but if it's an inport, then it's a connection from an in to an out (ie, the other way around), so somehow need to compensate for that!
+    /* Actually, don't need to replace it, can just remove the logic determining
+    the port type and still use it to find the inport index, just via allBlockInfo
+    NOT blockLibrary
      */
 
-  }
+    /* Note that the inportIndex is used to then look in allBlockInfo
+    and check if the selected inport is already conencted or not
+     */
+
+    for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
+      if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
+        //console.log("The fromBlock is an inport:" + edgeInfo.fromBlockPort);
+      //  var fromBlockPortType = "inport";
+        var inportIndex = i;
+        break;
+      }
+      else{
+        //console.log("The fromBlock isn't an inport, so it's an outport, so no need to check the outports!");
+      //  var fromBlockPortType = "outport";
+      }
+    }
+
+    for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
+      if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
+        //console.log("The toBlock is an inport: " + edgeInfo.toBlockPort);
+      //  var toBlockPortType = "inport";
+        var inportIndex = j;
+        break;
+      }
+      else{
+        //console.log("The toBlock isn't an inport, so it's an outport!");
+      //  var toBlockPortType = "outport";
+      }
+    }
+
+    var portTypes = {
+      fromBlockPortType: fromBlockPortType,
+      toBlockPortType: toBlockPortType
+    };
+
+    var types = {
+      blockTypes: blockTypes,
+      portTypes: portTypes
+    };
+
+    /* Time to compare the fromNodePortType and toNodePortType */
+
+    var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
+
+    /* Turns out that connections between a blocks' own inport and outport is allowed */
+
+    if(fromBlockPortType === toBlockPortType){
+      //console.log("The fromBlock and toBlock ports are both " + fromBlockPortType + "s, so can't connect them");
+      window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
+      /* Reset styling of fromPort before clearing this.state.storingFirstPortClciked */
+      //var fromPort = this.state.storingFirstPortClicked;
+
+      this.resetPortClickStorage();
+      /* Hence, don't add anything to allNodeInfo */
+
+      flowChartActions.addEdgePreview(null);
+      //interact('#appAndDragAreaContainer')
+      //  .off('move', this.interactJSMouseMoveForEdgePreview)
+    }
+    else if(fromBlockPortType !== toBlockPortType){
+
+      if(fromBlockPortType === "inport"){
+        this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
+      }
+      else if(toBlockPortType === "inport"){
+        this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
+      }
+      else{
+        //console.log("fromBlockPortType and toBlockPortType are apparently different, yet neither are an inport, so something is up...");
+      }
+
+    }
 
   },
 
   isInportConnected: function(inport, inportIndex, block, edgeInfo, types){
-    //console.log("The inport " + inport + " of the block " + block + " is " + this.props.allBlockInfo[block].inports[inportIndex].connected);
     if(this.props.allBlockInfo[block].inports[inportIndex].connected === true){
       //console.log("That inport is already connected, so another connection cannot be made");
-      window.alert("The inport " + inport + " of the block " + block + " is already connected, so another connection cannot be made");
+      window.alert("The inport " + inport + " of the block " + block +
+        " is already connected, so another connection cannot be made");
       /* Set the styling of the first port back to normal */
       //console.log(edgeInfo);
       //console.log(this.state.storingFirstPortClicked);
       var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
-
-      //fromPort.style.stroke = "black";
-      fromPort.style.fill = "grey";
-      //fromPort.setAttribute('r', 2);
 
       this.resetPortClickStorage();
 
@@ -585,11 +539,6 @@ var FlowChart = React.createClass({
     else if(this.props.allBlockInfo[block].inports[inportIndex].connected === false){
       //console.log("That inport isn't connected to anything, so proceed with the port connection process");
       var toPort = document.getElementById(this.props.portThatHasBeenClicked.id);
-
-      /* Put this styling later, sicne I've now added the port value type checker */
-      //toPort.style.stroke = "black";
-      //toPort.style.fill = "lightgrey";
-      //toPort.setAttribute('r', 4);
 
       /* Putting later, since I need to check if the start node was an inport or outport */
       //nodeActions.addOneSingleEdgeToAllNodeInfo(edgeInfo);
@@ -606,9 +555,15 @@ var FlowChart = React.createClass({
       var newEdge;
       var edgeLabel;
 
-      /* For the malcolmCall that updates the dropdown menu list in the block's tab */
+      /* For the malcolmCall that updates the dropdown menu list
+         specifying what port the block's inport is connected to */
       var inportBlock;
       var inportBlockPort;
+
+      var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+
+      var startBlockAttributes;
+      var endBlockAttributes;
 
       if(types.portTypes.fromBlockPortType === 'outport'){
 
@@ -620,7 +575,18 @@ var FlowChart = React.createClass({
         endBlockType = types.blockTypes.toBlockType;
         endBlockPort = edgeInfo.toBlockPort;
 
-        /* Then we know that the toBlockPortType is an inport, so then we can check their port VALUE types accordingly */
+        /* Replace the data type checking with the malcolm
+        type info
+         */
+
+
+        /* Now to loop through the specific port's tags to find
+        out what type it is (ie, pos, bit etc)
+         */
+
+
+        /* Then we know that the toBlockPortType is an inport,
+        so then we can check their port VALUE types accordingly */
         for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
           if(this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort){
             var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
@@ -644,71 +610,10 @@ var FlowChart = React.createClass({
         endBlockType = types.blockTypes.fromBlockType;
         endBlockPort = edgeInfo.fromBlockPort;
 
-        /* Then we know that the toBlockPortType is an outport */
-        for(var k = 0; k < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; k++){
-          if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].name === edgeInfo.fromBlockPort){
-            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].inports[k].type;
-          }
-        }
-        for(var l = 0; l < this.props.allBlockInfo[edgeInfo.toBlock].outports.length; l++){
-          if(this.props.allBlockInfo[edgeInfo.toBlock].outports[l].name === edgeInfo.toBlockPort){
-            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].outports[l].type;
-          }
-        }
       }
 
-      if(fromPortValueType === toPortValueType || fromPortValueType !== toPortValueType){
+      if(fromPortValueType === toPortValueType){
         /* Proceed with the connection as we have compatible port value types */
-
-        //toPort.style.stroke = "black";
-        toPort.style.fill = "#00c9cc";
-        //toPort.setAttribute('r', 4);
-
-
-        /* UPDATE: moved to the inside of the port value type checker since they also check the port types */
-        /* Now need to implement the logic that checks if the start port was an inport or outport */
-
-        //var startBlock;
-        //var startBlockType;
-        //var startBlockPort;
-        //var endBlock;
-        //var endBlockType;
-        //var endBlockPort;
-        //var newEdge;
-        //var edgeLabel;
-        //if(types.portTypes.fromBlockPortType === "outport"){
-        //  console.log("outport to inport, so edge labelling is normal");
-        //  startBlock = edgeInfo.fromBlock;
-        //  startBlockType = types.blockTypes.fromBlockType;
-        //  startBlockPort = edgeInfo.fromBlockPort;
-        //  endBlock = edgeInfo.toBlock;
-        //  endBlockType = types.blockTypes.toBlockType;
-        //  endBlockPort = edgeInfo.toBlockPort;
-        //  //newEdge = {
-        //  //  fromNode: startNode,
-        //  //  fromNodePort: startNodePort,
-        //  //  toNode: endNode,
-        //  //  toNodePort: endNodePort
-        //  //}
-        //}
-        //else if(types.portTypes.fromBlockPortType === "inport"){
-        //  console.log("inport to outport, so have to flip the edge labelling direction");
-        //  /* Note that you must also flip the ports too! */
-        //  startBlock = edgeInfo.toBlock;
-        //  startBlockType = types.blockTypes.toBlockType;
-        //  startBlockPort = edgeInfo.toBlockPort;
-        //  endBlock = edgeInfo.fromBlock;
-        //  endBlockType = types.blockTypes.fromBlockType;
-        //  endBlockPort = edgeInfo.fromBlockPort;
-        //  /* Don't need this in both loops, can just set this after the loops have completed! */
-        //  //newEdge = {
-        //  //  fromNode: startNode,
-        //  //  fromNodePort: startNodePort,
-        //  //  toNode: endNode,
-        //  //  toNodePort: endNodePort
-        //  //}
-        //}
-
 
         edgeLabel = String(startBlock) + String(startBlockPort) +  String(endBlock) + String(endBlockPort);
 
@@ -754,17 +659,15 @@ var FlowChart = React.createClass({
         //  .off('move', this.interactJSMouseMoveForEdgePreview)
       }
       else if(fromPortValueType !== toPortValueType){
-        window.alert("Incompatible port value types: the port " + edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
-          " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " + edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
+        window.alert("Incompatible port value types: the port " +
+          edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
+          " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " +
+          edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
           " has value type " + toPortValueType.toUpperCase() + ".");
 
         /* Do all the resetting jazz */
 
         var fromPort = document.getElementById(this.props.storingFirstPortClicked.id);
-
-        //fromPort.style.stroke = "black";
-        fromPort.style.fill = "grey";
-        //fromPort.setAttribute('r', 2);
 
         this.resetPortClickStorage();
 

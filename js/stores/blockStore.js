@@ -513,6 +513,14 @@ function addBlock(blockId){
         var outportRegExp = /flowgraph:outport/;
         if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var inportName = attribute;
+
+          /* Find the type of the inport value too,
+          via the flowgraph tag
+           */
+
+          var inportValueType = testAllBlockInfo[blockId].attributes[attribute].tags[i]
+            .slice('flowgraph:inport:'.length);
+
           /* Need to check if the inport is connected to
           anything as well, so then edges will be preserved
           on a window refresh!
@@ -527,8 +535,8 @@ function addBlock(blockId){
           inports.push(
             {
               name: inportName,
-              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
-              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+              type: inportValueType,
+              value: String(inportValue),
               connected: false,
               connectedTo: null
             }
@@ -549,10 +557,14 @@ function addBlock(blockId){
         }
         else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
           var outportName = attribute;
+
+          var outportValueType = testAllBlockInfo[blockId].attributes[attribute].tags[i]
+            .slice('flowgraph:outport:'.length);
+
           outports.push(
             {
               name: outportName,
-              type: testAllBlockInfo[blockId].attributes[attribute].type.name,
+              type: outportValueType,
               value: String(testAllBlockInfo[blockId].attributes[attribute].value),
               connected: false,
               connectedTo: []
@@ -641,6 +653,28 @@ function addEdgeViaMalcolm(Info){
   }
 
   console.log(allBlockInfo);
+
+}
+
+function removeEdgeViaMalcolm(Info){
+  /* This is specifically for when there's a connection to
+  BITS.ZERO and it means a disconnection rather than connect
+  to the BITS.ZERO port
+   */
+
+  for(var i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++){
+    if(allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort){
+      allBlockInfo[Info.inportBlock].inports[i].connected = false;
+      allBlockInfo[Info.inportBlock].inports[i].connectedTo = null;
+    }
+  }
+
+  /* The BITS block doesn't necessarily exist, and its
+  ZERO port is used specifically to show disconnected
+  blocks, so there's no need to remove the info from
+  the BITS block in allBlockInfo since it's not
+  necessarily there, and it's unneeded anyway
+   */
 
 }
 
@@ -921,13 +955,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       work just fine
        */
 
+      /* UPDATE: could also earch for the 'flowgraph' tag
+      to make sure that it's a inport dropdown menu and
+      not any other type of attribute
+       */
+
       //window.alert("dhi");
 
       var isInportDropdown = false;
+      var hasFlowgraphTag = false;
 
       for(var p = 0; p < item.responseMessage.tags.length; p++){
         if(item.responseMessage.tags[p].indexOf('widget:combo') !== -1){
           isInportDropdown = true;
+        }
+        else if(item.responseMessage.tags[p].indexOf('flowgraph') !== -1){
+          hasFlowgraphTag = true;
         }
         else if(item.responseMessage.tags[p] === 'widget:toggle'){
           if(item.requestedData.blockName === 'VISIBILITY') {
@@ -953,7 +996,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         }
       }
 
-      if(isInportDropdown === true){
+      if(isInportDropdown === true && hasFlowgraphTag === true){
         /* Then update allBlockInfo with the new edge! */
 
         var requestedData = JSON.parse(JSON.stringify(item.requestedData));
@@ -965,12 +1008,24 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         var outportBlock = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
         var outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
 
-        //addEdgeViaMalcolm({
-        //  inportBlock: inportBlock,
-        //  inportBlockPort: inportBlockPort,
-        //  outportBlock: outportBlock,
-        //  outportBlockPort: outportBlockPort
-        //});
+        if(responseMessage.value.indexOf('ZERO') === -1) {
+
+          addEdgeViaMalcolm({
+            inportBlock: inportBlock,
+            inportBlockPort: inportBlockPort,
+            outportBlock: outportBlock,
+            outportBlockPort: outportBlockPort
+          });
+        }
+        else if(responseMessage.value.indexOf('ZERO') !== -1){
+          /* Then the edge needs to be deleted! */
+
+          removeEdgeViaMalcolm({
+            inportBlock: inportBlock,
+            inportBlockPort: inportBlockPort,
+          })
+
+        }
 
         blockStore.emitChange();
       }

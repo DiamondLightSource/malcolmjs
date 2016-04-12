@@ -8,7 +8,7 @@ var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
-
+var attributeStore = require('../stores/attributeStore');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -132,7 +132,7 @@ var Ports = React.createClass({
     return radius * Math.cos(2*Math.PI * percent);
   },
   angleToY: function (percent, radius) {
-  return radius * Math.sin(2*Math.PI * percent);
+    return radius * Math.sin(2*Math.PI * percent);
   },
   makeArcPath: function (port) {
 
@@ -170,20 +170,36 @@ var Ports = React.createClass({
 
     var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
 
+    var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+
+
     for(var i = 0; i < blockInfo.inports.length; i++){
       var len = blockInfo.inports.length;
       var inportName = blockInfo.inports[i].name;
-      var portAndTextTransform = "translate(" + 0 + "," + blockStyling.outerRectangleHeight / (len + 1) * (i + 1) + ")";
+      var portAndTextTransform = "translate(" + 0 + ","
+        + blockStyling.outerRectangleHeight / (len + 1) * (i + 1) + ")";
       //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
+
+      /* Checking the type of the port via allBlockAttributes in order to colour code the ports */
+
+      //for(var k = 0; k < allBlockAttributes[blockId][inportName].tags.length; k++){
+      //  if(allBlockAttributes[blockId][inportName].tags[k].indexOf('flowgraph') !== -1){
+      //    var inportValueType = allBlockAttributes[blockId][inportName].tags[k].slice('flowgraph:inport:'.length);
+      //  }
+      //}
+
+      var inportValueType = blockInfo.inports[i].type;
+
       inports.push(
-        <g key={blockId + inportName + "portAndText"} id={blockId + inportName + "portAndText"} transform={portAndTextTransform} >
+        <g key={blockId + inportName + "portAndText"} id={blockId + inportName + "portAndText"}
+           transform={portAndTextTransform} >
           <path key={blockId + inportName + "-arc"} d={this.makeArcPath("inport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default' }} />
           <circle key={blockId + inportName} className="inport"
                   cx={0}
                   cy={0}
                   r={blockStyling.portRadius} //allBlockTypesStyling[blockType].ports.portStyling.portRadius
-                  style={{fill: blockStyling.portFill, cursor: 'default'  //allBlockTypesStyling[blockType].ports.portStyling.fill
+                  style={{fill: inportValueType === 'pos' ? 'orange' : 'lightblue', cursor: 'default'  //allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65, cursor: 'default'
                     }}
@@ -202,8 +218,9 @@ var Ports = React.createClass({
           <text key={blockId + inportName + "-text"} textAnchor="start"
                 x={5}
                 y={3}
-                style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"8px", fontFamily: "Verdana"}}
+                style={{MozUserSelect: 'none',
+                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+                fontSize:"8px", fontFamily: "Verdana"}}
           >
             {inportName}
           </text>
@@ -216,15 +233,19 @@ var Ports = React.createClass({
       var outportName = blockInfo.outports[j].name;
       var portAndTextTransform = "translate(" + blockStyling.outerRectangleWidth //allBlockTypesStyling[blockType].rectangle.rectangleStyling.width
         + "," + blockStyling.outerRectangleHeight / (len + 1) * (j + 1) + ")"; //allBlockTypesStyling[blockType].rectangle.rectangleStyling.height
+
+      var outportValueType = blockInfo.outports[j].type;
+
       outports.push(
-        <g key={blockId + outportName + "portAndText"} id={blockId + outportName + "portAndText"} transform={portAndTextTransform} >
+        <g key={blockId + outportName + "portAndText"} id={blockId + outportName + "portAndText"}
+           transform={portAndTextTransform} >
           <path key={blockId + outportName + "-arc"} d={this.makeArcPath("outport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black', cursor: 'default'  }} />
           <circle key={blockId + outportName} className="outport"
                   cx={0}
                   cy={0}
                   r={blockStyling.portRadius} //allBlockTypesStyling[blockType].ports.portStyling.portRadius
-                  style={{fill: blockStyling.portFill, //allBlockTypesStyling[blockType].ports.portStyling.fill
+                  style={{fill: outportValueType === 'pos' ? 'orange' : 'lightblue', //allBlockTypesStyling[blockType].ports.portStyling.fill
                    //stroke: allBlockTypesStyling[blockType].ports.portStyling.stroke,
                    // strokeWidth: 1.65,
                     cursor: 'default' }}
@@ -243,8 +264,9 @@ var Ports = React.createClass({
           <text key={blockId + outportName + "-text"} textAnchor="end"
                 x={-5}
                 y={3}
-                style={{MozUserSelect: 'none', cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-               fontSize:"8px", fontFamily: "Verdana"}}
+                style={{MozUserSelect: 'none',
+                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+                fontSize:"8px", fontFamily: "Verdana"}}
           >
             {outportName}
           </text>

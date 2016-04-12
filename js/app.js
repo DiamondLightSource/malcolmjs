@@ -45,6 +45,7 @@ var SideTabbedViewStyle = {
 var App = React.createClass({
 
   componentDidMount: function(){
+    //window.alert("app mounted");
     //MalcolmActionCreators.addWebsocketOnOpenCallback('Z');
     //AppDispatcher.handleAction({
     //  actionType: appConstants.INITIALISE_FLOWCHART_END,
