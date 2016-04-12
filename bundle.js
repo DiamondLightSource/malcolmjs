@@ -2065,6 +2065,7 @@ function addBlock(blockId){
   allBlockInfo[blockId] = {
     type: blockType,
     label: blockId,
+    iconURL: testAllBlockInfo[blockId].attributes['ICON'].value,
     name: '',
     inports: inports,
     outports: outports,
@@ -4226,6 +4227,7 @@ var Block = React.createClass({displayName: "Block",
           "/* To allow the cursor to change when hovering over the entire block container */", 
 
           React.createElement(BlockRectangle, {blockId: this.props.id, blockType: this.props.blockInfo.type, 
+                          blockIconURL: this.props.blockInfo.iconURL, 
                           portThatHasBeenClicked: this.props.portThatHasBeenClicked, 
                           selected: this.props.selected, 
                           blockStyling: this.props.blockStyling}), 
@@ -4268,6 +4270,9 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
 
     var blockStyling = this.props.blockStyling;
 
+    /* Use this for when all icons are available */
+    var blockIconURL = this.props.blockIconURL;
+
     return(
       React.createElement("g", null, 
         React.createElement("rect", {id: this.props.blockId.concat("Rectangle"), 
@@ -4285,6 +4290,18 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
               style: {fill: 'rgba(230,238,240,0.94)',
                        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
                        }}
+        ), 
+
+        React.createElement("svg", {height: blockStyling.outerRectangleHeight, 
+             width: blockStyling.outerRectangleWidth, 
+             viewBox: "0 0 144 152", 
+             style: {cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}, 
+          React.createElement("image", {height: "100%", width: "100%", 
+                 x: blockStyling.outerRectangleHeight / 2, 
+                 y: blockStyling.outerRectangleWidth / 2 - 10, 
+                 style: {cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+                 opacity: '0.5'}, 
+                 xlinkHref: "http://172.23.244.90:8080/icons/LUT.svg"})
         )
       )
     )
@@ -5893,7 +5910,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
   failedPortConnection: function(){
     //this.props.storingFirstPortClicked.style.stroke = "black";
-    document.getElementById(this.props.storingFirstPortClicked.id).style.fill = "grey";
+    //document.getElementById(this.props.storingFirstPortClicked.id).style.fill = "grey";
     //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */
@@ -6672,7 +6689,7 @@ var Ports = React.createClass({displayName: "Ports",
                 y: 3, 
                 style: {MozUserSelect: 'none',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize:"8px", fontFamily: "Verdana"}
+                fontSize:"7px", fontFamily: "Verdana"}
           }, 
             inportName
           )
@@ -6718,7 +6735,7 @@ var Ports = React.createClass({displayName: "Ports",
                 y: 3, 
                 style: {MozUserSelect: 'none',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize:"8px", fontFamily: "Verdana"}
+                fontSize:"7px", fontFamily: "Verdana"}
           }, 
             outportName
           )
@@ -6732,7 +6749,7 @@ var Ports = React.createClass({displayName: "Ports",
     blockText.push([
       React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize:"11px", fontFamily: "Verdana"}, 
+        alignmentBaseline: 'middle', fontSize:"10px", fontFamily: "Verdana"}, 
             transform: "translate(36, 91)"}, 
         blockInfo.label
       ),

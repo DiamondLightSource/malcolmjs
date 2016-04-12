@@ -220,7 +220,7 @@ var Ports = React.createClass({
                 y={3}
                 style={{MozUserSelect: 'none',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize:"8px", fontFamily: "Verdana"}}
+                fontSize:"7px", fontFamily: "Verdana"}}
           >
             {inportName}
           </text>
@@ -266,7 +266,7 @@ var Ports = React.createClass({
                 y={3}
                 style={{MozUserSelect: 'none',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize:"8px", fontFamily: "Verdana"}}
+                fontSize:"7px", fontFamily: "Verdana"}}
           >
             {outportName}
           </text>
@@ -280,7 +280,7 @@ var Ports = React.createClass({
     blockText.push([
       <text className="blockName" style={{MozUserSelect: 'none',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
-        alignmentBaseline: 'middle', fontSize:"11px", fontFamily: "Verdana"}}
+        alignmentBaseline: 'middle', fontSize:"10px", fontFamily: "Verdana"}}
             transform="translate(36, 91)" >
         {blockInfo.label}
       </text>,

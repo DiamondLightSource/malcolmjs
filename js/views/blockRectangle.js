@@ -20,6 +20,9 @@ var BlockRectangles = React.createClass({
 
     var blockStyling = this.props.blockStyling;
 
+    /* Use this for when all icons are available */
+    var blockIconURL = this.props.blockIconURL;
+
     return(
       <g>
         <rect id={this.props.blockId.concat("Rectangle")}
@@ -38,6 +41,18 @@ var BlockRectangles = React.createClass({
                        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
                        }}
         />
+
+        <svg height={blockStyling.outerRectangleHeight}
+             width={blockStyling.outerRectangleWidth}
+             viewBox="0 0 144 152"
+             style={{cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}} >
+          <image height="100%" width="100%"
+                 x={blockStyling.outerRectangleHeight / 2}
+                 y={blockStyling.outerRectangleWidth / 2 - 10}
+                 style={{cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+                 opacity: '0.5'}}
+                 xlinkHref="http://172.23.244.90:8080/icons/LUT.svg" />
+        </svg>
       </g>
     )
   }

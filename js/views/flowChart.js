@@ -681,7 +681,7 @@ var FlowChart = React.createClass({
 
   failedPortConnection: function(){
     //this.props.storingFirstPortClicked.style.stroke = "black";
-    document.getElementById(this.props.storingFirstPortClicked.id).style.fill = "grey";
+    //document.getElementById(this.props.storingFirstPortClicked.id).style.fill = "grey";
     //this.props.storingFirstPortClicked.setAttribute('r', 2);
     this.resetPortClickStorage();
     /* Hence, don't add anything to allNodeInfo */

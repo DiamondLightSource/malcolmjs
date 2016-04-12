@@ -238,6 +238,7 @@ var Block = React.createClass({
           /* To allow the cursor to change when hovering over the entire block container */
 
           <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
+                          blockIconURL={this.props.blockInfo.iconURL}
                           portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                           selected={this.props.selected}
                           blockStyling={this.props.blockStyling}/>

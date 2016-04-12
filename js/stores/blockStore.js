@@ -586,6 +586,7 @@ function addBlock(blockId){
   allBlockInfo[blockId] = {
     type: blockType,
     label: blockId,
+    iconURL: testAllBlockInfo[blockId].attributes['ICON'].value,
     name: '',
     inports: inports,
     outports: outports,
