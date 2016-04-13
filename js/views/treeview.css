@@ -1,6 +1,10 @@
 /* the tree node's style */
 .tree-view {
   overflow-y: hidden;
+
+  /* Prevent the sidebar overflow from causing unnecessary
+  scrollbars to appear in widgets */
+  overflow-x: hidden;
   /*padding-top: 10px;*/
   /*margin-bottom: -10px;*/
 
