@@ -40,3 +40,8 @@ body {
   /*flex-direction: row;*/
   /*align-items: center;*/
 }
+
+.sidebar .tab-content {
+  /* Allows overflow in a tab to create a scrollbar */
+  overflow: auto;
+}

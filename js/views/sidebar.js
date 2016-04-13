@@ -44,7 +44,11 @@ var SidebarStyling = {
     left: 0,
     right: 0,
     bottom: 0,
-    overflow: 'hidden',
+    //overflow: 'hidden',
+    overflowX: 'hidden',
+    /* Allow overflowY to be normal, so then a scrollbar will
+    appear when the content of a tab overflows
+     */
   },
   sidebar: {
     zIndex: 2,
