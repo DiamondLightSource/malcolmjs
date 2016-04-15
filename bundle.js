@@ -6904,137 +6904,59 @@ var SidePane = React.createClass({displayName: "SidePane",
 
   },
 
+  handleOnBlur: function(e){
+
+    var inputFieldValue;
+    var inputFieldElement = e.target;
+    var inputFieldBlockName = e.target.className.slice(0, e.target.className.indexOf('widget'));
+
+    var inputFieldAttribute = e.target.id.slice(inputFieldBlockName.length,
+      e.target.id.indexOf('inputField'));
+
+    if(inputFieldElement.value === ""){
+      /* Set the value to 0, then send that to
+       malcolmCall
+       */
+
+      inputFieldElement.value = "0";
+      /* Had to use dot notation to set value, rather
+       than setAttribute
+       */
+
+      inputFieldValue = "0";
+
+    }
+    else{
+      //window.alert(inputFieldElement.value);
+      inputFieldValue = inputFieldElement.value;
+    }
+
+    /* Now i need to pass malcolmCall the corresponding
+     method and arguments
+     */
+
+    var inputFieldSetMethodName = "_set_" +inputFieldAttribute;
+
+    var argsObject = {
+
+    };
+
+    argsObject[inputFieldAttribute] = inputFieldValue;
+
+    this.handleMalcolmCall(inputFieldBlockName, inputFieldSetMethodName, argsObject);
+
+    inputFieldElement.removeEventListener('blur', this.handleOnBlur);
+  },
+
   attributeFieldOnChange: function(blockInfo, e){
     console.log("field changed, wait for the enter key?");
     console.log(e);
     console.log(blockInfo);
+    //window.alert("fieldOnChange");
 
     var blockAttributeInputField = document.getElementById(blockInfo.block + blockInfo.attribute + "inputField");
 
-    console.log(blockAttributeInputField);
-
-    var appContainerElement = document.getElementById('appContainer');
-    console.log(appContainerElement);
-
-    document.addEventListener('keyup', this.enterKeyUp.bind(null, blockInfo, blockAttributeInputField));
-    appContainerElement.addEventListener('mouseup', this.mouseUp.bind(null, blockInfo, blockAttributeInputField));
-
-  },
-
-  enterKeyUp: function(blockInfo, inputFieldElement, e){
-
-    /* Just put it all in keyup, that way I don't
-    have to deal with if the user holds the key down
-    and the GUI ends up firing off lots of keydown/call method
-    events
-     */
-
-    if(e.keyCode == 13) {
-
-      var inputFieldValue;
-
-      if(inputFieldElement.value === ""){
-        /* Set the value to 0, then send that to
-        malcolmCall
-         */
-
-        inputFieldElement.value = "0";
-        /* Had to use dot notation to set value, rather
-        than setAttribute
-         */
-
-        inputFieldValue = "0";
-
-      }
-      else{
-        //window.alert(inputFieldElement.value);
-        inputFieldValue = inputFieldElement.value;
-      }
-
-      /* Now i need to pass malcolmCall the corresponding
-       method and arguments
-       */
-
-      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
-      var argsObject = {
-
-      };
-
-      for(var key in blockInfo){
-        if(blockInfo[key] === blockInfo.attribute){
-          argsObject[blockInfo.attribute] = inputFieldValue;
-        }
-      }
-
-      console.log(argsObject);
-
-      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
-
-      //document.removeEventListener('keydown', this.enterKeyDown);
-
-      var appContainerElement = document.getElementById('appContainer');
-
-      inputFieldElement.blur();
-      document.removeEventListener('keyup', this.enterKeyUp);
-      appContainerElement.removeEventListener('mouseup', this.mouseUp);
-
-    }
-  },
-
-  mouseUp: function(blockInfo, inputFieldElement,e){
-
-    /* e.target can tell what exactly you clicked on,
-    so use it to check the id!
-     */
-
-    if(e.target.id !== inputFieldElement.id) {
-
-      var inputFieldValue;
-
-      if(inputFieldElement.value === ""){
-        /* Set the value to 0, then send that to
-         malcolmCall
-         */
-
-        inputFieldElement.value = "0";
-        /* Had to use dot notation to set value, rather
-         than setAttribute
-         */
-
-        inputFieldValue = "0";
-
-      }
-      else{
-        //window.alert(inputFieldElement.value);
-        inputFieldValue = inputFieldElement.value;
-      }
-
-      /* Now I need to pass malcolmCall the corresponding
-       method and arguments
-       */
-
-      var inputFieldSetMethodName = "_set_" + blockInfo.attribute;
-      var argsObject = {};
-
-      for (var key in blockInfo) {
-        if (blockInfo[key] === blockInfo.attribute) {
-          argsObject[blockInfo.attribute] = inputFieldValue;
-        }
-      }
-
-      console.log(argsObject);
-
-      this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
-
-      var appContainerElement = document.getElementById('appContainer');
-
-      inputFieldElement.blur();
-      appContainerElement.removeEventListener('mouseup', this.mouseUp);
-      document.removeEventListener('keyup', this.enterKeyUp);
-    }
-    else if(e.target === inputFieldElement.id){
-      console.log("clicked on the field again, so don't submit it!");
-    }
+    blockAttributeInputField.addEventListener('blur', this.handleOnBlur);
 
   },
 
@@ -7376,7 +7298,7 @@ var SidePane = React.createClass({displayName: "SidePane",
       return (
         React.createElement(Tab, {key: block + "tab", title: block}, 
 
-          React.createElement(Content, {key: block + "content", className: "blockContent"}, 
+          React.createElement(Content, {key: block + "content"}, 
             betterTabContent()
           )
 
@@ -7650,6 +7572,19 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var TextEditableReadoutField = React.createClass({displayName: "TextEditableReadoutField",
 
+  componentDidMount: function(){
+    document.getElementById(this.props.blockName
+      + this.props.attributeName + "inputField")
+      .addEventListener('keyup', this.enterKeyUp);
+  },
+
+  enterKeyUp: function(e){
+    if(e.keyCode === 13){
+      document.getElementById(this.props.blockName
+        + this.props.attributeName + "inputField").blur();
+    }
+  },
+
   render: function(){
     return(
       React.createElement("div", {style: {position: 'relative', left: '5',
@@ -7662,6 +7597,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
         React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '90px'}}, 
           React.createElement("button", {style: {position: 'relative', left: '215px',}}, "Icon"), 
           React.createElement("input", {id: this.props.blockName + this.props.attributeName + "inputField", 
+                 className: this.props.blockName + 'widget', 
                  style: {position: 'relative', textAlign: 'left',
                          borderRadius: '2px', border: '2px solid #999',
                             //contentEditable:"true"

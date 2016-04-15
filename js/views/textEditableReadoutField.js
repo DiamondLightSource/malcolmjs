@@ -8,6 +8,19 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var TextEditableReadoutField = React.createClass({
 
+  componentDidMount: function(){
+    document.getElementById(this.props.blockName
+      + this.props.attributeName + "inputField")
+      .addEventListener('keyup', this.enterKeyUp);
+  },
+
+  enterKeyUp: function(e){
+    if(e.keyCode === 13){
+      document.getElementById(this.props.blockName
+        + this.props.attributeName + "inputField").blur();
+    }
+  },
+
   render: function(){
     return(
       <div style={{position: 'relative', left: '5',
@@ -20,6 +33,7 @@ var TextEditableReadoutField = React.createClass({
         <div style={{position: 'relative', bottom: '35px', left: '90px'}}>
           <button style={{position: 'relative', left: '215px',}}>Icon</button>
           <input id={this.props.blockName + this.props.attributeName + "inputField"}
+                 className={this.props.blockName + 'widget'}
                  style={{position: 'relative', textAlign: 'left',
                          borderRadius: '2px', border: '2px solid #999',
                             //contentEditable:"true"
