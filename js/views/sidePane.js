@@ -38,6 +38,8 @@ var BlockToggle = require('react-toggle');
 
 //var TreeviewComponent = require('react-treeview-component');
 
+var blockStore = require('../stores/blockStore');
+
 var SidePane = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
@@ -83,15 +85,36 @@ var SidePane = React.createClass({
 
   handleEdgeDeleteButton: function(EdgeInfo){
     console.log(EdgeInfo);
-    blockActions.deleteEdge(EdgeInfo);
+    /* Replace with a malcolmCall to delete the edge */
+    //blockActions.deleteEdge(EdgeInfo);
 
-    /* Reset port styling too */
+    var methodName = "_set_" + EdgeInfo.toBlockPort;
+    var argsObject = {};
+    var argumentValue;
 
-    var fromBlockPortElement = document.getElementById(EdgeInfo.fromBlock + EdgeInfo.fromBlockPort);
-    var toBlockPortElement = document.getElementById(EdgeInfo.toBlock + EdgeInfo.toBlockPort);
+    /* Need to know the type of the port value,
+    so a get from blockStore may be in order
+     */
 
-    fromBlockPortElement.style.fill = "grey";
-    toBlockPortElement.style.fill = "grey";
+    /* Can check either the fromPort value type,
+    or the toPort value type, if the two ports
+    are connected then they'll have the same type
+     */
+
+    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports.length;
+      i++){
+      if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'bit'){
+        argumentValue = 'BITS.ZERO';
+      }
+      else if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'pos'){
+        argumentValue = 'POSITIONS.ZERO';
+      }
+    }
+
+    argsObject[EdgeInfo.toBlockPort] = argumentValue;
+
+    this.handleMalcolmCall(EdgeInfo.toBlock, methodName, argsObject);
+
   },
 
   handleAttributeValueSubmit: function(blockName, method, args){
@@ -461,61 +484,49 @@ var SidePane = React.createClass({
       globals = this.props.globals || {};
 
     var betterTabs = this.props.tabState.map(function(block, i){
-      /* Using strings in tabState instead of obejct so I can just point to this.props.allBlockInfo[block] to show
-      the data, rather than having to redupdate allBlockTabInfo via waitFor every time blockStore's allBlockInfo changes
-       */
-      //var tabLabel = block.label;
-      var tabIndex = i + 1;
 
       var betterTabContent = function() {
 
         var tabContent = [];
 
-        if(block === "Favourites"){
-          console.log("we have a favourites tab");
-          tabContent.push(<p>{this.props.favContent.name}</p>);
-          var tabTitle = 'yh';
+        if(block.tabType === "Favourites"){
+          tabContent.push(
+            <p>{this.props.favContent.name}</p>
+          );
         }
-        else if(block === 'Configuration'){
-          console.log("we have a config tab");
-          tabContent.push(<p>{this.props.configContent.name}</p>);
-          var tabTitle = 'yh';
+        else if(block.tabType === 'Configuration'){
+          tabContent.push(
+            <p>{this.props.configContent.name}</p>
+          );
         }
-        else if(block === 'BlockLookupTable'){
-          console.log("we have the blockLookupTable tab");
+        else if(block.tabType === 'BlockLookupTable'){
 
           /* Making the tab content generator more generic */
 
           tabContent.push(
             this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
           );
-
-          var tabTitle = 'yh';
         }
         else if(block.tabType === 'edge'){
-          console.log("we have an edge tab!!");
-
-          var tabLabel = block.label;
 
           tabContent.push(
-            <button key={tabLabel + "edgeDeleteButton"} onClick={this.handleEdgeDeleteButton.bind(null, block)}
+            <button key={block.label + "edgeDeleteButton"}
+                    onClick={this.handleEdgeDeleteButton.bind(null, block)}
             >Delete edge</button>
           );
         }
-        else {
-          console.log("normal block tab");
-          var tabTitle = "Attributes of " + tabLabel;
-
-          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block], block));
+        else if(block.tabType === 'block'){
+          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block.label],
+            block.label));
         }
         console.log(tabContent);
         return tabContent;
       }.bind(this);
 
       return (
-        <Tab key={block + "tab"} title={block}>
+        <Tab key={block.label + "tab"} title={block.label}>
 
-          <Content key={block + "content"} >
+          <Content key={block.label + "content"} >
             {betterTabContent()}
           </Content>
 

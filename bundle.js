@@ -2748,7 +2748,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
-  'Gate1outTGen1ena': false,
+  //'Gate1outTGen1ena': false,
   //Gate1OutTGen1Ena: false,
   //TGen1PosnPComp1Posn: false,
   //TGen1PosnPComp1Ena: false
@@ -3301,7 +3301,7 @@ var dropdownMenuSelect = function(tab){
 
   for(var i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
-    if(_stuff.tabState[i] === tab){              /* Changed from .name to .label */
+    if(_stuff.tabState[i].label === tab){              /* Changed from .name to .label */
       var findTheIndex = i
     }
   }
@@ -3455,27 +3455,14 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.OPEN_EDGETAB:
       console.log(payload);
       console.log(item);
-      if(allEdgeTabProperties[item.edgeId] === false){
-        allEdgeTabProperties[item.edgeId] = true;
-
-        createObjectForEdgeTabContent({
-          fromBlock: item.fromBlock,
-          fromBlockPort: item.fromBlockPort,
-          toBlock: item.toBlock,
-          toBlockPort: item.toBlockPort
-        });
-        selectBlockOnClick();
-      }
-      else{
-        //console.log("edge tab is already open, jump to it");
-        /* Tab is already open, so jump to it! */
-        /* Need to remove the spaces in the edge id first */
-
-
-        var spacelessEdgeId = item.edgeId.replace(/\s/g, '');
-
-        dropdownMenuSelect(spacelessEdgeId);
-      }
+      var EdgeInfo = {
+        edgeId: item.edgeId,
+        fromBlock: item.fromBlock,
+        fromBlockPort: item.fromBlockPort,
+        toBlock: item.toBlock,
+        toBlockPort: item.toBlockPort
+      };
+      setEdgeTabStateTrue(EdgeInfo);
       paneStore.emitChange();
       break;
 
@@ -3565,6 +3552,100 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log("malcolmSubscribeSuccess in paneStore");
+      var isWidgetCombo = false;
+      var isGroupInputs = false;
+      for(var k =0; k < item.responseMessage.tags.length; k++){
+        if(item.responseMessage.tags[k].indexOf('widget:combo') !== -1){
+          isWidgetCombo = true;
+        }
+        else if(item.responseMessage.tags[k].indexOf('group:Inputs') !== -1){
+          isGroupInputs = true;
+        }
+      }
+
+      if(isWidgetCombo === true && isGroupInputs === true){
+        /* Then this is some info on edges, so we need
+        to append to the relevant objects in order to have
+        edge tabs
+         */
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        if(responseMessage.value !== 'BITS.ZERO' &&
+          responseMessage.value !== 'POSITIONS.ZERO') {
+
+          /* edgeLabelFirstHalf is the outport block and the
+           outport block port names put together
+           */
+          var edgeLabelFirstHalf = responseMessage.value.replace(/\./g, "");
+
+          /* edgeLabelSecondHalf is the inport block and the
+           inport block port names put together
+           */
+          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+          var edgeLabel = edgeLabelFirstHalf + edgeLabelSecondHalf;
+
+          appendToAllEdgeTabProperties(edgeLabel);
+        }
+        else if(responseMessage.value === 'BITS.ZERO' ||
+          responseMessage.value === 'POSITIONS.ZERO'){
+
+          /* I know what inport and what inport block the edge was
+           connected to, but I don't know what outport or what
+           outport block the edge was connected to, since you
+           get the value to be BITS.ZERO or POSITIONS.ZERO instead
+           of what it was connected to before...
+            */
+
+          var edgeLabelToDelete;
+
+          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+
+          /* Inports can't be connected to more than one outport
+          at a time, so only one edge with edgeLabelSecondHalf in it
+          can exist at any given time, so I think I can search through
+          all the edges in allEdgeTabProperties and see if the
+          indexOf(edgeLabelSecondHalf) !== -1, then that should
+          be the edge that I want to delete
+           */
+
+          for(var edge in allEdgeTabProperties){
+            if(edge.indexOf(edgeLabelSecondHalf) !== -1){
+              edgeLabelToDelete = edge;
+              delete allEdgeTabProperties[edge];
+            }
+          }
+
+          console.log(allEdgeTabProperties);
+
+          /* Now need to remove the edge from tabState! */
+
+          for(var j = 0; j < _stuff.tabState.length; j++){
+            if(_stuff.tabState[j].label === edgeLabelToDelete){
+              var newTabs = _stuff.tabState;
+              newTabs.splice(j, 1);
+              _stuff.tabState = newTabs;
+            }
+          }
+
+          console.log(_stuff.tabState);
+
+        }
+
+        paneStore.emitChange();
+
+      }
+
+      /* Hmm, I need to also remove the edge tab
+      if I'm deleting the edge; ie, if the value of
+      a subscription is BITS.ZERO or POSITIONS.ZERO
+       */
+
+      break;
+
     /* Not using loading screens for now */
     //case appConstants.TEST_INITIALDATAFETCH_PENDING:
     //  /* Show the loading icon in the mainPane while the initial data is being fetched */
@@ -3601,20 +3682,13 @@ var blockStore = require('./blockStore');
 
 var allBlockTabInfo;
 
-/* This will need an append function at some point */
-/* Yeahhh, this is why a new tab won't open when a new block is added, need to append to this somehow */
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
   'BlockLookupTable': false,
-  //'Gate1': false,
-  //'TGen1': false,
-  //'PComp1': false
 };
 
-var allEdgeTabProperties = {
-  'Gate1outTGen1ena': false,
-};
+var allEdgeTabProperties = {};
 
 function appendToAllEdgeTabProperties(EdgeId){
   allEdgeTabProperties[EdgeId] = false;
@@ -3624,14 +3698,25 @@ function appendToAllBlockTabProperties(BlockId){
   allBlockTabProperties[BlockId] = false;
 }
 
-var setBlockTabStateTrue = function(BlockId){
+function setBlockTabStateTrue(BlockId){
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
     console.log(allBlockTabProperties);
     /* Now need to run the function to check which tabs should be open */
     /* UPDATE: Nope, now try just add the tab to _stuff.tabState! */
 
-    _stuff.tabState.push(BlockId);
+    /* Try giving an object to tabState, in which it'll
+    have a 'tabType' specifying if it's a block tab or an
+    edge tab, and then a 'label' specifying what should
+    be the tab title
+     */
+
+    var blockTabStateObject = {
+      tabType: 'block',
+      label: BlockId
+    };
+
+    _stuff.tabState.push(blockTabStateObject);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
 
@@ -3644,31 +3729,42 @@ var setBlockTabStateTrue = function(BlockId){
 
     dropdownMenuSelect(BlockId);
   }
-};
+}
 
-//function setEdgeTabStateTrue(EdgeId){
-//  console.log(allEdgeTabProperties);
-//  if(allEdgeTabProperties[EdgeId] === false){
-//    allEdgeTabProperties[EdgeId] = true;
-//  }
-//  else{
-//    console.log("edge tab is already open, jump to it");
-//    /* Tab is already open, so jump to it! */
-//    /* Need to remove the spaces in the edge id first */
-//
-//    /* Changed edge id's to be spaceless to prevent this hassle, got too annoying when dealing with removing tabs */
-//    //var spacelessEdgeId = EdgeId.replace(/\s/g, '');
-//    //console.log(spacelessEdgeId);
-//
-//    dropdownMenuSelect(EdgeId);
-//  }
-//}
+function setEdgeTabStateTrue(EdgeInfo){
+
+  if(allEdgeTabProperties[EdgeInfo.edgeId] === false){
+    allEdgeTabProperties[EdgeInfo.edgeId] = true;
+
+    var edgeTabStateObject = {
+      tabType: 'edge',
+      label: EdgeInfo.edgeId,
+      fromBlock: EdgeInfo.fromBlock,
+      fromBlockPort: EdgeInfo.fromBlockPort,
+      toBlock: EdgeInfo.toBlock,
+      toBlockPort: EdgeInfo.toBlockPort
+    };
+
+    _stuff.tabState.push(edgeTabStateObject);
+
+    selectBlockOnClick();
+
+  }
+  else{
+    dropdownMenuSelect(EdgeInfo.edgeId);
+  }
+}
 
 function setFavTabStateTrue(){
  if(allBlockTabProperties['Favourites'] === false){
    allBlockTabProperties['Favourites'] = true;
 
-   _stuff.tabState.push('Favourites');
+   var favTabStateObject = {
+     tabType: 'Favourites',
+     label: 'Favourites'
+   };
+
+   _stuff.tabState.push(favTabStateObject);
 
    selectBlockOnClick()
  }
@@ -3683,7 +3779,12 @@ function setConfigTabStateTrue(){
   if(allBlockTabProperties['Configuration'] === false){
     allBlockTabProperties['Configuration'] = true;
 
-    _stuff.tabState.push('Configuration');
+    var configTabStateObject = {
+      tabType: 'Configuration',
+      label: 'Configuration'
+    };
+
+    _stuff.tabState.push(configTabStateObject);
 
     selectBlockOnClick();
   }
@@ -3699,37 +3800,18 @@ function setBlockLookupTableTabStateTrue(){
   if(allBlockTabProperties['BlockLookupTable'] === false){
     allBlockTabProperties['BlockLookupTable'] = true;
 
-    _stuff.tabState.push('BlockLookupTable');
+    var blockLookupTableTabStateObject = {
+      tabType: 'BlockLookupTable',
+      label: 'BlockLookupTable'
+    };
+
+    _stuff.tabState.push(blockLookupTableTabStateObject);
 
     selectBlockOnClick();
   }
   else if(allBlockTabProperties['BlockLookupTable'] === true){
     dropdownMenuSelect("BlockLookupTable");
   }
-}
-
-function createObjectForEdgeTabContent(EdgeInfo){
-  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
-  var edgeTabObject = {
-    'tabType': 'edge',
-    'label': edgeLabel,
-    'edgeId': edgeLabel
-  };
-  //for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
-  //  if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
-  //    edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
-  //  }
-  //}
-  //
-  //for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
-  //  if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
-  //    edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
-  //  }
-  //}
-
-  assign(edgeTabObject, EdgeInfo);
-
-  _stuff.tabState.push(edgeTabObject);
 }
 
 var removeBlockTab = function(selectedTabIndex){
@@ -3804,6 +3886,32 @@ function resetTabStateReferences(){
     }
   }
 }
+
+//function createObjectForEdgeTabContent(EdgeInfo){
+//  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
+//  var edgeTabObject = {
+//    'tabType': 'edge',
+//    'label': edgeLabel,
+//    'edgeId': edgeLabel
+//  };
+//  //for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
+//  //  if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
+//  //    edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
+//  //  }
+//  //}
+//  //
+//  //for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
+//  //  if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
+//  //    edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
+//  //  }
+//  //}
+//
+//  assign(edgeTabObject, EdgeInfo);
+//
+//  _stuff.tabState.push(edgeTabObject);
+//  console.log(_stuff.tabState);
+//}
+
 
 module.exports = paneStore;
 
@@ -4748,6 +4856,7 @@ var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -4779,6 +4888,27 @@ var Edge = React.createClass({displayName: "Edge",
       nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
       nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
     )
+  },
+
+  handleMalcolmCall: function(blockName, method, args){
+    MalcolmActionCreators.malcolmCall(blockName, method, args);
+  },
+
+  deleteEdgeViaMalcolm: function(){
+    var methodName = "_set_" + this.props.toBlockPort;
+    var argsObject = {};
+    var argumentValue;
+
+    if(this.props.fromBlockPortValueType === 'bit'){
+      argumentValue = 'BITS.ZERO';
+    }
+    else if(this.props.fromBlockPortValueType === 'pos'){
+      argumentValue = 'POSITIONS.ZERO';
+    }
+
+    argsObject[this.props.toBlockPort] = argumentValue;
+
+    this.handleMalcolmCall(this.props.toBlock, methodName, argsObject);
   },
 
   mouseOver: function(){
@@ -4826,30 +4956,11 @@ var Edge = React.createClass({displayName: "Edge",
         if(this.props.selected === true){
           /* Delete this particular edge */
 
-          /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
-          switching it around
+          /* The fromBlock is ALWAYS the block with the outport at this stage,
+          so no need to worry about potentially switching it around
            */
-          blockActions.deleteEdge({
-            fromBlock: this.props.fromBlock,
-            fromBlockPort: this.props.fromBlockPort,
-            toBlock: this.props.toBlock,
-            toBlockPort: this.props.toBlockPort,
-            edgeId: this.props.id
-          });
 
-          /* Reset both ports' styling to normal again */
-
-          var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
-
-          var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
-
-          //fromBlockPortElement.style.stroke = "black";
-          fromBlockPortElement.style.fill = "grey";
-          //fromBlockPortElement.setAttribute('r', 2);
-
-          //toBlockPortElement.style.stroke = "black";
-          toBlockPortElement.style.fill = "grey";
-          //toBlockPortElement.setAttribute('r', 2);
+          this.deleteEdgeViaMalcolm();
 
         }
 
@@ -4948,7 +5059,7 @@ var Edge = React.createClass({displayName: "Edge",
 
 module.exports = Edge;
 
-},{"../../node_modules/interact.js":44,"../../node_modules/react-dom/dist/react-dom.js":46,"../../node_modules/react/react":231,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12}],28:[function(require,module,exports){
+},{"../../node_modules/interact.js":44,"../../node_modules/react-dom/dist/react-dom.js":46,"../../node_modules/react/react":231,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/02/16.
  */
@@ -6030,22 +6141,31 @@ var FlowChart = React.createClass({displayName: "FlowChart",
           var toBlock = block;
           var toBlockType = this.props.allBlockInfo[block].type;
           var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+
           var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
-          //console.log(this.props.allBlockInfo);
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
+          var fromBlockPortValueType = this.props.allBlockInfo[block].inports[i].type;
+
+          /* Only one of fromBlockPortValueType and toBlockPortValue type
+          is needed, since if they are connected they SHOULD have the same type
+           */
 
           var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
 
           edges.push(
             React.createElement(Edge, {key: edgeLabel, id: edgeLabel, 
-                  fromBlock: fromBlock, fromBlockType: fromBlockType, fromBlockPort: fromBlockPort, fromBlockPosition: this.props.blockPositions[fromBlock], 
-                  toBlock: toBlock, toBlockType: toBlockType, toBlockPort: toBlockPort, toBlockPosition: this.props.blockPositions[toBlock], 
+                  fromBlock: fromBlock, fromBlockType: fromBlockType, 
+                  fromBlockPort: fromBlockPort, fromBlockPortValueType: fromBlockPortValueType, 
+                  fromBlockPosition: this.props.blockPositions[fromBlock], 
+                  toBlock: toBlock, toBlockType: toBlockType, 
+                  toBlockPort: toBlockPort, toBlockPosition: this.props.blockPositions[toBlock], 
                   fromBlockInfo: this.props.allBlockInfo[fromBlock], 
                   toBlockInfo: this.props.allBlockInfo[toBlock], 
                   areAnyEdgesSelected: this.props.areAnyEdgesSelected, 
                   selected: flowChartStore.getIfEdgeIsSelected(edgeLabel), 
-                  inportArrayIndex: i, inportArrayLength: this.props.allBlockInfo[block].inports.length, 
+                  inportArrayIndex: i, 
+                  inportArrayLength: this.props.allBlockInfo[block].inports.length, 
                   blockStyling: this.props.blockStyling}
             )
           )
@@ -6821,6 +6941,8 @@ var BlockToggle = require('react-toggle');
 
 //var TreeviewComponent = require('react-treeview-component');
 
+var blockStore = require('../stores/blockStore');
+
 var SidePane = React.createClass({displayName: "SidePane",
 
   shouldComponentUpdate: function(nextProps, nextState){
@@ -6866,15 +6988,36 @@ var SidePane = React.createClass({displayName: "SidePane",
 
   handleEdgeDeleteButton: function(EdgeInfo){
     console.log(EdgeInfo);
-    blockActions.deleteEdge(EdgeInfo);
+    /* Replace with a malcolmCall to delete the edge */
+    //blockActions.deleteEdge(EdgeInfo);
 
-    /* Reset port styling too */
+    var methodName = "_set_" + EdgeInfo.toBlockPort;
+    var argsObject = {};
+    var argumentValue;
 
-    var fromBlockPortElement = document.getElementById(EdgeInfo.fromBlock + EdgeInfo.fromBlockPort);
-    var toBlockPortElement = document.getElementById(EdgeInfo.toBlock + EdgeInfo.toBlockPort);
+    /* Need to know the type of the port value,
+    so a get from blockStore may be in order
+     */
 
-    fromBlockPortElement.style.fill = "grey";
-    toBlockPortElement.style.fill = "grey";
+    /* Can check either the fromPort value type,
+    or the toPort value type, if the two ports
+    are connected then they'll have the same type
+     */
+
+    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports.length;
+      i++){
+      if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'bit'){
+        argumentValue = 'BITS.ZERO';
+      }
+      else if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'pos'){
+        argumentValue = 'POSITIONS.ZERO';
+      }
+    }
+
+    argsObject[EdgeInfo.toBlockPort] = argumentValue;
+
+    this.handleMalcolmCall(EdgeInfo.toBlock, methodName, argsObject);
+
   },
 
   handleAttributeValueSubmit: function(blockName, method, args){
@@ -7244,61 +7387,49 @@ var SidePane = React.createClass({displayName: "SidePane",
       globals = this.props.globals || {};
 
     var betterTabs = this.props.tabState.map(function(block, i){
-      /* Using strings in tabState instead of obejct so I can just point to this.props.allBlockInfo[block] to show
-      the data, rather than having to redupdate allBlockTabInfo via waitFor every time blockStore's allBlockInfo changes
-       */
-      //var tabLabel = block.label;
-      var tabIndex = i + 1;
 
       var betterTabContent = function() {
 
         var tabContent = [];
 
-        if(block === "Favourites"){
-          console.log("we have a favourites tab");
-          tabContent.push(React.createElement("p", null, this.props.favContent.name));
-          var tabTitle = 'yh';
+        if(block.tabType === "Favourites"){
+          tabContent.push(
+            React.createElement("p", null, this.props.favContent.name)
+          );
         }
-        else if(block === 'Configuration'){
-          console.log("we have a config tab");
-          tabContent.push(React.createElement("p", null, this.props.configContent.name));
-          var tabTitle = 'yh';
+        else if(block.tabType === 'Configuration'){
+          tabContent.push(
+            React.createElement("p", null, this.props.configContent.name)
+          );
         }
-        else if(block === 'BlockLookupTable'){
-          console.log("we have the blockLookupTable tab");
+        else if(block.tabType === 'BlockLookupTable'){
 
           /* Making the tab content generator more generic */
 
           tabContent.push(
             this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
           );
-
-          var tabTitle = 'yh';
         }
         else if(block.tabType === 'edge'){
-          console.log("we have an edge tab!!");
-
-          var tabLabel = block.label;
 
           tabContent.push(
-            React.createElement("button", {key: tabLabel + "edgeDeleteButton", onClick: this.handleEdgeDeleteButton.bind(null, block)
+            React.createElement("button", {key: block.label + "edgeDeleteButton", 
+                    onClick: this.handleEdgeDeleteButton.bind(null, block)
             }, "Delete edge")
           );
         }
-        else {
-          console.log("normal block tab");
-          var tabTitle = "Attributes of " + tabLabel;
-
-          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block], block));
+        else if(block.tabType === 'block'){
+          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block.label],
+            block.label));
         }
         console.log(tabContent);
         return tabContent;
       }.bind(this);
 
       return (
-        React.createElement(Tab, {key: block + "tab", title: block}, 
+        React.createElement(Tab, {key: block.label + "tab", title: block.label}, 
 
-          React.createElement(Content, {key: block + "content"}, 
+          React.createElement(Content, {key: block.label + "content"}, 
             betterTabContent()
           )
 
@@ -7328,7 +7459,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 module.exports = SidePane;
 
-},{"../../node_modules/interact.js":44,"../../node_modules/react-dom/dist/react-dom.js":46,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/paneActions":5,"../stores/paneStore":16,"./blockToggleSwitch":22,"./button":23,"./dropdownEditableReadoutField":25,"./dropdownMenu":26,"./ledWidget":32,"./nonEditableReadoutField":34,"./textEditableReadoutField":38,"react":231,"react-panels":48,"react-toggle":52,"react-treeview":56}],37:[function(require,module,exports){
+},{"../../node_modules/interact.js":44,"../../node_modules/react-dom/dist/react-dom.js":46,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/paneActions":5,"../stores/blockStore":12,"../stores/paneStore":16,"./blockToggleSwitch":22,"./button":23,"./dropdownEditableReadoutField":25,"./dropdownMenu":26,"./ledWidget":32,"./nonEditableReadoutField":34,"./textEditableReadoutField":38,"react":231,"react-panels":48,"react-toggle":52,"react-treeview":56}],37:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */

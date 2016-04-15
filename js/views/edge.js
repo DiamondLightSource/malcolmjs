@@ -8,6 +8,7 @@ var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
+var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var interact = require('../../node_modules/interact.js');
 
@@ -39,6 +40,27 @@ var Edge = React.createClass({
       nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
       nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
     )
+  },
+
+  handleMalcolmCall: function(blockName, method, args){
+    MalcolmActionCreators.malcolmCall(blockName, method, args);
+  },
+
+  deleteEdgeViaMalcolm: function(){
+    var methodName = "_set_" + this.props.toBlockPort;
+    var argsObject = {};
+    var argumentValue;
+
+    if(this.props.fromBlockPortValueType === 'bit'){
+      argumentValue = 'BITS.ZERO';
+    }
+    else if(this.props.fromBlockPortValueType === 'pos'){
+      argumentValue = 'POSITIONS.ZERO';
+    }
+
+    argsObject[this.props.toBlockPort] = argumentValue;
+
+    this.handleMalcolmCall(this.props.toBlock, methodName, argsObject);
   },
 
   mouseOver: function(){
@@ -86,30 +108,11 @@ var Edge = React.createClass({
         if(this.props.selected === true){
           /* Delete this particular edge */
 
-          /* The fromBlock is ALWAYS the block with the inport at this stage, so no need to worry about potentially
-          switching it around
+          /* The fromBlock is ALWAYS the block with the outport at this stage,
+          so no need to worry about potentially switching it around
            */
-          blockActions.deleteEdge({
-            fromBlock: this.props.fromBlock,
-            fromBlockPort: this.props.fromBlockPort,
-            toBlock: this.props.toBlock,
-            toBlockPort: this.props.toBlockPort,
-            edgeId: this.props.id
-          });
 
-          /* Reset both ports' styling to normal again */
-
-          var fromBlockPortElement = document.getElementById(this.props.fromBlock + this.props.fromBlockPort);
-
-          var toBlockPortElement = document.getElementById(this.props.toBlock + this.props.toBlockPort);
-
-          //fromBlockPortElement.style.stroke = "black";
-          fromBlockPortElement.style.fill = "grey";
-          //fromBlockPortElement.setAttribute('r', 2);
-
-          //toBlockPortElement.style.stroke = "black";
-          toBlockPortElement.style.fill = "grey";
-          //toBlockPortElement.setAttribute('r', 2);
+          this.deleteEdgeViaMalcolm();
 
         }
 

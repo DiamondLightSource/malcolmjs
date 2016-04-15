@@ -801,22 +801,31 @@ var FlowChart = React.createClass({
           var toBlock = block;
           var toBlockType = this.props.allBlockInfo[block].type;
           var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+
           var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
-          //console.log(this.props.allBlockInfo);
           var fromBlockType = this.props.allBlockInfo[fromBlock].type;
           var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
+          var fromBlockPortValueType = this.props.allBlockInfo[block].inports[i].type;
+
+          /* Only one of fromBlockPortValueType and toBlockPortValue type
+          is needed, since if they are connected they SHOULD have the same type
+           */
 
           var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
 
           edges.push(
             <Edge key={edgeLabel} id={edgeLabel}
-                  fromBlock={fromBlock} fromBlockType={fromBlockType} fromBlockPort={fromBlockPort} fromBlockPosition={this.props.blockPositions[fromBlock]}
-                  toBlock={toBlock} toBlockType={toBlockType} toBlockPort={toBlockPort} toBlockPosition={this.props.blockPositions[toBlock]}
+                  fromBlock={fromBlock} fromBlockType={fromBlockType}
+                  fromBlockPort={fromBlockPort} fromBlockPortValueType={fromBlockPortValueType}
+                  fromBlockPosition={this.props.blockPositions[fromBlock]}
+                  toBlock={toBlock} toBlockType={toBlockType}
+                  toBlockPort={toBlockPort} toBlockPosition={this.props.blockPositions[toBlock]}
                   fromBlockInfo={this.props.allBlockInfo[fromBlock]}
                   toBlockInfo={this.props.allBlockInfo[toBlock]}
                   areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                   selected={flowChartStore.getIfEdgeIsSelected(edgeLabel)}
-                  inportArrayIndex={i} inportArrayLength={this.props.allBlockInfo[block].inports.length}
+                  inportArrayIndex={i}
+                  inportArrayLength={this.props.allBlockInfo[block].inports.length}
                   blockStyling={this.props.blockStyling}
             />
           )
