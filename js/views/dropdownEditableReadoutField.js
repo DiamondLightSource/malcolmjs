@@ -6,6 +6,8 @@ var React = require('react');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
+var WidgetStatusIcon = require('./widgetStatusIcon');
+
 var DropdownEditableReadoutField = React.createClass({
 
   render: function(){
@@ -71,7 +73,9 @@ var DropdownEditableReadoutField = React.createClass({
           {String(this.props.attributeName)}
         </p>
         <div style={{position: 'relative', bottom: '35px', left: '90px'}}>
-          <button style={{position: 'relative', left: '215px',}}>Icon</button>
+          <WidgetStatusIcon iconStyling={{position: 'relative', left: '215px',}}
+                            blockName={this.props.blockName}
+                            attributeName={this.props.attributeName}/>
           {dropdownList}
         </div>
       </div>

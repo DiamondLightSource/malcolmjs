@@ -17,7 +17,13 @@ var _stuff = {
   blockTabState: [],
   sidebarOpen: false,
   loadingInitialData: true,
-  loadingInitialDataError: false
+  loadingInitialDataError: false,
+  modalDialogBoxOpen: false
+};
+
+var modalDialogBoxInfo = {
+  blockName: null,
+  attributeName: null
 };
 
 var _handles = {
@@ -156,6 +162,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   },
   getIfLoadingInitialDataError: function(){
     return _stuff.loadingInitialDataError;
+  },
+  getModalDialogBoxOpenState: function(){
+    return _stuff.modalDialogBoxOpen;
+  },
+  getModalDialogBoxInfo: function(){
+    return modalDialogBoxInfo;
   }
 });
 
@@ -281,6 +293,20 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.ADDTO_ALLBLOCKINFO:
       appendToAllBlockTabProperties(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.MODAL_DIALOG_BOX_OPEN:
+      _stuff.modalDialogBoxOpen = true;
+      modalDialogBoxInfo.blockName = item.blockName;
+      modalDialogBoxInfo.attributeName = item.attributeName;
+      paneStore.emitChange();
+      break;
+
+    case appConstants.MODAL_DIALOG_BOX_CLOSE:
+      _stuff.modalDialogBoxOpen = false;
+      modalDialogBoxInfo.blockName = null;
+      modalDialogBoxInfo.attributeName = null;
       paneStore.emitChange();
       break;
 

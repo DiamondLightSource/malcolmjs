@@ -6,6 +6,8 @@ var React = require('react');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
+var WidgetStatusIcon = require('./widgetStatusIcon');
+
 var NonEditableReadoutField = React.createClass({
 
   render: function(){
@@ -19,7 +21,9 @@ var NonEditableReadoutField = React.createClass({
           {String(this.props.attributeName)}
         </p>
         <div style={{position: 'relative', bottom: '35px', left: '140px'}}>
-          <button style={{position: 'relative', left: '165px',}}>Icon</button>
+          <WidgetStatusIcon iconStyling={{position: 'relative', left: '165px',}}
+                            blockName={this.props.blockName}
+                            attributeName={this.props.attributeName} />
           <div style={{position: 'relative', backgroundColor: 'black', borderRadius: '2px',
           bottom: '23px', height: '23px', width: '162px'}} >
             <b style={{color: 'cyan', paddingLeft: '4px', paddingTop: '3px'}} >

@@ -7,6 +7,7 @@ var ReactDOM = require('react-dom');
 
 var MainPane = require('./mainPane');
 var SidePane = require('./sidePane');
+var ModalDialogBox = require('./modalDialogBox');
 
 var mainPaneStore = require('../stores/mainPaneStore');
 var sidePaneStore = require('../stores/sidePaneStore');
@@ -33,6 +34,14 @@ var SideTabbedViewStyle = {
   "height": "100%",
   "width": "100%",
   maxWidth:400
+};
+
+var BothPanesContainerStyle = {
+  margin: 0,
+  padding: 0,
+  //display: 'flex',
+  "height": "100%",
+  "width": "100%"
 };
 
 var SidebarStyling = {
@@ -100,6 +109,8 @@ function getBothPanesState(){
   return{
     /* Its own getter functions first */
     sidebarOpen: JSON.parse(JSON.stringify(paneStore.getSidebarOpenState())),
+    modalDialogBoxOpen: JSON.parse(JSON.stringify(paneStore.getModalDialogBoxOpenState())),
+    modalDialogBoxInfo: JSON.parse(JSON.stringify(paneStore.getModalDialogBoxInfo())),
 
     /* MainPane's getter functions for stores */
     footers: JSON.parse(JSON.stringify(mainPaneStore.getFooterState())),
@@ -150,7 +161,9 @@ var BothPanes = React.createClass({
       nextState.favContent !== this.state.favContent ||
       nextState.configContent !== this.state.configContent ||
       nextState.allBlockAttributes !== this.state.allBlockAttributes ||
-      nextState.blocksVisibility !== this.state.blocksVisibility
+      nextState.blocksVisibility !== this.state.blocksVisibility ||
+      nextState.modalDialogBoxOpen !== this.state.modalDialogBoxOpen ||
+      nextState.modalDialogBoxInfo !== this.state.modalDialogBoxInfo
       //nextState.loadingInitialData !== this.state.loadingInitialData ||
       //nextState.loadingInitialDataError !== this.state.loadingInitialDataError
       //nextState.blockPositions !== this.state.blockPositions
@@ -194,36 +207,41 @@ var BothPanes = React.createClass({
     //}
 
     return(
-      <SideBar sidebarClassName="sidebar" styles={SidebarStyling} docked={this.state.sidebarOpen}
-               //open={this.state.sidebarOpen}
-               pullRight={true} touchHandleWidth={5}
-               children={
-               //<div id="MainTabbedView" style={MainTabbedViewStyle}>
-                <MainPane footers={this.state.footers}
-                favTabOpen={this.state.favTabOpen}
-                configTabOpen={this.state.configTabOpen}
-                //loadingInitialData={this.state.loadingInitialData}
-                //loadingInitialDataError={this.state.loadingInitialDataError}
-                //theGraphDiamondState={this.state.theGraphDiamondState}
-                />
-                //</div>
-                }
-               sidebar={
-               //<div id="SideTabbedView" style={SideTabbedViewStyle}>
-               <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
-               listVisible={this.state.listVisible}
-               allBlockInfo={this.state.allBlockInfo}
-               favContent={this.state.favContent}
-               configContent={this.state.configContent}
-               allBlockAttributes={this.state.allBlockAttributes}
-               blocksVisibility={this.state.blocksVisibility}
-               blockGroups={this.state.blockGroups}
-               //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
-               //allBlockTabInfo={this.state.allBlockTabInfo}
-               />
-               //</div>
-               }>
-      </SideBar>
+      <div id="BothPanesContainer" style={BothPanesContainerStyle} >
+        <ModalDialogBox modalDialogBoxOpen={this.state.modalDialogBoxOpen}
+                        modalDialogBoxInfo={this.state.modalDialogBoxInfo}
+                        allBlockAttributes={this.state.allBlockAttributes} />
+        <SideBar sidebarClassName="sidebar" styles={SidebarStyling} docked={this.state.sidebarOpen}
+                 //open={this.state.sidebarOpen}
+                 pullRight={true} touchHandleWidth={5}
+                 children={
+                 //<div id="MainTabbedView" style={MainTabbedViewStyle}>
+                  <MainPane footers={this.state.footers}
+                  favTabOpen={this.state.favTabOpen}
+                  configTabOpen={this.state.configTabOpen}
+                  //loadingInitialData={this.state.loadingInitialData}
+                  //loadingInitialDataError={this.state.loadingInitialDataError}
+                  //theGraphDiamondState={this.state.theGraphDiamondState}
+                  />
+                  //</div>
+                  }
+                 sidebar={
+                 //<div id="SideTabbedView" style={SideTabbedViewStyle}>
+                 <SidePane tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex}
+                 listVisible={this.state.listVisible}
+                 allBlockInfo={this.state.allBlockInfo}
+                 favContent={this.state.favContent}
+                 configContent={this.state.configContent}
+                 allBlockAttributes={this.state.allBlockAttributes}
+                 blocksVisibility={this.state.blocksVisibility}
+                 blockGroups={this.state.blockGroups}
+                 //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
+                 //allBlockTabInfo={this.state.allBlockTabInfo}
+                 />
+                 //</div>
+                 }>
+        </SideBar>
+      </div>
     )
   }
 });

@@ -6,6 +6,8 @@ var React = require('react');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
+var WidgetStatusIcon = require('./widgetStatusIcon');
+
 var TextEditableReadoutField = React.createClass({
 
   componentDidMount: function(){
@@ -31,7 +33,9 @@ var TextEditableReadoutField = React.createClass({
           {String(this.props.attributeName)}
         </p>
         <div style={{position: 'relative', bottom: '35px', left: '90px'}}>
-          <button style={{position: 'relative', left: '215px',}}>Icon</button>
+          <WidgetStatusIcon iconStyling={{position: 'relative', left: '215px',}}
+                            blockName={this.props.blockName}
+                            attributeName={this.props.attributeName}/>
           <input id={this.props.blockName + this.props.attributeName + "inputField"}
                  className={this.props.blockName + 'widget'}
                  style={{position: 'relative', textAlign: 'left',

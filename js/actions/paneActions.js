@@ -86,7 +86,21 @@ var paneActions = {
       actionType: appConstants.OPEN_EDGETAB,
       item: item
     })
-  }
+  },
+
+  openModalDialogBox: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.MODAL_DIALOG_BOX_OPEN,
+      item: item
+    })
+  },
+
+  closeModalDialogBox: function(item){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.MODAL_DIALOG_BOX_CLOSE,
+      item: item
+    })
+  },
 
 };
 
