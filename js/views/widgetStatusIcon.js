@@ -21,11 +21,32 @@ var WidgetStatusIcon = React.createClass({
   },
 
   render: function(){
+
+    /* Decide which icon to display,
+    go through the 'alarm' subattribute
+    and also look at the websocket success
+    or fail somehow too
+     */
+
+    var statusIcon;
+
+    if(this.props.blockAttribute.alarm !== undefined){
+      if (this.props.blockAttribute.alarm.message === 'Invalid') {
+        statusIcon = <i className="fa fa-plug fa-2x" aria-hidden="true"
+                        onClick={this.onButtonClick}></i>
+      }
+      else {
+        statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+                        onClick={this.onButtonClick}></i>
+      }
+    }
+    else {
+      statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+                      onClick={this.onButtonClick}></i>
+    }
+
     return(
-      <button style={this.props.iconStyling}
-              onClick={this.onButtonClick} >
-        Icon
-      </button>
+      statusIcon
     )
   }
 

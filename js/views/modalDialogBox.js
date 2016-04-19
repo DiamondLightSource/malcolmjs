@@ -27,11 +27,11 @@ var modalDialogBoxStyling = {
     left                       : '40%',
     right                      : 'auto',
     bottom                     : 'auto',
-    border                     : '1px solid #ccc',
+    border                     : '3px solid #ccc',
     background                 : '#3e3e3e',
     overflow                   : 'auto',
     WebkitOverflowScrolling    : 'touch',
-    borderRadius               : '5px',
+    borderRadius               : '8px',
     outline                    : 'none',
     padding                    : '20px'
 
@@ -96,9 +96,11 @@ var ModalDialogBox = React.createClass({
           typeof allBlockAttributes[blockName][attributeName][attribute]
           === 'number') {
           tableContent.push(
-            <tr>
-              <td>{attribute}</td>
-              <td>{allBlockAttributes[blockName][attributeName][attribute]}</td>
+            <tr style={{verticalAlign: 'middle'}} >
+              <td style={{width: '100px'}} >{attribute}</td>
+              <td style={{width: '250px'}} >
+                {allBlockAttributes[blockName][attributeName][attribute]}
+              </td>
             </tr>
           )
         }
@@ -107,25 +109,31 @@ var ModalDialogBox = React.createClass({
          */
         else if(attribute === 'type'){
           tableContent.push(
-            <tr>
-              <td>{attribute}</td>
-              <td>{allBlockAttributes[blockName][attributeName][attribute].name}</td>
+            <tr style={{verticalAlign: 'middle'}} >
+              <td style={{width: '100px'}} >{attribute}</td>
+              <td style={{width: '250px'}} >
+                {allBlockAttributes[blockName][attributeName][attribute].name}
+              </td>
             </tr>
           )
         }
         else if(attribute === 'alarm'){
           tableContent.push(
-            <tr>
-              <td>{attribute}</td>
-              <td>{allBlockAttributes[blockName][attributeName][attribute].severity}</td>
+            <tr style={{verticalAlign: 'middle'}} >
+              <td style={{width: '100px'}} >{attribute}</td>
+              <td style={{width: '250px'}} >
+                {allBlockAttributes[blockName][attributeName][attribute].severity}
+              </td>
             </tr>
           )
         }
         else if(attribute === 'timeStamp'){
           tableContent.push(
-            <tr>
-              <td>{attribute}</td>
-              <td>{allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch}</td>
+            <tr style={{verticalAlign: 'middle'}} >
+              <td style={{width: '100px'}} >{attribute}</td>
+              <td style={{width: '250px'}} >
+                {allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch}
+              </td>
             </tr>
           )
         }
@@ -134,8 +142,8 @@ var ModalDialogBox = React.createClass({
       /* Add the buttons */
 
       tableContent.push(
-        <tr>
-          <td verticalAlign="bottom" >
+        <tr style={{verticalAlign: 'middle'}} >
+          <td style={{width: '100px'}} >
             <button style={{marginTop: '0px'}}
                   onClick={this.closeModalDialogBox} >
             Cancel
@@ -146,7 +154,7 @@ var ModalDialogBox = React.createClass({
 
       modalDialogBoxContent.push(
         <table id={blockName + attributeName + 'modalDialogBox'}
-               style={{width: '100%'}} >
+               style={{width: '370px', tableLayout: 'fixed'}} >
           <tbody>
           {tableContent}
           </tbody>

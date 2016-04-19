@@ -4470,23 +4470,30 @@ var React = require('react');
 
 var ToggleSwitch = require('react-toggle');
 
+var WidgetStatusIcon = require('./widgetStatusIcon');
+
 var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
   render: function(){
     /* 'on' is the default setting of the switch, shall be
      from the server at some point (perhaps a ternary operator?)
      */
     return(
-      React.createElement("div", {style: {position: 'relative', left: '0',
-                   bottom: '0px', width: '230px', height: '25px',
-                   display: 'flex', alignItems: 'flex-start'}}, 
-        React.createElement("b", {style: {margin: '0px', width: '100px'}}, this.props.attribute), 
-          React.createElement("div", {style: {position: 'relative', display: 'flex',
-                       alignItems: 'flex-start', left: '45'}}, 
-            React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
-            React.createElement("div", {id: "testToggleSwitch", style: {position: 'relative',
-                      height: '21', width: '50'}}, 
-              React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
-                                      this.props.attribute, this.props.toggleOrientation), 
+
+      React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
+             style: {width: '350px', tableLayout: 'fixed'}}, 
+        React.createElement("tbody", null, 
+        React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+          React.createElement("td", {style: {width: '180px'}}, 
+            React.createElement("p", {style: {margin: '0px'}}, 
+              String(this.props.attributeName)
+            )
+          ), 
+          React.createElement("td", {style: {width: '150px'}}, 
+            React.createElement("div", {style: {display: 'flex', alignItems: 'flex-start', left: '45'}}, 
+              React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
+              React.createElement("div", {id: "testToggleSwitch", style: {height: '21', width: '50'}}, 
+                React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
+                                this.props.attributeName, this.props.toggleOrientation), 
                             checked: this.props.toggleOrientation === 'Show' ||
                                      this.props.toggleOrientation === true, 
                             defaultChecked: this.props.toggleOrientation === 'Show' ||
@@ -4494,17 +4501,26 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
                             id: this.props.blockName + 'toggleSwitch', 
                             on: this.props.toggleOrientation === 'Show' ||
                                 this.props.toggleOrientation === true})
-            ), 
-            React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Show")
+              ), 
+              React.createElement("p", {style: {margin: '0px', width: '40px'}}, "Show")
+            )
+          ), 
+          React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
+            React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
+                              attributeName: this.props.attributeName, 
+                              blockAttribute: this.props.blockAttribute})
           )
+        )
+        )
       )
+
     )
   }
 });
 
 module.exports = BlockToggleSwitch;
 
-},{"react":253,"react-toggle":74}],23:[function(require,module,exports){
+},{"./widgetStatusIcon":40,"react":253,"react-toggle":74}],23:[function(require,module,exports){
 /**
  * Created by twi18192 on 16/02/16.
  */
@@ -4691,26 +4707,34 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
                             block: this.props.blockName,
                             attribute: this.props.attributeName
                             }), 
-              style: {width: '160px'}, 
+              style: {width: '152px'}, 
               value: this.props.blockAttribute.value}, 
         dropdownOptions
       );
 
     return(
-      React.createElement("div", {style: {position: 'relative', left: '5',
-                   bottom: '0px', width: '230px', height: '25px'}}, 
-        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
-           id: this.props.blockName + this.props.attributeName + "textContent", 
-           style: {fontSize: '13px', position: 'relative'}}, 
-          String(this.props.attributeName)
-        ), 
-        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '90px'}}, 
-          React.createElement(WidgetStatusIcon, {iconStyling: {position: 'relative', left: '215px',}, 
-                            blockName: this.props.blockName, 
-                            attributeName: this.props.attributeName}), 
-          dropdownList
+
+      React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
+             style: {width: '350px', tableLayout: 'fixed'}}, 
+        React.createElement("tbody", null, 
+          React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+            React.createElement("td", {style: {width: '180px'}}, 
+              React.createElement("p", {style: {margin: '0px'}}, 
+                String(this.props.attributeName)
+              )
+            ), 
+            React.createElement("td", {style: {width: '150px'}}, 
+              dropdownList
+            ), 
+            React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
+              React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
+                                attributeName: this.props.attributeName, 
+                                blockAttribute: this.props.blockAttribute})
+            )
+          )
         )
       )
+
     )
   }
 
@@ -6405,30 +6429,44 @@ module.exports = FlowChartControllerView;
 
 var React = require('react');
 
+var WidgetStatusIcon = require('./widgetStatusIcon');
+
 var LEDWidget = React.createClass({displayName: "LEDWidget",
   render: function(){
     return(
-      React.createElement("div", {style: {position: 'relative', height: '30'}}, 
-        React.createElement("svg", {style: {width: '300', height: '30'}}, 
-          React.createElement("circle", {r: "8", style: {fill: this.props.blockAttribute.value ? 'orange' : 'lightblue',
-                                stroke: 'white'}, 
-                  transform: "translate(153, 15)"}), 
-          React.createElement("text", {style: {fill: 'lightgrey'}, transform: "translate(5, 20)"}, 
-            String(this.props.attributeName)
-          )
-        ), 
-        React.createElement("div", {style: {position: 'relative', left: '310', bottom: '33', width: '30', height: '30'}}, 
-          React.createElement("i", {className: "fa fa-cog fa-spin fa-2x"})
-        )
 
+      React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
+             style: {width: '350px', tableLayout: 'fixed'}}, 
+        React.createElement("tbody", null, 
+        React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+          React.createElement("td", {style: {width: '180px'}}, 
+            React.createElement("p", {style: {margin: '0px'}}, 
+              String(this.props.attributeName)
+            )
+          ), 
+          React.createElement("td", {style: {width: '150px'}}, 
+            React.createElement("svg", {style: {width: '150', height: '20'}}, 
+              React.createElement("circle", {r: "8", style: {fill: this.props.blockAttribute.value ? 'orange' : 'lightblue',
+                                stroke: 'white'}, 
+                            transform: "translate(9, 12)"})
+            )
+          ), 
+          React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
+            React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
+                              attributeName: this.props.attributeName, 
+                              blockAttribute: this.props.blockAttribute})
+          )
+        )
+        )
       )
+
     )
   }
 });
 
 module.exports = LEDWidget;
 
-},{"react":253}],33:[function(require,module,exports){
+},{"./widgetStatusIcon":40,"react":253}],33:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -6618,11 +6656,11 @@ var modalDialogBoxStyling = {
     left                       : '40%',
     right                      : 'auto',
     bottom                     : 'auto',
-    border                     : '1px solid #ccc',
+    border                     : '3px solid #ccc',
     background                 : '#3e3e3e',
     overflow                   : 'auto',
     WebkitOverflowScrolling    : 'touch',
-    borderRadius               : '5px',
+    borderRadius               : '8px',
     outline                    : 'none',
     padding                    : '20px'
 
@@ -6687,9 +6725,11 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
           typeof allBlockAttributes[blockName][attributeName][attribute]
           === 'number') {
           tableContent.push(
-            React.createElement("tr", null, 
-              React.createElement("td", null, attribute), 
-              React.createElement("td", null, allBlockAttributes[blockName][attributeName][attribute])
+            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+              React.createElement("td", {style: {width: '100px'}}, attribute), 
+              React.createElement("td", {style: {width: '250px'}}, 
+                allBlockAttributes[blockName][attributeName][attribute]
+              )
             )
           )
         }
@@ -6698,25 +6738,31 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
          */
         else if(attribute === 'type'){
           tableContent.push(
-            React.createElement("tr", null, 
-              React.createElement("td", null, attribute), 
-              React.createElement("td", null, allBlockAttributes[blockName][attributeName][attribute].name)
+            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+              React.createElement("td", {style: {width: '100px'}}, attribute), 
+              React.createElement("td", {style: {width: '250px'}}, 
+                allBlockAttributes[blockName][attributeName][attribute].name
+              )
             )
           )
         }
         else if(attribute === 'alarm'){
           tableContent.push(
-            React.createElement("tr", null, 
-              React.createElement("td", null, attribute), 
-              React.createElement("td", null, allBlockAttributes[blockName][attributeName][attribute].severity)
+            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+              React.createElement("td", {style: {width: '100px'}}, attribute), 
+              React.createElement("td", {style: {width: '250px'}}, 
+                allBlockAttributes[blockName][attributeName][attribute].severity
+              )
             )
           )
         }
         else if(attribute === 'timeStamp'){
           tableContent.push(
-            React.createElement("tr", null, 
-              React.createElement("td", null, attribute), 
-              React.createElement("td", null, allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch)
+            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+              React.createElement("td", {style: {width: '100px'}}, attribute), 
+              React.createElement("td", {style: {width: '250px'}}, 
+                allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch
+              )
             )
           )
         }
@@ -6725,8 +6771,8 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
       /* Add the buttons */
 
       tableContent.push(
-        React.createElement("tr", null, 
-          React.createElement("td", {verticalAlign: "bottom"}, 
+        React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+          React.createElement("td", {style: {width: '100px'}}, 
             React.createElement("button", {style: {marginTop: '0px'}, 
                   onClick: this.closeModalDialogBox}, 
             "Cancel"
@@ -6737,7 +6783,7 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
 
       modalDialogBoxContent.push(
         React.createElement("table", {id: blockName + attributeName + 'modalDialogBox', 
-               style: {width: '100%'}}, 
+               style: {width: '370px', tableLayout: 'fixed'}}, 
           React.createElement("tbody", null, 
           tableContent
           )
@@ -6778,39 +6824,38 @@ var WidgetStatusIcon = require('./widgetStatusIcon');
 var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadoutField",
 
   render: function(){
-
     return(
-      React.createElement("div", {style: {position: 'relative', left: '5',
-                   bottom: '0px', width: '230px', height: '25px'}}, 
-        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
-           id: this.props.blockName + this.props.attributeName + "textContent", 
-           style: {fontSize: '13px', position: 'relative'}}, 
-          String(this.props.attributeName)
-        ), 
-        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '140px'}}, 
-          React.createElement(WidgetStatusIcon, {iconStyling: {position: 'relative', left: '165px',}, 
-                            blockName: this.props.blockName, 
-                            attributeName: this.props.attributeName}), 
-          React.createElement("div", {style: {position: 'relative', backgroundColor: 'black', borderRadius: '2px',
-          bottom: '23px', height: '23px', width: '162px'}}, 
-            React.createElement("b", {style: {color: 'cyan', paddingLeft: '4px', paddingTop: '3px'}}, 
-              String(this.props.blockAttribute.value)
+      React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
+             style: {width: '350px', tableLayout: 'fixed'}}, 
+        React.createElement("tbody", null, 
+          React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+            React.createElement("td", {style: {width: '180px'}}, 
+              React.createElement("p", {style: {margin: '0px'}}, 
+                String(this.props.attributeName)
+              )
+            ), 
+            React.createElement("td", {style: {width: '150px'}}, 
+              React.createElement("div", {style: {backgroundColor: 'black', borderRadius: '2px'}}, 
+                React.createElement("b", {style: {color: 'cyan'}}, 
+                  String(this.props.blockAttribute.value)
+                )
+              )
+            ), 
+            React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
+              React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
+                                attributeName: this.props.attributeName, 
+                                blockAttribute: this.props.blockAttribute})
             )
           )
         )
       )
+
     )
   }
 
 });
 
 module.exports = NonEditableReadoutField;
-
-//<input
-//  style={{position: 'relative', textAlign: 'left', borderRadius: '2px',
-//                    border: '2px solid #999', color: 'green'}}
-//  value={String(this.props.blockAttribute.value)}
-//  readOnly="readonly" maxLength="17" size="17"/>
 
 },{"../actions/MalcolmActionCreators":1,"./widgetStatusIcon":40,"react":253}],36:[function(require,module,exports){
 /**
@@ -7493,8 +7538,9 @@ var SidePane = React.createClass({displayName: "SidePane",
 
             case 'toggle':
                   widgetParent.push(
-                    React.createElement(BlockToggleSwitch, {blockName: blockName, 
-                                       attribute: attribute, 
+                    React.createElement(BlockToggleSwitch, {blockAttribute: blockAttributes[attribute], 
+                                       blockName: blockName, 
+                                       attributeName: attribute, 
                                        toggleSwitch: this.toggleSwitch, 
                                        toggleOrientation: blockAttributes[attribute].value, 
                                        key: blockName + attribute + 'toggleSwitch'}
@@ -7964,33 +8010,40 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
 
   render: function(){
     return(
-      React.createElement("div", {style: {position: 'relative', left: '5',
-                   bottom: '0px', width: '230px', height: '25px'}}, 
-        React.createElement("p", {key: this.props.blockName + this.props.attributeName + "textContent", 
-           id: this.props.blockName + this.props.attributeName + "textContent", 
-           style: {fontSize: '13px', position: 'relative'}}, 
-          String(this.props.attributeName)
-        ), 
-        React.createElement("div", {style: {position: 'relative', bottom: '35px', left: '90px'}}, 
-          React.createElement(WidgetStatusIcon, {iconStyling: {position: 'relative', left: '215px',}, 
-                            blockName: this.props.blockName, 
-                            attributeName: this.props.attributeName}), 
-          React.createElement("input", {id: this.props.blockName + this.props.attributeName + "inputField", 
-                 className: this.props.blockName + 'widget', 
-                 style: {position: 'relative', textAlign: 'left',
-                         borderRadius: '2px', border: '2px solid #999',
-                            //contentEditable:"true"
-                            color: 'blue'}, 
-                 defaultValue: String(this.props.blockAttribute.value), /* pass the specific block attribute to each readout! */
-                 onChange: this.props.attributeFieldOnChange.bind(null, {
-                            block: this.props.blockName,
-                            attribute: this.props.attributeName
-                            }), 
-                 onClick: this.props.selectedInputFieldText.bind(null,
-                 this.props.blockName + this.props.attributeName + "inputField"), 
-                 maxLength: "17", size: "17"})
+
+      React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
+             style: {width: '350px', tableLayout: 'fixed'}}, 
+        React.createElement("tbody", null, 
+          React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+            React.createElement("td", {style: {width: '180px'}}, 
+              React.createElement("p", {style: {margin: '0px'}}, 
+                String(this.props.attributeName)
+              )
+            ), 
+            React.createElement("td", {style: {width: '150px'}}, 
+              React.createElement("input", {id: this.props.blockName + this.props.attributeName + "inputField", 
+                     className: this.props.blockName + 'widget', 
+                     style: {textAlign: 'left',borderRadius: '2px', border: '2px solid #999',
+                                //contentEditable:"true"
+                                color: 'blue'}, 
+                     defaultValue: String(this.props.blockAttribute.value), 
+                     onChange: this.props.attributeFieldOnChange.bind(null, {
+                                block: this.props.blockName,
+                                attribute: this.props.attributeName
+                                }), 
+                     onClick: this.props.selectedInputFieldText.bind(null,
+                     this.props.blockName + this.props.attributeName + "inputField"), 
+                     maxLength: "16", size: "16"})
+            ), 
+            React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
+              React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
+                                attributeName: this.props.attributeName, 
+                                blockAttribute: this.props.blockAttribute})
+            )
+          )
         )
       )
+
     )
   }
 
@@ -8022,11 +8075,32 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
   },
 
   render: function(){
+
+    /* Decide which icon to display,
+    go through the 'alarm' subattribute
+    and also look at the websocket success
+    or fail somehow too
+     */
+
+    var statusIcon;
+
+    if(this.props.blockAttribute.alarm !== undefined){
+      if (this.props.blockAttribute.alarm.message === 'Invalid') {
+        statusIcon = React.createElement("i", {className: "fa fa-plug fa-2x", "aria-hidden": "true", 
+                        onClick: this.onButtonClick})
+      }
+      else {
+        statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-2x", "aria-hidden": "true", 
+                        onClick: this.onButtonClick})
+      }
+    }
+    else {
+      statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-2x", "aria-hidden": "true", 
+                      onClick: this.onButtonClick})
+    }
+
     return(
-      React.createElement("button", {style: this.props.iconStyling, 
-              onClick: this.onButtonClick}, 
-        "Icon"
-      )
+      statusIcon
     )
   }
 

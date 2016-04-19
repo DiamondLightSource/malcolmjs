@@ -364,8 +364,9 @@ var SidePane = React.createClass({
 
             case 'toggle':
                   widgetParent.push(
-                    <BlockToggleSwitch blockName={blockName}
-                                       attribute={attribute}
+                    <BlockToggleSwitch blockAttribute={blockAttributes[attribute]}
+                                       blockName={blockName}
+                                       attributeName={attribute}
                                        toggleSwitch={this.toggleSwitch}
                                        toggleOrientation={blockAttributes[attribute].value}
                                        key={blockName + attribute + 'toggleSwitch'}

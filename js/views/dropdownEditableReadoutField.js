@@ -59,26 +59,34 @@ var DropdownEditableReadoutField = React.createClass({
                             block: this.props.blockName,
                             attribute: this.props.attributeName
                             })}
-              style={{width: '160px'}}
+              style={{width: '152px'}}
               value={this.props.blockAttribute.value} >
         {dropdownOptions}
       </select>;
 
     return(
-      <div style={{position: 'relative', left: '5',
-                   bottom: '0px', width: '230px', height: '25px'}}>
-        <p key={this.props.blockName + this.props.attributeName + "textContent"}
-           id={this.props.blockName + this.props.attributeName + "textContent"}
-           style={{fontSize: '13px', position: 'relative'}}>
-          {String(this.props.attributeName)}
-        </p>
-        <div style={{position: 'relative', bottom: '35px', left: '90px'}}>
-          <WidgetStatusIcon iconStyling={{position: 'relative', left: '215px',}}
-                            blockName={this.props.blockName}
-                            attributeName={this.props.attributeName}/>
-          {dropdownList}
-        </div>
-      </div>
+
+      <table id={this.props.blockName + this.props.attributeName + 'contentTable'}
+             style={{width: '350px', tableLayout: 'fixed'}} >
+        <tbody>
+          <tr style={{verticalAlign: 'middle'}} >
+            <td style={{width: '180px'}} >
+              <p style={{margin: '0px'}}>
+                {String(this.props.attributeName)}
+              </p>
+            </td>
+            <td style={{width: '150px'}} >
+              {dropdownList}
+            </td>
+            <td style={{width: '30px', textAlign: 'center'}} >
+              <WidgetStatusIcon blockName={this.props.blockName}
+                                attributeName={this.props.attributeName}
+                                blockAttribute={this.props.blockAttribute} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
     )
   }
 
