@@ -500,12 +500,13 @@ var SidePane = React.createClass({
             <p>{this.props.configContent.name}</p>
           );
         }
-        else if(block.tabType === 'BlockLookupTable'){
+        else if(block.tabType === 'VISIBILITY'){
 
           /* Making the tab content generator more generic */
 
           tabContent.push(
-            this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
+            this.generateTabContent(this.props.allBlockAttributes[block.label],
+              block.label)
           );
         }
         else if(block.tabType === 'edge'){
@@ -517,8 +518,10 @@ var SidePane = React.createClass({
           );
         }
         else if(block.tabType === 'block'){
-          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block.label],
-            block.label));
+          tabContent.push(
+            this.generateTabContent(this.props.allBlockAttributes[block.label],
+            block.label)
+          );
         }
         console.log(tabContent);
         return tabContent;

@@ -68,55 +68,16 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
             console.log(allBlockAttributes);
           //}
         }
-        //else if(item.tags[i] === "instance:Zebra2"){
-        //  /* Save the list of all possible blocks */
-        //  listOfAllPossibleBlocks = JSON.parse(JSON.stringify(item.attributes.blocks.value));
-        //  /* Note that they all have 'Z:' in front of the block
-        //  name in the array
-        //   */
-        //}
-        //else if(item.tags[i] === 'instance:Zebra2Visibility'){
-        //  /* Save the list of all possible blocks */
-        //  var zVisibility = JSON.parse(JSON.stringify(item));
-        //  for(var attribute in zVisibility.attributes){
-        //    if(zVisibility.attributes[attribute].tags !== undefined){
-        //      var isBlockToggle = false;
-        //      var doesBelongToGroup = false;
-        //
-        //      for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
-        //        if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
-        //          /* Then it's a block! */
-        //          //blocksVisibility.push(attribute);
-        //          isBlockToggle = true;
-        //        }
-        //        else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
-        //          doesBelongToGroup = true;
-        //        }
-        //      }
-        //
-        //      if(isBlockToggle === true && doesBelongToGroup === true){
-        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
-        //      }
-        //      else if(isBlockToggle === true && doesBelongToGroup !== true){
-        //        /* It's a block that is the only instance of its
-        //        type, so add it to both blockGroups and
-        //        blocksVisibility, so then I can just check the length
-        //        of the array in the mapping of groups and group members
-        //         */
-        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
-        //        blockGroups.push(attribute);
-        //      }
-        //    }
-        //    else if(zVisibility.attributes[attribute].tags === undefined &&
-        //      zVisibility.attributes[attribute].descriptor === attribute){
-        //      /* Then it's a group! */
-        //      blockGroups.push(attribute);
-        //    }
-        //  }
-        //}
+        /* Try saving blocksVisibility in allBlockAttributes, instead
+        of using blockVisibleStore
+         */
+        else if(item.responseMessage.tags[i] === "instance:Zebra2Visibility"){
+
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+          allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
+          console.log(allBlockAttributes);
+        }
       }
-      //console.log(blockGroups);
-      //console.log(blocksVisibility);
 
       attributeStore.emitChange();
       break;
@@ -148,8 +109,27 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
         var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-        updateAttributeValue(requestedData.attribute, 'VISIBLE',
-          responseMessage.value);
+        /* UPDATE: so this works and the toggle switches stay in sync,
+        but I'm pretty sure I'm doing more updates than I need; I think
+        what's happening is that every time VISIBILITY changes a blocks'
+        visible status, the individual block attribute for its tab is being
+        updated at the same time as the overall master block.
+        It works for now, so keep it, but don't forget about this either!
+         */
+
+        /* UPDATED UPDATE: actually, if one changes, the server knows to
+        change the other, so I'll receive a subscribe message from both,
+        so I don't think it's any more complicated than simply updating
+        what attributes I'm given! (So I think I can even get rid of
+        this else if statement and simply have updateAttributeValue being
+        invoked for ALL malcolmSubscribes that come to attributeStore)
+         */
+
+        //updateAttributeValue(requestedData.attribute, 'VISIBLE',
+        //  responseMessage.value);
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
 
         attributeStore.emitChange();
 

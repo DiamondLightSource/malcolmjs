@@ -502,7 +502,7 @@ var allBlockTabInfo;
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
-  'BlockLookupTable': false,
+  'VISIBILITY': false,
 };
 
 var allEdgeTabProperties = {};
@@ -614,20 +614,20 @@ function setConfigTabStateTrue(){
 }
 
 function setBlockLookupTableTabStateTrue(){
-  if(allBlockTabProperties['BlockLookupTable'] === false){
-    allBlockTabProperties['BlockLookupTable'] = true;
+  if(allBlockTabProperties['VISIBILITY'] === false){
+    allBlockTabProperties['VISIBILITY'] = true;
 
     var blockLookupTableTabStateObject = {
-      tabType: 'BlockLookupTable',
-      label: 'BlockLookupTable'
+      tabType: 'VISIBILITY',
+      label: 'VISIBILITY'
     };
 
     _stuff.tabState.push(blockLookupTableTabStateObject);
 
     selectBlockOnClick();
   }
-  else if(allBlockTabProperties['BlockLookupTable'] === true){
-    dropdownMenuSelect("BlockLookupTable");
+  else if(allBlockTabProperties['VISIBILITY'] === true){
+    dropdownMenuSelect("VISIBILITY");
   }
 }
 

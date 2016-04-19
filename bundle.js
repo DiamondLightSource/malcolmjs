@@ -1390,55 +1390,16 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
             console.log(allBlockAttributes);
           //}
         }
-        //else if(item.tags[i] === "instance:Zebra2"){
-        //  /* Save the list of all possible blocks */
-        //  listOfAllPossibleBlocks = JSON.parse(JSON.stringify(item.attributes.blocks.value));
-        //  /* Note that they all have 'Z:' in front of the block
-        //  name in the array
-        //   */
-        //}
-        //else if(item.tags[i] === 'instance:Zebra2Visibility'){
-        //  /* Save the list of all possible blocks */
-        //  var zVisibility = JSON.parse(JSON.stringify(item));
-        //  for(var attribute in zVisibility.attributes){
-        //    if(zVisibility.attributes[attribute].tags !== undefined){
-        //      var isBlockToggle = false;
-        //      var doesBelongToGroup = false;
-        //
-        //      for(var j = 0; j < zVisibility.attributes[attribute].tags.length; j++){
-        //        if(zVisibility.attributes[attribute].tags[j].indexOf('widget:toggle') !== -1){
-        //          /* Then it's a block! */
-        //          //blocksVisibility.push(attribute);
-        //          isBlockToggle = true;
-        //        }
-        //        else if(zVisibility.attributes[attribute].tags[j].indexOf('group') !== -1){
-        //          doesBelongToGroup = true;
-        //        }
-        //      }
-        //
-        //      if(isBlockToggle === true && doesBelongToGroup === true){
-        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
-        //      }
-        //      else if(isBlockToggle === true && doesBelongToGroup !== true){
-        //        /* It's a block that is the only instance of its
-        //        type, so add it to both blockGroups and
-        //        blocksVisibility, so then I can just check the length
-        //        of the array in the mapping of groups and group members
-        //         */
-        //        blocksVisibility[attribute] = zVisibility.attributes[attribute];
-        //        blockGroups.push(attribute);
-        //      }
-        //    }
-        //    else if(zVisibility.attributes[attribute].tags === undefined &&
-        //      zVisibility.attributes[attribute].descriptor === attribute){
-        //      /* Then it's a group! */
-        //      blockGroups.push(attribute);
-        //    }
-        //  }
-        //}
+        /* Try saving blocksVisibility in allBlockAttributes, instead
+        of using blockVisibleStore
+         */
+        else if(item.responseMessage.tags[i] === "instance:Zebra2Visibility"){
+
+          var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+          allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
+          console.log(allBlockAttributes);
+        }
       }
-      //console.log(blockGroups);
-      //console.log(blocksVisibility);
 
       attributeStore.emitChange();
       break;
@@ -1470,8 +1431,19 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
         var requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
-        updateAttributeValue(requestedData.attribute, 'VISIBLE',
-          responseMessage.value);
+        /* UPDATE: so this works and the toggle switches stay in sync,
+        but I'm pretty sure I'm doing more updates than I need; I think
+        what's happening is that every time VISIBILITY changes a blocks'
+        visible status, the individual block attribute for its tab is being
+        updated at the same time as the overall master block.
+        It works for now, so keep it, but don't forget about this either!
+         */
+
+        //updateAttributeValue(requestedData.attribute, 'VISIBLE',
+        //  responseMessage.value);
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
 
         attributeStore.emitChange();
 
@@ -3727,7 +3699,7 @@ var allBlockTabInfo;
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
-  'BlockLookupTable': false,
+  'VISIBILITY': false,
 };
 
 var allEdgeTabProperties = {};
@@ -3839,20 +3811,20 @@ function setConfigTabStateTrue(){
 }
 
 function setBlockLookupTableTabStateTrue(){
-  if(allBlockTabProperties['BlockLookupTable'] === false){
-    allBlockTabProperties['BlockLookupTable'] = true;
+  if(allBlockTabProperties['VISIBILITY'] === false){
+    allBlockTabProperties['VISIBILITY'] = true;
 
     var blockLookupTableTabStateObject = {
-      tabType: 'BlockLookupTable',
-      label: 'BlockLookupTable'
+      tabType: 'VISIBILITY',
+      label: 'VISIBILITY'
     };
 
     _stuff.tabState.push(blockLookupTableTabStateObject);
 
     selectBlockOnClick();
   }
-  else if(allBlockTabProperties['BlockLookupTable'] === true){
-    dropdownMenuSelect("BlockLookupTable");
+  else if(allBlockTabProperties['VISIBILITY'] === true){
+    dropdownMenuSelect("VISIBILITY");
   }
 }
 
@@ -7138,7 +7110,7 @@ var Ports = React.createClass({displayName: "Ports",
     /* Hmm, where should I get/calculate their position & height from?... */
 
     blockText.push([
-      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none',
+      React.createElement("text", {className: "blockName", style: {MozUserSelect: 'none', fill: 'lightgrey',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize:"10px", fontFamily: "Verdana"}, 
             transform: "translate(36, 91)"}, 
@@ -7674,12 +7646,13 @@ var SidePane = React.createClass({displayName: "SidePane",
             React.createElement("p", null, this.props.configContent.name)
           );
         }
-        else if(block.tabType === 'BlockLookupTable'){
+        else if(block.tabType === 'VISIBILITY'){
 
           /* Making the tab content generator more generic */
 
           tabContent.push(
-            this.generateTabContent(this.props.blocksVisibility, 'VISIBILITY')
+            this.generateTabContent(this.props.allBlockAttributes[block.label],
+              block.label)
           );
         }
         else if(block.tabType === 'edge'){
@@ -7691,8 +7664,10 @@ var SidePane = React.createClass({displayName: "SidePane",
           );
         }
         else if(block.tabType === 'block'){
-          tabContent.push(this.generateTabContent(this.props.allBlockAttributes[block.label],
-            block.label));
+          tabContent.push(
+            this.generateTabContent(this.props.allBlockAttributes[block.label],
+            block.label)
+          );
         }
         console.log(tabContent);
         return tabContent;

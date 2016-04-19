@@ -278,7 +278,7 @@ var Ports = React.createClass({
     /* Hmm, where should I get/calculate their position & height from?... */
 
     blockText.push([
-      <text className="blockName" style={{MozUserSelect: 'none',
+      <text className="blockName" style={{MozUserSelect: 'none', fill: 'lightgrey',
        cursor: this.props.portThatHasBeenClicked === null ? "move" : "default", textAnchor: 'middle',
         alignmentBaseline: 'middle', fontSize:"10px", fontFamily: "Verdana"}}
             transform="translate(36, 91)" >
