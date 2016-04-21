@@ -276,6 +276,17 @@ var MalcolmActionCreators = {
 
   malcolmCall: function(blockName, method, args){
 
+    AppDispatcher.handleAction({
+      actionType: appConstants.MALCOLM_CALL_PENDING,
+      item: {
+        requestedDataToWrite: {
+          blockName: blockName,
+          method: method,
+          args: args
+        }
+      }
+    });
+
     console.log(blockName);
     console.log(method);
     console.log(args);
@@ -804,6 +815,7 @@ var appConstants = {
   MALCOLM_SUBSCRIBE_FAILURE: 'MALCOLM_SUBSCRIBE_FAILURE',
   MALCOLM_CALL_SUCCESS: 'MALCOLM_CALL_SUCCESS',
   MALCOLM_CALL_FAILURE: 'MALCOLM_CALL_FAILURE',
+  MALCOLM_CALL_PENDING: 'MALCOLM_CALL_PENDING',
 
   INITIALISE_FLOWCHART_START: 'INITIALISE_FLOWCHART_START',
   INITIALISE_FLOWCHART_END: 'INITIALISE_FLOWCHART_END',
@@ -1335,6 +1347,10 @@ var allBlockAttributes = {
 
 };
 
+var allBlockAttributesIconStatus = {
+
+};
+
 function updateAttributeValue(blockId, attribute, newValue){
   allBlockAttributes[blockId][attribute].value = newValue;
   console.log(newValue);
@@ -1354,6 +1370,9 @@ var attributeStore = assign({}, EventEmitter.prototype, {
   getAllBlockAttributes: function(){
     return allBlockAttributes;
   },
+  getAllBlockAttributesIconStatus: function(){
+    return allBlockAttributesIconStatus;
+  }
 
 });
 
@@ -1389,6 +1408,19 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
             allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
             console.log(allBlockAttributes);
           //}
+
+          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
+
+          /* Add the block to allBlockAttributesIconStatus */
+          allBlockAttributesIconStatus[blockName] = {};
+
+          for(var attribute in allBlockAttributes[blockName]){
+            allBlockAttributesIconStatus[blockName][attribute] = {
+              value: 'success',
+              message: null
+            };
+          }
+
         }
         /* Try saving blocksVisibility in allBlockAttributes, instead
         of using blockVisibleStore
@@ -1398,6 +1430,18 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
           console.log(allBlockAttributes);
+
+          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
+
+          /* Add the block to allBlockAttributesIconStatus */
+          allBlockAttributesIconStatus[blockName] = {};
+
+          for(var attribute in allBlockAttributes[blockName]){
+            allBlockAttributesIconStatus[blockName][attribute] = {
+              value: 'success',
+              message: null
+            };
+          }
         }
       }
 
@@ -1406,6 +1450,11 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_GET_FAILURE:
       console.log("MALCOLM GET ERROR!");
+
+      /* Not sure what to do when a GET block failure occurs,
+      it's not really related any specific widget is it?
+       */
+
       attributeStore.emitChange();
       break;
 
@@ -1419,8 +1468,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
-
-        attributeStore.emitChange();
       }
       /* This is for when a block has been changed from
       hide to show for the first time via the block palette
@@ -1439,19 +1486,121 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         It works for now, so keep it, but don't forget about this either!
          */
 
-        //updateAttributeValue(requestedData.attribute, 'VISIBLE',
-        //  responseMessage.value);
+        /* UPDATED UPDATE: actually, if one changes, the server knows to
+        change the other, so I'll receive a subscribe message from both,
+        so I don't think it's any more complicated than simply updating
+        what attributes I'm given! (So I think I can even get rid of
+        this else if statement and simply have updateAttributeValue being
+        invoked for ALL malcolmSubscribes that come to attributeStore)
+         */
+
+        /* UPDATE THE UPDATED UPDATE: right, so when I add a new block
+        via VISIBILITY I don't actually subscribe to its attributes, it's
+        only on refresh do I do that, hence the need to do this since not only
+        does a block's visible attribute not update, but neither does any of
+        them until the next refresh!
+        So the solution is basically to have attribute subscription when a
+        block is added/mounted
+         */
+
+        if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+
+          updateAttributeValue(requestedData.attribute, 'VISIBLE',
+            responseMessage.value);
+
+        }
 
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
-
-        attributeStore.emitChange();
-
       }
+
+      /* Update allBlockAttributesIconStatus appropriately */
+
+      allBlockAttributesIconStatus[requestedData.blockName]
+        [requestedData.attribute] = {
+        value: 'success',
+        message: null
+      };
+      attributeStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       console.log("malcolmSubscribeFailure in attributStore");
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+      /* Update allBlockAttributesIconStatus appropriately */
+
+      allBlockAttributesIconStatus[requestedData.blockName]
+        [requestedData.attribute] = {
+        value: 'failure',
+        message: responseMessage
+      };
+
+      /* The responseMessage holds an error message, so perhaps
+      that would be a useful thing to pass on somewhere?
+       */
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      console.log("malcolmCallSuccess");
+
+      /* No responseMessage is specified if it's a success */
+      //var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      /* As we will receive the METHOD name in requestedDataToWrite,
+      we need to get rid of the _set_ at the start of requestedDataToWrite.method
+      string in order to update the corresponding attribute/widget properly
+       */
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'success',
+        message: null
+      };
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+      console.log("malcolmCallFailure");
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'failure',
+        message: responseMessage
+      };
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_PENDING:
+      console.log('malcolmCallPending');
+
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'pending',
+        message: null
+      };
+
+      console.log(allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate]);
+
       attributeStore.emitChange();
       break;
 
@@ -3220,7 +3369,8 @@ var _stuff = {
 
 var modalDialogBoxInfo = {
   blockName: null,
-  attributeName: null
+  attributeName: null,
+  message: null
 };
 
 var _handles = {
@@ -3497,6 +3647,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       _stuff.modalDialogBoxOpen = true;
       modalDialogBoxInfo.blockName = item.blockName;
       modalDialogBoxInfo.attributeName = item.attributeName;
+      modalDialogBoxInfo.message = item.message;
       paneStore.emitChange();
       break;
 
@@ -3504,6 +3655,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       _stuff.modalDialogBoxOpen = false;
       modalDialogBoxInfo.blockName = null;
       modalDialogBoxInfo.attributeName = null;
+      modalDialogBoxInfo.message = null;
       paneStore.emitChange();
       break;
 
@@ -3658,6 +3810,38 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       a subscription is BITS.ZERO or POSITIONS.ZERO
        */
 
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      if(modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
+        modalDialogBoxInfo.attributeName === attributeToUpdate) {
+
+        //modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
+        //modalDialogBoxInfo.attributeName = attributeToUpdate;
+        modalDialogBoxInfo.message = null;
+      }
+
+      paneStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
+      modalDialogBoxInfo.attributeName = attributeToUpdate;
+      modalDialogBoxInfo.message = responseMessage;
+
+      console.log(modalDialogBoxInfo);
+
+      paneStore.emitChange();
       break;
 
     /* Not using loading screens for now */
@@ -4480,7 +4664,8 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
           React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
             React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
                               attributeName: this.props.attributeName, 
-                              blockAttribute: this.props.blockAttribute})
+                              blockAttribute: this.props.blockAttribute, 
+                              blockAttributeStatus: this.props.blockAttributeStatus})
           )
         )
         )
@@ -4701,7 +4886,8 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
               React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
                                 attributeName: this.props.attributeName, 
-                                blockAttribute: this.props.blockAttribute})
+                                blockAttribute: this.props.blockAttribute, 
+                                blockAttributeStatus: this.props.blockAttributeStatus})
             )
           )
         )
@@ -6426,7 +6612,8 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
           React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
             React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
                               attributeName: this.props.attributeName, 
-                              blockAttribute: this.props.blockAttribute})
+                              blockAttribute: this.props.blockAttribute, 
+                              blockAttributeStatus: this.props.blockAttributeStatus})
           )
         )
         )
@@ -6663,30 +6850,6 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
     }
     else if(blockName !== null && attributeName !== null){
 
-      /* Info for the block lookup table widgets is in
-      blockVisibleStore, so watch out that I'm assuming
-      I'm only using widgets in block tabs for now
-       */
-
-      //for(var attribute in this.props.allBlockAttributes
-      //  [this.props.modalDialogBoxInfo.blockName]
-      //  [this.props.modalDialogBoxInfo.attributeName]){
-      //  modalDialogBoxContent.push(
-      //    <p style={{color: 'lightgrey'}} >
-      //      {attribute}:
-      //    </p>
-      //  );
-      //  if(typeof this.props.allBlockAttributes[this.props.modalDialogBoxInfo.blockName]
-      //      [this.props.modalDialogBoxInfo.attributeName][attribute] === 'string') {
-      //    modalDialogBoxContent.push(
-      //      <p style={{color: 'lightgrey'}} >
-      //        {this.props.allBlockAttributes[this.props.modalDialogBoxInfo.blockName]
-      //          [this.props.modalDialogBoxInfo.attributeName][attribute]}
-      //      </p>
-      //    )
-      //  }
-      //}
-
       /* Trying HTML tables to display content */
 
       var tableContent = [];
@@ -6740,19 +6903,6 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
         }
       }
 
-      /* Add the buttons */
-
-      tableContent.push(
-        React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-          React.createElement("td", {style: {width: '100px'}}, 
-            React.createElement("button", {style: {marginTop: '0px'}, 
-                  onClick: this.closeModalDialogBox}, 
-            "Cancel"
-            )
-          )
-        )
-      );
-
       modalDialogBoxContent.push(
         React.createElement("table", {id: blockName + attributeName + 'modalDialogBox', 
                style: {width: '370px', tableLayout: 'fixed'}}, 
@@ -6761,6 +6911,62 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
           )
         )
       );
+
+
+      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+        modalDialogBoxContent.push(
+          React.createElement("b", {style: {color: 'red'}}, 
+            this.props.modalDialogBoxInfo.message
+          )
+        )
+      }
+
+      /* Doesn't change/disappear automatically when the error is
+       resolved though...
+        */
+
+      /* Add the buttons */
+      /* Only want a 'revert' button if there's an error I think? */
+
+      var buttonRowContent = [];
+
+      buttonRowContent.push(
+        React.createElement("td", {style: {width: '130px'}}, 
+          React.createElement("button", {style: {marginTop: '0px'}, 
+                  onClick: this.closeModalDialogBox}, 
+            "Cancel"
+          )
+        )
+      );
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+        /* Add a revert button too */
+
+        buttonRowContent.push(
+          React.createElement("td", {style: {width: '130px', textAlign: 'right'}}, 
+            React.createElement("button", {style: {marginTop: '0px'}}, 
+              "Revert"
+            )
+          )
+        );
+
+      }
+
+      var buttonTableContent =
+        React.createElement("table", {id: blockName + attributeName + 'modalDialogBoxButtons', 
+               style: {width: '355px', tableLayout: 'fixed'}}, 
+          React.createElement("tbody", null, 
+            React.createElement("tr", {style: {verticalAlign: 'baseline'}}, 
+              buttonRowContent
+            )
+          )
+        );
+
+      modalDialogBoxContent.push(
+        buttonTableContent
+      )
 
     }
 
@@ -6816,7 +7022,8 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
               React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
                                 attributeName: this.props.attributeName, 
-                                blockAttribute: this.props.blockAttribute})
+                                blockAttribute: this.props.blockAttribute, 
+                                blockAttributeStatus: this.props.blockAttributeStatus})
             )
           )
         )
@@ -7197,6 +7404,7 @@ var SidePane = React.createClass({displayName: "SidePane",
       nextProps.favContent !== this.props.favContent ||
       nextProps.configContent !== this.props.configContent ||
       nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
+      nextProps.allBlockAttributesIconStatus !== this.props.allBlockAttributesIconStatus ||
       nextProps.blocksVisibility !== this.props.blocksVisibility
       //nextProps.blockPositions !== this.props.blockPositions
     )
@@ -7458,6 +7666,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'led':
                   widgetParent.push(
                     React.createElement(LEDWidget, {blockAttribute: blockAttributes[attribute], 
+                               blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                [blockName][attribute], 
                                blockName: blockName, 
                                attributeName: attribute, 
                                key: blockName + attribute + 'led'})
@@ -7467,6 +7677,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'textupdate':
                   widgetParent.push(
                     React.createElement(NonEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                             blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                              [blockName][attribute], 
                                              blockName: blockName, 
                                              attributeName: attribute, 
                                              key: blockName + attribute + 'readonlyField'})
@@ -7476,6 +7688,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'textinput':
               widgetParent.push(
                 React.createElement(TextEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                          blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                            [blockName][attribute], 
                                           blockName: blockName, 
                                           attributeName: attribute, 
                                           attributeFieldOnChange: this.attributeFieldOnChange, 
@@ -7487,6 +7701,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'choice':
               widgetParent.push(
                 React.createElement(DropdownEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                              blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                                [blockName][attribute], 
                                               blockName: blockName, 
                                               attributeName: attribute, 
                                               onChangeBlockMethodDropdownOption: 
@@ -7499,6 +7715,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'combo':
               widgetParent.push(
                 React.createElement(DropdownEditableReadoutField, {blockAttribute: blockAttributes[attribute], 
+                                              blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                                [blockName][attribute], 
                                               blockName: blockName, 
                                               attributeName: attribute, 
                                               onChangeBlockMethodDropdownOption: 
@@ -7511,6 +7729,8 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'toggle':
                   widgetParent.push(
                     React.createElement(BlockToggleSwitch, {blockAttribute: blockAttributes[attribute], 
+                                       blockAttributeStatus: this.props.allBlockAttributesIconStatus
+                                        [blockName][attribute], 
                                        blockName: blockName, 
                                        attributeName: attribute, 
                                        toggleSwitch: this.toggleSwitch, 
@@ -7837,6 +8057,7 @@ function getBothPanesState(){
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
     allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+    allBlockAttributesIconStatus: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributesIconStatus())),
 
     blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
     blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
@@ -7870,6 +8091,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
       nextState.favContent !== this.state.favContent ||
       nextState.configContent !== this.state.configContent ||
       nextState.allBlockAttributes !== this.state.allBlockAttributes ||
+      nextState.allBlockAttributesIconStatus !== this.state.allBlockAttributesIconStatus ||
       nextState.blocksVisibility !== this.state.blocksVisibility ||
       nextState.modalDialogBoxOpen !== this.state.modalDialogBoxOpen ||
       nextState.modalDialogBoxInfo !== this.state.modalDialogBoxInfo
@@ -7942,6 +8164,7 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                  favContent: this.state.favContent, 
                  configContent: this.state.configContent, 
                  allBlockAttributes: this.state.allBlockAttributes, 
+                 allBlockAttributesIconStatus: this.state.allBlockAttributesIconStatus, 
                  blocksVisibility: this.state.blocksVisibility, 
                  blockGroups: this.state.blockGroups}
                  //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
@@ -8013,7 +8236,8 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
               React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
                                 attributeName: this.props.attributeName, 
-                                blockAttribute: this.props.blockAttribute})
+                                blockAttribute: this.props.blockAttribute, 
+                                blockAttributeStatus: this.props.blockAttributeStatus})
             )
           )
         )
@@ -8045,7 +8269,8 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
      */
     paneActions.openModalDialogBox({
       blockName: this.props.blockName,
-      attributeName: this.props.attributeName
+      attributeName: this.props.attributeName,
+      message: this.props.blockAttributeStatus.message
     });
   },
 
@@ -8057,19 +8282,53 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
     or fail somehow too
      */
 
-    var statusIcon;
+    var statusIcon = null;
 
     if(this.props.blockAttribute.alarm !== undefined){
       if (this.props.blockAttribute.alarm.message === 'Invalid') {
         statusIcon = React.createElement("i", {className: "fa fa-plug fa-2x", "aria-hidden": "true", 
                         onClick: this.onButtonClick})
       }
-      else {
-        statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-2x", "aria-hidden": "true", 
-                        onClick: this.onButtonClick})
-      }
+      //else {
+      //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+      //                  onClick={this.onButtonClick}></i>
+      //}
     }
-    else {
+    //else {
+    //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+    //                  onClick={this.onButtonClick}></i>
+    //}
+
+    if(this.props.blockAttributeStatus.value === 'failure'){
+      /* Override the other icons and display an error icon */
+
+      statusIcon = React.createElement("i", {className: "fa fa-exclamation-circle fa-2x", "aria-hidden": "true", 
+                      onClick: this.onButtonClick, 
+                      style: {color: 'red'}})
+
+
+    }
+    else if(this.props.blockAttributeStatus.value === 'pending'){
+      /* Show spinny cog icon */
+
+      statusIcon = React.createElement("i", {className: "fa fa-cog fa-spin fa-2x fa-fw margin-bottom", 
+                      onClick: this.onButtonClick})
+
+    }
+
+    /* All the info seems to be getting to the component fine,
+    so I'm not sure where the error with MALCOLM_PENDING is
+    occurring to cause the spinny cog to not display briefly?
+     */
+
+    /* UPDATE: tested by putting the MalcolmUtils call in
+    MalcolmActionCreators in a setTimeout function, it appears,
+    so it must be that the response comes back really quick
+    so the cog isn't displayed for very long
+     */
+
+    if(statusIcon === null){
+
       statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-2x", "aria-hidden": "true", 
                       onClick: this.onButtonClick})
     }

@@ -23,7 +23,8 @@ var _stuff = {
 
 var modalDialogBoxInfo = {
   blockName: null,
-  attributeName: null
+  attributeName: null,
+  message: null
 };
 
 var _handles = {
@@ -300,6 +301,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       _stuff.modalDialogBoxOpen = true;
       modalDialogBoxInfo.blockName = item.blockName;
       modalDialogBoxInfo.attributeName = item.attributeName;
+      modalDialogBoxInfo.message = item.message;
       paneStore.emitChange();
       break;
 
@@ -307,6 +309,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       _stuff.modalDialogBoxOpen = false;
       modalDialogBoxInfo.blockName = null;
       modalDialogBoxInfo.attributeName = null;
+      modalDialogBoxInfo.message = null;
       paneStore.emitChange();
       break;
 
@@ -461,6 +464,38 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       a subscription is BITS.ZERO or POSITIONS.ZERO
        */
 
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      if(modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
+        modalDialogBoxInfo.attributeName === attributeToUpdate) {
+
+        //modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
+        //modalDialogBoxInfo.attributeName = attributeToUpdate;
+        modalDialogBoxInfo.message = null;
+      }
+
+      paneStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
+      modalDialogBoxInfo.attributeName = attributeToUpdate;
+      modalDialogBoxInfo.message = responseMessage;
+
+      console.log(modalDialogBoxInfo);
+
+      paneStore.emitChange();
       break;
 
     /* Not using loading screens for now */

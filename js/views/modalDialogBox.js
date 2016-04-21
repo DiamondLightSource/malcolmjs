@@ -62,30 +62,6 @@ var ModalDialogBox = React.createClass({
     }
     else if(blockName !== null && attributeName !== null){
 
-      /* Info for the block lookup table widgets is in
-      blockVisibleStore, so watch out that I'm assuming
-      I'm only using widgets in block tabs for now
-       */
-
-      //for(var attribute in this.props.allBlockAttributes
-      //  [this.props.modalDialogBoxInfo.blockName]
-      //  [this.props.modalDialogBoxInfo.attributeName]){
-      //  modalDialogBoxContent.push(
-      //    <p style={{color: 'lightgrey'}} >
-      //      {attribute}:
-      //    </p>
-      //  );
-      //  if(typeof this.props.allBlockAttributes[this.props.modalDialogBoxInfo.blockName]
-      //      [this.props.modalDialogBoxInfo.attributeName][attribute] === 'string') {
-      //    modalDialogBoxContent.push(
-      //      <p style={{color: 'lightgrey'}} >
-      //        {this.props.allBlockAttributes[this.props.modalDialogBoxInfo.blockName]
-      //          [this.props.modalDialogBoxInfo.attributeName][attribute]}
-      //      </p>
-      //    )
-      //  }
-      //}
-
       /* Trying HTML tables to display content */
 
       var tableContent = [];
@@ -139,19 +115,6 @@ var ModalDialogBox = React.createClass({
         }
       }
 
-      /* Add the buttons */
-
-      tableContent.push(
-        <tr style={{verticalAlign: 'middle'}} >
-          <td style={{width: '100px'}} >
-            <button style={{marginTop: '0px'}}
-                  onClick={this.closeModalDialogBox} >
-            Cancel
-            </button>
-          </td>
-        </tr>
-      );
-
       modalDialogBoxContent.push(
         <table id={blockName + attributeName + 'modalDialogBox'}
                style={{width: '370px', tableLayout: 'fixed'}} >
@@ -160,6 +123,62 @@ var ModalDialogBox = React.createClass({
           </tbody>
         </table>
       );
+
+
+      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+        modalDialogBoxContent.push(
+          <b style={{color: 'red'}} >
+            {this.props.modalDialogBoxInfo.message}
+          </b>
+        )
+      }
+
+      /* Doesn't change/disappear automatically when the error is
+       resolved though...
+        */
+
+      /* Add the buttons */
+      /* Only want a 'revert' button if there's an error I think? */
+
+      var buttonRowContent = [];
+
+      buttonRowContent.push(
+        <td style={{width: '130px'}} >
+          <button style={{marginTop: '0px'}}
+                  onClick={this.closeModalDialogBox} >
+            Cancel
+          </button>
+        </td>
+      );
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+        /* Add a revert button too */
+
+        buttonRowContent.push(
+          <td style={{width: '130px', textAlign: 'right'}} >
+            <button style={{marginTop: '0px'}} >
+              Revert
+            </button>
+          </td>
+        );
+
+      }
+
+      var buttonTableContent =
+        <table id={blockName + attributeName + 'modalDialogBoxButtons'}
+               style={{width: '355px', tableLayout: 'fixed'}} >
+          <tbody>
+            <tr style={{verticalAlign: 'baseline'}} >
+              {buttonRowContent}
+            </tr>
+          </tbody>
+        </table>;
+
+      modalDialogBoxContent.push(
+        buttonTableContent
+      )
 
     }
 

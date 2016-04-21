@@ -51,6 +51,7 @@ var SidePane = React.createClass({
       nextProps.favContent !== this.props.favContent ||
       nextProps.configContent !== this.props.configContent ||
       nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
+      nextProps.allBlockAttributesIconStatus !== this.props.allBlockAttributesIconStatus ||
       nextProps.blocksVisibility !== this.props.blocksVisibility
       //nextProps.blockPositions !== this.props.blockPositions
     )
@@ -312,6 +313,8 @@ var SidePane = React.createClass({
             case 'led':
                   widgetParent.push(
                     <LEDWidget blockAttribute={blockAttributes[attribute]}
+                               blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                [blockName][attribute]}
                                blockName={blockName}
                                attributeName={attribute}
                                key={blockName + attribute + 'led'} />
@@ -321,6 +324,8 @@ var SidePane = React.createClass({
             case 'textupdate':
                   widgetParent.push(
                     <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                             blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                              [blockName][attribute]}
                                              blockName={blockName}
                                              attributeName={attribute}
                                              key={blockName + attribute + 'readonlyField'} />
@@ -330,6 +335,8 @@ var SidePane = React.createClass({
             case 'textinput':
               widgetParent.push(
                 <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                          blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                            [blockName][attribute]}
                                           blockName={blockName}
                                           attributeName={attribute}
                                           attributeFieldOnChange={this.attributeFieldOnChange}
@@ -341,6 +348,8 @@ var SidePane = React.createClass({
             case 'choice':
               widgetParent.push(
                 <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                              blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                                [blockName][attribute]}
                                               blockName={blockName}
                                               attributeName={attribute}
                                               onChangeBlockMethodDropdownOption={
@@ -353,6 +362,8 @@ var SidePane = React.createClass({
             case 'combo':
               widgetParent.push(
                 <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
+                                              blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                                [blockName][attribute]}
                                               blockName={blockName}
                                               attributeName={attribute}
                                               onChangeBlockMethodDropdownOption={
@@ -365,6 +376,8 @@ var SidePane = React.createClass({
             case 'toggle':
                   widgetParent.push(
                     <BlockToggleSwitch blockAttribute={blockAttributes[attribute]}
+                                       blockAttributeStatus={this.props.allBlockAttributesIconStatus
+                                        [blockName][attribute]}
                                        blockName={blockName}
                                        attributeName={attribute}
                                        toggleSwitch={this.toggleSwitch}

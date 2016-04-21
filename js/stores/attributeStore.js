@@ -13,6 +13,10 @@ var allBlockAttributes = {
 
 };
 
+var allBlockAttributesIconStatus = {
+
+};
+
 function updateAttributeValue(blockId, attribute, newValue){
   allBlockAttributes[blockId][attribute].value = newValue;
   console.log(newValue);
@@ -32,6 +36,9 @@ var attributeStore = assign({}, EventEmitter.prototype, {
   getAllBlockAttributes: function(){
     return allBlockAttributes;
   },
+  getAllBlockAttributesIconStatus: function(){
+    return allBlockAttributesIconStatus;
+  }
 
 });
 
@@ -67,6 +74,19 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
             allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
             console.log(allBlockAttributes);
           //}
+
+          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
+
+          /* Add the block to allBlockAttributesIconStatus */
+          allBlockAttributesIconStatus[blockName] = {};
+
+          for(var attribute in allBlockAttributes[blockName]){
+            allBlockAttributesIconStatus[blockName][attribute] = {
+              value: 'success',
+              message: null
+            };
+          }
+
         }
         /* Try saving blocksVisibility in allBlockAttributes, instead
         of using blockVisibleStore
@@ -76,6 +96,18 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
           console.log(allBlockAttributes);
+
+          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
+
+          /* Add the block to allBlockAttributesIconStatus */
+          allBlockAttributesIconStatus[blockName] = {};
+
+          for(var attribute in allBlockAttributes[blockName]){
+            allBlockAttributesIconStatus[blockName][attribute] = {
+              value: 'success',
+              message: null
+            };
+          }
         }
       }
 
@@ -84,6 +116,11 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_GET_FAILURE:
       console.log("MALCOLM GET ERROR!");
+
+      /* Not sure what to do when a GET block failure occurs,
+      it's not really related any specific widget is it?
+       */
+
       attributeStore.emitChange();
       break;
 
@@ -97,8 +134,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
-
-        attributeStore.emitChange();
       }
       /* This is for when a block has been changed from
       hide to show for the first time via the block palette
@@ -125,19 +160,113 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         invoked for ALL malcolmSubscribes that come to attributeStore)
          */
 
-        //updateAttributeValue(requestedData.attribute, 'VISIBLE',
-        //  responseMessage.value);
+        /* UPDATE THE UPDATED UPDATE: right, so when I add a new block
+        via VISIBILITY I don't actually subscribe to its attributes, it's
+        only on refresh do I do that, hence the need to do this since not only
+        does a block's visible attribute not update, but neither does any of
+        them until the next refresh!
+        So the solution is basically to have attribute subscription when a
+        block is added/mounted
+         */
+
+        if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+
+          updateAttributeValue(requestedData.attribute, 'VISIBLE',
+            responseMessage.value);
+
+        }
 
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
-
-        attributeStore.emitChange();
-
       }
+
+      /* Update allBlockAttributesIconStatus appropriately */
+
+      allBlockAttributesIconStatus[requestedData.blockName]
+        [requestedData.attribute] = {
+        value: 'success',
+        message: null
+      };
+      attributeStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       console.log("malcolmSubscribeFailure in attributStore");
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+      /* Update allBlockAttributesIconStatus appropriately */
+
+      allBlockAttributesIconStatus[requestedData.blockName]
+        [requestedData.attribute] = {
+        value: 'failure',
+        message: responseMessage
+      };
+
+      /* The responseMessage holds an error message, so perhaps
+      that would be a useful thing to pass on somewhere?
+       */
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      console.log("malcolmCallSuccess");
+
+      /* No responseMessage is specified if it's a success */
+      //var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      /* As we will receive the METHOD name in requestedDataToWrite,
+      we need to get rid of the _set_ at the start of requestedDataToWrite.method
+      string in order to update the corresponding attribute/widget properly
+       */
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'success',
+        message: null
+      };
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+      console.log("malcolmCallFailure");
+
+      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'failure',
+        message: responseMessage
+      };
+
+      attributeStore.emitChange();
+      break;
+
+    case appConstants.MALCOLM_CALL_PENDING:
+      console.log('malcolmCallPending');
+
+      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate] = {
+        value: 'pending',
+        message: null
+      };
+
+      console.log(allBlockAttributesIconStatus[requestedDataToWrite.blockName]
+        [attributeToUpdate]);
+
       attributeStore.emitChange();
       break;
 

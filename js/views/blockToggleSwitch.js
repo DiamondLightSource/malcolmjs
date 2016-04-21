@@ -44,7 +44,8 @@ var BlockToggleSwitch = React.createClass({
           <td style={{width: '30px', textAlign: 'center'}} >
             <WidgetStatusIcon blockName={this.props.blockName}
                               attributeName={this.props.attributeName}
-                              blockAttribute={this.props.blockAttribute} />
+                              blockAttribute={this.props.blockAttribute}
+                              blockAttributeStatus={this.props.blockAttributeStatus}/>
           </td>
         </tr>
         </tbody>

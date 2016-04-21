@@ -16,7 +16,8 @@ var WidgetStatusIcon = React.createClass({
      */
     paneActions.openModalDialogBox({
       blockName: this.props.blockName,
-      attributeName: this.props.attributeName
+      attributeName: this.props.attributeName,
+      message: this.props.blockAttributeStatus.message
     });
   },
 
@@ -28,19 +29,53 @@ var WidgetStatusIcon = React.createClass({
     or fail somehow too
      */
 
-    var statusIcon;
+    var statusIcon = null;
 
     if(this.props.blockAttribute.alarm !== undefined){
       if (this.props.blockAttribute.alarm.message === 'Invalid') {
         statusIcon = <i className="fa fa-plug fa-2x" aria-hidden="true"
                         onClick={this.onButtonClick}></i>
       }
-      else {
-        statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
-                        onClick={this.onButtonClick}></i>
-      }
+      //else {
+      //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+      //                  onClick={this.onButtonClick}></i>
+      //}
     }
-    else {
+    //else {
+    //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+    //                  onClick={this.onButtonClick}></i>
+    //}
+
+    if(this.props.blockAttributeStatus.value === 'failure'){
+      /* Override the other icons and display an error icon */
+
+      statusIcon = <i className="fa fa-exclamation-circle fa-2x" aria-hidden="true"
+                      onClick={this.onButtonClick}
+                      style={{color: 'red'}} ></i>
+
+
+    }
+    else if(this.props.blockAttributeStatus.value === 'pending'){
+      /* Show spinny cog icon */
+
+      statusIcon = <i className="fa fa-cog fa-spin fa-2x fa-fw margin-bottom"
+                      onClick={this.onButtonClick}></i>
+
+    }
+
+    /* All the info seems to be getting to the component fine,
+    so I'm not sure where the error with MALCOLM_PENDING is
+    occurring to cause the spinny cog to not display briefly?
+     */
+
+    /* UPDATE: tested by putting the MalcolmUtils call in
+    MalcolmActionCreators in a setTimeout function, it appears,
+    so it must be that the response comes back really quick
+    so the cog isn't displayed for very long
+     */
+
+    if(statusIcon === null){
+
       statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
                       onClick={this.onButtonClick}></i>
     }

@@ -275,6 +275,17 @@ var MalcolmActionCreators = {
 
   malcolmCall: function(blockName, method, args){
 
+    AppDispatcher.handleAction({
+      actionType: appConstants.MALCOLM_CALL_PENDING,
+      item: {
+        requestedDataToWrite: {
+          blockName: blockName,
+          method: method,
+          args: args
+        }
+      }
+    });
+
     console.log(blockName);
     console.log(method);
     console.log(args);

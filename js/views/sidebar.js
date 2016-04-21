@@ -128,6 +128,7 @@ function getBothPanesState(){
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
     allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+    allBlockAttributesIconStatus: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributesIconStatus())),
 
     blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
     blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
@@ -161,6 +162,7 @@ var BothPanes = React.createClass({
       nextState.favContent !== this.state.favContent ||
       nextState.configContent !== this.state.configContent ||
       nextState.allBlockAttributes !== this.state.allBlockAttributes ||
+      nextState.allBlockAttributesIconStatus !== this.state.allBlockAttributesIconStatus ||
       nextState.blocksVisibility !== this.state.blocksVisibility ||
       nextState.modalDialogBoxOpen !== this.state.modalDialogBoxOpen ||
       nextState.modalDialogBoxInfo !== this.state.modalDialogBoxInfo
@@ -233,6 +235,7 @@ var BothPanes = React.createClass({
                  favContent={this.state.favContent}
                  configContent={this.state.configContent}
                  allBlockAttributes={this.state.allBlockAttributes}
+                 allBlockAttributesIconStatus={this.state.allBlockAttributesIconStatus}
                  blocksVisibility={this.state.blocksVisibility}
                  blockGroups={this.state.blockGroups}
                  //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
