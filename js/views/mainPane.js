@@ -133,7 +133,7 @@ var MainPane = React.createClass({
             <i className="fa fa-wrench"></i>
           </ToggleButton>
         ]}>
-        <Tab title="View" showFooter={this.props.footers} >
+        <Tab title="Design" showFooter={this.props.footers} >
           <Content >
             <div style={contentStyling} >
               <FlowChartControllerView/>
@@ -143,7 +143,7 @@ var MainPane = React.createClass({
           {footer}
         </Tab>
 
-        <Tab title="Design" showFooter={this.props.footers}>
+        <Tab title="View" showFooter={this.props.footers}>
           <Content>Secondary main view - graph of position data <br/>
             Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
 

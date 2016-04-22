@@ -5262,23 +5262,66 @@ var Edge = React.createClass({displayName: "Edge",
     var innerLineName = this.props.id.concat(innerLineString);
     var outerLineName = this.props.id.concat(outerLineString);
 
+    /* Trying curvy lines! */
+
+    var sourceX = startOfEdgeX;
+    var sourceY = startOfEdgeY;
+    var targetX = endOfEdgeX;
+    var targetY = endOfEdgeY;
+
+    var c1X, c1Y, c2X, c2Y;
+
+    /* I think nodeSize is the block height or width, not sure which one though? */
+
+    if (targetX-5 < sourceX) {
+      var curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
+      if (Math.abs(targetY-sourceY) < blockStyling.outerRectangleHeight/2) {
+        // Loopback
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY - curveFactor;
+        c2X = targetX - curveFactor;
+        c2Y = targetY - curveFactor;
+      } else {
+        // Stick out some
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY + (targetY > sourceY ? curveFactor : -curveFactor);
+        c2X = targetX - curveFactor;
+        c2Y = targetY + (targetY > sourceY ? -curveFactor : curveFactor);
+      }
+    } else {
+      // Controls halfway between
+      c1X = sourceX + (targetX - sourceX)/2;
+      c1Y = sourceY;
+      c2X = c1X;
+      c2Y = targetY;
+    }
+
+    var pathInfo = [
+      "M",
+      sourceX, sourceY,
+      "C",
+      c1X, c1Y,
+      c2X, c2Y,
+      targetX, targetY
+    ];
+
+    pathInfo = pathInfo.join(" ");
+
 
     return(
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
-        React.createElement("line", {id: outerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-              //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
+        React.createElement("path", {id: outerLineName, 
               style: {strokeWidth: this.props.selected === true ? "10" : "7",
-               stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round",
-               cursor: 'default'}}), 
+               stroke: this.props.selected === true ? "#797979" : "lightgrey",
+               strokeLinecap: "round", cursor: 'default', fill: 'none'}, 
+              d: pathInfo}), 
 
-        React.createElement("line", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
-          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
-
+        React.createElement("path", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
+              style: {strokeWidth: '5',
+              stroke: this.props.fromBlockPortValueType === 'pos' ? 'orange' : 'lightblue',
+              cursor: 'default', fill: 'none'}, 
+              d: pathInfo})
 
       )
     )
@@ -5428,12 +5471,17 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
 
+    var portValueType;
+
     if(fromBlockInfo.fromBlockPortType === "inport"){
       var inportArrayLength = this.props.fromBlockInfo.inports.length;
       var inportArrayIndex;
+      var inportValueType;
       for(var j = 0; j < inportArrayLength; j++){
         if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
           inportArrayIndex = JSON.parse(JSON.stringify(j));
+          inportValueType = this.props.fromBlockInfo.inports[inportArrayIndex].type;
+          portValueType = inportValueType;
         }
       }
       var startOfEdgePortOffsetX = 0;
@@ -5442,10 +5490,13 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
       var outportArrayIndex;
+      var outportValueType;
 
       for(var i = 0; i < outportArrayLength; i++){
         if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
           outportArrayIndex = JSON.parse(JSON.stringify(i));
+          outportValueType = this.props.fromBlockInfo.outports[outportArrayIndex].type;
+          portValueType = outportValueType;
         }
       }
       var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
@@ -5465,21 +5516,66 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     var innerLineName = this.props.id.concat(innerLineString);
     var outerLineName = this.props.id.concat(outerLineString);
 
+    /* Trying curvy lines! */
+
+    var sourceX = startOfEdgeX;
+    var sourceY = startOfEdgeY;
+    var targetX = endOfEdgeX;
+    var targetY = endOfEdgeY;
+
+    var c1X, c1Y, c2X, c2Y;
+
+    /* I think nodeSize is the block height or width, not sure which one though? */
+
+    if ((targetX - 5 < sourceX && fromBlockInfo.fromBlockPortType === "outport") ||
+      (targetX - 5 > sourceX && fromBlockInfo.fromBlockPortType === "inport")) {
+      var curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight/200;
+      if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight/2) {
+        // Loopback
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY - curveFactor;
+        c2X = targetX - curveFactor;
+        c2Y = targetY - curveFactor;
+      } else {
+        // Stick out some
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY + (targetY > sourceY ? curveFactor : -curveFactor);
+        c2X = targetX - curveFactor;
+        c2Y = targetY + (targetY > sourceY ? -curveFactor : curveFactor);
+      }
+    } else {
+      // Controls halfway between
+      c1X = sourceX + (targetX - sourceX)/2;
+      c1Y = sourceY;
+      c2X = c1X;
+      c2Y = targetY;
+    }
+
+    var pathInfo = [
+      "M",
+      sourceX, sourceY,
+      "C",
+      c1X, c1Y,
+      c2X, c2Y,
+      targetX, targetY
+    ];
+
+    pathInfo = pathInfo.join(" ");
+
 
     return(
       React.createElement("g", React.__spread({id: "edgePreviewContainer"},  this.props), 
 
-        React.createElement("line", {id: outerLineName, 
-          //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: "7", stroke: "lightgrey", strokeLinecap: "round", cursor: 'default'}}), 
+        React.createElement("path", {id: outerLineName, 
+              style: {strokeWidth: "7", stroke: "lightgrey",
+               strokeLinecap: "round", cursor: 'default', fill: 'none'}, 
+              d: pathInfo}), 
 
-        React.createElement("line", {id: innerLineName, 
-          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
-          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1: startOfEdgeX, y1: startOfEdgeY, x2: endOfEdgeX, y2: endOfEdgeY, 
-              style: {strokeWidth: '5', stroke:"orange", cursor: 'default'}})
-
+        React.createElement("path", {id: innerLineName, 
+              style: {strokeWidth: '5',
+              stroke: portValueType === 'pos' ? 'orange' : 'lightblue',
+              cursor: 'default', fill: 'none'}, 
+              d: pathInfo})
 
       )
     )
@@ -6606,7 +6702,7 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
             React.createElement("svg", {style: {width: '150', height: '20'}}, 
               React.createElement("circle", {r: "8", style: {fill: this.props.blockAttribute.value ? 'orange' : 'lightblue',
                                 stroke: 'white'}, 
-                            transform: "translate(9, 12)"})
+                            transform: "translate(9, 11)"})
             )
           ), 
           React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
@@ -6761,7 +6857,7 @@ var MainPane = React.createClass({displayName: "MainPane",
             React.createElement("i", {className: "fa fa-wrench"})
           )
         ]}, 
-        React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
+        React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
           React.createElement(Content, null, 
             React.createElement("div", {style: contentStyling}, 
               React.createElement(FlowChartControllerView, null)
@@ -6771,7 +6867,7 @@ var MainPane = React.createClass({displayName: "MainPane",
           footer
         ), 
 
-        React.createElement(Tab, {title: "Design", showFooter: this.props.footers}, 
+        React.createElement(Tab, {title: "View", showFooter: this.props.footers}, 
           React.createElement(Content, null, "Secondary main view - graph of position data ", React.createElement("br", null), 
             "Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens ", React.createElement("br", null)
 
@@ -6903,6 +6999,22 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
         }
       }
 
+      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+          tableContent.push(
+            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
+              React.createElement("td", {style: {width: '100px'}}, "Return"), 
+              React.createElement("td", {style: {width: '250px'}}, 
+                this.props.modalDialogBoxInfo.message
+              )
+            )
+
+
+
+        )
+      }
+
       modalDialogBoxContent.push(
         React.createElement("table", {id: blockName + attributeName + 'modalDialogBox', 
                style: {width: '370px', tableLayout: 'fixed'}}, 
@@ -6912,20 +7024,6 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
         )
       );
 
-
-      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
-
-      if(this.props.modalDialogBoxInfo.message !== null){
-        modalDialogBoxContent.push(
-          React.createElement("b", {style: {color: 'red'}}, 
-            this.props.modalDialogBoxInfo.message
-          )
-        )
-      }
-
-      /* Doesn't change/disappear automatically when the error is
-       resolved though...
-        */
 
       /* Add the buttons */
       /* Only want a 'revert' button if there's an error I think? */
@@ -8286,7 +8384,7 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
 
     if(this.props.blockAttribute.alarm !== undefined){
       if (this.props.blockAttribute.alarm.message === 'Invalid') {
-        statusIcon = React.createElement("i", {className: "fa fa-plug fa-2x", "aria-hidden": "true", 
+        statusIcon = React.createElement("i", {className: "fa fa-plug fa-lg", "aria-hidden": "true", 
                         onClick: this.onButtonClick})
       }
       //else {
@@ -8302,7 +8400,7 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
     if(this.props.blockAttributeStatus.value === 'failure'){
       /* Override the other icons and display an error icon */
 
-      statusIcon = React.createElement("i", {className: "fa fa-exclamation-circle fa-2x", "aria-hidden": "true", 
+      statusIcon = React.createElement("i", {className: "fa fa-exclamation-circle fa-lg", "aria-hidden": "true", 
                       onClick: this.onButtonClick, 
                       style: {color: 'red'}})
 
@@ -8311,7 +8409,7 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
     else if(this.props.blockAttributeStatus.value === 'pending'){
       /* Show spinny cog icon */
 
-      statusIcon = React.createElement("i", {className: "fa fa-cog fa-spin fa-2x fa-fw margin-bottom", 
+      statusIcon = React.createElement("i", {className: "fa fa-cog fa-spin fa-lg fa-fw margin-bottom", 
                       onClick: this.onButtonClick})
 
     }
@@ -8329,7 +8427,7 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
 
     if(statusIcon === null){
 
-      statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-2x", "aria-hidden": "true", 
+      statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-lg", "aria-hidden": "true", 
                       onClick: this.onButtonClick})
     }
 

@@ -138,12 +138,17 @@ var EdgePreview = React.createClass({
     //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
     //console.log(fromNodePort);
 
+    var portValueType;
+
     if(fromBlockInfo.fromBlockPortType === "inport"){
       var inportArrayLength = this.props.fromBlockInfo.inports.length;
       var inportArrayIndex;
+      var inportValueType;
       for(var j = 0; j < inportArrayLength; j++){
         if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
           inportArrayIndex = JSON.parse(JSON.stringify(j));
+          inportValueType = this.props.fromBlockInfo.inports[inportArrayIndex].type;
+          portValueType = inportValueType;
         }
       }
       var startOfEdgePortOffsetX = 0;
@@ -152,10 +157,13 @@ var EdgePreview = React.createClass({
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
       var outportArrayIndex;
+      var outportValueType;
 
       for(var i = 0; i < outportArrayLength; i++){
         if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
           outportArrayIndex = JSON.parse(JSON.stringify(i));
+          outportValueType = this.props.fromBlockInfo.outports[outportArrayIndex].type;
+          portValueType = outportValueType;
         }
       }
       var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
@@ -175,21 +183,66 @@ var EdgePreview = React.createClass({
     var innerLineName = this.props.id.concat(innerLineString);
     var outerLineName = this.props.id.concat(outerLineString);
 
+    /* Trying curvy lines! */
+
+    var sourceX = startOfEdgeX;
+    var sourceY = startOfEdgeY;
+    var targetX = endOfEdgeX;
+    var targetY = endOfEdgeY;
+
+    var c1X, c1Y, c2X, c2Y;
+
+    /* I think nodeSize is the block height or width, not sure which one though? */
+
+    if ((targetX - 5 < sourceX && fromBlockInfo.fromBlockPortType === "outport") ||
+      (targetX - 5 > sourceX && fromBlockInfo.fromBlockPortType === "inport")) {
+      var curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight/200;
+      if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight/2) {
+        // Loopback
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY - curveFactor;
+        c2X = targetX - curveFactor;
+        c2Y = targetY - curveFactor;
+      } else {
+        // Stick out some
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY + (targetY > sourceY ? curveFactor : -curveFactor);
+        c2X = targetX - curveFactor;
+        c2Y = targetY + (targetY > sourceY ? -curveFactor : curveFactor);
+      }
+    } else {
+      // Controls halfway between
+      c1X = sourceX + (targetX - sourceX)/2;
+      c1Y = sourceY;
+      c2X = c1X;
+      c2Y = targetY;
+    }
+
+    var pathInfo = [
+      "M",
+      sourceX, sourceY,
+      "C",
+      c1X, c1Y,
+      c2X, c2Y,
+      targetX, targetY
+    ];
+
+    pathInfo = pathInfo.join(" ");
+
 
     return(
       <g id="edgePreviewContainer" {...this.props}>
 
-        <line id={outerLineName}
-          //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: "7", stroke: "lightgrey", strokeLinecap: "round", cursor: 'default'}} />
+        <path id={outerLineName}
+              style={{strokeWidth: "7", stroke: "lightgrey",
+               strokeLinecap: "round", cursor: 'default', fill: 'none'}}
+              d={pathInfo} />
 
-        <line id={innerLineName}
-          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
-          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: '5', stroke:"orange", cursor: 'default'}} />
-
+        <path id={innerLineName}
+              style={{strokeWidth: '5',
+              stroke: portValueType === 'pos' ? 'orange' : 'lightblue',
+              cursor: 'default', fill: 'none'}}
+              d={pathInfo} />
 
       </g>
     )

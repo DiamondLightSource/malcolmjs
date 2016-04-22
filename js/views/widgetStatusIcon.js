@@ -33,7 +33,7 @@ var WidgetStatusIcon = React.createClass({
 
     if(this.props.blockAttribute.alarm !== undefined){
       if (this.props.blockAttribute.alarm.message === 'Invalid') {
-        statusIcon = <i className="fa fa-plug fa-2x" aria-hidden="true"
+        statusIcon = <i className="fa fa-plug fa-lg" aria-hidden="true"
                         onClick={this.onButtonClick}></i>
       }
       //else {
@@ -49,7 +49,7 @@ var WidgetStatusIcon = React.createClass({
     if(this.props.blockAttributeStatus.value === 'failure'){
       /* Override the other icons and display an error icon */
 
-      statusIcon = <i className="fa fa-exclamation-circle fa-2x" aria-hidden="true"
+      statusIcon = <i className="fa fa-exclamation-circle fa-lg" aria-hidden="true"
                       onClick={this.onButtonClick}
                       style={{color: 'red'}} ></i>
 
@@ -58,7 +58,7 @@ var WidgetStatusIcon = React.createClass({
     else if(this.props.blockAttributeStatus.value === 'pending'){
       /* Show spinny cog icon */
 
-      statusIcon = <i className="fa fa-cog fa-spin fa-2x fa-fw margin-bottom"
+      statusIcon = <i className="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"
                       onClick={this.onButtonClick}></i>
 
     }
@@ -76,7 +76,7 @@ var WidgetStatusIcon = React.createClass({
 
     if(statusIcon === null){
 
-      statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
+      statusIcon = <i className="fa fa-info-circle fa-lg" aria-hidden="true"
                       onClick={this.onButtonClick}></i>
     }
 

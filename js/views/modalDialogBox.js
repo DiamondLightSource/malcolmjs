@@ -115,6 +115,19 @@ var ModalDialogBox = React.createClass({
         }
       }
 
+      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
+
+      if(this.props.modalDialogBoxInfo.message !== null){
+          tableContent.push(
+            <tr style={{verticalAlign: 'middle'}} >
+              <td style={{width: '100px'}} >Return</td>
+              <td style={{width: '250px'}} >
+                {this.props.modalDialogBoxInfo.message}
+              </td>
+            </tr>
+        )
+      }
+
       modalDialogBoxContent.push(
         <table id={blockName + attributeName + 'modalDialogBox'}
                style={{width: '370px', tableLayout: 'fixed'}} >
@@ -124,20 +137,6 @@ var ModalDialogBox = React.createClass({
         </table>
       );
 
-
-      /* Add the error message if this.props.modalDialogBoxInfo.message isn't null */
-
-      if(this.props.modalDialogBoxInfo.message !== null){
-        modalDialogBoxContent.push(
-          <b style={{color: 'red'}} >
-            {this.props.modalDialogBoxInfo.message}
-          </b>
-        )
-      }
-
-      /* Doesn't change/disappear automatically when the error is
-       resolved though...
-        */
 
       /* Add the buttons */
       /* Only want a 'revert' button if there's an error I think? */

@@ -186,23 +186,66 @@ var Edge = React.createClass({
     var innerLineName = this.props.id.concat(innerLineString);
     var outerLineName = this.props.id.concat(outerLineString);
 
+    /* Trying curvy lines! */
+
+    var sourceX = startOfEdgeX;
+    var sourceY = startOfEdgeY;
+    var targetX = endOfEdgeX;
+    var targetY = endOfEdgeY;
+
+    var c1X, c1Y, c2X, c2Y;
+
+    /* I think nodeSize is the block height or width, not sure which one though? */
+
+    if (targetX-5 < sourceX) {
+      var curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
+      if (Math.abs(targetY-sourceY) < blockStyling.outerRectangleHeight/2) {
+        // Loopback
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY - curveFactor;
+        c2X = targetX - curveFactor;
+        c2Y = targetY - curveFactor;
+      } else {
+        // Stick out some
+        c1X = sourceX + curveFactor;
+        c1Y = sourceY + (targetY > sourceY ? curveFactor : -curveFactor);
+        c2X = targetX - curveFactor;
+        c2Y = targetY + (targetY > sourceY ? -curveFactor : curveFactor);
+      }
+    } else {
+      // Controls halfway between
+      c1X = sourceX + (targetX - sourceX)/2;
+      c1Y = sourceY;
+      c2X = c1X;
+      c2Y = targetY;
+    }
+
+    var pathInfo = [
+      "M",
+      sourceX, sourceY,
+      "C",
+      c1X, c1Y,
+      c2X, c2Y,
+      targetX, targetY
+    ];
+
+    pathInfo = pathInfo.join(" ");
+
 
     return(
       <g id="edgeContainer" {...this.props}>
 
-        <line id={outerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-              //x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
+        <path id={outerLineName}
               style={{strokeWidth: this.props.selected === true ? "10" : "7",
-               stroke: this.props.selected === true ? "#797979" : "lightgrey", strokeLinecap: "round",
-               cursor: 'default'}} />
+               stroke: this.props.selected === true ? "#797979" : "lightgrey",
+               strokeLinecap: "round", cursor: 'default', fill: 'none'}}
+              d={pathInfo} />
 
-        <line id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-          //x1={this.props.startBlock.x} y1={this.props.startBlock.y} x2={this.props.endBlock.x} y2={this.props.endBlock.y}
-          //    x1={this.props.x1} y1={this.props.y1} x2={this.props.x2} y2={this.props.y2}
-              x1={startOfEdgeX} y1={startOfEdgeY} x2={endOfEdgeX} y2={endOfEdgeY}
-              style={{strokeWidth: '5', stroke:"orange", cursor: 'default'}} />
-
+        <path id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+              style={{strokeWidth: '5',
+              stroke: this.props.fromBlockPortValueType === 'pos' ? 'orange' : 'lightblue',
+              cursor: 'default', fill: 'none'}}
+              d={pathInfo} />
 
       </g>
     )
