@@ -966,32 +966,34 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       var isInportDropdown = false;
       var hasFlowgraphTag = false;
 
-      for(var p = 0; p < item.responseMessage.tags.length; p++){
-        if(item.responseMessage.tags[p].indexOf('widget:combo') !== -1){
-          isInportDropdown = true;
-        }
-        else if(item.responseMessage.tags[p].indexOf('flowgraph') !== -1){
-          hasFlowgraphTag = true;
-        }
-        else if(item.responseMessage.tags[p] === 'widget:toggle'){
-          if(item.requestedData.blockName === 'VISIBILITY') {
-            if (item.responseMessage.value === 'Show') {
-              /* Trying to add a block when its visibility is
-               changed to 'Show'
-               */
+      if(item.responseMessage.tags !== undefined) {
+        for (var p = 0; p < item.responseMessage.tags.length; p++) {
+          if (item.responseMessage.tags[p].indexOf('widget:combo') !== -1) {
+            isInportDropdown = true;
+          }
+          else if (item.responseMessage.tags[p].indexOf('flowgraph') !== -1) {
+            hasFlowgraphTag = true;
+          }
+          else if (item.responseMessage.tags[p] === 'widget:toggle') {
+            if (item.requestedData.blockName === 'VISIBILITY') {
+              if (item.responseMessage.value === 'Show') {
+                /* Trying to add a block when its visibility is
+                 changed to 'Show'
+                 */
 
-              appendToBlockPositions(item.requestedData.attribute,
-                flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+                appendToBlockPositions(item.requestedData.attribute,
+                  flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
-              addBlock(item.requestedData.attribute);
-              blockStore.emitChange();
-            }
-            else if (item.responseMessage.value === 'Hide') {
-              /* Should invoke a removeBlock function to remove
-               the info from allBlockInfo
-               */
-              removeBlock(item.requestedData.attribute);
-              blockStore.emitChange();
+                addBlock(item.requestedData.attribute);
+                blockStore.emitChange();
+              }
+              else if (item.responseMessage.value === 'Hide') {
+                /* Should invoke a removeBlock function to remove
+                 the info from allBlockInfo
+                 */
+                removeBlock(item.requestedData.attribute);
+                blockStore.emitChange();
+              }
             }
           }
         }
@@ -1021,10 +1023,21 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         else if(responseMessage.value.indexOf('ZERO') !== -1){
           /* Then the edge needs to be deleted! */
 
-          removeEdgeViaMalcolm({
-            inportBlock: inportBlock,
-            inportBlockPort: inportBlockPort,
-          })
+          /* Update: note that this could also occur when the
+          block with the inport is REMOVED via a toggle switch,
+          so then in that case the edge has been removed when the
+          block got deleted from allBlockInfo, ie, there's no need
+          to remove the edge in that case as it has effectively
+          already been done implicitly via block removal
+           */
+
+          if(allBlockInfo[inportBlock] !== undefined) {
+            removeEdgeViaMalcolm({
+              inportBlock: inportBlock,
+              inportBlockPort: inportBlockPort,
+            });
+            console.log(allBlockInfo[inportBlock]);
+          }
 
         }
 

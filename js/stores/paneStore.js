@@ -376,12 +376,15 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       console.log("malcolmSubscribeSuccess in paneStore");
       var isWidgetCombo = false;
       var isGroupInputs = false;
-      for(var k =0; k < item.responseMessage.tags.length; k++){
-        if(item.responseMessage.tags[k].indexOf('widget:combo') !== -1){
-          isWidgetCombo = true;
-        }
-        else if(item.responseMessage.tags[k].indexOf('group:Inputs') !== -1){
-          isGroupInputs = true;
+
+      if(item.responseMessage.tags !== undefined) {
+        for (var k = 0; k < item.responseMessage.tags.length; k++) {
+          if (item.responseMessage.tags[k].indexOf('widget:combo') !== -1) {
+            isWidgetCombo = true;
+          }
+          else if (item.responseMessage.tags[k].indexOf('group:Inputs') !== -1) {
+            isGroupInputs = true;
+          }
         }
       }
 

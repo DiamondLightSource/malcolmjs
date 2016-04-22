@@ -466,30 +466,32 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       //
       //}
 
-      for(var j = 0; j < item.responseMessage.tags.length; j++) {
-        if(item.responseMessage.tags[j] === 'widget:toggle'){
-          if(item.responseMessage.value === 'Show') {
+      if(item.responseMessage.tags !== undefined) {
+        for (var j = 0; j < item.responseMessage.tags.length; j++) {
+          if (item.responseMessage.tags[j] === 'widget:toggle') {
+            if (item.responseMessage.value === 'Show') {
 
-            /* Trying to add a block when its visibility is
-             changed to 'Show'
-             Hmm, how do I also get the coords from Z?
-             */
-            //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
-            appendToBlockSelectedStates(blockName);
-            //console.log(blockPositions);
-            flowChartStore.emitChange();
-          }
-          else if(item.responseMessage.value === 'Hide'){
-            /* Causes a circular dependency! */
-            //AppDispatcher.waitFor([blockStore.dispatchToken]);
-            //setTimeout(function(){
-            //  removeBlock(item.requestedData.attribute);
-            //
-            //}, 1000);
-            //removeBlock(item.requestedData.attribute);
-            flowChartStore.emitChange();
-          }
+              /* Trying to add a block when its visibility is
+               changed to 'Show'
+               Hmm, how do I also get the coords from Z?
+               */
+              //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
+              appendToBlockSelectedStates(blockName);
+              //console.log(blockPositions);
+              flowChartStore.emitChange();
+            }
+            else if (item.responseMessage.value === 'Hide') {
+              /* Causes a circular dependency! */
+              //AppDispatcher.waitFor([blockStore.dispatchToken]);
+              //setTimeout(function(){
+              //  removeBlock(item.requestedData.attribute);
+              //
+              //}, 1000);
+              //removeBlock(item.requestedData.attribute);
+              flowChartStore.emitChange();
+            }
 
+          }
         }
       }
 

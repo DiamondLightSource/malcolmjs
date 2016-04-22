@@ -6,6 +6,7 @@ var React = require('../../node_modules/react/react');
 var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
 var blockStore = require('../stores/blockStore.js');
+
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
@@ -21,21 +22,14 @@ var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 var Block = React.createClass({
 
   componentDidMount: function(){
-    //NodeStore.addChangeListener(this._onChange);
 
-    //ReactDOM.findDOMNode(this).addEventListener('NodeSelect', this.nodeSelect);
-    //this.setState({selected: NodeStore.getAnyNodeSelectedState((ReactDOM.findDOMNode(this).id))}, function(){ /* Can't put into getInitialState since the DOMNode isn't mounted yet apparently */
-    //  console.log(this.props.selected);
-    //
-    //  console.log("A node has been mounted"); });
-    //this.setState({nodePosition: NodeStore.getAnyNodePosition(ReactDOM.findDOMNode(this).id)}, function(){
-    //  console.log(this.state.nodePosition);
-    //});
+    var blockAttributes = blockStore.getTestAllBlockInfo()[this.props.id].attributes;
 
-    //interact('.node')
-    //  .draggable({
-    //    onmove: this.interactJsDrag
-    //  });
+    for(var attribute in blockAttributes){
+      if(attribute !== 'uptime') {
+        MalcolmActionCreators.malcolmSubscribe(this.props.id, attribute);
+      }
+    }
 
     interact(ReactDOM.findDOMNode(this))
       .draggable({
