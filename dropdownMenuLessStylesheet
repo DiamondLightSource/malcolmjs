@@ -81,7 +81,7 @@ div.dropdown-container {
     //float:right;
     width:100%;
     position:relative;
-    margin-left: -88px;
+    margin-left: -87px;
     width:100%;
     .transform(scale(1, 0)); /* the other two that went here probably just controlled the animation of the drop down menu */
 
@@ -93,7 +93,7 @@ div.dropdown-container {
       width:100%;
       z-index:2;
       cursor:pointer;
-      background:transparent;
+      background:#3e3e3e;
 
       >div {
         float:left;
@@ -101,7 +101,7 @@ div.dropdown-container {
         padding:0 @spacing;
         font-size:@font-size;
         .border-box;
-        border:solid 1px @border-colour;
+        border:solid 1px #000000;
         border-top:none;
 
         @icon-width:20px;

@@ -317,6 +317,7 @@ var SidePane = React.createClass({
                                 [blockName][attribute]}
                                blockName={blockName}
                                attributeName={attribute}
+                               isInAGroup={isInAGroup}
                                key={blockName + attribute + 'led'} />
                   );
                   break;
@@ -328,6 +329,7 @@ var SidePane = React.createClass({
                                               [blockName][attribute]}
                                              blockName={blockName}
                                              attributeName={attribute}
+                                             isInAGroup={isInAGroup}
                                              key={blockName + attribute + 'readonlyField'} />
                   );
                   break;
@@ -341,6 +343,7 @@ var SidePane = React.createClass({
                                           attributeName={attribute}
                                           attributeFieldOnChange={this.attributeFieldOnChange}
                                           selectedInputFieldText={this.selectedInputFieldText}
+                                          isInAGroup={isInAGroup}
                                           key={blockName + attribute + 'textEditField'}  />
                   );
                   break;
@@ -355,6 +358,7 @@ var SidePane = React.createClass({
                                               onChangeBlockMethodDropdownOption={
                                             this.onChangeBlockMethodDropdownOption
                                             }
+                                              isInAGroup={isInAGroup}
                                               key={blockName + attribute + 'dropdownField'}  />
                   );
                   break;
@@ -369,6 +373,7 @@ var SidePane = React.createClass({
                                               onChangeBlockMethodDropdownOption={
                                             this.onChangeBlockMethodDropdownOption
                                             }
+                                              isInAGroup={isInAGroup}
                                               key={blockName + attribute + 'dropdownField'}  />
                   );
                   break;
@@ -382,6 +387,7 @@ var SidePane = React.createClass({
                                        attributeName={attribute}
                                        toggleSwitch={this.toggleSwitch}
                                        toggleOrientation={blockAttributes[attribute].value}
+                                       isInAGroup={isInAGroup}
                                        key={blockName + attribute + 'toggleSwitch'}
                     />
                   );
@@ -407,7 +413,7 @@ var SidePane = React.createClass({
       blockAttributeDivs.push(
         <Treeview defaultCollapsed={true}
                   nodeLabel={
-                    <b style={{marginLeft: '-47px'}}>{group}</b>
+                    <b style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>
                     }
                   key={group + 'treeview'}
         > {groupsObject[group]}

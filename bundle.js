@@ -4507,7 +4507,7 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
              style: {width: '350px', tableLayout: 'fixed'}}, 
         React.createElement("tbody", null, 
         React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-          React.createElement("td", {style: {width: '180px'}}, 
+          React.createElement("td", {style: {width: this.props.isInAGroup === true ? '170px' : '180px'}}, 
             React.createElement("p", {style: {margin: '0px'}}, 
               String(this.props.attributeName)
             )
@@ -4732,7 +4732,9 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
                             block: this.props.blockName,
                             attribute: this.props.attributeName
                             }), 
-              style: {width: '152px'}, 
+              className: "dropdownMenuWidget", 
+              style: {width: '152px', backgroundColor:'#333333', color: 'lightblue',
+                      borderRadius: '4px', border: '2px solid #202020'}, 
               value: this.props.blockAttribute.value}, 
         dropdownOptions
       );
@@ -4743,7 +4745,7 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
              style: {width: '350px', tableLayout: 'fixed'}}, 
         React.createElement("tbody", null, 
           React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-            React.createElement("td", {style: {width: '180px'}}, 
+            React.createElement("td", {style: {width: this.props.isInAGroup === true ? '170px' : '180px'}}, 
               React.createElement("p", {style: {margin: '0px'}}, 
                 String(this.props.attributeName)
               )
@@ -6561,7 +6563,7 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
              style: {width: '350px', tableLayout: 'fixed'}}, 
         React.createElement("tbody", null, 
         React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-          React.createElement("td", {style: {width: '180px'}}, 
+          React.createElement("td", {style: {width: this.props.isInAGroup === true ? '170px' : '180px'}}, 
             React.createElement("p", {style: {margin: '0px'}}, 
               String(this.props.attributeName)
             )
@@ -6964,23 +6966,35 @@ var WidgetStatusIcon = require('./widgetStatusIcon');
 
 var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadoutField",
 
+  onClick: function(e){
+    e.preventDefault();
+    //e.target.blur();
+  },
+
   render: function(){
     return(
       React.createElement("table", {id: this.props.blockName + this.props.attributeName + 'contentTable', 
              style: {width: '350px', tableLayout: 'fixed'}}, 
         React.createElement("tbody", null, 
           React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-            React.createElement("td", {style: {width: '180px'}}, 
+            React.createElement("td", {style: {width: this.props.isInAGroup === true ? '170px' : '180px'}}, 
               React.createElement("p", {style: {margin: '0px'}}, 
                 String(this.props.attributeName)
               )
             ), 
             React.createElement("td", {style: {width: '150px'}}, 
-              React.createElement("div", {style: {backgroundColor: 'black', borderRadius: '2px'}}, 
-                React.createElement("b", {style: {color: 'cyan'}}, 
-                  String(this.props.blockAttribute.value)
-                )
-              )
+              React.createElement("input", {id: this.props.blockName + this.props.attributeName + "readoutField", 
+                     className: "readoutField", 
+                     value: String(this.props.blockAttribute.value), 
+                     style: {textAlign: 'left', borderRadius: '4px',
+                             border: '2px solid #797979',
+                             color: 'lightblue', backgroundColor:'#3e3e3e',
+                             cursor: 'default'}, 
+                     onMouseDown: this.onClick, 
+                     onMouseUp: this.onClick, 
+                     onMouseOut: this.onClick, 
+                     readOnly: "true", 
+                     maxLength: "16", size: "16"})
             ), 
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
               React.createElement(WidgetStatusIcon, {blockName: this.props.blockName, 
@@ -6998,6 +7012,13 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
 });
 
 module.exports = NonEditableReadoutField;
+
+
+//<div style={{backgroundColor: 'black', borderRadius: '2px'}} >
+//  <b style={{color: 'cyan'}} >
+//    {String(this.props.blockAttribute.value)}
+//  </b>
+//</div>
 
 },{"../actions/MalcolmActionCreators":1,"./widgetStatusIcon":40,"react":253}],36:[function(require,module,exports){
 /**
@@ -7633,6 +7654,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                 [blockName][attribute], 
                                blockName: blockName, 
                                attributeName: attribute, 
+                               isInAGroup: isInAGroup, 
                                key: blockName + attribute + 'led'})
                   );
                   break;
@@ -7644,6 +7666,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                               [blockName][attribute], 
                                              blockName: blockName, 
                                              attributeName: attribute, 
+                                             isInAGroup: isInAGroup, 
                                              key: blockName + attribute + 'readonlyField'})
                   );
                   break;
@@ -7657,6 +7680,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                           attributeName: attribute, 
                                           attributeFieldOnChange: this.attributeFieldOnChange, 
                                           selectedInputFieldText: this.selectedInputFieldText, 
+                                          isInAGroup: isInAGroup, 
                                           key: blockName + attribute + 'textEditField'})
                   );
                   break;
@@ -7671,6 +7695,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                               onChangeBlockMethodDropdownOption: 
                                             this.onChangeBlockMethodDropdownOption, 
                                             
+                                              isInAGroup: isInAGroup, 
                                               key: blockName + attribute + 'dropdownField'})
                   );
                   break;
@@ -7685,6 +7710,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                               onChangeBlockMethodDropdownOption: 
                                             this.onChangeBlockMethodDropdownOption, 
                                             
+                                              isInAGroup: isInAGroup, 
                                               key: blockName + attribute + 'dropdownField'})
                   );
                   break;
@@ -7698,6 +7724,7 @@ var SidePane = React.createClass({displayName: "SidePane",
                                        attributeName: attribute, 
                                        toggleSwitch: this.toggleSwitch, 
                                        toggleOrientation: blockAttributes[attribute].value, 
+                                       isInAGroup: isInAGroup, 
                                        key: blockName + attribute + 'toggleSwitch'}
                     )
                   );
@@ -7723,7 +7750,7 @@ var SidePane = React.createClass({displayName: "SidePane",
       blockAttributeDivs.push(
         React.createElement(Treeview, {defaultCollapsed: true, 
                   nodeLabel: 
-                    React.createElement("b", {style: {marginLeft: '-47px'}}, group), 
+                    React.createElement("b", {style: {marginLeft: '-47px', fontSize: '13px'}}, group), 
                     
                   key: group + 'treeview'
         }, " ", groupsObject[group]
@@ -8176,7 +8203,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
              style: {width: '350px', tableLayout: 'fixed'}}, 
         React.createElement("tbody", null, 
           React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-            React.createElement("td", {style: {width: '180px'}}, 
+            React.createElement("td", {style: {width: this.props.isInAGroup === true ? '170px' : '180px'}}, 
               React.createElement("p", {style: {margin: '0px'}}, 
                 String(this.props.attributeName)
               )
@@ -8184,9 +8211,10 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
             React.createElement("td", {style: {width: '150px'}}, 
               React.createElement("input", {id: this.props.blockName + this.props.attributeName + "inputField", 
                      className: this.props.blockName + 'widget', 
-                     style: {textAlign: 'left',borderRadius: '2px', border: '2px solid #999',
+                     style: {textAlign: 'left', borderRadius: '4px',
+                             border: '2px solid #202020',
                                 //contentEditable:"true"
-                                color: 'blue'}, 
+                             color: 'lightblue', backgroundColor:'#333333'}, 
                      defaultValue: String(this.props.blockAttribute.value), 
                      onChange: this.props.attributeFieldOnChange.bind(null, {
                                 block: this.props.blockName,
@@ -8293,6 +8321,7 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
     if(statusIcon === null){
 
       statusIcon = React.createElement("i", {className: "fa fa-info-circle fa-lg", "aria-hidden": "true", 
+                      style: {cursor: 'pointer'}, 
                       onClick: this.onButtonClick})
     }
 

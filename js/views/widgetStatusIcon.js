@@ -77,6 +77,7 @@ var WidgetStatusIcon = React.createClass({
     if(statusIcon === null){
 
       statusIcon = <i className="fa fa-info-circle fa-lg" aria-hidden="true"
+                      style={{cursor: 'pointer'}}
                       onClick={this.onButtonClick}></i>
     }
 

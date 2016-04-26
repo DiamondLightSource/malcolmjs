@@ -59,7 +59,9 @@ var DropdownEditableReadoutField = React.createClass({
                             block: this.props.blockName,
                             attribute: this.props.attributeName
                             })}
-              style={{width: '152px'}}
+              className="dropdownMenuWidget"
+              style={{width: '152px', backgroundColor:'#333333', color: 'lightblue',
+                      borderRadius: '4px', border: '2px solid #202020'}}
               value={this.props.blockAttribute.value} >
         {dropdownOptions}
       </select>;
@@ -70,7 +72,7 @@ var DropdownEditableReadoutField = React.createClass({
              style={{width: '350px', tableLayout: 'fixed'}} >
         <tbody>
           <tr style={{verticalAlign: 'middle'}} >
-            <td style={{width: '180px'}} >
+            <td style={{width: this.props.isInAGroup === true ? '170px' : '180px'}} >
               <p style={{margin: '0px'}}>
                 {String(this.props.attributeName)}
               </p>

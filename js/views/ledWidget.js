@@ -14,7 +14,7 @@ var LEDWidget = React.createClass({
              style={{width: '350px', tableLayout: 'fixed'}} >
         <tbody>
         <tr style={{verticalAlign: 'middle'}} >
-          <td style={{width: '180px'}} >
+          <td style={{width: this.props.isInAGroup === true ? '170px' : '180px'}} >
             <p style={{margin: '0px'}}>
               {String(this.props.attributeName)}
             </p>
