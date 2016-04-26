@@ -20,6 +20,10 @@ var allBlockInfo = {
 
 };
 
+var initialEdgeInfo = {
+
+};
+
 function addEdgeToAllBlockInfo(Info){
 
   /* QUESTION: do I need a loop here, can I just use bracket notation to access the required port directly? */
@@ -456,56 +460,38 @@ function addBlock(blockId){
   var inports = [];
   var outports = [];
 
+  /* The use of the three variables below is to take care of the
+  case when a block that is connected to another is added, but
+  the other block it is connected to doesn't yet exist in the GUI.
+
+  Inports of blocks are checked to see if they are connected to
+  ports of other blocks. If the other block exists then great, simply
+  add the info to allBlockInfo to both blocks' ports to reflect
+  the connection.
+
+  However, if the other OUTPORT block doesn't exist, then to
+  account for this I add the name of the block and port that
+  doesn't yet exist (in the format blockName.portName) to the
+  initialEdgeInfo object as the key, and the key value is the
+  name of the block that is currently being processed in the
+  function (again, in the same format of blockName.portName)
+
+  Then in the outports part it checks each outport to see if
+  that particular block & port combination is in the
+  initialEdgeInfo object (meaning that earlier on we ran into
+  a INPORT block that was connected to the current OUPORT block,
+  but the OUTPORT block didn't yet exist). If so, proceed to update
+  both blocks in allBlockInfo to show that they are connected.
+   */
+
+  var initialEdgeInfoKeyName;
+  var initialEdgeInfoKeyValueName;
+  var outportsThatExistInInitialEdgeInfo = [];
+
   console.log(testAllBlockInfo);
   console.log(blockId);
 
   for(var attribute in testAllBlockInfo[blockId].attributes){
-    /* Rewriting for proper inport & outport filtering */
-    //if(testAllBlockInfo[blockId][attribute].tags === undefined){
-    //  /* Add that outport to the outports array */
-    //
-    //  if(attribute.indexOf(":VAL") !== -1){
-    //    /* Could well be an inport since it has VAL in the title? */
-    //    /* Also, need to remove the VAL from the inport name in that case */
-    //    var inportName = attribute.replace(/:VAL/g, '');
-    //    inports.push(
-    //      {
-    //        name: inportName,
-    //        type: testAllBlockInfo[blockId][attribute].type.name,
-    //        value: String(testAllBlockInfo[blockId][attribute].value),
-    //        connected: false,
-    //        connectedTo: null
-    //      }
-    //    )
-    //  }
-    //  else {
-    //    outports.push(
-    //      {
-    //        name: attribute,
-    //        type: testAllBlockInfo[blockId][attribute].type.name,
-    //        value: String(testAllBlockInfo[blockId][attribute].value),
-    //        connected: false,
-    //        connectedTo: []
-    //      }
-    //    )
-    //  }
-    //}
-
-    console.log(testAllBlockInfo[blockId].attributes);
-    console.log(attribute);
-    console.log(testAllBlockInfo[blockId].attributes[attribute]);
-
-    //if(attribute === 'uptime'){
-    //  inports.push(
-    //    {
-    //      name: 'uptime',
-    //      type: testAllBlockInfo[blockId].attributes[attribute].type.name,
-    //      value: String(testAllBlockInfo[blockId].attributes[attribute].value),
-    //      connected: false,
-    //      connectedTo: null
-    //    }
-    //  )
-    //}
 
     if(testAllBlockInfo[blockId].attributes[attribute].tags !== undefined) {
       for (var i = 0; i < testAllBlockInfo[blockId].attributes[attribute].tags.length; i++) {
@@ -527,32 +513,62 @@ function addBlock(blockId){
            */
           var inportValue = testAllBlockInfo[blockId].attributes[attribute].value;
 
-          /* There'll be a 'disconnected' value at some point,
-          so I'll be checking whether it's connected to anything
-          at all here soon
+          /* Initially, the port is always added as being disconnected,
+          even if it is connected. This is to accomodate not being able
+          to add any edges until we can be certain that both involved
+          blocks exist within the GUI/store
            */
 
-          inports.push(
-            {
-              name: inportName,
-              type: inportValueType,
-              value: String(inportValue),
-              connected: false,
-              connectedTo: null
-            }
-          );
+          if(allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] === undefined) {
 
-          //var inportBlock = blockId;
-          //var inportBlockPort = attribute;
-          //var connectedToBlock = inportValue.slice(0, inportValue.indexOf('.'));
-          //var connectedToBlockPort = inportValue.slice(inportValue.indexOf('.') + 1);
-          //
-          //addEdgeViaMalcolm({
-          //  inportBlock: inportBlock,
-          //  inportBlockPort: inportBlockPort,
-          //  outportBlock: connectedToBlock,
-          //  outportBlockPort: connectedToBlockPort
-          //});
+            inports.push(
+              {
+                name: inportName,
+                type: inportValueType,
+                value: String(inportValue),
+                connected: false,
+                connectedTo: null
+              }
+            );
+
+            if (inportValue.indexOf('ZERO') !== -1) {
+              /* Then the block is connected to a .ZERO port,
+               ie, it's disconnected, so no need to do anything
+               */
+            }
+            else if (inportValue.indexOf('ZERO') === -1) {
+              /* The inport is connected to an outport,
+               so need to do more here
+               */
+
+              initialEdgeInfoKeyValueName = blockId + "." + attribute;
+
+              initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName;
+
+            }
+          }
+          else if(allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] !== undefined){
+            /* Then the outport block already exists, so can
+            simply push the inport like normal!
+             */
+
+            var outportBlockName = inportValue.slice(0, inportValue.indexOf('.'));
+            var outportName = inportValue.slice(inportValue.indexOf('.') + 1);
+
+            inports.push(
+              {
+                name: inportName,
+                type: inportValueType,
+                value: String(inportValue),
+                connected: true,
+                connectedTo: {
+                  block: outportBlockName,
+                  port: outportName
+                }
+              }
+            );
+
+          }
 
         }
         else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
@@ -561,11 +577,19 @@ function addBlock(blockId){
           var outportValueType = testAllBlockInfo[blockId].attributes[attribute].tags[i]
             .slice('flowgraph:outport:'.length);
 
+          var outportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+
+          initialEdgeInfoKeyName = blockId + '.' + attribute;
+
+          if(initialEdgeInfo[initialEdgeInfoKeyName] !== undefined){
+            outportsThatExistInInitialEdgeInfo.push(initialEdgeInfoKeyName);
+          }
+
           outports.push(
             {
               name: outportName,
               type: outportValueType,
-              value: String(testAllBlockInfo[blockId].attributes[attribute].value),
+              value: String(outportValue),
               connected: false,
               connectedTo: []
             }
@@ -593,12 +617,62 @@ function addBlock(blockId){
     methods: blockMethods
   };
 
+  /* Now to go through the outportsThatExistInInitialEdgeInfo array
+  and update both blocks involved in the connection
+   */
+
+  if(outportsThatExistInInitialEdgeInfo !== undefined &&
+    outportsThatExistInInitialEdgeInfo.length > 0) {
+    for (var k = 0; k < outportsThatExistInInitialEdgeInfo.length; k++) {
+      updateAnInitialEdge(outportsThatExistInInitialEdgeInfo[k]);
+    }
+  }
 
 }
 
 function removeBlock(blockId){
   delete allBlockInfo[blockId];
   delete blockPositions[blockId];
+}
+
+function updateAnInitialEdge(initialEdgeInfoKey){
+
+  var initialEdgeInfoValue = initialEdgeInfo[initialEdgeInfoKey];
+
+  var outportBlockName = initialEdgeInfoKey.slice(0, initialEdgeInfoKey.indexOf('.'));
+  var outportName = initialEdgeInfoKey.slice(initialEdgeInfoKey.indexOf('.') + 1);
+
+  var inportBlockName = initialEdgeInfoValue.slice(0, initialEdgeInfoValue.indexOf('.'));
+  var inportName = initialEdgeInfoValue.slice(initialEdgeInfoValue.indexOf('.') + 1);
+
+  /* Now to go through allBlockInfo and change the connected
+  attributes of the inports and outports to true
+   */
+
+  for(var i = 0; i < allBlockInfo[inportBlockName].inports.length; i++){
+    if(allBlockInfo[inportBlockName].inports[i].name === inportName){
+      allBlockInfo[inportBlockName].inports[i].connectedTo = {
+        block: outportBlockName,
+        port: outportName
+      };
+      allBlockInfo[inportBlockName].inports[i].connected = true;
+    }
+  }
+
+  for(var j = 0; j < allBlockInfo[outportBlockName].outports.length; j++){
+    if(allBlockInfo[outportBlockName].outports[j].name === outportName){
+      allBlockInfo[outportBlockName].outports[j].connectedTo.push({
+        block: inportBlockName,
+        port: inportName
+      });
+      allBlockInfo[outportBlockName].outports[j].connected = true;
+    }
+  }
+
+  /* Now delete that particular key in initialEdgeInfo, I don't
+  think it's needed anymore?
+   */
+
 }
 
 function updateAttributeValue(blockId, attribute, newValue){
@@ -1067,11 +1141,11 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       blockStore.emitChange();
       break;
 
-    case appConstants.INITIALISE_FLOWCHART_END:
-      console.log("initialise flowChart end, blockStore");
-      addInitialEdges();
-      blockStore.emitChange();
-      break;
+    //case appConstants.INITIALISE_FLOWCHART_END:
+    //  console.log("initialise flowChart end, blockStore");
+    //  addInitialEdges();
+    //  blockStore.emitChange();
+    //  break;
 
     default:
       return true
