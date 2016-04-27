@@ -40,6 +40,14 @@ var modalDialogBoxStyling = {
 
 var ModalDialogBox = React.createClass({
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.modalDialogBoxOpen !== this.props.modalDialogBoxOpen ||
+      nextProps.modalDialogBoxInfo !== this.props.modalDialogBoxInfo ||
+      nextProps.allBlockAttributes !== this.props.allBlockAttributes
+    )
+  },
+
   closeModalDialogBox: function(){
     paneActions.closeModalDialogBox('this is the item');
   },

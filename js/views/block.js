@@ -48,7 +48,7 @@ var Block = React.createClass({
           e.stopPropagation();
           //console.log("interactjs dragend");
           Perf.stop();
-          Perf.printWasted(Perf.getLastMeasurements());
+          Perf.printInclusive(Perf.getLastMeasurements());
         }
       });
 
@@ -115,6 +115,9 @@ var Block = React.createClass({
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
+
+    Perf.stop();
+    Perf.printWasted(Perf.getLastMeasurements());
 
     if(this.props.areAnyBlocksSelected === false){
       flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);

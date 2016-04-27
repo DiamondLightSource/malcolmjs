@@ -7,6 +7,17 @@ var React = require('react');
 var ToggleSwitch = require('react-toggle');
 
 var BlockToggleSwitch = React.createClass({
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.blockAttribute !== this.props.blockAttribute ||
+      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName ||
+      nextProps.toggleOrientation !== this.props.toggleOrientation
+    )
+  },
+
   render: function(){
     /* 'on' is the default setting of the switch, shall be
      from the server at some point (perhaps a ternary operator?)

@@ -5,6 +5,16 @@
 var React = require('react');
 
 var LEDWidget = React.createClass({
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.blockAttribute !== this.props.blockAttribute ||
+      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName
+    )
+  },
+
   render: function(){
     return(
 

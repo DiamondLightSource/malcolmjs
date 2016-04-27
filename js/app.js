@@ -19,6 +19,8 @@ var appConstants = require('./constants/appConstants.js');
 
 var MalcolmActionCreators = require('./actions/MalcolmActionCreators');
 
+var Perf = require('../node_modules/react/lib/ReactDefaultPerf.js');
+
 var AppContainerStyle = {
   margin: 0,
   padding: 0,
@@ -45,12 +47,9 @@ var SideTabbedViewStyle = {
 var App = React.createClass({
 
   componentDidMount: function(){
-    //window.alert("app mounted");
-    //MalcolmActionCreators.addWebsocketOnOpenCallback('Z');
-    //AppDispatcher.handleAction({
-    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //  item: "initialise flowChart end"
-    //});
+
+    Perf.start();
+
   },
 
   render: function(){

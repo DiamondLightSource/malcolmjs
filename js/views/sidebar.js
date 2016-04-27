@@ -14,7 +14,6 @@ var sidePaneStore = require('../stores/sidePaneStore');
 var paneStore = require('../stores/paneStore');
 var blockStore = require('../stores/blockStore.js');
 var attributeStore = require('../stores/attributeStore');
-var blocksVisibleStore = require('../stores/blocksVisibleStore');
 
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
@@ -124,14 +123,11 @@ function getBothPanesState(){
     selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
     listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
-    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
+    allBlockInfo: blockStore.getAllBlockInfo(),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
-    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
-    allBlockAttributesIconStatus: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributesIconStatus())),
-
-    blocksVisibility: JSON.parse(JSON.stringify(blocksVisibleStore.getBlocksVisibility())),
-    blockGroups: JSON.parse(JSON.stringify(blocksVisibleStore.getBlockGroups()))
+    allBlockAttributes: attributeStore.getAllBlockAttributes(),
+    allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus(),
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
@@ -163,7 +159,6 @@ var BothPanes = React.createClass({
       nextState.configContent !== this.state.configContent ||
       nextState.allBlockAttributes !== this.state.allBlockAttributes ||
       nextState.allBlockAttributesIconStatus !== this.state.allBlockAttributesIconStatus ||
-      nextState.blocksVisibility !== this.state.blocksVisibility ||
       nextState.modalDialogBoxOpen !== this.state.modalDialogBoxOpen ||
       nextState.modalDialogBoxInfo !== this.state.modalDialogBoxInfo
       //nextState.loadingInitialData !== this.state.loadingInitialData ||
@@ -178,7 +173,6 @@ var BothPanes = React.createClass({
     sidePaneStore.addChangeListener(this._onChange);
     blockStore.addChangeListener(this._onChange);
     attributeStore.addChangeListener(this._onChange);
-    blocksVisibleStore.addChangeListener(this._onChange);
     //flowChartStore.addChangeListener(this._onChange);
     var mql = window.matchMedia(`(min-width: 800px)`);
     mql.addListener(this.windowWidthMediaQueryChanged);
@@ -192,7 +186,6 @@ var BothPanes = React.createClass({
     sidePaneStore.removeChangeListener(this._onChange);
     blockStore.removeChangeListener(this._onChange);
     attributeStore.removeChangeListener(this._onChange);
-    blocksVisibleStore.removeChangeListener(this._onChange);
     //flowChartStore.removeChangeListener(this._onChange);
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   },
@@ -236,8 +229,6 @@ var BothPanes = React.createClass({
                  configContent={this.state.configContent}
                  allBlockAttributes={this.state.allBlockAttributes}
                  allBlockAttributesIconStatus={this.state.allBlockAttributesIconStatus}
-                 blocksVisibility={this.state.blocksVisibility}
-                 blockGroups={this.state.blockGroups}
                  //allBlockTabOpenStates={this.state.allBlockTabOpenStates}
                  //allBlockTabInfo={this.state.allBlockTabInfo}
                  />

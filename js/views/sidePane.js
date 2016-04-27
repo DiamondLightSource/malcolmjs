@@ -25,20 +25,8 @@ var blockActions = require('../actions/blockActions.js');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
-var CustomButton = require('./button');
-
-var NonEditableReadoutField = require('./nonEditableReadoutField');
-var TextEditableReadoutField = require('./textEditableReadoutField');
-var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
-var LEDWidget = require('./ledWidget');
-
-var BlockToggleSwitch = require('./blockToggleSwitch');
-
 var WidgetTableContainer = require('./widgetTableContainer');
 
-var BlockToggle = require('react-toggle');
-
-//var TreeviewComponent = require('react-treeview-component');
 
 var blockStore = require('../stores/blockStore');
 
@@ -53,8 +41,7 @@ var SidePane = React.createClass({
       nextProps.favContent !== this.props.favContent ||
       nextProps.configContent !== this.props.configContent ||
       nextProps.allBlockAttributes !== this.props.allBlockAttributes ||
-      nextProps.allBlockAttributesIconStatus !== this.props.allBlockAttributesIconStatus ||
-      nextProps.blocksVisibility !== this.props.blocksVisibility
+      nextProps.allBlockAttributesIconStatus !== this.props.allBlockAttributesIconStatus
       //nextProps.blockPositions !== this.props.blockPositions
     )
   },

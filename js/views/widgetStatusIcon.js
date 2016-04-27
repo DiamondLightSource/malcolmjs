@@ -8,6 +8,15 @@ var paneActions = require('../actions/paneActions');
 
 var WidgetStatusIcon = React.createClass({
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.blockAttribute !== this.props.blockAttribute ||
+      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName
+    )
+  },
+
   onButtonClick: function(){
     /* Needs to open the modal dialog box,
     so that info needs to be in a store
