@@ -34,6 +34,8 @@ var LEDWidget = require('./ledWidget');
 
 var BlockToggleSwitch = require('./blockToggleSwitch');
 
+var WidgetTableContainer = require('./widgetTableContainer');
+
 var BlockToggle = require('react-toggle');
 
 //var TreeviewComponent = require('react-treeview-component');
@@ -308,96 +310,57 @@ var SidePane = React.createClass({
             widgetParent = blockAttributeDivs;
           }
 
+          /* Using JSX spread attributes to pass a common set
+          of props to all widgets
+           */
+
+          var commonProps = {
+            blockAttribute: blockAttributes[attribute],
+            blockAttributeStatus: this.props.allBlockAttributesIconStatus[blockName][attribute],
+            blockName: blockName,
+            attributeName: attribute,
+            isInAGroup: isInAGroup,
+            key: blockName + attribute + widgetType,
+            widgetType: widgetType
+          };
+
           switch(widgetType){
 
             case 'led':
-                  widgetParent.push(
-                    <LEDWidget blockAttribute={blockAttributes[attribute]}
-                               blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                [blockName][attribute]}
-                               blockName={blockName}
-                               attributeName={attribute}
-                               isInAGroup={isInAGroup}
-                               key={blockName + attribute + 'led'} />
-                  );
-                  break;
-
             case 'textupdate':
                   widgetParent.push(
-                    <NonEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                             blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                              [blockName][attribute]}
-                                             blockName={blockName}
-                                             attributeName={attribute}
-                                             isInAGroup={isInAGroup}
-                                             key={blockName + attribute + 'readonlyField'} />
+                    <WidgetTableContainer {...commonProps} />
                   );
                   break;
 
             case 'textinput':
-              widgetParent.push(
-                <TextEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                          blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                            [blockName][attribute]}
-                                          blockName={blockName}
-                                          attributeName={attribute}
+                  widgetParent.push(
+                    <WidgetTableContainer {...commonProps}
                                           attributeFieldOnChange={this.attributeFieldOnChange}
-                                          selectedInputFieldText={this.selectedInputFieldText}
-                                          isInAGroup={isInAGroup}
-                                          key={blockName + attribute + 'textEditField'}  />
+                                          selectedInputFieldText={this.selectedInputFieldText} />
                   );
                   break;
 
             case 'choice':
-              widgetParent.push(
-                <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                              blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                                [blockName][attribute]}
-                                              blockName={blockName}
-                                              attributeName={attribute}
-                                              onChangeBlockMethodDropdownOption={
-                                            this.onChangeBlockMethodDropdownOption
-                                            }
-                                              isInAGroup={isInAGroup}
-                                              key={blockName + attribute + 'dropdownField'}  />
-                  );
-                  break;
-
             case 'combo':
-              widgetParent.push(
-                <DropdownEditableReadoutField blockAttribute={blockAttributes[attribute]}
-                                              blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                                [blockName][attribute]}
-                                              blockName={blockName}
-                                              attributeName={attribute}
-                                              onChangeBlockMethodDropdownOption={
+                  widgetParent.push(
+                    <WidgetTableContainer {...commonProps}
+                                          onChangeBlockMethodDropdownOption={
                                             this.onChangeBlockMethodDropdownOption
-                                            }
-                                              isInAGroup={isInAGroup}
-                                              key={blockName + attribute + 'dropdownField'}  />
+                                            } />
                   );
                   break;
 
             case 'toggle':
                   widgetParent.push(
-                    <BlockToggleSwitch blockAttribute={blockAttributes[attribute]}
-                                       blockAttributeStatus={this.props.allBlockAttributesIconStatus
-                                        [blockName][attribute]}
-                                       blockName={blockName}
-                                       attributeName={attribute}
-                                       toggleSwitch={this.toggleSwitch}
-                                       toggleOrientation={blockAttributes[attribute].value}
-                                       isInAGroup={isInAGroup}
-                                       key={blockName + attribute + 'toggleSwitch'}
-                    />
+                    <WidgetTableContainer {...commonProps}
+                                          toggleSwitch={this.toggleSwitch}
+                                          toggleOrientation={blockAttributes[attribute].value} />
                   );
                   break;
 
           }
-
-
         }
-
 
       }
 
