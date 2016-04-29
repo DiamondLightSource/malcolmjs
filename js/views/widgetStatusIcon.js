@@ -10,10 +10,8 @@ var WidgetStatusIcon = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
+      nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
     )
   },
 

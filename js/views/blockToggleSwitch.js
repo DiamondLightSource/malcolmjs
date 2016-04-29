@@ -10,9 +10,7 @@ var BlockToggleSwitch = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -27,14 +25,14 @@ var BlockToggleSwitch = React.createClass({
         <div id="testToggleSwitch" style={{height: '21', width: '50'}} >
           <ToggleSwitch onChange={this.props.toggleSwitch.bind(null, this.props.blockName,
                           this.props.attributeName,
-                          this.props.blockAttribute.value)}
-                      checked={this.props.blockAttribute.value === 'Show' ||
-                               this.props.blockAttribute.value === true}
-                      defaultChecked={this.props.blockAttribute.value === 'Show' ||
-                                      this.props.blockAttribute.value === true}
+                          this.props.blockAttributeValue)}
+                      checked={this.props.blockAttributeValue === 'Show' ||
+                               this.props.blockAttributeValue === true}
+                      defaultChecked={this.props.blockAttributeValue === 'Show' ||
+                                      this.props.blockAttributeValue === true}
                       id={this.props.blockName + 'toggleSwitch'}
-                      on={this.props.blockAttribute.value === 'Show' ||
-                          this.props.blockAttribute.value === true} />
+                      on={this.props.blockAttributeValue === 'Show' ||
+                          this.props.blockAttributeValue === true} />
         </div>
         <p style={{margin: '0px', width: '40px'}} >Show</p>
       </div>

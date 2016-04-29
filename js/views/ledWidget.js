@@ -8,9 +8,7 @@ var LEDWidget = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -18,7 +16,7 @@ var LEDWidget = React.createClass({
     return(
 
       <svg style={{width: '150', height: '20'}}  >
-        <circle r="8" style={{fill: this.props.blockAttribute.value ? 'orange' : 'lightblue',
+        <circle r="8" style={{fill: this.props.blockAttributeValue ? 'orange' : 'lightblue',
                           stroke: 'white' }}
                       transform="translate(9, 11)" />
       </svg>

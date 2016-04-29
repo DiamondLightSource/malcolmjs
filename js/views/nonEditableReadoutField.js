@@ -10,9 +10,7 @@ var NonEditableReadoutField = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -26,7 +24,7 @@ var NonEditableReadoutField = React.createClass({
 
       <input id={this.props.blockName + this.props.attributeName + "readoutField"}
              className="readoutField"
-             value={String(this.props.blockAttribute.value)}
+             value={String(this.props.blockAttributeValue)}
              style={{textAlign: 'left', borderRadius: '4px',
                      border: '2px solid #797979',
                      color: 'lightblue', backgroundColor:'#3e3e3e',

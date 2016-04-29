@@ -4477,9 +4477,7 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -4494,14 +4492,14 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
         React.createElement("div", {id: "testToggleSwitch", style: {height: '21', width: '50'}}, 
           React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
                           this.props.attributeName,
-                          this.props.blockAttribute.value), 
-                      checked: this.props.blockAttribute.value === 'Show' ||
-                               this.props.blockAttribute.value === true, 
-                      defaultChecked: this.props.blockAttribute.value === 'Show' ||
-                                      this.props.blockAttribute.value === true, 
+                          this.props.blockAttributeValue), 
+                      checked: this.props.blockAttributeValue === 'Show' ||
+                               this.props.blockAttributeValue === true, 
+                      defaultChecked: this.props.blockAttributeValue === 'Show' ||
+                                      this.props.blockAttributeValue === true, 
                       id: this.props.blockName + 'toggleSwitch', 
-                      on: this.props.blockAttribute.value === 'Show' ||
-                          this.props.blockAttribute.value === true})
+                      on: this.props.blockAttributeValue === 'Show' ||
+                          this.props.blockAttributeValue === true})
         ), 
         React.createElement("p", {style: {margin: '0px', width: '40px'}}, "Show")
       )
@@ -4650,9 +4648,7 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value
     )
   },
 
@@ -4684,7 +4680,7 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
               className: "dropdownMenuWidget", 
               style: {width: '152px', backgroundColor:'#333333', color: 'lightblue',
                       borderRadius: '4px', border: '2px solid #202020'}, 
-              value: this.props.blockAttribute.value}, 
+              value: this.props.blockAttributeValue}, 
         dropdownOptions
       );
 
@@ -6484,9 +6480,7 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -6494,7 +6488,7 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
     return(
 
       React.createElement("svg", {style: {width: '150', height: '20'}}, 
-        React.createElement("circle", {r: "8", style: {fill: this.props.blockAttribute.value ? 'orange' : 'lightblue',
+        React.createElement("circle", {r: "8", style: {fill: this.props.blockAttributeValue ? 'orange' : 'lightblue',
                           stroke: 'white'}, 
                       transform: "translate(9, 11)"})
       )
@@ -6888,9 +6882,7 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -6904,7 +6896,7 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
 
       React.createElement("input", {id: this.props.blockName + this.props.attributeName + "readoutField", 
              className: "readoutField", 
-             value: String(this.props.blockAttribute.value), 
+             value: String(this.props.blockAttributeValue), 
              style: {textAlign: 'left', borderRadius: '4px',
                      border: '2px solid #797979',
                      color: 'lightblue', backgroundColor:'#3e3e3e',
@@ -8025,9 +8017,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -8053,7 +8043,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
                      border: '2px solid #202020',
                         //contentEditable:"true"
                      color: 'lightblue', backgroundColor:'#333333'}, 
-             defaultValue: String(this.props.blockAttribute.value), 
+             defaultValue: String(this.props.blockAttributeValue), 
              onChange: this.props.attributeFieldOnChange.bind(null, {
                         block: this.props.blockName,
                         attribute: this.props.attributeName
@@ -8083,10 +8073,8 @@ var WidgetStatusIcon = React.createClass({displayName: "WidgetStatusIcon",
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
+      nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
     )
   },
 
@@ -8196,10 +8184,8 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
+      nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
     )
   },
 
@@ -8207,7 +8193,6 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
 
     var widget;
     var commonProps = {
-      blockAttribute: this.props.blockAttribute,
       blockName: this.props.blockName,
       attributeName: this.props.attributeName
     };
@@ -8216,18 +8201,21 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
 
       case 'led':
             widget =
-              React.createElement(LEDWidget, React.__spread({},  commonProps));
+              React.createElement(LEDWidget, React.__spread({},  commonProps, 
+                {blockAttributeValue: this.props.blockAttribute.value}));
             break;
 
       case 'textupdate':
             widget =
-              React.createElement(NonEditableReadoutField, React.__spread({},  commonProps));
+              React.createElement(NonEditableReadoutField, React.__spread({},  commonProps, 
+                {blockAttributeValue: this.props.blockAttribute.value}));
             break;
 
       case 'textinput':
             widget =
               React.createElement(TextEditableReadoutField, React.__spread({},  commonProps, 
-                                        {attributeFieldOnChange: this.props.attributeFieldOnChange, 
+                {blockAttributeValue: this.props.blockAttribute.value, 
+                                        attributeFieldOnChange: this.props.attributeFieldOnChange, 
                                         selectedInputFieldText: this.props.selectedInputFieldText}));
             break;
 
@@ -8236,13 +8224,15 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
             widget =
               React.createElement(DropdownEditableReadoutField, React.__spread({}, 
                 commonProps, 
-                {onChangeBlockMethodDropdownOption: this.props.onChangeBlockMethodDropdownOption}));
+                {blockAttribute: this.props.blockAttribute, 
+                onChangeBlockMethodDropdownOption: this.props.onChangeBlockMethodDropdownOption}));
             break;
 
       case 'toggle':
             widget =
               React.createElement(BlockToggleSwitch, React.__spread({},  commonProps, 
-                                 {toggleSwitch: this.props.toggleSwitch}));
+                {blockAttributeValue: this.props.blockAttribute.value, 
+                                 toggleSwitch: this.props.toggleSwitch}));
             break;
 
                 }
@@ -8264,7 +8254,8 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
 
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
               React.createElement(WidgetStatusIcon, React.__spread({},  commonProps, 
-                                {blockAttributeStatus: this.props.blockAttributeStatus}))
+                {blockAttribute: this.props.blockAttribute, 
+                                blockAttributeStatus: this.props.blockAttributeStatus}))
             )
           )
       )

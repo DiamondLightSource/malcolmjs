@@ -10,9 +10,7 @@ var TextEditableReadoutField = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
   },
 
@@ -38,7 +36,7 @@ var TextEditableReadoutField = React.createClass({
                      border: '2px solid #202020',
                         //contentEditable:"true"
                      color: 'lightblue', backgroundColor:'#333333'}}
-             defaultValue={String(this.props.blockAttribute.value)}
+             defaultValue={String(this.props.blockAttributeValue)}
              onChange={this.props.attributeFieldOnChange.bind(null, {
                         block: this.props.blockName,
                         attribute: this.props.attributeName

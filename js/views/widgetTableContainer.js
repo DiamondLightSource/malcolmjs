@@ -21,10 +21,8 @@ var WidgetTableContainer = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
+      nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
     )
   },
 
@@ -32,7 +30,6 @@ var WidgetTableContainer = React.createClass({
 
     var widget;
     var commonProps = {
-      blockAttribute: this.props.blockAttribute,
       blockName: this.props.blockName,
       attributeName: this.props.attributeName
     };
@@ -41,17 +38,20 @@ var WidgetTableContainer = React.createClass({
 
       case 'led':
             widget =
-              <LEDWidget {...commonProps} />;
+              <LEDWidget {...commonProps}
+                blockAttributeValue={this.props.blockAttribute.value} />;
             break;
 
       case 'textupdate':
             widget =
-              <NonEditableReadoutField {...commonProps} />;
+              <NonEditableReadoutField {...commonProps}
+                blockAttributeValue={this.props.blockAttribute.value}/>;
             break;
 
       case 'textinput':
             widget =
               <TextEditableReadoutField {...commonProps}
+                blockAttributeValue={this.props.blockAttribute.value}
                                         attributeFieldOnChange={this.props.attributeFieldOnChange}
                                         selectedInputFieldText={this.props.selectedInputFieldText} />;
             break;
@@ -61,12 +61,14 @@ var WidgetTableContainer = React.createClass({
             widget =
               <DropdownEditableReadoutField
                 {...commonProps}
+                blockAttribute={this.props.blockAttribute}
                 onChangeBlockMethodDropdownOption={this.props.onChangeBlockMethodDropdownOption}/>;
             break;
 
       case 'toggle':
             widget =
               <BlockToggleSwitch {...commonProps}
+                blockAttributeValue={this.props.blockAttribute.value}
                                  toggleSwitch={this.props.toggleSwitch}/>;
             break;
 
@@ -89,6 +91,7 @@ var WidgetTableContainer = React.createClass({
 
             <td style={{width: '30px', textAlign: 'center'}} >
               <WidgetStatusIcon {...commonProps}
+                blockAttribute={this.props.blockAttribute}
                                 blockAttributeStatus={this.props.blockAttributeStatus} />
             </td>
           </tr>

@@ -10,9 +10,7 @@ var DropdownEditableReadoutField = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.blockAttribute.value !== this.props.blockAttribute.value
     )
   },
 
@@ -44,7 +42,7 @@ var DropdownEditableReadoutField = React.createClass({
               className="dropdownMenuWidget"
               style={{width: '152px', backgroundColor:'#333333', color: 'lightblue',
                       borderRadius: '4px', border: '2px solid #202020'}}
-              value={this.props.blockAttribute.value} >
+              value={this.props.blockAttributeValue} >
         {dropdownOptions}
       </select>;
 
