@@ -123,11 +123,11 @@ function getBothPanesState(){
     selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
     listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
-    allBlockInfo: blockStore.getAllBlockInfo(),
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
-    allBlockAttributes: attributeStore.getAllBlockAttributes(),
-    allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus(),
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+    allBlockAttributesIconStatus: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributesIconStatus())),
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 

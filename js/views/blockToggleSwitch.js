@@ -13,8 +13,7 @@ var BlockToggleSwitch = React.createClass({
       nextProps.blockAttribute !== this.props.blockAttribute ||
       nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName ||
-      nextProps.toggleOrientation !== this.props.toggleOrientation
+      nextProps.attributeName !== this.props.attributeName
     )
   },
 
@@ -28,14 +27,15 @@ var BlockToggleSwitch = React.createClass({
         <p style={{margin: '0px', width: '40px', position: 'relative'}} >Hide</p>
         <div id="testToggleSwitch" style={{height: '21', width: '50'}} >
           <ToggleSwitch onChange={this.props.toggleSwitch.bind(null, this.props.blockName,
-                          this.props.attributeName, this.props.toggleOrientation)}
-                      checked={this.props.toggleOrientation === 'Show' ||
-                               this.props.toggleOrientation === true}
-                      defaultChecked={this.props.toggleOrientation === 'Show' ||
-                                      this.props.toggleOrientation === true}
+                          this.props.attributeName,
+                          this.props.blockAttribute.value)}
+                      checked={this.props.blockAttribute.value === 'Show' ||
+                               this.props.blockAttribute.value === true}
+                      defaultChecked={this.props.blockAttribute.value === 'Show' ||
+                                      this.props.blockAttribute.value === true}
                       id={this.props.blockName + 'toggleSwitch'}
-                      on={this.props.toggleOrientation === 'Show' ||
-                          this.props.toggleOrientation === true} />
+                      on={this.props.blockAttribute.value === 'Show' ||
+                          this.props.blockAttribute.value === true} />
         </div>
         <p style={{margin: '0px', width: '40px'}} >Show</p>
       </div>

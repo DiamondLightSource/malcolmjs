@@ -48,7 +48,7 @@ var Block = React.createClass({
           e.stopPropagation();
           //console.log("interactjs dragend");
           Perf.stop();
-          Perf.printInclusive(Perf.getLastMeasurements());
+          Perf.printWasted(Perf.getLastMeasurements());
         }
       });
 

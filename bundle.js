@@ -594,12 +594,7 @@ var App = React.createClass({displayName: "App",
   componentDidMount: function(){
 
     Perf.start();
-    //window.alert("app mounted");
-    //MalcolmActionCreators.addWebsocketOnOpenCallback('Z');
-    //AppDispatcher.handleAction({
-    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //  item: "initialise flowChart end"
-    //});
+
   },
 
   render: function(){
@@ -4198,7 +4193,7 @@ var Block = React.createClass({displayName: "Block",
           e.stopPropagation();
           //console.log("interactjs dragend");
           Perf.stop();
-          Perf.printInclusive(Perf.getLastMeasurements());
+          Perf.printWasted(Perf.getLastMeasurements());
         }
       });
 
@@ -4485,8 +4480,7 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
       nextProps.blockAttribute !== this.props.blockAttribute ||
       nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName ||
-      nextProps.toggleOrientation !== this.props.toggleOrientation
+      nextProps.attributeName !== this.props.attributeName
     )
   },
 
@@ -4500,14 +4494,15 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
         React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
         React.createElement("div", {id: "testToggleSwitch", style: {height: '21', width: '50'}}, 
           React.createElement(ToggleSwitch, {onChange: this.props.toggleSwitch.bind(null, this.props.blockName,
-                          this.props.attributeName, this.props.toggleOrientation), 
-                      checked: this.props.toggleOrientation === 'Show' ||
-                               this.props.toggleOrientation === true, 
-                      defaultChecked: this.props.toggleOrientation === 'Show' ||
-                                      this.props.toggleOrientation === true, 
+                          this.props.attributeName,
+                          this.props.blockAttribute.value), 
+                      checked: this.props.blockAttribute.value === 'Show' ||
+                               this.props.blockAttribute.value === true, 
+                      defaultChecked: this.props.blockAttribute.value === 'Show' ||
+                                      this.props.blockAttribute.value === true, 
                       id: this.props.blockName + 'toggleSwitch', 
-                      on: this.props.toggleOrientation === 'Show' ||
-                          this.props.toggleOrientation === true})
+                      on: this.props.blockAttribute.value === 'Show' ||
+                          this.props.blockAttribute.value === true})
         ), 
         React.createElement("p", {style: {margin: '0px', width: '40px'}}, "Show")
       )
@@ -7589,8 +7584,7 @@ var SidePane = React.createClass({displayName: "SidePane",
             case 'toggle':
                   widgetParent.push(
                     React.createElement(WidgetTableContainer, React.__spread({},  commonProps, 
-                                          {toggleSwitch: this.toggleSwitch, 
-                                          toggleOrientation: blockAttributes[attribute].value}))
+                                          {toggleSwitch: this.toggleSwitch}))
                   );
                   break;
 
@@ -8254,8 +8248,7 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
       case 'toggle':
             widget =
               React.createElement(BlockToggleSwitch, React.__spread({},  commonProps, 
-                                 {toggleSwitch: this.props.toggleSwitch, 
-                                 toggleOrientation: this.props.toggleOrientation}));
+                                 {toggleSwitch: this.props.toggleSwitch}));
             break;
 
                 }

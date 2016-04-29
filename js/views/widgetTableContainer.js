@@ -68,8 +68,7 @@ var WidgetTableContainer = React.createClass({
       case 'toggle':
             widget =
               <BlockToggleSwitch {...commonProps}
-                                 toggleSwitch={this.props.toggleSwitch}
-                                 toggleOrientation={this.props.toggleOrientation} />;
+                                 toggleSwitch={this.props.toggleSwitch}/>;
             break;
 
                 }

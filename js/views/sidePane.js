@@ -341,8 +341,7 @@ var SidePane = React.createClass({
             case 'toggle':
                   widgetParent.push(
                     <WidgetTableContainer {...commonProps}
-                                          toggleSwitch={this.toggleSwitch}
-                                          toggleOrientation={blockAttributes[attribute].value} />
+                                          toggleSwitch={this.toggleSwitch} />
                   );
                   break;
 
