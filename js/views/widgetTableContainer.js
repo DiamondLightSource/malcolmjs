@@ -33,7 +33,6 @@ var WidgetTableContainer = React.createClass({
     var widget;
     var commonProps = {
       blockAttribute: this.props.blockAttribute,
-      blockAttributeStatus: this.props.blockAttributeStatus,
       blockName: this.props.blockName,
       attributeName: this.props.attributeName
     };
@@ -89,7 +88,8 @@ var WidgetTableContainer = React.createClass({
             </td>
 
             <td style={{width: '30px', textAlign: 'center'}} >
-              <WidgetStatusIcon {...commonProps} />
+              <WidgetStatusIcon {...commonProps}
+                                blockAttributeStatus={this.props.blockAttributeStatus} />
             </td>
           </tr>
       </tbody>

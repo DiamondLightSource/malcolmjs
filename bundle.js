@@ -4478,7 +4478,6 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName
     )
@@ -4652,7 +4651,6 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName
     )
@@ -6487,7 +6485,6 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName
     )
@@ -6892,7 +6889,6 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName
     )
@@ -7897,11 +7893,11 @@ function getBothPanesState(){
     selectedTabIndex: JSON.parse(JSON.stringify(paneStore.getSelectedTabIndex())),
     listVisible: JSON.parse(JSON.stringify(sidePaneStore.getDropdownState())),
 
-    allBlockInfo: blockStore.getAllBlockInfo(),
+    allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
     favContent: JSON.parse(JSON.stringify(paneStore.getFavContent())),
     configContent: JSON.parse(JSON.stringify(paneStore.getConfigContent())),
-    allBlockAttributes: attributeStore.getAllBlockAttributes(),
-    allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus(),
+    allBlockAttributes: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes())),
+    allBlockAttributesIconStatus: JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributesIconStatus())),
 
     //blockPositions: JSON.parse(JSON.stringify(flowChartStore.getBlockPositions()))
 
@@ -8030,7 +8026,6 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttribute !== this.props.blockAttribute ||
-      nextProps.blockAttributeStatus !== this.props.blockAttributeStatus ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName
     )
@@ -8213,7 +8208,6 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
     var widget;
     var commonProps = {
       blockAttribute: this.props.blockAttribute,
-      blockAttributeStatus: this.props.blockAttributeStatus,
       blockName: this.props.blockName,
       attributeName: this.props.attributeName
     };
@@ -8269,7 +8263,8 @@ var WidgetTableContainer = React.createClass({displayName: "WidgetTableContainer
             ), 
 
             React.createElement("td", {style: {width: '30px', textAlign: 'center'}}, 
-              React.createElement(WidgetStatusIcon, React.__spread({},  commonProps))
+              React.createElement(WidgetStatusIcon, React.__spread({},  commonProps, 
+                                {blockAttributeStatus: this.props.blockAttributeStatus}))
             )
           )
       )
