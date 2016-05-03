@@ -12,7 +12,6 @@ var CHANGE_EVENT = 'change';
 var clickedEdge = null;
 var portThatHasBeenClicked = null;
 var storingFirstPortClicked = null;
-var portMouseOver = false;
 var edgePreview = null;
 var previousMouseCoordsOnZoom = null;
 
@@ -36,40 +35,11 @@ var blockSelectedStates = {
 
 };
 
-//var blockPositions = {
-//
-//};
-
-//function interactJsDrag(BlockInfo){
-//  //allNodeInfo[NodeInfo.target].position.x = allNodeInfo[NodeInfo.target].position.x + NodeInfo.x * (1 / graphZoomScale);
-//  //allNodeInfo[NodeInfo.target].position.y = allNodeInfo[NodeInfo.target].position.y + NodeInfo.y * (1 / graphZoomScale);
-//  //console.log(allNodeInfo[NodeInfo.target].position);
-//
-//  blockPositions[BlockInfo.target] = {
-//    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / graphZoomScale),
-//    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / graphZoomScale)
-//  }
-//}
-
-//function appendToBlockPositions(BlockId, xCoord, yCoord){
-//  blockPositions[BlockId] = {
-//    //x: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-//    //y: JSON.parse(JSON.stringify(generateRandomBlockPosition())) * 1/graphZoomScale,
-//    x: xCoord * 1/graphZoomScale,
-//    y: yCoord * 1/graphZoomScale
-//  }
-//}
-
 function appendToBlockSelectedStates(BlockId){
-  //console.log("blockSelectedStates before adding a new block:");
   blockSelectedStates[BlockId] = false;
-  //console.log("blockSelectedStates after adding a new block:");
 }
 
 function removeBlock(blockId){
-  /* Remove block from blockPositions */
-  //delete blockPositions[blockId];
-
   /* Remove from blockSelectedStates */
   delete blockSelectedStates[blockId];
 }
@@ -101,10 +71,7 @@ function checkIfAnyBlocksAreSelected(){
 }
 
 var edgeSelectedStates = {
-  //'Gate1outTGen1ena': false,
-  //Gate1OutTGen1Ena: false,
-  //TGen1PosnPComp1Posn: false,
-  //TGen1PosnPComp1Ena: false
+
 };
 
 function appendToEdgeSelectedStates(EdgeId){
@@ -223,10 +190,6 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
   getStoringFirstPortClicked: function(){
     return storingFirstPortClicked;
   },
-  getPortMouseOver: function(){
-    return portMouseOver;
-  },
-
 
   getEdgePreview: function(){
     return edgePreview;
@@ -235,10 +198,6 @@ var flowChartStore = assign({}, EventEmitter.prototype, {
   getBlockStyling: function(){
     return blockStyling;
   },
-
-  //getBlockPositions: function(){
-  //  return blockPositions;
-  //}
 
 });
 
@@ -258,35 +217,14 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
   switch(action.actionType){
 
-    /* Deleteing a block will go here at some point */
-
-    //case appConstants.APPEND_EDGESELECTEDSTATE:
-    //  edgeSelectedStates[item] = false;
-    //  flowChartStore.emitChange();
-    //  console.log(edgeSelectedStates);
-    //  break;
-
-
-
-
-    //case appConstants.INTERACTJS_DRAG:
-    //  interactJsDrag(item);
-    //  console.log(blockPositions[item.target]);
-    //  flowChartStore.emitChange();
-    //  break;
-
-
     case appConstants.SELECT_BLOCK:
       blockSelectedStates[item] = true;
       console.log(blockSelectedStates);
-      //changeUnselectedNodesOpacity();
       flowChartStore.emitChange();
       break;
 
     case appConstants.DESELECT_ALLBLOCKS:
       deselectAllBlocks();
-      //console.log(nodeSelectedStates.Gate1);
-      //console.log(nodeSelectedStates.TGen1);
       flowChartStore.emitChange();
       break;
 
@@ -365,41 +303,20 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       flowChartStore.emitChange();
       break;
 
-    /* WebAPI related stuff */
-
     case appConstants.MALCOLM_GET_SUCCESS:
-      //AppDispatcher.waitFor([blockStore.dispatchToken]);
-      //for(var block in item){
-      //  appendToBlockPositions(block);
-      //  appendToBlockSelectedStates(block);
-      //}
-      //appendToBlockPositions('CLOCKS');
-      //appendToBlockSelectedStates('CLOCKS');
-
-      console.log("");
 
       for(var i = 0; i < item.responseMessage.tags.length; i++){
-        /* No need to check the tags for if it's FlowGraph */
-        //if(item.tags[i] === 'instance:FlowGraph'){
-        //}
         if(item.responseMessage.tags[i] === 'instance:Zebra2Block'){
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
-          //var xCoord = JSON.parse(JSON.stringify(item.attributes.X_COORD.value));
-          //var yCoord = JSON.parse(JSON.stringify(item.attributes.Y_COORD.value));
-          //console.log(xCoord);
 
           /* Check the block visibility attribute here
             ie, check the 'USE' attribute */
 
-            if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
-            //appendToBlockPositions(blockName, xCoord, yCoord);
+          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockSelectedStates(blockName);
           }
           else{
             console.log("block isn't in use, don't add its info");
-
-            //appendToBlockPositions(blockName, xCoord, yCoord);
-            //appendToBlockSelectedStates(blockName);
           }
         }
       }
@@ -409,31 +326,6 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("flowChartStore malcolmSubscribe success");
-      //if(item.requestedData.attribute === 'X_COORD' ||
-      //  item.requestedData.attribute === 'Y_COORD'){
-      //
-      //  var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      //  var requestedData = JSON.parse(JSON.stringify(item.requestedData));
-      //
-      //  if(item.requestedData.attribute === 'X_COORD'){
-      //    blockPositions[requestedData.blockName].x = responseMessage.value  * 1/graphZoomScale;
-      //  }
-      //  else if(item.requestedData.attribute === 'Y_COORD'){
-      //    blockPositions[requestedData.blockName].y = responseMessage.value  * 1/graphZoomScale;
-      //  }
-      //
-      //  //blockPositions[requestedData.blockName] = {
-      //  //  x: responseMessage.value.X_COORD  * 1/graphZoomScale,
-      //  //  y: responseMessage.value.Y_COORD * 1/graphZoomScale
-      //  //}
-      //
-      //  /* The only time I want
-      //  flowChart to emit a change
-      //  due to a subscribe message
-      //   */
-      //  flowChartStore.emitChange();
-      //
-      //}
 
       /* I need to have it listening to when any new edges are added
       via malcolm, currently I'm listening to the old appConstant:
@@ -453,17 +345,24 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
           }
           else if (item.responseMessage.tags[j] === 'widget:toggle') {
             if (item.responseMessage.value === 'Show') {
-
-              /* Trying to add a block when its visibility is
-               changed to 'Show'
-               Hmm, how do I also get the coords from Z?
-               */
-              //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
-              appendToBlockSelectedStates(blockName);
-              flowChartStore.emitChange();
+              if(item.requestedData.blockName === 'VISIBILITY'){
+                appendToBlockSelectedStates(item.requestedData.attribute);
+                flowChartStore.emitChange();
+              }
+              else if(item.requestedData.blockName !== 'VISIBILITY'){
+                appendToBlockSelectedStates(item.requestedData.blockName);
+                flowChartStore.emitChange();
+              }
             }
             else if (item.responseMessage.value === 'Hide') {
-              flowChartStore.emitChange();
+              if(item.requestedData.blockName === 'VISIBILITY'){
+                removeBlock(item.requestedData.attribute);
+                flowChartStore.emitChange();
+              }
+              else if(item.requestedData.blockName !== 'VISIBILITY'){
+                removeBlock(item.requestedData.blockName);
+                flowChartStore.emitChange();
+              }
             }
 
           }

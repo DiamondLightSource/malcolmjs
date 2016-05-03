@@ -460,7 +460,59 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
       not any other type of attribute
        */
 
-      //window.alert("dhi");
+      /* Need to listen for block coordinate/position changes too */
+
+      /* When a block is hidden, an error appears saying that
+       blockPositions[requestedData.blockName] is undefined,
+       since the block has in fact been removed from that object.
+       I basically need to start doing unsubscriptions I think,
+       the other way is to simply put another if statement here
+       */
+
+      if(item.requestedData.attribute === 'X_COORD'){
+
+        /* Should first check if the position of the block isn't
+        already equal to the position grabbed from the server:
+        this is essentially because the block positions are updated
+        locally as well as from the server, changing the position
+        via the server is for when you have't dragged a block in
+        the GUI, but change it via the server in some other way
+         */
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        /* Undoing the zoom scale multiplication to check against
+        the server's unscaled coords */
+
+        if(blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
+          responseMessage.value) {
+
+          blockPositions[requestedData.blockName].x = responseMessage.value *
+            1 / flowChartStore.getGraphZoomScale();
+
+          blockStore.emitChange();
+        }
+
+      }
+      else if(item.requestedData.attribute === 'Y_COORD'){
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        /* Undoing the zoom scale multiplication to check against
+         the server's unscaled coords */
+
+        if(blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
+          responseMessage.value) {
+
+          blockPositions[requestedData.blockName].y = responseMessage.value *
+            1 / flowChartStore.getGraphZoomScale();
+
+          blockStore.emitChange();
+        }
+
+      }
 
       var isInportDropdown = false;
       var hasFlowgraphTag = false;

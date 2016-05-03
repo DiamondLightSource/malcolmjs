@@ -29,7 +29,6 @@ function getFlowChartState(){
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
 
 
-    //portMouseOver: JSON.parse(JSON.stringify(blockStore.getPortMouseOver())),
 
 
     /* WebAPI use */
@@ -85,9 +84,8 @@ var FlowChartControllerView = React.createClass({
         storingFirstPortClicked={this.state.storingFirstPortClicked}
         areAnyBlocksSelected={this.state.areAnyBlocksSelected}
         areAnyEdgesSelected={this.state.areAnyEdgesSelected}
-        //portMouseOver={this.state.portMouseOver}
         edgePreview={this.state.edgePreview}
-        previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
+        //previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}
         blockPositions={this.state.blockPositions}
       />
