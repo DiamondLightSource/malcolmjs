@@ -160,10 +160,6 @@ var MalcolmActionCreators = {
       }
     });
 
-    console.log(blockName);
-    console.log(method);
-    console.log(args);
-
     function malcolmCallSuccess(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_CALL_SUCCESS,
@@ -779,7 +775,6 @@ function Client(url){
 
   this.addWebSocketOnOpenCallback = function(callback){
     webSocketOnOpenCallbacks.push(callback);
-    console.log(webSocketOnOpenCallbacks);
   };
 
   this.addWebSocketOnCloseCallback = function(callback){
@@ -809,7 +804,6 @@ function Client(url){
   };
 
   this.sendText = function(message){
-    console.log(message);
     websocket.send(message);
 
     /* Pretty sure I'm not doing the callback thing right, but hey ho this is the best I got so far =P */
@@ -852,21 +846,14 @@ function Client(url){
     /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
 
     websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
-      console.log(evt);
-      //fireOnOpen(evt);
       for(var i in webSocketOnOpenCallbacks){
         webSocketOnOpenCallbacks[i](evt)
       }
-      console.log("websocket has been opened")
     };
 
     websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
-      //console.log("message has been received from server via websocket");
       var json;
       json = JSON.parse(evt.data);
-      console.log("Here is the event:");
-      console.log(evt);
-      console.log(json);
 
       /* Time to check which channel callback to invoke based on the type! */
       //console.log(json.type);
@@ -881,8 +868,6 @@ function Client(url){
       if(channelObject[json.id] === undefined){
         //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
         if(json.type === 'Error'){
-          //genericFailureCallback(json);
-          console.log(json);
           idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
         }
         else if(json.type === 'Return'){
@@ -925,9 +910,6 @@ function Client(url){
           //}
 
           /* Invoking the corresponding id's callback */
-          console.log(json);
-          //window.alert(json.id);
-          //window.alert(json.value);
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }
@@ -957,13 +939,10 @@ function Client(url){
 
     websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
       //fireOnError(evt);
-      console.log("webocket error");
-      console.log(evt);
     };
 
     websocket.onclose = function(evt){
       //fireOnClose(evt);
-      console.log("websocket has been closed")
     };
 
 
@@ -1209,11 +1188,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       AppDispatcher.waitFor([blockStore.dispatchToken]);
 
-      //window.alert("shfi");
-      console.log("hfoiuhawoioFIFIF");
-
-      console.log(item);
-
       for(var i = 0; i < item.responseMessage.tags.length; i++){
         if(item.responseMessage.tags[i] === "instance:Zebra2Block") {
 
@@ -1227,7 +1201,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
           //if (item.attributes.VISIBLE.value === 'Show') {
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
-            console.log(allBlockAttributes);
           //}
 
           /* Try using allBlockAttributesIconStatus for widgetIconStatus */
@@ -1250,7 +1223,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
-          console.log(allBlockAttributes);
 
           /* Try using allBlockAttributesIconStatus for widgetIconStatus */
 
@@ -1281,7 +1253,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("malcolmSubscribeSuccess in attributeStore");
-      console.log(item);
 
       if(item.requestedData.blockName !== 'VISIBILITY') {
         var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
@@ -1814,16 +1785,14 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
     /* BLOCK use */
 
     case appConstants.INTERACTJS_DRAG:
-      console.log(payload);
-      console.log(item);
       interactJsDrag(item);
       blockStore.emitChange();
       break;
@@ -1861,17 +1830,11 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
             /* Putting it here just to test the blocks even if they're not in use */
             //addBlock(blockName);
 
-            console.log("block isn't in use, don't add its info");
           }
-          console.log(testAllBlockInfo);
         }
 
       }
 
-
-
-      console.log(testAllBlockInfo);
-      console.log(_stuff.blockList);
       blockStore.emitChange();
       break;
 
@@ -1883,7 +1846,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("blockStore malcolmSubscribeSuccess");
 
-      console.log(item);
 
       /* Check the tags for 'widget:combo', it'll be
       indicating that a dropdown was used (it'll also
@@ -2278,8 +2240,8 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
@@ -2382,7 +2344,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
             appendToBlockSelectedStates(blockName);
           }
           else{
-            console.log("block isn't in use, don't add its info");
+            //console.log("block isn't in use, don't add its info");
           }
         }
       }
@@ -2715,8 +2677,8 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
@@ -2805,7 +2767,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       /* No need to check the tags for if it's FlowGraph */
       for(var j = 0; j < item.responseMessage.tags.length; j++){
-        console.log("one time round in the loop");
         //if(item.tags[j] === 'instance:FlowGraph'){
         //}
         if(item.responseMessage.tags[j] === 'instance:Zebra2Block'){
@@ -2818,8 +2779,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
           else{
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
-            console.log("block isn't in use, don't add its info");
-
           }
 
         }
@@ -3315,7 +3274,6 @@ var idLookupTableFunctions = {
    if 'success' is true then invoke the success callback,
    and if it's false then invoke the failure callback
    */
-    console.log(idLookupTable);
 
     //window.alert("look at the lookup table!");
 
@@ -3417,7 +3375,6 @@ var Block = React.createClass({displayName: "Block",
   shouldComponentUpdate: function(nextProps, nextState){
 
     if(this.props.portThatHasBeenClicked === null){
-      console.log("portThatHasBeenClicked isn't anything");
       return (
         nextProps.blockPosition.x !== this.props.blockPosition.x ||
         nextProps.blockPosition.y !== this.props.blockPosition.y ||
@@ -4692,52 +4649,12 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     areAnyEdgesSelected: React.PropTypes.bool,
   },
 
-  //componentWillMount: function(){
-  //  window.alert("flowChart will mount")
-  //},
-
-  componentDidUpdate: function(nextProps, nextState){
-    console.log(nextProps);
-    console.log(document.getElementById('BlocksGroup').children.length);
-    console.log(Object.keys(nextProps.allBlockInfo).length);
-
-    /* Doesn't work, blocks don't get rendered before the window alert? */
-    /* Actually, it was catching it when both were equal to zero =P */
-    if(document.getElementById('BlocksGroup').children.length ===
-      Object.keys(nextProps.allBlockInfo).length &&
-      document.getElementById('BlocksGroup').children.length !== 0){
-      //AppDispatcher.handleAction({
-      //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-      //  item: "initialise flowChart end"
-      //});
-    }
-  },
-
   componentDidMount: function () {
     //Perf.start();
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
-    //window.addEventListener('keydown', this.keyPress);
-
-    //window.alert("flowChart mount");
-
-    //window.alert(React.Children.count());
-
-    //setTimeout(function(){
-    //  AppDispatcher.handleAction({
-    //    actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //    item: "initialise flowChart end"
-    //  });
-    //}, 1000);
-
-    //AppDispatcher.handleAction({
-    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //  item: "initialise flowChart end"
-    //});
-
-
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -6650,9 +6567,6 @@ var SidePane = React.createClass({displayName: "SidePane",
 
     var groupsObject = {};
 
-    console.log(blockAttributes);
-    console.log(blockName);
-
     for(var attribute in blockAttributes){
 
       if(blockAttributes[attribute].tags === undefined &&
@@ -6859,7 +6773,6 @@ var SidePane = React.createClass({displayName: "SidePane",
   render: function () {
 
     console.log("render: sidePane");
-    console.log(this.props.tabState);
 
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
@@ -6903,7 +6816,6 @@ var SidePane = React.createClass({displayName: "SidePane",
             block.label)
           );
         }
-        console.log(tabContent);
         return tabContent;
       }.bind(this);
 

@@ -54,11 +54,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       AppDispatcher.waitFor([blockStore.dispatchToken]);
 
-      //window.alert("shfi");
-      console.log("hfoiuhawoioFIFIF");
-
-      console.log(item);
-
       for(var i = 0; i < item.responseMessage.tags.length; i++){
         if(item.responseMessage.tags[i] === "instance:Zebra2Block") {
 
@@ -72,7 +67,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
           //if (item.attributes.VISIBLE.value === 'Show') {
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
-            console.log(allBlockAttributes);
           //}
 
           /* Try using allBlockAttributesIconStatus for widgetIconStatus */
@@ -95,7 +89,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
-          console.log(allBlockAttributes);
 
           /* Try using allBlockAttributesIconStatus for widgetIconStatus */
 
@@ -126,7 +119,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("malcolmSubscribeSuccess in attributeStore");
-      console.log(item);
 
       if(item.requestedData.blockName !== 'VISIBILITY') {
         var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));

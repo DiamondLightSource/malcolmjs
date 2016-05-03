@@ -75,7 +75,6 @@ var Block = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState){
 
     if(this.props.portThatHasBeenClicked === null){
-      console.log("portThatHasBeenClicked isn't anything");
       return (
         nextProps.blockPosition.x !== this.props.blockPosition.x ||
         nextProps.blockPosition.y !== this.props.blockPosition.y ||

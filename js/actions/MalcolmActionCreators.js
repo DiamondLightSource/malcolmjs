@@ -159,10 +159,6 @@ var MalcolmActionCreators = {
       }
     });
 
-    console.log(blockName);
-    console.log(method);
-    console.log(args);
-
     function malcolmCallSuccess(responseMessage){
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_CALL_SUCCESS,

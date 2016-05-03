@@ -10,7 +10,6 @@ var idLookupTableFunctions = {
    if 'success' is true then invoke the success callback,
    and if it's false then invoke the failure callback
    */
-    console.log(idLookupTable);
 
     //window.alert("look at the lookup table!");
 

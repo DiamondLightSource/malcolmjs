@@ -212,8 +212,8 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
@@ -316,7 +316,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
             appendToBlockSelectedStates(blockName);
           }
           else{
-            console.log("block isn't in use, don't add its info");
+            //console.log("block isn't in use, don't add its info");
           }
         }
       }

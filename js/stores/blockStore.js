@@ -377,16 +377,14 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
     /* BLOCK use */
 
     case appConstants.INTERACTJS_DRAG:
-      console.log(payload);
-      console.log(item);
       interactJsDrag(item);
       blockStore.emitChange();
       break;
@@ -424,17 +422,11 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
             /* Putting it here just to test the blocks even if they're not in use */
             //addBlock(blockName);
 
-            console.log("block isn't in use, don't add its info");
           }
-          console.log(testAllBlockInfo);
         }
 
       }
 
-
-
-      console.log(testAllBlockInfo);
-      console.log(_stuff.blockList);
       blockStore.emitChange();
       break;
 
@@ -446,7 +438,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("blockStore malcolmSubscribeSuccess");
 
-      console.log(item);
 
       /* Check the tags for 'widget:combo', it'll be
       indicating that a dropdown was used (it'll also

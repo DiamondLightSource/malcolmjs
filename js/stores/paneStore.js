@@ -148,8 +148,8 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
-  console.log(payload);
-  console.log(item);
+  //console.log(payload);
+  //console.log(item);
 
   switch(action.actionType){
 
@@ -238,7 +238,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       /* No need to check the tags for if it's FlowGraph */
       for(var j = 0; j < item.responseMessage.tags.length; j++){
-        console.log("one time round in the loop");
         //if(item.tags[j] === 'instance:FlowGraph'){
         //}
         if(item.responseMessage.tags[j] === 'instance:Zebra2Block'){
@@ -251,8 +250,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
           else{
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
-            console.log("block isn't in use, don't add its info");
-
           }
 
         }

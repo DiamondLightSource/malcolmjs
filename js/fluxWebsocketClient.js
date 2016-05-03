@@ -29,7 +29,6 @@ function Client(url){
 
   this.addWebSocketOnOpenCallback = function(callback){
     webSocketOnOpenCallbacks.push(callback);
-    console.log(webSocketOnOpenCallbacks);
   };
 
   this.addWebSocketOnCloseCallback = function(callback){
@@ -59,7 +58,6 @@ function Client(url){
   };
 
   this.sendText = function(message){
-    console.log(message);
     websocket.send(message);
 
     /* Pretty sure I'm not doing the callback thing right, but hey ho this is the best I got so far =P */
@@ -102,21 +100,14 @@ function Client(url){
     /* Ok, so you dont' actually directly invoke the onopen, onclose functions below, the methods ofthe Client listed above take care of those */
 
     websocket.onopen = function(evt){   /* onopen is another thing to do with WebSockets */
-      console.log(evt);
-      //fireOnOpen(evt);
       for(var i in webSocketOnOpenCallbacks){
         webSocketOnOpenCallbacks[i](evt)
       }
-      console.log("websocket has been opened")
     };
 
     websocket.onmessage = function(evt){ /* I think all these methods with websocket.method are associated/builtin in WebSockets */
-      //console.log("message has been received from server via websocket");
       var json;
       json = JSON.parse(evt.data);
-      console.log("Here is the event:");
-      console.log(evt);
-      console.log(json);
 
       /* Time to check which channel callback to invoke based on the type! */
       //console.log(json.type);
@@ -131,8 +122,6 @@ function Client(url){
       if(channelObject[json.id] === undefined){
         //console.log("channel doesn't exist/isn't subscribed, so invoke generic callback");
         if(json.type === 'Error'){
-          //genericFailureCallback(json);
-          console.log(json);
           idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
         }
         else if(json.type === 'Return'){
@@ -175,9 +164,6 @@ function Client(url){
           //}
 
           /* Invoking the corresponding id's callback */
-          console.log(json);
-          //window.alert(json.id);
-          //window.alert(json.value);
           idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
 
         }
@@ -207,13 +193,10 @@ function Client(url){
 
     websocket.onerror = function(evt){  /* This is the only thing that invokes fireOnError I think */
       //fireOnError(evt);
-      console.log("webocket error");
-      console.log(evt);
     };
 
     websocket.onclose = function(evt){
       //fireOnClose(evt);
-      console.log("websocket has been closed")
     };
 
 

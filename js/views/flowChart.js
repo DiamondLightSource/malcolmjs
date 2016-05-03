@@ -38,52 +38,12 @@ var FlowChart = React.createClass({
     areAnyEdgesSelected: React.PropTypes.bool,
   },
 
-  //componentWillMount: function(){
-  //  window.alert("flowChart will mount")
-  //},
-
-  componentDidUpdate: function(nextProps, nextState){
-    console.log(nextProps);
-    console.log(document.getElementById('BlocksGroup').children.length);
-    console.log(Object.keys(nextProps.allBlockInfo).length);
-
-    /* Doesn't work, blocks don't get rendered before the window alert? */
-    /* Actually, it was catching it when both were equal to zero =P */
-    if(document.getElementById('BlocksGroup').children.length ===
-      Object.keys(nextProps.allBlockInfo).length &&
-      document.getElementById('BlocksGroup').children.length !== 0){
-      //AppDispatcher.handleAction({
-      //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-      //  item: "initialise flowChart end"
-      //});
-    }
-  },
-
   componentDidMount: function () {
     //Perf.start();
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
     ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
-    //window.addEventListener('keydown', this.keyPress);
-
-    //window.alert("flowChart mount");
-
-    //window.alert(React.Children.count());
-
-    //setTimeout(function(){
-    //  AppDispatcher.handleAction({
-    //    actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //    item: "initialise flowChart end"
-    //  });
-    //}, 1000);
-
-    //AppDispatcher.handleAction({
-    //  actionType: appConstants.INITIALISE_FLOWCHART_END,
-    //  item: "initialise flowChart end"
-    //});
-
-
 
     interact('#dragArea')
       .on('tap', this.deselect);

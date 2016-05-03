@@ -235,9 +235,6 @@ var SidePane = React.createClass({
 
     var groupsObject = {};
 
-    console.log(blockAttributes);
-    console.log(blockName);
-
     for(var attribute in blockAttributes){
 
       if(blockAttributes[attribute].tags === undefined &&
@@ -444,7 +441,6 @@ var SidePane = React.createClass({
   render: function () {
 
     console.log("render: sidePane");
-    console.log(this.props.tabState);
 
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
@@ -488,7 +484,6 @@ var SidePane = React.createClass({
             block.label)
           );
         }
-        console.log(tabContent);
         return tabContent;
       }.bind(this);
 
