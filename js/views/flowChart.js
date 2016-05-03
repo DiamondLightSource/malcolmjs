@@ -34,7 +34,6 @@ var FlowChart = React.createClass({
     graphPosition: React.PropTypes.object,
     graphZoomScale: React.PropTypes.number,
     allBlockInfo: React.PropTypes.object,
-    blockLibrary: React.PropTypes.object,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
   },
@@ -412,10 +411,6 @@ var FlowChart = React.createClass({
       fromBlockType: fromBlockType,
       toBlockType: toBlockType
     };
-
-
-    var fromBlockLibraryInfo = this.props.blockLibrary[fromBlockType];
-    var toBlockLibraryInfo = this.props.blockLibrary[toBlockType];
 
     //console.log((this.props.storingFirstPortClicked).parentNode.transform.animVal[0].matrix.e);
     //

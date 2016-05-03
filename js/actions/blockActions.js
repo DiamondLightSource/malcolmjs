@@ -9,30 +9,12 @@ var blockActions = {
 
   /* BLOCK use */
 
-  addToAllBlockInfo: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADDTO_ALLBLOCKINFO,
-      item: item
-    })
-  },
   //interactJsDrag: function(item){
   //  AppDispatcher.handleAction({
   //    actionType: appConstants.INTERACTJS_DRAG,
   //    item: item
   //  })
   //},
-  addOneSingleEdgeToAllBlockInfo(edgeInfo){
-    AppDispatcher.handleAction({
-      actionType: appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO,
-      item: edgeInfo
-    })
-  },
-  deleteEdge: function(item){
-    AppDispatcher.handleAction({
-      actionType: appConstants.DELETE_EDGE,
-      item: item
-    })
-  },
 
 };
 

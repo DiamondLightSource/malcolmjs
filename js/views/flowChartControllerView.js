@@ -14,7 +14,6 @@ function getFlowChartState(){
   return{
     /* blockStore */
     allBlockInfo: JSON.parse(JSON.stringify(blockStore.getAllBlockInfo())),
-    blockLibrary: JSON.parse(JSON.stringify(blockStore.getBlockLibrary())),
 
 
     /* flowChartStore */
@@ -35,7 +34,6 @@ function getFlowChartState(){
 
     /* WebAPI use */
 
-    dataFetchTest: JSON.parse(JSON.stringify(blockStore.getDataFetchTest())),
     testAllBlockInfo: JSON.parse(JSON.stringify(blockStore.getTestAllBlockInfo()))
   }
 }
@@ -63,7 +61,6 @@ var FlowChartControllerView = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState){
     return (
       nextState.allBlockInfo !== this.state.allBlockInfo ||
-      nextState.blockLibrary !== this.state.blockLibrary ||
 
       nextState.graphZoomScale !== this.state.graphZoomScale ||
       nextState.graphPosition.x !== this.state.graphPosition.x ||
@@ -73,7 +70,6 @@ var FlowChartControllerView = React.createClass({
       nextState.areAnyBlocksSelected !== this.state.areAnyBlocksSelected ||
       nextState.areAnyEdgesSelected !== this.state.areAnyEdgesSelected ||
       nextState.edgePreview !== this.state.edgePreview ||
-      nextState.dataFetchTest !== this.state.dataFetchTest ||
       nextState.blockPositions !== this.state.blockPositions
     )
   },
@@ -82,7 +78,6 @@ var FlowChartControllerView = React.createClass({
     return(
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
-        blockLibrary={this.state.blockLibrary}
 
         graphZoomScale={this.state.graphZoomScale}
         graphPosition={this.state.graphPosition}
@@ -94,7 +89,6 @@ var FlowChartControllerView = React.createClass({
         edgePreview={this.state.edgePreview}
         previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}
-        dataFetchTest={this.state.dataFetchTest}
         blockPositions={this.state.blockPositions}
       />
     )

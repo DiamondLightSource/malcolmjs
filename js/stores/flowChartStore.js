@@ -258,15 +258,6 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
   switch(action.actionType){
 
-    /* Need to listen to adding/removing blocks & edges so that I can append
-    to the appropriate state objects, ie, selected, position */
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      //AppDispatcher.waitFor([blockStore.dispatchToken]); /* NO need for waitFor, I'm just listening to a single action over multiple stores! */
-      //appendToBlockPositions(item);
-      appendToBlockSelectedStates(item);
-      flowChartStore.emitChange();
-      break;
-
     /* Deleteing a block will go here at some point */
 
     //case appConstants.APPEND_EDGESELECTEDSTATE:
@@ -274,17 +265,6 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
     //  flowChartStore.emitChange();
     //  console.log(edgeSelectedStates);
     //  break;
-
-    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      appendToEdgeSelectedStates(item.edgeLabel);
-      flowChartStore.emitChange();
-      break;
-
-    case appConstants.DELETE_EDGE:
-      /* Delete edge from edge state function */
-      removeFromEdgeSelectedStates(item.edgeId);
-      flowChartStore.emitChange();
-      break;
 
 
 
@@ -387,17 +367,6 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
     /* WebAPI related stuff */
 
-    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-    //  //AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  for(var block in item){
-    //    appendToBlockPositions(block);
-    //    appendToBlockSelectedStates(block);
-    //  }
-    //  //appendToBlockPositions('CLOCKS');
-    //  //appendToBlockSelectedStates('CLOCKS');
-    //  flowChartStore.emitChange();
-    //  break;
-
     case appConstants.MALCOLM_GET_SUCCESS:
       //AppDispatcher.waitFor([blockStore.dispatchToken]);
       //for(var block in item){
@@ -466,9 +435,23 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
       //
       //}
 
+      /* I need to have it listening to when any new edges are added
+      via malcolm, currently I'm listening to the old appConstant:
+       ADD_ONESINGLEEDGETOALLBLOCKINFO
+       */
+
+      var isWidgetCombo = false;
+      var isGroupInputs = false;
+
       if(item.responseMessage.tags !== undefined) {
         for (var j = 0; j < item.responseMessage.tags.length; j++) {
-          if (item.responseMessage.tags[j] === 'widget:toggle') {
+          if (item.responseMessage.tags[j].indexOf('widget:combo') !== -1) {
+            isWidgetCombo = true;
+          }
+          else if (item.responseMessage.tags[j].indexOf('group:Inputs') !== -1) {
+            isGroupInputs = true;
+          }
+          else if (item.responseMessage.tags[j] === 'widget:toggle') {
             if (item.responseMessage.value === 'Show') {
 
               /* Trying to add a block when its visibility is
@@ -477,21 +460,76 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
                */
               //appendToBlockPositions(item.requestedData.attribute, graphPosition.x, graphPosition.y);
               appendToBlockSelectedStates(blockName);
-              //console.log(blockPositions);
               flowChartStore.emitChange();
             }
             else if (item.responseMessage.value === 'Hide') {
-              /* Causes a circular dependency! */
-              //AppDispatcher.waitFor([blockStore.dispatchToken]);
-              //setTimeout(function(){
-              //  removeBlock(item.requestedData.attribute);
-              //
-              //}, 1000);
-              //removeBlock(item.requestedData.attribute);
               flowChartStore.emitChange();
             }
 
           }
+        }
+      }
+
+      /* Note that this is the exact same code in paneStore, just with
+       appendToAllEdgeTabProperties replaced with appendToEdgeSelectedTabStates...
+       */
+
+      if(isWidgetCombo === true && isGroupInputs === true){
+        /* Then this is some info on edges, so we need
+         to append to the relevant objects in order to have
+         edge tabs
+         */
+
+        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+
+        if(responseMessage.value !== 'BITS.ZERO' &&
+          responseMessage.value !== 'POSITIONS.ZERO') {
+
+          /* edgeLabelFirstHalf is the outport block and the
+           outport block port names put together
+           */
+          var edgeLabelFirstHalf = responseMessage.value.replace(/\./g, "");
+
+          /* edgeLabelSecondHalf is the inport block and the
+           inport block port names put together
+           */
+          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+          var edgeLabel = edgeLabelFirstHalf + edgeLabelSecondHalf;
+
+          appendToEdgeSelectedStates(edgeLabel);
+        }
+        else if(responseMessage.value === 'BITS.ZERO' ||
+          responseMessage.value === 'POSITIONS.ZERO'){
+
+          /* I know what inport and what inport block the edge was
+           connected to, but I don't know what outport or what
+           outport block the edge was connected to, since you
+           get the value to be BITS.ZERO or POSITIONS.ZERO instead
+           of what it was connected to before...
+           */
+
+          var edgeLabelToDelete;
+
+          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+
+          /* Inports can't be connected to more than one outport
+           at a time, so only one edge with edgeLabelSecondHalf in it
+           can exist at any given time, so I think I can search through
+           all the edges in allEdgeTabProperties and see if the
+           indexOf(edgeLabelSecondHalf) !== -1, then that should
+           be the edge that I want to delete
+           */
+
+          for(var edge in edgeSelectedStates){
+            if(edge.indexOf(edgeLabelSecondHalf) !== -1){
+              edgeLabelToDelete = edge;
+              removeFromEdgeSelectedStates(edgeLabelToDelete);
+            }
+          }
+
+          console.log(edgeSelectedStates);
+
         }
       }
 

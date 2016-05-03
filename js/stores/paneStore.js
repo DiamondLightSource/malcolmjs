@@ -218,33 +218,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    case appConstants.ADD_ONESINGLEEDGETOALLBLOCKINFO:
-      appendToAllEdgeTabProperties(item.edgeLabel);
-      paneStore.emitChange();
-      break;
-
-    case appConstants.DELETE_EDGE:
-        if(allEdgeTabProperties[item.edgeId] === true){
-          console.log("need to remove edge tab too");
-          /* Do the tab removal stuff */
-          //console.log("that edge tab was open, so now we need to remove that tab");
-          for(var i = 0; i < _stuff.tabState.length; i++){
-            if(_stuff.tabState[i].tabType === 'edge'){
-              allEdgeTabProperties[item.edgeId] = false;
-              var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-              newTabs.splice(i, 1);
-              _stuff.tabState = newTabs;
-            }
-          }
-        }
-      paneStore.emitChange();
-      break;
-
-    case appConstants.ADDTO_ALLBLOCKINFO:
-      appendToAllBlockTabProperties(item);
-      paneStore.emitChange();
-      break;
-
     case appConstants.MODAL_DIALOG_BOX_OPEN:
       _stuff.modalDialogBoxOpen = true;
       modalDialogBoxInfo.blockName = item.blockName;
