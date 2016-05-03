@@ -74,9 +74,6 @@ var SidePane = React.createClass({
   },
 
   handleEdgeDeleteButton: function(EdgeInfo){
-    console.log(EdgeInfo);
-    /* Replace with a malcolmCall to delete the edge */
-    //blockActions.deleteEdge(EdgeInfo);
 
     var methodName = "_set_" + EdgeInfo.toBlockPort;
     var argsObject = {};
@@ -86,18 +83,18 @@ var SidePane = React.createClass({
     so a get from blockStore may be in order
      */
 
-    /* Can check either the fromPort value type,
-    or the toPort value type, if the two ports
-    are connected then they'll have the same type
-     */
-
-    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports.length;
+    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports.length;
       i++){
-      if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'bit'){
-        argumentValue = 'BITS.ZERO';
-      }
-      else if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'pos'){
-        argumentValue = 'POSITIONS.ZERO';
+      console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
+      if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo !== null &&
+        blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.block === EdgeInfo.fromBlock &&
+        blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.port === EdgeInfo.fromBlockPort){
+        if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type === 'bit'){
+          argumentValue = 'BITS.ZERO';
+        }
+        else if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type == 'pos'){
+          argumentValue = 'POSITIONS.ZERO';
+        }
       }
     }
 

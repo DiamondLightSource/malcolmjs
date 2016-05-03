@@ -6557,13 +6557,29 @@ var SidePane = React.createClass({displayName: "SidePane",
     are connected then they'll have the same type
      */
 
-    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports.length;
+    //for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports.length;
+    //  i++){
+    //  window.alert(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type);
+    //  if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'bit'){
+    //    argumentValue = 'BITS.ZERO';
+    //  }
+    //  else if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'pos'){
+    //    argumentValue = 'POSITIONS.ZERO';
+    //  }
+    //}
+
+    for(var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports.length;
       i++){
-      if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'bit'){
-        argumentValue = 'BITS.ZERO';
-      }
-      else if(blockStore.getAllBlockInfo()[EdgeInfo.fromBlock].outports[i].type === 'pos'){
-        argumentValue = 'POSITIONS.ZERO';
+      console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
+      if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo !== null &&
+        blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.block === EdgeInfo.fromBlock &&
+        blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.port === EdgeInfo.fromBlockPort){
+        if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type === 'bit'){
+          argumentValue = 'BITS.ZERO';
+        }
+        else if(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type == 'pos'){
+          argumentValue = 'POSITIONS.ZERO';
+        }
       }
     }
 
