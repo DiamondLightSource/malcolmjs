@@ -12,12 +12,11 @@ var CHANGE_EVENT = 'change';
 var _stuff = {
   tabState: [],
   selectedTabIndex: 0,
-  //passSidePane: null
   updatedBlockContent: null,
   blockTabState: [],
   sidebarOpen: false,
-  loadingInitialData: true,
-  loadingInitialDataError: false,
+  //loadingInitialData: true,
+  //loadingInitialDataError: false,
   modalDialogBoxOpen: false
 };
 
@@ -35,28 +34,7 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
 
   _handles.passSidePane = ReactComponent;
 
-  //selectBlockOnClick(ReactComponent)
 };
-
-//var compareCurrentPaneStoreBlockContentAndDeviceStore = function(){
-//  for(var key in allBlockContent){
-//    if(allBlockContent[key].hack === _stuff.updatedBlockContent.hack){
-//      for(var subKey in allBlockContent[key].info.work){
-//        if(allBlockContent[key].info.work[subKey] === _stuff.updatedBlockContent.info.work[subKey]){
-//          /* Do nothing*/
-//          //console.log('the attributes are the same, no need to update paneStore\'s allBlockContent object')
-//        }
-//        else{/* ie, if they aren't equal, update the attribute in allBlockContent in paneStore to the newer version! */
-//          //console.log('the attribures aren\'t the same, requires attribute update, getting the newer data from deviceStore');
-//          allBlockContent[key].info.work[subKey] = _stuff.updatedBlockContent.info.work[subKey]
-//        }
-//      }
-//    }
-//    else{
-//      /* Do nothing */
-//    }
-//  }
-//};
 
 var favContent = {
   name: "Favourites tab",
@@ -103,11 +81,7 @@ var dropdownMenuSelect = function(tab){
       var findTheIndex = i
     }
   }
-  console.log(findTheIndex);
-  //
-  //var findTheIndex = this.props.list.indexOf(item);
   _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
-  //keepSidePane(ReactComponent)
 };
 
 var selectBlockOnClick = function(){
@@ -129,13 +103,9 @@ var paneStore = assign({}, EventEmitter.prototype, {
     return _stuff.tabState;
   },
   getFavTabOpen:function(){
-    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
-    //return allBlockTabProperties.favTabOpen;
     return allBlockTabProperties.Favourites;
   },
   getConfigTabOpen: function(){
-    /* Changed to use allNodeTabProperties instead of allBlockTabProperties */
-    //return allBlockTabProperties.configTabOpen;
     return allBlockTabProperties.Configuration;
   },
   getFavContent: function(){
@@ -158,12 +128,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getAllBlockTabInfo: function(){
     return allBlockTabInfo;
   },
-  getIfLoadingInitialData: function(){
-    return _stuff.loadingInitialData;
-  },
-  getIfLoadingInitialDataError: function(){
-    return _stuff.loadingInitialDataError;
-  },
+  //getIfLoadingInitialData: function(){
+  //  return _stuff.loadingInitialData;
+  //},
+  //getIfLoadingInitialDataError: function(){
+  //  return _stuff.loadingInitialDataError;
+  //},
   getModalDialogBoxOpenState: function(){
     return _stuff.modalDialogBoxOpen;
   },
@@ -177,40 +147,28 @@ var paneStore = assign({}, EventEmitter.prototype, {
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
+
+  console.log(payload);
+  console.log(item);
+
   switch(action.actionType){
 
     case appConstants.PASS_SIDEPANE:
-      //console.log(payload);
-      //console.log(action);
-      //console.log(item);
       passSidePane(item);
           break;
 
     case appConstants.DROPDOWN_SELECT:
-      //var tab = item.item;
-      //var component = item.component;
-
-      console.log(payload);
-      console.log(action); /* this tells you what the name of the selected tab is, for debugging purposes*/
       dropdownMenuSelect(item);
       paneStore.emitChange();
       break;
 
     case appConstants.FAVTAB_OPEN:
-      console.log(payload);
-      console.log(item);
-      /* Want to replace with a better version, now that I'm doing node tabs */
-      //changeFavTabState();
       setFavTabStateTrue();
       console.log(allBlockTabProperties.Favourites);
       paneStore.emitChange();
       break;
 
     case appConstants.CONFIGTAB_OPEN:
-      console.log(payload);
-      console.log(item);
-      /* Replacing so I don't have to go through checkWhichBlockTabsOpen() */
-      //changeConfigTabState();
       setConfigTabStateTrue();
       console.log(allBlockTabProperties.Configuration);
       paneStore.emitChange();
@@ -222,8 +180,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.OPEN_BLOCKTAB:
-      console.log(payload);
-      console.log(item);
 
       setBlockTabStateTrue(item);
       //_stuff.tabState.push(allNodeTabInfo[item]);
@@ -235,30 +191,22 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.REMOVE_BLOCKTAB:
-      console.log(payload);
-      console.log(item);
       removeBlockTab(item);
       console.log(_stuff.tabState);
       paneStore.emitChange();
       break;
 
     case appConstants.TOGGLE_SIDEBAR:
-      console.log(payload);
-      console.log(item);
       toggleSidebar();
       paneStore.emitChange();
       break;
 
     case appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED:
-      console.log(payload);
-      console.log(item);
       windowWidthMediaQueryChanged(item);
       paneStore.emitChange();
       break;
 
     case appConstants.OPEN_EDGETAB:
-      console.log(payload);
-      console.log(item);
       var EdgeInfo = {
         edgeId: item.edgeId,
         fromBlock: item.fromBlock,
@@ -313,39 +261,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       paneStore.emitChange();
       break;
 
-    //case appConstants.DELETE_EDGE:
-    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //  console.log("delete edge");
-    //  getInitialBlockDataFromBlockStore();
-    //  resetTabStateReferences();
-    //  console.log(allEdgeTabProperties[item.edgeId]);
-    //  /* Also need to remove the edges tab if it is open */
-    //  if(allEdgeTabProperties[item.edgeId] === true){
-    //    console.log("need to remove edge tab too");
-    //    /* Do the tab removal stuff */
-    //    //console.log("that edge tab was open, so now we need to remove that tab");
-    //    for(var i = 0; i < _stuff.tabState.length; i++){
-    //      if(_stuff.tabState[i].tabType === 'edge'){
-    //        allEdgeTabProperties[item.edgeId] = false;
-    //        var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-    //        newTabs.splice(i, 1);
-    //        _stuff.tabState = newTabs;
-    //      }
-    //    }
-    //  }
-      paneStore.emitChange();
-      break;
-
-    /* WebAPI use */
-
     case appConstants.MALCOLM_GET_SUCCESS:
-      //AppDispatcher.waitFor([blockStore.dispatchToken]);
-      //for(var block in item){
-      //  appendToBlockPositions(block);
-      //  appendToBlockSelectedStates(block);
-      //}
-      //appendToBlockPositions('CLOCKS');
-      //appendToBlockSelectedStates('CLOCKS');
 
       /* No need to check the tags for if it's FlowGraph */
       for(var j = 0; j < item.responseMessage.tags.length; j++){
@@ -578,10 +494,6 @@ function setBlockTabStateTrue(BlockId){
     selectBlockOnClick();
  }
   else{
-    //console.log("tab state was already true, so don't bother changing it to true");
-    /* Need to have the tab jump to the newly selected node, instead of just jumping to the end tab */
-    /* Could try using dropdownMenuSelect? */
-
     dropdownMenuSelect(BlockId);
   }
 }
@@ -683,21 +595,11 @@ var removeBlockTab = function(selectedTabIndex){
   /* Checking if it's a edge tab or a block tab */
 
   if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
-    //console.log("removing an edge tab");
-
-    //var spacelessEdgeTabName = tabName.replace(/\s/g, '');
-
-    /* Hmmm, I'm using the edge id WITH spaces in allEdgeTabProperties, but I'm using the spaceless
-    edge id in tabState, is that a good idea?...
-     */
     allEdgeTabProperties[tabName] = false;
   }
   else{
-    //console.log("removing a block tab");
     allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   }
-
-  //allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
   newTabs.splice(selectedTabIndex, 1);
   _stuff.tabState = newTabs;
@@ -713,59 +615,7 @@ function toggleSidebar(){
 }
 
 function windowWidthMediaQueryChanged(sidebarOpen){
-  //if(_stuff.sidebarOpen === true){
-  //  _stuff.sidebarOpen = false;
-  //}
-  //else if(_stuff.sidebarOpen === false){
-  //  console.log("sidebar was already closed, so don't bother setting it false even though the window width has changed");
-  //}
-  //console.log(_stuff.sidebarOpen)
-
   _stuff.sidebarOpen = sidebarOpen;
 }
-
-function copyTabState(){
-  _stuff['newTabState'] = _stuff.tabState.slice();
-}
-
-function resetTabStateReferences(){
-  for(var i = 0; i < _stuff.tabState.length; i++){
-    if(_stuff.tabState[i].label === 'Configuration' || _stuff.tabState[i].label === 'Favourites'){
-      //console.log("don't copy any data over, since these tabs' contents don't exist in allBlockInfo!");
-    }
-    else if(_stuff.tabState[i].tabType === 'edge'){
-      //console.log("also do nothing, since this info is created from allBlockTabInfo");
-    }
-    else {
-      _stuff.tabState[i] = allBlockTabInfo[_stuff.tabState[i].label];
-    }
-  }
-}
-
-//function createObjectForEdgeTabContent(EdgeInfo){
-//  var edgeLabel = String(EdgeInfo.fromBlock) + String(EdgeInfo.fromBlockPort) + String(EdgeInfo.toBlock) + String(EdgeInfo.toBlockPort);
-//  var edgeTabObject = {
-//    'tabType': 'edge',
-//    'label': edgeLabel,
-//    'edgeId': edgeLabel
-//  };
-//  //for(var i = 0; i < allBlockTabInfo[EdgeInfo.fromBlock].outports.length; i++){
-//  //  if(allBlockTabInfo[EdgeInfo.fromBlock].outports[i].name === EdgeInfo.fromBlockPort){
-//  //    edgeTabObject[EdgeInfo.fromBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.fromBlock].outports[i])));
-//  //  }
-//  //}
-//  //
-//  //for(var j = 0; j < allBlockTabInfo[EdgeInfo.toBlock].inports.length; j++){
-//  //  if(allBlockTabInfo[EdgeInfo.toBlock].inports[j].name === EdgeInfo.toBlockPort){
-//  //    edgeTabObject[EdgeInfo.toBlock] = (JSON.parse(JSON.stringify(allBlockTabInfo[EdgeInfo.toBlock].inports[j])));
-//  //  }
-//  //}
-//
-//  assign(edgeTabObject, EdgeInfo);
-//
-//  _stuff.tabState.push(edgeTabObject);
-//  console.log(_stuff.tabState);
-//}
-
 
 module.exports = paneStore;
