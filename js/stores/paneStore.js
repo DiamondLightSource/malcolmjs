@@ -246,16 +246,17 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
+            paneStore.emitChange();
+
           }
           else{
-            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
-            appendToAllBlockTabProperties(blockName);
+            //var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+            //appendToAllBlockTabProperties(blockName);
           }
 
         }
       }
 
-      paneStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
@@ -362,13 +363,10 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       if(modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
         modalDialogBoxInfo.attributeName === attributeToUpdate) {
-
-        //modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
-        //modalDialogBoxInfo.attributeName = attributeToUpdate;
         modalDialogBoxInfo.message = null;
+        paneStore.emitChange();
       }
 
-      paneStore.emitChange();
       break;
 
     case appConstants.MALCOLM_CALL_FAILURE:

@@ -314,6 +314,7 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
 
           if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockSelectedStates(blockName);
+            flowChartStore.emitChange();
           }
           else{
             //console.log("block isn't in use, don't add its info");
@@ -321,7 +322,6 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
         }
       }
 
-      flowChartStore.emitChange();
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
@@ -347,22 +347,20 @@ flowChartStore.dispatchToken = AppDispatcher.register(function(payload){
             if (item.responseMessage.value === 'Show') {
               if(item.requestedData.blockName === 'VISIBILITY'){
                 appendToBlockSelectedStates(item.requestedData.attribute);
-                flowChartStore.emitChange();
               }
               else if(item.requestedData.blockName !== 'VISIBILITY'){
                 appendToBlockSelectedStates(item.requestedData.blockName);
-                flowChartStore.emitChange();
               }
+              flowChartStore.emitChange();
             }
             else if (item.responseMessage.value === 'Hide') {
               if(item.requestedData.blockName === 'VISIBILITY'){
                 removeBlock(item.requestedData.attribute);
-                flowChartStore.emitChange();
               }
               else if(item.requestedData.blockName !== 'VISIBILITY'){
                 removeBlock(item.requestedData.blockName);
-                flowChartStore.emitChange();
               }
+              flowChartStore.emitChange();
             }
 
           }

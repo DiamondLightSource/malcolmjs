@@ -416,7 +416,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
             addBlock(blockName);
-
+            blockStore.emitChange();
           }
           else{
             /* Putting it here just to test the blocks even if they're not in use */
@@ -427,7 +427,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
       }
 
-      blockStore.emitChange();
       break;
 
     case appConstants.MALCOLM_GET_FAILURE:
@@ -591,22 +590,22 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       console.log("malcolmSubscribeFailure");
-      blockStore.emitChange();
+      //blockStore.emitChange();
       break;
 
     case appConstants.MALCOLM_CALL_SUCCESS:
       console.log("malcolmCallSuccess");
-      blockStore.emitChange();
+      //blockStore.emitChange();
       break;
 
     case appConstants.MALCOLM_CALL_FAILURE:
       console.log("malcolmCallFailure");
-      blockStore.emitChange();
+      //blockStore.emitChange();
       break;
 
     case appConstants.INITIALISE_FLOWCHART_START:
       //console.log("initialise flowChart start blockStore");
-      blockStore.emitChange();
+      //blockStore.emitChange();
       break;
 
     default:
