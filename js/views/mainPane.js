@@ -6,10 +6,7 @@ var React = require('react');
 var ReactPanels = require('react-panels');
 
 var mainPaneActions = require('../actions/mainPaneActions');
-var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
 
 var ConfigButton = require('./configButton');
 var FavButton = require('./favButton');
@@ -26,32 +23,21 @@ var Button = ReactPanels.Button;
 
 var MainPane = React.createClass({
 
-  componentDidMount: function(){
-
-  },
-
-  componentWillUnmount: function(){
-
-  },
-
   propTypes: {
     footers: React.PropTypes.bool,
-    //favPanelOpen: React.PropTypes.bool,
     favTabOpen: React.PropTypes.bool,
-    //configPanelOpen: React.PropTypes.bool,
     configTabOpen: React.PropTypes.bool,
     loadingInitialData: React.PropTypes.bool,
     loadingInitialDataError: React.PropTypes.bool
-    //theGraphDiamondState: React.PropTypes.object
   },
 
   shouldComponentUpdate(nextProps, nextState){
     return (
       nextProps.footers !== this.props.footers ||
       nextProps.favTabOpen !== this.props.favTabOpen ||
-      nextProps.configTabOpen !== this.props.configTabOpen ||
-      nextProps.loadingInitialData !== this.props.loadingInitialData ||
-      nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
+      nextProps.configTabOpen !== this.props.configTabOpen
+      //nextProps.loadingInitialData !== this.props.loadingInitialData ||
+      //nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
   },
 
@@ -87,8 +73,6 @@ var MainPane = React.createClass({
       'height': '1476',
       'width': '1494'
     };
-    //console.log(this.state.newlyAddedNode);
-    //console.log(this.state);
 
     /* Using an if statement to check if we need to display the initial data fetch loading icon
     instead of flowChart

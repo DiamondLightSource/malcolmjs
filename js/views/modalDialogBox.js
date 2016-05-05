@@ -6,6 +6,8 @@ var React = require('react');
 
 var paneActions = require('../actions/paneActions');
 
+var attributeStore = require('../stores/attributeStore');
+
 var ReactModal = require('react-modal');
 
 var modalDialogBoxStyling = {
@@ -38,14 +40,28 @@ var modalDialogBoxStyling = {
   }
 };
 
+function getModalDialogBoxState(){
+  return{
+    allBlockAttributes: attributeStore.getAllBlockAttributes()
+  }
+}
+
 var ModalDialogBox = React.createClass({
 
-  shouldComponentUpdate: function(nextProps, nextState){
-    return(
-      nextProps.modalDialogBoxOpen !== this.props.modalDialogBoxOpen ||
-      nextProps.modalDialogBoxInfo !== this.props.modalDialogBoxInfo ||
-      nextProps.allBlockAttributes !== this.props.allBlockAttributes
-    )
+  getInitialState: function(){
+    return getModalDialogBoxState();
+  },
+
+  _onChange: function(){
+    this.setState(getModalDialogBoxState());
+  },
+
+  componentDidMount: function(){
+    attributeStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function(){
+    attributeStore.removeChangeListener(this._onChange);
   },
 
   closeModalDialogBox: function(){
@@ -61,7 +77,7 @@ var ModalDialogBox = React.createClass({
 
     var blockName = this.props.modalDialogBoxInfo.blockName;
     var attributeName = this.props.modalDialogBoxInfo.attributeName;
-    var allBlockAttributes = this.props.allBlockAttributes;
+    var allBlockAttributes = this.state.allBlockAttributes;
 
     if(blockName === null && attributeName === null){
       modalDialogBoxContent.push(

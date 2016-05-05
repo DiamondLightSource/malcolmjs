@@ -272,6 +272,40 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
           else if (item.responseMessage.tags[k].indexOf('group:Inputs') !== -1) {
             isGroupInputs = true;
           }
+          else if(item.responseMessage.tags[k].indexOf('widget:toggle') !== -1){
+
+            /* Need to append to allBlockTabProperties when a block's
+             visibility is changed from Hide to Show, so then when a block
+             is added you can open its tab!
+             */
+
+            if(item.requestedData.blockName === 'VISIBILITY'){
+              if(item.responseMessage.value === 'Show'){
+                /* Append to allBlockTabProperties */
+                appendToAllBlockTabProperties(item.requestedData.attribute);
+              }
+              else if(item.responseMessage.value === 'Hide'){
+                /* Remove from allBlockTabProperties */
+                delete allBlockTabProperties[item.requestedData.attribute];
+              }
+              paneStore.emitChange()
+            }
+            else if(item.requestedData.attribute === 'VISIBLE'){
+              /* This is for when a block's own VISIBLE attribute/toggle switch
+              is changed, rather than VISBILITY's
+               */
+              if(item.responseMessage.value === 'Show'){
+                /* Append to allBlockTabProperties */
+                appendToAllBlockTabProperties(item.requestedData.blockName);
+              }
+              else if(item.responseMessage.value === 'Hide'){
+                /* Remove from allBlockTabProperties */
+                delete allBlockTabProperties[item.requestedData.blockName];
+              }
+              paneStore.emitChange();
+            }
+
+          }
         }
       }
 
@@ -333,11 +367,14 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
           /* Now need to remove the edge from tabState! */
 
+          function checkEdgeLabel(edgeTabObject){
+            return edgeTabObject.label !== edgeLabelToDelete;
+          }
+
           for(var j = 0; j < _stuff.tabState.length; j++){
             if(_stuff.tabState[j].label === edgeLabelToDelete){
-              var newTabs = _stuff.tabState;
-              newTabs.splice(j, 1);
-              _stuff.tabState = newTabs;
+              /* Return a new array after removing the edge tab */
+              _stuff.tabState = _stuff.tabState.filter(checkEdgeLabel);
             }
           }
 
@@ -438,6 +475,7 @@ function appendToAllBlockTabProperties(BlockId){
 }
 
 function setBlockTabStateTrue(BlockId){
+  console.log(allBlockTabProperties[BlockId]);
   if(allBlockTabProperties[BlockId] === false) {
     allBlockTabProperties[BlockId] = true;
     console.log(allBlockTabProperties);
@@ -450,12 +488,12 @@ function setBlockTabStateTrue(BlockId){
     be the tab title
      */
 
-    var blockTabStateObject = {
+    var blockTabStateObject = [{
       tabType: 'block',
       label: BlockId
-    };
+    }];
 
-    _stuff.tabState.push(blockTabStateObject);
+    _stuff.tabState = _stuff.tabState.concat(blockTabStateObject);
 
     /* Can run selectBlockOnClick now, since that tab wasn't open, so can jump staright to end tab */
 
@@ -471,16 +509,16 @@ function setEdgeTabStateTrue(EdgeInfo){
   if(allEdgeTabProperties[EdgeInfo.edgeId] === false){
     allEdgeTabProperties[EdgeInfo.edgeId] = true;
 
-    var edgeTabStateObject = {
+    var edgeTabStateObject = [{
       tabType: 'edge',
       label: EdgeInfo.edgeId,
       fromBlock: EdgeInfo.fromBlock,
       fromBlockPort: EdgeInfo.fromBlockPort,
       toBlock: EdgeInfo.toBlock,
       toBlockPort: EdgeInfo.toBlockPort
-    };
+    }];
 
-    _stuff.tabState.push(edgeTabStateObject);
+    _stuff.tabState = _stuff.tabState.concat(edgeTabStateObject);
 
     selectBlockOnClick();
 
@@ -494,12 +532,12 @@ function setFavTabStateTrue(){
  if(allBlockTabProperties['Favourites'] === false){
    allBlockTabProperties['Favourites'] = true;
 
-   var favTabStateObject = {
+   var favTabStateObject = [{
      tabType: 'Favourites',
      label: 'Favourites'
-   };
+   }];
 
-   _stuff.tabState.push(favTabStateObject);
+   _stuff.tabState = _stuff.tabState.concat(favTabStateObject);
 
    selectBlockOnClick()
  }
@@ -514,12 +552,12 @@ function setConfigTabStateTrue(){
   if(allBlockTabProperties['Configuration'] === false){
     allBlockTabProperties['Configuration'] = true;
 
-    var configTabStateObject = {
+    var configTabStateObject = [{
       tabType: 'Configuration',
       label: 'Configuration'
-    };
+    }];
 
-    _stuff.tabState.push(configTabStateObject);
+    _stuff.tabState = _stuff.tabState.concat(configTabStateObject);
 
     selectBlockOnClick();
   }
@@ -535,12 +573,12 @@ function setBlockLookupTableTabStateTrue(){
   if(allBlockTabProperties['VISIBILITY'] === false){
     allBlockTabProperties['VISIBILITY'] = true;
 
-    var blockLookupTableTabStateObject = {
+    var blockLookupTableTabStateObject = [{
       tabType: 'VISIBILITY',
       label: 'VISIBILITY'
-    };
+    }];
 
-    _stuff.tabState.push(blockLookupTableTabStateObject);
+    _stuff.tabState = _stuff.tabState.concat(blockLookupTableTabStateObject);
 
     selectBlockOnClick();
   }
@@ -551,13 +589,15 @@ function setBlockLookupTableTabStateTrue(){
 
 var removeBlockTab = function(selectedTabIndex){
 
+  var tabName;
+
   if(_stuff.tabState[selectedTabIndex].label === undefined){
     /* Tis a block tab, or a fav/config tab */
-    var tabName = _stuff.tabState[selectedTabIndex];
+    tabName = _stuff.tabState[selectedTabIndex];
     console.log(tabName);
   }
   else{
-    var tabName = _stuff.tabState[selectedTabIndex].label;
+    tabName = _stuff.tabState[selectedTabIndex].label;
 
   }
   /* Checking if it's a edge tab or a block tab */
@@ -568,9 +608,15 @@ var removeBlockTab = function(selectedTabIndex){
   else{
     allBlockTabProperties[tabName] = false; /* Setting the state of the tab to be removed to be false */
   }
-  var newTabs = _stuff.tabState;  /*setting up the current state of tabs, and then getting rid of the currently selected tab*/
-  newTabs.splice(selectedTabIndex, 1);
-  _stuff.tabState = newTabs;
+
+  /* Trying to return a new array when removing a tab */
+
+  function checkTabLabel(tabObject){
+    return tabObject.label !== tabName;
+  }
+
+  _stuff.tabState = _stuff.tabState.filter(checkTabLabel);
+
 };
 
 function toggleSidebar(){

@@ -9,6 +9,8 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
+var update = require('../../node_modules/react').addons.update;
+
 var CHANGE_EVENT = 'change';
 
 var _stuff = {
@@ -36,10 +38,39 @@ function appendToBlockPositions(BlockId, xCoord, yCoord){
 
 function interactJsDrag(BlockInfo){
 
-  blockPositions[BlockInfo.target] = {
-    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
-    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
-  }
+  //var oldBlockPositions = blockPositions;
+  //var oldBlockPositionsObject = blockPositions[BlockInfo.target];
+  //var oldCounter1BlockPositions = blockPositions['COUNTER1'];
+
+  //blockPositions[BlockInfo.target] = {
+  //  x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
+  //  y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
+  //};
+
+  //blockPositions[BlockInfo.target].x = blockPositions[BlockInfo.target].x +
+  //    BlockInfo.x * (1/flowChartStore.getGraphZoomScale());
+
+  /* This works to alter individual object key values */
+  //blockPositions[BlockInfo.target] = update(blockPositions[BlockInfo.target],
+  //  {$merge : {x: blockPositions[BlockInfo.target].x +
+  //  BlockInfo.x * (1/flowChartStore.getGraphZoomScale())}});
+  //
+  //blockPositions[BlockInfo.target].y = blockPositions[BlockInfo.target].y +
+  //  BlockInfo.y * (1/flowChartStore.getGraphZoomScale());
+
+
+  /* Testing React's immutability helper 'update' */
+
+  blockPositions[BlockInfo.target] = update(blockPositions[BlockInfo.target], {$set: {
+    x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1/flowChartStore.getGraphZoomScale()),
+    y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1/flowChartStore.getGraphZoomScale())
+  }});
+
+  //console.log(blockPositions === oldBlockPositions);
+  //console.log(blockPositions[BlockInfo.target] === oldBlockPositionsObject);
+  //console.log(blockPositions['COUNTER1'] === oldCounter1BlockPositions);
+  //console.log(blockPositions[BlockInfo.target].x === oldBlockPositionsObject.x);
+
 }
 
 
@@ -408,7 +439,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           var xCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.X_COORD.value));
           var yCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.Y_COORD.value));
 
-          console.log(blockName);
           testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.responseMessage));
 
           /* Add the block to allBlockInfo! */
@@ -516,6 +546,9 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
             hasFlowgraphTag = true;
           }
           else if (item.responseMessage.tags[p] === 'widget:toggle') {
+
+            /* What about when a block's own visible attribute gets changed? */
+
             if (item.requestedData.blockName === 'VISIBILITY') {
               if (item.responseMessage.value === 'Show') {
                 /* Trying to add a block when its visibility is

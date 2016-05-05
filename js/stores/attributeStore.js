@@ -9,6 +9,8 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var CHANGE_EVENT = 'change';
 
+var update = require('../../node_modules/react').addons.update;
+
 var allBlockAttributes = {
 
 };
@@ -18,8 +20,17 @@ var allBlockAttributesIconStatus = {
 };
 
 function updateAttributeValue(blockId, attribute, newValue){
-  allBlockAttributes[blockId][attribute].value = newValue;
-  console.log(newValue);
+  //allBlockAttributes[blockId][attribute].value = newValue;
+
+  /* Try using update to cause the reference to change! */
+
+  var oldAttributes = allBlockAttributes;
+
+  allBlockAttributes[blockId][attribute] = update(allBlockAttributes[blockId][attribute],
+    {$merge : {value: newValue}});
+
+  console.log(oldAttributes === allBlockAttributes);
+
 }
 
 var attributeStore = assign({}, EventEmitter.prototype, {
