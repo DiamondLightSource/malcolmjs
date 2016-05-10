@@ -12,39 +12,55 @@ var Treeview = require('react-treeview');
 var blockStore = require('../stores/blockStore');
 var attributeStore = require('../stores/attributeStore');
 /* Purely for favContent & configContent */
-var paneStore = require('../stores/paneStore');
+//var paneStore = require('../stores/paneStore');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var WidgetTableContainer = require('./widgetTableContainer');
 
-function getSidePaneTabContentsState(){
+function getSidePaneTabContentsState(SidePaneTabContentsComponent){
   return{
-    allBlockAttributes: attributeStore.getAllBlockAttributes(),
-    allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus(),
-    favContent: paneStore.getFavContent(),
-    configContent: paneStore.getConfigContent()
+    blockAttributes: attributeStore.getAllBlockAttributes()
+      [SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()
+      [SidePaneTabContentsComponent.props.tabObject.label],
+    //favContent: paneStore.getFavContent(),
+    //configContent: paneStore.getConfigContent()
   }
 }
 
 var SidePaneTabContents = React.createClass({
 
   getInitialState: function(){
-    return getSidePaneTabContentsState();
+    console.log("fetching initial state of " + this.props.tabObject.label);
+    return getSidePaneTabContentsState(this);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log(this.props);
+    //console.log(this.state);
+    //console.log(this.state.blockAttributes);
+    //console.log(nextState.blockAttributes);
+    //console.log(nextState.blockAttributes !== this.state.blockAttributes);
+    return(
+     nextState.blockAttributes !== this.state.blockAttributes
+    )
   },
 
   componentDidMount: function(){
     attributeStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    console.log("mounting " + this.props.tabObject.label);
   },
 
   componentWillUnmount: function(){
     attributeStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
+    console.log("unmounting " + this.props.tabObject.label);
   },
 
   _onChange: function(){
-    this.setState(getSidePaneTabContentsState());
+    this.setState(getSidePaneTabContentsState(this));
   },
 
   handleMalcolmCall: function(blockName, method, args){
@@ -312,11 +328,11 @@ var SidePaneTabContents = React.createClass({
 
           var commonProps = {
             blockAttribute: blockAttributes[attribute],
-            blockAttributeStatus: this.state.allBlockAttributesIconStatus[blockName][attribute],
-            blockName: blockName,
+            blockAttributeStatus: this.state.blockAttributesIconStatus[attribute],
+            blockName: this.props.tabObject.label,
             attributeName: attribute,
             isInAGroup: isInAGroup,
-            key: blockName + attribute + widgetType,
+            key: this.props.tabObject.label + attribute + widgetType,
             widgetType: widgetType
           };
 
@@ -385,24 +401,27 @@ var SidePaneTabContents = React.createClass({
 
   render: function(){
 
+    console.log('rerendering: ' + this.props.tabObject.label);
+
     var tabContent = [];
 
-    if(this.props.tabObject.tabType === "Favourites"){
-      tabContent.push(
-        <p>{this.state.favContent.name}</p>
-      );
-    }
-    else if(this.props.tabObject.tabType === 'Configuration'){
-      tabContent.push(
-        <p>{this.state.configContent.name}</p>
-      );
-    }
-    else if(this.props.tabObject.tabType === 'VISIBILITY'){
+    //if(this.props.tabObject.tabType === "Favourites"){
+    //  tabContent.push(
+    //    <p>{this.state.favContent.name}</p>
+    //  );
+    //}
+    //else if(this.props.tabObject.tabType === 'Configuration'){
+    //  tabContent.push(
+    //    <p>{this.state.configContent.name}</p>
+    //  );
+    //}
+    if(this.props.tabObject.tabType === 'VISIBILITY' ||
+        this.props.tabObject.tabType === 'block'){
 
       /* Making the tab content generator more generic */
 
       tabContent.push(
-        this.generateTabContent(this.state.allBlockAttributes[this.props.tabObject.label],
+        this.generateTabContent(this.state.blockAttributes,
           this.props.tabObject.label)
       );
     }
@@ -412,12 +431,6 @@ var SidePaneTabContents = React.createClass({
         <button key={this.props.tabObject.label + "edgeDeleteButton"}
                 onClick={this.handleEdgeDeleteButton.bind(null, this.props.tabObject)}
         >Delete edge</button>
-      );
-    }
-    else if(this.props.tabObject.tabType === 'block'){
-      tabContent.push(
-        this.generateTabContent(this.state.allBlockAttributes[this.props.tabObject.label],
-          this.props.tabObject.label)
       );
     }
 

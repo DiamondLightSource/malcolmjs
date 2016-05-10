@@ -109,8 +109,8 @@ function getBothPanesState(){
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    favTabOpen: paneStore.getFavTabOpen(),
-    configTabOpen: paneStore.getConfigTabOpen(),
+    //favTabOpen: paneStore.getFavTabOpen(),
+    //configTabOpen: paneStore.getConfigTabOpen(),
     //loadingInitialData: paneStore.getIfLoadingInitialData(),
     //loadingInitialDataError: paneStore.getIfLoadingInitialDataError(),
 
@@ -168,8 +168,8 @@ var BothPanes = React.createClass({
                  pullRight={true} touchHandleWidth={5}
                  children={
                   <MainPane footers={this.state.footers}
-                    favTabOpen={this.state.favTabOpen}
-                    configTabOpen={this.state.configTabOpen}
+                  //favTabOpen={this.state.favTabOpen}
+                  //configTabOpen={this.state.configTabOpen}
                   //loadingInitialData={this.state.loadingInitialData}
                   //loadingInitialDataError={this.state.loadingInitialDataError}
                   />

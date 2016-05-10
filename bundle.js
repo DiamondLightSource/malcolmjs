@@ -1158,12 +1158,34 @@ function updateAttributeValue(blockId, attribute, newValue){
 
   /* Try using update to cause the reference to change! */
 
-  var oldAttributes = allBlockAttributes;
+  //var oldAttributes = allBlockAttributes;
+  //var oldClocksAttributes = allBlockAttributes['CLOCKS'];
 
-  allBlockAttributes[blockId][attribute] = update(allBlockAttributes[blockId][attribute],
+  var updatedAttribute = update(allBlockAttributes[blockId][attribute],
     {$merge : {value: newValue}});
 
-  console.log(oldAttributes === allBlockAttributes);
+  /* I want to replace the whole attributes object for a
+  new object, because I don't want to check each individual
+   attribute object, I want to just check the entire block
+   attribute object in allBlockAttributes
+   */
+
+  var attributestoMerge = {};
+
+  attributestoMerge[attribute] = updatedAttribute;
+
+  var updatedAttributes = update(allBlockAttributes[blockId],
+    {$merge: attributestoMerge});
+
+  allBlockAttributes[blockId] = update(allBlockAttributes[blockId],
+    {$set: updatedAttributes});
+
+  //if(blockId === 'CLOCKS'){
+  //  console.log("updating CLOCKS' attributes");
+  //}
+  //
+  //console.log(oldAttributes === allBlockAttributes);
+  //console.log(oldClocksAttributes === allBlockAttributes['CLOCKS']);
 
 }
 
@@ -1306,15 +1328,32 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         block is added/mounted
          */
 
-        if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+        //if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+        //
+        //  updateAttributeValue(requestedData.attribute, 'VISIBLE',
+        //    responseMessage.value);
+        //
+        //}
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
+
+        console.log(allBlockAttributes[requestedData.attribute]);
+
+        if(allBlockAttributes[requestedData.attribute]['VISIBLE'].value !== responseMessage.value) {
 
           updateAttributeValue(requestedData.attribute, 'VISIBLE',
             responseMessage.value);
 
         }
+      }
 
-        updateAttributeValue(requestedData.blockName,
-          requestedData.attribute, responseMessage.value);
+      //if(responseMessage.value === 'Show' || responseMessage.value === 'Hide'){
+      if(requestedData.attribute === 'VISIBLE'){
+        //window.alert("jif");
+        console.log(requestedData);
+        console.log(responseMessage);
+        console.log(allBlockAttributes[requestedData.blockName]);
       }
 
       /* Update allBlockAttributesIconStatus appropriately */
@@ -1541,7 +1580,7 @@ function addBlock(blockId){
   var initialEdgeInfoKeyValueName;
   var outportsThatExistInInitialEdgeInfo = [];
 
-  console.log(testAllBlockInfo);
+  //console.log(testAllBlockInfo);
   console.log(blockId);
 
   for(var attribute in testAllBlockInfo[blockId].attributes){
@@ -1658,7 +1697,6 @@ function addBlock(blockId){
   for(var method in testAllBlockInfo[blockId].methods){
     blockMethods[method] = testAllBlockInfo[blockId].methods[method]
   }
-  console.log(blockMethods);
 
   allBlockInfo[blockId] = {
     type: blockType,
@@ -1924,13 +1962,21 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         /* Undoing the zoom scale multiplication to check against
         the server's unscaled coords */
 
-        if(blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
-          responseMessage.value) {
+        /* When a block is removed/hidden, its coords get reset to
+        (0,0), so need to check if they still exist in blockPositions
+        in case a coord change I catch here is due to removing a block
+         */
 
-          blockPositions[requestedData.blockName].x = responseMessage.value *
-            1 / flowChartStore.getGraphZoomScale();
+        if(blockPositions[requestedData.blockName] !== undefined) {
 
-          blockStore.emitChange();
+          if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
+            responseMessage.value) {
+
+            blockPositions[requestedData.blockName].x = responseMessage.value *
+              1 / flowChartStore.getGraphZoomScale();
+
+            blockStore.emitChange();
+          }
         }
 
       }
@@ -1942,13 +1988,16 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         /* Undoing the zoom scale multiplication to check against
          the server's unscaled coords */
 
-        if(blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
-          responseMessage.value) {
+        if(blockPositions[requestedData.blockName] !== undefined) {
 
-          blockPositions[requestedData.blockName].y = responseMessage.value *
-            1 / flowChartStore.getGraphZoomScale();
+          if (blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
+            responseMessage.value) {
 
-          blockStore.emitChange();
+            blockPositions[requestedData.blockName].y = responseMessage.value *
+              1 / flowChartStore.getGraphZoomScale();
+
+            blockStore.emitChange();
+          }
         }
 
       }
@@ -2606,38 +2655,38 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
 
 };
 
-var favContent = {
-  name: "Favourites tab",
-  label: 'Favourites',
-  hack: "favTabOpen",
-  info: {
-    block1: {
-      name: "Block 1",
-      stuff1: "meh",
-      stuff2: "bleh"
-      },
-    block2: {
-      name: "Block 2",
-      stuff1: "mah",
-      stuff2: "blah"
-    }
-  }
-};
+//var favContent = {
+//  name: "Favourites tab",
+//  label: 'Favourites',
+//  hack: "favTabOpen",
+//  info: {
+//    block1: {
+//      name: "Block 1",
+//      stuff1: "meh",
+//      stuff2: "bleh"
+//      },
+//    block2: {
+//      name: "Block 2",
+//      stuff1: "mah",
+//      stuff2: "blah"
+//    }
+//  }
+//};
 
-var configContent = {
-  name: "Configuration tab",
-  label: 'Configuration',
-  hack: "configTabOpen",
-  info: {
-    Configurations: {
-      config1: "config1",
-      config2: "config2"
-    },
-    SystemInformation: {
-      firmwareVersion: "numbers & letters"
-    }
-  }
-};
+//var configContent = {
+//  name: "Configuration tab",
+//  label: 'Configuration',
+//  hack: "configTabOpen",
+//  info: {
+//    Configurations: {
+//      config1: "config1",
+//      config2: "config2"
+//    },
+//    SystemInformation: {
+//      firmwareVersion: "numbers & letters"
+//    }
+//  }
+//};
 
 var dropdownMenuSelect = function(tab){
   /* Note that 'tab' is the nodeId, not the React element or anything like that */
@@ -2651,12 +2700,22 @@ var dropdownMenuSelect = function(tab){
       var findTheIndex = i
     }
   }
-  _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
+  //_handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
+
+  /* Use selectedTabIndex instead of panels' refs attribute */
+
+  _stuff.selectedTabIndex = findTheIndex;
+
 };
 
 var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
-  _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
+  //_handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
+
+  /* Use selectedTabIndex instead of panels' refs attribute */
+
+  _stuff.selectedTabIndex = tabStateLength - 1;
+
 };
 
 var paneStore = assign({}, EventEmitter.prototype, {
@@ -2678,12 +2737,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getConfigTabOpen: function(){
     return allBlockTabProperties.Configuration;
   },
-  getFavContent: function(){
-    return favContent;
-  },
-  getConfigContent: function(){
-    return configContent;
-  },
+  //getFavContent: function(){
+  //  return favContent;
+  //},
+  //getConfigContent: function(){
+  //  return configContent;
+  //},
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
   },
@@ -2712,12 +2771,13 @@ var paneStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-
+var attributeStore = require('./attributeStore');
 
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
+  //console.log(action);
   //console.log(payload);
   //console.log(item);
 
@@ -2816,14 +2876,35 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
+
+            /* Also need to check if the block has any edges too,
+            so then I can append them to allEdgeTabProperties,
+            meaning that their tabs will be openable after initial
+            render
+             */
+
             paneStore.emitChange();
 
           }
-          else{
-            //var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
-            //appendToAllBlockTabProperties(blockName);
-          }
+        }
+        else if(item.responseMessage.tags[j] === 'instance:Zebra2Visibility'){
+          /* I think I could potentially listen for when VISIBILITY comes in,
+           and then add its tab to tabState using setBlockLookupTableStateTrue?
+           */
 
+          /* Hmm, but what if attribute store goes AFTER paneStore,
+          that'll mean that the attributes for VISIBILITY won't
+          yet exist so they can't be drawn yet...
+          Could use waitFor, it could also break something though...
+           */
+
+          //AppDispatcher.waitFor([attributeStore.dispatchToken]);
+
+          console.log("zebra2visibility");
+          console.log(item.responseMessage);
+
+          setBlockLookupTableTabStateTrue();
+          paneStore.emitChange();
         }
       }
 
@@ -3187,6 +3268,19 @@ var removeBlockTab = function(selectedTabIndex){
 
   _stuff.tabState = _stuff.tabState.filter(checkTabLabel);
 
+  /* Will most liekly need to shift selectedTabIndex down by
+  one, since the length of tabState has gone down by one due
+  to removing a tab?
+   */
+
+  if(selectedTabIndex === _stuff.tabState.length) {
+    console.log(_stuff.selectedTabIndex);
+
+    _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
+    console.log(_stuff.selectedTabIndex);
+
+  }
+
 };
 
 function toggleSidebar(){
@@ -3204,7 +3298,7 @@ function windowWidthMediaQueryChanged(sidebarOpen){
 
 module.exports = paneStore;
 
-},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"./blockStore":12,"events":42,"object-assign":48}],16:[function(require,module,exports){
+},{"../constants/appConstants":8,"../dispatcher/appDispatcher":9,"./attributeStore":11,"./blockStore":12,"events":42,"object-assign":48}],16:[function(require,module,exports){
 /**
  * Created by twi18192 on 01/09/15.
  */
@@ -3938,7 +4032,7 @@ module.exports = DropdownEditableReadoutField;
  */
 
 var React = require('react');
-var sidePaneStore = require('../stores/sidePaneStore');
+
 var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
@@ -3950,8 +4044,11 @@ var Dropdown = React.createClass({displayName: "Dropdown",
   shouldComponentUpdate: function(nextProps, nextState){
     return (
       nextProps.listVisible !== this.props.listVisible ||
-      nextProps.tabState !== this.props.tabState ||
-      nextProps.changeTab !== this.props.changeTab
+      nextProps.tabState !== this.props.tabState
+      /* You can alter tabState with the dropdown list
+      visible, so you still need to redraw if tabState
+      changes
+       */
     )
   },
 
@@ -4014,40 +4111,24 @@ var Dropdown = React.createClass({displayName: "Dropdown",
       .off('tap', this.handleActionHide);
   },
 
-  renderListItems: function() {
-    var items = [];
-    for (var i = 0; i < this.props.tabState.length; i++) {
-      var item = this.props.tabState[i].label;
-      var interactIdString = "#" + "dropdownTab" + item;
-
-      items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
-                      //onClick={this.testSelectInvokeSidePane.bind(null, item)}
-      }, 
-        React.createElement("span", null, item)
-      ));
-
-      //interact(interactIdString)
-      //  .on('tap',
-      //    function(e){
-      //      //e.stopImmediatePropagation();
-      //      //e.stopPropagation();
-      //      this.testSelectInvokeSidePane.bind(null, item);
-      //      console.log(e);
-      //      console.log(this);
-      //      console.log(this.testSelectInvokeSidePane.bind(null, item));
-      //    }.bind(this)
-      //  );
-
-      /* Works, but gets increasingly slow the more you select from it */
-      //interact(interactIdString)
-      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
-
-      interact(interactIdString)
-        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
-    }
-
-    return items;
-  },
+  //renderListItems: function() {
+  //  var items = [];
+  //  for (var i = 0; i < this.props.tabState.length; i++) {
+  //    var item = this.props.tabState[i].label;
+  //    var interactIdString = "#" + "dropdownTab" + item;
+  //
+  //    items.push(
+  //      <div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab">
+  //        <span >{item}</span>
+  //      </div>
+  //    );
+  //
+  //    interact(interactIdString)
+  //      .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+  //  }
+  //
+  //  return items;
+  //},
 
   render: function(){
 
@@ -4059,20 +4140,18 @@ var Dropdown = React.createClass({displayName: "Dropdown",
         var interactIdString = "#" + "dropdownTab" + item;
       }
       else if(this.props.tabState[i].label === undefined){
+        window.alert("tabState[i].label is undefined");
         var item = this.props.tabState[i];
         //console.log(item);
         var interactIdString = "#" + "dropdownTab" + item;
       }
       //console.log(interactIdString);
 
-      items.push(React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"
-        //onClick={this.testSelectInvokeSidePane.bind(null, item)}
-      }, 
-        React.createElement("span", null, item)
-      ));
-
-      //interact(interactIdString)
-      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+      items.push(
+        React.createElement("div", {key: item + "-tab", id: "dropdownTab" + item, className: "dropdownTab"}, 
+          React.createElement("span", null, item)
+        )
+      );
 
       interact(interactIdString)
         .on('tap', function(e){
@@ -4086,26 +4165,28 @@ var Dropdown = React.createClass({displayName: "Dropdown",
       //console.log(document.getElementById("dropdownTab" + item));
     }
 
-    return React.createElement("div", {className: "dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}, 
-      React.createElement("div", {className: "dropdown-display" + (this.props.listVisible ? " clicked": ""), id: "dropdownButton"
-           //onClick={this.handleActionShow}
-      }, 
-        React.createElement("span", null), 
-        React.createElement("i", {className: "fa fa-angle-down"})
-      ), 
-      React.createElement("div", {className: "dropdown-list"}, 
-        React.createElement("div", null, 
-          items
+    return(
+      React.createElement("div", {className: "dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}, 
+        React.createElement("div", {className: "dropdown-display" + (this.props.listVisible ? " clicked": ""), id: "dropdownButton"
+             //onClick={this.handleActionShow}
+        }, 
+          React.createElement("span", null), 
+          React.createElement("i", {className: "fa fa-angle-down"})
+        ), 
+        React.createElement("div", {className: "dropdown-list"}, 
+          React.createElement("div", null, 
+            items
+          )
         )
       )
-    );
+    )
 
   }
 });
 
 module.exports = Dropdown;
 
-},{"../../node_modules/interact.js":47,"../actions/sidePaneActions":6,"../stores/paneStore":15,"../stores/sidePaneStore":16,"react":254}],26:[function(require,module,exports){
+},{"../../node_modules/interact.js":47,"../actions/sidePaneActions":6,"../stores/paneStore":15,"react":254}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -5690,17 +5771,17 @@ var MainPane = React.createClass({displayName: "MainPane",
 
   propTypes: {
     footers: React.PropTypes.bool,
-    favTabOpen: React.PropTypes.bool,
-    configTabOpen: React.PropTypes.bool,
+    //favTabOpen: React.PropTypes.bool,
+    //configTabOpen: React.PropTypes.bool,
     loadingInitialData: React.PropTypes.bool,
     loadingInitialDataError: React.PropTypes.bool
   },
 
   shouldComponentUpdate(nextProps, nextState){
     return (
-      nextProps.footers !== this.props.footers ||
-      nextProps.favTabOpen !== this.props.favTabOpen ||
-      nextProps.configTabOpen !== this.props.configTabOpen
+      nextProps.footers !== this.props.footers
+      //nextProps.favTabOpen !== this.props.favTabOpen ||
+      //nextProps.configTabOpen !== this.props.configTabOpen
       //nextProps.loadingInitialData !== this.props.loadingInitialData ||
       //nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
@@ -5710,13 +5791,13 @@ var MainPane = React.createClass({displayName: "MainPane",
     mainPaneActions.toggleFooter1("this is the item")
   },
 
-  handleActionFavTabOpen: function(){
-    paneActions.favTabOpen("this is the item")
-  },
-
-  handleActionConfigTabOpen: function(){
-    paneActions.configTabOpen('this is the item')
-  },
+  //handleActionFavTabOpen: function(){
+  //  paneActions.favTabOpen("this is the item")
+  //},
+  //
+  //handleActionConfigTabOpen: function(){
+  //  paneActions.configTabOpen('this is the item')
+  //},
 
   handleActionBlockLookupTableTabOpen: function(){
     paneActions.blockLookupTableTabOpen('this is the item');
@@ -5764,8 +5845,7 @@ var MainPane = React.createClass({displayName: "MainPane",
     var footer =
       React.createElement(Footer, null, React.createElement("div", {id: "blockDock"}, 
         React.createElement("div", {id: "buttonContainer"}, 
-          React.createElement(FavButton, {favTabOpen: this.handleActionFavTabOpen}), 
-          React.createElement(ConfigButton, {configTabOpen: this.handleActionConfigTabOpen}), 
+
           React.createElement(FooterButton, {id: "blockLookUpTableButton", 
                         buttonLabel: "Blocks", 
                         buttonClick: this.handleActionBlockLookupTableTabOpen})
@@ -5805,6 +5885,9 @@ var MainPane = React.createClass({displayName: "MainPane",
 });
 
 module.exports = MainPane;
+
+//<FavButton favTabOpen={this.handleActionFavTabOpen}/>
+//<ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
 
 },{"../actions/mainPaneActions":4,"../actions/paneActions":5,"./button":22,"./configButton":23,"./favButton":28,"./flowChartControllerView":30,"react":254,"react-panels":71}],33:[function(require,module,exports){
 /**
@@ -6250,7 +6333,7 @@ var Ports = React.createClass({displayName: "Ports",
 
     var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
 
-    var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+    //var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
 
 
     for(var i = 0; i < blockInfo.inports.length; i++){
@@ -6409,7 +6492,7 @@ var Footer = ReactPanels.Footer;
 var ToggleButton = ReactPanels.ToggleButton;
 var Button = ReactPanels.Button;
 
-var paneStore = require('../stores/paneStore');
+//var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
@@ -6438,14 +6521,14 @@ var SidePane = React.createClass({displayName: "SidePane",
     paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
   },
 
-  handleActionRemoveTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeTab(selectedIndex);
-  },
+  //handleActionRemoveTab: function(){
+  //  var selectedIndex = this.props.selectedTabIndex;
+  //  paneActions.removeTab(selectedIndex);
+  //},
 
   handleActionTabChangeViaOtherMeans: function(tab){
     console.log(tab);
-    paneActions.dropdownMenuSelect(tab, this);
+    paneActions.dropdownMenuSelect(tab);
     console.log("action function for changing tab via other means ran correctly");
   },
 
@@ -6453,8 +6536,9 @@ var SidePane = React.createClass({displayName: "SidePane",
   //  paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
   //},
   handleActionRemoveBlockTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeBlockTab(selectedIndex);
+    //var selectedIndex = this.refs.panel.getSelectedIndex();
+    /* Moving to a single tab with dynamic content rather than multiple tabs */
+    paneActions.removeBlockTab(this.props.selectedTabIndex);
   },
 
   componentDidMount: function(){
@@ -6481,13 +6565,26 @@ var SidePane = React.createClass({displayName: "SidePane",
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
-    var tabs = this.props.tabState.map(function(block){
-      return (
-        React.createElement(Tab, {key: block.label + "tab", title: block.label}, 
-          React.createElement(SidePaneTabContents, {tabObject: block})
-        )
-      )
-    }.bind(this));
+    /* Do I need dynamicTab to be something else if tabState is empty? */
+
+    console.log(this.props.tabState);
+    console.log(this.props.selectedTabIndex);
+
+    var dynamicTab;
+
+    /* Should I include selectedTabIndex being < 0 too ? */
+    if(this.props.tabState.length === 0){
+      dynamicTab = [];
+    }
+    else {
+      dynamicTab =
+        React.createElement(Tab, {key: this.props.tabState[this.props.selectedTabIndex].label + 'tab', 
+             title: this.props.tabState[this.props.selectedTabIndex].label}, 
+          React.createElement(SidePaneTabContents, {key: this.props.tabState[this.props.selectedTabIndex].label + 'contents', 
+            tabObject: this.props.tabState[this.props.selectedTabIndex]}
+             )
+        );
+    }
 
     return (
         React.createElement(Panel, {ref: "panel", theme: "flexbox", 
@@ -6508,7 +6605,7 @@ var SidePane = React.createClass({displayName: "SidePane",
             )
           ]
         }, 
-          tabs
+          dynamicTab
         )
     );
   }
@@ -6516,7 +6613,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 module.exports = SidePane;
 
-},{"../../node_modules/react-dom/dist/react-dom.js":49,"../actions/MalcolmActionCreators":1,"../actions/paneActions":5,"../stores/paneStore":15,"./dropdownMenu":25,"./sidePaneTabContents":37,"react":254,"react-panels":71}],37:[function(require,module,exports){
+},{"../../node_modules/react-dom/dist/react-dom.js":49,"../actions/MalcolmActionCreators":1,"../actions/paneActions":5,"./dropdownMenu":25,"./sidePaneTabContents":37,"react":254,"react-panels":71}],37:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/05/16.
  */
@@ -6531,39 +6628,55 @@ var Treeview = require('react-treeview');
 var blockStore = require('../stores/blockStore');
 var attributeStore = require('../stores/attributeStore');
 /* Purely for favContent & configContent */
-var paneStore = require('../stores/paneStore');
+//var paneStore = require('../stores/paneStore');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var WidgetTableContainer = require('./widgetTableContainer');
 
-function getSidePaneTabContentsState(){
+function getSidePaneTabContentsState(SidePaneTabContentsComponent){
   return{
-    allBlockAttributes: attributeStore.getAllBlockAttributes(),
-    allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus(),
-    favContent: paneStore.getFavContent(),
-    configContent: paneStore.getConfigContent()
+    blockAttributes: attributeStore.getAllBlockAttributes()
+      [SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()
+      [SidePaneTabContentsComponent.props.tabObject.label],
+    //favContent: paneStore.getFavContent(),
+    //configContent: paneStore.getConfigContent()
   }
 }
 
 var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
 
   getInitialState: function(){
-    return getSidePaneTabContentsState();
+    console.log("fetching initial state of " + this.props.tabObject.label);
+    return getSidePaneTabContentsState(this);
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    //console.log(this.props);
+    //console.log(this.state);
+    //console.log(this.state.blockAttributes);
+    //console.log(nextState.blockAttributes);
+    //console.log(nextState.blockAttributes !== this.state.blockAttributes);
+    return(
+     nextState.blockAttributes !== this.state.blockAttributes
+    )
   },
 
   componentDidMount: function(){
     attributeStore.addChangeListener(this._onChange);
-    paneStore.addChangeListener(this._onChange);
+    //paneStore.addChangeListener(this._onChange);
+    console.log("mounting " + this.props.tabObject.label);
   },
 
   componentWillUnmount: function(){
     attributeStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
+    //paneStore.removeChangeListener(this._onChange);
+    console.log("unmounting " + this.props.tabObject.label);
   },
 
   _onChange: function(){
-    this.setState(getSidePaneTabContentsState());
+    this.setState(getSidePaneTabContentsState(this));
   },
 
   handleMalcolmCall: function(blockName, method, args){
@@ -6831,11 +6944,11 @@ var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
 
           var commonProps = {
             blockAttribute: blockAttributes[attribute],
-            blockAttributeStatus: this.state.allBlockAttributesIconStatus[blockName][attribute],
-            blockName: blockName,
+            blockAttributeStatus: this.state.blockAttributesIconStatus[attribute],
+            blockName: this.props.tabObject.label,
             attributeName: attribute,
             isInAGroup: isInAGroup,
-            key: blockName + attribute + widgetType,
+            key: this.props.tabObject.label + attribute + widgetType,
             widgetType: widgetType
           };
 
@@ -6904,24 +7017,27 @@ var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
 
   render: function(){
 
+    console.log('rerendering: ' + this.props.tabObject.label);
+
     var tabContent = [];
 
-    if(this.props.tabObject.tabType === "Favourites"){
-      tabContent.push(
-        React.createElement("p", null, this.state.favContent.name)
-      );
-    }
-    else if(this.props.tabObject.tabType === 'Configuration'){
-      tabContent.push(
-        React.createElement("p", null, this.state.configContent.name)
-      );
-    }
-    else if(this.props.tabObject.tabType === 'VISIBILITY'){
+    //if(this.props.tabObject.tabType === "Favourites"){
+    //  tabContent.push(
+    //    <p>{this.state.favContent.name}</p>
+    //  );
+    //}
+    //else if(this.props.tabObject.tabType === 'Configuration'){
+    //  tabContent.push(
+    //    <p>{this.state.configContent.name}</p>
+    //  );
+    //}
+    if(this.props.tabObject.tabType === 'VISIBILITY' ||
+        this.props.tabObject.tabType === 'block'){
 
       /* Making the tab content generator more generic */
 
       tabContent.push(
-        this.generateTabContent(this.state.allBlockAttributes[this.props.tabObject.label],
+        this.generateTabContent(this.state.blockAttributes,
           this.props.tabObject.label)
       );
     }
@@ -6931,12 +7047,6 @@ var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
         React.createElement("button", {key: this.props.tabObject.label + "edgeDeleteButton", 
                 onClick: this.handleEdgeDeleteButton.bind(null, this.props.tabObject)
         }, "Delete edge")
-      );
-    }
-    else if(this.props.tabObject.tabType === 'block'){
-      tabContent.push(
-        this.generateTabContent(this.state.allBlockAttributes[this.props.tabObject.label],
-          this.props.tabObject.label)
       );
     }
 
@@ -6951,7 +7061,7 @@ var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
 
 module.exports = SidePaneTabContents;
 
-},{"../actions/MalcolmActionCreators":1,"../stores/attributeStore":11,"../stores/blockStore":12,"../stores/paneStore":15,"./widgetTableContainer":41,"react":254,"react-panels":71,"react-treeview":79}],38:[function(require,module,exports){
+},{"../actions/MalcolmActionCreators":1,"../stores/attributeStore":11,"../stores/blockStore":12,"./widgetTableContainer":41,"react":254,"react-panels":71,"react-treeview":79}],38:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -7063,8 +7173,8 @@ function getBothPanesState(){
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    favTabOpen: paneStore.getFavTabOpen(),
-    configTabOpen: paneStore.getConfigTabOpen(),
+    //favTabOpen: paneStore.getFavTabOpen(),
+    //configTabOpen: paneStore.getConfigTabOpen(),
     //loadingInitialData: paneStore.getIfLoadingInitialData(),
     //loadingInitialDataError: paneStore.getIfLoadingInitialDataError(),
 
@@ -7121,9 +7231,9 @@ var BothPanes = React.createClass({displayName: "BothPanes",
                  docked: this.state.sidebarOpen, 
                  pullRight: true, touchHandleWidth: 5, 
                  children: 
-                  React.createElement(MainPane, {footers: this.state.footers, 
-                    favTabOpen: this.state.favTabOpen, 
-                    configTabOpen: this.state.configTabOpen}
+                  React.createElement(MainPane, {footers: this.state.footers}
+                  //favTabOpen={this.state.favTabOpen}
+                  //configTabOpen={this.state.configTabOpen}
                   //loadingInitialData={this.state.loadingInitialData}
                   //loadingInitialDataError={this.state.loadingInitialDataError}
                   ), 

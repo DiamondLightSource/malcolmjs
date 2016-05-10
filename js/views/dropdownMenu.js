@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var sidePaneStore = require('../stores/sidePaneStore');
+
 var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
@@ -15,8 +15,11 @@ var Dropdown = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState){
     return (
       nextProps.listVisible !== this.props.listVisible ||
-      nextProps.tabState !== this.props.tabState ||
-      nextProps.changeTab !== this.props.changeTab
+      nextProps.tabState !== this.props.tabState
+      /* You can alter tabState with the dropdown list
+      visible, so you still need to redraw if tabState
+      changes
+       */
     )
   },
 
@@ -79,40 +82,24 @@ var Dropdown = React.createClass({
       .off('tap', this.handleActionHide);
   },
 
-  renderListItems: function() {
-    var items = [];
-    for (var i = 0; i < this.props.tabState.length; i++) {
-      var item = this.props.tabState[i].label;
-      var interactIdString = "#" + "dropdownTab" + item;
-
-      items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
-                      //onClick={this.testSelectInvokeSidePane.bind(null, item)}
-      >
-        <span >{item}</span>
-      </div>);
-
-      //interact(interactIdString)
-      //  .on('tap',
-      //    function(e){
-      //      //e.stopImmediatePropagation();
-      //      //e.stopPropagation();
-      //      this.testSelectInvokeSidePane.bind(null, item);
-      //      console.log(e);
-      //      console.log(this);
-      //      console.log(this.testSelectInvokeSidePane.bind(null, item));
-      //    }.bind(this)
-      //  );
-
-      /* Works, but gets increasingly slow the more you select from it */
-      //interact(interactIdString)
-      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
-
-      interact(interactIdString)
-        .on('tap', this.testSelectInvokeSidePane.bind(null, item));
-    }
-
-    return items;
-  },
+  //renderListItems: function() {
+  //  var items = [];
+  //  for (var i = 0; i < this.props.tabState.length; i++) {
+  //    var item = this.props.tabState[i].label;
+  //    var interactIdString = "#" + "dropdownTab" + item;
+  //
+  //    items.push(
+  //      <div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab">
+  //        <span >{item}</span>
+  //      </div>
+  //    );
+  //
+  //    interact(interactIdString)
+  //      .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+  //  }
+  //
+  //  return items;
+  //},
 
   render: function(){
 
@@ -124,20 +111,18 @@ var Dropdown = React.createClass({
         var interactIdString = "#" + "dropdownTab" + item;
       }
       else if(this.props.tabState[i].label === undefined){
+        window.alert("tabState[i].label is undefined");
         var item = this.props.tabState[i];
         //console.log(item);
         var interactIdString = "#" + "dropdownTab" + item;
       }
       //console.log(interactIdString);
 
-      items.push(<div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab"
-        //onClick={this.testSelectInvokeSidePane.bind(null, item)}
-      >
-        <span >{item}</span>
-      </div>);
-
-      //interact(interactIdString)
-      //  .on('tap', this.testSelectInvokeSidePane.bind(null, item));
+      items.push(
+        <div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab">
+          <span >{item}</span>
+        </div>
+      );
 
       interact(interactIdString)
         .on('tap', function(e){
@@ -151,19 +136,21 @@ var Dropdown = React.createClass({
       //console.log(document.getElementById("dropdownTab" + item));
     }
 
-    return <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}>
-      <div className={"dropdown-display" + (this.props.listVisible ? " clicked": "")} id="dropdownButton"
-           //onClick={this.handleActionShow}
-      >
-        <span ></span>
-        <i className="fa fa-angle-down"></i>
-      </div>
-      <div className="dropdown-list">
-        <div>
-          {items}
+    return(
+      <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")}>
+        <div className={"dropdown-display" + (this.props.listVisible ? " clicked": "")} id="dropdownButton"
+             //onClick={this.handleActionShow}
+        >
+          <span ></span>
+          <i className="fa fa-angle-down"></i>
+        </div>
+        <div className="dropdown-list">
+          <div>
+            {items}
+          </div>
         </div>
       </div>
-    </div>;
+    )
 
   }
 });

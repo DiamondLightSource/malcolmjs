@@ -36,38 +36,38 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
 
 };
 
-var favContent = {
-  name: "Favourites tab",
-  label: 'Favourites',
-  hack: "favTabOpen",
-  info: {
-    block1: {
-      name: "Block 1",
-      stuff1: "meh",
-      stuff2: "bleh"
-      },
-    block2: {
-      name: "Block 2",
-      stuff1: "mah",
-      stuff2: "blah"
-    }
-  }
-};
+//var favContent = {
+//  name: "Favourites tab",
+//  label: 'Favourites',
+//  hack: "favTabOpen",
+//  info: {
+//    block1: {
+//      name: "Block 1",
+//      stuff1: "meh",
+//      stuff2: "bleh"
+//      },
+//    block2: {
+//      name: "Block 2",
+//      stuff1: "mah",
+//      stuff2: "blah"
+//    }
+//  }
+//};
 
-var configContent = {
-  name: "Configuration tab",
-  label: 'Configuration',
-  hack: "configTabOpen",
-  info: {
-    Configurations: {
-      config1: "config1",
-      config2: "config2"
-    },
-    SystemInformation: {
-      firmwareVersion: "numbers & letters"
-    }
-  }
-};
+//var configContent = {
+//  name: "Configuration tab",
+//  label: 'Configuration',
+//  hack: "configTabOpen",
+//  info: {
+//    Configurations: {
+//      config1: "config1",
+//      config2: "config2"
+//    },
+//    SystemInformation: {
+//      firmwareVersion: "numbers & letters"
+//    }
+//  }
+//};
 
 var dropdownMenuSelect = function(tab){
   /* Note that 'tab' is the nodeId, not the React element or anything like that */
@@ -81,12 +81,22 @@ var dropdownMenuSelect = function(tab){
       var findTheIndex = i
     }
   }
-  _handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
+  //_handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
+
+  /* Use selectedTabIndex instead of panels' refs attribute */
+
+  _stuff.selectedTabIndex = findTheIndex;
+
 };
 
 var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
-  _handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
+  //_handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
+
+  /* Use selectedTabIndex instead of panels' refs attribute */
+
+  _stuff.selectedTabIndex = tabStateLength - 1;
+
 };
 
 var paneStore = assign({}, EventEmitter.prototype, {
@@ -108,12 +118,12 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getConfigTabOpen: function(){
     return allBlockTabProperties.Configuration;
   },
-  getFavContent: function(){
-    return favContent;
-  },
-  getConfigContent: function(){
-    return configContent;
-  },
+  //getFavContent: function(){
+  //  return favContent;
+  //},
+  //getConfigContent: function(){
+  //  return configContent;
+  //},
   getSelectedTabIndex: function(){
     return _stuff.selectedTabIndex;
   },
@@ -142,12 +152,13 @@ var paneStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-
+var attributeStore = require('./attributeStore');
 
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
 
+  //console.log(action);
   //console.log(payload);
   //console.log(item);
 
@@ -246,14 +257,35 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
             var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
             appendToAllBlockTabProperties(blockName);
+
+            /* Also need to check if the block has any edges too,
+            so then I can append them to allEdgeTabProperties,
+            meaning that their tabs will be openable after initial
+            render
+             */
+
             paneStore.emitChange();
 
           }
-          else{
-            //var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
-            //appendToAllBlockTabProperties(blockName);
-          }
+        }
+        else if(item.responseMessage.tags[j] === 'instance:Zebra2Visibility'){
+          /* I think I could potentially listen for when VISIBILITY comes in,
+           and then add its tab to tabState using setBlockLookupTableStateTrue?
+           */
 
+          /* Hmm, but what if attribute store goes AFTER paneStore,
+          that'll mean that the attributes for VISIBILITY won't
+          yet exist so they can't be drawn yet...
+          Could use waitFor, it could also break something though...
+           */
+
+          //AppDispatcher.waitFor([attributeStore.dispatchToken]);
+
+          console.log("zebra2visibility");
+          console.log(item.responseMessage);
+
+          setBlockLookupTableTabStateTrue();
+          paneStore.emitChange();
         }
       }
 
@@ -616,6 +648,19 @@ var removeBlockTab = function(selectedTabIndex){
   }
 
   _stuff.tabState = _stuff.tabState.filter(checkTabLabel);
+
+  /* Will most liekly need to shift selectedTabIndex down by
+  one, since the length of tabState has gone down by one due
+  to removing a tab?
+   */
+
+  if(selectedTabIndex === _stuff.tabState.length) {
+    console.log(_stuff.selectedTabIndex);
+
+    _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
+    console.log(_stuff.selectedTabIndex);
+
+  }
 
 };
 

@@ -15,7 +15,7 @@ var Footer = ReactPanels.Footer;
 var ToggleButton = ReactPanels.ToggleButton;
 var Button = ReactPanels.Button;
 
-var paneStore = require('../stores/paneStore');
+//var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
@@ -44,14 +44,14 @@ var SidePane = React.createClass({
     paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
   },
 
-  handleActionRemoveTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeTab(selectedIndex);
-  },
+  //handleActionRemoveTab: function(){
+  //  var selectedIndex = this.props.selectedTabIndex;
+  //  paneActions.removeTab(selectedIndex);
+  //},
 
   handleActionTabChangeViaOtherMeans: function(tab){
     console.log(tab);
-    paneActions.dropdownMenuSelect(tab, this);
+    paneActions.dropdownMenuSelect(tab);
     console.log("action function for changing tab via other means ran correctly");
   },
 
@@ -59,8 +59,9 @@ var SidePane = React.createClass({
   //  paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
   //},
   handleActionRemoveBlockTab: function(){
-    var selectedIndex = this.refs.panel.getSelectedIndex();
-    paneActions.removeBlockTab(selectedIndex);
+    //var selectedIndex = this.refs.panel.getSelectedIndex();
+    /* Moving to a single tab with dynamic content rather than multiple tabs */
+    paneActions.removeBlockTab(this.props.selectedTabIndex);
   },
 
   componentDidMount: function(){
@@ -87,13 +88,26 @@ var SidePane = React.createClass({
     var skin = this.props.skin || "default",
       globals = this.props.globals || {};
 
-    var tabs = this.props.tabState.map(function(block){
-      return (
-        <Tab key={block.label + "tab"} title={block.label}>
-          <SidePaneTabContents tabObject={block} />
-        </Tab>
-      )
-    }.bind(this));
+    /* Do I need dynamicTab to be something else if tabState is empty? */
+
+    console.log(this.props.tabState);
+    console.log(this.props.selectedTabIndex);
+
+    var dynamicTab;
+
+    /* Should I include selectedTabIndex being < 0 too ? */
+    if(this.props.tabState.length === 0){
+      dynamicTab = [];
+    }
+    else {
+      dynamicTab =
+        <Tab key={this.props.tabState[this.props.selectedTabIndex].label + 'tab'}
+             title={this.props.tabState[this.props.selectedTabIndex].label}>
+          <SidePaneTabContents key={this.props.tabState[this.props.selectedTabIndex].label + 'contents'}
+            tabObject={this.props.tabState[this.props.selectedTabIndex]}
+             />
+        </Tab>;
+    }
 
     return (
         <Panel ref="panel" theme="flexbox"
@@ -114,7 +128,7 @@ var SidePane = React.createClass({
             </Button>
           ]}
         >
-          {tabs}
+          {dynamicTab}
         </Panel>
     );
   }

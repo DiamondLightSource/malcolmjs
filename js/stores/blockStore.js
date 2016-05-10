@@ -122,7 +122,7 @@ function addBlock(blockId){
   var initialEdgeInfoKeyValueName;
   var outportsThatExistInInitialEdgeInfo = [];
 
-  console.log(testAllBlockInfo);
+  //console.log(testAllBlockInfo);
   console.log(blockId);
 
   for(var attribute in testAllBlockInfo[blockId].attributes){
@@ -239,7 +239,6 @@ function addBlock(blockId){
   for(var method in testAllBlockInfo[blockId].methods){
     blockMethods[method] = testAllBlockInfo[blockId].methods[method]
   }
-  console.log(blockMethods);
 
   allBlockInfo[blockId] = {
     type: blockType,
@@ -505,13 +504,21 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         /* Undoing the zoom scale multiplication to check against
         the server's unscaled coords */
 
-        if(blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
-          responseMessage.value) {
+        /* When a block is removed/hidden, its coords get reset to
+        (0,0), so need to check if they still exist in blockPositions
+        in case a coord change I catch here is due to removing a block
+         */
 
-          blockPositions[requestedData.blockName].x = responseMessage.value *
-            1 / flowChartStore.getGraphZoomScale();
+        if(blockPositions[requestedData.blockName] !== undefined) {
 
-          blockStore.emitChange();
+          if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
+            responseMessage.value) {
+
+            blockPositions[requestedData.blockName].x = responseMessage.value *
+              1 / flowChartStore.getGraphZoomScale();
+
+            blockStore.emitChange();
+          }
         }
 
       }
@@ -523,13 +530,16 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
         /* Undoing the zoom scale multiplication to check against
          the server's unscaled coords */
 
-        if(blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
-          responseMessage.value) {
+        if(blockPositions[requestedData.blockName] !== undefined) {
 
-          blockPositions[requestedData.blockName].y = responseMessage.value *
-            1 / flowChartStore.getGraphZoomScale();
+          if (blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
+            responseMessage.value) {
 
-          blockStore.emitChange();
+            blockPositions[requestedData.blockName].y = responseMessage.value *
+              1 / flowChartStore.getGraphZoomScale();
+
+            blockStore.emitChange();
+          }
         }
 
       }

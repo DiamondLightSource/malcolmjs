@@ -170,7 +170,7 @@ var Ports = React.createClass({
 
     var blockStyling = this.props.blockStyling; // Not hard coding the styling dimensions etc
 
-    var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
+    //var allBlockAttributes = JSON.parse(JSON.stringify(attributeStore.getAllBlockAttributes()));
 
 
     for(var i = 0; i < blockInfo.inports.length; i++){

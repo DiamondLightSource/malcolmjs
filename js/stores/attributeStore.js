@@ -24,12 +24,34 @@ function updateAttributeValue(blockId, attribute, newValue){
 
   /* Try using update to cause the reference to change! */
 
-  var oldAttributes = allBlockAttributes;
+  //var oldAttributes = allBlockAttributes;
+  //var oldClocksAttributes = allBlockAttributes['CLOCKS'];
 
-  allBlockAttributes[blockId][attribute] = update(allBlockAttributes[blockId][attribute],
+  var updatedAttribute = update(allBlockAttributes[blockId][attribute],
     {$merge : {value: newValue}});
 
-  console.log(oldAttributes === allBlockAttributes);
+  /* I want to replace the whole attributes object for a
+  new object, because I don't want to check each individual
+   attribute object, I want to just check the entire block
+   attribute object in allBlockAttributes
+   */
+
+  var attributestoMerge = {};
+
+  attributestoMerge[attribute] = updatedAttribute;
+
+  var updatedAttributes = update(allBlockAttributes[blockId],
+    {$merge: attributestoMerge});
+
+  allBlockAttributes[blockId] = update(allBlockAttributes[blockId],
+    {$set: updatedAttributes});
+
+  //if(blockId === 'CLOCKS'){
+  //  console.log("updating CLOCKS' attributes");
+  //}
+  //
+  //console.log(oldAttributes === allBlockAttributes);
+  //console.log(oldClocksAttributes === allBlockAttributes['CLOCKS']);
 
 }
 
@@ -172,15 +194,32 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         block is added/mounted
          */
 
-        if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+        //if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
+        //
+        //  updateAttributeValue(requestedData.attribute, 'VISIBLE',
+        //    responseMessage.value);
+        //
+        //}
+
+        updateAttributeValue(requestedData.blockName,
+          requestedData.attribute, responseMessage.value);
+
+        console.log(allBlockAttributes[requestedData.attribute]);
+
+        if(allBlockAttributes[requestedData.attribute]['VISIBLE'].value !== responseMessage.value) {
 
           updateAttributeValue(requestedData.attribute, 'VISIBLE',
             responseMessage.value);
 
         }
+      }
 
-        updateAttributeValue(requestedData.blockName,
-          requestedData.attribute, responseMessage.value);
+      //if(responseMessage.value === 'Show' || responseMessage.value === 'Hide'){
+      if(requestedData.attribute === 'VISIBLE'){
+        //window.alert("jif");
+        console.log(requestedData);
+        console.log(responseMessage);
+        console.log(allBlockAttributes[requestedData.blockName]);
       }
 
       /* Update allBlockAttributesIconStatus appropriately */

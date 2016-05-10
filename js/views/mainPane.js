@@ -25,17 +25,17 @@ var MainPane = React.createClass({
 
   propTypes: {
     footers: React.PropTypes.bool,
-    favTabOpen: React.PropTypes.bool,
-    configTabOpen: React.PropTypes.bool,
+    //favTabOpen: React.PropTypes.bool,
+    //configTabOpen: React.PropTypes.bool,
     loadingInitialData: React.PropTypes.bool,
     loadingInitialDataError: React.PropTypes.bool
   },
 
   shouldComponentUpdate(nextProps, nextState){
     return (
-      nextProps.footers !== this.props.footers ||
-      nextProps.favTabOpen !== this.props.favTabOpen ||
-      nextProps.configTabOpen !== this.props.configTabOpen
+      nextProps.footers !== this.props.footers
+      //nextProps.favTabOpen !== this.props.favTabOpen ||
+      //nextProps.configTabOpen !== this.props.configTabOpen
       //nextProps.loadingInitialData !== this.props.loadingInitialData ||
       //nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
@@ -45,13 +45,13 @@ var MainPane = React.createClass({
     mainPaneActions.toggleFooter1("this is the item")
   },
 
-  handleActionFavTabOpen: function(){
-    paneActions.favTabOpen("this is the item")
-  },
-
-  handleActionConfigTabOpen: function(){
-    paneActions.configTabOpen('this is the item')
-  },
+  //handleActionFavTabOpen: function(){
+  //  paneActions.favTabOpen("this is the item")
+  //},
+  //
+  //handleActionConfigTabOpen: function(){
+  //  paneActions.configTabOpen('this is the item')
+  //},
 
   handleActionBlockLookupTableTabOpen: function(){
     paneActions.blockLookupTableTabOpen('this is the item');
@@ -99,8 +99,7 @@ var MainPane = React.createClass({
     var footer =
       <Footer><div id="blockDock">
         <div id="buttonContainer">
-          <FavButton favTabOpen={this.handleActionFavTabOpen}/>
-          <ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
+
           <FooterButton id="blockLookUpTableButton"
                         buttonLabel="Blocks"
                         buttonClick={this.handleActionBlockLookupTableTabOpen} />
@@ -140,3 +139,6 @@ var MainPane = React.createClass({
 });
 
 module.exports = MainPane;
+
+//<FavButton favTabOpen={this.handleActionFavTabOpen}/>
+//<ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
