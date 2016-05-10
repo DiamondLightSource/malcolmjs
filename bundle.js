@@ -1972,6 +1972,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
             responseMessage.value) {
 
+            console.log("block x coord has changed");
+
             blockPositions[requestedData.blockName].x = responseMessage.value *
               1 / flowChartStore.getGraphZoomScale();
 
@@ -2754,9 +2756,6 @@ var paneStore = assign({}, EventEmitter.prototype, {
   getAllBlockTabOpenStates: function(){
     return allBlockTabProperties;
   },
-  getAllBlockTabInfo: function(){
-    return allBlockTabInfo;
-  },
   //getIfLoadingInitialData: function(){
   //  return _stuff.loadingInitialData;
   //},
@@ -2882,6 +2881,8 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
             meaning that their tabs will be openable after initial
             render
              */
+
+            checkBlockForInitialEdges(item.responseMessage.attributes);
 
             paneStore.emitChange();
 
@@ -3029,6 +3030,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
             }
           }
 
+          /* In the case of deleting the last tab in tabState */
+          if(_stuff.selectedTabIndex === _stuff.tabState.length) {
+            _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
+          }
+
           console.log(_stuff.tabState);
 
         }
@@ -3107,8 +3113,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
 var blockStore = require('./blockStore');
 
-var allBlockTabInfo;
-
 var allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
@@ -3156,6 +3160,8 @@ function setBlockTabStateTrue(BlockId){
 }
 
 function setEdgeTabStateTrue(EdgeInfo){
+
+  console.log(allEdgeTabProperties);
 
   if(allEdgeTabProperties[EdgeInfo.edgeId] === false){
     allEdgeTabProperties[EdgeInfo.edgeId] = true;
@@ -3240,6 +3246,10 @@ function setBlockLookupTableTabStateTrue(){
 
 var removeBlockTab = function(selectedTabIndex){
 
+  /* Don't even need to pass selectedTabIndex, can just
+  get it from the store!
+   */
+
   var tabName;
 
   if(_stuff.tabState[selectedTabIndex].label === undefined){
@@ -3294,6 +3304,35 @@ function toggleSidebar(){
 
 function windowWidthMediaQueryChanged(sidebarOpen){
   _stuff.sidebarOpen = sidebarOpen;
+}
+
+function checkBlockForInitialEdges(blockAttributeObject){
+
+  for(var attribute in blockAttributeObject){
+    if(blockAttributeObject[attribute].tags !== undefined){
+      for(var i = 0; i < blockAttributeObject[attribute].tags.length; i++){
+        if(blockAttributeObject[attribute].tags[i].indexOf('flowgraph:inport') !== -1){
+          if(blockAttributeObject[attribute].value.indexOf('ZERO') === -1 ){
+            /* Then it's connected to another block via an edge! */
+
+            var inportBlock = blockAttributeObject['BLOCKNAME'].value;
+            var inportBlockPort = attribute;
+
+            var outportBlock = blockAttributeObject[attribute].value
+              .slice(0, blockAttributeObject[attribute].value.indexOf('.'));
+            var outportBlockPort = blockAttributeObject[attribute].value
+              .slice(blockAttributeObject[attribute].value.indexOf('.') + 1);
+
+            var edgeLabel = outportBlock + outportBlockPort + inportBlock + inportBlockPort;
+
+            appendToAllEdgeTabProperties(edgeLabel);
+
+          }
+        }
+      }
+    }
+  }
+
 }
 
 module.exports = paneStore;

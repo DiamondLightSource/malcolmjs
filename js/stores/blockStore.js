@@ -514,6 +514,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
             responseMessage.value) {
 
+            console.log("block x coord has changed");
+
             blockPositions[requestedData.blockName].x = responseMessage.value *
               1 / flowChartStore.getGraphZoomScale();
 
