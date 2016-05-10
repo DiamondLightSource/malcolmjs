@@ -514,10 +514,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
             responseMessage.value) {
 
-            console.log("block x coord has changed");
-
-            blockPositions[requestedData.blockName].x = responseMessage.value *
-              1 / flowChartStore.getGraphZoomScale();
+            blockPositions[requestedData.blockName] = update(blockPositions[requestedData.blockName],
+              {x: {$set: responseMessage.value * 1 / flowChartStore.getGraphZoomScale()}});
 
             blockStore.emitChange();
           }
@@ -537,8 +535,8 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           if (blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
             responseMessage.value) {
 
-            blockPositions[requestedData.blockName].y = responseMessage.value *
-              1 / flowChartStore.getGraphZoomScale();
+            blockPositions[requestedData.blockName] = update(blockPositions[requestedData.blockName],
+              {y: {$set: responseMessage.value * 1 / flowChartStore.getGraphZoomScale()}});
 
             blockStore.emitChange();
           }

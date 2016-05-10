@@ -76,8 +76,7 @@ var Block = React.createClass({
 
     if(this.props.portThatHasBeenClicked === null){
       return (
-        nextProps.blockPosition.x !== this.props.blockPosition.x ||
-        nextProps.blockPosition.y !== this.props.blockPosition.y ||
+        nextProps.blockPosition !== this.props.blockPosition ||
         nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
         nextProps.selected !== this.props.selected
       )
@@ -89,8 +88,7 @@ var Block = React.createClass({
       console.log("portThatHasBeenClicked is something");
 
       return (
-        nextProps.blockPosition.x !== this.props.blockPosition.x ||
-        nextProps.blockPosition.y !== this.props.blockPosition.y ||
+        nextProps.blockPosition !== this.props.blockPosition ||
         nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected ||
         nextProps.selected !== this.props.selected ||
         nextProps.portThatHasBeenClicked !== this.props.portThatHasBeenClicked ||
