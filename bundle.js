@@ -1200,14 +1200,23 @@ function updateAttributeIconStatus(blockId, attribute, statusObject){
 
   var attributeName;
 
-  if(attribute !== 'coords'){
+  if(attribute !== 'coords' && attribute !== 'visible'
+    && attribute.indexOf('_visible') === -1){
     attributeName = attribute;
+  }
+  else if(attribute === 'visible'){
+    attributeName = 'VISIBLE';
+  }
+  else if(attribute.indexOf('_visible') !== -1){
+    attributeName = attribute.slice(0, attribute.indexOf('_visible'));
   }
   else{
     attributeName = 'X_COORD';
     /* Then also run the function again to update the Y_COORD attribute status */
     updateAttributeIconStatus(blockId, 'Y_COORD', statusObject);
   }
+
+  console.log(attributeName);
 
   var updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
     {$merge: {
@@ -5974,6 +5983,13 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
     this.setState(getModalDialogBoxState());
   },
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.modalDialogBoxOpen === true ||
+      nextProps.modalDialogBoxOpen !== this.props.modalDialogBoxOpen
+    )
+  },
+
   componentDidMount: function(){
     attributeStore.addChangeListener(this._onChange);
   },
@@ -6013,7 +6029,7 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
 
     if(blockName === null && attributeName === null){
       modalDialogBoxContent.push(
-        React.createElement("p", {style: {color: 'lightgrey'}}, "Null")
+        React.createElement("p", {key: 'modalDialogBoxNullText', style: {color: 'lightgrey'}}, "Null")
       )
     }
     else if(blockName !== null && attributeName !== null){

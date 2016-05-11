@@ -56,6 +56,13 @@ var ModalDialogBox = React.createClass({
     this.setState(getModalDialogBoxState());
   },
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    return(
+      nextProps.modalDialogBoxOpen === true ||
+      nextProps.modalDialogBoxOpen !== this.props.modalDialogBoxOpen
+    )
+  },
+
   componentDidMount: function(){
     attributeStore.addChangeListener(this._onChange);
   },
@@ -95,7 +102,7 @@ var ModalDialogBox = React.createClass({
 
     if(blockName === null && attributeName === null){
       modalDialogBoxContent.push(
-        <p style={{color: 'lightgrey'}} >Null</p>
+        <p key={'modalDialogBoxNullText'} style={{color: 'lightgrey'}} >Null</p>
       )
     }
     else if(blockName !== null && attributeName !== null){

@@ -66,8 +66,15 @@ function updateAttributeIconStatus(blockId, attribute, statusObject){
 
   var attributeName;
 
-  if(attribute !== 'coords'){
+  if(attribute !== 'coords' && attribute !== 'visible'
+    && attribute.indexOf('_visible') === -1){
     attributeName = attribute;
+  }
+  else if(attribute === 'visible'){
+    attributeName = 'VISIBLE';
+  }
+  else if(attribute.indexOf('_visible') !== -1){
+    attributeName = attribute.slice(0, attribute.indexOf('_visible'));
   }
   else{
     attributeName = 'X_COORD';
