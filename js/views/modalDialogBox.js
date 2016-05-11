@@ -142,7 +142,7 @@ var ModalDialogBox = React.createClass({
       if(this.props.modalDialogBoxInfo.message !== null){
           tableContent.push(
             this.createTableRow(this.props.modalDialogBoxInfo.blockName,
-              this.props.modalDialogBoxInfo.attributeName, 'dialogBoxMessage',
+              this.props.modalDialogBoxInfo.attributeName, 'Return',
               this.props.modalDialogBoxInfo.message)
         )
       }

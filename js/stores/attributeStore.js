@@ -55,6 +55,44 @@ function updateAttributeValue(blockId, attribute, newValue){
 
 }
 
+function updateAttributeIconStatus(blockId, attribute, statusObject){
+
+  /* In the case of block moving the method name doesn't reflect
+  the attribute name that you want to update (_set_coords is
+  called whenever a block is moved, yet the attributes to update
+  are X_COORD and Y_COORD), so use the attributeName variable
+  to check this and adjust accordingly
+   */
+
+  var attributeName;
+
+  if(attribute !== 'coords'){
+    attributeName = attribute;
+  }
+  else{
+    attributeName = 'X_COORD';
+    /* Then also run the function again to update the Y_COORD attribute status */
+    updateAttributeIconStatus(blockId, 'Y_COORD', statusObject);
+  }
+
+  var updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
+    {$merge: {
+      value: statusObject.value,
+      message: statusObject.message
+    }});
+
+  var attributesToMerge = {};
+
+  attributesToMerge[attributeName] = updatedAttribute;
+
+  var updatedAttributes = update(allBlockAttributesIconStatus[blockId],
+    {$merge: attributesToMerge});
+
+  allBlockAttributesIconStatus[blockId] = update(allBlockAttributesIconStatus[blockId],
+    {$set: updatedAttributes});
+
+}
+
 var attributeStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener: function(cb){
@@ -88,37 +126,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       AppDispatcher.waitFor([blockStore.dispatchToken]);
 
       for(var i = 0; i < item.responseMessage.tags.length; i++){
-        if(item.responseMessage.tags[i] === "instance:Zebra2Block") {
-
-          /* Temporarily removing this condition to see
-          whether or not allBlockATtributes should have
-          all the blocks' attributes, even the not-visible
-          ones, they'll instead simply be static and
-          not subscribed to?
-           */
-
-          //if (item.attributes.VISIBLE.value === 'Show') {
-            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
-            allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
-          //}
-
-          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
-
-          /* Add the block to allBlockAttributesIconStatus */
-          allBlockAttributesIconStatus[blockName] = {};
-
-          for(var attribute in allBlockAttributes[blockName]){
-            allBlockAttributesIconStatus[blockName][attribute] = {
-              value: 'success',
-              message: null
-            };
-          }
-
-        }
-        /* Try saving blocksVisibility in allBlockAttributes, instead
-        of using blockVisibleStore
-         */
-        else if(item.responseMessage.tags[i] === "instance:Zebra2Visibility"){
+        if(item.responseMessage.tags[i] === "instance:Zebra2Block" ||
+          item.responseMessage.tags[i] === "instance:Zebra2Visibility") {
 
           var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
           allBlockAttributes[blockName] = JSON.parse(JSON.stringify(item.responseMessage.attributes));
@@ -134,6 +143,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
               message: null
             };
           }
+
         }
       }
 
@@ -214,21 +224,13 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         }
       }
 
-      //if(responseMessage.value === 'Show' || responseMessage.value === 'Hide'){
-      if(requestedData.attribute === 'VISIBLE'){
-        //window.alert("jif");
-        console.log(requestedData);
-        console.log(responseMessage);
-        console.log(allBlockAttributes[requestedData.blockName]);
-      }
-
       /* Update allBlockAttributesIconStatus appropriately */
 
-      allBlockAttributesIconStatus[requestedData.blockName]
-        [requestedData.attribute] = {
+      updateAttributeIconStatus(requestedData.blockName, requestedData.attribute, {
         value: 'success',
         message: null
-      };
+      });
+
       attributeStore.emitChange();
       break;
 
@@ -240,15 +242,10 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       /* Update allBlockAttributesIconStatus appropriately */
 
-      allBlockAttributesIconStatus[requestedData.blockName]
-        [requestedData.attribute] = {
+      updateAttributeIconStatus(requestedData.blockName, requestedData.attribute, {
         value: 'failure',
         message: responseMessage
-      };
-
-      /* The responseMessage holds an error message, so perhaps
-      that would be a useful thing to pass on somewhere?
-       */
+      });
 
       attributeStore.emitChange();
       break;
@@ -267,11 +264,10 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
 
-      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
-        [attributeToUpdate] = {
+      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
         value: 'success',
         message: null
-      };
+      });
 
       attributeStore.emitChange();
       break;
@@ -284,11 +280,10 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
 
-      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
-        [attributeToUpdate] = {
+      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
         value: 'failure',
         message: responseMessage
-      };
+      });
 
       attributeStore.emitChange();
       break;
@@ -300,14 +295,10 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
       var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
 
-      allBlockAttributesIconStatus[requestedDataToWrite.blockName]
-        [attributeToUpdate] = {
+      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
         value: 'pending',
         message: null
-      };
-
-      console.log(allBlockAttributesIconStatus[requestedDataToWrite.blockName]
-        [attributeToUpdate]);
+      });
 
       attributeStore.emitChange();
       break;

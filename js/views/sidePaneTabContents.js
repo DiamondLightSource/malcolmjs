@@ -43,7 +43,8 @@ var SidePaneTabContents = React.createClass({
     //console.log(nextState.blockAttributes);
     //console.log(nextState.blockAttributes !== this.state.blockAttributes);
     return(
-     nextState.blockAttributes !== this.state.blockAttributes
+     nextState.blockAttributes !== this.state.blockAttributes ||
+     nextState.blockAttributesIconStatus !== this.state.blockAttributesIconStatus
     )
   },
 
