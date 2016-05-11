@@ -5995,6 +5995,20 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
     paneActions.closeModalDialogBox('this is the item');
   },
 
+  createTableRow: function(blockName, attributeName, subAttributeName, attributeValue){
+    return(
+      React.createElement("tr", {key: blockName + attributeName + subAttributeName + 'tableRow', 
+          style: {verticalAlign: 'middle'}}, 
+        React.createElement("td", {key: blockName + attributeName + subAttributeName + 'titleColumn', 
+            style: {width: '100px'}}, subAttributeName), 
+        React.createElement("td", {key: blockName + attributeName + subAttributeName + 'valueColumn', 
+            style: {width: '250px'}}, 
+          attributeValue
+        )
+      )
+    )
+  },
+
   generateContent: function(){
     /* If the modalDialogBoxInfo is null, display
     something else?
@@ -6023,12 +6037,8 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
           typeof allBlockAttributes[blockName][attributeName][attribute]
           === 'number') {
           tableContent.push(
-            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-              React.createElement("td", {style: {width: '100px'}}, attribute), 
-              React.createElement("td", {style: {width: '250px'}}, 
-                allBlockAttributes[blockName][attributeName][attribute]
-              )
-            )
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute])
           )
         }
         /* A pretty bad way to do this, but I can't think
@@ -6036,32 +6046,20 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
          */
         else if(attribute === 'type'){
           tableContent.push(
-            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-              React.createElement("td", {style: {width: '100px'}}, attribute), 
-              React.createElement("td", {style: {width: '250px'}}, 
-                allBlockAttributes[blockName][attributeName][attribute].name
-              )
-            )
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].name)
           )
         }
         else if(attribute === 'alarm'){
           tableContent.push(
-            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-              React.createElement("td", {style: {width: '100px'}}, attribute), 
-              React.createElement("td", {style: {width: '250px'}}, 
-                allBlockAttributes[blockName][attributeName][attribute].severity
-              )
-            )
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].severity)
           )
         }
         else if(attribute === 'timeStamp'){
           tableContent.push(
-            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-              React.createElement("td", {style: {width: '100px'}}, attribute), 
-              React.createElement("td", {style: {width: '250px'}}, 
-                allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch
-              )
-            )
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch)
           )
         }
       }
@@ -6070,19 +6068,17 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
 
       if(this.props.modalDialogBoxInfo.message !== null){
           tableContent.push(
-            React.createElement("tr", {style: {verticalAlign: 'middle'}}, 
-              React.createElement("td", {style: {width: '100px'}}, "Return"), 
-              React.createElement("td", {style: {width: '250px'}}, 
-                this.props.modalDialogBoxInfo.message
-              )
-            )
+            this.createTableRow(this.props.modalDialogBoxInfo.blockName,
+              this.props.modalDialogBoxInfo.attributeName, 'dialogBoxMessage',
+              this.props.modalDialogBoxInfo.message)
         )
       }
 
       modalDialogBoxContent.push(
-        React.createElement("table", {id: blockName + attributeName + 'modalDialogBox', 
+        React.createElement("table", {id: blockName + attributeName + 'modalDialogBoxTable', 
+               key: blockName + attributeName + 'modalDialogBoxTable', 
                style: {width: '370px', tableLayout: 'fixed'}}, 
-          React.createElement("tbody", null, 
+          React.createElement("tbody", {key: blockName + attributeName + 'modalDialogBoxTableBody'}, 
           tableContent
           )
         )
@@ -6095,8 +6091,10 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
       var buttonRowContent = [];
 
       buttonRowContent.push(
-        React.createElement("td", {style: {width: '130px'}}, 
-          React.createElement("button", {style: {marginTop: '0px'}, 
+        React.createElement("td", {style: {width: '130px'}, 
+            key: 'modalDialogBoxCloseButtonColumn'}, 
+          React.createElement("button", {key: 'modalDialogBoxCloseButton', 
+                  style: {marginTop: '0px'}, 
                   onClick: this.closeModalDialogBox}, 
             "Cancel"
           )
@@ -6107,8 +6105,10 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
         /* Add a revert button too */
 
         buttonRowContent.push(
-          React.createElement("td", {style: {width: '130px', textAlign: 'right'}}, 
-            React.createElement("button", {style: {marginTop: '0px'}}, 
+          React.createElement("td", {style: {width: '130px', textAlign: 'right'}, 
+              key: 'modalDialogBoxRevertButtonColumn'}, 
+            React.createElement("button", {key: 'modalDialogBoxRevertButton', 
+                    style: {marginTop: '0px'}}, 
               "Revert"
             )
           )
@@ -6117,10 +6117,12 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
       }
 
       var buttonTableContent =
-        React.createElement("table", {id: blockName + attributeName + 'modalDialogBoxButtons', 
+        React.createElement("table", {id: blockName + attributeName + 'modalDialogBoxButtonsTable', 
+               key: blockName + attributeName + 'modalDialogBoxButtonsTable', 
                style: {width: '355px', tableLayout: 'fixed'}}, 
-          React.createElement("tbody", null, 
-            React.createElement("tr", {style: {verticalAlign: 'baseline'}}, 
+          React.createElement("tbody", {key: blockName + attributeName + 'modalDialogBoxButtonsTableBody'}, 
+            React.createElement("tr", {key: blockName + attributeName + 'modalDialogBoxButtonsTableRow', 
+                style: {verticalAlign: 'baseline'}}, 
               buttonRowContent
             )
           )

@@ -68,6 +68,20 @@ var ModalDialogBox = React.createClass({
     paneActions.closeModalDialogBox('this is the item');
   },
 
+  createTableRow: function(blockName, attributeName, subAttributeName, attributeValue){
+    return(
+      <tr key={blockName + attributeName + subAttributeName + 'tableRow'}
+          style={{verticalAlign: 'middle'}} >
+        <td key={blockName + attributeName + subAttributeName + 'titleColumn'}
+            style={{width: '100px'}} >{subAttributeName}</td>
+        <td key={blockName + attributeName + subAttributeName + 'valueColumn'}
+            style={{width: '250px'}} >
+          {attributeValue}
+        </td>
+      </tr>
+    )
+  },
+
   generateContent: function(){
     /* If the modalDialogBoxInfo is null, display
     something else?
@@ -96,12 +110,8 @@ var ModalDialogBox = React.createClass({
           typeof allBlockAttributes[blockName][attributeName][attribute]
           === 'number') {
           tableContent.push(
-            <tr style={{verticalAlign: 'middle'}} >
-              <td style={{width: '100px'}} >{attribute}</td>
-              <td style={{width: '250px'}} >
-                {allBlockAttributes[blockName][attributeName][attribute]}
-              </td>
-            </tr>
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute])
           )
         }
         /* A pretty bad way to do this, but I can't think
@@ -109,32 +119,20 @@ var ModalDialogBox = React.createClass({
          */
         else if(attribute === 'type'){
           tableContent.push(
-            <tr style={{verticalAlign: 'middle'}} >
-              <td style={{width: '100px'}} >{attribute}</td>
-              <td style={{width: '250px'}} >
-                {allBlockAttributes[blockName][attributeName][attribute].name}
-              </td>
-            </tr>
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].name)
           )
         }
         else if(attribute === 'alarm'){
           tableContent.push(
-            <tr style={{verticalAlign: 'middle'}} >
-              <td style={{width: '100px'}} >{attribute}</td>
-              <td style={{width: '250px'}} >
-                {allBlockAttributes[blockName][attributeName][attribute].severity}
-              </td>
-            </tr>
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].severity)
           )
         }
         else if(attribute === 'timeStamp'){
           tableContent.push(
-            <tr style={{verticalAlign: 'middle'}} >
-              <td style={{width: '100px'}} >{attribute}</td>
-              <td style={{width: '250px'}} >
-                {allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch}
-              </td>
-            </tr>
+            this.createTableRow(blockName, attributeName, attribute,
+              allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch)
           )
         }
       }
@@ -143,19 +141,17 @@ var ModalDialogBox = React.createClass({
 
       if(this.props.modalDialogBoxInfo.message !== null){
           tableContent.push(
-            <tr style={{verticalAlign: 'middle'}} >
-              <td style={{width: '100px'}} >Return</td>
-              <td style={{width: '250px'}} >
-                {this.props.modalDialogBoxInfo.message}
-              </td>
-            </tr>
+            this.createTableRow(this.props.modalDialogBoxInfo.blockName,
+              this.props.modalDialogBoxInfo.attributeName, 'dialogBoxMessage',
+              this.props.modalDialogBoxInfo.message)
         )
       }
 
       modalDialogBoxContent.push(
-        <table id={blockName + attributeName + 'modalDialogBox'}
+        <table id={blockName + attributeName + 'modalDialogBoxTable'}
+               key={blockName + attributeName + 'modalDialogBoxTable'}
                style={{width: '370px', tableLayout: 'fixed'}} >
-          <tbody>
+          <tbody key={blockName + attributeName + 'modalDialogBoxTableBody'} >
           {tableContent}
           </tbody>
         </table>
@@ -168,8 +164,10 @@ var ModalDialogBox = React.createClass({
       var buttonRowContent = [];
 
       buttonRowContent.push(
-        <td style={{width: '130px'}} >
-          <button style={{marginTop: '0px'}}
+        <td style={{width: '130px'}}
+            key={'modalDialogBoxCloseButtonColumn'} >
+          <button key={'modalDialogBoxCloseButton'}
+                  style={{marginTop: '0px'}}
                   onClick={this.closeModalDialogBox} >
             Cancel
           </button>
@@ -180,8 +178,10 @@ var ModalDialogBox = React.createClass({
         /* Add a revert button too */
 
         buttonRowContent.push(
-          <td style={{width: '130px', textAlign: 'right'}} >
-            <button style={{marginTop: '0px'}} >
+          <td style={{width: '130px', textAlign: 'right'}}
+              key={'modalDialogBoxRevertButtonColumn'}>
+            <button key={'modalDialogBoxRevertButton'}
+                    style={{marginTop: '0px'}} >
               Revert
             </button>
           </td>
@@ -190,10 +190,12 @@ var ModalDialogBox = React.createClass({
       }
 
       var buttonTableContent =
-        <table id={blockName + attributeName + 'modalDialogBoxButtons'}
+        <table id={blockName + attributeName + 'modalDialogBoxButtonsTable'}
+               key={blockName + attributeName + 'modalDialogBoxButtonsTable'}
                style={{width: '355px', tableLayout: 'fixed'}} >
-          <tbody>
-            <tr style={{verticalAlign: 'baseline'}} >
+          <tbody key={blockName + attributeName + 'modalDialogBoxButtonsTableBody'} >
+            <tr key={blockName + attributeName + 'modalDialogBoxButtonsTableRow'}
+                style={{verticalAlign: 'baseline'}} >
               {buttonRowContent}
             </tr>
           </tbody>
