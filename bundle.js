@@ -1254,8 +1254,6 @@ var attributeStore = assign({}, EventEmitter.prototype, {
 
 });
 
-//var blockStore = require('./blockStore');
-
 attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
@@ -1263,8 +1261,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   switch(action.actionType){
 
     case appConstants.MALCOLM_GET_SUCCESS:
-
-      //AppDispatcher.waitFor([blockStore.dispatchToken]);
 
       for(var i = 0; i < item.responseMessage.tags.length; i++){
         if(item.responseMessage.tags[i] === "instance:Zebra2Block" ||
@@ -1546,7 +1542,6 @@ function addBlock(blockAttributesObject){
 
   console.log(blockAttributesObject);
   var blockType = blockAttributesObject['BLOCKNAME'].value.replace(/[0-9]/g, '');
-  console.log(blockType);
 
   var inports = [];
   var outports = [];
@@ -1579,7 +1574,6 @@ function addBlock(blockAttributesObject){
   var initialEdgeInfoKeyValueName;
   var outportsThatExistInInitialEdgeInfo = [];
 
-  //console.log(testAllBlockInfo);
   console.log(blockAttributesObject);
 
   for(var attribute in blockAttributesObject){
@@ -1697,20 +1691,13 @@ function addBlock(blockAttributesObject){
 
   }
 
-  //var blockMethods = {};
-  //
-  //for(var method in blockAttributesObject.methods){
-  //  blockMethods[method] = blockAttributesObject.methods[method]
-  //}
-
   allBlockInfo[blockAttributesObject['BLOCKNAME'].value] = {
     type: blockType,
     label: blockAttributesObject['BLOCKNAME'].value,
     iconURL: blockAttributesObject['ICON'].value,
     name: '',
     inports: inports,
-    outports: outports,
-    //methods: blockMethods
+    outports: outports
   };
 
   /* Now to go through the outportsThatExistInInitialEdgeInfo array
@@ -1905,11 +1892,9 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           var xCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.X_COORD.value));
           var yCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.Y_COORD.value));
 
-          //testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.responseMessage));
-
           /* Add the block to allBlockInfo! */
 
-          console.log(attributeStore.getAllBlockAttributes()[blockName]);
+          //console.log(attributeStore.getAllBlockAttributes()[blockName]);
 
           if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
@@ -1918,11 +1903,6 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
              */
             addBlock(attributeStore.getAllBlockAttributes()[blockName]);
             blockStore.emitChange();
-          }
-          else{
-            /* Putting it here just to test the blocks even if they're not in use */
-            //addBlock(blockName);
-
           }
         }
 
@@ -2040,6 +2020,9 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
                 appendToBlockPositions(item.requestedData.attribute,
                   flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
+                /* Pass addBlock the block object from allBlockAttributes in attributeStore
+                 instead of relying on testAllBlockInfo
+                 */
                 addBlock(attributeStore.getAllBlockAttributes()[item.requestedData.attribute]);
                 blockStore.emitChange();
               }
@@ -2151,9 +2134,9 @@ var previousMouseCoordsOnZoom = null;
 
 var blockStyling = {
   outerRectangleHeight: 76,
-  outerRectangleWidth: 72,
+  outerRectangleWidth: 76,
   innerRectangleHeight: 70,
-  innerRectangleWidth: 66,
+  innerRectangleWidth: 70,
   portRadius: 2.5,
   portFill: 'grey',
 };
@@ -3535,7 +3518,6 @@ module.exports = idLookupTableFunctions;
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('react-dom');
 
-var blockStore = require('../stores/blockStore.js');
 var attributeStore = require('../stores/attributeStore');
 
 var blockActions = require('../actions/blockActions.js');
@@ -3783,7 +3765,7 @@ var Block = React.createClass({displayName: "Block",
 
 module.exports = Block;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react/lib/ReactDefaultPerf.js":143,"../../node_modules/react/react":255,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/attributeStore":11,"../stores/blockStore.js":12,"./blockRectangle":20,"./ports.js":35,"react-dom":50}],20:[function(require,module,exports){
+},{"../../node_modules/interact.js":47,"../../node_modules/react/lib/ReactDefaultPerf.js":143,"../../node_modules/react/react":255,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/attributeStore":11,"./blockRectangle":20,"./ports.js":35,"react-dom":50}],20:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -3827,16 +3809,13 @@ var BlockRectangles = React.createClass({displayName: "BlockRectangles",
                        }}
         ), 
 
-        React.createElement("svg", {height: blockStyling.outerRectangleHeight, 
-             width: blockStyling.outerRectangleWidth, 
-             viewBox: "0 0 144 152", 
-             style: {cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}, 
-          React.createElement("image", {height: "100%", width: "100%", 
-                 x: blockStyling.outerRectangleHeight / 2, 
-                 y: blockStyling.outerRectangleWidth / 2 - 10, 
-                 style: {cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
-                 opacity: '0.5'}, 
-                 xlinkHref: "http://172.23.244.90:8080/icons/LUT.svg"})
+        React.createElement("image", {height: blockStyling.innerRectangleHeight, 
+               width: blockStyling.innerRectangleWidth, 
+               x: 3, 
+               y: 3, 
+               style: {cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
+               opacity: '0.5'}, 
+               xlinkHref: "http://172.23.244.90:8080/icons/LUT.svg"}
         )
       )
     )

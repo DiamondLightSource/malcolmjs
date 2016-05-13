@@ -442,7 +442,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
           /* Add the block to allBlockInfo! */
 
-          console.log(attributeStore.getAllBlockAttributes()[blockName]);
+          //console.log(attributeStore.getAllBlockAttributes()[blockName]);
 
           if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);

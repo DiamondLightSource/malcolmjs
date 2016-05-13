@@ -17,9 +17,9 @@ var previousMouseCoordsOnZoom = null;
 
 var blockStyling = {
   outerRectangleHeight: 76,
-  outerRectangleWidth: 72,
+  outerRectangleWidth: 76,
   innerRectangleHeight: 70,
-  innerRectangleWidth: 66,
+  innerRectangleWidth: 70,
   portRadius: 2.5,
   portFill: 'grey',
 };
