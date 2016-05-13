@@ -3,7 +3,6 @@
  */
 
 var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 var blockStore = require('../stores/blockStore.js');
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');

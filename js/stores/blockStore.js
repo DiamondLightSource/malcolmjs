@@ -9,7 +9,7 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
-var update = require('../../node_modules/react').addons.update;
+var update = require('react-addons-update');
 
 var CHANGE_EVENT = 'change';
 
@@ -86,10 +86,10 @@ Depending on the action that triggered the data fetch from the server I'll know 
 it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
 been returned/fetched to blockStore successfully?
  */
-function addBlock(blockId){
+function addBlock(blockAttributesObject){
 
-  var blockType = blockId.replace(/[0-9]/g, '');
-  console.log(blockType);
+  console.log(blockAttributesObject);
+  var blockType = blockAttributesObject['BLOCKNAME'].value.replace(/[0-9]/g, '');
 
   var inports = [];
   var outports = [];
@@ -122,30 +122,29 @@ function addBlock(blockId){
   var initialEdgeInfoKeyValueName;
   var outportsThatExistInInitialEdgeInfo = [];
 
-  //console.log(testAllBlockInfo);
-  console.log(blockId);
+  console.log(blockAttributesObject);
 
-  for(var attribute in testAllBlockInfo[blockId].attributes){
+  for(var attribute in blockAttributesObject){
 
-    if(testAllBlockInfo[blockId].attributes[attribute].tags !== undefined) {
-      for (var i = 0; i < testAllBlockInfo[blockId].attributes[attribute].tags.length; i++) {
+    if(blockAttributesObject[attribute].tags !== undefined) {
+      for (var i = 0; i < blockAttributesObject[attribute].tags.length; i++) {
         var inportRegExp = /flowgraph:inport/;
         var outportRegExp = /flowgraph:outport/;
-        if (inportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
+        if (inportRegExp.test(blockAttributesObject[attribute].tags[i]) === true) {
           var inportName = attribute;
 
           /* Find the type of the inport value too,
           via the flowgraph tag
            */
 
-          var inportValueType = testAllBlockInfo[blockId].attributes[attribute].tags[i]
+          var inportValueType = blockAttributesObject[attribute].tags[i]
             .slice('flowgraph:inport:'.length);
 
           /* Need to check if the inport is connected to
           anything as well, so then edges will be preserved
           on a window refresh!
            */
-          var inportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+          var inportValue = blockAttributesObject[attribute].value;
 
           /* Initially, the port is always added as being disconnected,
           even if it is connected. This is to accomodate not being able
@@ -175,7 +174,7 @@ function addBlock(blockId){
                so need to do more here
                */
 
-              initialEdgeInfoKeyValueName = blockId + "." + attribute;
+              initialEdgeInfoKeyValueName = blockAttributesObject['BLOCKNAME'].value + "." + attribute;
 
               initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName;
 
@@ -186,8 +185,13 @@ function addBlock(blockId){
             simply push the inport like normal!
              */
 
+            console.log("outport block already exists, so can just add the wire initially!");
+            console.log(initialEdgeInfo);
+
             var outportBlockName = inportValue.slice(0, inportValue.indexOf('.'));
             var outportName = inportValue.slice(inportValue.indexOf('.') + 1);
+            console.log(outportBlockName);
+            console.log(outportName);
 
             inports.push(
               {
@@ -201,19 +205,20 @@ function addBlock(blockId){
                 }
               }
             );
+            console.log(inports);
 
           }
 
         }
-        else if (outportRegExp.test(testAllBlockInfo[blockId].attributes[attribute].tags[i]) === true) {
+        else if (outportRegExp.test(blockAttributesObject[attribute].tags[i]) === true) {
           var outportName = attribute;
 
-          var outportValueType = testAllBlockInfo[blockId].attributes[attribute].tags[i]
+          var outportValueType = blockAttributesObject[attribute].tags[i]
             .slice('flowgraph:outport:'.length);
 
-          var outportValue = testAllBlockInfo[blockId].attributes[attribute].value;
+          var outportValue = blockAttributesObject[attribute].value;
 
-          initialEdgeInfoKeyName = blockId + '.' + attribute;
+          initialEdgeInfoKeyName = blockAttributesObject['BLOCKNAME'].value + '.' + attribute;
 
           if(initialEdgeInfo[initialEdgeInfoKeyName] !== undefined){
             outportsThatExistInInitialEdgeInfo.push(initialEdgeInfoKeyName);
@@ -234,20 +239,13 @@ function addBlock(blockId){
 
   }
 
-  var blockMethods = {};
-
-  for(var method in testAllBlockInfo[blockId].methods){
-    blockMethods[method] = testAllBlockInfo[blockId].methods[method]
-  }
-
-  allBlockInfo[blockId] = {
+  allBlockInfo[blockAttributesObject['BLOCKNAME'].value] = {
     type: blockType,
-    label: blockId,
-    iconURL: testAllBlockInfo[blockId].attributes['ICON'].value,
+    label: blockAttributesObject['BLOCKNAME'].value,
+    iconURL: blockAttributesObject['ICON'].value,
     name: '',
     inports: inports,
-    outports: outports,
-    methods: blockMethods
+    outports: outports
   };
 
   /* Now to go through the outportsThatExistInInitialEdgeInfo array
@@ -305,6 +303,8 @@ function updateAnInitialEdge(initialEdgeInfoKey){
   /* Now delete that particular key in initialEdgeInfo, I don't
   think it's needed anymore?
    */
+
+  delete initialEdgeInfo[initialEdgeInfoKey];
 
 }
 
@@ -403,6 +403,8 @@ var blockStore = assign({}, EventEmitter.prototype, {
 
 });
 
+var attributeStore = require('./attributeStore');
+
 blockStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
@@ -423,7 +425,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
-      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+      //AppDispatcher.waitFor([flowChartStore.dispatchToken]);
 
       /* Check if it's the initial FlowGraph structure, or
       if it's something else
@@ -438,19 +440,17 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
           var xCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.X_COORD.value));
           var yCoord = JSON.parse(JSON.stringify(item.responseMessage.attributes.Y_COORD.value));
 
-          testAllBlockInfo[blockName] = JSON.parse(JSON.stringify(item.responseMessage));
-
           /* Add the block to allBlockInfo! */
+
+          console.log(attributeStore.getAllBlockAttributes()[blockName]);
 
           if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
             appendToBlockPositions(blockName, xCoord, yCoord);
-            addBlock(blockName);
+            /* Pass addBlock the block object from allBlockAttributes in attributeStore
+            instead of relying on testAllBlockInfo
+             */
+            addBlock(attributeStore.getAllBlockAttributes()[blockName]);
             blockStore.emitChange();
-          }
-          else{
-            /* Putting it here just to test the blocks even if they're not in use */
-            //addBlock(blockName);
-
           }
         }
 
@@ -568,7 +568,10 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
                 appendToBlockPositions(item.requestedData.attribute,
                   flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
-                addBlock(item.requestedData.attribute);
+                /* Pass addBlock the block object from allBlockAttributes in attributeStore
+                 instead of relying on testAllBlockInfo
+                 */
+                addBlock(attributeStore.getAllBlockAttributes()[item.requestedData.attribute]);
                 blockStore.emitChange();
               }
               else if (item.responseMessage.value === 'Hide') {

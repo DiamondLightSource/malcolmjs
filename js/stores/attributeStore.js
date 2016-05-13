@@ -9,7 +9,7 @@ var assign = require('../../node_modules/object-assign/index.js');
 
 var CHANGE_EVENT = 'change';
 
-var update = require('../../node_modules/react').addons.update;
+var update = require('react-addons-update');
 
 var allBlockAttributes = {
 
@@ -120,8 +120,6 @@ var attributeStore = assign({}, EventEmitter.prototype, {
 
 });
 
-var blockStore = require('./blockStore');
-
 attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
@@ -129,8 +127,6 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   switch(action.actionType){
 
     case appConstants.MALCOLM_GET_SUCCESS:
-
-      AppDispatcher.waitFor([blockStore.dispatchToken]);
 
       for(var i = 0; i < item.responseMessage.tags.length; i++){
         if(item.responseMessage.tags[i] === "instance:Zebra2Block" ||

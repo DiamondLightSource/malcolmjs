@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
 
 var FlowChart = require('./flowChart');
 

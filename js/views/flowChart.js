@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var ReactDOM = require('react-dom');
 
 var appConstants = require('../constants/appConstants.js');
 
@@ -749,8 +749,9 @@ var FlowChart = React.createClass({
       );
 
       for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
-        if(this.props.allBlockInfo[block].inports[i].connected === true){
-          //console.log(this.props.allBlockInfo[block].inports[i]);
+        if(this.props.allBlockInfo[block].inports[i].connected === true &&
+          this.props.allBlockInfo[this.props.allBlockInfo[block].inports[i].connectedTo.block] !== undefined){
+
           //console.log("The " + this.props.allBlockInfo[block].inports[i].name + " inport of " + block + " is connected, so find out what block it is connected to");
           /* Ooops, the toNode's should be the INPORTS, since you go FROM an outport TO an inport the way I've done this */
           var toBlock = block;

@@ -3,9 +3,9 @@
  */
 
 var React = require('../../node_modules/react/react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var ReactDOM = require('react-dom');
 
-var blockStore = require('../stores/blockStore.js');
+var attributeStore = require('../stores/attributeStore');
 
 var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
@@ -23,7 +23,7 @@ var Block = React.createClass({
 
   componentDidMount: function(){
 
-    var blockAttributes = blockStore.getTestAllBlockInfo()[this.props.id].attributes;
+    var blockAttributes = attributeStore.getAllBlockAttributes()[this.props.id];
 
     for(var attribute in blockAttributes){
       if(attribute !== 'uptime') {
@@ -199,7 +199,7 @@ var Block = React.createClass({
       console.log(this.props.blockPosition);
       //this.handleInteractJsDrag(dragMovement)
       MalcolmActionCreators.malcolmCall(
-        this.props.id, this.props.blockInfo.methods._set_coords.name, {
+        this.props.id, '_set_coords', {
           X_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.x * this.props.graphZoomScale)),
           Y_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.y * this.props.graphZoomScale))
         }
@@ -212,8 +212,8 @@ var Block = React.createClass({
 
   render: function(){
     console.log("render: block");
-    console.log(this.props.id);
-    console.log(this.props.blockInfo);
+    //console.log(this.props.id);
+    //console.log(this.props.blockInfo);
 
     var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
 

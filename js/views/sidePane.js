@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var ReactDOM = require('../../node_modules/react-dom/dist/react-dom.js');
+var ReactDOM = require('react-dom');
 var ReactPanels = require('react-panels');
 var Dropdown = require('./dropdownMenu');
 
@@ -110,7 +110,7 @@ var SidePane = React.createClass({
     }
 
     return (
-        <Panel ref="panel" theme="flexbox"
+        <Panel theme="flexbox"
                skin={skin} useAvailableHeight={true}
                globals={globals}
                buttons={[
