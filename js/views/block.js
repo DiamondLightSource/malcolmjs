@@ -227,7 +227,9 @@ var Block = React.createClass({
         <g style={{MozUserSelect: 'none'}}
            //onMouseDown={this.mouseDown}
         >
-          <rect id="blockBackground" height="105" width="65" style={{fill: 'transparent',
+          <rect id="blockBackground"
+                height="105" width={this.props.blockStyling.outerRectangleWidth}
+                style={{fill: 'transparent',
           cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/>
           /* To allow the cursor to change when hovering over the entire block container */
 
