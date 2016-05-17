@@ -64,9 +64,8 @@ var Block = React.createClass({
   },
 
   componentWillUnmount: function(){
-    //NodeStore.removeChangeListener(this._onChange);
-    //this.interactable.unset();
-    //this.interactable = null;
+
+    clearTimeout(this.timer);
 
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.blockSelect);
@@ -85,7 +84,6 @@ var Block = React.createClass({
             this.props.portThatHasBeenClicked !== null ||
             nextProps.storingFirstPortClicked !== null ||
             this.props.storingFirstPortClicked !== null){
-      console.log("portThatHasBeenClicked is something");
 
       return (
         nextProps.blockPosition !== this.props.blockPosition ||
@@ -95,17 +93,10 @@ var Block = React.createClass({
         nextProps.storingFirstPortClicked !== this.props.storingFirstPortClicked
       );
     }
-    else{
-      console.log("SOMETHING CRAY CRAY IN SHOULDCOMPONENTUPDATE");
-    }
   },
 
   handleInteractJsDrag: function(item){
-    //console.log("interactJs drag is occurring");
     flowChartActions.interactJsDrag(item);
-
-    /* For debouncing */
-    //this.startDrag = null;
   },
 
   blockSelect: function(e){
@@ -127,17 +118,12 @@ var Block = React.createClass({
       paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
     }
 
-    /* Also need something here to make the tab jump to the newly selected nod eif it is already open */
-
-
-
   },
 
   interactJsDrag: function(e){
     e.stopPropagation();
     e.stopImmediatePropagation();
     var target = e.target.id;
-
 
     var deltaMovement = {
       target: target,
@@ -148,63 +134,38 @@ var Block = React.createClass({
     this.handleInteractJsDrag(deltaMovement);
 
     /* For debouncing */
-    if(this.startDrag === null || this.startDrag === undefined){
-      this.startDrag = {
-        x: 0,
-        y: 0
-      };
-    }
-
-    this.startDrag.x += e.dx;
-    this.startDrag.y += e.dy;
-
-
-    var deltaMovementDebounce = {
-      target: target,
-      x: this.startDrag.x,
-      y: this.startDrag.y
-    };
 
     clearTimeout(this.timer);
-    this.interactJsDragDebounce(deltaMovementDebounce);
+    this.interactJsDragDebounce();
 
-
-
-
-    /* Currently doesn't work very well, selects a node after dragging a bit... */
-    /* I could save the coords of the start of the drag from onstart in interactjs and do something from there? */
-
-    //if(Math.abs(e.dx) < 4 && Math.abs(e.dy) < 4){
-    //  console.log("Not large enough movement for a drag, so just do a nodeSelect");
-    //  this.nodeSelect(e);
-    //}
-    //else{
-    //  console.log("Drag movement is large enough, so do a drag");
-    //  this.handleInteractJsDrag(deltaMovement);
-    //}
-
-    /* Need to have some code here to check if the movement is large anough for a drag:
-    if so, just carry on and invoke the action to drag, and if not, invoke the node select function instead
+    /* Need to have some code here to check if the movement
+    is large enough for a drag: if so, just carry on and
+    invoke the action to drag, and if not, invoke the
+    node select function instead
      */
-
-    //this.handleInteractJsDrag(deltaMovement);
 
   },
 
-  interactJsDragDebounce: function(dragMovement){
-    //console.log("debouncing");
+  interactJsDragDebounce: function(){
+
+    /* Currently this is saving the timer as an instance variable
+    of the component (this.timer) rather than a state variable
+    (this.state.timer). This is mainly because otherwise
+    resetting the timer (I think) would then involve doing
+    clearTimeout(this.state.timer) and directly mutating state is
+    a no go in React.
+    It works, but I don't think it's ideal, nor particularly
+    'React-y', perhaps can make use of something like
+    https://github.com/plougsgaard/react-timeout in the future
+    */
+
     this.timer = setTimeout(function(){
-      //console.log("inside setTimeout");
-      console.log("testing drag debounce for server write request");
-      console.log(this.props.blockPosition);
-      //this.handleInteractJsDrag(dragMovement)
       MalcolmActionCreators.malcolmCall(
         this.props.id, '_set_coords', {
-          X_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.x * this.props.graphZoomScale)),
-          Y_COORD: JSON.parse(JSON.stringify(this.props.blockPosition.y * this.props.graphZoomScale))
+          X_COORD: this.props.blockPosition.x * this.props.graphZoomScale,
+          Y_COORD: this.props.blockPosition.y * this.props.graphZoomScale
         }
       );
-      console.log(dragMovement.target);
     }.bind(this), 500
     );
   },
@@ -215,19 +176,15 @@ var Block = React.createClass({
     //console.log(this.props.id);
     //console.log(this.props.blockInfo);
 
-    var blockTranslate = "translate(" + this.props.blockPosition.x + "," + this.props.blockPosition.y + ")";
+    var blockTranslate = "translate(" + this.props.blockPosition.x + ","
+      + this.props.blockPosition.y + ")";
 
     return (
-      <g {...this.props}
-          //onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-                         //style={this.props.selected && this.props.areAnyBlocksSelected || !this.props.selected && !this.props.areAnyBlocksSelected ? window.NodeContainerStyle : window.nonSelectedNodeContainerStyle}
-                         transform={blockTranslate}
-      >
+      <g {...this.props} transform={blockTranslate}>
 
-        <g style={{MozUserSelect: 'none'}}
-           //onMouseDown={this.mouseDown}
-        >
-          <rect id="blockBackground"
+        <g style={{MozUserSelect: 'none'}} >
+
+          <rect id={this.props.id + "blockBackground"}
                 height="105" width={this.props.blockStyling.outerRectangleWidth}
                 style={{fill: 'transparent',
           cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"}}/>
