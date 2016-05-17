@@ -13,7 +13,6 @@ function getFlowChartState(){
   return{
     /* blockStore */
     allBlockInfo: blockStore.getAllBlockInfo(),
-    testAllBlockInfo: blockStore.getTestAllBlockInfo(),
 
     /* flowChartStore */
     graphPosition: flowChartStore.getGraphPosition(),

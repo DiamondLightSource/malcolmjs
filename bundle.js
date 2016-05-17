@@ -1180,17 +1180,11 @@ var _stuff = {
   blockList: null
 };
 
-var allBlockInfo = {
+var allBlockInfo = null;
 
-};
+var initialEdgeInfo = {};
 
-var initialEdgeInfo = {
-
-};
-
-var blockPositions = {
-
-};
+var blockPositions = {};
 
 function appendToBlockPositions(BlockId, xCoord, yCoord){
   blockPositions[BlockId] = {
@@ -1471,8 +1465,6 @@ function updateAnInitialEdge(initialEdgeInfoKey){
 
 }
 
-var testAllBlockInfo = null;
-
 function addEdgeViaMalcolm(Info){
   console.log(Info);
   //window.alert(allBlockInfo[Info.inportBlock.label]);
@@ -1537,27 +1529,18 @@ var blockStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT)
   },
 
-  /* BLOCK use */
-
   getAllBlockInfo: function(){
-    return allBlockInfo;
-  },
 
-  getTestAllBlockInfo: function(){
-
-    if(testAllBlockInfo === null){
-      testAllBlockInfo = {};
+    if(allBlockInfo === null){
+      allBlockInfo = {};
 
       MalcolmActionCreators.initialiseFlowChart('Z');
 
-      /* So then testAllBlockInfo is something in flowChartViewController */
       return {};
-
     }
-    else{
-      return testAllBlockInfo;
+    else {
+      return allBlockInfo;
     }
-
   },
 
   getBlockPositions: function(){
@@ -5214,7 +5197,6 @@ function getFlowChartState(){
   return{
     /* blockStore */
     allBlockInfo: blockStore.getAllBlockInfo(),
-    testAllBlockInfo: blockStore.getTestAllBlockInfo(),
 
     /* flowChartStore */
     graphPosition: flowChartStore.getGraphPosition(),
