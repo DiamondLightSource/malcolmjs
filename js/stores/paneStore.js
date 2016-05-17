@@ -26,16 +26,6 @@ var modalDialogBoxInfo = {
   message: null
 };
 
-var _handles = {
-  passSidePane: null
-};
-
-var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
-
-  _handles.passSidePane = ReactComponent;
-
-};
-
 //var favContent = {
 //  name: "Favourites tab",
 //  label: 'Favourites',
@@ -70,20 +60,16 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
 //};
 
 var dropdownMenuSelect = function(tab){
-  /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
   console.log("dropdown menu select");
   console.log(tab);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
-    if(_stuff.tabState[i].label === tab){              /* Changed from .name to .label */
+    if(_stuff.tabState[i].label === tab){
       var findTheIndex = i
     }
   }
-  //_handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
-
-  /* Use selectedTabIndex instead of panels' refs attribute */
 
   _stuff.selectedTabIndex = findTheIndex;
 
@@ -91,9 +77,6 @@ var dropdownMenuSelect = function(tab){
 
 var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
-  //_handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
-
-  /* Use selectedTabIndex instead of panels' refs attribute */
 
   _stuff.selectedTabIndex = tabStateLength - 1;
 
@@ -160,10 +143,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
   //console.log(item);
 
   switch(action.actionType){
-
-    case appConstants.PASS_SIDEPANE:
-      passSidePane(item);
-          break;
 
     case appConstants.DROPDOWN_SELECT:
       dropdownMenuSelect(item);
@@ -457,29 +436,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       paneStore.emitChange();
       break;
-
-    /* Not using loading screens for now */
-    //case appConstants.TEST_INITIALDATAFETCH_PENDING:
-    //  /* Show the loading icon in the mainPane while the initial data is being fetched */
-    //  _stuff.loadingInitialData = true;
-    //  paneStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //
-    //  for(var block in item){
-    //    appendToAllBlockTabProperties(block);
-    //  }
-    //
-    //  _stuff.loadingInitialData = false;
-    //  paneStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_INITIALDATAFETCH_FAILURE:
-    //  _stuff.loadingInitialDataError = true;
-    //  paneStore.emitChange();
-    //  break;
 
     default:
           return true

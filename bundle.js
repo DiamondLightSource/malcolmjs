@@ -393,22 +393,11 @@ var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var paneActions = {
-  removeTab: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.REMOVE_TAB,
-      item: item
-    })
-  },
+
   dropdownMenuSelect: function(tab){
     AppDispatcher.handleViewAction({
       actionType: appConstants.DROPDOWN_SELECT,
       item:tab
-    })
-  },
-  passSidePane: function(ReactComponent){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.PASS_SIDEPANE,
-      item: ReactComponent
     })
   },
   favTabOpen: function(item){
@@ -429,19 +418,7 @@ var paneActions = {
       item: item
     })
   },
-  updatePaneStoreBlockContentViaDeviceStore: function(blockContentObject){
-    AppDispatcher.handleAction({
-      actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
-      item: blockContentObject
-    })
-  },
 
-  initialFetchOfBlockDataFromBlockStore: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.FETCHINITIAL_BLOCKDATA,
-      item: item
-    })
-  },
   openBlockTab: function(BlockId){
     AppDispatcher.handleViewAction({
       actionType: appConstants.OPEN_BLOCKTAB,
@@ -606,7 +583,6 @@ var appConstants = {
 
   /*paneStore use*/
 
-  REMOVE_TAB: "REMOVE_TAB",
   DROPDOWN_SELECT: "DROPDOWN_SELECT",
   FAVTAB_OPEN: "FAVTAB_OPEN",
   CONFIGTAB_OPEN: "CONFIGTAB_OPEN",
@@ -622,7 +598,6 @@ var appConstants = {
   /*sidePaneStore use*/
   DROPDOWN_SHOW: "DROPDOWN_SHOW",
   DROPDOWN_HIDE: "DROPDOWN_HIDE",
-  PASS_SIDEPANE: "PASS_SIDEPANE",
 
 
 
@@ -646,9 +621,6 @@ var appConstants = {
   /* BLOCK use */
 
   INTERACTJS_DRAG: "INTERACTJS_DRAG",
-
-  FETCHINITIAL_BLOCKDATA: "FETCHINITIAL_BLOCKDATA",
-
 
   GATEBLOCK_CHANGEPOSITION: "GATEBLOCK_CHANGEPOSITION",
   DRAGGED_ELEMENTID: "DRAGGED_ELEMENTID",
@@ -2336,16 +2308,6 @@ var modalDialogBoxInfo = {
   message: null
 };
 
-var _handles = {
-  passSidePane: null
-};
-
-var passSidePane = function(ReactComponent){ /* Testing to see if saving it in state would work, it did! :D*/
-
-  _handles.passSidePane = ReactComponent;
-
-};
-
 //var favContent = {
 //  name: "Favourites tab",
 //  label: 'Favourites',
@@ -2380,20 +2342,16 @@ var passSidePane = function(ReactComponent){ /* Testing to see if saving it in s
 //};
 
 var dropdownMenuSelect = function(tab){
-  /* Note that 'tab' is the nodeId, not the React element or anything like that */
 
   console.log("dropdown menu select");
   console.log(tab);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
-    if(_stuff.tabState[i].label === tab){              /* Changed from .name to .label */
+    if(_stuff.tabState[i].label === tab){
       var findTheIndex = i
     }
   }
-  //_handles.passSidePane.refs.panel.setSelectedIndex(findTheIndex);
-
-  /* Use selectedTabIndex instead of panels' refs attribute */
 
   _stuff.selectedTabIndex = findTheIndex;
 
@@ -2401,9 +2359,6 @@ var dropdownMenuSelect = function(tab){
 
 var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
-  //_handles.passSidePane.refs.panel.setSelectedIndex(tabStateLength - 1)
-
-  /* Use selectedTabIndex instead of panels' refs attribute */
 
   _stuff.selectedTabIndex = tabStateLength - 1;
 
@@ -2470,10 +2425,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
   //console.log(item);
 
   switch(action.actionType){
-
-    case appConstants.PASS_SIDEPANE:
-      passSidePane(item);
-          break;
 
     case appConstants.DROPDOWN_SELECT:
       dropdownMenuSelect(item);
@@ -2767,29 +2718,6 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       paneStore.emitChange();
       break;
-
-    /* Not using loading screens for now */
-    //case appConstants.TEST_INITIALDATAFETCH_PENDING:
-    //  /* Show the loading icon in the mainPane while the initial data is being fetched */
-    //  _stuff.loadingInitialData = true;
-    //  paneStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_INITIALDATAFETCH_SUCCESS:
-    //  AppDispatcher.waitFor([blockStore.dispatchToken]);
-    //
-    //  for(var block in item){
-    //    appendToAllBlockTabProperties(block);
-    //  }
-    //
-    //  _stuff.loadingInitialData = false;
-    //  paneStore.emitChange();
-    //  break;
-    //
-    //case appConstants.TEST_INITIALDATAFETCH_FAILURE:
-    //  _stuff.loadingInitialDataError = true;
-    //  paneStore.emitChange();
-    //  break;
 
     default:
           return true
@@ -6035,15 +5963,9 @@ var Dropdown = require('./dropdownMenu');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
-var Toolbar = ReactPanels.Toolbar;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-var ToggleButton = ReactPanels.ToggleButton;
 var Button = ReactPanels.Button;
 
-//var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var SidePaneTabContents = require('./sidePaneTabContents');
 
@@ -6062,36 +5984,15 @@ var SidePane = React.createClass({displayName: "SidePane",
     )
   },
 
-  handleActionPassSidePane: function(){
-    paneActions.passSidePane(this)
-  },
-
-  handleActionAddTab: function(){
-    paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
-  },
-
-  //handleActionRemoveTab: function(){
-  //  var selectedIndex = this.props.selectedTabIndex;
-  //  paneActions.removeTab(selectedIndex);
-  //},
-
   handleActionTabChangeViaOtherMeans: function(tab){
-    console.log(tab);
     paneActions.dropdownMenuSelect(tab);
-    console.log("action function for changing tab via other means ran correctly");
   },
 
-  //handleActionInitialFetchOfBlockData: function(){
-  //  paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
-  //},
   handleActionRemoveBlockTab: function(){
-    //var selectedIndex = this.refs.panel.getSelectedIndex();
-    /* Moving to a single tab with dynamic content rather than multiple tabs */
     paneActions.removeBlockTab(this.props.selectedTabIndex);
   },
 
   componentDidMount: function(){
-    this.handleActionPassSidePane();
     ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
   },
 
@@ -6141,7 +6042,8 @@ var SidePane = React.createClass({displayName: "SidePane",
                globals: globals, 
                buttons: [
 
-            React.createElement(Button, {title: "Remove active tab", onButtonClick: this.handleActionRemoveBlockTab}, 
+            React.createElement(Button, {title: "Remove active tab", 
+                    onButtonClick: this.handleActionRemoveBlockTab}, 
               React.createElement("i", {className: "fa fa-times"})
             ),
             React.createElement(Button, {title: "Drop down menu"}, 
@@ -6162,7 +6064,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 module.exports = SidePane;
 
-},{"../actions/MalcolmActionCreators":1,"../actions/paneActions":5,"./dropdownMenu":25,"./sidePaneTabContents":37,"react":254,"react-dom":50,"react-panels":71}],37:[function(require,module,exports){
+},{"../actions/paneActions":5,"./dropdownMenu":25,"./sidePaneTabContents":37,"react":254,"react-dom":50,"react-panels":71}],37:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/05/16.
  */

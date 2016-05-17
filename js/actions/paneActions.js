@@ -6,22 +6,11 @@ var AppDispatcher = require('../dispatcher/appDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var paneActions = {
-  removeTab: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.REMOVE_TAB,
-      item: item
-    })
-  },
+
   dropdownMenuSelect: function(tab){
     AppDispatcher.handleViewAction({
       actionType: appConstants.DROPDOWN_SELECT,
       item:tab
-    })
-  },
-  passSidePane: function(ReactComponent){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.PASS_SIDEPANE,
-      item: ReactComponent
     })
   },
   favTabOpen: function(item){
@@ -42,19 +31,7 @@ var paneActions = {
       item: item
     })
   },
-  updatePaneStoreBlockContentViaDeviceStore: function(blockContentObject){
-    AppDispatcher.handleAction({
-      actionType: appConstants.UPDATEBLOCKCONTENT_VIASERVER,
-      item: blockContentObject
-    })
-  },
 
-  initialFetchOfBlockDataFromBlockStore: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.FETCHINITIAL_BLOCKDATA,
-      item: item
-    })
-  },
   openBlockTab: function(BlockId){
     AppDispatcher.handleViewAction({
       actionType: appConstants.OPEN_BLOCKTAB,

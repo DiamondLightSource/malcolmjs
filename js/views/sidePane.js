@@ -9,15 +9,9 @@ var Dropdown = require('./dropdownMenu');
 
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
-var Toolbar = ReactPanels.Toolbar;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-var ToggleButton = ReactPanels.ToggleButton;
 var Button = ReactPanels.Button;
 
-//var paneStore = require('../stores/paneStore');
 var paneActions = require('../actions/paneActions');
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var SidePaneTabContents = require('./sidePaneTabContents');
 
@@ -36,36 +30,15 @@ var SidePane = React.createClass({
     )
   },
 
-  handleActionPassSidePane: function(){
-    paneActions.passSidePane(this)
-  },
-
-  handleActionAddTab: function(){
-    paneActions.addTab("this is the item"); /* this is what the plus button should invoke when clicked */
-  },
-
-  //handleActionRemoveTab: function(){
-  //  var selectedIndex = this.props.selectedTabIndex;
-  //  paneActions.removeTab(selectedIndex);
-  //},
-
   handleActionTabChangeViaOtherMeans: function(tab){
-    console.log(tab);
     paneActions.dropdownMenuSelect(tab);
-    console.log("action function for changing tab via other means ran correctly");
   },
 
-  //handleActionInitialFetchOfBlockData: function(){
-  //  paneActions.initialFetchOfBlockDataFromBlockStore("fetch the initial block data!");
-  //},
   handleActionRemoveBlockTab: function(){
-    //var selectedIndex = this.refs.panel.getSelectedIndex();
-    /* Moving to a single tab with dynamic content rather than multiple tabs */
     paneActions.removeBlockTab(this.props.selectedTabIndex);
   },
 
   componentDidMount: function(){
-    this.handleActionPassSidePane();
     ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
   },
 
@@ -115,7 +88,8 @@ var SidePane = React.createClass({
                globals={globals}
                buttons={[
 
-            <Button title="Remove active tab" onButtonClick={this.handleActionRemoveBlockTab}>
+            <Button title="Remove active tab"
+                    onButtonClick={this.handleActionRemoveBlockTab} >
               <i className="fa fa-times"></i>
             </Button>,
             <Button title="Drop down menu">
