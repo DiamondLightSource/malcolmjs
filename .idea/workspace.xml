@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundle.js" afterPath="$PROJECT_DIR$/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/blockStore.js" afterPath="$PROJECT_DIR$/js/stores/blockStore.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/flowChartControllerView.js" afterPath="$PROJECT_DIR$/js/views/flowChartControllerView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/textEditableReadoutField.js" afterPath="$PROJECT_DIR$/js/views/textEditableReadoutField.js" />
     </list>
     <ignored path="StartingFlux.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,8 +55,8 @@
           <file leaf-file-name="blockStore.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/js/stores/blockStore.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="1.6304348">
-                  <caret line="434" column="35" selection-start-line="434" selection-start-column="21" selection-end-line="434" selection-end-column="35" />
+                <state vertical-scroll-proportion="0.76544625">
+                  <caret line="544" column="64" selection-start-line="544" selection-start-column="64" selection-end-line="544" selection-end-column="64" />
                   <folding>
                     <element signature="e#0#43#0" expanded="false" />
                     <marker date="1463495058880" expanded="true" signature="22027:22028" placeholder="//..." />
@@ -82,20 +82,20 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="textEditableReadoutField.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="textEditableReadoutField.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-14.733334">
-                  <caret line="101" column="30" selection-start-line="101" selection-start-column="30" selection-end-line="101" selection-end-column="30" />
+                <state vertical-scroll-proportion="0.62929064">
+                  <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="flowChartControllerView.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="flowChartControllerView.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/js/views/flowChartControllerView.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.3089245">
+                <state vertical-scroll-proportion="-9.0">
                   <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
                   <folding />
                 </state>
@@ -186,7 +186,6 @@
         <option value="$PROJECT_DIR$/js/views/blockRectangle.js" />
         <option value="$PROJECT_DIR$/js/views/blockToggleSwitch.js" />
         <option value="$PROJECT_DIR$/js/views/dropdownEditableReadoutField.js" />
-        <option value="$PROJECT_DIR$/js/views/textEditableReadoutField.js" />
         <option value="$PROJECT_DIR$/js/views/widgetTableContainer.js" />
         <option value="$PROJECT_DIR$/js/views/sidePaneTabContents.js" />
         <option value="$PROJECT_DIR$/js/views/block.js" />
@@ -194,6 +193,7 @@
         <option value="$PROJECT_DIR$/js/fluxWebsocketClient.js" />
         <option value="$PROJECT_DIR$/js/stores/blockStore.js" />
         <option value="$PROJECT_DIR$/js/views/flowChartControllerView.js" />
+        <option value="$PROJECT_DIR$/js/views/textEditableReadoutField.js" />
       </list>
     </option>
   </component>
@@ -910,14 +910,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.733334">
-          <caret line="101" column="30" selection-start-line="101" selection-start-column="30" selection-end-line="101" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/edgePreview.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.3904867">
@@ -931,7 +923,7 @@
         <state vertical-scroll-proportion="-9.7">
           <caret line="30" column="29" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="29" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1018,10 +1010,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/flowChartControllerView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/stores/blockStore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6304348">
-          <caret line="434" column="35" selection-start-line="434" selection-start-column="21" selection-end-line="434" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.76544625">
+          <caret line="544" column="64" selection-start-line="544" selection-start-column="64" selection-end-line="544" selection-end-column="64" />
           <folding>
             <element signature="e#0#43#0" expanded="false" />
             <marker date="1463495058880" expanded="true" signature="22027:22028" placeholder="//..." />
@@ -1029,10 +1029,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/flowChartControllerView.js">
+    <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3089245">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.62929064">
+          <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
           <folding />
         </state>
       </provider>

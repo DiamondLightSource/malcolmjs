@@ -6655,12 +6655,10 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
       e.target.id.indexOf('inputField'));
 
     if(inputFieldElement.value === ""){
-      /* Set the value to 0, then send that to
-       malcolmCall
-       */
+      /* Set the input field value back to the previous value */
 
-      inputFieldElement.value = "0";
-      inputFieldValue = "0";
+      inputFieldElement.value = this.props.blockAttributeValue;
+      inputFieldValue = this.props.blockAttributeValue;
 
     }
     else{
