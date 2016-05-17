@@ -3896,8 +3896,7 @@ module.exports = Dropdown;
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('react-dom');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
+
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
@@ -3979,7 +3978,6 @@ var Edge = React.createClass({displayName: "Edge",
   edgeSelect: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //console.log("edge has been selected");
     flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
     paneActions.openEdgeTab({
       edgeId: ReactDOM.findDOMNode(this).id,
@@ -3991,9 +3989,6 @@ var Edge = React.createClass({displayName: "Edge",
   },
 
   keyPress: function(e){
-    //console.log("key press!");
-    //console.log(e);
-
     if(e.keyCode === 46){
       //console.log("delete key has been pressed");
       if(this.props.areAnyEdgesSelected === true){
@@ -4005,15 +4000,7 @@ var Edge = React.createClass({displayName: "Edge",
            */
 
           this.deleteEdgeViaMalcolm();
-
         }
-
-        else if(this.props.selected === false){
-          /* Do nothing to this edge since it isn't the selected edge */
-        }
-      }
-      else if(this.props.areAnyEdgesSelected === false){
-        //console.log("no edges are selected, so don't delete anything");
       }
     }
   },
@@ -4023,40 +4010,18 @@ var Edge = React.createClass({displayName: "Edge",
 
     var blockStyling = this.props.blockStyling;
 
-    /* Retiring allEdges in favour of calculating everything from allNodeInfo */
-    //var edgeInfo = this.props.allEdges[this.props.id];
-    //console.log(this.props.id);
-    //console.log(edgeInfo);
-    //
-    //var allEdges = this.props.allEdges;
-    //console.log(allEdges);
-    var fromBlock = this.props.fromBlock;
-    var toBlock = this.props.toBlock;
-    //console.log(fromNode);
-    //console.log(toNode);
     var fromBlockPort = this.props.fromBlockPort;
-    var toBlockPort = this.props.toBlockPort;
-
-    var fromBlockType = this.props.fromBlockType;
-    var toBlockType = this.props.toBlockType;
-
-    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.props.allNodePositions[toNode].position);
 
     var fromBlockPositionX = this.props.fromBlockPosition.x;
     var fromBlockPositionY = this.props.fromBlockPosition.y;
     var toBlockPositionX = this.props.toBlockPosition.x;
     var toBlockPositionY = this.props.toBlockPosition.y;
-    //console.log(fromNodePositionX);
-    //console.log(fromNodePositionY);
-    //
-    //console.log(allNodeTypesPortStyling[fromNodeType]);
-    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
-    //console.log(fromNodePort);
 
     var outportArrayLength = this.props.fromBlockInfo.outports.length;
     var outportArrayIndex;
+    /* outportArrayIndex is used in the calculation of the y coordinate
+     of the block with the outport involved in the connection
+      */
     for(var i = 0; i < outportArrayLength; i++){
       if(this.props.fromBlockInfo.outports[i].name === fromBlockPort){
         outportArrayIndex = JSON.parse(JSON.stringify(i));
@@ -4064,12 +4029,14 @@ var Edge = React.createClass({displayName: "Edge",
     }
 
     var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+      (outportArrayLength + 1) * (outportArrayIndex + 1);
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
     var endOfEdgePortOffsetX = 0;
-    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+      (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
     var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
@@ -4146,7 +4113,7 @@ var Edge = React.createClass({displayName: "Edge",
 
 module.exports = Edge;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react/react":254,"../actions/MalcolmActionCreators":1,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../actions/paneActions":5,"../stores/blockStore.js":12,"react-dom":50}],27:[function(require,module,exports){
+},{"../../node_modules/interact.js":47,"../../node_modules/react/react":254,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":3,"../actions/paneActions":5,"react-dom":50}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/02/16.
  */
@@ -4154,8 +4121,6 @@ module.exports = Edge;
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('react-dom');
 
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
 var flowChartActions = require('../actions/flowChartActions');
 
 var interact = require('../../node_modules/interact.js');
@@ -4165,42 +4130,50 @@ var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 
 var EdgePreview = React.createClass({displayName: "EdgePreview",
 
+  getInitialState: function(){
+    return{
+      noPanning: true
+    }
+  },
+
   componentDidMount: function(){
 
     Perf.start();
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    this.noPanning = true;
-
     interact(ReactDOM.findDOMNode(this))
       .draggable({
+
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           interact('#appAndDragAreaContainer')
             .off('move', this.interactJSMouseMoveForEdgePreview);
-          //console.log("drag start");
         }.bind(this),
+
         onmove: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.props.interactJsDragPan(e);
         }.bind(this),
+
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          //console.log("drag end");
-          this.noPanning = true;
-          interact('#appAndDragAreaContainer')
-            .on('move', this.interactJSMouseMoveForEdgePreview);
-          //console.log(e);
+
+          this.setState({noPanning: true}, function(){
+            interact('#appAndDragAreaContainer')
+              .on('move', this.interactJSMouseMoveForEdgePreview);
+          });
+
           /* No need for this after changing mousemove to move for some reason? */
           flowChartActions.updateEdgePreviewEndpoint({
             x: e.dx,
             y: e.dy
           })
         }.bind(this)
+
       });
 
     interact(ReactDOM.findDOMNode(this))
@@ -4210,7 +4183,6 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
       .on('down', this.onMouseDown);
   },
   componentWillUnmount: function(){
-    //console.log("edge preview unmounting!");
 
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.onTap);
@@ -4226,7 +4198,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
   },
 
   shouldComponentUpdate: function(){
-    return this.noPanning
+    return this.state.noPanning
   },
 
   interactJSMouseMoveForEdgePreview: function(e){
@@ -4245,7 +4217,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
   onTap: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //console.log("tapped!");
+
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
@@ -4254,15 +4226,11 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
   onMouseDown: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.noPanning = false;
 
-    /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
-     update the mouse position?
-     UPDATE: nice, it actually improved the performance!! :)
-     */
-
-    interact('#appAndDragAreaContainer')
-      .off('move', this.interactJSMouseMoveForEdgePreview);
+    this.setState({noPanning: false}, function(){
+      interact('#appAndDragAreaContainer')
+        .off('move', this.interactJSMouseMoveForEdgePreview);
+    });
   },
 
   render:function(){
@@ -4270,24 +4238,14 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
     var blockStyling = this.props.blockStyling;
 
-    //console.log(this.props.id);
-    //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
-
-    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.props.allNodePositions[toNode].position);
 
     var fromBlockPositionX = this.props.fromBlockPosition.x;
     var fromBlockPositionY = this.props.fromBlockPosition.y;
-    //console.log(fromNodePositionX);
-    //console.log(fromNodePositionY);
-    //
-    //console.log(allNodeTypesPortStyling[fromNodeType]);
-    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
-    //console.log(fromNodePort);
 
     var portValueType;
+    var startOfEdgePortOffsetX;
+    var startOfEdgePortOffsetY;
 
     if(fromBlockInfo.fromBlockPortType === "inport"){
       var inportArrayLength = this.props.fromBlockInfo.inports.length;
@@ -4300,8 +4258,8 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
           portValueType = inportValueType;
         }
       }
-      var startOfEdgePortOffsetX = 0;
-      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      startOfEdgePortOffsetX = 0;
+      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
@@ -4315,12 +4273,10 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
           portValueType = outportValueType;
         }
       }
-      var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
-    else{
-      window.alert("the port type is neither an inport or outport...");
-    }
+
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
@@ -4400,7 +4356,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
 module.exports= EdgePreview;
 
-},{"../../node_modules/interact.js":47,"../../node_modules/react/lib/ReactDefaultPerf.js":142,"../../node_modules/react/react":254,"../actions/blockActions.js":2,"../actions/flowChartActions":3,"../stores/blockStore.js":12,"react-dom":50}],28:[function(require,module,exports){
+},{"../../node_modules/interact.js":47,"../../node_modules/react/lib/ReactDefaultPerf.js":142,"../../node_modules/react/react":254,"../actions/flowChartActions":3,"react-dom":50}],28:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */

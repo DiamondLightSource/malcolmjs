@@ -5,8 +5,6 @@
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('react-dom');
 
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
 var flowChartActions = require('../actions/flowChartActions');
 
 var interact = require('../../node_modules/interact.js');
@@ -16,42 +14,50 @@ var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
 
 var EdgePreview = React.createClass({
 
+  getInitialState: function(){
+    return{
+      noPanning: true
+    }
+  },
+
   componentDidMount: function(){
 
     Perf.start();
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    this.noPanning = true;
-
     interact(ReactDOM.findDOMNode(this))
       .draggable({
+
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           interact('#appAndDragAreaContainer')
             .off('move', this.interactJSMouseMoveForEdgePreview);
-          //console.log("drag start");
         }.bind(this),
+
         onmove: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.props.interactJsDragPan(e);
         }.bind(this),
+
         onend: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          //console.log("drag end");
-          this.noPanning = true;
-          interact('#appAndDragAreaContainer')
-            .on('move', this.interactJSMouseMoveForEdgePreview);
-          //console.log(e);
+
+          this.setState({noPanning: true}, function(){
+            interact('#appAndDragAreaContainer')
+              .on('move', this.interactJSMouseMoveForEdgePreview);
+          });
+
           /* No need for this after changing mousemove to move for some reason? */
           flowChartActions.updateEdgePreviewEndpoint({
             x: e.dx,
             y: e.dy
           })
         }.bind(this)
+
       });
 
     interact(ReactDOM.findDOMNode(this))
@@ -61,7 +67,6 @@ var EdgePreview = React.createClass({
       .on('down', this.onMouseDown);
   },
   componentWillUnmount: function(){
-    //console.log("edge preview unmounting!");
 
     interact(ReactDOM.findDOMNode(this))
       .off('tap', this.onTap);
@@ -77,7 +82,7 @@ var EdgePreview = React.createClass({
   },
 
   shouldComponentUpdate: function(){
-    return this.noPanning
+    return this.state.noPanning
   },
 
   interactJSMouseMoveForEdgePreview: function(e){
@@ -96,7 +101,7 @@ var EdgePreview = React.createClass({
   onTap: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //console.log("tapped!");
+
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
@@ -105,15 +110,11 @@ var EdgePreview = React.createClass({
   onMouseDown: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    this.noPanning = false;
 
-    /* Perhaps also disable the edgePreview fucntion in the flowChart too while we're panning, since we needn't
-     update the mouse position?
-     UPDATE: nice, it actually improved the performance!! :)
-     */
-
-    interact('#appAndDragAreaContainer')
-      .off('move', this.interactJSMouseMoveForEdgePreview);
+    this.setState({noPanning: false}, function(){
+      interact('#appAndDragAreaContainer')
+        .off('move', this.interactJSMouseMoveForEdgePreview);
+    });
   },
 
   render:function(){
@@ -121,24 +122,14 @@ var EdgePreview = React.createClass({
 
     var blockStyling = this.props.blockStyling;
 
-    //console.log(this.props.id);
-    //console.log(this.props.interactJsDragPan);
     var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
-
-    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.props.allNodePositions[toNode].position);
 
     var fromBlockPositionX = this.props.fromBlockPosition.x;
     var fromBlockPositionY = this.props.fromBlockPosition.y;
-    //console.log(fromNodePositionX);
-    //console.log(fromNodePositionY);
-    //
-    //console.log(allNodeTypesPortStyling[fromNodeType]);
-    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
-    //console.log(fromNodePort);
 
     var portValueType;
+    var startOfEdgePortOffsetX;
+    var startOfEdgePortOffsetY;
 
     if(fromBlockInfo.fromBlockPortType === "inport"){
       var inportArrayLength = this.props.fromBlockInfo.inports.length;
@@ -151,8 +142,8 @@ var EdgePreview = React.createClass({
           portValueType = inportValueType;
         }
       }
-      var startOfEdgePortOffsetX = 0;
-      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      startOfEdgePortOffsetX = 0;
+      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
     }
     else if(fromBlockInfo.fromBlockPortType === "outport") {
       var outportArrayLength = this.props.fromBlockInfo.outports.length;
@@ -166,12 +157,10 @@ var EdgePreview = React.createClass({
           portValueType = outportValueType;
         }
       }
-      var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-      var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     }
-    else{
-      window.alert("the port type is neither an inport or outport...");
-    }
+
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 

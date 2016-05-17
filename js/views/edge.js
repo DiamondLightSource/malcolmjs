@@ -4,8 +4,7 @@
 
 var React = require('../../node_modules/react/react');
 var ReactDOM = require('react-dom');
-var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
+
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
@@ -87,7 +86,6 @@ var Edge = React.createClass({
   edgeSelect: function(e){
     e.stopImmediatePropagation();
     e.stopPropagation();
-    //console.log("edge has been selected");
     flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
     paneActions.openEdgeTab({
       edgeId: ReactDOM.findDOMNode(this).id,
@@ -99,9 +97,6 @@ var Edge = React.createClass({
   },
 
   keyPress: function(e){
-    //console.log("key press!");
-    //console.log(e);
-
     if(e.keyCode === 46){
       //console.log("delete key has been pressed");
       if(this.props.areAnyEdgesSelected === true){
@@ -113,15 +108,7 @@ var Edge = React.createClass({
            */
 
           this.deleteEdgeViaMalcolm();
-
         }
-
-        else if(this.props.selected === false){
-          /* Do nothing to this edge since it isn't the selected edge */
-        }
-      }
-      else if(this.props.areAnyEdgesSelected === false){
-        //console.log("no edges are selected, so don't delete anything");
       }
     }
   },
@@ -131,40 +118,18 @@ var Edge = React.createClass({
 
     var blockStyling = this.props.blockStyling;
 
-    /* Retiring allEdges in favour of calculating everything from allNodeInfo */
-    //var edgeInfo = this.props.allEdges[this.props.id];
-    //console.log(this.props.id);
-    //console.log(edgeInfo);
-    //
-    //var allEdges = this.props.allEdges;
-    //console.log(allEdges);
-    var fromBlock = this.props.fromBlock;
-    var toBlock = this.props.toBlock;
-    //console.log(fromNode);
-    //console.log(toNode);
     var fromBlockPort = this.props.fromBlockPort;
-    var toBlockPort = this.props.toBlockPort;
-
-    var fromBlockType = this.props.fromBlockType;
-    var toBlockType = this.props.toBlockType;
-
-    //console.log(document.getElementById(fromNode)); /* Since the positions of the nodes are in the store, I should really retrieve the node positions from there and not the DOM element position... */
-    //console.log(this.props.allNodePositions[fromNode].position); /* Position of fromNode */
-    //console.log(this.props.allNodePositions[toNode].position);
 
     var fromBlockPositionX = this.props.fromBlockPosition.x;
     var fromBlockPositionY = this.props.fromBlockPosition.y;
     var toBlockPositionX = this.props.toBlockPosition.x;
     var toBlockPositionY = this.props.toBlockPosition.y;
-    //console.log(fromNodePositionX);
-    //console.log(fromNodePositionY);
-    //
-    //console.log(allNodeTypesPortStyling[fromNodeType]);
-    //console.log(allNodeTypesPortStyling[fromNodeType].outportPositions);
-    //console.log(fromNodePort);
 
     var outportArrayLength = this.props.fromBlockInfo.outports.length;
     var outportArrayIndex;
+    /* outportArrayIndex is used in the calculation of the y coordinate
+     of the block with the outport involved in the connection
+      */
     for(var i = 0; i < outportArrayLength; i++){
       if(this.props.fromBlockInfo.outports[i].name === fromBlockPort){
         outportArrayIndex = JSON.parse(JSON.stringify(i));
@@ -172,12 +137,14 @@ var Edge = React.createClass({
     }
 
     var startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    var startOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+      (outportArrayLength + 1) * (outportArrayIndex + 1);
     var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
     var endOfEdgePortOffsetX = 0;
-    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+    var endOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+      (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
     var endOfEdgeX = toBlockPositionX + endOfEdgePortOffsetX;
     var endOfEdgeY = toBlockPositionY + endOfEdgePortOffsetY;
 
