@@ -14,6 +14,37 @@ var DropdownEditableReadoutField = React.createClass({
     )
   },
 
+  handleMalcolmCall: function(blockName, method, args){
+    console.log("malcolmCall in sidePane");
+    MalcolmActionCreators.malcolmCall(blockName, method, args)
+  },
+
+  handleDropdownOptionChange: function(e){
+
+    var clickedOptionFromDropdownMenu = e.currentTarget.value;
+
+    /* Testing 'VISIBLE' vs 'visible' for individual
+     block tabs' visibility dropdowns
+     */
+
+    var blockAttribute;
+
+    if(this.props.attributeName === 'VISIBLE'){
+      blockAttribute = 'visible';
+    }
+    else{
+      blockAttribute = this.props.attributeName;
+    }
+
+    var inputFieldSetMethodName = "_set_" + blockAttribute;
+    var argsObject = {};
+
+    argsObject[this.props.attributeName] = clickedOptionFromDropdownMenu;
+
+    this.handleMalcolmCall(this.props.blockName, inputFieldSetMethodName, argsObject);
+
+  },
+
   render: function(){
 
     var dropdownOptions = [];
@@ -35,10 +66,7 @@ var DropdownEditableReadoutField = React.createClass({
     }
 
     var dropdownList =
-      <select onChange={this.props.onChangeBlockMethodDropdownOption.bind(null, {
-                            block: this.props.blockName,
-                            attribute: this.props.attributeName
-                            })}
+      <select onChange={this.handleDropdownOptionChange}
               className="dropdownMenuWidget"
               style={{width: '152px', backgroundColor:'#333333', color: 'lightblue',
                       borderRadius: '4px', border: '2px solid #202020'}}

@@ -8,44 +8,109 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
 var TextEditableReadoutField = React.createClass({
 
+  getInitialState: function(){
+    return {
+      isUserEditing: false
+    }
+  },
+
   shouldComponentUpdate: function(nextProps, nextState){
     return(
-      nextProps.blockAttributeValue !== this.props.blockAttributeValue
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue ||
+      nextState.isUserEditing !== this.state.isUserEditing ||
+      this.state.isUserEditing === true
     )
   },
 
-  componentDidMount: function(){
-    document.getElementById(this.props.blockName
-      + this.props.attributeName + "inputField")
-      .addEventListener('keyup', this.enterKeyUp);
+  handleMalcolmCall: function(blockName, method, args){
+    console.log("malcolmCall in textEditableReadoutField");
+    MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
-  enterKeyUp: function(e){
+  handleOnBlur: function(e){
+
+    var inputFieldValue;
+    var inputFieldElement = e.target;
+    var inputFieldBlockName = e.target.className.slice(0, e.target.className.indexOf('widget'));
+
+    var inputFieldAttribute = e.target.id.slice(inputFieldBlockName.length,
+      e.target.id.indexOf('inputField'));
+
+    if(inputFieldElement.value === ""){
+      /* Set the value to 0, then send that to
+       malcolmCall
+       */
+
+      inputFieldElement.value = "0";
+      inputFieldValue = "0";
+
+    }
+    else{
+      inputFieldValue = inputFieldElement.value;
+    }
+
+    /* Now I need to pass malcolmCall the corresponding
+     method and arguments
+     */
+
+    var inputFieldSetMethodName = "_set_" +inputFieldAttribute;
+
+    var argsObject = {};
+
+    argsObject[inputFieldAttribute] = inputFieldValue;
+
+    this.handleMalcolmCall(inputFieldBlockName, inputFieldSetMethodName, argsObject);
+
+    this.setState({
+      isUserEditing: false
+    });
+
+  },
+
+  handleOnFocus: function(e){
+    var inputFieldElement = e.target;
+    inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
+  },
+
+  handleOnChange: function(e){
+    this.setState({
+      isUserEditing: true
+    })
+  },
+
+  handleKeyUp: function(e){
     if(e.keyCode === 13){
+      /* For handling when the enter key is pressed
+      after editing the input field
+       */
       document.getElementById(this.props.blockName
         + this.props.attributeName + "inputField").blur();
     }
   },
 
   render: function(){
+
+    var props = {
+      id: this.props.blockName + this.props.attributeName + "inputField",
+      className: this.props.blockName + 'widget',
+      style: {
+        textAlign: 'left', borderRadius: '4px',
+        border: '2px solid #202020',
+        color: 'lightblue', backgroundColor:'#333333'
+      },
+      onFocus: this.handleOnFocus,
+      onChange: this.handleOnChange,
+      onKeyUp: this.handleKeyUp,
+      onBlur: this.handleOnBlur,
+      value: this.state.isUserEditing === true ?
+        document.getElementById(this.props.blockName +
+        this.props.attributeName + "inputField").value : this.props.blockAttributeValue,
+      maxLength: 16,
+      size: 16
+    };
+
     return(
-
-      <input id={this.props.blockName + this.props.attributeName + "inputField"}
-             className={this.props.blockName + 'widget'}
-             style={{textAlign: 'left', borderRadius: '4px',
-                     border: '2px solid #202020',
-                        //contentEditable:"true"
-                     color: 'lightblue', backgroundColor:'#333333'}}
-             defaultValue={String(this.props.blockAttributeValue)}
-             onChange={this.props.attributeFieldOnChange.bind(null, {
-                        block: this.props.blockName,
-                        attribute: this.props.attributeName
-                        })}
-             onClick={this.props.selectedInputFieldText.bind(null,
-             this.props.blockName + this.props.attributeName + "inputField")}
-             maxLength="16" size="16"/>
-
-
+      <input {...props} />
     )
   }
 

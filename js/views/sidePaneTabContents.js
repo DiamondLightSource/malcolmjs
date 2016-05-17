@@ -69,51 +69,13 @@ var SidePaneTabContents = React.createClass({
     MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
-  handleOnBlur: function(e){
-
-    var inputFieldValue;
-    var inputFieldElement = e.target;
-    var inputFieldBlockName = e.target.className.slice(0, e.target.className.indexOf('widget'));
-
-    var inputFieldAttribute = e.target.id.slice(inputFieldBlockName.length,
-      e.target.id.indexOf('inputField'));
-
-    if(inputFieldElement.value === ""){
-      /* Set the value to 0, then send that to
-       malcolmCall
-       */
-
-      inputFieldElement.value = "0";
-      /* Had to use dot notation to set value, rather
-       than setAttribute
-       */
-
-      inputFieldValue = "0";
-
-    }
-    else{
-      //window.alert(inputFieldElement.value);
-      inputFieldValue = inputFieldElement.value;
-    }
-
-    /* Now i need to pass malcolmCall the corresponding
-     method and arguments
-     */
-
-    var inputFieldSetMethodName = "_set_" +inputFieldAttribute;
-
-    var argsObject = {
-
-    };
-
-    argsObject[inputFieldAttribute] = inputFieldValue;
-
-    this.handleMalcolmCall(inputFieldBlockName, inputFieldSetMethodName, argsObject);
-
-    inputFieldElement.removeEventListener('blur', this.handleOnBlur);
-  },
-
   handleEdgeDeleteButton: function(EdgeInfo){
+
+    /* Technically the edge delete button is some form of widget,
+    but it's such a small one that doesn't require any attribute
+    info from the store that it's just been plonked in here,
+    perhaps it should go somewhere else though?
+     */
 
     var methodName = "_set_" + EdgeInfo.toBlockPort;
     var argsObject = {};
@@ -144,124 +106,7 @@ var SidePaneTabContents = React.createClass({
 
   },
 
-  attributeFieldOnChange: function(blockInfo, e){
-    console.log("field changed, wait for the enter key?");
-    console.log(e);
-    console.log(blockInfo);
-    //window.alert("fieldOnChange");
-
-    var blockAttributeInputField = document.getElementById(blockInfo.block + blockInfo.attribute + "inputField");
-
-    blockAttributeInputField.addEventListener('blur', this.handleOnBlur);
-
-  },
-
-  selectedInputFieldText: function(inputFieldElementName, e){
-
-    var inputFieldElement = document.getElementById(inputFieldElementName);
-    inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
-
-  },
-
-  onChangeBlockMethodDropdownOption: function(blockInfo, e){
-    console.log("onClickBlockMethodDropdownOption");
-    console.log(e);
-    console.log(e.currentTarget.value);
-    console.log(blockInfo);
-
-    /* Fairly similar to the code for pressing
-     enter for theeditable fields
-     */
-    var clickedOptionFromDropdownMenu = e.currentTarget.value;
-
-    /* Testing 'VISIBLE' vs 'visible' for individual
-     block tabs' visibility dropdowns
-     */
-
-    var blockAttribute;
-
-    if(blockInfo.attribute === 'VISIBLE'){
-      blockAttribute = 'visible';
-    }
-    else{
-      blockAttribute = blockInfo.attribute;
-    }
-
-    var inputFieldSetMethodName = "_set_" + blockAttribute;
-    var argsObject = {};
-
-    for (var key in blockInfo) {
-      if (blockInfo[key] === blockInfo.attribute) {
-        argsObject[blockInfo.attribute] = clickedOptionFromDropdownMenu;
-      }
-    }
-
-    this.handleMalcolmCall(blockInfo.block, inputFieldSetMethodName, argsObject);
-
-  },
-
-  toggleSwitch: function(blockName, attribute, toggleOrientation, e){
-    console.log(toggleOrientation);
-    console.log(blockName);
-
-    var methodToInvoke;
-
-    /* Check the blockName if it's VISIBILITY or not */
-
-    if(blockName === 'VISIBILITY'){
-      /* WHat may cause some confusion is that in the context
-       of VISIBILITY, the name of a block is one of its attributes,
-       but in the context of a block its attributes will be
-       inputs, outputs, parameters etc
-       */
-      methodToInvoke = '_set_' + attribute + '_visible';
-      console.log("in visibility");
-    }
-    else{
-      if(attribute === 'VISIBLE'){
-        methodToInvoke = '_set_' + attribute.toLowerCase();
-      }
-      else{
-        methodToInvoke = '_set_' + attribute;
-      }
-    }
-
-    /* invoke malcolmCall to toggle the visible attribute
-     of the given block
-     */
-
-    /* If I'm toggling, I want to pass the OPPOSITE of
-     whatever the current value of the toggle is
-     */
-
-    var newValue;
-    var argsObject = {};
-
-    if(typeof toggleOrientation === 'string') {
-      if (toggleOrientation === 'Show') {
-        newValue = 'Hide';
-      }
-      else if (toggleOrientation === 'Hide') {
-        newValue = 'Show'
-      }
-    }
-    else if(typeof toggleOrientation === 'boolean'){
-      newValue = !toggleOrientation;
-    }
-
-    argsObject[attribute] = newValue;
-
-    console.log(newValue);
-
-    /* Now invoke malcolmCall */
-
-    this.handleMalcolmCall(blockName, methodToInvoke, argsObject);
-
-    /* Should also close the tab if I'm hiding a block maybe? */
-
-  },
-
-  generateTabContent: function(blockAttributes, blockName){
+  generateTabContent: function(blockAttributes){
 
     var blockAttributeDivs = [];
 
@@ -337,41 +182,10 @@ var SidePaneTabContents = React.createClass({
             widgetType: widgetType
           };
 
-          switch(widgetType){
+          widgetParent.push(
+            <WidgetTableContainer {...commonProps} />
+          );
 
-            case 'led':
-            case 'textupdate':
-              widgetParent.push(
-                <WidgetTableContainer {...commonProps} />
-              );
-              break;
-
-            case 'textinput':
-              widgetParent.push(
-                <WidgetTableContainer {...commonProps}
-                  attributeFieldOnChange={this.attributeFieldOnChange}
-                  selectedInputFieldText={this.selectedInputFieldText} />
-              );
-              break;
-
-            case 'choice':
-            case 'combo':
-              widgetParent.push(
-                <WidgetTableContainer {...commonProps}
-                  onChangeBlockMethodDropdownOption={
-                                            this.onChangeBlockMethodDropdownOption
-                                            } />
-              );
-              break;
-
-            case 'toggle':
-              widgetParent.push(
-                <WidgetTableContainer {...commonProps}
-                  toggleSwitch={this.toggleSwitch} />
-              );
-              break;
-
-          }
         }
 
       }
@@ -422,8 +236,7 @@ var SidePaneTabContents = React.createClass({
       /* Making the tab content generator more generic */
 
       tabContent.push(
-        this.generateTabContent(this.state.blockAttributes,
-          this.props.tabObject.label)
+        this.generateTabContent(this.state.blockAttributes)
       );
     }
     else if(this.props.tabObject.tabType === 'edge'){

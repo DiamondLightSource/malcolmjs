@@ -12,11 +12,6 @@ var BlockToggleSwitch = require('./blockToggleSwitch');
 
 var WidgetStatusIcon = require('./widgetStatusIcon');
 
-/* Each widget gets passed slightly different props depending
-on the widget type, so do I simply pass this component all
-the possible props and then filter them out in here, or do
-I filter them through sidePane still? */
-
 var WidgetTableContainer = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
@@ -51,28 +46,23 @@ var WidgetTableContainer = React.createClass({
       case 'textinput':
             widget =
               <TextEditableReadoutField {...commonProps}
-                blockAttributeValue={this.props.blockAttribute.value}
-                                        attributeFieldOnChange={this.props.attributeFieldOnChange}
-                                        selectedInputFieldText={this.props.selectedInputFieldText} />;
+                blockAttributeValue={this.props.blockAttribute.value} />;
             break;
 
       case 'choice':
       case 'combo':
             widget =
-              <DropdownEditableReadoutField
-                {...commonProps}
-                blockAttribute={this.props.blockAttribute}
-                onChangeBlockMethodDropdownOption={this.props.onChangeBlockMethodDropdownOption}/>;
+              <DropdownEditableReadoutField {...commonProps}
+                blockAttribute={this.props.blockAttribute} />;
             break;
 
       case 'toggle':
             widget =
               <BlockToggleSwitch {...commonProps}
-                blockAttributeValue={this.props.blockAttribute.value}
-                                 toggleSwitch={this.props.toggleSwitch}/>;
+                blockAttributeValue={this.props.blockAttribute.value} />;
             break;
 
-                }
+    }
 
     return(
       <table id={this.props.blockName + this.props.attributeName + 'contentTable'}
@@ -92,7 +82,7 @@ var WidgetTableContainer = React.createClass({
             <td style={{width: '30px', textAlign: 'center'}} >
               <WidgetStatusIcon {...commonProps}
                 blockAttribute={this.props.blockAttribute}
-                                blockAttributeStatus={this.props.blockAttributeStatus} />
+                blockAttributeStatus={this.props.blockAttributeStatus} />
             </td>
           </tr>
       </tbody>
