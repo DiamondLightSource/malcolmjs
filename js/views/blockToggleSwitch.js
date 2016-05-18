@@ -65,7 +65,7 @@ var BlockToggleSwitch = React.createClass({
     }
 
     argsObject[this.props.attributeName] = newValue;
-    
+
     this.handleMalcolmCall(this.props.blockName, methodToInvoke, argsObject);
 
   },

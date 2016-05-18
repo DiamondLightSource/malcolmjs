@@ -2572,13 +2572,9 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
              */
 
             if(item.requestedData.blockName === 'VISIBILITY'){
-              if(item.responseMessage.value === 'Show'){
-                /* Append to allBlockTabProperties */
+              if(item.responseMessage.value === 'Show' &&
+                allBlockTabProperties[item.requestedData.attribute] === undefined){
                 appendToAllBlockTabProperties(item.requestedData.attribute);
-              }
-              else if(item.responseMessage.value === 'Hide'){
-                /* Remove from allBlockTabProperties */
-                delete allBlockTabProperties[item.requestedData.attribute];
               }
               paneStore.emitChange()
             }
@@ -2586,13 +2582,9 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
               /* This is for when a block's own VISIBLE attribute/toggle switch
               is changed, rather than VISBILITY's
                */
-              if(item.responseMessage.value === 'Show'){
-                /* Append to allBlockTabProperties */
+              if(item.responseMessage.value === 'Show' &&
+                allBlockTabProperties[item.requestedData.blockName] === undefined){
                 appendToAllBlockTabProperties(item.requestedData.blockName);
-              }
-              else if(item.responseMessage.value === 'Hide'){
-                /* Remove from allBlockTabProperties */
-                delete allBlockTabProperties[item.requestedData.blockName];
               }
               paneStore.emitChange();
             }
@@ -3474,7 +3466,7 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
     }
 
     argsObject[this.props.attributeName] = newValue;
-    
+
     this.handleMalcolmCall(this.props.blockName, methodToInvoke, argsObject);
 
   },
