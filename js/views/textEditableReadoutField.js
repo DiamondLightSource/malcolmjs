@@ -94,7 +94,8 @@ var TextEditableReadoutField = React.createClass({
       style: {
         textAlign: 'left', borderRadius: '4px',
         border: '2px solid #202020',
-        color: 'lightblue', backgroundColor:'#333333'
+        color: 'lightblue', backgroundColor:'#333333',
+        paddingLeft: 3, width: 152
       },
       onFocus: this.handleOnFocus,
       onChange: this.handleOnChange,
@@ -102,9 +103,7 @@ var TextEditableReadoutField = React.createClass({
       onBlur: this.handleOnBlur,
       value: this.state.isUserEditing === true ?
         document.getElementById(this.props.blockName +
-        this.props.attributeName + "inputField").value : this.props.blockAttributeValue,
-      maxLength: 16,
-      size: 16
+        this.props.attributeName + "inputField").value : this.props.blockAttributeValue
     };
 
     return(

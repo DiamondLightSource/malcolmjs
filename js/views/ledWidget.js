@@ -16,8 +16,8 @@ var LEDWidget = React.createClass({
     return(
 
       <svg style={{width: '150', height: '20'}}  >
-        <circle r="8" style={{fill: this.props.blockAttributeValue ? 'orange' : 'lightblue',
-                          stroke: 'white' }}
+        <circle r="8" style={{fill: this.props.blockAttributeValue ? 'blue' : 'lightblue',
+                          stroke: this.props.blockAttributeValue ? 'black' : 'white' }}
                       transform="translate(9, 11)" />
       </svg>
 
