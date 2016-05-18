@@ -35,7 +35,7 @@ var SidePane = React.createClass({
   },
 
   handleActionRemoveBlockTab: function(){
-    paneActions.removeBlockTab(this.props.selectedTabIndex);
+    paneActions.removeBlockTab("this is the item");
   },
 
   componentDidMount: function(){

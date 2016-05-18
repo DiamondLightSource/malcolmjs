@@ -38,10 +38,10 @@ var paneActions = {
       item: BlockId
     })
   },
-  removeBlockTab: function(SelectedBlockTabIndex){
+  removeBlockTab: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.REMOVE_BLOCKTAB,
-      item: SelectedBlockTabIndex
+      item: item
     })
   },
 

@@ -178,7 +178,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.REMOVE_BLOCKTAB:
-      removeBlockTab(item);
+      removeBlockTab();
       console.log(_stuff.tabState);
       paneStore.emitChange();
       break;
@@ -571,26 +571,13 @@ function setBlockLookupTableTabStateTrue(){
   }
 }
 
-var removeBlockTab = function(selectedTabIndex){
+var removeBlockTab = function(){
 
-  /* Don't even need to pass selectedTabIndex, can just
-  get it from the store!
-   */
+  var tabName = _stuff.tabState[_stuff.selectedTabIndex].label;
 
-  var tabName;
+  /* Checking if it's an edge tab or a block tab */
 
-  if(_stuff.tabState[selectedTabIndex].label === undefined){
-    /* Tis a block tab, or a fav/config tab */
-    tabName = _stuff.tabState[selectedTabIndex];
-    console.log(tabName);
-  }
-  else{
-    tabName = _stuff.tabState[selectedTabIndex].label;
-
-  }
-  /* Checking if it's a edge tab or a block tab */
-
-  if(_stuff.tabState[selectedTabIndex].tabType === 'edge'){
+  if(_stuff.tabState[_stuff.selectedTabIndex].tabType === 'edge'){
     allEdgeTabProperties[tabName] = false;
   }
   else{
@@ -605,17 +592,17 @@ var removeBlockTab = function(selectedTabIndex){
 
   _stuff.tabState = _stuff.tabState.filter(checkTabLabel);
 
-  /* Will most liekly need to shift selectedTabIndex down by
-  one, since the length of tabState has gone down by one due
-  to removing a tab?
-   */
-
-  if(selectedTabIndex === _stuff.tabState.length) {
-    console.log(_stuff.selectedTabIndex);
-
+  if(_stuff.selectedTabIndex === _stuff.tabState.length) {
+    /* selectedTabIndex is now out of the range of _stuff.tabState
+    since a tab has been removed, so we need to decrease
+    _stuff.selectedTabIndex by 1
+     */
+    
     _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
-    console.log(_stuff.selectedTabIndex);
 
+  }
+  else if(0 < _stuff.selectedTabIndex && _stuff.selectedTabIndex < _stuff.tabState.length){
+    _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
   }
 
 };

@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="cd9c6323-ead0-4f7f-ad85-ce9845b566a3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bundle.js" afterPath="$PROJECT_DIR$/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/ledWidget.js" afterPath="$PROJECT_DIR$/js/views/ledWidget.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/textEditableReadoutField.js" afterPath="$PROJECT_DIR$/js/views/textEditableReadoutField.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/actions/paneActions.js" afterPath="$PROJECT_DIR$/js/actions/paneActions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/stores/paneStore.js" afterPath="$PROJECT_DIR$/js/stores/paneStore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/views/sidePane.js" afterPath="$PROJECT_DIR$/js/views/sidePane.js" />
     </list>
     <ignored path="StartingFlux.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,22 +69,22 @@
           <file leaf-file-name="paneStore.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="3.4599543">
-                  <caret line="472" column="32" selection-start-line="472" selection-start-column="32" selection-end-line="472" selection-end-column="32" />
+                <state vertical-scroll-proportion="0.94393593">
+                  <caret line="599" column="4" selection-start-line="599" selection-start-column="4" selection-end-line="599" selection-end-column="4" />
                   <folding>
                     <element signature="e#911#934#0" expanded="false" />
-                    <marker date="1463575734210" expanded="true" signature="296:339" placeholder="{&quot;selectedTabIndex&quot;: 0...}" />
-                    <marker date="1463575734210" expanded="true" signature="19365:19366" placeholder="//..." />
+                    <marker date="1463581982289" expanded="true" signature="296:339" placeholder="{&quot;selectedTabIndex&quot;: 0...}" />
+                    <marker date="1463581982289" expanded="true" signature="19156:19157" placeholder="//..." />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="blockToggleSwitch.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/js/views/blockToggleSwitch.js">
+          <file leaf-file-name="ports.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/js/views/ports.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+                  <caret line="192" column="56" selection-start-line="192" selection-start-column="56" selection-end-line="192" selection-end-column="56" />
                   <folding />
                 </state>
               </provider>
@@ -93,10 +94,10 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="textEditableReadoutField.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="textEditableReadoutField.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7212389">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="105" column="10" selection-start-line="105" selection-start-column="10" selection-end-line="105" selection-end-column="10" />
                   <folding />
                 </state>
@@ -117,20 +118,18 @@
             <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="66" column="45" selection-start-line="66" selection-start-column="45" selection-end-line="66" selection-end-column="45" />
+                  <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="flowChart.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/js/views/flowChart.js">
+          <file leaf-file-name="paneActions.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="497" column="44" selection-start-line="497" selection-start-column="44" selection-end-line="497" selection-end-column="44" />
-                  <folding>
-                    <element signature="e#0#43#0" expanded="false" />
-                  </folding>
+                <state vertical-scroll-proportion="0.3528761">
+                  <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -145,25 +144,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="paneStore.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+          <file leaf-file-name="index.css" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/index.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="472" column="32" selection-start-line="472" selection-start-column="32" selection-end-line="472" selection-end-column="32" />
-                  <folding>
-                    <element signature="e#911#934#0" expanded="false" />
-                    <marker date="1463575734210" expanded="true" signature="296:339" placeholder="{&quot;selectedTabIndex&quot;: 0...}" />
-                    <marker date="1463575734210" expanded="true" signature="19365:19366" placeholder="//..." />
-                  </folding>
+                <state vertical-scroll-proportion="-39.333332">
+                  <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
+                  <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="index.css" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/index.css">
+          <file leaf-file-name="dropdownMenuLessStylesheet" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/dropdownMenuLessStylesheet">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-18.481482">
-                  <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
+                <state vertical-scroll-proportion="-21.272728">
+                  <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="27" />
                   <folding />
                 </state>
               </provider>
@@ -226,19 +221,19 @@
         <option value="$PROJECT_DIR$/js/stores/blockStore.js" />
         <option value="$PROJECT_DIR$/js/views/flowChartControllerView.js" />
         <option value="$PROJECT_DIR$/js/constants/appConstants.js" />
-        <option value="$PROJECT_DIR$/js/actions/paneActions.js" />
         <option value="$PROJECT_DIR$/js/views/mainPane.js" />
         <option value="$PROJECT_DIR$/js/views/edge.js" />
         <option value="$PROJECT_DIR$/index.css" />
         <option value="$PROJECT_DIR$/js/views/edgePreview.js" />
         <option value="$PROJECT_DIR$/js/views/ports.js" />
         <option value="$PROJECT_DIR$/js/views/dropdownMenu.js" />
-        <option value="$PROJECT_DIR$/js/views/sidePane.js" />
         <option value="$PROJECT_DIR$/dropdownMenuLessStylesheet" />
-        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
         <option value="$PROJECT_DIR$/js/views/blockToggleSwitch.js" />
         <option value="$PROJECT_DIR$/js/views/textEditableReadoutField.js" />
         <option value="$PROJECT_DIR$/js/views/ledWidget.js" />
+        <option value="$PROJECT_DIR$/js/actions/paneActions.js" />
+        <option value="$PROJECT_DIR$/js/views/sidePane.js" />
+        <option value="$PROJECT_DIR$/js/stores/paneStore.js" />
       </list>
     </option>
   </component>
@@ -672,13 +667,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/react-dom/dist/react-dom.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/react-modal/dist/react-modal.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -927,22 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.45353982">
-          <caret line="17" column="42" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5675057">
-          <caret line="218" column="13" selection-start-line="218" selection-start-column="13" selection-end-line="218" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/flowChart.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1009,34 +981,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/block.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/views/dropdownMenu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dropdownMenuLessStylesheet">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7667844">
-          <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/blockToggleSwitch.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1049,30 +997,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
+    <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="66" column="45" selection-start-line="66" selection-start-column="45" selection-end-line="66" selection-end-column="45" />
+          <caret line="105" column="10" selection-start-line="105" selection-start-column="10" selection-end-line="105" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+    <entry file="file://$PROJECT_DIR$/js/views/block.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="472" column="32" selection-start-line="472" selection-start-column="32" selection-end-line="472" selection-end-column="32" />
-          <folding>
-            <element signature="e#911#934#0" expanded="false" />
-            <marker date="1463575734210" expanded="true" signature="296:339" placeholder="{&quot;selectedTabIndex&quot;: 0...}" />
-            <marker date="1463575734210" expanded="true" signature="19365:19366" placeholder="//..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.481482">
-          <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
+          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -1085,11 +1021,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/views/textEditableReadoutField.js">
+    <entry file="file://$PROJECT_DIR$/dropdownMenuLessStylesheet">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7212389">
-          <caret line="105" column="10" selection-start-line="105" selection-start-column="10" selection-end-line="105" selection-end-column="10" />
+        <state vertical-scroll-proportion="-21.272728">
+          <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-39.333332">
+          <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/blockToggleSwitch.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6415929">
+          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/ports.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="192" column="56" selection-start-line="192" selection-start-column="56" selection-end-line="192" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bundle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3329646">
+          <caret line="2348" column="10" selection-start-line="2348" selection-start-column="10" selection-end-line="2348" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/views/sidePane.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/actions/paneActions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3528761">
+          <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/stores/paneStore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.94393593">
+          <caret line="599" column="4" selection-start-line="599" selection-start-column="4" selection-end-line="599" selection-end-column="4" />
+          <folding>
+            <element signature="e#911#934#0" expanded="false" />
+            <marker date="1463581982289" expanded="true" signature="296:339" placeholder="{&quot;selectedTabIndex&quot;: 0...}" />
+            <marker date="1463581982289" expanded="true" signature="19156:19157" placeholder="//..." />
+          </folding>
         </state>
       </provider>
     </entry>
