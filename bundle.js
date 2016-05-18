@@ -3426,26 +3426,22 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
   },
 
   handleMalcolmCall: function(blockName, method, args){
-    console.log("malcolmCall in sidePane");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
   },
 
   handleOnChange: function(e){
-    console.log(this.props.blockAttributeValue);
-    console.log(this.props.blockName);
 
     var methodToInvoke;
 
     /* Check the blockName if it's VISIBILITY or not */
 
     if(this.props.blockName === 'VISIBILITY'){
-      /* WHat may cause some confusion is that in the context
+      /* What may cause some confusion is that in the context
        of VISIBILITY, the name of a block is one of its attributes,
-       but in the context of a block its attributes will be
+       but in the context of a block an attribute will be
        inputs, outputs, parameters etc
        */
       methodToInvoke = '_set_' + this.props.attributeName + '_visible';
-      console.log("in visibility");
     }
     else{
       if(this.props.attributeName === 'VISIBLE'){
@@ -3456,12 +3452,10 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
       }
     }
 
-    /* invoke malcolmCall to toggle the visible attribute
-     of the given block
-     */
-
     /* If I'm toggling, I want to pass the OPPOSITE of
-     whatever the current value of the toggle is
+     whatever the current value of the toggle is, whether
+     it's a string specifying visibility, or a boolean
+     specifying some other attribute
      */
 
     var newValue;
@@ -3480,36 +3474,26 @@ var BlockToggleSwitch = React.createClass({displayName: "BlockToggleSwitch",
     }
 
     argsObject[this.props.attributeName] = newValue;
-
-    console.log(newValue);
-
-    /* Now invoke malcolmCall */
-
+    
     this.handleMalcolmCall(this.props.blockName, methodToInvoke, argsObject);
-
-    /* Should also close the tab if I'm hiding a block maybe? */
 
   },
 
   render: function(){
-    /* 'on' is the default setting of the switch, shall be
-     from the server at some point (perhaps a ternary operator?)
-     */
+
     return(
 
-      React.createElement("div", {style: {display: 'flex', alignItems: 'flex-start', left: '45'}}, 
-        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "Hide"), 
-        React.createElement("div", {id: "testToggleSwitch", style: {height: '21', width: '50'}}, 
+      React.createElement("div", {style: {display: 'flex', justifyContent: 'space-between', left: '45'}}, 
+        React.createElement("p", {style: {margin: '0px', width: '40px', position: 'relative'}}, "False"), 
+        React.createElement("div", {id: "testToggleSwitch", style: {height: '16', width: '44', marginLeft: '25'}}, 
           React.createElement(ToggleSwitch, {onChange: this.handleOnChange, 
                       checked: this.props.blockAttributeValue === 'Show' ||
                                this.props.blockAttributeValue === true, 
-                      defaultChecked: this.props.blockAttributeValue === 'Show' ||
-                                      this.props.blockAttributeValue === true, 
                       id: this.props.blockName + 'toggleSwitch', 
                       on: this.props.blockAttributeValue === 'Show' ||
                           this.props.blockAttributeValue === true})
         ), 
-        React.createElement("p", {style: {margin: '0px', width: '40px'}}, "Show")
+        React.createElement("p", {style: {margin: '0px', width: '40px', marginLeft: '22'}}, "True")
       )
 
     )
