@@ -1,0 +1,130 @@
+@height:31px;
+@spacing:10px;
+@select-colour:#2875C7;
+@font-size:14px;
+@border-colour:#DDD;
+
+@font-family: Arial;
+
+#dropDown {
+  z-index: 10;
+  position: absolute;
+  margin-left: -5px;
+}
+
+.border-box {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.vertical-centre(@height) {
+  line-height:@height;
+}
+
+.transform(@transform) {
+  -webkit-transform: @transform;
+  -moz-transform: @transform;
+  -ms-transform: @transform;
+  -o-transform: @transform;
+  transform: @transform;
+
+}
+
+div.dropdown-container {
+  width: 32px;
+  font-family: @font-family;
+  &.handleActionShow>div.dropdown-list {
+    width: 125px;             /**/
+    .transform(scale(1, 1));
+  }
+
+
+
+  @icon-width:14px;
+
+  >div.dropdown-display {
+    float:left;
+    width:100%;
+    background:transparent;
+    height:@height;
+    cursor:pointer;
+    //border:solid 1px @border-colour;
+    .border-box;
+
+    >* {
+      float:left;
+      height:100%;
+      .vertical-centre(@height);
+    }
+
+    >span {
+      font-size:@font-size;
+      width:100%;
+      position:relative;
+      .border-box;
+      padding-right:@icon-width+@spacing*2;
+      padding-left:@spacing;
+    }
+
+    >i {
+      position:relative;
+      width:@icon-width;
+      margin-left:(@spacing+@icon-width)*-1.15;
+      font-size:1.125em;
+      font-weight:bold;
+      padding-right:@spacing ;
+      text-align:right;
+    }
+  }
+
+  >div.dropdown-list {
+    //float:right;
+    width:100%;
+    position:relative;
+    margin-left: -87px;
+    width:100%;
+    .transform(scale(1, 0)); /* the other two that went here probably just controlled the animation of the drop down menu */
+
+
+    >div {
+      position:absolute;
+
+      margin-top: 32px;
+      width:100%;
+      z-index:2;
+      cursor:pointer;
+      background:#3e3e3e;
+
+      >div {
+        float:left;
+        width:100%;
+        padding:0 @spacing;
+        font-size:@font-size;
+        .border-box;
+        border:solid 1px #000000;
+        border-top:none;
+
+        @icon-width:20px;
+
+        &:hover {
+          background:#F0F0F0;
+          color: #000011;
+        }
+
+        &.selected {
+          background:@select-colour;
+          color:white;
+        }
+
+        >* {
+          .vertical-centre(@height);
+        }
+
+        >span {
+          float:left;
+          width:100%;
+        }
+      }
+    }
+  }
+}

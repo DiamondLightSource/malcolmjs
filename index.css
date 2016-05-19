@@ -1,0 +1,149 @@
+html {
+  background-color: black;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+body {
+  background-color: transparent;
+  font-family: Verdana, "Lucida Grande", sans-serif;
+  min-width: 550px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#container {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#blockDock {
+  height: 100px
+}
+
+#buttonContainer {
+  display: flex;
+}
+
+.sidebar .tab-content {
+  /* Allows overflow in a tab to create a scrollbar */
+  overflow: auto;
+}
+
+.readoutField {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.dropdownMenuWidget {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  content: '\25BD';
+  background: #FFFFFF url("./1461620650_Arrow_Drop_Down.svg") no-repeat 113px center;
+}
+
+/* Moving some inline styling out of components */
+
+.outportPOS{
+  fill: orange;
+}
+
+.outportBIT {
+  fill: lightblue;
+}
+
+.inportPOS{
+  fill: orange;
+}
+
+.inportBIT {
+  fill: lightblue;
+}
+
+.edgeInnerLinePOS, .edgePreviewInnerLinePOS, .edgeInnerLineBIT, .edgePreviewInnerLineBIT{
+  stroke-width: 5px;
+  fill: none;
+  cursor: default;
+}
+
+.edgeInnerLinePOS, .edgePreviewInnerLinePOS{
+  stroke: orange;
+}
+
+.edgeInnerLineBIT, .edgePreviewInnerLineBIT{
+  stroke: lightblue;
+}
+
+.edgePreviewOuterLine{
+  stroke-width: 7px;
+  stroke: lightgrey;
+  stroke-linecap: round;
+  fill: none;
+  cursor: default;
+}
+
+.edgeOuterLineSelected, .edgeOuterLineUnselected{
+  stroke-linecap: round;
+  cursor: default;
+  fill: none;
+}
+
+.edgeOuterLineSelected{
+  stroke-width: 10px;
+  stroke: #797979;
+}
+
+.edgeOuterLineUnselected{
+  stroke-width: 7px;
+  stroke: lightgrey;
+}
+
+.textInputFieldWidget, .dropdownMenuWidget, .readoutFieldWidget{
+  color: lightblue;
+  width: 152px;
+  border-radius: 4px;
+}
+
+.textInputFieldWidget, .dropdownMenuWidget{
+  background-color: #333333;
+  border: 2px solid #202020;
+}
+
+.textInputFieldWidget, .readoutFieldWidget{
+  text-align: left;
+  padding-left: 3px;
+}
+
+.readoutFieldWidget{
+  background-color: #3e3e3e;
+  border: 2px solid #797979;
+  cursor: default;
+}
+
+.ledWidgetON{
+  fill: blue;
+  stroke: black;
+}
+
+.ledWidgetOFF{
+  fill: lightblue;
+  stroke: white;
+}
