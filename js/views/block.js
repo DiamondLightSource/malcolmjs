@@ -7,7 +7,6 @@ var ReactDOM = require('react-dom');
 
 var attributeStore = require('../stores/attributeStore');
 
-var blockActions = require('../actions/blockActions.js');
 var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');

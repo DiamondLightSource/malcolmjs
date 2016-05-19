@@ -4,7 +4,6 @@
 
 var React = require('../../node_modules/react/react');
 var blockStore = require('../stores/blockStore.js');
-var blockActions = require('../actions/blockActions.js');
 
 var BlockRectangles = React.createClass({
 

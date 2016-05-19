@@ -26,8 +26,4 @@ var mainPaneActions = {
   }
 };
 
-/* This isn't a React component, so you don't need a
-capital first letter in order for it to work
- */
-
 module.exports = mainPaneActions;
