@@ -5725,8 +5725,7 @@ var Ports = React.createClass({displayName: "Ports",
                   cx: 0, 
                   cy: 0, 
                   r: blockStyling.portRadius, 
-                  style: {
-                          cursor: 'default'}, 
+                  style: {cursor: 'default'}, 
                   id: blockId + outportName}
           ), 
           React.createElement("circle", {key: blockId + outportName + 'invisiblePortCircle', 
