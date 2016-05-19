@@ -597,7 +597,7 @@ var removeBlockTab = function(){
     since a tab has been removed, so we need to decrease
     _stuff.selectedTabIndex by 1
      */
-    
+
     _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
 
   }

@@ -203,15 +203,11 @@ var Edge = React.createClass({
       <g id="edgeContainer" {...this.props}>
 
         <path id={outerLineName}
-              style={{strokeWidth: this.props.selected === true ? "10" : "7",
-               stroke: this.props.selected === true ? "#797979" : "lightgrey",
-               strokeLinecap: "round", cursor: 'default', fill: 'none'}}
+              className={'edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected') }
               d={pathInfo} />
 
         <path id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-              style={{strokeWidth: '5',
-              stroke: this.props.fromBlockPortValueType === 'pos' ? 'orange' : 'lightblue',
-              cursor: 'default', fill: 'none'}}
+              className={"edgeInnerLine" + (this.props.fromBlockPortValueType === 'pos' ? 'POS' : 'BIT')}
               d={pathInfo} />
 
       </g>

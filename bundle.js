@@ -2879,7 +2879,7 @@ var removeBlockTab = function(){
     since a tab has been removed, so we need to decrease
     _stuff.selectedTabIndex by 1
      */
-    
+
     _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
 
   }
@@ -3677,8 +3677,6 @@ var DropdownEditableReadoutField = React.createClass({displayName: "DropdownEdit
     var dropdownList =
       React.createElement("select", {onChange: this.handleDropdownOptionChange, 
               className: "dropdownMenuWidget", 
-              style: {width: '152px', backgroundColor:'#333333', color: 'lightblue',
-                      borderRadius: '4px', border: '2px solid #202020'}, 
               value: this.props.blockAttribute.value}, 
         dropdownOptions
       );
@@ -4058,15 +4056,11 @@ var Edge = React.createClass({displayName: "Edge",
       React.createElement("g", React.__spread({id: "edgeContainer"},  this.props), 
 
         React.createElement("path", {id: outerLineName, 
-              style: {strokeWidth: this.props.selected === true ? "10" : "7",
-               stroke: this.props.selected === true ? "#797979" : "lightgrey",
-               strokeLinecap: "round", cursor: 'default', fill: 'none'}, 
+              className: 'edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected'), 
               d: pathInfo}), 
 
         React.createElement("path", {id: innerLineName, onMouseOver: this.mouseOver, onMouseLeave: this.mouseLeave, 
-              style: {strokeWidth: '5',
-              stroke: this.props.fromBlockPortValueType === 'pos' ? 'orange' : 'lightblue',
-              cursor: 'default', fill: 'none'}, 
+              className: "edgeInnerLine" + (this.props.fromBlockPortValueType === 'pos' ? 'POS' : 'BIT'), 
               d: pathInfo})
 
       )
@@ -4301,15 +4295,10 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
     return(
       React.createElement("g", React.__spread({id: "edgePreviewContainer"},  this.props), 
 
-        React.createElement("path", {id: outerLineName, 
-              style: {strokeWidth: "7", stroke: "lightgrey",
-               strokeLinecap: "round", cursor: 'default', fill: 'none'}, 
+        React.createElement("path", {id: outerLineName, className: "edgePreviewOuterLine", 
               d: pathInfo}), 
 
-        React.createElement("path", {id: innerLineName, 
-              style: {strokeWidth: '5',
-              stroke: portValueType === 'pos' ? 'orange' : 'lightblue',
-              cursor: 'default', fill: 'none'}, 
+        React.createElement("path", {id: innerLineName, className: "edgePreviewInnerLine" + (portValueType === 'pos' ? 'POS' : 'BIT'), 
               d: pathInfo})
 
       )
@@ -4565,7 +4554,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
     var endOfEdgePortOffsetY;
     var portType;
 
-    if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "inport"){
+    if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('inport') !== -1){
 
       var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
       var inportArrayIndex;
@@ -4578,7 +4567,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
       endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       portType = "inport";
     }
-    else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "outport") {
+    else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1) {
 
       var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
       var outportArrayIndex;
@@ -5003,7 +4992,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
         React.createElement("svg", {id: "appContainer", style: AppContainerStyle}, 
 
-          React.createElement("g", {id: "testPanGroup", 
+          React.createElement("g", {id: "panningGroup", 
              transform: matrixTransform, 
              onWheel: this.wheelZoom}, 
 
@@ -5120,8 +5109,7 @@ var LEDWidget = React.createClass({displayName: "LEDWidget",
     return(
 
       React.createElement("svg", {style: {width: '150', height: '20'}}, 
-        React.createElement("circle", {r: "8", style: {fill: this.props.blockAttributeValue ? 'blue' : 'lightblue',
-                          stroke: this.props.blockAttributeValue ? 'black' : 'white'}, 
+        React.createElement("circle", {r: "8", className: "ledWidget" + (this.props.blockAttributeValue ? 'ON' : 'OFF'), 
                       transform: "translate(9, 11)"})
       )
 
@@ -5538,17 +5526,12 @@ var NonEditableReadoutField = React.createClass({displayName: "NonEditableReadou
     return(
 
       React.createElement("input", {id: this.props.blockName + this.props.attributeName + "readoutField", 
-             className: "readoutField", 
+             className: "readoutFieldWidget", 
              value: String(this.props.blockAttributeValue), 
-             style: {textAlign: 'left', borderRadius: '4px',
-                     border: '2px solid #797979',
-                     color: 'lightblue', backgroundColor:'#3e3e3e',
-                     cursor: 'default'}, 
              onMouseDown: this.onClick, 
              onMouseUp: this.onClick, 
              onMouseOut: this.onClick, 
-             readOnly: "true", 
-             maxLength: "16", size: "16"})
+             readOnly: "true"})
 
     )
   }
@@ -5615,8 +5598,8 @@ var Ports = React.createClass({displayName: "Ports",
 
     if(e.currentTarget.className.animVal === "invisiblePortCircle"){
       for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
-        if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
-          || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+        if(e.currentTarget.parentNode.children[i].className.animVal.indexOf('inport') !== -1
+          || e.currentTarget.parentNode.children[i].className.animVal.indexOf('outport') !== -1){
           target = e.currentTarget.parentNode.children[i];
         }
       }
@@ -5692,12 +5675,12 @@ var Ports = React.createClass({displayName: "Ports",
                 d: this.makeArcPath("inport"), className: "portArc", 
                 style: {fill: this.props.selected ? '#797979' : 'black',
                         cursor: 'default'}}), 
-          React.createElement("circle", {key: blockId + inportName, className: "inport", 
+          React.createElement("circle", {key: blockId + inportName, 
+                  className: 'inport' + (inportValueType === 'pos' ? 'POS' : 'BIT'), 
                   cx: 0, 
                   cy: 0, 
                   r: blockStyling.portRadius, 
-                  style: {fill: inportValueType === 'pos' ? 'orange' : 'lightblue',
-                          cursor: 'default'}, 
+                  style: {cursor: 'default'}, 
                   id: blockId + inportName}
           ), 
           React.createElement("circle", {key: blockId + inportName + 'invisiblePortCircle', 
@@ -5737,11 +5720,12 @@ var Ports = React.createClass({displayName: "Ports",
                 d: this.makeArcPath("outport"), className: "portArc", 
                 style: {fill: this.props.selected ? '#797979' : 'black',
                 cursor: 'default'}}), 
-          React.createElement("circle", {key: blockId + outportName, className: "outport", 
+          React.createElement("circle", {key: blockId + outportName, 
+                  className: "outport" + (outportValueType === 'pos' ? 'POS' : 'BIT'), 
                   cx: 0, 
                   cy: 0, 
                   r: blockStyling.portRadius, 
-                  style: {fill: outportValueType === 'pos' ? 'orange' : 'lightblue',
+                  style: {
                           cursor: 'default'}, 
                   id: blockId + outportName}
           ), 
@@ -6395,10 +6379,8 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
 
     var inputFieldValue;
     var inputFieldElement = e.target;
-    var inputFieldBlockName = e.target.className.slice(0, e.target.className.indexOf('widget'));
-
-    var inputFieldAttribute = e.target.id.slice(inputFieldBlockName.length,
-      e.target.id.indexOf('inputField'));
+    var inputFieldBlockName = this.props.blockName;
+    var inputFieldAttribute = this.props.attributeName;
 
     if(inputFieldElement.value === ""){
       /* Set the input field value back to the previous value */
@@ -6454,13 +6436,7 @@ var TextEditableReadoutField = React.createClass({displayName: "TextEditableRead
 
     var props = {
       id: this.props.blockName + this.props.attributeName + "inputField",
-      className: this.props.blockName + 'widget',
-      style: {
-        textAlign: 'left', borderRadius: '4px',
-        border: '2px solid #202020',
-        color: 'lightblue', backgroundColor:'#333333',
-        paddingLeft: 3, width: 152
-      },
+      className: 'textInputFieldWidget',
       onFocus: this.handleOnFocus,
       onChange: this.handleOnChange,
       onKeyUp: this.handleKeyUp,

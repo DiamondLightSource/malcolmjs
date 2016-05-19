@@ -222,15 +222,10 @@ var EdgePreview = React.createClass({
     return(
       <g id="edgePreviewContainer" {...this.props}>
 
-        <path id={outerLineName}
-              style={{strokeWidth: "7", stroke: "lightgrey",
-               strokeLinecap: "round", cursor: 'default', fill: 'none'}}
+        <path id={outerLineName} className="edgePreviewOuterLine"
               d={pathInfo} />
 
-        <path id={innerLineName}
-              style={{strokeWidth: '5',
-              stroke: portValueType === 'pos' ? 'orange' : 'lightblue',
-              cursor: 'default', fill: 'none'}}
+        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === 'pos' ? 'POS' : 'BIT')}
               d={pathInfo} />
 
       </g>

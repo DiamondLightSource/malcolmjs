@@ -68,8 +68,6 @@ var DropdownEditableReadoutField = React.createClass({
     var dropdownList =
       <select onChange={this.handleDropdownOptionChange}
               className="dropdownMenuWidget"
-              style={{width: '152px', backgroundColor:'#333333', color: 'lightblue',
-                      borderRadius: '4px', border: '2px solid #202020'}}
               value={this.props.blockAttribute.value} >
         {dropdownOptions}
       </select>;

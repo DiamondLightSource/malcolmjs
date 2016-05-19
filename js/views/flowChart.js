@@ -166,7 +166,7 @@ var FlowChart = React.createClass({
     var endOfEdgePortOffsetY;
     var portType;
 
-    if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "inport"){
+    if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('inport') !== -1){
 
       var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
       var inportArrayIndex;
@@ -179,7 +179,7 @@ var FlowChart = React.createClass({
       endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       portType = "inport";
     }
-    else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal === "outport") {
+    else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1) {
 
       var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
       var outportArrayIndex;
@@ -604,7 +604,7 @@ var FlowChart = React.createClass({
 
         <svg id="appContainer" style={AppContainerStyle} >
 
-          <g id="testPanGroup"
+          <g id="panningGroup"
              transform={matrixTransform}
              onWheel={this.wheelZoom} >
 

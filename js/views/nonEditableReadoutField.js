@@ -23,17 +23,12 @@ var NonEditableReadoutField = React.createClass({
     return(
 
       <input id={this.props.blockName + this.props.attributeName + "readoutField"}
-             className="readoutField"
+             className="readoutFieldWidget"
              value={String(this.props.blockAttributeValue)}
-             style={{textAlign: 'left', borderRadius: '4px',
-                     border: '2px solid #797979',
-                     color: 'lightblue', backgroundColor:'#3e3e3e',
-                     cursor: 'default'}}
              onMouseDown={this.onClick}
              onMouseUp={this.onClick}
              onMouseOut={this.onClick}
-             readOnly="true"
-             maxLength="16" size="16"/>
+             readOnly="true" />
 
     )
   }

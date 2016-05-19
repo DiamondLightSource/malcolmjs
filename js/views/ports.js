@@ -55,8 +55,8 @@ var Ports = React.createClass({
 
     if(e.currentTarget.className.animVal === "invisiblePortCircle"){
       for(var i = 0; i < e.currentTarget.parentNode.children.length; i++){
-        if(e.currentTarget.parentNode.children[i].className.animVal === "inport"
-          || e.currentTarget.parentNode.children[i].className.animVal === "outport"){
+        if(e.currentTarget.parentNode.children[i].className.animVal.indexOf('inport') !== -1
+          || e.currentTarget.parentNode.children[i].className.animVal.indexOf('outport') !== -1){
           target = e.currentTarget.parentNode.children[i];
         }
       }
@@ -132,12 +132,12 @@ var Ports = React.createClass({
                 d={this.makeArcPath("inport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black',
                         cursor: 'default' }} />
-          <circle key={blockId + inportName} className="inport"
+          <circle key={blockId + inportName}
+                  className={'inport' + (inportValueType === 'pos' ? 'POS' : 'BIT')}
                   cx={0}
                   cy={0}
                   r={blockStyling.portRadius}
-                  style={{fill: inportValueType === 'pos' ? 'orange' : 'lightblue',
-                          cursor: 'default'}}
+                  style={{cursor: 'default'}}
                   id={blockId + inportName}
           />
           <circle key={blockId + inportName + 'invisiblePortCircle'}
@@ -177,12 +177,12 @@ var Ports = React.createClass({
                 d={this.makeArcPath("outport")} className="portArc"
                 style={{fill: this.props.selected ? '#797979' : 'black',
                 cursor: 'default'  }} />
-          <circle key={blockId + outportName} className="outport"
+          <circle key={blockId + outportName}
+                  className={"outport" + (outportValueType === 'pos' ? 'POS' : 'BIT')}
                   cx={0}
                   cy={0}
                   r={blockStyling.portRadius}
-                  style={{fill: outportValueType === 'pos' ? 'orange' : 'lightblue',
-                          cursor: 'default' }}
+                  style={{cursor: 'default' }}
                   id={blockId + outportName}
           />
           <circle key={blockId + outportName + 'invisiblePortCircle'}

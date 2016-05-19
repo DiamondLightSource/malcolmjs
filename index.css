@@ -1,7 +1,6 @@
 html {
   background-color: black;
   margin: 0;
-  /*padding: 0 84px;*/
   height: 100%;
   width: 100%;
 }
@@ -37,8 +36,6 @@ body {
 
 #buttonContainer {
   display: flex;
-  /*flex-direction: row;*/
-  /*align-items: center;*/
 }
 
 .sidebar .tab-content {
@@ -59,16 +56,94 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /*position: relative;*/
   content: '\25BD';
-  /*font-family: FontAwesome;*/
-  /*background-image: url('https://www.iconfinder.com/icons/1063883/arrow_arrow_down_down_drop_stroke_arrow_icon#size=128');*/
   background: #FFFFFF url("./1461620650_Arrow_Drop_Down.svg") no-repeat 113px center;
 }
 
-/*.dropdownMenuWidget:before {*/
-  /*font-family: FontAwesome;*/
-  /*font-size: 48px;*/
-  /*position: absolute; z-index: -1;*/
-  /*content: "\f005";*/
-/*}*/
+/* Moving some inline styling out of components */
+
+.outportPOS{
+  fill: orange;
+}
+
+.outportBIT {
+  fill: lightblue;
+}
+
+.inportPOS{
+  fill: orange;
+}
+
+.inportBIT {
+  fill: lightblue;
+}
+
+.edgeInnerLinePOS, .edgePreviewInnerLinePOS, .edgeInnerLineBIT, .edgePreviewInnerLineBIT{
+  stroke-width: 5px;
+  fill: none;
+  cursor: default;
+}
+
+.edgeInnerLinePOS, .edgePreviewInnerLinePOS{
+  stroke: orange;
+}
+
+.edgeInnerLineBIT, .edgePreviewInnerLineBIT{
+  stroke: lightblue;
+}
+
+.edgePreviewOuterLine{
+  stroke-width: 7px;
+  stroke: lightgrey;
+  stroke-linecap: round;
+  fill: none;
+  cursor: default;
+}
+
+.edgeOuterLineSelected, .edgeOuterLineUnselected{
+  stroke-linecap: round;
+  cursor: default;
+  fill: none;
+}
+
+.edgeOuterLineSelected{
+  stroke-width: 10px;
+  stroke: #797979;
+}
+
+.edgeOuterLineUnselected{
+  stroke-width: 7px;
+  stroke: lightgrey;
+}
+
+.textInputFieldWidget, .dropdownMenuWidget, .readoutFieldWidget{
+  color: lightblue;
+  width: 152px;
+  border-radius: 4px;
+}
+
+.textInputFieldWidget, .dropdownMenuWidget{
+  background-color: #333333;
+  border: 2px solid #202020;
+}
+
+.textInputFieldWidget, .readoutFieldWidget{
+  text-align: left;
+  padding-left: 3px;
+}
+
+.readoutFieldWidget{
+  background-color: #3e3e3e;
+  border: 2px solid #797979;
+  cursor: default;
+}
+
+.ledWidgetON{
+  fill: blue;
+  stroke: black;
+}
+
+.ledWidgetOFF{
+  fill: lightblue;
+  stroke: white;
+}
