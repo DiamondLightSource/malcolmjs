@@ -543,7 +543,7 @@ ReactDOM.render(
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
 
-},{"../node_modules/react/lib/ReactDefaultPerf.js":141,"./actions/MalcolmActionCreators":1,"./constants/appConstants.js":7,"./dispatcher/appDispatcher":8,"./stores/blockStore.js":11,"./views/mainPane":31,"./views/sidePane":35,"./views/sidebar":37,"react":253,"react-dom":49,"react-panels":70}],7:[function(require,module,exports){
+},{"../node_modules/react/lib/ReactDefaultPerf.js":141,"./actions/MalcolmActionCreators":1,"./constants/appConstants.js":7,"./dispatcher/appDispatcher":8,"./stores/blockStore.js":11,"./views/mainPane":31,"./views/sidePane":35,"./views/sidebar":37,"react":253,"react-dom":50,"react-panels":71}],7:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -1105,7 +1105,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = attributeStore;
 
-},{"../../node_modules/object-assign/index.js":47,"../constants/appConstants.js":7,"../dispatcher/appDispatcher.js":8,"events":41,"react-addons-update":48}],11:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":47,"../constants/appConstants.js":7,"../dispatcher/appDispatcher.js":8,"events":41,"react-addons-update":49}],11:[function(require,module,exports){
 /**
  * Created by twi18192 on 10/12/15.
  */
@@ -1753,7 +1753,7 @@ blockStore.dispatchToken = AppDispatcher.register(function(payload){
 
 module.exports = blockStore;
 
-},{"../../node_modules/object-assign/index.js":47,"../actions/MalcolmActionCreators":1,"../constants/appConstants.js":7,"../dispatcher/appDispatcher.js":8,"./attributeStore":10,"./flowChartStore":12,"events":41,"react-addons-update":48}],12:[function(require,module,exports){
+},{"../../node_modules/object-assign/index.js":47,"../actions/MalcolmActionCreators":1,"../constants/appConstants.js":7,"../dispatcher/appDispatcher.js":8,"./attributeStore":10,"./flowChartStore":12,"events":41,"react-addons-update":49}],12:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/02/16.
  */
@@ -3297,7 +3297,7 @@ var Block = React.createClass({displayName: "Block",
 
 module.exports = Block;
 
-},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../../node_modules/react/react":253,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../actions/paneActions":4,"../stores/attributeStore":10,"./blockRectangle":19,"./ports.js":34,"react-dom":49}],19:[function(require,module,exports){
+},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../../node_modules/react/react":253,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../actions/paneActions":4,"../stores/attributeStore":10,"./blockRectangle":19,"./ports.js":34,"react-dom":50}],19:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/01/16.
  */
@@ -4041,7 +4041,7 @@ var Edge = React.createClass({displayName: "Edge",
 
 module.exports = Edge;
 
-},{"../../node_modules/interact.js":46,"../../node_modules/react/react":253,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../actions/paneActions":4,"react-dom":49}],26:[function(require,module,exports){
+},{"../../node_modules/interact.js":46,"../../node_modules/react/react":253,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../actions/paneActions":4,"react-dom":50}],26:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/02/16.
  */
@@ -4279,7 +4279,7 @@ var EdgePreview = React.createClass({displayName: "EdgePreview",
 
 module.exports= EdgePreview;
 
-},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../../node_modules/react/react":253,"../actions/flowChartActions":2,"react-dom":49}],27:[function(require,module,exports){
+},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../../node_modules/react/react":253,"../actions/flowChartActions":2,"react-dom":50}],27:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/08/15.
  */
@@ -4988,7 +4988,7 @@ var FlowChart = React.createClass({displayName: "FlowChart",
 
 module.exports = FlowChart;
 
-},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../constants/appConstants.js":7,"../dispatcher/appDispatcher":8,"../stores/attributeStore":10,"../stores/flowChartStore":12,"./block.js":18,"./edge.js":25,"./edgePreview":26,"react":253,"react-dom":49}],29:[function(require,module,exports){
+},{"../../node_modules/interact.js":46,"../../node_modules/react/lib/ReactDefaultPerf.js":141,"../actions/MalcolmActionCreators":1,"../actions/flowChartActions":2,"../constants/appConstants.js":7,"../dispatcher/appDispatcher":8,"../stores/attributeStore":10,"../stores/flowChartStore":12,"./block.js":18,"./edge.js":25,"./edgePreview":26,"react":253,"react-dom":50}],29:[function(require,module,exports){
 /**
  * Created by twi18192 on 26/01/16.
  */
@@ -5236,7 +5236,7 @@ module.exports = MainPane;
 //<FavButton favTabOpen={this.handleActionFavTabOpen}/>
 //<ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>
 
-},{"../actions/mainPaneActions":3,"../actions/paneActions":4,"./button":21,"./configButton":22,"./favButton":27,"./flowChartControllerView":29,"react":253,"react-panels":70}],32:[function(require,module,exports){
+},{"../actions/mainPaneActions":3,"../actions/paneActions":4,"./button":21,"./configButton":22,"./favButton":27,"./flowChartControllerView":29,"react":253,"react-panels":71}],32:[function(require,module,exports){
 /**
  * Created by twi18192 on 18/04/16.
  */
@@ -5471,7 +5471,7 @@ var ModalDialogBox = React.createClass({displayName: "ModalDialogBox",
 
 module.exports = ModalDialogBox;
 
-},{"../actions/paneActions":4,"../stores/attributeStore":10,"react":253,"react-modal":56}],33:[function(require,module,exports){
+},{"../actions/paneActions":4,"../stores/attributeStore":10,"react":253,"react-modal":57}],33:[function(require,module,exports){
 /**
  * Created by twi18192 on 15/03/16.
  */
@@ -5862,7 +5862,7 @@ var SidePane = React.createClass({displayName: "SidePane",
 
 module.exports = SidePane;
 
-},{"../actions/paneActions":4,"./dropdownMenu":24,"./sidePaneTabContents":36,"react":253,"react-dom":49,"react-panels":70}],36:[function(require,module,exports){
+},{"../actions/paneActions":4,"./dropdownMenu":24,"./sidePaneTabContents":36,"react":253,"react-dom":50,"react-panels":71}],36:[function(require,module,exports){
 /**
  * Created by twi18192 on 04/05/16.
  */
@@ -6124,7 +6124,7 @@ var SidePaneTabContents = React.createClass({displayName: "SidePaneTabContents",
 
 module.exports = SidePaneTabContents;
 
-},{"../actions/MalcolmActionCreators":1,"../stores/attributeStore":10,"../stores/blockStore":11,"./widgetTableContainer":40,"react":253,"react-panels":70,"react-treeview":79}],37:[function(require,module,exports){
+},{"../actions/MalcolmActionCreators":1,"../stores/attributeStore":10,"../stores/blockStore":11,"./widgetTableContainer":40,"react":253,"react-panels":71,"react-treeview":79}],37:[function(require,module,exports){
 /**
  * Created by twi18192 on 25/01/16.
  */
@@ -6706,18 +6706,11 @@ EventEmitter.prototype.emit = function(type) {
         break;
       // slower
       default:
-        len = arguments.length;
-        args = new Array(len - 1);
-        for (i = 1; i < len; i++)
-          args[i - 1] = arguments[i];
+        args = Array.prototype.slice.call(arguments, 1);
         handler.apply(this, args);
     }
   } else if (isObject(handler)) {
-    len = arguments.length;
-    args = new Array(len - 1);
-    for (i = 1; i < len; i++)
-      args[i - 1] = arguments[i];
-
+    args = Array.prototype.slice.call(arguments, 1);
     listeners = handler.slice();
     len = listeners.length;
     for (i = 0; i < len; i++)
@@ -6755,7 +6748,6 @@ EventEmitter.prototype.addListener = function(type, listener) {
 
   // Check for listener leak
   if (isObject(this._events[type]) && !this._events[type].warned) {
-    var m;
     if (!isUndefined(this._maxListeners)) {
       m = this._maxListeners;
     } else {
@@ -6877,7 +6869,7 @@ EventEmitter.prototype.removeAllListeners = function(type) {
 
   if (isFunction(listeners)) {
     this.removeListener(type, listeners);
-  } else {
+  } else if (listeners) {
     // LIFO order
     while (listeners.length)
       this.removeListener(type, listeners[listeners.length - 1]);
@@ -6898,15 +6890,20 @@ EventEmitter.prototype.listeners = function(type) {
   return ret;
 };
 
+EventEmitter.prototype.listenerCount = function(type) {
+  if (this._events) {
+    var evlistener = this._events[type];
+
+    if (isFunction(evlistener))
+      return 1;
+    else if (evlistener)
+      return evlistener.length;
+  }
+  return 0;
+};
+
 EventEmitter.listenerCount = function(emitter, type) {
-  var ret;
-  if (!emitter._events || !emitter._events[type])
-    ret = 0;
-  else if (isFunction(emitter._events[type]))
-    ret = 1;
-  else
-    ret = emitter._events[type].length;
-  return ret;
+  return emitter.listenerCount(type);
 };
 
 function isFunction(arg) {
@@ -6935,6 +6932,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -6958,7 +6958,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -7010,7 +7012,6 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
@@ -7019,7 +7020,7 @@ process.umask = function() { return 0; };
 
 },{}],43:[function(require,module,exports){
 /**
- * Copyright (c) 2014, Facebook, Inc.
+ * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7027,11 +7028,12 @@ process.umask = function() { return 0; };
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-module.exports.Dispatcher = require('./lib/Dispatcher')
+module.exports.Dispatcher = require('./lib/Dispatcher');
 
 },{"./lib/Dispatcher":44}],44:[function(require,module,exports){
-/*
- * Copyright (c) 2014, Facebook, Inc.
+(function (process){
+/**
+ * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7039,14 +7041,18 @@ module.exports.Dispatcher = require('./lib/Dispatcher')
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule Dispatcher
- * @typechecks
+ * 
+ * @preventMunge
  */
 
-"use strict";
+'use strict';
 
-var invariant = require('./invariant');
+exports.__esModule = true;
 
-var _lastID = 1;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var invariant = require('fbjs/lib/invariant');
+
 var _prefix = 'ID_';
 
 /**
@@ -7096,7 +7102,7 @@ var _prefix = 'ID_';
  *
  * This payload is digested by both stores:
  *
- *    CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+ *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
  *     if (payload.actionType === 'country-update') {
  *       CountryStore.country = payload.selectedCountry;
  *     }
@@ -7124,14 +7130,10 @@ var _prefix = 'ID_';
  *     flightDispatcher.register(function(payload) {
  *       switch (payload.actionType) {
  *         case 'country-update':
+ *         case 'city-update':
  *           flightDispatcher.waitFor([CityStore.dispatchToken]);
  *           FlightPriceStore.price =
  *             getFlightPriceStore(CountryStore.country, CityStore.city);
- *           break;
- *
- *         case 'city-update':
- *           FlightPriceStore.price =
- *             FlightPriceStore(CountryStore.country, CityStore.city);
  *           break;
  *     }
  *   });
@@ -7141,131 +7143,109 @@ var _prefix = 'ID_';
  * `FlightPriceStore`.
  */
 
+var Dispatcher = (function () {
   function Dispatcher() {
-    this.$Dispatcher_callbacks = {};
-    this.$Dispatcher_isPending = {};
-    this.$Dispatcher_isHandled = {};
-    this.$Dispatcher_isDispatching = false;
-    this.$Dispatcher_pendingPayload = null;
+    _classCallCheck(this, Dispatcher);
+
+    this._callbacks = {};
+    this._isDispatching = false;
+    this._isHandled = {};
+    this._isPending = {};
+    this._lastID = 1;
   }
 
   /**
    * Registers a callback to be invoked with every dispatched payload. Returns
    * a token that can be used with `waitFor()`.
-   *
-   * @param {function} callback
-   * @return {string}
    */
-  Dispatcher.prototype.register=function(callback) {
-    var id = _prefix + _lastID++;
-    this.$Dispatcher_callbacks[id] = callback;
+
+  Dispatcher.prototype.register = function register(callback) {
+    var id = _prefix + this._lastID++;
+    this._callbacks[id] = callback;
     return id;
   };
 
   /**
    * Removes a callback based on its token.
-   *
-   * @param {string} id
    */
-  Dispatcher.prototype.unregister=function(id) {
-    invariant(
-      this.$Dispatcher_callbacks[id],
-      'Dispatcher.unregister(...): `%s` does not map to a registered callback.',
-      id
-    );
-    delete this.$Dispatcher_callbacks[id];
+
+  Dispatcher.prototype.unregister = function unregister(id) {
+    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+    delete this._callbacks[id];
   };
 
   /**
    * Waits for the callbacks specified to be invoked before continuing execution
    * of the current callback. This method should only be used by a callback in
    * response to a dispatched payload.
-   *
-   * @param {array<string>} ids
    */
-  Dispatcher.prototype.waitFor=function(ids) {
-    invariant(
-      this.$Dispatcher_isDispatching,
-      'Dispatcher.waitFor(...): Must be invoked while dispatching.'
-    );
+
+  Dispatcher.prototype.waitFor = function waitFor(ids) {
+    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
     for (var ii = 0; ii < ids.length; ii++) {
       var id = ids[ii];
-      if (this.$Dispatcher_isPending[id]) {
-        invariant(
-          this.$Dispatcher_isHandled[id],
-          'Dispatcher.waitFor(...): Circular dependency detected while ' +
-          'waiting for `%s`.',
-          id
-        );
+      if (this._isPending[id]) {
+        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
         continue;
       }
-      invariant(
-        this.$Dispatcher_callbacks[id],
-        'Dispatcher.waitFor(...): `%s` does not map to a registered callback.',
-        id
-      );
-      this.$Dispatcher_invokeCallback(id);
+      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+      this._invokeCallback(id);
     }
   };
 
   /**
    * Dispatches a payload to all registered callbacks.
-   *
-   * @param {object} payload
    */
-  Dispatcher.prototype.dispatch=function(payload) {
-    invariant(
-      !this.$Dispatcher_isDispatching,
-      'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.'
-    );
-    this.$Dispatcher_startDispatching(payload);
+
+  Dispatcher.prototype.dispatch = function dispatch(payload) {
+    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+    this._startDispatching(payload);
     try {
-      for (var id in this.$Dispatcher_callbacks) {
-        if (this.$Dispatcher_isPending[id]) {
+      for (var id in this._callbacks) {
+        if (this._isPending[id]) {
           continue;
         }
-        this.$Dispatcher_invokeCallback(id);
+        this._invokeCallback(id);
       }
     } finally {
-      this.$Dispatcher_stopDispatching();
+      this._stopDispatching();
     }
   };
 
   /**
    * Is this Dispatcher currently dispatching.
-   *
-   * @return {boolean}
    */
-  Dispatcher.prototype.isDispatching=function() {
-    return this.$Dispatcher_isDispatching;
+
+  Dispatcher.prototype.isDispatching = function isDispatching() {
+    return this._isDispatching;
   };
 
   /**
    * Call the callback stored with the given id. Also do some internal
    * bookkeeping.
    *
-   * @param {string} id
    * @internal
    */
-  Dispatcher.prototype.$Dispatcher_invokeCallback=function(id) {
-    this.$Dispatcher_isPending[id] = true;
-    this.$Dispatcher_callbacks[id](this.$Dispatcher_pendingPayload);
-    this.$Dispatcher_isHandled[id] = true;
+
+  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+    this._isPending[id] = true;
+    this._callbacks[id](this._pendingPayload);
+    this._isHandled[id] = true;
   };
 
   /**
    * Set up bookkeeping needed when dispatching.
    *
-   * @param {object} payload
    * @internal
    */
-  Dispatcher.prototype.$Dispatcher_startDispatching=function(payload) {
-    for (var id in this.$Dispatcher_callbacks) {
-      this.$Dispatcher_isPending[id] = false;
-      this.$Dispatcher_isHandled[id] = false;
+
+  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+    for (var id in this._callbacks) {
+      this._isPending[id] = false;
+      this._isHandled[id] = false;
     }
-    this.$Dispatcher_pendingPayload = payload;
-    this.$Dispatcher_isDispatching = true;
+    this._pendingPayload = payload;
+    this._isDispatching = true;
   };
 
   /**
@@ -7273,17 +7253,21 @@ var _prefix = 'ID_';
    *
    * @internal
    */
-  Dispatcher.prototype.$Dispatcher_stopDispatching=function() {
-    this.$Dispatcher_pendingPayload = null;
-    this.$Dispatcher_isDispatching = false;
+
+  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+    delete this._pendingPayload;
+    this._isDispatching = false;
   };
 
+  return Dispatcher;
+})();
 
 module.exports = Dispatcher;
-
-},{"./invariant":45}],45:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":42,"fbjs/lib/invariant":45}],45:[function(require,module,exports){
+(function (process){
 /**
- * Copyright (c) 2014, Facebook, Inc.
+ * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -7306,8 +7290,8 @@ module.exports = Dispatcher;
  * will remain to ensure logic does not differ in production.
  */
 
-var invariant = function(condition, format, a, b, c, d, e, f) {
-  if (false) {
+var invariant = function (condition, format, a, b, c, d, e, f) {
+  if (process.env.NODE_ENV !== 'production') {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
     }
@@ -7316,17 +7300,13 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
   if (!condition) {
     var error;
     if (format === undefined) {
-      error = new Error(
-        'Minified exception occurred; use the non-minified dev environment ' +
-        'for the full error message and additional helpful warnings.'
-      );
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
     } else {
       var args = [a, b, c, d, e, f];
       var argIndex = 0;
-      error = new Error(
-        'Invariant Violation: ' +
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
+      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
     }
 
     error.framesToPop = 1; // we don't care about invariant's own frame
@@ -7335,8 +7315,8 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 };
 
 module.exports = invariant;
-
-},{}],46:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":42}],46:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -13315,8 +13295,8 @@ module.exports = invariant;
 } (typeof window === 'undefined'? undefined : window));
 
 },{}],47:[function(require,module,exports){
-/* eslint-disable no-unused-vars */
 'use strict';
+/* eslint-disable no-unused-vars */
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -13328,7 +13308,51 @@ function toObject(val) {
 	return Object(val);
 }
 
-module.exports = Object.assign || function (target, source) {
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (e) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	var from;
 	var to = toObject(target);
 	var symbols;
@@ -13356,13 +13380,15 @@ module.exports = Object.assign || function (target, source) {
 };
 
 },{}],48:[function(require,module,exports){
+module.exports = require('react/lib/ReactCSSTransitionGroup');
+},{"react/lib/ReactCSSTransitionGroup":107}],49:[function(require,module,exports){
 module.exports = require('react/lib/update');
-},{"react/lib/update":223}],49:[function(require,module,exports){
+},{"react/lib/update":223}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
 
-},{"react/lib/ReactDOM":118}],50:[function(require,module,exports){
+},{"react/lib/ReactDOM":118}],51:[function(require,module,exports){
 (function (process){
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -13416,7 +13442,7 @@ var Modal = React.createClass({
   componentDidMount: function() {
     this.node = document.createElement('div');
     this.node.className = 'ReactModalPortal';
-    AppElement.appendChild(this.node);
+    document.body.appendChild(this.node);
     this.renderPortal(this.props);
   },
 
@@ -13426,7 +13452,7 @@ var Modal = React.createClass({
 
   componentWillUnmount: function() {
     ReactDOM.unmountComponentAtNode(this.node);
-    AppElement.removeChild(this.node);
+    document.body.removeChild(this.node);
     elementClass(document.body).remove('ReactModal__Body--open');
   },
 
@@ -13441,7 +13467,6 @@ var Modal = React.createClass({
       ariaAppHider.toggle(props.isOpen, props.appElement);
     }
 
-    sanitizeProps(props);
     this.portal = renderSubtreeIntoContainer(this, ModalPortal(Assign({}, props, {defaultStyles: Modal.defaultStyles})), this.node);
   },
 
@@ -13477,12 +13502,8 @@ Modal.defaultStyles = {
 
 module.exports = Modal
 
-function sanitizeProps(props) {
-  delete props.ref;
-}
-
 }).call(this,require('_process'))
-},{"../helpers/ariaAppHider":52,"./ModalPortal":51,"_process":42,"element-class":57,"exenv":58,"lodash.assign":59,"react":253,"react-dom":49}],51:[function(require,module,exports){
+},{"../helpers/ariaAppHider":53,"./ModalPortal":52,"_process":42,"element-class":58,"exenv":59,"lodash.assign":60,"react":253,"react-dom":50}],52:[function(require,module,exports){
 var React = require('react');
 var div = React.DOM.div;
 var focusManager = require('../helpers/focusManager');
@@ -13603,7 +13624,7 @@ var ModalPortal = module.exports = React.createClass({
     if (event.keyCode == 9 /*tab*/) scopeTab(this.refs.content, event);
     if (event.keyCode == 27 /*esc*/) {
       event.preventDefault();
-      this.requestClose();
+      this.requestClose(event);
     }
   },
 
@@ -13617,15 +13638,15 @@ var ModalPortal = module.exports = React.createClass({
 
     if (this.props.shouldCloseOnOverlayClick) {
       if (this.ownerHandlesClose())
-        this.requestClose();
+        this.requestClose(event);
       else
         this.focusContent();
     }
   },
 
-  requestClose: function() {
+  requestClose: function(event) {
     if (this.ownerHandlesClose())
-      this.props.onRequestClose();
+      this.props.onRequestClose(event);
   },
 
   ownerHandlesClose: function() {
@@ -13670,7 +13691,7 @@ var ModalPortal = module.exports = React.createClass({
   }
 });
 
-},{"../helpers/focusManager":53,"../helpers/scopeTab":54,"lodash.assign":59,"react":253}],52:[function(require,module,exports){
+},{"../helpers/focusManager":54,"../helpers/scopeTab":55,"lodash.assign":60,"react":253}],53:[function(require,module,exports){
 var _element = typeof document !== 'undefined' ? document.body : null;
 
 function setElement(element) {
@@ -13714,7 +13735,7 @@ exports.show = show;
 exports.hide = hide;
 exports.resetForTesting = resetForTesting;
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 var findTabbable = require('../helpers/tabbable');
 var modalElement = null;
 var focusLaterElement = null;
@@ -13784,7 +13805,7 @@ exports.teardownScopedFocus = function() {
 
 
 
-},{"../helpers/tabbable":55}],54:[function(require,module,exports){
+},{"../helpers/tabbable":56}],55:[function(require,module,exports){
 var findTabbable = require('../helpers/tabbable');
 
 module.exports = function(node, event) {
@@ -13805,7 +13826,7 @@ module.exports = function(node, event) {
   target.focus();
 };
 
-},{"../helpers/tabbable":55}],55:[function(require,module,exports){
+},{"../helpers/tabbable":56}],56:[function(require,module,exports){
 /*!
  * Adapted from jQuery UI core
  *
@@ -13857,11 +13878,11 @@ function findTabbableDescendants(element) {
 module.exports = findTabbableDescendants;
 
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 module.exports = require('./components/Modal');
 
 
-},{"./components/Modal":50}],57:[function(require,module,exports){
+},{"./components/Modal":51}],58:[function(require,module,exports){
 module.exports = function(opts) {
   return new ElementClass(opts)
 }
@@ -13922,7 +13943,7 @@ ElementClass.prototype.toggle = function(className) {
   else this.add(className)
 }
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Based on code that is Copyright 2013-2015, Facebook, Inc.
@@ -13963,7 +13984,7 @@ ElementClass.prototype.toggle = function(className) {
 
 }());
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14045,7 +14066,7 @@ var assign = createAssigner(function(object, source, customizer) {
 
 module.exports = assign;
 
-},{"lodash._baseassign":60,"lodash._createassigner":62,"lodash.keys":66}],60:[function(require,module,exports){
+},{"lodash._baseassign":61,"lodash._createassigner":63,"lodash.keys":67}],61:[function(require,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14074,7 +14095,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"lodash._basecopy":61,"lodash.keys":66}],61:[function(require,module,exports){
+},{"lodash._basecopy":62,"lodash.keys":67}],62:[function(require,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14108,7 +14129,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 /**
  * lodash 3.1.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14162,7 +14183,7 @@ function createAssigner(assigner) {
 
 module.exports = createAssigner;
 
-},{"lodash._bindcallback":63,"lodash._isiterateecall":64,"lodash.restparam":65}],63:[function(require,module,exports){
+},{"lodash._bindcallback":64,"lodash._isiterateecall":65,"lodash.restparam":66}],64:[function(require,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14229,7 +14250,7 @@ function identity(value) {
 
 module.exports = bindCallback;
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 /**
  * lodash 3.0.9 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14363,7 +14384,7 @@ function isObject(value) {
 
 module.exports = isIterateeCall;
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /**
  * lodash 3.6.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14432,7 +14453,7 @@ function restParam(func, start) {
 
 module.exports = restParam;
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 /**
  * lodash 3.1.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14670,7 +14691,7 @@ function keysIn(object) {
 
 module.exports = keys;
 
-},{"lodash._getnative":67,"lodash.isarguments":68,"lodash.isarray":69}],67:[function(require,module,exports){
+},{"lodash._getnative":68,"lodash.isarguments":69,"lodash.isarray":70}],68:[function(require,module,exports){
 /**
  * lodash 3.9.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -14809,7 +14830,7 @@ function isNative(value) {
 
 module.exports = getNative;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /**
  * lodash 3.0.8 (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="npm" -o ./`
@@ -15054,7 +15075,7 @@ function isObjectLike(value) {
 
 module.exports = isArguments;
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -15236,7 +15257,7 @@ function isNative(value) {
 
 module.exports = isArray;
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 /*
  * react-panels
  * https://github.com/Theadd/react-panels
@@ -17774,9 +17795,7 @@ var ReactPanels = {
 
 module.exports = ReactPanels;
 
-},{"react":253,"react-addons-css-transition-group":71,"react-addons-update":48,"react-dom":49}],71:[function(require,module,exports){
-module.exports = require('react/lib/ReactCSSTransitionGroup');
-},{"react/lib/ReactCSSTransitionGroup":107}],72:[function(require,module,exports){
+},{"react":253,"react-addons-css-transition-group":48,"react-addons-update":49,"react-dom":50}],72:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17889,7 +17908,7 @@ var Sidebar = (function (_React$Component) {
       touchCurrentY: null,
 
       // if touch is supported by the browser
-      dragSupported: (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && 'ontouchstart' in window
+      dragSupported: false
     };
 
     _this.overlayClicked = _this.overlayClicked.bind(_this);
@@ -17903,6 +17922,9 @@ var Sidebar = (function (_React$Component) {
   _createClass(Sidebar, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.setState({
+        dragSupported: (typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && 'ontouchstart' in window
+      });
       this.saveSidebarWidth();
     }
   }, {
@@ -18228,7 +18250,7 @@ Sidebar.defaultProps = {
 };
 
 exports.default = Sidebar;
-},{"react":253,"react-dom":49}],74:[function(require,module,exports){
+},{"react":253,"react-dom":50}],74:[function(require,module,exports){
 "use strict";
 
 var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -18364,48 +18386,53 @@ module.exports = React.createClass({
 
 },{"./check":74,"./x":78,"classnames":76,"react":253,"react-addons-pure-render-mixin":77}],76:[function(require,module,exports){
 /*!
-  Copyright (c) 2015 Jed Watson.
+  Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
   http://jedwatson.github.io/classnames
 */
+/* global define */
 
-function classNames() {
-	var classes = '';
-	var arg;
+(function () {
+	'use strict';
 
-	for (var i = 0; i < arguments.length; i++) {
-		arg = arguments[i];
-		if (!arg) {
-			continue;
-		}
+	var hasOwn = {}.hasOwnProperty;
 
-		if ('string' === typeof arg || 'number' === typeof arg) {
-			classes += ' ' + arg;
-		} else if (Object.prototype.toString.call(arg) === '[object Array]') {
-			classes += ' ' + classNames.apply(null, arg);
-		} else if ('object' === typeof arg) {
-			for (var key in arg) {
-				if (!arg.hasOwnProperty(key) || !arg[key]) {
-					continue;
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
 				}
-				classes += ' ' + key;
 			}
 		}
+
+		return classes.join(' ');
 	}
-	return classes.substr(1);
-}
 
-// safely export classNames for node / browserify
-if (typeof module !== 'undefined' && module.exports) {
-	module.exports = classNames;
-}
-
-// safely export classNames for RequireJS
-if (typeof define !== 'undefined' && define.amd) {
-	define('classnames', [], function() {
-		return classNames;
-	});
-}
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
 
 },{}],77:[function(require,module,exports){
 module.exports = require('react/lib/ReactComponentWithPureRenderMixin');
@@ -38749,91 +38776,8 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 }).call(this,require('_process'))
 },{"./emptyFunction":233,"_process":42}],252:[function(require,module,exports){
-'use strict';
-/* eslint-disable no-unused-vars */
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (e) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (Object.getOwnPropertySymbols) {
-			symbols = Object.getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-},{}],253:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"dup":47}],253:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
