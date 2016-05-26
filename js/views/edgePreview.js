@@ -7,7 +7,7 @@ var ReactDOM = require('react-dom');
 
 var flowChartActions = require('../actions/flowChartActions');
 
-var interact = require('../../node_modules/interact-js/interact.js');
+var interact = require('../../node_modules/interact.js');
 
 var EdgePreview = React.createClass({
 

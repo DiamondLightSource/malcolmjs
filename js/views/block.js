@@ -14,7 +14,7 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 var Ports = require('./ports.js');
 var BlockRectangle = require('./blockRectangle');
 
-var interact = require('../../node_modules/interact-js/interact.js');
+var interact = require('../../node_modules/interact.js');
 
 var Block = React.createClass({
 

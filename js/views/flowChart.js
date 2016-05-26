@@ -18,7 +18,7 @@ var Edge = require('./edge.js');
 var EdgePreview = require('./edgePreview');
 var Block = require('./block.js');
 
-var interact = require('../../node_modules/interact-js/interact.js');
+var interact = require('../../node_modules/interact.js');
 
 var AppContainerStyle = {
   "height": "100%",
