@@ -8,7 +8,7 @@ var sidePaneActions = require('../actions/sidePaneActions');
 
 var paneStore = require('../stores/paneStore');
 
-var interact = require('../../node_modules/interact.js');
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var Dropdown = React.createClass({
 

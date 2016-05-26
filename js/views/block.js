@@ -14,9 +14,7 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 var Ports = require('./ports.js');
 var BlockRectangle = require('./blockRectangle');
 
-var interact = require('../../node_modules/interact.js');
-
-var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var Block = React.createClass({
 
@@ -38,7 +36,6 @@ var Block = React.createClass({
         onstart: function(e){
           e.stopImmediatePropagation();
           e.stopPropagation();
-          Perf.start();
           //console.log("interactjs dragstart");
         },
         onmove: this.interactJsDrag,
@@ -46,8 +43,6 @@ var Block = React.createClass({
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragend");
-          Perf.stop();
-          Perf.printWasted(Perf.getLastMeasurements());
         }
       });
 
@@ -102,9 +97,6 @@ var Block = React.createClass({
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
-
-    Perf.stop();
-    Perf.printWasted(Perf.getLastMeasurements());
 
     if(this.props.areAnyBlocksSelected === false){
       flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);

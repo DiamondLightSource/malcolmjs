@@ -19,8 +19,6 @@ var appConstants = require('./constants/appConstants.js');
 
 var MalcolmActionCreators = require('./actions/MalcolmActionCreators');
 
-var Perf = require('../node_modules/react/lib/ReactDefaultPerf.js');
-
 var AppContainerStyle = {
   margin: 0,
   padding: 0,
@@ -47,8 +45,6 @@ var SideTabbedViewStyle = {
 var App = React.createClass({
 
   componentDidMount: function(){
-
-    Perf.start();
 
   },
 

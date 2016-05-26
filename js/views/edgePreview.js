@@ -7,10 +7,7 @@ var ReactDOM = require('react-dom');
 
 var flowChartActions = require('../actions/flowChartActions');
 
-var interact = require('../../node_modules/interact.js');
-
-var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
-
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var EdgePreview = React.createClass({
 
@@ -22,7 +19,6 @@ var EdgePreview = React.createClass({
 
   componentDidMount: function(){
 
-    Perf.start();
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
@@ -77,8 +73,6 @@ var EdgePreview = React.createClass({
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
-    Perf.stop();
-    Perf.printWasted(Perf.getLastMeasurements());
   },
 
   shouldComponentUpdate: function(){

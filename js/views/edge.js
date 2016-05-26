@@ -9,7 +9,7 @@ var paneActions = require('../actions/paneActions');
 var flowChartActions = require('../actions/flowChartActions');
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
-var interact = require('../../node_modules/interact.js');
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var Edge = React.createClass({
 

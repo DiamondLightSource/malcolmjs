@@ -18,9 +18,7 @@ var Edge = require('./edge.js');
 var EdgePreview = require('./edgePreview');
 var Block = require('./block.js');
 
-var interact = require('../../node_modules/interact.js');
-
-var Perf = require('../../node_modules/react/lib/ReactDefaultPerf.js');
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var AppContainerStyle = {
   "height": "100%",
@@ -39,7 +37,6 @@ var FlowChart = React.createClass({
   },
 
   componentDidMount: function () {
-    //Perf.start();
 
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);

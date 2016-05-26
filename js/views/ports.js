@@ -6,7 +6,7 @@ var React = require('../../node_modules/react/react');
 
 var flowChartActions = require('../actions/flowChartActions');
 
-var interact = require('../../node_modules/interact.js');
+var interact = require('../../node_modules/interact-js/interact.js');
 
 var Ports = React.createClass({
 
