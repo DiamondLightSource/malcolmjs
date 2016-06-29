@@ -93,5 +93,6 @@ function Client(url){
 
 }
 
-var WebSocketClient = new Client('ws://pc0090:8080/ws');
+/*var WebSocketClient = new Client('ws://pc0090:8080/ws');*/
+var WebSocketClient = new Client('ws://pc0070:8080/ws');
 module.exports = WebSocketClient;
