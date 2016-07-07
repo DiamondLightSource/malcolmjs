@@ -2,7 +2,8 @@
  * Created by twi18192 on 02/03/16.
  */
 
-var WebSocketClient = require('../fluxWebsocketClient');
+//var WebSocketClient = require('../fluxWebsocketClient');
+var WebSocketClient = require('../wsWebsocketClient');
 var idLookupTableFunctions = require('./idLookupTable');
 
 console.log(WebSocketClient);
