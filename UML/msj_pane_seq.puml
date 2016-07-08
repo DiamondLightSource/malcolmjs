@@ -1,0 +1,22 @@
+@startuml
+title Sidebar toggle sequence
+hide footbox
+skinparam roundcorner 20
+Actor User
+Activate MainPane #DarkSalmon
+User -> MainPane: click toggle sidebar
+MainPane -> panelActions: toggle sidebar
+Activate panelActions #DarkSalmon
+panelActions -> AppDispatcher: action
+Activate AppDispatcher #DarkSalmon
+AppDispatcher -> paneStore: action
+AppDispatcher --> panelActions
+panelActions --> MainPane
+Deactivate AppDispatcher
+Deactivate panelActions
+Deactivate MainPane
+Activate paneStore #DarkSalmon
+paneStore -> sidebar: emit change
+Activate sidebar #DarkSalmon
+paneStore -> sidebar: sidebar open state
+@enduml
