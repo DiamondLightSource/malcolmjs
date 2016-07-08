@@ -13,8 +13,8 @@ import BothPanes from '../views/sidebar';
 
 //const BothPanes = require('../views/sidebar')
 describe('BothPanes', () => {
-    it('changes the text after click', () => {
-        // Render a sidebar
+    it('creates and renders main pane and side pane areas', () => {
+        // Render the panes
         var AppConstants = require('../constants/appConstants');
         const bothpanes = TestUtils.renderIntoDocument(
             <BothPanes />
