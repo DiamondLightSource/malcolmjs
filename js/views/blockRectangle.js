@@ -46,7 +46,7 @@ var BlockRectangles = React.createClass({
                y={3}
                style={{cursor: this.props.portThatHasBeenClicked === null ? "move" : "default",
                opacity: '0.5'}}
-               xlinkHref="http://172.23.244.90:8080/icons/LUT.svg"
+               xlinkHref="http://localhost:8080/icons/LUT.svg"
         />
       </g>
     )
