@@ -3,7 +3,6 @@
  */
 var webpack = require('webpack');
 var path = require('path');
-//var json = require("json!./file.json");
 
 var BUILD_DIR = path.resolve(__dirname, 'build');
 var APP_DIR = path.resolve(__dirname, 'js');
@@ -16,7 +15,7 @@ var config = {
     },
     module : {
         loaders : [
-            {
+            {   exclude: /node_modules/,
                 test : /\.js?/,
                 include : APP_DIR,
                 loader : 'babel'
