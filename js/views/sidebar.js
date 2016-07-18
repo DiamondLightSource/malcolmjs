@@ -16,6 +16,10 @@ var paneActions = require('../actions/paneActions');
 
 var SideBar = require('react-sidebar').default;
 
+// Needed for onTouchTap
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 var MainTabbedViewStyle = {
   "height": "100%",
   "width": "100%",
