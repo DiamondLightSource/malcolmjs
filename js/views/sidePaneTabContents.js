@@ -6,6 +6,7 @@ var React = require('react');
 
 var ReactPanels = require('react-panels');
 var Content = ReactPanels.Content;
+var Button = ReactPanels.Button;
 
 var Treeview = require('react-treeview');
 
