@@ -9,7 +9,14 @@ var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 var ToggleSwitch = require('react-toggle');
 
 var BlockToggleSwitch = React.createClass({
-
+  propTypes: {
+    blockAttributeValue: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.bool
+    ]).isRequired,
+      blockName: React.PropTypes.string.isRequired,
+      attributeName: React.PropTypes.string.isRequired
+  },
   shouldComponentUpdate: function(nextProps, nextState){
     return(
       nextProps.blockAttributeValue !== this.props.blockAttributeValue
