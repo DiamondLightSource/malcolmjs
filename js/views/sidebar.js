@@ -107,12 +107,12 @@ var SidebarStyling = {
 // Stub out window.matchMedia() if running under Jest test simulation
 // as the mocked function does not appear to be supported.
 window.matchMedia = window.matchMedia || function() {
-      return {
-        matches : false,
-        addListener : function() {},
-        removeListener: function() {}
-      };
-    };
+  return {
+    matches : false,
+    addListener : function() {},
+    removeListener: function() {}
+  };
+};
 
 function getBothPanesState(){
   return{
@@ -169,7 +169,7 @@ var BothPanes = React.createClass({
 
   render: function(){
 
-    console.log("render: sidebar");
+    console.log("render: sidebar (BothPanes)");
 
     return(
       <div id="BothPanesContainer" style={BothPanesContainerStyle} >

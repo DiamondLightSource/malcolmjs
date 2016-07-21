@@ -64,8 +64,8 @@ var MainPane = React.createClass({
   render: function() {
     console.log("render: mainPane");
     var TESTStyling = {
-      height: 1000,
-      width: 1000,
+      'height': '1000px',
+      'width': '1000px',
       //backgroundColor: 'darkmagenta'
     };
 
