@@ -4,6 +4,9 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+
+//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 var ReactPanels = require('react-panels');
 //var WebSocketClient = require('./websocketClient');
 //var testingWebsocketActions = require('./actions/testingWebsocketActions');
@@ -57,6 +60,14 @@ var App = React.createClass({
     )
   }
 });
+
+/*
+const App = () => (
+    <div id="appContainer" style={AppContainerStyle}>
+        <BothPanes/>
+    </div>
+);
+*/
 
 ReactDOM.render(
   <App/>,
