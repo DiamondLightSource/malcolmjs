@@ -18,7 +18,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {pattern: 'js/__tests__/fixtures/**/*'},
-        '*.html',
+      '*.html',
       'tests.webpack.js'
     ],
 
@@ -38,14 +38,14 @@ module.exports = function(config) {
       'tests.webpack.js': [ 'webpack', 'sourcemap' ], //preprocess with webpack and our sourcemap loader
       '**/*.html'   : ['html2js'],
       '**/*.json'   : ['json_fixtures']
-  },
+    },
     coverageReporter: {
       type: 'html', //produces a html document after code is run
       dir: 'coverage/' //path to created html doc
     },
-  jsonFixturesPreprocessor: {
-    variableName: '__json__'
-  },
+    jsonFixturesPreprocessor: {
+      variableName: '__json__'
+    },
     reporters: [ 'mocha', 'coverage' ], //report results in this format
     webpack: { //kind of a copy of your webpack config
       devtool: 'inline-source-map', //just do inline source maps instead of the default
