@@ -8,7 +8,8 @@ var NonEditableReadoutField = require('./nonEditableReadoutField');
 var TextEditableReadoutField = require('./textEditableReadoutField');
 var DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
 var LEDWidget = require('./ledWidget');
-var BlockToggleSwitch = require('./blockToggleSwitch');
+//var BlockToggleSwitch = require('./blockToggleSwitch');
+var BlockToggleSwitch = require('../../components/blockToggleSwitchBelle');
 
 var WidgetStatusIcon = require('./widgetStatusIcon');
 

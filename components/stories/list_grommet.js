@@ -4,8 +4,9 @@
 import React from 'react';
 import List from 'grommet/components/List';
 import ListItem from 'grommet/components/ListItem';
+import 'grommet/grommet-hpe.min.css'
 import { storiesOf, action } from '@kadira/storybook';
-import './index.scss';
+//import './index.scss';
 
 function handleToggle(event){
 

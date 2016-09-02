@@ -25,19 +25,19 @@ var config = {
       {
         exclude: /node_modules/,
         test: /\.js?/,
-        include: APP_DIR,
+        include: [APP_DIR, path.resolve(__dirname, 'components')],
         loader: 'babel'
       },
       {test: /\.json$/, loader: 'json'},
       {
         test: /\.css?$/,
         loaders: ['style', 'raw'],
-        include: path.resolve(__dirname, './')
+        include: [path.resolve(__dirname, './'), path.resolve(__dirname, './components/styles')]
       },
       {
         test: /\.scss$/,
         loaders: ['style','css','sass'],
-        include: path.resolve(__dirname, './')
+        include: [path.resolve(__dirname, './'), path.resolve(__dirname, './components/styles')]
       },
       {test: /\.png$/, loader: "url-loader?limit=100000"},
       {test: /\.jpg$/, loader: "file-loader"}]
