@@ -2,11 +2,11 @@
  * Created by twi18192 on 02/03/16.
  */
 
-//var WebSocketClient = require('../fluxWebsocketClient');
+// var WebSocketClient = require('../fluxWebsocketClient');
 var WebSocketClient = require('../wsWebsocketClient');
 var idLookupTableFunctions = require('./idLookupTable');
 
-console.log(WebSocketClient);
+//console.log(WebSocketClient);
 
 var MalcolmUtils = {
 
@@ -17,7 +17,7 @@ var MalcolmUtils = {
   malcolmGet: function(requestedData, successCallback, failureCallback){
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
-    var message = JSON.stringify({type: 'Get', id: id, endpoint: requestedData});
+    var message = JSON.stringify({typeid: 'malcolm:core/Get:1.0', id: id, endpoint: requestedData});
 
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
@@ -30,7 +30,7 @@ var MalcolmUtils = {
   malcolmSubscribe: function(requestedData, successCallback, failureCallback){
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
-    var message = JSON.stringify({type: 'Subscribe', id: id, endpoint: requestedData});
+    var message = JSON.stringify({typeid: 'malcolm:core/Subscribe:1.0', id: id, endpoint: requestedData});
 
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
@@ -44,7 +44,7 @@ var MalcolmUtils = {
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
     var message = JSON.stringify({
-      type: 'Call',
+      typeid: 'malcolm:core/Call:1.0',
       id: id,
       endpoint: requestedDataToWrite,
       method: method,
