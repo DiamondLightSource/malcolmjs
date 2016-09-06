@@ -1,10 +1,13 @@
 /**
  * Created by twi18192 on 22/03/16.
  */
+import CheckBox from 'grommet/components/CheckBox';
+//require('../components/styles/main.css');
+import 'grommet/grommet.min.css';
 
 var React = require('react');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+var MalcolmActionCreators = require('../js/actions/MalcolmActionCreators');
 
 var ToggleSwitch = require('react-toggle');
 
@@ -83,13 +86,15 @@ var BlockToggleSwitch = React.createClass({
 
       <div style={{display: 'flex', justifyContent: 'space-between', left: '45'}} >
         <p style={{margin: '0px', width: '40px', position: 'relative'}} >False</p>
-        <div id="testToggleSwitch" style={{height: '16', width: '44', marginLeft: '25'}} >
-          <ToggleSwitch onChange={this.handleOnChange}
+        <div id="testToggleSwitch" >
+          <CheckBox onChange={this.handleOnChange} toggle={true}
                       checked={this.props.blockAttributeValue === 'Show' ||
                                this.props.blockAttributeValue === true}
                       id={this.props.blockName + 'toggleSwitch'}
                       on={this.props.blockAttributeValue === 'Show' ||
-                          this.props.blockAttributeValue === true} />
+                          this.props.blockAttributeValue === true}
+                    size="small"
+                    style={{height: '16', width: '44', marginLeft: '25'}}/>
         </div>
         <p style={{margin: '0px', width: '40px', marginLeft: '22'}} >True</p>
       </div>

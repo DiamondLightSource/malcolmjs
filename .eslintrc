@@ -1,8 +1,14 @@
 {
+// "off"   0
+// "warn"  1
+// "error" 2
+//
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react",
+
   ],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "env": {
     "browser": true,
     "node": true,
@@ -12,15 +18,21 @@
     "__DEV__": true,
     "__SERVER__": true
   },
-  "ecmaFeatures": {
-    "jsx": true
-  },
+  "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
   "rules": {
     // Strict mode
-    "strict": [2, "never"],
-
+    "strict": ["warn", "never"],
+    "no-console": "off",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
     // Code style
-    "indent": [2, 2],
-    "quotes": [2, "single"]
+    "indent": ["warn", 2],
+    "quotes": ["off", "single"]
   }
 }

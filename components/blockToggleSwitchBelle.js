@@ -1,12 +1,15 @@
 /**
  * Created by twi18192 on 22/03/16.
  */
+var belle = require('belle');
+var Toggle = belle.Toggle;
+var Choice = belle.Choice;
+//require('../components/styles/main.css');
+import 'grommet/grommet.min.css';
 
 var React = require('react');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
-
-var ToggleSwitch = require('react-toggle');
+var MalcolmActionCreators = require('../js/actions/MalcolmActionCreators');
 
 var BlockToggleSwitch = React.createClass({
   propTypes: {
@@ -82,16 +85,22 @@ var BlockToggleSwitch = React.createClass({
     return(
 
       <div style={{display: 'flex', justifyContent: 'space-between', left: '45'}} >
-        <p style={{margin: '0px', width: '40px', position: 'relative'}} >False</p>
-        <div id="testToggleSwitch" style={{height: '16', width: '44', marginLeft: '25'}} >
-          <ToggleSwitch onChange={this.handleOnChange}
-                      checked={this.props.blockAttributeValue === 'Show' ||
+        <span style={{margin: '0px', width: '40px', position: 'relative', verticalAlign: 'middle'}} >False</span>
+        <div id="testToggleSwitch" >
+          <Toggle onUpdate={this.handleOnChange}
+                      value={this.props.blockAttributeValue === 'Show' ||
                                this.props.blockAttributeValue === true}
                       id={this.props.blockName + 'toggleSwitch'}
-                      on={this.props.blockAttributeValue === 'Show' ||
-                          this.props.blockAttributeValue === true} />
+                  firstChoiceStyle={Object.assign({}, belle.style.toggle.firstChoiceStyle, { backgroundColor: 'rgba(127, 255, 127, 0.8)', color: 'rgba(0, 0, 255, 1.0)'})}
+                  style={Object.assign({}, belle.style.toggle.style, { transform: 'scale(0.6)'})}
+                  sliderStyle={Object.assign({}, belle.style.toggle.sliderStyle)}
+                  handleStyle={Object.assign({}, belle.style.toggle.handleStyle, {backgroundColor: 'rgba(127, 127, 200, 1.0)'})}
+                  secondChoiceStyle={Object.assign({}, belle.style.toggle.secondChoiceStyle, { backgroundColor: 'rgba(127, 127, 127, 1.0)' })}>
+            <Choice value>Show</Choice>
+            <Choice value={ false }>Hide</Choice>
+        </Toggle>
         </div>
-        <p style={{margin: '0px', width: '40px', marginLeft: '22'}} >True</p>
+        <p style={{margin: '0px', width: '40px', marginLeft: '22',verticalAlign: 'middle'}} >True</p>
       </div>
 
     )

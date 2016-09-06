@@ -88,20 +88,19 @@ var SidePane = React.createClass({
                globals={globals}
                buttons={[
 
-            <Button title="Remove active tab"
+                 <Button title="Remove active tab"
                     onButtonClick={this.handleActionRemoveBlockTab} >
-              <i className="fa fa-times"></i>
-            </Button>,
-            <Button title="Drop down menu">
-              <div id="dropDown">
-                <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
+                    <i className="fa fa-times"></i>
+                 </Button>,
+                 <Button title="Drop down menu">
+                    <div id="dropDown">
+                        <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
                           tabState={this.props.tabState}
                           listVisible={this.props.listVisible}
-                />
-              </div>
-            </Button>
-          ]}
-        >
+                        />
+                    </div>
+                  </Button>
+               ]}>
           {dynamicTab}
         </Panel>
     );
