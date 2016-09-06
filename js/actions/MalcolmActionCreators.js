@@ -8,6 +8,9 @@ var MalcolmUtils = require('../utils/MalcolmUtils');
 
 var MalcolmActionCreators = {
 
+  /* default device name to Z, which was the original name for the simulator device */
+  deviceId: "Z",
+
   initialiseFlowChart: function(requestedData){
 
     /* Try sending an initialise flowChart start action here */
@@ -29,6 +32,10 @@ var MalcolmActionCreators = {
     /* Testing subscribe */
     //MalcolmUtils.initialiseFlowChart(this.malcolmSubscribe.bind(null, requestedData));
 
+  },
+
+  malcolmSetDevice: function (devid) {
+    actionCreators.deviceId = devid;
   },
 
   malcolmGet: function(requestedData){
@@ -53,7 +60,7 @@ var MalcolmActionCreators = {
       })
     }
 
-    if(requestedData === 'Z'){
+    if(requestedData === actionCreators.deviceId){
 
       var testMalcolmGetSuccess = function(responseMessage){
         console.log(responseMessage);
@@ -79,7 +86,7 @@ var MalcolmActionCreators = {
           }
         };
 
-        MalcolmUtils.malcolmGet('Z:VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+        MalcolmUtils.malcolmGet(actionCreators.deviceId+':VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
 
         /* Fetching each block in the list */
 
@@ -140,7 +147,7 @@ var MalcolmActionCreators = {
       })
     }
 
-    var requestedAttributeDataPath = "Z:" + blockName + ".attributes." + attribute;
+    var requestedAttributeDataPath = actionCreators.deviceId+":" + blockName + ".attributes." + attribute;
 
     MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
@@ -187,7 +194,7 @@ var MalcolmActionCreators = {
       })
     }
 
-    var requestedDataToWritePath = "Z:" + blockName;
+    var requestedDataToWritePath = actionCreators.deviceId+":" + blockName;
 
     MalcolmUtils.malcolmCall(requestedDataToWritePath,
       method, args, malcolmCallSuccess, malcolmCallFailure);
