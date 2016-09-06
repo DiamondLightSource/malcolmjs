@@ -75,6 +75,21 @@ var dropdownMenuSelect = function(tab){
 
 };
 
+var deviceSelect = function(tab){
+
+  console.log("device select");
+  console.log(tab);
+
+  for(var i = 0; i < _stuff.tabState.length; i++){
+    console.log(_stuff.tabState[i]);
+    if(_stuff.tabState[i].label === tab){
+      var findTheIndex = i
+    }
+  }
+
+  _stuff.selectedTabIndex = findTheIndex;
+
+};
 var selectBlockOnClick = function(){
   var tabStateLength = _stuff.tabState.length;
 
@@ -146,6 +161,11 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
     case appConstants.DROPDOWN_SELECT:
       dropdownMenuSelect(item);
+      paneStore.emitChange();
+      break;
+
+    case appConstants.DEVICE_SELECT:
+      deviceSelect(item);
       paneStore.emitChange();
       break;
 

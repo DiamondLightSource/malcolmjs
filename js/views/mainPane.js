@@ -53,8 +53,8 @@ var MainPane = React.createClass({
   //  paneActions.configTabOpen('this is the item')
   //},
 
-  handleActionBlockLookupTableTabOpen: function(){
-    paneActions.blockLookupTableTabOpen('this is the item');
+  handleActionDeviceSelect: function(){
+    paneActions.deviceSelect('select device');
   },
 
   handleActionToggleSidebar: function(){
@@ -70,8 +70,8 @@ var MainPane = React.createClass({
     };
 
     var contentStyling = {
-      'height': '1476',
-      'width': '1494'
+      'height': '1476 px',
+      'width': '1494 px'
     };
 
     /* Using an if statement to check if we need to display the initial data fetch loading icon
@@ -103,6 +103,9 @@ var MainPane = React.createClass({
           <FooterButton id="blockLookUpTableButton"
                         buttonLabel="Blocks"
                         buttonClick={this.handleActionBlockLookupTableTabOpen} />
+          <FooterButton id="deviceLookUpTableButton"
+                        buttonLabel="Devices"
+                        buttonClick={this.handleActionDeviceSelect} />
         </div>
       </div>
       </Footer>;

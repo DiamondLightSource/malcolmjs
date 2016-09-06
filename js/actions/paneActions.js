@@ -13,6 +13,12 @@ var paneActions = {
       item:tab
     })
   },
+  deviceSelect: function(tab){
+    AppDispatcher.handleViewAction({
+      actionType: appConstants.DEVICE_SELECT,
+      item: tab
+    })
+  },
   favTabOpen: function(item){
     AppDispatcher.handleViewAction({
       actionType: appConstants.FAVTAB_OPEN,
