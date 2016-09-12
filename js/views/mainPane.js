@@ -70,8 +70,8 @@ var MainPane = React.createClass({
     };
 
     var contentStyling = {
-      'height': '1476 px',
-      'width': '1494 px'
+      'height': '1476px',
+      'width': '1494px'
     };
 
     /* Using an if statement to check if we need to display the initial data fetch loading icon
