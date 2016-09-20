@@ -12,6 +12,8 @@ var idLookupTableFunctions = {
    */
 
     //window.alert("look at the lookup table!");
+    //console.log("idLookupTableFunctions.invokeIdCallback( id, success, json)  json -> :");
+    //console.log(JSON.parse(JSON.stringify(json)));
 
     if (success === true) {
       idLookupTable[id].successCallback(json);

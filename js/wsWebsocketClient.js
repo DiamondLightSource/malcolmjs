@@ -6,6 +6,9 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 
 var idLookupTableFunctions = require('./utils/idLookupTable');
 
+var Config = require('./utils/config');
+var malcolmProtocol = require('./utils/malcolmProtocol');
+
 function Client(url){
 
     var channelIDIndex = 0;
@@ -27,6 +30,7 @@ function Client(url){
     };
 
     this.sendText = function(message){
+      console.log('Client.sendText: '+message);
         websocket.send(message);
     };
 
@@ -75,11 +79,12 @@ function Client(url){
 
         websocket.onmessage = function(evt){
             var json  = JSON.parse(evt.data);
-
-            if(json.type === 'Error'){
+            //console.log("websocket.onmessage: ");
+            //console.log(JSON.parse(JSON.stringify(json)));
+            if(malcolmProtocol.isError(json)){
                 idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
             }
-            else if(json.type === 'Return' || json.type === 'Value'){
+            else if(malcolmProtocol.isReturn(json) || malcolmProtocol.isValue(json)){
                 idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
             }
         };
@@ -88,6 +93,13 @@ function Client(url){
 
 }
 
-/*var WebSocketClient = new Client('ws://pc0070:8080/ws');*/
-var WebSocketClient = new Client('ws://pc0070:8080/ws');
+/*  For development purposes, a table of available Zebra/PandA servers
+ */
+Config.setServerName('isaDev');
+Config.setProtocolVersion('V1_0');
+Config.setdeviceName('Z');
+var url = Config.getServerURL();
+
+var WebSocketClient = new Client(url);
+
 module.exports = WebSocketClient;

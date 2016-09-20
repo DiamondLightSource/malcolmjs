@@ -5,6 +5,7 @@
 // var WebSocketClient = require('../fluxWebsocketClient');
 var WebSocketClient = require('../wsWebsocketClient');
 var idLookupTableFunctions = require('./idLookupTable');
+var malcolmProtocol = require('../utils/malcolmProtocol');
 
 //console.log(WebSocketClient);
 
@@ -17,46 +18,56 @@ var MalcolmUtils = {
   malcolmGet: function(requestedData, successCallback, failureCallback){
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
-    var message = JSON.stringify({typeid: 'malcolm:core/Get:1.0', id: id, endpoint: requestedData});
+    var message = {};
+    message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDGet();
+    message['id'] = id;
+    message['endpoint'] = requestedData;
+    //var messageJson = JSON.stringify({malcolmProtocol.getTypeIDIdent(): malcolmProtocol.getTypeIDGet(), id: id, endpoint: requestedData});
+    var messageJson = JSON.stringify(message);
 
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
       failureCallback: failureCallback
     });
 
-    WebSocketClient.sendText(message);
+    WebSocketClient.sendText(messageJson);
   },
 
   malcolmSubscribe: function(requestedData, successCallback, failureCallback){
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
-    var message = JSON.stringify({typeid: 'malcolm:core/Subscribe:1.0', id: id, endpoint: requestedData});
-
+    var message = {};
+    message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDSubscribe();
+    message['id'] = id;
+    message['endpoint'] = requestedData;
+    var messageJson = JSON.stringify(message);
+    console.log("Subscribe: ");
+    console.log(messageJson);
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
       failureCallback: failureCallback
     });
 
-    WebSocketClient.sendText(message);
+    WebSocketClient.sendText(messageJson);
   },
 
   malcolmCall: function(requestedDataToWrite, method, args, successCallback, failureCallback){
     var id = WebSocketClient.getNextAvailableId();
     WebSocketClient.incrementId();
-    var message = JSON.stringify({
-      typeid: 'malcolm:core/Call:1.0',
-      id: id,
-      endpoint: requestedDataToWrite,
-      method: method,
-      arguments: args
-    });
+    var message = {};
+    message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDCall();
+    message['id'] = id;
+    message['endpoint'] = requestedDataToWrite;
+    message['method'] = method;
+    message['arguments'] = args;
+    var messageJson = JSON.stringify(message);
 
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
       failureCallback: failureCallback
     });
 
-    WebSocketClient.sendText(message);
+    WebSocketClient.sendText(messageJson);
   }
 
 };

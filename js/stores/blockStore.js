@@ -8,6 +8,7 @@ var EventEmitter = require('events').EventEmitter;
 var assign = require('../../node_modules/object-assign/index.js');
 
 var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+var Config = require('../utils/config');
 
 var update = require('react-addons-update');
 
@@ -356,6 +357,7 @@ function removeEdgeViaMalcolm(Info){
 var flowChartStore = require('./flowChartStore');
 
 var blockStore = assign({}, EventEmitter.prototype, {
+
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
   },
@@ -371,7 +373,7 @@ var blockStore = assign({}, EventEmitter.prototype, {
     if(allBlockInfo === null){
       allBlockInfo = {};
 
-      MalcolmActionCreators.initialiseFlowChart('Z');
+      MalcolmActionCreators.initialiseFlowChart(Config.getDeviceName());
 
       return {};
     }

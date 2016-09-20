@@ -5,12 +5,13 @@
 var AppDispatcher = require('../dispatcher/appDispatcher.js');
 var appConstants = require('../constants/appConstants.js');
 var MalcolmUtils = require('../utils/MalcolmUtils');
+var Config = require('../utils/config');
 
 var MalcolmActionCreators = {
 
   /* default device name to Z, which was the original name for the simulator device */
-  deviceId: "Z",
-
+//  deviceId: "Z",
+  deviceId: ((Config.getProtocolVersion() === 'V2_0') ? "counter" : "Z"),
   initialiseFlowChart: function(requestedData){
 
     /* Try sending an initialise flowChart start action here */
@@ -32,10 +33,6 @@ var MalcolmActionCreators = {
     /* Testing subscribe */
     //MalcolmUtils.initialiseFlowChart(this.malcolmSubscribe.bind(null, requestedData));
 
-  },
-
-  malcolmSetDevice: function (devid) {
-    actionCreators.deviceId = devid;
   },
 
   malcolmGet: function(requestedData){
@@ -80,13 +77,30 @@ var MalcolmActionCreators = {
             if(zVisibility.attributes[attribute].tags !== undefined){
               /* Then it's a block visible attribute, so subscribe to it */
 
-              actionCreators.malcolmSubscribe('VISIBILITY', attribute);
+              if (Config.getProtocolVersion() === 'V2_0')
+                {
+                actionCreators.malcolmSubscribe(['VISIBILITY', attribute]);
+                }
+              else
+                {
+                  actionCreators.malcolmSubscribe('VISIBILITY', attribute);
+                  //console.log('malcolmGet: attribute: '+attribute);
+                }
+
 
             }
           }
         };
 
-        MalcolmUtils.malcolmGet(actionCreators.deviceId+':VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+        if (Config.getProtocolVersion() === 'V2_0')
+          {
+          MalcolmUtils.malcolmGet([actionCreators.deviceId, "VISIBILITY"], zVisibilitySubscribe, malcolmGetFailure);
+          }
+        else
+          {
+          MalcolmUtils.malcolmGet(actionCreators.deviceId+':VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+          }
+
 
         /* Fetching each block in the list */
 
@@ -98,7 +112,15 @@ var MalcolmActionCreators = {
            */
 
           var block = responseMessage.attributes.blocks.value[i];
-          MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+
+          if (Config.getProtocolVersion() === 'V2_0')
+          {
+            MalcolmUtils.malcolmGet([block], malcolmGetSuccess, malcolmGetFailure);
+          }
+          else
+          {
+            MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
+          }
 
         }
 
@@ -112,9 +134,10 @@ var MalcolmActionCreators = {
       MalcolmUtils.malcolmGet(requestedData, testMalcolmGetSuccess, malcolmGetFailure);
 
     }
-    else{
+    else
+      {
       MalcolmUtils.malcolmGet(requestedData, malcolmGetSuccess, malcolmGetFailure);
-    }
+      }
 
   },
 
@@ -147,7 +170,16 @@ var MalcolmActionCreators = {
       })
     }
 
-    var requestedAttributeDataPath = actionCreators.deviceId+":" + blockName + ".attributes." + attribute;
+    var requestedAttributeDataPath = '';
+
+    if (Config.getProtocolVersion() === 'V2_0')
+      {
+      requestedAttributeDataPath = [actionCreators.deviceId, blockName, "attributes", attribute];
+      }
+    else
+      {
+      requestedAttributeDataPath = actionCreators.deviceId + ":" + blockName + ".attributes." + attribute;
+      }
 
     MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
@@ -194,7 +226,16 @@ var MalcolmActionCreators = {
       })
     }
 
-    var requestedDataToWritePath = actionCreators.deviceId+":" + blockName;
+    var requestedDataToWritePath = '';
+
+    if (Config.getProtocolVersion() === 'V2_0')
+      {
+      requestedDataToWritePath = [actionCreators.deviceId, blockName];
+      }
+    else
+      {
+      requestedDataToWritePath = actionCreators.deviceId + ":" + blockName;
+      }
 
     MalcolmUtils.malcolmCall(requestedDataToWritePath,
       method, args, malcolmCallSuccess, malcolmCallFailure);
@@ -204,5 +245,7 @@ var MalcolmActionCreators = {
 };
 
 var actionCreators = MalcolmActionCreators;
+
+console.log("MalcolmActionCreators: deviceId = "+MalcolmActionCreators.deviceId);
 
 module.exports = MalcolmActionCreators;
