@@ -71,8 +71,9 @@ var _protocolEnum = Object.freeze({V1_0: 0, V2_0: 1});
 /* Set default protocol */
 var _protocolKey = _protocolEnum.V1_0;
 
-var _serverURLTable = Object.freeze({pc70:'ws://pc0070:8080/ws',
-                       isaDev:'ws://172.23.252.202/ws' });
+var _serverURLTable = Object.freeze({ pc70:'ws://pc0070:8080/ws',
+                                      isaDev:'ws://172.23.252.202/ws',
+                                      isaSpare:'ws://172.23.252.201/ws' });
 
 /* Default server URL to PC0070 - Ian's local machine */
 var _serverKey = 'isaDev';
