@@ -30,7 +30,7 @@ function Client(url){
     };
 
     this.sendText = function(message){
-      console.log('Client.sendText: '+message);
+      //console.log('Client.sendText: '+message);
         websocket.send(message);
     };
 
@@ -95,11 +95,10 @@ function Client(url){
 
 /*  For development purposes, a table of available Zebra/PandA servers
  */
-Config.setServerName('isaDev');
+Config.setServerName('isaSpare');
 Config.setProtocolVersion('V1_0');
 Config.setdeviceName('Z');
 var url = Config.getServerURL();
-
 var WebSocketClient = new Client(url);
 
 module.exports = WebSocketClient;
