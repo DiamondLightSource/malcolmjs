@@ -6,7 +6,15 @@ var React = require('react');
 
 var paneActions = require('../actions/paneActions');
 
-var WidgetStatusIcon = React.createClass({
+var WidgetStatusIcon = React.createClass(
+  {
+  propTypes:
+    {
+    blockAttribute: React.PropTypes.object,
+    blockAttributeStatus: React.PropTypes.object,
+    blockName: React.PropTypes.string,
+    attributeName: React.PropTypes.string
+    },
 
   shouldComponentUpdate: function(nextProps, nextState){
     return(
@@ -40,6 +48,7 @@ var WidgetStatusIcon = React.createClass({
 
     if(this.props.blockAttribute.alarm !== undefined){
       if (this.props.blockAttribute.alarm.message === 'Invalid') {
+        console.log('widgetStatusIcon.render(): alarm: Invalid');
         statusIcon = <i className="fa fa-plug fa-lg" aria-hidden="true"
                         onClick={this.onButtonClick}></i>
       }
@@ -55,6 +64,7 @@ var WidgetStatusIcon = React.createClass({
 
     if(this.props.blockAttributeStatus.value === 'failure'){
       /* Override the other icons and display an error icon */
+      console.log('widgetStatusIcon.render(): value === failure');
 
       statusIcon = <i className="fa fa-exclamation-circle fa-lg" aria-hidden="true"
                       onClick={this.onButtonClick}
@@ -64,6 +74,7 @@ var WidgetStatusIcon = React.createClass({
     }
     else if(this.props.blockAttributeStatus.value === 'pending'){
       /* Show spinny cog icon */
+      console.log('widgetStatusIcon.render(): value === pending');
 
       statusIcon = <i className="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"
                       onClick={this.onButtonClick}></i>
@@ -81,12 +92,13 @@ var WidgetStatusIcon = React.createClass({
     so the cog isn't displayed for very long
      */
 
-    if(statusIcon === null){
-
+    if(statusIcon === null)
+      {
+      console.log('widgetStatusIcon.render(): statusIcon === null');
       statusIcon = <i className="fa fa-info-circle fa-lg" aria-hidden="true"
                       style={{cursor: 'pointer'}}
                       onClick={this.onButtonClick}></i>
-    }
+      }
 
     return(
       statusIcon
