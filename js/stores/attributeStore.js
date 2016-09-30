@@ -123,6 +123,8 @@ var attributeStore = assign({}, EventEmitter.prototype, {
 attributeStore.dispatchToken = AppDispatcher.register(function(payload){
   var action = payload.action;
   var item = action.item;
+  var responseMessage = JSON.parse('null');
+  var requestedData = JSON.parse('null');
 
   switch(action.actionType){
 
@@ -164,11 +166,11 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("malcolmSubscribeSuccess in attributeStore");
+      //console.log("malcolmSubscribeSuccess in attributeStore");
 
       if(item.requestedData.blockName !== 'VISIBILITY') {
-        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
@@ -179,8 +181,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
       attributes (or at least something along those lines)
        */
       else if(item.requestedData.blockName === 'VISIBILITY'){
-        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        requestedData = JSON.parse(JSON.stringify(item.requestedData));
 
         /* UPDATE: so this works and the toggle switches stay in sync,
         but I'm pretty sure I'm doing more updates than I need; I think
@@ -217,7 +219,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function(payload){
         updateAttributeValue(requestedData.blockName,
           requestedData.attribute, responseMessage.value);
 
-        console.log(allBlockAttributes[requestedData.attribute]);
+        //console.log(allBlockAttributes[requestedData.attribute]);
 
         if(allBlockAttributes[requestedData.attribute]['VISIBLE'].value !== responseMessage.value) {
 

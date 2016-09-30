@@ -76,14 +76,14 @@ var dropdownMenuSelect = function(tab){
 };
 
 var deviceSelect = function(tab){
-
+  var findTheIndex = 0;
   console.log("device select");
   console.log(tab);
 
   for(var i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
     if(_stuff.tabState[i].label === tab){
-      var findTheIndex = i
+      findTheIndex = i
     }
   }
 

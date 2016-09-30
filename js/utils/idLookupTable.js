@@ -17,7 +17,7 @@ var idLookupTableFunctions = {
 
     if (success === true) {
       idLookupTable[id].successCallback(json);
-      console.log('idLookupTableFunctions.invokeIdCallback: ID: ' + id +' JSON: ' + json);
+      //console.log('idLookupTableFunctions.invokeIdCallback: ID: ' + id +' JSON: ' + json);
     }
     else if (success === false) {
       idLookupTable[id].failureCallback(json)

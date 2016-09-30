@@ -41,8 +41,8 @@ var MalcolmUtils = {
     message['id'] = id;
     message['endpoint'] = requestedData;
     var messageJson = JSON.stringify(message);
-    console.log("Subscribe: ");
-    console.log(messageJson);
+    //console.log("Subscribe: ");
+    //console.log(messageJson);
     idLookupTableFunctions.addIdCallbacks(id, {
       successCallback: successCallback,
       failureCallback: failureCallback
