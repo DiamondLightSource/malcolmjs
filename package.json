@@ -70,7 +70,6 @@
     "react-css-modules": "^3.7.8",
     "react-dom": "^15.2.1",
     "react-modal": "^1.4.0",
-    "react-panels": "file:react-panels",
     "react-sidebar": "^2.2.1",
     "react-tap-event-plugin": "^1.0.0",
     "react-toggle": "^2.1.1",
@@ -85,5 +84,13 @@
     "websocket": "^1.0.23",
     "ws": "^1.1.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "immutability-helper": "^2.0.0",
+    "material-ui": "^0.15.4",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
+    "react-panels": "file:///home/ig43/zebra2/react-panels",
+    "tls": "0.0.1"
+  }
 }
