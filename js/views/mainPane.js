@@ -13,6 +13,8 @@ var FavButton = require('./favButton');
 var FooterButton = require('./button');
 var FlowChartControllerView = require('./flowChartControllerView');
 
+var WasteBin = require('./wasteBin');
+
 var Panel = ReactPanels.Panel;
 var Tab = ReactPanels.Tab;
 var Toolbar = ReactPanels.Toolbar;
@@ -62,7 +64,6 @@ var MainPane = React.createClass({
   },
 
   render: function() {
-    console.log("render: mainPane");
     var TESTStyling = {
       'height': '1000px',
       'width': '1000px',
@@ -110,6 +111,7 @@ var MainPane = React.createClass({
       </div>
       </Footer>;
 
+  console.log("render: mainPane");
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
