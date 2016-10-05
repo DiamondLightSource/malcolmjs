@@ -11,7 +11,7 @@ var MalcolmActionCreators = {
 
   /* default device name to Z, which was the original name for the simulator device */
 //  deviceId: "Z",
-  deviceId: ((Config.getProtocolVersion() === 'V2_0') ? "counter" : "Z"),
+  deviceId: ((Config.getProtocolVersion() === 'V2_0') ? "P" : "Z"),
   initialiseFlowChart: function(requestedData){
 
     /* Try sending an initialise flowChart start action here */
@@ -94,7 +94,7 @@ var MalcolmActionCreators = {
 
         if (Config.getProtocolVersion() === 'V2_0')
           {
-          MalcolmUtils.malcolmGet([actionCreators.deviceId, "VISIBILITY"], zVisibilitySubscribe, malcolmGetFailure);
+          MalcolmUtils.malcolmGet([actionCreators.deviceId], zVisibilitySubscribe, malcolmGetFailure);
           }
         else
           {
