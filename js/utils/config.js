@@ -69,15 +69,16 @@ var config = {
 var _protocolEnum = Object.freeze({V1_0: 0, V2_0: 1});
 
 /* Set default protocol */
-var _protocolKey = _protocolEnum.V1_0;
+var _protocolKey = _protocolEnum.V2_0;
 
-var _serverURLTable = Object.freeze({ pc70:'ws://pc0070:8080/ws',
+var _serverURLTable = Object.freeze({ pc70:'ws://pc0070.cs.diamond.ac.uk:8080/ws',
                                       isaDev:'ws://172.23.252.202/ws',
-                                      isaSpare:'ws://172.23.252.201/ws' });
+                                      isaSpare:'ws://172.23.252.201/ws',
+                                      simulator:'ws://localhost:8080/ws'});
 
 /* Default server URL to PC0070 - Ian's local machine */
-var _serverKey = 'isaDev';
+var _serverKey = 'simulator';
 
-var _deviceName = 'Z';
+var _deviceName = 'P';
 
 module.exports = config;
