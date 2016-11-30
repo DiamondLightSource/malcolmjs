@@ -1,0 +1,1516 @@
+{
+  "typeid": "malcolm:core/Return:1.0",
+  "id": 0,
+  "value": {
+    "typeid": "malcolm:core/Block:1.0",
+    "meta": {
+      "typeid": "malcolm:core/BlockMeta:1.0",
+      "description": "",
+      "tags": [],
+      "writeable": false,
+      "label": ""
+    },
+    "state": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "State of Block",
+        "choices": [
+          "Resetting",
+          "Ready",
+          "Fault",
+          "Disabling",
+          "Disabled"
+        ],
+        "tags": [],
+        "writeable": false,
+        "label": "State"
+      },
+      "value": "Ready"
+    },
+    "status": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/StringMeta:1.0",
+        "description": "Status of Block",
+        "tags": [],
+        "writeable": false,
+        "label": "Status"
+      },
+      "value": "Done Resetting"
+    },
+    "busy": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Whether Block busy or not",
+        "tags": [],
+        "writeable": false,
+        "label": "Busy"
+      },
+      "value": false
+    },
+    "disable": {
+      "typeid": "malcolm:core/MethodMeta:1.0",
+      "takes": {
+        "typeid": "malcolm:core/MapMeta:1.0",
+        "elements": {
+          "typeid": "malcolm:core/ElementMap:1.0"
+        },
+        "description": "",
+        "tags": [],
+        "writeable": false,
+        "label": "",
+        "required": []
+      },
+      "defaults": {},
+      "description": "",
+      "tags": [],
+      "writeable": true,
+      "label": "",
+      "returns": {
+        "typeid": "malcolm:core/MapMeta:1.0",
+        "elements": {
+          "typeid": "malcolm:core/ElementMap:1.0"
+        },
+        "description": "",
+        "tags": [],
+        "writeable": false,
+        "label": "",
+        "required": []
+      }
+    },
+    "reset": {
+      "typeid": "malcolm:core/MethodMeta:1.0",
+      "takes": {
+        "typeid": "malcolm:core/MapMeta:1.0",
+        "elements": {
+          "typeid": "malcolm:core/ElementMap:1.0"
+        },
+        "description": "",
+        "tags": [],
+        "writeable": false,
+        "label": "",
+        "required": []
+      },
+      "defaults": {},
+      "description": "",
+      "tags": [],
+      "writeable": false,
+      "label": "",
+      "returns": {
+        "typeid": "malcolm:core/MapMeta:1.0",
+        "elements": {
+          "typeid": "malcolm:core/ElementMap:1.0"
+        },
+        "description": "",
+        "tags": [],
+        "writeable": false,
+        "label": "",
+        "required": []
+      }
+    },
+    "ICON": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/StringMeta:1.0",
+        "description": "URL for ICON",
+        "tags": [
+          "flowgraph:icon"
+        ],
+        "writeable": false,
+        "label": "Icon"
+      },
+      "value": "http://localhost:8080/path/to/SEQ"
+    },
+    "parameters": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "All parameters attributes",
+        "choices": [
+          "expanded",
+          "collapsed"
+        ],
+        "tags": [
+          "widget:group"
+        ],
+        "writeable": true,
+        "label": "Parameters"
+      },
+      "value": "expanded"
+    },
+    "PRESCALE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "float64",
+        "description": "Prescalar for system clock",
+        "tags": [
+          "group:parameters",
+          "widget:textupdate"
+        ],
+        "writeable": true,
+        "label": "Prescale"
+      },
+      "value": 0.0
+    },
+    "PRESCALE_UNITS": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Prescalar for system clock time units",
+        "choices": [
+          "s",
+          "ms",
+          "us"
+        ],
+        "tags": [
+          "group:parameters",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Prescale Units"
+      },
+      "value": "s"
+    },
+    "TABLE_CYCLE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint32",
+        "description": "Number of times the table will cycle",
+        "tags": [
+          "group:parameters",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Table Cycle"
+      },
+      "value": 0
+    },
+    "inputs": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "All inputs attributes",
+        "choices": [
+          "expanded",
+          "collapsed"
+        ],
+        "tags": [
+          "widget:group"
+        ],
+        "writeable": true,
+        "label": "Inputs"
+      },
+      "value": "expanded"
+    },
+    "ENABLE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Reset on falling edge, enable on rising",
+        "choices": [
+          "ZERO",
+          "ONE",
+          "TTLIN1.VAL",
+          "TTLIN2.VAL",
+          "TTLIN3.VAL",
+          "TTLIN4.VAL",
+          "TTLIN5.VAL",
+          "TTLIN6.VAL",
+          "LVDSIN1.VAL",
+          "LVDSIN2.VAL",
+          "LUT1.OUT",
+          "LUT2.OUT",
+          "LUT3.OUT",
+          "LUT4.OUT",
+          "LUT5.OUT",
+          "LUT6.OUT",
+          "LUT7.OUT",
+          "LUT8.OUT",
+          "SRGATE1.OUT",
+          "SRGATE2.OUT",
+          "SRGATE3.OUT",
+          "SRGATE4.OUT",
+          "DIV1.OUTD",
+          "DIV2.OUTD",
+          "DIV3.OUTD",
+          "DIV4.OUTD",
+          "DIV1.OUTN",
+          "DIV2.OUTN",
+          "DIV3.OUTN",
+          "DIV4.OUTN",
+          "PULSE1.OUT",
+          "PULSE2.OUT",
+          "PULSE3.OUT",
+          "PULSE4.OUT",
+          "FMC.INP1",
+          "FMC.INP2",
+          "FMC.INP3",
+          "FMC.INP4",
+          "SEQ1.OUTA",
+          "SEQ2.OUTA",
+          "SEQ3.OUTA",
+          "SEQ4.OUTA",
+          "SEQ1.OUTB",
+          "SEQ2.OUTB",
+          "SEQ3.OUTB",
+          "SEQ4.OUTB",
+          "SEQ1.OUTC",
+          "SEQ2.OUTC",
+          "SEQ3.OUTC",
+          "SEQ4.OUTC",
+          "SEQ1.OUTD",
+          "SEQ2.OUTD",
+          "SEQ3.OUTD",
+          "SEQ4.OUTD",
+          "SEQ1.OUTE",
+          "SEQ2.OUTE",
+          "SEQ3.OUTE",
+          "SEQ4.OUTE",
+          "SEQ1.OUTF",
+          "SEQ2.OUTF",
+          "SEQ3.OUTF",
+          "SEQ4.OUTF",
+          "SEQ1.ACTIVE",
+          "SEQ2.ACTIVE",
+          "SEQ3.ACTIVE",
+          "SEQ4.ACTIVE",
+          "INENC1.A",
+          "INENC2.A",
+          "INENC3.A",
+          "INENC4.A",
+          "INENC1.B",
+          "INENC2.B",
+          "INENC3.B",
+          "INENC4.B",
+          "INENC1.Z",
+          "INENC2.Z",
+          "INENC3.Z",
+          "INENC4.Z",
+          "INENC1.CONN",
+          "INENC2.CONN",
+          "INENC3.CONN",
+          "INENC4.CONN",
+          "POSENC1.A",
+          "POSENC2.A",
+          "POSENC3.A",
+          "POSENC4.A",
+          "POSENC1.B",
+          "POSENC2.B",
+          "POSENC3.B",
+          "POSENC4.B",
+          "COUNTER1.CARRY",
+          "COUNTER2.CARRY",
+          "COUNTER3.CARRY",
+          "COUNTER4.CARRY",
+          "COUNTER5.CARRY",
+          "COUNTER6.CARRY",
+          "COUNTER7.CARRY",
+          "COUNTER8.CARRY",
+          "PCOMP1.ACTIVE",
+          "PCOMP2.ACTIVE",
+          "PCOMP3.ACTIVE",
+          "PCOMP4.ACTIVE",
+          "PCOMP1.OUT",
+          "PCOMP2.OUT",
+          "PCOMP3.OUT",
+          "PCOMP4.OUT",
+          "PCAP.ACTIVE",
+          "INENC1.TRANS",
+          "INENC2.TRANS",
+          "INENC3.TRANS",
+          "INENC4.TRANS",
+          "FMC.INP5",
+          "FMC.INP6",
+          "FMC.INP7",
+          "FMC.INP8",
+          "BITS.OUTA",
+          "BITS.OUTB",
+          "BITS.OUTC",
+          "BITS.OUTD",
+          "CLOCKS.OUTA",
+          "CLOCKS.OUTB",
+          "CLOCKS.OUTC",
+          "CLOCKS.OUTD"
+        ],
+        "tags": [
+          "group:inputs",
+          "flowgraph:inport:bit",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Enable"
+      },
+      "value": "ZERO"
+    },
+    "ENABLE_VAL": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "ENABLE current value",
+        "tags": [
+          "group:inputs",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Enable Val"
+      },
+      "value": false
+    },
+    "ENABLE_DELAY": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint8",
+        "description": "How many FPGA ticks to delay input",
+        "tags": [
+          "group:inputs",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Enable Delay"
+      },
+      "value": 0
+    },
+    "INPA": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Trigger input A",
+        "choices": [
+          "ZERO",
+          "ONE",
+          "TTLIN1.VAL",
+          "TTLIN2.VAL",
+          "TTLIN3.VAL",
+          "TTLIN4.VAL",
+          "TTLIN5.VAL",
+          "TTLIN6.VAL",
+          "LVDSIN1.VAL",
+          "LVDSIN2.VAL",
+          "LUT1.OUT",
+          "LUT2.OUT",
+          "LUT3.OUT",
+          "LUT4.OUT",
+          "LUT5.OUT",
+          "LUT6.OUT",
+          "LUT7.OUT",
+          "LUT8.OUT",
+          "SRGATE1.OUT",
+          "SRGATE2.OUT",
+          "SRGATE3.OUT",
+          "SRGATE4.OUT",
+          "DIV1.OUTD",
+          "DIV2.OUTD",
+          "DIV3.OUTD",
+          "DIV4.OUTD",
+          "DIV1.OUTN",
+          "DIV2.OUTN",
+          "DIV3.OUTN",
+          "DIV4.OUTN",
+          "PULSE1.OUT",
+          "PULSE2.OUT",
+          "PULSE3.OUT",
+          "PULSE4.OUT",
+          "FMC.INP1",
+          "FMC.INP2",
+          "FMC.INP3",
+          "FMC.INP4",
+          "SEQ1.OUTA",
+          "SEQ2.OUTA",
+          "SEQ3.OUTA",
+          "SEQ4.OUTA",
+          "SEQ1.OUTB",
+          "SEQ2.OUTB",
+          "SEQ3.OUTB",
+          "SEQ4.OUTB",
+          "SEQ1.OUTC",
+          "SEQ2.OUTC",
+          "SEQ3.OUTC",
+          "SEQ4.OUTC",
+          "SEQ1.OUTD",
+          "SEQ2.OUTD",
+          "SEQ3.OUTD",
+          "SEQ4.OUTD",
+          "SEQ1.OUTE",
+          "SEQ2.OUTE",
+          "SEQ3.OUTE",
+          "SEQ4.OUTE",
+          "SEQ1.OUTF",
+          "SEQ2.OUTF",
+          "SEQ3.OUTF",
+          "SEQ4.OUTF",
+          "SEQ1.ACTIVE",
+          "SEQ2.ACTIVE",
+          "SEQ3.ACTIVE",
+          "SEQ4.ACTIVE",
+          "INENC1.A",
+          "INENC2.A",
+          "INENC3.A",
+          "INENC4.A",
+          "INENC1.B",
+          "INENC2.B",
+          "INENC3.B",
+          "INENC4.B",
+          "INENC1.Z",
+          "INENC2.Z",
+          "INENC3.Z",
+          "INENC4.Z",
+          "INENC1.CONN",
+          "INENC2.CONN",
+          "INENC3.CONN",
+          "INENC4.CONN",
+          "POSENC1.A",
+          "POSENC2.A",
+          "POSENC3.A",
+          "POSENC4.A",
+          "POSENC1.B",
+          "POSENC2.B",
+          "POSENC3.B",
+          "POSENC4.B",
+          "COUNTER1.CARRY",
+          "COUNTER2.CARRY",
+          "COUNTER3.CARRY",
+          "COUNTER4.CARRY",
+          "COUNTER5.CARRY",
+          "COUNTER6.CARRY",
+          "COUNTER7.CARRY",
+          "COUNTER8.CARRY",
+          "PCOMP1.ACTIVE",
+          "PCOMP2.ACTIVE",
+          "PCOMP3.ACTIVE",
+          "PCOMP4.ACTIVE",
+          "PCOMP1.OUT",
+          "PCOMP2.OUT",
+          "PCOMP3.OUT",
+          "PCOMP4.OUT",
+          "PCAP.ACTIVE",
+          "INENC1.TRANS",
+          "INENC2.TRANS",
+          "INENC3.TRANS",
+          "INENC4.TRANS",
+          "FMC.INP5",
+          "FMC.INP6",
+          "FMC.INP7",
+          "FMC.INP8",
+          "BITS.OUTA",
+          "BITS.OUTB",
+          "BITS.OUTC",
+          "BITS.OUTD",
+          "CLOCKS.OUTA",
+          "CLOCKS.OUTB",
+          "CLOCKS.OUTC",
+          "CLOCKS.OUTD"
+        ],
+        "tags": [
+          "group:inputs",
+          "flowgraph:inport:bit",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Inpa"
+      },
+      "value": "ZERO"
+    },
+    "INPA_VAL": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "INPA current value",
+        "tags": [
+          "group:inputs",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Inpa Val"
+      },
+      "value": false
+    },
+    "INPA_DELAY": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint8",
+        "description": "How many FPGA ticks to delay input",
+        "tags": [
+          "group:inputs",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Inpa Delay"
+      },
+      "value": 0
+    },
+    "INPB": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Trigger input B",
+        "choices": [
+          "ZERO",
+          "ONE",
+          "TTLIN1.VAL",
+          "TTLIN2.VAL",
+          "TTLIN3.VAL",
+          "TTLIN4.VAL",
+          "TTLIN5.VAL",
+          "TTLIN6.VAL",
+          "LVDSIN1.VAL",
+          "LVDSIN2.VAL",
+          "LUT1.OUT",
+          "LUT2.OUT",
+          "LUT3.OUT",
+          "LUT4.OUT",
+          "LUT5.OUT",
+          "LUT6.OUT",
+          "LUT7.OUT",
+          "LUT8.OUT",
+          "SRGATE1.OUT",
+          "SRGATE2.OUT",
+          "SRGATE3.OUT",
+          "SRGATE4.OUT",
+          "DIV1.OUTD",
+          "DIV2.OUTD",
+          "DIV3.OUTD",
+          "DIV4.OUTD",
+          "DIV1.OUTN",
+          "DIV2.OUTN",
+          "DIV3.OUTN",
+          "DIV4.OUTN",
+          "PULSE1.OUT",
+          "PULSE2.OUT",
+          "PULSE3.OUT",
+          "PULSE4.OUT",
+          "FMC.INP1",
+          "FMC.INP2",
+          "FMC.INP3",
+          "FMC.INP4",
+          "SEQ1.OUTA",
+          "SEQ2.OUTA",
+          "SEQ3.OUTA",
+          "SEQ4.OUTA",
+          "SEQ1.OUTB",
+          "SEQ2.OUTB",
+          "SEQ3.OUTB",
+          "SEQ4.OUTB",
+          "SEQ1.OUTC",
+          "SEQ2.OUTC",
+          "SEQ3.OUTC",
+          "SEQ4.OUTC",
+          "SEQ1.OUTD",
+          "SEQ2.OUTD",
+          "SEQ3.OUTD",
+          "SEQ4.OUTD",
+          "SEQ1.OUTE",
+          "SEQ2.OUTE",
+          "SEQ3.OUTE",
+          "SEQ4.OUTE",
+          "SEQ1.OUTF",
+          "SEQ2.OUTF",
+          "SEQ3.OUTF",
+          "SEQ4.OUTF",
+          "SEQ1.ACTIVE",
+          "SEQ2.ACTIVE",
+          "SEQ3.ACTIVE",
+          "SEQ4.ACTIVE",
+          "INENC1.A",
+          "INENC2.A",
+          "INENC3.A",
+          "INENC4.A",
+          "INENC1.B",
+          "INENC2.B",
+          "INENC3.B",
+          "INENC4.B",
+          "INENC1.Z",
+          "INENC2.Z",
+          "INENC3.Z",
+          "INENC4.Z",
+          "INENC1.CONN",
+          "INENC2.CONN",
+          "INENC3.CONN",
+          "INENC4.CONN",
+          "POSENC1.A",
+          "POSENC2.A",
+          "POSENC3.A",
+          "POSENC4.A",
+          "POSENC1.B",
+          "POSENC2.B",
+          "POSENC3.B",
+          "POSENC4.B",
+          "COUNTER1.CARRY",
+          "COUNTER2.CARRY",
+          "COUNTER3.CARRY",
+          "COUNTER4.CARRY",
+          "COUNTER5.CARRY",
+          "COUNTER6.CARRY",
+          "COUNTER7.CARRY",
+          "COUNTER8.CARRY",
+          "PCOMP1.ACTIVE",
+          "PCOMP2.ACTIVE",
+          "PCOMP3.ACTIVE",
+          "PCOMP4.ACTIVE",
+          "PCOMP1.OUT",
+          "PCOMP2.OUT",
+          "PCOMP3.OUT",
+          "PCOMP4.OUT",
+          "PCAP.ACTIVE",
+          "INENC1.TRANS",
+          "INENC2.TRANS",
+          "INENC3.TRANS",
+          "INENC4.TRANS",
+          "FMC.INP5",
+          "FMC.INP6",
+          "FMC.INP7",
+          "FMC.INP8",
+          "BITS.OUTA",
+          "BITS.OUTB",
+          "BITS.OUTC",
+          "BITS.OUTD",
+          "CLOCKS.OUTA",
+          "CLOCKS.OUTB",
+          "CLOCKS.OUTC",
+          "CLOCKS.OUTD"
+        ],
+        "tags": [
+          "group:inputs",
+          "flowgraph:inport:bit",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Inpb"
+      },
+      "value": "ZERO"
+    },
+    "INPB_VAL": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "INPB current value",
+        "tags": [
+          "group:inputs",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Inpb Val"
+      },
+      "value": false
+    },
+    "INPB_DELAY": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint8",
+        "description": "How many FPGA ticks to delay input",
+        "tags": [
+          "group:inputs",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Inpb Delay"
+      },
+      "value": 0
+    },
+    "INPC": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Trigger input C",
+        "choices": [
+          "ZERO",
+          "ONE",
+          "TTLIN1.VAL",
+          "TTLIN2.VAL",
+          "TTLIN3.VAL",
+          "TTLIN4.VAL",
+          "TTLIN5.VAL",
+          "TTLIN6.VAL",
+          "LVDSIN1.VAL",
+          "LVDSIN2.VAL",
+          "LUT1.OUT",
+          "LUT2.OUT",
+          "LUT3.OUT",
+          "LUT4.OUT",
+          "LUT5.OUT",
+          "LUT6.OUT",
+          "LUT7.OUT",
+          "LUT8.OUT",
+          "SRGATE1.OUT",
+          "SRGATE2.OUT",
+          "SRGATE3.OUT",
+          "SRGATE4.OUT",
+          "DIV1.OUTD",
+          "DIV2.OUTD",
+          "DIV3.OUTD",
+          "DIV4.OUTD",
+          "DIV1.OUTN",
+          "DIV2.OUTN",
+          "DIV3.OUTN",
+          "DIV4.OUTN",
+          "PULSE1.OUT",
+          "PULSE2.OUT",
+          "PULSE3.OUT",
+          "PULSE4.OUT",
+          "FMC.INP1",
+          "FMC.INP2",
+          "FMC.INP3",
+          "FMC.INP4",
+          "SEQ1.OUTA",
+          "SEQ2.OUTA",
+          "SEQ3.OUTA",
+          "SEQ4.OUTA",
+          "SEQ1.OUTB",
+          "SEQ2.OUTB",
+          "SEQ3.OUTB",
+          "SEQ4.OUTB",
+          "SEQ1.OUTC",
+          "SEQ2.OUTC",
+          "SEQ3.OUTC",
+          "SEQ4.OUTC",
+          "SEQ1.OUTD",
+          "SEQ2.OUTD",
+          "SEQ3.OUTD",
+          "SEQ4.OUTD",
+          "SEQ1.OUTE",
+          "SEQ2.OUTE",
+          "SEQ3.OUTE",
+          "SEQ4.OUTE",
+          "SEQ1.OUTF",
+          "SEQ2.OUTF",
+          "SEQ3.OUTF",
+          "SEQ4.OUTF",
+          "SEQ1.ACTIVE",
+          "SEQ2.ACTIVE",
+          "SEQ3.ACTIVE",
+          "SEQ4.ACTIVE",
+          "INENC1.A",
+          "INENC2.A",
+          "INENC3.A",
+          "INENC4.A",
+          "INENC1.B",
+          "INENC2.B",
+          "INENC3.B",
+          "INENC4.B",
+          "INENC1.Z",
+          "INENC2.Z",
+          "INENC3.Z",
+          "INENC4.Z",
+          "INENC1.CONN",
+          "INENC2.CONN",
+          "INENC3.CONN",
+          "INENC4.CONN",
+          "POSENC1.A",
+          "POSENC2.A",
+          "POSENC3.A",
+          "POSENC4.A",
+          "POSENC1.B",
+          "POSENC2.B",
+          "POSENC3.B",
+          "POSENC4.B",
+          "COUNTER1.CARRY",
+          "COUNTER2.CARRY",
+          "COUNTER3.CARRY",
+          "COUNTER4.CARRY",
+          "COUNTER5.CARRY",
+          "COUNTER6.CARRY",
+          "COUNTER7.CARRY",
+          "COUNTER8.CARRY",
+          "PCOMP1.ACTIVE",
+          "PCOMP2.ACTIVE",
+          "PCOMP3.ACTIVE",
+          "PCOMP4.ACTIVE",
+          "PCOMP1.OUT",
+          "PCOMP2.OUT",
+          "PCOMP3.OUT",
+          "PCOMP4.OUT",
+          "PCAP.ACTIVE",
+          "INENC1.TRANS",
+          "INENC2.TRANS",
+          "INENC3.TRANS",
+          "INENC4.TRANS",
+          "FMC.INP5",
+          "FMC.INP6",
+          "FMC.INP7",
+          "FMC.INP8",
+          "BITS.OUTA",
+          "BITS.OUTB",
+          "BITS.OUTC",
+          "BITS.OUTD",
+          "CLOCKS.OUTA",
+          "CLOCKS.OUTB",
+          "CLOCKS.OUTC",
+          "CLOCKS.OUTD"
+        ],
+        "tags": [
+          "group:inputs",
+          "flowgraph:inport:bit",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Inpc"
+      },
+      "value": "ZERO"
+    },
+    "INPC_VAL": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "INPC current value",
+        "tags": [
+          "group:inputs",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Inpc Val"
+      },
+      "value": false
+    },
+    "INPC_DELAY": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint8",
+        "description": "How many FPGA ticks to delay input",
+        "tags": [
+          "group:inputs",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Inpc Delay"
+      },
+      "value": 0
+    },
+    "INPD": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "Trigger input D",
+        "choices": [
+          "ZERO",
+          "ONE",
+          "TTLIN1.VAL",
+          "TTLIN2.VAL",
+          "TTLIN3.VAL",
+          "TTLIN4.VAL",
+          "TTLIN5.VAL",
+          "TTLIN6.VAL",
+          "LVDSIN1.VAL",
+          "LVDSIN2.VAL",
+          "LUT1.OUT",
+          "LUT2.OUT",
+          "LUT3.OUT",
+          "LUT4.OUT",
+          "LUT5.OUT",
+          "LUT6.OUT",
+          "LUT7.OUT",
+          "LUT8.OUT",
+          "SRGATE1.OUT",
+          "SRGATE2.OUT",
+          "SRGATE3.OUT",
+          "SRGATE4.OUT",
+          "DIV1.OUTD",
+          "DIV2.OUTD",
+          "DIV3.OUTD",
+          "DIV4.OUTD",
+          "DIV1.OUTN",
+          "DIV2.OUTN",
+          "DIV3.OUTN",
+          "DIV4.OUTN",
+          "PULSE1.OUT",
+          "PULSE2.OUT",
+          "PULSE3.OUT",
+          "PULSE4.OUT",
+          "FMC.INP1",
+          "FMC.INP2",
+          "FMC.INP3",
+          "FMC.INP4",
+          "SEQ1.OUTA",
+          "SEQ2.OUTA",
+          "SEQ3.OUTA",
+          "SEQ4.OUTA",
+          "SEQ1.OUTB",
+          "SEQ2.OUTB",
+          "SEQ3.OUTB",
+          "SEQ4.OUTB",
+          "SEQ1.OUTC",
+          "SEQ2.OUTC",
+          "SEQ3.OUTC",
+          "SEQ4.OUTC",
+          "SEQ1.OUTD",
+          "SEQ2.OUTD",
+          "SEQ3.OUTD",
+          "SEQ4.OUTD",
+          "SEQ1.OUTE",
+          "SEQ2.OUTE",
+          "SEQ3.OUTE",
+          "SEQ4.OUTE",
+          "SEQ1.OUTF",
+          "SEQ2.OUTF",
+          "SEQ3.OUTF",
+          "SEQ4.OUTF",
+          "SEQ1.ACTIVE",
+          "SEQ2.ACTIVE",
+          "SEQ3.ACTIVE",
+          "SEQ4.ACTIVE",
+          "INENC1.A",
+          "INENC2.A",
+          "INENC3.A",
+          "INENC4.A",
+          "INENC1.B",
+          "INENC2.B",
+          "INENC3.B",
+          "INENC4.B",
+          "INENC1.Z",
+          "INENC2.Z",
+          "INENC3.Z",
+          "INENC4.Z",
+          "INENC1.CONN",
+          "INENC2.CONN",
+          "INENC3.CONN",
+          "INENC4.CONN",
+          "POSENC1.A",
+          "POSENC2.A",
+          "POSENC3.A",
+          "POSENC4.A",
+          "POSENC1.B",
+          "POSENC2.B",
+          "POSENC3.B",
+          "POSENC4.B",
+          "COUNTER1.CARRY",
+          "COUNTER2.CARRY",
+          "COUNTER3.CARRY",
+          "COUNTER4.CARRY",
+          "COUNTER5.CARRY",
+          "COUNTER6.CARRY",
+          "COUNTER7.CARRY",
+          "COUNTER8.CARRY",
+          "PCOMP1.ACTIVE",
+          "PCOMP2.ACTIVE",
+          "PCOMP3.ACTIVE",
+          "PCOMP4.ACTIVE",
+          "PCOMP1.OUT",
+          "PCOMP2.OUT",
+          "PCOMP3.OUT",
+          "PCOMP4.OUT",
+          "PCAP.ACTIVE",
+          "INENC1.TRANS",
+          "INENC2.TRANS",
+          "INENC3.TRANS",
+          "INENC4.TRANS",
+          "FMC.INP5",
+          "FMC.INP6",
+          "FMC.INP7",
+          "FMC.INP8",
+          "BITS.OUTA",
+          "BITS.OUTB",
+          "BITS.OUTC",
+          "BITS.OUTD",
+          "CLOCKS.OUTA",
+          "CLOCKS.OUTB",
+          "CLOCKS.OUTC",
+          "CLOCKS.OUTD"
+        ],
+        "tags": [
+          "group:inputs",
+          "flowgraph:inport:bit",
+          "widget:combo"
+        ],
+        "writeable": true,
+        "label": "Inpd"
+      },
+      "value": "ZERO"
+    },
+    "INPD_VAL": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "INPD current value",
+        "tags": [
+          "group:inputs",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Inpd Val"
+      },
+      "value": false
+    },
+    "INPD_DELAY": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint8",
+        "description": "How many FPGA ticks to delay input",
+        "tags": [
+          "group:inputs",
+          "widget:textinput"
+        ],
+        "writeable": true,
+        "label": "Inpd Delay"
+      },
+      "value": 0
+    },
+    "outputs": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "All outputs attributes",
+        "choices": [
+          "expanded",
+          "collapsed"
+        ],
+        "tags": [
+          "widget:group"
+        ],
+        "writeable": true,
+        "label": "Outputs"
+      },
+      "value": "expanded"
+    },
+    "OUTA": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output A",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTA",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Outa"
+      },
+      "value": false
+    },
+    "OUTB": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output B",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTB",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Outb"
+      },
+      "value": false
+    },
+    "OUTC": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output C",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTC",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Outc"
+      },
+      "value": false
+    },
+    "OUTD": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output D",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTD",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Outd"
+      },
+      "value": false
+    },
+    "OUTE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output E",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTE",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Oute"
+      },
+      "value": false
+    },
+    "OUTF": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Output F",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.OUTF",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Outf"
+      },
+      "value": false
+    },
+    "ACTIVE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/BooleanMeta:1.0",
+        "description": "Sequencer active flag",
+        "tags": [
+          "group:outputs",
+          "flowgraph:outport:bit:SEQ1.ACTIVE",
+          "widget:led"
+        ],
+        "writeable": false,
+        "label": "Active"
+      },
+      "value": false
+    },
+    "readbacks": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/ChoiceMeta:1.0",
+        "description": "All readbacks attributes",
+        "choices": [
+          "expanded",
+          "collapsed"
+        ],
+        "tags": [
+          "widget:group"
+        ],
+        "writeable": true,
+        "label": "Readbacks"
+      },
+      "value": "expanded"
+    },
+    "CUR_FRAME": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint32",
+        "description": "Sequencer current frame number",
+        "tags": [
+          "group:readbacks",
+          "widget:textupdate"
+        ],
+        "writeable": false,
+        "label": "Cur Frame"
+      },
+      "value": 0
+    },
+    "CUR_FCYCLE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint32",
+        "description": "Current number of times the frame has cycled",
+        "tags": [
+          "group:readbacks",
+          "widget:textupdate"
+        ],
+        "writeable": false,
+        "label": "Cur Fcycle"
+      },
+      "value": 0
+    },
+    "CUR_TCYCLE": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/NumberMeta:1.0",
+        "dtype": "uint32",
+        "description": "Current number of times the table has cycled",
+        "tags": [
+          "group:readbacks",
+          "widget:textupdate"
+        ],
+        "writeable": false,
+        "label": "Cur Tcycle"
+      },
+      "value": 0
+    },
+    "TABLE": {
+      "typeid": "epics:nt/NTTable:1.0",
+      "labels": [
+        "Repeats",
+        "Use Inpa",
+        "Use Inpb",
+        "Use Inpc",
+        "Use Inpd",
+        "Inpa",
+        "Inpb",
+        "Inpc",
+        "Inpd",
+        "Ph1 Time",
+        "Ph1 Outa",
+        "Ph1 Outb",
+        "Ph1 Outc",
+        "Ph1 Outd",
+        "Ph1 Oute",
+        "Ph1 Outf",
+        "Ph2 Time",
+        "Ph2 Outa",
+        "Ph2 Outb",
+        "Ph2 Outc",
+        "Ph2 Outd",
+        "Ph2 Oute",
+        "Ph2 Outf"
+      ],
+      "meta": {
+        "typeid": "malcolm:core/TableMeta:1.0",
+        "elements": {
+          "typeid": "malcolm:core/TableElementMap:1.0",
+          "REPEATS": {
+            "typeid": "malcolm:core/NumberArrayMeta:1.0",
+            "dtype": "uint32",
+            "description": "REPEATS",
+            "tags": [
+              "widget:textinput"
+            ],
+            "writeable": false,
+            "label": "Repeats"
+          },
+          "USE_INPA": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "USE_INPA",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Use Inpa"
+          },
+          "USE_INPB": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "USE_INPB",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Use Inpb"
+          },
+          "USE_INPC": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "USE_INPC",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Use Inpc"
+          },
+          "USE_INPD": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "USE_INPD",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Use Inpd"
+          },
+          "INPA": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "INPA",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Inpa"
+          },
+          "INPB": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "INPB",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Inpb"
+          },
+          "INPC": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "INPC",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Inpc"
+          },
+          "INPD": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "INPD",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Inpd"
+          },
+          "PH1_TIME": {
+            "typeid": "malcolm:core/NumberArrayMeta:1.0",
+            "dtype": "uint32",
+            "description": "PH1_TIME",
+            "tags": [
+              "widget:textinput"
+            ],
+            "writeable": false,
+            "label": "Ph1 Time"
+          },
+          "PH1_OUTA": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTA",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Outa"
+          },
+          "PH1_OUTB": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTB",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Outb"
+          },
+          "PH1_OUTC": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTC",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Outc"
+          },
+          "PH1_OUTD": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTD",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Outd"
+          },
+          "PH1_OUTE": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTE",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Oute"
+          },
+          "PH1_OUTF": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH1_OUTF",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph1 Outf"
+          },
+          "PH2_TIME": {
+            "typeid": "malcolm:core/NumberArrayMeta:1.0",
+            "dtype": "uint32",
+            "description": "PH2_TIME",
+            "tags": [
+              "widget:textinput"
+            ],
+            "writeable": false,
+            "label": "Ph2 Time"
+          },
+          "PH2_OUTA": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTA",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Outa"
+          },
+          "PH2_OUTB": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTB",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Outb"
+          },
+          "PH2_OUTC": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTC",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Outc"
+          },
+          "PH2_OUTD": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTD",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Outd"
+          },
+          "PH2_OUTE": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTE",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Oute"
+          },
+          "PH2_OUTF": {
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "description": "PH2_OUTF",
+            "tags": [
+              "widget:checkbox"
+            ],
+            "writeable": false,
+            "label": "Ph2 Outf"
+          }
+        },
+        "description": "Sequencer configuration",
+        "tags": [
+          "widget:table",
+          "group:parameters"
+        ],
+        "writeable": true,
+        "label": "Table"
+      },
+      "value": {
+        "typeid": "malcolm:core/Table:1.0",
+        "REPEATS": [],
+        "USE_INPA": [],
+        "USE_INPB": [],
+        "USE_INPC": [],
+        "USE_INPD": [],
+        "INPA": [],
+        "INPB": [],
+        "INPC": [],
+        "INPD": [],
+        "PH1_TIME": [],
+        "PH1_OUTA": [],
+        "PH1_OUTB": [],
+        "PH1_OUTC": [],
+        "PH1_OUTD": [],
+        "PH1_OUTE": [],
+        "PH1_OUTF": [],
+        "PH2_TIME": [],
+        "PH2_OUTA": [],
+        "PH2_OUTB": [],
+        "PH2_OUTC": [],
+        "PH2_OUTD": [],
+        "PH2_OUTE": [],
+        "PH2_OUTF": []
+      }
+    }
+  }
+}

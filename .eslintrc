@@ -32,7 +32,10 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     // Code style
-    "indent": ["warn", 2],
-    "quotes": ["off", "single"]
+    //"indent": ["warn", 2],
+    "indent": ["off", 2],
+    "quotes": ["off", "single"],
+    "one-var": ["error", { var: "never", let: "never", const: "never" }],
+    "no-inner-declarations": ["error", "both"]
   }
 }

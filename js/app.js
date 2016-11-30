@@ -8,7 +8,7 @@ var ReactDOM = require('react-dom');
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 var ReactPanels = require('react-panels');
-//var WebSocketClient = require('./websocketClient');
+//var WebSocketClient = require('./wsWebsocketClient');
 //var testingWebsocketActions = require('./actions/testingWebsocketActions');
 
 var MainPane = require('./views/mainPane');
@@ -68,6 +68,7 @@ const App = () => (
     </div>
 );
 */
+
 
 ReactDOM.render(
   <App/>,

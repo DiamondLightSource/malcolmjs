@@ -3,8 +3,8 @@
  */
 
 var idLookupTableFunctions = require('./utils/idLookupTable');
-var Config                 = require('./utils/config');
-var malcolmProtocol        = require('./utils/malcolmProtocol');
+import config from './utils/config';
+import malcolmProtocol from './utils/malcolmProtocol';
 
 function Client(url)
   {
@@ -106,18 +106,26 @@ function Client(url)
       {
       var json = JSON.parse(evt.data);
 
-      if (json.type === 'Error')
+      if (malcolmProtocol.isError(json))
         {
-        idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
-        }
-      else if (json.type === 'Return' || json.type === 'Value')
-        {
-        idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
-        }
-      };
+        if (idLookupTableFunctions.hasId(json.id))
+          {
+          let reqMsg = idLookupTableFunctions.getRequestMessage(json.id);
 
+          console.log("websocket.onmessage ERROR:  requestedData,  return message  => ");
+          console.log(reqMsg, json.message);
+          idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
+          }
+        }
+      else if (malcolmProtocol.isReturn(json) || malcolmProtocol.isValue(json) || malcolmProtocol.isUpdate(json))
+        {
+        if (idLookupTableFunctions.hasId(json.id))
+          {
+          idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
+          }
+        }
+      }
     }
-
   }
 
 /*var WebSocketClient = new Client('ws://pc0090:8080/ws');*/
@@ -125,10 +133,10 @@ function Client(url)
 
 /*  For development purposes, a table of available Zebra/PandA servers
  */
-Config.setServerName('pc70');
-Config.setProtocolVersion('V2_0');
-Config.setdeviceName('P');
-var url             = Config.getServerURL();
+config.setServerName('pc70');
+config.setProtocolVersion('V2_0');
+config.setdeviceName('P');
+var url             = config.getServerURL();
 var WebSocketClient = new Client(url);
 
 

@@ -2,55 +2,78 @@
  * Created by twi18192 on 14/01/16.
  */
 
-var React    = require('../../node_modules/react/react');
-var ReactDOM = require('react-dom');
+let React    = require('../../node_modules/react/react');
+let ReactDOM = require('react-dom');
 
-var attributeStore = require('../stores/attributeStore');
+let attributeStore = require('../stores/attributeStore');
 
-var paneActions           = require('../actions/paneActions');
-var flowChartActions      = require('../actions/flowChartActions');
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+let paneActions           = require('../actions/paneActions');
+let flowChartActions      = require('../actions/flowChartActions');
+let MalcolmActionCreators = require('../actions/MalcolmActionCreators');
 
-var Ports          = require('./ports.js');
-var BlockRectangle = require('./blockRectangle');
+let Ports          = require('./ports.js');
+let BlockRectangle = require('./blockRectangle');
 
-var interact = require('../../node_modules/interact.js');
+let interact = require('../../node_modules/interact.js');
 
-var Block = React.createClass(
+let Block = React.createClass(
   {
+    propTypes: {
+          graphZoomScale: React.PropTypes.number,
+          blockInfo: React.PropTypes.object,
+          areAnyBlocksSelected: React.PropTypes.bool,
+          portThatHasBeenClicked: React.PropTypes.object,
+          blockStyling:  React.PropTypes.object,
+          storingFirstPortClicked: React.PropTypes.object,
+    },
 
     componentDidMount: function ()
       {
+      // Fetch all known attributes for this block.
+      // id is actually blockName at this stage.
+      let blockAttributes = attributeStore.getAllBlockAttributes()[this.props.id];
 
-      var blockAttributes = attributeStore.getAllBlockAttributes()[this.props.id];
+      console.log(`Block: blockAttributes  id = ${this.props.id}`);
+      console.log(blockAttributes);
 
-      for (var attribute in blockAttributes)
+      if (blockAttributes.hasOwnProperty('MRI'))
         {
-        if (attribute !== 'uptime')
+        MalcolmActionCreators.malcolmSubscribe(this.props.id, [blockAttributes.MRI]);
+        //MalcolmActionCreators.malcolmSubscribe(this.props.id, attribute);
+        }
+
+      for (let attribute in blockAttributes)
+        {
+        if ((attribute !== 'uptime') && (attribute !== 'MRI'))
           {
-          MalcolmActionCreators.malcolmSubscribe(this.props.id, attribute);
+          if (blockAttributes.hasOwnProperty('MRI'))
+            {
+            // todo: ??
+            MalcolmActionCreators.malcolmSubscribe(blockAttributes.MRI, [attribute]);
+            }
           }
         }
 
       interact(ReactDOM.findDOMNode(this))
-        .draggable({
-                     restrict: {
-                       restriction: '#appAndDragAreaContainer',
-                     },
-                     onstart : function (e)
-                       {
-                       e.stopImmediatePropagation();
-                       e.stopPropagation();
-                       //console.log("interactjs dragstart");
-                       },
-                     onmove  : this.interactJsDrag,
-                     onend   : function (e)
-                       {
-                       e.stopImmediatePropagation();
-                       e.stopPropagation();
-                       //console.log("interactjs dragend");
-                       }
-                   });
+        .draggable(
+          {
+            restrict: {
+              restriction: '#appAndDragAreaContainer',
+            },
+            onstart : function (e)
+              {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              //console.log("interactjs dragstart");
+              },
+            onmove  : this.interactJsDrag,
+            onend   : function (e)
+              {
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              //console.log("interactjs dragend");
+              }
+          });
 
       interact(ReactDOM.findDOMNode(this))
         .on('tap', this.blockSelect);
@@ -124,9 +147,9 @@ var Block = React.createClass(
       {
       e.stopPropagation();
       e.stopImmediatePropagation();
-      var target = e.target.id;
+      let target = e.target.id;
 
-      var deltaMovement = {
+      let deltaMovement = {
         target: target,
         x     : e.dx,
         y     : e.dy
@@ -176,10 +199,10 @@ var Block = React.createClass(
 
     render: function ()
       {
-      var blockTranslate = "translate(" + this.props.blockPosition.x + ","
+      let blockTranslate = "translate(" + this.props.blockPosition.x + ","
         + this.props.blockPosition.y + ")";
 
-      console.log("render: block");
+      //console.log("render: block");
       //console.log(this.props.id);
       //console.log(this.props.blockInfo);
 

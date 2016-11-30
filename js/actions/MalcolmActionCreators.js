@@ -1,26 +1,37 @@
+/*eslint-env es6*/
+
 /**
  * Created by twi18192 on 02/03/16.
  */
 
 var AppDispatcher = require('../dispatcher/appDispatcher.js');
-var appConstants = require('../constants/appConstants.js');
-var MalcolmUtils = require('../utils/MalcolmUtils');
-var Config = require('../utils/config');
+var appConstants  = require('../constants/appConstants.js');
+import MalcolmUtils from '../utils/MalcolmUtils';
+import config from "../utils/config";
 
-var MalcolmActionCreators = {
+let MalcolmActionCreators;
+
+
+MalcolmActionCreators = {
 
   /* default device name to Z, which was the original name for the simulator device */
-//  deviceId: "Z",
-  deviceId: ((Config.getProtocolVersion() === 'V2_0') ? "P" : "Z"),
-  initialiseFlowChart: function(requestedData){
+  //  deviceId: "Z",
+  deviceId           : ((config.getProtocolVersion() === 'V2_0') ? "P" : "Z"),
+  topLevelGetId      : 0,
+  topLevelSubscribeId: 0,
+  initialiseFlowChart: function (requestedData)
+    {
 
     /* Try sending an initialise flowChart start action here */
 
     AppDispatcher.handleAction({
       actionType: appConstants.INITIALISE_FLOWCHART_START,
-      item: 'initialise flowChart start'
+      item      : 'initialise flowChart start'
     });
 
+    // NB: bind in this context, forces a pre-specified initial argument of requestedData.
+    // The specified function argument becomes registered with WebSocketClient as a OnOpen callback,
+    // which initiates the first Get of the top level layout information.
     MalcolmUtils.initialiseFlowChart(this.malcolmGet.bind(null, requestedData));
 
     //window.alert("initialisation finished?");
@@ -33,219 +44,230 @@ var MalcolmActionCreators = {
     /* Testing subscribe */
     //MalcolmUtils.initialiseFlowChart(this.malcolmSubscribe.bind(null, requestedData));
 
-  },
+    },
 
-  malcolmGet: function(requestedData){
-
-    function malcolmGetSuccess(responseMessage){
-      AppDispatcher.handleAction({
-        actionType: appConstants.MALCOLM_GET_SUCCESS,
-        item: {
-          responseMessage: responseMessage,
-          requestedData: requestedData
-        }
-      })
-    }
-
-    function malcolmGetFailure(responseMessage){
-      AppDispatcher.handleAction({
-        actionType: appConstants.MALCOLM_GET_FAILURE,
-        item: {
-          responseMessage: responseMessage,
-          requestedData: requestedData
-        }
-      })
-    }
-
-    if(requestedData === actionCreators.deviceId){
-
-      var testMalcolmGetSuccess = function(responseMessage){
-        console.log(responseMessage);
-
-        /* Fetch Z:VISIBILITY, and then subscribe to all visible
-        attributes in Z:VISIBILITY
-        */
-
-        var zVisibilitySubscribe = function(zVisibility){
-          /* This is to return Z:VISIBILITY to the GUI, but I still
-          need to subscribe to all the blocks, so a for loop is
-          part of the callback too
-           */
-          malcolmGetSuccess(zVisibility);
-
-          for(var attribute in zVisibility.attributes){
-            if(zVisibility.attributes[attribute].tags !== undefined){
-              /* Then it's a block visible attribute, so subscribe to it */
-
-              if (Config.getProtocolVersion() === 'V2_0')
-                {
-                actionCreators.malcolmSubscribe(['VISIBILITY', attribute]);
-                }
-              else
-                {
-                  actionCreators.malcolmSubscribe('VISIBILITY', attribute);
-                  //console.log('malcolmGet: attribute: '+attribute);
-                }
-
-
-            }
+  malcolmGet: function (requestedData)
+    {
+    function malcolmGetSuccess(responseMessage)
+      {
+      // Dispatch MALCOLM_GET_SUCCESS to all subscribers.
+      AppDispatcher.handleAction(
+        {
+          actionType: appConstants.MALCOLM_GET_SUCCESS,
+          item      : {
+            responseMessage: responseMessage,
+            requestedData  : requestedData
           }
-        };
+        })
+      }
 
-        if (Config.getProtocolVersion() === 'V2_0')
-          {
-          MalcolmUtils.malcolmGet([actionCreators.deviceId], zVisibilitySubscribe, malcolmGetFailure);
+    // Dispatch MALCOLM_GET_FAILURE to all subscribers.
+    function malcolmGetFailure(responseMessage)
+      {
+      AppDispatcher.handleAction(
+        {
+          actionType: appConstants.MALCOLM_GET_FAILURE,
+          item      : {
+            responseMessage: responseMessage,
+            requestedData  : requestedData
           }
-        else
-          {
-          MalcolmUtils.malcolmGet(actionCreators.deviceId+':VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
-          }
+        })
+      }
 
-
-        /* Fetching each block in the list */
-
-        for(var i = 0; i < responseMessage.attributes.blocks.value.length; i++){
-
-          /* Try doing the block attribute subscribe in block's componentDidMount
-          instead of here, so simply fetch each block and hand it to the GUI
-          to populate testAllBlockInfo
-           */
-
-          var block = responseMessage.attributes.blocks.value[i];
-
-          if (Config.getProtocolVersion() === 'V2_0')
-          {
-            MalcolmUtils.malcolmGet([block], malcolmGetSuccess, malcolmGetFailure);
-          }
-          else
-          {
-            MalcolmUtils.malcolmGet(block, malcolmGetSuccess, malcolmGetFailure);
-          }
-
-        }
+    let itemGetSuccess = function (responseMessage)
+      {
+      //console.log('MalcolmActionCreators: itemGetSuccess...');
+      //console.log('requestedData =>');
+      //console.log(requestedData);
+      //console.log('responseMessage =>');
+      //console.log(responseMessage);
+      /* This is to return P:<item>
+       */
+      malcolmGetSuccess(responseMessage);
 
       };
 
-      /* This is the initial malcolmGet call that returns Z; I then
-      pass it a callback function that loops through Z.attributes.blocks.value
-      and fetches each block in that list
+    // Note: This is the callback function which handles the
+    // subscription return.
+    let zVisibilitySubscribe = function (zVisibility)
+      {
+      //console.log('MalcolmActionCreators: zVisibility...')
+      //console.log(zVisibility);
+      // zVisibility represents the top level object for the device
+      // which includes layout and visibility details:
+      // zVisibility.layout.value.visible[]
+      // IJG 31/10/16
+
+      /* This is to return Z:VISIBILITY to the GUI, but I still
+       need to subscribe to all the blocks, so a for loop is
+       part of the callback too
+       */
+      malcolmGetSuccess(zVisibility);
+
+      // Subscribe to the visibility list.
+      actionCreators.malcolmSubscribe(actionCreators.deviceId,["layout","value","visible"]);
+
+      //==========================================================================================
+      // TODO:
+      // The old Protocol_1 attributes pattern do not fit with Protocol_2.
+      // Instead we need to interrogate each block in the upper list (from Get),
+      // by Get or Subscribe to each block, then assemble the attributes into a local store.
+      // It begs the question as to why there is an attributeStore instead of each block item holding
+      // its own attributes?
+      // Ian Gillingham - October 2016.
+      //==========================================================================================
+
+
+      };
+
+    let testMalcolmGetSuccess = function (responseMessage)
+      {
+      //console.log(`MalcolmActionCreators: testMalcolmGetSuccess: responseMessage...  topLevelGetId = ${actionCreators.topLevelGetId}`)
+      //console.log(responseMessage);
+
+      /* Fetch Z:VISIBILITY, and then subscribe to all visible
+       attributes in Z:VISIBILITY
        */
 
-      MalcolmUtils.malcolmGet(requestedData, testMalcolmGetSuccess, malcolmGetFailure);
+      //=============*!*!*!*!*!*!
+      // TEMPORARY RETURN TO AVOID EXCEPTION DURING DEV: TODO
+      //=============*!*!*!*!*!*!
+      //return;
 
-    }
+      // Instruct MalcolmUtils to get the visibility information for all blocks on the remote instrument.
+      // Was: MalcolmUtils.malcolmGet('Z:VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
+      MalcolmUtils.malcolmGet([actionCreators.deviceId], zVisibilitySubscribe, malcolmGetFailure);
+
+      };
+
+
+    console.log('MalcolmActionCreators: malcolmGet: Requested data...');
+    console.log(requestedData);
+    console.log('MalcolmActionCreators: malcolmGet: deviceId...');
+    console.log(actionCreators.deviceId);
+
+    if (requestedData === actionCreators.deviceId)
+      {
+
+      /*
+       ===========================================================================
+       This is the initial malcolmGet call that returns the top level device block (once called Z);
+       It is then passed a callback function that loops through all the contained
+       attributes.blocks.value and fetches each block in that list
+       ===========================================================================
+       */
+
+      actionCreators.topLevelGetId = MalcolmUtils.malcolmGet(requestedData, testMalcolmGetSuccess, malcolmGetFailure);
+      //console.log(`MalcolmActionCreators: malcolmGet(): Issue Request for data:  topLevelGetId = ${actionCreators.topLevelGetId}`);
+      }
     else
       {
-      MalcolmUtils.malcolmGet(requestedData, malcolmGetSuccess, malcolmGetFailure);
+      actionCreators.topLevelGetId = MalcolmUtils.malcolmGet(requestedData, malcolmGetSuccess, malcolmGetFailure);
+      //console.log(`MalcolmActionCreators: malcolmGet() [requestedData !== actionCreators.deviceId]: Issue Request for data:  topLevelGetId = ${actionCreators.topLevelGetId}`);
       }
 
-  },
+    },
 
-  malcolmSubscribe: function(blockName, attribute){
+  /**
+   *
+   * @param {string} blockName - MRI name of block (e.g. "P:OUTENC3")
+   * @param {[string]} attribute - array of attribute tree to subscribe to
+   */
+  malcolmSubscribe: function (blockName, attribute)
+    {
 
-    function malcolmSubscribeSuccess(responseMessage){
+    function malcolmSubscribeSuccess(responseMessage)
+      {
       //console.log(requestedData);
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
-        item: {
+        item      : {
           responseMessage: responseMessage,
-          requestedData: {
+          requestedData  : {
             blockName: blockName,
             attribute: attribute
           }
         }
       })
-    }
+      }
 
-    function malcolmSubscribeFailure(responseMessage){
+    function malcolmSubscribeFailure(responseMessage)
+      {
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_FAILURE,
-        item: {
+        item      : {
           responseMessage: responseMessage,
-          requestedData: {
+          requestedData  : {
             blockName: blockName,
             attribute: attribute
           }
         }
       })
-    }
-
-    var requestedAttributeDataPath = '';
-
-    if (Config.getProtocolVersion() === 'V2_0')
-      {
-      requestedAttributeDataPath = [actionCreators.deviceId, blockName, "attributes", attribute];
-      }
-    else
-      {
-      requestedAttributeDataPath = actionCreators.deviceId + ":" + blockName + ".attributes." + attribute;
       }
 
-    MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+    //let requestedAttributeDataPath = [actionCreators.deviceId, blockName, "attributes", attribute];
+    let requestedAttributeDataPath = [blockName].concat(attribute);
 
-  },
+    console.log(`MalcolmActionCreators.malcolmSubscribe(): blockName = ${blockName}   attribute = ${JSON.stringify(attribute)}`);
+    let id = MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
-  malcolmCall: function(blockName, method, args){
+    },
+
+  malcolmCall: function (blockName, method, args)
+    {
+    let requestedDataToWritePath;
 
     AppDispatcher.handleAction({
       actionType: appConstants.MALCOLM_CALL_PENDING,
-      item: {
+      item      : {
         requestedDataToWrite: {
           blockName: blockName,
-          method: method,
-          args: args
+          method   : method,
+          args     : args
         }
       }
     });
 
-    function malcolmCallSuccess(responseMessage){
+    function malcolmCallSuccess(responseMessage)
+      {
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_CALL_SUCCESS,
-        item: {
-          responseMessage: responseMessage,
+        item      : {
+          responseMessage     : responseMessage,
           requestedDataToWrite: {
             blockName: blockName,
-            method: method,
-            args: args
+            method   : method,
+            args     : args
           }
         }
       })
-    }
+      }
 
-    function malcolmCallFailure(responseMessage){
+    function malcolmCallFailure(responseMessage)
+      {
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_CALL_FAILURE,
-        item: {
-          responseMessage: responseMessage,
+        item      : {
+          responseMessage     : responseMessage,
           requestedDataToWrite: {
             blockName: blockName,
-            method: method,
-            args: args
+            method   : method,
+            args     : args
           }
         }
       })
-    }
-
-    var requestedDataToWritePath = '';
-
-    if (Config.getProtocolVersion() === 'V2_0')
-      {
-      requestedDataToWritePath = [actionCreators.deviceId, blockName];
       }
-    else
-      {
-      requestedDataToWritePath = actionCreators.deviceId + ":" + blockName;
-      }
+
+
+    requestedDataToWritePath = [actionCreators.deviceId, blockName];
 
     MalcolmUtils.malcolmCall(requestedDataToWritePath,
       method, args, malcolmCallSuccess, malcolmCallFailure);
 
-  }
+    }
 
 };
 
-var actionCreators = MalcolmActionCreators;
-
-console.log("MalcolmActionCreators: deviceId = "+MalcolmActionCreators.deviceId);
+const actionCreators = MalcolmActionCreators;
 
 module.exports = MalcolmActionCreators;

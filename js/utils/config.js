@@ -8,7 +8,6 @@ var config = {
     {
     /* Set the Zebra or PandA communication protocol version
      */
-    console.log("config.setProtocolVersion(): "+ protocolVersion);
 
     if (protocolVersion in _protocolEnum)
       {
@@ -81,4 +80,4 @@ var _serverKey = 'simulator';
 
 var _deviceName = 'P';
 
-module.exports = config;
+export default config;

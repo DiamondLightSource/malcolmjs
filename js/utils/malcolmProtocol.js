@@ -2,165 +2,122 @@
  * Created by Ian Gillingham on 16/09/16.
  */
 
-var Config = require('./config');
+import config from './config';
 
 var Protocol = {};
 
 Protocol['V1_0'] = {
-  typeIdIdent : 'type',
-  typeidReturn :'Return',
-  typeidValue : 'Value',
-  typeidError : 'Error',
-  typeidGet : 'Get',
-  typeidSubscribe : 'Subscribe',
-  typeidCall : 'Call'
+  typeIdIdent    : 'type',
+  typeidReturn   : 'Return',
+  typeidValue    : 'Value',
+  typeidError    : 'Error',
+  typeidGet      : 'Get',
+  typeidSubscribe: 'Subscribe',
+  typeidCall     : 'Call'
 
 };
 
 Protocol['V2_0'] = {
-  typeIdIdent : 'typeid',
-  typeidReturn : 'malcolm:core/Return:1.0',
-  typeidValue : 'malcolm:core/Value:1.0',
-  typeidError : 'malcolm:core/Error:1.0',
-  typeidGet : 'malcolm:core/Get:1.0',
-  typeidSubscribe : 'malcolm:core/Subscribe:1.0',
-  typeidCall : 'malcolm:core/Call:1.0'
+  typeIdIdent    : 'typeid',
+  typeidReturn   : 'malcolm:core/Return:1.0',
+  typeidValue    : 'malcolm:core/Value:1.0',
+  typeidUpdate   : 'malcolm:core/Update:1.0',
+  typeidError    : 'malcolm:core/Error:1.0',
+  typeidGet      : 'malcolm:core/Get:1.0',
+  typeidSubscribe: 'malcolm:core/Subscribe:1.0',
+  typeidCall     : 'malcolm:core/Call:1.0'
 };
 
-var malcolmProtocol = {
-  getTypeIDIdent: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-      {
-      ret = Protocol[pver].typeIdIdent;
-      }
-    return(ret);
-  },
+// It is intended to support only one protocol, so no choice will be available.
+// So assume V2_0 as the default.
+export const ProtocolTypeId = {
+  typeIdIdent    : 'typeid',
+  typeidReturn   : 'malcolm:core/Return:1.0',
+  typeidValue    : 'malcolm:core/Value:1.0',
+  typeidUpdate   : 'malcolm:core/Update:1.0',
+  typeidError    : 'malcolm:core/Error:1.0',
+  typeidGet      : 'malcolm:core/Get:1.0',
+  typeidSubscribe: 'malcolm:core/Subscribe:1.0',
+  typeidCall     : 'malcolm:core/Call:1.0'
+};
 
-  getTypeIDReturn: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-      {
-      ret = Protocol[pver].typeidReturn;
-      }
-    return(ret);
-  },
+class MalcolmProtocol {
 
-  getTypeIDValue: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-      {
-      ret = Protocol[pver].typeidValue;
-      }
-    return(ret);
-  },
+getTypeIDIdent()
+  {
+  var ret = ProtocolTypeId.typeIdIdent;
+  return (ret);
+  }
 
-  getTypeIDError: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-      {
-      ret = Protocol[pver].typeidError;
-      }
-    return(ret);
-  },
+getTypeIDReturn()
+  {
+  var ret = ProtocolTypeId.typeidReturn;
+  return (ret);
+  }
 
-  getTypeIDGet: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      ret = Protocol[pver].typeidGet;
-    }
-    return(ret);
-  },
+getTypeIDValue()
+  {
+  var ret = ProtocolTypeId.typeidValue;
+  return (ret);
+  }
 
-  getTypeIDSubscribe: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      ret = Protocol[pver].typeidSubscribe;
-    }
-    return(ret);
-  },
+getTypeIDUpdate()
+  {
+  var ret = ProtocolTypeId.typeidUpdate;
+  return (ret);
+  }
 
-  getTypeIDCall: function () {
-    var ret = '';
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      ret = Protocol[pver].typeidCall;
-    }
-    return(ret);
-  },
+getTypeIDError()
+  {
+  var ret = ProtocolTypeId.typeidError;
+  return (ret);
+  }
 
-  isError: function (msg) {
-    var bRet = false;
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      switch (pver)
-      {
-        case 'V1_0':
-          bRet = (msg[Protocol['V1_0'].typeIdIdent] === this.getTypeIDError());
-          break;
-        case 'V2_0':
-          bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDError());
-          break;
-        default:
-          break;
-      }
-    }
-  return(bRet);
-  },
+getTypeIDGet()
+  {
+  var ret = ProtocolTypeId.typeidGet;
+  return (ret);
+  }
 
-  isReturn: function (msg) {
-    var bRet = false;
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      switch (pver)
-      {
-        case 'V1_0':
-          bRet = (msg[Protocol['V1_0'].typeIdIdent] === this.getTypeIDReturn());
-          break;
-        case 'V2_0':
-          bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDReturn());
-          break;
-        default:
-          break;
-      }
-    }
-    return(bRet);
-  },
+getTypeIDSubscribe()
+  {
+  var ret = ProtocolTypeId.typeidSubscribe;
+  return (ret);
+  }
 
-  isValue: function (msg) {
-    var bRet = false;
-    var pver = Config.getProtocolVersion();
-    if (pver in Protocol)
-    {
-      switch (pver)
-      {
-        case 'V1_0':
-          bRet = (msg[Protocol['V1_0'].typeIdIdent] === this.getTypeIDValue());
-          break;
-        case 'V2_0':
-          bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDValue());
-          break;
-        default:
-          break;
-      }
-    }
-    return(bRet);
+getTypeIDCall()
+  {
+  var ret = ProtocolTypeId.typeidCall;
+  return (ret);
+  }
+
+isError(msg)
+  {
+  var bRet = (msg[ProtocolTypeId.typeIdIdent] === this.getTypeIDError());
+  return (bRet);
+  }
+
+isReturn(msg)
+  {
+  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDReturn());
+  return (bRet);
+  }
+
+isValue(msg)
+  {
+  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDValue());
+  return (bRet);
+  }
+
+isUpdate(msg)
+  {
+  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDUpdate());
+  return (bRet);
   }
 
 
+}
 
+var malcolmProtocol = new MalcolmProtocol();
 
-};
-
-module.exports = malcolmProtocol;
+export default malcolmProtocol;

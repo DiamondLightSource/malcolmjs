@@ -2,14 +2,16 @@
  * Created by twi18192 on 17/09/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants = require('../constants/appConstants');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 
-var CHANGE_EVENT = 'change';
+let CHANGE_EVENT = 'change';
 
-var _stuff = {
+import MalcolmUtils from '../utils/MalcolmUtils'
+
+let _stuff = {
   tabState: [],
   selectedTabIndex: 0,
   updatedBlockContent: null,
@@ -20,13 +22,13 @@ var _stuff = {
   modalDialogBoxOpen: false
 };
 
-var modalDialogBoxInfo = {
+let modalDialogBoxInfo = {
   blockName: null,
   attributeName: null,
   message: null
 };
 
-//var favContent = {
+//let favContent = {
 //  name: "Favourites tab",
 //  label: 'Favourites',
 //  hack: "favTabOpen",
@@ -44,7 +46,7 @@ var modalDialogBoxInfo = {
 //  }
 //};
 
-//var configContent = {
+//let configContent = {
 //  name: "Configuration tab",
 //  label: 'Configuration',
 //  hack: "configTabOpen",
@@ -59,15 +61,15 @@ var modalDialogBoxInfo = {
 //  }
 //};
 
-var dropdownMenuSelect = function(tab){
-
+let dropdownMenuSelect = function(tab){
+  let findTheIndex = 0;
   console.log("dropdown menu select");
   console.log(tab);
 
-  for(var i = 0; i < _stuff.tabState.length; i++){
+  for(let i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
     if(_stuff.tabState[i].label === tab){
-      var findTheIndex = i
+      let findTheIndex = i
     }
   }
 
@@ -75,12 +77,12 @@ var dropdownMenuSelect = function(tab){
 
 };
 
-var deviceSelect = function(tab){
-  var findTheIndex = 0;
+let deviceSelect = function(tab){
+  let findTheIndex = 0;
   console.log("device select");
   console.log(tab);
 
-  for(var i = 0; i < _stuff.tabState.length; i++){
+  for(let i = 0; i < _stuff.tabState.length; i++){
     console.log(_stuff.tabState[i]);
     if(_stuff.tabState[i].label === tab){
       findTheIndex = i
@@ -90,14 +92,14 @@ var deviceSelect = function(tab){
   _stuff.selectedTabIndex = findTheIndex;
 
 };
-var selectBlockOnClick = function(){
-  var tabStateLength = _stuff.tabState.length;
+let selectBlockOnClick = function(){
+  let tabStateLength = _stuff.tabState.length;
 
   _stuff.selectedTabIndex = tabStateLength - 1;
 
 };
 
-var paneStore = assign({}, EventEmitter.prototype, {
+let paneStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb){
     this.on(CHANGE_EVENT, cb)
   },
@@ -147,11 +149,11 @@ var paneStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-var attributeStore = require('./attributeStore');
+let attributeStore = require('./attributeStore');
 
 paneStore.dispatchToken = AppDispatcher.register(function(payload){
-  var action = payload.action;
-  var item = action.item;
+  let action = payload.action;
+  let item = action.item;
 
   //console.log(action);
   //console.log(payload);
@@ -214,7 +216,7 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
       break;
 
     case appConstants.OPEN_EDGETAB:
-      var EdgeInfo = {
+      let EdgeInfo = {
         edgeId: item.edgeId,
         fromBlock: item.fromBlock,
         fromBlockPort: item.fromBlockPort,
@@ -244,211 +246,227 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
     case appConstants.MALCOLM_GET_SUCCESS:
 
       /* No need to check the tags for if it's FlowGraph */
-      for(var j = 0; j < item.responseMessage.tags.length; j++){
-        //if(item.tags[j] === 'instance:FlowGraph'){
-        //}
-        if(item.responseMessage.tags[j] === 'instance:Zebra2Block'){
 
-          if(item.responseMessage.attributes.VISIBLE.value === 'Show') {
+      console.log('paneStore: MALCOLM_GET_SUCCESS');
+      console.log(item.responseMessage);
+      // Determine whether the GET notification is in response to:
+      // Top level item list or individual item attributes.
+      // The top level case will have a 'layout' attribute.
+      if (MalcolmUtils.hasOwnNestedProperties(item.responseMessage, 'value','layout'))
+        {
 
-            var blockName = JSON.parse(JSON.stringify(item.responseMessage.name.slice(2)));
+        for (let i = 0; i < item.responseMessage.layout.value.name.length; i++)
+          {
+          //if(item.tags[j] === 'instance:FlowGraph'){
+          //}
+          console.log(`paneStore: visible: ${item.responseMessage.layout.value.visible[i]}`);
+          if (item.responseMessage.layout.value.visible[i] === true)
+            {
+            let blockName = item.responseMessage.layout.value.name[i];
             appendToAllBlockTabProperties(blockName);
 
             /* Also need to check if the block has any edges too,
-            so then I can append them to allEdgeTabProperties,
-            meaning that their tabs will be openable after initial
-            render
+             so then I can append them to allEdgeTabProperties,
+             meaning that their tabs will be openable after initial
+             render
              */
 
             checkBlockForInitialEdges(item.responseMessage.attributes);
 
             paneStore.emitChange();
-
+            }
           }
         }
-        else if(item.responseMessage.tags[j] === 'instance:Zebra2Visibility'){
-          /* I think I could potentially listen for when VISIBILITY comes in,
-           and then add its tab to tabState using setBlockLookupTableStateTrue?
-           */
-
-          /* Hmm, but what if attribute store goes AFTER paneStore,
-          that'll mean that the attributes for VISIBILITY won't
-          yet exist so they can't be drawn yet...
-          Could use waitFor, it could also break something though...
-           */
-
-          //AppDispatcher.waitFor([attributeStore.dispatchToken]);
-
-          console.log("zebra2visibility");
-          console.log(item.responseMessage);
-
-          setBlockLookupTableTabStateTrue();
-          paneStore.emitChange();
-        }
-      }
 
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("malcolmSubscribeSuccess in paneStore");
-      var isWidgetCombo = false;
-      var isGroupInputs = false;
+      {
+      let isWidgetCombo = false;
+      let isGroupInputs = false;
 
-      if(item.responseMessage.tags !== undefined) {
-        for (var k = 0; k < item.responseMessage.tags.length; k++) {
-          if (item.responseMessage.tags[k].indexOf('widget:combo') !== -1) {
+      console.log("malcolmSubscribeSuccess in paneStore");
+
+      if (item.responseMessage.hasOwnProperty("tags"))
+        {
+        for (let k = 0; k < item.responseMessage.tags.length; k++)
+          {
+          if (item.responseMessage.tags[k].indexOf('widget:combo') !== -1)
+            {
             isWidgetCombo = true;
-          }
-          else if (item.responseMessage.tags[k].indexOf('group:Inputs') !== -1) {
+            }
+          else if (item.responseMessage.tags[k].indexOf('group:Inputs') !== -1)
+            {
             isGroupInputs = true;
-          }
-          else if(item.responseMessage.tags[k].indexOf('widget:toggle') !== -1){
+            }
+          else if (item.responseMessage.tags[k].indexOf('widget:toggle') !== -1)
+            {
 
             /* Need to append to allBlockTabProperties when a block's
              visibility is changed from Hide to Show, so then when a block
              is added you can open its tab!
              */
 
-            if(item.requestedData.blockName === 'VISIBILITY'){
-              if(item.responseMessage.value === 'Show' &&
-                allBlockTabProperties[item.requestedData.attribute] === undefined){
+            if (item.requestedData.blockName === 'VISIBILITY')
+              {
+              if (item.responseMessage.value === 'Show' &&
+                allBlockTabProperties[item.requestedData.attribute] === undefined)
+                {
                 appendToAllBlockTabProperties(item.requestedData.attribute);
-              }
+                }
               paneStore.emitChange()
-            }
-            else if(item.requestedData.attribute === 'VISIBLE'){
-              /* This is for when a block's own VISIBLE attribute/toggle switch
-              is changed, rather than VISBILITY's
-               */
-              if(item.responseMessage.value === 'Show' &&
-                allBlockTabProperties[item.requestedData.blockName] === undefined){
-                appendToAllBlockTabProperties(item.requestedData.blockName);
               }
+            else if (item.requestedData.attribute === 'VISIBLE')
+              {
+              /* This is for when a block's own VISIBLE attribute/toggle switch
+               is changed, rather than VISBILITY's
+               */
+              if (item.responseMessage.value === 'Show' &&
+                allBlockTabProperties[item.requestedData.blockName] === undefined)
+                {
+                appendToAllBlockTabProperties(item.requestedData.blockName);
+                }
               paneStore.emitChange();
-            }
+              }
 
+            }
           }
         }
-      }
 
-      if(isWidgetCombo === true && isGroupInputs === true){
+      if (isWidgetCombo === true && isGroupInputs === true)
+        {
         /* Then this is some info on edges, so we need
-        to append to the relevant objects in order to have
-        edge tabs
+         to append to the relevant objects in order to have
+         edge tabs
          */
 
-        var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        var requestedData = JSON.parse(JSON.stringify(item.requestedData));
+        let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+        let requestedData   = JSON.parse(JSON.stringify(item.requestedData));
 
-        if(responseMessage.value !== 'BITS.ZERO' &&
-          responseMessage.value !== 'POSITIONS.ZERO') {
+        if (responseMessage.value !== 'BITS.ZERO' &&
+          responseMessage.value !== 'POSITIONS.ZERO')
+          {
 
           /* edgeLabelFirstHalf is the outport block and the
            outport block port names put together
            */
-          var edgeLabelFirstHalf = responseMessage.value.replace(/\./g, "");
+          let edgeLabelFirstHalf = responseMessage.value.replace(/\./g, "");
 
           /* edgeLabelSecondHalf is the inport block and the
            inport block port names put together
            */
-          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
-          var edgeLabel = edgeLabelFirstHalf + edgeLabelSecondHalf;
+          let edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+          let edgeLabel           = edgeLabelFirstHalf + edgeLabelSecondHalf;
 
           appendToAllEdgeTabProperties(edgeLabel);
-        }
-        else if(responseMessage.value === 'BITS.ZERO' ||
-          responseMessage.value === 'POSITIONS.ZERO'){
+          }
+        else if (responseMessage.value === 'BITS.ZERO' ||
+          responseMessage.value === 'POSITIONS.ZERO')
+          {
 
           /* I know what inport and what inport block the edge was
            connected to, but I don't know what outport or what
            outport block the edge was connected to, since you
            get the value to be BITS.ZERO or POSITIONS.ZERO instead
            of what it was connected to before...
-            */
-
-          var edgeLabelToDelete;
-
-          var edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
-
-          /* Inports can't be connected to more than one outport
-          at a time, so only one edge with edgeLabelSecondHalf in it
-          can exist at any given time, so I think I can search through
-          all the edges in allEdgeTabProperties and see if the
-          indexOf(edgeLabelSecondHalf) !== -1, then that should
-          be the edge that I want to delete
            */
 
-          for(var edge in allEdgeTabProperties){
-            if(edge.indexOf(edgeLabelSecondHalf) !== -1){
+          let edgeLabelToDelete;
+
+          let edgeLabelSecondHalf = requestedData.blockName + requestedData.attribute;
+
+          /* Inports can't be connected to more than one outport
+           at a time, so only one edge with edgeLabelSecondHalf in it
+           can exist at any given time, so I think I can search through
+           all the edges in allEdgeTabProperties and see if the
+           indexOf(edgeLabelSecondHalf) !== -1, then that should
+           be the edge that I want to delete
+           */
+
+          for (let edge in allEdgeTabProperties)
+            {
+            if (edge.indexOf(edgeLabelSecondHalf) !== -1)
+              {
               edgeLabelToDelete = edge;
               delete allEdgeTabProperties[edge];
+              }
             }
-          }
 
           console.log(allEdgeTabProperties);
 
           /* Now need to remove the edge from tabState! */
 
-          function checkEdgeLabel(edgeTabObject){
+          function checkEdgeLabel(edgeTabObject)
+            {
             return edgeTabObject.label !== edgeLabelToDelete;
-          }
+            }
 
-          for(var j = 0; j < _stuff.tabState.length; j++){
-            if(_stuff.tabState[j].label === edgeLabelToDelete){
+          for (let j = 0; j < _stuff.tabState.length; j++)
+            {
+            if (_stuff.tabState[j].label === edgeLabelToDelete)
+              {
               /* Return a new array after removing the edge tab */
               _stuff.tabState = _stuff.tabState.filter(checkEdgeLabel);
+              }
             }
-          }
 
           /* In the case of deleting the last tab in tabState */
-          if(_stuff.selectedTabIndex === _stuff.tabState.length) {
+          if (_stuff.selectedTabIndex === _stuff.tabState.length)
+            {
             _stuff.selectedTabIndex = _stuff.selectedTabIndex - 1;
-          }
+            }
 
           console.log(_stuff.tabState);
 
-        }
+          }
 
         paneStore.emitChange();
 
-      }
+        }
 
       /* Hmm, I need to also remove the edge tab
-      if I'm deleting the edge; ie, if the value of
-      a subscription is BITS.ZERO or POSITIONS.ZERO
+       if I'm deleting the edge; ie, if the value of
+       a subscription is BITS.ZERO or POSITIONS.ZERO
        */
 
       break;
-
-    case appConstants.MALCOLM_CALL_SUCCESS:
-      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-      if(modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
-        modalDialogBoxInfo.attributeName === attributeToUpdate) {
-        modalDialogBoxInfo.message = null;
-        paneStore.emitChange();
       }
 
+    case appConstants.MALCOLM_CALL_SUCCESS:
+      {
+      let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+
+      //debugger; // <======= TODO
+
+      let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+
+      if (modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
+        modalDialogBoxInfo.attributeName === attributeToUpdate)
+        {
+        modalDialogBoxInfo.message = null;
+        paneStore.emitChange();
+        }
+
       break;
+      }
 
     case appConstants.MALCOLM_CALL_FAILURE:
+      {
+      let responseMessage      = JSON.parse(JSON.stringify(item.responseMessage));
+      let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
 
-      var responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      var requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+      let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
 
-      var attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-      modalDialogBoxInfo.blockName = requestedDataToWrite.blockName;
+      modalDialogBoxInfo.blockName     = requestedDataToWrite.blockName;
       modalDialogBoxInfo.attributeName = attributeToUpdate;
-      modalDialogBoxInfo.message = responseMessage;
+      modalDialogBoxInfo.message       = responseMessage;
 
       console.log(modalDialogBoxInfo);
 
       paneStore.emitChange();
       break;
-
+      }
+      
     default:
           return true
   }
@@ -458,15 +476,15 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
-var blockStore = require('./blockStore');
+let blockStore = require('./blockStore');
 
-var allBlockTabProperties = {
+let allBlockTabProperties = {
   'Favourites': false,
   'Configuration': false,
   'VISIBILITY': false,
 };
 
-var allEdgeTabProperties = {};
+let allEdgeTabProperties = {};
 
 function appendToAllEdgeTabProperties(EdgeId){
   allEdgeTabProperties[EdgeId] = false;
@@ -490,7 +508,7 @@ function setBlockTabStateTrue(BlockId){
     be the tab title
      */
 
-    var blockTabStateObject = [{
+    let blockTabStateObject = [{
       tabType: 'block',
       label: BlockId
     }];
@@ -513,7 +531,7 @@ function setEdgeTabStateTrue(EdgeInfo){
   if(allEdgeTabProperties[EdgeInfo.edgeId] === false){
     allEdgeTabProperties[EdgeInfo.edgeId] = true;
 
-    var edgeTabStateObject = [{
+    let edgeTabStateObject = [{
       tabType: 'edge',
       label: EdgeInfo.edgeId,
       fromBlock: EdgeInfo.fromBlock,
@@ -536,7 +554,7 @@ function setFavTabStateTrue(){
  if(allBlockTabProperties['Favourites'] === false){
    allBlockTabProperties['Favourites'] = true;
 
-   var favTabStateObject = [{
+   let favTabStateObject = [{
      tabType: 'Favourites',
      label: 'Favourites'
    }];
@@ -556,7 +574,7 @@ function setConfigTabStateTrue(){
   if(allBlockTabProperties['Configuration'] === false){
     allBlockTabProperties['Configuration'] = true;
 
-    var configTabStateObject = [{
+    let configTabStateObject = [{
       tabType: 'Configuration',
       label: 'Configuration'
     }];
@@ -577,7 +595,7 @@ function setBlockLookupTableTabStateTrue(){
   if(allBlockTabProperties['VISIBILITY'] === false){
     allBlockTabProperties['VISIBILITY'] = true;
 
-    var blockLookupTableTabStateObject = [{
+    let blockLookupTableTabStateObject = [{
       tabType: 'VISIBILITY',
       label: 'VISIBILITY'
     }];
@@ -591,9 +609,9 @@ function setBlockLookupTableTabStateTrue(){
   }
 }
 
-var removeBlockTab = function(){
+let removeBlockTab = function(){
 
-  var tabName = _stuff.tabState[_stuff.selectedTabIndex].label;
+  let tabName = _stuff.tabState[_stuff.selectedTabIndex].label;
 
   /* Checking if it's an edge tab or a block tab */
 
@@ -642,22 +660,22 @@ function windowWidthMediaQueryChanged(sidebarOpen){
 
 function checkBlockForInitialEdges(blockAttributeObject){
 
-  for(var attribute in blockAttributeObject){
+  for(let attribute in blockAttributeObject){
     if(blockAttributeObject[attribute].tags !== undefined){
-      for(var i = 0; i < blockAttributeObject[attribute].tags.length; i++){
+      for(let i = 0; i < blockAttributeObject[attribute].tags.length; i++){
         if(blockAttributeObject[attribute].tags[i].indexOf('flowgraph:inport') !== -1){
           if(blockAttributeObject[attribute].value.indexOf('ZERO') === -1 ){
             /* Then it's connected to another block via an edge! */
 
-            var inportBlock = blockAttributeObject['BLOCKNAME'].value;
-            var inportBlockPort = attribute;
+            let inportBlock = blockAttributeObject['BLOCKNAME'].value;
+            let inportBlockPort = attribute;
 
-            var outportBlock = blockAttributeObject[attribute].value
+            let outportBlock = blockAttributeObject[attribute].value
               .slice(0, blockAttributeObject[attribute].value.indexOf('.'));
-            var outportBlockPort = blockAttributeObject[attribute].value
+            let outportBlockPort = blockAttributeObject[attribute].value
               .slice(blockAttributeObject[attribute].value.indexOf('.') + 1);
 
-            var edgeLabel = outportBlock + outportBlockPort + inportBlock + inportBlockPort;
+            let edgeLabel = outportBlock + outportBlockPort + inportBlock + inportBlockPort;
 
             appendToAllEdgeTabProperties(edgeLabel);
 

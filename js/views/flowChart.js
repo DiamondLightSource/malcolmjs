@@ -2,31 +2,31 @@
  * Created by twi18192 on 10/12/15.
  */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var appConstants = require('../constants/appConstants.js');
+let appConstants = require('../constants/appConstants.js');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
-var attributeStore = require('../stores/attributeStore');
-var flowChartStore = require('../stores/flowChartStore');
-var flowChartActions = require('../actions/flowChartActions');
+let MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+let attributeStore = require('../stores/attributeStore');
+let flowChartStore = require('../stores/flowChartStore');
+let flowChartActions = require('../actions/flowChartActions');
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
+let AppDispatcher = require('../dispatcher/appDispatcher');
 
-var Edge = require('./edge.js');
-var EdgePreview = require('./edgePreview');
-var Block = require('./block.js');
+let Edge = require('./edge.js');
+let EdgePreview = require('./edgePreview');
+let Block = require('./block.js');
 
-var interact = require('../../node_modules/interact.js');
+let interact = require('../../node_modules/interact.js');
 
-var AppContainerStyle = {
+let AppContainerStyle = {
   "height": "100%",
   "width": "100%",
   //'backgroundColor': "green"
 };
 
-var FlowChart = React.createClass({
+let FlowChart = React.createClass({
 
   propTypes: {
     graphPosition: React.PropTypes.object,
@@ -34,6 +34,11 @@ var FlowChart = React.createClass({
     allBlockInfo: React.PropTypes.object,
     areAnyBlocksSelected: React.PropTypes.bool,
     areAnyEdgesSelected: React.PropTypes.bool,
+    portThatHasBeenClicked: React.PropTypes.object,
+    blockStyling:  React.PropTypes.object,
+    blockPositions: React.PropTypes.object,
+    storingFirstPortClicked: React.PropTypes.object,
+    edgePreview: React.PropTypes.object
   },
 
   componentDidMount: function () {
@@ -103,14 +108,14 @@ var FlowChart = React.createClass({
     e.nativeEvent.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
 
-    var currentZoomScale = this.props.graphZoomScale;
-    var currentGraphPositionX = this.props.graphPosition.x;
-    var currentGraphPositionY = this.props.graphPosition.y;
+    let currentZoomScale = this.props.graphZoomScale;
+    let currentGraphPositionX = this.props.graphPosition.x;
+    let currentGraphPositionY = this.props.graphPosition.y;
 
-    var ZOOM_STEP = 0.05;
-    var zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
+    let ZOOM_STEP = 0.05;
+    let zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
 
-    var newZoomScale;
+    let newZoomScale;
 
     if(zoomDirection === 'up'){
       newZoomScale = this.props.graphZoomScale + ZOOM_STEP;
@@ -119,18 +124,18 @@ var FlowChart = React.createClass({
       newZoomScale = this.props.graphZoomScale - ZOOM_STEP;
     }
 
-    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
-    var scale = scaleDelta * currentZoomScale;
+    let scaleDelta = 1 + (newZoomScale - currentZoomScale);
+    let scale = scaleDelta * currentZoomScale;
 
-    var mouseOnZoomX = e.nativeEvent.clientX;
-    var mouseOnZoomY = e.nativeEvent.clientY;
+    let mouseOnZoomX = e.nativeEvent.clientX;
+    let mouseOnZoomY = e.nativeEvent.clientY;
 
-    var newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX)
+    let newGraphPositionX = scaleDelta * (currentGraphPositionX - mouseOnZoomX)
       + mouseOnZoomX;
-    var newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY)
+    let newGraphPositionY = scaleDelta * (currentGraphPositionY - mouseOnZoomY)
       + mouseOnZoomY;
 
-    var newGraphPosition = {
+    let newGraphPosition = {
       x: newGraphPositionX,
       y: newGraphPositionY
     };
@@ -146,12 +151,12 @@ var FlowChart = React.createClass({
 
   addEdgePreview: function(){
 
-    var fromBlockId = document.getElementById(this.props.portThatHasBeenClicked.id)
+    let fromBlockId = document.getElementById(this.props.portThatHasBeenClicked.id)
       .parentNode.parentNode.parentNode.parentNode.parentNode.id;
-    var portStringSliceIndex = fromBlockId.length;
-    var portName = document.getElementById(this.props.portThatHasBeenClicked.id)
+    let portStringSliceIndex = fromBlockId.length;
+    let portName = document.getElementById(this.props.portThatHasBeenClicked.id)
       .id.slice(portStringSliceIndex);
-    var fromBlockType = this.props.allBlockInfo[fromBlockId].type;
+    let fromBlockType = this.props.allBlockInfo[fromBlockId].type;
 
     /* Slightly confusing since the end of the edge is the same as the start
     of the edge at the very beginning of an edgePreview, but this is only to
@@ -159,15 +164,15 @@ var FlowChart = React.createClass({
     in edgePreview.js
      */
 
-    var endOfEdgePortOffsetX;
-    var endOfEdgePortOffsetY;
-    var portType;
+    let endOfEdgePortOffsetX;
+    let endOfEdgePortOffsetY;
+    let portType;
 
     if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('inport') !== -1){
 
-      var inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
-      var inportArrayIndex;
-      for(var j = 0; j < inportArrayLength; j++){
+      let inportArrayLength = this.props.allBlockInfo[fromBlockId].inports.length;
+      let inportArrayIndex;
+      for(let j = 0; j < inportArrayLength; j++){
         if(this.props.allBlockInfo[fromBlockId].inports[j].name === portName){
           inportArrayIndex = JSON.parse(JSON.stringify(j));
         }
@@ -178,10 +183,10 @@ var FlowChart = React.createClass({
     }
     else if(document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1) {
 
-      var outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
-      var outportArrayIndex;
+      let outportArrayLength = this.props.allBlockInfo[fromBlockId].outports.length;
+      let outportArrayIndex;
 
-      for(var i = 0; i < outportArrayLength; i++){
+      for(let i = 0; i < outportArrayLength; i++){
         if(this.props.allBlockInfo[fromBlockId].outports[i].name === portName){
           outportArrayIndex = JSON.parse(JSON.stringify(i));
         }
@@ -191,10 +196,10 @@ var FlowChart = React.createClass({
       endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
       portType = "outport";
     }
-    var endOfEdgeX = this.props.blockPositions[fromBlockId].x + endOfEdgePortOffsetX;
-    var endOfEdgeY = this.props.blockPositions[fromBlockId].y + endOfEdgePortOffsetY;
+    let endOfEdgeX = this.props.blockPositions[fromBlockId].x + endOfEdgePortOffsetX;
+    let endOfEdgeY = this.props.blockPositions[fromBlockId].y + endOfEdgePortOffsetY;
 
-    var edgePreviewInfo = {
+    let edgePreviewInfo = {
       fromBlockInfo: {
         fromBlock: fromBlockId,
         fromBlockType: fromBlockType,
@@ -224,8 +229,8 @@ var FlowChart = React.createClass({
   checkBothClickedPorts: function(){
     /* This function will run whenever we have dispatched a PortSelect event */
 
-    var firstPort = document.getElementById(this.props.storingFirstPortClicked.id);
-    var secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
+    let firstPort = document.getElementById(this.props.storingFirstPortClicked.id);
+    let secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
     /* The excessive use of .parentNode is to walk up
     the DOM tree and find the id of the block that the
@@ -236,13 +241,13 @@ var FlowChart = React.createClass({
     /* Need the length of the name of the node, then slice the firstPort id string
     until the end of the node name length */
 
-    var firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
+    let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
       .parentNode.parentNode.id.length;
-    var firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
+    let firstPortName = firstPort.id.slice(firstPortStringSliceIndex);
 
-    var secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
+    let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
       .parentNode.parentNode.id.length;
-    var secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
+    let secondPortName = secondPort.id.slice(secondPortStringSliceIndex);
 
 
     if(firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
@@ -250,7 +255,7 @@ var FlowChart = React.createClass({
       firstPort.id === secondPort.id ){
     }
     else{
-      var edge = {
+      let edge = {
         fromBlock: firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
         fromBlockPort: firstPortName,
         toBlock: secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
@@ -265,16 +270,16 @@ var FlowChart = React.createClass({
     /* First need to check we have an inport and an outport */
     /* Find both port types, then compare them somehow */
 
-    var fromBlockPortType;
-    var toBlockPortType;
+    let fromBlockPortType;
+    let toBlockPortType;
 
-    var fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
-    var toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
+    let fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
+    let toBlockType = this.props.allBlockInfo[edgeInfo.toBlock].type;
 
     /* Remember, this is BEFORE any swapping occurs, but be
     aware that these may have to swap later on
     */
-    var blockTypes = {
+    let blockTypes = {
       fromBlockType: fromBlockType,
       toBlockType: toBlockType
     };
@@ -300,28 +305,28 @@ var FlowChart = React.createClass({
     and check if the selected inport is already conencted or not
      */
 
-    var inportIndex;
+    let inportIndex;
 
-    for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
+    for(let i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].inports.length; i++){
       if(this.props.allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort){
         inportIndex = i;
         break;
       }
     }
 
-    for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
+    for(let j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++ ){
       if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
         inportIndex = j;
         break;
       }
     }
 
-    var portTypes = {
+    let portTypes = {
       fromBlockPortType: fromBlockPortType,
       toBlockPortType: toBlockPortType
     };
 
-    var types = {
+    let types = {
       blockTypes: blockTypes,
       portTypes: portTypes
     };
@@ -358,14 +363,16 @@ var FlowChart = React.createClass({
 
       /* Now check if the port value types are compatible (ie, if they're the same) */
 
-      var startBlock;
-      var startBlockPort;
-      var endBlock;
-      var endBlockPort;
+      let startBlock;
+      let startBlockPort;
+      let endBlock;
+      let endBlockPort;
+      let fromPortValueType;
+      let toPortValueType;
 
       /* For the malcolmCall that updates the dropdown menu list
          specifying what port the block's inport is connected to */
-      var inportBlock;
+      let inportBlock;
 
       if(types.portTypes.fromBlockPortType === 'outport'){
 
@@ -380,15 +387,15 @@ var FlowChart = React.createClass({
 
         /* We know that the toBlockPortType is an inport,
         so then we can check their port VALUE types accordingly */
-        for(var i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
+        for(let i = 0; i < this.props.allBlockInfo[edgeInfo.fromBlock].outports.length; i++){
           if(this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort){
-            var fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
+            fromPortValueType = this.props.allBlockInfo[edgeInfo.fromBlock].outports[i].type;
           }
         }
 
-        for(var j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++){
+        for(let j = 0; j < this.props.allBlockInfo[edgeInfo.toBlock].inports.length; j++){
           if(this.props.allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort){
-            var toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].inports[j].type;
+            toPortValueType = this.props.allBlockInfo[edgeInfo.toBlock].inports[j].type;
           }
         }
       }
@@ -408,10 +415,10 @@ var FlowChart = React.createClass({
         /* Create new edges by sending a malcolmCall */
 
         inportBlock = endBlock; /* the 'blockName' argument */
-        var inputFieldSetMethod = "_set_" + endBlockPort; /* the 'method' argument */
-        var newDropdownValue = startBlock + "." + startBlockPort; /* the 'args' argument */
+        let inputFieldSetMethod = "_set_" + endBlockPort; /* the 'method' argument */
+        let newDropdownValue = startBlock + "." + startBlockPort; /* the 'args' argument */
 
-        var argsObject = {};
+        let argsObject = {};
         argsObject[endBlockPort] = newDropdownValue;
 
         MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
@@ -454,8 +461,8 @@ var FlowChart = React.createClass({
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    var xChange = this.props.graphPosition.x + e.dx;
-    var yChange = this.props.graphPosition.y + e.dy;
+    let xChange = this.props.graphPosition.x + e.dx;
+    let yChange = this.props.graphPosition.y + e.dy;
 
     flowChartActions.changeGraphPosition({
       x: xChange,
@@ -474,20 +481,20 @@ var FlowChart = React.createClass({
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    var currentZoomScale = this.props.graphZoomScale;
-    var newZoomScale = currentZoomScale + e.ds;
+    let currentZoomScale = this.props.graphZoomScale;
+    let newZoomScale = currentZoomScale + e.ds;
 
-    var scaleDelta = 1 + (newZoomScale - currentZoomScale);
+    let scaleDelta = 1 + (newZoomScale - currentZoomScale);
 
-    //var scale = scaleDelta * currentZoomScale;
+    //let scale = scaleDelta * currentZoomScale;
 
-    var pinchZoomX = e.clientX;
-    var pinchZoomY = e.clientY;
+    let pinchZoomX = e.clientX;
+    let pinchZoomY = e.clientY;
 
-    var newGraphPositionX = scaleDelta * (this.props.graphPosition.x - pinchZoomX) + pinchZoomX ;
-    var newGraphPositionY = scaleDelta * (this.props.graphPosition.y - pinchZoomY) + pinchZoomY ;
+    let newGraphPositionX = scaleDelta * (this.props.graphPosition.x - pinchZoomX) + pinchZoomX ;
+    let newGraphPositionY = scaleDelta * (this.props.graphPosition.y - pinchZoomY) + pinchZoomY ;
 
-    var newGraphPosition = {
+    let newGraphPosition = {
       x: newGraphPositionX,
       y: newGraphPositionY
     };
@@ -498,12 +505,12 @@ var FlowChart = React.createClass({
 
   generateEdgePreview: function(){
 
-    var edgePreview = [];
+    let edgePreview = [];
 
     if(this.props.edgePreview !== null){
       /* Render the edgePreview component! */
 
-      var edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock +
+      let edgePreviewLabel = this.props.edgePreview.fromBlockInfo.fromBlock +
         this.props.edgePreview.fromBlockInfo.fromBlockPort + "-preview";
 
       edgePreview.push(
@@ -526,15 +533,15 @@ var FlowChart = React.createClass({
   render: function(){
     console.log("render: flowChart");
 
-    var x = this.props.graphPosition.x;
-    var y = this.props.graphPosition.y;
-    var scale = this.props.graphZoomScale;
-    var matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
+    let x = this.props.graphPosition.x;
+    let y = this.props.graphPosition.y;
+    let scale = this.props.graphZoomScale;
+    let matrixTransform = "matrix("+scale+",0,0,"+scale+","+x+","+y+")";
 
-    var blocks = [];
-    var edges = [];
+    let blocks = [];
+    let edges = [];
 
-    for(var block in this.props.allBlockInfo){
+    for(let block in this.props.allBlockInfo){
       blocks.push(
         <Block key={block} id={block} className="block"
                blockInfo={this.props.allBlockInfo[block]}
@@ -551,24 +558,24 @@ var FlowChart = React.createClass({
         />
       );
 
-      for(var i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
+      for(let i = 0; i < this.props.allBlockInfo[block].inports.length; i++){
         if(this.props.allBlockInfo[block].inports[i].connected === true &&
           this.props.allBlockInfo[this.props.allBlockInfo[block].inports[i].connectedTo.block] !== undefined){
 
-          var toBlock = block;
-          var toBlockType = this.props.allBlockInfo[block].type;
-          var toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+          let toBlock = block;
+          let toBlockType = this.props.allBlockInfo[block].type;
+          let toBlockPort = this.props.allBlockInfo[block].inports[i].name;
 
-          var fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
-          var fromBlockType = this.props.allBlockInfo[fromBlock].type;
-          var fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
-          var fromBlockPortValueType = this.props.allBlockInfo[block].inports[i].type;
+          let fromBlock = this.props.allBlockInfo[block].inports[i].connectedTo.block;
+          let fromBlockType = this.props.allBlockInfo[fromBlock].type;
+          let fromBlockPort = this.props.allBlockInfo[block].inports[i].connectedTo.port;
+          let fromBlockPortValueType = this.props.allBlockInfo[block].inports[i].type;
 
           /* Only one of fromBlockPortValueType and toBlockPortValue type
           is needed, since if they are connected they SHOULD have the same type
            */
 
-          var edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
+          let edgeLabel = String(fromBlock) + String(fromBlockPort) +  String(toBlock) + String(toBlockPort);
 
           edges.push(
             <Edge key={edgeLabel} id={edgeLabel}
