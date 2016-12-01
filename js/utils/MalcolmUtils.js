@@ -2,10 +2,13 @@
  * Created by twi18192 on 02/03/16.
  */
 
-let WebSocketClient = require('../fluxWebsocketClient');
-//let WebSocketClient        = require('../wsWebsocketClient');
+//let WebSocketClient = require('../fluxWebsocketClient');
+let WebSocketClient        = require('../wsWebsocketClient');
 let idLookupTableFunctions = require('./idLookupTable');
 import malcolmProtocol from "../utils/malcolmProtocol";
+
+//let log_debug = false;
+//let LOG = log_debug ? console.log.bind(console) : function () {};
 
 class Utils {
 
@@ -108,4 +111,6 @@ hasOwnNestedProperties(obj /*, level1, level2, ... levelN*/)
 
 let MalcolmUtils = new Utils();
 
-export default MalcolmUtils;
+export {MalcolmUtils as default};
+//export default MalcolmUtils;
+//module.exports = MalcolmUtils;

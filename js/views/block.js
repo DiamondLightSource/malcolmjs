@@ -2,7 +2,8 @@
  * Created by twi18192 on 14/01/16.
  */
 
-let React    = require('../../node_modules/react/react');
+//let React    = require('../../node_modules/react/react');
+let React    = require('react');
 let ReactDOM = require('react-dom');
 
 let attributeStore = require('../stores/attributeStore');

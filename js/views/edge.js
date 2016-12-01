@@ -2,7 +2,8 @@
  * Created by twi18192 on 10/12/15.
  */
 
-var React    = require('../../node_modules/react/react');
+//var React    = require('../../node_modules/react/react');
+var React    = require('react');
 var ReactDOM = require('react-dom');
 
 var paneActions           = require('../actions/paneActions');

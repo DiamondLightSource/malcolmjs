@@ -8,14 +8,16 @@ var BUILD_DIR = path.resolve(__dirname, 'build');
 var APP_DIR = path.resolve(__dirname, 'js');
 
 var config = {
-  entry: APP_DIR + '/app.js',
+  entry: path.join(APP_DIR, '/app.js'),
   output: {
     path: BUILD_DIR,
     filename: 'bundle.js'
   },
   resolve: {
     alias: { // In case of multiple copies of React flying around
-      react: path.resolve('./node_modules/react')
+      //'react.js': path.join(__dirname, 'node_modules/react/react.js'),
+      'react/lib/CSSPropertyOperations': path.join(__dirname, 'node_modules/react-dom/lib/CSSPropertyOperations.js'),
+      'react/lib/ReactDOM': path.join(__dirname, 'node_modules/react-dom/lib/ReactDOM.js')
     }
   },
   debug: true,

@@ -1,6 +1,7 @@
 /**
  * Created by twi18192 on 10/03/16.
  */
+//import winston from 'winston';
 import blockCollection from '../classes/blockItems';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators'
@@ -372,6 +373,8 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
     appConstants.MALCOLM_SUBSCRIBE_FAILURE
     :
       {
+      //winston.log('Error', 'malcolmSubscribeFailure in attributeStore')
+      //winston.info(item.requestedData, item.responseMessage)
       console.log("malcolmSubscribeFailure in attributeStore");
       console.log(item.requestedData, item.responseMessage)
 

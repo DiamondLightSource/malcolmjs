@@ -24,12 +24,13 @@
     "babel-plugin-react-transform": "^2.0.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.10.3",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-webpack-alias": "^2.1.2",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
     "babelify": "^7.3.0",
-    "belle": "^2.0.7",
+    "belle": "^2.0.9",
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "expect.js": "^0.3.1",
@@ -64,12 +65,14 @@
     "raw-loader": "^0.5.1",
     "react": "^15.2.1",
     "react-addons-css-transition-group": "^15.2.1",
+    "react-addons-shallow-compare": "^15.4.1",
     "react-addons-test-utils": "^15.2.0",
     "react-addons-update": "^15.2.1",
     "react-bootstrap": "^0.29.5",
     "react-css-modules": "^3.7.8",
     "react-dom": "^15.2.1",
     "react-modal": "^1.4.0",
+    "react-panels": "file:///home/ig43/zebra2/react-panels",
     "react-sidebar": "^2.2.1",
     "react-tap-event-plugin": "^1.0.0",
     "react-toggle": "^2.1.1",
@@ -85,12 +88,14 @@
     "ws": "^1.1.1"
   },
   "dependencies": {
-    "fs": "0.0.1-security",
+    "fs": "^0.0.1-security",
     "immutability-helper": "^2.0.0",
-    "material-ui": "^0.15.4",
+    "react-addons": "^0.9.1-deprecated",
+    "react-css-property-operations": "^15.4.1",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
-    "react-panels": "file:///home/ig43/zebra2/react-panels",
-    "tls": "0.0.1"
+    "react-dom": "^15.4.1",
+    "react-panels": "^2.5.1",
+    "tls": "^0.0.1"
   }
 }

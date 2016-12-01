@@ -2,8 +2,8 @@
  * Created by ig43 on 03/10/16.
  */
 import React from 'react';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
-import {red500, yellow500, blue500} from 'material-ui/styles/colors';
+//import ActionDelete from 'material-ui/svg-icons/action/delete';
+//import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 
 const iconStyles = {
   marginRight: 24,
@@ -36,7 +36,7 @@ shouldComponentUpdate()
  */
 render()
   {
-  return <ActionDelete style={iconStyles} color={red500}/>;
+  //return <ActionDelete style={iconStyles} color={red500}/>;
   }
 }
 
