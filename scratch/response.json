@@ -17,16 +17,11 @@
         "description": "State of Block",
         "choices": [
           "Resetting",
-          "Idle",
           "Ready",
-          "Configuring",
-          "PreRun",
-          "Running",
-          "PostRun",
-          "Paused",
-          "Rewinding",
-          "Aborting",
-          "Aborted",
+          "Editing",
+          "Editable",
+          "Saving",
+          "Reverting",
           "Fault",
           "Disabling",
           "Disabled"
@@ -35,7 +30,7 @@
         "writeable": false,
         "label": "State"
       },
-      "value": "Idle"
+      "value": "Ready"
     },
     "status": {
       "typeid": "epics:nt/NTScalar:1.0",
@@ -46,7 +41,7 @@
         "writeable": false,
         "label": "Status"
       },
-      "value": "Done Resetting"
+      "value": "Ready"
     },
     "busy": {
       "typeid": "epics:nt/NTScalar:1.0",
@@ -58,18 +53,6 @@
         "label": "Busy"
       },
       "value": false
-    },
-    "totalSteps": {
-      "typeid": "epics:nt/NTScalar:1.0",
-      "meta": {
-        "typeid": "malcolm:core/NumberMeta:1.0",
-        "dtype": "int32",
-        "description": "Readback of number of scan steps",
-        "tags": [],
-        "writeable": false,
-        "label": ""
-      },
-      "value": 0
     },
     "layout": {
       "typeid": "epics:nt/NTTable:1.0",
@@ -101,7 +84,7 @@
           "x": {
             "typeid": "malcolm:core/NumberArrayMeta:1.0",
             "dtype": "float64",
-            "description": "X Co-ordinate of child block",
+            "description": "X Coordinate of child block",
             "tags": [],
             "writeable": false,
             "label": ""
@@ -109,7 +92,7 @@
           "y": {
             "typeid": "malcolm:core/NumberArrayMeta:1.0",
             "dtype": "float64",
-            "description": "X Co-ordinate of child block",
+            "description": "Y Coordinate of child block",
             "tags": [],
             "writeable": false,
             "label": ""
@@ -124,194 +107,194 @@
         },
         "description": "Layout of child blocks",
         "tags": [],
-        "writeable": true,
+        "writeable": false,
         "label": ""
       },
       "value": {
         "typeid": "malcolm:core/Table:1.0",
         "name": [
-          "TTLIN1",
-          "TTLIN2",
-          "TTLIN3",
-          "TTLIN4",
-          "TTLIN5",
-          "TTLIN6",
-          "SFP",
-          "OUTENC1",
-          "OUTENC2",
           "OUTENC3",
+          "OUTENC2",
+          "OUTENC1",
           "OUTENC4",
-          "PCAP",
-          "PCOMP1",
-          "PCOMP2",
-          "PCOMP3",
-          "PCOMP4",
-          "TTLOUT1",
-          "TTLOUT2",
-          "TTLOUT3",
-          "TTLOUT4",
-          "TTLOUT5",
-          "TTLOUT6",
-          "TTLOUT7",
-          "TTLOUT8",
-          "TTLOUT9",
-          "TTLOUT10",
-          "ADC1",
+          "LVDSOUT1",
+          "INENC4",
+          "INENC3",
+          "INENC2",
+          "INENC1",
+          "ADDER2",
+          "ADDER1",
+          "ADC5",
           "ADC2",
           "ADC3",
-          "ADC4",
-          "ADC5",
-          "ADC6",
-          "ADC7",
+          "QDEC4",
+          "QDEC1",
+          "QDEC2",
+          "QDEC3",
+          "SFP",
           "ADC8",
-          "DIV1",
-          "DIV2",
-          "DIV3",
-          "DIV4",
-          "INENC1",
-          "INENC2",
-          "INENC3",
-          "INENC4",
-          "SLOW",
-          "PGEN1",
-          "PGEN2",
-          "LVDSIN1",
-          "LVDSIN2",
-          "POSENC1",
-          "POSENC2",
-          "POSENC3",
-          "POSENC4",
-          "SEQ1",
-          "SEQ2",
+          "TTLOUT7",
+          "TTLOUT6",
+          "TTLOUT5",
+          "TTLOUT4",
+          "TTLOUT3",
+          "TTLOUT2",
+          "TTLOUT1",
+          "TTLOUT9",
+          "TTLOUT8",
           "SEQ3",
+          "SEQ2",
+          "SEQ1",
           "SEQ4",
-          "PULSE1",
-          "PULSE2",
-          "PULSE3",
-          "PULSE4",
+          "TTLIN5",
+          "TTLIN4",
+          "TTLIN6",
+          "TTLIN1",
+          "TTLIN3",
+          "TTLIN2",
           "SRGATE1",
-          "SRGATE2",
           "SRGATE3",
+          "SRGATE2",
           "SRGATE4",
-          "FMC",
           "LUT1",
-          "LUT2",
           "LUT3",
-          "LUT4",
+          "LUT2",
           "LUT5",
-          "LUT6",
+          "LUT4",
           "LUT7",
+          "LUT6",
           "LUT8",
-          "LVDSOUT1",
+          "SLOW",
+          "DIV4",
+          "BITS",
+          "DIV2",
+          "DIV1",
+          "PCOMP1",
+          "PCOMP3",
+          "PCOMP2",
+          "PCOMP4",
+          "POSENC1",
+          "POSENC3",
+          "POSENC2",
+          "POSENC4",
           "LVDSOUT2",
-          "COUNTER1",
-          "COUNTER2",
-          "COUNTER3",
+          "FMC",
+          "DIV3",
+          "COUNTER8",
           "COUNTER4",
           "COUNTER5",
           "COUNTER6",
           "COUNTER7",
-          "COUNTER8",
-          "ADDER1",
-          "ADDER2",
+          "PCAP",
+          "COUNTER1",
+          "COUNTER2",
+          "COUNTER3",
+          "ADC6",
+          "ADC7",
+          "ADC4",
+          "PULSE4",
+          "PULSE3",
+          "PULSE2",
+          "PULSE1",
+          "ADC1",
+          "PGEN2",
+          "PGEN1",
+          "LVDSIN2",
+          "LVDSIN1",
           "CLOCKS",
-          "BITS",
-          "QDEC1",
-          "QDEC2",
-          "QDEC3",
-          "QDEC4"
+          "TTLOUT10"
         ],
         "mri": [
-          "P:TTLIN1",
-          "P:TTLIN2",
-          "P:TTLIN3",
-          "P:TTLIN4",
-          "P:TTLIN5",
-          "P:TTLIN6",
-          "P:SFP",
-          "P:OUTENC1",
-          "P:OUTENC2",
-          "P:OUTENC3",
-          "P:OUTENC4",
-          "P:PCAP",
-          "P:PCOMP1",
-          "P:PCOMP2",
-          "P:PCOMP3",
-          "P:PCOMP4",
-          "P:TTLOUT1",
-          "P:TTLOUT2",
-          "P:TTLOUT3",
-          "P:TTLOUT4",
-          "P:TTLOUT5",
-          "P:TTLOUT6",
-          "P:TTLOUT7",
-          "P:TTLOUT8",
-          "P:TTLOUT9",
-          "P:TTLOUT10",
-          "P:ADC1",
-          "P:ADC2",
-          "P:ADC3",
-          "P:ADC4",
-          "P:ADC5",
-          "P:ADC6",
-          "P:ADC7",
-          "P:ADC8",
-          "P:DIV1",
-          "P:DIV2",
-          "P:DIV3",
-          "P:DIV4",
-          "P:INENC1",
-          "P:INENC2",
-          "P:INENC3",
-          "P:INENC4",
-          "P:SLOW",
-          "P:PGEN1",
-          "P:PGEN2",
-          "P:LVDSIN1",
-          "P:LVDSIN2",
-          "P:POSENC1",
-          "P:POSENC2",
-          "P:POSENC3",
-          "P:POSENC4",
-          "P:SEQ1",
-          "P:SEQ2",
-          "P:SEQ3",
-          "P:SEQ4",
-          "P:PULSE1",
-          "P:PULSE2",
-          "P:PULSE3",
-          "P:PULSE4",
-          "P:SRGATE1",
-          "P:SRGATE2",
-          "P:SRGATE3",
-          "P:SRGATE4",
-          "P:FMC",
-          "P:LUT1",
-          "P:LUT2",
-          "P:LUT3",
-          "P:LUT4",
-          "P:LUT5",
-          "P:LUT6",
-          "P:LUT7",
-          "P:LUT8",
-          "P:LVDSOUT1",
-          "P:LVDSOUT2",
-          "P:COUNTER1",
-          "P:COUNTER2",
-          "P:COUNTER3",
-          "P:COUNTER4",
-          "P:COUNTER5",
-          "P:COUNTER6",
-          "P:COUNTER7",
-          "P:COUNTER8",
-          "P:ADDER1",
-          "P:ADDER2",
-          "P:CLOCKS",
-          "P:BITS",
-          "P:QDEC1",
-          "P:QDEC2",
-          "P:QDEC3",
-          "P:QDEC4"
+          "P-OUTENC3",
+          "P-OUTENC2",
+          "P-OUTENC1",
+          "P-OUTENC4",
+          "P-LVDSOUT1",
+          "P-INENC4",
+          "P-INENC3",
+          "P-INENC2",
+          "P-INENC1",
+          "P-ADDER2",
+          "P-ADDER1",
+          "P-ADC5",
+          "P-ADC2",
+          "P-ADC3",
+          "P-QDEC4",
+          "P-QDEC1",
+          "P-QDEC2",
+          "P-QDEC3",
+          "P-SFP",
+          "P-ADC8",
+          "P-TTLOUT7",
+          "P-TTLOUT6",
+          "P-TTLOUT5",
+          "P-TTLOUT4",
+          "P-TTLOUT3",
+          "P-TTLOUT2",
+          "P-TTLOUT1",
+          "P-TTLOUT9",
+          "P-TTLOUT8",
+          "P-SEQ3",
+          "P-SEQ2",
+          "P-SEQ1",
+          "P-SEQ4",
+          "P-TTLIN5",
+          "P-TTLIN4",
+          "P-TTLIN6",
+          "P-TTLIN1",
+          "P-TTLIN3",
+          "P-TTLIN2",
+          "P-SRGATE1",
+          "P-SRGATE3",
+          "P-SRGATE2",
+          "P-SRGATE4",
+          "P-LUT1",
+          "P-LUT3",
+          "P-LUT2",
+          "P-LUT5",
+          "P-LUT4",
+          "P-LUT7",
+          "P-LUT6",
+          "P-LUT8",
+          "P-SLOW",
+          "P-DIV4",
+          "P-BITS",
+          "P-DIV2",
+          "P-DIV1",
+          "P-PCOMP1",
+          "P-PCOMP3",
+          "P-PCOMP2",
+          "P-PCOMP4",
+          "P-POSENC1",
+          "P-POSENC3",
+          "P-POSENC2",
+          "P-POSENC4",
+          "P-LVDSOUT2",
+          "P-FMC",
+          "P-DIV3",
+          "P-COUNTER8",
+          "P-COUNTER4",
+          "P-COUNTER5",
+          "P-COUNTER6",
+          "P-COUNTER7",
+          "P-PCAP",
+          "P-COUNTER1",
+          "P-COUNTER2",
+          "P-COUNTER3",
+          "P-ADC6",
+          "P-ADC7",
+          "P-ADC4",
+          "P-PULSE4",
+          "P-PULSE3",
+          "P-PULSE2",
+          "P-PULSE1",
+          "P-ADC1",
+          "P-PGEN2",
+          "P-PGEN1",
+          "P-LVDSIN2",
+          "P-LVDSIN1",
+          "P-CLOCKS",
+          "P-TTLOUT10"
         ],
         "x": [
           0.0,
@@ -591,99 +574,16 @@
         ]
       }
     },
-    "abort": {
-      "typeid": "malcolm:core/MethodMeta:1.0",
-      "takes": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
+    "layoutName": {
+      "typeid": "epics:nt/NTScalar:1.0",
+      "meta": {
+        "typeid": "malcolm:core/StringMeta:1.0",
+        "description": "Saved layout name to load",
         "tags": [],
         "writeable": false,
-        "label": "",
-        "required": []
+        "label": ""
       },
-      "defaults": {},
-      "description": "",
-      "tags": [],
-      "writeable": true,
-      "label": "",
-      "returns": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": []
-      }
-    },
-    "configure": {
-      "typeid": "malcolm:core/MethodMeta:1.0",
-      "takes": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0",
-          "generator": {
-            "typeid": "malcolm:core/PointGeneratorMeta:1.0",
-            "description": "Generator instance",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "axes_to_move": {
-            "typeid": "malcolm:core/StringArrayMeta:1.0",
-            "description": "Axes that should be moved",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "exposure": {
-            "typeid": "malcolm:core/NumberMeta:1.0",
-            "dtype": "float64",
-            "description": "How long to remain at each point",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "filePath": {
-            "typeid": "malcolm:core/StringMeta:1.0",
-            "description": "File path to write data to",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          }
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": [
-          "generator",
-          "axes_to_move",
-          "exposure",
-          "filePath"
-        ]
-      },
-      "defaults": {},
-      "description": "",
-      "tags": [],
-      "writeable": true,
-      "label": "",
-      "returns": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": []
-      }
+      "value": ""
     },
     "disable": {
       "typeid": "malcolm:core/MethodMeta:1.0",
@@ -715,7 +615,7 @@
         "required": []
       }
     },
-    "pause": {
+    "edit": {
       "typeid": "malcolm:core/MethodMeta:1.0",
       "takes": {
         "typeid": "malcolm:core/MapMeta:1.0",
@@ -775,7 +675,7 @@
         "required": []
       }
     },
-    "resume": {
+    "revert": {
       "typeid": "malcolm:core/MethodMeta:1.0",
       "takes": {
         "typeid": "malcolm:core/MapMeta:1.0",
@@ -805,109 +705,17 @@
         "required": []
       }
     },
-    "rewind": {
+    "save": {
       "typeid": "malcolm:core/MethodMeta:1.0",
       "takes": {
         "typeid": "malcolm:core/MapMeta:1.0",
         "elements": {
           "typeid": "malcolm:core/ElementMap:1.0",
-          "steps": {
-            "typeid": "malcolm:core/NumberMeta:1.0",
-            "dtype": "uint32",
-            "description": "Number of steps to rewind",
-            "tags": [],
-            "writeable": false,
-            "label": ""
-          }
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": [
-          "steps"
-        ]
-      },
-      "defaults": {},
-      "description": "",
-      "tags": [],
-      "writeable": false,
-      "label": "",
-      "returns": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": []
-      }
-    },
-    "run": {
-      "typeid": "malcolm:core/MethodMeta:1.0",
-      "takes": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": []
-      },
-      "defaults": {},
-      "description": "",
-      "tags": [],
-      "writeable": false,
-      "label": "",
-      "returns": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0"
-        },
-        "description": "",
-        "tags": [],
-        "writeable": false,
-        "label": "",
-        "required": []
-      }
-    },
-    "validate": {
-      "typeid": "malcolm:core/MethodMeta:1.0",
-      "takes": {
-        "typeid": "malcolm:core/MapMeta:1.0",
-        "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0",
-          "generator": {
-            "typeid": "malcolm:core/PointGeneratorMeta:1.0",
-            "description": "Generator instance",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "axes_to_move": {
-            "typeid": "malcolm:core/StringArrayMeta:1.0",
-            "description": "Axes that should be moved",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "exposure": {
-            "typeid": "malcolm:core/NumberMeta:1.0",
-            "dtype": "float64",
-            "description": "How long to remain at each point",
-            "tags": [],
-            "writeable": true,
-            "label": ""
-          },
-          "filePath": {
+          "layoutName": {
             "typeid": "malcolm:core/StringMeta:1.0",
-            "description": "File path to write data to",
+            "description": "Name of layout to save to, if different from current layoutName",
             "tags": [],
-            "writeable": true,
+            "writeable": false,
             "label": ""
           }
         },
@@ -915,62 +723,25 @@
         "tags": [],
         "writeable": false,
         "label": "",
-        "required": [
-          "generator",
-          "axes_to_move",
-          "exposure",
-          "filePath"
-        ]
+        "required": []
       },
-      "defaults": {},
+      "defaults": {
+        "layoutName": ""
+      },
       "description": "",
       "tags": [],
-      "writeable": true,
+      "writeable": false,
       "label": "",
       "returns": {
         "typeid": "malcolm:core/MapMeta:1.0",
         "elements": {
-          "typeid": "malcolm:core/ElementMap:1.0",
-          "generator": {
-            "typeid": "malcolm:core/PointGeneratorMeta:1.0",
-            "description": "Generator instance",
-            "tags": [],
-            "writeable": false,
-            "label": ""
-          },
-          "axes_to_move": {
-            "typeid": "malcolm:core/StringArrayMeta:1.0",
-            "description": "Axes that should be moved",
-            "tags": [],
-            "writeable": false,
-            "label": ""
-          },
-          "exposure": {
-            "typeid": "malcolm:core/NumberMeta:1.0",
-            "dtype": "float64",
-            "description": "How long to remain at each point",
-            "tags": [],
-            "writeable": false,
-            "label": ""
-          },
-          "filePath": {
-            "typeid": "malcolm:core/StringMeta:1.0",
-            "description": "File path to write data to",
-            "tags": [],
-            "writeable": false,
-            "label": ""
-          }
+          "typeid": "malcolm:core/ElementMap:1.0"
         },
         "description": "",
         "tags": [],
         "writeable": false,
         "label": "",
-        "required": [
-          "generator",
-          "axes_to_move",
-          "exposure",
-          "filePath"
-        ]
+        "required": []
       }
     }
   }

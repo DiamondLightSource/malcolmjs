@@ -10,6 +10,10 @@ var idLookupTableFunctions = require('./utils/idLookupTable');
 import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
 
+//import {LOG} from './utils/MalcolmUtils'
+
+//let debug = true;
+
 function Client(url)
   {
 
@@ -57,12 +61,13 @@ function Client(url)
 
   function openWebSocket(url)
     {
+    //LOG('Flux WebSocket: Connecting to: ' + url);
     console.log("wsWebSocketClient: openWebSocket()  url: " + url);
     //console.log(window);
     websocket            = new W3CWebSocket(url);
     websocket.binaryType = "arraybuffer";
 
-    websocket.setTimeout(0);
+    //websocket.setTimeout(0);
 
     websocket.onopen = function (evt)
       {
@@ -110,8 +115,10 @@ function Client(url)
           {
           let reqMsg = idLookupTableFunctions.getRequestMessage(json.id);
 
-          console.log("websocket.onmessage ERROR:  requestedData,  return message  => ");
-          console.log(reqMsg, json.message);
+          console.log("websocket.onmessage ERROR:  requestedData   => ");
+          console.log(reqMsg);
+          console.log("websocket.onmessage ERROR:  return message  => ");
+          console.log(json.message);
           idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
           }
         }

@@ -43,18 +43,22 @@ let Block = React.createClass(
         //MalcolmActionCreators.malcolmSubscribe(this.props.id, attribute);
         }
 
+      /** ToDo: This is all wrong for protocol2
+       * Layout information is derived from the top-level layout schema
+       * whilst block values are derived from the block subscriptions.
+       */
+/*
       for (let attribute in blockAttributes)
         {
         if ((attribute !== 'uptime') && (attribute !== 'MRI'))
           {
           if (blockAttributes.hasOwnProperty('MRI'))
             {
-            // todo: ??
             MalcolmActionCreators.malcolmSubscribe(blockAttributes.MRI, [attribute]);
             }
           }
         }
-
+*/
       interact(ReactDOM.findDOMNode(this))
         .draggable(
           {

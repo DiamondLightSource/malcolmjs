@@ -12,7 +12,7 @@ var ReactPanels = require('react-panels');
 //var testingWebsocketActions = require('./actions/testingWebsocketActions');
 
 var MainPane = require('./views/mainPane');
-var SidePane = require('./views/sidePane');
+var SidePane = require('./views/sidePane'); // TODO: This is probably not needed here.
 var BothPanes = require('./views/sidebar');
 
 var blockStore = require('./stores/blockStore.js');

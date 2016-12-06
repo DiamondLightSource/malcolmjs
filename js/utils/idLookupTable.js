@@ -18,13 +18,13 @@ var idLookupTableFunctions = {
 
     if (success === true)
       {
-      console.log(`idLookupTableFunctions idLookupTable = ${idLookupTable}`);
+      //console.log(`idLookupTableFunctions idLookupTable = ${idLookupTable}`);
       if (idLookupTable.hasOwnProperty(id))
         {
-        //console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(idLookupTable)}`);
+        console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(idLookupTable)}`);
         //console.log('idLookupTable[] ->');
         //console.log(idLookupTable);
-        idLookupTable[id].successCallback(json);
+        idLookupTable[id].successCallback(id, json);
         //console.log('idLookupTableFunctions.invokeIdCallback: ID: ' + id +' JSON: ' + json);
         }
       }
@@ -47,6 +47,14 @@ var idLookupTableFunctions = {
     idLookupTable[id] = callbacks;
     idLookupTable[id].id = id;
     idLookupTable[id].requestMessage = requestedData;
+
+    /**
+    if (callbacks.hasOwnProperty('successCallback'))
+      {
+      idLookupTable[id].successCallback.bind(null, id)
+      }
+     *
+     */
     },
 
   /**

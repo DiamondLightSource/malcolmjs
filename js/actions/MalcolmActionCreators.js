@@ -48,7 +48,7 @@ MalcolmActionCreators = {
 
   malcolmGet: function (requestedData)
     {
-    function malcolmGetSuccess(responseMessage)
+    function malcolmGetSuccess(id, responseMessage)
       {
       // Dispatch MALCOLM_GET_SUCCESS to all subscribers.
       AppDispatcher.handleAction(
@@ -74,7 +74,7 @@ MalcolmActionCreators = {
         })
       }
 
-    let itemGetSuccess = function (responseMessage)
+    let itemGetSuccess = function (id, responseMessage)
       {
       //console.log('MalcolmActionCreators: itemGetSuccess...');
       //console.log('requestedData =>');
@@ -83,13 +83,13 @@ MalcolmActionCreators = {
       //console.log(responseMessage);
       /* This is to return P:<item>
        */
-      malcolmGetSuccess(responseMessage);
+      malcolmGetSuccess(id, responseMessage);
 
       };
 
     // Note: This is the callback function which handles the
     // subscription return.
-    let zVisibilitySubscribe = function (zVisibility)
+    let zVisibilitySubscribe = function (id, zVisibility)
       {
       //console.log('MalcolmActionCreators: zVisibility...')
       //console.log(zVisibility);
@@ -102,7 +102,7 @@ MalcolmActionCreators = {
        need to subscribe to all the blocks, so a for loop is
        part of the callback too
        */
-      malcolmGetSuccess(zVisibility);
+      malcolmGetSuccess(id, zVisibility);
 
       // Subscribe to the visibility list.
       actionCreators.malcolmSubscribe(actionCreators.deviceId,["layout","value","visible"]);
@@ -120,7 +120,7 @@ MalcolmActionCreators = {
 
       };
 
-    let testMalcolmGetSuccess = function (responseMessage)
+    let testMalcolmGetSuccess = function (id, responseMessage)
       {
       //console.log(`MalcolmActionCreators: testMalcolmGetSuccess: responseMessage...  topLevelGetId = ${actionCreators.topLevelGetId}`)
       //console.log(responseMessage);
@@ -141,10 +141,10 @@ MalcolmActionCreators = {
       };
 
 
-    console.log('MalcolmActionCreators: malcolmGet: Requested data...');
-    console.log(requestedData);
-    console.log('MalcolmActionCreators: malcolmGet: deviceId...');
-    console.log(actionCreators.deviceId);
+    //console.log('MalcolmActionCreators: malcolmGet: Requested data...');
+    //console.log(requestedData);
+    //console.log('MalcolmActionCreators: malcolmGet: deviceId...');
+    //console.log(actionCreators.deviceId);
 
     if (requestedData === actionCreators.deviceId)
       {
@@ -176,7 +176,7 @@ MalcolmActionCreators = {
   malcolmSubscribe: function (blockName, attribute)
     {
 
-    function malcolmSubscribeSuccess(responseMessage)
+    function malcolmSubscribeSuccess(id, responseMessage)
       {
       //console.log(requestedData);
       AppDispatcher.handleAction({
@@ -208,7 +208,7 @@ MalcolmActionCreators = {
     //let requestedAttributeDataPath = [actionCreators.deviceId, blockName, "attributes", attribute];
     let requestedAttributeDataPath = [blockName].concat(attribute);
 
-    console.log(`MalcolmActionCreators.malcolmSubscribe(): blockName = ${blockName}   attribute = ${JSON.stringify(attribute)}`);
+    //console.log(`MalcolmActionCreators.malcolmSubscribe(): blockName = ${blockName}   attribute = ${JSON.stringify(attribute)}`);
     let id = MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
     },
@@ -228,7 +228,7 @@ MalcolmActionCreators = {
       }
     });
 
-    function malcolmCallSuccess(responseMessage)
+    function malcolmCallSuccess(id, responseMessage)
       {
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_CALL_SUCCESS,

@@ -33,6 +33,7 @@
     "belle": "^2.0.9",
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
+    "debug": "^2.3.3",
     "expect.js": "^0.3.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "flux": "^2.1.1",
@@ -84,7 +85,9 @@
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
+    "webpack-webstorm-debugger-script": "^1.0.1",
     "websocket": "^1.0.23",
+    "winston": "^2.3.0",
     "ws": "^1.1.1"
   },
   "dependencies": {

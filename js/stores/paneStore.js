@@ -10,6 +10,7 @@ let assign = require('object-assign');
 let CHANGE_EVENT = 'change';
 
 import MalcolmUtils from '../utils/MalcolmUtils'
+import malcolmProtocol from '../utils/malcolmProtocol'
 
 let _stuff = {
   tabState: [],
@@ -260,7 +261,8 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
           //if(item.tags[j] === 'instance:FlowGraph'){
           //}
           console.log(`paneStore: visible: ${item.responseMessage.layout.value.visible[i]}`);
-          if (item.responseMessage.layout.value.visible[i] === true)
+          if (malcolmProtocol.isBlock(item.responseMessage))
+          //if (item.responseMessage.layout.value.visible[i] === true)
             {
             let blockName = item.responseMessage.layout.value.name[i];
             appendToAllBlockTabProperties(blockName);
@@ -287,19 +289,19 @@ paneStore.dispatchToken = AppDispatcher.register(function(payload){
 
       console.log("malcolmSubscribeSuccess in paneStore");
 
-      if (item.responseMessage.hasOwnProperty("tags"))
+      if (MalcolmUtils.hasOwnNestedProperties(item.responseMessage, 'meta','tags'))
         {
-        for (let k = 0; k < item.responseMessage.tags.length; k++)
+        for (let k = 0; k < item.responseMessage.meta.tags.length; k++)
           {
-          if (item.responseMessage.tags[k].indexOf('widget:combo') !== -1)
+          if (item.responseMessage.meta.tags[k].indexOf('widget:combo') !== -1)
             {
             isWidgetCombo = true;
             }
-          else if (item.responseMessage.tags[k].indexOf('group:Inputs') !== -1)
+          else if (item.responseMessage.meta.tags[k].indexOf('group:Inputs') !== -1)
             {
             isGroupInputs = true;
             }
-          else if (item.responseMessage.tags[k].indexOf('widget:toggle') !== -1)
+          else if (item.responseMessage.meta.tags[k].indexOf('widget:toggle') !== -1)
             {
 
             /* Need to append to allBlockTabProperties when a block's
@@ -662,8 +664,8 @@ function checkBlockForInitialEdges(blockAttributeObject){
 
   for(let attribute in blockAttributeObject){
     if(blockAttributeObject[attribute].tags !== undefined){
-      for(let i = 0; i < blockAttributeObject[attribute].tags.length; i++){
-        if(blockAttributeObject[attribute].tags[i].indexOf('flowgraph:inport') !== -1){
+      for(let i = 0; i < blockAttributeObject[attribute].meta.tags.length; i++){
+        if(blockAttributeObject[attribute].meta.tags[i].indexOf('flowgraph:inport') !== -1){
           if(blockAttributeObject[attribute].value.indexOf('ZERO') === -1 ){
             /* Then it's connected to another block via an edge! */
 

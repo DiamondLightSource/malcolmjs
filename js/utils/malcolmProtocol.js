@@ -25,7 +25,8 @@ Protocol['V2_0'] = {
   typeidError    : 'malcolm:core/Error:1.0',
   typeidGet      : 'malcolm:core/Get:1.0',
   typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidCall     : 'malcolm:core/Call:1.0'
+  typeidCall     : 'malcolm:core/Call:1.0',
+  typeidBlock    : 'malcolm:core/Block:1.0'
 };
 
 // It is intended to support only one protocol, so no choice will be available.
@@ -38,7 +39,8 @@ export const ProtocolTypeId = {
   typeidError    : 'malcolm:core/Error:1.0',
   typeidGet      : 'malcolm:core/Get:1.0',
   typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidCall     : 'malcolm:core/Call:1.0'
+  typeidCall     : 'malcolm:core/Call:1.0',
+  typeidBlock    : 'malcolm:core/Block:1.0'
 };
 
 class MalcolmProtocol {
@@ -91,6 +93,12 @@ getTypeIDCall()
   return (ret);
   }
 
+getTypeIDBlock()
+  {
+  var ret = ProtocolTypeId.typeidBlock;
+  return (ret);
+  }
+
 isError(msg)
   {
   var bRet = (msg[ProtocolTypeId.typeIdIdent] === this.getTypeIDError());
@@ -112,6 +120,12 @@ isValue(msg)
 isUpdate(msg)
   {
   var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDUpdate());
+  return (bRet);
+  }
+
+isBlock(msg)
+  {
+  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDBlock());
   return (bRet);
   }
 

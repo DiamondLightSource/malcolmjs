@@ -1,7 +1,6 @@
 /**
  * Created by twi18192 on 10/03/16.
  */
-//import winston from 'winston';
 import blockCollection from '../classes/blockItems';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators'
@@ -23,14 +22,16 @@ let allBlockItems = [];
 
 /**
  *
- * @param {number} blockId
+ * @param {number} blockId - This is actually a string looking at block.js - hmmm...
  * @param {string} blockAttribute
  * @param {string|number} attributeValue
  */
 allBlockAttributes.addBlockAttribute = function (blockId, blockAttribute, attributeValue)
   {
   //updateAttributeValue(blockId, blockAttribute, attributeValue);
+  //console.log(`allBlockAttributes.addBlockAttribute: blockId = ${blockId}`);
   if (!this.hasOwnProperty(blockId))
+  //if (!this.length > blockId)
     {
     this[blockId]              = {};
     this[blockId].attributes   = [];
@@ -54,24 +55,29 @@ function updateAttributeValue(blockId, attribute, newValue)
   //let oldAttributes = allBlockAttributes;
   //let oldClocksAttributes = allBlockAttributes['CLOCKS'];
 
-  let updatedAttribute = update(allBlockAttributes[blockId][attribute],
-    {$merge: {value: newValue}});
+  //console.log(`allBlockAttributes.updateAttributeValue: blockId = ${blockId}   attribute: ${attribute}   newValue: ${newValue}`);
 
-  /* I want to replace the whole attributes object for a
-   new object, because I don't want to check each individual
-   attribute object, I want to just check the entire block
-   attribute object in allBlockAttributes
-   */
+  if (allBlockAttributes.hasOwnProperty(blockId))
+    {
+    let updatedAttribute = update(allBlockAttributes[blockId][attribute],
+      {$merge: {value: newValue}});
 
-  let attributestoMerge = {};
+    /* I want to replace the whole attributes object for a
+     new object, because I don't want to check each individual
+     attribute object, I want to just check the entire block
+     attribute object in allBlockAttributes
+     */
 
-  attributestoMerge[attribute] = updatedAttribute;
+    let attributestoMerge = {};
 
-  let updatedAttributes = update(allBlockAttributes[blockId],
-    {$merge: attributestoMerge});
+    attributestoMerge[attribute] = updatedAttribute;
 
-  allBlockAttributes[blockId] = update(allBlockAttributes[blockId],
-    {$set: updatedAttributes});
+    let updatedAttributes = update(allBlockAttributes[blockId],
+      {$merge: attributestoMerge});
+
+    allBlockAttributes[blockId] = update(allBlockAttributes[blockId],
+      {$set: updatedAttributes});
+    }
 
   //if(blockId === 'CLOCKS'){
   //  console.log("updating CLOCKS' attributes");
@@ -114,23 +120,27 @@ function updateAttributeIconStatus(blockId, attribute, statusObject)
     updateAttributeIconStatus(blockId, 'Y_COORD', statusObject);
     }
 
-  let updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
+  if (allBlockAttributesIconStatus.hasOwnProperty(blockId))
     {
-      $merge: {
-        value  : statusObject.value,
-        message: statusObject.message
-      }
-    });
 
-  let attributesToMerge = {};
+    let updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
+      {
+        $merge: {
+          value  : statusObject.value,
+          message: statusObject.message
+        }
+      });
 
-  attributesToMerge[attributeName] = updatedAttribute;
+    let attributesToMerge = {};
 
-  let updatedAttributes = update(allBlockAttributesIconStatus[blockId],
-    {$merge: attributesToMerge});
+    attributesToMerge[attributeName] = updatedAttribute;
 
-  allBlockAttributesIconStatus[blockId] = update(allBlockAttributesIconStatus[blockId],
-    {$set: updatedAttributes});
+    let updatedAttributes = update(allBlockAttributesIconStatus[blockId],
+      {$merge: attributesToMerge});
+
+    allBlockAttributesIconStatus[blockId] = update(allBlockAttributesIconStatus[blockId],
+      {$set: updatedAttributes});
+    }
 
   }
 
@@ -185,7 +195,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
         //console.log(item.responseMessage.layout);
         //console.log("item.responseMessage.layout.value.length = " + item.responseMessage.layout.value.name.length);
 
-        // === blockCollection.createBlockItemsFromSchema(item.responseMessage);
+        blockCollection.createBlockItemsFromSchema(item.responseMessage);
 
         // Iterate through all blocks available in responseMessage
         // extracting each block attributes, building up the allBlockAttributes table.
@@ -215,13 +225,13 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
 
           if (item.responseMessage.layout.value.hasOwnProperty("visible"))
             {
-            console.log(`attributeStore => visible : blockName = ${blockName}`);
+            //console.log(`attributeStore => visible : blockName = ${blockName}`);
             allBlockAttributes.addBlockAttribute(blockName, "VISIBLE", item.responseMessage.layout.value.visible[i]);
             //allBlockAttributes[blockName]["VISIBLE"] = item.responseMessage.layout.value.visible[i];
             }
           if (item.responseMessage.layout.value.hasOwnProperty("mri"))
             {
-            console.log(`attributeStore => mri : blockName = ${blockName} :  mri = ${item.responseMessage.layout.value.mri[i]}`);
+            //console.log(`attributeStore => mri : blockName = ${blockName} :  mri = ${item.responseMessage.layout.value.mri[i]}`);
             let mri = item.responseMessage.layout.value.mri[i];
             allBlockAttributes.addBlockAttribute(blockName, "MRI", mri);
             // Create an instance of BlockItem to be associated with this block and to provide callbacks.
@@ -247,7 +257,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
             }
 
 
-          console.log('attributeStore: Dispatch callback MALCOLM_GET_SUCCESS: iterate top level: blockname = ' + blockName);
+          //console.log('attributeStore: Dispatch callback MALCOLM_GET_SUCCESS: iterate top level: blockname = ' + blockName);
           /* Try using allBlockAttributesIconStatus for widgetIconStatus */
 
           /* Add the block to allBlockAttributesIconStatus */
@@ -291,9 +301,9 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
     appConstants.MALCOLM_SUBSCRIBE_SUCCESS
     :
       {
-      console.log('attributeStore: MALCOLM_SUBSCRIBE_SUCCESS: ');
-      console.log("REQUESTED: => " + JSON.stringify(item.requestedData));
-      console.log("RESPONSE: => " + JSON.stringify(item.responseMessage));
+      //console.log('attributeStore: MALCOLM_SUBSCRIBE_SUCCESS: ');
+      //console.log("REQUESTED: => " + JSON.stringify(item.requestedData));
+      //console.log("RESPONSE: => " + JSON.stringify(item.responseMessage));
       if (item.requestedData.blockName !== 'VISIBILITY')
         {
         responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
@@ -306,6 +316,7 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
        hide to show for the first time via the block palette
        so the GUI isn't yet subscribed to any of the blocks'
        attributes (or at least something along those lines)
+       TODO: Needs changing for Protocol2
        */
       else if (item.requestedData.blockName === 'VISIBILITY')
         {
@@ -467,10 +478,10 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
   }
 );
 
-function malcolmSubscribeSuccess(responseMessage)
+function malcolmSubscribeSuccess(id, responseMessage)
   {
-    console.log('attributeStore.malcolmSubscribeSuccess: responseMessage ->');
-    console.log(responseMessage);
+    //console.log('attributeStore.malcolmSubscribeSuccess: responseMessage ->');
+    //console.log(responseMessage);
   //updateSchema(responseMessage);
   }
 

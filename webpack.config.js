@@ -43,7 +43,17 @@ var config = {
       },
       {test: /\.png$/, loader: "url-loader?limit=100000"},
       {test: /\.jpg$/, loader: "file-loader"}]
-  }
+  },
+
 };
+
+/**
+config.node = {
+  fs: 'empty',
+  net: 'empty',
+  tls: 'empty'
+}
+ */
+
 
 module.exports = config;

@@ -43,68 +43,9 @@ constructor(index, collection)
   // Presently, this.Id is the basic block name string.
   console.log(`BlockItem instance: index = ${this.index}`);
 
-  let schema = collection.getLayoutSchema();
-  this.parseLayoutSchema(schema);
+  let schema      = this.collection.getLayoutSchema();
 
-
-  this.dispatchToken = AppDispatcher.register(payload =>
-    {
-    let action = payload.action;
-    let item   = action.item;
-    //console.log(`BlockItem AppDispatcher callback: action = ${action}   item = ${item}`);
-    //console.log(action);
-
-    switch (action.actionType)
-    {
-
-      /* BLOCK use */
-
-      case appConstants.INTERACTJS_DRAG:
-        this.emitChange();
-        break;
-
-      /* WebAPI use */
-
-      case appConstants.MALCOLM_GET_SUCCESS:
-
-        //AppDispatcher.waitFor([flowChartStore.dispatchToken]);
-
-        /* Check if it's the initial FlowGraph structure, or
-         if it's something else
-         */
-
-        //console.log('BlockItem MALCOLM_GET_SUCCESS: item.responseMessage:');
-        //console.log(item.responseMessage);
-        for (let attributeName in item.responseMessage)
-          {
-          // Copy the response message attributes to local collection.
-          // (there may be a more efficient way of doing this)
-          this.attributes[attributeName] = item.responseMessage[attributeName];
-          if (MalcolmUtils.hasOwnNestedProperties(this.attributes[attributeName], 'meta', 'tags'))
-            {
-            if (this.attributes[attributeName].meta.tags.length > 0)
-              {
-              let tags = this.attributes[attributeName].meta.tags;
-              console.log(`BlockItem AppDispatcher callback MALCOLM_GET_SUCCESS: tags found for ${attributeName}   tags = ${tags}`);
-              }
-            }
-          }
-        break;
-
-      case appConstants.MALCOLM_GET_FAILURE:
-        console.log("BlockItem MALCOLM GET ERROR!");
-        this.emitChange();
-        break;
-
-      case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-        console.log("BlockItem malcolmSubscribeSuccess");
-
-        break;
-
-
-    }
-    }
-  ); // end of payload
+  this.dispatchToken = AppDispatcher.register(this.dispatchCallback);
 
   console.log(`BlockItem end of constructor: dispatchToken = ${this.dispatchToken}`);
 
@@ -120,7 +61,70 @@ constructor(index, collection)
 
   } // end of constructor
 
-parseLayoutSchema()
+dispatchCallback(payload)
+  {
+  let action = payload.action;
+  let item   = action.item;
+  //console.log(`BlockItem AppDispatcher callback: action = ${action}   item = ${item}`);
+  //console.log(action);
+
+  switch (action.actionType)
+  {
+
+    /* BLOCK use */
+
+    case appConstants.INTERACTJS_DRAG:
+      this.emitChange();
+      break;
+
+    /* WebAPI use */
+
+    case appConstants.MALCOLM_GET_SUCCESS:
+
+      //AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+
+      /* Check if it's the initial FlowGraph structure, or
+       if it's something else
+       */
+
+      //console.log('BlockItem MALCOLM_GET_SUCCESS: item.responseMessage:');
+      //console.log(item.responseMessage);
+      for (let attributeName in item.responseMessage)
+        {
+        // Copy the response message attributes to local collection.
+        // (there may be a more efficient way of doing this)
+        this.attributes[attributeName] = item.responseMessage[attributeName];
+        if (MalcolmUtils.hasOwnNestedProperties(this.attributes[attributeName], 'meta', 'tags'))
+          {
+          if (this.attributes[attributeName].meta.tags.length > 0)
+            {
+            let tags = this.attributes[attributeName].meta.tags;
+            console.log(`BlockItem AppDispatcher callback MALCOLM_GET_SUCCESS: tags found for ${attributeName}   tags = ${tags}`);
+            }
+          }
+        }
+      break;
+
+    case appConstants.MALCOLM_GET_FAILURE:
+      console.log("BlockItem MALCOLM GET ERROR!");
+      this.emitChange();
+      break;
+
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+      console.log(`BlockItem ${this.index} malcolmSubscribeSuccess`);
+
+      break;
+
+
+  }
+  }
+
+/**
+ * Iterate across the layout schema and extract properties associated with this BlockItem index.
+ * @function parseLayoutSchema
+ * @param schema
+ */
+parseLayoutSchema(schema)
   {
   // Determine all the attribute names associated with the layout schema.
   //  To be successful in creating a BlockItem, we are expecting the following schema to exist:
@@ -137,9 +141,10 @@ parseLayoutSchema()
   //   |   -- <attribute name>
   //   |   |       [] <attribute values>
   //
-  let schema = this.collection.getLayoutSchema();
 
-  if (schema.hasOwnProperty('layout'))
+  let elements = {};
+
+  if (MalcolmUtils.hasOwnNestedProperties(schema, 'layout', 'meta', 'elements'))
     {
     for (let attr in schema.layout.meta.elements)
       {
@@ -150,71 +155,65 @@ parseLayoutSchema()
         // The values associated with the attributes is expected to be in
         // layoutResponse.value[attr][index], but need to do some sanity checking
         // to ensure the data are there.
-        if (schema.layout.hasOwnProperty('value'))
+        if (MalcolmUtils.hasOwnNestedProperties(schema, 'layout', 'value', attr))
           {
-          let attrNames = schema.layout.value;
-          // Look up the attribute names that are specified in meta.
-          if (attrNames.hasOwnProperty(attr))
+          if (schema.layout.value[attr].length > this.index)
             {
-            // attrValues represents the list of attributes in the value section.
-            let attrValues = attrNames[attr];
-            // attrValues represents the array of values for attribute attr.
-            if (attrValues.length > this.index)
-              {
-              // Extract the attribute value for this block.
-              this.attributes[attr] = attrValues[this.index];
-              }
+            // Extract the attribute value for this block.
+            this.attributes[attr] = schema.layout.value[attr][this.index];
             }
           }
         }
       }
     }
-  }
+  } /* parseLayoutSchema */
 
-malcolmSubscribeSuccess(responseMessage)
-  {
-  console.log('blockItems.malcolmSubscribeSuccess: responseMessage ->');
-  console.log(responseMessage);
-  //updateSchema(responseMessage);
-  }
+}
+
+malcolmSubscribeSuccess(id, responseMessage)
+{
+console.log(`blockItems.malcolmSubscribeSuccess: id -> ${id}  responseMessage ->`);
+console.log(responseMessage);
+//updateSchema(responseMessage);
+}
 
 malcolmSubscribeFailure(responseMessage)
-  {
-  console.log('blockItems.malcolmSubscribeFailure: responseMessage ->');
-  console.log(responseMessage);
-  }
+{
+console.log('blockItems.malcolmSubscribeFailure: responseMessage ->');
+console.log(responseMessage);
+}
 
 emitChange()
-  {
-  this.emit(CHANGE_EVENT);
-  }
+{
+this.emit(CHANGE_EVENT);
+}
 
 addChangeListener(callback)
-  {
-  this.on(CHANGE_EVENT, callback);
-  }
+{
+this.on(CHANGE_EVENT, callback);
+}
 
 removeChangeListener(callback)
-  {
-  this.removeListener(CHANGE_EVENT, callback);
-  }
+{
+this.removeListener(CHANGE_EVENT, callback);
+}
 
 addVisibleAttribute(attrName = '')
-  {
+{
 
-  }
+}
 
 getId()
-  { // class method
-  console.log(`BlockItem class instance: Id: ${this.index}`)
-  return ( this.index );
-  }
+{ // class method
+console.log(`BlockItem class instance: Id: ${this.index}`)
+return ( this.index );
+}
 
 getAttribute()
-  {
-  return ( this.attributes );
-  }
+{
+return ( this.attributes );
 }
+} /* Class BlockItem */
 
 /**
  * @class BlockCollection
@@ -258,7 +257,7 @@ updateSchema(updatedSchema)
   }
 
 /**
- * When the top level layout changes on thre remote device
+ * When the top level layout changes on the remote device
  * update the local layout model and instantiate block items.
  *
  * @param {object} topLevelSchema
@@ -267,15 +266,33 @@ createBlockItemsFromSchema(topLevelSchema)
   {
   this._allBlockItems = [];
   this.updateSchema(topLevelSchema);
-  if (topLevelSchema.hasOwnProperty('layout'))
+
+  if (MalcolmUtils.hasOwnNestedProperties(topLevelSchema, 'layout', 'meta', 'elements', 'mri'))
+  //if (topLevelSchema.hasOwnProperty('layout'))
     {
     let index = 0;
-    for (let attr in topLevelSchema.layout.meta.elements)
+    /**
+     * Each BlockItem is referenced in the layout by its position in the attribute arrays. The same index value valid
+     * for each attribute list. So can construct each BlockItem, providing it with its unique index and a pointer to
+     * the layout schema - each BlockItem can then populate all its attributes from the schema.
+     * It is important that pushing to the _allBlockItem array is kept in sync with index count.
+     */
+    for (let mri in topLevelSchema.layout.meta.elements.mri)
       {
       this._allBlockItems.push(new BlockItem(index, this));
       index++;
       }
     }
+  }
+
+getBlockItem(index)
+  {
+  let retBlockItem = null;
+  if (this._allBlockItems.length > index)
+    {
+    retBlockItem = this._allBlockItems[index];
+    }
+  return (retBlockItem);
   }
 
 /**

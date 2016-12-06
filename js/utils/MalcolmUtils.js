@@ -54,11 +54,12 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
   let messageJson                           = JSON.stringify(message);
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
     successCallback: successCallback,
-    failureCallback: failureCallback
+    failureCallback: failureCallback,
+    requestedData  : requestedData
   });
 
-  console.log('WebSocketClient.sendText(): =>');
-  console.log(messageJson);
+  //console.log('WebSocketClient.sendText(): =>');
+  //console.log(messageJson);
   WebSocketClient.sendText(messageJson);
 
   // Added: return the GET id number so that the client object can associate itself
@@ -80,7 +81,8 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
     successCallback: successCallback,
-    failureCallback: failureCallback
+    failureCallback: failureCallback,
+    requestedData  : requestedDataToWrite
   });
 
   WebSocketClient.sendText(messageJson);
