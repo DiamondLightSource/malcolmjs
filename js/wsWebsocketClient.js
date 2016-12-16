@@ -2,11 +2,14 @@
  * Created by Ian Gillingham on 7/07/16.
  */
 
-var W3CWebSocket    = require('websocket').w3cwebsocket;
-var WebSocketClient = require('websocket').client;
+//import W3CWebSocket from 'websocket';
+//import WebSocketClient from  'websocket';
+let W3CWebSocket    = require('websocket').w3cwebsocket;
+let WebSocketClient = require('websocket').client;
 
-var idLookupTableFunctions = require('./utils/idLookupTable');
+let idLookupTableFunctions = require('./utils/idLookupTable');
 
+import EventEmitter from 'events';
 import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
 
@@ -17,11 +20,11 @@ import malcolmProtocol from './utils/malcolmProtocol';
 function Client(url)
   {
 
-  var channelIDIndex            = 0;
-  var websocket                 = null;
-  var webSocketOnOpenCallbacks  = [];
-  var webSocketOnCloseCallbacks = [];
-  var webSocketOnErrorCallbacks = [];
+  let channelIDIndex            = 0;
+  let websocket                 = null;
+  let webSocketOnOpenCallbacks  = [];
+  let webSocketOnCloseCallbacks = [];
+  let webSocketOnErrorCallbacks = [];
 
   this.addWebSocketOnOpenCallback = function (callback)
     {
@@ -72,7 +75,7 @@ function Client(url)
     websocket.onopen = function (evt)
       {
       console.log("openWebSocket().onopen callback");
-      for (var i = 0; i < webSocketOnOpenCallbacks.length; i++)
+      for (let i = 0; i < webSocketOnOpenCallbacks.length; i++)
         {
         webSocketOnOpenCallbacks[i](evt);
         }
@@ -80,7 +83,7 @@ function Client(url)
 
     websocket.onclose = function (evt)
       {
-      for (var j = 0; j < webSocketOnCloseCallbacks.length; j++)
+      for (let j = 0; j < webSocketOnCloseCallbacks.length; j++)
         {
         webSocketOnCloseCallbacks[j](evt);
         }
@@ -93,7 +96,7 @@ function Client(url)
        error that is about the websocket itself
        */
       console.log('WebSocket Connection Error : evt = ' + JSON.stringify(evt));
-      for (var k = 0; k < webSocketOnErrorCallbacks.length; k++)
+      for (let k = 0; k < webSocketOnErrorCallbacks.length; k++)
         {
         webSocketOnErrorCallbacks[k](evt);
         }
@@ -101,12 +104,13 @@ function Client(url)
 
     websocket.onbeforeunload = function()
       {
+      console.log('** websocket.onbeforeunload() **');
       websocket.close();
       };
 
     websocket.onmessage = function (evt)
       {
-      var json = JSON.parse(evt.data);
+      let json = JSON.parse(evt.data);
       //console.log("websocket.onmessage: ");
       //console.log(JSON.parse(JSON.stringify(json)));
       if (malcolmProtocol.isError(json))
@@ -143,7 +147,7 @@ function Client(url)
     websocket.on('connect', function (connection)
     {
     console.log("jofswf");
-    for (var i = 0; i < webSocketOnOpenCallbacks.length; i++)
+    for (let i = 0; i < webSocketOnOpenCallbacks.length; i++)
       {
       webSocketOnOpenCallbacks[i](connection);
       }
@@ -156,7 +160,7 @@ function Client(url)
      error that is about the websocket itself
      */
     console.log('WebSocketClient Connection Error : evt = ' + evt.toString());
-    for (var k = 0; k < webSocketOnErrorCallbacks.length; k++)
+    for (let k = 0; k < webSocketOnErrorCallbacks.length; k++)
       {
       webSocketOnErrorCallbacks[k](evt);
       }
@@ -164,8 +168,7 @@ function Client(url)
 
     websocket.on('close', function (evt)
     {
-    var j = 0;
-    for (j = 0; j < webSocketOnCloseCallbacks.length; j++)
+    for (let j = 0; j < webSocketOnCloseCallbacks.length; j++)
       {
       webSocketOnCloseCallbacks[j](evt);
       }
@@ -174,7 +177,7 @@ function Client(url)
 
     websocket.on('message', function (message)
     {
-    var json = '';
+    let json = '';
     if (message.type === 'utf8')
       {
       json = JSON.parse(message.text);
@@ -204,7 +207,8 @@ function Client(url)
 config.setServerName('pc70');
 config.setProtocolVersion('V2_0');
 config.setdeviceName('P');
-var url             = config.getServerURL();
-var WebSocketClient = new Client(url);
+let url             = config.getServerURL();
+let MalcolmWebSocketClient = new Client(url);
 
-module.exports = WebSocketClient;
+//module.exports = MalcolmWebSocketClient;
+export {MalcolmWebSocketClient as default};
