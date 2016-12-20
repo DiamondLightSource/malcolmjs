@@ -94,6 +94,12 @@ var appConstants = {
 
   TOGGLE_SIDEBAR: "TOGGLE_SIDEBAR",
   WINDOWWIDTH_MEDIAQUERYCHANGED: "WINDOWWIDTH_MEDIAQUERYCHANGED",
+
+  /* BlockCollection use */
+  BLOCKS_UPDATED: "BLOCKS_UPDATES",
+
+  /* Websocket EventEmitter */
+  WEBSOCKET_STATE: "WEBSOCKET_STATE",
 };
 
 module.exports = appConstants;

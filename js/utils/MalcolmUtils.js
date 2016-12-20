@@ -2,9 +2,9 @@
  * Created by twi18192 on 02/03/16.
  */
 
-//let WebSocketClient = require('../fluxWebsocketClient');
-let WebSocketClient        = require('../wsWebsocketClient');
-let idLookupTableFunctions = require('./idLookupTable');
+  //let MalcolmWebSocketClient = require('../fluxWebsocketClient');
+import MalcolmWebSocketClient from '../wsWebsocketClient';
+import idLookupTableFunctions from './idLookupTable';
 import malcolmProtocol from "../utils/malcolmProtocol";
 
 //let log_debug = false;
@@ -12,16 +12,33 @@ import malcolmProtocol from "../utils/malcolmProtocol";
 
 class Utils {
 
+constructor()
+  {
+  this.webSocketOpen   = false;
+  MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen);
+  MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose);
+  }
+
+webSocketOnOpen()
+  {
+  this.webSocketOpen = true;
+  }
+
+webSocketOnClose()
+  {
+  this.webSocketOpen = false;
+  }
+
 initialiseFlowChart(callback)
   {
-  WebSocketClient.addWebSocketOnOpenCallback(callback);
+  MalcolmWebSocketClient.addWebSocketOnOpenCallback(callback);
   // Note that callback() has been bound with a pre-specified initial argument of requestedData from the caller.
   }
 
 malcolmGet(requestedData, successCallback, failureCallback)
   {
-  let id = WebSocketClient.getNextAvailableId();
-  WebSocketClient.incrementId();
+  let id = MalcolmWebSocketClient.getNextAvailableId();
+  MalcolmWebSocketClient.incrementId();
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDGet();
   message['id']                             = id;
@@ -35,7 +52,7 @@ malcolmGet(requestedData, successCallback, failureCallback)
     requestedData  : requestedData
   });
 
-  WebSocketClient.sendText(messageJson);
+  MalcolmWebSocketClient.sendText(messageJson);
 
   // Added: return the GET id number so that the client object can associate itself
   // with response data.
@@ -45,22 +62,23 @@ malcolmGet(requestedData, successCallback, failureCallback)
 
 malcolmSubscribe(requestedData, successCallback, failureCallback)
   {
-  let id = WebSocketClient.getNextAvailableId();
-  WebSocketClient.incrementId();
+  let id = MalcolmWebSocketClient.getNextAvailableId();
+  MalcolmWebSocketClient.incrementId();
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDSubscribe();
   message['id']                             = id;
   message['endpoint']                       = requestedData;
   let messageJson                           = JSON.stringify(message);
+
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
     successCallback: successCallback,
     failureCallback: failureCallback,
     requestedData  : requestedData
   });
 
-  //console.log('WebSocketClient.sendText(): =>');
+  //console.log('MalcolmWebSocketClient.sendText(): =>');
   //console.log(messageJson);
-  WebSocketClient.sendText(messageJson);
+  MalcolmWebSocketClient.sendText(messageJson);
 
   // Added: return the GET id number so that the client object can associate itself
   // with response data.
@@ -69,8 +87,8 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
 
 malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback)
   {
-  let id = WebSocketClient.getNextAvailableId();
-  WebSocketClient.incrementId();
+  let id = MalcolmWebSocketClient.getNextAvailableId();
+  MalcolmWebSocketClient.incrementId();
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDCall();
   message['id']                             = id;
@@ -85,14 +103,14 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
     requestedData  : requestedDataToWrite
   });
 
-  WebSocketClient.sendText(messageJson);
+  MalcolmWebSocketClient.sendText(messageJson);
   }
 
 
 /*
-  Check object for nested property. If a given property at
-  any level does not exist then it will return false
-   */
+ Check object for nested property. If a given property at
+ any level does not exist then it will return false
+ */
 
 hasOwnNestedProperties(obj /*, level1, level2, ... levelN*/)
   {
@@ -107,6 +125,52 @@ hasOwnNestedProperties(obj /*, level1, level2, ... levelN*/)
     obj = obj[args[i]];
     }
   return true;
+  }
+
+
+/**
+ * isEquivalent(a, b)
+ * Compares two objects for value equivalence.
+ *
+ * @param a
+ * @param b
+ * @returns {boolean}
+ */
+isEquivalent(a, b)
+  {
+  if ((a != undefined) && (b != undefined))
+    {
+    // Create arrays of property names
+    let aProps = Object.getOwnPropertyNames(a);
+    let bProps = Object.getOwnPropertyNames(b);
+
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length != bProps.length)
+      {
+      return false;
+      }
+
+    for (let i = 0; i < aProps.length; i++)
+      {
+      let propName = aProps[i];
+
+      // If values of same property are not equal,
+      // objects are not equivalent
+      if (a[propName] !== b[propName])
+        {
+        return false;
+        }
+      }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+    }
+  else
+    {
+    return false;
+    }
   }
 
 }

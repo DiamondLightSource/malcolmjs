@@ -4,18 +4,15 @@
  * Created by twi18192 on 02/03/16.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher.js');
-var appConstants  = require('../constants/appConstants.js');
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import config from "../utils/config";
 
-let MalcolmActionCreators;
 
-
-MalcolmActionCreators = {
+let MalcolmActionCreators = {
 
   /* default device name to Z, which was the original name for the simulator device */
-  //  deviceId: "Z",
   deviceId           : ((config.getProtocolVersion() === 'V2_0') ? "P" : "Z"),
   topLevelGetId      : 0,
   topLevelSubscribeId: 0,
@@ -58,7 +55,7 @@ MalcolmActionCreators = {
             responseMessage: responseMessage,
             requestedData  : requestedData
           }
-        })
+        });
       }
 
     // Dispatch MALCOLM_GET_FAILURE to all subscribers.
@@ -76,7 +73,7 @@ MalcolmActionCreators = {
 
     let itemGetSuccess = function (id, responseMessage)
       {
-      //console.log('MalcolmActionCreators: itemGetSuccess...');
+      console.log('MalcolmActionCreators: itemGetSuccess...');
       //console.log('requestedData =>');
       //console.log(requestedData);
       //console.log('responseMessage =>');
@@ -102,7 +99,13 @@ MalcolmActionCreators = {
        need to subscribe to all the blocks, so a for loop is
        part of the callback too
        */
-      malcolmGetSuccess(id, zVisibility);
+
+      // //malcolmGetSuccess(id, zVisibility);
+      //if (zVisibility.hasOwnProperty('layout'))
+      //  {
+      //  blockCollection.createBlockItemsFromSchema(zVisibility);
+      //  }
+
 
       // Subscribe to the visibility list.
       actionCreators.malcolmSubscribe(actionCreators.deviceId,["layout","value","visible"]);
@@ -120,19 +123,20 @@ MalcolmActionCreators = {
 
       };
 
+    /**
+     * testMalcolmGetSuccess: Callback to top level layout response
+     *
+     * @param id
+     * @param responseMessage
+     */
     let testMalcolmGetSuccess = function (id, responseMessage)
       {
-      //console.log(`MalcolmActionCreators: testMalcolmGetSuccess: responseMessage...  topLevelGetId = ${actionCreators.topLevelGetId}`)
-      //console.log(responseMessage);
+      console.log(`MalcolmActionCreators: testMalcolmGetSuccess: responseMessage...  topLevelGetId = ${actionCreators.topLevelGetId}`)
+      console.log(responseMessage);
 
       /* Fetch Z:VISIBILITY, and then subscribe to all visible
        attributes in Z:VISIBILITY
        */
-
-      //=============*!*!*!*!*!*!
-      // TEMPORARY RETURN TO AVOID EXCEPTION DURING DEV: TODO
-      //=============*!*!*!*!*!*!
-      //return;
 
       // Instruct MalcolmUtils to get the visibility information for all blocks on the remote instrument.
       // Was: MalcolmUtils.malcolmGet('Z:VISIBILITY', zVisibilitySubscribe, malcolmGetFailure);
@@ -169,7 +173,7 @@ MalcolmActionCreators = {
     },
 
   /**
-   *
+   * malcolmSubscribe
    * @param {string} blockName - MRI name of block (e.g. "P:OUTENC3")
    * @param {[string]} attribute - array of attribute tree to subscribe to
    */
@@ -178,7 +182,7 @@ MalcolmActionCreators = {
 
     function malcolmSubscribeSuccess(id, responseMessage)
       {
-      //console.log(requestedData);
+      console.log(`MalcolmActionCreators.malcolmSubscribeSuccess(): id = ${id}`);
       AppDispatcher.handleAction({
         actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
         item      : {
@@ -188,7 +192,7 @@ MalcolmActionCreators = {
             attribute: attribute
           }
         }
-      })
+      });
       }
 
     function malcolmSubscribeFailure(responseMessage)
@@ -202,13 +206,22 @@ MalcolmActionCreators = {
             attribute: attribute
           }
         }
-      })
+      });
       }
 
     //let requestedAttributeDataPath = [actionCreators.deviceId, blockName, "attributes", attribute];
-    let requestedAttributeDataPath = [blockName].concat(attribute);
+    let requestedAttributeDataPath = null;
+    if (attribute.length > 0)
+      {
+      requestedAttributeDataPath = [blockName].concat(attribute);
+      }
+    else
+      {
+      requestedAttributeDataPath = [blockName];
+      }
 
-    //console.log(`MalcolmActionCreators.malcolmSubscribe(): blockName = ${blockName}   attribute = ${JSON.stringify(attribute)}`);
+
+    console.log(`MalcolmActionCreators.malcolmSubscribe(): ${requestedAttributeDataPath}`);
     let id = MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
 
     },
@@ -240,7 +253,7 @@ MalcolmActionCreators = {
             args     : args
           }
         }
-      })
+      });
       }
 
     function malcolmCallFailure(responseMessage)
@@ -255,7 +268,7 @@ MalcolmActionCreators = {
             args     : args
           }
         }
-      })
+      });
       }
 
 
@@ -264,10 +277,17 @@ MalcolmActionCreators = {
     MalcolmUtils.malcolmCall(requestedDataToWritePath,
       method, args, malcolmCallSuccess, malcolmCallFailure);
 
+    },
+
+  getdeviceId: function ()
+    {
+    return ( actionCreators.deviceId );
     }
 
 };
 
 const actionCreators = MalcolmActionCreators;
 
-module.exports = MalcolmActionCreators;
+//module.exports = MalcolmActionCreators;
+
+export {MalcolmActionCreators as default};

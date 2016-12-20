@@ -7,11 +7,11 @@ let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
 let assign        = require('../../node_modules/object-assign/index.js');
 
-let MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 let attributeStore        = require('./attributeStore');
 
 import config from "../utils/config";
-import BlockItem from '../classes/blockItems';
+import blockCollection from '../classes/blockItems';
 
 let update = require('react-addons-update');
 
@@ -445,6 +445,7 @@ blockStore.dispatchToken = AppDispatcher.register(
       //console.log(item.responseMessage);
       if (item.responseMessage.hasOwnProperty('layout'))
         {
+        let somethingUpdated = false;
         for (let i = 0; i < item.responseMessage.layout.value.name.length; i++)
           {
           /* Do the block adding to testAllBlockInfo stuff */
@@ -469,13 +470,17 @@ blockStore.dispatchToken = AppDispatcher.register(
           let obj = attributeStore.getAllBlockAttributes()[blockName];
           //console.log('blockStore MALCOLM_GET_SUCCESS:  obj -> ');
           //console.log(obj);
-          if (Object.keys(obj).length !== 0)
+          if ((obj != null) && (Object.keys(obj).length !== 0))
             {
             addBlock(obj);
+            somethingUpdated = true;
             // TODO: This is not efficient. Should consider calling blockStore.emitChange outside for loop.
-            // IJG: 23/11/16
-            blockStore.emitChange();
+            // IJG: 23/11/16 - done 7/12/16
             }
+          }
+        if (somethingUpdated)
+          {
+          blockStore.emitChange();
           }
         }
 
@@ -484,12 +489,35 @@ blockStore.dispatchToken = AppDispatcher.register(
     case
     appConstants.MALCOLM_GET_FAILURE:
       console.log("blockStore MALCOLM GET ERROR!");
-      blockStore.emitChange();
+      //blockStore.emitChange();
       break;
+
+    case appConstants.BLOCKS_UPDATED:
+      {
+      /**
+       * item (from action.item) is an array of block indeces that have been updated.
+       */
+      console.log(`blockStore BLOCKS_UPDATED callback: item = ${item}`);
+
+      let isWidgetCombo = false;
+      let isGroupInputs = false;
+
+      console.log("BLOCKS_UPDATED in paneStore");
+      for (let i = 0; i < item.length; i++)
+        {
+        let index     = item[i];
+        let blockItem = blockCollection.getBlockItem(index);
+        if (blockItem != null)
+          {
+
+          }
+        }
+      }
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       console.log("blockStore malcolmSubscribeSuccess");
-
+      // Wait for blockCollection to have fully processed the subscribe return
+      AppDispatcher.waitFor([blockCollection.dispatchToken]);
 
       /* Check the tags for 'widget:combo', it'll be
        indicating that a dropdown was used (it'll also
@@ -611,6 +639,7 @@ blockStore.dispatchToken = AppDispatcher.register(
                 /* Pass addBlock the block object from allBlockAttributes in attributeStore
                  instead of relying on testAllBlockInfo
                  */
+                AppDispatcher.waitFor([attributeStore.dispatchToken]);
                 let obj = attributeStore.getAllBlockAttributes()[item.requestedData.attribute];
 
                 if (Object.keys(obj).length !== 0)

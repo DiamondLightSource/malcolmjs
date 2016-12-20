@@ -61,7 +61,9 @@ var config = {
   setdeviceName: function(name)
   {
       _deviceName = name;
-  }
+  },
+
+  testparams: {maxBlocks: 10}
 
 };
 

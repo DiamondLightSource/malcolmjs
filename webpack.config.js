@@ -15,7 +15,7 @@ var config = {
   },
   resolve: {
     alias: { // In case of multiple copies of React flying around
-      //'react.js': path.join(__dirname, 'node_modules/react/react.js'),
+      'react.js': path.join(__dirname, 'node_modules/react/react.js'),
       'react/lib/CSSPropertyOperations': path.join(__dirname, 'node_modules/react-dom/lib/CSSPropertyOperations.js'),
       'react/lib/ReactDOM': path.join(__dirname, 'node_modules/react-dom/lib/ReactDOM.js')
     }

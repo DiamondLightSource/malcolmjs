@@ -19,9 +19,9 @@ var idLookupTableFunctions = {
     if (success === true)
       {
       //console.log(`idLookupTableFunctions idLookupTable = ${idLookupTable}`);
-      if (idLookupTable.hasOwnProperty(id))
+      if (idLookupTable.hasOwnProperty(id.toString()))
         {
-        console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(idLookupTable)}`);
+        //console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(idLookupTable)}`);
         //console.log('idLookupTable[] ->');
         //console.log(idLookupTable);
         idLookupTable[id].successCallback(id, json);
@@ -30,7 +30,7 @@ var idLookupTableFunctions = {
       }
     else if (success === false)
       {
-      if (idLookupTable.hasOwnProperty(id))
+      if (idLookupTable.hasOwnProperty(id.toString()))
         {
         idLookupTable[id].failureCallback(json);
         }
@@ -61,18 +61,18 @@ var idLookupTableFunctions = {
    Test for table having an entry for the given id number.
    @name hasId
    @param {number} id
-   @returns {bool} true if the id exiss
+   @returns {boolean} true if the id exiss
  */
   hasId: function(id)
     {
-    return( idLookupTable.hasOwnProperty(id));
+    return( idLookupTable.hasOwnProperty(id.toString()));
     },
 
   getRequestMessage: function (id)
     {
     let reqMsg = null;
 
-    if (idLookupTable.hasOwnProperty(id))
+    if (idLookupTable.hasOwnProperty(id.toString()))
       {
       reqMsg = idLookupTable[id].requestMessage;
       }

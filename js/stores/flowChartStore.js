@@ -364,7 +364,6 @@ switch (action.actionType)
 
   case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
     console.log("flowChartStore malcolmSubscribe success");
-
     /* I need to have it listening to when any new edges are added
      via malcolm, currently I'm listening to the old appConstant:
      ADD_ONESINGLEEDGETOALLBLOCKINFO

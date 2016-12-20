@@ -8,6 +8,7 @@ let W3CWebSocket    = require('websocket').w3cwebsocket;
 let WebSocketClient = require('websocket').client;
 
 let idLookupTableFunctions = require('./utils/idLookupTable');
+let appConstants = require ('./constants/appConstants');
 
 import EventEmitter from 'events';
 import config from './utils/config';
@@ -17,98 +18,110 @@ import malcolmProtocol from './utils/malcolmProtocol';
 
 //let debug = true;
 
-function Client(url)
+class WSClient extends EventEmitter
   {
 
-  let channelIDIndex            = 0;
-  let websocket                 = null;
-  let webSocketOnOpenCallbacks  = [];
-  let webSocketOnCloseCallbacks = [];
-  let webSocketOnErrorCallbacks = [];
-
-  this.addWebSocketOnOpenCallback = function (callback)
+  constructor(url)
     {
-    webSocketOnOpenCallbacks.push(callback);
-    };
+    super();
+    this.channelIDIndex            = 0;
+    this.websocket                 = null;
+    this.webSocketOnOpenCallbacks  = [];
+    this.webSocketOnCloseCallbacks = [];
+    this.webSocketOnErrorCallbacks = [];
 
-  this.addWebSocketOnCloseCallback = function (callback)
+    this.webSocketOpen = false;
+
+    // Mainline code for this class
+    this.openWebSocket(url);
+    //openWebSocketClient(url);
+
+    }
+
+
+  addWebSocketOnOpenCallback(callback)
     {
-    webSocketOnCloseCallbacks.push(callback);
-    };
+    this.webSocketOnOpenCallbacks.push(callback);
+    }
 
-  this.addWebSocketOnErrorCallback = function (callback)
+  addWebSocketOnCloseCallback(callback)
     {
-    webSocketOnErrorCallbacks.push(callback);
-    };
+    this.webSocketOnCloseCallbacks.push(callback);
+    }
 
-  this.sendText = function (message)
+  addWebSocketOnErrorCallback(callback)
     {
-    //console.log('Client.sendText: ' + message);
-    websocket.send(message);
-    };
+    this.webSocketOnErrorCallbacks.push(callback);
+    }
 
-  this.close = function ()
+  sendText(message)
     {
-    websocket.close();
-    };
+    console.log('Client.sendText: ' + message);
+    this.websocket.send(message);
+    }
 
-  this.getNextAvailableId = function ()
+  close()
     {
-    return channelIDIndex;
-    };
+    this.websocket.close();
+    }
 
-  this.incrementId = function ()
+  getNextAvailableId()
     {
-    channelIDIndex += 1;
-    };
+    return this.channelIDIndex;
+    }
 
-  function openWebSocket(url)
+  incrementId()
+    {
+    this.channelIDIndex += 1;
+    }
+
+  openWebSocket(url)
     {
     //LOG('Flux WebSocket: Connecting to: ' + url);
     console.log("wsWebSocketClient: openWebSocket()  url: " + url);
     //console.log(window);
-    websocket            = new W3CWebSocket(url);
-    websocket.binaryType = "arraybuffer";
+    this.websocket            = new W3CWebSocket(url);
+    this.websocket.binaryType = "arraybuffer";
 
     //websocket.setTimeout(0);
 
-    websocket.onopen = function (evt)
+    this.websocket.onopen = (evt) =>
       {
       console.log("openWebSocket().onopen callback");
-      for (let i = 0; i < webSocketOnOpenCallbacks.length; i++)
+      for (let i = 0; i < this.webSocketOnOpenCallbacks.length; i++)
         {
-        webSocketOnOpenCallbacks[i](evt);
+        this.webSocketOnOpenCallbacks[i](evt);
         }
       };
 
-    websocket.onclose = function (evt)
+    this.websocket.onclose = (evt) =>
       {
-      for (let j = 0; j < webSocketOnCloseCallbacks.length; j++)
+      for (let j = 0; j < this.webSocketOnCloseCallbacks.length; j++)
         {
-        webSocketOnCloseCallbacks[j](evt);
+        this.webSocketOnCloseCallbacks[j](evt);
         }
       };
 
-    websocket.onerror = function (evt)
+    this.websocket.onerror = (evt) =>
       {
       /* This is not for websocket messages which are informing the client
        of an error with an interaction with the server, this is for an
        error that is about the websocket itself
        */
       console.log('WebSocket Connection Error : evt = ' + JSON.stringify(evt));
-      for (let k = 0; k < webSocketOnErrorCallbacks.length; k++)
+      for (let k = 0; k < this.webSocketOnErrorCallbacks.length; k++)
         {
-        webSocketOnErrorCallbacks[k](evt);
+        this.webSocketOnErrorCallbacks[k](evt);
         }
       };
 
-    websocket.onbeforeunload = function()
+    this.websocket.onbeforeunload = () =>
       {
       console.log('** websocket.onbeforeunload() **');
-      websocket.close();
+      this.websocket.close();
       };
 
-    websocket.onmessage = function (evt)
+    this.websocket.onmessage = (evt) =>
       {
       let json = JSON.parse(evt.data);
       //console.log("websocket.onmessage: ");
@@ -137,52 +150,52 @@ function Client(url)
 
     }
 
-  function openWebSocketClient(url)
+  openWebSocketClient(url)
     {
     console.log("wsWebSocketClient: openWebSocketClient()  url: " + url);
     //console.log(window);
-    websocket = new WebSocketClient();
-    websocket.connect(url);
+    this.websocket = new WebSocketClient();
+    this.websocket.connect(url);
 
-    websocket.on('connect', function (connection)
+    this.websocket.on('connect', connection =>
     {
     console.log("jofswf");
-    for (let i = 0; i < webSocketOnOpenCallbacks.length; i++)
+    for (let i = 0; i < this.webSocketOnOpenCallbacks.length; i++)
       {
-      webSocketOnOpenCallbacks[i](connection);
+      this.webSocketOnOpenCallbacks[i](connection);
       }
     });
 
-    websocket.on('connectFailed', function (evt)
+    this.websocket.on('connectFailed', evt =>
     {
     /* This is not for websocket messages which are informing the client
      of an error with an interaction with the server, this is for an
      error that is about the websocket itself
      */
     console.log('WebSocketClient Connection Error : evt = ' + evt.toString());
-    for (let k = 0; k < webSocketOnErrorCallbacks.length; k++)
+    for (let k = 0; k < this.webSocketOnErrorCallbacks.length; k++)
       {
-      webSocketOnErrorCallbacks[k](evt);
+      this.webSocketOnErrorCallbacks[k](evt);
       }
     });
 
-    websocket.on('close', function (evt)
+    this.websocket.on('close', evt =>
     {
-    for (let j = 0; j < webSocketOnCloseCallbacks.length; j++)
+    for (let j = 0; j < this.webSocketOnCloseCallbacks.length; j++)
       {
-      webSocketOnCloseCallbacks[j](evt);
+      this.webSocketOnCloseCallbacks[j](evt);
       }
     });
 
 
-    websocket.on('message', function (message)
+    this.websocket.on('message', message =>
     {
     let json = '';
     if (message.type === 'utf8')
       {
       json = JSON.parse(message.text);
-      //console.log("websocketClient.onmessage: ");
-      //console.log(JSON.parse(JSON.stringify(json)));
+      console.log("websocketClient.onmessage: ");
+      console.log(JSON.parse(JSON.stringify(json)));
       if (malcolmProtocol.isError(json))
         {
         idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
@@ -192,13 +205,24 @@ function Client(url)
         idLookupTableFunctions.invokeIdCallback(json.id, true, json.value);
         }
       }
-    });
+    })
 
     }
 
-  // Mainline code for this class
-  openWebSocket(url);
-  //openWebSocketClient(url);
+  emitChange()
+    {
+    this.emit(appConstants.WEBSOCKET_STATE);
+    }
+
+  addChangeListener(callback)
+    {
+    this.on(appConstants.WEBSOCKET_STATE, callback);
+    }
+
+  removeChangeListener(callback)
+    {
+    this.removeListener(appConstants.WEBSOCKET_STATE, callback);
+    }
 
   }
 
@@ -208,7 +232,7 @@ config.setServerName('pc70');
 config.setProtocolVersion('V2_0');
 config.setdeviceName('P');
 let url             = config.getServerURL();
-let MalcolmWebSocketClient = new Client(url);
+let MalcolmWebSocketClient = new WSClient(url);
 
 //module.exports = MalcolmWebSocketClient;
 export {MalcolmWebSocketClient as default};

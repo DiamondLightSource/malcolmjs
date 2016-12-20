@@ -10,6 +10,7 @@ let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
 let assign        = require('../../node_modules/object-assign/index.js');
 
+// Used for Node.js EventEmitted implementation
 let CHANGE_EVENT = 'change';
 
 let update = require('react-addons-update');
@@ -30,13 +31,13 @@ allBlockAttributes.addBlockAttribute = function (blockId, blockAttribute, attrib
   {
   //updateAttributeValue(blockId, blockAttribute, attributeValue);
   //console.log(`allBlockAttributes.addBlockAttribute: blockId = ${blockId}`);
-  if (!this.hasOwnProperty(blockId))
+  if (!this.hasOwnProperty(blockId.toString()))
   //if (!this.length > blockId)
     {
-    this[blockId]              = {};
-    this[blockId].attributes   = [];
-    this[blockId]['BLOCKNAME'] = {};
-    this[blockId]['ICON'] = {};
+    this[blockId]               = {};
+    this[blockId].attributes    = [];
+    this[blockId]['BLOCKNAME']  = {};
+    this[blockId]['ICON']       = {};
     this[blockId]['ICON'].value = '';
     }
   this[blockId]['BLOCKNAME'].value = blockId;
@@ -46,6 +47,12 @@ allBlockAttributes.addBlockAttribute = function (blockId, blockAttribute, attrib
   this[blockId][blockAttribute] = attributeValue;
   };
 
+/**
+ *
+ * @param {string} blockId   - Block name
+ * @param {string} attribute - Attribute name
+ * @param {string} newValue  - New value for local attributes interface entry
+ */
 function updateAttributeValue(blockId, attribute, newValue)
   {
   //allBlockAttributes[blockId][attribute].value = newValue;
@@ -57,7 +64,7 @@ function updateAttributeValue(blockId, attribute, newValue)
 
   //console.log(`allBlockAttributes.updateAttributeValue: blockId = ${blockId}   attribute: ${attribute}   newValue: ${newValue}`);
 
-  if (allBlockAttributes.hasOwnProperty(blockId))
+  if (allBlockAttributes.hasOwnProperty(blockId.toString()))
     {
     let updatedAttribute = update(allBlockAttributes[blockId][attribute],
       {$merge: {value: newValue}});
@@ -88,6 +95,12 @@ function updateAttributeValue(blockId, attribute, newValue)
 
   }
 
+/**
+ *
+ * @param {string} blockId   - block name
+ * @param {string} attribute - attribute name
+ * @param {object} statusObject
+ */
 function updateAttributeIconStatus(blockId, attribute, statusObject)
   {
 
@@ -120,7 +133,7 @@ function updateAttributeIconStatus(blockId, attribute, statusObject)
     updateAttributeIconStatus(blockId, 'Y_COORD', statusObject);
     }
 
-  if (allBlockAttributesIconStatus.hasOwnProperty(blockId))
+  if (allBlockAttributesIconStatus.hasOwnProperty(blockId.toString()))
     {
 
     let updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
@@ -144,8 +157,12 @@ function updateAttributeIconStatus(blockId, attribute, statusObject)
 
   }
 
-// todo: should this be declared as: let attributeStore = merge(EventEmitter.prototype, {...  ??
-// IG 19 Oct 2016
+/**
+* todo: should this be declared as: let attributeStore = merge(EventEmitter.prototype, {...  ??
+* Actually it begs the question as to why Flux and Node.js EventEmmitter are both being deployed here
+* when changes to any store should probably be using Flux to broadcast and receive change events.
+* IG 19 Oct 2016
+*/
 let attributeStore = assign({}, EventEmitter.prototype, {
 
   addChangeListener              : function (cb)
@@ -175,14 +192,12 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
   {
   let action          = payload.action;
   let item            = action.item;
-  let responseMessage = JSON.parse('null');
-  let requestedData   = JSON.parse('null');
 
   switch (action.actionType)
   {
     case appConstants.MALCOLM_GET_SUCCESS:
       {
-      //console.log('attributeStore: MALCOLM_GET_SUCCESS: ');
+      console.log('attributeStore: MALCOLM_GET_SUCCESS: ');
       //console.log("REQUESTED: => " + JSON.stringify(item.requestedData));
       //console.log("RESPONSE: => " + JSON.stringify(item.responseMessage));
 
@@ -195,66 +210,67 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
         //console.log(item.responseMessage.layout);
         //console.log("item.responseMessage.layout.value.length = " + item.responseMessage.layout.value.name.length);
 
-        blockCollection.createBlockItemsFromSchema(item.responseMessage);
+        // Wait for blockCollection to respond to this broadcast message and
+        // populate the collection.
+        AppDispatcher.waitFor([blockCollection.getDispatchToken()]);
 
         // Iterate through all blocks available in responseMessage
         // extracting each block attributes, building up the allBlockAttributes table.
         //
         for (let i = 0; i < item.responseMessage.layout.value.name.length; i++)
           {
-          let blockName = item.responseMessage.layout.value.name[i];
-          let blockMRI = item.responseMessage.layout.value.mri[i];
+          let blockName = JSON.stringify(item.responseMessage.layout.value.name[i]);
 
-          //==========================================================================================
-          // TODO:
-          // The old Protocol_1 attributes pattern do not fit with Protocol_2.
-          // Instead we need to interrogate each block in the upper list (from Get),
-          // by Get or Subscribe to each block, then assemble the attributes into a local store.
-          // It begs the question as to why there is an attributeStore instead of each blockStore holding
-          // its own attributes?
-          // Ian Gillingham - October 2016.
-          //==========================================================================================
+          /**
+          ==========================================================================================
+          TODO:
+          The old Protocol_1 attributes pattern do not fit with Protocol_2.
+          Instead we need to interrogate each block in the upper list (from Get),
+          by Get or Subscribe to each block, then assemble the attributes into a local store.
+          It begs the question as to why there is an attributeStore instead of each blockStore holding
+          its own attributes?
 
-          // here we go...
-          //
-          // Create an instance of BlockItem to be associated with this block and to provide callbacks.
-          let requestedAttributeDataPath = [blockMRI];
-          console.log(`MalcolmActionCreators.malcolmSubscribe(): blockMRI = ${blockMRI}`);
-          MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
+          As a transition to the new code structure required with Protocol2, allBlockAttributes in attributeStore
+          will be maintained and mapped to he new BlockCollection instance in blockItems.js
+          The plan is eventually to remove this clunky interface and fully incorporate the BlockCollection
+          in its place.
+
+          Ian Gillingham - December 2016.
+          ==========================================================================================
+           */
 
 
-          if (item.responseMessage.layout.value.hasOwnProperty("visible"))
-            {
-            //console.log(`attributeStore => visible : blockName = ${blockName}`);
-            allBlockAttributes.addBlockAttribute(blockName, "VISIBLE", item.responseMessage.layout.value.visible[i]);
-            //allBlockAttributes[blockName]["VISIBLE"] = item.responseMessage.layout.value.visible[i];
-            }
-          if (item.responseMessage.layout.value.hasOwnProperty("mri"))
+          /**
+           * Iterate through each blockItem in the collection and copy its visibility attribute into
+           * attributeStore.allBlockAttributes
+           */
+          let blockItem = blockCollection.getBlockItem(i);
+          console.log(blockItem);
+
+          // I don't think it's necessary to subscribe here, because it's already being done
+          // in the BlockCollection class instance and this attribute store will receive all
+          // the notifications.
+          //MalcolmActionCreators.malcolmSubscribe(blockMRI, []);
+          let visible = blockItem.visible();
+          allBlockAttributes.addBlockAttribute(blockName, "VISIBLE", blockItem.visible());
+          let mri = blockItem.mri();
+          if (mri != null)
             {
             //console.log(`attributeStore => mri : blockName = ${blockName} :  mri = ${item.responseMessage.layout.value.mri[i]}`);
-            let mri = item.responseMessage.layout.value.mri[i];
-            allBlockAttributes.addBlockAttribute(blockName, "MRI", mri);
-            // Create an instance of BlockItem to be associated with this block and to provide callbacks.
-            //allBlockAttributes[blockName]["MRI"] = item.responseMessage.layout.value.mri[i];
+            allBlockAttributes.addBlockAttribute(blockName, "MRI", blockItem.mri());
+            allBlockAttributes.addBlockAttribute(blockName, "BLOCKNAME", blockItem.blockName());
             }
-          if (item.responseMessage.layout.value.hasOwnProperty("x"))
-            {
-            /**
-             * TODO: All the coordinates need subscribing to, so if any change from the
-             *       device, a subscription event will notify and we can then determine which
-             *       position has changed and update the blockItem as appropriate.
-             *       So - MUST instantiate blockItems with subscriptions and the collection object subscribing to
-             *       common position information.
-             */
-            //actionCreators.malcolmSubscribe(actionCreators.deviceId,["layout","value","x"]);
-            allBlockAttributes.addBlockAttribute(blockName, "X", item.responseMessage.layout.value.x[i]);
-            //allBlockAttributes[blockName]["X"] = item.responseMessage.layout.value.x[i];
-            }
-          if (item.responseMessage.layout.value.hasOwnProperty("y"))
-            {
-            allBlockAttributes.addBlockAttribute(blockName, "Y", item.responseMessage.layout.value.y[i]);
-            //allBlockAttributes[blockName]["Y"] = item.responseMessage.layout.value.y[i];
-            }
+          let x = blockItem.x();
+          let y = blockItem.y();
+          /**
+           * TODO: All the coordinates need subscribing to, so if any change from the
+           *       device, a subscription event will notify and we can then determine which
+           *       position has changed and update the blockItem as appropriate.
+           *       So - MUST instantiate blockItems with subscriptions and the collection object subscribing to
+           *       common position information.
+           */
+          allBlockAttributes.addBlockAttribute(blockName, "X", x);
+          allBlockAttributes.addBlockAttribute(blockName, "Y", y);
 
 
           //console.log('attributeStore: Dispatch callback MALCOLM_GET_SUCCESS: iterate top level: blockname = ' + blockName);
@@ -298,134 +314,108 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
       }
 
     case
-    appConstants.MALCOLM_SUBSCRIBE_SUCCESS
-    :
+    appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
       {
-      //console.log('attributeStore: MALCOLM_SUBSCRIBE_SUCCESS: ');
-      //console.log("REQUESTED: => " + JSON.stringify(item.requestedData));
-      //console.log("RESPONSE: => " + JSON.stringify(item.responseMessage));
-      if (item.requestedData.blockName !== 'VISIBILITY')
+      console.log(`attributeStore MALCOLM_SUBSCRIBE_SUCCESS callback: item = ${item}`);
+      AppDispatcher.waitFor([blockCollection.dispatchToken]);
+
+      for (let i = 0; i < item.length; i++)
         {
-        responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-
-        updateAttributeValue(requestedData.blockName,
-          requestedData.attribute, responseMessage.value);
-        }
-      /* This is for when a block has been changed from
-       hide to show for the first time via the block palette
-       so the GUI isn't yet subscribed to any of the blocks'
-       attributes (or at least something along those lines)
-       TODO: Needs changing for Protocol2
-       */
-      else if (item.requestedData.blockName === 'VISIBILITY')
-        {
-        responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-
-        /* UPDATE: so this works and the toggle switches stay in sync,
-         but I'm pretty sure I'm doing more updates than I need; I think
-         what's happening is that every time VISIBILITY changes a blocks'
-         visible status, the individual block attribute for its tab is being
-         updated at the same time as the overall master block.
-         It works for now, so keep it, but don't forget about this either!
-         */
-
-        /* UPDATED UPDATE: actually, if one changes, the server knows to
-         change the other, so I'll receive a subscribe message from both,
-         so I don't think it's any more complicated than simply updating
-         what attributes I'm given! (So I think I can even get rid of
-         this else if statement and simply have updateAttributeValue being
-         invoked for ALL malcolmSubscribes that come to attributeStore)
-         */
-
-        /* UPDATE THE UPDATED UPDATE: right, so when I add a new block
-         via VISIBILITY I don't actually subscribe to its attributes, it's
-         only on refresh do I do that, hence the need to do this since not only
-         does a block's visible attribute not update, but neither does any of
-         them until the next refresh!
-         So the solution is basically to have attribute subscription when a
-         block is added/mounted
-         */
-
-        //if(allBlockAttributes[requestedData.attribute].value !== responseMessage.value) {
-        //
-        //  updateAttributeValue(requestedData.attribute, 'VISIBLE',
-        //    responseMessage.value);
-        //
-        //}
-
-        updateAttributeValue(requestedData.blockName,
-          requestedData.attribute, responseMessage.value);
-
-        //console.log(allBlockAttributes[requestedData.attribute]);
-
-        if (allBlockAttributes[requestedData.attribute]['VISIBLE'].value !== responseMessage.value)
+        let index     = item[i];
+        let blockItem = blockCollection.getBlockItem(index);
+        if (blockItem != null)
           {
+          /** This is for when a block has been changed from
+           hide to show for the first time via the block palette
+           so the GUI isn't yet subscribed to any of the blocks'
+           attributes (or at least something along those lines)
+           */
 
-          updateAttributeValue(requestedData.attribute, 'VISIBLE',
-            responseMessage.value);
+          /* UPDATE: so this works and the toggle switches stay in sync,
+           but I'm pretty sure I'm doing more updates than I need; I think
+           what's happening is that every time VISIBILITY changes a blocks'
+           visible status, the individual block attribute for its tab is being
+           updated at the same time as the overall master block.
+           It works for now, so keep it, but don't forget about this either!
+           */
 
-          }
-        }
+          /* UPDATED UPDATE: actually, if one changes, the server knows to
+           change the other, so I'll receive a subscribe message from both,
+           so I don't think it's any more complicated than simply updating
+           what attributes I'm given! (So I think I can even get rid of
+           this else if statement and simply have updateAttributeValue being
+           invoked for ALL malcolmSubscribes that come to attributeStore)
+           */
 
-      /* Update allBlockAttributesIconStatus appropriately */
+          /* UPDATE THE UPDATED UPDATE: right, so when I add a new block
+           via VISIBILITY I don't actually subscribe to its attributes, it's
+           only on refresh do I do that, hence the need to do this since not only
+           does a block's visible attribute not update, but neither does any of
+           them until the next refresh!
+           So the solution is basically to have attribute subscription when a
+           block is added/mounted
+           */
 
-      updateAttributeIconStatus(requestedData.blockName, requestedData.attribute, {
-        value  : 'success',
-        message: null
-      });
+          updateAttributeValue(blockItem.blockName(), "VISIBLE", blockItem.visible());
+          updateAttributeValue(blockItem.blockName(), "X_COORD", blockItem.x());
+          updateAttributeValue(blockItem.blockName(), "Y_COORD", blockItem.y());
 
-      attributeStore.emitChange();
+          //console.log(allBlockAttributes[requestedData.attribute]);
+          /* Update allBlockAttributesIconStatus appropriately */
+
+          updateAttributeIconStatus(blockItem.blockName(), "VISIBLE", {
+            value  : 'success',
+            message: null
+          });
+          updateAttributeIconStatus(blockItem.blockName(), "X_COORD", {
+            value  : 'success',
+            message: null
+          });
+          updateAttributeIconStatus(blockItem.blockName(), "Y_COORD", {
+            value  : 'success',
+            message: null
+          });
+
+          attributeStore.emitChange();
+          } // if blockItem != null
+
+        } // for
+
+
       break;
       }
 
     case
-    appConstants.MALCOLM_SUBSCRIBE_FAILURE
-    :
+    appConstants.MALCOLM_SUBSCRIBE_FAILURE:
       {
-      //winston.log('Error', 'malcolmSubscribeFailure in attributeStore')
-      //winston.info(item.requestedData, item.responseMessage)
-      console.log("malcolmSubscribeFailure in attributeStore");
-      console.log(item.requestedData, item.responseMessage)
-
-      let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      let requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-
-      /* Update allBlockAttributesIconStatus appropriately */
-
-      updateAttributeIconStatus(requestedData.blockName, requestedData.attribute, {
-        value  : 'failure',
-        message: responseMessage
-      });
-
-      attributeStore.emitChange();
       break;
       }
 
     case
-    appConstants.MALCOLM_CALL_SUCCESS
-    :
+    appConstants.MALCOLM_CALL_SUCCESS:
       {
       console.log("malcolmCallSuccess");
 
       /* No responseMessage is specified if it's a success */
       //let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+      if (item.hasOwnProperty('requestedDataToWrite'))
+        {
+        let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
 
-      /* As we will receive the METHOD name in requestedDataToWrite,
-       we need to get rid of the _set_ at the start of requestedDataToWrite.method
-       string in order to update the corresponding attribute/widget properly
-       */
+        /* As we will receive the METHOD name in requestedDataToWrite,
+         we need to get rid of the _set_ at the start of requestedDataToWrite.method
+         string in order to update the corresponding attribute/widget properly
+         */
 
-      let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
+        let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
 
-      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
-        value  : 'success',
-        message: null
-      });
+        updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
+          value  : 'success',
+          message: null
+        });
 
-      attributeStore.emitChange();
+        attributeStore.emitChange();
+        }
       break;
       }
 
@@ -468,6 +458,9 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
       break;
       }
 
+    case appConstants.BLOCKS_UPDATED:
+      break;
+
     default:
       return true
 
@@ -478,17 +471,5 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
   }
 );
 
-function malcolmSubscribeSuccess(id, responseMessage)
-  {
-    //console.log('attributeStore.malcolmSubscribeSuccess: responseMessage ->');
-    //console.log(responseMessage);
-  //updateSchema(responseMessage);
-  }
-
-function malcolmSubscribeFailure(responseMessage)
-  {
-  console.log('attributeStore.malcolmSubscribeFailure: responseMessage ->');
-  console.log(responseMessage);
-  }
 
 module.exports = attributeStore;

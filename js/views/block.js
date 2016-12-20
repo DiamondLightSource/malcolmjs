@@ -37,15 +37,12 @@ let Block = React.createClass(
       console.log(`Block: blockAttributes  id = ${this.props.id}`);
       console.log(blockAttributes);
 
-      if (blockAttributes.hasOwnProperty('MRI'))
-        {
-        MalcolmActionCreators.malcolmSubscribe(this.props.id, [blockAttributes.MRI]);
-        //MalcolmActionCreators.malcolmSubscribe(this.props.id, attribute);
-        }
-
       /** ToDo: This is all wrong for protocol2
        * Layout information is derived from the top-level layout schema
        * whilst block values are derived from the block subscriptions.
+       * And.. whilst we are about it.. subscription requests should NOT be
+       * made in a view - all data should come from the relevant store, which itself should subscribe
+       * (IJG Dev 2016)
        */
 /*
       for (let attribute in blockAttributes)
