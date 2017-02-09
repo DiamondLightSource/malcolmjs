@@ -2,39 +2,39 @@
  * Created by twi18192 on 04/05/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var ReactPanels = require('react-panels');
-var Content     = ReactPanels.Content;
-var Button      = ReactPanels.Button;
+let ReactPanels = require('react-panels');
+let Content     = ReactPanels.Content;
+let Button      = ReactPanels.Button;
 
-var Treeview = require('react-treeview');
+let Treeview = require('react-treeview');
 
-var blockStore     = require('../stores/blockStore');
-var attributeStore = require('../stores/attributeStore');
+let blockStore     = require('../stores/blockStore');
+let attributeStore = require('../stores/attributeStore');
+import MalcolmUtils from '../utils/MalcolmUtils';
+
+
 /* Purely for favContent & configContent */
-//var paneStore = require('../stores/paneStore');
+//let paneStore = require('../stores/paneStore');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-var WidgetTableContainer = require('./widgetTableContainer');
+let WidgetTableContainer = require('./widgetTableContainer');
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
   {
   return {
-    blockAttributes          : attributeStore.getAllBlockAttributes()
-      [SidePaneTabContentsComponent.props.tabObject.label],
-    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()
-      [SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributes          : attributeStore.getAllBlockAttributes()[SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()[SidePaneTabContentsComponent.props.tabObject.label],
     //favContent: paneStore.getFavContent(),
     //configContent: paneStore.getConfigContent()
   }
   }
 
-var SidePaneTabContents = React.createClass(
+let SidePaneTabContents = React.createClass(
   {
     propTypes: {
-      key      : React.PropTypes.string.isRequired,
       tabObject: React.PropTypes.object
     },
     
@@ -91,18 +91,18 @@ var SidePaneTabContents = React.createClass(
        perhaps it should go somewhere else though?
        */
       
-      var methodName = "_set_" + EdgeInfo.toBlockPort;
-      var argsObject = {};
-      var argumentValue;
+      let methodName = "_set_" + EdgeInfo.toBlockPort;
+      let argsObject = {};
+      let argumentValue;
       
       /* Need to know the type of the port value,
        so a get from blockStore may be in order
        */
       
-      for (var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports.length;
+      for (let i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports.length;
            i++)
         {
-        console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
+        //console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
         if (blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo !== null &&
           blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.block === EdgeInfo.fromBlock &&
           blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.port === EdgeInfo.fromBlockPort)
@@ -127,14 +127,14 @@ var SidePaneTabContents = React.createClass(
     generateTabContent: function (blockAttributes)
       {
       
-      var blockAttributeDivs = [];
+      let blockAttributeDivs = [];
       
-      var groupsObject = {};
+      let groupsObject = {};
       
-      for (var attribute in blockAttributes)
+      for (let attribute in blockAttributes)
         {
         
-        if (blockAttributes[attribute].tags === undefined &&
+        if (!MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags") &&
           blockAttributes[attribute].alarm === undefined)
           {
           
@@ -145,32 +145,32 @@ var SidePaneTabContents = React.createClass(
           groupsObject[attribute] = [];
             
           }
-        else if (blockAttributes[attribute].tags !== undefined)
+        else if (MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags"))
           {
+          let groupName;
+          let isWidget   = false;
+          let widgetType;
+          let isInAGroup = false;
+          let widgetParent = blockAttributeDivs;
           
-          var isWidget   = false;
-          var widgetType;
-          var isInAGroup = false;
-          var widgetParent;
-          
-          for (var k = 0; k < blockAttributes[attribute].tags.length; k++)
+          for (let k = 0; k < blockAttributes[attribute].meta.tags.length; k++)
             {
-            if (blockAttributes[attribute].tags[k].indexOf('widget') !== -1)
+            if (blockAttributes[attribute].meta.tags[k].indexOf('widget') !== -1)
               {
               isWidget   = true;
-              widgetType = blockAttributes[attribute].tags[k].slice('widget:'.length);
-              //console.log('sidePaneTabContents.generateTabContent: widgetType = '+widgetType);
+              widgetType = blockAttributes[attribute].meta.tags[k].slice('widget:'.length);
+              console.log('sidePaneTabContents.generateTabContent: widgetType = '+widgetType);
               }
             
             /* Need to find what group the
              attribute belongs to as well
              */
             
-            else if (blockAttributes[attribute].tags[k].indexOf('group') !== -1)
+            else if (blockAttributes[attribute].meta.tags[k].indexOf('group') !== -1)
               {
               
               isInAGroup    = true;
-              var groupName = blockAttributes[attribute].tags[k].slice('group:'.length);
+              groupName = blockAttributes[attribute].meta.tags[k].slice('group:'.length);
                 
               }
             }
@@ -187,12 +187,15 @@ var SidePaneTabContents = React.createClass(
              on isInAGroup with some sort of logic to decided
              what to 'push' to in each case
              */
-            
+            /**
+             * ToDo: Can't see any assignment into groupsObject[]
+             *       How is this working? IJG 6/2/17
+             */
             if (isInAGroup === true)
               {
               widgetParent = groupsObject[groupName];
               }
-            else if (isInAGroup === false)
+            else
               {
               widgetParent = blockAttributeDivs;
               }
@@ -201,7 +204,7 @@ var SidePaneTabContents = React.createClass(
              of props to all widgets
              */
             
-            var commonProps = {
+            let commonProps = {
               blockAttribute      : blockAttributes[attribute],
               blockAttributeStatus: this.state.blockAttributesIconStatus[attribute],
               blockName           : this.props.tabObject.label,
@@ -210,10 +213,9 @@ var SidePaneTabContents = React.createClass(
               key                 : this.props.tabObject.label + attribute + widgetType,
               widgetType          : widgetType
             };
-            
-            widgetParent.push(
-              <WidgetTableContainer {...commonProps} />
-            );
+
+            if (widgetParent !== undefined)
+              widgetParent.push(<WidgetTableContainer {...commonProps} />);
               
             }
             
@@ -227,10 +229,10 @@ var SidePaneTabContents = React.createClass(
           
         }
       
-      for (var group in groupsObject)
+      for (let group in groupsObject)
         {
         blockAttributeDivs.push(
-          <Treeview defaultCollapsed={true}
+          <Treeview defaultCollapsed={false}
                     nodeLabel={
                       <b
                         style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>
@@ -248,9 +250,9 @@ var SidePaneTabContents = React.createClass(
     render: function ()
       {
       
-      console.log('rerendering: ' + this.props.tabObject.label);
+      console.log('sidePaneTabContents.render(): ' + this.props.tabObject.label);
       
-      var tabContent = [];
+      let tabContent = [];
       
       //if(this.props.tabObject.tabType === "Favourites"){
       //  tabContent.push(
@@ -274,11 +276,13 @@ var SidePaneTabContents = React.createClass(
         }
       else if (this.props.tabObject.tabType === 'edge')
         {
-        
+        /**
+         * TODO: I think that button should be Button. CHECK!!
+         */
         tabContent.push(
-          <button key={this.props.tabObject.label + "edgeDeleteButton"}
+          <Button key={this.props.tabObject.label + "edgeDeleteButton"}
                   onClick={this.handleEdgeDeleteButton.bind(null, this.props.tabObject)}
-          >Delete edge</button>
+          >Delete edge</Button>
         );
         }
       

@@ -6,9 +6,10 @@ let AppDispatcher = require('../dispatcher/appDispatcher.js');
 let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
 let assign        = require('../../node_modules/object-assign/index.js');
+import eachOf from 'async/eachOf';
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-let attributeStore        = require('./attributeStore');
+let attributeStore = require('./attributeStore');
 
 import config from "../utils/config";
 import blockCollection from '../classes/blockItems';
@@ -21,7 +22,7 @@ let _stuff = {
   blockList: null
 };
 
-let allBlockInfo = null;
+let allBlockInfo = {};
 
 let initialEdgeInfo = {};
 
@@ -81,10 +82,10 @@ function interactJsDrag(BlockInfo)
  it was that I needed to do, so hopefully then I can trigger the correct function in blockStore after the data has
  been returned/fetched to blockStore successfully?
  */
-function addBlock(blockAttributesObject)
+function addBlock(blockItem)
   {
   // Strip off the block type instance number to just leave the type.
-  let blockType = blockAttributesObject['BLOCKNAME'].value.replace(/[0-9]/g, '');
+  let blockType = blockItem.blockName().replace(/[0-9]/g, '');
 
   let inports  = [];
   let outports = [];
@@ -112,45 +113,59 @@ function addBlock(blockAttributesObject)
    but the OUTPORT block didn't yet exist). If so, proceed to update
    both blocks in allBlockInfo to show that they are connected.
    */
+  /**
+
+   _O/
+   \     Aghh... my head is going to explode!!
+   /\_
+   \  `
+
+   */
 
   let initialEdgeInfoKeyName;
   let initialEdgeInfoKeyValueName;
   let outportsThatExistInInitialEdgeInfo = [];
 
 
-  for (let attribute in blockAttributesObject)
-    {
+  let names = blockItem.getAttributeNames();
 
-    if (blockAttributesObject[attribute].tags !== undefined)
+  for (let nameindex = 0; nameindex < names.length; nameindex++)
+    {
+    let attrName  = names[nameindex];
+    let attribute = blockItem.getAttribute(attrName);
+    let tags      = blockItem.getAttributeTags(attrName);
+    if (tags !== null)
       {
-      for (let i = 0; i < blockAttributesObject[attribute].tags.length; i++)
+      for (let i = 0; i < tags.length; i++)
         {
-        let inportRegExp  = /flowgraph:inport/;
-        let outportRegExp = /flowgraph:outport/;
-        if (inportRegExp.test(blockAttributesObject[attribute].tags[i]) === true)
+        let inportRegExp  = /inport/;
+        let outportRegExp = /outport/;
+        if (inportRegExp.test(tags[i]) === true)
           {
-          let inportName = attribute;
+          let inportName = attrName;
 
           /* Find the type of the inport value too,
            via the flowgraph tag
            */
 
-          let inportValueType = blockAttributesObject[attribute].tags[i]
-            .slice('flowgraph:inport:'.length);
+          let inportValueType = tags[i].split(':')[1];
 
           /* Need to check if the inport is connected to
            anything as well, so then edges will be preserved
            on a window refresh!
            */
-          let inportValue = blockAttributesObject[attribute].value;
+          let inportValue = attribute.value;
 
           /* Initially, the port is always added as being disconnected,
-           even if it is connected. This is to accomodate not being able
+           even if it is connected. This is to accommodate not being able
            to add any edges until we can be certain that both involved
            blocks exist within the GUI/store
            */
+          /**
+           * inportValue should be of the form: "inport:bool:ZERO"
+           */
 
-          if (allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] === undefined)
+          if (allBlockInfo[inportValue.slice(0, inportValue.indexOf(':'))] === undefined)
             {
 
             inports.push(
@@ -175,13 +190,13 @@ function addBlock(blockAttributesObject)
                so need to do more here
                */
 
-              initialEdgeInfoKeyValueName = blockAttributesObject['BLOCKNAME'].value + "." + attribute;
+              initialEdgeInfoKeyValueName = blockItem.blockName() + ":" + attrName;
 
               initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName;
 
               }
             }
-          else if (allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] !== undefined)
+          else if (allBlockInfo[inportValue.slice(0, inportValue.indexOf(':'))] !== undefined)
             {
             /* Then the outport block already exists, so can
              simply push the inport like normal!
@@ -190,8 +205,13 @@ function addBlock(blockAttributesObject)
             console.log("outport block already exists, so can just add the wire initially!");
             console.log(initialEdgeInfo);
 
-            let outportBlockName = inportValue.slice(0, inportValue.indexOf('.'));
-            let outportName      = inportValue.slice(inportValue.indexOf('.') + 1);
+            let outportBlockName;
+            let outportName;
+            if (inportValue.indexOf(':') != -1)
+              {
+              outportBlockName = inportValue.slice(0, inportValue.indexOf(':'));
+              outportName      = inportValue.slice(inportValue.indexOf(':') + 1);
+              }
 
             inports.push(
               {
@@ -209,16 +229,15 @@ function addBlock(blockAttributesObject)
             }
 
           }
-        else if (outportRegExp.test(blockAttributesObject[attribute].tags[i]) === true)
+        else if (outportRegExp.test(tags[i]) === true)
           {
-          let outportName = attribute;
+          let outportName = attrName;
 
-          let outportValueType = blockAttributesObject[attribute].tags[i]
-            .slice('flowgraph:outport:'.length);
+          let outportValueType = tags[i].split(':')[1];
 
-          let outportValue = blockAttributesObject[attribute].value;
+          let outportValue = attribute.value;
 
-          initialEdgeInfoKeyName = blockAttributesObject['BLOCKNAME'].value + '.' + attribute;
+          initialEdgeInfoKeyName = blockItem.blockName() + '.' + attrName;
 
           if (initialEdgeInfo[initialEdgeInfoKeyName] !== undefined)
             {
@@ -240,11 +259,11 @@ function addBlock(blockAttributesObject)
 
     }
 
-  allBlockInfo[blockAttributesObject['BLOCKNAME'].value] = {
+  allBlockInfo[blockItem.blockName()] = {
     type    : blockType,
-    label   : blockAttributesObject['BLOCKNAME'].value,
-    iconURL : blockAttributesObject['ICON'].value,
-    name    : '',
+    label   : blockItem.blockName(),
+    //iconURL : blockAttributesObject['ICON'].value, todo
+    name    : blockItem.blockName(),
     inports : inports,
     outports: outports
   };
@@ -264,10 +283,11 @@ function addBlock(blockAttributesObject)
 
   }
 
-function removeBlock(blockId)
+function removeBlock(blockItem)
   {
-  delete allBlockInfo[blockId];
-  delete blockPositions[blockId];
+  let name = blockItem.blockName();
+  delete allBlockInfo[name];
+  delete blockPositions[name];
   }
 
 function updateAnInitialEdge(initialEdgeInfoKey)
@@ -275,11 +295,11 @@ function updateAnInitialEdge(initialEdgeInfoKey)
 
   let initialEdgeInfoValue = initialEdgeInfo[initialEdgeInfoKey];
 
-  let outportBlockName = initialEdgeInfoKey.slice(0, initialEdgeInfoKey.indexOf('.'));
-  let outportName      = initialEdgeInfoKey.slice(initialEdgeInfoKey.indexOf('.') + 1);
+  let outportBlockName = initialEdgeInfoKey.slice(0, initialEdgeInfoKey.indexOf(':'));
+  let outportName      = initialEdgeInfoKey.slice(initialEdgeInfoKey.indexOf(':') + 1);
 
-  let inportBlockName = initialEdgeInfoValue.slice(0, initialEdgeInfoValue.indexOf('.'));
-  let inportName      = initialEdgeInfoValue.slice(initialEdgeInfoValue.indexOf('.') + 1);
+  let inportBlockName = initialEdgeInfoValue.slice(0, initialEdgeInfoValue.indexOf(':'));
+  let inportName      = initialEdgeInfoValue.slice(initialEdgeInfoValue.indexOf(':') + 1);
 
   /* Now to go through allBlockInfo and change the connected
    attributes of the inports and outports to true
@@ -319,33 +339,51 @@ function updateAnInitialEdge(initialEdgeInfoKey)
 
 function addEdgeViaMalcolm(Info)
   {
+  // TODO:
+  //return; // !!!!!!! Temporary disable function - must put this back once sorted!!!!!!
+  //debugger;
   //window.alert(allBlockInfo[Info.inportBlock.label]);
-  for (let i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++)
+  if (allBlockInfo[Info.inportBlock] !== undefined)
     {
-    if (allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort)
+    for (let i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++)
       {
-      let addEdgeToInportBlock                              = {
-        block: Info.outportBlock,
-        port : Info.outportBlockPort
-      };
-      allBlockInfo[Info.inportBlock].inports[i].connected   = true;
-      allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+      if (allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort)
+        {
+        let addEdgeToInportBlock                              = {
+          block: Info.outportBlock,
+          port : Info.outportBlockPort
+        };
+        allBlockInfo[Info.inportBlock].inports[i].connected   = true;
+        allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+        }
       }
     }
-
-  for (let j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++)
+  else
     {
-    if (allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort)
-      {
-      let addEdgeToOutportBlock                             = {
-        block: Info.inportBlock,
-        port : Info.inportBlockPort
-      };
-      allBlockInfo[Info.outportBlock].outports[j].connected = true;
-      allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
-      }
+    console.log('ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.inportBlock attribute');
+    console.log(allBlockInfo);
     }
 
+  if (allBlockInfo[Info.outportBlock] !== undefined)
+    {
+    for (let j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++)
+      {
+      if (allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort)
+        {
+        let addEdgeToOutportBlock                             = {
+          block: Info.inportBlock,
+          port : Info.inportBlockPort
+        };
+        allBlockInfo[Info.outportBlock].outports[j].connected = true;
+        allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
+        }
+      }
+    }
+  else
+    {
+    console.log('ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock attribute');
+    console.log(allBlockInfo);
+    }
   }
 
 function removeEdgeViaMalcolm(Info)
@@ -375,45 +413,278 @@ function removeEdgeViaMalcolm(Info)
 
 let flowChartStore = require('./flowChartStore');
 
-let blockStore = assign({}, EventEmitter.prototype, {
+class BlockStore extends EventEmitter {
+constructor()
+  {
+  super();
+  blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
+  }
 
-  addChangeListener   : function (cb)
+addChangeListener(cb)
+  {
+  this.on(CHANGE_EVENT, cb);
+  }
+
+removeChangeListener(cb)
+  {
+  this.removeListener(CHANGE_EVENT, cb);
+  }
+
+emitChange()
+  {
+  //console.log('blockStore.emitChange ^V^V^V^');
+  this.emit(CHANGE_EVENT);
+  }
+
+getAllBlockInfo()
+  {
+  if (allBlockInfo === null)
     {
-    this.on(CHANGE_EVENT, cb)
-    },
-  removeChangeListener: function (cb)
-    {
-    this.removeListener(CHANGE_EVENT, cb)
-    },
-  emitChange          : function ()
-    {
-    this.emit(CHANGE_EVENT)
-    },
+    allBlockInfo = {};
 
-  getAllBlockInfo: function ()
-    {
+    //MalcolmActionCreators.initialiseFlowChart(config.getDeviceName());
 
-    if (allBlockInfo === null)
-      {
-      allBlockInfo = {};
-
-      MalcolmActionCreators.initialiseFlowChart(config.getDeviceName());
-
-      return {};
-      }
-    else
-      {
-      return allBlockInfo;
-      }
-    },
-
-  getBlockPositions: function ()
-    {
-    return blockPositions;
+    return {};
     }
+  else
+    {
+    return allBlockInfo;
+    }
+  }
 
-});
+getBlockPositions()
+  {
+  return blockPositions;
+  }
 
+
+/**
+ * onChangeBlockCollectionCallback()
+ * Callback function called when blockCollection emits an event.
+ * Note that this will reference the EventEmitter, not the blockStore instance
+ * as might be expected. IJG 9/1/17
+ *
+ * @param event
+ * @param items
+ */
+onChangeBlockCollectionCallback(items)
+  {
+  //console.log(`blockStore.onChangeBlockCollectionCallback(): items = ${items}`);
+  for (let i = 0; i < items.length; i++)
+    {
+    let index = items[i];
+    blockStore.blockUpdated(index);
+    }
+  }
+
+/**
+ * Determine whether this blockItem has a position move to be applied.
+ * @param blockItem
+ */
+updateBlockPosition(blockItem)
+  {
+  let updated = false;
+
+  if (blockItem !== null)
+    {
+    let blockName = blockItem.blockName();
+    /* Undoing the zoom scale multiplication to check against
+     the server's unscaled coords */
+
+    /* When a block is removed/hidden, its coords get reset to
+     (0,0), so need to check if they still exist in blockPositions
+     in case a coord change I catch here is due to removing a block
+     */
+
+    if (blockPositions[blockName] !== undefined)
+      {
+      // --- This section used to be in MALCOLM_GET_SUCCESS
+      let xCoord = blockItem.x();
+      let yCoord = blockItem.y();
+
+      /* Add the block to allBlockInfo! */
+
+      //console.log('blockStore MALCOLM_GET_SUCCESS: item.responseMessage - iteration:');
+      //console.log(blockName);
+
+      //        if (item.responseMessage.layout.value.visible[i] === true)
+      //          {
+      //console.log('blockStore MALCOLM_GET_SUCCESS:' + '  name: ' + blockName + ' -- item.responseMessage...visible : true');
+      appendToBlockPositions(blockName, xCoord, yCoord);
+      /* Pass addBlock the block object from allBlockAttributes in attributeStore
+       instead of relying on testAllBlockInfo
+       */
+      addBlock(blockItem);
+      // -------------------
+
+      // --- This section used to be in MALCOLM_SUBSCRIBE_SUCCESS
+      if (blockPositions[blockName].x * flowChartStore.getGraphZoomScale() !== blockItem.x())
+        {
+        blockPositions[blockName] = update(blockPositions[blockName],
+          {x: {$set: blockItem.x() * 1 / flowChartStore.getGraphZoomScale()}});
+        updated                   = true;
+        }
+      if (blockPositions[blockName].y * flowChartStore.getGraphZoomScale() !== blockItem.y())
+        {
+        blockPositions[blockName] = update(blockPositions[blockName],
+          {y: {$set: blockItem.y() * 1 / flowChartStore.getGraphZoomScale()}});
+        updated                   = true;
+        }
+      // -------------------
+
+      }
+    }
+  return (updated);
+  }
+
+
+blockUpdated(blockIndex)
+  {
+  let isInportDropdown = false;
+  let hasFlowgraphTag  = false;
+
+  let blockItem = blockCollection.getBlockItem(blockIndex);
+  if (blockItem !== null)
+    {
+    let positionUpdated = blockStore.updateBlockPosition(blockItem);
+
+    let attrNames = blockItem.getAttributeNames();
+
+    if (attrNames.length > 0)
+      {
+      for (let a = 0; a < attrNames.length; a++)
+        {
+        let attributeName = attrNames[a];
+        let tags          = blockItem.getAttributeTags(attributeName);
+        isInportDropdown  = false;
+        hasFlowgraphTag   = false;
+
+        for (let p = 0; p < tags.length; p++)
+          {
+          if (tags[p].indexOf('widget:combo') !== -1)
+            {
+            isInportDropdown = true;
+            }
+          else if ((tags[p].indexOf('flowgraph') !== -1) || (tags[p].indexOf('inport') !== -1) || (tags[p].indexOf('outport') !== -1))
+            {
+            hasFlowgraphTag = true;
+            }
+          else if (tags[p] === 'widget:toggle')
+            {
+
+            /* What about when a block's own visible attribute gets changed? */
+
+            /**
+             * TODO: DEBUG
+             */
+            if (blockItem.visible)
+            //if (true)
+              {
+              /* Trying to add a blockadd when its visibility is
+               changed to 'Show'
+               */
+
+              appendToBlockPositions(blockItem.blockName(),
+                flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+
+              /* Pass addBlock the block object from allBlockAttributes in attributeStore
+               instead of relying on testAllBlockInfo
+               */
+              addBlock(blockItem);
+              positionUpdated = true;
+              }
+            else
+              {
+              /**
+               * block not visible, so remove
+               the info from allBlockInfo.
+               */
+              removeBlock(blockItem);
+              positionUpdated = true;
+              }
+            }
+          }
+
+        if (isInportDropdown === true && hasFlowgraphTag === true)
+          {
+          // Try placing this section here, as I think anything that is tagged as gui
+          // should be recorded in block positions.
+          appendToBlockPositions(blockItem.blockName(),
+            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+
+          /* Pass addBlock the block object from allBlockAttributes in attributeStore
+           instead of relying on testAllBlockInfo
+           */
+          addBlock(blockItem);
+          positionUpdated = true;
+
+
+          /* Then update allBlockInfo with the new edge! */
+          let attribute = blockItem.getAttribute(attributeName);
+          if (attribute.hasOwnProperty("value"))
+            {
+            let inportBlock     = blockItem.blockName();
+            let inportBlockPort = attributeName;
+
+            // TODO: This truncates the string by one character if '.' is not fount (-1 returned)
+            // So check what we are testing and put temporary test for '.' before slicing.
+            //
+            let outportBlock;
+            //if (attribute.value.indexOf('.'))
+            if (attribute.value.indexOf(':'))
+              outportBlock = attribute.value.slice(0, attribute.value.indexOf(':'));
+            else
+              outportBlock = attribute.value;
+
+            let outportBlockPort = attribute.value.slice(attribute.value.indexOf(':') + 1);
+
+            let defval = blockItem.getAttributeDefaultValue(attributeName);
+            if (attribute.value.indexOf(defval) === -1)
+              {
+
+              addEdgeViaMalcolm({
+                inportBlock     : inportBlock,
+                inportBlockPort : inportBlockPort,
+                outportBlock    : outportBlock,
+                outportBlockPort: outportBlockPort
+              });
+              }
+            else if (attribute.value.indexOf(defval) !== -1)
+              {
+              /* Then the edge needs to be deleted! */
+
+              /* Update: note that this could also occur when the
+               block with the inport is REMOVED via a toggle switch,
+               so then in that case the edge has been removed when the
+               block got deleted from allBlockInfo, ie, there's no need
+               to remove the edge in that case as it has effectively
+               already been done implicitly via block removal
+               */
+
+              if (allBlockInfo[inportBlock] !== undefined)
+                {
+                removeEdgeViaMalcolm({
+                  inportBlock    : inportBlock,
+                  inportBlockPort: inportBlockPort,
+                });
+                //console.log(allBlockInfo[inportBlock]);
+                }
+              }
+            positionUpdated = true;
+            }
+          }
+        }
+      if (positionUpdated === true)
+        {
+        blockStore.emitChange();
+        }
+      }
+    } // if (blockItem !== null)
+  } // blockUpdated()
+
+} // Class
+
+const blockStore = new BlockStore();
 
 blockStore.dispatchToken = AppDispatcher.register(
   function (payload)
@@ -432,293 +703,6 @@ blockStore.dispatchToken = AppDispatcher.register(
       break;
 
     /* WebAPI use */
-
-    case appConstants.MALCOLM_GET_SUCCESS:
-
-      //AppDispatcher.waitFor([flowChartStore.dispatchToken]);
-
-      /* Check if it's the initial FlowGraph structure, or
-       if it's something else
-       */
-
-      //console.log('blockStore MALCOLM_GET_SUCCESS: item.responseMessage:');
-      //console.log(item.responseMessage);
-      if (item.responseMessage.hasOwnProperty('layout'))
-        {
-        let somethingUpdated = false;
-        for (let i = 0; i < item.responseMessage.layout.value.name.length; i++)
-          {
-          /* Do the block adding to testAllBlockInfo stuff */
-
-          let blockName = item.responseMessage.layout.value.name[i];
-          let xCoord    = item.responseMessage.layout.value.x[i];
-          let yCoord    = item.responseMessage.layout.value.y[i];
-
-          /* Add the block to allBlockInfo! */
-
-          //console.log('blockStore MALCOLM_GET_SUCCESS: item.responseMessage - iteration:');
-          //console.log(blockName);
-
-          //        if (item.responseMessage.layout.value.visible[i] === true)
-          //          {
-          //console.log('blockStore MALCOLM_GET_SUCCESS:' + '  name: ' + blockName + ' -- item.responseMessage...visible : true');
-          appendToBlockPositions(blockName, xCoord, yCoord);
-          /* Pass addBlock the block object from allBlockAttributes in attributeStore
-           instead of relying on testAllBlockInfo
-           */
-          AppDispatcher.waitFor([attributeStore.dispatchToken]);
-          let obj = attributeStore.getAllBlockAttributes()[blockName];
-          //console.log('blockStore MALCOLM_GET_SUCCESS:  obj -> ');
-          //console.log(obj);
-          if ((obj != null) && (Object.keys(obj).length !== 0))
-            {
-            addBlock(obj);
-            somethingUpdated = true;
-            // TODO: This is not efficient. Should consider calling blockStore.emitChange outside for loop.
-            // IJG: 23/11/16 - done 7/12/16
-            }
-          }
-        if (somethingUpdated)
-          {
-          blockStore.emitChange();
-          }
-        }
-
-      break;
-
-    case
-    appConstants.MALCOLM_GET_FAILURE:
-      console.log("blockStore MALCOLM GET ERROR!");
-      //blockStore.emitChange();
-      break;
-
-    case appConstants.BLOCKS_UPDATED:
-      {
-      /**
-       * item (from action.item) is an array of block indeces that have been updated.
-       */
-      console.log(`blockStore BLOCKS_UPDATED callback: item = ${item}`);
-
-      let isWidgetCombo = false;
-      let isGroupInputs = false;
-
-      console.log("BLOCKS_UPDATED in paneStore");
-      for (let i = 0; i < item.length; i++)
-        {
-        let index     = item[i];
-        let blockItem = blockCollection.getBlockItem(index);
-        if (blockItem != null)
-          {
-
-          }
-        }
-      }
-
-    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      console.log("blockStore malcolmSubscribeSuccess");
-      // Wait for blockCollection to have fully processed the subscribe return
-      AppDispatcher.waitFor([blockCollection.dispatchToken]);
-
-      /* Check the tags for 'widget:combo', it'll be
-       indicating that a dropdown was used (it'll also
-       cause things like the dropdowns with 'triggered'
-       and stuff to emit a change, but for now that'll
-       work just fine
-       */
-
-      /* UPDATE: could also search for the 'flowgraph' tag
-       to make sure that it's a inport dropdown menu and
-       not any other type of attribute
-       */
-
-      /* Need to listen for block coordinate/position changes too */
-
-      /* When a block is hidden, an error appears saying that
-       blockPositions[requestedData.blockName] is undefined,
-       since the block has in fact been removed from that object.
-       I basically need to start doing unsubscriptions I think,
-       the other way is to simply put another if statement here
-       */
-
-      if (item.requestedData.attribute === 'X_COORD')
-        {
-
-        /* Should first check if the position of the block isn't
-         already equal to the position grabbed from the server:
-         this is essentially because the block positions are updated
-         locally as well as from the server, changing the position
-         via the server is for when you have't dragged a block in
-         the GUI, but change it via the server in some other way
-         */
-
-        let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        let requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-
-        /* Undoing the zoom scale multiplication to check against
-         the server's unscaled coords */
-
-        /* When a block is removed/hidden, its coords get reset to
-         (0,0), so need to check if they still exist in blockPositions
-         in case a coord change I catch here is due to removing a block
-         */
-
-        if (blockPositions[requestedData.blockName] !== undefined)
-          {
-
-          if (blockPositions[requestedData.blockName].x * flowChartStore.getGraphZoomScale() !==
-            responseMessage.value)
-            {
-
-            blockPositions[requestedData.blockName] = update(blockPositions[requestedData.blockName],
-              {x: {$set: responseMessage.value * 1 / flowChartStore.getGraphZoomScale()}});
-
-            blockStore.emitChange();
-            }
-          }
-
-        }
-      else if (item.requestedData.attribute === 'Y_COORD')
-        {
-
-        let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-        let requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-
-        /* Undoing the zoom scale multiplication to check against
-         the server's unscaled coords */
-
-        if (blockPositions[requestedData.blockName] !== undefined)
-          {
-
-          if (blockPositions[requestedData.blockName].y * flowChartStore.getGraphZoomScale() !==
-            responseMessage.value)
-            {
-
-            blockPositions[requestedData.blockName] = update(blockPositions[requestedData.blockName],
-              {y: {$set: responseMessage.value * 1 / flowChartStore.getGraphZoomScale()}});
-
-            blockStore.emitChange();
-            }
-          }
-
-        }
-
-      let isInportDropdown = false;
-      let hasFlowgraphTag  = false;
-
-      console.log('blockStore MALCOLM_SUBSCRIBE_SUCCESS: item.responseMessage:');
-      console.log(item.responseMessage);
-
-      if (item.responseMessage.tags !== undefined)
-        {
-        for (let p = 0; p < item.responseMessage.tags.length; p++)
-          {
-          if (item.responseMessage.tags[p].indexOf('widget:combo') !== -1)
-            {
-            isInportDropdown = true;
-            }
-          else if (item.responseMessage.tags[p].indexOf('flowgraph') !== -1)
-            {
-            hasFlowgraphTag = true;
-            }
-          else if (item.responseMessage.tags[p] === 'widget:toggle')
-            {
-
-            /* What about when a block's own visible attribute gets changed? */
-
-            if (item.requestedData.blockName === 'VISIBILITY')
-              {
-              if (item.responseMessage.value === 'Show')
-                {
-                /* Trying to add a block when its visibility is
-                 changed to 'Show'
-                 */
-
-                appendToBlockPositions(item.requestedData.attribute,
-                  flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
-
-                /* Pass addBlock the block object from allBlockAttributes in attributeStore
-                 instead of relying on testAllBlockInfo
-                 */
-                AppDispatcher.waitFor([attributeStore.dispatchToken]);
-                let obj = attributeStore.getAllBlockAttributes()[item.requestedData.attribute];
-
-                if (Object.keys(obj).length !== 0)
-                  {
-                  addBlock(obj);
-                  blockStore.emitChange();
-                  }
-                }
-              else if (item.responseMessage.value === 'Hide')
-                {
-                /* Should invoke a removeBlock function to remove
-                 the info from allBlockInfo
-                 */
-                removeBlock(item.requestedData.attribute);
-                blockStore.emitChange();
-                }
-              }
-            }
-          }
-        }
-
-      if (isInportDropdown === true && hasFlowgraphTag === true)
-        {
-        /* Then update allBlockInfo with the new edge! */
-
-        let requestedData   = JSON.parse(JSON.stringify(item.requestedData));
-        let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-
-        let inportBlock     = requestedData.blockName;
-        let inportBlockPort = requestedData.attribute;
-
-        let outportBlock     = responseMessage.value.slice(0, responseMessage.value.indexOf('.'));
-        let outportBlockPort = responseMessage.value.slice(responseMessage.value.indexOf('.') + 1);
-
-        if (responseMessage.value.indexOf('ZERO') === -1)
-          {
-
-          addEdgeViaMalcolm({
-            inportBlock     : inportBlock,
-            inportBlockPort : inportBlockPort,
-            outportBlock    : outportBlock,
-            outportBlockPort: outportBlockPort
-          });
-          }
-        else if (responseMessage.value.indexOf('ZERO') !== -1)
-          {
-          /* Then the edge needs to be deleted! */
-
-          /* Update: note that this could also occur when the
-           block with the inport is REMOVED via a toggle switch,
-           so then in that case the edge has been removed when the
-           block got deleted from allBlockInfo, ie, there's no need
-           to remove the edge in that case as it has effectively
-           already been done implicitly via block removal
-           */
-
-          if (allBlockInfo[inportBlock] !== undefined)
-            {
-            removeEdgeViaMalcolm({
-              inportBlock    : inportBlock,
-              inportBlockPort: inportBlockPort,
-            });
-            //console.log(allBlockInfo[inportBlock]);
-            }
-
-          }
-
-        blockStore.emitChange();
-        }
-
-
-      break;
-
-    case
-    appConstants.MALCOLM_SUBSCRIBE_FAILURE
-    :
-      console.log("malcolmSubscribeFailure");
-      //blockStore.emitChange();
-      break;
 
     case
     appConstants.MALCOLM_CALL_SUCCESS

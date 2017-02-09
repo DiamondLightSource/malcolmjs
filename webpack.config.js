@@ -28,7 +28,12 @@ var config = {
         exclude: /node_modules/,
         test: /\.js?/,
         include: [APP_DIR, path.resolve(__dirname, 'components')],
-        loader: 'babel'
+        loader: 'babel',
+        query:
+        {
+          presets:['es2015', 'react'],
+          plugins: ['transform-object-rest-spread']
+        }
       },
       {test: /\.json$/, loader: 'json'},
       {

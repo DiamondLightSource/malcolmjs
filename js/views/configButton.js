@@ -2,11 +2,11 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var React = require('react');
-var mainPaneStore = require('../stores/mainPaneStore');
-var mainPaneActions = require('../actions/mainPaneActions');
+let React = require('react');
+let mainPaneStore = require('../stores/mainPaneStore');
+let mainPaneActions = require('../actions/mainPaneActions');
 
-var ButtonStyle = {
+let ButtonStyle = {
   backgroundColor: 'grey',
   height: 25,
   width: 70,
@@ -25,7 +25,7 @@ var ButtonStyle = {
 
 };
 
-var ButtonTitlePadding = {
+let ButtonTitlePadding = {
   position: 'relative',
   top: -6
 
@@ -37,7 +37,7 @@ var ButtonTitlePadding = {
 //  }
 //}
 
-var ConfigButton = React.createClass({
+let ConfigButton = React.createClass({
   //getInitialState: function(){
   //  return getConfigButtonState();
   //},
@@ -45,6 +45,10 @@ var ConfigButton = React.createClass({
   //_onChange: function(){
   //  this.setState(getConfigButtonState)
   //},
+
+  propTypes: {
+    configTabOpen      : React.PropTypes.func
+  },
 
   handleActionConfigToggle:function(){
     mainPaneActions.toggleConfigPanel("this is the item");

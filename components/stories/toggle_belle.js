@@ -2,9 +2,9 @@
  * Created by ig43 on 03/08/16.
  */
 import React from 'react';
-var belle = require('belle');
-var Toggle = belle.Toggle;
-var Choice = belle.Choice;
+let belle = require('belle');
+let Toggle = belle.Toggle;
+let Choice = belle.Choice;
 //import Toggle from 'belle';
 import { storiesOf, action } from '@kadira/storybook';
 

@@ -2,26 +2,26 @@
  * Created by twi18192 on 25/01/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var MainPane       = require('./mainPane');
-var SidePane       = require('./sidePane');
-var ModalDialogBox = require('./modalDialogBox');
+let MainPane       = require('./mainPane');
+let SidePane       = require('./sidePane');
+let ModalDialogBox = require('./modalDialogBox');
 
-var mainPaneStore = require('../stores/mainPaneStore');
-var sidePaneStore = require('../stores/sidePaneStore');
-var paneStore     = require('../stores/paneStore');
+let mainPaneStore = require('../stores/mainPaneStore');
+let sidePaneStore = require('../stores/sidePaneStore');
+let paneStore     = require('../stores/paneStore');
 
-var paneActions = require('../actions/paneActions');
+let paneActions = require('../actions/paneActions');
 
-var SideBar = require('react-sidebar').default;
+let SideBar = require('react-sidebar').default;
 
 // Needed for onTouchTap
 // todo: ????
 //import injectTapEventPlugin from 'react-tap-event-plugin';
 //injectTapEventPlugin();
 
-var MainTabbedViewStyle = {
+let MainTabbedViewStyle = {
   "height" : "100%",
   "width"  : "100%",
   minWidth : 200,
@@ -29,14 +29,14 @@ var MainTabbedViewStyle = {
   display  : 'inlineBlock'
 };
 
-var SideTabbedViewStyle = {
+let SideTabbedViewStyle = {
   float   : 'right',
   "height": "100%",
   "width" : "100%",
   maxWidth: 400
 };
 
-var BothPanesContainerStyle = {
+let BothPanesContainerStyle = {
   margin  : 0,
   padding : 0,
   //display: 'flex',
@@ -44,7 +44,7 @@ var BothPanesContainerStyle = {
   "width" : "100%"
 };
 
-var SidebarStyling = {
+let SidebarStyling = {
   root      : {
     position : 'absolute',
     id       : "root",
@@ -142,7 +142,7 @@ function getBothPanesState()
   }
   }
 
-var BothPanes = React.createClass(
+let BothPanes = React.createClass(
   {
     getInitialState: function ()
       {
@@ -156,16 +156,16 @@ var BothPanes = React.createClass(
 
     componentDidMount: function ()
       {
-      var mql = window.matchMedia(`(min-width: 800px)`);
+      let mql = window.matchMedia(`(min-width: 800px)`);
       mainPaneStore.addChangeListener(this._onChange);
       paneStore.addChangeListener(this._onChange);
       sidePaneStore.addChangeListener(this._onChange);
 
       mql.addListener(this.windowWidthMediaQueryChanged);
       this.setState({mql: mql}, function ()
-        {
-        paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
-        });
+      {
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+      });
       },
     componentWillUnmount(){
     mainPaneStore.removeChangeListener(this._onChange);
@@ -183,7 +183,7 @@ var BothPanes = React.createClass(
     render: function ()
       {
 
-      console.log("render: sidebar (BothPanes)");
+      //console.log("render: sidebar (BothPanes)");
 
       return (
         <div id="BothPanesContainer" style={BothPanesContainerStyle}>

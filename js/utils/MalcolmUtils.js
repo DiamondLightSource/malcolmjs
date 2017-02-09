@@ -2,7 +2,7 @@
  * Created by twi18192 on 02/03/16.
  */
 
-  //let MalcolmWebSocketClient = require('../fluxWebsocketClient');
+//let MalcolmWebSocketClient = require('../fluxWebsocketClient');
 import MalcolmWebSocketClient from '../wsWebsocketClient';
 import idLookupTableFunctions from './idLookupTable';
 import malcolmProtocol from "../utils/malcolmProtocol";
@@ -14,7 +14,7 @@ class Utils {
 
 constructor()
   {
-  this.webSocketOpen   = false;
+  this.webSocketOpen = false;
   MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen);
   MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose);
   }
@@ -90,11 +90,10 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
   let id = MalcolmWebSocketClient.getNextAvailableId();
   MalcolmWebSocketClient.incrementId();
   let message                               = {};
-  message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDCall();
+  message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPost();
   message['id']                             = id;
   message['endpoint']                       = requestedDataToWrite;
-  message['method']                         = method;
-  message['arguments']                      = args;
+  message['parameters']                     = {'method':method, 'arguments':args};
   let messageJson                           = JSON.stringify(message);
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
@@ -103,9 +102,37 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
     requestedData  : requestedDataToWrite
   });
 
+  console.log(`MalcolmUtils.malcolmCall(): ==>`);
+  console.log(messageJson);
   MalcolmWebSocketClient.sendText(messageJson);
+
+  return(id);
   }
 
+
+malcolmPut(requestedDataToWrite, endpoint, value, successCallback, failureCallback)
+  {
+  let id = MalcolmWebSocketClient.getNextAvailableId();
+  MalcolmWebSocketClient.incrementId();
+  let message                               = {};
+  message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPut();
+  message['id']                             = id;
+  message['endpoint']                       = endpoint;
+  message['value']                          = JSON.stringify(value);
+  let messageJson                           = JSON.stringify(message);
+
+  idLookupTableFunctions.addIdCallbacks(id, messageJson, {
+    successCallback: successCallback,
+    failureCallback: failureCallback,
+    requestedData  : requestedDataToWrite
+  });
+
+  console.log(`MalcolmUtils.malcolmPut(): ==>`);
+  console.log(messageJson);
+  MalcolmWebSocketClient.sendText(messageJson);
+
+  return(id);
+  }
 
 /*
  Check object for nested property. If a given property at
@@ -114,17 +141,22 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
 
 hasOwnNestedProperties(obj /*, level1, level2, ... levelN*/)
   {
-  var args = Array.prototype.slice.call(arguments, 1);
-
-  for (var i = 0; i < args.length; i++)
+  let ret = true;
+  if (obj !== null)
     {
-    if (!obj || !obj.hasOwnProperty(args[i]))
+    let args = Array.prototype.slice.call(arguments, 1);
+
+    for (let i = 0; i < args.length; i++)
       {
-      return false;
+      if (!obj || !obj.hasOwnProperty(args[i]))
+        {
+        ret = false;
+        break;
+        }
+      obj = obj[args[i]];
       }
-    obj = obj[args[i]];
     }
-  return true;
+  return ret;
   }
 
 
@@ -175,7 +207,7 @@ isEquivalent(a, b)
 
 }
 
-let MalcolmUtils = new Utils();
+const MalcolmUtils = new Utils();
 
 export {MalcolmUtils as default};
 //export default MalcolmUtils;

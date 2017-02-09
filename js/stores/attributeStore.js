@@ -3,7 +3,8 @@
  */
 import blockCollection from '../classes/blockItems';
 import MalcolmUtils from '../utils/MalcolmUtils';
-import MalcolmActionCreators from '../actions/MalcolmActionCreators'
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import eachOf from 'async/eachOf';
 
 let AppDispatcher = require('../dispatcher/appDispatcher.js');
 let appConstants  = require('../constants/appConstants.js');
@@ -23,37 +24,66 @@ let allBlockItems = [];
 
 /**
  *
- * @param {number} blockId - This is actually a string looking at block.js - hmmm...
- * @param {string} blockAttribute
- * @param {string|number} attributeValue
+ * addBlockAttribute():
+ * Given a blockItem, copy it into the attributeStore in the form that's expected by old clients of
+ * attributeStore. This is a short-term kludge to get this suite working as quickly as possible, but should be
+ * cleaned up and rationalised ASAP.
+ * IJG Feb 2017.
+ *
+ * @param {string} blockItem   - block item instance to add to store
+ *
  */
-allBlockAttributes.addBlockAttribute = function (blockId, blockAttribute, attributeValue)
+allBlockAttributes.addBlockAttributes = function (blockItem)
   {
-  //updateAttributeValue(blockId, blockAttribute, attributeValue);
-  //console.log(`allBlockAttributes.addBlockAttribute: blockId = ${blockId}`);
-  if (!this.hasOwnProperty(blockId.toString()))
-  //if (!this.length > blockId)
+  //updateAttributeValue(blockName, blockAttribute, attributeValue);
+  //console.log(`allBlockAttributes.addBlockAttribute: blockName = ${blockName}`);
+  let blockName  = blockItem.blockName();
+  let attributes = blockItem.getAllBlockAttributes();
+  if (!this.hasOwnProperty(blockName))
     {
-    this[blockId]               = {};
-    this[blockId].attributes    = [];
-    this[blockId]['BLOCKNAME']  = {};
-    this[blockId]['ICON']       = {};
-    this[blockId]['ICON'].value = '';
+    this[blockName]               = {};
+    this[blockName]['BLOCKNAME']  = blockName;
+    this[blockName]['ICON']       = {};
+    this[blockName]['ICON'].value = '';
     }
-  this[blockId]['BLOCKNAME'].value = blockId;
-  this[blockId].attributes.push(blockAttribute);
-  this[blockId][blockAttribute] = {};
-  //this[blockId][blockAttribute].value = attributeValue;
-  this[blockId][blockAttribute] = attributeValue;
+
+  for (let attributeName in attributes)
+    {
+    let attribute = blockItem.getAttribute(attributeName);
+
+    if (attributeName === "visible")
+      {
+      this[blockName]["VISIBLE"] = attribute;
+      }
+    else
+      {
+      this[blockName][attributeName] = attribute;
+      }
+    }
+  if (typeof attributes.x == 'function')
+    {
+    this["X_COORD"] = attributes.x();
+    }
+  if (typeof attributes.y == 'function')
+    {
+    this["Y_COORD"] = attributes.y();
+    }
+  };
+
+allBlockAttributesIconStatus.addBlockAttributeIconStatus = function (blockName, attributeName, value, message)
+  {
+  if (!this.hasOwnProperty(blockName))
+    {
+    this[blockName] = {};
+    }
+  this[blockName][attributeName] = {value: message};
   };
 
 /**
  *
- * @param {string} blockId   - Block name
- * @param {string} attribute - Attribute name
- * @param {string} newValue  - New value for local attributes interface entry
+ * @param {object} blockItem   - Block Item
  */
-function updateAttributeValue(blockId, attribute, newValue)
+function updateAttributeValue(blockitem)
   {
   //allBlockAttributes[blockId][attribute].value = newValue;
 
@@ -64,44 +94,28 @@ function updateAttributeValue(blockId, attribute, newValue)
 
   //console.log(`allBlockAttributes.updateAttributeValue: blockId = ${blockId}   attribute: ${attribute}   newValue: ${newValue}`);
 
-  if (allBlockAttributes.hasOwnProperty(blockId.toString()))
-    {
-    let updatedAttribute = update(allBlockAttributes[blockId][attribute],
-      {$merge: {value: newValue}});
-
-    /* I want to replace the whole attributes object for a
-     new object, because I don't want to check each individual
-     attribute object, I want to just check the entire block
-     attribute object in allBlockAttributes
-     */
-
-    let attributestoMerge = {};
-
-    attributestoMerge[attribute] = updatedAttribute;
-
-    let updatedAttributes = update(allBlockAttributes[blockId],
-      {$merge: attributestoMerge});
-
-    allBlockAttributes[blockId] = update(allBlockAttributes[blockId],
-      {$set: updatedAttributes});
-    }
-
-  //if(blockId === 'CLOCKS'){
-  //  console.log("updating CLOCKS' attributes");
-  //}
-  //
-  //console.log(oldAttributes === allBlockAttributes);
-  //console.log(oldClocksAttributes === allBlockAttributes['CLOCKS']);
+  allBlockAttributes.addBlockAttributes(blockitem);
+  // if (allBlockAttributes.hasOwnProperty(blockName))
+  //   {
+  //   Object.assign(allBlockAttributes[blockName], attribute);
+  //   }
+  // else
+  //   {
+  //   /**
+  //    * Add attribute rather than update
+  //    */
+  //   allBlockAttributes.addBlockAttribute(blockName, attribute, newValue);
+  //   }
 
   }
 
 /**
  *
- * @param {string} blockId   - block name
+ * @param {string} blockName   - block name
  * @param {string} attribute - attribute name
  * @param {object} statusObject
  */
-function updateAttributeIconStatus(blockId, attribute, statusObject)
+function updateAttributeIconStatus(blockName, attribute, statusObject)
   {
 
   /* In the case of block moving the method name doesn't reflect
@@ -130,13 +144,20 @@ function updateAttributeIconStatus(blockId, attribute, statusObject)
     {
     attributeName = 'X_COORD';
     /* Then also run the function again to update the Y_COORD attribute status */
-    updateAttributeIconStatus(blockId, 'Y_COORD', statusObject);
+    updateAttributeIconStatus(blockName, 'Y_COORD', statusObject);
     }
 
-  if (allBlockAttributesIconStatus.hasOwnProperty(blockId.toString()))
+  if (allBlockAttributesIconStatus.hasOwnProperty(blockName.toString()))
     {
+    //console.log("attributeStore.updateAttributeIconStatus(): ");
+    //console.log(allBlockAttributesIconStatus);
 
-    let updatedAttribute = update(allBlockAttributesIconStatus[blockId][attributeName],
+    if (!allBlockAttributesIconStatus[blockName].hasOwnProperty(attributeName))
+      {
+      allBlockAttributesIconStatus[blockName][attributeName] = {};
+      }
+
+    let updatedAttribute = update(allBlockAttributesIconStatus[blockName][attributeName],
       {
         $merge: {
           value  : statusObject.value,
@@ -148,249 +169,103 @@ function updateAttributeIconStatus(blockId, attribute, statusObject)
 
     attributesToMerge[attributeName] = updatedAttribute;
 
-    let updatedAttributes = update(allBlockAttributesIconStatus[blockId],
+    let updatedAttributes = update(allBlockAttributesIconStatus[blockName],
       {$merge: attributesToMerge});
 
-    allBlockAttributesIconStatus[blockId] = update(allBlockAttributesIconStatus[blockId],
+    allBlockAttributesIconStatus[blockName] = update(allBlockAttributesIconStatus[blockName],
       {$set: updatedAttributes});
+    }
+  else
+    {
+    allBlockAttributesIconStatus.addBlockAttributeIconStatus(blockName, attributeName, statusObject.value, statusObject.message);
     }
 
   }
 
+class AttributeStore extends EventEmitter {
+constructor()
+  {
+  super();
+  blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
+  }
+
+addChangeListener(cb)
+  {
+  this.on(CHANGE_EVENT, cb);
+  }
+
+removeChangeListener(cb)
+  {
+  this.removeListener(CHANGE_EVENT, cb);
+  }
+
+emitChange()
+  {
+  //console.log('AttributeStore.emitChange ^V^V^V^');
+  this.emit(CHANGE_EVENT);
+  }
+
+getAllBlockAttributes()
+  {
+  return allBlockAttributes;
+  }
+
+getAllBlockAttributesIconStatus()
+  {
+  return allBlockAttributesIconStatus;
+  }
+
 /**
-* todo: should this be declared as: let attributeStore = merge(EventEmitter.prototype, {...  ??
-* Actually it begs the question as to why Flux and Node.js EventEmmitter are both being deployed here
-* when changes to any store should probably be using Flux to broadcast and receive change events.
-* IG 19 Oct 2016
-*/
-let attributeStore = assign({}, EventEmitter.prototype, {
+ * onChangeBlockCollectionCallback()
+ * Callback function called when blockCollection emits an event.
+ * Note that this will reference the EventEmitter, not the attributeStore instance
+ * as might be expected. IJG 10/1/17
+ *
+ * @param event
+ * @param items
+ */
+onChangeBlockCollectionCallback(items)
+  {
+  let changed = false;
 
-  addChangeListener              : function (cb)
+  //console.log(`attributetore.onChangeBlockCollectionCallback(): items = ${items}`);
+  for (let i = 0; i < items.length; i++)
     {
-    this.on(CHANGE_EVENT, cb)
-    },
-  removeChangeListener           : function (cb)
-    {
-    this.removeListener(CHANGE_EVENT, cb)
-    },
-  emitChange                     : function ()
-    {
-    this.emit(CHANGE_EVENT)
-    },
-  getAllBlockAttributes          : function ()
-    {
-    return allBlockAttributes;
-    },
-  getAllBlockAttributesIconStatus: function ()
-    {
-    return allBlockAttributesIconStatus;
+    let index     = items[i];
+    let blockItem = blockCollection.getBlockItem(index);
+    if (blockItem !== null)
+      {
+      updateAttributeValue(blockItem);
+      let attributes = blockItem.getAttributeNames();
+      for (let attrIndex = 0; attrIndex < attributes.length; attrIndex++)
+        {
+        let attrName = attributes[attrIndex];
+        updateAttributeIconStatus(blockItem.blockName(), attrName, {
+          value  : 'success',
+          message: null
+        });
+        }
+      changed = true;
+      }
     }
+  if (changed)
+    {
+    attributeStore.emitChange();
+    }
+  }
 
-});
+} // class
+
+const attributeStore = new AttributeStore();
+
 
 attributeStore.dispatchToken = AppDispatcher.register(function (payload)
   {
-  let action          = payload.action;
-  let item            = action.item;
+  let action = payload.action;
+  let item   = action.item;
 
   switch (action.actionType)
   {
-    case appConstants.MALCOLM_GET_SUCCESS:
-      {
-      console.log('attributeStore: MALCOLM_GET_SUCCESS: ');
-      //console.log("REQUESTED: => " + JSON.stringify(item.requestedData));
-      //console.log("RESPONSE: => " + JSON.stringify(item.responseMessage));
-
-      // Determine whether the GET notification is in response to:
-      // Top level item list or individual item attributes.
-      // The top level case will have a 'layout' attribute.
-      if (item.responseMessage.hasOwnProperty('layout'))
-        {
-        //console.log("item.responseMessage.layout = ");
-        //console.log(item.responseMessage.layout);
-        //console.log("item.responseMessage.layout.value.length = " + item.responseMessage.layout.value.name.length);
-
-        // Wait for blockCollection to respond to this broadcast message and
-        // populate the collection.
-        AppDispatcher.waitFor([blockCollection.getDispatchToken()]);
-
-        // Iterate through all blocks available in responseMessage
-        // extracting each block attributes, building up the allBlockAttributes table.
-        //
-        for (let i = 0; i < item.responseMessage.layout.value.name.length; i++)
-          {
-          let blockName = JSON.stringify(item.responseMessage.layout.value.name[i]);
-
-          /**
-          ==========================================================================================
-          TODO:
-          The old Protocol_1 attributes pattern do not fit with Protocol_2.
-          Instead we need to interrogate each block in the upper list (from Get),
-          by Get or Subscribe to each block, then assemble the attributes into a local store.
-          It begs the question as to why there is an attributeStore instead of each blockStore holding
-          its own attributes?
-
-          As a transition to the new code structure required with Protocol2, allBlockAttributes in attributeStore
-          will be maintained and mapped to he new BlockCollection instance in blockItems.js
-          The plan is eventually to remove this clunky interface and fully incorporate the BlockCollection
-          in its place.
-
-          Ian Gillingham - December 2016.
-          ==========================================================================================
-           */
-
-
-          /**
-           * Iterate through each blockItem in the collection and copy its visibility attribute into
-           * attributeStore.allBlockAttributes
-           */
-          let blockItem = blockCollection.getBlockItem(i);
-          console.log(blockItem);
-
-          // I don't think it's necessary to subscribe here, because it's already being done
-          // in the BlockCollection class instance and this attribute store will receive all
-          // the notifications.
-          //MalcolmActionCreators.malcolmSubscribe(blockMRI, []);
-          let visible = blockItem.visible();
-          allBlockAttributes.addBlockAttribute(blockName, "VISIBLE", blockItem.visible());
-          let mri = blockItem.mri();
-          if (mri != null)
-            {
-            //console.log(`attributeStore => mri : blockName = ${blockName} :  mri = ${item.responseMessage.layout.value.mri[i]}`);
-            allBlockAttributes.addBlockAttribute(blockName, "MRI", blockItem.mri());
-            allBlockAttributes.addBlockAttribute(blockName, "BLOCKNAME", blockItem.blockName());
-            }
-          let x = blockItem.x();
-          let y = blockItem.y();
-          /**
-           * TODO: All the coordinates need subscribing to, so if any change from the
-           *       device, a subscription event will notify and we can then determine which
-           *       position has changed and update the blockItem as appropriate.
-           *       So - MUST instantiate blockItems with subscriptions and the collection object subscribing to
-           *       common position information.
-           */
-          allBlockAttributes.addBlockAttribute(blockName, "X", x);
-          allBlockAttributes.addBlockAttribute(blockName, "Y", y);
-
-
-          //console.log('attributeStore: Dispatch callback MALCOLM_GET_SUCCESS: iterate top level: blockname = ' + blockName);
-          /* Try using allBlockAttributesIconStatus for widgetIconStatus */
-
-          /* Add the block to allBlockAttributesIconStatus */
-          allBlockAttributesIconStatus[blockName] = {};
-
-          for (let attribute in allBlockAttributes[blockName].attributes)
-            {
-            allBlockAttributesIconStatus[blockName][attribute] = {
-              value  : 'success',
-              message: null
-            };
-
-            }
-          }
-
-        attributeStore.emitChange();
-        break;
-        } // end if hasOwnProperty('layout')
-      else // 'layout' found so must be an item attributes response
-        {
-
-        }
-      break;
-      }
-
-    case appConstants.MALCOLM_GET_FAILURE:
-      {
-      console.log("attributeStore MALCOLM GET ERROR!");
-
-      /* Not sure what to do when a GET block failure occurs,
-       it's not really related any specific widget is it?
-       */
-      console.log("GET ERROR: REQUESTED: => " + JSON.stringify(item.requestedData));
-      console.log("GET ERROR: RESPONSE: => " + JSON.stringify(item.responseMessage));
-
-      attributeStore.emitChange();
-      break;
-      }
-
-    case
-    appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
-      {
-      console.log(`attributeStore MALCOLM_SUBSCRIBE_SUCCESS callback: item = ${item}`);
-      AppDispatcher.waitFor([blockCollection.dispatchToken]);
-
-      for (let i = 0; i < item.length; i++)
-        {
-        let index     = item[i];
-        let blockItem = blockCollection.getBlockItem(index);
-        if (blockItem != null)
-          {
-          /** This is for when a block has been changed from
-           hide to show for the first time via the block palette
-           so the GUI isn't yet subscribed to any of the blocks'
-           attributes (or at least something along those lines)
-           */
-
-          /* UPDATE: so this works and the toggle switches stay in sync,
-           but I'm pretty sure I'm doing more updates than I need; I think
-           what's happening is that every time VISIBILITY changes a blocks'
-           visible status, the individual block attribute for its tab is being
-           updated at the same time as the overall master block.
-           It works for now, so keep it, but don't forget about this either!
-           */
-
-          /* UPDATED UPDATE: actually, if one changes, the server knows to
-           change the other, so I'll receive a subscribe message from both,
-           so I don't think it's any more complicated than simply updating
-           what attributes I'm given! (So I think I can even get rid of
-           this else if statement and simply have updateAttributeValue being
-           invoked for ALL malcolmSubscribes that come to attributeStore)
-           */
-
-          /* UPDATE THE UPDATED UPDATE: right, so when I add a new block
-           via VISIBILITY I don't actually subscribe to its attributes, it's
-           only on refresh do I do that, hence the need to do this since not only
-           does a block's visible attribute not update, but neither does any of
-           them until the next refresh!
-           So the solution is basically to have attribute subscription when a
-           block is added/mounted
-           */
-
-          updateAttributeValue(blockItem.blockName(), "VISIBLE", blockItem.visible());
-          updateAttributeValue(blockItem.blockName(), "X_COORD", blockItem.x());
-          updateAttributeValue(blockItem.blockName(), "Y_COORD", blockItem.y());
-
-          //console.log(allBlockAttributes[requestedData.attribute]);
-          /* Update allBlockAttributesIconStatus appropriately */
-
-          updateAttributeIconStatus(blockItem.blockName(), "VISIBLE", {
-            value  : 'success',
-            message: null
-          });
-          updateAttributeIconStatus(blockItem.blockName(), "X_COORD", {
-            value  : 'success',
-            message: null
-          });
-          updateAttributeIconStatus(blockItem.blockName(), "Y_COORD", {
-            value  : 'success',
-            message: null
-          });
-
-          attributeStore.emitChange();
-          } // if blockItem != null
-
-        } // for
-
-
-      break;
-      }
-
-    case
-    appConstants.MALCOLM_SUBSCRIBE_FAILURE:
-      {
-      break;
-      }
-
     case
     appConstants.MALCOLM_CALL_SUCCESS:
       {

@@ -2,10 +2,10 @@
  * Created by twi18192 on 19/02/16.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher.js');
-var appConstants = require('../constants/appConstants.js');
+let AppDispatcher = require('../dispatcher/appDispatcher.js');
+let appConstants = require('../constants/appConstants.js');
 
-var flowChartActions = {
+let flowChartActions = {
 
   interactJsDrag: function(item){
     AppDispatcher.handleAction({
@@ -120,4 +120,6 @@ var flowChartActions = {
   //}
 };
 
-module.exports = flowChartActions;
+export {flowChartActions as default}
+
+

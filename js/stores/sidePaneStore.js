@@ -2,18 +2,18 @@
  * Created by twi18192 on 01/09/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants  = require('../constants/appConstants');
-var EventEmitter  = require('events').EventEmitter;
-var assign        = require('object-assign');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants  = require('../constants/appConstants');
+let EventEmitter  = require('events').EventEmitter;
+let assign        = require('object-assign');
 
-var CHANGE_EVENT = 'change';
+let CHANGE_EVENT = 'change';
 
-var _stuff = {
+let _stuff = {
   dropdownListVisible: false,
 };
 
-var dropdownMenuShow = function ()
+let dropdownMenuShow = function ()
   {
 
   /* Want to have it so that you can toggle the dropdown menu if you click on the button more than once */
@@ -28,13 +28,13 @@ var dropdownMenuShow = function ()
     }
   };
 
-var dropdownMenuHide = function ()
+let dropdownMenuHide = function ()
   {
   _stuff.dropdownListVisible = false;
   };
 
 
-var sidePaneStore = assign({}, EventEmitter.prototype, {
+let sidePaneStore = assign({}, EventEmitter.prototype, {
   addChangeListener   : function (cb)
     {
     this.on(CHANGE_EVENT, cb)
@@ -56,8 +56,8 @@ var sidePaneStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function (payload)
 {
-var action = payload.action;
-var item   = action.item;
+let action = payload.action;
+let item   = action.item;
 switch (action.actionType)
 {
 
@@ -66,7 +66,7 @@ switch (action.actionType)
     console.log(action);
     dropdownMenuShow();
     sidePaneStore.emitChange();
-    console.log(_stuff.dropdownListVisible);
+    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   case appConstants.DROPDOWN_HIDE:
@@ -74,11 +74,11 @@ switch (action.actionType)
     console.log(action);
     dropdownMenuHide();
     sidePaneStore.emitChange();
-    console.log(_stuff.dropdownListVisible);
+    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   default:
-    return true;
+    break;
 }
 });
 

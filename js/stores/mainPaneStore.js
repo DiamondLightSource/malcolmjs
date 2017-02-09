@@ -2,22 +2,22 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants = require('../constants/appConstants');
+let EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
 
-var CHANGE_EVENT = 'change';
+let CHANGE_EVENT = 'change';
 
-var _stuff = {
+let _stuff = {
     footerState: false,
 };
 
-var toggleFooter = function(){
+let toggleFooter = function(){
     _stuff.footerState = !_stuff.footerState
   };
 
-var mainPaneStore = assign({}, EventEmitter.prototype, {
+let mainPaneStore = assign({}, EventEmitter.prototype, {
   addChangeListener: function(cb) {
     this.on(CHANGE_EVENT, cb);
   },
@@ -33,13 +33,14 @@ var mainPaneStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(payload){
-  var action = payload.action;
+  let action = payload.action;
   switch(action.actionType){
     case appConstants.FOOTER_TOGGLE:
       console.log(payload);
       console.log(action);
       toggleFooter();
       mainPaneStore.emitChange();
+
       console.log(_stuff.footerState);
       break;
 

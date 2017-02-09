@@ -37,7 +37,7 @@
         "writeable": false,
         "label": "Status"
       },
-      "value": "Done Resetting"
+      "value": "Ready"
     },
     "busy": {
       "typeid": "epics:nt/NTScalar:1.0",
@@ -110,53 +110,18 @@
         "required": []
       }
     },
-    "ICON": {
+    "icon": {
       "typeid": "epics:nt/NTScalar:1.0",
       "meta": {
         "typeid": "malcolm:core/StringMeta:1.0",
         "description": "URL for ICON",
         "tags": [
-          "flowgraph:icon"
+          "widget:icon"
         ],
         "writeable": false,
         "label": "Icon"
       },
-      "value": "http://localhost:8080/path/to/TTLIN"
-    },
-    "parameters": {
-      "typeid": "epics:nt/NTScalar:1.0",
-      "meta": {
-        "typeid": "malcolm:core/ChoiceMeta:1.0",
-        "description": "All parameters attributes",
-        "choices": [
-          "expanded",
-          "collapsed"
-        ],
-        "tags": [
-          "widget:group"
-        ],
-        "writeable": true,
-        "label": "Parameters"
-      },
-      "value": "expanded"
-    },
-    "TERM": {
-      "typeid": "epics:nt/NTScalar:1.0",
-      "meta": {
-        "typeid": "malcolm:core/ChoiceMeta:1.0",
-        "description": "Select TTL input termination",
-        "choices": [
-          "High-Z",
-          "50-Ohm"
-        ],
-        "tags": [
-          "group:parameters",
-          "widget:combo"
-        ],
-        "writeable": true,
-        "label": "Term"
-      },
-      "value": "High-Z"
+      "value": "http://localhost:8080/path/to/LVDSIN"
     },
     "outputs": {
       "typeid": "epics:nt/NTScalar:1.0",
@@ -175,14 +140,14 @@
       },
       "value": "expanded"
     },
-    "VAL": {
+    "val": {
       "typeid": "epics:nt/NTScalar:1.0",
       "meta": {
         "typeid": "malcolm:core/BooleanMeta:1.0",
-        "description": "TTL input value",
+        "description": "LVDS input value",
         "tags": [
           "group:outputs",
-          "outport:bit:TTLIN1.VAL",
+          "outport:bool:LVDSIN2.VAL",
           "widget:led"
         ],
         "writeable": false,
@@ -191,3 +156,4 @@
       "value": false
     }
   }
+}

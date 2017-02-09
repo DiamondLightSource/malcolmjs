@@ -2,49 +2,66 @@
  * Created by twi18192 on 04/02/16.
  */
 
-var React = require('../../node_modules/react/react');
-var ReactDOM = require('react-dom');
+let React    = require('../../node_modules/react/react');
+let ReactDOM = require('react-dom');
 
-var flowChartActions = require('../actions/flowChartActions');
+import flowChartActions from '../actions/flowChartActions';
 
-var interact = require('../../node_modules/interact.js');
+let interact = require('../../node_modules/interact.js');
 
-var EdgePreview = React.createClass({
+let EdgePreview = React.createClass({
 
-  getInitialState: function(){
-    return{
-      noPanning: true
-    }
+  propTypes: {
+    noPanning      : React.PropTypes.bool,
+    failedPortConnection : React.PropTypes.func,
+    blockStyling         : React.PropTypes.object,
+    edgePreview          : React.PropTypes.object,
+    fromBlockPosition    : React.PropTypes.object,
+    fromBlockInfo        : React.PropTypes.object,
+    id                   : React.PropTypes.string
+
   },
 
-  componentDidMount: function(){
+  getInitialState: function ()
+    {
+    return {
+      noPanning: true
+    }
+    },
+
+  componentDidMount   : function ()
+    {
 
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.refs.node)
       .draggable({
 
-        onstart: function(e){
+        onstart: function (e)
+          {
           e.stopImmediatePropagation();
           e.stopPropagation();
           interact('#appAndDragAreaContainer')
             .off('move', this.interactJSMouseMoveForEdgePreview);
-        }.bind(this),
+          }.bind(this),
 
-        onmove: function(e){
+        onmove: function (e)
+          {
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.props.interactJsDragPan(e);
-        }.bind(this),
+          }.bind(this),
 
-        onend: function(e){
+        onend: function (e)
+          {
           e.stopImmediatePropagation();
           e.stopPropagation();
 
-          this.setState({noPanning: true}, function(){
-            interact('#appAndDragAreaContainer')
-              .on('move', this.interactJSMouseMoveForEdgePreview);
+          this.setState({noPanning: true}, function ()
+          {
+          interact('#appAndDragAreaContainer')
+            .on('move', this.interactJSMouseMoveForEdgePreview);
           });
 
           /* No need for this after changing mousemove to move for some reason? */
@@ -52,156 +69,175 @@ var EdgePreview = React.createClass({
             x: e.dx,
             y: e.dy
           })
-        }.bind(this)
+          }.bind(this)
 
       });
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.refs.node)
       .on('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.refs.node)
       .on('down', this.onMouseDown);
-  },
-  componentWillUnmount: function(){
+    },
+  componentWillUnmount: function ()
+    {
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.refs.node)
       .off('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.refs.node)
       .off('down', this.onMouseDown);
 
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
-  },
+    },
 
-  shouldComponentUpdate: function(){
+  shouldComponentUpdate: function ()
+    {
     return this.state.noPanning
-  },
+    },
 
-  interactJSMouseMoveForEdgePreview: function(e){
+  interactJSMouseMoveForEdgePreview: function (e)
+    {
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    var mousePositionChange = {
+    let mousePositionChange = {
       x: e.mozMovementX,
       y: e.mozMovementY
     };
 
     flowChartActions.updateEdgePreviewEndpoint(mousePositionChange);
 
-  },
+    },
 
-  onTap: function(e){
+  onTap: function (e)
+    {
     e.stopImmediatePropagation();
     e.stopPropagation();
 
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
-  },
+    },
 
-  onMouseDown: function(e){
+  onMouseDown: function (e)
+    {
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    this.setState({noPanning: false}, function(){
-      interact('#appAndDragAreaContainer')
-        .off('move', this.interactJSMouseMoveForEdgePreview);
+    this.setState({noPanning: false}, function ()
+    {
+    interact('#appAndDragAreaContainer')
+      .off('move', this.interactJSMouseMoveForEdgePreview);
     });
-  },
+    },
 
-  render:function(){
-    console.log("render: edgePreview");
+  render: function ()
+    {
+    //console.log("render: edgePreview");
 
-    var blockStyling = this.props.blockStyling;
+    let blockStyling = this.props.blockStyling;
 
-    var fromBlockInfo = this.props.edgePreview.fromBlockInfo;
+    let fromBlockInfo = this.props.edgePreview.fromBlockInfo;
 
-    var fromBlockPositionX = this.props.fromBlockPosition.x;
-    var fromBlockPositionY = this.props.fromBlockPosition.y;
+    let fromBlockPositionX = this.props.fromBlockPosition.x;
+    let fromBlockPositionY = this.props.fromBlockPosition.y;
 
-    var portValueType;
-    var startOfEdgePortOffsetX;
-    var startOfEdgePortOffsetY;
+    let portValueType;
+    let startOfEdgePortOffsetX;
+    let startOfEdgePortOffsetY;
 
-    if(fromBlockInfo.fromBlockPortType === "inport"){
-      var inportArrayLength = this.props.fromBlockInfo.inports.length;
-      var inportArrayIndex;
-      var inportValueType;
-      for(var j = 0; j < inportArrayLength; j++){
-        if(this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort){
+    if (fromBlockInfo.fromBlockPortType === "inport")
+      {
+      let inportArrayLength = this.props.fromBlockInfo.inports.length;
+      let inportArrayIndex;
+      let inportValueType;
+      for (let j = 0; j < inportArrayLength; j++)
+        {
+        if (this.props.fromBlockInfo.inports[j].name === fromBlockInfo.fromBlockPort)
+          {
           inportArrayIndex = JSON.parse(JSON.stringify(j));
-          inportValueType = this.props.fromBlockInfo.inports[inportArrayIndex].type;
-          portValueType = inportValueType;
+          inportValueType  = this.props.fromBlockInfo.inports[inportArrayIndex].type;
+          portValueType    = inportValueType;
+          }
         }
-      }
       startOfEdgePortOffsetX = 0;
       startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
-    }
-    else if(fromBlockInfo.fromBlockPortType === "outport") {
-      var outportArrayLength = this.props.fromBlockInfo.outports.length;
-      var outportArrayIndex;
-      var outportValueType;
-
-      for(var i = 0; i < outportArrayLength; i++){
-        if(this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort){
-          outportArrayIndex = JSON.parse(JSON.stringify(i));
-          outportValueType = this.props.fromBlockInfo.outports[outportArrayIndex].type;
-          portValueType = outportValueType;
-        }
       }
+    else if (fromBlockInfo.fromBlockPortType === "outport")
+      {
+      let outportArrayLength = this.props.fromBlockInfo.outports.length;
+      let outportArrayIndex;
+      let outportValueType;
+
+      for (let i = 0; i < outportArrayLength; i++)
+        {
+        if (this.props.fromBlockInfo.outports[i].name === fromBlockInfo.fromBlockPort)
+          {
+          outportArrayIndex = JSON.parse(JSON.stringify(i));
+          outportValueType  = this.props.fromBlockInfo.outports[outportArrayIndex].type;
+          portValueType     = outportValueType;
+          }
+        }
       startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
       startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
-    }
+      }
 
-    var startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
-    var startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
+    let startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
+    let startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    var endOfEdgeX = this.props.edgePreview.endpointCoords.x;
-    var endOfEdgeY = this.props.edgePreview.endpointCoords.y;
+    let endOfEdgeX = this.props.edgePreview.endpointCoords.x;
+    let endOfEdgeY = this.props.edgePreview.endpointCoords.y;
 
-    var innerLineString = "-innerline";
-    var outerLineString = "-outerline";
-    var innerLineName = this.props.id.concat(innerLineString);
-    var outerLineName = this.props.id.concat(outerLineString);
+    let innerLineString = "-innerline";
+    let outerLineString = "-outerline";
+    let innerLineName   = this.props.id.concat(innerLineString);
+    let outerLineName   = this.props.id.concat(outerLineString);
 
     /* Trying curvy lines! */
 
-    var sourceX = startOfEdgeX;
-    var sourceY = startOfEdgeY;
-    var targetX = endOfEdgeX;
-    var targetY = endOfEdgeY;
+    let sourceX = startOfEdgeX;
+    let sourceY = startOfEdgeY;
+    let targetX = endOfEdgeX;
+    let targetY = endOfEdgeY;
 
-    var c1X, c1Y, c2X, c2Y;
+    let c1X, c1Y, c2X, c2Y;
 
     /* I think nodeSize is the block height or width, not sure which one though? */
 
     if ((targetX - 5 < sourceX && fromBlockInfo.fromBlockPortType === "outport") ||
-      (targetX - 5 > sourceX && fromBlockInfo.fromBlockPortType === "inport")) {
-      var curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight/200;
-      if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight/2) {
+      (targetX - 5 > sourceX && fromBlockInfo.fromBlockPortType === "inport"))
+      {
+      let curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
+      if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight / 2)
+        {
         // Loopback
         c1X = sourceX + curveFactor;
         c1Y = sourceY - curveFactor;
         c2X = targetX - curveFactor;
         c2Y = targetY - curveFactor;
-      } else {
+        }
+      else
+        {
         // Stick out some
         c1X = sourceX + curveFactor;
         c1Y = sourceY + (targetY > sourceY ? curveFactor : -curveFactor);
         c2X = targetX - curveFactor;
         c2Y = targetY + (targetY > sourceY ? -curveFactor : curveFactor);
+        }
       }
-    } else {
+    else
+      {
       // Controls halfway between
-      c1X = sourceX + (targetX - sourceX)/2;
+      c1X = sourceX + (targetX - sourceX) / 2;
       c1Y = sourceY;
       c2X = c1X;
       c2Y = targetY;
-    }
+      }
 
-    var pathInfo = [
+    let pathInfo = [
       "M",
       sourceX, sourceY,
       "C",
@@ -213,18 +249,18 @@ var EdgePreview = React.createClass({
     pathInfo = pathInfo.join(" ");
 
 
-    return(
-      <g id="edgePreviewContainer" {...this.props}>
+    return (
+      <g id="edgePreviewContainer" {...this.props} ref="node">
 
         <path id={outerLineName} className="edgePreviewOuterLine"
-              d={pathInfo} />
+              d={pathInfo}/>
 
         <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === 'pos' ? 'POS' : 'BIT')}
-              d={pathInfo} />
+              d={pathInfo}/>
 
       </g>
     )
-  }
+    }
 });
 
-module.exports= EdgePreview;
+module.exports = EdgePreview;

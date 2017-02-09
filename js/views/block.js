@@ -2,15 +2,15 @@
  * Created by twi18192 on 14/01/16.
  */
 
-//let React    = require('../../node_modules/react/react');
+  //let React    = require('../../node_modules/react/react');
 let React    = require('react');
 let ReactDOM = require('react-dom');
 
 let attributeStore = require('../stores/attributeStore');
 
-let paneActions           = require('../actions/paneActions');
-let flowChartActions      = require('../actions/flowChartActions');
-let MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+let paneActions = require('../actions/paneActions');
+import flowChartActions from '../actions/flowChartActions';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
 let Ports          = require('./ports.js');
 let BlockRectangle = require('./blockRectangle');
@@ -20,13 +20,21 @@ let interact = require('../../node_modules/interact.js');
 let Block = React.createClass(
   {
     propTypes: {
-          graphZoomScale: React.PropTypes.number,
-          blockInfo: React.PropTypes.object,
-          areAnyBlocksSelected: React.PropTypes.bool,
-          portThatHasBeenClicked: React.PropTypes.object,
-          blockStyling:  React.PropTypes.object,
-          storingFirstPortClicked: React.PropTypes.object,
+      graphZoomScale         : React.PropTypes.number,
+      blockInfo              : React.PropTypes.object,
+      areAnyBlocksSelected   : React.PropTypes.bool,
+      portThatHasBeenClicked : React.PropTypes.object,
+      blockStyling           : React.PropTypes.object,
+      storingFirstPortClicked: React.PropTypes.object,
+      id                     : React.PropTypes.string,
+      selected               : React.PropTypes.bool,
+      blockPosition          : React.PropTypes.object,
+      deselect               : React.PropTypes.func
+
     },
+    /**
+     *  blockInfo = { type, label, name, inports, outports };
+     */
 
     componentDidMount: function ()
       {
@@ -34,8 +42,8 @@ let Block = React.createClass(
       // id is actually blockName at this stage.
       let blockAttributes = attributeStore.getAllBlockAttributes()[this.props.id];
 
-      console.log(`Block: blockAttributes  id = ${this.props.id}`);
-      console.log(blockAttributes);
+      //console.log(`Block: blockAttributes  id = ${this.props.id}`);
+      //console.log(blockAttributes);
 
       /** ToDo: This is all wrong for protocol2
        * Layout information is derived from the top-level layout schema
@@ -44,19 +52,19 @@ let Block = React.createClass(
        * made in a view - all data should come from the relevant store, which itself should subscribe
        * (IJG Dev 2016)
        */
-/*
-      for (let attribute in blockAttributes)
-        {
-        if ((attribute !== 'uptime') && (attribute !== 'MRI'))
-          {
-          if (blockAttributes.hasOwnProperty('MRI'))
-            {
-            MalcolmActionCreators.malcolmSubscribe(blockAttributes.MRI, [attribute]);
-            }
-          }
-        }
-*/
-      interact(ReactDOM.findDOMNode(this))
+      /*
+       for (let attribute in blockAttributes)
+       {
+       if ((attribute !== 'uptime') && (attribute !== 'MRI'))
+       {
+       if (blockAttributes.hasOwnProperty('MRI'))
+       {
+       MalcolmActionCreators.malcolmSubscribe(blockAttributes.MRI, [attribute]);
+       }
+       }
+       }
+       */
+      interact(this.refs.node)
         .draggable(
           {
             restrict: {
@@ -77,10 +85,10 @@ let Block = React.createClass(
               }
           });
 
-      interact(ReactDOM.findDOMNode(this))
+      interact(this.refs.node)
         .on('tap', this.blockSelect);
 
-      interact(ReactDOM.findDOMNode(this))
+      interact(this.refs.node)
         .styleCursor(false);
 
       /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
@@ -93,7 +101,7 @@ let Block = React.createClass(
 
       clearTimeout(this.timer);
 
-      interact(ReactDOM.findDOMNode(this))
+      interact(this.refs.node)
         .off('tap', this.blockSelect);
       },
 
@@ -140,8 +148,8 @@ let Block = React.createClass(
         /* Need to run deselect before I select the current node */
         this.props.deselect();
         }
-      flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
-      paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+      flowChartActions.selectBlock(this.props.blockInfo.label);
+      paneActions.openBlockTab(this.props.blockInfo.label);
 
       },
 
@@ -149,7 +157,7 @@ let Block = React.createClass(
       {
       e.stopPropagation();
       e.stopImmediatePropagation();
-      let target = e.target.id;
+      let target = this.props.blockInfo.label;
 
       let deltaMovement = {
         target: target,
@@ -187,14 +195,14 @@ let Block = React.createClass(
        */
 
       this.timer = setTimeout(function ()
-                                {
-                                MalcolmActionCreators.malcolmCall(
-                                  this.props.id, '_set_coords', {
-                                    X_COORD: this.props.blockPosition.x * this.props.graphZoomScale,
-                                    Y_COORD: this.props.blockPosition.y * this.props.graphZoomScale
-                                  }
-                                );
-                                }.bind(this), 500
+        {
+        MalcolmActionCreators.malcolmCall(
+          this.props.id, '_set_coords', {
+            X_COORD: this.props.blockPosition.x * this.props.graphZoomScale,
+            Y_COORD: this.props.blockPosition.y * this.props.graphZoomScale
+          }
+        );
+        }.bind(this), 500
       );
       },
 
@@ -208,8 +216,35 @@ let Block = React.createClass(
       //console.log(this.props.id);
       //console.log(this.props.blockInfo);
 
+
+      /**
+       * I dont know why this.props was being given to <g>. It caused warnings in the console output
+       * due to <g> not having many of the parent (this) props.
+       * We know the props specifically for this <Block> element, so should filter them out before passing
+       * the remaining props to <g> via gProps.
+       *
+       * IJG 18 Jan 2017.
+       *
+       * @type {*}
+       */
+      const { graphZoomScale,blockInfo,areAnyBlocksSelected,portThatHasBeenClicked,blockStyling,
+              storingFirstPortClicked,blockPosition,deselect, ...rest } = this.props;
+/*
+      const gProps = Object.assign({}, this.props);
+      delete gProps.graphZoomScale;
+      delete gProps.blockInfo;
+      delete gProps.areAnyBlocksSelected;
+      delete gProps.portThatHasBeenClicked;
+      delete gProps.blockStyling;
+      delete gProps.storingFirstPortClicked;
+      delete gProps.id;
+      delete gProps.selected;
+      delete gProps.blockPosition;
+      delete gProps.deselect;
+*/
+
       return (
-        <g {...this.props} transform={blockTranslate}>
+        <g {...rest} transform={blockTranslate} ref="node">
 
           <g style={{MozUserSelect: 'none'}}>
 

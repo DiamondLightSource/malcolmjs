@@ -7,7 +7,7 @@
 let W3CWebSocket    = require('websocket').w3cwebsocket;
 let WebSocketClient = require('websocket').client;
 
-let idLookupTableFunctions = require('./utils/idLookupTable');
+import idLookupTableFunctions from './utils/idLookupTable';
 let appConstants = require ('./constants/appConstants');
 
 import EventEmitter from 'events';
@@ -56,7 +56,7 @@ class WSClient extends EventEmitter
 
   sendText(message)
     {
-    console.log('Client.sendText: ' + message);
+    //console.log('Client.sendText: ' + message);
     this.websocket.send(message);
     }
 
@@ -159,7 +159,7 @@ class WSClient extends EventEmitter
 
     this.websocket.on('connect', connection =>
     {
-    console.log("jofswf");
+    //console.log("jofswf");
     for (let i = 0; i < this.webSocketOnOpenCallbacks.length; i++)
       {
       this.webSocketOnOpenCallbacks[i](connection);
@@ -194,8 +194,8 @@ class WSClient extends EventEmitter
     if (message.type === 'utf8')
       {
       json = JSON.parse(message.text);
-      console.log("websocketClient.onmessage: ");
-      console.log(JSON.parse(JSON.stringify(json)));
+      //console.log("websocketClient.onmessage: ");
+      //console.log(JSON.parse(JSON.stringify(json)));
       if (malcolmProtocol.isError(json))
         {
         idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);

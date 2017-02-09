@@ -2,10 +2,10 @@
  * Created by twi18192 on 01/09/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants = require('../constants/appConstants');
 
-var sidePaneActions = {
+let sidePaneActions = {
 
   dropdownMenuShow: function(item){
     AppDispatcher.handleViewAction({
@@ -22,4 +22,4 @@ var sidePaneActions = {
 
 };
 
-module.exports = sidePaneActions;
+export {sidePaneActions as default}

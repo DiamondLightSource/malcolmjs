@@ -2,12 +2,12 @@
  * Created by twi18192 on 26/01/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var FlowChart = require('./flowChart');
+let FlowChart = require('./flowChart');
 
-var blockStore = require('../stores/blockStore.js');
-var flowChartStore = require('../stores/flowChartStore');
+let blockStore = require('../stores/blockStore.js');
+let flowChartStore = require('../stores/flowChartStore');
 
 function getFlowChartState(){
   return{
@@ -28,7 +28,7 @@ function getFlowChartState(){
   }
 }
 
-var FlowChartControllerView = React.createClass({
+let FlowChartControllerView = React.createClass({
 
   getInitialState: function(){
     return getFlowChartState();

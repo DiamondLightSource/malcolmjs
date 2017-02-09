@@ -2,25 +2,34 @@
  * Created by twi18192 on 15/03/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-var NonEditableReadoutField = React.createClass({
+let NonEditableReadoutField = React.createClass({
+  propTypes: {
+    blockAttributeValue: React.PropTypes.string,
+    blockName          : React.PropTypes.string,
+    attributeName      : React.PropTypes.string
 
-  shouldComponentUpdate: function(nextProps, nextState){
-    return(
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState)
+    {
+    return (
       nextProps.blockAttributeValue !== this.props.blockAttributeValue
     )
-  },
+    },
 
-  onClick: function(e){
+  onClick: function (e)
+    {
     e.preventDefault();
     //e.target.blur();
-  },
+    },
 
-  render: function(){
-    return(
+  render: function ()
+    {
+    return (
 
       <input id={this.props.blockName + this.props.attributeName + "readoutField"}
              className="readoutFieldWidget"
@@ -28,10 +37,10 @@ var NonEditableReadoutField = React.createClass({
              onMouseDown={this.onClick}
              onMouseUp={this.onClick}
              onMouseOut={this.onClick}
-             readOnly="true" />
+             readOnly="true"/>
 
     )
-  }
+    }
 
 });
 

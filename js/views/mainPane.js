@@ -2,28 +2,28 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var React = require('react');
-var ReactPanels = require('react-panels');
+let React = require('react');
+let ReactPanels = require('react-panels');
 
-var mainPaneActions = require('../actions/mainPaneActions');
-var paneActions = require('../actions/paneActions');
+let mainPaneActions = require('../actions/mainPaneActions');
+let paneActions = require('../actions/paneActions');
 
-var ConfigButton = require('./configButton');
-var FavButton = require('./favButton');
-var FooterButton = require('./button');
-var FlowChartControllerView = require('./flowChartControllerView');
+let ConfigButton = require('./configButton');
+let FavButton = require('./favButton');
+let FooterButton = require('./button');
+let FlowChartControllerView = require('./flowChartControllerView');
 
-var WasteBin = require('./wasteBin');
+let WasteBin = require('./wasteBin');
 
-var Panel = ReactPanels.Panel;
-var Tab = ReactPanels.Tab;
-var Toolbar = ReactPanels.Toolbar;
-var Content = ReactPanels.Content;
-var Footer = ReactPanels.Footer;
-var ToggleButton = ReactPanels.ToggleButton;
-var Button = ReactPanels.Button;
+let Panel = ReactPanels.Panel;
+let Tab = ReactPanels.Tab;
+let Toolbar = ReactPanels.Toolbar;
+let Content = ReactPanels.Content;
+let Footer = ReactPanels.Footer;
+let ToggleButton = ReactPanels.ToggleButton;
+let Button = ReactPanels.Button;
 
-var MainPane = React.createClass({
+let MainPane = React.createClass({
 
   propTypes: {
     footers: React.PropTypes.bool,
@@ -64,13 +64,13 @@ var MainPane = React.createClass({
   },
 
   render: function() {
-    var TESTStyling = {
+    let TESTStyling = {
       'height': '1000px',
       'width': '1000px',
       //backgroundColor: 'darkmagenta'
     };
 
-    var contentStyling = {
+    let contentStyling = {
       'height': '1476px',
       'width': '1494px'
     };
@@ -80,7 +80,7 @@ var MainPane = React.createClass({
      */
     /* UPDATE: Don't use a loading screen for now */
 
-    //var mainPaneContent;
+    //let mainPaneContent;
     //
     //if(this.props.loadingInitialData === true){
     //  if(this.props.loadingInitialDataError === false) {
@@ -97,7 +97,7 @@ var MainPane = React.createClass({
     //  /* Perhaps have another icon show up if initial data fetch doesn't work? */
     //}
 
-    var footer =
+    let footer =
       <Footer><div id="blockDock">
         <div id="buttonContainer">
 

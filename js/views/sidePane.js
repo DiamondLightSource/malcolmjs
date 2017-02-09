@@ -2,27 +2,28 @@
  * Created by twi18192 on 01/09/15.
  */
 
-var React       = require('react');
-var ReactDOM    = require('react-dom');
-var ReactPanels = require('react-panels');
-var Dropdown    = require('./dropdownMenu');
+let React       = require('react');
+let ReactDOM    = require('react-dom');
+let ReactPanels = require('react-panels');
+let Dropdown    = require('./dropdownMenu');
 
-var Panel  = ReactPanels.Panel;
-var Tab    = ReactPanels.Tab;
-var Button = ReactPanels.Button;
+let Panel  = ReactPanels.Panel;
+let Tab    = ReactPanels.Tab;
+let Button = ReactPanels.Button;
 
-var paneActions = require('../actions/paneActions');
+let paneActions = require('../actions/paneActions');
 
-var SidePaneTabContents = require('./sidePaneTabContents');
+let SidePaneTabContents = require('./sidePaneTabContents');
 
-var SidePane = React.createClass({
+let SidePane;
+SidePane = React.createClass({
 
   propTypes: {
     skin            : React.PropTypes.object,
     globals         : React.PropTypes.number,
-    tabState        : React.PropTypes.arrayOf(React.PropTypes.object),
-    selectedTabIndex: React.PropTypes.number,
-    listVisible     : React.PropTypes.bool
+    tabState        : React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    selectedTabIndex: React.PropTypes.number.isRequired,
+    listVisible     : React.PropTypes.bool.isRequired
   },
 
   shouldComponentUpdate: function (nextProps, nextState)
@@ -51,6 +52,9 @@ var SidePane = React.createClass({
 
   componentDidMount: function ()
     {
+    console.log('SidePane.componentDidMount(): ');
+    console.log(this.refs);
+    //debugger;
     ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
     },
 
@@ -74,15 +78,15 @@ var SidePane = React.createClass({
 
     console.log("render: sidePane");
 
-    var skin    = this.props.skin || "default",
-        globals = this.props.globals || {};
+    let skin    = this.props.skin || "default";
+    let globals = this.props.globals || {};
 
     /* Do I need dynamicTab to be something else if tabState is empty? */
 
     console.log(this.props.tabState);
     console.log(this.props.selectedTabIndex);
 
-    var dynamicTab;
+    let dynamicTab;
 
     /* Should I include selectedTabIndex being < 0 too ? */
     if (this.props.tabState.length === 0)
@@ -95,8 +99,7 @@ var SidePane = React.createClass({
         <Tab key={this.props.tabState[this.props.selectedTabIndex].label + 'tab'}
              title={this.props.tabState[this.props.selectedTabIndex].label}>
           <SidePaneTabContents key={this.props.tabState[this.props.selectedTabIndex].label + 'contents'}
-                               tabObject={this.props.tabState[this.props.selectedTabIndex]}
-          />
+                               tabObject={this.props.tabState[this.props.selectedTabIndex]}/>
         </Tab>;
       }
 
