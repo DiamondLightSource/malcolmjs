@@ -111,17 +111,6 @@ malcolmPut(blockName, endpoint, value)
   {
   let requestedDataToWritePath;
 
-  AppDispatcher.handleAction({
-    actionType: appConstants.MALCOLM_CALL_PENDING,
-    item      : {
-      requestedDataToWrite: {
-        blockName: blockName,
-        endpoint : endpoint,
-        value    : value
-      }
-    }
-  });
-
   function malcolmPutSuccess(id, responseMessage)
     {
     AppDispatcher.handleAction({
@@ -153,14 +142,70 @@ malcolmPut(blockName, endpoint, value)
     });
     }
 
-    if (blockName)
+  /**
+   * Output needs to be of the format:
+   * {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"On"}
+   */
+  if (blockName)
       {
-      requestedDataToWritePath = [actionCreators.deviceId, blockName];
+      requestedDataToWritePath = [blockName];
       }
     else
       {
       requestedDataToWritePath = [actionCreators.deviceId];
       }
+
+  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
+
+  }
+
+malcolmPost(blockName, endpoint, parameters)
+  {
+  let requestedDataToWritePath;
+
+  function malcolmPostSuccess(id, responseMessage)
+    {
+    AppDispatcher.handleAction({
+      actionType: appConstants.MALCOLM_POST_SUCCESS,
+      item      : {
+        responseMessage     : responseMessage,
+        requestedDataToWrite: {
+          blockName: blockName,
+          endpoint : endpoint,
+          parameters: parameters
+        }
+      }
+    });
+    }
+
+  function malcolmPostFailure(responseMessage)
+    {
+    AppDispatcher.handleAction({
+      actionType: appConstants.MALCOLM_POST_FAILURE,
+      item      : {
+        responseMessage     : responseMessage,
+        requestedDataToWrite: {
+          blockName: blockName,
+          endpoint : endpoint,
+          parameters: parameters
+        }
+
+      }
+    });
+    }
+
+  /**
+   * Output needs to be of the format:
+   * {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"On"}
+   */
+  if (blockName)
+    {
+    requestedDataToWritePath = [blockName];
+    }
+  else
+    {
+    requestedDataToWritePath = [actionCreators.deviceId];
+    }
 
   MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
 
