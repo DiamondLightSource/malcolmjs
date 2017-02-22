@@ -220,7 +220,7 @@ addVisibleAttribute(attrName = '')
 
 get Id()
   { // class method
-    //console.log(`BlockItem class instance: Id: ${this.index}`);
+  //console.log(`BlockItem class instance: Id: ${this.index}`);
   return ( this.index );
   }
 
@@ -273,12 +273,12 @@ y()
 
 putX(newX)
   {
-  MalcolmActionCreators.malcolmPut([this.attributes.mri,"layout","value","x"], {"x":"newX"});
+  MalcolmActionCreators.malcolmPut("X", [this.attributes.mri, "layout", "value", "x"], {"x": newX});
   }
 
 putY(newY)
   {
-  MalcolmActionCreators.malcolmPut([this.attributes.mri,"layout","value","y"], {"y":"newY"});
+  MalcolmActionCreators.malcolmPut("Y", [this.attributes.mri, "layout", "value", "y"], {"y": newY});
   }
 
 blockName()
@@ -328,7 +328,7 @@ getAllBlockAttributes()
   let attr = [];
   if (this.hasOwnProperty('attributes'))
     {
-    attr = Object.assign({},this.attributes);
+    attr = Object.assign({}, this.attributes);
     }
   return (attr);
   }
@@ -395,6 +395,16 @@ attributeTagsContains(attributeName, value)
       }
     }
   return (ret);
+  }
+
+/**
+ * blockType()
+ * @returns {*|string|void|XML}
+ */
+get blockType()
+  {
+  let bt = this.blockName().replace(/[0-9]/g, '');
+  return (bt);
   }
 
 }
@@ -744,12 +754,12 @@ setItemProtocolIndex(itemIndex, protocolIndex)
 
 getItemByProtocolIndex(protocolIndex)
   {
-  let item = null;
+  let item       = null;
   let blockIndex = -1;
   if (this._MapBlockIndexProtocolIndex.hasOwnProperty(protocolIndex))
     {
     blockIndex = this._MapBlockIndexProtocolIndex[protocolIndex];
-    item = this.getBlockItem(blockIndex);
+    item       = this.getBlockItem(blockIndex);
     }
   return (item);
   }
