@@ -9,9 +9,9 @@ import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 let TextEditableReadoutField = React.createClass({
 
   propTypes: {
-    blockAttributeValue      : React.PropTypes.string,
-    tabObject: React.PropTypes.object,
-    blockName      : React.PropTypes.string,
+    blockAttributeValue: React.PropTypes.string,
+    tabObject          : React.PropTypes.object,
+    blockName          : React.PropTypes.string,
     attributeName      : React.PropTypes.string,
   },
 
