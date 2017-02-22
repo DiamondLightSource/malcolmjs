@@ -6,8 +6,8 @@ let React = require('react');
 
 let LEDWidget = React.createClass({
   propTypes: {
-    blockAttributeValue      : React.PropTypes.string,
-    tabObject: React.PropTypes.object
+    blockAttributeValue: React.PropTypes.bool.isRequired,
+    tabObject          : React.PropTypes.object
   },
 
   shouldComponentUpdate: function (nextProps, nextState)
