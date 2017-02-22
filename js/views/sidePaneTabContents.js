@@ -134,8 +134,8 @@ let SidePaneTabContents = React.createClass(
       for (let attribute in blockAttributes)
         {
         
-        if (!MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags") &&
-          blockAttributes[attribute].alarm === undefined)
+        if ((MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags") === undefined) &&
+          (blockAttributes[attribute].alarm === undefined))
           {
           
           /* Creating the array that I'll push the
@@ -188,11 +188,16 @@ let SidePaneTabContents = React.createClass(
              what to 'push' to in each case
              */
             /**
-             * ToDo: Can't see any assignment into groupsObject[]
-             *       How is this working? IJG 6/2/17
+             * Switch the output rendering to either groupsObject[] or blockAttributeDivs
+             * by pointing widgetParent at the appropriate object.
+             * IJG 6/2/17
              */
             if (isInAGroup === true)
               {
+              if (groupsObject[groupName] === undefined)
+                {
+                groupsObject[groupName] = [];
+                }
               widgetParent = groupsObject[groupName];
               }
             else
@@ -232,11 +237,8 @@ let SidePaneTabContents = React.createClass(
       for (let group in groupsObject)
         {
         blockAttributeDivs.push(
-          <Treeview defaultCollapsed={false}
-                    nodeLabel={
-                      <b
-                        style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>
-                    }
+          <Treeview defaultCollapsed={true}
+                    nodeLabel={<b style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>}
                     key={group + 'treeview'}
           > {groupsObject[group]}
           </Treeview>
