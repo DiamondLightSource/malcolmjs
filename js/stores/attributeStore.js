@@ -2,14 +2,11 @@
  * Created by twi18192 on 10/03/16.
  */
 import blockCollection from '../classes/blockItems';
-import MalcolmUtils from '../utils/MalcolmUtils';
-import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import eachOf from 'async/eachOf';
 
 let AppDispatcher = require('../dispatcher/appDispatcher.js');
 let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
-let assign        = require('../../node_modules/object-assign/index.js');
 
 // Used for Node.js EventEmitted implementation
 let CHANGE_EVENT = 'change';
@@ -19,8 +16,6 @@ let update = require('react-addons-update');
 let allBlockAttributes = {};
 
 let allBlockAttributesIconStatus = {};
-
-let allBlockItems = [];
 
 /**
  *
