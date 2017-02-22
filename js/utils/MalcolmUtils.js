@@ -118,7 +118,7 @@ malcolmPut(requestedDataToWrite, endpoint, value, successCallback, failureCallba
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPut();
   message['id']                             = id;
   message['endpoint']                       = endpoint;
-  message['value']                          = JSON.stringify(value);
+  message['value']                          = value;
   let messageJson                           = JSON.stringify(message);
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
