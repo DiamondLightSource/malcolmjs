@@ -9,10 +9,12 @@ let FlowChart = require('./flowChart');
 let blockStore = require('../stores/blockStore.js');
 let flowChartStore = require('../stores/flowChartStore');
 
+
 function getFlowChartState(){
   return{
     /* blockStore */
     allBlockInfo: blockStore.getAllBlockInfo(),
+    blockPositions: blockStore.getBlockPositions(),
 
     /* flowChartStore */
     graphPosition: flowChartStore.getGraphPosition(),
@@ -22,8 +24,7 @@ function getFlowChartState(){
     areAnyBlocksSelected: flowChartStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected: flowChartStore.getIfAnyEdgesAreSelected(),
     edgePreview: flowChartStore.getEdgePreview(),
-    blockStyling: flowChartStore.getBlockStyling(),
-    blockPositions: blockStore.getBlockPositions(),
+    blockStyling: flowChartStore.getBlockStyling()
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
 }
@@ -47,6 +48,12 @@ let FlowChartControllerView = React.createClass({
     blockStore.removeChangeListener(this._onChange);
     flowChartStore.removeChangeListener(this._onChange);
   },
+
+  shouldComponentUpdate: function(nextProps, nextState)
+    {
+    let bRet = Object.is(nextProps, this.props);
+    return(bRet);
+    },
 
   render: function(){
     return(

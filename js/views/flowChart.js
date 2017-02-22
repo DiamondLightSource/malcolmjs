@@ -3,22 +3,18 @@
  */
 
 let React    = require('react');
-let ReactDOM = require('react-dom');
-
-let appConstants = require('../constants/appConstants.js');
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-let attributeStore = require('../stores/attributeStore');
 let flowChartStore = require('../stores/flowChartStore');
 import flowChartActions from '../actions/flowChartActions';
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-
 let Edge        = require('./edge.js');
 let EdgePreview = require('./edgePreview');
-let Block       = require('./block.js');
+import Block from './block.js';
 
 let interact = require('../../node_modules/interact.js');
+
+import blockCollection from '../classes/blockItems';
 
 let AppContainerStyle = {
   "height": "100%",
@@ -43,7 +39,9 @@ let FlowChart = React.createClass({
 
   componentDidMount   : function ()
     {
-
+    /**
+     * Add listeners to CustomEvent broadcasters in ports.js portClick(e).
+     */
     this.refs.node.addEventListener('EdgePreview', this.addEdgePreview);
     this.refs.node.addEventListener('EdgePreview', this.portSelectHighlight);
     this.refs.node.addEventListener('TwoPortClicks', this.checkBothClickedPorts);
@@ -159,25 +157,38 @@ let FlowChart = React.createClass({
     return ((n = +n) || 1 / n) < 0;
     },
 
+  /**
+   * addEdgePreview()
+   *
+   * This event driven callback does not have any direct rendering function in flowChart.
+   * Its sole purpose is to construct an edgePreviewInfo object and call
+   * flowChartActions.addEdgePreview(edgePreviewInfo), which then trigger flowChartStore
+   * to update its edgePreview object, followed by emitting a change event.
+   *
+   * ?? Would this be better to reside within the flowChartStore ??
+   * IJG 17 Feb 17
+   *
+   * @param eventdata
+   */
   addEdgePreview: function (eventdata)
     {
+    let blockInfo = eventdata.detail.blockInfo;
 
-    let blockInfo = eventdata.detail;
-
-    //console.log('flowChart: blockInfo :');
-    //console.log(blockInfo);
+    console.log('flowChart: blockInfo :');
+    console.log(blockInfo);
 
     let clickedPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
     // AGHHHHHHHHH!!!!!! Yuck... :(
     //let fromBlockId = clickedPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
     let fromBlockId = blockInfo.name;
 
     console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
 
     let portStringSliceIndex = fromBlockId.length;
     let portName             = document.getElementById(this.props.portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
-    let fromBlockType        = this.props.allBlockInfo[fromBlockId].type;
+    let fromBlockType        = blockInfo.type;
 
     /* Slightly confusing since the end of the edge is the same as the start
      of the edge at the very beginning of an edgePreview, but this is only to
@@ -244,8 +255,9 @@ let FlowChart = React.createClass({
     flowChartActions.addEdgePreview(edgePreviewInfo);
     },
 
-  portSelectHighlight: function ()
+  portSelectHighlight: function (eventdata)
     {
+    let blockInfo = eventdata.detail.blockInfo;
     flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
     },
 
@@ -255,9 +267,10 @@ let FlowChart = React.createClass({
     flowChartActions.addEdgePreview(null);
     },
 
-  checkBothClickedPorts: function ()
+  checkBothClickedPorts: function (eventdata)
     {
     /* This function will run whenever we have dispatched a PortSelect event */
+    let blockInfo = eventdata.detail.blockInfo;
 
     let firstPort  = document.getElementById(this.props.storingFirstPortClicked.id);
     let secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
@@ -474,16 +487,26 @@ let FlowChart = React.createClass({
         /* Create new edges by sending a malcolmCall */
 
         inportBlock = endBlock;
-        /* the 'blockName' argument */
-        let inputFieldSetMethod = "_set_" + endBlockPort;
         /* the 'method' argument */
         let newDropdownValue = startBlock + "." + startBlockPort;
         /* the 'args' argument */
-
         let argsObject           = {};
         argsObject[endBlockPort] = newDropdownValue;
 
-        MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+        /**
+         * TODO: Modify for Protocol 2
+         *      Must be of the form:
+         *      {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"Off"}
+         */
+        let item = blockCollection.getBlockItemByName(inportBlock);
+        if (item !== null)
+          {
+          let mri = item.mri();
+          let endpoint = [mri, endBlockPort, "value"];
+          let newValue = newDropdownValue.toUpperCase();
+          MalcolmActionCreators.malcolmPut(inportBlock, endpoint, newValue);
+          //MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+          }
 
         this.resetPortClickStorage();
 
@@ -615,42 +638,43 @@ let FlowChart = React.createClass({
      *  allBlockInfo[] = { type, label, name, inports, outports };
      */
 
-    for (let block in this.props.allBlockInfo)
+    for (let blockName in this.props.allBlockInfo) // this returns just the string name of each block object.
       {
-      if (this.props.allBlockInfo.hasOwnProperty(block))
+      let blockInfo = this.props.allBlockInfo[blockName];
+      if (this.props.allBlockInfo.hasOwnProperty(blockName))
         {
         //for(let blockindex = 0; blockindex < this.props.allBlockInfo.length; blockindex++)
         //let block = this.props.allBlockInfo[blockindex];
         blocks.push(
-          <Block key={block} id={block} className="block"
-                 blockInfo={this.props.allBlockInfo[block]}
+          <Block key={blockInfo.name} id={blockInfo.name} className="block"
+                 blockInfo={blockInfo}
                  areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                  storingFirstPortClicked={this.props.storingFirstPortClicked}
             //portMouseOver={this.props.portMouseOver}
-                 selected={flowChartStore.getAnyBlockSelectedState(block)}
+                 selected={flowChartStore.getAnyBlockSelectedState(blockName)}
                  deselect={this.deselect}
                  blockStyling={this.props.blockStyling}
-                 blockPosition={this.props.blockPositions[block]}
+                 blockPosition={this.props.blockPositions[blockName]}
                  graphZoomScale={this.props.graphZoomScale}
             //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
           />
         );
 
-        for (let i = 0; i < this.props.allBlockInfo[block].inports.length; i++)
+        for (let i = 0; i < this.props.allBlockInfo[blockName].inports.length; i++)
           {
-          if (this.props.allBlockInfo[block].inports[i].connected === true &&
-            this.props.allBlockInfo[this.props.allBlockInfo[block].inports[i].connectedTo.block] !== undefined)
+          if (this.props.allBlockInfo[blockName].inports[i].connected === true &&
+            this.props.allBlockInfo[this.props.allBlockInfo[blockName].inports[i].connectedTo.block] !== undefined)
             {
 
-            let toBlock     = block;
-            let toBlockType = this.props.allBlockInfo[block].type;
-            let toBlockPort = this.props.allBlockInfo[block].inports[i].name;
+            let toBlock     = blockName;
+            let toBlockType = this.props.allBlockInfo[blockName].type;
+            let toBlockPort = this.props.allBlockInfo[blockName].inports[i].name;
 
-            let fromBlock              = this.props.allBlockInfo[block].inports[i].connectedTo.block;
+            let fromBlock              = this.props.allBlockInfo[blockName].inports[i].connectedTo.block;
             let fromBlockType          = this.props.allBlockInfo[fromBlock].type;
-            let fromBlockPort          = this.props.allBlockInfo[block].inports[i].connectedTo.port;
-            let fromBlockPortValueType = this.props.allBlockInfo[block].inports[i].type;
+            let fromBlockPort          = this.props.allBlockInfo[blockName].inports[i].connectedTo.port;
+            let fromBlockPortValueType = this.props.allBlockInfo[blockName].inports[i].type;
 
             /* Only one of fromBlockPortValueType and toBlockPortValue type
              is needed, since if they are connected they SHOULD have the same type
@@ -670,7 +694,7 @@ let FlowChart = React.createClass({
                     areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                     selected={flowChartStore.getIfEdgeIsSelected(edgeLabel)}
                     inportArrayIndex={i}
-                    inportArrayLength={this.props.allBlockInfo[block].inports.length}
+                    inportArrayLength={this.props.allBlockInfo[blockName].inports.length}
                     blockStyling={this.props.blockStyling}
               />
             )

@@ -7,7 +7,9 @@ let AppDispatcher = require('../dispatcher/appDispatcher.js');
 let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
 let assign        = require('../../node_modules/object-assign/index.js');
+let blockStore    = require('../stores/blockStore.js');
 import blockCollection from '../classes/blockItems';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
 let CHANGE_EVENT = 'change';
 
@@ -16,6 +18,7 @@ let portThatHasBeenClicked    = null;
 let storingFirstPortClicked   = null;
 let edgePreview               = null;
 let previousMouseCoordsOnZoom = null;
+let clickedPortBlockInfo      = null;
 
 let blockStyling = {
   outerRectangleHeight: 76,
@@ -390,6 +393,403 @@ onChangeBlockCollectionCallback(items)
     }
   }
 
+/**
+ * addEdgePreview()
+ *
+ * When a block port is clicked, this function will determine the state of the user interaction with the flowChart
+ * It can be a first click to select a 'from' port or a second click to select a 'to' port.
+ * The ouptut is an edgePreviewInfo object, which then gets stored as a state in this flowChartStore and a
+ * change event emitted to inform all components of the change.
+ *
+ * @param eventdata
+ * eventdata is an object which has a property of blockInfo relating to the block containing the port which was clicked.
+ */
+addEdgePreview()
+  {
+  // portThatHasBeenClicked contains the reference to the port just clicked.
+  // Determine the related block and get its info.
+  let blockInfo = clickedPortBlockInfo;
+
+  let blockItem = blockCollection.getBlockItemByName(blockInfo.name);
+
+  console.log('flowChartStore: blockInfo :');
+  console.log(blockInfo);
+
+  let clickedPort = document.getElementById(portThatHasBeenClicked.id);
+  //let clickedPort = portThatHasBeenClicked;
+
+  // AGHHHHHHHHH!!!!!! Yuck... :(
+  //let fromBlockId = clickedPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+  let fromBlockId = blockInfo.name;
+
+  console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
+
+  let portStringSliceIndex = fromBlockId.length;
+  let portName             = document.getElementById(portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
+  let fromBlockType        = blockInfo.type;
+
+  /* Slightly confusing since the end of the edge is the same as the start
+   of the edge at the very beginning of an edgePreview, but this is only to
+   do the initial render, this'll be updated by interactJSMouseMoveForEdgePreview()
+   in edgePreview.js
+   */
+
+  let endOfEdgePortOffsetX;
+  let endOfEdgePortOffsetY;
+  let portType;
+
+  if (document.getElementById(portThatHasBeenClicked.id).className.baseVal.indexOf('inport') !== -1)
+    {
+
+    let inportArrayLength = clickedPortBlockInfo.inports.length;
+    let inportArrayIndex;
+    for (let j = 0; j < inportArrayLength; j++)
+      {
+      if (clickedPortBlockInfo.inports[j].name === portName)
+        {
+        inportArrayIndex = JSON.parse(JSON.stringify(j));
+        }
+      }
+    endOfEdgePortOffsetX = 0;
+    endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    portType             = "inport";
+    }
+  else if (document.getElementById(portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1)
+    {
+
+    let outportArrayLength = clickedPortBlockInfo.outports.length;
+    let outportArrayIndex;
+
+    for (let i = 0; i < outportArrayLength; i++)
+      {
+      if (clickedPortBlockInfo.outports[i].name === portName)
+        {
+        outportArrayIndex = JSON.parse(JSON.stringify(i));
+        }
+      }
+
+    endOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
+    endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    portType             = "outport";
+    }
+
+  let blockPosX  = blockItem.x();
+  let blockPosY  = blockItem.y();
+  let endOfEdgeX = blockPosX + endOfEdgePortOffsetX;
+  let endOfEdgeY = blockPosY + endOfEdgePortOffsetY;
+
+  let edgePreviewInfo = {
+    fromBlockInfo : {
+      fromBlock        : fromBlockId,
+      fromBlockType    : fromBlockType,
+      fromBlockPort    : portName,
+      fromBlockPortType: portType
+    },
+    /* At the very start this'll be the same as the fromBlockPort position,
+     then I'll update it with interactJSMouseMoveForEdgePreview() in edgePreview.js */
+    endpointCoords: {
+      x: endOfEdgeX,
+      y: endOfEdgeY
+    }
+  };
+
+  // This used to be the purpose of this function when it used to be in flowChart component.
+  //
+  //flowChartActions.addEdgePreview(edgePreviewInfo);
+  edgePreview = edgePreviewInfo;
+  flowChartStore.emitChange();
+
+  }
+
+cancelEdgePreview()
+  {
+  this.resetPortClickStorage();
+  edgePreview = null;
+  flowChartStore.emitChange();
+  }
+
+checkBothClickedPorts()
+  {
+  /* This function will run whenever we have dispatched a PortSelect event */
+  let blockInfo = clickedPortBlockInfo;
+
+  let firstPort  = document.getElementById(storingFirstPortClicked.id);
+  let secondPort = document.getElementById(portThatHasBeenClicked.id);
+
+  console.log(`flowChartStore: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
+
+  /* The excessive use of .parentNode is to walk up
+   the DOM tree and find the id of the block that the
+   port belongs to, not the best way I'm sure...
+   */
+
+  /* Trying to use id instead of class to then allow class for interactjs use */
+  /* Need the length of the name of the node, then slice the firstPort id string
+   until the end of the node name length */
+
+  let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
+    .parentNode.parentNode.id.length;
+  let firstPortName             = firstPort.id.slice(firstPortStringSliceIndex);
+
+  let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
+    .parentNode.parentNode.id.length;
+  let secondPortName             = secondPort.id.slice(secondPortStringSliceIndex);
+
+
+  if (firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
+    secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
+    firstPort.id === secondPort.id)
+    {
+    }
+  else
+    {
+    let edge = {
+      fromBlock    : firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+      fromBlockPort: firstPortName,
+      toBlock      : secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+      toBlockPort  : secondPortName
+    };
+    this.checkPortCompatibility(edge);
+    }
+
+  }
+
+checkPortCompatibility(edgeInfo)
+  {
+  /* First need to check we have an inport and an outport */
+  /* Find both port types, then compare them somehow */
+
+  let fromBlockPortType;
+  let toBlockPortType;
+
+  let fromBlockItem = blockCollection.getBlockItemByName(edgeInfo.fromBlock);
+  let fromBlockType = fromBlockItem.blockType;
+  let toBlockItem   = blockCollection.getBlockItemByName(edgeInfo.toBlock);
+  let toBlockType   = toBlockItem.blockType;
+
+  let allBlockInfo = blockStore.getAllBlockInfo();
+
+  console.log(`flowChart: checkPortCompatibility() : fromBlockType = ${fromBlockType}    toBlockType = ${toBlockType}`);
+
+  /* Remember, this is BEFORE any swapping occurs, but be
+   aware that these may have to swap later on
+   */
+  let blockTypes = {
+    fromBlockType: fromBlockType,
+    toBlockType  : toBlockType
+  };
+
+  if (document.getElementById(storingFirstPortClicked.id).parentNode
+      .transform.animVal[0].matrix.e === 0)
+    {
+    //console.log("it's an inport, since the port's x value is zero!");
+    fromBlockPortType = "inport";
+    }
+  else
+    {
+    fromBlockPortType = "outport";
+    }
+
+  if (document.getElementById(portThatHasBeenClicked.id).parentNode
+      .transform.animVal[0].matrix.e === 0)
+    {
+    toBlockPortType = "inport";
+    }
+  else
+    {
+    toBlockPortType = "outport";
+    }
+
+  /* Note that the inportIndex is used to then look in allBlockInfo
+   and check if the selected inport is already conencted or not
+   */
+
+  let inportIndex;
+
+  for (let i = 0; i < allBlockInfo[edgeInfo.fromBlock].inports.length; i++)
+    {
+    if (allBlockInfo[edgeInfo.fromBlock].inports[i].name === edgeInfo.fromBlockPort)
+      {
+      inportIndex = i;
+      break;
+      }
+    }
+
+  for (let j = 0; j < allBlockInfo[edgeInfo.toBlock].inports.length; j++)
+    {
+    if (allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort)
+      {
+      inportIndex = j;
+      break;
+      }
+    }
+
+  let portTypes = {
+    fromBlockPortType: fromBlockPortType,
+    toBlockPortType  : toBlockPortType
+  };
+
+  let types = {
+    blockTypes: blockTypes,
+    portTypes : portTypes
+  };
+
+  /* Time to compare the fromNodePortType and toNodePortType */
+
+  if (fromBlockPortType === toBlockPortType)
+    {
+    window.alert("Incompatible ports, they are both " + fromBlockPortType + "s.");
+    this.resetPortClickStorage();
+    this.cancelEdgePreview();
+    }
+  else if (fromBlockPortType !== toBlockPortType)
+    {
+
+    if (fromBlockPortType === "inport")
+      {
+      this.isInportConnected(edgeInfo.fromBlockPort, inportIndex, edgeInfo.fromBlock, edgeInfo, types);
+      }
+    else if (toBlockPortType === "inport")
+      {
+      this.isInportConnected(edgeInfo.toBlockPort, inportIndex, edgeInfo.toBlock, edgeInfo, types);
+      }
+
+    }
+
+  }
+
+isInportConnected(inport, inportIndex, block, edgeInfo, types)
+  {
+  let allBlockInfo = blockStore.getAllBlockInfo();
+
+  if (allBlockInfo[block].inports[inportIndex].connected === true)
+    {
+    window.alert("The inport " + inport + " of the block " + block +
+      " is already connected, so another connection cannot be made");
+
+    this.cancelEdgePreview();
+    }
+  else if (allBlockInfo[block].inports[inportIndex].connected === false)
+    {
+
+    /* Now check if the port value types are compatible (ie, if they're the same) */
+
+    let startBlock;
+    let startBlockPort;
+    let endBlock;
+    let endBlockPort;
+    let fromPortValueType;
+    let toPortValueType;
+
+    /* For the malcolmCall that updates the dropdown menu list
+     specifying what port the block's inport is connected to */
+    let inportBlock;
+
+    if (types.portTypes.fromBlockPortType === 'outport')
+      {
+
+      startBlock     = edgeInfo.fromBlock;
+      startBlockPort = edgeInfo.fromBlockPort;
+      endBlock       = edgeInfo.toBlock;
+      endBlockPort   = edgeInfo.toBlockPort;
+
+      /* Now to loop through the specific port's tags to find
+       out what type it is (ie, pos, bit etc)
+       */
+
+      /* We know that the toBlockPortType is an inport,
+       so then we can check their port VALUE types accordingly */
+      for (let i = 0; i < allBlockInfo[edgeInfo.fromBlock].outports.length; i++)
+        {
+        if (allBlockInfo[edgeInfo.fromBlock].outports[i].name === edgeInfo.fromBlockPort)
+          {
+          fromPortValueType = allBlockInfo[edgeInfo.fromBlock].outports[i].type;
+          }
+        }
+
+      for (let j = 0; j < allBlockInfo[edgeInfo.toBlock].inports.length; j++)
+        {
+        if (allBlockInfo[edgeInfo.toBlock].inports[j].name === edgeInfo.toBlockPort)
+          {
+          toPortValueType = allBlockInfo[edgeInfo.toBlock].inports[j].type;
+          }
+        }
+      }
+    else if (types.portTypes.fromBlockPortType === 'inport')
+      {
+
+      /* Note that you must also flip the ports too! */
+      startBlock     = edgeInfo.toBlock;
+      startBlockPort = edgeInfo.toBlockPort;
+      endBlock       = edgeInfo.fromBlock;
+      endBlockPort   = edgeInfo.fromBlockPort;
+
+      }
+
+    if (fromPortValueType === toPortValueType)
+      {
+      /* Proceed with the connection as we have compatible port value types */
+
+      /* Create new edges by sending a malcolmCall */
+
+      inportBlock = endBlock;
+      /* the 'method' argument */
+      let newDropdownValue = startBlock + "." + startBlockPort;
+      /* the 'args' argument */
+      let argsObject           = {};
+      argsObject[endBlockPort] = newDropdownValue;
+
+      /**
+       * TODO: Modify for Protocol 2
+       *      Must be of the form:
+       *      {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"Off"}
+       */
+      let item = blockCollection.getBlockItemByName(inportBlock);
+      if (item !== null)
+        {
+        let mri      = item.mri();
+        let endpoint = [mri, endBlockPort, "value"];
+        let newValue = newDropdownValue.toUpperCase();
+        MalcolmActionCreators.malcolmPut(inportBlock, endpoint, newValue);
+        //MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+        }
+
+      this.resetPortClickStorage();
+
+      /* Can now safely delete the edgePreview by setting it back to null */
+      this.cancelEdgePreview();
+      }
+    else if (fromPortValueType !== toPortValueType)
+      {
+      window.alert("Incompatible port value types: the port " +
+        edgeInfo.fromBlockPort.toUpperCase() + " in " + edgeInfo.fromBlock.toUpperCase() +
+        " has value type " + fromPortValueType.toUpperCase() + ", whilst the port " +
+        edgeInfo.toBlockPort.toUpperCase() + " in " + edgeInfo.toBlock.toUpperCase() +
+        " has value type " + toPortValueType.toUpperCase() + ".");
+
+      /* Do all the resetting jazz */
+
+      this.resetPortClickStorage();
+
+      this.cancelEdgePreview();
+      }
+
+    }
+  }
+
+failedPortConnection()
+  {
+  this.resetPortClickStorage();
+  document.getElementById('dragArea').style.cursor = 'default';
+  this.cancelEdgePreview();
+  }
+
+resetPortClickStorage()
+  {
+  storingFirstPortClicked = null;
+  flowChartStore.emitChange();
+  }
 }
 
 const flowChartStore = new FlowChartStore();
@@ -419,10 +819,11 @@ switch (action.actionType)
     break;
 
   case appConstants.SELECT_EDGE:
+    {
     let areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
     //console.log(areAnyEdgesSelected);
     console.log(clickedEdge);
-    if (areAnyEdgesSelected === true && item !== clickedEdge)
+    if ((areAnyEdgesSelected === true) && (item !== clickedEdge))
       {
       deselectAllEdges();
       selectEdge(item);
@@ -433,6 +834,7 @@ switch (action.actionType)
       }
     console.log(edgeSelectedStates);
     flowChartStore.emitChange();
+    }
     break;
 
   case appConstants.DESELECT_ALLEDGES:
@@ -463,9 +865,34 @@ switch (action.actionType)
     break;
 
   case appConstants.PASS_PORTMOUSEDOWN:
-    portThatHasBeenClicked = item;
-    console.log(portThatHasBeenClicked);
-    flowChartStore.emitChange();
+    if (item !== null)
+      {
+      portThatHasBeenClicked = item.target;
+      clickedPortBlockInfo   = {...item.blockInfo}; // Make a deep copy using spread.
+      console.log("flowChartStore Dispatch callback: PASS_PORTMOUSEDOWN ==>");
+      console.log(portThatHasBeenClicked);
+      if (storingFirstPortClicked === null)
+        {
+        /* Haven"t clicked on another port before this,
+         just do an edgePreview rather than draw an edge
+         */
+        flowChartStore.addEdgePreview();
+        }
+      else
+        {
+        /* A port has been clicked before this, so
+         start the checking whether the two ports
+         are connectable/compatible
+         */
+        flowChartStore.checkBothClickedPorts();
+        }
+      }
+    else
+      {
+      flowChartStore.emitChange();
+      }
+    // emitChange() now called in addEdgePreview() above.
+    //flowChartStore.emitChange();
     break;
 
   case appConstants.DESELECT_ALLPORTS:
