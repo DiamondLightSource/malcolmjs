@@ -2,8 +2,8 @@
  * Created by Ian Gillingham on 10/02/17.
  */
 
-let React    = require('react');
-let interact = require('../../node_modules/interact.js');
+let React    = require("react");
+let interact = require("../../node_modules/interact.js");
 
 class Port extends React.Component {
 constructor(props)
@@ -21,14 +21,14 @@ componentDidMount()
   // blockId + inPortName + "invisiblePortCircle"
   if (this.props.className.indexOf("invisiblePortCircle"))
     {
-    interact(this.props.id).on('tap', this.portClick);
+    //interact(this.props.id).on('tap', this.portClick);
     //interact(this.props.id).styleCursor(false);
     }
   }
 
 componentWillUnmount()
   {
-  interact('.invisiblePortCircle').off('tap', this.portClick);
+  interact(".invisiblePortCircle").off("tap", this.portClick);
   }
 
 shouldComponentUpdate(nextProps, nextState)
@@ -43,22 +43,24 @@ portClick(e)
   //e.stopPropagation();
   console.log(`Port.portClick(): blockName = ${this.props.blockName}`);
   // Inform the parent Block object that we have been clicked.
-  if ((this.props.className.indexOf("invisiblePortCircle")) && (this.props.cbClicked !== null))
+  if ((this.props.className.indexOf("invisiblePortCircle") > -1) && (this.props.cbClicked !== null))
     {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
+    //e.stopImmediatePropagation();
+    //e.stopPropagation();
     this.props.cbClicked(e);
     }
   }
 
 render()
   {
-  // Sanitise the propoerties being passed to the primitive <circle> element.
+  // Sanitise the properties being passed to the primitive <circle> element.
   let circleProps = Object.assign({}, this.props);
   delete circleProps.blockName;
+  if (circleProps.hasOwnProperty("cbClicked"))
+    delete circleProps.cbClicked;
 
   return (
-    <circle {...circleProps} onClick={this.portClick}/>  )
+    <circle {...circleProps} onClick={this.portClick}/>);
   }
 }
 
