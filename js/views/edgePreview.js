@@ -12,13 +12,13 @@ let interact = require('../../node_modules/interact.js');
 let EdgePreview = React.createClass({
 
   propTypes: {
-    noPanning      : React.PropTypes.bool,
-    failedPortConnection : React.PropTypes.func,
-    blockStyling         : React.PropTypes.object,
-    edgePreview          : React.PropTypes.object,
-    fromBlockPosition    : React.PropTypes.object,
-    fromBlockInfo        : React.PropTypes.object,
-    id                   : React.PropTypes.string
+    noPanning           : React.PropTypes.bool,
+    failedPortConnection: React.PropTypes.func,
+    blockStyling        : React.PropTypes.object,
+    edgePreview         : React.PropTypes.object,
+    fromBlockPosition   : React.PropTypes.object,
+    fromBlockInfo       : React.PropTypes.object,
+    id                  : React.PropTypes.string
 
   },
 
@@ -248,9 +248,20 @@ let EdgePreview = React.createClass({
 
     pathInfo = pathInfo.join(" ");
 
+    // Removed props not relevant to <g> and store remainder in gProps
+    const gProps    = Object.assign({}, this.props);
+    const notGProps = ["fromBlock", "fromBlockType", "fromBlockPort", "fromBlockPortValueType", "fromBlockPosition",
+                       "toBlock", "toBlockType", "toBlockPort", "toBlockPosition", "fromBlockInfo", "toBlockInfo",
+                       "areAnyEdgesSelected", "inportArrayIndex", "inportArrayLength", "blockStyling",
+                       "interactJsDragPan", "failedPortConnection", "edgePreview"];
+    for (let i = 0; i < notGProps.length; i++)
+      {
+      let delProp = notGProps[i];
+      delete gProps[delProp];
+      }
 
     return (
-      <g id="edgePreviewContainer" {...this.props} ref="node">
+      <g id="edgePreviewContainer" {...gProps} ref="node">
 
         <path id={outerLineName} className="edgePreviewOuterLine"
               d={pathInfo}/>
