@@ -28,6 +28,19 @@ let initialEdgeInfo = {};
 
 let blockPositions = {};
 
+/**
+ * mapPortBlock: Contains a dictionary of port id mapped to block id
+ * Provides a clean and reliable lookup of the block associated with a port
+ * when the port is clicked.
+ * Mapping structure is:
+ * [{port_id : block_name}]
+ *
+ * IJG 10 Feb 2017
+ *
+ * @type {{}}
+ */
+let mapPortBlock = {};
+
 function appendToBlockPositions(BlockId, xCoord, yCoord)
   {
   blockPositions[BlockId] = {
@@ -85,7 +98,7 @@ function interactJsDrag(BlockInfo)
 function addBlock(blockItem)
   {
   // Strip off the block type instance number to just leave the type.
-  let blockType = blockItem.blockName().replace(/[0-9]/g, '');
+  let blockType = blockItem.blockType;
 
   let inports  = [];
   let outports = [];
@@ -190,13 +203,13 @@ function addBlock(blockItem)
                so need to do more here
                */
 
-              initialEdgeInfoKeyValueName = blockItem.blockName() + ":" + attrName;
+              initialEdgeInfoKeyValueName = blockItem.blockName() + "." + attrName;
 
               initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName;
 
               }
-            }
-          else if (allBlockInfo[inportValue.slice(0, inportValue.indexOf(':'))] !== undefined)
+            } // TODO: Revisit these colons - I suspect they should be dots (as was)
+          else if (allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] !== undefined)
             {
             /* Then the outport block already exists, so can
              simply push the inport like normal!
@@ -207,10 +220,10 @@ function addBlock(blockItem)
 
             let outportBlockName;
             let outportName;
-            if (inportValue.indexOf(':') != -1)
+            if (inportValue.indexOf('.') != -1)
               {
-              outportBlockName = inportValue.slice(0, inportValue.indexOf(':'));
-              outportName      = inportValue.slice(inportValue.indexOf(':') + 1);
+              outportBlockName = inportValue.slice(0, inportValue.indexOf('.'));
+              outportName      = inportValue.slice(inportValue.indexOf('.') + 1);
               }
 
             inports.push(
@@ -295,11 +308,11 @@ function updateAnInitialEdge(initialEdgeInfoKey)
 
   let initialEdgeInfoValue = initialEdgeInfo[initialEdgeInfoKey];
 
-  let outportBlockName = initialEdgeInfoKey.slice(0, initialEdgeInfoKey.indexOf(':'));
-  let outportName      = initialEdgeInfoKey.slice(initialEdgeInfoKey.indexOf(':') + 1);
+  let outportBlockName = initialEdgeInfoKey.slice(0, initialEdgeInfoKey.indexOf('.'));
+  let outportName      = initialEdgeInfoKey.slice(initialEdgeInfoKey.indexOf('.') + 1);
 
-  let inportBlockName = initialEdgeInfoValue.slice(0, initialEdgeInfoValue.indexOf(':'));
-  let inportName      = initialEdgeInfoValue.slice(initialEdgeInfoValue.indexOf(':') + 1);
+  let inportBlockName = initialEdgeInfoValue.slice(0, initialEdgeInfoValue.indexOf('.'));
+  let inportName      = initialEdgeInfoValue.slice(initialEdgeInfoValue.indexOf('.') + 1);
 
   /* Now to go through allBlockInfo and change the connected
    attributes of the inports and outports to true
@@ -339,7 +352,7 @@ function updateAnInitialEdge(initialEdgeInfoKey)
 
 function addEdgeViaMalcolm(Info)
   {
-  // TODO:
+  // TODO: ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock attribute
   //return; // !!!!!!! Temporary disable function - must put this back once sorted!!!!!!
   //debugger;
   //window.alert(allBlockInfo[Info.inportBlock.label]);
@@ -631,12 +644,12 @@ blockUpdated(blockIndex)
             //
             let outportBlock;
             //if (attribute.value.indexOf('.'))
-            if (attribute.value.indexOf(':'))
-              outportBlock = attribute.value.slice(0, attribute.value.indexOf(':'));
+            if (attribute.value.indexOf('.'))
+              outportBlock = attribute.value.slice(0, attribute.value.indexOf('.'));
             else
               outportBlock = attribute.value;
 
-            let outportBlockPort = attribute.value.slice(attribute.value.indexOf(':') + 1);
+            let outportBlockPort = attribute.value.slice(attribute.value.indexOf('.') + 1);
 
             let defval = blockItem.getAttributeDefaultValue(attributeName);
             if (attribute.value.indexOf(defval) === -1)
