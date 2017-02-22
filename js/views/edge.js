@@ -18,8 +18,8 @@ let Edge = React.createClass(
     propTypes           : {
       areAnyEdgesSelected   : React.PropTypes.bool,
       fromBlockPosition     : React.PropTypes.object,
-      fromBlock             : React.PropTypes.object,
-      fromBlockPort         : React.PropTypes.object,
+      fromBlock             : React.PropTypes.string,
+      fromBlockPort         : React.PropTypes.string,
       fromBlockInfo         : React.PropTypes.object,
       toBlockPosition       : React.PropTypes.object,
       toBlockPort           : React.PropTypes.string,
@@ -27,7 +27,7 @@ let Edge = React.createClass(
       toBlock               : React.PropTypes.string,
       id                    : React.PropTypes.string,
       selected              : React.PropTypes.bool,
-      blockStyling          : React.PropTypes.string,
+      blockStyling          : React.PropTypes.object,
       inportArrayIndex      : React.PropTypes.number,
       inportArrayLength     : React.PropTypes.number
     },
@@ -68,9 +68,15 @@ let Edge = React.createClass(
       MalcolmActionCreators.malcolmCall(blockName, method, args);
       },
 
+    handleMalcolmPut: function (blockName, endpoint, value)
+      {
+      MalcolmActionCreators.malcolmPut(blockName, endpoint, value);
+      },
+
     deleteEdgeViaMalcolm: function ()
       {
       let methodName = "_set_" + this.props.toBlockPort;
+      let endpoint = "";
       let argsObject = {};
       let argumentValue;
 
@@ -86,6 +92,8 @@ let Edge = React.createClass(
       argsObject[this.props.toBlockPort] = argumentValue;
 
       this.handleMalcolmCall(this.props.toBlock, methodName, argsObject);
+      // TODO: To be continued...
+      //this.handleMalcolmPut(this.props.toBlock, endpoint, argsObject);
       },
 
     mouseOver : function ()
@@ -247,9 +255,18 @@ let Edge = React.createClass(
 
       pathInfo = pathInfo.join(" ");
 
+      const gProps = Object.assign({}, this.props);
+      const notGProps = ["fromBlock", "fromBlockType", "fromBlockPort", "fromBlockPortValueType", "fromBlockPosition",
+                         "toBlock", "toBlockType", "toBlockPort", "toBlockPosition", "fromBlockInfo", "toBlockInfo",
+                         "areAnyEdgesSelected", "inportArrayIndex", "inportArrayLength", "blockStyling"];
+      for (let i = 0; i < notGProps.length; i++)
+        {
+        let delProp = notGProps[i];
+        delete gProps[delProp];
+        }
 
       return (
-        <g id="edgeContainer" {...this.props} ref="node">
+        <g id="edgeContainer" {...gProps} ref="node">
 
           <path id={outerLineName}
                 className={'edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected') }
