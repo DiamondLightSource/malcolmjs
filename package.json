@@ -43,6 +43,7 @@
     "eslint-plugin-react": "^6.9.0",
     "expect.js": "^0.3.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "flow-bin": "^0.40.0",
     "flux": "^2.1.1",
     "grommet": "^0.6.10",
     "grommet-hpe-theme": "^0.2.0",
