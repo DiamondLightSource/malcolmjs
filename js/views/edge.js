@@ -36,7 +36,7 @@ let Edge = React.createClass(
       //ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
       this.refs.node.addEventListener('EdgeSelect', this.edgeSelect);
 
-      interact(this.node)
+      interact(ReactDOM.findDOMNode(this))
         .on('tap', this.edgeSelect);
 
       window.addEventListener('keydown', this.keyPress);
@@ -44,7 +44,7 @@ let Edge = React.createClass(
       },
     componentWillUnmount: function ()
       {
-      interact(this.node)
+      interact(ReactDOM.findDOMNode(this))
         .off('tap', this.edgeSelect);
 
       window.removeEventListener('keydown', this.keyPress);
