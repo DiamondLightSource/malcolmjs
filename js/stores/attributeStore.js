@@ -181,6 +181,7 @@ class AttributeStore extends EventEmitter {
 constructor()
   {
   super();
+  this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
   }
 
@@ -342,4 +343,4 @@ attributeStore.dispatchToken = AppDispatcher.register(function (payload)
 );
 
 
-module.exports = attributeStore;
+export default attributeStore;
