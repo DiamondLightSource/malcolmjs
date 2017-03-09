@@ -15,7 +15,7 @@ constructor(props)
 
 componentDidMount()
   {
-  console.log(`Port.componentDidMount(): blockName = ${this.props.blockName}   className = ${this.props.className}`);
+  //console.log(`Port.componentDidMount(): blockName = ${this.props.blockName}   className = ${this.props.className}`);
 
   // The classname for the invisible port circles is composed of:
   // blockId + inPortName + "invisiblePortCircle"
