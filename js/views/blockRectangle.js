@@ -3,7 +3,6 @@
  */
 
 let React      = require('../../node_modules/react/react');
-let blockStore = require('../stores/blockStore.js');
 
 let BlockRectangle = React.createClass({
 
