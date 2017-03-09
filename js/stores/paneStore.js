@@ -111,6 +111,7 @@ class PaneStore extends EventEmitter {
 constructor()
   {
   super();
+  this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
   }
 
@@ -212,7 +213,8 @@ blockUpdated(blockIndex)
 
 const paneStore = new PaneStore();
 
-let attributeStore = require('./attributeStore');
+import attributeStore from './attributeStore';
+
 
 paneStore.dispatchToken = AppDispatcher.register(function (payload)
 {
@@ -310,7 +312,7 @@ switch (action.actionType)
 
   case appConstants.MALCOLM_CALL_SUCCESS:
     {
-    AppDispatcher.waitFor([blockCollection.dispatchToken]);
+    //AppDispatcher.waitFor([blockCollection.dispatchToken]);
 
     let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
 
@@ -351,8 +353,6 @@ switch (action.actionType)
 /* Importing a store into another store is the only way to use the dispatchToken of another store in order to use waitFor, so it must be ok! */
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
-
-let blockStore = require('./blockStore');
 
 let allBlockTabProperties = {
   'Favourites'   : false,
