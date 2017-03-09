@@ -10,8 +10,8 @@ let Button      = ReactPanels.Button;
 
 let Treeview = require('react-treeview');
 
-let blockStore     = require('../stores/blockStore');
-let attributeStore = require('../stores/attributeStore');
+import blockStore  from '../stores/blockStore';
+import attributeStore from '../stores/attributeStore';
 import MalcolmUtils from '../utils/MalcolmUtils';
 
 
