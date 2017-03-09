@@ -7,7 +7,7 @@ let AppDispatcher = require('../dispatcher/appDispatcher.js');
 let appConstants  = require('../constants/appConstants.js');
 let EventEmitter  = require('events').EventEmitter;
 let assign        = require('../../node_modules/object-assign/index.js');
-let blockStore    = require('../stores/blockStore.js');
+import blockStore from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
@@ -159,6 +159,8 @@ class FlowChartStore extends EventEmitter {
 constructor()
   {
   super();
+  this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
+
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
   }
 
@@ -245,7 +247,7 @@ getBlockStyling()
 /**
  * onChangeBlockCollectionCallback()
  * Callback function called when blockCollection emits an event.
- * Note that this will reference the EventEmitter, not the blockStore instance
+ * Note that 'this' will reference the EventEmitter, not the flowChartStore instance
  * as might be expected. IJG 9/1/17
  *
  * @param event
@@ -300,7 +302,7 @@ onChangeBlockCollectionCallback(items)
                   {
                   isWidgetCombo = true;
                   }
-                else if (tags[j].indexOf('group:Inputs') !== -1)
+                else if (tags[j].indexOf('group:inputs') !== -1)
                   {
                   isGroupInputs = true;
                   }
@@ -309,12 +311,12 @@ onChangeBlockCollectionCallback(items)
                   if (blockItem.visible)
                     {
                     appendToBlockSelectedStates(blockItem.blockName());
-                    flowChartStore.emitChange();
+                    changed = true;
                     }
                   else
                     {
                     removeBlock(blockItem.blockName());
-                    flowChartStore.emitChange();
+                    changed = true;
                     }
 
                   }
@@ -332,7 +334,7 @@ onChangeBlockCollectionCallback(items)
                  */
 
                 let defval = blockItem.getAttributeDefaultValue(attrName);
-                if (attr.value.indexOf(defval) === -1)
+                if ((defval !== null) && (typeof attr.value === "string") && (attr.value.indexOf(defval) === -1))
                   {
                   // Not default connection
                   /* edgeLabelFirstHalf is the outport block and the
@@ -385,11 +387,11 @@ onChangeBlockCollectionCallback(items)
             }
           }
         }
-      if (changed === true)
-        {
-        flowChartStore.emitChange(); // TODO: I think this should be outside the for loop - IG 20/12/16
-        }
       }
+    }
+  if (changed === true)
+    {
+    flowChartStore.emitChange();
     }
   }
 
@@ -790,6 +792,33 @@ resetPortClickStorage()
   storingFirstPortClicked = null;
   flowChartStore.emitChange();
   }
+
+/**
+ * getAllBlockInfo()
+ * The FlowChart component depends on properties derived from blockStore,
+ * so this function is a proxy to the blockStore function, so that FlowChart
+ * can follow Flux guidelines and be updated by only one store.
+  * @returns {{}|*}
+ */
+getAllBlockInfo()
+  {
+  let allBlockInfo = blockStore.getAllBlockInfo();
+  return (allBlockInfo);
+  }
+
+/**
+ * getBlockPositions()
+ * The FlowChart component depends on properties derived from blockStore,
+ * so this function is a proxy to the blockStore function, so that FlowChart
+ * can follow Flux guidelines and be updated by only one store.
+ * @returns {{}|*}
+ */
+getBlockPositions()
+  {
+  let blockPositions = blockStore.getBlockPositions();
+  return (blockPositions);
+  }
+
 }
 
 const flowChartStore = new FlowChartStore();
@@ -810,11 +839,13 @@ switch (action.actionType)
   case appConstants.SELECT_BLOCK:
     blockSelectedStates[item] = true;
     console.log(blockSelectedStates);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.DESELECT_ALLBLOCKS:
     deselectAllBlocks();
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
@@ -833,34 +864,40 @@ switch (action.actionType)
       selectEdge(item);
       }
     console.log(edgeSelectedStates);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     }
     break;
 
   case appConstants.DESELECT_ALLEDGES:
     deselectAllEdges();
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.CHANGE_GRAPHPOSITION:
     graphPosition = item;
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.GRAPH_ZOOM:
     graphZoomScale = item;
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.GETANY_EDGESELECTEDSTATE:
     getAnyEdgeSelectedState(item);
     //console.log(edgeSelectedStates[item]);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.CLICKED_EDGE:
     clickedEdge = item;
     console.log(clickedEdge);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
@@ -889,6 +926,7 @@ switch (action.actionType)
       }
     else
       {
+      //flowChartStore.waitFor([blockStore.dispatchToken]);
       flowChartStore.emitChange();
       }
     // emitChange() now called in addEdgePreview() above.
@@ -898,48 +936,60 @@ switch (action.actionType)
   case appConstants.DESELECT_ALLPORTS:
     portThatHasBeenClicked = null;
     //console.log("portThatHasBeenClicked has been reset");
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.STORING_FIRSTPORTCLICKED:
     storingFirstPortClicked = item;
     //console.log("storingFirstPortClicked is now: " + storingFirstPortClicked.id);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.ADD_EDGEPREVIEW:
     edgePreview = item;
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
     updateEdgePreviewEndpoint(item);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
     previousMouseCoordsOnZoom = item;
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.MALCOLM_GET_SUCCESS:
     break;
 
+  case appConstants.INTERACTJS_DRAG:
+    flowChartStore.emitChange();
+    break;
+
   case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+  case appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT:
     //console.info("flowChartStore malcolmSubscribe success",item.responseMessage);
     /* I need to have it listening to when any new edges are added
      via malcolm, currently I'm listening to the old appConstant:
      ADD_ONESINGLEEDGETOALLBLOCKINFO
      */
     //AppDispatcher.waitFor([blockCollection.dispatchToken]);
+    flowChartStore.emitChange();
 
     break;
 
 
   default:
-    return true
+    //console.log("flowChartStore dispatch callback - unrecognised actionType.");
+    break;
 }
 
 });
 
-module.exports = flowChartStore;
+export default flowChartStore;
