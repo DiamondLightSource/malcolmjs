@@ -9,10 +9,11 @@ let assign        = require('../../node_modules/object-assign/index.js');
 import eachOf from 'async/eachOf';
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-let attributeStore = require('./attributeStore');
+import attributeStore from './attributeStore';
 
 import config from "../utils/config";
 import blockCollection from '../classes/blockItems';
+import flowChartStore from './flowChartStore';
 
 let update = require('react-addons-update');
 
@@ -74,14 +75,18 @@ function interactJsDrag(BlockInfo)
 
 
   /* Testing React's immutability helper 'update' */
-
+  // TODO: Review the use of immutability helpers. It is possibly simpler and more understandable to
+  // carefully use a straightforward assign.
+  // It seems that the previous developer was experimenting with 'update'.
+  // Note that BlockInfo.x and BlockInfo.y are delta changes, not absolute, so need to be added to existing position.
+  // IJG 24 Feb 2017.
   blockPositions[BlockInfo.target] = update(blockPositions[BlockInfo.target], {
     $set: {
-      x: blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale()),
-      y: blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale())
+      x: Math.round(blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale())),
+      y: Math.round(blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
     }
   });
-
+  console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
   }
 
 
@@ -177,8 +182,14 @@ function addBlock(blockItem)
           /**
            * inportValue should be of the form: "inport:bool:ZERO"
            */
+          let firstColonPos  = inportValue.indexOf(':');
+          let substringValue = inportValue;
+          if (firstColonPos !== -1)
+            {
+            substringValue = inportValue.slice(0, firstColonPos);
+            }
 
-          if (allBlockInfo[inportValue.slice(0, inportValue.indexOf(':'))] === undefined)
+          if (allBlockInfo[substringValue] === undefined)
             {
 
             inports.push(
@@ -373,7 +384,7 @@ function addEdgeViaMalcolm(Info)
     }
   else
     {
-    console.log('ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.inportBlock attribute');
+    console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.inportBlock (${Info.inportBlock}) attribute`);
     console.log(allBlockInfo);
     }
 
@@ -394,7 +405,7 @@ function addEdgeViaMalcolm(Info)
     }
   else
     {
-    console.log('ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock attribute');
+    console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock (${Info.outportBlock}) attribute`);
     console.log(allBlockInfo);
     }
   }
@@ -424,13 +435,15 @@ function removeEdgeViaMalcolm(Info)
 
   }
 
-let flowChartStore = require('./flowChartStore');
 
 class BlockStore extends EventEmitter {
 constructor()
   {
   super();
+  this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
+  this.dispatcherCallback = this.dispatcherCallback.bind(this);
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
+  this.dispatchToken = AppDispatcher.register(this.dispatcherCallback);
   }
 
 addChangeListener(cb)
@@ -443,6 +456,7 @@ removeChangeListener(cb)
   this.removeListener(CHANGE_EVENT, cb);
   }
 
+
 emitChange()
   {
   //console.log('blockStore.emitChange ^V^V^V^');
@@ -451,23 +465,21 @@ emitChange()
 
 getAllBlockInfo()
   {
+  let retVal = {};
   if (allBlockInfo === null)
     {
     allBlockInfo = {};
-
-    //MalcolmActionCreators.initialiseFlowChart(config.getDeviceName());
-
-    return {};
     }
   else
     {
-    return allBlockInfo;
+    retVal = allBlockInfo;
     }
+  return (retVal);
   }
 
 getBlockPositions()
   {
-  return blockPositions;
+  return (blockPositions);
   }
 
 
@@ -515,6 +527,7 @@ updateBlockPosition(blockItem)
       let xCoord = blockItem.x();
       let yCoord = blockItem.y();
 
+      console.log(`blockCollection.updateBlockPosition(): xCoord = ${xCoord}  yCoord = ${yCoord}`);
       /* Add the block to allBlockInfo! */
 
       //console.log('blockStore MALCOLM_GET_SUCCESS: item.responseMessage - iteration:');
@@ -559,12 +572,16 @@ blockUpdated(blockIndex)
   let blockItem = blockCollection.getBlockItem(blockIndex);
   if (blockItem !== null)
     {
+    // Determine whether this blockItem has a position move to be applied.
     let positionUpdated = blockStore.updateBlockPosition(blockItem);
 
+    // Get a list of names of all the attributes of this block item
     let attrNames = blockItem.getAttributeNames();
 
     if (attrNames.length > 0)
       {
+      // Drill down and look for tag blocks to determine whether this is a graphical item
+      // and if so, what type.
       for (let a = 0; a < attrNames.length; a++)
         {
         let attributeName = attrNames[a];
@@ -590,15 +607,17 @@ blockUpdated(blockIndex)
             /**
              * TODO: DEBUG
              */
-            if (blockItem.visible)
-            //if (true)
+            //if (blockItem.visible)
+            if (true)
               {
               /* Trying to add a blockadd when its visibility is
                changed to 'Show'
                */
 
-              appendToBlockPositions(blockItem.blockName(),
-                flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+              /* IJG: Commented out this block as it appeared to be constantly resetting block moves to zero.
+               */
+               appendToBlockPositions(blockItem.blockName(),
+               flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
               /* Pass addBlock the block object from allBlockAttributes in attributeStore
                instead of relying on testAllBlockInfo
@@ -622,12 +641,14 @@ blockUpdated(blockIndex)
           {
           // Try placing this section here, as I think anything that is tagged as gui
           // should be recorded in block positions.
-          appendToBlockPositions(blockItem.blockName(),
-            flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
 
+          /* IJG: Commented out this block as it appeared to be constantly resetting block moves to zero.
+           */
+           appendToBlockPositions(blockItem.blockName(), flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
           /* Pass addBlock the block object from allBlockAttributes in attributeStore
            instead of relying on testAllBlockInfo
            */
+
           addBlock(blockItem);
           positionUpdated = true;
 
@@ -644,7 +665,7 @@ blockUpdated(blockIndex)
             //
             let outportBlock;
             //if (attribute.value.indexOf('.'))
-            if (attribute.value.indexOf('.'))
+            if (attribute.value.indexOf('.') !== -1)
               outportBlock = attribute.value.slice(0, attribute.value.indexOf('.'));
             else
               outportBlock = attribute.value;
@@ -689,22 +710,18 @@ blockUpdated(blockIndex)
         }
       if (positionUpdated === true)
         {
+        //AppDispatcher.waitFor([attributeStore.dispatchToken]);
+        //AppDispatcher.waitFor([blockCollection.dispatchToken]);
         blockStore.emitChange();
         }
       }
     } // if (blockItem !== null)
   } // blockUpdated()
 
-} // Class
-
-const blockStore = new BlockStore();
-
-blockStore.dispatchToken = AppDispatcher.register(
-  function (payload)
+dispatcherCallback(payload)
   {
   let action = payload.action;
   let item   = action.item;
-
   switch (action.actionType)
   {
 
@@ -712,6 +729,11 @@ blockStore.dispatchToken = AppDispatcher.register(
 
     case appConstants.INTERACTJS_DRAG:
       interactJsDrag(item);
+      //AppDispatcher.waitFor([attributeStore.dispatchToken]);
+      AppDispatcher.waitFor([blockCollection.dispatchToken]);
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+      // TODO: Should this emitChange() be called here??
+      console.log("blockStore dispatcher callback: INTERACTJS_DRAG");
       blockStore.emitChange();
       break;
 
@@ -738,12 +760,23 @@ blockStore.dispatchToken = AppDispatcher.register(
       //blockStore.emitChange();
       break;
 
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+    case appConstants.MALCOLM_GET_SUCCESS:
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT:
+      AppDispatcher.waitFor([blockCollection.dispatchToken]);
+      AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+      blockStore.emitChange();
+      break;
+
     default:
       return true;
   }
-  return ( true );
-  })
-;
+  return true;
+  }
+
+} // Class
+
+const blockStore = new BlockStore();
 
 
-module.exports = blockStore;
+export default blockStore;
