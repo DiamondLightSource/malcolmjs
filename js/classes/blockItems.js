@@ -145,9 +145,9 @@ updateFromSchema(schemaIn)
 
     let iteration = function (layout, attr, callbackDone)
       {
-      if ((attr !== 'typeid') && (layout.layout.value.hasOwnProperty(attr)))
+      if ((attr !== 'typeid') && (schema.layout.value.hasOwnProperty(attr)))
         {
-        let t1 = JSON.stringify(layout.layout.value[attr][self.index]);
+        let t1 = JSON.stringify(schema.layout.value[attr][self.index]);
         let t2 = JSON.stringify(self.attributes[attr]);
         if (t1 !== t2)
           {
@@ -166,7 +166,7 @@ updateFromSchema(schemaIn)
 
     eachOf(schema.layout.meta.elements, iteration, callbackError);
     }
-  else
+  else // The incoming schema describes an individual block.
     {
     let self      = this;
     let iteration = function (blockData, attr, callbackDone)
@@ -194,6 +194,7 @@ updateFromSchema(schemaIn)
     }
   if (changed)
     {
+    // This block item has been updated, so record its index with the collection
     this.collection.blockItemUpdated(this.index);
     }
   }
@@ -271,14 +272,15 @@ y()
   return (ret);
   }
 
-putX(newX)
+putXY(newX, newY)
   {
-  MalcolmActionCreators.malcolmPut("X", [this.attributes.mri, "layout", "value", "x"], {"x": newX});
-  }
-
-putY(newY)
-  {
-  MalcolmActionCreators.malcolmPut("Y", [this.attributes.mri, "layout", "value", "y"], {"y": newY});
+  MalcolmActionCreators.malcolmPut("", [MalcolmActionCreators.getdeviceId(), "layout", "value"],
+    {"typeid":"malcolm:core/Table:1.0",
+      "name":[this.blockName()],
+      "mri":[this.mri()],
+      "x":[newX],
+      "y":[newY],
+      "visible":[this.visible]});
   }
 
 blockName()
@@ -454,7 +456,7 @@ constructor()
    */
   this._layoutSchema = {};
   //console.debug('** BlockCollection constructor() **')
-  this.dispatchToken = AppDispatcher.register(this.dispatcherCallback);
+  this.dispatchToken = AppDispatcher.register(this.dispatcherCallback.bind(this));
 
   /**
    * All traffic used to be initiated from MalcolmActionCreators via webSocketOnOpen() callback
@@ -467,8 +469,8 @@ constructor()
    * @type {boolean}
    */
   this.webSocketOpen = false;
-  MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen);
-  MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose);
+  MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen.bind(this));
+  MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose.bind(this));
 
   }
 
@@ -478,7 +480,7 @@ webSocketOnOpen()
   // Subscribe to the layout schema.
 
   console.debug('BlockCollection: webSocketOnOpen()');
-  MalcolmActionCreators.malcolmSubscribe(MalcolmActionCreators.getdeviceId(), []);
+  MalcolmActionCreators.malcolmSubscribe(MalcolmActionCreators.getdeviceId(), [], appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT);
   }
 
 webSocketOnClose()
@@ -594,7 +596,6 @@ updateBlockItemsFromSchema(index, schemaIn)
     if ((typeof block === 'object') && (block !== null))
       {
       block.updateFromSchema(schema);
-      self._blockItemsChanged.push(blockIndex);
       }
     callbackDone();
     };
@@ -631,7 +632,14 @@ updateBlockItemsFromSchema(index, schemaIn)
    */
   if (this._blockItemsChanged.length > 0)
     {
-    this.BlocksUpdated();
+    if (schema.hasOwnProperty('layout'))
+      {
+      this.LayoutUpdated();
+      }
+    else
+      {
+      this.BlocksUpdated();
+      }
     }
   }
 
@@ -639,6 +647,13 @@ BlocksUpdated()
   {
   //console.log(`BlockCollection.BlocksUpdated number => ${this._blockItemsChanged.length}`);
   this.emitBlockChange(); // do this before clearing the _blockItemsChanged array.
+  this._blockItemsChanged = []; // Clear the list of updated blocks
+  }
+
+LayoutUpdated()
+  {
+  //console.log(`BlockCollection.BlocksUpdated number => ${this._blockItemsChanged.length}`);
+  this.emitLayoutChange();
   this._blockItemsChanged = []; // Clear the list of updated blocks
   }
 
@@ -654,6 +669,7 @@ BlocksUpdated()
 blockItemUpdated(index)
   {
   //console.log(`BlockCollection.blockItemUpdated index = ${index}`);
+    // Test whether this index value exists within the array of indices.
   if (this._blockItemsChanged.indexOf(index) < 0)
     {
     this._blockItemsChanged.push(index);
@@ -798,14 +814,15 @@ dispatcherCallback(payload)
       break;
 
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS:
+    case appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT:
       /**
        * One or more blocks may have been updated in this subscription response
        * so iterate through the table of changed blocks.
        */
-      //console.log("BlockCollection MALCOLM_SUBSCRIBE_SUCCESS");
-      //console.log(item.requestedData);
-      //console.log(item.responseMessage);
-      //console.log("------------------------------------------");
+      console.log("BlockCollection MALCOLM_SUBSCRIBE_SUCCESS");
+      console.log(item.requestedData);
+      console.log(item.responseMessage);
+      console.log("------------------------------------------");
 
       if (blockCollection._allBlockItems.length < 1)
         {
@@ -824,6 +841,8 @@ dispatcherCallback(payload)
         }
       break;
 
+    case appConstants.INTERACTJS_DRAG:
+      break;
 
   }
   }
