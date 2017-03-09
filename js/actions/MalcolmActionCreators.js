@@ -9,13 +9,12 @@ import appConstants from '../constants/appConstants.js';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import config from "../utils/config";
 
-class CMalcolmActionCreators
-{
+class CMalcolmActionCreators {
 constructor()
   {
   /* default device name to Z, which was the original name for the simulator device */
-  this.deviceId          = ((config.getProtocolVersion() === 'V2_0') ? "P" : "Z");
-  this.topLevelGetId     = 0;
+  this.deviceId            = ((config.getProtocolVersion() === 'V2_0') ? "P" : "Z");
+  this.topLevelGetId       = 0;
   this.topLevelSubscribeId = 0;
 
   }
@@ -25,12 +24,12 @@ initialiseFlowChart(requestedData)
 
   /* Try sending an initialise flowChart start action here */
 
-/*
-  AppDispatcher.handleAction({
-    actionType: appConstants.INITIALISE_FLOWCHART_START,
-    item      : 'initialise flowChart start'
-  });
-*/
+  /*
+   AppDispatcher.handleAction({
+   actionType: appConstants.INITIALISE_FLOWCHART_START,
+   item      : 'initialise flowChart start'
+   });
+   */
 
   // NB: bind in this context, forces a pre-specified initial argument of requestedData.
   // The specified function argument becomes registered with WebSocketClient as a OnOpen callback,
@@ -145,15 +144,21 @@ malcolmPut(blockName, endpoint, value)
   /**
    * Output needs to be of the format:
    * {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"On"}
+   * accepted
+
+   Memory jogger...
+   check if the variable has a truthy value or not via simple test:
+   if( value ) {}
+   will evaluate to true if value is not: null, undefined, NaN, empty string (""), 0, false
    */
   if (blockName)
-      {
-      requestedDataToWritePath = [blockName];
-      }
-    else
-      {
-      requestedDataToWritePath = [actionCreators.deviceId];
-      }
+    {
+    requestedDataToWritePath = [blockName];
+    }
+  else
+    {
+    requestedDataToWritePath = [actionCreators.deviceId];
+    }
 
   MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
 
@@ -170,8 +175,8 @@ malcolmPost(blockName, endpoint, parameters)
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          endpoint : endpoint,
+          blockName : blockName,
+          endpoint  : endpoint,
           parameters: parameters
         }
       }
@@ -185,8 +190,8 @@ malcolmPost(blockName, endpoint, parameters)
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          endpoint : endpoint,
+          blockName : blockName,
+          endpoint  : endpoint,
           parameters: parameters
         }
 
@@ -346,17 +351,29 @@ malcolmGet(requestedData)
   }
 
 /**
- * malcolmSubscribe
+ * @name malcolmSubscribe
  * @param {string} blockName - MRI name of block (e.g. "P:OUTENC3")
  * @param {[string]} attribute - array of attribute tree to subscribe to
+ * @param {string} subtype - actionType response - defaults to MALCOLM_SUBSCRIBE_SUCCESS.
  */
-malcolmSubscribe(blockName, attribute)
+malcolmSubscribe(blockName, attribute, subtype = appConstants.MALCOLM_SUBSCRIBE_SUCCESS)
   {
+  /**
+   * alt_response wil be defaulted to MALCOLM_SUBSCRIBE_SUCCESS if the subtype argument is not supplied.
+   * It provides closure within the success and failure callback functions and defines what Flux message (actionType)
+   * will be dispatched.
+   * IJG 7 March 2017
+   *
+   * @type {string}
+   */
+  let alt_response = subtype;
+
   function malcolmSubscribeSuccess(id, responseMessage)
     {
     //console.log(`MalcolmActionCreators.malcolmSubscribeSuccess(): id = ${id}`);
+    // TODO: Lookup which return ID to adopt for the promise.
     AppDispatcher.handleAction({
-      actionType: appConstants.MALCOLM_SUBSCRIBE_SUCCESS,
+      actionType: alt_response,
       item      : {
         responseMessage: responseMessage,
         index          : id,
@@ -396,7 +413,7 @@ malcolmSubscribe(blockName, attribute)
 
   //console.log(`MalcolmActionCreators.malcolmSubscribe(): ${requestedAttributeDataPath}`);
   let id = MalcolmUtils.malcolmSubscribe(requestedAttributeDataPath, malcolmSubscribeSuccess, malcolmSubscribeFailure);
-  return(id);
+  return (id);
   }
 
 
@@ -407,7 +424,7 @@ getdeviceId()
 }
 
 const MalcolmActionCreators = new CMalcolmActionCreators();
-const actionCreators = MalcolmActionCreators;
+const actionCreators        = MalcolmActionCreators;
 
 
 export {MalcolmActionCreators as default};
