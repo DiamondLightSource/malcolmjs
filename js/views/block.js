@@ -6,7 +6,7 @@
 let React    = require('react');
 let ReactDOM = require('react-dom');
 
-let attributeStore = require('../stores/attributeStore');
+import attributeStore from '../stores/attributeStore';
 
 let paneActions = require('../actions/paneActions');
 import flowChartActions from '../actions/flowChartActions';
@@ -23,8 +23,9 @@ class Block extends React.Component {
 constructor(props)
   {
   super(props);
-  this.portClicked = this.portClicked.bind(this);
-  this.blockSelect = this.blockSelect.bind(this);
+
+  this.portClicked    = this.portClicked.bind(this);
+  this.blockSelect    = this.blockSelect.bind(this);
   this.interactJsDrag = this.interactJsDrag.bind(this);
   }
 
@@ -60,7 +61,7 @@ componentDidMount()
    }
    }
    */
-  interact(this.refs.node)
+  interact(ReactDOM.findDOMNode(this))
     .draggable(
       {
         restrict: {
@@ -71,20 +72,20 @@ componentDidMount()
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragstart");
-          },
+          }.bind(this),
         onmove  : this.interactJsDrag,
         onend   : function (e)
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragend");
-          }
+          }.bind(this)
       });
 
-  interact(this.refs.node)
+  interact(ReactDOM.findDOMNode(this))
     .on('tap', this.blockSelect);
 
-  interact(this.refs.node)
+  interact(ReactDOM.findDOMNode(this))
     .styleCursor(false);
 
   /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
@@ -97,7 +98,7 @@ componentWillUnmount()
 
   clearTimeout(this.timer);
 
-  interact(this.refs.node)
+  interact(ReactDOM.findDOMNode(this))
     .off('tap', this.blockSelect);
   }
 
@@ -194,11 +195,9 @@ interactJsDragDebounce()
 
   this.timer = setTimeout(function ()
     {
-    item.putX(this.props.blockPosition.x * this.props.graphZoomScale);
-    item.putY(this.props.blockPosition.y * this.props.graphZoomScale);
-
-    }.bind(this), 500
-  );
+    item.putXY(this.props.blockPosition.x * this.props.graphZoomScale,
+      this.props.blockPosition.y * this.props.graphZoomScale);
+    }.bind(this), 500 );
   }
 
 /**
