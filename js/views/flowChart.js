@@ -5,12 +5,12 @@
 let React    = require('react');
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-let flowChartStore = require('../stores/flowChartStore');
+import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
 
-let Edge        = require('./edge.js');
+let Edge        = require('./edge');
 let EdgePreview = require('./edgePreview');
-import Block from './block.js';
+import Block from './block';
 
 let interact = require('../../node_modules/interact.js');
 
@@ -21,6 +21,8 @@ let AppContainerStyle = {
   "width" : "100%",
   //'backgroundColor': "green"
 };
+
+let moduleDebug = false;
 
 let FlowChart = React.createClass({
 
@@ -643,8 +645,14 @@ let FlowChart = React.createClass({
       let blockInfo = this.props.allBlockInfo[blockName];
       if (this.props.allBlockInfo.hasOwnProperty(blockName))
         {
+        //let blockInfo = this.props.allBlockInfo[blockName];
         //for(let blockindex = 0; blockindex < this.props.allBlockInfo.length; blockindex++)
         //let block = this.props.allBlockInfo[blockindex];
+        if (moduleDebug)
+          {
+            console.log(`flowChart.render(): blockName ${blockName}   Position: X: ${this.props.blockPositions[blockName].x}  y: ${this.props.blockPositions[blockName].y}`);
+          }
+
         blocks.push(
           <Block key={blockInfo.name} id={blockInfo.name} className="block"
                  blockInfo={blockInfo}
@@ -704,37 +712,40 @@ let FlowChart = React.createClass({
         }
       }
 
-    return (
-      <svg id="appAndDragAreaContainer" height="100%" width="100%"
-           style={AppContainerStyle} ref="node">
+      return (
+        <svg id="appAndDragAreaContainer" height="100%" width="100%"
+             style={AppContainerStyle} ref="node">
 
-        <rect id="dragArea" height="100%" width="100%"
-              fill="transparent" style={{MozUserSelect: 'none'}}
+          <rect id="dragArea" height="100%" width="100%"
+                fill="transparent" style={{MozUserSelect: 'none'}}
               onWheel={this.wheelZoom}/>
 
-        <svg id="appContainer" style={AppContainerStyle}>
+          <svg id="appContainer" style={AppContainerStyle}>
 
-          <g id="panningGroup"
-             transform={matrixTransform}
+            {this.props.blockPositions ? (
+            <g id="panningGroup"
+               transform={matrixTransform}
              onWheel={this.wheelZoom}>
 
-            <g id="EdgesGroup">
-              {edges}
+              <g id="EdgesGroup">
+                {edges}
               {this.generateEdgePreview()}
+              </g>
+
+              <g id="BlocksGroup">
+                {blocks}
+              </g>
+
             </g>
 
-            <g id="BlocksGroup">
-              {blocks}
-            </g>
+              ) : (<div> Waiting for block positions... </div>)}
+          </svg>
 
-          </g>
-
-        </svg>
-
-      </svg>
+          </svg>
 
     )
     }
 });
 
 module.exports = FlowChart;
+
