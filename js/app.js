@@ -7,20 +7,11 @@ let ReactDOM = require('react-dom');
 
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-let ReactPanels = require('react-panels');
 //let WebSocketClient = require('./wsWebsocketClient');
 //let testingWebsocketActions = require('./actions/testingWebsocketActions');
 
-let MainPane  = require('./views/mainPane');
-let SidePane  = require('./views/sidePane'); // TODO: This is probably not needed here.
 let BothPanes = require('./views/sidebar');
 
-let blockStore = require('./stores/blockStore.js');
-
-let AppDispatcher = require('./dispatcher/appDispatcher');
-let appConstants  = require('./constants/appConstants.js');
-
-let MalcolmActionCreators = require('./actions/MalcolmActionCreators');
 
 let AppContainerStyle = {
   margin  : 0,
