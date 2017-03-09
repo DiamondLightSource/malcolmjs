@@ -6,7 +6,7 @@ let React = require('react');
 
 let paneActions = require('../actions/paneActions');
 
-let attributeStore = require('../stores/attributeStore');
+import attributeStore from '../stores/attributeStore';
 
 let ReactModal = require('react-modal');
 
