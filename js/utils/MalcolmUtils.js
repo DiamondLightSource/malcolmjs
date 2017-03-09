@@ -15,6 +15,9 @@ class Utils {
 constructor()
   {
   this.webSocketOpen = false;
+  // bind callbacks to this
+  this.webSocketOnOpen = this.webSocketOnOpen.bind(this);
+  this.webSocketOnClose = this.webSocketOnClose.bind(this);
   MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen);
   MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose);
   }
