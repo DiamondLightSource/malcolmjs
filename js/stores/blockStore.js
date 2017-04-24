@@ -12,7 +12,7 @@ import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import attributeStore from './attributeStore';
 
 import config from "../utils/config";
-import blockCollection from '../classes/blockItems';
+import blockCollection, {BlockItem} from '../classes/blockItems';
 import flowChartStore from './flowChartStore';
 
 let update = require('react-addons-update');
@@ -86,7 +86,7 @@ function interactJsDrag(BlockInfo)
       y: Math.round(blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
     }
   });
-  console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
+  //console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
   }
 
 
@@ -373,10 +373,7 @@ function addEdgeViaMalcolm(Info)
       {
       if (allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort)
         {
-        let addEdgeToInportBlock                              = {
-          block: Info.outportBlock,
-          port : Info.outportBlockPort
-        };
+        let addEdgeToInportBlock = {block: Info.outportBlock, port : Info.outportBlockPort};
         allBlockInfo[Info.inportBlock].inports[i].connected   = true;
         allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
         }
@@ -394,10 +391,7 @@ function addEdgeViaMalcolm(Info)
       {
       if (allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort)
         {
-        let addEdgeToOutportBlock                             = {
-          block: Info.inportBlock,
-          port : Info.inportBlockPort
-        };
+        let addEdgeToOutportBlock = {block: Info.inportBlock, port : Info.inportBlockPort};
         allBlockInfo[Info.outportBlock].outports[j].connected = true;
         allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
         }
@@ -413,8 +407,8 @@ function addEdgeViaMalcolm(Info)
 function removeEdgeViaMalcolm(Info)
   {
   /* This is specifically for when there's a connection to
-   BITS.ZERO and it means a disconnection rather than connect
-   to the BITS.ZERO port
+   ZERO and it means a disconnection rather than connect
+   to the ZERO port
    */
 
   for (let i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++)
@@ -510,7 +504,8 @@ updateBlockPosition(blockItem)
   {
   let updated = false;
 
-  if (blockItem !== null)
+  // NB: instanceof will check that blockItem is an instance of BlockItem and also that it is not null.
+  if (blockItem instanceof BlockItem)
     {
     let blockName = blockItem.blockName();
     /* Undoing the zoom scale multiplication to check against
@@ -527,7 +522,7 @@ updateBlockPosition(blockItem)
       let xCoord = blockItem.x();
       let yCoord = blockItem.y();
 
-      console.log(`blockCollection.updateBlockPosition(): xCoord = ${xCoord}  yCoord = ${yCoord}`);
+      console.log(`blockCollection.updateBlockPosition(): Block = ${blockName}  xCoord = ${xCoord}  yCoord = ${yCoord}`);
       /* Add the block to allBlockInfo! */
 
       //console.log('blockStore MALCOLM_GET_SUCCESS: item.responseMessage - iteration:');
@@ -614,10 +609,9 @@ blockUpdated(blockIndex)
                changed to 'Show'
                */
 
-              /* IJG: Commented out this block as it appeared to be constantly resetting block moves to zero.
-               */
-               appendToBlockPositions(blockItem.blockName(),
-               flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+              let xCoord = blockItem.x();
+              let yCoord = blockItem.y();
+              appendToBlockPositions(blockItem.blockName(), xCoord, yCoord);
 
               /* Pass addBlock the block object from allBlockAttributes in attributeStore
                instead of relying on testAllBlockInfo
@@ -642,9 +636,9 @@ blockUpdated(blockIndex)
           // Try placing this section here, as I think anything that is tagged as gui
           // should be recorded in block positions.
 
-          /* IJG: Commented out this block as it appeared to be constantly resetting block moves to zero.
-           */
-           appendToBlockPositions(blockItem.blockName(), flowChartStore.getGraphPosition().x, flowChartStore.getGraphPosition().y);
+          let xCoord = blockItem.x();
+          let yCoord = blockItem.y();
+          appendToBlockPositions(blockItem.blockName(), xCoord, yCoord);
           /* Pass addBlock the block object from allBlockAttributes in attributeStore
            instead of relying on testAllBlockInfo
            */
@@ -733,7 +727,7 @@ dispatcherCallback(payload)
       AppDispatcher.waitFor([blockCollection.dispatchToken]);
       AppDispatcher.waitFor([flowChartStore.dispatchToken]);
       // TODO: Should this emitChange() be called here??
-      console.log("blockStore dispatcher callback: INTERACTJS_DRAG");
+      //console.log("blockStore dispatcher callback: INTERACTJS_DRAG");
       blockStore.emitChange();
       break;
 
