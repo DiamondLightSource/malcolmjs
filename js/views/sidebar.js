@@ -9,7 +9,7 @@ let SidePane       = require('./sidePane');
 let ModalDialogBox = require('./modalDialogBox');
 
 let mainPaneStore = require('../stores/mainPaneStore');
-let sidePaneStore = require('../stores/sidePaneStore');
+import sidePaneStore from '../stores/sidePaneStore';
 let paneStore     = require('../stores/paneStore');
 
 let paneActions = require('../actions/paneActions');
