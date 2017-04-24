@@ -73,7 +73,7 @@ componentDidMount()
           e.stopPropagation();
           //console.log("interactjs dragstart");
           }.bind(this),
-        onmove  : this.interactJsDrag,
+        onmove  : this.interactJsDrag.bind(this),
         onend   : function (e)
           {
           e.stopImmediatePropagation();
@@ -141,6 +141,9 @@ blockSelect(e)
   e.stopImmediatePropagation();
   e.stopPropagation();
 
+  // If a port has been clicked, then we are not interested in selecting blocks
+
+  // If a block has been selected then ensure that any previous selections are cleared first.
   if (this.props.areAnyBlocksSelected)
     {
     /* Need to run deselect before I select the current node */
@@ -148,7 +151,8 @@ blockSelect(e)
     }
   flowChartActions.selectBlock(this.props.blockInfo.label);
   paneActions.openBlockTab(this.props.blockInfo.label);
-
+  //flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
+  //paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
   }
 
 interactJsDrag(e)
@@ -197,7 +201,7 @@ interactJsDragDebounce()
     {
     item.putXY(this.props.blockPosition.x * this.props.graphZoomScale,
       this.props.blockPosition.y * this.props.graphZoomScale);
-    }.bind(this), 500 );
+    }.bind(this), 500);
   }
 
 /**
@@ -207,8 +211,6 @@ interactJsDragDebounce()
  */
 portClicked(e)
   {
-  console.log(`Block => ${this.props.id}  Port Clicked callback =>`);
-  console.log(e);
   }
 
 render()
@@ -233,7 +235,7 @@ render()
    */
   const gProps    = Object.assign({}, this.props);
   const notGProps = ["graphZoomScale", "blockInfo", "areAnyBlocksSelected", "portThatHasBeenClicked", "blockStyling",
-                     "storingFirstPortClicked", "id", "selected", "blockPosition", "deselect"];
+                     "storingFirstPortClicked", "selected", "blockPosition", "deselect"];
 
   for (let i = 0; i < notGProps.length; i++)
     {
