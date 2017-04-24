@@ -13,7 +13,7 @@ class Ports extends React.Component {
 constructor(props)
   {
   super(props);
-  console.log(`Ports constructor():`);
+  //console.log(`Ports constructor():`);
   this.portClick = this.portClick.bind(this);
   }
 
@@ -66,6 +66,8 @@ portClick(e)
 
   console.log(`ports.portClick(): blockInfo = ${JSON.stringify(this.props.blockInfo)}`);
 
+  // Wrap up target and blockInfo in passed object.
+
   let target;
 
   /* Doing the stuff to accommodate the invisiblePortCircle, instead of giving portClick
@@ -85,6 +87,9 @@ portClick(e)
         }
       }
     }
+  let params = {"target": target, "blockInfo": this.props.blockInfo};
+  flowChartActions.passPortMouseDown(params);
+  //return;
 
   /**
    * This is where the port click event broadcasts the PASS_PORTMOUSEDOWN custom event
@@ -92,37 +97,34 @@ portClick(e)
    *
    * -- comment: It's not clear why the previous developer started working at the DOM level
    * as it dissociates elements from their React containers and is then very difficult to
-   * re-associate them.
+   * re-associate them. All updates to view components should be via props *only*.
    * IJG 13 Feb 2017
    */
-  // Wrap up target and blockInfo in passed object.
-  let params = {"target": target, "blockInfo": this.props.blockInfo};
-  flowChartActions.passPortMouseDown(params);
-
-  /*
   let flowChartHandle = document.getElementById("appAndDragAreaContainer");
 
   if (this.props.storingFirstPortClicked === null)
     {
-    /!* Haven"t clicked on another port before this,
+    /* Haven"t clicked on another port before this,
      just do an edgePreview rather than draw an edge
-     *!/
-    let edgePreviewEvent = new CustomEvent("EdgePreview", {detail: {blockInfo: this.props.blockInfo}});
-    flowChartHandle.dispatchEvent(edgePreviewEvent);
+     */
+    //let edgePreviewEvent = new CustomEvent("EdgePreview", {detail: params});
+    //flowChartHandle.dispatchEvent(edgePreviewEvent);
+    flowChartActions.storingFirstPortClicked(target);
+
     //flowChartHandle.dispatchEvent(EdgePreview);
     }
   else if (this.props.storingFirstPortClicked !== null)
     {
-    /!* A port has been clicked before this, so
+    /* A port has been clicked before this, so
      start the checking whether the two ports
      are connectable/compatible
-     *!/
+     */
     let twoPortClicksEvent = new CustomEvent("TwoPortClicks", {detail: {blockInfo: this.props.blockInfo}});
     flowChartHandle.dispatchEvent(twoPortClicksEvent);
     //flowChartHandle.dispatchEvent(TwoPortClicks)
     }
-*/
 
+    // Doesn't do anything - yet. Not sure why it's here. IJG March 2017.
   if (this.props.cbClicked !== null)
     {
     this.props.cbClicked(e);
