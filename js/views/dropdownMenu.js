@@ -45,8 +45,8 @@ let Dropdown = React.createClass({
       sidePaneActions.dropdownMenuShow("This is the item");
       //document.addEventListener("click", this.handleActionHide)
 
-      //interact('#container')
-      interact(this.refs.dropdowncontainer)
+      interact('#container')
+      //interact(this.refs.dropdowncontainer)
         .on('tap', this.handleActionHide);
       }
 
@@ -90,8 +90,8 @@ let Dropdown = React.createClass({
     //interact('.dropdown-display')
     //  .off('tap', this.handleActionShow)
 
-    //interact('#dropdownButton')
-    interact(this.refs.dropdownbutton)
+    interact('#dropdownButton')
+    //interact(this.refs.dropdownbutton)
       .off('tap', this.handleActionShow);
 
     interact('#container')
