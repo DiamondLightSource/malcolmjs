@@ -33,8 +33,8 @@ let Edge = React.createClass(
     },
     componentDidMount   : function ()
       {
-      //ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
-      this.refs.node.addEventListener('EdgeSelect', this.edgeSelect);
+      ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
+      //this.refs.node.addEventListener('EdgeSelect', this.edgeSelect);
 
       interact(ReactDOM.findDOMNode(this))
         .on('tap', this.edgeSelect);
@@ -80,13 +80,9 @@ let Edge = React.createClass(
       let argsObject = {};
       let argumentValue;
 
-      if (this.props.fromBlockPortValueType === 'bit')
+      if ((this.props.fromBlockPortValueType === 'bool')||(this.props.fromBlockPortValueType === 'int32'))
         {
-        argumentValue = 'BITS.ZERO';
-        }
-      else if (this.props.fromBlockPortValueType === 'pos')
-        {
-        argumentValue = 'POSITIONS.ZERO';
+        argumentValue = 'ZERO';
         }
 
       argsObject[this.props.toBlockPort] = argumentValue;
@@ -127,9 +123,9 @@ let Edge = React.createClass(
       {
       e.stopImmediatePropagation();
       e.stopPropagation();
-      flowChartActions.selectEdge(this.node.id);
+    flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
       paneActions.openEdgeTab({
-        edgeId       : this.node.id,
+      edgeId: ReactDOM.findDOMNode(this).id,
         fromBlock    : this.props.fromBlock,
         fromBlockPort: this.props.fromBlockPort,
         toBlock      : this.props.toBlock,
@@ -160,8 +156,6 @@ let Edge = React.createClass(
 
     render: function ()
       {
-      console.log("render: edges");
-
       let blockStyling = this.props.blockStyling;
 
       let fromBlockPort = this.props.fromBlockPort;
@@ -178,7 +172,7 @@ let Edge = React.createClass(
        */
       for (let i = 0; i < outportArrayLength; i++)
         {
-        if (this.props.fromBlockInfo.outports[i].name === fromBlockPort)
+        if (this.props.fromBlockInfo.outports[i].name.toUpperCase() === fromBlockPort.toUpperCase())
           {
           outportArrayIndex = JSON.parse(JSON.stringify(i));
           }
