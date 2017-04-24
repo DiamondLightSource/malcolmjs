@@ -54,7 +54,6 @@ let FlowChartControllerView = React.createClass({
   componentDidMount: function ()
     {
     flowChartStore.addChangeListener(this._onChange);
-    console.log(`FlowChartControllerView: NODE_ENV ${process.env.NODE_ENV}`);
     },
 
   componentWillUnmount: function ()
@@ -70,7 +69,7 @@ let FlowChartControllerView = React.createClass({
       bRet = false;
       console.log(`flowChartControllerView.shouldComponentUpdate(): this.state.blockPositions is undefined`);
       }
-    console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
+    //console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
     return (bRet);
     },
 
@@ -79,10 +78,11 @@ let FlowChartControllerView = React.createClass({
     let blockPositions = this.state.blockPositions;
     if (blockPositions === undefined)
       {
-      console.log(`flowChartControllerView.render(): this.state.blockPositions is undefined`);
+      //console.log(`flowChartControllerView.render(): this.state.blockPositions is undefined`);
       blockPositions = {};
       }
 
+    //console.log(`flowChartControllerView: render(): portThatHasBeenClicked = ${this.state.portThatHasBeenClicked}  storingFirstPortClicked = ${this.state.storingFirstPortClicked}`);
     return (
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
