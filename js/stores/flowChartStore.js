@@ -192,7 +192,7 @@ getAnyBlockSelectedState(BlockId)
     }
   else
     {
-    //console.log("the state of that nod exists, passing it now");
+    //console.log("the state of that node exists, passing it now");
     //console.log(nodeSelectedStates[NodeId]);
     return blockSelectedStates[BlockId];
     }
@@ -356,7 +356,7 @@ onChangeBlockCollectionCallback(items)
                   /* I know what inport and what inport block the edge was
                    connected to, but I don't know what outport or what
                    outport block the edge was connected to, since you
-                   get the value to be BITS.ZERO or POSITIONS.ZERO instead
+                   get the value to be ZERO instead
                    of what it was connected to before...
                    */
 
@@ -425,7 +425,7 @@ addEdgePreview()
 
   let fromBlockId = blockInfo.name;
 
-  console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
+  //console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
 
   let portStringSliceIndex = fromBlockId.length;
   let portName             = document.getElementById(portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
@@ -519,7 +519,7 @@ checkBothClickedPorts()
   let firstPort  = document.getElementById(storingFirstPortClicked.id);
   let secondPort = document.getElementById(portThatHasBeenClicked.id);
 
-  console.log(`flowChartStore: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
+  //console.log(`flowChartStore: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
 
   /* The excessive use of .parentNode is to walk up
    the DOM tree and find the id of the block that the
@@ -530,14 +530,14 @@ checkBothClickedPorts()
   /* Need the length of the name of the node, then slice the firstPort id string
    until the end of the node name length */
 
-  let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
-    .parentNode.parentNode.id.length;
+  let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
   let firstPortName             = firstPort.id.slice(firstPortStringSliceIndex);
 
-  let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
-    .parentNode.parentNode.id.length;
+  let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
   let secondPortName             = secondPort.id.slice(secondPortStringSliceIndex);
 
+  let fromBlock = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+  let toBlock   = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
 
   if (firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
     secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
@@ -547,9 +547,9 @@ checkBothClickedPorts()
   else
     {
     let edge = {
-      fromBlock    : firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+      fromBlock    : fromBlock,
       fromBlockPort: firstPortName,
-      toBlock      : secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+      toBlock      : toBlock,
       toBlockPort  : secondPortName
     };
     this.checkPortCompatibility(edge);
@@ -572,7 +572,7 @@ checkPortCompatibility(edgeInfo)
 
   let allBlockInfo = blockStore.getAllBlockInfo();
 
-  console.log(`flowChart: checkPortCompatibility() : fromBlockType = ${fromBlockType}    toBlockType = ${toBlockType}`);
+  //console.log(`flowChart: checkPortCompatibility() : fromBlockType = ${fromBlockType}    toBlockType = ${toBlockType}`);
 
   /* Remember, this is BEFORE any swapping occurs, but be
    aware that these may have to swap later on
@@ -798,7 +798,7 @@ resetPortClickStorage()
  * The FlowChart component depends on properties derived from blockStore,
  * so this function is a proxy to the blockStore function, so that FlowChart
  * can follow Flux guidelines and be updated by only one store.
-  * @returns {{}|*}
+ * @returns {{}|*}
  */
 getAllBlockInfo()
   {
@@ -817,6 +817,17 @@ getBlockPositions()
   {
   let blockPositions = blockStore.getBlockPositions();
   return (blockPositions);
+  }
+
+
+passPortMouseDown(item)
+  {
+  if (item !== null)
+    {
+    portThatHasBeenClicked = item.target;
+    clickedPortBlockInfo   = {...item.blockInfo}; // Make a deep copy using spread.
+    flowChartStore.emitChange();
+    }
   }
 
 }
@@ -902,12 +913,14 @@ switch (action.actionType)
     break;
 
   case appConstants.PASS_PORTMOUSEDOWN:
+    AppDispatcher.waitFor([blockCollection.dispatchToken]);
+    //flowChartStore.passPortMouseDown(item);
+    //break;
+
     if (item !== null)
       {
       portThatHasBeenClicked = item.target;
       clickedPortBlockInfo   = {...item.blockInfo}; // Make a deep copy using spread.
-      console.log("flowChartStore Dispatch callback: PASS_PORTMOUSEDOWN ==>");
-      console.log(portThatHasBeenClicked);
       if (storingFirstPortClicked === null)
         {
         /* Haven"t clicked on another port before this,
@@ -954,8 +967,8 @@ switch (action.actionType)
     break;
 
   case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
+    //flowChartStore.waitFor([blockCollection.dispatchToken]);
     updateEdgePreviewEndpoint(item);
-    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
