@@ -2,32 +2,30 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var React = require('react');
-var mainPaneStore = require('../stores/mainPaneStore');
-var mainPaneActions = require('../actions/mainPaneActions');
+let React           = require('react');
 
-var ButtonStyle = {
+let ButtonStyle = {
   backgroundColor: 'grey',
-  height: 25,
-  width: 70,
-  borderRadius: 8,
-  borderStyle:'solid',
-  borderWidth: 1,
-  borderColor: 'black',
-  fontFamily: 'Verdana',
-//    color: 'white',
-  textAlign: 'center',
-  display: 'inline-block',
-  cursor: 'pointer',
-  MozUserSelect: 'none',
-  position: 'relative',
-  marginTop: '39px'
+  height         : 25,
+  width          : 70,
+  borderRadius   : 8,
+  borderStyle    : 'solid',
+  borderWidth    : 1,
+  borderColor    : 'black',
+  fontFamily     : 'Verdana',
+  //    color: 'white',
+  textAlign      : 'center',
+  display        : 'inline-block',
+  cursor         : 'pointer',
+  MozUserSelect  : 'none',
+  position       : 'relative',
+  marginTop      : '39px'
 
 };
 
-var ButtonTitlePadding = {
+let ButtonTitlePadding = {
   position: 'relative',
-  top: -6
+  top     : -6
 
 };
 
@@ -37,38 +35,47 @@ var ButtonTitlePadding = {
 //  }
 //}
 
-var FavButton = React.createClass({
+let FavButton = React.createClass({
   //getInitialState: function(){
   //  return getFavButtonState();
   //},
-
-  _onChange: function(){
-    //this.setState(getFavButtonState)
+  propTypes: {
+    favTabOpen      : React.PropTypes.func
   },
 
-  handleActionFavToggle: function(){
+  _onChange: function ()
+    {
+    //this.setState(getFavButtonState)
+    },
+
+  handleActionFavToggle: function ()
+    {
     //mainPaneActions.toggleFavPanel("this is the item");
     this.props.favTabOpen()
-  },
+    },
 
-  componentDidMount: function(){
+  componentDidMount: function ()
+    {
     //mainPaneStore.addChangeListener(this._onChange)
-  },
+    },
 
-  componentWillUnmount: function(){
+  componentWillUnmount: function ()
+    {
     //mainPaneStore.removeChangeListener(this._onChange)
-  },
+    },
 
-  render: function(){
-    return(
+  render: function ()
+    {
+    return (
       <div>
-        <div id="fav" style={ButtonStyle} onClick={this.handleActionFavToggle} ><span style={ButtonTitlePadding}> Fav</span>
+        <div id="fav" style={ButtonStyle} onClick={this.handleActionFavToggle}><span
+          style={ButtonTitlePadding}> Fav</span>
 
         </div>
 
       </div>
     );
-  }
+    }
 
 });
 

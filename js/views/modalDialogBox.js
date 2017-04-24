@@ -2,15 +2,15 @@
  * Created by twi18192 on 18/04/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var paneActions = require('../actions/paneActions');
+let paneActions = require('../actions/paneActions');
 
-var attributeStore = require('../stores/attributeStore');
+import attributeStore from '../stores/attributeStore';
 
-var ReactModal = require('react-modal');
+let ReactModal = require('react-modal');
 
-var modalDialogBoxStyling = {
+let modalDialogBoxStyling = {
   overlay: {
     height         : '100%',
     width          : '100%',
@@ -47,7 +47,7 @@ function getModalDialogBoxState()
   }
   }
 
-var ModalDialogBox = React.createClass(
+let ModalDialogBox = React.createClass(
   {
     propTypes: {
       modalDialogBoxOpen: React.PropTypes.bool,
@@ -109,12 +109,12 @@ var ModalDialogBox = React.createClass(
        something else?
        */
 
-      var modalDialogBoxContent = [];
-      var tableContent = [];
+      let modalDialogBoxContent = [];
+      let tableContent          = [];
 
-      var blockName          = this.props.modalDialogBoxInfo.blockName;
-      var attributeName      = this.props.modalDialogBoxInfo.attributeName;
-      var allBlockAttributes = this.state.allBlockAttributes;
+      let blockName          = this.props.modalDialogBoxInfo.blockName;
+      let attributeName      = this.props.modalDialogBoxInfo.attributeName;
+      let allBlockAttributes = this.state.allBlockAttributes;
 
       if (blockName === null && attributeName === null)
         {
@@ -127,7 +127,7 @@ var ModalDialogBox = React.createClass(
 
         /* Trying HTML tables to display content */
 
-        for (var attribute in allBlockAttributes[blockName][attributeName])
+        for (let attribute in allBlockAttributes[blockName][attributeName])
           {
           if (typeof allBlockAttributes[blockName][attributeName][attribute]
             === 'string' ||
@@ -136,7 +136,7 @@ var ModalDialogBox = React.createClass(
             {
             tableContent.push(
               this.createTableRow(blockName, attributeName, attribute,
-                                  allBlockAttributes[blockName][attributeName][attribute])
+                allBlockAttributes[blockName][attributeName][attribute])
             )
             }
           /* A pretty bad way to do this, but I can't think
@@ -146,21 +146,21 @@ var ModalDialogBox = React.createClass(
             {
             tableContent.push(
               this.createTableRow(blockName, attributeName, attribute,
-                                  allBlockAttributes[blockName][attributeName][attribute].name)
+                allBlockAttributes[blockName][attributeName][attribute].name)
             )
             }
           else if (attribute === 'alarm')
             {
             tableContent.push(
               this.createTableRow(blockName, attributeName, attribute,
-                                  allBlockAttributes[blockName][attributeName][attribute].severity)
+                allBlockAttributes[blockName][attributeName][attribute].severity)
             )
             }
           else if (attribute === 'timeStamp')
             {
             tableContent.push(
               this.createTableRow(blockName, attributeName, attribute,
-                                  allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch)
+                allBlockAttributes[blockName][attributeName][attribute].secondsPastEpoch)
             )
             }
           }
@@ -171,8 +171,8 @@ var ModalDialogBox = React.createClass(
           {
           tableContent.push(
             this.createTableRow(this.props.modalDialogBoxInfo.blockName,
-                                this.props.modalDialogBoxInfo.attributeName, 'Return',
-                                this.props.modalDialogBoxInfo.message)
+              this.props.modalDialogBoxInfo.attributeName, 'Return',
+              this.props.modalDialogBoxInfo.message)
           )
           }
 
@@ -190,7 +190,7 @@ var ModalDialogBox = React.createClass(
         /* Add the buttons */
         /* Only want a 'revert' button if there's an error I think? */
 
-        var buttonRowContent = [];
+        let buttonRowContent = [];
 
         buttonRowContent.push(
           <td style={{width: '130px'}}
@@ -219,7 +219,7 @@ var ModalDialogBox = React.createClass(
 
           }
 
-        var buttonTableContent =
+        let buttonTableContent =
               <table id={blockName + attributeName + 'modalDialogBoxButtonsTable'}
                      key={blockName + attributeName + 'modalDialogBoxButtonsTable'}
                      style={{width: '355px', tableLayout: 'fixed'}}>

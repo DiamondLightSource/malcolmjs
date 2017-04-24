@@ -5,6 +5,11 @@
 var idLookupTableFunctions = require('./utils/idLookupTable');
 import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
+//import LOG from './utils/MalcolmUtils'
+
+var debug = false;
+
+//var LOG = debug ? console.log.bind(console) : function () {};
 
 function Client(url)
   {
@@ -50,7 +55,7 @@ function Client(url)
     channelIDIndex += 1;
     };
 
-  console.log('Flux WebSocket: Connecting to: ' + url);
+  LOG('Flux WebSocket: Connecting to: ' + url);
   openWebSocket(url);
 
   function openWebSocket(url)
@@ -58,12 +63,12 @@ function Client(url)
 
     if ("WebSocket" in window)
       {
-      console.log("WebSocket in window");
+      LOG("WebSocket in window");
       websocket = new WebSocket(url);
       }
     else if ("MozWebSocket" in window)
       {
-      console.log("MozWebSocket in window");
+      LOG("MozWebSocket in window");
       websocket = new MozWebSocket(url);
       }
     else
@@ -74,7 +79,7 @@ function Client(url)
 
     websocket.onopen = function (evt)
       {
-      console.log("WebSocket - onopen() - OK");
+      LOG("WebSocket - onopen() - OK");
       for (var i = 0; i < webSocketOnOpenCallbacks.length; i++)
         {
         webSocketOnOpenCallbacks[i](evt);
@@ -95,7 +100,7 @@ function Client(url)
        of an error with an interaction with the server, this is for an
        error that is about the websocket itself
        */
-      console.log("Flux WebSocket error: " + evt);
+      LOG("Flux WebSocket error: " + evt);
       for (var k = 0; k < webSocketOnErrorCallbacks.length; k++)
         {
         webSocketOnErrorCallbacks[k](evt);
@@ -112,8 +117,8 @@ function Client(url)
           {
           let reqMsg = idLookupTableFunctions.getRequestMessage(json.id);
 
-          console.log("websocket.onmessage ERROR:  requestedData,  return message  => ");
-          console.log(reqMsg, json.message);
+          LOG("websocket.onmessage ERROR:  requestedData,  return message  => ");
+          LOG(reqMsg, json.message);
           idLookupTableFunctions.invokeIdCallback(json.id, false, json.message);
           }
         }

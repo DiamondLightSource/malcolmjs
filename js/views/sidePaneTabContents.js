@@ -2,39 +2,38 @@
  * Created by twi18192 on 04/05/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var ReactPanels = require('react-panels');
-var Content     = ReactPanels.Content;
-var Button      = ReactPanels.Button;
+let ReactPanels = require('react-panels');
+let Content     = ReactPanels.Content;
+let Button      = ReactPanels.Button;
 
-var Treeview = require('react-treeview');
+let Treeview = require('react-treeview');
 
-var blockStore     = require('../stores/blockStore');
-var attributeStore = require('../stores/attributeStore');
+import blockStore  from '../stores/blockStore';
+import attributeStore from '../stores/attributeStore';
+import MalcolmUtils from '../utils/MalcolmUtils';
+import appConstants from '../constants/appConstants';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+
 /* Purely for favContent & configContent */
-//var paneStore = require('../stores/paneStore');
+//let paneStore = require('../stores/paneStore');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
-
-var WidgetTableContainer = require('./widgetTableContainer');
+let WidgetTableContainer = require('./widgetTableContainer');
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
   {
   return {
-    blockAttributes          : attributeStore.getAllBlockAttributes()
-      [SidePaneTabContentsComponent.props.tabObject.label],
-    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()
-      [SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributes          : attributeStore.getAllBlockAttributes()[SidePaneTabContentsComponent.props.tabObject.label],
+    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()[SidePaneTabContentsComponent.props.tabObject.label],
     //favContent: paneStore.getFavContent(),
     //configContent: paneStore.getConfigContent()
   }
   }
 
-var SidePaneTabContents = React.createClass(
+let SidePaneTabContents = React.createClass(
   {
     propTypes: {
-      key      : React.PropTypes.string.isRequired,
       tabObject: React.PropTypes.object
     },
     
@@ -75,13 +74,19 @@ var SidePaneTabContents = React.createClass(
       {
       this.setState(getSidePaneTabContentsState(this));
       },
-    
+
     handleMalcolmCall: function (blockName, method, args)
       {
       console.log("malcolmCall in sidePane");
-      MalcolmActionCreators.malcolmCall(blockName, method, args)
+      MalcolmActionCreators.malcolmCall(blockName, method, args);
       },
-    
+
+    handleMalcolmPut: function (blockName, endpoint, value)
+      {
+      console.log("malcolmPut in sidePane");
+      MalcolmActionCreators.malcolmPut(blockName, endpoint, value);
+      },
+
     handleEdgeDeleteButton: function (EdgeInfo)
       {
       
@@ -91,51 +96,49 @@ var SidePaneTabContents = React.createClass(
        perhaps it should go somewhere else though?
        */
       
-      var methodName = "_set_" + EdgeInfo.toBlockPort;
-      var argsObject = {};
-      var argumentValue;
+      let argumentValue;
       
       /* Need to know the type of the port value,
        so a get from blockStore may be in order
        */
+    
+      let allBlockInfo = blockStore.getAllBlockInfo();
       
-      for (var i = 0; i < blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports.length;
+      for (let i = 0; i < allBlockInfo[EdgeInfo.toBlock].inports.length;
            i++)
         {
-        console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
-        if (blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo !== null &&
-          blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.block === EdgeInfo.fromBlock &&
-          blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo.port === EdgeInfo.fromBlockPort)
+        //console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
+        let blockinfo = allBlockInfo[EdgeInfo.toBlock];
+        let inport = blockinfo.inports[i];
+
+        if (inport.connectedTo !== null &&
+          inport.connectedTo.block === EdgeInfo.fromBlock &&
+          inport.connectedTo.port === EdgeInfo.fromBlockPort)
           {
-          if (blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type === 'bit')
+          if ((inport.type === appConstants.MALCOLM_TYPE_BOOL) || (inport.type == appConstants.MALCOLM_TYPE_INT32))
             {
-            argumentValue = 'BITS.ZERO';
-            }
-          else if (blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].type == 'pos')
-            {
-            argumentValue = 'POSITIONS.ZERO';
+            argumentValue = appConstants.MALCOLM_VALUE_ZERO;
             }
           }
         }
-      
-      argsObject[EdgeInfo.toBlockPort] = argumentValue;
-      
-      this.handleMalcolmCall(EdgeInfo.toBlock, methodName, argsObject);
-        
+
+      let endpoint = [MalcolmActionCreators.getdeviceId()+"-"+EdgeInfo.toBlock, EdgeInfo.toBlockPort, "value"];
+      this.handleMalcolmPut(EdgeInfo.toBlock, endpoint, argumentValue);
+
       },
     
     generateTabContent: function (blockAttributes)
       {
       
-      var blockAttributeDivs = [];
+      let blockAttributeDivs = [];
       
-      var groupsObject = {};
+      let groupsObject = {};
       
-      for (var attribute in blockAttributes)
+      for (let attribute in blockAttributes)
         {
         
-        if (blockAttributes[attribute].tags === undefined &&
-          blockAttributes[attribute].alarm === undefined)
+        if ((MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags") === undefined) &&
+          (blockAttributes[attribute].alarm === undefined))
           {
           
           /* Creating the array that I'll push the
@@ -145,20 +148,20 @@ var SidePaneTabContents = React.createClass(
           groupsObject[attribute] = [];
             
           }
-        else if (blockAttributes[attribute].tags !== undefined)
+        else if (MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute],"meta", "tags"))
           {
+          let groupName;
+          let isWidget   = false;
+          let widgetType;
+          let isInAGroup = false;
+          let widgetParent = blockAttributeDivs;
           
-          var isWidget   = false;
-          var widgetType;
-          var isInAGroup = false;
-          var widgetParent;
-          
-          for (var k = 0; k < blockAttributes[attribute].tags.length; k++)
+          for (let k = 0; k < blockAttributes[attribute].meta.tags.length; k++)
             {
-            if (blockAttributes[attribute].tags[k].indexOf('widget') !== -1)
+            if (blockAttributes[attribute].meta.tags[k].indexOf('widget') !== -1)
               {
               isWidget   = true;
-              widgetType = blockAttributes[attribute].tags[k].slice('widget:'.length);
+              widgetType = blockAttributes[attribute].meta.tags[k].slice('widget:'.length);
               //console.log('sidePaneTabContents.generateTabContent: widgetType = '+widgetType);
               }
             
@@ -166,11 +169,11 @@ var SidePaneTabContents = React.createClass(
              attribute belongs to as well
              */
             
-            else if (blockAttributes[attribute].tags[k].indexOf('group') !== -1)
+            else if (blockAttributes[attribute].meta.tags[k].indexOf('group') !== -1)
               {
               
               isInAGroup    = true;
-              var groupName = blockAttributes[attribute].tags[k].slice('group:'.length);
+              groupName = blockAttributes[attribute].meta.tags[k].slice('group:'.length);
                 
               }
             }
@@ -187,12 +190,20 @@ var SidePaneTabContents = React.createClass(
              on isInAGroup with some sort of logic to decided
              what to 'push' to in each case
              */
-            
+            /**
+             * Switch the output rendering to either groupsObject[] or blockAttributeDivs
+             * by pointing widgetParent at the appropriate object.
+             * IJG 6/2/17
+             */
             if (isInAGroup === true)
               {
+              if (groupsObject[groupName] === undefined)
+                {
+                groupsObject[groupName] = [];
+                }
               widgetParent = groupsObject[groupName];
               }
-            else if (isInAGroup === false)
+            else
               {
               widgetParent = blockAttributeDivs;
               }
@@ -201,7 +212,7 @@ var SidePaneTabContents = React.createClass(
              of props to all widgets
              */
             
-            var commonProps = {
+            let commonProps = {
               blockAttribute      : blockAttributes[attribute],
               blockAttributeStatus: this.state.blockAttributesIconStatus[attribute],
               blockName           : this.props.tabObject.label,
@@ -210,10 +221,9 @@ var SidePaneTabContents = React.createClass(
               key                 : this.props.tabObject.label + attribute + widgetType,
               widgetType          : widgetType
             };
-            
-            widgetParent.push(
-              <WidgetTableContainer {...commonProps} />
-            );
+
+            if (widgetParent !== undefined)
+              widgetParent.push(<WidgetTableContainer {...commonProps} />);
               
             }
             
@@ -227,14 +237,11 @@ var SidePaneTabContents = React.createClass(
           
         }
       
-      for (var group in groupsObject)
+      for (let group in groupsObject)
         {
         blockAttributeDivs.push(
           <Treeview defaultCollapsed={true}
-                    nodeLabel={
-                      <b
-                        style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>
-                    }
+                    nodeLabel={<b style={{marginLeft: '-47px', fontSize: '13px'}}>{group}</b>}
                     key={group + 'treeview'}
           > {groupsObject[group]}
           </Treeview>
@@ -248,9 +255,9 @@ var SidePaneTabContents = React.createClass(
     render: function ()
       {
       
-      console.log('rerendering: ' + this.props.tabObject.label);
+      console.log('sidePaneTabContents.render(): ' + this.props.tabObject.label);
       
-      var tabContent = [];
+      let tabContent = [];
       
       //if(this.props.tabObject.tabType === "Favourites"){
       //  tabContent.push(
@@ -262,6 +269,7 @@ var SidePaneTabContents = React.createClass(
       //    <p>{this.state.configContent.name}</p>
       //  );
       //}
+      console.log(`sidePaneTabContents.render(): this.props.tabObject.tabType = ${this.props.tabObject.tabType}`);
       if (this.props.tabObject.tabType === 'VISIBILITY' ||
         this.props.tabObject.tabType === 'block')
         {
@@ -274,11 +282,13 @@ var SidePaneTabContents = React.createClass(
         }
       else if (this.props.tabObject.tabType === 'edge')
         {
-        
+        /**
+         * TODO: I think that button should be Button. CHECK!!
+         */
         tabContent.push(
-          <button key={this.props.tabObject.label + "edgeDeleteButton"}
+          <Button key={this.props.tabObject.label + "edgeDeleteButton"}
                   onClick={this.handleEdgeDeleteButton.bind(null, this.props.tabObject)}
-          >Delete edge</button>
+          >Delete edge</Button>
         );
         }
       

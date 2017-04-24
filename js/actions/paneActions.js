@@ -2,10 +2,10 @@
  * Created by twi18192 on 17/09/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants = require('../constants/appConstants');
 
-var paneActions = {
+let paneActions = {
 
   dropdownMenuSelect: function(tab){
     AppDispatcher.handleViewAction({

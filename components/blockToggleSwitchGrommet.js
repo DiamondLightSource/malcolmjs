@@ -5,13 +5,13 @@ import CheckBox from 'grommet/components/CheckBox';
 //require('../components/styles/main.css');
 import 'grommet/grommet.min.css';
 
-var React = require('react');
+let React = require('react');
 
-var MalcolmActionCreators = require('../js/actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-var ToggleSwitch = require('react-toggle');
+let ToggleSwitch = require('react-toggle');
 
-var BlockToggleSwitch = React.createClass({
+let BlockToggleSwitch = React.createClass({
   propTypes: {
     blockAttributeValue: React.PropTypes.oneOfType([
       React.PropTypes.string,
@@ -32,7 +32,7 @@ var BlockToggleSwitch = React.createClass({
 
   handleOnChange: function(e){
 
-    var methodToInvoke;
+    let methodToInvoke;
 
     /* Check the blockName if it's VISIBILITY or not */
 
@@ -59,8 +59,8 @@ var BlockToggleSwitch = React.createClass({
      specifying some other attribute
      */
 
-    var newValue;
-    var argsObject = {};
+    let newValue;
+    let argsObject = {};
 
     if(typeof this.props.blockAttributeValue === 'string') {
       if (this.props.blockAttributeValue === 'Show') {

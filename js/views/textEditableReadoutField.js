@@ -2,56 +2,69 @@
  * Created by twi18192 on 15/03/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-var TextEditableReadoutField = React.createClass({
+let TextEditableReadoutField = React.createClass({
 
-  getInitialState: function(){
+  propTypes: {
+    blockAttributeValue: React.PropTypes.any,
+    tabObject          : React.PropTypes.object,
+    blockName          : React.PropTypes.string,
+    attributeName      : React.PropTypes.string,
+  },
+
+  getInitialState: function ()
+    {
     return {
       isUserEditing: false
     }
-  },
+    },
 
-  shouldComponentUpdate: function(nextProps, nextState){
-    return(
+  shouldComponentUpdate: function (nextProps, nextState)
+    {
+    return (
       nextProps.blockAttributeValue !== this.props.blockAttributeValue ||
       nextState.isUserEditing !== this.state.isUserEditing ||
       this.state.isUserEditing === true
     )
-  },
+    },
 
-  handleMalcolmCall: function(blockName, method, args){
+  handleMalcolmCall: function (blockName, method, args)
+    {
     console.log("malcolmCall in textEditableReadoutField");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-  },
+    },
 
-  handleOnBlur: function(e){
+  handleOnBlur: function (e)
+    {
 
-    var inputFieldValue;
-    var inputFieldElement = e.target;
-    var inputFieldBlockName = this.props.blockName;
-    var inputFieldAttribute = this.props.attributeName;
+    let inputFieldValue;
+    let inputFieldElement   = e.target;
+    let inputFieldBlockName = this.props.blockName;
+    let inputFieldAttribute = this.props.attributeName;
 
-    if(inputFieldElement.value === ""){
+    if (inputFieldElement.value === "")
+      {
       /* Set the input field value back to the previous value */
 
       inputFieldElement.value = this.props.blockAttributeValue;
-      inputFieldValue = this.props.blockAttributeValue;
+      inputFieldValue         = this.props.blockAttributeValue;
 
-    }
-    else{
+      }
+    else
+      {
       inputFieldValue = inputFieldElement.value;
-    }
+      }
 
     /* Now I need to pass malcolmCall the corresponding
      method and arguments
      */
 
-    var inputFieldSetMethodName = "_set_" +inputFieldAttribute;
+    let inputFieldSetMethodName = "_set_" + inputFieldAttribute;
 
-    var argsObject = {};
+    let argsObject = {};
 
     argsObject[inputFieldAttribute] = inputFieldValue;
 
@@ -61,47 +74,52 @@ var TextEditableReadoutField = React.createClass({
       isUserEditing: false
     });
 
-  },
+    },
 
-  handleOnFocus: function(e){
-    var inputFieldElement = e.target;
+  handleOnFocus: function (e)
+    {
+    let inputFieldElement = e.target;
     inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
-  },
+    },
 
-  handleOnChange: function(e){
+  handleOnChange: function (e)
+    {
     this.setState({
       isUserEditing: true
     })
-  },
+    },
 
-  handleKeyUp: function(e){
-    if(e.keyCode === 13){
+  handleKeyUp: function (e)
+    {
+    if (e.keyCode === 13)
+      {
       /* For handling when the enter key is pressed
-      after editing the input field
+       after editing the input field
        */
       document.getElementById(this.props.blockName
         + this.props.attributeName + "inputField").blur();
-    }
-  },
+      }
+    },
 
-  render: function(){
+  render: function ()
+    {
 
-    var props = {
-      id: this.props.blockName + this.props.attributeName + "inputField",
+    let props = {
+      id       : this.props.blockName + this.props.attributeName + "inputField",
       className: 'textInputFieldWidget',
-      onFocus: this.handleOnFocus,
-      onChange: this.handleOnChange,
-      onKeyUp: this.handleKeyUp,
-      onBlur: this.handleOnBlur,
-      value: this.state.isUserEditing === true ?
+      onFocus  : this.handleOnFocus,
+      onChange : this.handleOnChange,
+      onKeyUp  : this.handleKeyUp,
+      onBlur   : this.handleOnBlur,
+      value    : this.state.isUserEditing === true ?
         document.getElementById(this.props.blockName +
-        this.props.attributeName + "inputField").value : this.props.blockAttributeValue
+          this.props.attributeName + "inputField").value : this.props.blockAttributeValue
     };
 
-    return(
+    return (
       <input {...props} />
     )
-  }
+    }
 
 });
 

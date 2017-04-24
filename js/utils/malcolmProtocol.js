@@ -4,7 +4,7 @@
 
 import config from './config';
 
-var Protocol = {};
+let Protocol = {};
 
 Protocol['V1_0'] = {
   typeIdIdent    : 'type',
@@ -25,7 +25,9 @@ Protocol['V2_0'] = {
   typeidError    : 'malcolm:core/Error:1.0',
   typeidGet      : 'malcolm:core/Get:1.0',
   typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidCall     : 'malcolm:core/Call:1.0'
+  typeidPost     : 'malcolm:core/Post:1.0',
+  typeidPut      : 'malcolm:core/Put:1.0',
+  typeidBlock    : 'malcolm:core/Block:1.0'
 };
 
 // It is intended to support only one protocol, so no choice will be available.
@@ -38,86 +40,106 @@ export const ProtocolTypeId = {
   typeidError    : 'malcolm:core/Error:1.0',
   typeidGet      : 'malcolm:core/Get:1.0',
   typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidCall     : 'malcolm:core/Call:1.0'
+  typeidPost     : 'malcolm:core/Post:1.0',
+  typeidPut      : 'malcolm:core/Put:1.0',
+  typeidBlock    : 'malcolm:core/Block:1.0'
 };
 
 class MalcolmProtocol {
 
 getTypeIDIdent()
   {
-  var ret = ProtocolTypeId.typeIdIdent;
+  let ret = ProtocolTypeId.typeIdIdent;
   return (ret);
   }
 
 getTypeIDReturn()
   {
-  var ret = ProtocolTypeId.typeidReturn;
+  let ret = ProtocolTypeId.typeidReturn;
   return (ret);
   }
 
 getTypeIDValue()
   {
-  var ret = ProtocolTypeId.typeidValue;
+  let ret = ProtocolTypeId.typeidValue;
   return (ret);
   }
 
 getTypeIDUpdate()
   {
-  var ret = ProtocolTypeId.typeidUpdate;
+  let ret = ProtocolTypeId.typeidUpdate;
   return (ret);
   }
 
 getTypeIDError()
   {
-  var ret = ProtocolTypeId.typeidError;
+  let ret = ProtocolTypeId.typeidError;
   return (ret);
   }
 
 getTypeIDGet()
   {
-  var ret = ProtocolTypeId.typeidGet;
+  let ret = ProtocolTypeId.typeidGet;
   return (ret);
   }
 
 getTypeIDSubscribe()
   {
-  var ret = ProtocolTypeId.typeidSubscribe;
+  let ret = ProtocolTypeId.typeidSubscribe;
   return (ret);
   }
 
-getTypeIDCall()
+getTypeIDPost()
   {
-  var ret = ProtocolTypeId.typeidCall;
+  let ret = ProtocolTypeId.typeidPost;
+  return (ret);
+  }
+
+getTypeIDPut()
+  {
+  let ret = ProtocolTypeId.typeidPut;
+  return (ret);
+  }
+
+getTypeIDBlock()
+  {
+  let ret = ProtocolTypeId.typeidBlock;
   return (ret);
   }
 
 isError(msg)
   {
-  var bRet = (msg[ProtocolTypeId.typeIdIdent] === this.getTypeIDError());
+  let bRet = (msg[ProtocolTypeId.typeIdIdent] === this.getTypeIDError());
   return (bRet);
   }
 
 isReturn(msg)
   {
-  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDReturn());
+  let bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDReturn());
   return (bRet);
   }
 
 isValue(msg)
   {
-  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDValue());
+  let bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDValue());
   return (bRet);
   }
 
 isUpdate(msg)
   {
-  var bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDUpdate());
+  let bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDUpdate());
+  return (bRet);
+  }
+
+isBlock(msg)
+  {
+  let bRet = (msg[Protocol['V2_0'].typeIdIdent] === this.getTypeIDBlock());
   return (bRet);
   }
 
 
 }
 
-var malcolmProtocol = new MalcolmProtocol();
+let malcolmProtocol = new MalcolmProtocol();
 
 export default malcolmProtocol;

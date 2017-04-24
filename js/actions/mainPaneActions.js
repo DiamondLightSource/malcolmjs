@@ -2,10 +2,10 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var appConstants = require('../constants/appConstants');
+let AppDispatcher = require('../dispatcher/appDispatcher');
+let appConstants = require('../constants/appConstants');
 
-var mainPaneActions = {
+let mainPaneActions = {
   toggleFooter1: function(item){
     AppDispatcher.handleViewAction({
       actionType:appConstants.FOOTER_TOGGLE,

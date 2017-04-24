@@ -2,54 +2,88 @@
  * Created by twi18192 on 26/01/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var FlowChart = require('./flowChart');
+let FlowChart = require('./flowChart');
 
-var blockStore = require('../stores/blockStore.js');
-var flowChartStore = require('../stores/flowChartStore');
+//import blockStore from '../stores/blockStore.js';
+import flowChartStore from '../stores/flowChartStore';
 
-function getFlowChartState(){
-  return{
+
+function getFlowChartState()
+  {
+  return {
+    /**
+     * TODO:
+     * Tut tut - there should be only one store per component type
+     * there are two here, so if either triggers an event and the other hasn't initialised,
+     * we would be (and do!) attempting to set some props to undefined.
+     *
+     * IJG 28 Feb 2017
+     *
+     */
     /* blockStore */
-    allBlockInfo: blockStore.getAllBlockInfo(),
+    allBlockInfo  : flowChartStore.getAllBlockInfo(),
+    blockPositions: flowChartStore.getBlockPositions(),
 
     /* flowChartStore */
-    graphPosition: flowChartStore.getGraphPosition(),
-    graphZoomScale: flowChartStore.getGraphZoomScale(),
-    portThatHasBeenClicked: flowChartStore.getPortThatHasBeenClicked(),
+    graphPosition          : flowChartStore.getGraphPosition(),
+    graphZoomScale         : flowChartStore.getGraphZoomScale(),
+    portThatHasBeenClicked : flowChartStore.getPortThatHasBeenClicked(),
     storingFirstPortClicked: flowChartStore.getStoringFirstPortClicked(),
-    areAnyBlocksSelected: flowChartStore.getIfAnyBlocksAreSelected(),
-    areAnyEdgesSelected: flowChartStore.getIfAnyEdgesAreSelected(),
-    edgePreview: flowChartStore.getEdgePreview(),
-    blockStyling: flowChartStore.getBlockStyling(),
-    blockPositions: blockStore.getBlockPositions(),
+    areAnyBlocksSelected   : flowChartStore.getIfAnyBlocksAreSelected(),
+    areAnyEdgesSelected    : flowChartStore.getIfAnyEdgesAreSelected(),
+    edgePreview            : flowChartStore.getEdgePreview(),
+    blockStyling           : flowChartStore.getBlockStyling()
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
-}
+  }
 
-var FlowChartControllerView = React.createClass({
+let FlowChartControllerView = React.createClass({
 
-  getInitialState: function(){
+  getInitialState: function ()
+    {
     return getFlowChartState();
-  },
+    },
 
-  _onChange: function(){
+  _onChange: function ()
+    {
     this.setState(getFlowChartState());
-  },
+    },
 
-  componentDidMount: function(){
-    blockStore.addChangeListener(this._onChange);
+  componentDidMount: function ()
+    {
     flowChartStore.addChangeListener(this._onChange);
-  },
+    },
 
-  componentWillUnmount: function(){
-    blockStore.removeChangeListener(this._onChange);
+  componentWillUnmount: function ()
+    {
     flowChartStore.removeChangeListener(this._onChange);
-  },
+    },
 
-  render: function(){
-    return(
+  shouldComponentUpdate: function (nextProps, nextState)
+    {
+    let bRet = !Object.is(nextState, this.State);
+    if (this.state.blockPositions === undefined)
+      {
+      bRet = false;
+      console.log(`flowChartControllerView.shouldComponentUpdate(): this.state.blockPositions is undefined`);
+      }
+    //console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
+    return (bRet);
+    },
+
+  render: function ()
+    {
+    let blockPositions = this.state.blockPositions;
+    if (blockPositions === undefined)
+      {
+      //console.log(`flowChartControllerView.render(): this.state.blockPositions is undefined`);
+      blockPositions = {};
+      }
+
+    //console.log(`flowChartControllerView: render(): portThatHasBeenClicked = ${this.state.portThatHasBeenClicked}  storingFirstPortClicked = ${this.state.storingFirstPortClicked}`);
+    return (
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
 
@@ -65,7 +99,7 @@ var FlowChartControllerView = React.createClass({
         blockPositions={this.state.blockPositions}
       />
     )
-  }
+    }
 });
 
 module.exports = FlowChartControllerView;

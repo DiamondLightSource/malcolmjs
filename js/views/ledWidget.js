@@ -2,26 +2,32 @@
  * Created by twi18192 on 06/04/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var LEDWidget = React.createClass({
-
-  shouldComponentUpdate: function(nextProps, nextState){
-    return(
-      nextProps.blockAttributeValue !== this.props.blockAttributeValue
-    )
+let LEDWidget = React.createClass({
+  propTypes: {
+    blockAttributeValue: React.PropTypes.bool.isRequired,
+    tabObject          : React.PropTypes.object
   },
 
-  render: function(){
-    return(
+  shouldComponentUpdate: function (nextProps, nextState)
+    {
+    return (
+      nextProps.blockAttributeValue !== this.props.blockAttributeValue
+    )
+    },
 
-      <svg style={{width: '150', height: '20'}}  >
+  render: function ()
+    {
+    return (
+
+      <svg style={{width: '150px', height: '20px'}}>
         <circle r="8" className={"ledWidget" + (this.props.blockAttributeValue ? 'ON' : 'OFF')}
-                      transform="translate(9, 11)" />
+                transform="translate(9, 11)"/>
       </svg>
 
     )
-  }
+    }
 });
 
 module.exports = LEDWidget;

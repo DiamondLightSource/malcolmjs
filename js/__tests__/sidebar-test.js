@@ -22,7 +22,7 @@ describe('BothPanes', () => {
 
     it('creates and renders main pane and side pane areas', () => {
         // Render the panes
-        var AppConstants = require('../constants/appConstants');
+        let AppConstants = require('../constants/appConstants');
         const bothpanes = TestUtils.renderIntoDocument(
             <BothPanes />
         );

@@ -3,9 +3,21 @@
  */
 
 
-var idLookupTableFunctions = {
+class IdLookupTableFunctions
+{
 
-  invokeIdCallback: function (id, success, json)
+constructor()
+  {
+  this.idLookupTable = {};
+  }
+
+  /**
+   *
+   * @param id
+   * @param success
+   * @param json
+   */
+  invokeIdCallback(id, success, json)
     {
     /* 'success' will be a boolean value;
      if 'success' is true then invoke the success callback,
@@ -18,60 +30,71 @@ var idLookupTableFunctions = {
 
     if (success === true)
       {
-      console.log(`idLookupTableFunctions idLookupTable = ${idLookupTable}`);
-      if (idLookupTable.hasOwnProperty(id))
+      //console.log(`idLookupTableFunctions idLookupTable = ${this.idLookupTable}`);
+      if (this.idLookupTable.hasOwnProperty(id.toString()))
         {
-        //console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(idLookupTable)}`);
+        //console.log(`idLookupTableFunctions: invokeIdCallback() -> id = ${id}  is Array? -> ${Array.isArray(this.idLookupTable)}`);
         //console.log('idLookupTable[] ->');
-        //console.log(idLookupTable);
-        idLookupTable[id].successCallback(json);
+        //console.log(this.idLookupTable);
+        this.idLookupTable[id].successCallback(id, json);
         //console.log('idLookupTableFunctions.invokeIdCallback: ID: ' + id +' JSON: ' + json);
         }
       }
     else if (success === false)
       {
-      if (idLookupTable.hasOwnProperty(id))
+      if (this.idLookupTable.hasOwnProperty(id.toString()))
         {
-        idLookupTable[id].failureCallback(json);
+        this.idLookupTable[id].failureCallback(json);
         }
       }
-    },
+    }
 
   /**
    * @name addIdCallbacks
    * @param {number} id - unique identifier for this callback
+   * @param {object} requestedData
+   * @param {array} callbacks
    */
-  addIdCallbacks: function (id, requestedData, callbacks)
+  addIdCallbacks(id, requestedData, callbacks)
     {
     //
-    idLookupTable[id] = callbacks;
-    idLookupTable[id].id = id;
-    idLookupTable[id].requestMessage = requestedData;
-    },
+    this.idLookupTable[id] = callbacks;
+    this.idLookupTable[id].id = id;
+    this.idLookupTable[id].requestMessage = requestedData;
+
+    /**
+    if (callbacks.hasOwnProperty('successCallback'))
+      {
+      this.idLookupTable[id].successCallback.bind(null, id)
+      }
+     *
+     */
+    }
 
   /**
    Test for table having an entry for the given id number.
    @name hasId
    @param {number} id
-   @returns {bool} true if the id exiss
+   @returns {boolean} true if the id exiss
  */
-  hasId: function(id)
+  hasId(id)
     {
-    return( idLookupTable.hasOwnProperty(id));
-    },
+    return( this.idLookupTable.hasOwnProperty(id.toString()));
+    }
 
-  getRequestMessage: function (id)
+  getRequestMessage(id)
     {
     let reqMsg = null;
 
-    if (idLookupTable.hasOwnProperty(id))
+    if (this.idLookupTable.hasOwnProperty(id.toString()))
       {
-      reqMsg = idLookupTable[id].requestMessage;
+      reqMsg = this.idLookupTable[id].requestMessage;
       }
     return(reqMsg);
     }
-};
+}
 
-var idLookupTable = {};
+let idLookupTableFunctions = new IdLookupTableFunctions();
 
-module.exports = idLookupTableFunctions;
+export {idLookupTableFunctions as default}
+

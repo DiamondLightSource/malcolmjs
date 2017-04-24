@@ -2,10 +2,10 @@
  * Created by twi18192 on 25/08/15.
  */
 
-var Dispatcher = require('flux').Dispatcher;
-var assign = require('object-assign');
+let Dispatcher = require('flux').Dispatcher;
+let assign     = require('object-assign');
 
-//var AppDispatcher = new Dispatcher();
+//let AppDispatcher = new Dispatcher();
 //
 //AppDispatcher.handleAction = function(action){
 //  this.dispatch({
@@ -14,29 +14,39 @@ var assign = require('object-assign');
 //  })
 //};
 
-var AppDispatcher = assign(new Dispatcher(), {
+let AppDispatcher = assign(new Dispatcher(), {
 
-  handleAction: function(action){
+  handleAction: function (action)
+    {
     this.dispatch({
       source: 'VIEW_ACTION',
       action: action
     })
-  },
+    },
 
-  handleViewAction: function(action){
+  handleViewAction: function (action)
+    {
     this.dispatch({
       source: "VIEW_ACTION",
       action: action
     })
-  },
+    },
 
-  handleServerAction: function(action){
+  handleServerAction: function (action)
+    {
     this.dispatch({
       source: "SERVER_ACTION",
       action: action
     })
-  }
+    },
 
+  handleBlockUpdate: function (action)
+    {
+    this.dispatch({
+      source: "BLOCK_UPDATE",
+      action: action
+    })
+    }
 
 });
 

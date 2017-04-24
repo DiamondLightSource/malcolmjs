@@ -2,80 +2,94 @@
  * Created by twi18192 on 15/03/16.
  */
 
-var React = require('react');
+let React = require('react');
 
-var MalcolmActionCreators = require('../actions/MalcolmActionCreators');
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-var DropdownEditableReadoutField = React.createClass({
+let DropdownEditableReadoutField = React.createClass({
+  propTypes: {
+    blockAttribute: React.PropTypes.object,
+    tabObject     : React.PropTypes.object,
+    attributeName : React.PropTypes.string,
+    blockName     : React.PropTypes.string,
 
-  shouldComponentUpdate: function(nextProps, nextState){
-    return(
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState)
+    {
+    return (
       nextProps.blockAttribute.value !== this.props.blockAttribute.value
     )
-  },
+    },
 
-  handleMalcolmCall: function(blockName, method, args){
+  handleMalcolmCall: function (blockName, method, args)
+    {
     console.log("malcolmCall in sidePane");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-  },
+    },
 
-  handleDropdownOptionChange: function(e){
+  handleDropdownOptionChange: function (e)
+    {
 
-    var clickedOptionFromDropdownMenu = e.currentTarget.value;
+    let clickedOptionFromDropdownMenu = e.currentTarget.value;
 
     /* Testing 'VISIBLE' vs 'visible' for individual
      block tabs' visibility dropdowns
      */
 
-    var blockAttribute;
+    let blockAttribute;
 
-    if(this.props.attributeName === 'VISIBLE'){
+    if (this.props.attributeName === 'VISIBLE')
+      {
       blockAttribute = 'visible';
-    }
-    else{
+      }
+    else
+      {
       blockAttribute = this.props.attributeName;
-    }
+      }
 
-    var inputFieldSetMethodName = "_set_" + blockAttribute;
-    var argsObject = {};
+    let inputFieldSetMethodName = "_set_" + blockAttribute;
+    let argsObject              = {};
 
     argsObject[this.props.attributeName] = clickedOptionFromDropdownMenu;
 
     this.handleMalcolmCall(this.props.blockName, inputFieldSetMethodName, argsObject);
 
-  },
+    },
 
-  render: function(){
+  render: function ()
+    {
 
-    var dropdownOptions = [];
+    let dropdownOptions = [];
 
-    for(var m = 0; m < this.props.blockAttribute.type.labels.length; m++){
+    for (let m = 0; m < this.props.blockAttribute.meta.choices.length; m++)
+      {
 
       /* Try using the value attribute of <select>,
-      rather than setting selected on an <option>
+       rather than setting selected on an <option>
        */
 
       dropdownOptions.push(
-        <option value={this.props.blockAttribute.type.labels[m]}
-                key={this.props.blockAttribute.type.labels[m] + 'dropdownOption'}
+        <option value={this.props.blockAttribute.meta.choices[m]}
+                key={this.props.blockAttribute.meta.choices[m] + 'dropdownOption'}
         >
-          {this.props.blockAttribute.type.labels[m]}
+          {this.props.blockAttribute.meta.choices[m]}
         </option>
       )
 
-    }
+      }
 
-    var dropdownList =
-      <select onChange={this.handleDropdownOptionChange}
-              className="dropdownMenuWidget"
-              value={this.props.blockAttribute.value} >
-        {dropdownOptions}
-      </select>;
+    let dropdownList =
+          <select onChange={this.handleDropdownOptionChange}
+                  className="dropdownMenuWidget"
+                  value={this.props.blockAttribute.value}>
+            {dropdownOptions}
+          </select>;
 
-    return(
+    return (
       dropdownList
     )
-  }
+    }
 
 });
 
