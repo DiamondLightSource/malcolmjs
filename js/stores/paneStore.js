@@ -770,8 +770,8 @@ function updateBlock(blockItem)
             appendToAllEdgeTabProperties(edgeLabel);
             }
           /*
-           else if (attr.value === 'BITS.ZERO' ||
-           attr.value === 'POSITIONS.ZERO')
+           else if (attr.value === 'ZERO' ||
+           attr.value === 'ZERO')
            */
           else if ((typeof attr.value === 'string') && (attr.value === defval))
             {
@@ -779,7 +779,7 @@ function updateBlock(blockItem)
             /* I know what inport and what inport block the edge was
              connected to, but I don't know what outport or what
              outport block the edge was connected to, since you
-             get the value to be BITS.ZERO or POSITIONS.ZERO instead
+             get the value to be ZERO instead
              of what it was connected to before...
              */
 
