@@ -10,10 +10,7 @@ let ToggleSwitch = require('react-toggle');
 
 let BlockToggleSwitch = React.createClass({
   propTypes            : {
-    blockAttributeValue: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.bool
-    ]).isRequired,
+    blockAttributeValue: React.PropTypes.any.isRequired,
     blockName          : React.PropTypes.string.isRequired,
     attributeName      : React.PropTypes.string.isRequired
   },
@@ -29,6 +26,10 @@ let BlockToggleSwitch = React.createClass({
     MalcolmActionCreators.malcolmCall(blockName, method, args)
     },
 
+  /**
+   * handleOnChange(): Presented as a callback reference (prop) to the underlying toggle switch component.
+    * @param e
+   */
   handleOnChange: function (e)
     {
 
