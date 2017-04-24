@@ -45,8 +45,6 @@ let App = React.createClass({
 
   render: function ()
     {
-
-    console.log("render: app");
     return (
       <div id="appContainer" style={AppContainerStyle}>
         <BothPanes/>
