@@ -49,7 +49,8 @@
         "expanded",
         "collapsed"
       ], "tags"     : [
-        "widget:group"
+        "widget:group",
+        "config"
       ], "writeable": true, "label": "Parameters"
     }, "value": "expanded"
   }, "delay"      : {
@@ -57,7 +58,8 @@
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "float64",
       "description" : "Output pulse delay (0 for no delay)", "tags": [
         "group:parameters",
-        "widget:textupdate"
+        "widget:textupdate",
+        "config"
       ], "writeable": true, "label": "Delay"
     }, "value": 0.0
   }, "delayUnits" : {
@@ -69,7 +71,8 @@
         "us"
       ], "tags"     : [
         "group:parameters",
-        "widget:combo"
+        "widget:combo",
+        "config"
       ], "writeable": true, "label": "Delay Units"
     }, "value": "s"
   }, "width"      : {
@@ -77,7 +80,8 @@
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "float64",
       "description" : "Output pulse width (0 for input pulse width)", "tags": [
         "group:parameters",
-        "widget:textupdate"
+        "widget:textupdate",
+        "config"
       ], "writeable": true, "label": "Width"
     }, "value": 0.0
   }, "widthUnits" : {
@@ -89,7 +93,8 @@
         "us"
       ], "tags"     : [
         "group:parameters",
-        "widget:combo"
+        "widget:combo",
+        "config"
       ], "writeable": true, "label": "Width Units"
     }, "value": "s"
   }, "inputs"     : {
@@ -98,7 +103,8 @@
         "expanded",
         "collapsed"
       ], "tags"     : [
-        "widget:group"
+        "widget:group",
+        "config"
       ], "writeable": true, "label": "Inputs"
     }, "value": "expanded"
   }, "inp"        : {
@@ -230,7 +236,8 @@
       ], "tags"     : [
         "group:inputs",
         "inport:bool:ZERO",
-        "widget:combo"
+        "widget:combo",
+        "config"
       ], "writeable": true, "label": "Inp"
     }, "value": "ZERO"
   }, "inpVal"     : {
@@ -245,7 +252,8 @@
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint8",
       "description" : "How many FPGA ticks to delay input", "tags": [
         "group:inputs",
-        "widget:textinput"
+        "widget:textinput",
+        "config"
       ], "writeable": true, "label": "Inp Delay"
     }, "value": 0
   }, "enable"     : {
@@ -378,7 +386,8 @@
       ], "tags"     : [
         "group:inputs",
         "inport:bool:ZERO",
-        "widget:combo"
+        "widget:combo",
+        "config"
       ], "writeable": true, "label": "Enable"
     }, "value": "ZERO"
   }, "enableVal"  : {
@@ -393,7 +402,8 @@
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint8",
       "description" : "How many FPGA ticks to delay input", "tags": [
         "group:inputs",
-        "widget:textinput"
+        "widget:textinput",
+        "config"
       ], "writeable": true, "label": "Enable Delay"
     }, "value": 0
   }, "outputs"    : {
@@ -402,7 +412,8 @@
         "expanded",
         "collapsed"
       ], "tags"     : [
-        "widget:group"
+        "widget:group",
+        "config"
       ], "writeable": true, "label": "Outputs"
     }, "value": "expanded"
   }, "out"        : {
@@ -419,7 +430,8 @@
         "expanded",
         "collapsed"
       ], "tags"     : [
-        "widget:group"
+        "widget:group",
+        "config"
       ], "writeable": true, "label": "Readbacks"
     }, "value": "expanded"
   }, "errOverflow": {
