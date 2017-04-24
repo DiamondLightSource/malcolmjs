@@ -111,7 +111,6 @@ let MainPane = React.createClass({
       </div>
       </Footer>;
 
-  console.log("render: mainPane");
     return(
       <Panel theme="flexbox" useAvailableHeight={true} buttons={[
           <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
