@@ -54,6 +54,15 @@ var appConstants = {
   INITIALISE_FLOWCHART_END: 'INITIALISE_FLOWCHART_END',
   INITIALISE_FLOWCHART_FAILURE: 'INITIALISE_FLOWCHART_FAILURE',
 
+  /* Protocol metadata string constants */
+  MALCOLM_TYPE_BOOL:   'bool',
+  MALCOLM_TYPE_INT32:  'int32',
+  MALCOLM_TYPE_UINT32: 'uint32',
+  MALCOLM_TYPE_INT8:   'int8',
+  MALCOLM_TYPE_UINT8:  'uint8',
+  MALCOLM_TYPE_FLOAT64:'float64',
+  MALCOLM_VALUE_ZERO:  'ZERO',
+
   /* Constants from flowChart added here */
 
   /* BLOCK use */
