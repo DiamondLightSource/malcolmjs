@@ -280,7 +280,18 @@ putXY(newX, newY)
       "mri":[this.mri()],
       "x":[newX],
       "y":[newY],
-      "visible":[this.visible]});
+      "visible":[this.attributes.visible]});
+  }
+
+putVisible(visibility)
+  {
+  MalcolmActionCreators.malcolmPut("", [MalcolmActionCreators.getdeviceId(), "layout", "value"],
+    {"typeid":"malcolm:core/Table:1.0",
+      "name":[this.blockName()],
+      "mri":[this.mri()],
+      "x":[this.attributes.x],
+      "y":[this.attributes.y],
+      "visible":[visibility]});
   }
 
 blockName()
@@ -792,6 +803,9 @@ dispatcherCallback(payload)
 
   switch (action.actionType)
   {
+    case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
+      //this.emitBlockChange();
+      break;
 
     case appConstants.MALCOLM_GET_SUCCESS:
 
@@ -819,10 +833,13 @@ dispatcherCallback(payload)
        * One or more blocks may have been updated in this subscription response
        * so iterate through the table of changed blocks.
        */
+
+      /**
       console.log("BlockCollection MALCOLM_SUBSCRIBE_SUCCESS");
       console.log(item.requestedData);
       console.log(item.responseMessage);
       console.log("------------------------------------------");
+       */
 
       if (blockCollection._allBlockItems.length < 1)
         {
@@ -842,6 +859,9 @@ dispatcherCallback(payload)
       break;
 
     case appConstants.INTERACTJS_DRAG:
+      break;
+
+    default:
       break;
 
   }
