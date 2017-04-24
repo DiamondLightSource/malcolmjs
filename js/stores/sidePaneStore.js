@@ -4,8 +4,9 @@
 
 let AppDispatcher = require('../dispatcher/appDispatcher');
 let appConstants  = require('../constants/appConstants');
-let EventEmitter  = require('events').EventEmitter;
-let assign        = require('object-assign');
+//let EventEmitter  = require('events').EventEmitter;
+import EventEmitter from 'events';
+let assign = require('object-assign');
 
 let CHANGE_EVENT = 'change';
 
@@ -34,6 +35,37 @@ let dropdownMenuHide = function ()
   };
 
 
+class SidePaneStore extends EventEmitter {
+constructor()
+  {
+  super();
+  }
+
+addChangeListener(cb)
+  {
+  this.on(CHANGE_EVENT, cb)
+  }
+
+removeChangeListener(cb)
+  {
+  this.removeListener(CHANGE_EVENT, cb)
+  }
+
+emitChange()
+  {
+  this.emit(CHANGE_EVENT)
+  }
+
+getDropdownState()
+  {
+  return _stuff.dropdownListVisible;
+  }
+
+}
+
+let sidePaneStore = new SidePaneStore();
+
+/*
 let sidePaneStore = assign({}, EventEmitter.prototype, {
   addChangeListener   : function (cb)
     {
@@ -53,8 +85,9 @@ let sidePaneStore = assign({}, EventEmitter.prototype, {
     }
 
 });
+*/
 
-AppDispatcher.register(function (payload)
+AppDispatcher.register((payload) =>
 {
 let action = payload.action;
 let item   = action.item;
@@ -82,4 +115,4 @@ switch (action.actionType)
 }
 });
 
-module.exports = sidePaneStore;
+export default sidePaneStore;
