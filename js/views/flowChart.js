@@ -2,7 +2,8 @@
  * Created by twi18192 on 10/12/15.
  */
 
-let React    = require('react');
+import * as React from 'react';
+let ReactDOM = require('react-dom');
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
@@ -41,12 +42,9 @@ let FlowChart = React.createClass({
 
   componentDidMount   : function ()
     {
-    /**
-     * Add listeners to CustomEvent broadcasters in ports.js portClick(e).
-     */
-    this.refs.node.addEventListener('EdgePreview', this.addEdgePreview);
-    this.refs.node.addEventListener('EdgePreview', this.portSelectHighlight);
-    this.refs.node.addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
     interact('#dragArea')
       .on('tap', this.deselect);
@@ -78,9 +76,9 @@ let FlowChart = React.createClass({
   componentWillUnmount: function ()
     {
 
-    this.refs.node.removeEventListener('EdgePreview', this.addEdgePreview);
-    this.refs.node.removeEventListener('EdgePreview', this.portSelectHighlight);
-    this.refs.node.removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
+    ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
+    ReactDOM.findDOMNode(this).removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
     interact('#dragArea')
       .off('tap', this.deselect);
@@ -98,6 +96,15 @@ let FlowChart = React.createClass({
       this.resetPortClickStorage();
       flowChartActions.addEdgePreview(null);
       }
+
+    /**
+     * TODO: display available blocks on clicking background
+     * Now that all everything is deselcted:
+     * Fill the SidePane contents with a list of all available blocks
+     * to allow the user to select and drag one onto the MainPane.
+     * IJG: 24 April 2017
+     */
+
 
     },
 
@@ -176,9 +183,6 @@ let FlowChart = React.createClass({
     {
     let blockInfo = eventdata.detail.blockInfo;
 
-    console.log('flowChart: blockInfo :');
-    console.log(blockInfo);
-
     let clickedPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
     // AGHHHHHHHHH!!!!!! Yuck... :(
@@ -186,7 +190,7 @@ let FlowChart = React.createClass({
 
     let fromBlockId = blockInfo.name;
 
-    console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
+    //console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
 
     let portStringSliceIndex = fromBlockId.length;
     let portName             = document.getElementById(this.props.portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
@@ -257,6 +261,12 @@ let FlowChart = React.createClass({
     flowChartActions.addEdgePreview(edgePreviewInfo);
     },
 
+  /**
+   * portSelectHighlight():
+   * Event listener callback for EdgePreview
+   *
+   * @param eventdata
+   */
   portSelectHighlight: function (eventdata)
     {
     let blockInfo = eventdata.detail.blockInfo;
@@ -277,7 +287,7 @@ let FlowChart = React.createClass({
     let firstPort  = document.getElementById(this.props.storingFirstPortClicked.id);
     let secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
-    console.log(`flowChart: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
+    //console.log(`flowChart: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
 
     /* The excessive use of .parentNode is to walk up
      the DOM tree and find the id of the block that the
@@ -326,7 +336,7 @@ let FlowChart = React.createClass({
     let fromBlockType = this.props.allBlockInfo[edgeInfo.fromBlock].type;
     let toBlockType   = this.props.allBlockInfo[edgeInfo.toBlock].type;
 
-    console.log(`flowChart: checkPortCompatibility() : fromBlockType = ${fromBlockType}    toBlockType = ${toBlockType}`);
+    //console.log(`flowChart: checkPortCompatibility() : fromBlockType = ${fromBlockType}    toBlockType = ${toBlockType}`);
 
     /* Remember, this is BEFORE any swapping occurs, but be
      aware that these may have to swap later on
@@ -567,6 +577,7 @@ let FlowChart = React.createClass({
         y: -e.dy
       })
       }
+    //console.log(`flowChart.interactJsDragPan(): e = ${JSON.stringify(e)} props.graphPosition.x = ${this.props.graphPosition.x}  props.graphPosition.y = ${this.props.graphPosition.y}`);
     },
 
   interactJsPinchZoom: function (e)
@@ -648,18 +659,23 @@ let FlowChart = React.createClass({
         //let blockInfo = this.props.allBlockInfo[blockName];
         //for(let blockindex = 0; blockindex < this.props.allBlockInfo.length; blockindex++)
         //let block = this.props.allBlockInfo[blockindex];
-        if (moduleDebug)
-          {
-            console.log(`flowChart.render(): blockName ${blockName}   Position: X: ${this.props.blockPositions[blockName].x}  y: ${this.props.blockPositions[blockName].y}`);
-          }
+        //if (moduleDebug)
+        //  {
+        //    console.log(`flowChart.render(): blockName ${blockName}   Position: X: ${this.props.blockPositions[blockName].x}  y: ${this.props.blockPositions[blockName].y}`);
+        //  }
 
         blocks.push(
-          <Block key={blockInfo.name} id={blockInfo.name} className="block"
+          <Block key={blockInfo.name}
+                 id={blockInfo.name}
+                 className="block"
                  blockInfo={blockInfo}
                  areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                  storingFirstPortClicked={this.props.storingFirstPortClicked}
-            //portMouseOver={this.props.portMouseOver}
+                //portMouseOver={this.props.portMouseOver}
+
+                // TODO: ** NO!! Must NOT access stores directly from view component. All info via props *only*
+                // IJG 22 March 2017
                  selected={flowChartStore.getAnyBlockSelectedState(blockName)}
                  deselect={this.deselect}
                  blockStyling={this.props.blockStyling}
@@ -691,12 +707,17 @@ let FlowChart = React.createClass({
             let edgeLabel = String(fromBlock) + String(fromBlockPort) + String(toBlock) + String(toBlockPort);
 
             edges.push(
-              <Edge key={edgeLabel} id={edgeLabel}
-                    fromBlock={fromBlock} fromBlockType={fromBlockType}
-                    fromBlockPort={fromBlockPort} fromBlockPortValueType={fromBlockPortValueType}
+              <Edge key={edgeLabel}
+                    id={edgeLabel}
+                    fromBlock={fromBlock}
+                    fromBlockType={fromBlockType}
+                    fromBlockPort={fromBlockPort}
+                    fromBlockPortValueType={fromBlockPortValueType}
                     fromBlockPosition={this.props.blockPositions[fromBlock]}
-                    toBlock={toBlock} toBlockType={toBlockType}
-                    toBlockPort={toBlockPort} toBlockPosition={this.props.blockPositions[toBlock]}
+                    toBlock={toBlock}
+                    toBlockType={toBlockType}
+                    toBlockPort={toBlockPort}
+                    toBlockPosition={this.props.blockPositions[toBlock]}
                     fromBlockInfo={this.props.allBlockInfo[fromBlock]}
                     toBlockInfo={this.props.allBlockInfo[toBlock]}
                     areAnyEdgesSelected={this.props.areAnyEdgesSelected}
