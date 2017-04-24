@@ -75,16 +75,15 @@ SidePane = React.createClass({
 
   render: function ()
     {
-
-    console.log("render: sidePane");
+    //console.log("render: sidePane");
 
     let skin    = this.props.skin || "default";
     let globals = this.props.globals || {};
 
     /* Do I need dynamicTab to be something else if tabState is empty? */
 
-    console.log(this.props.tabState);
-    console.log(this.props.selectedTabIndex);
+    console.log(`SidePane: tabState = ${this.props.tabState}`);
+    console.log(`SidePane: selectedTabIndex = ${this.props.selectedTabIndex}`);
 
     let dynamicTab;
 
