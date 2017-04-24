@@ -2,7 +2,7 @@
  * Created by twi18192 on 04/02/16.
  */
 
-let React    = require('../../node_modules/react/react');
+import * as React from 'react';
 let ReactDOM = require('react-dom');
 
 import flowChartActions from '../actions/flowChartActions';
@@ -35,7 +35,7 @@ let EdgePreview = React.createClass({
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    interact(this.refs.node)
+    interact(ReactDOM.findDOMNode(this))
       .draggable({
 
         onstart: function (e)
@@ -73,19 +73,19 @@ let EdgePreview = React.createClass({
 
       });
 
-    interact(this.refs.node)
+    interact(ReactDOM.findDOMNode(this))
       .on('tap', this.onTap);
 
-    interact(this.refs.node)
+    interact(ReactDOM.findDOMNode(this))
       .on('down', this.onMouseDown);
     },
   componentWillUnmount: function ()
     {
 
-    interact(this.refs.node)
+    interact(ReactDOM.findDOMNode(this))
       .off('tap', this.onTap);
 
-    interact(this.refs.node)
+    interact(ReactDOM.findDOMNode(this))
       .off('down', this.onMouseDown);
 
     interact('#appAndDragAreaContainer')
