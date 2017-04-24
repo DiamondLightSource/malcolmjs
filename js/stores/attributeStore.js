@@ -21,7 +21,7 @@ let allBlockAttributesIconStatus = {};
  *
  * addBlockAttribute():
  * Given a blockItem, copy it into the attributeStore in the form that's expected by old clients of
- * attributeStore. This is a short-term kludge to get this suite working as quickly as possible, but should be
+ * attributeStore. TODO: This is a short-term kludge to get this suite working as quickly as possible, but should be
  * cleaned up and rationalised ASAP.
  * IJG Feb 2017.
  *
@@ -55,13 +55,15 @@ allBlockAttributes.addBlockAttributes = function (blockItem)
       this[blockName][attributeName] = attribute;
       }
     }
-  if (typeof attributes.x == 'function')
+  if (attributes.hasOwnProperty("x"))
     {
-    this["X_COORD"] = attributes.x();
+    let x = blockItem.x();
+    this["X_COORD"] = attributes.x;
     }
-  if (typeof attributes.y == 'function')
+  if (attributes.hasOwnProperty("y"))
     {
-    this["Y_COORD"] = attributes.y();
+    let y = blockItem.y();
+    this["Y_COORD"] = attributes.y;
     }
   };
 
@@ -182,7 +184,9 @@ constructor()
   {
   super();
   this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
+  this.onChangeBlockLayoutCallback = this.onChangeBlockLayoutCallback.bind(this);
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
+  blockCollection.addChangeListenerLayout(this.onChangeBlockLayoutCallback);
   }
 
 addChangeListener(cb)
@@ -250,6 +254,35 @@ onChangeBlockCollectionCallback(items)
     }
   }
 
+onChangeBlockLayoutCallback(items)
+  {
+  let changed = false;
+
+  //console.log(`attributetore.onChangeBlockCollectionCallback(): items = ${items}`);
+  for (let i = 0; i < items.length; i++)
+    {
+    let index     = items[i];
+    let blockItem = blockCollection.getBlockItem(index);
+    if (blockItem !== null)
+      {
+      updateAttributeValue(blockItem);
+      let attributes = blockItem.getAttributeNames();
+      for (let attrIndex = 0; attrIndex < attributes.length; attrIndex++)
+        {
+        let attrName = attributes[attrIndex];
+        updateAttributeIconStatus(blockItem.blockName(), attrName, {
+          value  : 'success',
+          message: null
+        });
+        }
+      changed = true;
+      }
+    }
+  if (changed)
+    {
+    attributeStore.emitChange();
+    }
+  }
 } // class
 
 const attributeStore = new AttributeStore();
