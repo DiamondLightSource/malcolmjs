@@ -106,6 +106,14 @@ malcolmCall(blockName, method, args)
 
   }
 
+
+/**
+ * malcolmPut()
+ * @param blockName - can be empty, in which case it is defaulted to the device ID (e.g. ["P"])
+ * @param endpoint - array of path ids, e.g. ["P", "layout", "value"]
+ * @param value    - object to write, e.g. {mri:array[n], name:array[n], visible:array[n], x:array[n], y:array[n], typeid:array[n]}
+ *
+ */
 malcolmPut(blockName, endpoint, value)
   {
   let requestedDataToWritePath;
