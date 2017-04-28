@@ -4,6 +4,7 @@
 
 let React       = require('react');
 let ReactDOM    = require('react-dom');
+import PropTypes from 'prop-types';
 let ReactPanels = require('react-panels');
 let Dropdown    = require('./dropdownMenu');
 
@@ -19,11 +20,13 @@ let SidePane;
 SidePane = React.createClass({
 
   propTypes: {
-    skin            : React.PropTypes.object,
-    globals         : React.PropTypes.number,
-    tabState        : React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    selectedTabIndex: React.PropTypes.number.isRequired,
-    listVisible     : React.PropTypes.bool.isRequired
+    skin            : PropTypes.object,
+    globals         : PropTypes.number,
+    tabState        : PropTypes.arrayOf(PropTypes.object).isRequired,
+    selectedTabIndex: PropTypes.number.isRequired,
+    listVisible     : PropTypes.bool.isRequired,
+    areAnyBlocksSelected   : PropTypes.bool,
+    areAnyEdgesSelected    : PropTypes.bool
   },
 
   shouldComponentUpdate: function (nextProps, nextState)
@@ -34,9 +37,11 @@ SidePane = React.createClass({
      which isn't quite what I want
      */
     return (
-      nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
-      nextProps.listVisible !== this.props.listVisible ||
-      nextProps.tabState !== this.props.tabState
+      nextProps.selectedTabIndex     !== this.props.selectedTabIndex    ||
+      nextProps.listVisible          !== this.props.listVisible         ||
+      nextProps.tabState             !== this.props.tabState            ||
+      nextProps.areAnyEdgesSelected  !== this.props.areAnyEdgesSelected ||
+      nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected
     )
     },
 
@@ -94,12 +99,29 @@ SidePane = React.createClass({
       }
     else
       {
-      dynamicTab =
-        <Tab key={this.props.tabState[this.props.selectedTabIndex].label + 'tab'}
-             title={this.props.tabState[this.props.selectedTabIndex].label}>
-          <SidePaneTabContents key={this.props.tabState[this.props.selectedTabIndex].label + 'contents'}
-                               tabObject={this.props.tabState[this.props.selectedTabIndex]}/>
-        </Tab>;
+      /***
+       * If any block is selected then use its name (via tabState[n].label)
+       * in the Tab title.
+       * Otherwise assum no blocks selected and set the Tab title to
+       * indicate that we are displaying the list of available blocks.
+       *
+       */
+      let title;
+      if (!(this.props.areAnyBlocksSelected || this.props.areAnyEdgesSelected))
+        {
+        title = "Blocks Available";
+        }
+      else
+        {
+        title = this.props.tabState[this.props.selectedTabIndex].label;
+        }
+        dynamicTab = <Tab key={title + 'tab'}
+                      title={title}>
+                      <SidePaneTabContents key={title + 'contents'}
+                           tabObject={this.props.tabState[this.props.selectedTabIndex]}
+                           areAnyBlocksSelected={this.props.areAnyBlocksSelected}
+                           areAnyEdgesSelected={this.props.areAnyEdgesSelected}/>
+                      </Tab>;
       }
 
     return (
@@ -116,8 +138,8 @@ SidePane = React.createClass({
                  <div id="dropDown">
                    <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
                              tabState={this.props.tabState}
-                             listVisible={this.props.listVisible}
-                   />
+                             listVisible={this.props.listVisible}>
+                     </Dropdown>
                  </div>
                </Button>
              ]}>
