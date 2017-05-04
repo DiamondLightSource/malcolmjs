@@ -1,20 +1,25 @@
 /**
  * Created by twi18192 on 25/01/16.
  */
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
-let React = require('react');
+import MainPane from './mainPane';
+import SidePane from './sidePane';
+import ModalDialogBox from './modalDialogBox';
 
-let MainPane       = require('./mainPane');
-let SidePane       = require('./sidePane');
-let ModalDialogBox = require('./modalDialogBox');
-
-let mainPaneStore = require('../stores/mainPaneStore');
+import mainPaneStore from '../stores/mainPaneStore';
 import sidePaneStore from '../stores/sidePaneStore';
-let paneStore     = require('../stores/paneStore');
+import paneStore from '../stores/paneStore';
+import flowChartStore from '../stores/flowChartStore';
 
-let paneActions = require('../actions/paneActions');
+import paneActions from '../actions/paneActions';
 
-let SideBar = require('react-sidebar').default;
+import SideBar from 'react-sidebar';
+
+//import {DragDropContextProvider} from 'react-dnd';
+//import HTML5Backend from 'react-dnd-html5-backend';
+//import ItemTypes from './dndItemTypes';
 
 // Needed for onTouchTap
 // todo: ????
@@ -139,79 +144,112 @@ function getBothPanesState()
     tabState        : paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
     listVisible     : sidePaneStore.getDropdownState(),
+
+    /* Need to switch SidePane content depending on whether any block are selected
+     * If they are not then display a list of available blocks for the user
+     * to drag to the FlowChart pane.
+     * */
+    areAnyBlocksSelected: flowChartStore.getIfAnyBlocksAreSelected(),
+    areAnyEdgesSelected : flowChartStore.getIfAnyEdgesAreSelected()
+
   }
   }
 
-let BothPanes = React.createClass(
-  {
-    getInitialState: function ()
-      {
-      return getBothPanesState();
-      },
+const boxTarget = {
+  drop() {
+  return {name: 'flowChart'};
+  },
+};
 
-    _onChange: function ()
+
+export default class BothPanes extends React.Component {
+  constructor(props)
+    {
+    super(props);
+    this.state = getBothPanesState();
+    this.__onChange = this.__onChange.bind(this);
+    }
+
+    __onChange()
       {
       this.setState(getBothPanesState());
-      },
+      }
 
-    componentDidMount: function ()
+    componentDidMount()
       {
       let mql = window.matchMedia(`(min-width: 800px)`);
-      mainPaneStore.addChangeListener(this._onChange);
-      paneStore.addChangeListener(this._onChange);
-      sidePaneStore.addChangeListener(this._onChange);
+      mainPaneStore.addChangeListener(this.__onChange);
+      paneStore.addChangeListener(this.__onChange);
+      sidePaneStore.addChangeListener(this.__onChange);
+      flowChartStore.addChangeListener(this.__onChange);
 
       mql.addListener(this.windowWidthMediaQueryChanged);
       this.setState({mql: mql}, function ()
       {
       paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
       });
-      },
+      }
     componentWillUnmount(){
-    mainPaneStore.removeChangeListener(this._onChange);
-    paneStore.removeChangeListener(this._onChange);
-    sidePaneStore.removeChangeListener(this._onChange);
+    mainPaneStore.removeChangeListener(this.__onChange);
+    paneStore.removeChangeListener(this.__onChange);
+    sidePaneStore.removeChangeListener(this.__onChange);
 
     this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
-    },
+    }
 
-    windowWidthMediaQueryChanged: function ()
+    windowWidthMediaQueryChanged()
       {
       paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
-      },
+      }
 
-    render: function ()
+    render()
       {
 
       //console.log("render: sidebar (BothPanes)");
+      /* abc <DragDropContextProvider backend={HTML5Backend}> */
+      /*  DragDropContextProvider established to encompass both panes (MainPane and SidePane) */
+      /*  This is to facilitate dragging a block from the list in the SidePane and dropping it */
+      /*  into the FlowChart (via MainPane)*/
 
+      /* Note: It is not good practice to pass children as props (see SideBar below),
+       * they should be passed as content between the element start and end tags.
+       * TODO: Determine whether this is a design issue of react-sidebar or MalcolmJS.
+       * IJG May 2017 */
+      //console.log("BothPanes.render() ----------------------------");
       return (
-        <div id="BothPanesContainer" style={BothPanesContainerStyle}>
-          <ModalDialogBox modalDialogBoxOpen={this.state.modalDialogBoxOpen}
-                          modalDialogBoxInfo={this.state.modalDialogBoxInfo}
-          />
-          <SideBar sidebarClassName="sidebar"
-                   styles={SidebarStyling}
-                   docked={this.state.sidebarOpen}
-                   pullRight={true} touchHandleWidth={5}
-                   children={
-                     <MainPane footers={this.state.footers}
-                       //favTabOpen={this.state.favTabOpen}
-                       //configTabOpen={this.state.configTabOpen}
-                       //loadingInitialData={this.state.loadingInitialData}
-                       //loadingInitialDataError={this.state.loadingInitialDataError}
-                     />
-                   }
-                   sidebar={
-                     <SidePane tabState={this.state.tabState}
-                               selectedTabIndex={this.state.selectedTabIndex}
-                               listVisible={this.state.listVisible}
-                     />
-                   }>
-          </SideBar>
-        </div>
+          <div id="BothPanesContainer" style={BothPanesContainerStyle}>
+            <ModalDialogBox modalDialogBoxOpen={this.state.modalDialogBoxOpen}
+                            modalDialogBoxInfo={this.state.modalDialogBoxInfo}
+            />
+            <SideBar sidebarClassName="sidebar"
+                     styles={SidebarStyling}
+                     docked={this.state.sidebarOpen}
+                     pullRight={true} touchHandleWidth={5}
+                     children={
+                       <MainPane footers={this.state.footers}/>
+                     }
+
+                     sidebar={
+                       <SidePane tabState={this.state.tabState}
+                                 selectedTabIndex={this.state.selectedTabIndex}
+                                 listVisible={this.state.listVisible}
+                                 areAnyBlocksSelected={this.state.areAnyBlocksSelected}
+                                 areAnyEdgesSelected={this.state.areAnyEdgesSelected}
+                       />}
+            />
+            {/* -- Commented out properties for this MainPane JSX element -- */}
+            {/* favTabOpen={this.state.favTabOpen} */}
+            {/* configTabOpen={this.state.configTabOpen} */}
+            {/* loadingInitialData={this.state.loadingInitialData} */}
+            {/* loadingInitialDataError={this.state.loadingInitialDataError} */}
+          </div>
       )
       }
-  });
+  }
 
-module.exports = BothPanes;
+BothPanes.propTypes = {
+  connectDropTarget: PropTypes.func.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  canDrop: PropTypes.bool.isRequired,
+};
+

@@ -1,21 +1,9 @@
 /**
- * Created by ig43 on 13/10/16.
- *
- * Abstracts the concept of a block instance.
- * Block Item := blockName + { attributeName, attribute }
- *
- * This module has been created to avoid the previous design pattern of splitting attributes from
- * blocks between having blockStore and attributeStore.
- * The intention is to maintain blockStore, which should simply represent a collection of blockItems.
- *
- * A BlockItem is constructed from its given unique index number along with a copy of the json schema of
- * the top level layout description, which contains arrays of attributes, such as visibility, position etc.
- * Each BlockItem derived its own attribute values by looking up the values from the attribute arrays, indexed on
- * the given index number.
- *
- * Ian Gillingham: 13 October 2016
- *
+ * @module blockItems
+ * @author  Ian Gillingham
+ * @since  13/10/2016
  */
+
 import EventEmitter from 'events';
 import AppDispatcher from '../dispatcher/appDispatcher';
 import appConstants  from '../constants/appConstants';
@@ -541,7 +529,7 @@ createBlockItemsFromSchema(topLevelSchema)
     let iteration = function (name, index, callbackDone)
       {
       //console.log(`BlockCollection.createBlockItemsFromSchema(): mri = ${mri}`);
-      let bi  = new BlockItem(index, blockCollection)
+      let bi  = new BlockItem(index, blockCollection);
       let pos = blockCollection._allBlockItems.push(bi);
 
       self._blockItemsChanged.push(pos - 1);
@@ -746,6 +734,13 @@ getBlockItemByName(blockName)
   }
 
 
+/**
+ * getAllBlockItems():
+ * @returns {Array}
+ *
+ * @description Returns an array of BlockItem instances.
+ *
+ */
 getAllBlockItems()
   {
   let retBlockItems = this._allBlockItems;

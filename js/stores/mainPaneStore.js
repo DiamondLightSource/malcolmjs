@@ -2,39 +2,55 @@
  * Created by twi18192 on 25/08/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants = require('../constants/appConstants');
-let EventEmitter = require('events').EventEmitter;
-let assign = require('object-assign');
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
+//import * as assign from 'object-assign';
 
 let CHANGE_EVENT = 'change';
 
 let _stuff = {
-    footerState: false,
+  footerState: false,
 };
 
-let toggleFooter = function(){
-    _stuff.footerState = !_stuff.footerState
+let toggleFooter = function ()
+  {
+  _stuff.footerState = !_stuff.footerState
   };
 
-let mainPaneStore = assign({}, EventEmitter.prototype, {
-  addChangeListener: function(cb) {
-    this.on(CHANGE_EVENT, cb);
-  },
-  removeChangeListener: function(cb) {
-    this.removeListener(CHANGE_EVENT, cb);
-  },
-  emitChange: function(){
-    this.emit(CHANGE_EVENT)
-  },
-  getFooterState: function(){
-    return _stuff.footerState;
-  },
-});
+class MainPaneStore extends EventEmitter
+  {
+  constructor()
+    {
+    super();
+    }
 
-AppDispatcher.register(function(payload){
+  addChangeListener(cb)
+    {
+    this.on(CHANGE_EVENT, cb);
+    }
+
+  removeChangeListener(cb)
+    {
+    this.removeListener(CHANGE_EVENT, cb);
+    }
+
+  emitChange()
+    {
+    this.emit(CHANGE_EVENT)
+    }
+
+  getFooterState()
+    {
+    return _stuff.footerState;
+    }
+  }
+
+AppDispatcher.register(function (payload)
+  {
   let action = payload.action;
-  switch(action.actionType){
+  switch (action.actionType)
+    {
     case appConstants.FOOTER_TOGGLE:
       console.log(payload);
       console.log(action);
@@ -45,8 +61,11 @@ AppDispatcher.register(function(payload){
       break;
 
     default:
-          return true;
-  }
-});
+      return true;
+    }
+  return(true);
+  });
 
-module.exports = mainPaneStore;
+let mainPaneStore = new MainPaneStore();
+
+export default mainPaneStore;

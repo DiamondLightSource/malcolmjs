@@ -2,7 +2,8 @@
  * Created by twi18192 on 16/02/16.
  */
 
-let React           = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
 let ButtonStyle = {
   backgroundColor: 'grey',
@@ -29,15 +30,14 @@ let ButtonTitlePadding = {
 
 };
 
-let Button = React.createClass({
+export default class Button extends React.Component
+{
+  constructor(props)
+    {
+    super(props);
 
-  propTypes: {
-    buttonId   : React.PropTypes.string,
-    buttonClick: React.PropTypes.func,
-    buttonLabel: React.PropTypes.string,
-  },
-
-  render: function ()
+    }
+  render()
     {
     return (
       <div>
@@ -48,6 +48,11 @@ let Button = React.createClass({
       </div>
     )
     }
-});
+}
 
-module.exports = Button;
+Button.propTypes = {
+buttonId   : PropTypes.string,
+  buttonClick: PropTypes.func,
+  buttonLabel: PropTypes.string,
+};
+

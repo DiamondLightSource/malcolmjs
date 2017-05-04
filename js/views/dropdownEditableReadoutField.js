@@ -2,33 +2,34 @@
  * Created by twi18192 on 15/03/16.
  */
 
-let React = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-let DropdownEditableReadoutField = React.createClass({
-  propTypes: {
-    blockAttribute: React.PropTypes.object,
-    tabObject     : React.PropTypes.object,
-    attributeName : React.PropTypes.string,
-    blockName     : React.PropTypes.string,
 
-  },
+export default class DropdownEditableReadoutField extends React.Component
+{
+constructor(props)
+  {
+  super(props);
+  this.handleDropdownOptionChange = this.handleDropdownOptionChange.bind(this);
+  }
 
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate(nextProps, nextState)
     {
     return (
       nextProps.blockAttribute.value !== this.props.blockAttribute.value
     )
-    },
+    }
 
-  handleMalcolmCall: function (blockName, method, args)
+  handleMalcolmCall(blockName, method, args)
     {
     console.log("malcolmCall in sidePane");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-    },
+    }
 
-  handleDropdownOptionChange: function (e)
+  handleDropdownOptionChange(e)
     {
 
     let clickedOptionFromDropdownMenu = e.currentTarget.value;
@@ -55,9 +56,9 @@ let DropdownEditableReadoutField = React.createClass({
 
     this.handleMalcolmCall(this.props.blockName, inputFieldSetMethodName, argsObject);
 
-    },
+    }
 
-  render: function ()
+  render()
     {
 
     let dropdownOptions = [];
@@ -91,6 +92,13 @@ let DropdownEditableReadoutField = React.createClass({
     )
     }
 
-});
+}
 
-module.exports = DropdownEditableReadoutField;
+DropdownEditableReadoutField.propTypes = {
+blockAttribute: PropTypes.object,
+  tabObject     : PropTypes.object,
+  attributeName : PropTypes.string,
+  blockName     : PropTypes.string,
+
+};
+

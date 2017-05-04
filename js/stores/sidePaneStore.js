@@ -2,11 +2,9 @@
  * Created by twi18192 on 01/09/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants  = require('../constants/appConstants');
-//let EventEmitter  = require('events').EventEmitter;
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
 import EventEmitter from 'events';
-let assign = require('object-assign');
 
 let CHANGE_EVENT = 'change';
 
@@ -115,4 +113,4 @@ switch (action.actionType)
 }
 });
 
-export default sidePaneStore;
+export {sidePaneStore as default, SidePaneStore};

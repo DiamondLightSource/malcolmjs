@@ -2,29 +2,26 @@
  * Created by twi18192 on 27/04/16.
  */
 
-let React = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
-let NonEditableReadoutField      = require('./nonEditableReadoutField');
-let TextEditableReadoutField     = require('./textEditableReadoutField');
-let DropdownEditableReadoutField = require('./dropdownEditableReadoutField');
-let LEDWidget                    = require('./ledWidget');
-let BlockToggleSwitch            = require('./blockToggleSwitch');
-//let BlockToggleSwitch            = require('../../components/blockToggleSwitchBelle');
+import NonEditableReadoutField      from './nonEditableReadoutField';
+import TextEditableReadoutField     from './textEditableReadoutField';
+import DropdownEditableReadoutField from './dropdownEditableReadoutField';
+import LEDWidget                    from './ledWidget';
+import BlockToggleSwitch            from './blockToggleSwitch';
+//import BlockToggleSwitch            from '../../components/blockToggleSwitchBelle';
+import WidgetStatusIcon from './widgetStatusIcon';
 
-let WidgetStatusIcon = require('./widgetStatusIcon');
+export default class WidgetTableContainer extends React.Component
+{
+  constructor(props)
+    {
+    super(props);
+    }
 
-let WidgetTableContainer = React.createClass({
 
-  propTypes: {
-    blockAttribute      : React.PropTypes.object,
-    blockAttributeStatus: React.PropTypes.object,
-    blockName           : React.PropTypes.string,
-    attributeName       : React.PropTypes.string,
-    widgetType          : React.PropTypes.string,
-    isInAGroup          : React.PropTypes.bool
-  },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate (nextProps, nextState)
     {
     let valcheck    = (nextProps.blockAttribute.value !== this.props.blockAttribute.value);
     let statusCheck = false;
@@ -32,9 +29,9 @@ let WidgetTableContainer = React.createClass({
       statusCheck = nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value;
 
     return (valcheck || statusCheck)
-    },
+    }
 
-  render: function ()
+  render ()
     {
 
     let widget;
@@ -55,13 +52,13 @@ let WidgetTableContainer = React.createClass({
       case 'textupdate':
         widget =
           <NonEditableReadoutField {...commonProps}
-                                   blockAttributeValue={this.props.blockAttribute.value}/>;
+                                   blockAttributeValue={this.props.blockAttribute.value.toString()}/>;
         break;
 
       case 'textinput':
         widget =
           <TextEditableReadoutField {...commonProps}
-                                    blockAttributeValue={this.props.blockAttribute.value}/>;
+                                    blockAttributeValue={this.props.blockAttribute.value.toString()}/>;
         break;
 
       case 'choice':
@@ -74,7 +71,7 @@ let WidgetTableContainer = React.createClass({
       case 'toggle':
         widget =
           <BlockToggleSwitch {...commonProps}
-                             blockAttributeValue={this.props.blockAttribute.value}/>;
+                             blockAttributeValue={this.props.blockAttribute.value.toString()}/>;
         break;
 
     }
@@ -104,7 +101,13 @@ let WidgetTableContainer = React.createClass({
       </table>
     )
     }
+}
 
-});
-
-module.exports = WidgetTableContainer;
+WidgetStatusIcon.propTypes = {
+blockAttribute      : PropTypes.object,
+  blockAttributeStatus: PropTypes.object,
+  blockName           : PropTypes.string,
+  attributeName       : PropTypes.string,
+  widgetType          : PropTypes.string,
+  isInAGroup          : PropTypes.bool
+};

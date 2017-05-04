@@ -2,13 +2,13 @@
  * Created by Ian Gillingham on 10/02/17.
  */
 import * as React from 'react';
-import { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import * as ReactDOM from 'react-dom';
 
 //let React    = require("react");
-let interact = require("../../node_modules/interact.js");
+import interact from "../../node_modules/interact.js";
 
-class Port extends Component {
+export default class Port extends React.Component {
 constructor(props)
   {
   super(props);
@@ -102,4 +102,3 @@ Port.propTypes =
 };
 
 
-export default Port;

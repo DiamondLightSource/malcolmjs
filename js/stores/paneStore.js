@@ -1,16 +1,40 @@
 /**
- * Created by twi18192 on 17/09/15.
+ * @module paneStore
+ * @author  Ian Gillingham
+ * @since  April 2017
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants  = require('../constants/appConstants');
-let EventEmitter  = require('events').EventEmitter;
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
 import blockCollection from '../classes/blockItems';
 import eachOf from 'async/eachOf';
+import MalcolmUtils from '../utils/MalcolmUtils'
 
 let CHANGE_EVENT = 'change';
 
-import MalcolmUtils from '../utils/MalcolmUtils'
+
+/**
+ *
+ * @type {{
+  * tabState: Array,
+  * selectedTabIndex: number,
+  * updatedBlockContent: null,
+  * blockTabState: Array,
+  * sidebarOpen: boolean,
+  * modalDialogBoxOpen: boolean
+  * }}
+ *
+ * @description
+ * tabState            - Whether the drop-down is open
+ * selectedTabIndex    - This is the index of the item selected in the drop-down
+ * updatedBlockContent - Not used - historical artifact that may be able to be removed
+ * blockTabState       - An array of states of each entry in the drop-down list.
+ * sidebarOpen         - True if the sidebar is in its visible state (default)
+ * modalDialogBoxOpen  - True if the modal dialogue box is in its visible state.
+ *
+ * @private
+ */
 
 let _stuff = {
   tabState           : [],
@@ -23,6 +47,10 @@ let _stuff = {
   modalDialogBoxOpen : false
 };
 
+/**
+ *
+ * @type {{blockName: null, attributeName: null, message: null}}
+ */
 let modalDialogBoxInfo = {
   blockName    : null,
   attributeName: null,
@@ -74,6 +102,7 @@ let dropdownMenuSelect = function (tab)
     if (_stuff.tabState[i].label === tab)
       {
       findTheIndex = i;
+      break; // search no further
       }
     }
 
@@ -212,8 +241,6 @@ blockUpdated(blockIndex)
 }
 
 const paneStore = new PaneStore();
-
-import attributeStore from './attributeStore';
 
 
 paneStore.dispatchToken = AppDispatcher.register(function (payload)
@@ -354,7 +381,13 @@ switch (action.actionType)
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
-let allBlockTabProperties = {
+
+let allBlockTabProperties;
+/**
+ *
+ * @type {{Favourites: boolean, Configuration: boolean, VISIBILITY: boolean}}
+ */
+allBlockTabProperties = {
   'Favourites'   : false,
   'Configuration': false,
   'VISIBILITY'   : false,
@@ -417,6 +450,10 @@ function setBlockTabStateTrue(BlockId)
     }
   }
 
+/**
+ *
+ * @param EdgeInfo
+ */
 function setEdgeTabStateTrue(EdgeInfo)
   {
   //console.log(`paneStore.setEdgeTabStateTrue()`);
@@ -857,7 +894,7 @@ function layoutUpdated(index)
 
   let iteration = function (blockItem, attr, callbackDone)
     {
-    updateBlock(blockItem)
+    updateBlock(blockItem);
     callbackDone();
     };
 
@@ -875,4 +912,4 @@ function layoutUpdated(index)
   paneStore.emitChange();
   }
 
-module.exports = paneStore;
+export {paneStore as default, PaneStore};

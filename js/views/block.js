@@ -2,32 +2,32 @@
  * Created by twi18192 on 14/01/16.
  */
 
-  //let React    = require('../../node_modules/react/react');
-let React    = require('react');
-let ReactDOM = require('react-dom');
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import * as ReactDOM from 'react-dom';
 
 import attributeStore from '../stores/attributeStore';
 
-let paneActions = require('../actions/paneActions');
+import paneActions from '../actions/paneActions';
 import flowChartActions from '../actions/flowChartActions';
 //import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
 import Ports from './ports.js';
-let BlockRectangle = require('./blockRectangle');
+import BlockRectangle from './blockRectangle';
 
-let interact = require('../../node_modules/interact.js');
+import interact from '../../node_modules/interact.js';
 
 import blockCollection from '../classes/blockItems';
 
-class Block extends React.Component {
-constructor(props)
-  {
-  super(props);
+export default class Block extends React.Component {
+  constructor(props)
+    {
+    super(props);
 
-  this.portClicked    = this.portClicked.bind(this);
-  this.blockSelect    = this.blockSelect.bind(this);
-  this.interactJsDrag = this.interactJsDrag.bind(this);
-  }
+    this.portClicked    = this.portClicked.bind(this);
+    this.blockSelect    = this.blockSelect.bind(this);
+    this.interactJsDrag = this.interactJsDrag.bind(this);
+    }
 
 /**
  *  blockInfo = { type, label, name, inports, outports };
@@ -244,12 +244,12 @@ render()
     }
 
   return (
-    <g {...gProps} transform={blockTranslate} ref="node">
+    <g {...gProps} transform={blockTranslate} ref={"node"}>
 
       <g style={{MozUserSelect: 'none'}}>
 
         <rect id={this.props.id + "blockBackground"}
-              height="105" width={this.props.blockStyling.outerRectangleWidth}
+              height={"105"} width={this.props.blockStyling.outerRectangleWidth}
               style={{
                 fill  : 'transparent',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
@@ -279,18 +279,17 @@ render()
 
 Block.propTypes =
 {
-  graphZoomScale         : React.PropTypes.number,
-  blockInfo              : React.PropTypes.object,
-  areAnyBlocksSelected   : React.PropTypes.bool,
-  portThatHasBeenClicked : React.PropTypes.object,
-  blockStyling           : React.PropTypes.object,
-  storingFirstPortClicked: React.PropTypes.object,
-  id                     : React.PropTypes.string,
-  selected               : React.PropTypes.bool,
-  blockPosition          : React.PropTypes.object,
-  deselect               : React.PropTypes.func
+  graphZoomScale         : PropTypes.number,
+  blockInfo              : PropTypes.object,
+  areAnyBlocksSelected   : PropTypes.bool,
+  portThatHasBeenClicked : PropTypes.object,
+  blockStyling           : PropTypes.object,
+  storingFirstPortClicked: PropTypes.object,
+  id                     : PropTypes.string,
+  selected               : PropTypes.bool,
+  blockPosition          : PropTypes.object,
+  deselect               : PropTypes.func
 
 };
 
 
-export default Block;

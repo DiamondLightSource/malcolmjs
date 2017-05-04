@@ -1,16 +1,17 @@
 /**
  * Created by twi18192 on 25/08/15.
  */
-
-let React    = require('react');
-let ReactDOM = require('react-dom');
+import  * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 //let WebSocketClient = require('./wsWebsocketClient');
 //let testingWebsocketActions = require('./actions/testingWebsocketActions');
 
-let BothPanes = require('./views/sidebar');
+import BothPanes from './views/sidebar';
+//import {DragDropContextProvider} from 'react-dnd';
+//import HTML5Backend from 'react-dnd-html5-backend';
 
 
 let AppContainerStyle = {
@@ -36,22 +37,35 @@ let SideTabbedViewStyle = {
   maxWidth: 400
 };
 
-let App = React.createClass({
+export default class App extends React.Component
+  {
+  constructor(props)
+    {
+      super(props);
+      this.dummy = this.dummy.bind(this);
+    }
 
-  componentDidMount: function ()
+  componentDidMount()
+    {
+    }
+
+  dummy()
     {
 
-    },
+    }
 
-  render: function ()
+  render()
     {
+    /* Either side of BothPanes :*/
+      /* <DragDropContextProvider backend={HTML5Backend}> */
+      /* </DragDropContextProvider> */
     return (
       <div id="appContainer" style={AppContainerStyle}>
-        <BothPanes/>
+        <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
       </div>
     )
     }
-});
+  }
 
 /*
  const App = () => (
@@ -61,11 +75,11 @@ let App = React.createClass({
  );
  */
 
-
 ReactDOM.render(
   <App/>,
   document.getElementById('container')
 );
+//ReactDOM.render(React.createElement(App, null), document.getElementById('container'));
 
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>

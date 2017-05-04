@@ -2,26 +2,29 @@
  * Created by twi18192 on 10/12/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
-let EventEmitter  = require('events').EventEmitter;
-let assign        = require('../../node_modules/object-assign/index.js');
-import eachOf from 'async/eachOf';
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
 
-import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-import attributeStore from './attributeStore';
+//let assign        = require('../../node_modules/object-assign/index.js');
+//import eachOf from 'async/eachOf';
 
-import config from "../utils/config";
+//import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+//import attributeStore from './attributeStore';
+
+//import config from "../utils/config";
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import flowChartStore from './flowChartStore';
 
-let update = require('react-addons-update');
+import update from 'immutability-helper';
 
 let CHANGE_EVENT = 'change';
 
+/*
 let _stuff = {
   blockList: null
 };
+*/
 
 let allBlockInfo = {};
 

@@ -2,28 +2,28 @@
  * Created by twi18192 on 18/04/16.
  */
 
-let React = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
-let paneActions = require('../actions/paneActions');
+import paneActions from '../actions/paneActions';
 
-let WidgetStatusIcon = React.createClass(
+export default class WidgetStatusIcon extends React.Component
   {
-    propTypes: {
-      blockAttribute      : React.PropTypes.object,
-      blockAttributeStatus: React.PropTypes.object,
-      blockName           : React.PropTypes.string,
-      attributeName       : React.PropTypes.string
-    },
+  constructor(props)
+    {
+    super(props);
+    this.onButtonClick = this.onButtonClick.bind(this);
+    }
 
-    shouldComponentUpdate: function (nextProps, nextState)
+    shouldComponentUpdate (nextProps, nextState)
       {
       return (
         nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
         nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
       )
-      },
+      }
 
-    onButtonClick: function ()
+    onButtonClick ()
       {
       /* Needs to open the modal dialog box,
        so that info needs to be in a store
@@ -35,9 +35,9 @@ let WidgetStatusIcon = React.createClass(
         attributeName: this.props.attributeName,
         message      : this.props.blockAttributeStatus.message
       });
-      },
+      }
 
-    render: function ()
+    render ()
       {
 
       /* Decide which icon to display,
@@ -53,7 +53,7 @@ let WidgetStatusIcon = React.createClass(
         if (this.props.blockAttribute.alarm.message === 'Invalid')
           {
           console.log('widgetStatusIcon.render(): alarm: Invalid');
-          statusIcon = <i className="fa fa-plug fa-lg" aria-hidden="true"
+          statusIcon = <i className={"fa fa-plug fa-lg"} aria-hidden={"true"}
                           onClick={this.onButtonClick}></i>
           }
         //else {
@@ -72,7 +72,7 @@ let WidgetStatusIcon = React.createClass(
           /* Override the other icons and display an error icon */
           console.log('widgetStatusIcon.render(): value === failure');
 
-          statusIcon = <i className="fa fa-exclamation-circle fa-lg" aria-hidden="true"
+          statusIcon = <i className={"fa fa-exclamation-circle fa-lg"} aria-hidden={"true"}
                           onClick={this.onButtonClick}
                           style={{color: 'red'}}></i>
 
@@ -103,7 +103,7 @@ let WidgetStatusIcon = React.createClass(
       if (statusIcon === null)
         {
         console.log('widgetStatusIcon.render(): statusIcon === null');
-        statusIcon = <i className="fa fa-info-circle fa-lg" aria-hidden="true"
+        statusIcon = <i className={"fa fa-info-circle fa-lg"} aria-hidden={"true"}
                         style={{cursor: 'pointer'}}
                         onClick={this.onButtonClick}></i>
         }
@@ -113,6 +113,11 @@ let WidgetStatusIcon = React.createClass(
       )
       }
 
-  });
+  }
 
-module.exports = WidgetStatusIcon;
+WidgetStatusIcon.propTypes = {
+blockAttribute      : PropTypes.object,
+  blockAttributeStatus: PropTypes.object,
+  blockName           : PropTypes.string,
+  attributeName       : PropTypes.string
+};

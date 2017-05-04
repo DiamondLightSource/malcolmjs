@@ -2,8 +2,8 @@
  * Created by twi18192 on 19/02/16.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants  from '../constants/appConstants.js';
 
 class FlowChartActions {
 constructor()

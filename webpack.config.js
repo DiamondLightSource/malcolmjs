@@ -20,7 +20,6 @@ var config = {
       'react/lib/ReactDOM': path.join(__dirname, 'node_modules/react-dom/lib/ReactDOM.js')
     }
   },
-  debug: true,
   devtool: 'source-map',
   module: {
     loaders: [
@@ -28,14 +27,14 @@ var config = {
         exclude: /node_modules/,
         test: /\.js?/,
         include: [APP_DIR, path.resolve(__dirname, 'components')],
-        loader: 'babel',
+        loader: 'babel-loader',
         query:
         {
           presets:['es2015', 'react'],
           plugins: ['transform-object-rest-spread']
         }
       },
-      {test: /\.json$/, loader: 'json'},
+      {test: /\.json$/, loader: 'json-loader'},
       {
         test: /\.css?$/,
         loaders: ['style', 'raw'],
@@ -63,7 +62,11 @@ var config = {
      }
      })
      */
-  ],
+  new webpack.LoaderOptionsPlugin({
+    debug: true
+  })
+
+],
 };
 
 /**

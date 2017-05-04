@@ -2,13 +2,11 @@
  * Created by twi18192 on 18/04/16.
  */
 
-let React = require('react');
-
-let paneActions = require('../actions/paneActions');
-
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import paneActions from '../actions/paneActions';
 import attributeStore from '../stores/attributeStore';
-
-let ReactModal = require('react-modal');
+import Modal from 'react-modal';
 
 let modalDialogBoxStyling = {
   overlay: {
@@ -47,48 +45,44 @@ function getModalDialogBoxState()
   }
   }
 
-let ModalDialogBox = React.createClass(
-  {
-    propTypes: {
-      modalDialogBoxOpen: React.PropTypes.bool,
-      modalDialogBoxInfo: React.PropTypes.object
-    },
+export default class ModalDialogBox extends React.Component {
+  constructor(props)
+    {
+    super(props);
+    this.state = getModalDialogBoxState();
+    this.__onChange = this.__onChange.bind(this);
+    }
 
 
-    getInitialState: function ()
-      {
-      return getModalDialogBoxState();
-      },
-
-    _onChange: function ()
+    __onChange()
       {
       this.setState(getModalDialogBoxState());
-      },
+      }
 
-    shouldComponentUpdate: function (nextProps, nextState)
+    shouldComponentUpdate(nextProps, nextState)
       {
       return (
         nextProps.modalDialogBoxOpen === true ||
         nextProps.modalDialogBoxOpen !== this.props.modalDialogBoxOpen
       )
-      },
+      }
 
-    componentDidMount: function ()
+    componentDidMount()
       {
-      attributeStore.addChangeListener(this._onChange);
-      },
+      attributeStore.addChangeListener(this.__onChange);
+      }
 
-    componentWillUnmount: function ()
+    componentWillUnmount()
       {
-      attributeStore.removeChangeListener(this._onChange);
-      },
+      attributeStore.removeChangeListener(this.__onChange);
+      }
 
-    closeModalDialogBox: function ()
+    closeModalDialogBox()
       {
       paneActions.closeModalDialogBox('this is the item');
-      },
+      }
 
-    createTableRow: function (blockName, attributeName, subAttributeName, attributeValue)
+    createTableRow(blockName, attributeName, subAttributeName, attributeValue)
       {
       return (
         <tr key={blockName + attributeName + subAttributeName + 'tableRow'}
@@ -101,9 +95,9 @@ let ModalDialogBox = React.createClass(
           </td>
         </tr>
       )
-      },
+      }
 
-    generateContent: function ()
+    generateContent()
       {
       /* If the modalDialogBoxInfo is null, display
        something else?
@@ -119,7 +113,7 @@ let ModalDialogBox = React.createClass(
       if (blockName === null && attributeName === null)
         {
         modalDialogBoxContent.push(
-          <p key={'modalDialogBoxNullText'} style={{color: 'lightgrey'}}>Null</p>
+          <p key={'modalDialogBoxNullText'} style={{color: 'lightgrey'}}>{"Null"}</p>
         )
         }
       else if (blockName !== null && attributeName !== null)
@@ -198,7 +192,7 @@ let ModalDialogBox = React.createClass(
             <button key={'modalDialogBoxCloseButton'}
                     style={{marginTop: '0px'}}
                     onClick={this.closeModalDialogBox}>
-              Cancel
+              {"Cancel"}
             </button>
           </td>
         );
@@ -212,7 +206,7 @@ let ModalDialogBox = React.createClass(
                 key={'modalDialogBoxRevertButtonColumn'}>
               <button key={'modalDialogBoxRevertButton'}
                       style={{marginTop: '0px'}}>
-                Revert
+                {"Revert"}
               </button>
             </td>
           );
@@ -239,19 +233,25 @@ let ModalDialogBox = React.createClass(
 
       return modalDialogBoxContent;
 
-      },
+      }
 
-    render: function ()
+    render()
       {
       return (
-        <ReactModal style={modalDialogBoxStyling}
+        <Modal style={modalDialogBoxStyling}
                     isOpen={this.props.modalDialogBoxOpen}
+                    contentLabel={"Diamond MalcolmJS Modal"}
                     onRequestClose={this.closeModalDialogBox}>
           {this.generateContent()}
-        </ReactModal>
+        </Modal>
       )
       }
 
-  });
+  }
 
-module.exports = ModalDialogBox;
+ModalDialogBox.propTypes =
+  {
+  modalDialogBoxOpen: PropTypes.bool,
+  modalDialogBoxInfo: PropTypes.object
+  };
+

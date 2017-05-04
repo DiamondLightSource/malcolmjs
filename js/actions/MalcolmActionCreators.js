@@ -220,7 +220,8 @@ malcolmPost(blockName, endpoint, parameters)
     requestedDataToWritePath = [actionCreators.deviceId];
     }
 
-  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
+  let value = "";
+  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPostSuccess, malcolmPostFailure);
 
   }
 

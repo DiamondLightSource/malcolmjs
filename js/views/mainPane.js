@@ -2,18 +2,19 @@
  * Created by twi18192 on 25/08/15.
  */
 
-let React = require('react');
-let ReactPanels = require('react-panels');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
-let mainPaneActions = require('../actions/mainPaneActions');
-let paneActions = require('../actions/paneActions');
+import ReactPanels from 'react-panels';
+import mainPaneActions from '../actions/mainPaneActions';
+import paneActions from '../actions/paneActions';
 
-let ConfigButton = require('./configButton');
-let FavButton = require('./favButton');
-let FooterButton = require('./button');
-let FlowChartControllerView = require('./flowChartControllerView');
+//import ConfigButton from './configButton';
+import FavButton from './favButton';
+import FooterButton from './button';
+import FlowChartControllerView from './flowChartControllerView';
 
-let WasteBin = require('./wasteBin');
+import WasteBin from './wasteBin';
 
 let Panel = ReactPanels.Panel;
 let Tab = ReactPanels.Tab;
@@ -23,16 +24,17 @@ let Footer = ReactPanels.Footer;
 let ToggleButton = ReactPanels.ToggleButton;
 let Button = ReactPanels.Button;
 
-let MainPane = React.createClass({
-
-  propTypes: {
-    footers: React.PropTypes.bool,
-    //favTabOpen: React.PropTypes.bool,
-    //configTabOpen: React.PropTypes.bool,
-    loadingInitialData: React.PropTypes.bool,
-    loadingInitialDataError: React.PropTypes.bool
-  },
-
+export default class MainPane extends React.Component
+{
+constructor(props)
+  {
+  super(props);
+  this.handleActionToggleSidebar = this.handleActionToggleSidebar.bind(this);
+  this.handleActionFooterToggle = this.handleActionFooterToggle.bind(this);
+  this.handleActionBlockLookupTableTabOpen = this.handleActionBlockLookupTableTabOpen.bind(this);
+  this.handleActionDeviceSelect = this.handleActionDeviceSelect.bind(this);
+  }
+  
   shouldComponentUpdate(nextProps, nextState){
     return (
       nextProps.footers !== this.props.footers
@@ -41,29 +43,34 @@ let MainPane = React.createClass({
       //nextProps.loadingInitialData !== this.props.loadingInitialData ||
       //nextProps.loadingInitialDataError !== this.props.loadingInitialDataError
     )
-  },
+  }
 
-  handleActionFooterToggle: function(){     /* this is what the footer toggle button needs to call when clicked!!*/
+  handleActionFooterToggle(){     /* this is what the footer toggle button needs to call when clicked!!*/
     mainPaneActions.toggleFooter1("this is the item")
-  },
+  }
 
-  //handleActionFavTabOpen: function(){
+  //handleActionFavTabOpen(){
   //  paneActions.favTabOpen("this is the item")
   //},
   //
-  //handleActionConfigTabOpen: function(){
+  //handleActionConfigTabOpen(){
   //  paneActions.configTabOpen('this is the item')
   //},
 
-  handleActionDeviceSelect: function(){
+  handleActionDeviceSelect(){
     paneActions.deviceSelect('select device');
-  },
+  }
 
-  handleActionToggleSidebar: function(){
+  handleActionBlockLookupTableTabOpen()
+    {
+
+    }
+
+  handleActionToggleSidebar(){
     paneActions.toggleSidebar("toggle sidebar");
-  },
+  }
 
-  render: function() {
+  render() {
     let TESTStyling = {
       'height': '1000px',
       'width': '1000px',
@@ -98,29 +105,29 @@ let MainPane = React.createClass({
     //}
 
     let footer =
-      <Footer><div id="blockDock">
-        <div id="buttonContainer">
+      <Footer><div id={"blockDock"}>
+        <div id={"buttonContainer"}>
 
-          <FooterButton id="blockLookUpTableButton"
-                        buttonLabel="Blocks"
+          <FooterButton id={"blockLookUpTableButton"}
+                        buttonLabel={"Blocks"}
                         buttonClick={this.handleActionBlockLookupTableTabOpen} />
-          <FooterButton id="deviceLookUpTableButton"
-                        buttonLabel="Devices"
+          <FooterButton id={"deviceLookUpTableButton"}
+                        buttonLabel={"Devices"}
                         buttonClick={this.handleActionDeviceSelect} />
         </div>
       </div>
       </Footer>;
 
     return(
-      <Panel theme="flexbox" useAvailableHeight={true} buttons={[
-          <ToggleButton title="Toggle sidebar" onClick={this.handleActionToggleSidebar} >
-            <i className="fa fa-bars"></i>
+      <Panel theme={"flexbox"} useAvailableHeight={true} buttons={[
+          <ToggleButton title={"Toggle sidebar"} onClick={this.handleActionToggleSidebar} >
+            <i className={"fa fa-bars"}></i>
           </ToggleButton>,
-          <ToggleButton title="Toggle Footer" onChange={this.handleActionFooterToggle}>
-            <i className="fa fa-wrench"></i>
+          <ToggleButton title={"Toggle Footer"} onChange={this.handleActionFooterToggle}>
+            <i className={"fa fa-wrench"}></i>
           </ToggleButton>
         ]}>
-        <Tab title="Design" showFooter={this.props.footers} >
+        <Tab title={"Design"} showFooter={this.props.footers} >
           <Content >
             <div style={contentStyling} >
               <FlowChartControllerView/>
@@ -130,19 +137,25 @@ let MainPane = React.createClass({
           {footer}
         </Tab>
 
-        <Tab title="View" showFooter={this.props.footers}>
-          <Content>Secondary main view - graph of position data <br/>
-            Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens <br/>
-
+        <Tab title={"View"} showFooter={this.props.footers}>
+          <Content>{"Secondary main view - graph of position data"} <br/>
+            {"Contains a graph of the current position data, also has some buttons at the bottom to launch subscreens"} <br/>
           </Content>
           {footer}
         </Tab>
       </Panel>
     )
   }
-});
+}
 
-module.exports = MainPane;
+MainPane.propTypes = {
+footers: PropTypes.bool,
+  //favTabOpen: PropTypes.bool,
+  //configTabOpen: PropTypes.bool,
+  loadingInitialData: PropTypes.bool,
+  loadingInitialDataError: PropTypes.bool
+};
+
 
 //<FavButton favTabOpen={this.handleActionFavTabOpen}/>
 //<ConfigButton configTabOpen={this.handleActionConfigTabOpen}/>

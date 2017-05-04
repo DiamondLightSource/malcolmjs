@@ -2,11 +2,15 @@
  * Created by twi18192 on 18/02/16.
  * Refactored by Ian Gillingham: 2016 - 2017
  */
+/**
+ * @module  flowChartStore
+ * @author  Ian Gillingham
+ * @since   13/10/2016
+ */
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
-let EventEmitter  = require('events').EventEmitter;
-let assign        = require('../../node_modules/object-assign/index.js');
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
 import blockStore from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
@@ -60,6 +64,10 @@ function deselectAllBlocks()
     {
     blockSelectedStates[block] = false
     }
+
+    // Inform views that we have deselected all blocks and edges
+    // At this stage prepare to show list of blocks in SidePane.
+    flowChartStore.emitChange();
   }
 
 function checkIfAnyBlocksAreSelected()
@@ -101,6 +109,8 @@ function selectEdge(Edge)
 
 function getAnyEdgeSelectedState(EdgeId)
   {
+  let selected = false;
+    /** edgeSelectedStates is an array of bool */
   if (edgeSelectedStates[EdgeId] === undefined || null)
     {
     //console.log("edge selected state is undefined or null, best check it out...");
@@ -108,8 +118,9 @@ function getAnyEdgeSelectedState(EdgeId)
   else
     {
     //console.log("that edge's state exists, hooray!");
-    return edgeSelectedStates[EdgeId];
+    selected = edgeSelectedStates[EdgeId];
     }
+  return(selected);
   }
 
 function checkIfAnyEdgesAreSelected()
@@ -146,6 +157,7 @@ function deselectAllEdges()
     {
     edgeSelectedStates[edge] = false
     }
+  flowChartStore.emitChange();
   }
 
 function updateEdgePreviewEndpoint(position)
@@ -184,6 +196,8 @@ emitChange()
 
 getAnyBlockSelectedState(BlockId)
   {
+  let selected = false;
+
   if (blockSelectedStates[BlockId] === undefined || null)
     {
     //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
@@ -194,8 +208,9 @@ getAnyBlockSelectedState(BlockId)
     {
     //console.log("the state of that node exists, passing it now");
     //console.log(nodeSelectedStates[NodeId]);
-    return blockSelectedStates[BlockId];
+    selected = blockSelectedStates[BlockId];
     }
+  return( selected );
   }
 
 getIfAnyBlocksAreSelected()
@@ -1005,4 +1020,4 @@ switch (action.actionType)
 
 });
 
-export default flowChartStore;
+export {flowChartStore as default, FlowChartStore};

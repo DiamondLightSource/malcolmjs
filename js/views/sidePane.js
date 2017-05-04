@@ -2,34 +2,30 @@
  * Created by twi18192 on 01/09/15.
  */
 
-let React       = require('react');
-let ReactDOM    = require('react-dom');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-let ReactPanels = require('react-panels');
-let Dropdown    = require('./dropdownMenu');
+import ReactPanels from 'react-panels';
+import Dropdown from './dropdownMenu';
 
 let Panel  = ReactPanels.Panel;
 let Tab    = ReactPanels.Tab;
 let Button = ReactPanels.Button;
 
-let paneActions = require('../actions/paneActions');
+import paneActions from '../actions/paneActions';
+import SidePaneTabContents from './sidePaneTabContents';
 
-let SidePaneTabContents = require('./sidePaneTabContents');
+export default class SidePane extends React.Component
+{
+  constructor(props)
+    {
+    super(props);
+    this.disableTabKey = this.disableTabKey.bind(this);
+    this.handleActionTabChangeViaOtherMeans = this.handleActionTabChangeViaOtherMeans.bind(this);
+    this.handleActionRemoveBlockTab = this.handleActionRemoveBlockTab.bind(this);
+    }
 
-let SidePane;
-SidePane = React.createClass({
-
-  propTypes: {
-    skin            : PropTypes.object,
-    globals         : PropTypes.number,
-    tabState        : PropTypes.arrayOf(PropTypes.object).isRequired,
-    selectedTabIndex: PropTypes.number.isRequired,
-    listVisible     : PropTypes.bool.isRequired,
-    areAnyBlocksSelected   : PropTypes.bool,
-    areAnyEdgesSelected    : PropTypes.bool
-  },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate(nextProps, nextState)
     {
     /* Even though all the props of sidePane will need to cause a
      rerender if changed, if I don't put shouldComponentUpdate with
@@ -43,32 +39,32 @@ SidePane = React.createClass({
       nextProps.areAnyEdgesSelected  !== this.props.areAnyEdgesSelected ||
       nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected
     )
-    },
+    }
 
-  handleActionTabChangeViaOtherMeans: function (tab)
+  handleActionTabChangeViaOtherMeans(tab)
     {
     paneActions.dropdownMenuSelect(tab);
-    },
+    }
 
-  handleActionRemoveBlockTab: function ()
+  handleActionRemoveBlockTab()
     {
     paneActions.removeBlockTab("this is the item");
-    },
+    }
 
-  componentDidMount: function ()
+  componentDidMount()
     {
     console.log('SidePane.componentDidMount(): ');
     console.log(this.refs);
     //debugger;
     ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
-    },
+    }
 
-  componentWillUnmount: function ()
+  componentWillUnmount()
     {
     ReactDOM.findDOMNode(this).removeEventListener('keydown', this.disableTabKey);
-    },
+    }
 
-  disableTabKey: function (e)
+  disableTabKey(e)
     {
     console.log(e);
     if (e.keyCode === 9)
@@ -76,11 +72,11 @@ SidePane = React.createClass({
       console.log("tab key!");
       e.preventDefault();
       }
-    },
+    }
 
-  render: function ()
+  render()
     {
-    //console.log("render: sidePane");
+    console.log("SidePanes.render() ----------------------------");
 
     let skin    = this.props.skin || "default";
     let globals = this.props.globals || {};
@@ -147,6 +143,14 @@ SidePane = React.createClass({
       </Panel>
     );
     }
-});
+}
 
-module.exports = SidePane;
+SidePane.propTypes = {
+skin            : PropTypes.object,
+  globals         : PropTypes.number,
+  tabState        : PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedTabIndex: PropTypes.number.isRequired,
+  listVisible     : PropTypes.bool.isRequired,
+  areAnyBlocksSelected   : PropTypes.bool,
+  areAnyEdgesSelected    : PropTypes.bool
+};

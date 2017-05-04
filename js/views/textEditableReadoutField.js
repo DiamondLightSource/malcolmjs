@@ -2,44 +2,40 @@
  * Created by twi18192 on 15/03/16.
  */
 
-let React = require('react');
-
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-let TextEditableReadoutField = React.createClass({
+export default class TextEditableReadoutField extends React.Component
+{
 
-  propTypes: {
-    blockAttributeValue: React.PropTypes.any,
-    tabObject          : React.PropTypes.object,
-    blockName          : React.PropTypes.string,
-    attributeName      : React.PropTypes.string,
-  },
+ constructor(props)
+   {
+   super(props);
+   this.handleOnBlur = this.handleOnBlur.bind(this);
+   this.handleOnFocus = this.handleOnFocus.bind(this);
+   this.handleOnChange = this.handleOnChange.bind(this);
+   this.handleKeyUp = this.handleKeyUp.bind(this);
+   this.state = {isUserEditing: false};
+   }
 
-  getInitialState: function ()
-    {
-    return {
-      isUserEditing: false
-    }
-    },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate (nextProps, nextState)
     {
     return (
       nextProps.blockAttributeValue !== this.props.blockAttributeValue ||
       nextState.isUserEditing !== this.state.isUserEditing ||
       this.state.isUserEditing === true
     )
-    },
+    }
 
-  handleMalcolmCall: function (blockName, method, args)
+  handleMalcolmCall (blockName, method, args)
     {
     console.log("malcolmCall in textEditableReadoutField");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-    },
+    }
 
-  handleOnBlur: function (e)
+  handleOnBlur (e)
     {
-
     let inputFieldValue;
     let inputFieldElement   = e.target;
     let inputFieldBlockName = this.props.blockName;
@@ -51,7 +47,6 @@ let TextEditableReadoutField = React.createClass({
 
       inputFieldElement.value = this.props.blockAttributeValue;
       inputFieldValue         = this.props.blockAttributeValue;
-
       }
     else
       {
@@ -74,22 +69,22 @@ let TextEditableReadoutField = React.createClass({
       isUserEditing: false
     });
 
-    },
+    }
 
-  handleOnFocus: function (e)
+  handleOnFocus (e)
     {
     let inputFieldElement = e.target;
     inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
-    },
+    }
 
-  handleOnChange: function (e)
+  handleOnChange (e)
     {
     this.setState({
       isUserEditing: true
     })
-    },
+    }
 
-  handleKeyUp: function (e)
+  handleKeyUp (e)
     {
     if (e.keyCode === 13)
       {
@@ -99,9 +94,9 @@ let TextEditableReadoutField = React.createClass({
       document.getElementById(this.props.blockName
         + this.props.attributeName + "inputField").blur();
       }
-    },
+    }
 
-  render: function ()
+  render ()
     {
 
     let props = {
@@ -120,7 +115,11 @@ let TextEditableReadoutField = React.createClass({
       <input {...props} />
     )
     }
+}
 
-});
-
-module.exports = TextEditableReadoutField;
+TextEditableReadoutField.propTypes = {
+blockAttributeValue: PropTypes.any,
+  tabObject          : PropTypes.object,
+  blockName          : PropTypes.string,
+  attributeName      : PropTypes.string,
+};

@@ -8,7 +8,7 @@ let W3CWebSocket    = require('websocket').w3cwebsocket;
 let WebSocketClient = require('websocket').client;
 
 import idLookupTableFunctions from './utils/idLookupTable';
-let appConstants = require ('./constants/appConstants');
+import appConstants from './constants/appConstants';
 
 import EventEmitter from 'events';
 import config from './utils/config';

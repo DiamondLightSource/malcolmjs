@@ -15,7 +15,8 @@ let BlockToggleSwitch = React.createClass({
   propTypes: {
     blockAttributeValue: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.bool
+      React.PropTypes.bool,
+      React.PropTypes.number
     ]).isRequired,
       blockName: React.PropTypes.string.isRequired,
       attributeName: React.PropTypes.string.isRequired

@@ -2,10 +2,8 @@
  * Created by twi18192 on 26/01/16.
  */
 
-let React = require('react');
-
-let FlowChart = require('./flowChart');
-
+import * as React from 'react';
+import FlowChart from './flowChart';
 //import blockStore from '../stores/blockStore.js';
 import flowChartStore from '../stores/flowChartStore';
 
@@ -39,29 +37,31 @@ function getFlowChartState()
   }
   }
 
-let FlowChartControllerView = React.createClass({
-
-  getInitialState: function ()
+export default class FlowChartControllerView extends React.Component
+{
+  constructor(props)
     {
-    return getFlowChartState();
-    },
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this.state = getFlowChartState();
+    }
 
-  _onChange: function ()
+  _onChange ()
     {
     this.setState(getFlowChartState());
-    },
+    }
 
-  componentDidMount: function ()
+  componentDidMount ()
     {
     flowChartStore.addChangeListener(this._onChange);
-    },
+    }
 
-  componentWillUnmount: function ()
+  componentWillUnmount ()
     {
     flowChartStore.removeChangeListener(this._onChange);
-    },
+    }
 
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate (nextProps, nextState)
     {
     let bRet = !Object.is(nextState, this.State);
     if (this.state.blockPositions === undefined)
@@ -71,9 +71,9 @@ let FlowChartControllerView = React.createClass({
       }
     //console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
     return (bRet);
-    },
+    }
 
-  render: function ()
+  render ()
     {
     let blockPositions = this.state.blockPositions;
     if (blockPositions === undefined)
@@ -83,6 +83,7 @@ let FlowChartControllerView = React.createClass({
       }
 
     //console.log(`flowChartControllerView: render(): portThatHasBeenClicked = ${this.state.portThatHasBeenClicked}  storingFirstPortClicked = ${this.state.storingFirstPortClicked}`);
+    //console.log(`flowChartControllerView: render(): areAnyBlocksSelected = ${this.state.areAnyBlocksSelected}   areAnyEdgesSelected = ${this.state.areAnyEdgesSelected}`);
     return (
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
@@ -100,6 +101,4 @@ let FlowChartControllerView = React.createClass({
       />
     )
     }
-});
-
-module.exports = FlowChartControllerView;
+}

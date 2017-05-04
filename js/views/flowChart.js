@@ -3,17 +3,17 @@
  */
 
 import * as React from 'react';
-let ReactDOM = require('react-dom');
-
+import PropTypes from 'prop-types';
+import * as ReactDOM from 'react-dom';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
 
-let Edge        = require('./edge');
-let EdgePreview = require('./edgePreview');
+import Edge from './edge';
+import EdgePreview from './edgePreview';
 import Block from './block';
 
-let interact = require('../../node_modules/interact.js');
+import interact from '../../node_modules/interact.js';
 
 import blockCollection from '../classes/blockItems';
 
@@ -25,22 +25,20 @@ let AppContainerStyle = {
 
 let moduleDebug = false;
 
-let FlowChart = React.createClass({
-
-  propTypes: {
-    graphPosition          : React.PropTypes.object,
-    graphZoomScale         : React.PropTypes.number,
-    allBlockInfo           : React.PropTypes.object,
-    areAnyBlocksSelected   : React.PropTypes.bool,
-    areAnyEdgesSelected    : React.PropTypes.bool,
-    portThatHasBeenClicked : React.PropTypes.object,
-    blockStyling           : React.PropTypes.object,
-    blockPositions         : React.PropTypes.object,
-    storingFirstPortClicked: React.PropTypes.object,
-    edgePreview            : React.PropTypes.object
-  },
-
-  componentDidMount   : function ()
+export default class FlowChart extends React.Component
+{
+ constructor(props)
+   {
+   super(props) ;
+   this.deselect = this.deselect.bind(this);
+   this.portSelectHighlight = this.portSelectHighlight.bind(this);
+   this.checkBothClickedPorts = this.checkBothClickedPorts.bind(this);
+   this.interactJsDragPan = this.interactJsDragPan.bind(this);
+   this.interactJsPinchZoom = this.interactJsPinchZoom.bind(this);
+   this.wheelZoom = this.wheelZoom.bind(this);
+   }
+  
+  componentDidMount()
     {
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
     ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
@@ -72,8 +70,9 @@ let FlowChart = React.createClass({
 
     interact('#dragArea')
       .styleCursor(false);
-    },
-  componentWillUnmount: function ()
+    }
+
+  componentWillUnmount()
     {
 
     ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
@@ -82,9 +81,9 @@ let FlowChart = React.createClass({
 
     interact('#dragArea')
       .off('tap', this.deselect);
-    },
+    }
 
-  deselect: function (e)
+  deselect(e)
     {
     flowChartActions.deselectAllBlocks("deselect all blocks");
     flowChartActions.deselectAllEdges("deselect all edges");
@@ -106,9 +105,9 @@ let FlowChart = React.createClass({
      */
 
 
-    },
+    }
 
-  wheelZoom: function (e)
+  wheelZoom(e)
     {
 
     /* This wheelZoom function in its current state is incomplete:
@@ -159,12 +158,12 @@ let FlowChart = React.createClass({
     flowChartActions.graphZoom(scale);
     flowChartActions.changeGraphPosition(newGraphPosition);
 
-    },
+    }
 
-  isZoomNegative: function (n)
+  isZoomNegative(n)
     {
     return ((n = +n) || 1 / n) < 0;
-    },
+    }
 
   /**
    * addEdgePreview()
@@ -179,7 +178,7 @@ let FlowChart = React.createClass({
    *
    * @param eventdata
    */
-  addEdgePreview: function (eventdata)
+  addEdgePreview(eventdata)
     {
     let blockInfo = eventdata.detail.blockInfo;
 
@@ -259,7 +258,7 @@ let FlowChart = React.createClass({
     };
 
     flowChartActions.addEdgePreview(edgePreviewInfo);
-    },
+    }
 
   /**
    * portSelectHighlight():
@@ -267,19 +266,19 @@ let FlowChart = React.createClass({
    *
    * @param eventdata
    */
-  portSelectHighlight: function (eventdata)
+  portSelectHighlight(eventdata)
     {
     let blockInfo = eventdata.detail.blockInfo;
     flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
-    },
+    }
 
-  portDeselectRemoveHighlight: function ()
+  portDeselectRemoveHighlight()
     {
     this.resetPortClickStorage();
     flowChartActions.addEdgePreview(null);
-    },
+    }
 
-  checkBothClickedPorts: function (eventdata)
+  checkBothClickedPorts(eventdata)
     {
     /* This function will run whenever we have dispatched a PortSelect event */
     let blockInfo = eventdata.detail.blockInfo;
@@ -323,9 +322,9 @@ let FlowChart = React.createClass({
       this.checkPortCompatibility(edge);
       }
 
-    },
+    }
 
-  checkPortCompatibility: function (edgeInfo)
+  checkPortCompatibility(edgeInfo)
     {
     /* First need to check we have an inport and an outport */
     /* Find both port types, then compare them somehow */
@@ -423,9 +422,9 @@ let FlowChart = React.createClass({
 
       }
 
-    },
+    }
 
-  isInportConnected: function (inport, inportIndex, block, edgeInfo, types)
+  isInportConnected(inport, inportIndex, block, edgeInfo, types)
     {
     if (this.props.allBlockInfo[block].inports[inportIndex].connected === true)
       {
@@ -541,23 +540,23 @@ let FlowChart = React.createClass({
         }
 
       }
-    },
+    }
 
-  failedPortConnection: function ()
+  failedPortConnection()
     {
     this.resetPortClickStorage();
     document.getElementById('dragArea').style.cursor = 'default';
     flowChartActions.addEdgePreview(null);
-    },
+    }
 
-  resetPortClickStorage: function ()
+  resetPortClickStorage()
     {
     /* The same as what I would expect a portDeselect function to do I think */
     flowChartActions.storingFirstPortClicked(null);
     flowChartActions.passPortMouseDown(null);
-    },
+    }
 
-  interactJsDragPan: function (e)
+  interactJsDragPan(e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -578,9 +577,9 @@ let FlowChart = React.createClass({
       })
       }
     //console.log(`flowChart.interactJsDragPan(): e = ${JSON.stringify(e)} props.graphPosition.x = ${this.props.graphPosition.x}  props.graphPosition.y = ${this.props.graphPosition.y}`);
-    },
+    }
 
-  interactJsPinchZoom: function (e)
+  interactJsPinchZoom(e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -605,9 +604,9 @@ let FlowChart = React.createClass({
 
     flowChartActions.graphZoom(newZoomScale);
     flowChartActions.changeGraphPosition(newGraphPosition);
-    },
+    }
 
-  generateEdgePreview: function ()
+  generateEdgePreview()
     {
 
     let edgePreview = [];
@@ -633,10 +632,10 @@ let FlowChart = React.createClass({
 
     return edgePreview;
 
-    },
+    }
 
 
-  render: function ()
+  render()
     {
     //console.log("render: flowChart");
 
@@ -667,7 +666,7 @@ let FlowChart = React.createClass({
         blocks.push(
           <Block key={blockInfo.name}
                  id={blockInfo.name}
-                 className="block"
+                 className={"block"}
                  blockInfo={blockInfo}
                  areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                  portThatHasBeenClicked={this.props.portThatHasBeenClicked}
@@ -734,39 +733,51 @@ let FlowChart = React.createClass({
       }
 
       return (
-        <svg id="appAndDragAreaContainer" height="100%" width="100%"
-             style={AppContainerStyle} ref="node">
+        <svg id={"appAndDragAreaContainer"} height={"100%"} width={"100%"}
+             style={AppContainerStyle} ref={"node"}>
 
-          <rect id="dragArea" height="100%" width="100%"
-                fill="transparent" style={{MozUserSelect: 'none'}}
+          <rect id={"dragArea"} height={"100%"} width={"100%"}
+                fill={"transparent"} style={{MozUserSelect: 'none'}}
               onWheel={this.wheelZoom}/>
 
-          <svg id="appContainer" style={AppContainerStyle}>
+          <svg id={"appContainer"} style={AppContainerStyle}>
 
             {this.props.blockPositions ? (
-            <g id="panningGroup"
+            <g id={"panningGroup"}
                transform={matrixTransform}
              onWheel={this.wheelZoom}>
 
-              <g id="EdgesGroup">
+              <g id={"EdgesGroup"}>
                 {edges}
               {this.generateEdgePreview()}
               </g>
 
-              <g id="BlocksGroup">
+              <g id={"BlocksGroup"}>
                 {blocks}
               </g>
 
             </g>
 
-              ) : (<div> Waiting for block positions... </div>)}
+              ) : (<div>{"Waiting for block positions..."}</div>)}
           </svg>
 
           </svg>
 
     )
     }
-});
+}
 
-module.exports = FlowChart;
+FlowChart.propTypes = {
+graphPosition          : PropTypes.object,
+  graphZoomScale         : PropTypes.number,
+  allBlockInfo           : PropTypes.object,
+  areAnyBlocksSelected   : PropTypes.bool,
+  areAnyEdgesSelected    : PropTypes.bool,
+  portThatHasBeenClicked : PropTypes.object,
+  blockStyling           : PropTypes.object,
+  blockPositions         : PropTypes.object,
+  storingFirstPortClicked: PropTypes.object,
+  edgePreview            : PropTypes.object
+};
+
 

@@ -1,8 +1,9 @@
 /**
- * Created by twi18192 on 25/08/15.
+ * @module appConstants
+ *
  */
 
-var appConstants = {
+const appConstants = {
   /*mainPaneStore use*/
   FOOTER_TOGGLE: "FOOTER_TOGGLE",
   CONFIG_TOGGLE: "CONFIG_TOGGLE",
@@ -123,4 +124,4 @@ var appConstants = {
   WEBSOCKET_STATE: "WEBSOCKET_STATE",
 };
 
-module.exports = appConstants;
+export default appConstants;

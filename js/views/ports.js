@@ -2,14 +2,14 @@
  * Created by twi18192 on 15/01/16.
  */
 
-let React = require("../../node_modules/react/react");
-
+import * as React  from 'react';
+import PropTypes from 'prop-types';
 import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
 
-let interact = require("../../node_modules/interact.js");
+import interact from "../../node_modules/interact.js";
 
-class Ports extends React.Component {
+export default class Ports extends React.Component {
 constructor(props)
   {
   super(props);
@@ -145,21 +145,23 @@ angleToY(percent, radius)
 
 makeArcPath(port)
   {
+  let arcPath = [];
 
   if (port === "inport")
     {
-    return [
+    arcPath = [
       "M", this.angleToX(-1 / 4, 4), this.angleToY(-1 / 4, 4),
       "A", 4, 4, 0, 0, 0, this.angleToX(1 / 4, 4), this.angleToY(1 / 4, 4)
     ].join(" ");
     }
   else if (port === "outport")
     {
-    return [
+    arcPath = [
       "M", this.angleToX(1 / 4, 4), this.angleToY(1 / 4, 4),
       "A", 4, 4, 0, 0, 0, this.angleToX(-1 / 4, 4), this.angleToY(-1 / 4, 4)
     ].join(" ");
     }
+  return( arcPath );
   }
 
 render()
@@ -285,14 +287,14 @@ render()
   /* Now just need to add the block name text */
 
   blockText.push(
-    <text className="blockName" key={blockId + "textLabel"}
+    <text className={"blockName"} key={blockId + "textLabel"}
           style={{
             MozUserSelect                          : "none", fill: "lightgrey",
             cursor                                 : this.props.portThatHasBeenClicked === null ? "move" : "default",
             textAnchor: "middle", alignmentBaseline: "middle",
             fontSize                               : "10px", fontFamily: "Verdana"
           }}
-          transform="translate(36, 91)">
+          transform={"translate(36, 91)"}>
       {blockInfo.label}
     </text>
   );
@@ -312,13 +314,12 @@ render()
 }
 
 Ports.propTypes = {
-  portThatHasBeenClicked : React.PropTypes.object,
-  selected               : React.PropTypes.bool,
-  storingFirstPortClicked: React.PropTypes.object,
-  blockInfo              : React.PropTypes.object,
-  blockId                : React.PropTypes.string,
-  blockStyling           : React.PropTypes.object,
-  cbClicked              : React.PropTypes.func
+  portThatHasBeenClicked : PropTypes.object,
+  selected               : PropTypes.bool,
+  storingFirstPortClicked: PropTypes.object,
+  blockInfo              : PropTypes.object,
+  blockId                : PropTypes.string,
+  blockStyling           : PropTypes.object,
+  cbClicked              : PropTypes.func
 };
 
-export default Ports;

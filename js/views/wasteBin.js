@@ -1,7 +1,7 @@
 /**
  * Created by ig43 on 03/10/16.
  */
-import React from 'react';
+import * as React from 'react';
 //import ActionDelete from 'material-ui/svg-icons/action/delete';
 //import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 
@@ -14,7 +14,7 @@ const iconStyles = {
  * @class WasteBin
  * @extends React.Component
  */
-class WasteBin extends React.Component {
+export default class WasteBin extends React.Component {
 constructor(props)
   {
   super(props);
@@ -27,7 +27,8 @@ constructor(props)
  */
 shouldComponentUpdate()
   {
-  return React.addons.PureRenderMixin.shouldComponentUpdate.apply(this, arguments);
+  // Just return false until there is some meat on the bones.
+  return (false);
   }
 
 /*
@@ -42,6 +43,3 @@ render()
 
 WasteBin.propTypes    = {};
 WasteBin.defaultProps = {};
-
-
-export default WasteBin;

@@ -6,9 +6,13 @@
   "parser": "babel-eslint",
   "plugins": [
     "react",
-
+    "import"
   ],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"],
   "env": {
     "browser": true,
     "node": true,
@@ -23,7 +27,9 @@
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
-        }
+        },
+    "allowImportExportEverywhere": false,
+    "codeFrame": false
     },
   "rules": {
     // Strict mode

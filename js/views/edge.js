@@ -3,35 +3,29 @@
  */
 
   //let React    = require('../../node_modules/react/react');
-let React    = require('react');
-let ReactDOM = require('react-dom');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-let paneActions      = require('../actions/paneActions');
+import paneActions from '../actions/paneActions';
 import flowChartActions from '../actions/flowChartActions';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-let interact = require('../../node_modules/interact.js');
+import interact from '../../node_modules/interact.js';
 
-let Edge = React.createClass(
+
+export default class Edge extends React.Component
   {
+  constructor(props)
+    {
+    super(props);
+    this.mouseOver = this.mouseOver.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+    this.edgeSelect = this.edgeSelect.bind(this);
+    this.keyPress = this.keyPress.bind(this);
+    }
 
-    propTypes           : {
-      areAnyEdgesSelected   : React.PropTypes.bool,
-      fromBlockPosition     : React.PropTypes.object,
-      fromBlock             : React.PropTypes.string,
-      fromBlockPort         : React.PropTypes.string,
-      fromBlockInfo         : React.PropTypes.object,
-      toBlockPosition       : React.PropTypes.object,
-      toBlockPort           : React.PropTypes.string,
-      fromBlockPortValueType: React.PropTypes.string,
-      toBlock               : React.PropTypes.string,
-      id                    : React.PropTypes.string,
-      selected              : React.PropTypes.bool,
-      blockStyling          : React.PropTypes.object,
-      inportArrayIndex      : React.PropTypes.number,
-      inportArrayLength     : React.PropTypes.number
-    },
-    componentDidMount   : function ()
+    componentDidMount()
       {
       ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
       //this.refs.node.addEventListener('EdgeSelect', this.edgeSelect);
@@ -41,17 +35,18 @@ let Edge = React.createClass(
 
       window.addEventListener('keydown', this.keyPress);
 
-      },
-    componentWillUnmount: function ()
+      }
+
+    componentWillUnmount()
       {
       interact(ReactDOM.findDOMNode(this))
         .off('tap', this.edgeSelect);
 
       window.removeEventListener('keydown', this.keyPress);
 
-      },
+      }
 
-    shouldComponentUpdate: function (nextProps, nextState)
+    shouldComponentUpdate(nextProps, nextState)
       {
       return (
         nextProps.selected !== this.props.selected ||
@@ -61,19 +56,19 @@ let Edge = React.createClass(
         nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
         nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
       )
-      },
+      }
 
-    handleMalcolmCall: function (blockName, method, args)
+    handleMalcolmCall(blockName, method, args)
       {
       MalcolmActionCreators.malcolmCall(blockName, method, args);
-      },
+      }
 
-    handleMalcolmPut: function (blockName, endpoint, value)
+    handleMalcolmPut(blockName, endpoint, value)
       {
       MalcolmActionCreators.malcolmPut(blockName, endpoint, value);
-      },
+      }
 
-    deleteEdgeViaMalcolm: function ()
+    deleteEdgeViaMalcolm()
       {
       let methodName = "_set_" + this.props.toBlockPort;
       let endpoint = "";
@@ -90,9 +85,9 @@ let Edge = React.createClass(
       this.handleMalcolmCall(this.props.toBlock, methodName, argsObject);
       // TODO: To be continued...
       //this.handleMalcolmPut(this.props.toBlock, endpoint, argsObject);
-      },
+      }
 
-    mouseOver : function ()
+    mouseOver ()
       {
       let outerLineName = this.props.id.concat("-outerline");
       let test          = document.getElementById(outerLineName);
@@ -104,8 +99,9 @@ let Edge = React.createClass(
         {
         test.style.stroke = '#797979'
         }
-      },
-    mouseLeave: function ()
+      }
+
+    mouseLeave()
       {
       let outerLineName = this.props.id.concat("-outerline");
       let test          = document.getElementById(outerLineName);
@@ -118,8 +114,9 @@ let Edge = React.createClass(
         //console.log("this.props.selected is false");
         test.style.stroke = 'lightgrey'
         }
-      },
-    edgeSelect: function (e)
+      }
+
+    edgeSelect(e)
       {
       e.stopImmediatePropagation();
       e.stopPropagation();
@@ -131,9 +128,9 @@ let Edge = React.createClass(
         toBlock      : this.props.toBlock,
         toBlockPort  : this.props.toBlockPort
       });
-      },
+      }
 
-    keyPress: function (e)
+    keyPress(e)
       {
       if (e.keyCode === 46)
         {
@@ -152,9 +149,9 @@ let Edge = React.createClass(
             }
           }
         }
-      },
+      }
 
-    render: function ()
+    render()
       {
       let blockStyling = this.props.blockStyling;
 
@@ -273,6 +270,22 @@ let Edge = React.createClass(
         </g>
       )
       }
-  });
+  }
 
-module.exports = Edge;
+Edge.propTypes = {
+areAnyEdgesSelected   : PropTypes.bool,
+  fromBlockPosition     : PropTypes.object,
+  fromBlock             : PropTypes.string,
+  fromBlockPort         : PropTypes.string,
+  fromBlockInfo         : PropTypes.object,
+  toBlockPosition       : PropTypes.object,
+  toBlockPort           : PropTypes.string,
+  fromBlockPortValueType: PropTypes.string,
+  toBlock               : PropTypes.string,
+  id                    : PropTypes.string,
+  selected              : PropTypes.bool,
+  blockStyling          : PropTypes.object,
+  inportArrayIndex      : PropTypes.number,
+  inportArrayLength     : PropTypes.number
+};
+
