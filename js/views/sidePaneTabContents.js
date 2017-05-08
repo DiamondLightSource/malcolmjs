@@ -17,9 +17,10 @@ import appConstants from '../constants/appConstants';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import SortableTree from 'react-sortable-tree';
 import PropTypes from 'prop-types';
-//import { DragSource } from 'react-dnd';
-//import DNDBlockSelector from './dndBlockSelector';
-//import ItemTypes from './dndItemTypes';
+
+import { DragSource } from 'react-dnd';
+import DNDBlockSelector from './dndBlockSelector';
+import ItemTypes from './dndItemTypes';
 
 /* Purely for favContent & configContent */
 //let paneStore = require('../stores/paneStore');
@@ -276,7 +277,7 @@ export default class SidePaneTabContents extends React.Component {
       if (blockItem.visible === false)
         {
         let element =   <div onSelect={this._onBlockItemSelect}>
-          { /*<DNDBlockSelector connectDragSource= {ItemTypes.BOX} isDragging={true} name={blockItem.blockName()}/> */}
+          <DNDBlockSelector connectDragSource= {ItemTypes.BLOCK} isDragging={true} name={blockItem.blockName()}/>
                           {blockItem.blockName()}
                         </div>;
         blockListDivs.push(element);

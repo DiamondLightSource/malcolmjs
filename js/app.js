@@ -6,12 +6,9 @@ import * as ReactDOM from 'react-dom';
 
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-//let WebSocketClient = require('./wsWebsocketClient');
-//let testingWebsocketActions = require('./actions/testingWebsocketActions');
-
 import BothPanes from './views/sidebar';
-//import {DragDropContextProvider} from 'react-dnd';
-//import HTML5Backend from 'react-dnd-html5-backend';
+import {DragDropContextProvider} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 
 let AppContainerStyle = {
@@ -56,12 +53,11 @@ export default class App extends React.Component
 
   render()
     {
-    /* Either side of BothPanes :*/
-      /* <DragDropContextProvider backend={HTML5Backend}> */
-      /* </DragDropContextProvider> */
     return (
       <div id="appContainer" style={AppContainerStyle}>
+        <DragDropContextProvider backend={HTML5Backend}>
         <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
+        </DragDropContextProvider>
       </div>
     )
     }

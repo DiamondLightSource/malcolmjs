@@ -15,6 +15,7 @@ import EventEmitter from 'events';
 //import config from "../utils/config";
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import flowChartStore from './flowChartStore';
+import {DroppedBlockInfo} from '../actions/flowChartActions';
 
 import update from 'immutability-helper';
 
@@ -715,6 +716,23 @@ blockUpdated(blockIndex)
     } // if (blockItem !== null)
   } // blockUpdated()
 
+/**
+ *
+ * @param {DroppedBlockInfo} info
+ */
+droppedBlockFromList(info)
+  {
+  if (info instanceof DroppedBlockInfo)
+    {
+    blockPositions[info.name] = update(blockPositions[info.name], {
+      $set: {
+        x: Math.round(info.offset.x * (1 / flowChartStore.getGraphZoomScale())),
+        y: Math.round(info.offset.y * (1 / flowChartStore.getGraphZoomScale()))
+      }
+    });
+    }
+  }
+
 dispatcherCallback(payload)
   {
   let action = payload.action;
@@ -762,6 +780,12 @@ dispatcherCallback(payload)
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT:
       AppDispatcher.waitFor([blockCollection.dispatchToken]);
       AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DROPPED_BLOCK_FROM_LIST:
+      /* item is {name: <name>, x: <x>, y: <y>} */
+      this.droppedBlockFromList(item);
       blockStore.emitChange();
       break;
 

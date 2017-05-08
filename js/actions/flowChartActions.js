@@ -138,6 +138,21 @@ previousMouseCoordsOnZoom(item)
   })
   }
 
+/**
+ *
+ * @param {DroppedBlockInfo} info
+ */
+dropBlockFromList(info)
+  {
+  // Sanity check that this was called with the expected class type.
+  if (info instanceof DroppedBlockInfo)
+    {
+    AppDispatcher.handleAction({
+      actionType: appConstants.DROPPED_BLOCK_FROM_LIST,
+      item      : info
+    })
+    }
+  }
 
 //appendToBlockSelectedStates(item){
 //  AppDispatcher.handleAction({
@@ -147,9 +162,36 @@ previousMouseCoordsOnZoom(item)
 //}
 }
 
+/**
+ * @class DroppedBlockInfo
+ * @description Encapsulates information from dropBlockFromList() action creator, allowing type checking.
+ */
+class DroppedBlockInfo
+{
+/**
+ * @param {name} item
+ * @param {x, y} offset
+ */
+constructor(item, offset)
+    {
+    //this.info = {item:{name:""}, coords:{x:0, y:0}};
+    this.info = {item, offset};
+    }
+
+  get name()
+    {
+    return(this.info.item.name);
+    }
+
+  get offset()
+    {
+    return(this.info.offset);
+    }
+}
+
 const flowChartActions = new FlowChartActions();
 
-export {flowChartActions as default};
+export {flowChartActions as default, DroppedBlockInfo};
 
 
 

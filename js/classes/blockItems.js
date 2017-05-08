@@ -10,6 +10,7 @@ import appConstants  from '../constants/appConstants';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import MalcolmWebSocketClient from '../wsWebsocketClient';
+import {DroppedBlockInfo} from '../actions/flowChartActions'
 import config from '../utils/config';
 //import async from 'async-es';
 import eachOf from 'async/eachOf';
@@ -98,6 +99,7 @@ parseLayoutSchema(schemaIn)
         if (t1 !== t2)
           {
           self.attributes[attr] = JSON.parse(t1);
+          console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
           self.collection.blockItemUpdated(self.index);
           }
         callbackDone();
@@ -788,6 +790,23 @@ getItemByProtocolIndex(protocolIndex)
 
 /**
  *
+ * @param {DroppedBlockInfo} item
+ */
+droppedBlockFromList(item)
+  {
+    if (item instanceof DroppedBlockInfo)
+      {
+      let block_item = this.getBlockItemByName(item.name);
+
+      if (block_item instanceof BlockItem)
+        {
+        block_item.putVisible(true);
+        }
+      }
+  }
+
+/**
+ *
  * @param payload
  */
 dispatcherCallback(payload)
@@ -854,6 +873,12 @@ dispatcherCallback(payload)
       break;
 
     case appConstants.INTERACTJS_DRAG:
+      break;
+
+    case appConstants.DROPPED_BLOCK_FROM_LIST:
+      /* item is {name: <name>, x: <x>, y: <y>} */
+      // item should be of type class DroppedBlockInfo - defined in flowChartActions.
+      this.droppedBlockFromList(item);
       break;
 
     default:
