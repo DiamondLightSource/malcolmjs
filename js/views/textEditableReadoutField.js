@@ -34,7 +34,21 @@ export default class TextEditableReadoutField extends React.Component
     MalcolmActionCreators.malcolmCall(blockName, method, args)
     }
 
-  handleOnBlur (e)
+/**
+ *
+ * Extract from w3schools.com which describes the Blur event:
+ *
+ * The onblur event occurs when an object loses focus.
+ * The onblur event is most often used with form validation code (e.g. when the user leaves a form field).
+ * Tip: The onblur event is the opposite of the onfocus event.
+ * Tip: The onblur event is similar to the onfocusout event. The main difference is that the onblur event does not bubble.
+ * Therefore, if you want to find out whether an element or its child loses focus, you could use the onfocusout event.
+ * However, you can achieve this by using the optional useCapture parameter of the addEventListener() method for the onblur event.
+ *
+ * @name handleOnBlur
+ * @param e
+ */
+handleOnBlur (e)
     {
     let inputFieldValue;
     let inputFieldElement   = e.target;
@@ -56,15 +70,9 @@ export default class TextEditableReadoutField extends React.Component
     /* Now I need to pass malcolmCall the corresponding
      method and arguments
      */
-
-    let inputFieldSetMethodName = "_set_" + inputFieldAttribute;
-
-    let argsObject = {};
-
-    argsObject[inputFieldAttribute] = inputFieldValue;
-
-    this.handleMalcolmCall(inputFieldBlockName, inputFieldSetMethodName, argsObject);
-
+    // Need this type of format...
+    // {"typeid":"malcolm:core/Put:1.0","id":95,"path":["P:PCAP","enable","value"],"value":"SEQ3.OUTA"}
+    MalcolmActionCreators.malcolmAttributeValueEdited(this.props.blockName, this.props.attributeName, inputFieldValue);
     this.setState({
       isUserEditing: false
     });
@@ -86,6 +94,10 @@ export default class TextEditableReadoutField extends React.Component
 
   handleKeyUp (e)
     {
+    /**
+     * TODO: All use cases should also be considered, such as direct loss of focus, but no CR keypress.
+     * IJG 15/5/17
+     */
     if (e.keyCode === 13)
       {
       /* For handling when the enter key is pressed

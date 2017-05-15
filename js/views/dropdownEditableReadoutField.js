@@ -23,10 +23,10 @@ constructor(props)
     )
     }
 
-  handleMalcolmCall(blockName, method, args)
+  handleMalcolmAttributeEdited(blockName, attributePath, newValue)
     {
-    console.log("malcolmCall in sidePane");
-    MalcolmActionCreators.malcolmCall(blockName, method, args)
+    console.log("handleMalcolmAttributeEdited in dropdownEditableReadoutField");
+    MalcolmActionCreators.malcolmAttributeValueEdited(blockName, attributePath, newValue);
     }
 
   handleDropdownOptionChange(e)
@@ -49,12 +49,10 @@ constructor(props)
       blockAttribute = this.props.attributeName;
       }
 
-    let inputFieldSetMethodName = "_set_" + blockAttribute;
-    let argsObject              = {};
-
-    argsObject[this.props.attributeName] = clickedOptionFromDropdownMenu;
-
-    this.handleMalcolmCall(this.props.blockName, inputFieldSetMethodName, argsObject);
+    // Need this type of format...
+    // {"typeid":"malcolm:core/Put:1.0","id":95,"path":["P:PCAP","enable","value"],"value":"SEQ3.OUTA"}
+    let attributePath = [this.props.attributeName, "value"];
+    this.handleMalcolmAttributeEdited(this.props.blockName, this.props.attributeName, clickedOptionFromDropdownMenu);
 
     }
 
@@ -98,7 +96,7 @@ DropdownEditableReadoutField.propTypes = {
 blockAttribute: PropTypes.object,
   tabObject     : PropTypes.object,
   attributeName : PropTypes.string,
-  blockName     : PropTypes.string,
+  blockName     : PropTypes.string
 
 };
 
