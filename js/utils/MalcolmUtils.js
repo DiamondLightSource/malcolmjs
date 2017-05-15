@@ -45,7 +45,7 @@ malcolmGet(requestedData, successCallback, failureCallback)
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDGet();
   message['id']                             = id;
-  message['endpoint']                       = requestedData;
+  message['path']                       = requestedData;
   //let messageJson = JSON.stringify({malcolmProtocol.getTypeIDIdent(): malcolmProtocol.getTypeIDGet(), id: id, endpoint: requestedData});
   let messageJson                           = JSON.stringify(message);
 
@@ -70,7 +70,7 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDSubscribe();
   message['id']                             = id;
-  message['endpoint']                       = requestedData;
+  message['path']                       = requestedData;
   let messageJson                           = JSON.stringify(message);
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
@@ -88,6 +88,33 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
   return (id);
   }
 
+/**
+ * @name  malcolmUnsubscribe
+ * @param subscriptionId
+ * @returns {*}
+ *
+ * @description  Request the device to stop sending subscription updates of a given subscription ID.
+ *               The callbacks to this should be handles locally.
+ */
+malcolmUnsubscribe(subscriptionId)
+  {
+  let message                               = {};
+  message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDUnsubscribe();
+  message['id']                             = subscriptionId;
+  let messageJson                           = JSON.stringify(message);
+
+  idLookupTableFunctions.addIdCallbacks(subscriptionId, messageJson, {
+    successCallback: () => {idLookupTableFunctions.removeIdCallback(subscriptionId)},
+    failureCallback: () => {},
+    requestedData  : requestedData
+  });
+
+  MalcolmWebSocketClient.sendText(messageJson);
+  return (subscriptionId);
+  }
+
+
+
 malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback)
   {
   let id = MalcolmWebSocketClient.getNextAvailableId();
@@ -95,7 +122,7 @@ malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPost();
   message['id']                             = id;
-  message['endpoint']                       = requestedDataToWrite;
+  message['path']                       = requestedDataToWrite;
   message['parameters']                     = {'method':method, 'arguments':args};
   let messageJson                           = JSON.stringify(message);
 
@@ -120,7 +147,7 @@ malcolmPut(requestedDataToWrite, endpoint, value, successCallback, failureCallba
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPut();
   message['id']                             = id;
-  message['endpoint']                       = endpoint;
+  message['path']                       = endpoint;
   message['value']                          = value;
   let messageJson                           = JSON.stringify(message);
 
