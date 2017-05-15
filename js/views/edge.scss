@@ -1,0 +1,38 @@
+
+.edgeInnerLineint32, .edgePreviewInnerLineint32, .edgeInnerLinebool, .edgePreviewInnerLinebool {
+  stroke-width: 5px;
+  fill: none;
+  cursor: default;
+}
+
+.edgeInnerLineint32, .edgePreviewInnerLineint32 {
+  stroke: orange;
+}
+
+.edgeInnerLinebool, .edgePreviewInnerLinebool {
+  stroke: lightblue;
+}
+
+.edgePreviewOuterLine {
+  stroke-width: 7px;
+  stroke: lightgrey;
+  stroke-linecap: round;
+  fill: none;
+  cursor: default;
+}
+
+.edgeOuterLineSelected, .edgeOuterLineUnselected {
+  stroke-linecap: round;
+  cursor: default;
+  fill: none;
+}
+
+.edgeOuterLineSelected {
+  stroke-width: 10px;
+  stroke: #797979;
+}
+
+.edgeOuterLineUnselected {
+  stroke-width: 7px;
+  stroke: lightgrey;
+}
