@@ -99,7 +99,7 @@ parseLayoutSchema(schemaIn)
         if (t1 !== t2)
           {
           self.attributes[attr] = JSON.parse(t1);
-          console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
+          //console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
           self.collection.blockItemUpdated(self.index);
           }
         callbackDone();
@@ -109,7 +109,9 @@ parseLayoutSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema.layout.meta.elements, iteration, callbackError);
@@ -151,7 +153,9 @@ updateFromSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema.layout.meta.elements, iteration, callbackError);
@@ -163,12 +167,32 @@ updateFromSchema(schemaIn)
       {
       if (attr !== 'typeid')
         {
+        // Take care when comparing the two json blocks.
+        // there is a timestamp which will constantly change
+        // but not valid for triggering an udate.
         let t1 = JSON.stringify(blockData);
         let t2 = JSON.stringify(self.attributes[attr]);
+/*
+        if (t1.hasOwnProperty('timestamp'))
+          {
+          delete t1.timestamp;
+          }
+        if (t2.hasOwnProperty('timestamp'))
+          {
+          delete t2.timestamp;
+          }
+*/
+
         if (t1 !== t2)
           {
           self.attributes[attr] = JSON.parse(t1);
           changed               = true;
+          console.log(`blockItem: updateFromSchema() - individual block: ${self.blockName()} `);
+          console.log('t1 (new block update):');
+          console.log(t1);
+          console.log('t2 (old block update):');
+          console.log(t2);
+
           }
         }
       callbackDone();
@@ -177,7 +201,9 @@ updateFromSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema, iteration, callbackError);
@@ -410,6 +436,12 @@ get blockType()
   return (bt);
   }
 
+putAttributeValue(attributeName, value)
+  {
+  // {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:PGEN2","trig","value"],"value":"PULSE1.OUT"}
+  let mri = this.mri();
+  MalcolmActionCreators.malcolmPut("", [mri, attributeName, "value"],value);
+  }
 }
 /* Class BlockItem */
 
@@ -604,7 +636,9 @@ updateBlockItemsFromSchema(index, schemaIn)
   let callbackError = function (err)
     {
     if (err)
+      {
       console.error(err.message);
+      }
     };
 
   /**
@@ -879,6 +913,15 @@ dispatcherCallback(payload)
       /* item is {name: <name>, x: <x>, y: <y>} */
       // item should be of type class DroppedBlockInfo - defined in flowChartActions.
       this.droppedBlockFromList(item);
+      break;
+
+    case appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED:
+      let blockItem = this.getBlockItemByName(item.blockName);
+      if (blockItem instanceof BlockItem)
+        {
+        console.log(`BlockCollection: Dispatch message received: MALCOLM_BLOCK_ATTRIBUTE_EDITED, Block ${blockItem.blockName()}  attribute  ${item.attribute_path}  value  ${item.newValue}`);
+        blockItem.putAttributeValue(item.attribute_path, item.newValue);
+        }
       break;
 
     default:
