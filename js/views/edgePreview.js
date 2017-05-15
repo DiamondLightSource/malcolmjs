@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
 /**
  * Created by twi18192 on 04/02/16.
  */
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
+import {MalcolmDefs} from '../utils/malcolmProtocol';
 import interact from '../../node_modules/interact.js';
+import * as classes from './edge.scss';
 
 export default class EdgePreview extends React.Component
 {
@@ -255,7 +257,7 @@ export default class EdgePreview extends React.Component
 
         <path id={outerLineName} className={"edgePreviewOuterLine"} d={pathInfo}/>
 
-        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === 'pos' ? 'POS' : 'BIT')}
+        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')}
               d={pathInfo}/>
 
       </g>

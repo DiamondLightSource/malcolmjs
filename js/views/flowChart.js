@@ -40,7 +40,7 @@ const layoutTarget = {
   // You can disallow drop based on props or item
   const item = monitor.getItem();
   //return canMakeBlockMove(item.fromPosition, props.position);
-  return(true);
+  return (true);
   },
 
   hover(props, monitor, component) {
@@ -355,45 +355,47 @@ checkBothClickedPorts(eventdata)
   /* This function will run whenever we have dispatched a PortSelect event */
   let blockInfo = eventdata.detail.blockInfo;
 
-  let firstPort  = document.getElementById(this.props.storingFirstPortClicked.id);
-  let secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
-
-  //console.log(`flowChart: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
-
-  /* The excessive use of .parentNode is to walk up
-   the DOM tree and find the id of the block that the
-   port belongs to, not the best way I'm sure...
-   */
-
-  /* Trying to use id instead of class to then allow class for interactjs use */
-  /* Need the length of the name of the node, then slice the firstPort id string
-   until the end of the node name length */
-
-  let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
-    .parentNode.parentNode.id.length;
-  let firstPortName             = firstPort.id.slice(firstPortStringSliceIndex);
-
-  let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
-    .parentNode.parentNode.id.length;
-  let secondPortName             = secondPort.id.slice(secondPortStringSliceIndex);
-
-
-  if (firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
-    secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
-    firstPort.id === secondPort.id)
+  if ((this.props.storingFirstPortClicked !== null) && (this.props.portThatHasBeenClicked !== null))
     {
-    }
-  else
-    {
-    let edge = {
-      fromBlock    : firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
-      fromBlockPort: firstPortName,
-      toBlock      : secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
-      toBlockPort  : secondPortName
-    };
-    this.checkPortCompatibility(edge);
-    }
+    let firstPort  = document.getElementById(this.props.storingFirstPortClicked.id);
+    let secondPort = document.getElementById(this.props.portThatHasBeenClicked.id);
 
+    //console.log(`flowChart: checkBothClickedPorts() : firstPort = ${firstPort}    secondPort = ${secondPort}`);
+
+    /* The excessive use of .parentNode is to walk up
+     the DOM tree and find the id of the block that the
+     port belongs to, not the best way I'm sure...
+     */
+
+    /* Trying to use id instead of class to then allow class for interactjs use */
+    /* Need the length of the name of the node, then slice the firstPort id string
+     until the end of the node name length */
+
+    let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode
+      .parentNode.parentNode.id.length;
+    let firstPortName             = firstPort.id.slice(firstPortStringSliceIndex);
+
+    let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode
+      .parentNode.parentNode.id.length;
+    let secondPortName             = secondPort.id.slice(secondPortStringSliceIndex);
+
+
+    if (firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
+      secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
+      firstPort.id === secondPort.id)
+      {
+      }
+    else
+      {
+      let edge = {
+        fromBlock    : firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+        fromBlockPort: firstPortName,
+        toBlock      : secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id,
+        toBlockPort  : secondPortName
+      };
+      this.checkPortCompatibility(edge);
+      }
+    }
   }
 
 checkPortCompatibility(edgeInfo)
@@ -579,7 +581,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
       /**
        * TODO: Modify for Protocol 2
        *      Must be of the form:
-       *      {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"Off"}
+       *      {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"Off"}
        */
       let item = blockCollection.getBlockItemByName(inportBlock);
       if (item !== null)
@@ -710,8 +712,8 @@ generateEdgePreview()
 render()
   {
   //console.log("render: flowChart");
-  const { canDrop, isOver, connectDropTarget } = this.props;
-  const isActive = canDrop && isOver;
+  const {canDrop, isOver, connectDropTarget} = this.props;
+  const isActive                             = canDrop && isOver;
 
   let backgroundColor = '#3E3E3E';
   if (isActive)
@@ -737,7 +739,7 @@ render()
   for (let blockName in this.props.allBlockInfo) // this returns just the string name of each block object.
     {
     let blockInfo = this.props.allBlockInfo[blockName];
-    let item = blockCollection.getBlockItemByName(blockName);
+    let item      = blockCollection.getBlockItemByName(blockName);
     if ((item instanceof BlockItem) && (this.props.allBlockInfo.hasOwnProperty(blockName)) && (item.visible))
       {
       //let blockInfo = this.props.allBlockInfo[blockName];
@@ -818,38 +820,38 @@ render()
     }
 
   return connectDropTarget(
-  //return (
+    //return (
     <div id={"appAndDragAreaContainer"}
-         style={Object.assign({},AppContainerStyle,{backgroundColor:backgroundColor, height:"100%", width:"100%"})} >
-    <svg height={"100%"} width={"100%"}
-         ref={"node"}>
+         style={Object.assign({}, AppContainerStyle, {backgroundColor: backgroundColor, height: "100%", width: "100%"})}>
+      <svg height={"100%"} width={"100%"}
+           ref={"node"}>
 
-      <rect id={"dragArea"} height={"100%"} width={"100%"}
-            fill={"transparent"} style={{MozUserSelect: 'none'}}
-            onWheel={this.wheelZoom}/>
+        <rect id={"dragArea"} height={"100%"} width={"100%"}
+              fill={"transparent"} style={{MozUserSelect: 'none'}}
+              onWheel={this.wheelZoom}/>
 
-      <svg id={"appContainer"} style={AppContainerStyle}>
+        <svg id={"appContainer"} style={AppContainerStyle}>
 
-        {this.props.blockPositions ? (
-          <g id={"panningGroup"}
-             transform={matrixTransform}
-             onWheel={this.wheelZoom}>
+          {this.props.blockPositions ? (
+            <g id={"panningGroup"}
+               transform={matrixTransform}
+               onWheel={this.wheelZoom}>
 
-            <g id={"EdgesGroup"}>
-              {edges}
-              {this.generateEdgePreview()}
+              <g id={"EdgesGroup"}>
+                {edges}
+                {this.generateEdgePreview()}
+              </g>
+
+              <g id={"BlocksGroup"}>
+                {blocks}
+              </g>
+
             </g>
 
-            <g id={"BlocksGroup"}>
-              {blocks}
-            </g>
+          ) : (<div>{"Waiting for block positions..."}</div>)}
+        </svg>
 
-          </g>
-
-        ) : (<div>{"Waiting for block positions..."}</div>)}
       </svg>
-
-    </svg>
     </div>
   )
   }
@@ -865,7 +867,8 @@ FlowChart.propTypes = {
   blockStyling           : PropTypes.object,
   blockPositions         : PropTypes.object,
   storingFirstPortClicked: PropTypes.object,
-  edgePreview            : PropTypes.object
+  edgePreview            : PropTypes.object,
+  backgroundSelected     : PropTypes.bool
 };
 
 export default DropTarget(ItemTypes.BLOCK, layoutTarget, collect)(FlowChart);

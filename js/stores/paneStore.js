@@ -93,8 +93,8 @@ let modalDialogBoxInfo = {
 let dropdownMenuSelect = function (tab)
   {
   let findTheIndex = 0;
-  console.log("dropdown menu select");
-  console.log(tab);
+  //console.log("dropdown menu select");
+  //console.log(tab);
 
   for (let i = 0; i < _stuff.tabState.length; i++)
     {
@@ -267,13 +267,13 @@ switch (action.actionType)
 
   case appConstants.FAVTAB_OPEN:
     setFavTabStateTrue();
-    console.log(allBlockTabProperties.Favourites);
+    //console.log(allBlockTabProperties.Favourites);
     paneStore.emitChange();
     break;
 
   case appConstants.CONFIGTAB_OPEN:
     setConfigTabStateTrue();
-    console.log(allBlockTabProperties.Configuration);
+    //console.log(allBlockTabProperties.Configuration);
     paneStore.emitChange();
     break;
 
@@ -295,7 +295,7 @@ switch (action.actionType)
 
   case appConstants.REMOVE_BLOCKTAB:
     removeBlockTab();
-    console.log(_stuff.tabState);
+    //console.log(_stuff.tabState);
     paneStore.emitChange();
     break;
 
@@ -366,7 +366,7 @@ switch (action.actionType)
     modalDialogBoxInfo.attributeName = attributeToUpdate;
     modalDialogBoxInfo.message       = responseMessage;
 
-    console.log(modalDialogBoxInfo);
+    //console.log(modalDialogBoxInfo);
 
     paneStore.emitChange();
     break;

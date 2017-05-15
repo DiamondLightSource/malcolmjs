@@ -52,12 +52,14 @@ AppDispatcher.register(function (payload)
   switch (action.actionType)
     {
     case appConstants.FOOTER_TOGGLE:
+      console.log('mainPaneStore: FOOTER_TOGGLE received from dispatcher vvvvv');
       console.log(payload);
       console.log(action);
       toggleFooter();
       mainPaneStore.emitChange();
 
       console.log(_stuff.footerState);
+      console.log('mainPaneStore: FOOTER_TOGGLE ^^^^^');
       break;
 
     default:

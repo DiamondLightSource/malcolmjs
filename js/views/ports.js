@@ -8,6 +8,7 @@ import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
 
 import interact from "../../node_modules/interact.js";
+import * as classes from './port.scss';
 
 export default class Ports extends React.Component {
 constructor(props)
@@ -24,13 +25,11 @@ constructor(props)
 
 componentDidMount()
   {
-/*
   interact(".invisiblePortCircle")
     .on("tap", this.portClick);
 
   interact(".invisiblePortCircle")
     .styleCursor(false);
-*/
   }
 
 componentWillUnmount()
@@ -61,10 +60,10 @@ shouldComponentUpdate(nextProps, nextState)
 portClick(e)
   {
   // IJG 14/2/17
-  //e.stopImmediatePropagation();
-  //e.stopPropagation();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
 
-  console.log(`ports.portClick(): blockInfo = ${JSON.stringify(this.props.blockInfo)}`);
+  //console.log(`ports.portClick(): blockInfo = ${JSON.stringify(this.props.blockInfo)}`);
 
   // Wrap up target and blockInfo in passed object.
 
@@ -81,12 +80,14 @@ portClick(e)
       if (e.currentTarget.parentNode.children[i].className.animVal.indexOf("inport") !== -1
         || e.currentTarget.parentNode.children[i].className.animVal.indexOf("outport") !== -1)
         {
+        console.log(`ports: portClick(): invisiblePortCircle - target = ${target}`);
         target = e.currentTarget.parentNode.children[i];
         // TODO: I think there should be a break here. IJG 13 feb 17
         // Otherwise i will only reference the tail value.
         }
       }
     }
+
   let params = {"target": target, "blockInfo": this.props.blockInfo};
   flowChartActions.passPortMouseDown(params);
   //return;
@@ -104,6 +105,8 @@ portClick(e)
 
   if (this.props.storingFirstPortClicked === null)
     {
+    console.log(`ports: portClick(): this.props.storingFirstPortClicked is null, so -> flowChartActions.storingFirstPortClicked(target)`);
+
     /* Haven"t clicked on another port before this,
      just do an edgePreview rather than draw an edge
      */
@@ -115,6 +118,7 @@ portClick(e)
     }
   else if (this.props.storingFirstPortClicked !== null)
     {
+    console.log(`ports: portClick(): this.props.storingFirstPortClicked is NOT null, so -> flowChartHandle.dispatchEvent(twoPortClicksEvent)`);
     /* A port has been clicked before this, so
      start the checking whether the two ports
      are connectable/compatible
@@ -127,6 +131,7 @@ portClick(e)
     // Doesn't do anything - yet. Not sure why it's here. IJG March 2017.
   if (this.props.cbClicked !== null)
     {
+    console.log(`ports: portClick(): this.props.cbClicked() is specified and being called`);
     this.props.cbClicked(e);
     }
   }
@@ -185,6 +190,7 @@ render()
       + blockStyling.outerRectangleHeight / (inportsLength + 1) * (i + 1) + ")";
 
     let inportValueType = blockInfo.inports[i].type;
+    //let portclass = classes["inport" + inportValueType];
 
     inports.push(
       <g key={blockId + inportName + "portAndText"}
@@ -196,17 +202,17 @@ render()
                 fill  : this.props.selected ? "#797979" : "black",
                 cursor: "default"
               }}/>
+        {/*className={"inport" + inportValueType}*/}
         <Port key={blockId + inportName}
-              className={"inport" + (inportValueType === "pos" ? "POS" : "BIT")}
+              className={"inport" + inportValueType}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
-              style={{cursor: "default"}}
               id={blockId + inportName}
               blockName={blockId}
         />
         <Port key={blockId + inportName + "invisiblePortCircle"}
-              className="invisiblePortCircle"
+              className={"invisiblePortCircle"}
               cx={0}
               cy={0}
               r={blockStyling.portRadius + 2}
@@ -250,17 +256,16 @@ render()
                 cursor: "default"
               }}/>
         <Port key={blockId + outportName}
-              className={"outport" + (outportValueType === "pos" ? "POS" : "BIT")}
+              className={"outport" + outportValueType}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
-              style={{cursor: "default"}}
               id={blockId + outportName}
               blockName={blockId}
 
         />
         <Port key={blockId + outportName + "invisiblePortCircle"}
-              className="invisiblePortCircle"
+              className={"invisiblePortCircle"}
               cx={0}
               cy={0}
               r={blockStyling.portRadius + 2}

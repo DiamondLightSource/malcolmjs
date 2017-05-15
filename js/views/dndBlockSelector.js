@@ -14,7 +14,7 @@ import flowChartActions, {DroppedBlockInfo} from '../actions/flowChartActions';
 
 const style = {
   border         : '1px dashed gray',
-  backgroundColor: 'white',
+  backgroundColor: '#85FFFF',
   padding        : '0.5rem 1rem',
   marginRight    : '1.5rem',
   marginBottom   : '1.5rem',
@@ -22,39 +22,39 @@ const style = {
   float          : 'left',
 };
 
-const blockSource =
-  {
-  beginDrag(props)
-    {
-    const item = {name: props.name};
-    return (item);
-    },
-
-  endDrag(props, monitor)
-    {
-    const item       = monitor.getItem();
-    const dropResult = monitor.getDropResult();
-
-    if (dropResult)
+let blockSource =
       {
-      let clientOffset = monitor.getSourceClientOffset();
-      if (clientOffset === null)
-        {
-        clientOffset = {x:0,y:0};
-        }
+        beginDrag(props)
+          {
+          const item = {name: props.name};
+          return (item);
+          },
 
-      let info = new DroppedBlockInfo(item, clientOffset);
+        endDrag(props, monitor)
+          {
+          const item       = monitor.getItem();
+          const dropResult = monitor.getDropResult();
 
-      flowChartActions.dropBlockFromList(info);
-      // We will need to trigger an action creator here
-/*
-      window.alert( // eslint-disable-line no-alert
-        `You dropped ${item.name} into ${dropResult.name}!`,
-      );
-*/
-      }
-    },
-  };
+          if (dropResult)
+            {
+            let clientOffset = monitor.getSourceClientOffset();
+            if (clientOffset === null)
+              {
+              clientOffset = {x: 0, y: 0};
+              }
+
+            let info = new DroppedBlockInfo(item, clientOffset);
+
+            flowChartActions.dropBlockFromList(info);
+            // We will need to trigger an action creator here
+            /*
+             window.alert( // eslint-disable-line no-alert
+             `You dropped ${item.name} into ${dropResult.name}!`,
+             );
+             */
+            }
+          },
+      };
 
 
 class DNDBlockSelector extends React.Component {
@@ -64,11 +64,18 @@ render()
   const {name}                          = this.props;
   const opacity                         = isDragging ? 0.4 : 1;
 
+  let dndKey = null;
+
+  if ('key' in this.props)
+    {
+    dndKey = this.props.key+'DNDBlockSelector';
+    }
+
   return (
     connectDragSource(
       <div style={{...style, opacity}}>
         {name}
-      </div>,
+      </div>
     )
   );
   }
@@ -86,6 +93,7 @@ DNDBlockSelector.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   isDragging       : PropTypes.bool.isRequired,
   name             : PropTypes.string.isRequired,
+  key              : PropTypes.string
 };
 
 

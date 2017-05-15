@@ -26,7 +26,9 @@ export default class WidgetTableContainer extends React.Component
     let valcheck    = (nextProps.blockAttribute.value !== this.props.blockAttribute.value);
     let statusCheck = false;
     if ((nextProps.blockAttributeStatus !== undefined) && (this.props.blockAttributeStatus !== undefined))
+      {
       statusCheck = nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value;
+      }
 
     return (valcheck || statusCheck)
     }
@@ -37,7 +39,8 @@ export default class WidgetTableContainer extends React.Component
     let widget;
     let commonProps = {
       blockName    : this.props.blockName,
-      attributeName: this.props.attributeName
+      attributeName: this.props.attributeName,
+      attributePath: this.props.attributePath
     };
 
     switch (this.props.widgetType)
@@ -72,6 +75,9 @@ export default class WidgetTableContainer extends React.Component
         widget =
           <BlockToggleSwitch {...commonProps}
                              blockAttributeValue={this.props.blockAttribute.value.toString()}/>;
+        break;
+
+      default:
         break;
 
     }

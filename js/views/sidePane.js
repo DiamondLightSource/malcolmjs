@@ -53,9 +53,6 @@ export default class SidePane extends React.Component
 
   componentDidMount()
     {
-    console.log('SidePane.componentDidMount(): ');
-    console.log(this.refs);
-    //debugger;
     ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
     }
 
@@ -66,25 +63,18 @@ export default class SidePane extends React.Component
 
   disableTabKey(e)
     {
-    console.log(e);
     if (e.keyCode === 9)
       {
-      console.log("tab key!");
       e.preventDefault();
       }
     }
 
   render()
     {
-    console.log("SidePanes.render() ----------------------------");
-
     let skin    = this.props.skin || "default";
     let globals = this.props.globals || {};
 
     /* Do I need dynamicTab to be something else if tabState is empty? */
-
-    console.log(`SidePane: tabState = ${this.props.tabState}`);
-    console.log(`SidePane: selectedTabIndex = ${this.props.selectedTabIndex}`);
 
     let dynamicTab;
 

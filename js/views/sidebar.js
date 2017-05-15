@@ -205,7 +205,6 @@ export default class BothPanes extends React.Component {
     render()
       {
 
-      //console.log("render: sidebar (BothPanes)");
       /* abc <DragDropContextProvider backend={HTML5Backend}> */
       /*  DragDropContextProvider established to encompass both panes (MainPane and SidePane) */
       /*  This is to facilitate dragging a block from the list in the SidePane and dropping it */
@@ -215,7 +214,6 @@ export default class BothPanes extends React.Component {
        * they should be passed as content between the element start and end tags.
        * TODO: Determine whether this is a design issue of react-sidebar or MalcolmJS.
        * IJG May 2017 */
-      //console.log("BothPanes.render() ----------------------------");
       return (
           <div id="BothPanesContainer" style={BothPanesContainerStyle}>
             <ModalDialogBox modalDialogBoxOpen={this.state.modalDialogBoxOpen}

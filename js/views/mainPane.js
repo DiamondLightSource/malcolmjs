@@ -15,7 +15,7 @@ import FooterButton from './button';
 import FlowChartControllerView from './flowChartControllerView';
 
 import WasteBin from './wasteBin';
-
+import * as toggleButtonStyles from './toggleButton.css';
 let Panel = ReactPanels.Panel;
 let Tab = ReactPanels.Tab;
 let Toolbar = ReactPanels.Toolbar;

@@ -32,7 +32,8 @@ function getFlowChartState()
     areAnyBlocksSelected   : flowChartStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected    : flowChartStore.getIfAnyEdgesAreSelected(),
     edgePreview            : flowChartStore.getEdgePreview(),
-    blockStyling           : flowChartStore.getBlockStyling()
+    blockStyling           : flowChartStore.getBlockStyling(),
+    backgroundSelected     : flowChartStore.getBackgroundSelected()
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
   }
@@ -67,9 +68,7 @@ export default class FlowChartControllerView extends React.Component
     if (this.state.blockPositions === undefined)
       {
       bRet = false;
-      console.log(`flowChartControllerView.shouldComponentUpdate(): this.state.blockPositions is undefined`);
       }
-    //console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
     return (bRet);
     }
 
@@ -78,12 +77,9 @@ export default class FlowChartControllerView extends React.Component
     let blockPositions = this.state.blockPositions;
     if (blockPositions === undefined)
       {
-      //console.log(`flowChartControllerView.render(): this.state.blockPositions is undefined`);
       blockPositions = {};
       }
 
-    //console.log(`flowChartControllerView: render(): portThatHasBeenClicked = ${this.state.portThatHasBeenClicked}  storingFirstPortClicked = ${this.state.storingFirstPortClicked}`);
-    //console.log(`flowChartControllerView: render(): areAnyBlocksSelected = ${this.state.areAnyBlocksSelected}   areAnyEdgesSelected = ${this.state.areAnyEdgesSelected}`);
     return (
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
@@ -98,7 +94,8 @@ export default class FlowChartControllerView extends React.Component
         //previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}
         blockPositions={this.state.blockPositions}
-      />
+        backgroundSelected={this.state.backgroundSelected}
+        />
     )
     }
 }

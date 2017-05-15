@@ -93,19 +93,13 @@ switch (action.actionType)
 {
 
   case appConstants.DROPDOWN_SHOW:
-    console.log(payload);
-    console.log(action);
     dropdownMenuShow();
     sidePaneStore.emitChange();
-    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   case appConstants.DROPDOWN_HIDE:
-    console.log(payload);
-    console.log(action);
     dropdownMenuHide();
     sidePaneStore.emitChange();
-    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   default:

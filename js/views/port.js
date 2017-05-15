@@ -62,12 +62,13 @@ portClick(e)
   {
   //e.stopImmediatePropagation();
   //e.stopPropagation();
-  //console.log(`Port.portClick(): blockName = ${this.props.blockName}`);
+  console.log(`Port.portClick(): blockName = ${this.props.blockName}`);
   // Inform the parent Block object that we have been clicked.
   if ((this.props.className.indexOf("invisiblePortCircle") > -1) && (this.props.cbClicked !== null))
     {
-    //e.stopImmediatePropagation();
-    //e.stopPropagation();
+    console.log(`Port: portClick(): classname -> invisiblePortCircle. Calling this.props.cbClicked()`);
+    e.stopImmediatePropagation();
+    e.stopPropagation();
     this.props.cbClicked(e);
     }
   }
@@ -78,10 +79,11 @@ render()
   let circleProps = Object.assign({}, this.props);
   delete circleProps.blockName;
   if (circleProps.hasOwnProperty("cbClicked"))
+    {
     delete circleProps.cbClicked;
+    }
 
-  return (
-    <circle {...circleProps} />);
+  return (<circle {...circleProps} />);
   }
 }
 
