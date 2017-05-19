@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import ReactPanels from 'react-panels';
 import mainPaneActions from '../actions/mainPaneActions';
 import paneActions from '../actions/paneActions';
+import ToolsNavbar from './toolsNavbar';
+
 
 //import ConfigButton from './configButton';
 import FavButton from './favButton';
@@ -70,6 +72,8 @@ constructor(props)
     paneActions.toggleSidebar("toggle sidebar");
   }
 
+
+
   render() {
     let TESTStyling = {
       'height': '1000px',
@@ -118,6 +122,7 @@ constructor(props)
       </div>
       </Footer>;
 
+
     return(
       <Panel theme={"flexbox"} useAvailableHeight={true} buttons={[
           <ToggleButton title={"Toggle sidebar"} onClick={this.handleActionToggleSidebar} >
@@ -143,6 +148,9 @@ constructor(props)
           </Content>
           {footer}
         </Tab>
+
+        <ToolsNavbar/>
+
       </Panel>
     )
   }
