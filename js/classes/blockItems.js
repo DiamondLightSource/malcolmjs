@@ -187,11 +187,11 @@ updateFromSchema(schemaIn)
           {
           self.attributes[attr] = JSON.parse(t1);
           changed               = true;
-          console.log(`blockItem: updateFromSchema() - individual block: ${self.blockName()} `);
-          console.log('t1 (new block update):');
-          console.log(t1);
-          console.log('t2 (old block update):');
-          console.log(t2);
+          //console.log(`blockItem: updateFromSchema() - individual block: ${self.blockName()} `);
+          //console.log('t1 (new block update):');
+          //console.log(t1);
+          //console.log('t2 (old block update):');
+          //console.log(t2);
 
           }
         }
