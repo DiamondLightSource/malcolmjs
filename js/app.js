@@ -4,12 +4,14 @@
 import  * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import BothPanes from './views/sidebar';
 import {DragDropContextProvider} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
+import 'font-awesome/css/font-awesome.min.css';
+import './styles/app.scss';
 
 let AppContainerStyle = {
   margin  : 0,
@@ -34,7 +36,7 @@ let SideTabbedViewStyle = {
   maxWidth: 400
 };
 
-export default class App extends React.Component
+export default class MjsApp extends React.Component
   {
   constructor(props)
     {
@@ -54,11 +56,13 @@ export default class App extends React.Component
   render()
     {
     return (
+      <MuiThemeProvider>
       <div id="appContainer" style={AppContainerStyle}>
         <DragDropContextProvider backend={HTML5Backend}>
         <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
         </DragDropContextProvider>
       </div>
+      </MuiThemeProvider>
     )
     }
   }
@@ -72,7 +76,7 @@ export default class App extends React.Component
  */
 
 ReactDOM.render(
-  <App/>,
+  <MjsApp/>,
   document.getElementById('container')
 );
 //ReactDOM.render(React.createElement(App, null), document.getElementById('container'));
