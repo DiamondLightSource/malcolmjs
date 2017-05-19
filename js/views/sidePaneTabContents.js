@@ -25,9 +25,11 @@ import ItemTypes from './dndItemTypes';
 
 import WidgetTableContainer from './widgetTableContainer';
 
+import './sidePaneTabContents.scss';
+
 // Load the TreeView stylesheet
 //import * as treeViewStyles from './treeview.css';
-import * as treeViewStyles from 'react-treeview/react-treeview.css';
+//import * as treeViewStyles from 'react-treeview/react-treeview.css';
 
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
