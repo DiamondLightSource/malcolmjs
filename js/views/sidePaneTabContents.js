@@ -368,13 +368,7 @@ render()
   //  );
   //}
   //console.log(`sidePaneTabContents.render(): this.props.tabObject.tabType = ${this.props.tabObject.tabType}`);
-  if ((this.props.areAnyBlocksSelected === false) && (this.props.areAnyEdgesSelected === false))
-    {
-    tabContent.push(this.generateBlockList(this.state.blocksAvailable));
-    //tabContent.push(this.generateBlockTree(this.state.blocksAvailable));
-    //tabContent.push(this.generateBlockMenu(this.state.blocksAvailable));
-    }
-  else if (this.props.tabObject.tabType === 'VISIBILITY' ||
+  if (this.props.tabObject.tabType === 'VISIBILITY' ||
     this.props.tabObject.tabType === 'block')
     {
 
@@ -383,6 +377,10 @@ render()
     tabContent.push(
       this.generateTabContent(this.state.blockAttributes)
     );
+    }
+  else if (this.props.tabObject.tabType === 'BlockList')
+    {
+    tabContent.push(this.generateBlockList(this.state.blocksAvailable));
     }
   else if (this.props.tabObject.tabType === 'edge')
     {

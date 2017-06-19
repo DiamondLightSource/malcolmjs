@@ -1,19 +1,22 @@
 /*
  * Created by ig43 on 12/07/16.
  */
-const webpack = require('webpack');
-const path    = require('path');
+const webpack           = require('webpack');
+const path              = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const BUILD_DIR = path.resolve(__dirname, 'build');
-const APP_DIR   = path.resolve(__dirname, 'js');
+const nodeModulesDir= path.resolve(__dirname, 'node_modules');
+const BUILD_DIR     = path.resolve(__dirname, 'build');
+const APP_DIR       = path.resolve(__dirname, 'js');
 
 const config = {
-  entry  : path.join(APP_DIR, '/app.js'),
-  output : {
+  /*entry  : ['babel-polyfill', path.join(APP_DIR, '/app.js')],*/
+  entry  : [path.join(APP_DIR, '/app.js')],
+  output :
+    {
     path    : BUILD_DIR,
     filename: 'bundle.js'
-  },
+    },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json", ".css", ".scss", ".less"],
     alias     : { // In case of multiple copies of React flying around
@@ -43,63 +46,90 @@ const config = {
         exclude: /node_modules/,
         test   : /\.js?/,
         include: [APP_DIR, path.resolve(__dirname, 'components')],
-        loader : 'babel-loader',
-        query  : {
-          presets: ['es2015', 'react'],
-          plugins: ['transform-object-rest-spread']
+        use : [
+          {loader : 'react-hot-loader'},
+          {loader : 'babel-loader',
+            query  :
+              {
+              presets: ['es2015', 'react'],
+              plugins: ['transform-object-rest-spread']
+              }
+          }
+      ]
+      },
+      { // === To satisfy react-icons imports. See https://github.com/gorangajic/react-icons/issues/34
+        test: /react-icons\/(.)*(.js)$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react']
         }
       },
       {test: /\.json$/, loader: 'json-loader'},
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              localIdentName: '[path][name]__[local]--[hash:base64:5]'
-            }
+      {test: /\.css$/,
+        exclude: /node_modules/,
+        use : [
+          {loader: "style-loader"},
+          {loader: "css-loader",
+            options:
+              {
+              //modules       : true,
+              sourceMap     : true,
+              localIdentName: '[name]__[local]--[hash:base64:5]'
+              }
           }
         ]
-     },
+      },
+      {
+        // For all .css files in node_modules
+        test: /\.css$/,
+        include: /node_modules/,
+        use: ['style-loader', 'css-loader']
+      },
       {
         test: /\.scss$/,
-        use: [
+        use : [
           {
             loader: "style-loader"
           },
           {
-            loader: "css-loader",
-            options: {
-              alias: {
-                "../fonts/bootstrap": "bootstrap-sass/assets/fonts/bootstrap"
-              }
+            loader : "css-loader",
+            options:
+            {
+              sourceMap     : true,
             }
+
           },
           {
-            loader: "sass-loader",
-            options: {
-              includePaths: [
-                path.resolve("./node_modules/bootstrap-sass/assets/stylesheets")
-              ]
+            loader : "sass-loader",
+            options:
+            {
+              sourceMap: true
             }
           }
         ]
       },
       {
-        test: /\.less$/, loader: "style-loader!css-loader!less-loader"
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [
+          {loader: "style-loader"},
+          {loader : "css-loader"},
+          {loader: "less-loader"}
+        ]
       },
-      {test: /\.png$/, loader: "url-loader?limit=100000"},
       {test: /\.jpg$/, loader: "file-loader"},
       {
         test   : /\.tsx?$/,
         loader : 'ts-loader',
         //loader: 'webpack-typescript?target=ES5&jsx=react',
         exclude: /node_modules/
+      },
+      {
+        test  : /\.(png|woff|woff2|eot|ttf|svg)$/,
+        use:[
+            {loader: 'url-loader?limit=100000'}
+            ]
       }
-
     ],
 
   },

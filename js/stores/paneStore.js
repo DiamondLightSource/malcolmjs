@@ -238,6 +238,10 @@ blockUpdated(blockIndex)
   layoutUpdated(blockIndex);
   }
 
+setBlockListTabStateTrue()
+  {
+  setBlockListTabStateTrue();
+  }
 }
 
 const paneStore = new PaneStore();
@@ -301,6 +305,11 @@ switch (action.actionType)
 
   case appConstants.TOGGLE_SIDEBAR:
     toggleSidebar();
+    paneStore.emitChange();
+    break;
+
+  case appConstants.NAVBAR_ACTION:
+    setBlockListTabStateTrue(item);
     paneStore.emitChange();
     break;
 
@@ -391,6 +400,7 @@ allBlockTabProperties = {
   'Favourites'   : false,
   'Configuration': false,
   'VISIBILITY'   : false,
+  'BlockList'    : false
 };
 
 let allEdgeTabProperties = {};
@@ -551,6 +561,27 @@ function setBlockLookupTableTabStateTrue()
     }
   }
 
+function setBlockListTabStateTrue()
+  {
+  if (allBlockTabProperties['BlockList'] === false)
+    {
+    allBlockTabProperties['BlockList'] = true;
+
+    let blockListTabStateObject = [{
+      tabType: 'BlockList',
+      label  : 'BlockList'
+    }];
+
+    _stuff.tabState = _stuff.tabState.concat(blockListTabStateObject);
+
+    selectBlockOnClick();
+    }
+  else if (allBlockTabProperties['BlockList'] === true)
+    {
+    dropdownMenuSelect("BlockList");
+    }
+  }
+
 let removeBlockTab = function ()
   {
 
@@ -657,7 +688,9 @@ function registerBlockWithPane(index)
   let callbackError = function (err)
     {
     if (err)
+      {
       console.error(err.message);
+      }
     };
 
   let iteration = function (attribute, attributeName, callbackDone)

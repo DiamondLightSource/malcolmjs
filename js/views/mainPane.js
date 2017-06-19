@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import ReactPanels from 'react-panels';
 import mainPaneActions from '../actions/mainPaneActions';
 import paneActions from '../actions/paneActions';
-import ToolsNavbar from './toolsNavbar';
+import ToolsNavbar from './navbarView';
 
 
 //import ConfigButton from './configButton';

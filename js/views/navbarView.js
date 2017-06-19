@@ -10,6 +10,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 //import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
+import navbarActions, {NavbarEventInfo} from '../actions/navbarActions';
 
 const deleteIcon = <FontIcon className="material-icons">{"delete"}</FontIcon>;
 const addIcon    = <FontIcon className="material-icons">{"add"}</FontIcon>;
@@ -24,8 +25,8 @@ export default class ToolsNavbar extends React.Component {
 constructor(props)
   {
   super(props);
+    this.actionIdName = ["AddBlock","DeleteBlock","Delete Edge","MenuAction"];
   this.state = { selectedIndex: 0, };
-
   this.__onSelect = this.__onSelect.bind(this);
   }
 
@@ -33,6 +34,12 @@ __onSelect(index)
   {
   console.log(`toolsNavbar: __onSelect()  index = ${index}`);
   this.setState({selectedIndex: index});
+    if (index < this.actionIdName.length)
+      {
+      let actionName = this.actionIdName[index];
+      let nbInfo = new NavbarEventInfo(actionName,null);
+      navbarActions.userClickedNavbarItem(nbInfo);
+      }
   }
 
 render()
@@ -44,17 +51,22 @@ render()
                 <BottomNavigationItem
                   label="Add Block"
                   icon={addIcon}
-                  onTouchTap={() => this.__onSelect(0)}
+                  onClick={() => this.__onSelect(0)}
                 />
                 <BottomNavigationItem
                   label="Delete Block"
                   icon={deleteIcon}
-                  onTouchTap={() => this.__onSelect(1)}
+                  onClick={() => this.__onSelect(1)}
+                />
+                <BottomNavigationItem
+                  label="Delete Edge"
+                  icon={deleteIcon}
+                  onClick={() => this.__onSelect(2)}
                 />
                 <BottomNavigationItem
                   label="Actions"
                   icon={menuIcon}
-                  onTouchTap={() => this.__onSelect(2)}
+                  onClick={() => this.__onSelect(3)}
                 />
               </BottomNavigation>
             </Paper>

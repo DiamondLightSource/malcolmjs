@@ -125,6 +125,9 @@ const appConstants = {
   /* Websocket EventEmitter */
   WEBSOCKET_STATE: "WEBSOCKET_STATE",
 
+  /* Navbar use */
+  NAVBAR_ACTION: "NAVBAR_ACTION",
+
 };
 
 export default appConstants;

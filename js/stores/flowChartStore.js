@@ -11,13 +11,15 @@
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import EventEmitter from 'events';
-import blockStore from '../stores/blockStore.js';
+import blockStore, {BlockItem} from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import {NavbarEventInfo} from '../actions/navbarActions';
 
 let CHANGE_EVENT = 'change';
 
 let clickedEdge               = null;
+let clickedBlock              = null;  // Name of the block selected by the user
 let portThatHasBeenClicked    = null;
 let storingFirstPortClicked   = null;
 let edgePreview               = null;
@@ -41,7 +43,7 @@ let graphPosition = {
 let graphZoomScale = 2.0;
 
 let blockSelectedStates = {};
-let backgroundSelected = false;
+let backgroundSelected  = false;
 
 function appendToBlockSelectedStates(BlockId)
   {
@@ -66,11 +68,11 @@ function deselectAllBlocks()
     blockSelectedStates[block] = false
     }
 
-    backgroundSelected = true;
+  backgroundSelected = true;
 
-    // Inform views that we have deselected all blocks and edges
-    // At this stage prepare to show list of blocks in SidePane.
-    flowChartStore.emitChange();
+  // Inform views that we have deselected all blocks and edges
+  // At this stage prepare to show list of blocks in SidePane.
+  flowChartStore.emitChange();
   }
 
 function checkIfAnyBlocksAreSelected()
@@ -108,7 +110,7 @@ function selectEdge(Edge)
 function getAnyEdgeSelectedState(EdgeId)
   {
   let selected = false;
-    /** edgeSelectedStates is an array of bool */
+  /** edgeSelectedStates is an array of bool */
   if (edgeSelectedStates[EdgeId] === undefined || null)
     {
     //console.log("edge selected state is undefined or null, best check it out...");
@@ -118,7 +120,7 @@ function getAnyEdgeSelectedState(EdgeId)
     //console.log("that edge's state exists, hooray!");
     selected = edgeSelectedStates[EdgeId];
     }
-  return(selected);
+  return (selected);
   }
 
 function checkIfAnyEdgesAreSelected()
@@ -208,12 +210,17 @@ getAnyBlockSelectedState(BlockId)
     //console.log(nodeSelectedStates[NodeId]);
     selected = blockSelectedStates[BlockId];
     }
-  return( selected );
+  return ( selected );
   }
 
 getIfAnyBlocksAreSelected()
   {
   return checkIfAnyBlocksAreSelected();
+  }
+
+getSelectedBlock()
+  {
+  return(clickedBlock);
   }
 
 getIfAnyEdgesAreSelected()
@@ -259,7 +266,7 @@ getBlockStyling()
 
 getBackgroundSelected()
   {
-    return backgroundSelected;
+  return backgroundSelected;
   }
 
 /**
@@ -282,16 +289,16 @@ onChangeBlockCollectionCallback(items)
     let blockItem = blockCollection.getBlockItem(index);
     if (blockItem !== null)
       {
-/*
-      if (blockItem.visible === true)
-        {
-        appendToBlockSelectedStates(blockItem.blockName());
-        changed = true;
-        }
-*/
+      /*
+       if (blockItem.visible === true)
+       {
+       appendToBlockSelectedStates(blockItem.blockName());
+       changed = true;
+       }
+       */
 
-      let isWidgetCombo = false;
-      let isGroupInputs = false;
+      let isWidgetCombo  = false;
+      let isGroupInputs  = false;
       let isWidgetToggle = false;
 
       let meta = null;
@@ -330,18 +337,18 @@ onChangeBlockCollectionCallback(items)
                 else if (tags[j] === 'widget:toggle')
                   {
                   isWidgetToggle = true;
-/*
-                  if (blockItem.visible)
-                    {
-                    appendToBlockSelectedStates(blockItem.blockName());
-                    changed = true;
-                    }
-                  else
-                    {
-                    removeBlock(blockItem.blockName());
-                    changed = true;
-                    }
-*/
+                  /*
+                   if (blockItem.visible)
+                   {
+                   appendToBlockSelectedStates(blockItem.blockName());
+                   changed = true;
+                   }
+                   else
+                   {
+                   removeBlock(blockItem.blockName());
+                   changed = true;
+                   }
+                   */
 
                   }
                 }
@@ -872,6 +879,7 @@ switch (action.actionType)
 
   case appConstants.SELECT_BLOCK:
     blockSelectedStates[item] = true;
+    clickedBlock              = item;
     console.log(`flowChartStore: SELECT_BLOCK event - item: ${item}  blockSelectedStates ${blockSelectedStates[item]}`);
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
@@ -909,6 +917,35 @@ switch (action.actionType)
     deselectAllEdges();
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
+    break;
+
+  case appConstants.NAVBAR_ACTION:
+    // 1) determine the selected block
+    // 2) get the BlockItem instance
+    // 3) call removeBlock(item)
+    if (item instanceof NavbarEventInfo)
+      {
+      switch (item.eventName)
+        {
+        case "DeleteBlock":
+          {
+          let blockName = flowChartStore.getSelectedBlock();
+          if (blockName !== null)
+            {
+            let blockItem = blockCollection.getBlockItemByName(blockName);
+            if (blockItem !== null)
+              {
+              blockItem.putVisible(false);
+              }
+            }
+          }
+          break;
+
+        default:
+          break;
+        }
+      blockStore.emitChange();
+      }
     break;
 
   case appConstants.CHANGE_GRAPHPOSITION:

@@ -266,7 +266,8 @@ export default class EdgePreview extends React.Component
 }
 
 EdgePreview.propTypes = {
-noPanning           : PropTypes.bool,
+  noPanning           : PropTypes.bool,
+  interactJsDragPan   : propTypes.func,
   failedPortConnection: PropTypes.func,
   blockStyling        : PropTypes.object,
   edgePreview         : PropTypes.object,
