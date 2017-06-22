@@ -10,7 +10,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
 //import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import navbarActions, {NavbarEventInfo} from '../actions/navbarActions';
+//import navbarActions, {NavbarEventInfo} from '../actions/navbarActions';
 
 const deleteIcon = <FontIcon className="material-icons">{"delete"}</FontIcon>;
 const addIcon    = <FontIcon className="material-icons">{"add"}</FontIcon>;
