@@ -9,7 +9,7 @@ import ReactPanels from 'react-panels';
 import mainPaneActions from '../actions/mainPaneActions';
 import paneActions from '../actions/paneActions';
 import ToolsNavbar from './navbarView';
-
+import {MjsPanel} from '../components/MjsPanel';
 
 //import ConfigButton from './configButton';
 import FavButton from './favButton';
