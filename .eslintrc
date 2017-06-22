@@ -6,9 +6,13 @@
   "parser": "babel-eslint",
   "plugins": [
     "react",
-
+    "import"
   ],
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"],
   "env": {
     "browser": true,
     "node": true,
@@ -23,7 +27,9 @@
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
-        }
+        },
+    "allowImportExportEverywhere": false,
+    "codeFrame": false
     },
   "rules": {
     // Strict mode
@@ -31,11 +37,20 @@
     "no-console": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
+    "react/no-children-prop": "warn",
+    "react/no-danger": "warn",
+    "react/no-deprecated": "warn",
+    "react/no-direct-mutation-state": "error",
+    "react/no-unescaped-entities": "warn",
+    "react/jsx-key": "warn",
+    "react/jsx-no-literals": "warn",
+    "react/jsx-no-undef": "warn",
+    "react/jsx-pascal-case": "warn",
     // Code style
     //"indent": ["warn", 2],
     "indent": ["off", 2],
     "quotes": ["off", "single"],
-    "one-var": ["error", { var: "never", let: "never", const: "never" }],
+    "one-var": ["error", { "var": "never", "let": "never", "const": "never" }],
     "no-inner-declarations": ["error", "both"]
   }
 }

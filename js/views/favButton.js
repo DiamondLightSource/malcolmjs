@@ -2,7 +2,8 @@
  * Created by twi18192 on 25/08/15.
  */
 
-let React           = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
 let ButtonStyle = {
   backgroundColor: 'grey',
@@ -35,36 +36,37 @@ let ButtonTitlePadding = {
 //  }
 //}
 
-let FavButton = React.createClass({
-  //getInitialState: function(){
-  //  return getFavButtonState();
-  //},
-  propTypes: {
-    favTabOpen      : React.PropTypes.func
-  },
-
-  _onChange: function ()
+export default class FavButton extends React.Component
+{
+  constructor(props)
+    {
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this.handleActionFavToggle = this.handleActionFavToggle.bind(this);
+    }
+  
+  _onChange ()
     {
     //this.setState(getFavButtonState)
-    },
+    }
 
-  handleActionFavToggle: function ()
+  handleActionFavToggle ()
     {
     //mainPaneActions.toggleFavPanel("this is the item");
     this.props.favTabOpen()
-    },
+    }
 
-  componentDidMount: function ()
+  componentDidMount ()
     {
     //mainPaneStore.addChangeListener(this._onChange)
-    },
+    }
 
-  componentWillUnmount: function ()
+  componentWillUnmount ()
     {
     //mainPaneStore.removeChangeListener(this._onChange)
-    },
+    }
 
-  render: function ()
+  render ()
     {
     return (
       <div>
@@ -77,6 +79,8 @@ let FavButton = React.createClass({
     );
     }
 
-});
+}
 
-module.exports = FavButton;
+FavButton.propTypes = {
+favTabOpen      : PropTypes.func
+};

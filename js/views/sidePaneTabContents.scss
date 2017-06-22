@@ -1,0 +1,8 @@
+@charset "UTF-8";
+@import "../../node_modules/react-treeview/react-treeview.css";
+
+$text-color: #75BA5F;
+
+.sidebar .tab-content p, .sidebar .tab-content span {color: $text-color}
+.sidebar .tab-content .fa-info-circle {color: #3e999f}
+.sidebar .fa.fa-angle-down {color: #3ea0a0}

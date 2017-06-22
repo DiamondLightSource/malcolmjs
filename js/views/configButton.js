@@ -2,9 +2,11 @@
  * Created by twi18192 on 25/08/15.
  */
 
-let React = require('react');
-let mainPaneStore = require('../stores/mainPaneStore');
-let mainPaneActions = require('../actions/mainPaneActions');
+
+import * as React from 'react';
+import PropTypes from 'prop-types';
+//import mainPaneStore from '../stores/mainPaneStore';
+import mainPaneActions from '../actions/mainPaneActions';
 
 let ButtonStyle = {
   backgroundColor: 'grey',
@@ -37,33 +39,30 @@ let ButtonTitlePadding = {
 //  }
 //}
 
-let ConfigButton = React.createClass({
-  //getInitialState: function(){
-  //  return getConfigButtonState();
-  //},
+export default class ConfigButton extends React.Component
+{
+constructor(props)
+  {
+    super(props);
+  }
 
-  //_onChange: function(){
-  //  this.setState(getConfigButtonState)
-  //},
-
-  propTypes: {
-    configTabOpen      : React.PropTypes.func
-  },
-
-  handleActionConfigToggle:function(){
+  handleActionConfigToggle()
+    {
     mainPaneActions.toggleConfigPanel("this is the item");
     this.props.configTabOpen()
-  },
+    }
 
-  componentDidMount: function(){
+  componentDidMount()
+    {
     //mainPaneStore.addChangeListener(this._onChange)
-  },
+    }
 
-  componentWillUnmount: function(){
+  componentWillUnmount()
+    {
     //mainPaneStore.removeChangeListener(this._onChange)
-  },
+    }
 
-  render: function() {
+  render() {
     return(
       <div>
         <div id="config" style={ButtonStyle} onClick={this.handleActionConfigToggle} ><span style={ButtonTitlePadding}>Config</span>
@@ -73,6 +72,9 @@ let ConfigButton = React.createClass({
 
       </div>
     )}
-});
+}
 
-module.exports = ConfigButton;
+ConfigButton.propTypes = {
+configTabOpen      : PropTypes.func
+};
+

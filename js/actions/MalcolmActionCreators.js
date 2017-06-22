@@ -151,7 +151,7 @@ malcolmPut(blockName, endpoint, value)
 
   /**
    * Output needs to be of the format:
-   * {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"On"}
+   * {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"On"}
    * accepted
 
    Memory jogger...
@@ -209,7 +209,7 @@ malcolmPost(blockName, endpoint, parameters)
 
   /**
    * Output needs to be of the format:
-   * {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"On"}
+   * {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"On"}
    */
   if (blockName)
     {
@@ -220,7 +220,8 @@ malcolmPost(blockName, endpoint, parameters)
     requestedDataToWritePath = [actionCreators.deviceId];
     }
 
-  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
+  let value = "";
+  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPostSuccess, malcolmPostFailure);
 
   }
 
@@ -424,6 +425,27 @@ malcolmSubscribe(blockName, attribute, subtype = appConstants.MALCOLM_SUBSCRIBE_
   return (id);
   }
 
+/**
+ * @name  malcolmAttributeValueEdited
+ * @param blockName
+ * @param attributePath
+ * @param newValue
+ * @description  Called by a UI component when a block attribute value is changed by the user.
+ *               Dispatches a message to all stores, so that one of the can take the appropriate action,
+ *               such as Pushing the new value to the device.
+ */
+malcolmAttributeValueEdited(blockName, attributePath, newValue)
+  {
+  AppDispatcher.handleAction({
+      actionType: appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED,
+      item      : {
+        blockName     : blockName,
+        attribute_path: attributePath,
+        newValue      : newValue
+      }
+    }
+  );
+  }
 
 getdeviceId()
   {
@@ -435,4 +457,4 @@ const MalcolmActionCreators = new CMalcolmActionCreators();
 const actionCreators        = MalcolmActionCreators;
 
 
-export {MalcolmActionCreators as default};
+export default MalcolmActionCreators;

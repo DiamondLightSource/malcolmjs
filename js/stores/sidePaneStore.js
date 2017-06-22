@@ -2,11 +2,9 @@
  * Created by twi18192 on 01/09/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants  = require('../constants/appConstants');
-//let EventEmitter  = require('events').EventEmitter;
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
 import EventEmitter from 'events';
-let assign = require('object-assign');
 
 let CHANGE_EVENT = 'change';
 
@@ -95,19 +93,13 @@ switch (action.actionType)
 {
 
   case appConstants.DROPDOWN_SHOW:
-    console.log(payload);
-    console.log(action);
     dropdownMenuShow();
     sidePaneStore.emitChange();
-    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   case appConstants.DROPDOWN_HIDE:
-    console.log(payload);
-    console.log(action);
     dropdownMenuHide();
     sidePaneStore.emitChange();
-    console.log(`_stuff.dropdownListVisible: ${_stuff.dropdownListVisible}`);
     break;
 
   default:
@@ -115,4 +107,4 @@ switch (action.actionType)
 }
 });
 
-export default sidePaneStore;
+export {sidePaneStore as default, SidePaneStore};

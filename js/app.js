@@ -1,17 +1,17 @@
 /**
  * Created by twi18192 on 25/08/15.
  */
+import  * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-let React    = require('react');
-let ReactDOM = require('react-dom');
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import BothPanes from './views/sidebar';
+import {DragDropContextProvider} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
-//let WebSocketClient = require('./wsWebsocketClient');
-//let testingWebsocketActions = require('./actions/testingWebsocketActions');
-
-let BothPanes = require('./views/sidebar');
-
+import 'font-awesome/css/font-awesome.min.css';
+import './styles/app.scss';
 
 let AppContainerStyle = {
   margin  : 0,
@@ -36,22 +36,36 @@ let SideTabbedViewStyle = {
   maxWidth: 400
 };
 
-let App = React.createClass({
+export default class MjsApp extends React.Component
+  {
+  constructor(props)
+    {
+      super(props);
+      this.dummy = this.dummy.bind(this);
+    }
 
-  componentDidMount: function ()
+  componentDidMount()
+    {
+    }
+
+  dummy()
     {
 
-    },
+    }
 
-  render: function ()
+  render()
     {
     return (
+      <MuiThemeProvider>
       <div id="appContainer" style={AppContainerStyle}>
-        <BothPanes/>
+        <DragDropContextProvider backend={HTML5Backend}>
+        <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
+        </DragDropContextProvider>
       </div>
+      </MuiThemeProvider>
     )
     }
-});
+  }
 
 /*
  const App = () => (
@@ -61,11 +75,11 @@ let App = React.createClass({
  );
  */
 
-
 ReactDOM.render(
-  <App/>,
+  <MjsApp/>,
   document.getElementById('container')
 );
+//ReactDOM.render(React.createElement(App, null), document.getElementById('container'));
 
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
 //<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>

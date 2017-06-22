@@ -2,18 +2,24 @@
  * Created by twi18192 on 18/02/16.
  * Refactored by Ian Gillingham: 2016 - 2017
  */
+/**
+ * @module  flowChartStore
+ * @author  Ian Gillingham
+ * @since   13/10/2016
+ */
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
-let EventEmitter  = require('events').EventEmitter;
-let assign        = require('../../node_modules/object-assign/index.js');
-import blockStore from '../stores/blockStore.js';
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
+import blockStore, {BlockItem} from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import {NavbarEventInfo} from '../actions/navbarActions';
 
 let CHANGE_EVENT = 'change';
 
 let clickedEdge               = null;
+let clickedBlock              = null;  // Name of the block selected by the user
 let portThatHasBeenClicked    = null;
 let storingFirstPortClicked   = null;
 let edgePreview               = null;
@@ -37,6 +43,7 @@ let graphPosition = {
 let graphZoomScale = 2.0;
 
 let blockSelectedStates = {};
+let backgroundSelected  = false;
 
 function appendToBlockSelectedStates(BlockId)
   {
@@ -60,22 +67,23 @@ function deselectAllBlocks()
     {
     blockSelectedStates[block] = false
     }
+
+  backgroundSelected = true;
+
+  // Inform views that we have deselected all blocks and edges
+  // At this stage prepare to show list of blocks in SidePane.
+  flowChartStore.emitChange();
   }
 
 function checkIfAnyBlocksAreSelected()
   {
-  let areAnyBlocksSelected = null;
+  let areAnyBlocksSelected = false;
   for (let block in blockSelectedStates)
     {
     if (blockSelectedStates[block] === true)
       {
       areAnyBlocksSelected = true;
       break;
-      }
-    else
-      {
-      //console.log("one of the blocks' state is false, check the next one if it is true");
-      areAnyBlocksSelected = false;
       }
     }
   //console.log(areAnyNodesSelected);
@@ -101,6 +109,8 @@ function selectEdge(Edge)
 
 function getAnyEdgeSelectedState(EdgeId)
   {
+  let selected = false;
+  /** edgeSelectedStates is an array of bool */
   if (edgeSelectedStates[EdgeId] === undefined || null)
     {
     //console.log("edge selected state is undefined or null, best check it out...");
@@ -108,8 +118,9 @@ function getAnyEdgeSelectedState(EdgeId)
   else
     {
     //console.log("that edge's state exists, hooray!");
-    return edgeSelectedStates[EdgeId];
+    selected = edgeSelectedStates[EdgeId];
     }
+  return (selected);
   }
 
 function checkIfAnyEdgesAreSelected()
@@ -146,12 +157,13 @@ function deselectAllEdges()
     {
     edgeSelectedStates[edge] = false
     }
+  flowChartStore.emitChange();
   }
 
 function updateEdgePreviewEndpoint(position)
   {
-  edgePreview.endpointCoords.x = edgePreview.endpointCoords.x + (1 / graphZoomScale) * (position.x);
-  edgePreview.endpointCoords.y = edgePreview.endpointCoords.y + (1 / graphZoomScale) * (position.y);
+  edgePreview.endpointCoords.x += (1 / graphZoomScale) * (position.x);
+  edgePreview.endpointCoords.y += (1 / graphZoomScale) * (position.y);
   //console.log(edgePreview.endpointCoords);
   }
 
@@ -184,6 +196,8 @@ emitChange()
 
 getAnyBlockSelectedState(BlockId)
   {
+  let selected = false;
+
   if (blockSelectedStates[BlockId] === undefined || null)
     {
     //console.log("that node doesn't exist in the nodeSelectedStates object, something's gone wrong...");
@@ -194,13 +208,19 @@ getAnyBlockSelectedState(BlockId)
     {
     //console.log("the state of that node exists, passing it now");
     //console.log(nodeSelectedStates[NodeId]);
-    return blockSelectedStates[BlockId];
+    selected = blockSelectedStates[BlockId];
     }
+  return ( selected );
   }
 
 getIfAnyBlocksAreSelected()
   {
   return checkIfAnyBlocksAreSelected();
+  }
+
+getSelectedBlock()
+  {
+  return(clickedBlock);
   }
 
 getIfAnyEdgesAreSelected()
@@ -244,6 +264,11 @@ getBlockStyling()
   return blockStyling;
   }
 
+getBackgroundSelected()
+  {
+  return backgroundSelected;
+  }
+
 /**
  * onChangeBlockCollectionCallback()
  * Callback function called when blockCollection emits an event.
@@ -264,14 +289,17 @@ onChangeBlockCollectionCallback(items)
     let blockItem = blockCollection.getBlockItem(index);
     if (blockItem !== null)
       {
-      if (blockItem.visible === true)
-        {
-        appendToBlockSelectedStates(blockItem.blockName());
-        changed = true;
-        }
+      /*
+       if (blockItem.visible === true)
+       {
+       appendToBlockSelectedStates(blockItem.blockName());
+       changed = true;
+       }
+       */
 
-      let isWidgetCombo = false;
-      let isGroupInputs = false;
+      let isWidgetCombo  = false;
+      let isGroupInputs  = false;
+      let isWidgetToggle = false;
 
       let meta = null;
       let tags = null;
@@ -308,16 +336,19 @@ onChangeBlockCollectionCallback(items)
                   }
                 else if (tags[j] === 'widget:toggle')
                   {
-                  if (blockItem.visible)
-                    {
-                    appendToBlockSelectedStates(blockItem.blockName());
-                    changed = true;
-                    }
-                  else
-                    {
-                    removeBlock(blockItem.blockName());
-                    changed = true;
-                    }
+                  isWidgetToggle = true;
+                  /*
+                   if (blockItem.visible)
+                   {
+                   appendToBlockSelectedStates(blockItem.blockName());
+                   changed = true;
+                   }
+                   else
+                   {
+                   removeBlock(blockItem.blockName());
+                   changed = true;
+                   }
+                   */
 
                   }
                 }
@@ -414,7 +445,7 @@ addEdgePreview()
 
   let blockItem = blockCollection.getBlockItemByName(blockInfo.name);
 
-  console.log('flowChartStore: blockInfo :');
+  console.log('flowChartStore.addEdgePreview(): blockInfo : vvvvv');
   console.log(blockInfo);
 
   let clickedPort = document.getElementById(portThatHasBeenClicked.id);
@@ -428,7 +459,7 @@ addEdgePreview()
   //console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
 
   let portStringSliceIndex = fromBlockId.length;
-  let portName             = document.getElementById(portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
+  let portName             = clickedPort.id.slice(portStringSliceIndex);
   let fromBlockType        = blockInfo.type;
 
   /* Slightly confusing since the end of the edge is the same as the start
@@ -441,7 +472,7 @@ addEdgePreview()
   let endOfEdgePortOffsetY;
   let portType;
 
-  if (document.getElementById(portThatHasBeenClicked.id).className.baseVal.indexOf('inport') !== -1)
+  if (clickedPort.className.baseVal.indexOf('inport') !== -1)
     {
 
     let inportArrayLength = clickedPortBlockInfo.inports.length;
@@ -457,7 +488,7 @@ addEdgePreview()
     endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
     portType             = "inport";
     }
-  else if (document.getElementById(portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1)
+  else if (clickedPort.className.baseVal.indexOf('outport') !== -1)
     {
 
     let outportArrayLength = clickedPortBlockInfo.outports.length;
@@ -481,7 +512,7 @@ addEdgePreview()
   let endOfEdgeX = blockPosX + endOfEdgePortOffsetX;
   let endOfEdgeY = blockPosY + endOfEdgePortOffsetY;
 
-  let edgePreviewInfo = {
+  edgePreview = {
     fromBlockInfo : {
       fromBlock        : fromBlockId,
       fromBlockType    : fromBlockType,
@@ -499,7 +530,6 @@ addEdgePreview()
   // This used to be the purpose of this function when it used to be in flowChart component.
   //
   //flowChartActions.addEdgePreview(edgePreviewInfo);
-  edgePreview = edgePreviewInfo;
   flowChartStore.emitChange();
 
   }
@@ -745,7 +775,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
       /**
        * TODO: Modify for Protocol 2
        *      Must be of the form:
-       *      {"typeid":"malcolm:core/Put:1.0","id":0,"endpoint":["P-FMC","outPwrOn","value"],"value":"Off"}
+       *      {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"Off"}
        */
       let item = blockCollection.getBlockItemByName(inportBlock);
       if (item !== null)
@@ -849,7 +879,8 @@ switch (action.actionType)
 
   case appConstants.SELECT_BLOCK:
     blockSelectedStates[item] = true;
-    console.log(blockSelectedStates);
+    clickedBlock              = item;
+    console.log(`flowChartStore: SELECT_BLOCK event - item: ${item}  blockSelectedStates ${blockSelectedStates[item]}`);
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
@@ -864,6 +895,7 @@ switch (action.actionType)
     {
     let areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
     //console.log(areAnyEdgesSelected);
+    console.log('flowChartStore: SELECT_EDGE received from dispatcher vvvvvv');
     console.log(clickedEdge);
     if ((areAnyEdgesSelected === true) && (item !== clickedEdge))
       {
@@ -875,6 +907,7 @@ switch (action.actionType)
       selectEdge(item);
       }
     console.log(edgeSelectedStates);
+    console.log('flowChartStore: SELECT_EDGE ^^^^^^');
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     }
@@ -884,6 +917,35 @@ switch (action.actionType)
     deselectAllEdges();
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
+    break;
+
+  case appConstants.NAVBAR_ACTION:
+    // 1) determine the selected block
+    // 2) get the BlockItem instance
+    // 3) call removeBlock(item)
+    if (item instanceof NavbarEventInfo)
+      {
+      switch (item.eventName)
+        {
+        case "DeleteBlock":
+          {
+          let blockName = flowChartStore.getSelectedBlock();
+          if (blockName !== null)
+            {
+            let blockItem = blockCollection.getBlockItemByName(blockName);
+            if (blockItem !== null)
+              {
+              blockItem.putVisible(false);
+              }
+            }
+          }
+          break;
+
+        default:
+          break;
+        }
+      blockStore.emitChange();
+      }
     break;
 
   case appConstants.CHANGE_GRAPHPOSITION:
@@ -907,14 +969,17 @@ switch (action.actionType)
 
   case appConstants.CLICKED_EDGE:
     clickedEdge = item;
+    console.log('flowChartStore: CLICKED_EDGE received from dispatcher vvvvv');
     console.log(clickedEdge);
+    console.log('flowChartStore: CLICKED_EDGE ^^^^^');
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 
   case appConstants.PASS_PORTMOUSEDOWN:
     AppDispatcher.waitFor([blockCollection.dispatchToken]);
-    //flowChartStore.passPortMouseDown(item);
+    console.log(`flowChartStore: Disatcher callback: PASS_PORTMOUSEDOWN: item ${item}`)
+    flowChartStore.passPortMouseDown(item);
     //break;
 
     if (item !== null)
@@ -926,6 +991,7 @@ switch (action.actionType)
         /* Haven"t clicked on another port before this,
          just do an edgePreview rather than draw an edge
          */
+        console.log(`flowChartStore: storingFirstPortClicked === null so first port click will be set.`)
         flowChartStore.addEdgePreview();
         }
       else
@@ -934,12 +1000,14 @@ switch (action.actionType)
          start the checking whether the two ports
          are connectable/compatible
          */
+        console.log(`flowChartStore: storingFirstPortClicked !== null so first port already clicked - check for second port click.`)
         flowChartStore.checkBothClickedPorts();
         }
       }
     else
       {
       //flowChartStore.waitFor([blockStore.dispatchToken]);
+      console.log(`flowChartStore: item === null so just emitChange().`)
       flowChartStore.emitChange();
       }
     // emitChange() now called in addEdgePreview() above.
@@ -1005,4 +1073,4 @@ switch (action.actionType)
 
 });
 
-export default flowChartStore;
+export {flowChartStore as default, FlowChartStore};

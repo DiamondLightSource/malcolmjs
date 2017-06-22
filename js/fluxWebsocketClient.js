@@ -2,12 +2,12 @@
  * Created by twi18192 on 18/02/16.
  */
 
-var idLookupTableFunctions = require('./utils/idLookupTable');
+import idLookupTableFunctions from './utils/idLookupTable';
 import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
 //import LOG from './utils/MalcolmUtils'
 
-var debug = false;
+const debug = false;
 
 //var LOG = debug ? console.log.bind(console) : function () {};
 

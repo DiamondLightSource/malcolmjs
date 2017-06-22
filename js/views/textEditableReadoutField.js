@@ -2,44 +2,54 @@
  * Created by twi18192 on 15/03/16.
  */
 
-let React = require('react');
-
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
-let TextEditableReadoutField = React.createClass({
+export default class TextEditableReadoutField extends React.Component
+{
 
-  propTypes: {
-    blockAttributeValue: React.PropTypes.any,
-    tabObject          : React.PropTypes.object,
-    blockName          : React.PropTypes.string,
-    attributeName      : React.PropTypes.string,
-  },
+ constructor(props)
+   {
+   super(props);
+   this.handleOnBlur = this.handleOnBlur.bind(this);
+   this.handleOnFocus = this.handleOnFocus.bind(this);
+   this.handleOnChange = this.handleOnChange.bind(this);
+   this.handleKeyUp = this.handleKeyUp.bind(this);
+   this.state = {isUserEditing: false};
+   }
 
-  getInitialState: function ()
-    {
-    return {
-      isUserEditing: false
-    }
-    },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate (nextProps, nextState)
     {
     return (
       nextProps.blockAttributeValue !== this.props.blockAttributeValue ||
       nextState.isUserEditing !== this.state.isUserEditing ||
       this.state.isUserEditing === true
     )
-    },
+    }
 
-  handleMalcolmCall: function (blockName, method, args)
+  handleMalcolmCall (blockName, method, args)
     {
     console.log("malcolmCall in textEditableReadoutField");
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-    },
+    }
 
-  handleOnBlur: function (e)
+/**
+ *
+ * Extract from w3schools.com which describes the Blur event:
+ *
+ * The onblur event occurs when an object loses focus.
+ * The onblur event is most often used with form validation code (e.g. when the user leaves a form field).
+ * Tip: The onblur event is the opposite of the onfocus event.
+ * Tip: The onblur event is similar to the onfocusout event. The main difference is that the onblur event does not bubble.
+ * Therefore, if you want to find out whether an element or its child loses focus, you could use the onfocusout event.
+ * However, you can achieve this by using the optional useCapture parameter of the addEventListener() method for the onblur event.
+ *
+ * @name handleOnBlur
+ * @param e
+ */
+handleOnBlur (e)
     {
-
     let inputFieldValue;
     let inputFieldElement   = e.target;
     let inputFieldBlockName = this.props.blockName;
@@ -51,7 +61,6 @@ let TextEditableReadoutField = React.createClass({
 
       inputFieldElement.value = this.props.blockAttributeValue;
       inputFieldValue         = this.props.blockAttributeValue;
-
       }
     else
       {
@@ -61,36 +70,34 @@ let TextEditableReadoutField = React.createClass({
     /* Now I need to pass malcolmCall the corresponding
      method and arguments
      */
-
-    let inputFieldSetMethodName = "_set_" + inputFieldAttribute;
-
-    let argsObject = {};
-
-    argsObject[inputFieldAttribute] = inputFieldValue;
-
-    this.handleMalcolmCall(inputFieldBlockName, inputFieldSetMethodName, argsObject);
-
+    // Need this type of format...
+    // {"typeid":"malcolm:core/Put:1.0","id":95,"path":["P:PCAP","enable","value"],"value":"SEQ3.OUTA"}
+    MalcolmActionCreators.malcolmAttributeValueEdited(this.props.blockName, this.props.attributeName, inputFieldValue);
     this.setState({
       isUserEditing: false
     });
 
-    },
+    }
 
-  handleOnFocus: function (e)
+  handleOnFocus (e)
     {
     let inputFieldElement = e.target;
     inputFieldElement.setSelectionRange(0, inputFieldElement.value.length);
-    },
+    }
 
-  handleOnChange: function (e)
+  handleOnChange (e)
     {
     this.setState({
       isUserEditing: true
     })
-    },
+    }
 
-  handleKeyUp: function (e)
+  handleKeyUp (e)
     {
+    /**
+     * TODO: All use cases should also be considered, such as direct loss of focus, but no CR keypress.
+     * IJG 15/5/17
+     */
     if (e.keyCode === 13)
       {
       /* For handling when the enter key is pressed
@@ -99,9 +106,9 @@ let TextEditableReadoutField = React.createClass({
       document.getElementById(this.props.blockName
         + this.props.attributeName + "inputField").blur();
       }
-    },
+    }
 
-  render: function ()
+  render ()
     {
 
     let props = {
@@ -120,7 +127,11 @@ let TextEditableReadoutField = React.createClass({
       <input {...props} />
     )
     }
+}
 
-});
-
-module.exports = TextEditableReadoutField;
+TextEditableReadoutField.propTypes = {
+blockAttributeValue: PropTypes.any,
+  tabObject          : PropTypes.object,
+  blockName          : PropTypes.string,
+  attributeName      : PropTypes.string,
+};

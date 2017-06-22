@@ -3,6 +3,7 @@
 
 build
 node_modules
+scratch
 npm-debug.log
 bundle.js
 .idea

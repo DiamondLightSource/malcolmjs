@@ -1,27 +1,16 @@
 /**
- * Created by ig43 on 13/10/16.
- *
- * Abstracts the concept of a block instance.
- * Block Item := blockName + { attributeName, attribute }
- *
- * This module has been created to avoid the previous design pattern of splitting attributes from
- * blocks between having blockStore and attributeStore.
- * The intention is to maintain blockStore, which should simply represent a collection of blockItems.
- *
- * A BlockItem is constructed from its given unique index number along with a copy of the json schema of
- * the top level layout description, which contains arrays of attributes, such as visibility, position etc.
- * Each BlockItem derived its own attribute values by looking up the values from the attribute arrays, indexed on
- * the given index number.
- *
- * Ian Gillingham: 13 October 2016
- *
+ * @module blockItems
+ * @author  Ian Gillingham
+ * @since  13/10/2016
  */
+
 import EventEmitter from 'events';
 import AppDispatcher from '../dispatcher/appDispatcher';
 import appConstants  from '../constants/appConstants';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import MalcolmWebSocketClient from '../wsWebsocketClient';
+import {DroppedBlockInfo} from '../actions/flowChartActions'
 import config from '../utils/config';
 //import async from 'async-es';
 import eachOf from 'async/eachOf';
@@ -110,6 +99,7 @@ parseLayoutSchema(schemaIn)
         if (t1 !== t2)
           {
           self.attributes[attr] = JSON.parse(t1);
+          //console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
           self.collection.blockItemUpdated(self.index);
           }
         callbackDone();
@@ -119,7 +109,9 @@ parseLayoutSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema.layout.meta.elements, iteration, callbackError);
@@ -161,7 +153,9 @@ updateFromSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema.layout.meta.elements, iteration, callbackError);
@@ -173,12 +167,32 @@ updateFromSchema(schemaIn)
       {
       if (attr !== 'typeid')
         {
+        // Take care when comparing the two json blocks.
+        // there is a timestamp which will constantly change
+        // but not valid for triggering an udate.
         let t1 = JSON.stringify(blockData);
         let t2 = JSON.stringify(self.attributes[attr]);
+/*
+        if (t1.hasOwnProperty('timestamp'))
+          {
+          delete t1.timestamp;
+          }
+        if (t2.hasOwnProperty('timestamp'))
+          {
+          delete t2.timestamp;
+          }
+*/
+
         if (t1 !== t2)
           {
           self.attributes[attr] = JSON.parse(t1);
           changed               = true;
+          //console.log(`blockItem: updateFromSchema() - individual block: ${self.blockName()} `);
+          //console.log('t1 (new block update):');
+          //console.log(t1);
+          //console.log('t2 (old block update):');
+          //console.log(t2);
+
           }
         }
       callbackDone();
@@ -187,7 +201,9 @@ updateFromSchema(schemaIn)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(schema, iteration, callbackError);
@@ -420,6 +436,12 @@ get blockType()
   return (bt);
   }
 
+putAttributeValue(attributeName, value)
+  {
+  // {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:PGEN2","trig","value"],"value":"PULSE1.OUT"}
+  let mri = this.mri();
+  MalcolmActionCreators.malcolmPut("", [mri, attributeName, "value"],value);
+  }
 }
 /* Class BlockItem */
 
@@ -541,7 +563,7 @@ createBlockItemsFromSchema(topLevelSchema)
     let iteration = function (name, index, callbackDone)
       {
       //console.log(`BlockCollection.createBlockItemsFromSchema(): mri = ${mri}`);
-      let bi  = new BlockItem(index, blockCollection)
+      let bi  = new BlockItem(index, blockCollection);
       let pos = blockCollection._allBlockItems.push(bi);
 
       self._blockItemsChanged.push(pos - 1);
@@ -614,7 +636,9 @@ updateBlockItemsFromSchema(index, schemaIn)
   let callbackError = function (err)
     {
     if (err)
+      {
       console.error(err.message);
+      }
     };
 
   /**
@@ -746,6 +770,13 @@ getBlockItemByName(blockName)
   }
 
 
+/**
+ * getAllBlockItems():
+ * @returns {Array}
+ *
+ * @description Returns an array of BlockItem instances.
+ *
+ */
 getAllBlockItems()
   {
   let retBlockItems = this._allBlockItems;
@@ -789,6 +820,23 @@ getItemByProtocolIndex(protocolIndex)
     item       = this.getBlockItem(blockIndex);
     }
   return (item);
+  }
+
+/**
+ *
+ * @param {DroppedBlockInfo} item
+ */
+droppedBlockFromList(item)
+  {
+    if (item instanceof DroppedBlockInfo)
+      {
+      let block_item = this.getBlockItemByName(item.name);
+
+      if (block_item instanceof BlockItem)
+        {
+        block_item.putVisible(true);
+        }
+      }
   }
 
 /**
@@ -859,6 +907,21 @@ dispatcherCallback(payload)
       break;
 
     case appConstants.INTERACTJS_DRAG:
+      break;
+
+    case appConstants.DROPPED_BLOCK_FROM_LIST:
+      /* item is {name: <name>, x: <x>, y: <y>} */
+      // item should be of type class DroppedBlockInfo - defined in flowChartActions.
+      this.droppedBlockFromList(item);
+      break;
+
+    case appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED:
+      let blockItem = this.getBlockItemByName(item.blockName);
+      if (blockItem instanceof BlockItem)
+        {
+        console.log(`BlockCollection: Dispatch message received: MALCOLM_BLOCK_ATTRIBUTE_EDITED, Block ${blockItem.blockName()}  attribute  ${item.attribute_path}  value  ${item.newValue}`);
+        blockItem.putAttributeValue(item.attribute_path, item.newValue);
+        }
       break;
 
     default:

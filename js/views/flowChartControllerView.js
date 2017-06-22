@@ -2,10 +2,8 @@
  * Created by twi18192 on 26/01/16.
  */
 
-let React = require('react');
-
-let FlowChart = require('./flowChart');
-
+import * as React from 'react';
+import FlowChart from './flowChart';
 //import blockStore from '../stores/blockStore.js';
 import flowChartStore from '../stores/flowChartStore';
 
@@ -34,55 +32,54 @@ function getFlowChartState()
     areAnyBlocksSelected   : flowChartStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected    : flowChartStore.getIfAnyEdgesAreSelected(),
     edgePreview            : flowChartStore.getEdgePreview(),
-    blockStyling           : flowChartStore.getBlockStyling()
+    blockStyling           : flowChartStore.getBlockStyling(),
+    backgroundSelected     : flowChartStore.getBackgroundSelected()
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
   }
 
-let FlowChartControllerView = React.createClass({
-
-  getInitialState: function ()
+export default class FlowChartControllerView extends React.Component
+{
+  constructor(props)
     {
-    return getFlowChartState();
-    },
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this.state = getFlowChartState();
+    }
 
-  _onChange: function ()
+  _onChange ()
     {
     this.setState(getFlowChartState());
-    },
+    }
 
-  componentDidMount: function ()
+  componentDidMount ()
     {
     flowChartStore.addChangeListener(this._onChange);
-    },
+    }
 
-  componentWillUnmount: function ()
+  componentWillUnmount ()
     {
     flowChartStore.removeChangeListener(this._onChange);
-    },
+    }
 
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate (nextProps, nextState)
     {
     let bRet = !Object.is(nextState, this.State);
     if (this.state.blockPositions === undefined)
       {
       bRet = false;
-      console.log(`flowChartControllerView.shouldComponentUpdate(): this.state.blockPositions is undefined`);
       }
-    //console.log(`flowChartControllerView.shouldComponentUpdate(): return ${bRet}`);
     return (bRet);
-    },
+    }
 
-  render: function ()
+  render ()
     {
     let blockPositions = this.state.blockPositions;
     if (blockPositions === undefined)
       {
-      //console.log(`flowChartControllerView.render(): this.state.blockPositions is undefined`);
       blockPositions = {};
       }
 
-    //console.log(`flowChartControllerView: render(): portThatHasBeenClicked = ${this.state.portThatHasBeenClicked}  storingFirstPortClicked = ${this.state.storingFirstPortClicked}`);
     return (
       <FlowChart
         allBlockInfo={this.state.allBlockInfo}
@@ -97,9 +94,8 @@ let FlowChartControllerView = React.createClass({
         //previousMouseCoordsOnZoom={this.state.previousMouseCoordsOnZoom}
         blockStyling={this.state.blockStyling}
         blockPositions={this.state.blockPositions}
-      />
+        backgroundSelected={this.state.backgroundSelected}
+        />
     )
     }
-});
-
-module.exports = FlowChartControllerView;
+}

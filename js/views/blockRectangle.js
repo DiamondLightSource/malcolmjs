@@ -2,26 +2,22 @@
  * Created by twi18192 on 18/01/16.
  */
 
-let React      = require('../../node_modules/react/react');
+import * as React from '../../node_modules/react/react';
+import PropTypes from 'prop-types';
 
-let BlockRectangle = React.createClass({
-
-  propTypes: {
-    selected              : React.PropTypes.bool,
-    blockStyling          : React.PropTypes.object,
-    blockIconURL          : React.PropTypes.string,
-    blockId               : React.PropTypes.string,
-    portThatHasBeenClicked: React.PropTypes.object
-  },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+export default class BlockRectangle extends React.Component
+{
+  constructor(props)
     {
-    return (
-      nextProps.selected !== this.props.selected
-    )
-    },
+    super(props);
+    }
 
-  render: function ()
+  shouldComponentUpdate(nextProps, nextState)
+    {
+    return (nextProps.selected !== this.props.selected)
+    }
+
+  render()
     {
     //console.log("render: blockRectangle");
 
@@ -59,12 +55,19 @@ let BlockRectangle = React.createClass({
                  cursor : this.props.portThatHasBeenClicked === null ? "move" : "default",
                  opacity: '0.5'
                }}
-               xlinkHref="http://localhost:8080/icons/LUT.svg"
+               xlinkHref={"http://localhost:8080/icons/LUT.svg"}
         />
       </g>
     )
     }
 
-});
+}
 
-module.exports = BlockRectangle;
+BlockRectangle.propTypes = {
+selected              : PropTypes.bool,
+  blockStyling          : PropTypes.object,
+  blockIconURL          : PropTypes.string,
+  blockId               : PropTypes.string,
+  portThatHasBeenClicked: PropTypes.object
+};
+

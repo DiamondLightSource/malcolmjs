@@ -18,31 +18,33 @@ Protocol['V1_0'] = {
 };
 
 Protocol['V2_0'] = {
-  typeIdIdent    : 'typeid',
-  typeidReturn   : 'malcolm:core/Return:1.0',
-  typeidValue    : 'malcolm:core/Value:1.0',
-  typeidUpdate   : 'malcolm:core/Update:1.0',
-  typeidError    : 'malcolm:core/Error:1.0',
-  typeidGet      : 'malcolm:core/Get:1.0',
-  typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidPost     : 'malcolm:core/Post:1.0',
-  typeidPut      : 'malcolm:core/Put:1.0',
-  typeidBlock    : 'malcolm:core/Block:1.0'
+  typeIdIdent      : 'typeid',
+  typeidReturn     : 'malcolm:core/Return:1.0',
+  typeidValue      : 'malcolm:core/Value:1.0',
+  typeidUpdate     : 'malcolm:core/Update:1.0',
+  typeidError      : 'malcolm:core/Error:1.0',
+  typeidGet        : 'malcolm:core/Get:1.0',
+  typeidSubscribe  : 'malcolm:core/Subscribe:1.0',
+  typeidUnsubscribe: 'malcolm:core/Unubscribe:1.0',
+  typeidPost       : 'malcolm:core/Post:1.0',
+  typeidPut        : 'malcolm:core/Put:1.0',
+  typeidBlock      : 'malcolm:core/Block:1.0'
 };
 
 // It is intended to support only one protocol, so no choice will be available.
 // So assume V2_0 as the default.
 export const ProtocolTypeId = {
-  typeIdIdent    : 'typeid',
-  typeidReturn   : 'malcolm:core/Return:1.0',
-  typeidValue    : 'malcolm:core/Value:1.0',
-  typeidUpdate   : 'malcolm:core/Update:1.0',
-  typeidError    : 'malcolm:core/Error:1.0',
-  typeidGet      : 'malcolm:core/Get:1.0',
-  typeidSubscribe: 'malcolm:core/Subscribe:1.0',
-  typeidPost     : 'malcolm:core/Post:1.0',
-  typeidPut      : 'malcolm:core/Put:1.0',
-  typeidBlock    : 'malcolm:core/Block:1.0'
+  typeIdIdent      : 'typeid',
+  typeidReturn     : 'malcolm:core/Return:1.0',
+  typeidValue      : 'malcolm:core/Value:1.0',
+  typeidUpdate     : 'malcolm:core/Update:1.0',
+  typeidError      : 'malcolm:core/Error:1.0',
+  typeidGet        : 'malcolm:core/Get:1.0',
+  typeidSubscribe  : 'malcolm:core/Subscribe:1.0',
+  typeidUnsubscribe: 'malcolm:core/Unubscribe:1.0',
+  typeidPost       : 'malcolm:core/Post:1.0',
+  typeidPut        : 'malcolm:core/Put:1.0',
+  typeidBlock      : 'malcolm:core/Block:1.0'
 };
 
 class MalcolmProtocol {
@@ -86,6 +88,12 @@ getTypeIDGet()
 getTypeIDSubscribe()
   {
   let ret = ProtocolTypeId.typeidSubscribe;
+  return (ret);
+  }
+
+getTypeIDUnsubscribe()
+  {
+  let ret = ProtocolTypeId.typeidUnsubscribe;
   return (ret);
   }
 
@@ -137,7 +145,24 @@ isBlock(msg)
   return (bRet);
   }
 
+}
 
+/**
+ * @class MalcolmDefs
+ * @description Static enumerations protected in a MalcolmDefs namespace.
+ * @author Ian Gillingham
+ *
+ */
+export class MalcolmDefs {
+static get MINT32()
+  {
+  return ("int32");
+  }
+
+static get MBOOL()
+  {
+  return ("bool");
+  }
 }
 
 let malcolmProtocol = new MalcolmProtocol();

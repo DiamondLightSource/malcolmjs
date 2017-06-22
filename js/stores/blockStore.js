@@ -2,26 +2,30 @@
  * Created by twi18192 on 10/12/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
-let EventEmitter  = require('events').EventEmitter;
-let assign        = require('../../node_modules/object-assign/index.js');
-import eachOf from 'async/eachOf';
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
 
-import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-import attributeStore from './attributeStore';
+//let assign        = require('../../node_modules/object-assign/index.js');
+//import eachOf from 'async/eachOf';
 
-import config from "../utils/config";
+//import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+//import attributeStore from './attributeStore';
+
+//import config from "../utils/config";
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import flowChartStore from './flowChartStore';
+import {DroppedBlockInfo} from '../actions/flowChartActions';
 
-let update = require('react-addons-update');
+import update from 'immutability-helper';
 
 let CHANGE_EVENT = 'change';
 
+/*
 let _stuff = {
   blockList: null
 };
+*/
 
 let allBlockInfo = {};
 
@@ -133,10 +137,10 @@ function addBlock(blockItem)
    */
   /**
 
-   _O/
-   \     Aghh... my head is going to explode!!
-   /\_
-   \  `
+   \_O/
+    \     Aghh... my head is going to explode!!
+    /\_
+    \  `
 
    */
 
@@ -361,46 +365,50 @@ function updateAnInitialEdge(initialEdgeInfoKey)
 
   }
 
-function addEdgeViaMalcolm(Info)
+function addEdgeViaMalcolm(EdgeInfo)
   {
   // TODO: ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock attribute
   //return; // !!!!!!! Temporary disable function - must put this back once sorted!!!!!!
   //debugger;
   //window.alert(allBlockInfo[Info.inportBlock.label]);
-  if (allBlockInfo[Info.inportBlock] !== undefined)
+  if (allBlockInfo[EdgeInfo.inportBlock] !== undefined)
     {
-    for (let i = 0; i < allBlockInfo[Info.inportBlock].inports.length; i++)
+    for (let i = 0; i < allBlockInfo[EdgeInfo.inportBlock].inports.length; i++)
       {
-      if (allBlockInfo[Info.inportBlock].inports[i].name === Info.inportBlockPort)
+      if (allBlockInfo[EdgeInfo.inportBlock].inports[i].name === EdgeInfo.inportBlockPort)
         {
-        let addEdgeToInportBlock = {block: Info.outportBlock, port : Info.outportBlockPort};
-        allBlockInfo[Info.inportBlock].inports[i].connected   = true;
-        allBlockInfo[Info.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
+        let addEdgeToInportBlock = {block: EdgeInfo.outportBlock, port : EdgeInfo.outportBlockPort};
+        allBlockInfo[EdgeInfo.inportBlock].inports[i].connected   = true;
+        allBlockInfo[EdgeInfo.inportBlock].inports[i].connectedTo = addEdgeToInportBlock;
         }
       }
     }
   else
     {
-    console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.inportBlock (${Info.inportBlock}) attribute`);
+    console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.inportBlock (${EdgeInfo.inportBlock}) attribute`);
     console.log(allBlockInfo);
     }
 
-  if (allBlockInfo[Info.outportBlock] !== undefined)
+  if (allBlockInfo[EdgeInfo.outportBlock] !== undefined)
     {
-    for (let j = 0; j < allBlockInfo[Info.outportBlock].outports.length; j++)
+    for (let j = 0; j < allBlockInfo[EdgeInfo.outportBlock].outports.length; j++)
       {
-      if (allBlockInfo[Info.outportBlock].outports[j].name === Info.outportBlockPort)
+      if (allBlockInfo[EdgeInfo.outportBlock].outports[j].name === EdgeInfo.outportBlockPort)
         {
-        let addEdgeToOutportBlock = {block: Info.inportBlock, port : Info.inportBlockPort};
-        allBlockInfo[Info.outportBlock].outports[j].connected = true;
-        allBlockInfo[Info.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
+        let addEdgeToOutportBlock = {block: EdgeInfo.inportBlock, port : EdgeInfo.inportBlockPort};
+        allBlockInfo[EdgeInfo.outportBlock].outports[j].connected = true;
+        allBlockInfo[EdgeInfo.outportBlock].outports[j].connectedTo.push(addEdgeToOutportBlock);
         }
       }
     }
   else
     {
-    console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock (${Info.outportBlock}) attribute`);
-    console.log(allBlockInfo);
+    /**
+     * Destination block not yet on GUI. This will be noted and connected up during that block update.
+     * This is NOT an error.
+     */
+    //console.log(`ERR: blockStore.addEdgeViaMalcolm: allBlockInfo does not have Info.outportBlock (${EdgeInfo.outportBlock}) attribute`);
+    //console.log(allBlockInfo);
     }
   }
 
@@ -575,8 +583,10 @@ blockUpdated(blockIndex)
 
     if (attrNames.length > 0)
       {
-      // Drill down and look for tag blocks to determine whether this is a graphical item
-      // and if so, what type.
+      /**
+       * Drill down and look for tag blocks to determine whether this is a graphical item
+       * and if so, what type.
+       */
       for (let a = 0; a < attrNames.length; a++)
         {
         let attributeName = attrNames[a];
@@ -602,8 +612,8 @@ blockUpdated(blockIndex)
             /**
              * TODO: DEBUG
              */
-            //if (blockItem.visible)
-            if (true)
+            if (blockItem.visible)
+            //if (true)
               {
               /* Trying to add a blockadd when its visibility is
                changed to 'Show'
@@ -631,17 +641,14 @@ blockUpdated(blockIndex)
             }
           }
 
-        if (isInportDropdown === true && hasFlowgraphTag === true)
+        if ((isInportDropdown === true) && (hasFlowgraphTag === true))
           {
-          // Try placing this section here, as I think anything that is tagged as gui
-          // should be recorded in block positions.
-
+          /**
+           * Build up an array of block names with correspondind coordinates
+           */
           let xCoord = blockItem.x();
           let yCoord = blockItem.y();
           appendToBlockPositions(blockItem.blockName(), xCoord, yCoord);
-          /* Pass addBlock the block object from allBlockAttributes in attributeStore
-           instead of relying on testAllBlockInfo
-           */
 
           addBlock(blockItem);
           positionUpdated = true;
@@ -654,15 +661,19 @@ blockUpdated(blockIndex)
             let inportBlock     = blockItem.blockName();
             let inportBlockPort = attributeName;
 
-            // TODO: This truncates the string by one character if '.' is not fount (-1 returned)
+            // TODO: This truncates the string by one character if '.' is not found (-1 returned)
             // So check what we are testing and put temporary test for '.' before slicing.
             //
             let outportBlock;
             //if (attribute.value.indexOf('.'))
             if (attribute.value.indexOf('.') !== -1)
+              {
               outportBlock = attribute.value.slice(0, attribute.value.indexOf('.'));
+              }
             else
+              {
               outportBlock = attribute.value;
+              }
 
             let outportBlockPort = attribute.value.slice(attribute.value.indexOf('.') + 1);
 
@@ -712,6 +723,23 @@ blockUpdated(blockIndex)
     } // if (blockItem !== null)
   } // blockUpdated()
 
+/**
+ *
+ * @param {DroppedBlockInfo} info
+ */
+droppedBlockFromList(info)
+  {
+  if (info instanceof DroppedBlockInfo)
+    {
+    blockPositions[info.name] = update(blockPositions[info.name], {
+      $set: {
+        x: Math.round(info.offset.x * (1 / flowChartStore.getGraphZoomScale())),
+        y: Math.round(info.offset.y * (1 / flowChartStore.getGraphZoomScale()))
+      }
+    });
+    }
+  }
+
 dispatcherCallback(payload)
   {
   let action = payload.action;
@@ -759,6 +787,12 @@ dispatcherCallback(payload)
     case appConstants.MALCOLM_SUBSCRIBE_SUCCESS_LAYOUT:
       AppDispatcher.waitFor([blockCollection.dispatchToken]);
       AppDispatcher.waitFor([flowChartStore.dispatchToken]);
+      blockStore.emitChange();
+      break;
+
+    case appConstants.DROPPED_BLOCK_FROM_LIST:
+      /* item is {name: <name>, x: <x>, y: <y>} */
+      this.droppedBlockFromList(item);
       blockStore.emitChange();
       break;
 

@@ -3,42 +3,33 @@
  */
 
 import * as React from 'react';
-let ReactDOM = require('react-dom');
-
+import * as ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
+import {MalcolmDefs} from '../utils/malcolmProtocol';
+import interact from '../../node_modules/interact.js';
+import * as classes from './edge.scss';
 
-let interact = require('../../node_modules/interact.js');
-
-let EdgePreview = React.createClass({
-
-  propTypes: {
-    noPanning           : React.PropTypes.bool,
-    failedPortConnection: React.PropTypes.func,
-    blockStyling        : React.PropTypes.object,
-    edgePreview         : React.PropTypes.object,
-    fromBlockPosition   : React.PropTypes.object,
-    fromBlockInfo       : React.PropTypes.object,
-    id                  : React.PropTypes.string
-
-  },
-
-  getInitialState: function ()
+export default class EdgePreview extends React.Component
+{
+  constructor(props)
     {
-    return {
-      noPanning: true
+    super(props);
+    this.state = {noPanning: true};
+    this.onTap = this.onTap.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.interactJSMouseMoveForEdgePreview = this.interactJSMouseMoveForEdgePreview.bind(this);
     }
-    },
-
-  componentDidMount   : function ()
+  
+  componentDidMount()
     {
-
     interact('#appAndDragAreaContainer')
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
     interact(ReactDOM.findDOMNode(this))
       .draggable({
 
-        onstart: function (e)
+        onstart: function(e)
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
@@ -78,8 +69,9 @@ let EdgePreview = React.createClass({
 
     interact(ReactDOM.findDOMNode(this))
       .on('down', this.onMouseDown);
-    },
-  componentWillUnmount: function ()
+    }
+  
+  componentWillUnmount ()
     {
 
     interact(ReactDOM.findDOMNode(this))
@@ -91,14 +83,14 @@ let EdgePreview = React.createClass({
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
-    },
+    }
 
-  shouldComponentUpdate: function ()
+  shouldComponentUpdate ()
     {
     return this.state.noPanning
-    },
+    }
 
-  interactJSMouseMoveForEdgePreview: function (e)
+  interactJSMouseMoveForEdgePreview (e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -110,9 +102,9 @@ let EdgePreview = React.createClass({
 
     flowChartActions.updateEdgePreviewEndpoint(mousePositionChange);
 
-    },
+    }
 
-  onTap: function (e)
+  onTap (e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -120,9 +112,9 @@ let EdgePreview = React.createClass({
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
-    },
+    }
 
-  onMouseDown: function (e)
+  onMouseDown (e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -132,9 +124,9 @@ let EdgePreview = React.createClass({
     interact('#appAndDragAreaContainer')
       .off('move', this.interactJSMouseMoveForEdgePreview);
     });
-    },
+    }
 
-  render: function ()
+  render ()
     {
     //console.log("render: edgePreview");
 
@@ -261,17 +253,27 @@ let EdgePreview = React.createClass({
       }
 
     return (
-      <g id="edgePreviewContainer" {...gProps} ref="node">
+      <g id={"edgePreviewContainer"} {...gProps} ref={"node"}>
 
-        <path id={outerLineName} className="edgePreviewOuterLine"
-              d={pathInfo}/>
+        <path id={outerLineName} className={"edgePreviewOuterLine"} d={pathInfo}/>
 
-        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === 'pos' ? 'POS' : 'BIT')}
+        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')}
               d={pathInfo}/>
 
       </g>
     )
     }
-});
+}
 
-module.exports = EdgePreview;
+EdgePreview.propTypes = {
+  noPanning           : PropTypes.bool,
+  interactJsDragPan   : propTypes.func,
+  failedPortConnection: PropTypes.func,
+  blockStyling        : PropTypes.object,
+  edgePreview         : PropTypes.object,
+  fromBlockPosition   : PropTypes.object,
+  fromBlockInfo       : PropTypes.object,
+  id                  : PropTypes.string
+
+};
+

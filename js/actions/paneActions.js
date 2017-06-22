@@ -2,8 +2,8 @@
  * Created by twi18192 on 17/09/15.
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants = require('../constants/appConstants');
+import AppDispatcher from '../dispatcher/appDispatcher';
+import appConstants from '../constants/appConstants';
 
 let paneActions = {
 
@@ -87,4 +87,4 @@ let paneActions = {
 
 };
 
-module.exports = paneActions;
+export default paneActions;

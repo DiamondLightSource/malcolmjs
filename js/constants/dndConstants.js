@@ -2,7 +2,10 @@
  * Created by ig43 on 30/09/16.
  */
 
-exports.ItemTypes =
+
+const ItemTypes =
   {
   BLOCK: 'block'
   };
+
+export default ItemTypes;

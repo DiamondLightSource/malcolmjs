@@ -2,32 +2,36 @@
  * Created by twi18192 on 06/04/16.
  */
 
-let React = require('react');
+import * as React from 'react';
+import PropTypes from 'prop-types';
 
-let LEDWidget = React.createClass({
-  propTypes: {
-    blockAttributeValue: React.PropTypes.bool.isRequired,
-    tabObject          : React.PropTypes.object
-  },
+export default class LEDWidget extends React.Component {
+constructor(props)
+  {
+  super(props);
+  }
 
-  shouldComponentUpdate: function (nextProps, nextState)
-    {
-    return (
-      nextProps.blockAttributeValue !== this.props.blockAttributeValue
-    )
-    },
+shouldComponentUpdate(nextProps, nextState)
+  {
+  return (
+    nextProps.blockAttributeValue !== this.props.blockAttributeValue
+  )
+  }
 
-  render: function ()
-    {
-    return (
+render()
+  {
+  return (
 
-      <svg style={{width: '150px', height: '20px'}}>
-        <circle r="8" className={"ledWidget" + (this.props.blockAttributeValue ? 'ON' : 'OFF')}
-                transform="translate(9, 11)"/>
-      </svg>
+    <svg style={{width: '150px', height: '20px'}}>
+      <circle r={"8"} className={"ledWidget" + (this.props.blockAttributeValue ? 'ON' : 'OFF')}
+              transform={"translate(9, 11)"}/>
+    </svg>
 
-    )
-    }
-});
+  )
+  }
+}
 
-module.exports = LEDWidget;
+LEDWidget.propTypes = {
+  blockAttributeValue: PropTypes.bool.isRequired,
+  tabObject          : PropTypes.object
+};

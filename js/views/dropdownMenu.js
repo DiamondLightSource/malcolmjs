@@ -2,23 +2,22 @@
  * Created by twi18192 on 01/09/15.
  */
 
-let React = require('react');
-
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import sidePaneActions from '../actions/sidePaneActions';
+//import paneStore from '../stores/paneStore';
+import interact from '../../node_modules/interact.js';
+import * as dropDownStyles from './dropdownMenuLessStylesheet.less';
+export default class Dropdown extends React.Component
+{
+  constructor(props)
+    {
+    super(props);
+    this.handleActionShow = this.handleActionShow.bind(this);
+    this.handleActionHide = this.handleActionHide.bind(this);
+    }
 
-let paneStore = require('../stores/paneStore');
-
-let interact = require('../../node_modules/interact.js');
-
-let Dropdown = React.createClass({
-
-  propTypes: {
-    listVisible: React.PropTypes.bool,
-    tabState   : React.PropTypes.arrayOf(React.PropTypes.object),
-    changeTab  : React.PropTypes.func
-  },
-
-  shouldComponentUpdate: function (nextProps, nextState)
+  shouldComponentUpdate(nextProps, nextState)
     {
     return (
       (nextProps.listVisible !== this.props.listVisible) ||
@@ -28,9 +27,9 @@ let Dropdown = React.createClass({
        changes
        */
     )
-    },
+    }
 
-  handleActionShow: function (e)
+  handleActionShow(e)
     {
     console.log(e);
     e.stopImmediatePropagation();
@@ -50,9 +49,9 @@ let Dropdown = React.createClass({
         .on('tap', this.handleActionHide);
       }
 
-    },
+    }
 
-  handleActionHide: function (e)
+  handleActionHide(e)
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -62,15 +61,15 @@ let Dropdown = React.createClass({
 
     interact('#container')
       .off('tap', this.handleActionHide);
-    },
+    }
 
-  testSelectInvokeSidePane: function (item)
+  testSelectInvokeSidePane(item)
     {
     this.props.changeTab(item);
     console.log("inside testSelectInvokeSidePane");
-    },
+    }
 
-  componentDidMount: function ()
+  componentDidMount()
     {
     console.log("dropdown is mounted");
     //sidePaneStore.addChangeListener(this._onChange);
@@ -80,9 +79,9 @@ let Dropdown = React.createClass({
 
     interact('#dropdownButton')
       .on('tap', this.handleActionShow)
-    },
+    }
 
-  componentWillUnmount: function ()
+  componentWillUnmount()
     {
     //sidePaneStore.removeChangeListener(this._onChange);
     console.log("dropdown is unmounting");
@@ -96,7 +95,7 @@ let Dropdown = React.createClass({
 
     interact('#container')
       .off('tap', this.handleActionHide);
-    },
+    }
 
   //renderListItems: function() {
   //  let items = [];
@@ -117,7 +116,7 @@ let Dropdown = React.createClass({
   //  return items;
   //},
 
-  render: function ()
+  render()
     {
 
     let items = [];
@@ -142,7 +141,7 @@ let Dropdown = React.createClass({
       //console.log(interactIdString);
 
       items.push(
-        <div key={item + "-tab"} id={"dropdownTab" + item} className="dropdownTab">
+        <div key={item + "-tab"} id={"dropdownTab" + item} className={"dropdownTab"}>
           <span >{item}</span>
         </div>
       );
@@ -161,14 +160,14 @@ let Dropdown = React.createClass({
       }
 
     return (
-      <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")} ref="dropdowncontainer">
-        <div className={"dropdown-display" + (this.props.listVisible ? " clicked" : "")} id="dropdownButton" ref="dropdownbutton"
+      <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")} ref={"dropdowncontainer"}>
+        <div className={"dropdown-display" + (this.props.listVisible ? " clicked" : "")} id={"dropdownButton"} ref={"dropdownbutton"}
           //onClick={this.handleActionShow}
         >
           <span ></span>
-          <i className="fa fa-angle-down"></i>
+          <i className={"fa fa-angle-down"}></i>
         </div>
-        <div className="dropdown-list">
+        <div className={"dropdown-list"}>
           <div>
             {items}
           </div>
@@ -177,6 +176,11 @@ let Dropdown = React.createClass({
     )
 
     }
-});
+}
 
-module.exports = Dropdown;
+Dropdown.propTypes = {
+listVisible: PropTypes.bool,
+  tabState   : PropTypes.arrayOf(PropTypes.object),
+  changeTab  : PropTypes.func
+};
+

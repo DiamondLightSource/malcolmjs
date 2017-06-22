@@ -2,35 +2,34 @@
  * Created by twi18192 on 22/03/16.
  */
 
-let React = require('react');
-
+import * as React from 'react';
+import PropTypes from 'prop-types';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import ToggleSwitch from 'react-toggle';
 
-let ToggleSwitch = require('react-toggle');
-
-let BlockToggleSwitch = React.createClass({
-  propTypes            : {
-    blockAttributeValue: React.PropTypes.any.isRequired,
-    blockName          : React.PropTypes.string.isRequired,
-    attributeName      : React.PropTypes.string.isRequired
-  },
-  shouldComponentUpdate: function (nextProps, nextState)
+export default class BlockToggleSwitch extends React.Component
+{
+  constructor(props)
     {
-    return (
-      nextProps.blockAttributeValue !== this.props.blockAttributeValue
-    )
-    },
+    super(props);
+    this.handleOnChange = this.handleOnChange.bind(this);
+    }
+  
+  shouldComponentUpdate (nextProps, nextState)
+    {
+    return ( nextProps.blockAttributeValue !== this.props.blockAttributeValue  )
+    }
 
-  handleMalcolmCall: function (blockName, method, args)
+  handleMalcolmCall (blockName, method, args)
     {
     MalcolmActionCreators.malcolmCall(blockName, method, args)
-    },
+    }
 
   /**
    * handleOnChange(): Presented as a callback reference (prop) to the underlying toggle switch component.
     * @param e
    */
-  handleOnChange: function (e)
+  handleOnChange (e)
     {
 
     let methodToInvoke;
@@ -87,16 +86,16 @@ let BlockToggleSwitch = React.createClass({
 
     this.handleMalcolmCall(this.props.blockName, methodToInvoke, argsObject);
 
-    },
+    }
 
-  render: function ()
+  render ()
     {
 
     return (
 
       <div style={{display: 'flex', justifyContent: 'space-between', left: '45'}}>
-        <p style={{margin: '0px', width: '40px', position: 'relative'}}>False</p>
-        <div id="testToggleSwitch" style={{height: '16', width: '44', marginLeft: '25'}}>
+        <p style={{margin: '0px', width: '40px', position: 'relative'}}>{"False"}</p>
+        <div id={"testToggleSwitch"} style={{height: '16', width: '44', marginLeft: '25'}}>
           <ToggleSwitch onChange={this.handleOnChange}
                         checked={this.props.blockAttributeValue === 'Show' ||
                         this.props.blockAttributeValue === true}
@@ -104,11 +103,16 @@ let BlockToggleSwitch = React.createClass({
                         on={this.props.blockAttributeValue === 'Show' ||
                         this.props.blockAttributeValue === true}/>
         </div>
-        <p style={{margin: '0px', width: '40px', marginLeft: '22'}}>True</p>
+        <p style={{margin: '0px', width: '40px', marginLeft: '22'}}>{"True"}</p>
       </div>
 
     )
     }
-});
+}
 
-module.exports = BlockToggleSwitch;
+BlockToggleSwitch.propTypes = {
+blockAttributeValue: PropTypes.any.isRequired,
+  blockName          : PropTypes.string.isRequired,
+  attributeName      : PropTypes.string.isRequired
+};
+

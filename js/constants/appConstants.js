@@ -1,8 +1,9 @@
 /**
- * Created by twi18192 on 25/08/15.
+ * @module appConstants
+ *
  */
 
-var appConstants = {
+const appConstants = {
   /*mainPaneStore use*/
   FOOTER_TOGGLE: "FOOTER_TOGGLE",
   CONFIG_TOGGLE: "CONFIG_TOGGLE",
@@ -49,6 +50,7 @@ var appConstants = {
   MALCOLM_PUT_FAILURE: 'MALCOLM_PUT_FAILURE',
   MALCOLM_POST_SUCCESS: 'MALCOLM_POST_SUCCESS',
   MALCOLM_POST_FAILURE: 'MALCOLM_POST_FAILURE',
+  MALCOLM_BLOCK_ATTRIBUTE_EDITED: 'MALCOLM_BLOCK_ATTRIBUTE_EDITED',
 
   INITIALISE_FLOWCHART_START: 'INITIALISE_FLOWCHART_START',
   INITIALISE_FLOWCHART_END: 'INITIALISE_FLOWCHART_END',
@@ -107,6 +109,7 @@ var appConstants = {
   //APPEND_EDGESELECTEDSTATE: "APPEND_EDGESELECTEDSTATE",
   //APPENDTO_BLOCKSELECTEDSTATES: 'APPENDTO_BLOCKSELECTEDSTATES',
 
+  DROPPED_BLOCK_FROM_LIST: "DROPPED_BLOCK_FROM_LIST",
 
 
   /* sidebar use */
@@ -121,6 +124,10 @@ var appConstants = {
 
   /* Websocket EventEmitter */
   WEBSOCKET_STATE: "WEBSOCKET_STATE",
+
+  /* Navbar use */
+  NAVBAR_ACTION: "NAVBAR_ACTION",
+
 };
 
-module.exports = appConstants;
+export default appConstants;

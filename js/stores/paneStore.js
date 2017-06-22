@@ -1,16 +1,40 @@
 /**
- * Created by twi18192 on 17/09/15.
+ * @module paneStore
+ * @author  Ian Gillingham
+ * @since  April 2017
  */
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let appConstants  = require('../constants/appConstants');
-let EventEmitter  = require('events').EventEmitter;
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
 import blockCollection from '../classes/blockItems';
 import eachOf from 'async/eachOf';
+import MalcolmUtils from '../utils/MalcolmUtils'
 
 let CHANGE_EVENT = 'change';
 
-import MalcolmUtils from '../utils/MalcolmUtils'
+
+/**
+ *
+ * @type {{
+  * tabState: Array,
+  * selectedTabIndex: number,
+  * updatedBlockContent: null,
+  * blockTabState: Array,
+  * sidebarOpen: boolean,
+  * modalDialogBoxOpen: boolean
+  * }}
+ *
+ * @description
+ * tabState            - Whether the drop-down is open
+ * selectedTabIndex    - This is the index of the item selected in the drop-down
+ * updatedBlockContent - Not used - historical artifact that may be able to be removed
+ * blockTabState       - An array of states of each entry in the drop-down list.
+ * sidebarOpen         - True if the sidebar is in its visible state (default)
+ * modalDialogBoxOpen  - True if the modal dialogue box is in its visible state.
+ *
+ * @private
+ */
 
 let _stuff = {
   tabState           : [],
@@ -23,6 +47,10 @@ let _stuff = {
   modalDialogBoxOpen : false
 };
 
+/**
+ *
+ * @type {{blockName: null, attributeName: null, message: null}}
+ */
 let modalDialogBoxInfo = {
   blockName    : null,
   attributeName: null,
@@ -65,8 +93,8 @@ let modalDialogBoxInfo = {
 let dropdownMenuSelect = function (tab)
   {
   let findTheIndex = 0;
-  console.log("dropdown menu select");
-  console.log(tab);
+  //console.log("dropdown menu select");
+  //console.log(tab);
 
   for (let i = 0; i < _stuff.tabState.length; i++)
     {
@@ -74,6 +102,7 @@ let dropdownMenuSelect = function (tab)
     if (_stuff.tabState[i].label === tab)
       {
       findTheIndex = i;
+      break; // search no further
       }
     }
 
@@ -209,11 +238,13 @@ blockUpdated(blockIndex)
   layoutUpdated(blockIndex);
   }
 
+setBlockListTabStateTrue()
+  {
+  setBlockListTabStateTrue();
+  }
 }
 
 const paneStore = new PaneStore();
-
-import attributeStore from './attributeStore';
 
 
 paneStore.dispatchToken = AppDispatcher.register(function (payload)
@@ -240,13 +271,13 @@ switch (action.actionType)
 
   case appConstants.FAVTAB_OPEN:
     setFavTabStateTrue();
-    console.log(allBlockTabProperties.Favourites);
+    //console.log(allBlockTabProperties.Favourites);
     paneStore.emitChange();
     break;
 
   case appConstants.CONFIGTAB_OPEN:
     setConfigTabStateTrue();
-    console.log(allBlockTabProperties.Configuration);
+    //console.log(allBlockTabProperties.Configuration);
     paneStore.emitChange();
     break;
 
@@ -268,12 +299,17 @@ switch (action.actionType)
 
   case appConstants.REMOVE_BLOCKTAB:
     removeBlockTab();
-    console.log(_stuff.tabState);
+    //console.log(_stuff.tabState);
     paneStore.emitChange();
     break;
 
   case appConstants.TOGGLE_SIDEBAR:
     toggleSidebar();
+    paneStore.emitChange();
+    break;
+
+  case appConstants.NAVBAR_ACTION:
+    setBlockListTabStateTrue(item);
     paneStore.emitChange();
     break;
 
@@ -339,7 +375,7 @@ switch (action.actionType)
     modalDialogBoxInfo.attributeName = attributeToUpdate;
     modalDialogBoxInfo.message       = responseMessage;
 
-    console.log(modalDialogBoxInfo);
+    //console.log(modalDialogBoxInfo);
 
     paneStore.emitChange();
     break;
@@ -354,10 +390,17 @@ switch (action.actionType)
 
 /* Importing nodeStore to begin connecting them together and to do an initial fetch of the node data */
 
-let allBlockTabProperties = {
+
+let allBlockTabProperties;
+/**
+ *
+ * @type {{Favourites: boolean, Configuration: boolean, VISIBILITY: boolean}}
+ */
+allBlockTabProperties = {
   'Favourites'   : false,
   'Configuration': false,
   'VISIBILITY'   : false,
+  'BlockList'    : false
 };
 
 let allEdgeTabProperties = {};
@@ -417,6 +460,10 @@ function setBlockTabStateTrue(BlockId)
     }
   }
 
+/**
+ *
+ * @param EdgeInfo
+ */
 function setEdgeTabStateTrue(EdgeInfo)
   {
   //console.log(`paneStore.setEdgeTabStateTrue()`);
@@ -511,6 +558,27 @@ function setBlockLookupTableTabStateTrue()
   else if (allBlockTabProperties['VISIBILITY'] === true)
     {
     dropdownMenuSelect("VISIBILITY");
+    }
+  }
+
+function setBlockListTabStateTrue()
+  {
+  if (allBlockTabProperties['BlockList'] === false)
+    {
+    allBlockTabProperties['BlockList'] = true;
+
+    let blockListTabStateObject = [{
+      tabType: 'BlockList',
+      label  : 'BlockList'
+    }];
+
+    _stuff.tabState = _stuff.tabState.concat(blockListTabStateObject);
+
+    selectBlockOnClick();
+    }
+  else if (allBlockTabProperties['BlockList'] === true)
+    {
+    dropdownMenuSelect("BlockList");
     }
   }
 
@@ -620,7 +688,9 @@ function registerBlockWithPane(index)
   let callbackError = function (err)
     {
     if (err)
+      {
       console.error(err.message);
+      }
     };
 
   let iteration = function (attribute, attributeName, callbackDone)
@@ -857,7 +927,7 @@ function layoutUpdated(index)
 
   let iteration = function (blockItem, attr, callbackDone)
     {
-    updateBlock(blockItem)
+    updateBlock(blockItem);
     callbackDone();
     };
 
@@ -875,4 +945,4 @@ function layoutUpdated(index)
   paneStore.emitChange();
   }
 
-module.exports = paneStore;
+export {paneStore as default, PaneStore};

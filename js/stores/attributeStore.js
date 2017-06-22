@@ -4,14 +4,14 @@
 import blockCollection from '../classes/blockItems';
 import eachOf from 'async/eachOf';
 
-let AppDispatcher = require('../dispatcher/appDispatcher.js');
-let appConstants  = require('../constants/appConstants.js');
-let EventEmitter  = require('events').EventEmitter;
+import AppDispatcher from '../dispatcher/appDispatcher.js';
+import appConstants from '../constants/appConstants.js';
+import EventEmitter from 'events';
+import update from 'immutability-helper';
 
 // Used for Node.js EventEmitted implementation
 let CHANGE_EVENT = 'change';
 
-let update = require('react-addons-update');
 
 let allBlockAttributes = {};
 
@@ -78,7 +78,7 @@ allBlockAttributesIconStatus.addBlockAttributeIconStatus = function (blockName, 
 
 /**
  *
- * @param {object} blockItem   - Block Item
+ * @param {object} blockitem   - Block Item
  */
 function updateAttributeValue(blockitem)
   {

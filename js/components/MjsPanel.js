@@ -40,6 +40,7 @@ shouldComponentUpdate(nextProps, nextState)
 
 render()
   {
+    return (<div/>);
   }
 }
 
