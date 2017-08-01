@@ -6,7 +6,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import sidePaneActions from '../actions/sidePaneActions';
 //import paneStore from '../stores/paneStore';
-import interact from '../../node_modules/interact.js';
+import interact from '../../node_modules/interactjs';
 import * as dropDownStyles from './dropdownMenuLessStylesheet.less';
 export default class Dropdown extends React.Component
 {
@@ -147,7 +147,7 @@ export default class Dropdown extends React.Component
       );
 
       interact(interactIdString)
-        .on('tap', function (e)
+        .on('tap', (e) =>
           {
           e.stopPropagation();
           e.stopImmediatePropagation();
@@ -155,13 +155,13 @@ export default class Dropdown extends React.Component
           //console.log(item);
           this.testSelectInvokeSidePane(item);
           this.handleActionHide(e);
-          }.bind(this));
+          });
       //console.log(document.getElementById("dropdownTab" + item));
       }
 
     return (
-      <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")} ref={"dropdowncontainer"}>
-        <div className={"dropdown-display" + (this.props.listVisible ? " clicked" : "")} id={"dropdownButton"} ref={"dropdownbutton"}
+      <div className={"dropdown-container" + (this.props.listVisible ? " handleActionShow" : "")} >
+        <div className={"dropdown-display" + (this.props.listVisible ? " clicked" : "")} id={"dropdownButton"}
           //onClick={this.handleActionShow}
         >
           <span ></span>

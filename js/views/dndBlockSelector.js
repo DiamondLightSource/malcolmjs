@@ -8,7 +8,7 @@
  */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {DragSource} from 'react-dnd';
+import DragSource from 'react-dnd/lib/DragSource';
 import ItemTypes from './dndItemTypes';
 import flowChartActions, {DroppedBlockInfo} from '../actions/flowChartActions';
 

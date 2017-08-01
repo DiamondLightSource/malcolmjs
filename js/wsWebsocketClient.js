@@ -228,7 +228,8 @@ class WSClient extends EventEmitter
 
 /*  For development purposes, a table of available Zebra/PandA servers
  */
-config.setServerName('pc70');
+// config.setServerName('pc70');
+config.setServerName('pc4');
 config.setProtocolVersion('V2_0');
 config.setdeviceName('P');
 let url             = config.getServerURL();

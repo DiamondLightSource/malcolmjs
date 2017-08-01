@@ -308,6 +308,16 @@ putVisible(visibility)
       "x":[this.attributes.x],
       "y":[this.attributes.y],
       "visible":[visibility]});
+  /**
+   * Setting visibility false may need to be an atomic operation, as any movement before the response is received
+   * will automaticallly reset visibility to true.
+   */
+  if (!visibility)
+    {
+    // Set the local value before getting the response, so as to avoid transition back to visible.
+    // There is probably a better way of doing this, but it works for the timebeing.
+    this.attributes.visible = false;
+    }
   }
 
 blockName()
@@ -501,9 +511,11 @@ constructor()
    *
    * @type {boolean}
    */
+  this.webSocketOnOpen = this.webSocketOnOpen.bind(this);
+  this.webSocketOnClose = this.webSocketOnClose.bind(this);
   this.webSocketOpen = false;
-  MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen.bind(this));
-  MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose.bind(this));
+  MalcolmWebSocketClient.addWebSocketOnOpenCallback(this.webSocketOnOpen);
+  MalcolmWebSocketClient.addWebSocketOnCloseCallback(this.webSocketOnClose);
 
   }
 
@@ -579,7 +591,9 @@ createBlockItemsFromSchema(topLevelSchema)
     let callbackError = function (err)
       {
       if (err)
+        {
         console.error(err.message);
+        }
       };
 
     eachOf(this._layoutSchema.layout.value.name, iteration, callbackError);
@@ -916,12 +930,24 @@ dispatcherCallback(payload)
       break;
 
     case appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED:
+      {
       let blockItem = this.getBlockItemByName(item.blockName);
       if (blockItem instanceof BlockItem)
         {
         console.log(`BlockCollection: Dispatch message received: MALCOLM_BLOCK_ATTRIBUTE_EDITED, Block ${blockItem.blockName()}  attribute  ${item.attribute_path}  value  ${item.newValue}`);
         blockItem.putAttributeValue(item.attribute_path, item.newValue);
         }
+      }
+      break;
+
+    case appConstants.REMOVE_BLOCK:
+      {
+      let blockItem = this.getBlockItemByName(item);
+      if (blockItem instanceof BlockItem)
+        {
+        blockItem.putVisible(false);
+        }
+      }
       break;
 
     default:

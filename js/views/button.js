@@ -19,6 +19,7 @@ let ButtonStyle = {
   display        : 'inline-block',
   cursor         : 'pointer',
   MozUserSelect  : 'none',
+  WebkitUserSelect: 'none',
   //position       : 'relative',
   marginTop      : '39px'
 

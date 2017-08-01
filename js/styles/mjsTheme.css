@@ -1,0 +1,40 @@
+@import "react-toolbox/lib/layout/theme.css";
+
+
+.layout {
+ // this class should go in div that wraps Layout component, maybe rename as '.app'
+position: absolute;
+    height: 100%;
+    margin  : 0;
+    padding : 0;
+    display: flex;
+    overflow-y: auto;
+    flex-direction: row;
+    width : 100%;
+}
+
+.layout .content {  // where content go
+        flex: 1 1 auto;
+        overflow-y: auto;
+        position: relative; // need this to position inner content
+        width: 100%;
+        height: 100%;
+    }
+
+.layout .header {  // the appbar
+    flex: 0 0 auto;
+    }
+
+.layout .panel {
+    display:flex;
+    height:100%;
+    width: 75%
+}
+
+.layout .sidebar {
+    overflow-y: auto;
+    display:flex;
+    height:100%;
+    width:25%
+}
+

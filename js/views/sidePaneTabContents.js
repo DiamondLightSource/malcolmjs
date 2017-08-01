@@ -3,29 +3,30 @@
  */
 
 import * as React from 'react';
-import ReactPanels from 'react-panels';
-let Content = ReactPanels.Content;
-let Button  = ReactPanels.Button;
-
+import PropTypes from 'prop-types';
+//import ReactPanels from 'react-panels';
+//let Content = ReactPanels.Content;
+//let Button  = ReactPanels.Button;
+import Button from 'react-toolbox/lib/button/Button';
 import TreeView from 'react-treeview';
-
+import {List,ListItem} from 'react-toolbox/lib/list'
 import blockStore  from '../stores/blockStore';
-import blockCollection,{BlockItem} from '../classes/blockItems';
+import blockCollection, {BlockItem} from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import appConstants from '../constants/appConstants';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import SortableTree from 'react-sortable-tree';
-import PropTypes from 'prop-types';
 import DNDBlockSelector from './dndBlockSelector';
 import ItemTypes from './dndItemTypes';
+import theme from '../../src/toolbox/theme';
 
 /* Purely for favContent & configContent */
 //let paneStore = require('../stores/paneStore');
 
 import WidgetTableContainer from './widgetTableContainer';
 
-import './sidePaneTabContents.scss';
+import * as classes from './sidePaneTabContents.scss';
 
 // Load the TreeView stylesheet
 //import * as treeViewStyles from './treeview.css';
@@ -34,13 +35,26 @@ import './sidePaneTabContents.scss';
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
   {
-  return {
-    blockAttributes          : attributeStore.getAllBlockAttributes()[SidePaneTabContentsComponent.props.tabObject.label],
-    blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()[SidePaneTabContentsComponent.props.tabObject.label],
-    blocksAvailable          : blockCollection.getAllBlockItems()
-    //favContent: paneStore.getFavContent(),
-    //configContent: paneStore.getConfigContent()
-  }
+  if (SidePaneTabContentsComponent.props.tabObject !== undefined)
+    {
+    return {
+      blockAttributes          : attributeStore.getAllBlockAttributes()[SidePaneTabContentsComponent.props.tabObject.label],
+      blockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()[SidePaneTabContentsComponent.props.tabObject.label],
+      blocksAvailable          : blockCollection.getAllBlockItems()
+      //favContent: paneStore.getFavContent(),
+      //configContent: paneStore.getConfigContent()
+    }
+    }
+  else
+    {
+    return {
+      blockAttributes          : null,
+      blockAttributesIconStatus: null,
+      blocksAvailable          : blockCollection.getAllBlockItems()
+      //favContent: paneStore.getFavContent(),
+      //configContent: paneStore.getConfigContent()
+    }
+    }
   }
 
 export default class SidePaneTabContents extends React.Component {
@@ -60,17 +74,23 @@ shouldComponentUpdate(nextProps, nextState)
   //console.log(this.state.blockAttributes);
   //console.log(nextState.blockAttributes);
   //console.log(nextState.blockAttributes !== this.state.blockAttributes);
-  return (
-    nextState.blockAttributes !== this.state.blockAttributes ||
-    nextState.blockAttributesIconStatus !== this.state.blockAttributesIconStatus ||
-    nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
-    nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected
 
-  )
+    /*
+  let bAttributesDelta = (nextState.blockAttributes !== this.state.blockAttributes);
+  let bIconStatusDelta = (nextState.blockAttributesIconStatus !== this.state.blockAttributesIconStatus);
+  let bEdgeSelectedDelta = (nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected);
+  let bBlocksSelectedDelta = (nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected);
+  */
+
+  //let bUpdate = (bAttributesDelta||bIconStatusDelta||bEdgeSelectedDelta||bBlocksSelectedDelta);
+  let bUpdate = true;
+
+  return (bUpdate);
   }
 
 componentDidMount()
   {
+  console.log('SidePaneTabContents.componentDidMount()');
   attributeStore.addChangeListener(this._onChange);
   blockCollection.addChangeListener(this._onChange);
   //paneStore.addChangeListener(this._onChange);
@@ -249,29 +269,30 @@ generateTabContent(blockAttributes)
 
   // This is the correct way to iterate through the array of attributes
   // and constructing the TreeView
-  blockAttributeDivs.push (Object.keys(groupsObject).map(blockAttribs =>
+  blockAttributeDivs.push(Object.keys(groupsObject).map(blockAttribs =>
   {
   const label2 = <span className="node">{blockAttribs}</span>;
   return (
-    <TreeView nodeLabel={label2} key={blockAttribs + 'treeview'} defaultCollapsed={false}>
-      <div className="info">{groupsObject[blockAttribs]}</div>
-    </TreeView>
+    <List nodeLabel={label2} key={blockAttribs + 'treeview'}>
+      <ListItem>{groupsObject[blockAttribs]}</ListItem>
+    </List>
   );
   }));
 
     {/* -- This is still here but commented out in case it needs future reference.
-  for (let group in groupsObject)
-    {
-    blockAttributeDivs.push(
-      <Treeview defaultCollapsed={true}
-                nodeLabel={<b style={{marginLeft: '50px', fontSize: '13px'}}>{group}</b>}
-                key={group + 'treeview'}
-      > {groupsObject[group]}
-      </Treeview>
-    );
+     for (let group in groupsObject)
+     {
+     blockAttributeDivs.push(
+     <Treeview defaultCollapsed={true}
+     nodeLabel={<b style={{marginLeft: '50px', fontSize: '13px'}}>{group}</b>}
+     key={group + 'treeview'}
+     > {groupsObject[group]}
+     </Treeview>
+     );
 
+     }
+     */
     }
-    */}
 
   return blockAttributeDivs;
 
@@ -287,9 +308,33 @@ generateBlockList(blocksAvailable)
 
   let blockListDivs = [];
 
-  let blockList = blocksAvailable.map((blockItem, index) => (<li key={blockItem.blockName()+'dragBlock'}><DNDBlockSelector className={'dragBlock'} connectDragSource={ItemTypes.BLOCK} isDragging={true}
-                                                               name={blockItem.blockName()}/></li>));
-  return (<ul>{blockList}</ul>);
+  let blockList = blocksAvailable.map((blockItem, index) => (
+      <li key={blockItem.blockName() + 'dragBlock'}><DNDBlockSelector className={'dragBlock'}
+                                                                      connectDragSource={ItemTypes.BLOCK}
+                                                                      isDragging={true}
+                                                                      name={blockItem.blockName()}
+                                                                      key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+      </li>
+    )
+  );
+  return (<ul style={{display: "flex", flexDirection: "column"}}>{blockList}</ul>);
+  }
+
+generateBlockListRTBX(blocksAvailable)
+  {
+
+  let blockListDivs = [];
+
+  let blockList = blocksAvailable.map((blockItem, index) => (
+      <ListItem key={blockItem.blockName() + 'dragBlock'}><DNDBlockSelector className={'dragBlock'}
+                                                                      connectDragSource={ItemTypes.BLOCK}
+                                                                      isDragging={true}
+                                                                      name={blockItem.blockName()}
+                                                                      key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+      </ListItem>
+    )
+  );
+  return (<List id={'dragBlockList'} key={'dragBlockList'} style={{display: "flex", flexDirection: "column", overflowY: "overlay"}}>{blockList}</List>);
   }
 
 generateBlockTree(blocksAvailable)
@@ -332,7 +377,8 @@ generateBlockMenu(blocksAvailable)
     let blockItem = blocksAvailable[i];
     if (blockItem.visible === false)
       {
-      let element = (<div>{"dummy"}</div>);
+      let elementKey = blockItem.name()+'-list-item';
+      let element = (<div key={elementKey}>{"dummy"}</div>);
 
       menuItems.push(element);
       }
@@ -380,7 +426,7 @@ render()
     }
   else if (this.props.tabObject.tabType === 'BlockList')
     {
-    tabContent.push(this.generateBlockList(this.state.blocksAvailable));
+    tabContent.push(this.generateBlockListRTBX(this.state.blocksAvailable));
     }
   else if (this.props.tabObject.tabType === 'edge')
     {
@@ -395,9 +441,10 @@ render()
     }
 
   return (
-    <Content>
+
+    <div id="tabContentDivContainer">
       {tabContent}
-    </Content>
+    </div>
   );
   }
 
@@ -408,4 +455,3 @@ SidePaneTabContents.propTypes = {
   areAnyBlocksSelected: PropTypes.bool,
   areAnyEdgesSelected : PropTypes.bool
 };
-

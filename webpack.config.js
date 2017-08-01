@@ -3,11 +3,12 @@
  */
 const webpack           = require('webpack');
 const path              = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+//const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const nodeModulesDir= path.resolve(__dirname, 'node_modules');
 const BUILD_DIR     = path.resolve(__dirname, 'build');
 const APP_DIR       = path.resolve(__dirname, 'js');
+const env           = process.env.NODE_ENV || 'development';
 
 const config = {
   /*entry  : ['babel-polyfill', path.join(APP_DIR, '/app.js')],*/
@@ -19,13 +20,8 @@ const config = {
     },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json", ".css", ".scss", ".less"],
-    alias     : { // In case of multiple copies of React flying around
-      'react.js'                       : path.join(__dirname, 'node_modules/react/react.js'),
-      'react/lib/CSSPropertyOperations': path.join(__dirname, 'node_modules/react-dom/lib/CSSPropertyOperations.js'),
-      'react/lib/ReactDOM'             : path.join(__dirname, 'node_modules/react-dom/lib/ReactDOM.js')
-    }
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   module : {
 
     rules: [
@@ -43,16 +39,18 @@ const config = {
       //test: /\.tsx?$/,
       //loader: "source-map-loader" },
       {
-        exclude: /node_modules/,
         test   : /\.js?/,
+        exclude: /node_modules/,
         include: [APP_DIR, path.resolve(__dirname, 'components')],
         use : [
           {loader : 'react-hot-loader'},
           {loader : 'babel-loader',
             query  :
               {
-              presets: ['es2015', 'react'],
-              plugins: ['transform-object-rest-spread']
+                presets: ['es2015', "stage-2",'react'],
+                //presets: ['es2015', {modules:false},'react'],
+                //presets: ['es2015','react'],
+              plugins: ["transform-node-env-inline",'transform-object-rest-spread']
               }
           }
       ]
@@ -64,21 +62,30 @@ const config = {
           presets: ['es2015', 'react']
         }
       },
-      {test: /\.json$/, loader: 'json-loader'},
+      { test: /\.json$/,
+        exclude: /node_modules/,
+        loader: 'json-loader'
+      },
       {test: /\.css$/,
+        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox')],
         exclude: /node_modules/,
         use : [
-          {loader: "style-loader"},
+          { loader: 'style-loader', options: { sourceMap: true } },
           {loader: "css-loader",
             options:
               {
-              //modules       : true,
-              sourceMap     : true,
-              localIdentName: '[name]__[local]--[hash:base64:5]'
+              modules       : true,
+              sourceMap     : false,
+              importLoaders : 1,
+                //localIdentName: '[name]--[local]--[hash:base64:5]'
+              localIdentName: '[local]'
               }
-          }
+          },
+          { loader: 'postcss-loader' },
+          { loader: 'sass-loader'}
         ]
       },
+
       {
         // For all .css files in node_modules
         test: /\.css$/,
@@ -87,6 +94,7 @@ const config = {
       },
       {
         test: /\.scss$/,
+        exclude: /node_modules/,
         use : [
           {
             loader: "style-loader"
@@ -147,14 +155,16 @@ const config = {
      }
      })
      */
+    // The following recommended for react-toolbox
+    new webpack.NamedModulesPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),
 
-    new ExtractTextPlugin('style.css')
-    //if you want to pass in options, you can do so:
-    //new ExtractTextPlugin({
-    //  filename: 'style.css'
+    //new ExtractTextPlugin('style.css')
+    ////if you want to pass in options, you can do so:
+    ////new ExtractTextPlugin({
+    ////  filename: 'style.css'
     //})
 
   ],

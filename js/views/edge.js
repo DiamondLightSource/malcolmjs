@@ -11,7 +11,7 @@ import paneActions from '../actions/paneActions';
 import flowChartActions from '../actions/flowChartActions';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
-import interact from '../../node_modules/interact.js';
+import interact from '../../node_modules/interactjs';
 import KeyCodes from '../constants/keycodes';
 
 export default class Edge extends React.Component {
@@ -47,6 +47,8 @@ componentWillUnmount()
 
 shouldComponentUpdate(nextProps, nextState)
   {
+    return(true);
+/*
   return (
     nextProps.selected !== this.props.selected ||
     nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
@@ -55,6 +57,7 @@ shouldComponentUpdate(nextProps, nextState)
     nextProps.toBlockPosition.x !== this.props.toBlockPosition.x ||
     nextProps.toBlockPosition.y !== this.props.toBlockPosition.y
   )
+*/
   }
 
 handleMalcolmCall(blockName, method, args)
@@ -243,6 +246,7 @@ render()
     c2X, c2Y,
     targetX, targetY
   ];
+  console.log(`Edge.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
 
   pathInfo = pathInfo.join(" ");
 
@@ -255,9 +259,10 @@ render()
     let delProp = notGProps[i];
     delete gProps[delProp];
     }
-
+    let edgeContainerId = "edgeContainer-"+outerLineName;
+  //console.log(`Edge.render(): ${edgeContainerId}`);
   return (
-    <g id="edgeContainer" {...gProps} ref="node">
+    <g id={edgeContainerId} {...gProps} ref="node">
 
       <path id={outerLineName}
             className={'edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected') }

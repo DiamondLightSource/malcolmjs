@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import TestUtils from 'react-addons-test-utils';
-import BothPanes from '../views/sidebar';
+import BothPanes from '../views/bothPanes';
 
 //const BothPanes = require('../views/sidebar')
 describe('BothPanes', () => {

@@ -7,7 +7,7 @@ import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
-import interact from '../../node_modules/interact.js';
+import interact from '../../node_modules/interactjs';
 import * as classes from './edge.scss';
 
 export default class EdgePreview extends React.Component
@@ -85,9 +85,10 @@ export default class EdgePreview extends React.Component
 
     }
 
-  shouldComponentUpdate ()
+  shouldComponentUpdate (nextProps, nextState)
     {
-    return this.state.noPanning
+      //return(true);
+    return (this.state.noPanning);
     }
 
   interactJSMouseMoveForEdgePreview (e)
@@ -95,9 +96,24 @@ export default class EdgePreview extends React.Component
     e.stopImmediatePropagation();
     e.stopPropagation();
 
+    /**
+     * Cater for all mousemove event types, whether:
+     * Mozilla, WebKit or vanilla
+      * @type {any}
+     */
+    let movementX = e.movementX ||
+      e.mozMovementX          ||
+      e.webkitMovementX       ||
+      0;
+
+    let movementY = e.movementY ||
+      e.mozMovementY      ||
+      e.webkitMovementY   ||
+      0;
+
     let mousePositionChange = {
-      x: e.mozMovementX,
-      y: e.mozMovementY
+      x: movementX,
+      y: movementY
     };
 
     flowChartActions.updateEdgePreviewEndpoint(mousePositionChange);
@@ -199,11 +215,11 @@ export default class EdgePreview extends React.Component
 
     /* I think nodeSize is the block height or width, not sure which one though? */
 
-    if ((targetX - 5 < sourceX && fromBlockInfo.fromBlockPortType === "outport") ||
-      (targetX - 5 > sourceX && fromBlockInfo.fromBlockPortType === "inport"))
+    if ((((targetX - 5) < sourceX) && (fromBlockInfo.fromBlockPortType === "outport")) ||
+      (((targetX - 5) > sourceX) && (fromBlockInfo.fromBlockPortType === "inport")))
       {
       let curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
-      if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight / 2)
+      if (Math.abs(targetY - sourceY) < (blockStyling.outerRectangleHeight / 2))
         {
         // Loopback
         c1X = sourceX + curveFactor;
@@ -238,6 +254,8 @@ export default class EdgePreview extends React.Component
       targetX, targetY
     ];
 
+    console.log(`edgePreview.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
+
     pathInfo = pathInfo.join(" ");
 
     // Removed props not relevant to <g> and store remainder in gProps
@@ -267,7 +285,7 @@ export default class EdgePreview extends React.Component
 
 EdgePreview.propTypes = {
   noPanning           : PropTypes.bool,
-  interactJsDragPan   : propTypes.func,
+  interactJsDragPan   : PropTypes.func,
   failedPortConnection: PropTypes.func,
   blockStyling        : PropTypes.object,
   edgePreview         : PropTypes.object,

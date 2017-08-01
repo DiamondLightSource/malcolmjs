@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
 
-import interact from "../../node_modules/interact.js";
+import interact from "../../node_modules/interactjs";
 import * as classes from './port.scss';
 
 export default class Ports extends React.Component {
@@ -203,7 +203,7 @@ render()
                 cursor: "default"
               }}/>
         {/*className={"inport" + inportValueType}*/}
-        <Port key={blockId + inportName}
+        <Port portkey={blockId + inportName}
               className={"inport" + inportValueType}
               cx={0}
               cy={0}
@@ -211,7 +211,7 @@ render()
               id={blockId + inportName}
               blockName={blockId}
         />
-        <Port key={blockId + inportName + "invisiblePortCircle"}
+        <Port portkey={blockId + inportName + "invisiblePortCircle"}
               className={"invisiblePortCircle"}
               cx={0}
               cy={0}
@@ -221,11 +221,12 @@ render()
               blockName={blockId}
               cbClicked={this.portClick}
         />
-        <text key={blockId + inportName + "-text"} textAnchor="start"
+        <text key={blockId + inportName + "-text"} textAnchor={"start"}
               x={5}
               y={3}
               style={{
-                MozUserSelect              : "none",
+                MozUserSelect:"none",
+                WebkitUserSelect:"none",
                 cursor                     : this.props.portThatHasBeenClicked === null ? "move" : "default",
                 fontSize: "7px", fontFamily: "Verdana"
               }}
@@ -255,7 +256,7 @@ render()
                 fill  : this.props.selected ? "#797979" : "black",
                 cursor: "default"
               }}/>
-        <Port key={blockId + outportName}
+        <Port portkey={blockId + outportName}
               className={"outport" + outportValueType}
               cx={0}
               cy={0}
@@ -264,7 +265,7 @@ render()
               blockName={blockId}
 
         />
-        <Port key={blockId + outportName + "invisiblePortCircle"}
+        <Port portkey={blockId + outportName + "invisiblePortCircle"}
               className={"invisiblePortCircle"}
               cx={0}
               cy={0}
@@ -279,6 +280,7 @@ render()
               y={3}
               style={{
                 MozUserSelect              : "none",
+                WebkitUserSelect           : 'none',
                 cursor                     : this.props.portThatHasBeenClicked === null ? "move" : "default",
                 fontSize: "7px", fontFamily: "Verdana"
               }}
@@ -294,7 +296,9 @@ render()
   blockText.push(
     <text className={"blockName"} key={blockId + "textLabel"}
           style={{
-            MozUserSelect                          : "none", fill: "lightgrey",
+            MozUserSelect                          : "none",
+            WebkitUserSelect                       : 'none',
+            fill: "lightgrey",
             cursor                                 : this.props.portThatHasBeenClicked === null ? "move" : "default",
             textAnchor: "middle", alignmentBaseline: "middle",
             fontSize                               : "10px", fontFamily: "Verdana"

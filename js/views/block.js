@@ -15,7 +15,7 @@ import flowChartActions from '../actions/flowChartActions';
 import Ports from './ports.js';
 import BlockRectangle from './blockRectangle';
 
-import interact from '../../node_modules/interact.js';
+import interact from '../../node_modules/interactjs';
 
 import blockCollection from '../classes/blockItems';
 
@@ -26,6 +26,9 @@ export default class Block extends React.Component {
 
     this.portClicked    = this.portClicked.bind(this);
     this.blockSelect    = this.blockSelect.bind(this);
+    this.blockHold      = this.blockHold.bind(this);
+    this.pointerDown    = this.pointerDown.bind(this);
+    this.pointerUp      = this.pointerUp.bind(this);
     this.interactJsDrag = this.interactJsDrag.bind(this);
     }
 
@@ -84,6 +87,12 @@ componentDidMount()
 
   interact(ReactDOM.findDOMNode(this))
     .on('tap', this.blockSelect);
+  interact(ReactDOM.findDOMNode(this))
+    .on('hold', this.blockHold);
+  interact(ReactDOM.findDOMNode(this))
+    .on('down', this.pointerDown);
+  interact(ReactDOM.findDOMNode(this))
+    .on('up', this.pointerUp);
 
   interact(ReactDOM.findDOMNode(this))
     .styleCursor(false);
@@ -153,6 +162,38 @@ blockSelect(e)
   paneActions.openBlockTab(this.props.blockInfo.label);
   //flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
   //paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+  }
+
+blockHold(e)
+  {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
+
+  //flowChartActions.holdBlock(this.props.blockInfo.label);
+  }
+
+/**
+ * pointerDown()
+ * Any time the pointer is down whilst over a block, there should be an action generated to inform the flowChartStore
+ * in order to change the tool icon from + to - to show change in mode.
+ * The action was originally associated with pointer 'hold' and the action is still called holdBlock for simplicity.
+ * @param e
+ */
+pointerDown(e)
+  {
+    console.log(`block: ${this.props.blockInfo.label}  pointerDown`);
+  flowChartActions.holdBlock(this.props.blockInfo.label);
+  }
+/**
+  * pointerUp()
+  * @param e
+  * @description typically called in response to releasing the mouse button
+  * Useful to signal when a HOLD event has finished.
+  */
+pointerUp(e)
+  {
+  flowChartActions.releaseBlock(this.props.blockInfo.label)
   }
 
 interactJsDrag(e)
@@ -246,7 +287,7 @@ render()
   return (
     <g {...gProps} transform={blockTranslate} ref={"node"}>
 
-      <g style={{MozUserSelect: 'none'}}>
+      <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
 
         <rect id={this.props.id + "blockBackground"}
               height={"105"} width={this.props.blockStyling.outerRectangleWidth}
@@ -260,6 +301,7 @@ render()
                         blockIconURL={this.props.blockInfo.iconURL}
                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                         selected={this.props.selected}
+
                         blockStyling={this.props.blockStyling}/>
 
         <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}

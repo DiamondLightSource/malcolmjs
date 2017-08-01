@@ -29,6 +29,7 @@ constructor()
 
   this._serverURLTable = Object.freeze({
     pc70     : 'ws://pc0070.cs.diamond.ac.uk:8080/ws',
+    pc4      : 'ws://pc0004.cs.diamond.ac.uk:8080/ws',
     isaDev   : 'ws://172.23.252.202/ws',
     isaSpare : 'ws://172.23.252.201/ws',
     simulator: 'ws://localhost:8080/ws'

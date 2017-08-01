@@ -288,7 +288,7 @@ onChangeBlockLayoutCallback(items)
 const attributeStore = new AttributeStore();
 
 
-attributeStore.dispatchToken = AppDispatcher.register(function (payload)
+attributeStore.dispatchToken = AppDispatcher.register((payload) =>
   {
   let action = payload.action;
   let item   = action.item;

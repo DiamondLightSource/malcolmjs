@@ -46,7 +46,7 @@ class MainPaneStore extends EventEmitter
     }
   }
 
-AppDispatcher.register(function (payload)
+AppDispatcher.register((payload) =>
   {
   let action = payload.action;
   switch (action.actionType)

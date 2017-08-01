@@ -17,10 +17,10 @@ import SidePaneTabContents from './sidePaneTabContents';
 import MjsPanel from '../components/MjsPanel';
 import Tabs from 'react-toolbox/lib/tabs/Tabs';
 import Tab from 'react-toolbox/lib/tabs/Tab';
-import {Button} from 'semantic-ui-react';
-//import Button from 'react-toolbox/lib/button/Button';
+import Button from 'react-toolbox/lib/button/Button';
+import theme from '../../src/toolbox/theme';
 
-export default class SidePane extends React.Component {
+export default class DlsSidePane extends React.Component {
 constructor(props)
   {
   super(props);
@@ -127,34 +127,27 @@ render()
     //</Tab>;
     }
 
-    return (
-      <MjsPanel theme="flexbox" useAvailableHeight={true}>
-        <Button label="Remove active tab"
-                onClick={this.handleActionRemoveBlockTab}
-                key={"rat1"}
-                icon={"remove"}
-                attached={"top"}>
-        </Button>
-        <Button label="Block details"
-                key={"drm1"}
-                icon={"dropdown"}
-                attached={"top"}>
+    let renderMjsPanel =
+          <MjsPanel theme="flexbox" useAvailableHeight={true}>
+            {/*
+            <div id="dropDown">
+              <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
+                        tabState={this.props.tabState}
+                        listVisible={this.props.listVisible}>
+              </Dropdown>
+            </div>
+            */}
+            {dynamicTab}
 
-          <div id="dropDown">
-            <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
-                      tabState={this.props.tabState}
-                      listVisible={this.props.listVisible}>
-            </Dropdown>
-          </div>
-        </Button>
-        {dynamicTab}
+          </MjsPanel>;
 
-      </MjsPanel>
-    );
+    let renderSimple = <div>{dynamicTab}</div>;
+
+  return ( renderSimple );
   }
 }
 
-SidePane.propTypes = {
+DlsSidePane.propTypes = {
   skin                : PropTypes.object,
   globals             : PropTypes.number,
   tabState            : PropTypes.arrayOf(PropTypes.object).isRequired,

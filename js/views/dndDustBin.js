@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import DropTarget from 'react-dnd';
+import DropTarget from 'react-dnd/lib/DropTarget';
 import ItemTypes from './dndItemTypes';
 
 const style = {

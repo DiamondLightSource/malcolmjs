@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import * as ReactDOM from 'react-dom';
 
 //let React    = require("react");
-import interact from "../../node_modules/interact.js";
+import interact from "../../node_modules/interactjs";
 
 export default class Port extends React.Component {
 constructor(props)
@@ -78,12 +78,13 @@ render()
   // Sanitise the properties being passed to the primitive <circle> element.
   let circleProps = Object.assign({}, this.props);
   delete circleProps.blockName;
+  delete circleProps.portkey;
   if (circleProps.hasOwnProperty("cbClicked"))
     {
     delete circleProps.cbClicked;
     }
 
-  return (<circle {...circleProps} />);
+  return (<circle {...circleProps} key={this.props.portkey} />);
   }
 }
 
@@ -92,7 +93,7 @@ Port.defaultProps = {cbClicked: null};
 
 Port.propTypes =
 {
-  key      : PropTypes.string,
+  portkey  : PropTypes.string,
   className: PropTypes.string,
   cx       : PropTypes.number,
   cy       : PropTypes.number,

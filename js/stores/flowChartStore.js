@@ -14,12 +14,13 @@ import EventEmitter from 'events';
 import blockStore, {BlockItem} from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-import {NavbarEventInfo} from '../actions/navbarActions';
+//import {NavbarEventInfo} from '../actions/navbarActions';
 
 let CHANGE_EVENT = 'change';
 
 let clickedEdge               = null;
 let clickedBlock              = null;  // Name of the block selected by the user
+let heldBlock                 = null;  // Name of the block held by the user
 let portThatHasBeenClicked    = null;
 let storingFirstPortClicked   = null;
 let edgePreview               = null;
@@ -43,6 +44,7 @@ let graphPosition = {
 let graphZoomScale = 2.0;
 
 let blockSelectedStates = {};
+let blockHoldStates = {};
 let backgroundSelected  = false;
 
 function appendToBlockSelectedStates(BlockId)
@@ -71,7 +73,7 @@ function deselectAllBlocks()
   backgroundSelected = true;
 
   // Inform views that we have deselected all blocks and edges
-  // At this stage prepare to show list of blocks in SidePane.
+  // At this stage prepare to show list of blocks in DlsSidePane.
   flowChartStore.emitChange();
   }
 
@@ -129,7 +131,7 @@ function checkIfAnyEdgesAreSelected()
   let i = 0;
   for (let edge in edgeSelectedStates)
     {
-    i = i + 1;
+    i += 1;
     if (edgeSelectedStates[edge] === true)
       {
       //console.log(edgeSelectedStates[edge]);
@@ -164,7 +166,7 @@ function updateEdgePreviewEndpoint(position)
   {
   edgePreview.endpointCoords.x += (1 / graphZoomScale) * (position.x);
   edgePreview.endpointCoords.y += (1 / graphZoomScale) * (position.y);
-  //console.log(edgePreview.endpointCoords);
+  console.log(edgePreview.endpointCoords);
   }
 
 class FlowChartStore extends EventEmitter {
@@ -221,6 +223,11 @@ getIfAnyBlocksAreSelected()
 getSelectedBlock()
   {
   return(clickedBlock);
+  }
+
+getHeldBlock()
+  {
+  return(heldBlock);
   }
 
 getIfAnyEdgesAreSelected()
@@ -866,7 +873,7 @@ const flowChartStore = new FlowChartStore();
 
 //let blockStore = require('./blockStore');
 
-flowChartStore.dispatchToken = AppDispatcher.register(function (payload)
+flowChartStore.dispatchToken = AppDispatcher.register((payload) =>
 {
 let action = payload.action;
 let item   = action.item;
@@ -881,6 +888,22 @@ switch (action.actionType)
     blockSelectedStates[item] = true;
     clickedBlock              = item;
     console.log(`flowChartStore: SELECT_BLOCK event - item: ${item}  blockSelectedStates ${blockSelectedStates[item]}`);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
+    flowChartStore.emitChange();
+    break;
+
+  case appConstants.HOLD_BLOCK:
+    blockHoldStates[item] = true;
+    heldBlock             = item;
+    console.log(`flowChartStore: HOLD_BLOCK event - item: ${item}  blockHoldStates ${blockHoldStates[item]}`);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
+    flowChartStore.emitChange();
+    break;
+
+  case appConstants.RELEASE_BLOCK:
+    blockHoldStates[item] = false;
+    heldBlock             = null;
+    console.log(`flowChartStore: RELEASE_BLOCK event - item: ${item}  blockHoldStates ${blockHoldStates[item]}`);
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
@@ -917,35 +940,6 @@ switch (action.actionType)
     deselectAllEdges();
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
-    break;
-
-  case appConstants.NAVBAR_ACTION:
-    // 1) determine the selected block
-    // 2) get the BlockItem instance
-    // 3) call removeBlock(item)
-    if (item instanceof NavbarEventInfo)
-      {
-      switch (item.eventName)
-        {
-        case "DeleteBlock":
-          {
-          let blockName = flowChartStore.getSelectedBlock();
-          if (blockName !== null)
-            {
-            let blockItem = blockCollection.getBlockItemByName(blockName);
-            if (blockItem !== null)
-              {
-              blockItem.putVisible(false);
-              }
-            }
-          }
-          break;
-
-        default:
-          break;
-        }
-      blockStore.emitChange();
-      }
     break;
 
   case appConstants.CHANGE_GRAPHPOSITION:
@@ -1065,6 +1059,9 @@ switch (action.actionType)
 
     break;
 
+  case appConstants.NAVBAR_ACTION:
+    flowChartStore.emitChange();
+    break;
 
   default:
     //console.log("flowChartStore dispatch callback - unrecognised actionType.");

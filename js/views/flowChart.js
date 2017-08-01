@@ -14,17 +14,22 @@ import Edge from './edge';
 import EdgePreview from './edgePreview';
 import Block from './block';
 
-import interact from '../../node_modules/interact.js';
+import interact from 'interactjs';
 
 import blockCollection, {BlockItem} from '../classes/blockItems';
+import WasteBin from './wasteBin';
 
 // Drag and Drop support - IJG May 2017
-import {DropTarget} from 'react-dnd';
+import DropTarget from 'react-dnd/lib/DropTarget';
 import ItemTypes from './dndItemTypes';
 
-let AppContainerStyle = {
+import FontIcon from 'react-toolbox/lib/font_icon';
+
+let AppDivContainerStyle = {
   "height": "100%",
   "width" : "100%",
+  backgroundColor: "#05354c",
+  overflowY: "hidden"
   //'backgroundColor': "green"
 };
 
@@ -108,6 +113,10 @@ constructor(props)
   this.interactJsDragPan     = this.interactJsDragPan.bind(this);
   this.interactJsPinchZoom   = this.interactJsPinchZoom.bind(this);
   this.wheelZoom             = this.wheelZoom.bind(this);
+  this.state                               =
+    {
+    backgroundSelected       : false
+    };
   }
 
 componentDidMount()
@@ -116,12 +125,11 @@ componentDidMount()
   ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
   ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
-  interact('#dragArea')
-    .on('tap', this.deselect);
+  interact('#dragArea').on('tap', this.deselect);
 
   interact('#dragArea')
     .draggable({
-      onstart: function (e)
+      onstart: (e) =>
         {
         e.stopImmediatePropagation();
         e.stopPropagation();
@@ -129,7 +137,7 @@ componentDidMount()
 
         },
       onmove : this.interactJsDragPan,
-      onend  : function (e)
+      onend  : (e) =>
         {
         e.stopImmediatePropagation();
         e.stopPropagation();
@@ -157,6 +165,7 @@ componentWillUnmount()
 
 deselect(e)
   {
+  console.log(`flowChart: on(tap) callback - deselect(). e = ${e}`);
   flowChartActions.deselectAllBlocks("deselect all blocks");
   flowChartActions.deselectAllEdges("deselect all edges");
 
@@ -171,11 +180,11 @@ deselect(e)
   /**
    * TODO: display available blocks on clicking background
    * Now that all everything is deselcted:
-   * Fill the SidePane contents with a list of all available blocks
+   * Fill the DlsSidePane contents with a list of all available blocks
    * to allow the user to select and drag one onto the MainPane.
    * IJG: 24 April 2017
    */
-
+  flowChartActions.clickedBackground();
 
   }
 
@@ -198,6 +207,7 @@ wheelZoom(e)
   let currentGraphPositionY = this.props.graphPosition.y;
 
   let ZOOM_STEP     = 0.05;
+    //console.log(`wheelZoom(e): deltaY = ${e.nativeEvent.deltaY}`);
   let zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
 
   let newZoomScale;
@@ -234,7 +244,12 @@ wheelZoom(e)
 
 isZoomNegative(n)
   {
-  return ((n = +n) || 1 / n) < 0;
+  /**
+   * TODO: Check this algorithm - what was he trying to do here ??
+   * IJG June 2017
+   */
+  return( n < 0 );
+  //return ((n = +n) || 1 / n) < 0;
   }
 
 /**
@@ -715,7 +730,7 @@ render()
   const {canDrop, isOver, connectDropTarget} = this.props;
   const isActive                             = canDrop && isOver;
 
-  let backgroundColor = '#3E3E3E';
+  let backgroundColor = '#05354c';
   if (isActive)
     {
     backgroundColor = '#557B55';
@@ -758,6 +773,7 @@ render()
                areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}
+               //held={this.props.heldBlock}
           //portMouseOver={this.props.portMouseOver}
 
           // TODO: ** NO!! Must NOT access stores directly from view component. All info via props *only*
@@ -821,16 +837,13 @@ render()
 
   return connectDropTarget(
     //return (
-    <div id={"appAndDragAreaContainer"}
-         style={Object.assign({}, AppContainerStyle, {backgroundColor: backgroundColor, height: "100%", width: "100%"})}>
-      <svg height={"100%"} width={"100%"}
-           ref={"node"}>
-
+    <svg id={"appAndDragAreaContainer"}
+         style={Object.assign({}, AppDivContainerStyle, {backgroundColor: backgroundColor, height: "100%", width: "100%"})}>
         <rect id={"dragArea"} height={"100%"} width={"100%"}
-              fill={"transparent"} style={{MozUserSelect: 'none'}}
+              fill={"transparent"} style={{MozUserSelect: 'none', WebkitUserSelect: 'none', display: 'flex'}}
               onWheel={this.wheelZoom}/>
 
-        <svg id={"appContainer"} style={AppContainerStyle}>
+        <svg id={"appDivContainer"} style={AppDivContainerStyle}>
 
           {this.props.blockPositions ? (
             <g id={"panningGroup"}
@@ -845,15 +858,19 @@ render()
               <g id={"BlocksGroup"}>
                 {blocks}
               </g>
-
             </g>
 
           ) : (<div>{"Waiting for block positions..."}</div>)}
         </svg>
-
-      </svg>
-    </div>
+      {/*<WasteBin isOver={false} canDrop={false} connectDropTarget={this.dummy} onDrop={this.dummy}/>*/}s
+      <WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>
+    </svg>
   )
+  }
+
+dummy()
+  {
+    console.log('flowChart: Drop target connected or Block dropped in waste bin');
   }
 }
 

@@ -4,21 +4,28 @@
 import  * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import BothPanes from './views/sidebar';
-import {DragDropContextProvider} from 'react-dnd';
+import BothPanes from './views/bothPanes';
+import DragDropContextProvider from 'react-dnd/lib/DragDropContextProvider';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import 'font-awesome/css/font-awesome.min.css';
-import './styles/app.scss';
 
+import './styles/index.css';
+
+let OldAppContainerStyle = {
+  margin  : 0,
+  padding : 0,
+  //display : 'flex',
+  "height": "100%",
+  "width" : "100%"
+};
 let AppContainerStyle = {
   margin  : 0,
   padding : 0,
-  display : 'flex',
-  "height": "100%",
-  "width" : "100%"
+  flex: 1,
+  flexDirection: "column",
+  height: "inherit"
+
 };
 
 let MainTabbedViewStyle = {
@@ -55,15 +62,20 @@ export default class MjsApp extends React.Component
 
   render()
     {
-    return (
-      <MuiThemeProvider>
-      <div id="appContainer" style={AppContainerStyle}>
-        <DragDropContextProvider backend={HTML5Backend}>
-        <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
-        </DragDropContextProvider>
-      </div>
-      </MuiThemeProvider>
-    )
+    /**
+     * Only one of these possible rendering models will be implemented in the final version
+     *
+     */
+
+     const renderReactToolbox =
+                      <div id="appContainer" style={AppContainerStyle}>
+                        <DragDropContextProvider backend={HTML5Backend}>
+                          <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
+                        </DragDropContextProvider>
+                      </div>
+                    ;
+
+    return (renderReactToolbox);
     }
   }
 
@@ -82,4 +94,4 @@ ReactDOM.render(
 //ReactDOM.render(React.createElement(App, null), document.getElementById('container'));
 
 //<div id="MainTabbedView" style={MainTabbedViewStyle}><MainPane/></div>
-//<div id="SideTabbedView" style={SideTabbedViewStyle}><SidePane/></div>
+//<div id="SideTabbedView" style={SideTabbedViewStyle}><DlsSidePane/></div>

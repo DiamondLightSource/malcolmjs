@@ -16,23 +16,12 @@ import FavButton from './favButton';
 import FooterButton from './button';
 import FlowChartControllerView from './flowChartControllerView';
 
-import WasteBin from './wasteBin';
 //import * as toggleButtonStyles from './toggleButton.css';
 
-import Button from 'react-toolbox/lib/button/Button';
-//import Tabs from 'react-toolbox/lib/tabs/Tabs';
-//import Tab from 'react-toolbox/lib/tabs/Tab';
-import {Menu} from 'semantic-ui-react';
 import AppBar from 'react-toolbox/lib/app_bar/AppBar';
 import Navigation from 'react-toolbox/lib/navigation/Navigation';
 import Link from 'react-toolbox/lib/link/Link';
-//let Panel = ReactPanels.Panel;
-//let Tab = ReactPanels.Tab;
-//let Toolbar = ReactPanels.Toolbar;
-//let Content = ReactPanels.Content;
-//let Footer = ReactPanels.Footer;
-//let ToggleButton = ReactPanels.ToggleButton;
-//let Button = ReactPanels.Button;
+
 
 export default class MainPane extends React.Component {
 
@@ -56,7 +45,8 @@ constructor(props)
 shouldComponentUpdate(nextProps, nextState)
   {
   return (
-    nextProps.footers !== this.props.footers
+    true
+    //nextProps.footers !== this.props.footers
     //nextProps.favTabOpen !== this.props.favTabOpen ||
     //nextProps.configTabOpen !== this.props.configTabOpen
     //nextProps.loadingInitialData !== this.props.loadingInitialData ||
@@ -101,8 +91,10 @@ handleActionToggleSidebar()
 render()
   {
   let TESTStyling = {
-    'height': '1000px',
-    'width' : '1000px',
+    'height': '100%',
+    'width' : '100%',
+    'flex': '1',
+    'overflowY': 'hidden'
     //backgroundColor: 'darkmagenta'
   };
 
@@ -136,18 +128,9 @@ render()
 
 
   return (
-    <MjsPanel theme={"flexbox"} useAvailableHeight={true}>
-      <Button label={"Toggle sidebar"} onClick={this.handleActionToggleSidebar}>
-        <i className={"fa fa-bars"}></i>
-      </Button>
-
-      <div >
-        <div style={contentStyling}>
+      <div style={TESTStyling}>
           <FlowChartControllerView/>
-        </div>
-      </div>;
-
-    </MjsPanel>
+      </div>
   )
   }
 }

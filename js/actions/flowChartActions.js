@@ -28,6 +28,30 @@ selectBlock(item)
   })
   }
 
+holdBlock(item)
+  {
+  AppDispatcher.handleAction({
+    actionType: appConstants.HOLD_BLOCK,
+    item      : item
+  })
+  }
+
+releaseBlock(item)
+  {
+  AppDispatcher.handleAction({
+    actionType: appConstants.RELEASE_BLOCK,
+    item      : item
+  })
+  }
+
+removeBlock(blockName)
+  {
+  AppDispatcher.handleAction({
+    actionType: appConstants.REMOVE_BLOCK,
+    item      : blockName
+  })
+  }
+
 deselectAllBlocks(item)
   {
   AppDispatcher.handleAction({
@@ -137,6 +161,15 @@ previousMouseCoordsOnZoom(item)
     item      : item
   })
   }
+
+clickedBackground()
+  {
+  AppDispatcher.handleViewAction({
+    actionType: appConstants.NAVBAR_ACTION,
+    item      : null
+  })
+  }
+
 
 /**
  *

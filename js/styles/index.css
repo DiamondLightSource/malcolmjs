@@ -2,7 +2,7 @@
 html {
     background-color: black;
     margin: 0;
-    height: 100%;
+    height: 100vh;
     width: 100%;
 }
 
@@ -13,7 +13,7 @@ body {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.8);
     margin: 0;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     padding: 0;
 }
@@ -59,7 +59,7 @@ body {
     -moz-appearance: none;
     appearance: none;
     content: '\25BD';
-    background: #FFFFFF url("./1461620650_Arrow_Drop_Down.svg") no-repeat 113px center;
+    background: #FFFFFF url("../../1461620650_Arrow_Drop_Down.svg") no-repeat 113px center;
 }
 
 /* Moving some inline styling out of components */
@@ -96,3 +96,4 @@ body {
     fill: lightblue;
     stroke: white;
 }
+

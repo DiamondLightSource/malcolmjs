@@ -247,7 +247,7 @@ setBlockListTabStateTrue()
 const paneStore = new PaneStore();
 
 
-paneStore.dispatchToken = AppDispatcher.register(function (payload)
+paneStore.dispatchToken = AppDispatcher.register((payload) =>
 {
 let action = payload.action;
 let item   = action.item;
@@ -922,7 +922,9 @@ function layoutUpdated(index)
   let callbackError = function (err)
     {
     if (err)
+      {
       console.error(err.message);
+      }
     };
 
   let iteration = function (blockItem, attr, callbackDone)

@@ -33,7 +33,8 @@ function getFlowChartState()
     areAnyEdgesSelected    : flowChartStore.getIfAnyEdgesAreSelected(),
     edgePreview            : flowChartStore.getEdgePreview(),
     blockStyling           : flowChartStore.getBlockStyling(),
-    backgroundSelected     : flowChartStore.getBackgroundSelected()
+    backgroundSelected     : flowChartStore.getBackgroundSelected(),
+    heldBlock              : flowChartStore.getHeldBlock()
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
   }
@@ -64,7 +65,7 @@ export default class FlowChartControllerView extends React.Component
 
   shouldComponentUpdate (nextProps, nextState)
     {
-    let bRet = !Object.is(nextState, this.State);
+    let bRet = !Object.is(nextState, this.state);
     if (this.state.blockPositions === undefined)
       {
       bRet = false;

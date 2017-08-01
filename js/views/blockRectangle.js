@@ -55,7 +55,8 @@ export default class BlockRectangle extends React.Component
                  cursor : this.props.portThatHasBeenClicked === null ? "move" : "default",
                  opacity: '0.5'
                }}
-               xlinkHref={"http://localhost:8080/icons/LUT.svg"}
+               xlinkHref={"file:///dls/technical/controls/ig43/zebra2/pymalcolm/malcolm/modules/pandablocks/icons/TTLIN.svg"}
+               //xlinkHref={"http://localhost:8080/icons/TTLIN.svg"}
         />
       </g>
     )

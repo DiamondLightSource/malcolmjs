@@ -86,8 +86,10 @@ function interactJsDrag(BlockInfo)
   // IJG 24 Feb 2017.
   blockPositions[BlockInfo.target] = update(blockPositions[BlockInfo.target], {
     $set: {
-      x: Math.round(blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale())),
-      y: Math.round(blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
+      //x: Math.round(blockPositions[BlockInfo.target].x + BlockInfo.x * (1 / flowChartStore.getGraphZoomScale())),
+      //y: Math.round(blockPositions[BlockInfo.target].y + BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
+      x: blockPositions[BlockInfo.target].x + (BlockInfo.x * (1 / flowChartStore.getGraphZoomScale())),
+      y: blockPositions[BlockInfo.target].y + (BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
     }
   });
   //console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
@@ -186,7 +188,10 @@ function addBlock(blockItem)
           /**
            * inportValue should be of the form: "inport:bool:ZERO"
            */
-          let firstColonPos  = inportValue.indexOf(':');
+            // Expect inportValue to be of the form: ZERO, ONE, TTLOUT1.OUT
+            // so look for a dot delimeter in case it is another block port
+            // as in block.port
+          let firstColonPos  = inportValue.indexOf('.');
           let substringValue = inportValue;
           if (firstColonPos !== -1)
             {
@@ -733,8 +738,8 @@ droppedBlockFromList(info)
     {
     blockPositions[info.name] = update(blockPositions[info.name], {
       $set: {
-        x: Math.round(info.offset.x * (1 / flowChartStore.getGraphZoomScale())),
-        y: Math.round(info.offset.y * (1 / flowChartStore.getGraphZoomScale()))
+        x: info.offset.x * (1 / flowChartStore.getGraphZoomScale()),
+        y: info.offset.y * (1 / flowChartStore.getGraphZoomScale())
       }
     });
     }
@@ -750,12 +755,12 @@ dispatcherCallback(payload)
     /* BLOCK use */
 
     case appConstants.INTERACTJS_DRAG:
-      interactJsDrag(item);
       //AppDispatcher.waitFor([attributeStore.dispatchToken]);
       AppDispatcher.waitFor([blockCollection.dispatchToken]);
       AppDispatcher.waitFor([flowChartStore.dispatchToken]);
       // TODO: Should this emitChange() be called here??
       //console.log("blockStore dispatcher callback: INTERACTJS_DRAG");
+      interactJsDrag(item);
       blockStore.emitChange();
       break;
 
