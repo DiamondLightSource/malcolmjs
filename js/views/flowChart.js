@@ -863,7 +863,7 @@ render()
           ) : (<div>{"Waiting for block positions..."}</div>)}
         </svg>
       {/*<WasteBin isOver={false} canDrop={false} connectDropTarget={this.dummy} onDrop={this.dummy}/>*/}s
-      <WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>
+      {/*<WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>*/}
     </svg>
   )
   }

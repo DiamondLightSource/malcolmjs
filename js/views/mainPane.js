@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import mainPaneActions from '../actions/mainPaneActions';
 import paneActions from '../actions/paneActions';
 //import ToolsNavbar from './navbarView';
-import MjsPanel from '../components/MjsPanel';
 
 //import ConfigButton from './configButton';
 import FavButton from './favButton';
@@ -21,7 +20,7 @@ import FlowChartControllerView from './flowChartControllerView';
 import AppBar from 'react-toolbox/lib/app_bar/AppBar';
 import Navigation from 'react-toolbox/lib/navigation/Navigation';
 import Link from 'react-toolbox/lib/link/Link';
-
+import WasteBin from './wasteBin';
 
 export default class MainPane extends React.Component {
 
@@ -129,7 +128,8 @@ render()
 
   return (
       <div style={TESTStyling}>
-          <FlowChartControllerView/>
+        <WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>
+        <FlowChartControllerView/>
       </div>
   )
   }

@@ -20,12 +20,13 @@ import Layout from 'react-toolbox/lib/layout/Layout';
 import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
 import Panel from 'react-toolbox/lib/layout/Panel';
 import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-import theme from '../styles/AppBar.css';
+import theme from '../styles/mjsLayout.css';
 import FontIcon from 'react-toolbox/lib/font_icon';
-import styles from "../styles/mjsTheme.css";
-import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
+//import styles from "../styles/mjsLayout.css";
+import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+// import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
 
-console.log('bothPanes: styles', styles);
+//console.log('bothPanes: styles', styles);
 console.log('bothPanes: theme', theme);
 //import {DragDropContextProvider} from 'react-dnd';
 //import HTML5Backend from 'react-dnd-html5-backend';
@@ -52,13 +53,13 @@ let SideTabbedViewStyle = {
 };
 
 let BothPanesContainerStyle = {
-  margin  : 0,
-  padding : 0,
-  display: 'flex',
-  overflowY: 'autos',
+  margin       : 0,
+  padding      : 0,
+  display      : 'flex',
+  overflowY    : 'autos',
   flexDirection: 'row',
-  height: "100%",
-  width : "100%"
+  height       : "100%",
+  width        : "100%"
 };
 
 let SidebarStyling = {
@@ -165,7 +166,6 @@ function getBothPanesState()
     areAnyEdgesSelected : flowChartStore.getIfAnyEdgesAreSelected(),
 
 
-
   }
   }
 
@@ -180,16 +180,16 @@ export default class BothPanes extends React.Component {
 constructor(props)
   {
   super(props);
-  this.state      = getBothPanesState();
+  this.state = getBothPanesState();
   /**
    * Navigation drawer state
    */
   this.state.drawerActive = false;
-  this.state.drawerPinned = false;
+  this.state.drawerPinned  = false;
   this.state.sidebarPinned = false;
 
-  this.__onChange = this.__onChange.bind(this);
-    this.toggleDrawerActive = this.toggleDrawerActive.bind(this);
+  this.__onChange         = this.__onChange.bind(this);
+  this.toggleDrawerActive = this.toggleDrawerActive.bind(this);
   }
 
 __onChange()
@@ -226,16 +226,19 @@ windowWidthMediaQueryChanged()
   paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
   }
 
-  toggleDrawerActive = () => {
-  this.setState({ drawerActive: !this.state.drawerActive });
+toggleDrawerActive = () =>
+  {
+  this.setState({drawerActive: !this.state.drawerActive});
   };
 
-  toggleDrawerPinned = () => {
-  this.setState({ drawerPinned: !this.state.drawerPinned });
+toggleDrawerPinned = () =>
+  {
+  this.setState({drawerPinned: !this.state.drawerPinned});
   };
 
-  toggleSidebar = () => {
-  this.setState({ sidebarPinned: !this.state.sidebarPinned });
+toggleSidebar = () =>
+  {
+  //this.setState({sidebarPinned: !this.state.sidebarPinned});
   };
 
 
@@ -254,39 +257,41 @@ render()
    * */
 
   const actions = [
-    { label: 'Alarm', raised: true, icon: 'access_alarm'},
-    { label: 'Location', raised: true, accent: true, icon: 'room'}
+    {label: 'Alarm', raised: true, icon: 'access_alarm'},
+    {label: 'Location', raised: true, accent: true, icon: 'room'}
   ];
 
-const bp3 =
-  <ThemeProvider theme={theme}>
-    {/*<Layout  id="BothPanesContainer" style={BothPanesContainerStyle}>*/}
-  <Layout  id="BothPanesContainer" className={styles.layout}>
-  <NavDrawer active={this.state.drawerActive}
-             pinned={this.state.drawerPinned}
-             onOverlayClick={ this.toggleDrawerActive }>
-    <p>
-      PandA context etc. goes here.
-    </p>
-  </NavDrawer>
-  <Panel style={{scrollY:"false", height:"100vh", width: "75%"}}>
-    <div id='MainPaneDivWrapper' style={{ flex: 1, overflowY: 'hidden', height:'inherit'}}>
-      <AppBar leftIcon='menu' theme={theme} onLeftIconClick={ this.toggleDrawerActive }/>
-      <MainPane footers={this.state.footers}/>
-    </div>
-  </Panel>
-  <Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>
-    <div><FontIcon value='close' onClick={ this.toggleSidebar }/></div>
-    <div id="DlsSidePaneContainerDiv" style={{ flex: 1, flexDirection: 'row' }}>
-      <DlsSidePane id="DlsSidePane" tabState={this.state.tabState}
-                   selectedTabIndex={this.state.selectedTabIndex}
-                   listVisible={this.state.listVisible}
-                   areAnyBlocksSelected={this.state.areAnyBlocksSelected}
-                   areAnyEdgesSelected={this.state.areAnyEdgesSelected}/>
-    </div>
-  </Sidebar>
-</Layout>
-    </ThemeProvider>;
+  const bp3 =
+          <ThemeProvider theme={theme}>
+            {/*<Layout  id="BothPanesContainer" style={BothPanesContainerStyle}>*/}
+            <Layout id="BothPanesContainer" theme={theme}>
+              <NavDrawer active={this.state.drawerActive}
+                         pinned={this.state.drawerPinned}
+                         onOverlayClick={ this.toggleDrawerActive } theme={theme}>
+                <p>
+                  PandA context etc. goes here.
+                </p>
+              </NavDrawer>
+              {/*<Panel style={{scrollY:"false", height:"100vh", width: "75%"}}>*/}
+              <Panel theme={theme}>
+                <div id='MainPaneDivWrapper' style={{flex: 1, overflowY: 'hidden', height: 'inherit'}}>
+                  <AppBar leftIcon='menu' theme={theme} onLeftIconClick={ this.toggleDrawerActive }/>
+                  <MainPane footers={this.state.footers}/>
+                </div>
+              </Panel>
+              {/*<Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>*/}
+              <Sidebar id="rightsidepane" pinned={ true } theme={theme}>
+                <div><FontIcon value='close' onClick={ this.toggleSidebar }/></div>
+                <div id="DlsSidePaneContainerDiv" style={{flex: 1, flexDirection: 'row'}}>
+                  <DlsSidePane id="DlsSidePane" tabState={this.state.tabState}
+                               selectedTabIndex={this.state.selectedTabIndex}
+                               listVisible={this.state.listVisible}
+                               areAnyBlocksSelected={this.state.areAnyBlocksSelected}
+                               areAnyEdgesSelected={this.state.areAnyEdgesSelected}/>
+                </div>
+              </Sidebar>
+            </Layout>
+          </ThemeProvider>;
 
 
   return ( bp3 );

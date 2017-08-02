@@ -21,11 +21,17 @@ import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
 
 const iconStyles = {
-  marginRight: 24,
+  marginRight         : 24,
   outerRectangleHeight: 46,
   outerRectangleWidth : 46,
   innerRectangleHeight: 40,
   innerRectangleWidth : 40,
+};
+
+const icons = {
+  wastebin: <g>
+    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-12h-12v12zm13-15h-3.5l-1-1h-5l-1 1h-3.5v2h14v-2z"></path>
+  </g>
 };
 
 /**
@@ -111,9 +117,11 @@ constructor(props)
   // Add is default. If a block is started to drag, then mode becomes Delete
   this.state = {mode: 'Add'};
 
-  this.componentAdd = <FontIcon value='add' />;
+  this.componentAdd = <FontIcon value='add'/>;
 
-  this.componentRemove = <FontIcon value='highlightOff' />;
+  this.componentRemove = <FontIcon value='highlightOff'/>;
+
+  console.log('WasteBin: constructor()');
   }
 
 componentDidMount()
@@ -130,18 +138,19 @@ componentDidMount()
     event.target.classList.add('drop-activated');
     });
 
-    flowChartStore.addChangeListener(this._onChange);
+  flowChartStore.addChangeListener(this._onChange);
 
+  console.log('WasteBin: componentDidMount()');
   }
 
 componentWillUnmount()
   {
   /*interact(ReactDOM.findDOMNode(this))
-    .on('dropdeactivate', function (event)
-    {
-    event.target.classList.add('drop-deactivated');
-    });
-*/
+   .on('dropdeactivate', function (event)
+   {
+   event.target.classList.add('drop-deactivated');
+   });
+   */
   }
 
 /*
@@ -151,8 +160,7 @@ componentWillUnmount()
 shouldComponentUpdate(nextProps, nextState)
   {
   // Update is mode has changed
-  return (true);
-  //return (this.state.mode !== nextState.mode);
+  return (this.state.mode !== nextState.mode);
   }
 
 /**
@@ -163,14 +171,14 @@ shouldComponentUpdate(nextProps, nextState)
 getMode()
   {
   let heldBlock = flowChartStore.getHeldBlock();
-  let mode = (heldBlock === null)?'Add':'Remove';
-  return( { mode : mode} );
+  let mode      = (heldBlock === null) ? 'Add' : 'Remove';
+  return ( {mode: mode} );
   }
 
-_onChange ()
-    {
-    this.setState(this.getMode());
-    }
+_onChange()
+  {
+  this.setState(this.getMode());
+  }
 
 
 /*
@@ -191,7 +199,8 @@ render()
   //<FontIcon value={"remove_circle"}/>;
   //{this.props.children};
 
-  return connectDropTarget(<div>{tool}</div>);
+  return connectDropTarget(<div id={'wastebin'} style={{width: "75px", height: "75px"}}>{tool}</div>);
+  //return connectDropTarget(<svg id={'wastebin'}>{icons.wastebin}</svg>);
   }
 }
 

@@ -14,7 +14,6 @@ import Dropdown from './dropdownMenu';
 
 import paneActions from '../actions/paneActions';
 import SidePaneTabContents from './sidePaneTabContents';
-import MjsPanel from '../components/MjsPanel';
 import Tabs from 'react-toolbox/lib/tabs/Tabs';
 import Tab from 'react-toolbox/lib/tabs/Tab';
 import Button from 'react-toolbox/lib/button/Button';
@@ -127,19 +126,6 @@ render()
     //</Tab>;
     }
 
-    let renderMjsPanel =
-          <MjsPanel theme="flexbox" useAvailableHeight={true}>
-            {/*
-            <div id="dropDown">
-              <Dropdown changeTab={this.handleActionTabChangeViaOtherMeans}
-                        tabState={this.props.tabState}
-                        listVisible={this.props.listVisible}>
-              </Dropdown>
-            </div>
-            */}
-            {dynamicTab}
-
-          </MjsPanel>;
 
     let renderSimple = <div>{dynamicTab}</div>;
 

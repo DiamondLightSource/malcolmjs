@@ -1,5 +1,5 @@
 @import "react-toolbox/lib/layout/theme.css";
-
+@import "AppBar.css";
 
 .layout {
  // this class should go in div that wraps Layout component, maybe rename as '.app'
@@ -31,10 +31,13 @@ position: absolute;
     width: 75%
 }
 
+.layout .panel #MainPaneDivWrapper { flex: 1; overflow-y: hidden; height: inherit}
+
 .layout .sidebar {
     overflow-y: auto;
     display:flex;
     height:100%;
-    width:25%
+    width:25%;
+
 }
 

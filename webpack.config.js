@@ -77,8 +77,8 @@ const config = {
               modules       : true,
               sourceMap     : false,
               importLoaders : 1,
-                //localIdentName: '[name]--[local]--[hash:base64:5]'
-              localIdentName: '[local]'
+              localIdentName: '[name]--[local]--[hash:base64:5]'
+              //localIdentName: '[local]'
               }
           },
           { loader: 'postcss-loader' },
