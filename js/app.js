@@ -7,7 +7,7 @@ import * as ReactDOM from 'react-dom';
 import BothPanes from './views/bothPanes';
 import DragDropContextProvider from 'react-dnd/lib/DragDropContextProvider';
 import HTML5Backend from 'react-dnd-html5-backend';
-import MouseBackEnd from 'react-dnd-mouse-backend';
+
 import 'font-awesome/css/font-awesome.min.css';
 
 import './styles/index.css';
@@ -69,7 +69,7 @@ export default class MjsApp extends React.Component
 
      const renderReactToolbox =
                       <div id="appContainer" style={AppContainerStyle}>
-                        <DragDropContextProvider backend={MouseBackEnd}>
+                        <DragDropContextProvider backend={HTML5Backend}>
                           <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
                         </DragDropContextProvider>
                       </div>
