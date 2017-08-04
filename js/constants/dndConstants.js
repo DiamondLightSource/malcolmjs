@@ -5,7 +5,8 @@
 
 const ItemTypes =
   {
-  BLOCK: 'block'
+  BLOCK: 'block',
+  PALETTE: 'palette'
   };
 
 export default ItemTypes;

@@ -10,7 +10,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import DragSource from 'react-dnd/lib/DragSource';
 import ItemTypes from './dndItemTypes';
-import flowChartActions, {DroppedBlockInfo} from '../actions/flowChartActions';
+import flowChartActions, {DroppedPaletteInfo} from '../actions/flowChartActions';
 
 const style = {
   border         : '1px dashed gray',
@@ -22,7 +22,7 @@ const style = {
   float          : 'left',
 };
 
-let blockSource =
+let paletteSource =
       {
         beginDrag(props)
           {
@@ -35,7 +35,6 @@ let blockSource =
           const item       = monitor.getItem();
           const dropResult = monitor.getDropResult();
 
-          console.log('dndBlockSelector: blockSource.endDrag()  -  item = ',item)
           if (dropResult)
             {
             let clientOffset = monitor.getSourceClientOffset();
@@ -44,9 +43,9 @@ let blockSource =
               clientOffset = {x: 0, y: 0};
               }
 
-            //let info = new DroppedBlockInfo(item, clientOffset);
+            let info = new DroppedPaletteInfo(item, clientOffset);
 
-            //flowChartActions.dropBlockFromCanvas(info);
+            flowChartActions.dropPaletteFromList(info);
             // We will need to trigger an action creator here
             /*
              window.alert( // eslint-disable-line no-alert
@@ -58,21 +57,27 @@ let blockSource =
       };
 
 
-class DNDBlockSelector extends React.Component {
+class DNDPaletteSelector extends React.Component {
 render()
   {
   const {isDragging, connectDragSource} = this.props;
   const {name}                          = this.props;
   const opacity                         = isDragging ? 0.4 : 1;
 
+  let dndKey = null;
 
-  let dndKey = name+'DNDBlockSelector';
+  if ('key' in this.props)
+    {
+    dndKey = this.props.key+'DNDPaletteSelector';
+    }
 
   return (
     connectDragSource(
-      this.props.children
+      <div style={{...style, opacity}}>
+        {name}
+      </div>
     )
-  )
+  );
   }
 }
 
@@ -84,7 +89,7 @@ function collect(connect, monitor)
   };
   }
 
-DNDBlockSelector.propTypes = {
+DNDPaletteSelector.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   isDragging       : PropTypes.bool.isRequired,
   name             : PropTypes.string.isRequired,
@@ -92,4 +97,4 @@ DNDBlockSelector.propTypes = {
 };
 
 
-export default DragSource(ItemTypes.BLOCK, blockSource, collect)(DNDBlockSelector);
+export default DragSource(ItemTypes.PALETTE, paletteSource, collect)(DNDPaletteSelector);

@@ -15,7 +15,7 @@ import EventEmitter from 'events';
 //import config from "../utils/config";
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import flowChartStore from './flowChartStore';
-import {DroppedBlockInfo} from '../actions/flowChartActions';
+import {DroppedPaletteInfo} from '../actions/flowChartActions';
 
 import update from 'immutability-helper';
 
@@ -730,11 +730,11 @@ blockUpdated(blockIndex)
 
 /**
  *
- * @param {DroppedBlockInfo} info
+ * @param {DroppedPaletteInfo} info
  */
 droppedBlockFromList(info)
   {
-  if (info instanceof DroppedBlockInfo)
+  if (info instanceof DroppedPaletteInfo)
     {
     blockPositions[info.name] = update(blockPositions[info.name], {
       $set: {
@@ -795,7 +795,7 @@ dispatcherCallback(payload)
       blockStore.emitChange();
       break;
 
-    case appConstants.DROPPED_BLOCK_FROM_LIST:
+    case appConstants.DROPPED_PALETTE_FROM_LIST:
       /* item is {name: <name>, x: <x>, y: <y>} */
       this.droppedBlockFromList(item);
       blockStore.emitChange();

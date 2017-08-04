@@ -206,6 +206,7 @@ wheelZoom(e)
   let currentGraphPositionX = this.props.graphPosition.x;
   let currentGraphPositionY = this.props.graphPosition.y;
 
+  //noinspection MagicNumberJS
   let ZOOM_STEP     = 0.05;
     //console.log(`wheelZoom(e): deltaY = ${e.nativeEvent.deltaY}`);
   let zoomDirection = (this.isZoomNegative(e.nativeEvent.deltaY) ? 'up' : 'down');
@@ -862,8 +863,8 @@ render()
 
           ) : (<div>{"Waiting for block positions..."}</div>)}
         </svg>
-      {/*<WasteBin isOver={false} canDrop={false} connectDropTarget={this.dummy} onDrop={this.dummy}/>*/}s
-      {/*<WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>*/}
+
+      <WasteBin style={{width: "75px", height: "75px"}}/>
     </svg>
   )
   }
@@ -888,4 +889,4 @@ FlowChart.propTypes = {
   backgroundSelected     : PropTypes.bool
 };
 
-export default DropTarget(ItemTypes.BLOCK, layoutTarget, collect)(FlowChart);
+export default DropTarget(ItemTypes.PALETTE, layoutTarget, collect)(FlowChart);

@@ -173,20 +173,31 @@ clickedBackground()
 
 /**
  *
- * @param {DroppedBlockInfo} info
+ * @param {DroppedPaletteInfo} info
  */
-dropBlockFromList(info)
+dropPaletteFromList(info)
   {
   // Sanity check that this was called with the expected class type.
-  if (info instanceof DroppedBlockInfo)
+  if (info instanceof DroppedPaletteInfo)
     {
     AppDispatcher.handleAction({
-      actionType: appConstants.DROPPED_BLOCK_FROM_LIST,
+      actionType: appConstants.DROPPED_PALETTE_FROM_LIST,
       item      : info
     })
     }
   }
 
+dropBlockFromCanvas(info)
+  {
+  // Sanity check that this was called with the expected class type.
+  if (info instanceof DroppedPaletteInfo)
+    {
+    AppDispatcher.handleAction({
+      actionType: appConstants.DROPPED_BLOCK_FROM_CANVAS,
+      item      : info
+    })
+    }
+  }
 //appendToBlockSelectedStates(item){
 //  AppDispatcher.handleAction({
 //    actionType: appConstants.APPENDTO_BLOCKSELECTEDSTATES,
@@ -196,10 +207,10 @@ dropBlockFromList(info)
 }
 
 /**
- * @class DroppedBlockInfo
+ * @class DroppedPaletteInfo
  * @description Encapsulates information from dropBlockFromList() action creator, allowing type checking.
  */
-class DroppedBlockInfo
+class DroppedPaletteInfo
 {
 /**
  * @param {name} item
@@ -222,9 +233,36 @@ constructor(item, offset)
     }
 }
 
+/**
+ * @class DroppedBlockInfo
+ * @description Encapsulates information from dropBlockFromList() action creator, allowing type checking.
+ */
+class DroppedBlockInfo
+{
+/**
+ * @param {name} item
+ * @param {x, y} offset
+ */
+constructor(item, offset)
+  {
+  //this.info = {item:{name:""}, coords:{x:0, y:0}};
+  this.info = {item, offset};
+  }
+
+get name()
+  {
+  return(this.info.item.name);
+  }
+
+get offset()
+  {
+  return(this.info.offset);
+  }
+}
+
 const flowChartActions = new FlowChartActions();
 
-export {flowChartActions as default, DroppedBlockInfo};
+export {flowChartActions as default, DroppedPaletteInfo, DroppedBlockInfo};
 
 
 

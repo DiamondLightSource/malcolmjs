@@ -17,7 +17,7 @@ import MalcolmUtils from '../utils/MalcolmUtils';
 import appConstants from '../constants/appConstants';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import SortableTree from 'react-sortable-tree';
-import DNDBlockSelector from './dndBlockSelector';
+import DNDPaletteSelector from './dndPaletteSelector';
 import ItemTypes from './dndItemTypes';
 import theme from '../../src/toolbox/theme';
 
@@ -310,7 +310,7 @@ generateBlockList(blocksAvailable)
 
   let blockList = blocksAvailable.map((blockItem, index) => (
       <li key={blockItem.blockName() + 'dragBlock'}><DNDBlockSelector className={'dragBlock'}
-                                                                      connectDragSource={ItemTypes.BLOCK}
+                                                                      connectDragSource={ItemTypes.PALETTE}
                                                                       isDragging={true}
                                                                       name={blockItem.blockName()}
                                                                       key={blockItem.blockName() + 'dragBlockDNDSel'}/>
@@ -326,8 +326,8 @@ generateBlockListRTBX(blocksAvailable)
   let blockListDivs = [];
 
   let blockList = blocksAvailable.map((blockItem, index) => (
-      <ListItem key={blockItem.blockName() + 'dragBlock'}><DNDBlockSelector className={'dragBlock'}
-                                                                      connectDragSource={ItemTypes.BLOCK}
+      <ListItem key={blockItem.blockName() + 'dragBlock'}><DNDPaletteSelector className={'dragBlock'}
+                                                                      connectDragSource={ItemTypes.PALETTE}
                                                                       isDragging={true}
                                                                       name={blockItem.blockName()}
                                                                       key={blockItem.blockName() + 'dragBlockDNDSel'}/>

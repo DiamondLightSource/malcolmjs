@@ -1,0 +1,59 @@
+
+
+#outer-dropzone {
+    height: 140px;
+}
+
+#inner-dropzone {
+    height: 80px;
+}
+
+.dropzone {
+    fill: "transparent";
+    fill-opacity: 0.2;
+    stroke-dasharray: 2;
+    stroke-width: 4px;
+    stroke-linecap: round;
+}
+
+
+#iconWastebin       {
+    stroke: lightgreen;
+    fill: lightgreen;
+
+}
+#iconWastebin:hover {
+    stroke: yellow;
+    fill: yellow;
+}
+
+.wbIcon{
+    fill: yellow;
+}
+.wbIcon:hover{
+    fill: red;
+}
+
+.drop-active {
+    stroke: #aaa;
+}
+
+.drop-target {
+    fill: "transparent";
+    stroke: #fff;
+    stroke-dasharray: 0;
+}
+
+.drag-drop {
+    stroke: #fff;
+    fill: "transparent";
+    stroke-dasharray: 0;
+    stroke-width: 2px;
+    stroke-linecap: round;
+}
+
+.drag-drop.can-drop {
+    stroke: #000;
+    fill: "transparent";
+}
+

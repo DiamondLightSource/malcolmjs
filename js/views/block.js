@@ -19,7 +19,7 @@ import interact from '../../node_modules/interactjs';
 
 import blockCollection from '../classes/blockItems';
 
-export default class Block extends React.Component {
+class Block extends React.Component {
   constructor(props)
     {
     super(props);
@@ -256,6 +256,9 @@ portClicked(e)
 
 render()
   {
+  const {isDragging, connectDragSource} = this.props;
+  const {name}                          = this.props;
+
   let blockTranslate = "translate(" + this.props.blockPosition.x + ","
     + this.props.blockPosition.y + ")";
 
@@ -283,9 +286,15 @@ render()
     let delProp = notGProps[i];
     delete gProps[delProp];
     }
+    /*<DNDBlockSelector className={'dragBlock'}
+     connectDragSource={ItemTypes.BLOCK}
+     isDragging={true}
+     name={this.props.id}
+     key={this.props.id + 'dragBlockDND'}>
+     */
 
-  return (
-    <g {...gProps} transform={blockTranslate} ref={"node"}>
+  return(
+    <g className="draggable drag-drop" {...gProps} transform={blockTranslate}>
 
       <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
 
@@ -295,7 +304,6 @@ render()
                 fill  : 'transparent',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
               }}/>
-        /* To allow the cursor to change when hovering over the entire block container */
 
         <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
                         blockIconURL={this.props.blockInfo.iconURL}
@@ -312,9 +320,8 @@ render()
                cbClicked={this.portClicked}/>
 
       </g>
+    </g>)
 
-    </g>
-  )
   }
 }
 
@@ -335,3 +342,4 @@ Block.propTypes =
 };
 
 
+export default Block;

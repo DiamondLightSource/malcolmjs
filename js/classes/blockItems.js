@@ -10,7 +10,7 @@ import appConstants  from '../constants/appConstants';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import MalcolmWebSocketClient from '../wsWebsocketClient';
-import {DroppedBlockInfo} from '../actions/flowChartActions'
+import {DroppedPaletteInfo} from '../actions/flowChartActions'
 import config from '../utils/config';
 //import async from 'async-es';
 import eachOf from 'async/eachOf';
@@ -838,11 +838,11 @@ getItemByProtocolIndex(protocolIndex)
 
 /**
  *
- * @param {DroppedBlockInfo} item
+ * @param {DroppedPaletteInfo} item
  */
 droppedBlockFromList(item)
   {
-    if (item instanceof DroppedBlockInfo)
+    if (item instanceof DroppedPaletteInfo)
       {
       let block_item = this.getBlockItemByName(item.name);
 
@@ -923,9 +923,9 @@ dispatcherCallback(payload)
     case appConstants.INTERACTJS_DRAG:
       break;
 
-    case appConstants.DROPPED_BLOCK_FROM_LIST:
+    case appConstants.DROPPED_PALETTE_FROM_LIST:
       /* item is {name: <name>, x: <x>, y: <y>} */
-      // item should be of type class DroppedBlockInfo - defined in flowChartActions.
+      // item should be of type class DroppedPaletteInfo - defined in flowChartActions.
       this.droppedBlockFromList(item);
       break;
 

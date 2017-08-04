@@ -74,6 +74,7 @@ const config = {
           {loader: "css-loader",
             options:
               {
+              camelCase     : true,
               modules       : true,
               sourceMap     : false,
               importLoaders : 1,

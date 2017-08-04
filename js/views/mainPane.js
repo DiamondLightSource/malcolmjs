@@ -128,7 +128,6 @@ render()
 
   return (
       <div style={TESTStyling}>
-        <WasteBin isOver={false} canDrop={false} connectDropTarget={()=>{}} onDrop={()=>{}} style={{width: "75px", height: "75px"}}/>
         <FlowChartControllerView/>
       </div>
   )
