@@ -1,28 +1,29 @@
 
 
-#outer-dropzone {
-    height: 140px;
-}
-
-#inner-dropzone {
-    height: 80px;
-}
-
 .dropzone {
     fill: "transparent";
     fill-opacity: 0.2;
-    stroke-dasharray: 2;
-    stroke-width: 4px;
-    stroke-linecap: round;
 }
 
 
-#iconWastebin       {
+#wbWastebin       {
     stroke: lightgreen;
     fill: lightgreen;
 
 }
-#iconWastebin:hover {
+#wbWastebin:hover {
+    stroke: yellow;
+    fill: yellow;
+    -webkit-transition: fill 2s, -webkit-transform 2s;
+    transition: fill 2s, transform 2s;
+}
+
+#iconPalette       {
+    stroke: lightgreen;
+    fill: lightgreen;
+
+}
+#iconPalette:hover {
     stroke: yellow;
     fill: yellow;
 }
@@ -35,21 +36,22 @@
 }
 
 .drop-active {
-    stroke: #aaa;
+//    stroke: red;
+//    animation: dash 1s linear forwards;
 }
 
 .drop-target {
     fill: "transparent";
-    stroke: #fff;
-    stroke-dasharray: 0;
+    //stroke: #fff;
+    //stroke-dasharray: 0;
 }
 
 .drag-drop {
     stroke: #fff;
     fill: "transparent";
-    stroke-dasharray: 0;
-    stroke-width: 2px;
-    stroke-linecap: round;
+    //stroke-dasharray: 0;
+    //stroke-width: 2px;
+    //stroke-linecap: round;
 }
 
 .drag-drop.can-drop {

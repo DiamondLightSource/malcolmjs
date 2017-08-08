@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 //let Content = ReactPanels.Content;
 //let Button  = ReactPanels.Button;
 import Button from 'react-toolbox/lib/button/Button';
-import TreeView from 'react-treeview';
 import {List,ListItem} from 'react-toolbox/lib/list'
 import blockStore  from '../stores/blockStore';
 import blockCollection, {BlockItem} from '../classes/blockItems';
@@ -16,17 +15,14 @@ import attributeStore from '../stores/attributeStore';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import appConstants from '../constants/appConstants';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-import SortableTree from 'react-sortable-tree';
 import DNDPaletteSelector from './dndPaletteSelector';
 import ItemTypes from './dndItemTypes';
-import theme from '../../src/toolbox/theme';
-
-/* Purely for favContent & configContent */
-//let paneStore = require('../stores/paneStore');
 
 import WidgetTableContainer from './widgetTableContainer';
 
-import * as classes from './sidePaneTabContents.scss';
+import styles from '../styles/sidePaneContent.css';
+
+//import * as classes from './sidePaneTabContents.scss';
 
 // Load the TreeView stylesheet
 //import * as treeViewStyles from './treeview.css';
@@ -274,7 +270,7 @@ generateTabContent(blockAttributes)
   const label2 = <span className="node">{blockAttribs}</span>;
   return (
     <List nodeLabel={label2} key={blockAttribs + 'treeview'}>
-      <ListItem>{groupsObject[blockAttribs]}</ListItem>
+      <ListItem>{groupsObject[blockAttribs]} </ListItem>
     </List>
   );
   }));
@@ -309,11 +305,12 @@ generateBlockList(blocksAvailable)
   let blockListDivs = [];
 
   let blockList = blocksAvailable.map((blockItem, index) => (
-      <li key={blockItem.blockName() + 'dragBlock'}><DNDBlockSelector className={'dragBlock'}
-                                                                      connectDragSource={ItemTypes.PALETTE}
-                                                                      isDragging={true}
-                                                                      name={blockItem.blockName()}
-                                                                      key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+      <li key={blockItem.blockName() + 'dragBlock'} className={styles.dragBlock}>
+        <DNDBlockSelector className={styles.dragBlock}
+                          connectDragSource={ItemTypes.PALETTE}
+                          isDragging={true}
+                          name={blockItem.blockName()}
+                          key={blockItem.blockName() + 'dragBlockDNDSel'}/>
       </li>
     )
   );
@@ -326,75 +323,25 @@ generateBlockListRTBX(blocksAvailable)
   let blockListDivs = [];
 
   let blockList = blocksAvailable.map((blockItem, index) => (
-      <ListItem key={blockItem.blockName() + 'dragBlock'}><DNDPaletteSelector className={'dragBlock'}
-                                                                      connectDragSource={ItemTypes.PALETTE}
-                                                                      isDragging={true}
-                                                                      name={blockItem.blockName()}
-                                                                      key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+      <ListItem key={blockItem.blockName() + 'dragBlock'} >
+        <DNDPaletteSelector connectDragSource={ItemTypes.PALETTE}
+                            isDragging={true}
+                            name={blockItem.blockName()}
+                            key={blockItem.blockName() + 'dragBlockDNDSel'}/>
       </ListItem>
     )
   );
-  return (<List id={'dragBlockList'} key={'dragBlockList'} style={{display: "flex", flexDirection: "column", overflowY: "overlay"}}>{blockList}</List>);
+  let listBlocks = <List
+                    id={'dragBlockList'}
+                    className={styles.ListBlocks}
+                    key={'dragBlockList'}
+                    >
+                    {blockList}
+                  </List>;
+
+  return (listBlocks);
   }
 
-generateBlockTree(blocksAvailable)
-  {
-  let rendering = [];
-  let blockTree = [];
-  let children  = [];
-
-  for (let i = 0; i < blocksAvailable.length; i++)
-    {
-    let blockItem = blocksAvailable[i];
-    if (blockItem.visible === false)
-      {
-      children.push({title: blockItem.blockName()});
-      }
-    }
-
-  blockTree.push({title: 'Blocks Available', children: children, expanded: true});
-
-  rendering.push(<div>{"Above SortableTree"}</div>);
-  rendering.push(<SortableTree
-    treeData={blockTree}
-    onChange={treeData => this.setState({treeData})}
-  />);
-  rendering.push(<div>{"Below SortableTree"}</div>);
-  return rendering;
-  }
-
-onBlockItemSelectonSelectAlert(eventKey)
-  {
-  alert(`Alert from menu item.\neventKey: ${eventKey}`);
-  }
-
-generateBlockMenu(blocksAvailable)
-  {
-  let menuItems = [];
-
-  for (let i = 0; i < blocksAvailable.length; i++)
-    {
-    let blockItem = blocksAvailable[i];
-    if (blockItem.visible === false)
-      {
-      let elementKey = blockItem.name()+'-list-item';
-      let element = (<div key={elementKey}>{"dummy"}</div>);
-
-      menuItems.push(element);
-      }
-    }
-
-  const MenuItems = (
-    <ul className="dropdown-menu open">
-      {menuItems}
-    </ul>
-  );
-
-  let rendering = [];
-
-  rendering.push(MenuItems);
-  return ( rendering );
-  }
 
 
 render()
@@ -403,17 +350,6 @@ render()
 
   let tabContent = [];
 
-  //if(this.props.tabObject.tabType === "Favourites"){
-  //  tabContent.push(
-  //    <p>{this.state.favContent.name}</p>
-  //  );
-  //}
-  //else if(this.props.tabObject.tabType === 'Configuration'){
-  //  tabContent.push(
-  //    <p>{this.state.configContent.name}</p>
-  //  );
-  //}
-  //console.log(`sidePaneTabContents.render(): this.props.tabObject.tabType = ${this.props.tabObject.tabType}`);
   if (this.props.tabObject.tabType === 'VISIBILITY' ||
     this.props.tabObject.tabType === 'block')
     {
@@ -430,9 +366,6 @@ render()
     }
   else if (this.props.tabObject.tabType === 'edge')
     {
-    /**
-     * TODO: I think that button should be Button. CHECK!!
-     */
     tabContent.push(
       <Button key={this.props.tabObject.label + "edgeDeleteButton"}
               onClick={this.handleEdgeDeleteButton}
@@ -441,7 +374,6 @@ render()
     }
 
   return (
-
     <div id="tabContentDivContainer">
       {tabContent}
     </div>

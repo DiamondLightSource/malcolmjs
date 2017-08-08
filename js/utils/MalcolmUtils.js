@@ -157,8 +157,8 @@ malcolmPut(requestedDataToWrite, endpoint, value, successCallback, failureCallba
     requestedData  : requestedDataToWrite
   });
 
-  console.log(`MalcolmUtils.malcolmPut(): ==>`);
-  console.log(messageJson);
+  //console.log(`MalcolmUtils.malcolmPut(): ==>`);
+  //console.log(messageJson);
   MalcolmWebSocketClient.sendText(messageJson);
 
   return(id);

@@ -246,7 +246,7 @@ render()
     c2X, c2Y,
     targetX, targetY
   ];
-  console.log(`Edge.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
+  //console.log(`Edge.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
 
   pathInfo = pathInfo.join(" ");
 

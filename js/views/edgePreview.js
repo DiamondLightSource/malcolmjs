@@ -254,7 +254,7 @@ export default class EdgePreview extends React.Component
       targetX, targetY
     ];
 
-    console.log(`edgePreview.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
+    //console.log(`edgePreview.render():  sourceX: ${sourceX} sourceY: ${sourceY} targetX: ${targetX} targetY: ${targetY} c1X: ${c1X} c1Y: ${c1Y} c2X: ${c2X} c2Y ${c2Y}`);
 
     pathInfo = pathInfo.join(" ");
 

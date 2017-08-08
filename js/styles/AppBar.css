@@ -1,6 +1,14 @@
+.appBar > div {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
 .appBar {
+    overflow-y: auto;
     background-color: #800080;
 }
+
 .appBar svg {
     width: 3.4rem;
     height: 3.4rem;

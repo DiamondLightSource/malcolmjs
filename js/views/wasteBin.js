@@ -24,6 +24,7 @@ const iconStyles = {
   innerRectangleWidth : 40,
 };
 
+
 const icons = {
   wastebin: <path id={styles.wbWastebin} className={styles.wbIcon}
     d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-12h-12v12zm13-15h-3.5l-1-1h-5l-1 1h-3.5v2h14v-2z">
@@ -62,25 +63,32 @@ handleChange = (field, value) => {
 this.setState({...this.state, [field]: value});
 };
 
+
 componentDidMount()
   {
   //interact(ReactDOM.findDOMNode(this))
-  interact('.dropzone').dropzone({
+  interact(ReactDOM.findDOMNode(this)).dropzone({
     ondrop        : (event) =>
       {
       console.log(`WasteBin: ondrop()`);
       flowChartActions.removeBlock(event.relatedTarget.id);
       },
-    ondropactivate: (event) =>
+    // allow multiple drags on the same element
+    maxPerElement: Infinity
+    })
+    .on ('drop', (event) =>
+      {
+      console.log(`WasteBin: ondrop()`);
+      flowChartActions.removeBlock(event.relatedTarget.id);
+      })
+    .on ('dropactivate', (event) =>
       {
       console.log(`WasteBin: ondropactivate()`);
       // add active dropzone feedback
       event.target.classList.add(styles.dropActive);
       this.handleChange("isActive", true);
-      },
-
-
-    ondragenter: (event) =>
+      })
+    .on('dragenter', (event) =>
       {
       console.log(`WasteBin: ondragenter()`);
       let draggableElement = event.relatedTarget,
@@ -91,26 +99,23 @@ componentDidMount()
       dropzoneElement.classList.add(styles.dropTarget);
       draggableElement.classList.add(styles.canDrop);
       this.handleChange("isOver", true);
-      },
-
-    ondragleave: (event) =>
+      }).
+    on('dragleave', (event) =>
       {
       console.log(`WasteBin: ondragleave()`);
       // remove the drop feedback style
       event.target.classList.remove(styles.dropTarget);
       event.relatedTarget.classList.remove(styles.canDrop);
       this.handleChange("isOver", false);
-      },
-
-    ondropdeactivate: (event) =>
+      })
+    .on('dropdeactivate', (event) =>
       {
       console.log(`WasteBin: ondropdeactivate()`);
       // remove active dropzone feedback
       event.target.classList.remove(styles.dropActive);
       event.target.classList.remove(styles.dropTarget);
       this.handleChange("isActive", false);
-      }
-  });
+      });
 
   flowChartStore.addChangeListener(this._onChange);
 

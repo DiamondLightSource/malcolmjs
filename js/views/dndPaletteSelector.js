@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import DragSource from 'react-dnd/lib/DragSource';
 import ItemTypes from './dndItemTypes';
 import flowChartActions, {DroppedPaletteInfo} from '../actions/flowChartActions';
+import styles from '../styles/sidePaneContent.css';
 
 const style = {
   border         : '1px dashed gray',
@@ -73,7 +74,7 @@ render()
 
   return (
     connectDragSource(
-      <div style={{...style, opacity}}>
+      <div className={styles.dragBlock}>
         {name}
       </div>
     )
