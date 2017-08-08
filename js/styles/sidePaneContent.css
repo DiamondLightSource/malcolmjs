@@ -1,0 +1,29 @@
+.dragBlock {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 100px;
+    height: 50px;
+
+    //padding        : '0.5rem 1rem',
+    margin-right    : 1.5rem;
+    margin-bottom   : 1.5rem;
+    float          : left;
+    cursor: move;
+}
+
+.ListBlocks {
+  list-style: none;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.ListBlockItem {
+
+}
+
+.RightSidebar {
+  overflow-y: auto;
+}
