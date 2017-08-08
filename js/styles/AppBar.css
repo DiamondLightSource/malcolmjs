@@ -1,12 +1,14 @@
 .appBar > div {
     display: flex;
     flex-direction: row;
-    align-content: center;
+    align-content: baseline;
+    height: 35px;
+    overflow-y: hidden;
 }
 
 .appBar {
     overflow-y: auto;
-    background-color: #800080;
+    background-color: #004180;
 }
 
 .appBar svg {
@@ -14,4 +16,8 @@
     height: 3.4rem;
     margin-right: 1rem;
     fill: #fff;
+}
+
+.appBar h1 {
+    margin-top: auto;
 }

@@ -269,7 +269,7 @@ generateTabContent(blockAttributes)
   {
   const label2 = <span className="node">{blockAttribs}</span>;
   return (
-    <List nodeLabel={label2} key={blockAttribs + 'treeview'}>
+    <List className={styles.ListParams} nodeLabel={label2} key={blockAttribs + 'treeview'}>
       <ListItem>{groupsObject[blockAttribs]} </ListItem>
     </List>
   );
