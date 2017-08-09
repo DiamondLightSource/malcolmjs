@@ -4,6 +4,8 @@
 
 import * as React from '../../node_modules/react/react';
 import PropTypes from 'prop-types';
+//import InlineSVG from 'svg-inline-react';
+//import SVGInline from "react-svg-inline"
 
 export default class BlockRectangle extends React.Component
 {
@@ -21,10 +23,42 @@ export default class BlockRectangle extends React.Component
     {
     //console.log("render: blockRectangle");
 
+   //cleanup={["title", "desc", "comment", "defs"]}
+    /* Use this for when all icons are available */
+/*
+    let blockIconSVG = <SVGInline
+                        svg={this.props.blockIconSVG}
+                        component={"svg"}
+                        cleanup={["title", "desc", "comment", "defs"]}
+                        height={(blockStyling.innerRectangleHeight/2).toString()}
+                        width={(blockStyling.innerRectangleWidth/2).toString()}
+                        viewBox={`0 0 ${(blockStyling.innerRectangleWidth/2).toString()} ${(blockStyling.innerRectangleHeight/2).toString()}`}
+                        />;
+*/
+/*
+      let blockIconSVG = React.cloneElement(rawBlockIconSVG, {height:{blockStyling.innerRectangleHeight.toString()},
+                                                              width:{blockStyling.innerRectangleWidth.toString()},
+                                                              viewBox:{`0 0 ${blockStyling.innerRectangleWidth.toString()} ${blockStyling.innerRectangleHeight.toString()}`}} )
+*/
+   // blockIconSVG.props.height = blockStyling.innerRectangleHeight.toString();
+    //blockIconSVG.props.width = blockStyling.innerRectangleWidth.toString();
+    //blockIconSVG.props.viewBox = `0 0 ${blockStyling.innerRectangleWidth.toString()} ${blockStyling.innerRectangleHeight.toString()}`;
+
     let blockStyling = this.props.blockStyling;
 
-    /* Use this for when all icons are available */
-    let blockIconURL = this.props.blockIconURL;
+    let svgProps = {height:blockStyling.innerRectangleHeight.toString(),
+                    width:blockStyling.innerRectangleWidth.toString(),
+                    viewBox:"0 0 "+blockStyling.innerRectangleWidth.toString()+" "+blockStyling.innerRectangleHeight.toString(),
+                    dangerouslySetInnerHTML:{__html: this.props.blockIconSVG}};
+
+
+    //let parser = new DOMParser();
+    //let doc = parser.parseFromString(this.props.blockIconSVG, "image/svg+xml");
+    //let ele  = doc.documentElement;
+    let elem = React.createElement('svg', {...svgProps});
+
+    //let elem  = React.createElement('svg', {...svgProps}, this.props.blockIconSVG);
+    //let elem = this.props.blockIconSVG;
 
     return (
       <g>
@@ -36,7 +70,6 @@ export default class BlockRectangle extends React.Component
                 stroke: this.props.selected ? '#797979' : 'black',
                 cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
               }}
-          //onClick={this.nodeClick} onDragStart={this.nodeDrag}
         />
         <rect id={this.props.blockId.concat("InnerRectangle")}
               height={blockStyling.innerRectangleHeight} width={blockStyling.innerRectangleWidth}
@@ -47,17 +80,9 @@ export default class BlockRectangle extends React.Component
               }}
         />
 
-        <image height={blockStyling.innerRectangleHeight}
-               width={blockStyling.innerRectangleWidth}
-               x={3}
-               y={3}
-               style={{
-                 cursor : this.props.portThatHasBeenClicked === null ? "move" : "default",
-                 opacity: '0.5'
-               }}
-               xlinkHref={"file:///dls/technical/controls/ig43/zebra2/pymalcolm/malcolm/modules/pandablocks/icons/TTLIN.svg"}
-               //xlinkHref={"http://localhost:8080/icons/TTLIN.svg"}
-        />
+        <svg {...svgProps}>
+        </svg>
+
       </g>
     )
     }
@@ -67,8 +92,7 @@ export default class BlockRectangle extends React.Component
 BlockRectangle.propTypes = {
 selected              : PropTypes.bool,
   blockStyling          : PropTypes.object,
-  blockIconURL          : PropTypes.string,
+  blockIconSVG          : PropTypes.string,
   blockId               : PropTypes.string,
   portThatHasBeenClicked: PropTypes.object
 };
-
