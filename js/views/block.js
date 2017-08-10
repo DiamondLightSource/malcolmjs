@@ -279,7 +279,7 @@ render()
    */
   const gProps    = Object.assign({}, this.props);
   const notGProps = ["graphZoomScale", "blockInfo", "areAnyBlocksSelected", "portThatHasBeenClicked", "blockStyling",
-                     "storingFirstPortClicked", "selected", "blockPosition", "deselect"];
+                     "storingFirstPortClicked", "selected", "blockPosition", "deselect", "blockIconSVG"];
 
   for (let i = 0; i < notGProps.length; i++)
     {
@@ -307,6 +307,7 @@ render()
 
         <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
                         blockIconURL={this.props.blockInfo.iconURL}
+                        blockIconSVG={this.props.blockIconSVG}
                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                         selected={this.props.selected}
 
@@ -330,6 +331,7 @@ Block.propTypes =
 {
   graphZoomScale         : PropTypes.number,
   blockInfo              : PropTypes.object,
+  blockIconSVG           : PropTypes.string,
   areAnyBlocksSelected   : PropTypes.bool,
   portThatHasBeenClicked : PropTypes.object,
   blockStyling           : PropTypes.object,

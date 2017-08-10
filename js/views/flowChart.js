@@ -771,6 +771,7 @@ render()
                id={blockInfo.name}
                className={"block"}
                blockInfo={blockInfo}
+               blockIconSVG={item.icon}
                areAnyBlocksSelected={this.props.areAnyBlocksSelected}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}

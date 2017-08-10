@@ -251,6 +251,37 @@ mri()
   return (ret);
   }
 
+/**
+ * property icon() returns the SVG string representing this block icon.
+ * The SVG is represented by a string which is derived from InkScape. This is quite a dirty string
+ * as it contains a plethora of line-feed and escape characters.
+ * So we need to sanitise it into a valid SVG object.
+ *
+ * @returns {*}
+ */
+get icon()
+  {
+  let ret = "";
+  if (this.attributes.hasOwnProperty('icon'))
+    {
+    // Avoid disturbing the original raw string
+    //  - Get rid of the xml preamble and copy string from first <svg tag.
+
+    let posSvgStart = this.attributes.icon.value.search("<svg");
+    if (posSvgStart >= 0)
+      {
+      let copyRaw = this.attributes.icon.value.slice(posSvgStart);
+      ret = copyRaw;
+      // Replace all line-feed escapes with no character:
+      // - copyRaw = copyRaw.replace(/\n/g,'');
+      // Replace all escaped quotation marks with non-escaped ones.
+      // - ret = copyRaw.replace(/\\\"/g,'\"');
+      //console.log(ret);
+      }
+    }
+  return (ret);
+  }
+
 get visible()
   {
   let ret = false;

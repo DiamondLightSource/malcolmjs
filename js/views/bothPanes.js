@@ -25,9 +25,11 @@ import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import theme from '../styles/mjsLayout.css';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import Link from 'react-toolbox/lib/link/Link';
 import styles from "../styles/mjsLayout.css";
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+import {Breadcrumbs} from 'react-breadcrumbs-dynamic';
+import { Route } from 'react-router-dom'
+
 // import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
 
 //console.log('bothPanes: styles', styles);
@@ -219,6 +221,17 @@ render()
                 <div id='MainPaneDivWrapper' style={{flex: 1, overflowY: 'hidden', height: 'inherit'}}>
                 <AppBar className={styles.appBar} title="Zebra2 Configurator" leftIcon='menu' theme={theme} onLeftIconClick={ this.toggleDrawerActive }>
                     {/* This is probably a good place to handle breadcrumbs */}
+                  <div>
+ 
+                    <Breadcrumbs
+                      separator={<b> / </b>}
+                      item={'a'}
+                      finalItem={'b'}
+                      finalProps={{
+                        style: {color: 'red'}
+                      }}
+                    />
+                  </div>
                 </AppBar>
                   <MainPane footers={this.state.footers}/>
                 </div>

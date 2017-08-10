@@ -4,8 +4,8 @@
 
 import * as React from '../../node_modules/react/react';
 import PropTypes from 'prop-types';
-//import InlineSVG from 'svg-inline-react';
-//import SVGInline from "react-svg-inline"
+import styles from '../styles/block.css';
+import renderHTML from 'react-render-html';
 
 export default class BlockRectangle extends React.Component
 {
@@ -46,19 +46,19 @@ export default class BlockRectangle extends React.Component
 
     let blockStyling = this.props.blockStyling;
 
+/*
+    let svgProps = {height:blockStyling.innerRectangleHeight.toString(),
+      width:blockStyling.innerRectangleWidth.toString(),
+      viewBox:"0 0 "+blockStyling.innerRectangleWidth.toString()+" "+blockStyling.innerRectangleHeight.toString(),
+      dangerouslySetInnerHTML:{__html: this.props.blockIconSVG}};
+*/
     let svgProps = {height:blockStyling.innerRectangleHeight.toString(),
                     width:blockStyling.innerRectangleWidth.toString(),
-                    viewBox:"0 0 "+blockStyling.innerRectangleWidth.toString()+" "+blockStyling.innerRectangleHeight.toString(),
-                    dangerouslySetInnerHTML:{__html: this.props.blockIconSVG}};
+                    viewBox:"0 0 "+(blockStyling.innerRectangleWidth*1.75).toString()+" "+(blockStyling.innerRectangleHeight).toString()};
+
+    let elem = <svg className={styles.svgBlockIcon} {...svgProps}>{renderHTML(this.props.blockIconSVG)}</svg>;
 
 
-    //let parser = new DOMParser();
-    //let doc = parser.parseFromString(this.props.blockIconSVG, "image/svg+xml");
-    //let ele  = doc.documentElement;
-    let elem = React.createElement('svg', {...svgProps});
-
-    //let elem  = React.createElement('svg', {...svgProps}, this.props.blockIconSVG);
-    //let elem = this.props.blockIconSVG;
 
     return (
       <g>
@@ -80,9 +80,7 @@ export default class BlockRectangle extends React.Component
               }}
         />
 
-        <svg {...svgProps}>
-        </svg>
-
+        {elem}
       </g>
     )
     }
@@ -90,7 +88,7 @@ export default class BlockRectangle extends React.Component
 }
 
 BlockRectangle.propTypes = {
-selected              : PropTypes.bool,
+  selected              : PropTypes.bool,
   blockStyling          : PropTypes.object,
   blockIconSVG          : PropTypes.string,
   blockId               : PropTypes.string,
