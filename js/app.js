@@ -4,6 +4,8 @@
 import  * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { BrowserRouter } from 'react-router-dom';
+
 import BothPanes from './views/bothPanes';
 import DragDropContextProvider from 'react-dnd/lib/DragDropContextProvider';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -68,11 +70,13 @@ export default class MjsApp extends React.Component
      */
 
      const renderReactToolbox =
+             <BrowserRouter>
                       <div id="appContainer" style={AppContainerStyle}>
                         <DragDropContextProvider backend={HTML5Backend}>
                           <BothPanes connectDropTarget={this.dummy} isOver={false} canDrop={false}/>
                         </DragDropContextProvider>
                       </div>
+               </BrowserRouter>
                     ;
 
     return (renderReactToolbox);

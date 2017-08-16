@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 //let Content = ReactPanels.Content;
 //let Button  = ReactPanels.Button;
 import Button from 'react-toolbox/lib/button/Button';
-import {List,ListItem} from 'react-toolbox/lib/list'
+import {List,ListItem} from 'react-toolbox/lib/list';
 import blockStore  from '../stores/blockStore';
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
@@ -23,11 +23,6 @@ import WidgetTableContainer from './widgetTableContainer';
 import styles from '../styles/sidePaneContent.css';
 
 //import * as classes from './sidePaneTabContents.scss';
-
-// Load the TreeView stylesheet
-//import * as treeViewStyles from './treeview.css';
-//import * as treeViewStyles from 'react-treeview/react-treeview.css';
-
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
   {

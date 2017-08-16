@@ -13,6 +13,8 @@ import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
 import interact from '../../node_modules/interactjs';
 import KeyCodes from '../constants/keycodes';
+import styles from '../styles/edge.scss';
+import {BlockStore} from '../stores/blockStore';
 
 export default class Edge extends React.Component {
 constructor(props)
@@ -91,13 +93,13 @@ deleteEdgeViaMalcolm()
 
 mouseOver()
   {
-  let outerLineName = this.props.id.concat("-outerline");
+  let outerLineName = styles[this.props.id.concat("-outerline")];
   let test          = document.getElementById(outerLineName);
   if (this.props.selected === true)
     {
 
     }
-  else
+  else if (test)
     {
     test.style.stroke = '#797979'
     }
@@ -105,13 +107,13 @@ mouseOver()
 
 mouseLeave()
   {
-  let outerLineName = this.props.id.concat("-outerline");
+  let outerLineName = styles[this.props.id.concat("-outerline")];
   let test          = document.getElementById(outerLineName);
   if (this.props.selected === true)
     {
     //console.log("this.props.selected is true, so don't reset the border colour");
     }
-  else
+  else if (test)
     {
     //console.log("this.props.selected is false");
     test.style.stroke = 'lightgrey'
@@ -178,22 +180,39 @@ render()
       }
     }
 
+  // default height to basic style.
+  let outerRectHeight = blockStyling.outerRectangleHeight;
+  // then if nports property is specified, calculate the ideal height.
+  if (this.props.nports)
+    {
+    if (this.props.nports > 0)
+      {
+      outerRectHeight = (2*blockStyling.verticalMargin) + (this.props.nports - 1)*blockStyling.interPortSpacing;
+      }
+    }
+
   let startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-  let startOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+/*
+  let startOfEdgePortOffsetY = outerRectHeight /
     (outportArrayLength + 1) * (outportArrayIndex + 1);
+*/
+  let startOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (outportArrayIndex));
   let startOfEdgeX           = fromBlockPositionX + startOfEdgePortOffsetX;
   let startOfEdgeY           = fromBlockPositionY + startOfEdgePortOffsetY;
 
   let endOfEdgePortOffsetX = 0;
-  let endOfEdgePortOffsetY = blockStyling.outerRectangleHeight /
+/*
+  let endOfEdgePortOffsetY = outerRectHeight /
     (this.props.inportArrayLength + 1) * (this.props.inportArrayIndex + 1);
+*/
+  let endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin + (BlockStore.drawingParams.interPortSpacing * (this.props.inportArrayIndex));
   let endOfEdgeX           = toBlockPositionX + endOfEdgePortOffsetX;
   let endOfEdgeY           = toBlockPositionY + endOfEdgePortOffsetY;
 
   let innerLineString = "-innerline";
   let outerLineString = "-outerline";
-  let innerLineName   = this.props.id.concat(innerLineString);
-  let outerLineName   = this.props.id.concat(outerLineString);
+  let innerLineName   = styles[this.props.id.concat(innerLineString)];
+  let outerLineName   = styles[this.props.id.concat(outerLineString)];
 
   /* Trying curvy lines! */
 
@@ -211,8 +230,8 @@ render()
 
   if (targetX - 5 < sourceX)
     {
-    let curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
-    if (Math.abs(targetY - sourceY) < blockStyling.outerRectangleHeight / 2)
+    let curveFactor = (sourceX - targetX) * outerRectHeight / 200;
+    if (Math.abs(targetY - sourceY) < outerRectHeight / 2)
       {
       // Loopback
       c1X = sourceX + curveFactor;
@@ -259,17 +278,17 @@ render()
     let delProp = notGProps[i];
     delete gProps[delProp];
     }
-    let edgeContainerId = "edgeContainer-"+outerLineName;
+    let edgeContainerId = styles["edgeContainer-"+outerLineName];
   //console.log(`Edge.render(): ${edgeContainerId}`);
   return (
     <g id={edgeContainerId} {...gProps} ref="node">
 
       <path id={outerLineName}
-            className={'edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected') }
+            className={styles['edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected')] }
             d={pathInfo}/>
 
-      <path id={innerLineName} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
-            className={"edgeInnerLine" + (this.props.fromBlockPortValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')}
+      <path id={styles[innerLineName]} onMouseOver={this.mouseOver} onMouseLeave={this.mouseLeave}
+            className={styles["edgeInnerLine" + (this.props.fromBlockPortValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')]}
             d={pathInfo}/>
 
     </g>
@@ -278,19 +297,22 @@ render()
 }
 
 Edge.propTypes = {
-  areAnyEdgesSelected   : PropTypes.bool,
-  fromBlockPosition     : PropTypes.object,
   fromBlock             : PropTypes.string,
+  fromBlockType         : PropTypes.string,
   fromBlockPort         : PropTypes.string,
-  fromBlockInfo         : PropTypes.object,
-  toBlockPosition       : PropTypes.object,
-  toBlockPort           : PropTypes.string,
   fromBlockPortValueType: PropTypes.string,
+  fromBlockPosition     : PropTypes.object,
   toBlock               : PropTypes.string,
-  id                    : PropTypes.string,
+  toBlockType           : PropTypes.string,
+  toBlockPort           : PropTypes.string,
+  toBlockPosition       : PropTypes.object,
+  fromBlockInfo         : PropTypes.object,
+  toBlockInfo           : PropTypes.object,
+  areAnyEdgesSelected   : PropTypes.bool,
   selected              : PropTypes.bool,
-  blockStyling          : PropTypes.object,
   inportArrayIndex      : PropTypes.number,
-  inportArrayLength     : PropTypes.number
+  inportArrayLength     : PropTypes.number,
+  id                    : PropTypes.string,
+  blockStyling          : PropTypes.object,
 };
 

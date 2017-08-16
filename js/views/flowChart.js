@@ -754,6 +754,10 @@ render()
 
   for (let blockName in this.props.allBlockInfo) // this returns just the string name of each block object.
     {
+      /**
+       * TODO: Need to determine height of block based on max ports.
+       * Aug 2017
+       */
     let blockInfo = this.props.allBlockInfo[blockName];
     let item      = blockCollection.getBlockItemByName(blockName);
     if ((item instanceof BlockItem) && (this.props.allBlockInfo.hasOwnProperty(blockName)) && (item.visible))

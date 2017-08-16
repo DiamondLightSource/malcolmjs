@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
 import interact from '../../node_modules/interactjs';
-import * as classes from './edge.scss';
+import styles from '../styles/edge.scss';
 
 export default class EdgePreview extends React.Component
 {
@@ -23,7 +23,7 @@ export default class EdgePreview extends React.Component
   
   componentDidMount()
     {
-    interact('#appAndDragAreaContainer')
+    interact(styles.appAndDragAreaContainer)
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
     interact(ReactDOM.findDOMNode(this))
@@ -33,7 +33,7 @@ export default class EdgePreview extends React.Component
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          interact('#appAndDragAreaContainer')
+          interact(styles.appAndDragAreaContainer)
             .off('move', this.interactJSMouseMoveForEdgePreview);
           }.bind(this),
 
@@ -51,7 +51,7 @@ export default class EdgePreview extends React.Component
 
           this.setState({noPanning: true}, function ()
           {
-          interact('#appAndDragAreaContainer')
+          interact(styles.appAndDragAreaContainer)
             .on('move', this.interactJSMouseMoveForEdgePreview);
           });
 
@@ -80,7 +80,7 @@ export default class EdgePreview extends React.Component
     interact(ReactDOM.findDOMNode(this))
       .off('down', this.onMouseDown);
 
-    interact('#appAndDragAreaContainer')
+    interact(styles.appAndDragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
     }
@@ -125,7 +125,7 @@ export default class EdgePreview extends React.Component
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    interact('#appAndDragAreaContainer')
+    interact(styles.appAndDragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
     }
@@ -137,7 +137,7 @@ export default class EdgePreview extends React.Component
 
     this.setState({noPanning: false}, function ()
     {
-    interact('#appAndDragAreaContainer')
+    interact(styles.appAndDragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     });
     }
@@ -157,6 +157,18 @@ export default class EdgePreview extends React.Component
     let startOfEdgePortOffsetX;
     let startOfEdgePortOffsetY;
 
+    // default height to basic style.
+    let outerRectHeight = blockStyling.outerRectangleHeight;
+    // then if nports property is specified, calculate the ideal height.
+    if (this.props.nports)
+      {
+      if (this.props.nports > 0)
+        {
+        outerRectHeight = (2*blockStyling.verticalMargin) + (this.props.nports - 1)*blockStyling.interPortSpacing;
+        }
+      }
+
+
     if (fromBlockInfo.fromBlockPortType === "inport")
       {
       let inportArrayLength = this.props.fromBlockInfo.inports.length;
@@ -172,7 +184,7 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = 0;
-      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      startOfEdgePortOffsetY = outerRectHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
       }
     else if (fromBlockInfo.fromBlockPortType === "outport")
       {
@@ -190,7 +202,7 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      startOfEdgePortOffsetY = outerRectHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
       }
 
     let startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
@@ -218,8 +230,8 @@ export default class EdgePreview extends React.Component
     if ((((targetX - 5) < sourceX) && (fromBlockInfo.fromBlockPortType === "outport")) ||
       (((targetX - 5) > sourceX) && (fromBlockInfo.fromBlockPortType === "inport")))
       {
-      let curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
-      if (Math.abs(targetY - sourceY) < (blockStyling.outerRectangleHeight / 2))
+      let curveFactor = (sourceX - targetX) * outerRectHeight / 200;
+      if (Math.abs(targetY - sourceY) < (outerRectHeight / 2))
         {
         // Loopback
         c1X = sourceX + curveFactor;
@@ -271,11 +283,11 @@ export default class EdgePreview extends React.Component
       }
 
     return (
-      <g id={"edgePreviewContainer"} {...gProps} ref={"node"}>
+      <g id={styles.edgePreviewContainer} {...gProps} ref={"node"}>
 
-        <path id={outerLineName} className={"edgePreviewOuterLine"} d={pathInfo}/>
+        <path id={styles.outerLineName} className={styles.edgePreviewOuterLine} d={pathInfo}/>
 
-        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')}
+        <path id={styles.innerLineName} className={styles["edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')]}
               d={pathInfo}/>
 
       </g>
@@ -291,7 +303,8 @@ EdgePreview.propTypes = {
   edgePreview         : PropTypes.object,
   fromBlockPosition   : PropTypes.object,
   fromBlockInfo       : PropTypes.object,
-  id                  : PropTypes.string
+  id                  : PropTypes.string,
+  nports              : PropTypes.number
 
 };
 

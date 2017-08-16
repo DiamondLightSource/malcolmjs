@@ -19,6 +19,7 @@ import interact from '../../node_modules/interactjs';
 
 import blockCollection from '../classes/blockItems';
 
+
 class Block extends React.Component {
   constructor(props)
     {
@@ -293,24 +294,33 @@ render()
      key={this.props.id + 'dragBlockDND'}>
      */
 
+     // Determine the maximum number of ports on either inputs or outputs.
+     // This will allow the block height to be determined.
+     //
+  let nports = this.props.blockInfo.inports.length > this.props.blockInfo.outports.length ? this.props.blockInfo.inports.length : this.props.blockInfo.outports.length;
+
+  // default height to basic style.
+  let outerRectHeight = this.props.blockStyling.outerRectangleHeight;
+  // then if nports property is specified, calculate the ideal height.
+  if (this.props.nports)
+    {
+    if (this.props.nports > 0)
+      {
+      outerRectHeight = (this.props.nports - 1)*20;
+      }
+    }
+
   return(
     <g className="draggable drag-drop" {...gProps} transform={blockTranslate}>
 
       <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
-
-        <rect id={this.props.id + "blockBackground"}
-              height={"105"} width={this.props.blockStyling.outerRectangleWidth}
-              style={{
-                fill  : 'transparent',
-                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
-              }}/>
 
         <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
                         blockIconURL={this.props.blockInfo.iconURL}
                         blockIconSVG={this.props.blockIconSVG}
                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                         selected={this.props.selected}
-
+                        nports={nports}
                         blockStyling={this.props.blockStyling}/>
 
         <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
@@ -318,7 +328,8 @@ render()
                storingFirstPortClicked={this.props.storingFirstPortClicked}
                selected={this.props.selected}
                blockStyling={this.props.blockStyling}
-               cbClicked={this.portClicked}/>
+               cbClicked={this.portClicked}
+               nports={nports}/>
 
       </g>
     </g>)

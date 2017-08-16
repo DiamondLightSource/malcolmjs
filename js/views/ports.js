@@ -2,15 +2,16 @@
  * Created by twi18192 on 15/01/16.
  */
 
-import * as React  from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
 
 import interact from "../../node_modules/interactjs";
-import * as classes from './port.scss';
+import styles from '../styles/port.scss';
+import {BlockStore} from '../stores/blockStore';
 
-export default class Ports extends React.Component {
+export default class Ports extends Component {
 constructor(props)
   {
   super(props);
@@ -25,16 +26,16 @@ constructor(props)
 
 componentDidMount()
   {
-  interact(".invisiblePortCircle")
+  interact('#invisiblePortCircle')
     .on("tap", this.portClick);
 
-  interact(".invisiblePortCircle")
+  interact('#invisiblePortCircle')
     .styleCursor(false);
   }
 
 componentWillUnmount()
   {
-  interact(".invisiblePortCircle")
+  interact('#invisiblePortCircle')
     .off("tap", this.portClick);
   }
 
@@ -73,7 +74,7 @@ portClick(e)
    to both portCircle and portArc
    */
 
-  if (e.currentTarget.className.animVal === "invisiblePortCircle")
+  if (e.currentTarget.className.animVal === 'invisiblePortCircle')
     {
     for (let i = 0; i < e.currentTarget.parentNode.children.length; i++)
       {
@@ -182,12 +183,23 @@ render()
 
   let blockStyling = this.props.blockStyling;
 
+  // default height to basic style.
+  let outerRectHeight = blockStyling.outerRectangleHeight;
+  // then if nports property is specified, calculate the ideal height.
+  if (this.props.nports)
+    {
+      if (this.props.nports > 0)
+        {
+        outerRectHeight = (2*blockStyling.verticalMargin) + (this.props.nports - 1)*blockStyling.interPortSpacing;
+        }
+    }
+
   for (let i = 0; i < blockInfo.inports.length; i++)
     {
     let inportsLength          = blockInfo.inports.length;
     let inportName             = blockInfo.inports[i].name;
     let inportAndTextTransform = "translate(" + 0 + ","
-      + blockStyling.outerRectangleHeight / (inportsLength + 1) * (i + 1) + ")";
+      + (BlockStore.drawingParams.verticalMargin + (i * BlockStore.drawingParams.interPortSpacing)) + ")";
 
     let inportValueType = blockInfo.inports[i].type;
     //let portclass = classes["inport" + inportValueType];
@@ -204,7 +216,7 @@ render()
               }}/>
         {/*className={"inport" + inportValueType}*/}
         <Port portkey={blockId + inportName}
-              className={"inport" + inportValueType}
+              className={styles["inport" + inportValueType]}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
@@ -242,7 +254,7 @@ render()
     let outportsLength          = blockInfo.outports.length;
     let outportName             = blockInfo.outports[j].name;
     let outportAndTextTransform = "translate(" + blockStyling.outerRectangleWidth
-      + "," + blockStyling.outerRectangleHeight / (outportsLength + 1) * (j + 1) + ")";
+      + "," + (BlockStore.drawingParams.verticalMargin + (j * BlockStore.drawingParams.interPortSpacing)) + ")";
 
     let outportValueType = blockInfo.outports[j].type;
 
@@ -257,7 +269,7 @@ render()
                 cursor: "default"
               }}/>
         <Port portkey={blockId + outportName}
-              className={"outport" + outportValueType}
+              className={styles["outport" + outportValueType]}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
@@ -329,6 +341,6 @@ Ports.propTypes = {
   blockInfo              : PropTypes.object,
   blockId                : PropTypes.string,
   blockStyling           : PropTypes.object,
-  cbClicked              : PropTypes.func
+  cbClicked              : PropTypes.func,
+  nports                 : PropTypes.number
 };
-

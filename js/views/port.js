@@ -1,14 +1,13 @@
 /**
  * Created by Ian Gillingham on 10/02/17.
  */
-import * as React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as ReactDOM from 'react-dom';
+import styles from '../styles/port.scss';
+import interact from 'interactjs';
 
-//let React    = require("react");
-import interact from "../../node_modules/interactjs";
-
-export default class Port extends React.Component {
+export default class Port extends Component {
 constructor(props)
   {
   super(props);
@@ -103,5 +102,3 @@ Port.propTypes =
   blockName: PropTypes.string,
   cbClicked: PropTypes.func
 };
-
-
