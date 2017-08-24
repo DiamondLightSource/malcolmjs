@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 
 import attributeStore from '../stores/attributeStore';
 
@@ -15,7 +15,7 @@ import flowChartActions from '../actions/flowChartActions';
 import Ports from './ports.js';
 import BlockRectangle from './blockRectangle';
 
-import interact from '../../node_modules/interactjs';
+import interact from 'interactjs';
 
 import blockCollection from '../classes/blockItems';
 
@@ -65,7 +65,7 @@ componentDidMount()
    }
    }
    */
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .draggable(
       {
         restrict: {
@@ -86,16 +86,16 @@ componentDidMount()
           }.bind(this)
       });
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('tap', this.blockSelect);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('hold', this.blockHold);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('down', this.pointerDown);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('up', this.pointerUp);
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .styleCursor(false);
 
   /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
@@ -108,7 +108,7 @@ componentWillUnmount()
 
   clearTimeout(this.timer);
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .off('tap', this.blockSelect);
   }
 
@@ -311,7 +311,7 @@ render()
     }
 
   return(
-    <g className="draggable drag-drop" {...gProps} transform={blockTranslate}>
+    <g className="draggable drag-drop" {...gProps} transform={blockTranslate} ref={(node) => {this.g = node}}>
 
       <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
 

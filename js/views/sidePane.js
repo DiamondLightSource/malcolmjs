@@ -3,7 +3,7 @@
  */
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 //import ReactPanels from 'react-panels';
 import Dropdown from './dropdownMenu';
@@ -17,7 +17,7 @@ import SidePaneTabContents from './sidePaneTabContents';
 import Tabs from 'react-toolbox/lib/tabs/Tabs';
 import Tab from 'react-toolbox/lib/tabs/Tab';
 import Button from 'react-toolbox/lib/button/Button';
-import theme from '../../src/toolbox/theme';
+import styles from '../styles/sidePaneContent.css';
 
 export default class DlsSidePane extends React.Component {
 constructor(props)
@@ -69,12 +69,12 @@ handleActionRemoveBlockTab()
 
 componentDidMount()
   {
-  ReactDOM.findDOMNode(this).addEventListener('keydown', this.disableTabKey);
+  this.tabcontent.addEventListener('keydown', this.disableTabKey);
   }
 
 componentWillUnmount()
   {
-  ReactDOM.findDOMNode(this).removeEventListener('keydown', this.disableTabKey);
+  this.tabcontent.removeEventListener('keydown', this.disableTabKey);
   }
 
 disableTabKey(e)
@@ -117,17 +117,17 @@ render()
       {
       title = this.props.tabState[this.props.selectedTabIndex].label;
       }
-    //dynamicTab = <Tab key={title + 'tab'}
-    //                label={title}>
-    dynamicTab = <SidePaneTabContents key={title + 'contents'}
-                                      tabObject={this.props.tabState[this.props.selectedTabIndex]}
-                                      areAnyBlocksSelected={this.props.areAnyBlocksSelected}
-                                      areAnyEdgesSelected={this.props.areAnyEdgesSelected}/>;
-    //</Tab>;
+
+    dynamicTab =
+        <SidePaneTabContents key={title + 'contents'}
+                                        tabObject={this.props.tabState[this.props.selectedTabIndex]}
+                                        areAnyBlocksSelected={this.props.areAnyBlocksSelected}
+                                        areAnyEdgesSelected={this.props.areAnyEdgesSelected}/>;
     }
 
 
-    let renderSimple = <div>{dynamicTab}</div>;
+
+    let renderSimple = <div className={styles.RightSidebar} ref={(node) => {this.tabcontent = node}}>{dynamicTab}</div>;
 
   return ( renderSimple );
   }

@@ -12,6 +12,24 @@ const env           = process.env.NODE_ENV || 'development';
 
 const context = path.resolve(__dirname, 'js');
 
+const postcssPlugins = [
+  require('postcss-cssnext')(),
+  require('postcss-modules-values')
+];
+
+const scssLoader = [
+  { loader: 'style-loader' },
+  { loader: 'css-loader' },
+  { loader: 'sass-loader' }
+];
+
+const postcssLoader = [
+  { loader: 'style-loader' },
+  { loader: 'css-loader', options: { modules: true } },
+  { loader: 'postcss-loader', options: { plugins: () => [...postcssPlugins] } }
+];
+
+
 const config = {
   context,
   /*entry  : ['babel-polyfill', path.join(APP_DIR, '/app.js')],*/
@@ -71,27 +89,26 @@ const config = {
         loader: 'json-loader'
       },
       {test: /\.css$/,
-        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox')],
-        exclude: /node_modules/,
-        use : [
-          { loader: 'style-loader', options: { sourceMap: true } },
-          {loader: "css-loader",
-            options:
-              {
-              camelCase     : true,
-              modules       : true,
-              sourceMap     : false,
-              importLoaders : 1,
-              localIdentName: '[name]--[local]--[hash:base64:5]'
-              //localIdentName: '[local]'
-              }
+        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox'), path.resolve(__dirname, 'node_modules/react-toolbox')],
+        //exclude: /node_modules/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true, // default is false
+              sourceMap: true,
+              importLoaders: 1,
+              localIdentName: "[name]--[local]--[hash:base64:8]"
+            }
           },
-          { loader: 'postcss-loader' }
+          "postcss-loader"
         ]
       },
       {test: /\.scss$/,
-        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox')],
-        exclude: /node_modules/,
+        include: [APP_DIR, path.resolve(APP_DIR, 'styles'),
+                  path.resolve(__dirname, 'src/toolbox')],
+        //exclude: /node_modules/,
         use : [
           { loader: 'style-loader', options: { sourceMap: true } },
           {loader: "css-loader",
@@ -101,8 +118,7 @@ const config = {
               modules       : true,
               sourceMap     : false,
               importLoaders : 1,
-              localIdentName: '[name]--[local]--[hash:base64:5]'
-              //localIdentName: '[local]'
+              localIdentName: "[name]--[local]--[hash:base64:8]"
               }
           },
           { loader: 'postcss-loader' },
@@ -112,16 +128,10 @@ const config = {
             camelCase     : true,
             modules       : true,
             sourceMap     : false,
-            localIdentName: '[name]--[local]--[hash:base64:5]'
+            localIdentName: "[name]--[local]--[hash:base64:8]"
             }
           }
         ]
-      },
-      {
-        // For all .css files in node_modules
-        test: /\.css$/,
-        include: /node_modules/,
-        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.less$/,

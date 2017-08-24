@@ -3,6 +3,7 @@
 
 
 .layout {
+    display: flex;
     height: 100%;
     margin  : 0;
     padding : 0;
@@ -12,26 +13,32 @@
     width : 100%;
 }
 
-.layout .content {  // where content go
+.layout .content {
         flex: 1 1 auto;
         overflow-y: auto;
-        position: relative; // need this to position inner content
+        position: relative;
         width: 100%;
         height: 100%;
     }
 
-.layout .header {  // the appbar
+.layout .header {
     flex: 0 0 auto;
     }
 
 .layout .panel {
     display:flex;
+    flex-direction: column;
     position: relative;
     height:100%;
-    width: 75%
+    width: auto;
 }
 
-.layout .panel #MainPaneDivWrapper { flex: 1; overflow-y: hidden; height: inherit}
+.layout .panel #MainPaneDivWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: hidden;
+    height: 100%}
 
 .layout .sidebar {
     overflow-y: auto;
@@ -50,5 +57,13 @@
   overflow-y: auto;
 }
 
+.panel > div {
+  overflow-y: auto;
+  
+}
 
-#rightsidepane { display: "content" }
+#navdrawer.leftsidebar {
+  overflow-y: auto;
+}
+
+#rightsidepane { display: block }

@@ -10,7 +10,7 @@ import BothPanes from './views/bothPanes';
 import DragDropContextProvider from 'react-dnd/lib/DragDropContextProvider';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import 'font-awesome/css/font-awesome.min.css';
+//import 'font-awesome/css/font-awesome.min.css';
 
 import './styles/index.css';
 

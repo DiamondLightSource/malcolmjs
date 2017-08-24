@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import MainPane from './mainPane';
 import DlsSidePane from './sidePane';
 import ModalDialogBox from './modalDialogBox';
-import SidePaneTabContents from './sidePaneTabContents';
 
 import mainPaneStore from '../stores/mainPaneStore';
 import sidePaneStore from '../stores/sidePaneStore';
@@ -16,18 +15,18 @@ import flowChartStore from '../stores/flowChartStore';
 
 import paneActions from '../actions/paneActions';
 
-import AppBar from 'react-toolbox/lib/app_bar/AppBar';
-import Layout from 'react-toolbox/lib/layout/Layout';
-import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
-import Drawer from 'react-toolbox/lib/drawer/Drawer';
-import Panel from 'react-toolbox/lib/layout/Panel';
-import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-import theme from '../styles/mjsLayout.css';
+import {AppBar} from 'react-toolbox/lib/app_bar';
+import {Layout,NavDrawer,Sidebar,Panel} from 'react-toolbox/lib/layout';
+//import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
+import {Drawer} from 'react-toolbox/lib/drawer';
+//import Panel from 'react-toolbox/lib/layout/Panel';
+//import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import FontIcon from 'react-toolbox/lib/font_icon';
-import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import styles from "../styles/mjsLayout.css";
-import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+import {Navigation} from 'react-toolbox/lib/navigation';
+import theme from "../styles/mjsLayout.css";
+//import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 import {Breadcrumbs} from 'react-breadcrumbs';
+import MjsOptions from '../components/MjsOptions';
 import {List,ListItem} from 'react-toolbox/lib/list'
 //import {Route} from 'react-router-dom';
 import {
@@ -43,7 +42,6 @@ import MjsBreadcrumbs from '../components/mjsBreadcrumbs';
 // import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
 
 //console.log('bothPanes: styles', styles);
-console.log('bothPanes: theme', theme);
 //import {DragDropContextProvider} from 'react-dnd';
 //import HTML5Backend from 'react-dnd-html5-backend';
 //import ItemTypes from './dndItemTypes';
@@ -52,31 +50,6 @@ console.log('bothPanes: theme', theme);
 // todo: ????
 //import injectTapEventPlugin from 'react-tap-event-plugin';
 //injectTapEventPlugin();
-
-let MainTabbedViewStyle = {
-  "height": "100%",
-  "width": "100%",
-  minWidth: 200,
-  minHeight: 500,
-  display: 'inlineBlock'
-};
-
-let SideTabbedViewStyle = {
-  float: 'right',
-  "height": "100%",
-  "width": "100%",
-  maxWidth: 400
-};
-
-let BothPanesContainerStyle = {
-  margin: 0,
-  padding: 0,
-  display: 'flex',
-  overflowY: 'auto',
-  flexDirection: 'row',
-  height: "100%",
-  width: "100%"
-};
 
 // Stub out window.matchMedia() if running under Jest test simulation
 // as the mocked function does not appear to be supported.
@@ -248,20 +221,23 @@ export default class BothPanes extends React.Component {
     );
   });
 */
-    const bp3 = <Layout id="BothPanesContainer" theme={theme} className={styles.layout}>
-      <NavDrawer active={this.state.drawerActive} pinned={this.state.drawerPinned} onOverlayClick={this.toggleDrawerActive} theme={theme}>
-        <p>
-          PandA context etc. goes here.
-        </p>
+
+/**
+ * Styles from mjsLayout
+ *
+ */
+    const bp3 = <Layout id="BothPanesContainer" theme={theme}>
+      <NavDrawer theme={theme} active={this.state.drawerActive} pinned={this.state.drawerPinned} onOverlayClick={this.toggleDrawerActive} >
+        <div>
+          <p>
+          {"Options"}
+          </p>
+          <MjsOptions/>
+        </div>
       </NavDrawer>
-      {/*<Panel style={{scrollY:"false", height:"100vh", width: "75%"}}>*/}
       <Panel theme={theme}>
-        <div id='MainPaneDivWrapper' style={{
-          flex: 1,
-          overflowY: 'hidden',
-          height: 'inherit'
-        }}>
-          <AppBar className={styles.appBar} title="  " leftIcon='menu' theme={theme} onLeftIconClick={this.toggleDrawerActive}>
+        <div id={theme.MainPaneDivWrapper}>
+          <AppBar theme={theme} title="Zebra2" leftIcon='menu' onLeftIconClick={this.toggleDrawerActive}>
             {/* This is probably a good place to handle breadcrumbs */}
             <MjsBreadcrumbs/>
             {/*
@@ -282,7 +258,7 @@ export default class BothPanes extends React.Component {
         </div>
       </Panel>
       {/*<Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>*/}
-      <Sidebar width={'100%'} pinned={true} right={true} scrollY={true} theme={theme} className={styles.RightSidebar}>
+      <Sidebar id={theme.rightsidepane} theme={theme} width={25} pinned={true} right={true} scrollY={true}>
         <div><FontIcon value='close' onClick={this.toggleSidebar}/></div>
         {/* <div id="DlsSidePaneContainerDiv" style={{flex: 1, flexDirection: 'row'}}> */}
         <DlsSidePane id="DlsSidePane" tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible} areAnyBlocksSelected={this.state.areAnyBlocksSelected} areAnyEdgesSelected={this.state.areAnyEdgesSelected}/> {/* </div> */}

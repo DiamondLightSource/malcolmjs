@@ -2,7 +2,7 @@
  * Created by twi18192 on 18/01/16.
  */
 
-import * as React from '../../node_modules/react/react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/block.css';
 import renderHTML from 'react-render-html';

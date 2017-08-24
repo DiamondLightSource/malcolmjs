@@ -9,6 +9,7 @@ import classSet from 'react-classset';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
+import {BlockStore} from '../stores/blockStore';
 
 import Edge from './edge';
 import EdgePreview from './edgePreview';
@@ -121,9 +122,9 @@ constructor(props)
 
 componentDidMount()
   {
-  ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.addEdgePreview);
-  ReactDOM.findDOMNode(this).addEventListener('EdgePreview', this.portSelectHighlight);
-  ReactDOM.findDOMNode(this).addEventListener('TwoPortClicks', this.checkBothClickedPorts);
+  this.dragAreaContainerNode.addEventListener('EdgePreview', this.addEdgePreview);
+  this.dragAreaContainerNode.addEventListener('EdgePreview', this.portSelectHighlight);
+  this.dragAreaContainerNode.addEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
   interact('#dragArea').on('tap', this.deselect);
 
@@ -155,9 +156,9 @@ componentDidMount()
 componentWillUnmount()
   {
 
-  ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.addEdgePreview);
-  ReactDOM.findDOMNode(this).removeEventListener('EdgePreview', this.portSelectHighlight);
-  ReactDOM.findDOMNode(this).removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
+  this.dragAreaContainerNode.removeEventListener('EdgePreview', this.addEdgePreview);
+  this.dragAreaContainerNode.removeEventListener('EdgePreview', this.portSelectHighlight);
+  this.dragAreaContainerNode.removeEventListener('TwoPortClicks', this.checkBothClickedPorts);
 
   interact('#dragArea')
     .off('tap', this.deselect);
@@ -280,6 +281,7 @@ addEdgePreview(eventdata)
   //console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
 
   let portStringSliceIndex = fromBlockId.length;
+  // TODO: Look at changing the use of getElementById with ref. IJG 21/8/17
   let portName             = document.getElementById(this.props.portThatHasBeenClicked.id).id.slice(portStringSliceIndex);
   let fromBlockType        = blockInfo.type;
 
@@ -306,7 +308,8 @@ addEdgePreview(eventdata)
         }
       }
     endOfEdgePortOffsetX = 0;
-    endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    //endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin + (BlockStore.drawingParams.interPortSpacing * inportArrayIndex);
     portType             = "inport";
     }
   else if (document.getElementById(this.props.portThatHasBeenClicked.id).className.baseVal.indexOf('outport') !== -1)
@@ -324,7 +327,8 @@ addEdgePreview(eventdata)
       }
 
     endOfEdgePortOffsetX = this.props.blockStyling.outerRectangleWidth;
-    endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin + (BlockStore.drawingParams.interPortSpacing * outportArrayIndex);
+    //endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     portType             = "outport";
     }
   let endOfEdgeX = this.props.blockPositions[fromBlockId].x + endOfEdgePortOffsetX;
@@ -843,7 +847,7 @@ render()
 
   return connectDropTarget(
     //return (
-    <svg id={"appAndDragAreaContainer"}
+    <svg id={"appAndDragAreaContainer"} ref={(node) => {this.dragAreaContainerNode = node}}
          style={Object.assign({}, AppDivContainerStyle, {backgroundColor: backgroundColor, height: "100%", width: "100%"})}>
         <rect id={"dragArea"} height={"100%"} width={"100%"}
               fill={"transparent"} style={{MozUserSelect: 'none', WebkitUserSelect: 'none', display: 'flex'}}
@@ -891,7 +895,10 @@ FlowChart.propTypes = {
   blockPositions         : PropTypes.object,
   storingFirstPortClicked: PropTypes.object,
   edgePreview            : PropTypes.object,
-  backgroundSelected     : PropTypes.bool
+  backgroundSelected     : PropTypes.bool,
+  canDrop                : PropTypes.bool,
+  isOver                 : PropTypes.bool.isRequired,
+  connectDropTarget      : PropTypes.func.isRequired
 };
 
 export default DropTarget(ItemTypes.PALETTE, layoutTarget, collect)(FlowChart);
