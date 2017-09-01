@@ -3,55 +3,64 @@
  */
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
-import interact from '../../node_modules/interactjs';
-import * as classes from './edge.scss';
+import interact from 'interactjs';
+import styles from '../styles/edge.scss';
+import {BlockStore} from '../stores/blockStore';
+
+const dragAreaContainer = '#appAndDragAreaContainer';
 
 export default class EdgePreview extends React.Component
 {
   constructor(props)
     {
     super(props);
-    this.state = {noPanning: true};
+    this.state = {noPanning: true, mousePosition:{x:0, y:0}};
     this.onTap = this.onTap.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.interactJSMouseMoveForEdgePreview = this.interactJSMouseMoveForEdgePreview.bind(this);
+
+    // Added 21 Aug 17 as diagnistic tool
+    this._onMouseMove = this._onMouseMove.bind(this);
     }
   
   componentDidMount()
     {
-    interact('#appAndDragAreaContainer')
+    interact(dragAreaContainer)
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .draggable({
 
-        onstart: function(e)
+        // Drag start
+        onstart: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          interact('#appAndDragAreaContainer')
+          interact(dragAreaContainer)
             .off('move', this.interactJSMouseMoveForEdgePreview);
-          }.bind(this),
+          },
 
-        onmove: function (e)
+        // Drag move
+        onmove: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.props.interactJsDragPan(e);
-          }.bind(this),
+          },
 
-        onend: function (e)
+        // Drag end
+        onend: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
 
           this.setState({noPanning: true}, function ()
           {
-          interact('#appAndDragAreaContainer')
+          interact(dragAreaContainer)
             .on('move', this.interactJSMouseMoveForEdgePreview);
           });
 
@@ -60,27 +69,26 @@ export default class EdgePreview extends React.Component
             x: e.dx,
             y: e.dy
           })
-          }.bind(this)
+          }
 
       });
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .on('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .on('down', this.onMouseDown);
     }
   
   componentWillUnmount ()
     {
-
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .off('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .off('down', this.onMouseDown);
 
-    interact('#appAndDragAreaContainer')
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
     }
@@ -125,7 +133,7 @@ export default class EdgePreview extends React.Component
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    interact('#appAndDragAreaContainer')
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
     }
@@ -137,12 +145,21 @@ export default class EdgePreview extends React.Component
 
     this.setState({noPanning: false}, function ()
     {
-    interact('#appAndDragAreaContainer')
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     });
     }
 
-  render ()
+  _onMouseMove(e) {
+                  let curState = Object.assign({},this.state);
+                  curState.mousePosition.x = e.screenX;
+                  curState.mousePosition.y = e.screenY;
+                  console.log(`Edgepreview._onMouseMove: x = ${e.screenX}  y=${e.screenY}`);
+                  this.setState(curState);
+                  }
+
+
+render ()
     {
     //console.log("render: edgePreview");
 
@@ -156,6 +173,18 @@ export default class EdgePreview extends React.Component
     let portValueType;
     let startOfEdgePortOffsetX;
     let startOfEdgePortOffsetY;
+
+    // default height to basic style.
+    let outerRectHeight = blockStyling.outerRectangleHeight;
+    // then if nports property is specified, calculate the ideal height.
+    if (this.props.nports)
+      {
+      if (this.props.nports > 0)
+        {
+        outerRectHeight = (2*blockStyling.verticalMargin) + (this.props.nports - 1)*blockStyling.interPortSpacing;
+        }
+      }
+
 
     if (fromBlockInfo.fromBlockPortType === "inport")
       {
@@ -172,7 +201,7 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = 0;
-      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      startOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (inportArrayIndex));
       }
     else if (fromBlockInfo.fromBlockPortType === "outport")
       {
@@ -190,14 +219,14 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-      startOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      startOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (outportArrayIndex));
       }
 
     let startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     let startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    let endOfEdgeX = this.props.edgePreview.endpointCoords.x;
-    let endOfEdgeY = this.props.edgePreview.endpointCoords.y;
+    let endOfEdgeX = (this.props.edgePreview.endpointCoords.x);
+    let endOfEdgeY = (this.props.edgePreview.endpointCoords.y);
 
     let innerLineString = "-innerline";
     let outerLineString = "-outerline";
@@ -211,6 +240,8 @@ export default class EdgePreview extends React.Component
     let targetX = endOfEdgeX;
     let targetY = endOfEdgeY;
 
+    console.log(`EdgePreview: sourceX = ${sourceX.toFixed(2)}  sourceY = ${sourceY.toFixed(2)}  targetX = ${targetX.toFixed(2)} targetY = ${targetY.toFixed(2)}`);
+
     let c1X, c1Y, c2X, c2Y;
 
     /* I think nodeSize is the block height or width, not sure which one though? */
@@ -218,8 +249,8 @@ export default class EdgePreview extends React.Component
     if ((((targetX - 5) < sourceX) && (fromBlockInfo.fromBlockPortType === "outport")) ||
       (((targetX - 5) > sourceX) && (fromBlockInfo.fromBlockPortType === "inport")))
       {
-      let curveFactor = (sourceX - targetX) * blockStyling.outerRectangleHeight / 200;
-      if (Math.abs(targetY - sourceY) < (blockStyling.outerRectangleHeight / 2))
+      let curveFactor = (sourceX - targetX) * outerRectHeight / 200;
+      if (Math.abs(targetY - sourceY) < (outerRectHeight / 2))
         {
         // Loopback
         c1X = sourceX + curveFactor;
@@ -271,11 +302,11 @@ export default class EdgePreview extends React.Component
       }
 
     return (
-      <g id={"edgePreviewContainer"} {...gProps} ref={"node"}>
+      <g id={styles.edgePreviewContainer} {...gProps} ref={(node) => {this.g = node}} >
 
-        <path id={outerLineName} className={"edgePreviewOuterLine"} d={pathInfo}/>
+        <path id={styles.outerLineName} className={styles.edgePreviewOuterLine} d={pathInfo}/>
 
-        <path id={innerLineName} className={"edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')}
+        <path id={styles.innerLineName} className={styles["edgePreviewInnerLine" + (portValueType === MalcolmDefs.MINT32 ? 'int32' : 'bool')]}
               d={pathInfo}/>
 
       </g>
@@ -292,6 +323,5 @@ EdgePreview.propTypes = {
   fromBlockPosition   : PropTypes.object,
   fromBlockInfo       : PropTypes.object,
   id                  : PropTypes.string
-
 };
 

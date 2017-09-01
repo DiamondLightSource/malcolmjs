@@ -10,7 +10,28 @@ const BUILD_DIR     = path.resolve(__dirname, 'build');
 const APP_DIR       = path.resolve(__dirname, 'js');
 const env           = process.env.NODE_ENV || 'development';
 
+const context = path.resolve(__dirname, 'js');
+
+const postcssPlugins = [
+  require('postcss-cssnext')(),
+  require('postcss-modules-values')
+];
+
+const scssLoader = [
+  { loader: 'style-loader' },
+  { loader: 'css-loader' },
+  { loader: 'sass-loader' }
+];
+
+const postcssLoader = [
+  { loader: 'style-loader' },
+  { loader: 'css-loader', options: { modules: true } },
+  { loader: 'postcss-loader', options: { plugins: () => [...postcssPlugins] } }
+];
+
+
 const config = {
+  context,
   /*entry  : ['babel-polyfill', path.join(APP_DIR, '/app.js')],*/
   entry  : [path.join(APP_DIR, '/app.js')],
   output :
@@ -45,8 +66,9 @@ const config = {
         use : [
           {loader : 'react-hot-loader'},
           {loader : 'babel-loader',
-            query  :
+            options  :
               {
+                babelrc: false,
                 presets: ['es2015', "stage-2",'react'],
                 //presets: ['es2015', {modules:false},'react'],
                 //presets: ['es2015','react'],
@@ -58,7 +80,7 @@ const config = {
       { // === To satisfy react-icons imports. See https://github.com/gorangajic/react-icons/issues/34
         test: /react-icons\/(.)*(.js)$/,
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: ['es2015', 'react']
         }
       },
@@ -67,8 +89,26 @@ const config = {
         loader: 'json-loader'
       },
       {test: /\.css$/,
-        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox')],
-        exclude: /node_modules/,
+        include: [APP_DIR, path.resolve(APP_DIR, 'styles'), path.resolve(__dirname, 'src/toolbox'), path.resolve(__dirname, 'node_modules/react-toolbox')],
+        //exclude: /node_modules/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true, // default is false
+              sourceMap: true,
+              importLoaders: 1,
+              localIdentName: "[name]--[local]--[hash:base64:8]"
+            }
+          },
+          "postcss-loader"
+        ]
+      },
+      {test: /\.scss$/,
+        include: [APP_DIR, path.resolve(APP_DIR, 'styles'),
+                  /*path.resolve(__dirname, 'src/toolbox')*/],
+        //exclude: /node_modules/,
         use : [
           { loader: 'style-loader', options: { sourceMap: true } },
           {loader: "css-loader",
@@ -78,41 +118,17 @@ const config = {
               modules       : true,
               sourceMap     : false,
               importLoaders : 1,
-              localIdentName: '[name]--[local]--[hash:base64:5]'
-              //localIdentName: '[local]'
+              localIdentName: "[name]--[local]--[hash:base64:8]"
               }
           },
           { loader: 'postcss-loader' },
-          { loader: 'sass-loader'}
-        ]
-      },
-
-      {
-        // For all .css files in node_modules
-        test: /\.css$/,
-        include: /node_modules/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        use : [
-          {
-            loader: "style-loader"
-          },
-          {
-            loader : "css-loader",
-            options:
+          { loader: 'sass-loader',
+          options:
             {
-              sourceMap     : true,
-            }
-
-          },
-          {
-            loader : "sass-loader",
-            options:
-            {
-              sourceMap: true
+            camelCase     : true,
+            modules       : true,
+            sourceMap     : false,
+            localIdentName: "[name]--[local]--[hash:base64:8]"
             }
           }
         ]
@@ -138,8 +154,8 @@ const config = {
         use:[
             {loader: 'url-loader?limit=100000'}
             ]
-      }
-    ],
+      },
+     ],
 
   },
 
@@ -181,13 +197,11 @@ const config = {
    */
 };
 
-/**
  config.node = {
   fs: 'empty',
   net: 'empty',
   tls: 'empty'
-}
- */
+};
 
 
 module.exports = config;

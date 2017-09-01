@@ -6,8 +6,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import sidePaneActions from '../actions/sidePaneActions';
 //import paneStore from '../stores/paneStore';
-import interact from '../../node_modules/interactjs';
-import * as dropDownStyles from './dropdownMenuLessStylesheet.less';
+import interact from 'interactjs';
 export default class Dropdown extends React.Component
 {
   constructor(props)

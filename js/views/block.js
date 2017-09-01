@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 
 import attributeStore from '../stores/attributeStore';
 
@@ -15,9 +15,10 @@ import flowChartActions from '../actions/flowChartActions';
 import Ports from './ports.js';
 import BlockRectangle from './blockRectangle';
 
-import interact from '../../node_modules/interactjs';
+import interact from 'interactjs';
 
 import blockCollection from '../classes/blockItems';
+
 
 class Block extends React.Component {
   constructor(props)
@@ -64,7 +65,7 @@ componentDidMount()
    }
    }
    */
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .draggable(
       {
         restrict: {
@@ -85,16 +86,16 @@ componentDidMount()
           }.bind(this)
       });
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('tap', this.blockSelect);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('hold', this.blockHold);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('down', this.pointerDown);
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('up', this.pointerUp);
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .styleCursor(false);
 
   /* Doesn't work quite as expected, perhaps do checks with e.dy and e.dx to check myself if  */
@@ -107,7 +108,7 @@ componentWillUnmount()
 
   clearTimeout(this.timer);
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .off('tap', this.blockSelect);
   }
 
@@ -279,7 +280,7 @@ render()
    */
   const gProps    = Object.assign({}, this.props);
   const notGProps = ["graphZoomScale", "blockInfo", "areAnyBlocksSelected", "portThatHasBeenClicked", "blockStyling",
-                     "storingFirstPortClicked", "selected", "blockPosition", "deselect"];
+                     "storingFirstPortClicked", "selected", "blockPosition", "deselect", "blockIconSVG"];
 
   for (let i = 0; i < notGProps.length; i++)
     {
@@ -293,31 +294,43 @@ render()
      key={this.props.id + 'dragBlockDND'}>
      */
 
+     // Determine the maximum number of ports on either inputs or outputs.
+     // This will allow the block height to be determined.
+     //
+  let nports = this.props.blockInfo.inports.length > this.props.blockInfo.outports.length ? this.props.blockInfo.inports.length : this.props.blockInfo.outports.length;
+
+  // default height to basic style.
+  let outerRectHeight = this.props.blockStyling.outerRectangleHeight;
+  // then if nports property is specified, calculate the ideal height.
+  if (this.props.nports)
+    {
+    if (this.props.nports > 0)
+      {
+      outerRectHeight = (this.props.nports - 1)*20;
+      }
+    }
+
   return(
-    <g className="draggable drag-drop" {...gProps} transform={blockTranslate}>
+    <g className="draggable drag-drop" {...gProps} transform={blockTranslate} ref={(node) => {this.g = node}}>
 
       <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
 
-        <rect id={this.props.id + "blockBackground"}
-              height={"105"} width={this.props.blockStyling.outerRectangleWidth}
-              style={{
-                fill  : 'transparent',
-                cursor: this.props.portThatHasBeenClicked === null ? "move" : "default"
-              }}/>
-
         <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
                         blockIconURL={this.props.blockInfo.iconURL}
+                        blockIconSVG={this.props.blockIconSVG}
                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                         selected={this.props.selected}
-
-                        blockStyling={this.props.blockStyling}/>
+                        nports={nports}
+                        blockStyling={this.props.blockStyling}
+                        graphicsStyle={this.props.graphicsStyle} />
 
         <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                storingFirstPortClicked={this.props.storingFirstPortClicked}
                selected={this.props.selected}
                blockStyling={this.props.blockStyling}
-               cbClicked={this.portClicked}/>
+               cbClicked={this.portClicked}
+               nports={nports}/>
 
       </g>
     </g>)
@@ -330,6 +343,7 @@ Block.propTypes =
 {
   graphZoomScale         : PropTypes.number,
   blockInfo              : PropTypes.object,
+  blockIconSVG           : PropTypes.string,
   areAnyBlocksSelected   : PropTypes.bool,
   portThatHasBeenClicked : PropTypes.object,
   blockStyling           : PropTypes.object,
@@ -337,7 +351,8 @@ Block.propTypes =
   id                     : PropTypes.string,
   selected               : PropTypes.bool,
   blockPosition          : PropTypes.object,
-  deselect               : PropTypes.func
+  deselect               : PropTypes.func,
+  graphicsStyle          : PropTypes.string,
 
 };
 

@@ -1,0 +1,33 @@
+* {margin: 0; padding: 0;}
+
+html, body {min-height: 100%;}
+
+body {
+  padding-top: 10px;
+}
+
+.options {
+  /*centering*/
+  display: inline-block;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  border-radius: 5px;
+  /*Lets add the numbers for each link using CSS counters. flag is the name of the counter. to be defined using counter-reset in the parent element of the links*/
+  counter-reset: flag;
+}
+
+.options a {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  float: left;
+  font-size: 12px;
+  line-height: 36px;
+  color: white;
+  /*need more margin on the left of links to accomodate the numbers*/
+  padding: 0 10px 0 60px;
+  background: #666;
+  position: relative;
+}
+
+.container { text-align: left; padding-left: 2em}

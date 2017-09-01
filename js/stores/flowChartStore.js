@@ -11,7 +11,7 @@
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import EventEmitter from 'events';
-import blockStore, {BlockItem} from '../stores/blockStore.js';
+import blockStore, {BlockStore} from '../stores/blockStore.js';
 import blockCollection from '../classes/blockItems';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 //import {NavbarEventInfo} from '../actions/navbarActions';
@@ -27,14 +27,9 @@ let edgePreview               = null;
 let previousMouseCoordsOnZoom = null;
 let clickedPortBlockInfo      = null;
 
-let blockStyling = {
-  outerRectangleHeight: 76,
-  outerRectangleWidth : 76,
-  innerRectangleHeight: 70,
-  innerRectangleWidth : 70,
-  portRadius          : 2.5,
-  portFill            : 'grey',
-};
+
+// Block drawing parameter constants no stored in one place only.
+let blockStyling = BlockStore.drawingParams;
 
 let graphPosition = {
   x: 0,
@@ -70,7 +65,12 @@ function deselectAllBlocks()
     blockSelectedStates[block] = false
     }
 
-  backgroundSelected = true;
+  /**
+   * Toggle backgroundSelected state if selecting again.
+   * This way we can switch it off and hide the sidepane.
+   *
+   */
+  backgroundSelected = !backgroundSelected;
 
   // Inform views that we have deselected all blocks and edges
   // At this stage prepare to show list of blocks in DlsSidePane.
@@ -166,7 +166,7 @@ function updateEdgePreviewEndpoint(position)
   {
   edgePreview.endpointCoords.x += (1 / graphZoomScale) * (position.x);
   edgePreview.endpointCoords.y += (1 / graphZoomScale) * (position.y);
-  console.log(edgePreview.endpointCoords);
+  console.log(`FlowChartStore: edgePreview.endpointCoords: x= ${edgePreview.endpointCoords.x}  y= ${edgePreview.endpointCoords.y}  position: x= ${position.x}   position: y= ${position.y}  graphZoomScale: ${graphZoomScale}`);
   }
 
 class FlowChartStore extends EventEmitter {
@@ -492,7 +492,7 @@ addEdgePreview()
         }
       }
     endOfEdgePortOffsetX = 0;
-    endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (inportArrayIndex));
     portType             = "inport";
     }
   else if (clickedPort.className.baseVal.indexOf('outport') !== -1)
@@ -509,8 +509,8 @@ addEdgePreview()
         }
       }
 
-    endOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-    endOfEdgePortOffsetY = blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+    endOfEdgePortOffsetX = blockInfo.blockDimensions.width;
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (outportArrayIndex));
     portType             = "outport";
     }
 
@@ -972,7 +972,7 @@ switch (action.actionType)
 
   case appConstants.PASS_PORTMOUSEDOWN:
     AppDispatcher.waitFor([blockCollection.dispatchToken]);
-    console.log(`flowChartStore: Disatcher callback: PASS_PORTMOUSEDOWN: item ${item}`)
+    console.log(`flowChartStore: Disatcher callback: PASS_PORTMOUSEDOWN: item ${item}`);
     flowChartStore.passPortMouseDown(item);
     //break;
 
@@ -985,7 +985,7 @@ switch (action.actionType)
         /* Haven"t clicked on another port before this,
          just do an edgePreview rather than draw an edge
          */
-        console.log(`flowChartStore: storingFirstPortClicked === null so first port click will be set.`)
+        console.log(`flowChartStore: storingFirstPortClicked === null so first port click will be set.`);
         flowChartStore.addEdgePreview();
         }
       else
@@ -994,14 +994,14 @@ switch (action.actionType)
          start the checking whether the two ports
          are connectable/compatible
          */
-        console.log(`flowChartStore: storingFirstPortClicked !== null so first port already clicked - check for second port click.`)
+        console.log(`flowChartStore: storingFirstPortClicked !== null so first port already clicked - check for second port click.`);
         flowChartStore.checkBothClickedPorts();
         }
       }
     else
       {
       //flowChartStore.waitFor([blockStore.dispatchToken]);
-      console.log(`flowChartStore: item === null so just emitChange().`)
+      console.log(`flowChartStore: item === null so just emitChange().`);
       flowChartStore.emitChange();
       }
     // emitChange() now called in addEdgePreview() above.

@@ -1,50 +1,55 @@
 {"typeid": "malcolm:core/Return:1.0", "id": 0, "value": {
-  "typeid"         : "malcolm:core/Block:1.0", "meta": {
-    "typeid": "malcolm:core/BlockMeta:1.0", "description": "", "tags": [], "writeable": false, "label": ""
-  }, "state"       : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
-      "typeid" : "malcolm:core/ChoiceMeta:1.0", "description": "State of Block", "choices": [
-        "Resetting",
-        "Ready",
-        "Fault",
-        "Disabling",
-        "Disabled"
-      ], "tags": [], "writeable": false, "label": "State"
-    }, "value": "Ready"
-  }, "status"      : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
-      "typeid": "malcolm:core/StringMeta:1.0", "description": "Status of Block", "tags": [], "writeable": false,
-      "label" : "Status"
-    }, "value": "Ready"
-  }, "busy"        : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
-      "typeid"   : "malcolm:core/BooleanMeta:1.0", "description": "Whether Block busy or not", "tags": [],
-      "writeable": false, "label": "Busy"
-    }, "value": false
-  }, "disable"     : {
-    "typeid"     : "malcolm:core/MethodMeta:1.0", "takes": {
-      "typeid": "malcolm:core/MapMeta:1.0", "elements": {"typeid": "malcolm:core/ElementMap:1.0"}, "description": "",
-      "tags"  : [], "writeable": false, "label": "", "required": []
-    }, "defaults": {}, "description": "", "tags": [], "writeable": true, "label": "", "returns": {
-      "typeid": "malcolm:core/MapMeta:1.0", "elements": {"typeid": "malcolm:core/ElementMap:1.0"}, "description": "",
-      "tags"  : [], "writeable": false, "label": "", "required": []
-    }
-  }, "reset"       : {
-    "typeid"     : "malcolm:core/MethodMeta:1.0", "takes": {
-      "typeid": "malcolm:core/MapMeta:1.0", "elements": {"typeid": "malcolm:core/ElementMap:1.0"}, "description": "",
-      "tags"  : [], "writeable": false, "label": "", "required": []
-    }, "defaults": {}, "description": "", "tags": [], "writeable": false, "label": "", "returns": {
-      "typeid": "malcolm:core/MapMeta:1.0", "elements": {"typeid": "malcolm:core/ElementMap:1.0"}, "description": "",
-      "tags"  : [], "writeable": false, "label": "", "required": []
-    }
-  }, "icon"        : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
-      "typeid"      : "malcolm:core/StringMeta:1.0", "description": "URL for ICON", "tags": [
+  "typeid"          : "malcolm:core/Block:1.0", "meta": {
+    "typeid": "malcolm:core/BlockMeta:1.0", "description": "", "tags": [], "writeable": false, "label": "COUNTER",
+    "fields": [
+      "health",
+      "icon",
+      "label",
+      "parameters",
+      "dir",
+      "start",
+      "step",
+      "inputs",
+      "enable",
+      "enableCurrent",
+      "enableDelay",
+      "trig",
+      "trigCurrent",
+      "trigDelay",
+      "outputs",
+      "carry",
+      "out",
+      "outUnits",
+      "outScale",
+      "outOffset",
+      "outCapture",
+      "outDataDelay"
+    ]
+  }, "health"       : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
+      "typeid"   : "malcolm:core/HealthMeta:1.0", "description": "Displays OK or an error message", "tags": [],
+      "writeable": false, "label": "Health"
+    }, "value" : "OK", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 639035940, "userTag": 0}
+  }, "icon"         : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
+      "typeid"      : "malcolm:core/StringMeta:1.0", "description": "SVG icon for Block", "tags": [
         "widget:icon"
       ], "writeable": false, "label": "Icon"
-    }, "value": "http://localhost:8080/path/to/COUNTER"
-  }, "parameters"  : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    },
+    "value"    : "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!-- Created with Inkscape (http://www.inkscape.org/) -->\n\n<svg\n   xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n   xmlns:cc=\"http://creativecommons.org/ns#\"\n   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\"\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   width=\"120\"\n   height=\"80\"\n   id=\"svg2816\"\n   version=\"1.1\"\n   inkscape:version=\"0.91 r13725\"\n   sodipodi:docname=\"COUNTER.svg\">\n  <defs\n     id=\"defs2818\" />\n  <sodipodi:namedview\n     id=\"base\"\n     pagecolor=\"#ffffff\"\n     bordercolor=\"#666666\"\n     borderopacity=\"1.0\"\n     inkscape:pageopacity=\"0.0\"\n     inkscape:pageshadow=\"2\"\n     inkscape:zoom=\"2.8284272\"\n     inkscape:cx=\"90.888444\"\n     inkscape:cy=\"-62.175302\"\n     inkscape:current-layer=\"layer2\"\n     showgrid=\"true\"\n     inkscape:grid-bbox=\"true\"\n     inkscape:document-units=\"px\"\n     inkscape:window-width=\"1861\"\n     inkscape:window-height=\"1056\"\n     inkscape:window-x=\"59\"\n     inkscape:window-y=\"24\"\n     inkscape:window-maximized=\"1\"\n     inkscape:snap-others=\"false\"\n     inkscape:snap-grids=\"true\"\n     inkscape:snap-to-guides=\"false\"\n     showguides=\"false\"\n     inkscape:snap-bbox=\"true\"\n     inkscape:bbox-paths=\"true\"\n     inkscape:bbox-nodes=\"false\"\n     inkscape:snap-bbox-edge-midpoints=\"true\"\n     inkscape:object-paths=\"true\"\n     inkscape:snap-intersection-paths=\"true\"\n     inkscape:object-nodes=\"true\"\n     inkscape:snap-smooth-nodes=\"true\"\n     inkscape:snap-bbox-midpoints=\"true\">\n    <inkscape:grid\n       type=\"xygrid\"\n       id=\"grid3706\"\n       empspacing=\"5\"\n       visible=\"true\"\n       enabled=\"true\"\n       snapvisiblegridlinesonly=\"true\" />\n  </sodipodi:namedview>\n  <metadata\n     id=\"metadata2821\">\n    <rdf:RDF>\n      <cc:Work\n         rdf:about=\"\">\n        <dc:format>image/svg+xml</dc:format>\n        <dc:type\n           rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" />\n        <dc:title />\n        <dc:creator>\n          <cc:Agent>\n            <dc:title>Frederic TA</dc:title>\n          </cc:Agent>\n        </dc:creator>\n      </cc:Work>\n    </rdf:RDF>\n  </metadata>\n  <g\n     id=\"layer1\"\n     inkscape:label=\"Layer 1\"\n     inkscape:groupmode=\"layer\"\n     transform=\"translate(0,48)\" />\n  <g\n     inkscape:groupmode=\"layer\"\n     id=\"layer2\"\n     inkscape:label=\"Layer 2\"\n     transform=\"translate(0,10)\">\n    <rect\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"rect4136\"\n       width=\"70\"\n       height=\"10\"\n       x=\"25\"\n       y=\"55\" />\n    <rect\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"rect4138\"\n       width=\"5\"\n       height=\"60\"\n       x=\"30\"\n       y=\"-5\" />\n    <rect\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"rect4140\"\n       width=\"4.5\"\n       height=\"60\"\n       x=\"85.5\"\n       y=\"-5\" />\n    <path\n       style=\"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n       d=\"m 35,40 50,0\"\n       id=\"path4142\"\n       inkscape:connector-curvature=\"0\" />\n    <path\n       style=\"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n       d=\"m 35,20 50,0\"\n       id=\"path4144\"\n       inkscape:connector-curvature=\"0\" />\n    <path\n       style=\"fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n       d=\"M 85,0 35,0\"\n       id=\"path4146\"\n       inkscape:connector-curvature=\"0\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4148\"\n       cx=\"45\"\n       cy=\"40\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4150\"\n       cx=\"55\"\n       cy=\"40\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4152\"\n       cx=\"80\"\n       cy=\"40\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4154\"\n       cx=\"40\"\n       cy=\"20\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4156\"\n       cx=\"70\"\n       cy=\"20\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4158\"\n       cx=\"80\"\n       cy=\"20\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4160\"\n       cx=\"70\"\n       cy=\"0\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4162\"\n       cx=\"60\"\n       cy=\"0\"\n       r=\"5\" />\n    <circle\n       style=\"fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n       id=\"path4164\"\n       cx=\"50\"\n       cy=\"0\"\n       r=\"5\" />\n  </g>\n</svg>\n",
+    "alarm"    : {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 633744001, "userTag": 0}
+  }, "label"        : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
+      "typeid"      : "malcolm:core/StringMeta:1.0", "description": "Label for created block", "tags": [
+        "widget:textinput",
+        "config"
+      ], "writeable": true, "label": "Label"
+    }, "value" : "COUNTER", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 634429931, "userTag": 0}
+  }, "parameters"   : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "All parameters attributes", "choices": [
         "expanded",
         "collapsed"
@@ -52,9 +57,10 @@
         "widget:group",
         "config"
       ], "writeable": true, "label": "Parameters"
-    }, "value": "expanded"
-  }, "dir"         : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "expanded", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 635093927, "userTag": 0}
+  }, "dir"          : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "Up/Down direction (0 = Up, 1 = Down)", "choices": [
         "Up",
         "Down"
@@ -63,25 +69,28 @@
         "widget:combo",
         "config"
       ], "writeable": true, "label": "Dir"
-    }, "value": "Up"
-  }, "start"       : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "Up", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 1811981, "userTag": 0}
+  }, "start"        : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint32", "description": "Counter start value", "tags": [
         "group:parameters",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Start"
-    }, "value": 100
-  }, "step"        : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 100, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 442028, "userTag": 0}
+  }, "step"         : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint32", "description": "Up/Down step value", "tags": [
         "group:parameters",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Step"
-    }, "value": 5
-  }, "inputs"      : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 5, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 9520053, "userTag": 0}
+  }, "inputs"       : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "All inputs attributes", "choices": [
         "expanded",
         "collapsed"
@@ -89,9 +98,10 @@
         "widget:group",
         "config"
       ], "writeable": true, "label": "Inputs"
-    }, "value": "expanded"
-  }, "enable"      : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "expanded", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 636111974, "userTag": 0}
+  }, "enable"       : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "Halt on falling edge, reset and enable on rising",
       "choices"     : [
         "ZERO",
@@ -223,25 +233,28 @@
         "widget:combo",
         "config"
       ], "writeable": true, "label": "Enable"
-    }, "value": "SEQ1.ACTIVE"
-  }, "enableVal"   : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "ZERO", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 2001047, "userTag": 0}
+  }, "enableCurrent": {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/BooleanMeta:1.0", "description": "ENABLE current value", "tags": [
         "group:inputs",
         "widget:led"
-      ], "writeable": false, "label": "Enable Val"
-    }, "value": false
-  }, "enableDelay" : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+      ], "writeable": false, "label": "Enable Current"
+    }, "value" : false, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 2372980, "userTag": 0}
+  }, "enableDelay"  : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint8",
       "description" : "How many FPGA ticks to delay input", "tags": [
         "group:inputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Enable Delay"
-    }, "value": 0
-  }, "trig"        : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 5539894, "userTag": 0}
+  }, "trig"         : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0",
       "description" : "Rising edge ticks the counter up/down by user-defined value", "choices": [
         "ZERO",
@@ -373,25 +386,28 @@
         "widget:combo",
         "config"
       ], "writeable": true, "label": "Trig"
-    }, "value": "SEQ1.OUTA"
-  }, "trigVal"     : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "ZERO", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 5754947, "userTag": 0}
+  }, "trigCurrent"  : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/BooleanMeta:1.0", "description": "TRIG current value", "tags": [
         "group:inputs",
         "widget:led"
-      ], "writeable": false, "label": "Trig Val"
-    }, "value": false
-  }, "trigDelay"   : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+      ], "writeable": false, "label": "Trig Current"
+    }, "value" : false, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 6112098, "userTag": 0}
+  }, "trigDelay"    : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint8",
       "description" : "How many FPGA ticks to delay input", "tags": [
         "group:inputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Trig Delay"
-    }, "value": 0
-  }, "outputs"     : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 9299993, "userTag": 0}
+  }, "outputs"      : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "All outputs attributes", "choices": [
         "expanded",
         "collapsed"
@@ -399,51 +415,57 @@
         "widget:group",
         "config"
       ], "writeable": true, "label": "Outputs"
-    }, "value": "expanded"
-  }, "carry"       : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "expanded", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189069, "nanoseconds": 637478113, "userTag": 0}
+  }, "carry"        : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/BooleanMeta:1.0", "description": "Internal counter overflow status", "tags": [
         "group:outputs",
         "outport:bool:COUNTER1.CARRY",
         "widget:led"
       ], "writeable": false, "label": "Carry"
-    }, "value": false
-  }, "out"         : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : false, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 23710966, "userTag": 0}
+  }, "out"          : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "float64", "description": "Output", "tags": [
         "group:outputs",
         "outport:int32:COUNTER1.OUT",
         "widget:textupdate"
       ], "writeable": false, "label": "Out"
-    }, "value": 100.0
-  }, "outUnits"    : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 100.0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 660896, "userTag": 0}
+  }, "outUnits"     : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/StringMeta:1.0", "description": "Units for position fields on this block", "tags": [
         "group:outputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Out Units"
-    }, "value": ""
-  }, "outScale"    : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 854969, "userTag": 0}
+  }, "outScale"     : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "float64",
       "description" : "Scale for block position fields", "tags": [
         "group:outputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Out Scale"
-    }, "value": 1.0
-  }, "outOffset"   : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 1.0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 1416921, "userTag": 0}
+  }, "outOffset"    : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "float64",
       "description" : "Offset for block position fields", "tags": [
         "group:outputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Out Offset"
-    }, "value": 0.0
-  }, "outCapture"  : {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : 0.0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 1219987, "userTag": 0}
+  }, "outCapture"   : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/ChoiceMeta:1.0", "description": "Capture OUT in PCAP?", "choices": [
         "No",
         "Triggered",
@@ -453,16 +475,18 @@
         "widget:combo",
         "config"
       ], "writeable": true, "label": "Out Capture"
-    }, "value": "Triggered"
-  }, "outDataDelay": {
-    "typeid"  : "epics:nt/NTScalar:1.0", "meta": {
+    }, "value" : "Triggered", "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 1034975, "userTag": 0}
+  }, "outDataDelay" : {
+    "typeid"   : "epics:nt/NTScalar:1.0", "meta": {
       "typeid"      : "malcolm:core/NumberMeta:1.0", "dtype": "uint8",
       "description" : "How many FPGA ticks to delay data capture", "tags": [
         "group:outputs",
         "widget:textinput",
         "config"
       ], "writeable": true, "label": "Out Data Delay"
-    }, "value": 0
+    }, "value" : 0, "alarm": {"typeid": "alarm_t", "severity": 0, "status": 0, "message": ""},
+    "timeStamp": {"typeid": "time_t", "secondsPastEpoch": 1502189070, "nanoseconds": 1605987, "userTag": 0}
   }
 }
 }

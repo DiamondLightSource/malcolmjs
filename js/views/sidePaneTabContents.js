@@ -4,11 +4,8 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-//import ReactPanels from 'react-panels';
-//let Content = ReactPanels.Content;
-//let Button  = ReactPanels.Button;
-import Button from 'react-toolbox/lib/button/Button';
-import {List,ListItem} from 'react-toolbox/lib/list'
+import {List,ListItem} from 'react-toolbox/lib/list';
+import {Button} from 'react-toolbox/lib/button';
 import blockStore  from '../stores/blockStore';
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
@@ -20,14 +17,9 @@ import ItemTypes from './dndItemTypes';
 
 import WidgetTableContainer from './widgetTableContainer';
 
-import styles from '../styles/sidePaneContent.css';
+import styles from '../styles/sidePaneContent.scss';
 
 //import * as classes from './sidePaneTabContents.scss';
-
-// Load the TreeView stylesheet
-//import * as treeViewStyles from './treeview.css';
-//import * as treeViewStyles from 'react-treeview/react-treeview.css';
-
 
 function getSidePaneTabContentsState(SidePaneTabContentsComponent)
   {
@@ -265,15 +257,13 @@ generateTabContent(blockAttributes)
 
   // This is the correct way to iterate through the array of attributes
   // and constructing the TreeView
+  //const label2 = <span className="node">{blockAttribs}</span>;
+
   blockAttributeDivs.push(Object.keys(groupsObject).map(blockAttribs =>
-  {
-  const label2 = <span className="node">{blockAttribs}</span>;
-  return (
-    <List className={styles.ListParams} nodeLabel={label2} key={blockAttribs + 'treeview'}>
-      <ListItem>{groupsObject[blockAttribs]} </ListItem>
-    </List>
-  );
-  }));
+    ( <List theme={styles} className={styles.ListParams} key={blockAttribs + 'treeview'} ripple>
+      <ListItem theme={styles} className={styles.listItem} caption={blockAttribs}>{groupsObject[blockAttribs]}</ListItem>
+    </List>)
+    ));
 
     {/* -- This is still here but commented out in case it needs future reference.
      for (let group in groupsObject)
@@ -374,7 +364,7 @@ render()
     }
 
   return (
-    <div id="tabContentDivContainer">
+    <div id={styles.tabContentDivContainer}>
       {tabContent}
     </div>
   );

@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import DragSource from 'react-dnd/lib/DragSource';
 import ItemTypes from './dndItemTypes';
 import flowChartActions, {DroppedPaletteInfo} from '../actions/flowChartActions';
-import styles from '../styles/sidePaneContent.css';
+import styles from '../styles/sidePaneContent.scss';
 
 const style = {
   border         : '1px dashed gray',

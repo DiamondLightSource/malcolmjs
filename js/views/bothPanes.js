@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import MainPane from './mainPane';
 import DlsSidePane from './sidePane';
 import ModalDialogBox from './modalDialogBox';
-import SidePaneTabContents from './sidePaneTabContents';
 
 import mainPaneStore from '../stores/mainPaneStore';
 import sidePaneStore from '../stores/sidePaneStore';
@@ -16,22 +15,35 @@ import flowChartStore from '../stores/flowChartStore';
 
 import paneActions from '../actions/paneActions';
 
-import AppBar from 'react-toolbox/lib/app_bar/AppBar';
-import Layout from 'react-toolbox/lib/layout/Layout';
-import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
-import Drawer from 'react-toolbox/lib/drawer/Drawer';
-import Panel from 'react-toolbox/lib/layout/Panel';
-import Sidebar from 'react-toolbox/lib/layout/Sidebar';
-import theme from '../styles/mjsLayout.css';
+import {AppBar} from 'react-toolbox/lib/app_bar';
+import {Layout,NavDrawer,Sidebar,Panel} from 'react-toolbox/lib/layout';
+import {List,ListItem} from 'react-toolbox/lib/list'
+//import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
+import {Drawer} from 'react-toolbox/lib/drawer';
+//import Panel from 'react-toolbox/lib/layout/Panel';
+//import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import FontIcon from 'react-toolbox/lib/font_icon';
-import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import Link from 'react-toolbox/lib/link/Link';
-import styles from "../styles/mjsLayout.css";
-import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+import {Navigation} from 'react-toolbox/lib/navigation';
+//import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+import {Breadcrumbs} from 'react-breadcrumbs';
+import MjsOptions from '../components/MjsOptions';
+import MjsBottomBar from '../components/MjsBottomBar.jsx';
+//import {Route} from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  NavLink
+} from 'react-router-dom';
+
+import breadBin from '../stores/breadbin';
+import MjsBreadcrumbs from '../components/mjsBreadcrumbs';
+
+import styles from "../styles/mjsLayout.scss";
+
 // import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
 
 //console.log('bothPanes: styles', styles);
-console.log('bothPanes: theme', theme);
 //import {DragDropContextProvider} from 'react-dnd';
 //import HTML5Backend from 'react-dnd-html5-backend';
 //import ItemTypes from './dndItemTypes';
@@ -41,209 +53,228 @@ console.log('bothPanes: theme', theme);
 //import injectTapEventPlugin from 'react-tap-event-plugin';
 //injectTapEventPlugin();
 
-let MainTabbedViewStyle = {
-  "height" : "100%",
-  "width"  : "100%",
-  minWidth : 200,
-  minHeight: 500,
-  display  : 'inlineBlock'
-};
-
-let SideTabbedViewStyle = {
-  float   : 'right',
-  "height": "100%",
-  "width" : "100%",
-  maxWidth: 400
-};
-
-let BothPanesContainerStyle = {
-  margin       : 0,
-  padding      : 0,
-  display      : 'flex',
-  overflowY    : 'auto',
-  flexDirection: 'row',
-  height       : "100%",
-  width        : "100%"
-};
-
-
 // Stub out window.matchMedia() if running under Jest test simulation
 // as the mocked function does not appear to be supported.
-window.matchMedia = window.matchMedia || function ()
-    {
-    return {
-      matches       : false,
-      addListener   : function ()
-        {
-        },
-      removeListener: function ()
-        {
-        }
-    };
-    };
+window.matchMedia = window.matchMedia || function() {
+  return {matches: false, addListener: function() {}, removeListener: function() {}};
+};
 
-function getBothPanesState()
-  {
+function getBothPanesState() {
   return {
     /* Its own getter functions first */
-    sidebarOpen       : paneStore.getSidebarOpenState(),
+    sidebarOpen: paneStore.getSidebarOpenState(),
     modalDialogBoxOpen: paneStore.getModalDialogBoxOpenState(),
     modalDialogBoxInfo: paneStore.getModalDialogBoxInfo(),
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    //favTabOpen: paneStore.getFavTabOpen(),
-    //configTabOpen: paneStore.getConfigTabOpen(),
-    //loadingInitialData: paneStore.getIfLoadingInitialData(),
-    //loadingInitialDataError: paneStore.getIfLoadingInitialDataError(),
 
     /* DlsSidePane's getter functions for stores */
-    tabState        : paneStore.getTabState(),
+    tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible     : sidePaneStore.getDropdownState(),
+    listVisible: sidePaneStore.getDropdownState(),
 
     /* Need to switch DlsSidePane content depending on whether any block are selected
      * If they are not then display a list of available blocks for the user
      * to drag to the FlowChart pane.
      * */
     areAnyBlocksSelected: flowChartStore.getIfAnyBlocksAreSelected(),
-    areAnyEdgesSelected : flowChartStore.getIfAnyEdgesAreSelected(),
+    areAnyEdgesSelected: flowChartStore.getIfAnyEdgesAreSelected(),
+    backgroundSelected: flowChartStore.getBackgroundSelected(),
+    selectedBlock: flowChartStore.getSelectedBlock(),
 
-
+    breadcrumbList: breadBin.breadcrumbs
   }
-  }
+}
 
 const boxTarget = {
   drop() {
-  return {name: 'flowChart'};
-  },
+    return {name: 'flowChart'};
+  }
 };
 
-
 export default class BothPanes extends React.Component {
-constructor(props)
+  constructor(props)
   {
-  super(props);
-  this.state = getBothPanesState();
-  /**
+    super(props);
+    this.state = getBothPanesState();
+    /**
    * Navigation drawer state
    */
-  this.state.drawerActive = false;
-  this.state.drawerPinned  = false;
-  this.state.sidebarPinned = true;
+    this.state.drawerActive = false;
+    this.state.drawerPinned = false;
+    this.state.sidebarPinned = true;
 
-  this.__onChange         = this.__onChange.bind(this);
-  this.toggleDrawerActive = this.toggleDrawerActive.bind(this);
+    this.state.breadcrumbList = breadBin.breadcrumbs;
+
+    this.__onChange = this.__onChange.bind(this);
+    this.__onBreadcrumbChange = this.__onBreadcrumbChange.bind(this);
+
+    this.toggleDrawerActive = this.toggleDrawerActive.bind(this);
   }
 
-__onChange()
+  __onChange()
   {
-  this.setState(getBothPanesState());
+    this.setState(getBothPanesState());
   }
 
-componentDidMount()
+  __onBreadcrumbChange()
   {
-  let mql = window.matchMedia(`(min-width: 800px)`);
-  mainPaneStore.addChangeListener(this.__onChange);
-  paneStore.addChangeListener(this.__onChange);
-  sidePaneStore.addChangeListener(this.__onChange);
-  flowChartStore.addChangeListener(this.__onChange);
-
-  mql.addListener(this.windowWidthMediaQueryChanged);
-  this.setState({mql: mql}, function ()
-  {
-  paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
-  });
+    this.setState(getBothPanesState());
   }
 
-componentWillUnmount()
+  componentDidMount()
   {
-  mainPaneStore.removeChangeListener(this.__onChange);
-  paneStore.removeChangeListener(this.__onChange);
-  sidePaneStore.removeChangeListener(this.__onChange);
+    let mql = window.matchMedia(`(min-width: 800px)`);
+    mainPaneStore.addChangeListener(this.__onChange);
+    paneStore.addChangeListener(this.__onChange);
+    sidePaneStore.addChangeListener(this.__onChange);
+    flowChartStore.addChangeListener(this.__onChange);
+    breadBin.addChangeListener(this.__onBreadcrumbChange);
 
-  this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
+    mql.addListener(this.windowWidthMediaQueryChanged);
+    this.setState({
+      mql: mql
+    }, function() {
+      paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    });
   }
 
-windowWidthMediaQueryChanged()
+  componentWillUnmount()
   {
-  paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+    mainPaneStore.removeChangeListener(this.__onChange);
+    paneStore.removeChangeListener(this.__onChange);
+    sidePaneStore.removeChangeListener(this.__onChange);
+
+    this.state.mql.removeListener(this.windowWidthMediaQueryChanged);
   }
 
-toggleDrawerActive = () =>
+  windowWidthMediaQueryChanged()
   {
-  this.setState({drawerActive: !this.state.drawerActive});
+    paneActions.windowWidthMediaQueryChanged(this.state.mql.matches);
+  }
+
+  toggleDrawerActive = () => {
+    this.setState({
+      drawerActive: !this.state.drawerActive
+    });
   };
 
-toggleDrawerPinned = () =>
-  {
-  this.setState({drawerPinned: !this.state.drawerPinned});
+  toggleDrawerPinned = () => {
+    this.setState({
+      drawerPinned: !this.state.drawerPinned
+    });
   };
 
-toggleSidebar = () =>
-  {
-  //this.setState({sidebarPinned: !this.state.sidebarPinned});
+  toggleSidebar = () => {
+    this.setState({sidebarPinned: !this.state.sidebarPinned});
   };
 
-
-render()
+  render()
   {
 
-  /* abc <DragDropContextProvider backend={HTML5Backend}> */
-  /*  DragDropContextProvider established to encompass both panes (MainPane and DlsSidePane) */
-  /*  This is to facilitate dragging a block from the list in the DlsSidePane and dropping it */
-  /*  into the FlowChart (via MainPane)*/
+    /* abc <DragDropContextProvider backend={HTML5Backend}> */
+    /*  DragDropContextProvider established to encompass both panes (MainPane and DlsSidePane) */
+    /*  This is to facilitate dragging a block from the list in the DlsSidePane and dropping it */
+    /*  into the FlowChart (via MainPane)*/
 
-  /* Note: It is not good practice to pass children as props (see SideBar below),
+    /* Note: It is not good practice to pass children as props (see SideBar below),
    * they should be passed as content between the element start and end tags.
    * TODO: Determine whether this is a design issue of react-sidebar or MalcolmJS.
    * IJG May 2017
    * */
+    const actions = [
+      {
+        label: 'Alarm',
+        raised: true,
+        icon: 'access_alarm'
+      }, {
+        label: 'Location',
+        raised: true,
+        accent: true,
+        icon: 'room'
+      }
+    ];
 
-  const actions = [
-    {label: 'Alarm', raised: true, icon: 'access_alarm'},
-    {label: 'Location', raised: true, accent: true, icon: 'room'}
-  ];
+  let sidebareActive = (this.state.areAnyBlocksSelected || this.state.areAnyEdgesSelected || this.state.backgroundSelected);
 
-  const bp3 =
-            <Layout id="BothPanesContainer" theme={theme} className={styles.layout}>
-              <NavDrawer active={this.state.drawerActive}
-                         pinned={this.state.drawerPinned}
-                         onOverlayClick={ this.toggleDrawerActive } theme={theme}>
-                <p>
-                  PandA context etc. goes here.
-                </p>
-              </NavDrawer>
-              {/*<Panel style={{scrollY:"false", height:"100vh", width: "75%"}}>*/}
-              <Panel theme={theme}>
-                <div id='MainPaneDivWrapper' style={{flex: 1, overflowY: 'hidden', height: 'inherit'}}>
-                <AppBar className={styles.appBar} title="Zebra2 Configurator" leftIcon='menu' theme={theme} onLeftIconClick={ this.toggleDrawerActive }>
-                    {/* This is probably a good place to handle breadcrumbs */}
-                </AppBar>
-                  <MainPane footers={this.state.footers}/>
-                </div>
-              </Panel>
-              {/*<Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>*/}
-              <Sidebar width={'100%'} pinned={ true } right={true} scrollY={true} theme={theme} className={styles.RightSidebar}>
-                <div><FontIcon value='close' onClick={ this.toggleSidebar }/></div>
-                {/* <div id="DlsSidePaneContainerDiv" style={{flex: 1, flexDirection: 'row'}}> */}
-                  <DlsSidePane id="DlsSidePane" tabState={this.state.tabState}
-                               selectedTabIndex={this.state.selectedTabIndex}
-                               listVisible={this.state.listVisible}
-                               areAnyBlocksSelected={this.state.areAnyBlocksSelected}
-                               areAnyEdgesSelected={this.state.areAnyEdgesSelected}/>
-                { /* </div> */ }
-              </Sidebar>
-            </Layout>;
+    const base_url = 'index.html';
 
+    // Temporary test constructs for router--------
+    const Home = () => (
+      <div>
+        <h2>Home</h2>
+      </div>
+    );
 
-  return ( bp3 );
+    const About = () => (
+      <div>
+        <h2>About</h2>
+      </div>
+    );
+    //-------------------------------------
+ /*   this.state.breadcrumbList.map(bc =>
+    {
+    return (
+      <List className={styles.ListParams} nodeLabel={bc}>
+        <ListItem>{groupsObject[blockAttribs]} </ListItem>
+      </List>
+    );
+  });
+*/
+
+/**
+ * Styles from mjsLayout
+ *
+ */
+    const bp3 = <Layout id="BothPanesContainer">
+      <Drawer theme={styles} active={this.state.drawerActive} pinned={this.state.drawerPinned} onOverlayClick={this.toggleDrawerActive} >
+        <AppBar theme={styles} title='Panda 1' leftIcon='close' rightIcon='open_in_new' onLeftIconClick={this.toggleDrawerActive}/>
+        <div>
+          <p>
+          {"Options"}
+          </p>
+          <MjsOptions/>
+        </div>
+      </Drawer>
+      <Panel theme={styles}>
+        {/*<div id={styles.MainPaneDivWrapper}>*/}
+          <AppBar leftIcon='menu' rightIcon='open_in_new' onLeftIconClick={this.toggleDrawerActive}>
+            {/* This is probably a good place to handle breadcrumbs */}
+            <MjsBreadcrumbs/>
+            {/*
+            <div>
+
+              <NavLink to={base_url+"/"}>Layout</NavLink>
+              <NavLink to={base_url+"/home"}>Home</NavLink>
+              <NavLink to={base_url+"/about"}>About</NavLink>
+                <div>
+                <Route exact path={base_url+"/"} component={Home}/>
+                <Route path={base_url+"/layout"} component={About}/>
+                <Route path={base_url+"/about"} component={About}/>
+              </div>
+            </div>
+            */}
+          </AppBar>
+          <MainPane footers={this.state.footers}/>
+        {/*</div>*/}
+      </Panel>
+      {/*<Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>*/}
+      <Sidebar theme={styles} id={styles.rightsidepane}  pinned={sidebareActive} right={true} scrollY={true}>
+        <AppBar theme={styles}title={this.state.selectedBlock} onLeftIconClick={ this.toggleSidebar } leftIcon='close' rightIcon='open_in_new'/>
+        {/* <div id="DlsSidePaneContainerDiv" style={{flex: 1, flexDirection: 'row'}}> */}
+        <DlsSidePane id="DlsSidePane" tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible} areAnyBlocksSelected={this.state.areAnyBlocksSelected} areAnyEdgesSelected={this.state.areAnyEdgesSelected}/>
+      </Sidebar>
+      <MjsBottomBar/>
+    </Layout>;
+
+    return (bp3);
 
   }
 }
 
 BothPanes.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
-  isOver           : PropTypes.bool.isRequired,
-  canDrop          : PropTypes.bool.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  canDrop: PropTypes.bool.isRequired
 };

@@ -1,6 +1,6 @@
 
 .edgeInnerLineint32, .edgePreviewInnerLineint32, .edgeInnerLinebool, .edgePreviewInnerLinebool {
-  stroke-width: 5px;
+  stroke-width: 3px;
   fill: none;
   cursor: default;
 }
@@ -14,7 +14,7 @@
 }
 
 .edgePreviewOuterLine {
-  stroke-width: 7px;
+  stroke-width: 5px;
   stroke: lightgrey;
   stroke-linecap: round;
   fill: none;
@@ -28,11 +28,11 @@
 }
 
 .edgeOuterLineSelected {
-  stroke-width: 10px;
-  stroke: #797979;
+  stroke-width: 7px;
+  stroke: #07a733;
 }
 
 .edgeOuterLineUnselected {
-  stroke-width: 7px;
+  stroke-width: 5px;
   stroke: lightgrey;
 }
