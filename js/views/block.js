@@ -321,7 +321,8 @@ render()
                         portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                         selected={this.props.selected}
                         nports={nports}
-                        blockStyling={this.props.blockStyling}/>
+                        blockStyling={this.props.blockStyling}
+                        graphicsStyle={this.props.graphicsStyle} />
 
         <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
                portThatHasBeenClicked={this.props.portThatHasBeenClicked}
@@ -350,7 +351,8 @@ Block.propTypes =
   id                     : PropTypes.string,
   selected               : PropTypes.bool,
   blockPosition          : PropTypes.object,
-  deselect               : PropTypes.func
+  deselect               : PropTypes.func,
+  graphicsStyle          : PropTypes.string,
 
 };
 

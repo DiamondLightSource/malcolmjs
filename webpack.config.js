@@ -107,7 +107,7 @@ const config = {
       },
       {test: /\.scss$/,
         include: [APP_DIR, path.resolve(APP_DIR, 'styles'),
-                  path.resolve(__dirname, 'src/toolbox')],
+                  /*path.resolve(__dirname, 'src/toolbox')*/],
         //exclude: /node_modules/,
         use : [
           { loader: 'style-loader', options: { sourceMap: true } },

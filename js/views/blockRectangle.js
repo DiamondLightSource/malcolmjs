@@ -6,6 +6,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/block.css';
 import renderHTML from 'react-render-html';
+import {MjsOptionsStore} from '../stores/optionsStore';
 
 export default class BlockRectangle extends React.Component
 {
@@ -99,7 +100,7 @@ export default class BlockRectangle extends React.Component
         <rect id={this.props.blockId.concat("Rectangle")}
               height={outerRectHeight} width={blockStyling.outerRectangleWidth}
               x={0} y={0} rx={8} ry={8}
-              filter={'url(#lighting3d)'}
+              filter={this.props.graphicsStyle == MjsOptionsStore.gs3d ? 'url(#lighting3d)' : null}
               style={{
                 /*fill  : 'white',*/
                 strokeWidth: 2,

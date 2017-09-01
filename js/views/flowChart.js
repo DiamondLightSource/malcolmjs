@@ -10,6 +10,7 @@ import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
 import {BlockStore} from '../stores/blockStore';
+import {MjsOptionsStore} from '../stores/optionsStore';
 
 import Edge from './edge';
 import EdgePreview from './edgePreview';
@@ -793,6 +794,7 @@ render()
                blockStyling={this.props.blockStyling}
                blockPosition={this.props.blockPositions[blockName]}
                graphZoomScale={this.props.graphZoomScale}
+               graphicsStyle={this.props.graphicsStyle}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );
@@ -898,7 +900,10 @@ FlowChart.propTypes = {
   backgroundSelected     : PropTypes.bool,
   canDrop                : PropTypes.bool,
   isOver                 : PropTypes.bool.isRequired,
-  connectDropTarget      : PropTypes.func.isRequired
+  connectDropTarget      : PropTypes.func.isRequired,
+  graphicsStyle          : PropTypes.string,
 };
+
+FlowChart.defaultProps = {graphicsStyle: MjsOptionsStore.gs3d};
 
 export default DropTarget(ItemTypes.PALETTE, layoutTarget, collect)(FlowChart);

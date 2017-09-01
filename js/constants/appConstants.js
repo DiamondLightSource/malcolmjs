@@ -132,6 +132,9 @@ const appConstants = {
   /* Navbar use */
   NAVBAR_ACTION: "NAVBAR_ACTION",
 
+  /* Options */
+  OPTIONS_ACTION_GSTYLE: "OPTIONS_ACTION_GSTYLE",
+  OPTIONS_ACTION_RIGHT_PINNED: "OPTIONS_ACTION_RIGHT_PINNED",
 };
 
 export default appConstants;

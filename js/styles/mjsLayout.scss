@@ -1,6 +1,12 @@
 @import "react-toolbox/lib/layout/theme.css";
+@import "react-toolbox/lib/list/theme.css";
+@import "react-toolbox/lib/drawer/theme.css";
+@import "react-toolbox/lib/navigation/theme.css";
 @import "AppBar.css";
 
+.appBar .inner {
+  overflow-x: hidden;
+}
 
 .layout {
     display: flex;
@@ -33,7 +39,7 @@
     width: auto;
 }
 
-.layout .panel #MainPaneDivWrapper {
+.layout .panel  {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -42,14 +48,15 @@
 
 .layout .sidebar {
     overflow-y: auto;
-    display:flex;
+    display:contents;
     height:100%;
-    width:25%;
+    //width:25%;
 
 }
 
-.sidebarDrawer {
-  width:100%;
+.sidebarDrawer,
+.navDrawerDrawer {
+  background-color: var(--palette-blue-200);
 }
 
 .RightSidebar, .sidebarWrapper {
@@ -57,13 +64,25 @@
   overflow-y: auto;
 }
 
-.panel > div {
-  overflow-y: auto;
-  
+.panel {
+  height: 100%;
+}
+
+div.panel{
+  overflow-y: hidden;
+  height: 100%;
 }
 
 #navdrawer.leftsidebar {
   overflow-y: auto;
 }
 
-#rightsidepane { display: block }
+#rightsidepane { display: inline-block; color: var(--palette-blue-900)}
+
+.bottombar {
+  position: fixed;
+  bottom: 0em;
+  height: 2em;
+  width: 100%;
+  background-color: var(--palette-blue-200);
+}

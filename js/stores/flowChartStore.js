@@ -65,7 +65,12 @@ function deselectAllBlocks()
     blockSelectedStates[block] = false
     }
 
-  backgroundSelected = true;
+  /**
+   * Toggle backgroundSelected state if selecting again.
+   * This way we can switch it off and hide the sidepane.
+   *
+   */
+  backgroundSelected = !backgroundSelected;
 
   // Inform views that we have deselected all blocks and edges
   // At this stage prepare to show list of blocks in DlsSidePane.
@@ -161,7 +166,7 @@ function updateEdgePreviewEndpoint(position)
   {
   edgePreview.endpointCoords.x += (1 / graphZoomScale) * (position.x);
   edgePreview.endpointCoords.y += (1 / graphZoomScale) * (position.y);
-  console.log(edgePreview.endpointCoords);
+  console.log(`FlowChartStore: edgePreview.endpointCoords: x= ${edgePreview.endpointCoords.x}  y= ${edgePreview.endpointCoords.y}  position: x= ${position.x}   position: y= ${position.y}  graphZoomScale: ${graphZoomScale}`);
   }
 
 class FlowChartStore extends EventEmitter {
@@ -487,7 +492,7 @@ addEdgePreview()
         }
       }
     endOfEdgePortOffsetX = 0;
-    endOfEdgePortOffsetY = blockInfo.blockDimensions.height / (inportArrayLength + 1) * (inportArrayIndex + 1);
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (inportArrayIndex));
     portType             = "inport";
     }
   else if (clickedPort.className.baseVal.indexOf('outport') !== -1)
@@ -505,7 +510,7 @@ addEdgePreview()
       }
 
     endOfEdgePortOffsetX = blockInfo.blockDimensions.width;
-    endOfEdgePortOffsetY = blockInfo.blockDimensions.height/ (outportArrayLength + 1) * (outportArrayIndex + 1);
+    endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (outportArrayIndex));
     portType             = "outport";
     }
 

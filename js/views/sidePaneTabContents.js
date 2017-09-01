@@ -4,11 +4,8 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-//import ReactPanels from 'react-panels';
-//let Content = ReactPanels.Content;
-//let Button  = ReactPanels.Button;
-import {Button} from 'react-toolbox/lib/button';
 import {List,ListItem} from 'react-toolbox/lib/list';
+import {Button} from 'react-toolbox/lib/button';
 import blockStore  from '../stores/blockStore';
 import blockCollection, {BlockItem} from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
@@ -20,7 +17,7 @@ import ItemTypes from './dndItemTypes';
 
 import WidgetTableContainer from './widgetTableContainer';
 
-import styles from '../styles/sidePaneContent.css';
+import styles from '../styles/sidePaneContent.scss';
 
 //import * as classes from './sidePaneTabContents.scss';
 
@@ -263,8 +260,8 @@ generateTabContent(blockAttributes)
   //const label2 = <span className="node">{blockAttribs}</span>;
 
   blockAttributeDivs.push(Object.keys(groupsObject).map(blockAttribs =>
-    ( <List className={styles.ListParams} key={blockAttribs + 'treeview'}>
-      <ListItem>{groupsObject[blockAttribs]} </ListItem>
+    ( <List theme={styles} className={styles.ListParams} key={blockAttribs + 'treeview'} ripple>
+      <ListItem theme={styles} className={styles.listItem} caption={blockAttribs}>{groupsObject[blockAttribs]}</ListItem>
     </List>)
     ));
 
@@ -367,7 +364,7 @@ render()
     }
 
   return (
-    <div id="tabContentDivContainer">
+    <div id={styles.tabContentDivContainer}>
       {tabContent}
     </div>
   );

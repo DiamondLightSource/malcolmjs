@@ -3,55 +3,64 @@
  */
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import flowChartActions from '../actions/flowChartActions';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
-import interact from '../../node_modules/interactjs';
+import interact from 'interactjs';
 import styles from '../styles/edge.scss';
+import {BlockStore} from '../stores/blockStore';
+
+const dragAreaContainer = '#appAndDragAreaContainer';
 
 export default class EdgePreview extends React.Component
 {
   constructor(props)
     {
     super(props);
-    this.state = {noPanning: true};
+    this.state = {noPanning: true, mousePosition:{x:0, y:0}};
     this.onTap = this.onTap.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.interactJSMouseMoveForEdgePreview = this.interactJSMouseMoveForEdgePreview.bind(this);
+
+    // Added 21 Aug 17 as diagnistic tool
+    this._onMouseMove = this._onMouseMove.bind(this);
     }
   
   componentDidMount()
     {
-    interact(styles.appAndDragAreaContainer)
+    interact(dragAreaContainer)
       .on('move', this.interactJSMouseMoveForEdgePreview);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .draggable({
 
-        onstart: function(e)
+        // Drag start
+        onstart: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
-          interact(styles.appAndDragAreaContainer)
+          interact(dragAreaContainer)
             .off('move', this.interactJSMouseMoveForEdgePreview);
-          }.bind(this),
+          },
 
-        onmove: function (e)
+        // Drag move
+        onmove: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
           this.props.interactJsDragPan(e);
-          }.bind(this),
+          },
 
-        onend: function (e)
+        // Drag end
+        onend: (e) =>
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
 
           this.setState({noPanning: true}, function ()
           {
-          interact(styles.appAndDragAreaContainer)
+          interact(dragAreaContainer)
             .on('move', this.interactJSMouseMoveForEdgePreview);
           });
 
@@ -60,27 +69,26 @@ export default class EdgePreview extends React.Component
             x: e.dx,
             y: e.dy
           })
-          }.bind(this)
+          }
 
       });
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .on('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .on('down', this.onMouseDown);
     }
   
   componentWillUnmount ()
     {
-
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .off('tap', this.onTap);
 
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.g)
       .off('down', this.onMouseDown);
 
-    interact(styles.appAndDragAreaContainer)
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
 
     }
@@ -125,7 +133,7 @@ export default class EdgePreview extends React.Component
     e.stopImmediatePropagation();
     e.stopPropagation();
 
-    interact(styles.appAndDragAreaContainer)
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     this.props.failedPortConnection();
     }
@@ -137,12 +145,21 @@ export default class EdgePreview extends React.Component
 
     this.setState({noPanning: false}, function ()
     {
-    interact(styles.appAndDragAreaContainer)
+    interact(dragAreaContainer)
       .off('move', this.interactJSMouseMoveForEdgePreview);
     });
     }
 
-  render ()
+  _onMouseMove(e) {
+                  let curState = Object.assign({},this.state);
+                  curState.mousePosition.x = e.screenX;
+                  curState.mousePosition.y = e.screenY;
+                  console.log(`Edgepreview._onMouseMove: x = ${e.screenX}  y=${e.screenY}`);
+                  this.setState(curState);
+                  }
+
+
+render ()
     {
     //console.log("render: edgePreview");
 
@@ -184,7 +201,7 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = 0;
-      startOfEdgePortOffsetY = outerRectHeight / (inportArrayLength + 1) * (inportArrayIndex + 1);
+      startOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (inportArrayIndex));
       }
     else if (fromBlockInfo.fromBlockPortType === "outport")
       {
@@ -202,14 +219,14 @@ export default class EdgePreview extends React.Component
           }
         }
       startOfEdgePortOffsetX = blockStyling.outerRectangleWidth;
-      startOfEdgePortOffsetY = outerRectHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
+      startOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin+(BlockStore.drawingParams.interPortSpacing * (outportArrayIndex));
       }
 
     let startOfEdgeX = fromBlockPositionX + startOfEdgePortOffsetX;
     let startOfEdgeY = fromBlockPositionY + startOfEdgePortOffsetY;
 
-    let endOfEdgeX = this.props.edgePreview.endpointCoords.x;
-    let endOfEdgeY = this.props.edgePreview.endpointCoords.y;
+    let endOfEdgeX = (this.props.edgePreview.endpointCoords.x);
+    let endOfEdgeY = (this.props.edgePreview.endpointCoords.y);
 
     let innerLineString = "-innerline";
     let outerLineString = "-outerline";
@@ -222,6 +239,8 @@ export default class EdgePreview extends React.Component
     let sourceY = startOfEdgeY;
     let targetX = endOfEdgeX;
     let targetY = endOfEdgeY;
+
+    console.log(`EdgePreview: sourceX = ${sourceX.toFixed(2)}  sourceY = ${sourceY.toFixed(2)}  targetX = ${targetX.toFixed(2)} targetY = ${targetY.toFixed(2)}`);
 
     let c1X, c1Y, c2X, c2Y;
 
@@ -283,7 +302,7 @@ export default class EdgePreview extends React.Component
       }
 
     return (
-      <g id={styles.edgePreviewContainer} {...gProps} ref={"node"}>
+      <g id={styles.edgePreviewContainer} {...gProps} ref={(node) => {this.g = node}} >
 
         <path id={styles.outerLineName} className={styles.edgePreviewOuterLine} d={pathInfo}/>
 
@@ -303,8 +322,6 @@ EdgePreview.propTypes = {
   edgePreview         : PropTypes.object,
   fromBlockPosition   : PropTypes.object,
   fromBlockInfo       : PropTypes.object,
-  id                  : PropTypes.string,
-  nports              : PropTypes.number
-
+  id                  : PropTypes.string
 };
 

@@ -4,23 +4,9 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
-//import ReactPanels from 'react-panels';
 import mainPaneActions from '../actions/mainPaneActions';
 import paneActions from '../actions/paneActions';
-//import ToolsNavbar from './navbarView';
-
-//import ConfigButton from './configButton';
-import FavButton from './favButton';
-import FooterButton from './button';
 import FlowChartControllerView from './flowChartControllerView';
-
-//import * as toggleButtonStyles from './toggleButton.css';
-
-import AppBar from 'react-toolbox/lib/app_bar/AppBar';
-import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import Link from 'react-toolbox/lib/link/Link';
-import WasteBin from './wasteBin';
 
 export default class MainPane extends React.Component {
 
@@ -125,12 +111,11 @@ render()
   //}
 
 
+    //div style={TESTStyling}>
 
-  return (
-      <div style={TESTStyling}>
-        <FlowChartControllerView/>
-      </div>
-  )
+  return  (
+          <FlowChartControllerView/>
+          )
   }
 }
 

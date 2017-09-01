@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import * as ReactDOM from 'react-dom';
+//import * as ReactDOM from 'react-dom';
 import styles from '../styles/port.scss';
 import interact from 'interactjs';
 
@@ -23,32 +23,32 @@ componentDidMount()
   //if (this.props.className.indexOf("invisiblePortCircle"))
     if (this.props.className.includes("invisiblePortCircle"))
     {
-    interact(ReactDOM.findDOMNode(this))
+    interact(this.circleNode)
       .draggable(
         {
           restrict: {
             restriction: '#appAndDragAreaContainer',
           },
-          onstart : function (e)
+          onstart : (e) =>
             {
             e.stopImmediatePropagation();
             e.stopPropagation();
-            }.bind(this),
-          onend   : function (e)
+            },
+          onend   : (e) =>
             {
             e.stopImmediatePropagation();
             e.stopPropagation();
-            }.bind(this)
+            }
         });
 
-    interact(ReactDOM.findDOMNode(this)).on('tap', this.portClick);
-    interact(ReactDOM.findDOMNode(this)).styleCursor(false);
+    interact(this.circleNode).on('tap', this.portClick);
+    interact(this.circleNode).styleCursor(false);
     }
   }
 
 componentWillUnmount()
   {
-  interact(ReactDOM.findDOMNode(this)).off("tap", this.portClick);
+  interact(this.circleNode).off("tap", this.portClick);
   }
 
 shouldComponentUpdate(nextProps, nextState)
@@ -62,6 +62,7 @@ portClick(e)
   //e.stopImmediatePropagation();
   //e.stopPropagation();
   console.log(`Port.portClick(): blockName = ${this.props.blockName}`);
+  console.log(e);
   // Inform the parent Block object that we have been clicked.
   if ((this.props.className.indexOf("invisiblePortCircle") > -1) && (this.props.cbClicked !== null))
     {
@@ -83,7 +84,7 @@ render()
     delete circleProps.cbClicked;
     }
 
-  return (<circle {...circleProps} key={this.props.portkey} />);
+  return (<circle {...circleProps} key={this.props.portkey} ref={(node) => {this.circleNode = node}} />);
   }
 }
 

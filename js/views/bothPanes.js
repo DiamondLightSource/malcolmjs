@@ -17,17 +17,17 @@ import paneActions from '../actions/paneActions';
 
 import {AppBar} from 'react-toolbox/lib/app_bar';
 import {Layout,NavDrawer,Sidebar,Panel} from 'react-toolbox/lib/layout';
+import {List,ListItem} from 'react-toolbox/lib/list'
 //import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
 import {Drawer} from 'react-toolbox/lib/drawer';
 //import Panel from 'react-toolbox/lib/layout/Panel';
 //import Sidebar from 'react-toolbox/lib/layout/Sidebar';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import {Navigation} from 'react-toolbox/lib/navigation';
-import theme from "../styles/mjsLayout.css";
 //import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 import {Breadcrumbs} from 'react-breadcrumbs';
 import MjsOptions from '../components/MjsOptions';
-import {List,ListItem} from 'react-toolbox/lib/list'
+import MjsBottomBar from '../components/MjsBottomBar.jsx';
 //import {Route} from 'react-router-dom';
 import {
   BrowserRouter as Router,
@@ -38,6 +38,8 @@ import {
 
 import breadBin from '../stores/breadbin';
 import MjsBreadcrumbs from '../components/mjsBreadcrumbs';
+
+import styles from "../styles/mjsLayout.scss";
 
 // import ThemeProvider from 'react-css-themr/lib/components/ThemeProvider';
 
@@ -66,10 +68,6 @@ function getBothPanesState() {
 
     /* MainPane's getter functions for stores */
     footers: mainPaneStore.getFooterState(),
-    //favTabOpen: paneStore.getFavTabOpen(),
-    //configTabOpen: paneStore.getConfigTabOpen(),
-    //loadingInitialData: paneStore.getIfLoadingInitialData(),
-    //loadingInitialDataError: paneStore.getIfLoadingInitialDataError(),
 
     /* DlsSidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
@@ -82,6 +80,8 @@ function getBothPanesState() {
      * */
     areAnyBlocksSelected: flowChartStore.getIfAnyBlocksAreSelected(),
     areAnyEdgesSelected: flowChartStore.getIfAnyEdgesAreSelected(),
+    backgroundSelected: flowChartStore.getBackgroundSelected(),
+    selectedBlock: flowChartStore.getSelectedBlock(),
 
     breadcrumbList: breadBin.breadcrumbs
   }
@@ -167,7 +167,7 @@ export default class BothPanes extends React.Component {
   };
 
   toggleSidebar = () => {
-    //this.setState({sidebarPinned: !this.state.sidebarPinned});
+    this.setState({sidebarPinned: !this.state.sidebarPinned});
   };
 
   render()
@@ -183,7 +183,6 @@ export default class BothPanes extends React.Component {
    * TODO: Determine whether this is a design issue of react-sidebar or MalcolmJS.
    * IJG May 2017
    * */
-
     const actions = [
       {
         label: 'Alarm',
@@ -196,6 +195,8 @@ export default class BothPanes extends React.Component {
         icon: 'room'
       }
     ];
+
+  let sidebareActive = (this.state.areAnyBlocksSelected || this.state.areAnyEdgesSelected || this.state.backgroundSelected);
 
     const base_url = 'index.html';
 
@@ -226,18 +227,19 @@ export default class BothPanes extends React.Component {
  * Styles from mjsLayout
  *
  */
-    const bp3 = <Layout id="BothPanesContainer" theme={theme}>
-      <NavDrawer theme={theme} active={this.state.drawerActive} pinned={this.state.drawerPinned} onOverlayClick={this.toggleDrawerActive} >
+    const bp3 = <Layout id="BothPanesContainer">
+      <Drawer theme={styles} active={this.state.drawerActive} pinned={this.state.drawerPinned} onOverlayClick={this.toggleDrawerActive} >
+        <AppBar theme={styles} title='Panda 1' leftIcon='close' rightIcon='open_in_new' onLeftIconClick={this.toggleDrawerActive}/>
         <div>
           <p>
           {"Options"}
           </p>
           <MjsOptions/>
         </div>
-      </NavDrawer>
-      <Panel theme={theme}>
-        <div id={theme.MainPaneDivWrapper}>
-          <AppBar theme={theme} title="Zebra2" leftIcon='menu' onLeftIconClick={this.toggleDrawerActive}>
+      </Drawer>
+      <Panel theme={styles}>
+        {/*<div id={styles.MainPaneDivWrapper}>*/}
+          <AppBar leftIcon='menu' rightIcon='open_in_new' onLeftIconClick={this.toggleDrawerActive}>
             {/* This is probably a good place to handle breadcrumbs */}
             <MjsBreadcrumbs/>
             {/*
@@ -255,14 +257,15 @@ export default class BothPanes extends React.Component {
             */}
           </AppBar>
           <MainPane footers={this.state.footers}/>
-        </div>
+        {/*</div>*/}
       </Panel>
       {/*<Sidebar id="rightsidepane" pinned={ true } style={{overflowY:'overlap'}}>*/}
-      <Sidebar id={theme.rightsidepane} theme={theme} width={25} pinned={true} right={true} scrollY={true}>
-        <div><FontIcon value='close' onClick={this.toggleSidebar}/></div>
+      <Sidebar theme={styles} id={styles.rightsidepane}  pinned={sidebareActive} right={true} scrollY={true}>
+        <AppBar theme={styles}title={this.state.selectedBlock} onLeftIconClick={ this.toggleSidebar } leftIcon='close' rightIcon='open_in_new'/>
         {/* <div id="DlsSidePaneContainerDiv" style={{flex: 1, flexDirection: 'row'}}> */}
-        <DlsSidePane id="DlsSidePane" tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible} areAnyBlocksSelected={this.state.areAnyBlocksSelected} areAnyEdgesSelected={this.state.areAnyEdgesSelected}/> {/* </div> */}
+        <DlsSidePane id="DlsSidePane" tabState={this.state.tabState} selectedTabIndex={this.state.selectedTabIndex} listVisible={this.state.listVisible} areAnyBlocksSelected={this.state.areAnyBlocksSelected} areAnyEdgesSelected={this.state.areAnyEdgesSelected}/>
       </Sidebar>
+      <MjsBottomBar/>
     </Layout>;
 
     return (bp3);

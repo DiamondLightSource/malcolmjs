@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
 
-import interact from "../../node_modules/interactjs";
+import interact from "interactjs";
 import styles from '../styles/port.scss';
 import {BlockStore} from '../stores/blockStore';
 
@@ -81,8 +81,9 @@ portClick(e)
       if (e.currentTarget.parentNode.children[i].className.animVal.indexOf("inport") !== -1
         || e.currentTarget.parentNode.children[i].className.animVal.indexOf("outport") !== -1)
         {
-        console.log(`ports: portClick(): invisiblePortCircle - target = ${target}`);
         target = e.currentTarget.parentNode.children[i];
+        console.log(`ports: portClick(): invisiblePortCircle - target = ${target}`);
+        break;
         // TODO: I think there should be a break here. IJG 13 feb 17
         // Otherwise i will only reference the tail value.
         }

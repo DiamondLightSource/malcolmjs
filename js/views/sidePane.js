@@ -8,16 +8,10 @@ import PropTypes from 'prop-types';
 //import ReactPanels from 'react-panels';
 import Dropdown from './dropdownMenu';
 
-//let Panel  = ReactPanels.Panel;
-//let Tab    = ReactPanels.Tab;
-//let Button = ReactPanels.Button;
-
 import paneActions from '../actions/paneActions';
 import SidePaneTabContents from './sidePaneTabContents';
-import Tabs from 'react-toolbox/lib/tabs/Tabs';
-import Tab from 'react-toolbox/lib/tabs/Tab';
-import Button from 'react-toolbox/lib/button/Button';
-import styles from '../styles/sidePaneContent.css';
+//import {Tabs,Tab, Button} from 'react-toolbox';
+import styles from '../styles/sidePaneContent.scss';
 
 export default class DlsSidePane extends React.Component {
 constructor(props)

@@ -56,7 +56,7 @@ class BreadBin extends EventEmitter {
   {
     this.emit(CHANGE_EVENT)
   }
-};
+}
 
   const breadBin = new BreadBin();
 

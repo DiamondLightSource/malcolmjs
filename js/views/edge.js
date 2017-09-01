@@ -4,14 +4,13 @@
 
 //let React    = require('../../node_modules/react/react');
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import paneActions from '../actions/paneActions';
 import flowChartActions from '../actions/flowChartActions';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import {MalcolmDefs} from '../utils/malcolmProtocol';
-import interact from '../../node_modules/interactjs';
+import interact from 'interactjs';
 import KeyCodes from '../constants/keycodes';
 import styles from '../styles/edge.scss';
 import {BlockStore} from '../stores/blockStore';
@@ -28,10 +27,10 @@ constructor(props)
 
 componentDidMount()
   {
-  ReactDOM.findDOMNode(this).addEventListener('EdgeSelect', this.edgeSelect);
+  this.g.addEventListener('EdgeSelect', this.edgeSelect);
   //this.refs.node.addEventListener('EdgeSelect', this.edgeSelect);
 
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .on('tap', this.edgeSelect);
 
   window.addEventListener('keydown', this.keyPress);
@@ -40,7 +39,7 @@ componentDidMount()
 
 componentWillUnmount()
   {
-  interact(ReactDOM.findDOMNode(this))
+  interact(this.g)
     .off('tap', this.edgeSelect);
 
   window.removeEventListener('keydown', this.keyPress);
@@ -124,9 +123,9 @@ edgeSelect(e)
   {
   e.stopImmediatePropagation();
   e.stopPropagation();
-  flowChartActions.selectEdge(ReactDOM.findDOMNode(this).id);
+  flowChartActions.selectEdge(this.g.id);
   paneActions.openEdgeTab({
-    edgeId       : ReactDOM.findDOMNode(this).id,
+    edgeId       : this.g.id,
     fromBlock    : this.props.fromBlock,
     fromBlockPort: this.props.fromBlockPort,
     toBlock      : this.props.toBlock,
@@ -180,6 +179,7 @@ render()
       }
     }
 
+  // TODO: nports is not a property of Edge, so need to rethink this bit or remove it.
   // default height to basic style.
   let outerRectHeight = blockStyling.outerRectangleHeight;
   // then if nports property is specified, calculate the ideal height.
@@ -281,7 +281,7 @@ render()
     let edgeContainerId = styles["edgeContainer-"+outerLineName];
   //console.log(`Edge.render(): ${edgeContainerId}`);
   return (
-    <g id={edgeContainerId} {...gProps} ref="node">
+    <g id={edgeContainerId} {...gProps} ref={(node) => {this.g = node}}>
 
       <path id={outerLineName}
             className={styles['edgeOuterLine' + (this.props.selected === true ? 'Selected' : 'Unselected')] }
@@ -315,4 +315,3 @@ Edge.propTypes = {
   id                    : PropTypes.string,
   blockStyling          : PropTypes.object,
 };
-
