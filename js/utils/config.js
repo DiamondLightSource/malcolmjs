@@ -83,7 +83,7 @@ getServerNameList()
 
 getServerName()
   {
-  return (_serverKey);
+  return (this._serverKey);
   }
 
 getServerURL()
