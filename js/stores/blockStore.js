@@ -89,7 +89,17 @@ function interactJsDrag(BlockInfo) {
       y: blockPositions[BlockInfo.target].y + (BlockInfo.y * (1 / flowChartStore.getGraphZoomScale()))
     }
   });
-  //console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
+
+  /**
+   * Now update the blockItem in the blockCollection
+   *
+   */
+  let item = blockCollection.getBlockItemByName(BlockInfo.target);
+  if (item instanceof BlockItem)
+    {
+//    item.putXY(blockPositions[BlockInfo.target].x, blockPositions[BlockInfo.target].y);
+    }
+  console.log(`blockStore.interactJsDrag(): target = ${BlockInfo.target},  X: ${blockPositions[BlockInfo.target].x},  y: ${blockPositions[BlockInfo.target].y}`);
 }
 
 /* Functions to do with data retrieval from the server */
@@ -420,6 +430,7 @@ class BlockStore extends EventEmitter {
     this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
     this.dispatcherCallback = this.dispatcherCallback.bind(this);
     blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
+    blockCollection.addChangeListenerLayout(this.onChangeBlockLayoutCallback);
     this.dispatchToken = AppDispatcher.register(this.dispatcherCallback);
   }
 
@@ -474,6 +485,19 @@ class BlockStore extends EventEmitter {
       blockStore.blockUpdated(index);
     }
   }
+
+  onChangeBlockLayoutCallback(items)
+    {
+    console.log(`blockStore.onChangeBlockLayoutCallback(): items = ${items}`);
+    for (let i = 0; i < items.length; i++) {
+      let index = items[i];
+      blockStore.blockUpdated(index);
+    }
+    if (items.length > 0)
+      {
+      blockStore.emitChange();
+      }
+    }
 
   /**
  * Determine whether this blockItem has a position move to be applied.

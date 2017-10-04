@@ -241,8 +241,11 @@ interactJsDragDebounce()
 
   this.timer = setTimeout(function ()
     {
-    item.putXY(this.props.blockPosition.x * this.props.graphZoomScale,
-      this.props.blockPosition.y * this.props.graphZoomScale);
+      let newX = this.props.blockPosition.x * this.props.graphZoomScale;
+      let newY = this.props.blockPosition.y * this.props.graphZoomScale;
+      console.log(`block.interactJsDragDebounce(): Calling item.putXY(${newX}, ${newY})`);
+
+    item.putXY(newX, newY);
     }.bind(this), 500);
   }
 

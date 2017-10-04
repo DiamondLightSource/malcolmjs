@@ -514,6 +514,8 @@ addEdgePreview()
     portType             = "outport";
     }
 
+// TODO: Is this where the problem of the preview offset edge end position stems from??
+//  
   let blockPosX  = blockItem.x();
   let blockPosY  = blockItem.y();
   let endOfEdgeX = blockPosX + endOfEdgePortOffsetX;

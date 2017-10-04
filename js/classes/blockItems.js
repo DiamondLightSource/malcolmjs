@@ -270,8 +270,7 @@ get icon()
     let posSvgStart = this.attributes.icon.value.search("<svg");
     if (posSvgStart >= 0)
       {
-      let copyRaw = this.attributes.icon.value.slice(posSvgStart);
-      ret = copyRaw;
+      ret = this.attributes.icon.value.slice(posSvgStart);
       // Replace all line-feed escapes with no character:
       // - copyRaw = copyRaw.replace(/\n/g,'');
       // Replace all escaped quotation marks with non-escaped ones.
@@ -290,13 +289,7 @@ get visible()
     ret = this.attributes.visible;
     }
 
-  /**
-   * TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING
-   * @type {boolean}
-   */
-  //ret = true;
-
-  return (ret);
+   return (ret);
   }
 
 x()
@@ -321,6 +314,9 @@ y()
 
 putXY(newX, newY)
   {
+    // Quick local update until we get the instrument update.
+    this.attributes.x = newX;
+    this.attributes.y = newY;
   MalcolmActionCreators.malcolmPut("", [MalcolmActionCreators.getdeviceId(), "layout", "value"],
     {"typeid":"malcolm:core/Table:1.0",
       "name":[this.blockName()],
@@ -892,12 +888,12 @@ dispatcherCallback(payload)
   {
   let action = payload.action;
   let item   = action.item;
-  //console.log(`BlockCollection AppDispatcher callback: action = ${action}   item = ${item}`);
+  console.log(`BlockCollection AppDispatcher callback: action = ${action}   item = ${item}`);
 
   switch (action.actionType)
   {
     case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
-      //this.emitBlockChange();
+      this.emitBlockChange();
       break;
 
     case appConstants.MALCOLM_GET_SUCCESS:

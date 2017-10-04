@@ -26,7 +26,7 @@ export default class EdgePreview extends React.Component
     // Added 21 Aug 17 as diagnistic tool
     this._onMouseMove = this._onMouseMove.bind(this);
     }
-  
+
   componentDidMount()
     {
     interact(dragAreaContainer)
@@ -79,7 +79,7 @@ export default class EdgePreview extends React.Component
     interact(this.g)
       .on('down', this.onMouseDown);
     }
-  
+
   componentWillUnmount ()
     {
     interact(this.g)
@@ -103,7 +103,6 @@ export default class EdgePreview extends React.Component
     {
     e.stopImmediatePropagation();
     e.stopPropagation();
-
     /**
      * Cater for all mousemove event types, whether:
      * Mozilla, WebKit or vanilla
@@ -118,6 +117,8 @@ export default class EdgePreview extends React.Component
       e.mozMovementY      ||
       e.webkitMovementY   ||
       0;
+
+    //console.log(`edgePreview: interactJSMouseMoveForEdgePreview:  movementX ${movementX}   movementY ${movementY}`);
 
     let mousePositionChange = {
       x: movementX,
@@ -324,4 +325,3 @@ EdgePreview.propTypes = {
   fromBlockInfo       : PropTypes.object,
   id                  : PropTypes.string
 };
-

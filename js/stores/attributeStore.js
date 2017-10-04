@@ -186,7 +186,7 @@ constructor()
   this.onChangeBlockCollectionCallback = this.onChangeBlockCollectionCallback.bind(this);
   this.onChangeBlockLayoutCallback = this.onChangeBlockLayoutCallback.bind(this);
   blockCollection.addChangeListener(this.onChangeBlockCollectionCallback);
-  blockCollection.addChangeListenerLayout(this.onChangeBlockLayoutCallback);
+  //blockCollection.addChangeListenerLayout(this.onChangeBlockLayoutCallback);
   }
 
 addChangeListener(cb)
@@ -258,7 +258,7 @@ onChangeBlockLayoutCallback(items)
   {
   let changed = false;
 
-  //console.log(`attributetore.onChangeBlockCollectionCallback(): items = ${items}`);
+  console.log(`attributeStore.onChangeBlockLayoutCallback(): items = ${items}`);
   for (let i = 0; i < items.length; i++)
     {
     let index     = items[i];
