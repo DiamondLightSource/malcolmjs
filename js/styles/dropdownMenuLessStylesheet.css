@@ -1,0 +1,98 @@
+#dropDown {
+  z-index: 10;
+  position: absolute;
+  margin-left: -5px;
+}
+.border-box {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+div.dropdown-container {
+  width: 32px;
+  font-family: Arial;
+}
+div.dropdown-container.handleActionShow > div.dropdown-list {
+  width: 125px;
+  /**/
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+div.dropdown-container > div.dropdown-display {
+  float: left;
+  width: 100%;
+  background: transparent;
+  height: 31px;
+  cursor: pointer;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+div.dropdown-container > div.dropdown-display > * {
+  float: left;
+  height: 100%;
+  line-height: 31px;
+}
+div.dropdown-container > div.dropdown-display > span {
+  font-size: 14px;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding-right: 34px;
+  padding-left: 10px;
+}
+div.dropdown-container > div.dropdown-display > i {
+  position: relative;
+  width: 14px;
+  margin-left: -27.6px;
+  font-size: 1.125em;
+  font-weight: bold;
+  padding-right: 10px;
+  text-align: right;
+}
+div.dropdown-container > div.dropdown-list {
+  position: relative;
+  margin-left: -87px;
+  width: 100%;
+  -webkit-transform: scale(1, 0);
+  -moz-transform: scale(1, 0);
+  -ms-transform: scale(1, 0);
+  -o-transform: scale(1, 0);
+  transform: scale(1, 0);
+  /* the other two that went here probably just controlled the animation of the drop down menu */
+}
+div.dropdown-container > div.dropdown-list > div {
+  position: absolute;
+  margin-top: 32px;
+  width: 100%;
+  z-index: 2;
+  cursor: pointer;
+  background: #3e3e3e;
+}
+div.dropdown-container > div.dropdown-list > div > div {
+  float: left;
+  width: 100%;
+  padding: 0 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border: solid 1px #000000;
+  border-top: none;
+}
+div.dropdown-container > div.dropdown-list > div > div:hover {
+  background: #F0F0F0;
+  color: #000011;
+}
+div.dropdown-container > div.dropdown-list > div > div.selected {
+  background: #2875C7;
+  color: white;
+}
+div.dropdown-container > div.dropdown-list > div > div > * {
+  line-height: 31px;
+}
+div.dropdown-container > div.dropdown-list > div > div > span {
+  float: left;
+  width: 100%;
+}
