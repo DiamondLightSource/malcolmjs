@@ -2,6 +2,14 @@
 Malcolm client and web gui written in reactjs
 
 # Installing
+First you need a local version of node (which version???) which you can install
+on /scratch and put on your path. You then need some tools:
+
+``
+npm install -g yarn
+npm install -g webpack
+```
+
 Within a directory of your choosing:
 ```bash
 git clone git@github.com:/dls-controls/malcolmjs.git
