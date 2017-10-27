@@ -3,136 +3,269 @@
  */
 
 import * as React from 'react';
-//import * as ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-//import ReactPanels from 'react-panels';
-import Dropdown from './dropdownMenu';
+import blockStore from '../stores/blockStore';
+import blockCollection from '../classes/blockItems';
+import attributeStore from '../stores/attributeStore';
+import MalcolmUtils from '../utils/MalcolmUtils';
+import appConstants from '../constants/appConstants';
+import {Typography, ListItem, ListItemText, Button, Icon, Divider, withStyles, Toolbar, IconButton} from 'material-ui';
+import Collapse from 'material-ui/transitions/Collapse';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import DNDPaletteSelector from './dndPaletteSelector';
+import ItemTypes from './dndItemTypes';
+import WidgetTableContainer from './widgetLine';
+import WidgetTextInput from './widgetTextInput';
 
-import paneActions from '../actions/paneActions';
-import SidePaneTabContents from './sidePaneTabContents';
-//import {Tabs,Tab, Button} from 'react-toolbox';
-import styles from '../styles/sidePaneContent.scss';
+const styles = theme => ({
+  flex: {
+    flex: 1,
+  },
+  drawer: {
+    width: theme.size.drawer,
+    overflowX: "hidden"
+  },
+  palette: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+});
 
-export default class DlsSidePane extends React.Component {
-constructor(props)
-  {
-  super(props);
-  this.disableTabKey                      = this.disableTabKey.bind(this);
-  this.handleActionTabChangeViaOtherMeans = this.handleActionTabChangeViaOtherMeans.bind(this);
-  this.handleActionRemoveBlockTab         = this.handleActionRemoveBlockTab.bind(this);
-  this.handleTabChange                    = this.handleTabChange.bind(this);
 
-  this.state =
-  {
-    index       : 1,
-    fixedIndex  : 1,
-    inverseIndex: 1
-  };
-  }
+class SidePane extends React.Component {
 
-shouldComponentUpdate(nextProps, nextState)
-  {
-  /* Even though all the props of sidePane will need to cause a
-   rerender if changed, if I don't put shouldComponentUpdate with
-   all of them in, sidePane will rerender whenever sidebar does,
-   which isn't quite what I want
-   */
-  return (
-    nextProps.selectedTabIndex !== this.props.selectedTabIndex ||
-    nextProps.listVisible !== this.props.listVisible ||
-    nextProps.tabState !== this.props.tabState ||
-    nextProps.areAnyEdgesSelected !== this.props.areAnyEdgesSelected ||
-    nextProps.areAnyBlocksSelected !== this.props.areAnyBlocksSelected
-  )
-  }
+  generateTabContent(blockAttributes, blockAttributesIconStatus) {
+    let blockAttributeDivs = [];
+    let {tabObject, classes} = this.props;
+    let ret = {
+      title: <Typography type="subheading" className={classes.flex}>{tabObject.label}</Typography>,
+      contents: blockAttributeDivs,
+    };
 
-handleTabChange(index)
-  {
-  this.setState({index});
-  }
+    let groupsObject = {};
 
-handleActionTabChangeViaOtherMeans(tab)
-  {
-  paneActions.dropdownMenuSelect(tab);
-  }
+    for (let attribute in blockAttributes) {
 
-handleActionRemoveBlockTab()
-  {
-  paneActions.removeBlockTab("this is the item");
-  }
+      if (!blockAttributes.hasOwnProperty(attribute)) continue;
 
-componentDidMount()
-  {
-  this.tabcontent.addEventListener('keydown', this.disableTabKey);
-  }
+      if ((MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute], "meta", "tags") === undefined) &&
+        (blockAttributes[attribute].alarm === undefined)) {
 
-componentWillUnmount()
-  {
-  this.tabcontent.removeEventListener('keydown', this.disableTabKey);
-  }
+        /* Creating the array that I'll push the
+         treeview children to as the upper for loop
+         goes through all the attributes of the block
+         */
+        groupsObject[attribute] = [];
 
-disableTabKey(e)
-  {
-  if (e.keyCode === 9)
-    {
-    e.preventDefault();
+      }
+      else if (MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute], "meta", "tags")) {
+        let groupName;
+        let isWidget = false;
+        let widgetType;
+        let isInAGroup = false;
+        let widgetParent = blockAttributeDivs;
+
+        for (let k = 0; k < blockAttributes[attribute].meta.tags.length; k++) {
+          if (blockAttributes[attribute].meta.tags[k].indexOf('widget') !== -1) {
+            isWidget = true;
+            widgetType = blockAttributes[attribute].meta.tags[k].slice('widget:'.length);
+            //console.log('sidePaneTabContents.generateTabContent: widgetType = '+widgetType);
+          }
+
+          /* Need to find what group the
+           attribute belongs to as well
+           */
+
+          else if (blockAttributes[attribute].meta.tags[k].indexOf('group') !== -1) {
+
+            isInAGroup = true;
+            groupName = blockAttributes[attribute].meta.tags[k].slice('group:'.length);
+
+          }
+        }
+
+        if (isWidget === true) {
+
+          /* Want a switch statement going through all
+           the possible widget types
+           */
+
+          /* Also want to take into account whether or
+           not the widget is part of a group, so do a check
+           on isInAGroup with some sort of logic to decided
+           what to 'push' to in each case
+           */
+          /**
+           * Switch the output rendering to either groupsObject[] or blockAttributeDivs
+           * by pointing widgetParent at the appropriate object.
+           * IJG 6/2/17
+           */
+          if (isInAGroup === true) {
+            if (groupsObject[groupName] === undefined) {
+              groupsObject[groupName] = [];
+            }
+            widgetParent = groupsObject[groupName];
+          }
+
+          /* Using JSX spread attributes to pass a common set
+           of props to all widgets
+           */
+
+          let commonProps = {
+            blockAttribute: blockAttributes[attribute],
+            blockAttributeStatus: blockAttributesIconStatus[attribute],
+            blockName: this.props.tabObject.label,
+            attributeName: attribute,
+            isInAGroup: isInAGroup,
+            key: this.props.tabObject.label + attribute + widgetType,
+            widgetType: widgetType
+          };
+
+          if (widgetType === "title") {
+            ret.title = (
+              <WidgetTextInput
+                blockName={tabObject.label}
+                attributeName={attribute}
+                blockAttributeValue={blockAttributes[attribute].value}
+                className={classes.flex}
+              />
+            );
+          } else if (widgetParent !== undefined) {
+            widgetParent.push(
+              <WidgetTableContainer {...commonProps}/>);
+          }
+        }
+      }
     }
+
+    // This is the correct way to iterate through the array of attributes
+    // and constructing the TreeView
+    //const label2 = <span className="node">{blockAttribs}</span>;
+    for (let groupName in groupsObject) {
+      let group = blockAttributes[groupName];
+      let expanded = group.value === "expanded";
+      blockAttributeDivs.push(
+        <ListItem button onClick={(e) =>
+          MalcolmActionCreators.malcolmAttributeValueEdited(
+            this.props.tabObject.label, groupName, expanded)
+        } key={groupName + "listitem"}>
+          <ListItemText primary={group.meta.label}/>
+          { expanded ? <Icon color="action">expand_less</Icon> : <Icon color="action">expand_more</Icon>}
+        </ListItem>
+      );
+      blockAttributeDivs.push(
+        <Collapse in={expanded} transitionDuration="auto" unmountOnExit
+                  key={groupName + "collapse"}>
+          {groupsObject[groupName]}
+        </Collapse>
+      );
+      blockAttributeDivs.push(
+        <Divider light key={groupName + "divider"}/>
+      );
+    }
+    return ret;
   }
 
-render()
-  {
-  let skin    = this.props.skin || "default";
-  let globals = this.props.globals || {};
+  handleEdgeDeleteButton(EdgeInfo) {
 
-  /* Do I need dynamicTab to be something else if tabState is empty? */
-
-  let dynamicTab;
-
-  /* Should I include selectedTabIndex being < 0 too ? */
-  if (this.props.tabState.length === 0)
-    {
-    dynamicTab = [];
-    }
-  else
-    {
-    /***
-     * If any block is selected then use its name (via tabState[n].label)
-     * in the Tab title.
-     * Otherwise assum no blocks selected and set the Tab title to
-     * indicate that we are displaying the list of available blocks.
-     *
+    /* Technically the edge delete button is some form of widget,
+     but it's such a small one that doesn't require any attribute
+     info from the store that it's just been plonked in here,
+     perhaps it should go somewhere else though?
      */
-    let title;
-    if (!(this.props.areAnyBlocksSelected || this.props.areAnyEdgesSelected))
-      {
-      title = "Blocks Available";
-      }
-    else
-      {
-      title = this.props.tabState[this.props.selectedTabIndex].label;
-      }
 
-    dynamicTab =
-        <SidePaneTabContents key={title + 'contents'}
-                                        tabObject={this.props.tabState[this.props.selectedTabIndex]}
-                                        areAnyBlocksSelected={this.props.areAnyBlocksSelected}
-                                        areAnyEdgesSelected={this.props.areAnyEdgesSelected}/>;
+    let argumentValue;
+
+    /* Need to know the type of the port value,
+     so a get from blockStore may be in order
+     */
+
+    let allBlockInfo = blockStore.getAllBlockInfo();
+    
+    const {tabObject} = this.props;
+
+    for (let i = 0; i < allBlockInfo[tabObject.toBlock].inports.length;
+         i++) {
+      //console.log(blockStore.getAllBlockInfo()[EdgeInfo.toBlock].inports[i].connectedTo);
+      let blockinfo = allBlockInfo[tabObject.toBlock];
+      let inport = blockinfo.inports[i];
+
+      if (inport.connectedTo !== null &&
+        inport.connectedTo.block === tabObject.fromBlock &&
+        inport.connectedTo.port === tabObject.fromBlockPort) {
+        if ((inport.type === appConstants.MALCOLM_TYPE_BOOL) || (inport.type === appConstants.MALCOLM_TYPE_INT32)) {
+          argumentValue = appConstants.MALCOLM_VALUE_ZERO;
+        }
+      }
+    }
+    // TODO: this is wrong, toBlock and fromBlock should be fully qualified names
+    let endpoint = [MalcolmActionCreators.getdeviceId() + ":" + tabObject.toBlock, tabObject.toBlockPort, "value"];
+    MalcolmActionCreators.malcolmPut(EdgeInfo.toBlock, endpoint, argumentValue);
+  }
+
+  render() {
+    const {classes, tabObject, areAnyBlocksSelected, areAnyEdgesSelected,
+      onClose} = this.props;
+
+    if (tabObject === undefined) {
+      return null;
     }
 
+    let title;
+    let contents;
 
+    if (areAnyEdgesSelected) {
+      // Show an edge delete button
+      console.log("Show edges");
+      title = <Typography type="subheading" className={classes.flex}>{tabObject.label}</Typography>;
+      contents = (
+        <Button onClick={this.handleEdgeDeleteButton}>
+          Delete edge
+        </Button>
+      )
+    } else if (areAnyBlocksSelected) {
+      // Show the blocks details
+      console.log("Show block" + tabObject.label);
+      let ret = this.generateTabContent(
+        attributeStore.getAllBlockAttributes()[tabObject.label],
+        attributeStore.getAllBlockAttributesIconStatus()[tabObject.label]);
+      title = ret.title;
+      contents = ret.contents;
+    } else {
+      // Show the block list
+      console.log("Show palette");
+      title = <Typography type="subheading" className={classes.flex}>Palette</Typography>;
 
-    let renderSimple = <div className={styles.RightSidebar} ref={(node) => {this.tabcontent = node}}>{dynamicTab}</div>;
-
-  return ( renderSimple );
+      let blockList = blockCollection.getAllBlockItems().map((blockItem, index) => (
+          <DNDPaletteSelector connectDragSource={ItemTypes.PALETTE}
+                              isDragging={true}
+                              name={blockItem.blockName()}
+                              key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+        )
+      );
+      contents = <div className={classes.palette}>{blockList}</div>
+    }
+    return (
+      <div className={classes.drawer}>
+        <Toolbar disableGutters>
+          <IconButton onClick={onClose}>close</IconButton>
+          {title}
+          <IconButton>open_in_new</IconButton>
+        </Toolbar>
+        {contents}
+      </div>
+    );
   }
 }
 
-DlsSidePane.propTypes = {
-  skin                : PropTypes.object,
-  globals             : PropTypes.number,
-  tabState            : PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedTabIndex    : PropTypes.number.isRequired,
-  listVisible         : PropTypes.bool.isRequired,
-  areAnyBlocksSelected: PropTypes.bool,
-  areAnyEdgesSelected : PropTypes.bool
+SidePane.propTypes = {
+  classes: PropTypes.object.isRequired,
+  tabObject: PropTypes.object,
+  areAnyBlocksSelected: PropTypes.bool.isRequired,
+  areAnyEdgesSelected: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
+
+export default withStyles(styles)(SidePane);
+
+

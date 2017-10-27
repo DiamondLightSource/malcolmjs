@@ -57,12 +57,6 @@ let paneActions = {
       item: item
     })
   },
-  windowWidthMediaQueryChanged: function(item){
-    AppDispatcher.handleViewAction({
-      actionType: appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED,
-      item: item
-    })
-  },
 
   openEdgeTab: function(item){
     AppDispatcher.handleViewAction({

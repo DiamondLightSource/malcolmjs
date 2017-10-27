@@ -6,12 +6,39 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import flowChartActions from "../actions/flowChartActions";
 import Port from "./port";
-
-import interact from "interactjs";
-import styles from '../styles/port.scss';
 import {BlockStore} from '../stores/blockStore';
+import {withStyles} from 'material-ui';
 
-export default class Ports extends Component {
+
+const styles = theme => ({
+  blockTitle: {
+    textAnchor: "middle",
+    dominantBaseline: "middle",
+    fill: theme.palette.text.primary,
+    ...theme.typography.subheading
+  },
+  blockDescription: {
+    textAnchor: "middle",
+    dominantBaseline: "middle",
+    fill: theme.palette.text.secondary,
+    ...theme.typography.caption
+  },
+  inPort: {
+    dominantBaseline: "middle",
+    textAnchor: "left",
+    fill: theme.palette.text.primary,
+    ...theme.typography.caption
+  },
+  outPort: {
+    dominantBaseline: "middle",
+    textAnchor: "end",
+    fill: theme.palette.text.primary,
+    ...theme.typography.caption
+  },
+});
+
+
+class Ports extends Component {
 constructor(props)
   {
   super(props);
@@ -19,25 +46,11 @@ constructor(props)
   this.portClick = this.portClick.bind(this);
   }
 
-
 /**
  *  blockInfo = { type, label, name, inports, outports };
  */
 
-componentDidMount()
-  {
-  interact('#invisiblePortCircle')
-    .on("tap", this.portClick);
 
-  interact('#invisiblePortCircle')
-    .styleCursor(false);
-  }
-
-componentWillUnmount()
-  {
-  interact('#invisiblePortCircle')
-    .off("tap", this.portClick);
-  }
 
 shouldComponentUpdate(nextProps, nextState)
   {
@@ -138,69 +151,22 @@ portClick(e)
     }
   }
 
-/* From the-graph */
-
-angleToX(percent, radius)
-  {
-  return radius * Math.cos(2 * Math.PI * percent);
-  }
-
-angleToY(percent, radius)
-  {
-  return radius * Math.sin(2 * Math.PI * percent);
-  }
-
-makeArcPath(port)
-  {
-  let arcPath = [];
-
-  if (port === "inport")
-    {
-    arcPath = [
-      "M", this.angleToX(-1 / 4, 4), this.angleToY(-1 / 4, 4),
-      "A", 4, 4, 0, 0, 0, this.angleToX(1 / 4, 4), this.angleToY(1 / 4, 4)
-    ].join(" ");
-    }
-  else if (port === "outport")
-    {
-    arcPath = [
-      "M", this.angleToX(1 / 4, 4), this.angleToY(1 / 4, 4),
-      "A", 4, 4, 0, 0, 0, this.angleToX(-1 / 4, 4), this.angleToY(-1 / 4, 4)
-    ].join(" ");
-    }
-  return( arcPath );
-  }
-
 render()
   {
   //console.log("render: ports");
-
-  let blockId   = this.props.blockId;
-  let blockInfo = this.props.blockInfo;
+    let {nports, classes, blockStyling, blockId, blockInfo, theme} = this.props;
 
   let inports   = [];
   let outports  = [];
   let blockText = [];
 
-  let blockStyling = this.props.blockStyling;
-
-  // default height to basic style.
-  let outerRectHeight = blockStyling.outerRectangleHeight;
-  // then if nports property is specified, calculate the ideal height.
-  if (this.props.nports)
-    {
-      if (this.props.nports > 0)
-        {
-        outerRectHeight = (2*blockStyling.verticalMargin) + (this.props.nports - 1)*blockStyling.interPortSpacing;
-        }
-    }
+  let outerRectHeight = 2 * blockStyling.verticalMargin + nports * blockStyling.interPortSpacing;
 
   for (let i = 0; i < blockInfo.inports.length; i++)
     {
-    let inportsLength          = blockInfo.inports.length;
     let inportName             = blockInfo.inports[i].name;
     let inportAndTextTransform = "translate(" + 0 + ","
-      + (BlockStore.drawingParams.verticalMargin + (i * BlockStore.drawingParams.interPortSpacing)) + ")";
+      + (BlockStore.drawingParams.verticalMargin + (i + 0.5) * BlockStore.drawingParams.interPortSpacing) + ")";
 
     let inportValueType = blockInfo.inports[i].type;
     //let portclass = classes["inport" + inportValueType];
@@ -209,15 +175,9 @@ render()
       <g key={blockId + inportName + "portAndText"}
          id={blockId + inportName + "portAndText"}
          transform={inportAndTextTransform}>
-        <path key={blockId + inportName + "-arc"}
-              d={this.makeArcPath("inport")} className="portArc"
-              style={{
-                fill  : this.props.selected ? "#797979" : "black",
-                cursor: "default"
-              }}/>
-        {/*className={"inport" + inportValueType}*/}
         <Port portkey={blockId + inportName}
-              className={styles["inport" + inportValueType]}
+              className={"inport" + inportValueType}
+              style={{fill: theme.palette.ports[inportValueType][500]}}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
@@ -234,16 +194,7 @@ render()
               blockName={blockId}
               cbClicked={this.portClick}
         />
-        <text key={blockId + inportName + "-text"} textAnchor={"start"}
-              x={5}
-              y={3}
-              style={{
-                MozUserSelect:"none",
-                WebkitUserSelect:"none",
-                cursor                     : this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize: "7px", fontFamily: "Verdana"
-              }}
-        >
+        <text x={8} y={0} className={classes.inPort}>
           {inportName}
         </text>
       </g>
@@ -252,25 +203,18 @@ render()
 
   for (let j = 0; j < blockInfo.outports.length; j++)
     {
-    let outportsLength          = blockInfo.outports.length;
     let outportName             = blockInfo.outports[j].name;
     let outportAndTextTransform = "translate(" + blockStyling.outerRectangleWidth
-      + "," + (BlockStore.drawingParams.verticalMargin + (j * BlockStore.drawingParams.interPortSpacing)) + ")";
+      + "," + (BlockStore.drawingParams.verticalMargin + (j + 0.5) * BlockStore.drawingParams.interPortSpacing) + ")";
 
     let outportValueType = blockInfo.outports[j].type;
-
     outports.push(
       <g key={blockId + outportName + "portAndText"}
          id={blockId + outportName + "portAndText"}
          transform={outportAndTextTransform}>
-        <path key={blockId + outportName + "-arc"}
-              d={this.makeArcPath("outport")} className="portArc"
-              style={{
-                fill  : this.props.selected ? "#797979" : "black",
-                cursor: "default"
-              }}/>
         <Port portkey={blockId + outportName}
-              className={styles["outport" + outportValueType]}
+              className={"outport" + outportValueType}
+              style={{fill: theme.palette.ports[outportValueType][500]}}
               cx={0}
               cy={0}
               r={blockStyling.portRadius}
@@ -288,16 +232,7 @@ render()
               blockName={blockId}
               cbClicked={this.portClick}
         />
-        <text key={blockId + outportName + "-text"} textAnchor="end"
-              x={-5}
-              y={3}
-              style={{
-                MozUserSelect              : "none",
-                WebkitUserSelect           : 'none',
-                cursor                     : this.props.portThatHasBeenClicked === null ? "move" : "default",
-                fontSize: "7px", fontFamily: "Verdana"
-              }}
-        >
+        <text x={-8} y={0} className={classes.outPort}>
           {outportName}
         </text>
       </g>
@@ -321,21 +256,28 @@ render()
     </text>
   );
 
+  console.log("****" + JSON.stringify(this.props.blockInfo));
+
   return (
     <g id={blockId + "-ports"}>
-      <g id={blockId + "-inports"}>
-        {inports}
-      </g>
-      <g id={blockId + "-outports"}>
-        {outports}
-      </g>
-      {blockText}
+      {inports}
+      {outports}
+      <text x={blockStyling.outerRectangleWidth/2}
+            y={-15} className={classes.blockTitle}>
+        {blockInfo.label}
+      </text>
+      <text x={blockStyling.outerRectangleWidth/2}
+            y={outerRectHeight + 15} className={classes.blockDescription}>
+        Xspress3 trigger signal output
+      </text>
     </g>
   )
   }
 }
 
 Ports.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
   portThatHasBeenClicked : PropTypes.object,
   selected               : PropTypes.bool,
   storingFirstPortClicked: PropTypes.object,
@@ -345,3 +287,5 @@ Ports.propTypes = {
   cbClicked              : PropTypes.func,
   nports                 : PropTypes.number
 };
+
+export default withStyles(styles, {withTheme: true})(Ports);

@@ -4,8 +4,6 @@
 
 //import W3CWebSocket from 'websocket';
 //import WebSocketClient from  'websocket';
-let W3CWebSocket    = require('websocket').w3cwebsocket;
-let WebSocketClient = require('websocket').client;
 
 import idLookupTableFunctions from './utils/idLookupTable';
 import appConstants from './constants/appConstants';
@@ -13,6 +11,9 @@ import appConstants from './constants/appConstants';
 import EventEmitter from 'events';
 import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
+
+let W3CWebSocket    = require('websocket').w3cwebsocket;
+let WebSocketClient = require('websocket').client;
 
 //import {LOG} from './utils/MalcolmUtils'
 

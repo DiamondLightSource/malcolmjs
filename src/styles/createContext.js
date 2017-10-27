@@ -10,9 +10,37 @@ const theme = createMuiTheme({
   palette: {
     primary: lightBlue,
     secondary: orange,
+    warning: orange[500],
     type: 'dark',
+    ports: {
+      bool: lightBlue,
+      int32: orange
+    },
   },
+  size: {
+    // Custom variable for sidepane width
+    drawer: 360,
+    // And param label and value
+    param: "calc(50% - 40px)",
+    // Size of plus button
+    fab: 56,
+  },
+  // Filled in below
+  dropShadows: []
 });
+
+
+for (let elevation = 0; elevation < theme.shadows.length; elevation++) {
+  // Turn box-shadow CSS property into drop-shadow
+  let arr = theme.shadows[elevation].split("),");
+  let out = [];
+  for (let i = 0; i < arr.length; i++) {
+    let split = arr[i].split(" ");
+    split.splice(3, 1);
+    out.push("drop-shadow(" + split.join(" ") + ")");
+  }
+  theme.dropShadows.push(out.join(") "));
+}
 
 // Configure JSS
 const jss = create(preset());

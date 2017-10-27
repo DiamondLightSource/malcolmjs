@@ -19,6 +19,11 @@ const styles = theme => ({
 
 class App extends Component {
 
+  dummy()
+  {
+
+  }
+
   render() {
     const { classes } = this.props;
     return (

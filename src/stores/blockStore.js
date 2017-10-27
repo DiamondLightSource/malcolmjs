@@ -403,14 +403,11 @@ function removeEdgeViaMalcolm(Info) {
 
 
 const __blockStyling = {
-  outerRectangleHeight: 76,
-  outerRectangleWidth : 76,
-  innerRectangleHeight: 70,
-  innerRectangleWidth : 70,
-  portRadius          : 2.5,
+  outerRectangleWidth : 120,
+  portRadius          : 5,
   portFill            : 'grey',
   interPortSpacing    : 20,
-  verticalMargin      : 30
+  verticalMargin      : 20
 };
 
 class BlockStore extends EventEmitter {

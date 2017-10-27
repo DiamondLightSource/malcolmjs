@@ -11,17 +11,8 @@ import PropTypes from 'prop-types';
 import DragSource from 'react-dnd/lib/DragSource';
 import ItemTypes from './dndItemTypes';
 import flowChartActions, {DroppedPaletteInfo} from '../actions/flowChartActions';
-import styles from '../styles/sidePaneContent.scss';
+import {Chip} from 'material-ui';
 
-const style = {
-  border         : '1px dashed gray',
-  backgroundColor: '#85FFFF',
-  padding        : '0.5rem 1rem',
-  marginRight    : '1.5rem',
-  marginBottom   : '1.5rem',
-  cursor         : 'move',
-  float          : 'left',
-};
 
 let paletteSource =
       {
@@ -63,19 +54,11 @@ render()
   {
   const {isDragging, connectDragSource} = this.props;
   const {name}                          = this.props;
-  const opacity                         = isDragging ? 0.4 : 1;
-
-  let dndKey = null;
-
-  if ('key' in this.props)
-    {
-    dndKey = this.props.key+'DNDPaletteSelector';
-    }
 
   return (
     connectDragSource(
-      <div className={styles.dragBlock}>
-        {name}
+      <div>
+        <Chip label={name}/>
       </div>
     )
   );

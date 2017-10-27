@@ -4,7 +4,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 //import * as ReactDOM from 'react-dom';
-import styles from '../styles/port.scss';
 import interact from 'interactjs';
 
 export default class Port extends Component {

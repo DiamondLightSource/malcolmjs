@@ -18,7 +18,8 @@ import BlockRectangle from './blockRectangle';
 import interact from 'interactjs';
 
 import blockCollection from '../classes/blockItems';
-
+import mainPaneStore from "../stores/mainPaneStore";
+import paneStore from "../stores/paneStore";
 
 class Block extends React.Component {
   constructor(props)
@@ -154,15 +155,20 @@ blockSelect(e)
   // If a port has been clicked, then we are not interested in selecting blocks
 
   // If a block has been selected then ensure that any previous selections are cleared first.
-  if (this.props.areAnyBlocksSelected)
-    {
+  if (this.props.areAnyBlocksSelected) {
     /* Need to run deselect before I select the current node */
     this.props.deselect();
-    }
+  }
   flowChartActions.selectBlock(this.props.blockInfo.label);
   paneActions.openBlockTab(this.props.blockInfo.label);
   //flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
   //paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
+
+
+  if (!paneStore.getSidebarOpenState()) {
+    /* Need to make sure side bar is open */
+    paneActions.toggleSidebar();
+  }
   }
 
 blockHold(e)
@@ -312,28 +318,25 @@ render()
 
   return(
     <g className="draggable drag-drop" {...gProps} transform={blockTranslate} ref={(node) => {this.g = node}}>
+      <BlockRectangle blockId={this.props.id}
+                      blockType={this.props.blockInfo.type}
+                      blockIconURL={this.props.blockInfo.iconURL}
+                      blockIconSVG={this.props.blockIconSVG}
+                      portThatHasBeenClicked={this.props.portThatHasBeenClicked}
+                      selected={this.props.selected}
+                      nports={nports}
+                      blockStyling={this.props.blockStyling}
+                      graphicsStyle={this.props.graphicsStyle} />
 
-      <g style={{MozUserSelect: 'none', WebkitUserSelect: 'none'}}>
-
-        <BlockRectangle blockId={this.props.id} blockType={this.props.blockInfo.type}
-                        blockIconURL={this.props.blockInfo.iconURL}
-                        blockIconSVG={this.props.blockIconSVG}
-                        portThatHasBeenClicked={this.props.portThatHasBeenClicked}
-                        selected={this.props.selected}
-                        nports={nports}
-                        blockStyling={this.props.blockStyling}
-                        graphicsStyle={this.props.graphicsStyle} />
-
-        <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
-               portThatHasBeenClicked={this.props.portThatHasBeenClicked}
-               storingFirstPortClicked={this.props.storingFirstPortClicked}
-               selected={this.props.selected}
-               blockStyling={this.props.blockStyling}
-               cbClicked={this.portClicked}
-               nports={nports}/>
-
-      </g>
-    </g>)
+      <Ports blockId={this.props.id} blockInfo={this.props.blockInfo}
+             portThatHasBeenClicked={this.props.portThatHasBeenClicked}
+             storingFirstPortClicked={this.props.storingFirstPortClicked}
+             selected={this.props.selected}
+             blockStyling={this.props.blockStyling}
+             cbClicked={this.portClicked}
+             nports={nports}/>
+    </g>
+  );
 
   }
 }

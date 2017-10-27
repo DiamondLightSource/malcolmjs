@@ -5,12 +5,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import * as ReactDOM from 'react-dom';
-import classSet from 'react-classset';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
 import {BlockStore} from '../stores/blockStore';
-import {MjsOptionsStore} from '../stores/optionsStore';
+import paneStore from '../stores/paneStore';
 
 import Edge from './edge';
 import EdgePreview from './edgePreview';
@@ -24,18 +23,15 @@ import WasteBin from './wasteBin';
 // Drag and Drop support - IJG May 2017
 import DropTarget from 'react-dnd/lib/DropTarget';
 import ItemTypes from './dndItemTypes';
+import paneActions from "../actions/paneActions";
 
-import FontIcon from 'react-toolbox/lib/font_icon';
 
 let AppDivContainerStyle = {
   "height": "100%",
   "width" : "100%",
-  backgroundColor: "#05354c",
+  position: "fixed",
   overflowY: "hidden"
-  //'backgroundColor': "green"
 };
-
-let moduleDebug = false;
 
 
 /**
@@ -186,7 +182,11 @@ deselect(e)
    * to allow the user to select and drag one onto the MainPane.
    * IJG: 24 April 2017
    */
-  flowChartActions.clickedBackground();
+    if (paneStore.getSidebarOpenState()) {
+      /* Need to make sure side bar is closed */
+      paneActions.toggleSidebar();
+    }
+  //flowChartActions.clickedBackground();
 
   }
 
@@ -753,6 +753,7 @@ render()
 
   let blocks = [];
   let edges  = [];
+  let selectedEdges = [];
   /**
    *  allBlockInfo[] = { type, label, name, inports, outports };
    */
@@ -794,7 +795,6 @@ render()
                blockStyling={this.props.blockStyling}
                blockPosition={this.props.blockPositions[blockName]}
                graphZoomScale={this.props.graphZoomScale}
-               graphicsStyle={this.props.graphicsStyle}
           //onMouseDown={this.mouseDownSelectElement}  onMouseUp={this.mouseUp}
         />
       );
@@ -820,27 +820,27 @@ render()
 
           let edgeLabel = String(fromBlock) + String(fromBlockPort) + String(toBlock) + String(toBlockPort);
 
-          edges.push(
-            <Edge key={edgeLabel}
-                  id={edgeLabel}
+          let edge = (
+            <Edge id={edgeLabel} key={edgeLabel}
                   fromBlock={fromBlock}
-                  fromBlockType={fromBlockType}
                   fromBlockPort={fromBlockPort}
                   fromBlockPortValueType={fromBlockPortValueType}
                   fromBlockPosition={this.props.blockPositions[fromBlock]}
                   toBlock={toBlock}
-                  toBlockType={toBlockType}
                   toBlockPort={toBlockPort}
                   toBlockPosition={this.props.blockPositions[toBlock]}
                   fromBlockInfo={this.props.allBlockInfo[fromBlock]}
-                  toBlockInfo={this.props.allBlockInfo[toBlock]}
-                  areAnyEdgesSelected={this.props.areAnyEdgesSelected}
                   selected={flowChartStore.getIfEdgeIsSelected(edgeLabel)}
                   inportArrayIndex={i}
-                  inportArrayLength={this.props.allBlockInfo[blockName].inports.length}
                   blockStyling={this.props.blockStyling}
             />
-          )
+          );
+          if (flowChartStore.getIfEdgeIsSelected(edgeLabel)) {
+            selectedEdges.push(edge);
+          } else {
+            edges.push(edge);
+          }
+
           }
         }
 
@@ -849,33 +849,29 @@ render()
 
   return connectDropTarget(
     //return (
+
     <svg id={"appAndDragAreaContainer"} ref={(node) => {this.dragAreaContainerNode = node}}
-         style={Object.assign({}, AppDivContainerStyle, {backgroundColor: backgroundColor, height: "100%", width: "100%"})}>
-        <rect id={"dragArea"} height={"100%"} width={"100%"}
-              fill={"transparent"} style={{MozUserSelect: 'none', WebkitUserSelect: 'none', display: 'flex'}}
-              onWheel={this.wheelZoom}/>
+         style={AppDivContainerStyle}>
+      <rect id={"dragArea"} height={"100%"} width={"100%"}
+            fill={"transparent"} style={{MozUserSelect: 'none', WebkitUserSelect: 'none', display: 'flex'}}
+            onWheel={this.wheelZoom}/>
 
-        <svg id={"appDivContainer"} style={AppDivContainerStyle}>
+      <svg id={"appDivContainer"} style={AppDivContainerStyle}>
+        <g id={"panningGroup"}
+           transform={matrixTransform}
+           onWheel={this.wheelZoom}>
 
-          {this.props.blockPositions ? (
-            <g id={"panningGroup"}
-               transform={matrixTransform}
-               onWheel={this.wheelZoom}>
+          <g id={"EdgesGroup"}>
+            {edges}
+            {selectedEdges}
+            {this.generateEdgePreview()}
+          </g>
 
-              <g id={"EdgesGroup"}>
-                {edges}
-                {this.generateEdgePreview()}
-              </g>
-
-              <g id={"BlocksGroup"}>
-                {blocks}
-              </g>
-            </g>
-
-          ) : (<div>{"Waiting for block positions..."}</div>)}
-        </svg>
-
-      <WasteBin style={{width: "75px", height: "75px"}}/>
+          <g id={"BlocksGroup"}>
+            {blocks}
+          </g>
+        </g>
+      </svg>
     </svg>
   )
   }
@@ -901,9 +897,6 @@ FlowChart.propTypes = {
   canDrop                : PropTypes.bool,
   isOver                 : PropTypes.bool.isRequired,
   connectDropTarget      : PropTypes.func.isRequired,
-  graphicsStyle          : PropTypes.string,
 };
-
-FlowChart.defaultProps = {graphicsStyle: MjsOptionsStore.gs3d};
 
 export default DropTarget(ItemTypes.PALETTE, layoutTarget, collect)(FlowChart);

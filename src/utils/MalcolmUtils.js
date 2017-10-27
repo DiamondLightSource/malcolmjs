@@ -96,7 +96,7 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
  * @description  Request the device to stop sending subscription updates of a given subscription ID.
  *               The callbacks to this should be handles locally.
  */
-malcolmUnsubscribe(subscriptionId)
+/*malcolmUnsubscribe(subscriptionId)
   {
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDUnsubscribe();
@@ -111,7 +111,7 @@ malcolmUnsubscribe(subscriptionId)
 
   MalcolmWebSocketClient.sendText(messageJson);
   return (subscriptionId);
-  }
+  }*/
 
 
 

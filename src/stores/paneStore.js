@@ -313,11 +313,6 @@ switch (action.actionType)
     paneStore.emitChange();
     break;
 
-  case appConstants.WINDOWWIDTH_MEDIAQUERYCHANGED:
-    windowWidthMediaQueryChanged(item);
-    paneStore.emitChange();
-    break;
-
   case appConstants.OPEN_EDGETAB:
     let EdgeInfo = {
       edgeId       : item.edgeId,
@@ -327,6 +322,7 @@ switch (action.actionType)
       toBlockPort  : item.toBlockPort
     };
     setEdgeTabStateTrue(EdgeInfo);
+    _stuff.sidebarOpen = true;
     paneStore.emitChange();
     break;
 
@@ -635,11 +631,6 @@ function toggleSidebar()
     {
     _stuff.sidebarOpen = true;
     }
-  }
-
-function windowWidthMediaQueryChanged(sidebarOpen)
-  {
-  _stuff.sidebarOpen = sidebarOpen;
   }
 
 function checkBlockForInitialEdges(blockItem)

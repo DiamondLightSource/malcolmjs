@@ -100,14 +100,6 @@ getAnyEdgeSelectedState(item)
   })
   }
 
-clickedEdge(item)
-  {
-  AppDispatcher.handleAction({
-    actionType: appConstants.CLICKED_EDGE,
-    item      : item
-  })
-  }
-
 passPortMouseDown(port)
   {
   AppDispatcher.handleAction({

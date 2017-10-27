@@ -6,7 +6,6 @@ import * as React from 'react';
 import FlowChart from './flowChart';
 //import blockStore from '../stores/blockStore.js';
 import flowChartStore from '../stores/flowChartStore';
-import optionsStore from '../stores/optionsStore';
 
 
 function getFlowChartState()
@@ -36,7 +35,6 @@ function getFlowChartState()
     blockStyling           : flowChartStore.getBlockStyling(),
     backgroundSelected     : flowChartStore.getBackgroundSelected(),
     heldBlock              : flowChartStore.getHeldBlock(),
-    graphicsStyle          : optionsStore.options.graphicsStyle,
     //previousMouseCoordsOnZoom: JSON.parse(JSON.stringify(flowChartStore.getPreviousMouseCoordsOnZoom())),
   }
   }
@@ -58,13 +56,11 @@ export default class FlowChartControllerView extends React.Component
   componentDidMount ()
     {
     flowChartStore.addChangeListener(this._onChange);
-    optionsStore.addChangeListener(this._onChange);
     }
 
   componentWillUnmount ()
     {
     flowChartStore.removeChangeListener(this._onChange);
-    optionsStore.removeChangeListener(this._onChange);
     }
 
   shouldComponentUpdate (nextProps, nextState)
@@ -100,7 +96,6 @@ export default class FlowChartControllerView extends React.Component
         blockStyling={this.state.blockStyling}
         blockPositions={this.state.blockPositions}
         backgroundSelected={this.state.backgroundSelected}
-        graphicsStyle={this.state.graphicsStyle}
         />
     )
     }

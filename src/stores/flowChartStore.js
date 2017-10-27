@@ -36,7 +36,7 @@ let graphPosition = {
   y: 0
 };
 
-let graphZoomScale = 2.0;
+let graphZoomScale = 1.0;
 
 let blockSelectedStates = {};
 let blockHoldStates = {};
@@ -602,6 +602,8 @@ checkPortCompatibility(edgeInfo)
   let fromBlockPortType;
   let toBlockPortType;
 
+  console.log(JSON.stringify(edgeInfo));
+
   let fromBlockItem = blockCollection.getBlockItemByName(edgeInfo.fromBlock);
   let fromBlockType = fromBlockItem.blockType;
   let toBlockItem   = blockCollection.getBlockItemByName(edgeInfo.toBlock);
@@ -919,8 +921,8 @@ switch (action.actionType)
     let areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
     //console.log(areAnyEdgesSelected);
     console.log('flowChartStore: SELECT_EDGE received from dispatcher vvvvvv');
-    console.log(clickedEdge);
-    if ((areAnyEdgesSelected === true) && (item !== clickedEdge))
+    console.log(item);
+    if ((areAnyEdgesSelected === true) && (edgeSelectedStates[item] === false))
       {
       deselectAllEdges();
       selectEdge(item);
@@ -957,15 +959,6 @@ switch (action.actionType)
   case appConstants.GETANY_EDGESELECTEDSTATE:
     getAnyEdgeSelectedState(item);
     //console.log(edgeSelectedStates[item]);
-    //flowChartStore.waitFor([blockStore.dispatchToken]);
-    flowChartStore.emitChange();
-    break;
-
-  case appConstants.CLICKED_EDGE:
-    clickedEdge = item;
-    console.log('flowChartStore: CLICKED_EDGE received from dispatcher vvvvv');
-    console.log(clickedEdge);
-    console.log('flowChartStore: CLICKED_EDGE ^^^^^');
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;

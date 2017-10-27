@@ -4,120 +4,89 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
+import {Icon, IconButton, CircularProgress, withStyles} from 'material-ui';
 import paneActions from '../actions/paneActions';
 
-export default class WidgetStatusIcon extends React.Component
-  {
-  constructor(props)
-    {
-    super(props);
-    this.onButtonClick = this.onButtonClick.bind(this);
+
+const AlarmStatus = {
+  NO_ALARM: 0,
+  MINOR_ALARM: 1,
+  MAJOR_ALARM: 2,
+  INVALID_ALARM: 3,
+  UNDEFINED_ALARM: 4
+};
+
+const styles = theme => ({
+  warning: {
+    color: theme.palette.warning
+  }
+});
+
+class WidgetStatusIcon extends React.Component {
+  onButtonClick = () => {
+    /* Needs to open the modal dialog box,
+     so that info needs to be in a store
+     so I can change it via an action
+     (since it's in a separate component)
+     */
+    paneActions.openModalDialogBox({
+      blockName: this.props.blockName,
+      attributeName: this.props.attributeName,
+      message: this.props.blockAttributeStatus.message
+    });
+  };
+
+  render() {
+
+    /* Decide which icon to display,
+     go through the 'alarm' subattribute
+     and also look at the websocket success
+     or fail somehow too
+     */
+
+    let {classes, blockAttributeStatus, blockAttribute} = this.props;
+    let icon = "info_outline";
+
+    switch(blockAttributeStatus) {
+      case 'pending':
+        icon = <CircularProgress/>;
+        break;
+      case 'failure':
+        icon = <Icon color="error">error</Icon>;
+        break;
     }
 
-    shouldComponentUpdate (nextProps, nextState)
-      {
-      return (
-        nextProps.blockAttribute.value !== this.props.blockAttribute.value ||
-        nextProps.blockAttributeStatus.value !== this.props.blockAttributeStatus.value
-      )
+    if (blockAttribute.alarm !== undefined) {
+      switch(blockAttribute.alarm.severity) {
+        case AlarmStatus.UNDEFINED_ALARM:
+          icon = <Icon color="error">bug_report</Icon>;
+          break;
+        case AlarmStatus.INVALID_ALARM:
+          icon = "highlight_off";
+          break;
+        case AlarmStatus.MAJOR_ALARM:
+          icon = <Icon color="error">error</Icon>;
+          break;
+        case AlarmStatus.MINOR_ALARM:
+          icon = <Icon className={classes.warning}>warning</Icon>;
+          break;
       }
+    }
 
-    onButtonClick ()
-      {
-      /* Needs to open the modal dialog box,
-       so that info needs to be in a store
-       so I can change it via an action
-       (since it's in a separate component)
-       */
-      paneActions.openModalDialogBox({
-        blockName    : this.props.blockName,
-        attributeName: this.props.attributeName,
-        message      : this.props.blockAttributeStatus.message
-      });
-      }
-
-    render ()
-      {
-
-      /* Decide which icon to display,
-       go through the 'alarm' subattribute
-       and also look at the websocket success
-       or fail somehow too
-       */
-
-      let statusIcon = null;
-
-      if (this.props.blockAttribute.alarm !== undefined)
-        {
-        if (this.props.blockAttribute.alarm.message === 'Invalid')
-          {
-          console.log('widgetStatusIcon.render(): alarm: Invalid');
-          statusIcon = <i className={"fa fa-plug fa-lg"} aria-hidden={"true"}
-                          onClick={this.onButtonClick}></i>
-          }
-        //else {
-        //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
-        //                  onClick={this.onButtonClick}></i>
-        //}
-        }
-      //else {
-      //  statusIcon = <i className="fa fa-info-circle fa-2x" aria-hidden="true"
-      //                  onClick={this.onButtonClick}></i>
-      //}
-      if (this.props.blockAttributeStatus !== undefined)
-        {
-        if (this.props.blockAttributeStatus.value === 'failure')
-          {
-          /* Override the other icons and display an error icon */
-          console.log('widgetStatusIcon.render(): value === failure');
-
-          statusIcon = <i className={"fa fa-exclamation-circle fa-lg"} aria-hidden={"true"}
-                          onClick={this.onButtonClick}
-                          style={{color: 'red'}}></i>
-
-
-          }
-        else if (this.props.blockAttributeStatus.value === 'pending')
-          {
-          /* Show spinny cog icon */
-          console.log('widgetStatusIcon.render(): value === pending');
-
-          statusIcon = <i className="fa fa-cog fa-spin fa-lg fa-fw margin-bottom"
-                          onClick={this.onButtonClick}></i>
-
-          }
-        }
-
-      /* All the info seems to be getting to the component fine,
-       so I'm not sure where the error with MALCOLM_PENDING is
-       occurring to cause the spinny cog to not display briefly?
-       */
-
-      /* UPDATE: tested by putting the MalcolmUtils call in
-       MalcolmActionCreators in a setTimeout function, it appears,
-       so it must be that the response comes back really quick
-       so the cog isn't displayed for very long
-       */
-
-      if (statusIcon === null)
-        {
-        console.log('widgetStatusIcon.render(): statusIcon === null');
-        statusIcon = <i className={"fa fa-info-circle fa-lg"} aria-hidden={"true"}
-                        style={{cursor: 'pointer'}}
-                        onClick={this.onButtonClick}></i>
-        }
-
-      return (
-        statusIcon
-      )
-      }
-
+    return (
+      <IconButton onClick={this.onButtonClick}>
+        {icon}
+      </IconButton>
+    );
   }
+}
 
 WidgetStatusIcon.propTypes = {
-blockAttribute      : PropTypes.object,
+  classes: PropTypes.object.isRequired,  
+  blockAttribute: PropTypes.object,
   blockAttributeStatus: PropTypes.object,
-  blockName           : PropTypes.string,
-  attributeName       : PropTypes.string
+  blockName: PropTypes.string,
+  attributeName: PropTypes.string
 };
+
+export default withStyles(styles)(WidgetStatusIcon);
