@@ -4,11 +4,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import MainPane from './mainPane';
+import FlowChartControllerView from './flowChartControllerView';
 import SidePane from './sidePane';
 import ModalDialogBox from './modalDialogBox';
-import mainPaneStore from '../stores/mainPaneStore';
-import sidePaneStore from '../stores/sidePaneStore';
 import paneStore from '../stores/paneStore';
 import flowChartStore from '../stores/flowChartStore';
 import paneActions from '../actions/paneActions';
@@ -32,13 +30,9 @@ function getBothPanesState() {
     modalDialogBoxOpen: paneStore.getModalDialogBoxOpenState(),
     modalDialogBoxInfo: paneStore.getModalDialogBoxInfo(),
 
-    /* MainPane's getter functions for stores */
-    footers: mainPaneStore.getFooterState(),
-
     /* DlsSidePane's getter functions for stores */
     tabState: paneStore.getTabState(),
     selectedTabIndex: paneStore.getSelectedTabIndex(),
-    listVisible: sidePaneStore.getDropdownState(),
 
     /* Need to switch DlsSidePane content depending on whether any block are selected
      * If they are not then display a list of available blocks for the user
@@ -116,18 +110,14 @@ class BothPanes extends React.Component {
 
   componentDidMount()
   {
-    mainPaneStore.addChangeListener(this.__onChange);
     paneStore.addChangeListener(this.__onChange);
-    sidePaneStore.addChangeListener(this.__onChange);
     flowChartStore.addChangeListener(this.__onChange);
     breadBin.addChangeListener(this.__onBreadcrumbChange);
   }
 
   componentWillUnmount()
   {
-    mainPaneStore.removeChangeListener(this.__onChange);
     paneStore.removeChangeListener(this.__onChange);
-    sidePaneStore.removeChangeListener(this.__onChange);
   }
 
   toggleLeft = () => {
@@ -159,13 +149,12 @@ class BothPanes extends React.Component {
     const {classes, theme} = this.props;
     
     const leftDrawer = (
-      <div className={classes.drawer}>
-        <Toolbar disableGutters>
-          <IconButton onClick={this.toggleLeft}>close</IconButton>
-          <Input value="Panda 1" className={classes.flex}/>
-          <IconButton>open_in_new</IconButton>
-        </Toolbar>
-      </div>
+      <SidePane
+        tabObject={{label: "PANDABOX"}}
+        onClose={this.toggleLeft}
+        areAnyBlocksSelected={true}
+        areAnyEdgesSelected={false}
+      />
     );
 
     const appBar = (
@@ -288,7 +277,7 @@ class BothPanes extends React.Component {
             </Drawer>
           </div>
         </Hidden>
-        <MainPane footers={this.state.footers}/>
+        <FlowChartControllerView/>
         {fab}
         <ModalDialogBox
           modalDialogBoxInfo={this.state.modalDialogBoxInfo}

@@ -666,8 +666,6 @@ updateBlockItemsFromSchema(index, schemaIn)
   this.updateSchema(schema);
   //this._allBlockItems = [];
 
-  let self = this;
-
   let iteration = function (rawBlock, blockIndex, callbackDone)
     {
     let block = blockCollection._allBlockItems[blockIndex];

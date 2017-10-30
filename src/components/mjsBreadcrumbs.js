@@ -4,7 +4,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import breadBin from '../stores/breadbin';
-import {IconButton, Typography, withStyles, Toolbar} from 'material-ui';
+import {Typography, withStyles, Toolbar} from 'material-ui';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 
 const styles = theme => ({
   flex: {
@@ -18,11 +19,6 @@ const styles = theme => ({
 });
 
 class MjsBreadcrumbs extends Component {
-  constructor(props)
-  {
-    super(props);
-  }
-
   componentDidMount()
   {
     breadBin.addChangeListener(this.__onBreadcumbsChange);
@@ -48,25 +44,7 @@ class MjsBreadcrumbs extends Component {
 
     return (
       <Toolbar className={classes.breadCrumbs} disableGutters>
-        <a href='#'>
-          <Typography type="subheading">BL14I-ML-SCAN-01</Typography>
-        </a>
-        <IconButton id="breadcrumbs0">expand_more</IconButton>
-        <a href='#'>
-          <Typography type="subheading">Layout</Typography>
-        </a>
-        <IconButton id="breadcrumbs1">expand_more</IconButton>
-        <a href='#'>
-          <Typography type="subheading">PANDA</Typography>
-        </a>
-        <IconButton id="breadcrumbs2">expand_more</IconButton>
-        <a href='#'>
-          <Typography type="subheading">Layout</Typography>
-        </a>
-        <IconButton id="breadcrumbs3">expand_more</IconButton>
-        <a href='#'>
-          <Typography type="subheading" className={classes.flex}>TTLOUT32</Typography>
-        </a>
+        <Typography type="subheading">{MalcolmActionCreators.deviceId}</Typography>
       </Toolbar>
     );
   }

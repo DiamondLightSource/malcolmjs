@@ -7,16 +7,18 @@
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import MalcolmUtils from '../utils/MalcolmUtils';
-import config from "../utils/config";
+import QueryParams from '../utils/queryParams';
+
 
 class CMalcolmActionCreators {
+
 constructor()
   {
-  /* default device name to Z, which was the original name for the simulator device */
-  this.deviceId            = ((config.getProtocolVersion() === 'V2_0') ? "P" : "Z");
-  this.topLevelGetId       = 0;
-  this.topLevelSubscribeId = 0;
-
+    this.qp = new QueryParams({});
+    this.deviceId = this.qp.getDeviceId();
+    console.log(this.deviceId);
+    // TODO: update this when path changes with something like:
+    //this.setQueryParams({path: ["P", "Q"]});
   }
 
 initialiseFlowChart(requestedData)
@@ -253,19 +255,6 @@ malcolmGet(requestedData)
         }
       })
     }
-
-  let itemGetSuccess = function (id, responseMessage)
-    {
-    //console.log('MalcolmActionCreators: itemGetSuccess...');
-    //console.log('requestedData =>');
-    //console.log(requestedData);
-    //console.log('responseMessage =>');
-    //console.log(responseMessage);
-    /* This is to return P:<item>
-     */
-    malcolmGetSuccess(id, responseMessage);
-
-    };
 
   // Note: This is the callback function which handles the
   // subscription return.

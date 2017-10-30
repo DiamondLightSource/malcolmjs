@@ -9,11 +9,11 @@ import {withStyles} from 'material-ui';
 
 const styles = theme => ({
   blockSelected: {
-    fill: theme.palette.background.paper,
+    fill: theme.palette.background.selected,
     filter: theme.dropShadows[8],
   },
   blockUnselected: {
-    fill: theme.palette.background.default,
+    fill: theme.palette.background.paper,
     filter: theme.dropShadows[2],
   }
 });

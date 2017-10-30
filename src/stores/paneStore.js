@@ -908,7 +908,6 @@ function layoutUpdated(index)
     //console.log(`paneStore layoutUpdated()`);
 
     //console.log("BLOCKS_UPDATED (GET) in paneStore");
-  let self = this;
 
   let callbackError = function (err)
     {

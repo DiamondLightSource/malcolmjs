@@ -52,8 +52,7 @@ let paletteSource =
 class DNDPaletteSelector extends React.Component {
 render()
   {
-  const {isDragging, connectDragSource} = this.props;
-  const {name}                          = this.props;
+  const {connectDragSource, name} = this.props;
 
   return (
     connectDragSource(

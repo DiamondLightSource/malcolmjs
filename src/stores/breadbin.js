@@ -17,7 +17,6 @@
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import EventEmitter from 'events';
-import List from "collections/list";
 
 import "collections/shim-array"
 const CHANGE_EVENT = 'change';

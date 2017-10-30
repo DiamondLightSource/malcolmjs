@@ -2,7 +2,6 @@
  * Created by twi18192 on 10/03/16.
  */
 import blockCollection from '../classes/blockItems';
-import eachOf from 'async/eachOf';
 
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
@@ -57,12 +56,10 @@ allBlockAttributes.addBlockAttributes = function (blockItem)
     }
   if (attributes.hasOwnProperty("x"))
     {
-    let x = blockItem.x();
     this["X_COORD"] = attributes.x;
     }
   if (attributes.hasOwnProperty("y"))
     {
-    let y = blockItem.y();
     this["Y_COORD"] = attributes.y;
     }
   };

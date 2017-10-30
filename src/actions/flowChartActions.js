@@ -6,10 +6,6 @@ import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants  from '../constants/appConstants.js';
 
 class FlowChartActions {
-constructor()
-  {
-
-  }
 
 interactJsDrag(item)
   {
@@ -142,14 +138,6 @@ updateEdgePreviewEndpoint(item)
   {
   AppDispatcher.handleAction({
     actionType: appConstants.UPDATE_EDGEPREVIEWENDPOINT,
-    item      : item
-  })
-  }
-
-previousMouseCoordsOnZoom(item)
-  {
-  AppDispatcher.handleAction({
-    actionType: appConstants.PREVIOUS_MOUSECOORDSONZOOM,
     item      : item
   })
   }

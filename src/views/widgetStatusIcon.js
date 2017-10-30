@@ -54,6 +54,8 @@ class WidgetStatusIcon extends React.Component {
       case 'failure':
         icon = <Icon color="error">error</Icon>;
         break;
+      default:
+        break;
     }
 
     if (blockAttribute.alarm !== undefined) {
@@ -69,6 +71,8 @@ class WidgetStatusIcon extends React.Component {
           break;
         case AlarmStatus.MINOR_ALARM:
           icon = <Icon className={classes.warning}>warning</Icon>;
+          break;
+        default:
           break;
       }
     }

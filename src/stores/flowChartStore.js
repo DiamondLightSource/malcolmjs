@@ -24,7 +24,6 @@ let heldBlock                 = null;  // Name of the block held by the user
 let portThatHasBeenClicked    = null;
 let storingFirstPortClicked   = null;
 let edgePreview               = null;
-let previousMouseCoordsOnZoom = null;
 let clickedPortBlockInfo      = null;
 
 
@@ -41,22 +40,6 @@ let graphZoomScale = 1.0;
 let blockSelectedStates = {};
 let blockHoldStates = {};
 let backgroundSelected  = false;
-
-function appendToBlockSelectedStates(BlockId)
-  {
-  blockSelectedStates[BlockId] = false;
-  }
-
-function removeBlock(blockId)
-  {
-  /* Remove from blockSelectedStates */
-  delete blockSelectedStates[blockId];
-  }
-
-function generateRandomBlockPosition()
-  {
-  return Math.floor((Math.random() * 500) + 1)
-  }
 
 function deselectAllBlocks()
   {
@@ -306,7 +289,6 @@ onChangeBlockCollectionCallback(items)
 
       let isWidgetCombo  = false;
       let isGroupInputs  = false;
-      let isWidgetToggle = false;
 
       let meta = null;
       let tags = null;
@@ -340,23 +322,6 @@ onChangeBlockCollectionCallback(items)
                 else if (tags[j].indexOf('group:inputs') !== -1)
                   {
                   isGroupInputs = true;
-                  }
-                else if (tags[j] === 'widget:toggle')
-                  {
-                  isWidgetToggle = true;
-                  /*
-                   if (blockItem.visible)
-                   {
-                   appendToBlockSelectedStates(blockItem.blockName());
-                   changed = true;
-                   }
-                   else
-                   {
-                   removeBlock(blockItem.blockName());
-                   changed = true;
-                   }
-                   */
-
                   }
                 }
 
@@ -551,8 +516,6 @@ cancelEdgePreview()
 checkBothClickedPorts()
   {
   /* This function will run whenever we have dispatched a PortSelect event */
-  let blockInfo = clickedPortBlockInfo;
-
   let firstPort  = document.getElementById(storingFirstPortClicked.id);
   let secondPort = document.getElementById(portThatHasBeenClicked.id);
 
@@ -601,8 +564,6 @@ checkPortCompatibility(edgeInfo)
 
   let fromBlockPortType;
   let toBlockPortType;
-
-  console.log(JSON.stringify(edgeInfo));
 
   let fromBlockItem = blockCollection.getBlockItemByName(edgeInfo.fromBlock);
   let fromBlockType = fromBlockItem.blockType;
@@ -921,8 +882,8 @@ switch (action.actionType)
     let areAnyEdgesSelected = checkIfAnyEdgesAreSelected();
     //console.log(areAnyEdgesSelected);
     console.log('flowChartStore: SELECT_EDGE received from dispatcher vvvvvv');
-    console.log(item);
-    if ((areAnyEdgesSelected === true) && (edgeSelectedStates[item] === false))
+    console.log(clickedEdge);
+    if ((areAnyEdgesSelected === true) && (item !== clickedEdge))
       {
       deselectAllEdges();
       selectEdge(item);
@@ -959,6 +920,15 @@ switch (action.actionType)
   case appConstants.GETANY_EDGESELECTEDSTATE:
     getAnyEdgeSelectedState(item);
     //console.log(edgeSelectedStates[item]);
+    //flowChartStore.waitFor([blockStore.dispatchToken]);
+    flowChartStore.emitChange();
+    break;
+
+  case appConstants.CLICKED_EDGE:
+    clickedEdge = item;
+    console.log('flowChartStore: CLICKED_EDGE received from dispatcher vvvvv');
+    console.log(clickedEdge);
+    console.log('flowChartStore: CLICKED_EDGE ^^^^^');
     //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
@@ -1024,12 +994,6 @@ switch (action.actionType)
   case appConstants.UPDATE_EDGEPREVIEWENDPOINT:
     //flowChartStore.waitFor([blockCollection.dispatchToken]);
     updateEdgePreviewEndpoint(item);
-    flowChartStore.emitChange();
-    break;
-
-  case appConstants.PREVIOUS_MOUSECOORDSONZOOM:
-    previousMouseCoordsOnZoom = item;
-    //flowChartStore.waitFor([blockStore.dispatchToken]);
     flowChartStore.emitChange();
     break;
 

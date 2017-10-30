@@ -4,22 +4,14 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-//import * as ReactDOM from 'react-dom';
-
-import attributeStore from '../stores/attributeStore';
-
 import paneActions from '../actions/paneActions';
 import flowChartActions from '../actions/flowChartActions';
-//import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-
 import Ports from './ports.js';
 import BlockRectangle from './blockRectangle';
-
 import interact from 'interactjs';
-
 import blockCollection from '../classes/blockItems';
-import mainPaneStore from "../stores/mainPaneStore";
 import paneStore from "../stores/paneStore";
+
 
 class Block extends React.Component {
   constructor(props)
@@ -40,32 +32,6 @@ class Block extends React.Component {
 
 componentDidMount()
   {
-  // Fetch all known attributes for this block.
-  // id is actually blockName at this stage.
-  let blockAttributes = attributeStore.getAllBlockAttributes()[this.props.id];
-
-  //console.log(`Block: blockAttributes  id = ${this.props.id}`);
-  //console.log(blockAttributes);
-
-  /** ToDo: This is all wrong for protocol2
-   * Layout information is derived from the top-level layout schema
-   * whilst block values are derived from the block subscriptions.
-   * And.. whilst we are about it.. subscription requests should NOT be
-   * made in a view - all data should come from the relevant store, which itself should subscribe
-   * (IJG Dev 2016)
-   */
-  /*
-   for (let attribute in blockAttributes)
-   {
-   if ((attribute !== 'uptime') && (attribute !== 'MRI'))
-   {
-   if (blockAttributes.hasOwnProperty('MRI'))
-   {
-   MalcolmActionCreators.malcolmSubscribe(blockAttributes.MRI, [attribute]);
-   }
-   }
-   }
-   */
   interact(this.g)
     .draggable(
       {
@@ -77,14 +43,14 @@ componentDidMount()
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragstart");
-          }.bind(this),
+          },
         onmove  : this.interactJsDrag.bind(this),
         onend   : function (e)
           {
           e.stopImmediatePropagation();
           e.stopPropagation();
           //console.log("interactjs dragend");
-          }.bind(this)
+          }
       });
 
   interact(this.g)
@@ -263,9 +229,6 @@ portClicked(e)
 
 render()
   {
-  const {isDragging, connectDragSource} = this.props;
-  const {name}                          = this.props;
-
   let blockTranslate = "translate(" + this.props.blockPosition.x + ","
     + this.props.blockPosition.y + ")";
 
@@ -305,16 +268,6 @@ render()
      //
   let nports = this.props.blockInfo.inports.length > this.props.blockInfo.outports.length ? this.props.blockInfo.inports.length : this.props.blockInfo.outports.length;
 
-  // default height to basic style.
-  let outerRectHeight = this.props.blockStyling.outerRectangleHeight;
-  // then if nports property is specified, calculate the ideal height.
-  if (this.props.nports)
-    {
-    if (this.props.nports > 0)
-      {
-      outerRectHeight = (this.props.nports - 1)*20;
-      }
-    }
 
   return(
     <g className="draggable drag-drop" {...gProps} transform={blockTranslate} ref={(node) => {this.g = node}}>

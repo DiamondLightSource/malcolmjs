@@ -5,13 +5,20 @@ import preset from 'jss-preset-default';
 import { createMuiTheme } from 'material-ui/styles';
 import { lightBlue, orange } from 'material-ui/colors';
 import createGenerateClassName from 'material-ui/styles/createGenerateClassName';
+import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+
+let themeType = MalcolmActionCreators.qp.getTheme();
+
 
 const theme = createMuiTheme({
   palette: {
     primary: lightBlue,
     secondary: orange,
     warning: orange[500],
-    type: 'dark',
+    type: themeType,
+    background: {
+      selected: themeType === "dark" ? "#565656" : "#fff"
+    },
     ports: {
       bool: lightBlue,
       int32: orange

@@ -78,7 +78,9 @@ class WasteBin extends React.Component {
     }
 
     return (
-      <Icon color={color} className={this.classes.bin}>delete_forever</Icon>
+      <Icon color={color} className={this.props.classes.bin}>
+        delete_forever
+      </Icon>
     );
   }
 }

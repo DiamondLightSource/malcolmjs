@@ -33,19 +33,6 @@ let initialEdgeInfo = {};
 
 let blockPositions = {};
 
-/**
- * mapPortBlock: Contains a dictionary of port id mapped to block id
- * Provides a clean and reliable lookup of the block associated with a port
- * when the port is clicked.
- * Mapping structure is:
- * [{port_id : block_name}]
- *
- * IJG 10 Feb 2017
- *
- * @type {{}}
- */
-let mapPortBlock = {};
-
 function appendToBlockPositions(BlockId, xCoord, yCoord) {
   blockPositions[BlockId] = {
     x: xCoord * 1 / flowChartStore.getGraphZoomScale(),
@@ -215,7 +202,7 @@ function addBlock(blockItem) {
 
             let outportBlockName;
             let outportName;
-            if (inportValue.indexOf('.') != -1) {
+            if (inportValue.indexOf('.') !== -1) {
               outportBlockName = inportValue.slice(0, inportValue.indexOf('.'));
               outportName = inportValue.slice(inportValue.indexOf('.') + 1);
             }
@@ -405,7 +392,6 @@ function removeEdgeViaMalcolm(Info) {
 const __blockStyling = {
   outerRectangleWidth : 120,
   portRadius          : 5,
-  portFill            : 'grey',
   interPortSpacing    : 20,
   verticalMargin      : 20
 };

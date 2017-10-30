@@ -4,7 +4,6 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import * as ReactDOM from 'react-dom';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import flowChartStore from '../stores/flowChartStore';
 import flowChartActions from '../actions/flowChartActions';
@@ -18,7 +17,6 @@ import Block from './block';
 import interact from 'interactjs';
 
 import blockCollection, {BlockItem} from '../classes/blockItems';
-import WasteBin from './wasteBin';
 
 // Drag and Drop support - IJG May 2017
 import DropTarget from 'react-dnd/lib/DropTarget';
@@ -40,27 +38,7 @@ let AppDivContainerStyle = {
  */
 const layoutTarget = {
   canDrop(props, monitor) {
-  // You can disallow drop based on props or item
-  const item = monitor.getItem();
-  //return canMakeBlockMove(item.fromPosition, props.position);
-  return (true);
-  },
-
-  hover(props, monitor, component) {
-  // This is fired very often and lets you perform side effects
-  // in response to the hover. You can't handle enter and leave
-  // here—if you need them, put monitor.isOver() into collect() so you
-  // can just use componentWillReceiveProps() to handle enter/leave.
-
-  // You can access the coordinates if you need them
-  const clientOffset  = monitor.getClientOffset();
-  const componentRect = ReactDOM.findDOMNode(component).getBoundingClientRect();
-
-  // You can check whether we're over a nested drop target
-  const isJustOverThisOne = monitor.isOver({shallow: true});
-
-  // You will receive hover() even for items for which canDrop() is false
-  const canDrop = monitor.canDrop();
+    return (true);
   },
 
   drop(props, monitor, component) {
@@ -70,12 +48,6 @@ const layoutTarget = {
     // target already handled drop
     return;
     }
-
-  // Obtain the dragged item
-  const item = monitor.getItem();
-
-  // You can do something with it
-  //ChessActions.movePiece(item.fromPosition, props.position);
 
   // You can also do nothing and return a drop result,
   // which will be available as monitor.getDropResult()
@@ -271,12 +243,6 @@ isZoomNegative(n)
 addEdgePreview(eventdata)
   {
   let blockInfo = eventdata.detail.blockInfo;
-
-  let clickedPort = document.getElementById(this.props.portThatHasBeenClicked.id);
-
-  // AGHHHHHHHHH!!!!!! Yuck... :(
-  //let fromBlockId = clickedPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-
   let fromBlockId = blockInfo.name;
 
   //console.log(`flowChart: addEdgePreview() : clickedPort = ${clickedPort}    fromBlockId = ${fromBlockId}`);
@@ -361,7 +327,6 @@ addEdgePreview(eventdata)
  */
 portSelectHighlight(eventdata)
   {
-  let blockInfo = eventdata.detail.blockInfo;
   flowChartActions.storingFirstPortClicked(this.props.portThatHasBeenClicked);
   }
 
@@ -374,8 +339,6 @@ portDeselectRemoveHighlight()
 checkBothClickedPorts(eventdata)
   {
   /* This function will run whenever we have dispatched a PortSelect event */
-  let blockInfo = eventdata.detail.blockInfo;
-
   if ((this.props.storingFirstPortClicked !== null) && (this.props.portThatHasBeenClicked !== null))
     {
     let firstPort  = document.getElementById(this.props.storingFirstPortClicked.id);
@@ -806,11 +769,9 @@ render()
           {
 
           let toBlock     = blockName;
-          let toBlockType = this.props.allBlockInfo[blockName].type;
           let toBlockPort = this.props.allBlockInfo[blockName].inports[i].name;
 
           let fromBlock              = this.props.allBlockInfo[blockName].inports[i].connectedTo.block;
-          let fromBlockType          = this.props.allBlockInfo[fromBlock].type;
           let fromBlockPort          = this.props.allBlockInfo[blockName].inports[i].connectedTo.port;
           let fromBlockPortValueType = this.props.allBlockInfo[blockName].inports[i].type;
 
@@ -874,11 +835,6 @@ render()
       </svg>
     </svg>
   )
-  }
-
-dummy()
-  {
-    console.log('flowChart: Drop target connected or Block dropped in waste bin');
   }
 }
 

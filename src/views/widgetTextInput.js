@@ -18,49 +18,46 @@ export default class WidgetTextInput extends React.Component {
   }
 
   onBlur = (e) => {
-    // On loss of focus write the value if dirty
-    // TODO: this will be ignored if we click outside the window and
-    // the component is unmounted
-    if (this.state.dirty) {
-      this.writeValue();
-    }
+    // On loss of focus reset the value
+    this.setState({
+      value: this.props.blockAttributeValue,
+      editing: false,
+    });
   };
 
   onFocus = (e) => {
     // Select all the text on focus
-    let inputFieldElement = e.target;
-    inputFieldElement.select();
-    console.log(this.props.blockName);
-  };
-
-  onKeyDown = (e) => {
-    if (e.key === "Return") {
-      // Always write the value on return pressed
-      this.writeValue();
-    } else if (e.key === "Escape") {
-      // Reset on escape
-      this.setState({dirty: false});
-    }
-  };
-
-  writeValue = () => {
-    // Write the current value to Malcolm
-    MalcolmActionCreators.malcolmAttributeValueEdited(
-      this.props.blockName, this.props.attributeName, this.state.value);
-    this.setState({dirty: false});
-  };
-
-  onChange = event => {
-    // Store the temporary value so that it can be set on loss of focus
+    e.target.select();
     this.setState({
-      value: event.target.value,
-      dirty: true
+      value: this.props.blockAttributeValue,
+      editing: true
     });
   };
 
+  onKeyDown = (e) => {
+    console.log(e.target.value + this.state.editing);
+    if (e.key === "Enter") {
+      // Write the current value to Malcolm
+      MalcolmActionCreators.malcolmAttributeValueEdited(
+        this.props.blockName, this.props.attributeName, this.state.value);
+      e.target.blur();
+    } else if (e.key === "Escape") {
+      // Reset on escape
+      e.target.blur();
+    }
+  };
+
+  onChange = event => {
+    // Store the temporary value
+    this.setState({
+        value: event.target.value,
+    });
+  };
+
+
   render() {
     return (
-      <Input value={this.state.dirty ? this.state.value : this.props.blockAttributeValue}
+      <Input value={this.state.editing ? this.state.value : this.props.blockAttributeValue}
              onBlur={this.onBlur}
              onFocus={this.onFocus}
              onKeyDown={this.onKeyDown}
