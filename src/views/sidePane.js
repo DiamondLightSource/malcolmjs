@@ -232,11 +232,20 @@ class SidePane extends React.Component {
       console.log("Show palette");
       title = <Typography type="subheading" className={classes.flex}>Palette</Typography>;
 
-      let blockList = blockCollection.getAllBlockItems().map((blockItem, index) => (
+      let blockItems = blockCollection.getAllBlockItems();
+      let blockNames = [];
+      for (let i = 0; i < blockItems.length; i++) {
+        blockNames.push(blockItems[i].blockName());
+      }
+      blockNames.sort();
+
+      let blockList = blockNames.map(
+        (blockName) => (
           <DNDPaletteSelector connectDragSource={ItemTypes.PALETTE}
                               isDragging={true}
-                              name={blockItem.blockName()}
-                              key={blockItem.blockName() + 'dragBlockDNDSel'}/>
+                              name={blockName}
+                              key={blockName + 'dragBlockDNDSel'}
+          />
         )
       );
       contents = <div className={classes.palette}>{blockList}</div>
