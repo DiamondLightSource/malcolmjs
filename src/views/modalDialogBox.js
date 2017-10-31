@@ -28,7 +28,7 @@ let modalDialogBoxStyling = {
     right                  : 'auto',
     bottom                 : 'auto',
     border                 : '3px solid #ccc',
-    background             : '#3e3e3e',
+    background             : '#fff',
     overflow               : 'auto',
     WebkitOverflowScrolling: 'touch',
     borderRadius           : '8px',
