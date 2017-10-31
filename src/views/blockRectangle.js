@@ -29,14 +29,15 @@ class BlockRectangle extends React.Component {
     let blockClass = selected ? classes.blockSelected : classes.blockUnselected;
 
     return (
-      <g className={blockClass}>
+      <g>
         <rect height={outerRectHeight}
               width={blockStyling.outerRectangleWidth}
               rx={2} ry={2}
+              className={blockClass}
         />
         <svg height={outerRectHeight}
              width={blockStyling.outerRectangleWidth}
-             opacity={0.25}>
+             opacity={0.35}>
           {renderHTML(this.props.blockIconSVG)}
         </svg>;
       </g>
