@@ -158,7 +158,6 @@ render()
 
   let inports   = [];
   let outports  = [];
-  let blockText = [];
 
   let outerRectHeight = 2 * blockStyling.verticalMargin + nports * blockStyling.interPortSpacing;
 
@@ -239,36 +238,18 @@ render()
     );
     }
 
-  /* Now just need to add the block name text */
-
-  blockText.push(
-    <text className={"blockName"} key={blockId + "textLabel"}
-          style={{
-            MozUserSelect                          : "none",
-            WebkitUserSelect                       : 'none',
-            fill: "lightgrey",
-            cursor                                 : this.props.portThatHasBeenClicked === null ? "move" : "default",
-            textAnchor: "middle", alignmentBaseline: "middle",
-            fontSize                               : "10px", fontFamily: "Verdana"
-          }}
-          transform={"translate(36, 91)"}>
-      {blockInfo.label}
-    </text>
-  );
-
-  console.log("****" + JSON.stringify(this.props.blockInfo));
-
+  /* Now just need to add the block name label and description */
   return (
     <g id={blockId + "-ports"}>
       {inports}
       {outports}
       <text x={blockStyling.outerRectangleWidth/2}
             y={-15} className={classes.blockTitle}>
-        {blockInfo.label}
+        {blockInfo.name}
       </text>
       <text x={blockStyling.outerRectangleWidth/2}
             y={outerRectHeight + 15} className={classes.blockDescription}>
-        Xspress3 trigger signal output
+        {blockInfo.label}
       </text>
     </g>
   )

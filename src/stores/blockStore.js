@@ -133,10 +133,14 @@ function addBlock(blockItem) {
   let outportsThatExistInInitialEdgeInfo = [];
 
   let names = blockItem.getAttributeNames();
+  let label = blockItem.blockName();
 
   for (let nameindex = 0; nameindex < names.length; nameindex++) {
     let attrName = names[nameindex];
     let attribute = blockItem.getAttribute(attrName);
+    if (attrName === "meta") {
+      label = attribute.label;
+    }
     let tags = blockItem.getAttributeTags(attrName);
     if (tags !== null) {
       for (let i = 0; i < tags.length; i++) {
@@ -256,7 +260,7 @@ if (nports)
 
 allBlockInfo[blockItem.blockName()] = {
     type: blockType,
-    label: blockItem.blockName(),
+    label: label,
     //iconURL : blockAttributesObject['ICON'].value, todo
     name: blockItem.blockName(),
     inports: inports,

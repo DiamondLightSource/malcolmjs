@@ -125,8 +125,8 @@ blockSelect(e)
     /* Need to run deselect before I select the current node */
     this.props.deselect();
   }
-  flowChartActions.selectBlock(this.props.blockInfo.label);
-  paneActions.openBlockTab(this.props.blockInfo.label);
+  flowChartActions.selectBlock(this.props.blockInfo.name);
+  paneActions.openBlockTab(this.props.blockInfo.name);
   //flowChartActions.selectBlock(ReactDOM.findDOMNode(this).id);
   //paneActions.openBlockTab(ReactDOM.findDOMNode(this).id);
 
@@ -155,8 +155,8 @@ blockHold(e)
  */
 pointerDown(e)
   {
-    console.log(`block: ${this.props.blockInfo.label}  pointerDown`);
-  flowChartActions.holdBlock(this.props.blockInfo.label);
+    console.log(`block: ${this.props.blockInfo.name}  pointerDown`);
+  flowChartActions.holdBlock(this.props.blockInfo.name);
   }
 /**
   * pointerUp()
@@ -166,14 +166,14 @@ pointerDown(e)
   */
 pointerUp(e)
   {
-  flowChartActions.releaseBlock(this.props.blockInfo.label)
+  flowChartActions.releaseBlock(this.props.blockInfo.name)
   }
 
 interactJsDrag(e)
   {
   e.stopPropagation();
   e.stopImmediatePropagation();
-  let target = this.props.blockInfo.label;
+  let target = this.props.blockInfo.name;
 
   let deltaMovement = {
     target: target,
