@@ -37,7 +37,7 @@ let CHANGE_EVENT = 'change';
  */
 
 let _stuff = {
-  tabState           : [],
+  tabState           : [{label: "palette"}],
   selectedTabIndex   : 0,
   updatedBlockContent: null,
   blockTabState      : [],

@@ -14,13 +14,9 @@ import flowChartActions  from '../actions/flowChartActions';
 import breadBin from '../stores/breadbin';
 import MjsBreadcrumbs from '../components/mjsBreadcrumbs';
 import WasteBin from './wasteBin';
-import {Toolbar, IconButton, AppBar, Hidden, Drawer, Input,
-  withStyles, Button, Icon} from 'material-ui';
-
-// Needed for onTouchTap
-// todo: ????
-//import injectTapEventPlugin from 'react-tap-event-plugin';
-//injectTapEventPlugin();
+import {Toolbar, IconButton, AppBar, Hidden, Drawer,
+  withStyles, Button, Icon, Typography} from 'material-ui';
+import MalcolmActionCreators from "../actions/MalcolmActionCreators";
 
 
 function getBothPanesState() {
@@ -147,14 +143,15 @@ class BothPanes extends React.Component {
      * */
 
     const {classes, theme} = this.props;
-    
+
     const leftDrawer = (
-      <SidePane
-        tabObject={{label: "PANDABOX"}}
-        onClose={this.toggleLeft}
-        areAnyBlocksSelected={true}
-        areAnyEdgesSelected={false}
-      />
+      <div className={classes.drawer}>
+        <Toolbar disableGutters>
+          <IconButton onClick={this.toggleLeft}>close</IconButton>
+          <Typography type="subheading" className={classes.flex}>{MalcolmActionCreators.deviceId}</Typography>
+          {/*<IconButton>open_in_new</IconButton>*/}
+        </Toolbar>
+      </div>
     );
 
     const appBar = (
@@ -167,7 +164,7 @@ class BothPanes extends React.Component {
             menu
           </IconButton>
           <MjsBreadcrumbs/>
-          <IconButton>open_in_new</IconButton>
+          {/*<IconButton>open_in_new</IconButton>*/}
         </Toolbar>
       </AppBar>
     );

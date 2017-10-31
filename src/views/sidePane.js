@@ -207,10 +207,6 @@ class SidePane extends React.Component {
     const {classes, tabObject, areAnyBlocksSelected, areAnyEdgesSelected,
       onClose} = this.props;
 
-    if (tabObject === undefined) {
-      return null;
-    }
-
     let title;
     let contents;
 
@@ -250,7 +246,7 @@ class SidePane extends React.Component {
         <Toolbar disableGutters>
           <IconButton onClick={onClose}>close</IconButton>
           {title}
-          <IconButton>open_in_new</IconButton>
+          {/*<IconButton>open_in_new</IconButton>*/}
         </Toolbar>
         {contents}
       </div>
