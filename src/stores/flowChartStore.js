@@ -513,8 +513,7 @@ cancelEdgePreview()
   flowChartStore.emitChange();
   }
 
-checkBothClickedPorts()
-  {
+checkBothClickedPorts() {
   /* This function will run whenever we have dispatched a PortSelect event */
   let firstPort  = document.getElementById(storingFirstPortClicked.id);
   let secondPort = document.getElementById(portThatHasBeenClicked.id);
@@ -530,27 +529,17 @@ checkBothClickedPorts()
   /* Need the length of the name of the node, then slice the firstPort id string
    until the end of the node name length */
 
-  let firstPortStringSliceIndex = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
-  let firstPortName             = firstPort.id.slice(firstPortStringSliceIndex);
+  let fromBlock = firstPort.parentNode.parentNode.parentNode.id;
+  let fromPort = firstPort.id.slice(fromBlock.length);
+  let toBlock = secondPort.parentNode.parentNode.parentNode.id;
+  let toPort = secondPort.id.slice(toBlock.length);
 
-  let secondPortStringSliceIndex = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id.length;
-  let secondPortName             = secondPort.id.slice(secondPortStringSliceIndex);
-
-  let fromBlock = firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-  let toBlock   = secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-
-  if (firstPort.parentNode.parentNode.parentNode.parentNode.parentNode.id ===
-    secondPort.parentNode.parentNode.parentNode.parentNode.parentNode.id &&
-    firstPort.id === secondPort.id)
-    {
-    }
-  else
-    {
+  if (fromBlock !== toBlock || fromPort !== toPort) {
     let edge = {
       fromBlock    : fromBlock,
-      fromBlockPort: firstPortName,
+      fromBlockPort: fromPort,
       toBlock      : toBlock,
-      toBlockPort  : secondPortName
+      toBlockPort  : toPort
     };
     this.checkPortCompatibility(edge);
     }

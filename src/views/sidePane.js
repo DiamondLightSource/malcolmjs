@@ -9,7 +9,7 @@ import blockCollection from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import appConstants from '../constants/appConstants';
-import {Typography, ListItem, ListItemText, Button, Icon, Divider, withStyles, Toolbar, IconButton} from 'material-ui';
+import {Typography, ListItem, ListItemText, Button, Icon, Divider, List, withStyles, Toolbar, IconButton} from 'material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import DNDPaletteSelector from './dndPaletteSelector';
@@ -166,7 +166,7 @@ class SidePane extends React.Component {
     return ret;
   }
 
-  handleEdgeDeleteButton(EdgeInfo) {
+  handleEdgeDeleteButton = (EdgeInfo) => {
 
     /* Technically the edge delete button is some form of widget,
      but it's such a small one that doesn't require any attribute
@@ -201,7 +201,7 @@ class SidePane extends React.Component {
     // TODO: this is wrong, toBlock and fromBlock should be fully qualified names
     let endpoint = [MalcolmActionCreators.getdeviceId() + ":" + tabObject.toBlock, tabObject.toBlockPort, "value"];
     MalcolmActionCreators.malcolmPut(EdgeInfo.toBlock, endpoint, argumentValue);
-  }
+  };
 
   render() {
     const {classes, tabObject, areAnyBlocksSelected, areAnyEdgesSelected,
@@ -215,9 +215,11 @@ class SidePane extends React.Component {
       console.log("Show edges");
       title = <Typography type="subheading" className={classes.flex}>{tabObject.label}</Typography>;
       contents = (
-        <Button onClick={this.handleEdgeDeleteButton}>
-          Delete edge
-        </Button>
+        <ListItem>
+          <Button raised onClick={this.handleEdgeDeleteButton}>
+            Delete edge
+          </Button>
+        </ListItem>
       )
     } else if (areAnyBlocksSelected) {
       // Show the blocks details
