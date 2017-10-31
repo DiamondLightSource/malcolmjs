@@ -11,8 +11,6 @@ import MalcolmUtils from '../utils/MalcolmUtils';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import MalcolmWebSocketClient from '../wsWebsocketClient';
 import {DroppedPaletteInfo} from '../actions/flowChartActions'
-import config from '../utils/config';
-//import async from 'async-es';
 import eachOf from 'async/eachOf';
 
 
@@ -504,8 +502,6 @@ class BlockCollection extends EventEmitter {
 constructor()
   {
   super();
-
-  this._config = config;
 
   this._allBlockItems = [];
 

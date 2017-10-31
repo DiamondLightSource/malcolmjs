@@ -5,9 +5,9 @@ import preset from 'jss-preset-default';
 import { createMuiTheme } from 'material-ui/styles';
 import { lightBlue, orange } from 'material-ui/colors';
 import createGenerateClassName from 'material-ui/styles/createGenerateClassName';
-import MalcolmActionCreators from '../actions/MalcolmActionCreators';
+import params from '../utils/queryParams';
 
-let themeType = MalcolmActionCreators.qp.getTheme();
+let themeType = params.getTheme();
 
 
 const theme = createMuiTheme({

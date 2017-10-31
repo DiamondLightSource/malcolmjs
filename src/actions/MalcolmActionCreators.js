@@ -7,16 +7,14 @@
 import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import MalcolmUtils from '../utils/MalcolmUtils';
-import QueryParams from '../utils/queryParams';
+import params from '../utils/queryParams';
 
 
 class CMalcolmActionCreators {
 
 constructor()
   {
-    this.qp = new QueryParams({});
-    this.deviceId = this.qp.getDeviceId();
-    console.log(this.deviceId);
+    this.deviceId = params.getDeviceId();
     // TODO: update this when path changes with something like:
     //this.setQueryParams({path: ["P", "Q"]});
   }

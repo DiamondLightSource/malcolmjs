@@ -9,8 +9,8 @@ import idLookupTableFunctions from './utils/idLookupTable';
 import appConstants from './constants/appConstants';
 
 import EventEmitter from 'events';
-import config from './utils/config';
 import malcolmProtocol from './utils/malcolmProtocol';
+import params from "./utils/queryParams";
 
 let W3CWebSocket    = require('websocket').w3cwebsocket;
 let WebSocketClient = require('websocket').client;
@@ -227,12 +227,7 @@ class WSClient extends EventEmitter
 
   }
 
-/*  For development purposes, a table of available Zebra/PandA servers
- */
-// config.setServerName('pc70');
-// config.setServerName('pc4');
-let url             = config.getServerURL();
+let url = "ws://" + params.getWsHost() + "/ws";
 let MalcolmWebSocketClient = new WSClient(url);
 
-//module.exports = MalcolmWebSocketClient;
 export {MalcolmWebSocketClient as default};
