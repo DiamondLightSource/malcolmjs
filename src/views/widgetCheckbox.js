@@ -21,7 +21,7 @@ export default class WidgetCheckbox extends React.Component {
       <Checkbox
         checked={this.props.blockAttributeValue}
         onChange={this.onChange}
-        value={this.props.blockAttributeValue}
+        className={this.props.className}
       />
     );
   }
@@ -29,6 +29,7 @@ export default class WidgetCheckbox extends React.Component {
 
 WidgetCheckbox.propTypes = {
   blockName: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
   attributeName: PropTypes.string.isRequired,
   blockAttributeValue: PropTypes.any.isRequired,
 };

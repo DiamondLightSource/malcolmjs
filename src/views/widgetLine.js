@@ -26,6 +26,7 @@ const styles = theme => ({
     width: theme.size.param,
     marginRight: theme.spacing.unit * 2,
     overflow: "hidden",
+    justifyContent: "left",
   },
 });
 
@@ -90,6 +91,7 @@ class WidgetLine extends React.Component {
             blockName={blockName}
             attributeName={attributeName}
             blockAttributeValue={blockAttribute.value}
+            className={classes.paramValue}
           />;
         break;
 
