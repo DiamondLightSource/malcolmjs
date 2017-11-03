@@ -3,7 +3,7 @@
 import { create, SheetsRegistry } from 'jss';
 import preset from 'jss-preset-default';
 import { createMuiTheme } from 'material-ui/styles';
-import { lightBlue, orange } from 'material-ui/colors';
+import { lightBlue, orange, purple } from 'material-ui/colors';
 import createGenerateClassName from 'material-ui/styles/createGenerateClassName';
 import params from '../utils/queryParams';
 
@@ -15,6 +15,7 @@ const theme = createMuiTheme({
     primary: lightBlue,
     secondary: orange,
     warning: orange[500],
+    disconnected: purple[500],
     type: themeType,
     background: {
       selected: themeType === "dark" ? "#565656" : "#fff"

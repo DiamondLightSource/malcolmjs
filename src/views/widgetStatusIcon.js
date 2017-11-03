@@ -19,6 +19,9 @@ const AlarmStatus = {
 const styles = theme => ({
   warning: {
     color: theme.palette.warning
+  },
+  disconnected: {
+    color: theme.palette.disconnected
   }
 });
 
@@ -46,25 +49,26 @@ class WidgetStatusIcon extends React.Component {
 
     let {classes, blockAttributeStatus, blockAttribute} = this.props;
     let icon = "info_outline";
+    console.log(blockAttributeStatus);
 
-    switch(blockAttributeStatus) {
-      case 'pending':
-        icon = <CircularProgress/>;
-        break;
-      case 'failure':
-        icon = <Icon color="error">error</Icon>;
-        break;
-      default:
-        break;
+    if (blockAttributeStatus !== undefined) {
+      switch (blockAttributeStatus.value) {
+        case 'pending':
+          icon = <CircularProgress/>;
+          break;
+        case 'failure':
+          icon = <Icon color="error">error</Icon>;
+          break;
+        default:
+          break;
+      }
     }
 
     if (blockAttribute.alarm !== undefined) {
       switch(blockAttribute.alarm.severity) {
         case AlarmStatus.UNDEFINED_ALARM:
-          icon = <Icon color="error">bug_report</Icon>;
-          break;
         case AlarmStatus.INVALID_ALARM:
-          icon = "highlight_off";
+          icon = <Icon className={classes.disconnected}>highlight_off</Icon>;
           break;
         case AlarmStatus.MAJOR_ALARM:
           icon = <Icon color="error">error</Icon>;
