@@ -13,6 +13,7 @@ import paneStore from '../stores/paneStore';
 import Edge from './edge';
 import EdgePreview from './edgePreview';
 import Block from './block';
+import DropShadows from './dropShadows';
 
 import interact from 'interactjs';
 
@@ -818,6 +819,7 @@ render()
             onWheel={this.wheelZoom}/>
 
       <svg id={"appDivContainer"} style={AppDivContainerStyle}>
+        <DropShadows/>
         <g id={"panningGroup"}
            transform={matrixTransform}
            onWheel={this.wheelZoom}>

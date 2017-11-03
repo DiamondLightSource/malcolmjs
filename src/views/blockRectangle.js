@@ -2,7 +2,7 @@
  * Created by twi18192 on 18/01/16.
  */
 
-import * as React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import renderHTML from 'react-render-html';
 import {withStyles} from 'material-ui';
@@ -10,21 +10,17 @@ import {withStyles} from 'material-ui';
 const styles = theme => ({
   blockSelected: {
     fill: theme.palette.background.selected,
-    filter: theme.dropShadows[8],
+    filter: "url(#dropshadow8)",
   },
   blockUnselected: {
     fill: theme.palette.background.paper,
-    filter: theme.dropShadows[2],
+    filter: "url(#dropshadow2)",
   }
 });
 
-class BlockRectangle extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return (nextProps.selected !== this.props.selected)
-  }
-
+class BlockRectangle extends PureComponent {
   render() {
-    let {classes, blockStyling, nports, selected} = this.props;
+    let {classes, blockStyling, nports, selected, blockIconSVG} = this.props;
     let outerRectHeight = 2 * blockStyling.verticalMargin + nports * blockStyling.interPortSpacing;
     let blockClass = selected ? classes.blockSelected : classes.blockUnselected;
 
@@ -38,7 +34,7 @@ class BlockRectangle extends React.Component {
         <svg height={outerRectHeight}
              width={blockStyling.outerRectangleWidth}
              opacity={0.35}>
-          {renderHTML(this.props.blockIconSVG)}
+          {renderHTML(blockIconSVG)}
         </svg>;
       </g>
     )
@@ -47,12 +43,10 @@ class BlockRectangle extends React.Component {
 
 BlockRectangle.propTypes = {
   classes: PropTypes.object.isRequired,
-  selected: PropTypes.bool,
-  blockStyling: PropTypes.object,
-  blockIconSVG: PropTypes.string,
-  blockId: PropTypes.string,
-  portThatHasBeenClicked: PropTypes.object,
-  nports: PropTypes.number
+  selected: PropTypes.bool.isRequired,
+  blockStyling: PropTypes.object.isRequired,
+  blockIconSVG: PropTypes.string.isRequired,
+  nports: PropTypes.number.isRequired
 };
 
 export default withStyles(styles)(BlockRectangle);

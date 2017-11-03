@@ -32,22 +32,7 @@ const theme = createMuiTheme({
     // Size of plus button
     fab: 56,
   },
-  // Filled in below
-  dropShadows: []
 });
-
-
-for (let elevation = 0; elevation < theme.shadows.length; elevation++) {
-  // Turn box-shadow CSS property into drop-shadow
-  let arr = theme.shadows[elevation].split("),");
-  let out = [];
-  for (let i = 0; i < arr.length; i++) {
-    let split = arr[i].split(" ");
-    split.splice(3, 1);
-    out.push("drop-shadow(" + split.join(" ") + ")");
-  }
-  theme.dropShadows.push(out.join(") "));
-}
 
 // Configure JSS
 const jss = create(preset());

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {PureComponent} from 'react';
 import {withStyles} from 'material-ui';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ const styles = theme => ({
     height: "100vh",
   },
   edgeSelected: {
-    filter: theme.dropShadows[1],
+    filter: "url(#dropshadow1)",
     strokeWidth: 6,
     fill: "none",
   },
@@ -20,7 +20,7 @@ const styles = theme => ({
 });
 
 
-class EdgeLine extends React.Component {
+class EdgeLine extends PureComponent {
 
   render() {
     let {classes, theme, sourceX, sourceY, targetX, targetY, portType, blockStyling, selected} = this.props;
