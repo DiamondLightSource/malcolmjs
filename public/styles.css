@@ -1,9 +1,0 @@
-@-moz-document url-prefix() {
-    /* Make all native selects have text butting up to their start to make
-     * them look like inputs
-     * https://github.com/callemall/material-ui/issues/8946
-     */
-    select {
-        text-indent: -2px;
-    }
-}

@@ -20,22 +20,25 @@ Go get some tea for 5 minutes...
 
 First of all you need the simulator running:
 
-`bash
-/dls_sw/work/targetOS/zebra2-server/simserver`
+```bash
+/dls_sw/work/targetOS/zebra2-server/simserver
+```
 
 Then in another terminal you need the malcolm server:
 
-`bash
-/home/tmc43/common/python/pymalcolm/examples/pandabox_onboard.py`
+```bash
+/home/tmc43/common/python/pymalcolm/examples/pandabox_onboard.py
+```
 
 Running: 
 
-`bash
-npm start`
+```bash
+npm start
+```
 
 Runs the app in the development mode.
 
-Open [http://localhost:3000/?wsHost=localhost:8080] to view it in the browser.
+Open [http://localhost:3000/?wsHost=localhost:8080]() to view it in the browser.
 
 The page will reload if you make edits.
 
@@ -45,8 +48,9 @@ You will also see any lint errors in the console.
 
 Running:
  
-`bash
-npm run build`
+```bash
+npm run build
+```
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
