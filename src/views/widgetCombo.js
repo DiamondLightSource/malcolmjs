@@ -5,14 +5,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
-import {Input, option, Select} from 'material-ui';
+import blockCollection from '../classes/blockItems';
+import {Input, Select} from 'material-ui';
 
 export default class WidgetCombo extends React.Component {
 
   onChange = e => {
     // Write the current value to Malcolm
-    MalcolmActionCreators.malcolmAttributeValueEdited(
-      this.props.blockName, this.props.attributeName, e.target.value);
+    let blockItem = blockCollection.getBlockItemByName(this.props.blockName);
+    MalcolmActionCreators.malcolmPut([blockItem.mri(), this.props.attributeName, "value"], e.target.value);
   };
 
   render() {

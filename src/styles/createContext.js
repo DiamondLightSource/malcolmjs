@@ -3,7 +3,7 @@
 import { create, SheetsRegistry } from 'jss';
 import preset from 'jss-preset-default';
 import { createMuiTheme } from 'material-ui/styles';
-import { lightBlue, orange, purple } from 'material-ui/colors';
+import { blue, orange, purple } from 'material-ui/colors';
 import createGenerateClassName from 'material-ui/styles/createGenerateClassName';
 import params from '../utils/queryParams';
 
@@ -12,7 +12,7 @@ let themeType = params.getTheme();
 
 const theme = createMuiTheme({
   palette: {
-    primary: lightBlue,
+    primary: blue,
     secondary: orange,
     warning: orange[500],
     disconnected: purple[500],
@@ -21,7 +21,7 @@ const theme = createMuiTheme({
       selected: themeType === "dark" ? "#565656" : "#fff"
     },
     ports: {
-      bool: lightBlue,
+      bool: blue,
       int32: orange
     },
   },

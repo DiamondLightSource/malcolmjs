@@ -148,7 +148,12 @@ export default class ModalDialogBox extends React.Component {
             tableContent.push(
               this.createTableRow(blockName, attributeName, attribute,
                 allBlockAttributes[blockName][attributeName][attribute].severity)
-            )
+            );
+              tableContent.push(
+                this.createTableRow(blockName, attributeName, attribute + " message",
+                  allBlockAttributes[blockName][attributeName][attribute].message)
+              )
+
             }
           else if (attribute === 'timeStamp')
             {

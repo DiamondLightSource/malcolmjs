@@ -14,7 +14,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import DNDPaletteSelector from './dndPaletteSelector';
 import ItemTypes from './dndItemTypes';
-import WidgetTableContainer from './widgetLine';
+import WidgetLine from './widgetLine';
 import WidgetTextInput from './widgetTextInput';
 
 const styles = theme => ({
@@ -34,7 +34,54 @@ const styles = theme => ({
 
 class SidePane extends React.Component {
 
+  constructor(props)
+  {
+    super(props);
+    this.state = {method_expanded: {}};
+  }
+
+  __onChange = () => {
+    if (this.props.tabObject.label !== "Palette") {
+      this.setState({
+        allBlockAttributesIconStatus: attributeStore.getAllBlockAttributesIconStatus()
+      });
+    }
+  };
+
+  componentDidMount()
+  {
+    attributeStore.addChangeListener(this.__onChange);
+  }
+
+  componentWillUnmount()
+  {
+    attributeStore.removeChangeListener(this.__onChange);
+  }
+
+  getWidgetTags(meta) {
+    let ret = {
+      widgetType: null,
+      groupName: null
+    };
+
+    for (let k = 0; k < meta.tags.length; k++) {
+      let tag = meta.tags[k];
+      if (tag.indexOf('widget') !== -1) {
+        // We found a "widget:<name>" tag
+        ret.widgetType = tag.slice('widget:'.length);
+      }
+      else if (tag.indexOf('group') !== -1) {
+        // We found a "group:<name>" tag
+        ret.groupName = tag.slice('group:'.length);
+      }
+    }
+
+    return ret;
+  }
+
   generateTabContent(blockAttributes, blockAttributesIconStatus) {
+    // Write the current value to Malcolm
+    let blockItem = blockCollection.getBlockItemByName(this.props.tabObject.label);
     let blockAttributeDivs = [];
     let {tabObject, classes} = this.props;
     let ret = {
@@ -44,112 +91,131 @@ class SidePane extends React.Component {
 
     let groupsObject = {};
 
-    for (let attribute in blockAttributes) {
+    for (let attributeName in blockAttributes) {
 
-      if (!blockAttributes.hasOwnProperty(attribute)) continue;
+      if (!blockAttributes.hasOwnProperty(attributeName)) continue;
 
-      if ((MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute], "meta", "tags") === undefined) &&
-        (blockAttributes[attribute].alarm === undefined)) {
+      let attribute = blockAttributes[attributeName];
+      let widgetParent = blockAttributeDivs;
 
-        /* Creating the array that I'll push the
-         treeview children to as the upper for loop
-         goes through all the attributes of the block
-         */
-        groupsObject[attribute] = [];
-
-      }
-      else if (MalcolmUtils.hasOwnNestedProperties(blockAttributes[attribute], "meta", "tags")) {
-        let groupName;
-        let isWidget = false;
-        let widgetType;
-        let isInAGroup = false;
-        let widgetParent = blockAttributeDivs;
-
-        for (let k = 0; k < blockAttributes[attribute].meta.tags.length; k++) {
-          if (blockAttributes[attribute].meta.tags[k].indexOf('widget') !== -1) {
-            isWidget = true;
-            widgetType = blockAttributes[attribute].meta.tags[k].slice('widget:'.length);
-            //console.log('sidePaneTabContents.generateTabContent: widgetType = '+widgetType);
-          }
-
-          /* Need to find what group the
-           attribute belongs to as well
-           */
-
-          else if (blockAttributes[attribute].meta.tags[k].indexOf('group') !== -1) {
-
-            isInAGroup = true;
-            groupName = blockAttributes[attribute].meta.tags[k].slice('group:'.length);
-
-          }
+      if (attribute.typeid === 'malcolm:core/Method:1.0') {
+        // Make a method
+        let takes = attribute.takes.elements;
+        let keys = Object.keys(takes);
+        if (attribute.method_parameters === undefined) {
+          attribute.method_parameters = {};
         }
-
-        if (isWidget === true) {
-
-          /* Want a switch statement going through all
-           the possible widget types
-           */
-
-          /* Also want to take into account whether or
-           not the widget is part of a group, so do a check
-           on isInAGroup with some sort of logic to decided
-           what to 'push' to in each case
-           */
-          /**
-           * Switch the output rendering to either groupsObject[] or blockAttributeDivs
-           * by pointing widgetParent at the appropriate object.
-           * IJG 6/2/17
-           */
-          if (isInAGroup === true) {
-            if (groupsObject[groupName] === undefined) {
-              groupsObject[groupName] = [];
+        if (keys.length > 0) {
+          // Need a widget group
+          groupsObject[attributeName] = [];
+          widgetParent = groupsObject[attributeName];
+          for (let i=0; i<keys.length; i++) {
+            let paramName = keys[i];
+            let tags = this.getWidgetTags(takes[paramName]);
+            if (attribute.method_parameters[paramName] === undefined) {
+              attribute.method_parameters[paramName] = {
+                meta: takes[paramName],
+                value: null
+              };
             }
-            widgetParent = groupsObject[groupName];
-          }
-
-          /* Using JSX spread attributes to pass a common set
-           of props to all widgets
-           */
-
-          let commonProps = {
-            blockAttribute: blockAttributes[attribute],
-            blockAttributeStatus: blockAttributesIconStatus[attribute],
-            blockName: this.props.tabObject.label,
-            attributeName: attribute,
-            isInAGroup: isInAGroup,
-            key: this.props.tabObject.label + attribute + widgetType,
-            widgetType: widgetType
-          };
-
-          if (widgetType === "title") {
-            ret.title = (
-              <WidgetTextInput
-                blockName={tabObject.label}
-                attributeName={attribute}
-                blockAttributeValue={blockAttributes[attribute].value}
-                className={classes.flex}
+            widgetParent.push(
+              <WidgetLine
+                blockAttribute={attribute.method_parameters[paramName]}
+                blockAttributeStatus={blockAttributesIconStatus[attributeName]}
+                blockName={this.props.tabObject.label}
+                attributeName={"*" + paramName}
+                widgetType={tags.widgetType}
+                key={attributeName + paramName}
               />
             );
-          } else if (widgetParent !== undefined) {
-            widgetParent.push(
-              <WidgetTableContainer {...commonProps}/>);
           }
+        } else {
+          let tags = this.getWidgetTags(attribute);
+          if (tags.groupName) {
+            if (groupsObject[tags.groupName] === undefined) {
+              groupsObject[tags.groupName] = [];
+            }
+            widgetParent = groupsObject[tags.groupName];
+          }
+        }
+        // Put in a button
+        widgetParent.push(
+          <WidgetLine
+            blockAttribute={attribute}
+            blockAttributeStatus={blockAttributesIconStatus[attributeName]}
+            blockName={this.props.tabObject.label}
+            attributeName={attributeName}
+            widgetType="method"
+            key={attributeName}
+          />
+        )
+      } else if (MalcolmUtils.hasOwnNestedProperties(attribute, "meta", "tags")) {
+        // Make an attribute
+        let tags = this.getWidgetTags(attribute.meta);
+        if (tags.groupName) {
+          if (groupsObject[tags.groupName] === undefined) {
+            groupsObject[tags.groupName] = [];
+          }
+          widgetParent = groupsObject[tags.groupName];
+        }
+
+        if (tags.widgetType === "title") {
+          ret.title = (
+            <WidgetTextInput
+              blockName={tabObject.label}
+              attributeName={attributeName}
+              blockAttribute={attribute}
+              blockAttributeValue={attribute.value}
+              className={classes.flex}
+            />
+          );
+        } else if (tags.widgetType !== "icon" && tags.widgetType !== "group") {
+          widgetParent.push(
+            <WidgetLine
+              blockAttribute={attribute}
+              blockAttributeStatus={blockAttributesIconStatus[attributeName]}
+              blockName={this.props.tabObject.label}
+              attributeName={attributeName}
+              widgetType={tags.widgetType}
+              key={attributeName}
+            />
+          );
         }
       }
     }
 
-    // This is the correct way to iterate through the array of attributes
-    // and constructing the TreeView
-    //const label2 = <span className="node">{blockAttribs}</span>;
+    if (blockAttributeDivs.length > 0 && Object.keys(groupsObject).length > 0) {
+      // We have some widgets in the top section, and some groups, so put a divider in
+      blockAttributeDivs.push(
+        <Divider light key={"ungrouped_and_grouped_divider"}/>
+      );
+    }
+
     for (let groupName in groupsObject) {
       let group = blockAttributes[groupName];
-      let expanded = group.value === "expanded";
+      let label;
+      let expanded;
+      let onClick;
+      if (MalcolmUtils.hasOwnNestedProperties(group, "meta")) {
+        // Attribute group
+        label = group.meta.label;
+        expanded = group.value === "expanded";
+        onClick = (e) => {
+          MalcolmActionCreators.malcolmPut([blockItem.mri(), groupName, "value"], expanded)
+        }
+      } else {
+        // Method group
+        label = group.label;
+        expanded = this.state.method_expanded[groupName] !== false;
+        onClick = (e) => {
+          let method_expanded = {...this.state.method_expanded};
+          method_expanded[groupName] = method_expanded[groupName] === false;
+          this.setState({"method_expanded": method_expanded})
+        };
+      }
       blockAttributeDivs.push(
-        <ListItem button onClick={(e) =>
-          MalcolmActionCreators.malcolmAttributeValueEdited(
-            this.props.tabObject.label, groupName, expanded)
-        } key={groupName + "listitem"}>
-          <ListItemText primary={group.meta.label}/>
+        <ListItem button onClick={onClick} key={groupName + "listitem"}>
+          <ListItemText primary={label}/>
           { expanded ? <Icon color="action">expand_less</Icon> : <Icon color="action">expand_more</Icon>}
         </ListItem>
       );
@@ -200,7 +266,7 @@ class SidePane extends React.Component {
     }
     // TODO: this is wrong, toBlock and fromBlock should be fully qualified names
     let endpoint = [MalcolmActionCreators.getdeviceId() + ":" + tabObject.toBlock, tabObject.toBlockPort, "value"];
-    MalcolmActionCreators.malcolmPut(EdgeInfo.toBlock, endpoint, argumentValue);
+    MalcolmActionCreators.malcolmPut(endpoint, argumentValue);
   };
 
   render() {
@@ -231,13 +297,14 @@ class SidePane extends React.Component {
       contents = ret.contents;
     } else {
       // Show the block list
-      console.log("Show palette");
+      //console.log("Show palette");
       title = <Typography type="subheading" className={classes.flex}>Palette</Typography>;
 
       let blockItems = blockCollection.getAllBlockItems();
       let blockNames = [];
       for (let i = 0; i < blockItems.length; i++) {
-        blockNames.push(blockItems[i].blockName());
+        if (blockItems[i].blockName() !== "")
+          blockNames.push(blockItems[i].blockName());
       }
       blockNames.sort();
 

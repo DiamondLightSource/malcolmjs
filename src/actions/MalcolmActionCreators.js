@@ -8,6 +8,8 @@ import AppDispatcher from '../dispatcher/appDispatcher.js';
 import appConstants from '../constants/appConstants.js';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import params from '../utils/queryParams';
+import attributeStore from '../stores/attributeStore';
+import blockCollection from '../classes/blockItems';
 
 
 class CMalcolmActionCreators {
@@ -48,75 +50,69 @@ initialiseFlowChart(requestedData)
 
   }
 
-/**
- * malcolmCall
- * @param blockName
- * @param method
- * @param args
- */
-malcolmCall(blockName, method, args)
+malcolmPost(path, parameters)
   {
-  let requestedDataToWritePath;
 
-  AppDispatcher.handleAction({
-    actionType: appConstants.MALCOLM_CALL_PENDING,
-    item      : {
-      requestedDataToWrite: {
-        blockName: blockName,
-        method   : method,
-        args     : args
-      }
-    }
-  });
+    let blockItem = blockCollection.getBlockItemByMri(path[0]);
 
-  function malcolmCallSuccess(id, responseMessage)
+    attributeStore.updateAttributeIconStatus(blockItem.blockName(), path[1], {
+      value: 'pending',
+      message: null
+    });
+
+    attributeStore.emitChange();
+
+  function malcolmPostSuccess(id, responseMessage)
     {
     AppDispatcher.handleAction({
       actionType: appConstants.MALCOLM_CALL_SUCCESS,
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          method   : method,
-          args     : args
+          path: path,
+          parameters: parameters
         }
       }
     });
     }
 
-  function malcolmCallFailure(responseMessage)
+  function malcolmPostFailure(responseMessage)
     {
     AppDispatcher.handleAction({
       actionType: appConstants.MALCOLM_CALL_FAILURE,
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          method   : method,
-          args     : args
+          path: path,
+          parameters: parameters
         }
       }
     });
     }
 
-
-  requestedDataToWritePath = [actionCreators.deviceId, blockName];
-
-  MalcolmUtils.malcolmCall(requestedDataToWritePath, method, args, malcolmCallSuccess, malcolmCallFailure);
+  MalcolmUtils.malcolmPost(path, parameters, malcolmPostSuccess, malcolmPostFailure);
 
   }
 
 
 /**
  * malcolmPut()
- * @param blockName - can be empty, in which case it is defaulted to the device ID (e.g. ["P"])
- * @param endpoint - array of path ids, e.g. ["P", "layout", "value"]
- * @param value    - object to write, e.g. {mri:array[n], name:array[n], visible:array[n], x:array[n], y:array[n], typeid:array[n]}
+ * @param path    - array of path ids, e.g. ["P", "layout", "value"]
+ * @param value   - object to write, e.g. {mri:array[n], name:array[n], visible:array[n], x:array[n], y:array[n], typeid:array[n]}
  *
  */
-malcolmPut(blockName, endpoint, value)
+malcolmPut(path, value)
   {
-  let requestedDataToWritePath;
+
+    let blockItem = blockCollection.getBlockItemByMri(path[0]);
+
+    attributeStore.updateAttributeIconStatus(blockItem.blockName(), path[1], {
+      value: 'pending',
+      message: null
+    });
+
+    attributeStore.emitChange();
+
 
   function malcolmPutSuccess(id, responseMessage)
     {
@@ -125,9 +121,8 @@ malcolmPut(blockName, endpoint, value)
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          endpoint : endpoint,
-          value    : value
+          path: path,
+          value: value
         }
       }
     });
@@ -140,90 +135,17 @@ malcolmPut(blockName, endpoint, value)
       item      : {
         responseMessage     : responseMessage,
         requestedDataToWrite: {
-          blockName: blockName,
-          endpoint : endpoint,
-          value    : value
+          path: path,
+          value: value
         }
-
       }
     });
     }
 
-  /**
-   * Output needs to be of the format:
-   * {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"On"}
-   * accepted
-
-   Memory jogger...
-   check if the variable has a truthy value or not via simple test:
-   if( value ) {}
-   will evaluate to true if value is not: null, undefined, NaN, empty string (""), 0, false
-   */
-  if (blockName)
-    {
-    requestedDataToWritePath = [blockName];
-    }
-  else
-    {
-    requestedDataToWritePath = [actionCreators.deviceId];
-    }
-
-  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPutSuccess, malcolmPutFailure);
+  MalcolmUtils.malcolmPut(path, value, malcolmPutSuccess, malcolmPutFailure);
 
   }
 
-malcolmPost(blockName, endpoint, parameters)
-  {
-  let requestedDataToWritePath;
-
-  function malcolmPostSuccess(id, responseMessage)
-    {
-    AppDispatcher.handleAction({
-      actionType: appConstants.MALCOLM_POST_SUCCESS,
-      item      : {
-        responseMessage     : responseMessage,
-        requestedDataToWrite: {
-          blockName : blockName,
-          endpoint  : endpoint,
-          parameters: parameters
-        }
-      }
-    });
-    }
-
-  function malcolmPostFailure(responseMessage)
-    {
-    AppDispatcher.handleAction({
-      actionType: appConstants.MALCOLM_POST_FAILURE,
-      item      : {
-        responseMessage     : responseMessage,
-        requestedDataToWrite: {
-          blockName : blockName,
-          endpoint  : endpoint,
-          parameters: parameters
-        }
-
-      }
-    });
-    }
-
-  /**
-   * Output needs to be of the format:
-   * {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:FMC","outPwrOn","value"],"value":"On"}
-   */
-  if (blockName)
-    {
-    requestedDataToWritePath = [blockName];
-    }
-  else
-    {
-    requestedDataToWritePath = [actionCreators.deviceId];
-    }
-
-  let value = "";
-  MalcolmUtils.malcolmPut(requestedDataToWritePath, endpoint, value, malcolmPostSuccess, malcolmPostFailure);
-
-  }
 
 malcolmGet(requestedData)
   {
@@ -412,27 +334,6 @@ malcolmSubscribe(blockName, attribute, subtype = appConstants.MALCOLM_SUBSCRIBE_
   return (id);
   }
 
-/**
- * @name  malcolmAttributeValueEdited
- * @param blockName
- * @param attributePath
- * @param newValue
- * @description  Called by a UI component when a block attribute value is changed by the user.
- *               Dispatches a message to all stores, so that one of the can take the appropriate action,
- *               such as Pushing the new value to the device.
- */
-malcolmAttributeValueEdited(blockName, attributePath, newValue)
-  {
-  AppDispatcher.handleAction({
-      actionType: appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED,
-      item      : {
-        blockName     : blockName,
-        attribute_path: attributePath,
-        newValue      : newValue
-      }
-    }
-  );
-  }
 
 getdeviceId()
   {

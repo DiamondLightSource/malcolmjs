@@ -115,46 +115,44 @@ malcolmSubscribe(requestedData, successCallback, failureCallback)
 
 
 
-malcolmCall(requestedDataToWrite, method, args, successCallback, failureCallback)
+malcolmPost(path, parameters, successCallback, failureCallback)
   {
   let id = MalcolmWebSocketClient.getNextAvailableId();
   MalcolmWebSocketClient.incrementId();
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPost();
   message['id']                             = id;
-  message['path']                       = requestedDataToWrite;
-  message['parameters']                     = {'method':method, 'arguments':args};
+  message['path']                           = path;
+  message['parameters']                     = parameters;
   let messageJson                           = JSON.stringify(message);
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
     successCallback: successCallback,
     failureCallback: failureCallback,
-    requestedData  : requestedDataToWrite
   });
 
-  console.log(`MalcolmUtils.malcolmCall(): ==>`);
-  console.log(messageJson);
+  //console.log(`MalcolmUtils.malcolmCall(): ==>`);
+  //console.log(messageJson);
   MalcolmWebSocketClient.sendText(messageJson);
 
   return(id);
   }
 
 
-malcolmPut(requestedDataToWrite, endpoint, value, successCallback, failureCallback)
+malcolmPut(path, value, successCallback, failureCallback)
   {
   let id = MalcolmWebSocketClient.getNextAvailableId();
   MalcolmWebSocketClient.incrementId();
   let message                               = {};
   message[malcolmProtocol.getTypeIDIdent()] = malcolmProtocol.getTypeIDPut();
   message['id']                             = id;
-  message['path']                       = endpoint;
+  message['path']                           = path;
   message['value']                          = value;
   let messageJson                           = JSON.stringify(message);
 
   idLookupTableFunctions.addIdCallbacks(id, messageJson, {
     successCallback: successCallback,
     failureCallback: failureCallback,
-    requestedData  : requestedDataToWrite
   });
 
   //console.log(`MalcolmUtils.malcolmPut(): ==>`);

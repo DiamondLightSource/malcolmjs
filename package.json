@@ -14,7 +14,7 @@
     "flux": "^3.1.2",
     "immutability-helper": "^2.3.0",
     "interactjs": "^1.2.9",
-    "material-ui": "^1.0.0-beta.17",
+    "material-ui": "^1.0.0-beta.20",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-modal": "^2.2.4",

@@ -505,7 +505,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
     let fromPortValueType;
     let toPortValueType;
 
-    /* For the malcolmCall that updates the dropdown menu list
+    /* For the malcolmPost that updates the dropdown menu list
      specifying what port the block's inport is connected to */
     let inportBlock;
 
@@ -554,7 +554,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
       {
       /* Proceed with the connection as we have compatible port value types */
 
-      /* Create new edges by sending a malcolmCall */
+      /* Create new edges by sending a malcolmPost */
 
       inportBlock = endBlock;
       /* the 'method' argument */
@@ -574,8 +574,8 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
         let mri      = item.mri();
         let endpoint = [mri, endBlockPort, "value"];
         let newValue = newDropdownValue.toUpperCase();
-        MalcolmActionCreators.malcolmPut(inportBlock, endpoint, newValue);
-        //MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+        MalcolmActionCreators.malcolmPut(endpoint, newValue);
+        //MalcolmActionCreators.malcolmPost(inportBlock, inputFieldSetMethod, argsObject);
         }
 
       this.resetPortClickStorage();

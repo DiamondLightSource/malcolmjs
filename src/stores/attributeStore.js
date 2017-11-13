@@ -103,78 +103,6 @@ function updateAttributeValue(blockitem)
 
   }
 
-/**
- *
- * @param {string} blockName   - block name
- * @param {string} attribute - attribute name
- * @param {object} statusObject
- */
-function updateAttributeIconStatus(blockName, attribute, statusObject)
-  {
-
-  /* In the case of block moving the method name doesn't reflect
-   the attribute name that you want to update (_set_coords is
-   called whenever a block is moved, yet the attributes to update
-   are X_COORD and Y_COORD), so use the attributeName variable
-   to check this and adjust accordingly
-   */
-
-  let attributeName;
-
-  if (attribute !== 'coords' && attribute !== 'visible'
-    && attribute.indexOf('_visible') === -1)
-    {
-    attributeName = attribute;
-    }
-  else if (attribute === 'visible')
-    {
-    attributeName = 'VISIBLE';
-    }
-  else if (attribute.indexOf('_visible') !== -1)
-    {
-    attributeName = attribute.slice(0, attribute.indexOf('_visible'));
-    }
-  else
-    {
-    attributeName = 'X_COORD';
-    /* Then also run the function again to update the Y_COORD attribute status */
-    updateAttributeIconStatus(blockName, 'Y_COORD', statusObject);
-    }
-
-  if (allBlockAttributesIconStatus.hasOwnProperty(blockName.toString()))
-    {
-    //console.log("attributeStore.updateAttributeIconStatus(): ");
-    //console.log(allBlockAttributesIconStatus);
-
-    if (!allBlockAttributesIconStatus[blockName].hasOwnProperty(attributeName))
-      {
-      allBlockAttributesIconStatus[blockName][attributeName] = {};
-      }
-
-    let updatedAttribute = update(allBlockAttributesIconStatus[blockName][attributeName],
-      {
-        $merge: {
-          value  : statusObject.value,
-          message: statusObject.message
-        }
-      });
-
-    let attributesToMerge = {};
-
-    attributesToMerge[attributeName] = updatedAttribute;
-
-    let updatedAttributes = update(allBlockAttributesIconStatus[blockName],
-      {$merge: attributesToMerge});
-
-    allBlockAttributesIconStatus[blockName] = update(allBlockAttributesIconStatus[blockName],
-      {$set: updatedAttributes});
-    }
-  else
-    {
-    allBlockAttributesIconStatus.addBlockAttributeIconStatus(blockName, attributeName, statusObject.value, statusObject.message);
-    }
-
-  }
 
 class AttributeStore extends EventEmitter {
 constructor()
@@ -213,6 +141,78 @@ getAllBlockAttributesIconStatus()
   }
 
 /**
+ *
+ * @param {string} blockName   - block name
+ * @param {string} attribute - attribute name
+ * @param {object} statusObject
+ */
+updateAttributeIconStatus(blockName, attribute, statusObject) {
+
+  /* In the case of block moving the method name doesn't reflect
+   the attribute name that you want to update (_set_coords is
+   called whenever a block is moved, yet the attributes to update
+   are X_COORD and Y_COORD), so use the attributeName variable
+   to check this and adjust accordingly
+   */
+
+  let attributeName;
+
+  if (attribute !== 'coords' && attribute !== 'visible'
+    && attribute.indexOf('_visible') === -1)
+  {
+    attributeName = attribute;
+  }
+  else if (attribute === 'visible')
+  {
+    attributeName = 'VISIBLE';
+  }
+  else if (attribute.indexOf('_visible') !== -1)
+  {
+    attributeName = attribute.slice(0, attribute.indexOf('_visible'));
+  }
+  else
+  {
+    attributeName = 'X_COORD';
+    /* Then also run the function again to update the Y_COORD attribute status */
+    this.updateAttributeIconStatus(blockName, 'Y_COORD', statusObject);
+  }
+
+  if (allBlockAttributesIconStatus.hasOwnProperty(blockName.toString()))
+  {
+    //console.log("attributeStore.updateAttributeIconStatus(): ");
+    //console.log(allBlockAttributesIconStatus);
+
+    if (!allBlockAttributesIconStatus[blockName].hasOwnProperty(attributeName))
+    {
+      allBlockAttributesIconStatus[blockName][attributeName] = {};
+    }
+
+    let updatedAttribute = update(allBlockAttributesIconStatus[blockName][attributeName],
+      {
+        $merge: {
+          value  : statusObject.value,
+          message: statusObject.message
+        }
+      });
+
+    let attributesToMerge = {};
+
+    attributesToMerge[attributeName] = updatedAttribute;
+
+    let updatedAttributes = update(allBlockAttributesIconStatus[blockName],
+      {$merge: attributesToMerge});
+
+    allBlockAttributesIconStatus[blockName] = update(allBlockAttributesIconStatus[blockName],
+      {$set: updatedAttributes});
+  }
+  else
+  {
+    allBlockAttributesIconStatus.addBlockAttributeIconStatus(blockName, attributeName, statusObject.value, statusObject.message);
+  }
+
+}
+
+/**
  * onChangeBlockCollectionCallback()
  * Callback function called when blockCollection emits an event.
  * Note that this will reference the EventEmitter, not the attributeStore instance
@@ -237,7 +237,7 @@ onChangeBlockCollectionCallback(items)
       for (let attrIndex = 0; attrIndex < attributes.length; attrIndex++)
         {
         let attrName = attributes[attrIndex];
-        updateAttributeIconStatus(blockItem.blockName(), attrName, {
+        this.updateAttributeIconStatus(blockItem.blockName(), attrName, {
           value  : 'success',
           message: null
         });
@@ -267,7 +267,7 @@ onChangeBlockLayoutCallback(items)
       for (let attrIndex = 0; attrIndex < attributes.length; attrIndex++)
         {
         let attrName = attributes[attrIndex];
-        updateAttributeIconStatus(blockItem.blockName(), attrName, {
+        this.updateAttributeIconStatus(blockItem.blockName(), attrName, {
           value  : 'success',
           message: null
         });
@@ -289,75 +289,41 @@ attributeStore.dispatchToken = AppDispatcher.register((payload) =>
   {
   let action = payload.action;
   let item   = action.item;
+  let requestedDataToWrite;
+  let blockItem;
+
 
   switch (action.actionType)
   {
-    case
-    appConstants.MALCOLM_CALL_SUCCESS:
-      {
-      console.log("malcolmCallSuccess");
+    case appConstants.MALCOLM_CALL_SUCCESS:
+    case appConstants.MALCOLM_PUT_SUCCESS:
+      requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+      console.log("malcolmCallSuccess " + requestedDataToWrite);
+      blockItem = blockCollection.getBlockItemByMri(requestedDataToWrite.path[0]);
 
-      /* No responseMessage is specified if it's a success */
-      //let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
-      if (item.hasOwnProperty('requestedDataToWrite'))
-        {
-        let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-        /* As we will receive the METHOD name in requestedDataToWrite,
-         we need to get rid of the _set_ at the start of requestedDataToWrite.method
-         string in order to update the corresponding attribute/widget properly
-         */
-
-        let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-        updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
-          value  : 'success',
-          message: null
-        });
-
-        attributeStore.emitChange();
-        }
-      break;
-      }
-
-    case
-    appConstants.MALCOLM_CALL_FAILURE
-    :
-      {
-      console.log("malcolmCallFailure");
-
-      let responseMessage      = JSON.parse(JSON.stringify(item.responseMessage));
-      let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-      let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
-        value  : 'failure',
-        message: responseMessage
-      });
-
-      attributeStore.emitChange();
-      break;
-      }
-
-    case
-    appConstants.MALCOLM_CALL_PENDING
-    :
-      {
-      let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-      let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-      console.log('malcolmCallPending');
-
-      updateAttributeIconStatus(requestedDataToWrite.blockName, attributeToUpdate, {
-        value  : 'pending',
+      attributeStore.updateAttributeIconStatus(blockItem.blockName(), requestedDataToWrite.path[1], {
+        value: 'success',
         message: null
       });
 
       attributeStore.emitChange();
       break;
-      }
+
+    case appConstants.MALCOLM_CALL_FAILURE:
+    case appConstants.MALCOLM_PUT_FAILURE:
+
+      let responseMessage = JSON.parse(JSON.stringify(item.responseMessage));
+      requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
+      console.log("malcolmCallFailure " + requestedDataToWrite + " " + responseMessage);
+      blockItem = blockCollection.getBlockItemByMri(requestedDataToWrite.path[0]);
+
+      attributeStore.updateAttributeIconStatus(blockItem.blockName(), requestedDataToWrite.path[1], {
+        value: 'failure',
+        message: responseMessage
+      });
+
+      attributeStore.emitChange();
+      break;
 
     case appConstants.BLOCKS_UPDATED:
       break;

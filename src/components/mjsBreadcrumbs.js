@@ -44,7 +44,7 @@ class MjsBreadcrumbs extends Component {
 
     return (
       <Toolbar className={classes.breadCrumbs} disableGutters>
-        <Typography type="subheading">{MalcolmActionCreators.deviceId}</Typography>
+        <Typography type="title" color="inherit">{MalcolmActionCreators.deviceId}</Typography>
       </Toolbar>
     );
   }

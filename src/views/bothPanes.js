@@ -15,8 +15,7 @@ import breadBin from '../stores/breadbin';
 import MjsBreadcrumbs from '../components/mjsBreadcrumbs';
 import WasteBin from './wasteBin';
 import {Toolbar, IconButton, AppBar, Hidden, Drawer,
-  withStyles, Button, Icon, Typography} from 'material-ui';
-import MalcolmActionCreators from "../actions/MalcolmActionCreators";
+  withStyles, Button, Icon} from 'material-ui';
 
 
 function getBothPanesState() {
@@ -87,7 +86,7 @@ class BothPanes extends React.Component {
     /**
      * Navigation drawer state
      */
-    this.state.leftOpen = false;
+    this.state.leftOpen = true;
 
     this.__onChange = this.__onChange.bind(this);
     this.__onBreadcrumbChange = this.__onBreadcrumbChange.bind(this);
@@ -145,13 +144,12 @@ class BothPanes extends React.Component {
     const {classes, theme} = this.props;
 
     const leftDrawer = (
-      <div className={classes.drawer}>
-        <Toolbar disableGutters>
-          <IconButton onClick={this.toggleLeft}>close</IconButton>
-          <Typography type="subheading" className={classes.flex}>{MalcolmActionCreators.deviceId}</Typography>
-          {/*<IconButton>open_in_new</IconButton>*/}
-        </Toolbar>
-      </div>
+      <SidePane
+        tabObject={{label: ""}}
+        onClose={this.toggleLeft}
+        areAnyBlocksSelected={true}
+        areAnyEdgesSelected={false}
+      />
     );
 
     const appBar = (
@@ -160,6 +158,7 @@ class BothPanes extends React.Component {
           <IconButton
             onClick={this.toggleLeft}
             className={classNames(this.state.leftOpen && classes.hideDesktop)}
+            color="contrast"
           >
             menu
           </IconButton>

@@ -342,41 +342,6 @@ switch (action.actionType)
     paneStore.emitChange();
     break;
 
-  case appConstants.MALCOLM_CALL_SUCCESS:
-    {
-    //AppDispatcher.waitFor([blockCollection.dispatchToken]);
-
-    let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-    let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-    if (modalDialogBoxInfo.blockName === requestedDataToWrite.blockName &&
-      modalDialogBoxInfo.attributeName === attributeToUpdate)
-      {
-      modalDialogBoxInfo.message = null;
-      paneStore.emitChange();
-      }
-
-    break;
-    }
-
-  case appConstants.MALCOLM_CALL_FAILURE:
-    {
-    let responseMessage      = JSON.parse(JSON.stringify(item.responseMessage));
-    let requestedDataToWrite = JSON.parse(JSON.stringify(item.requestedDataToWrite));
-
-    let attributeToUpdate = requestedDataToWrite.method.slice('_set_'.length);
-
-    modalDialogBoxInfo.blockName     = requestedDataToWrite.blockName;
-    modalDialogBoxInfo.attributeName = attributeToUpdate;
-    modalDialogBoxInfo.message       = responseMessage;
-
-    //console.log(modalDialogBoxInfo);
-
-    paneStore.emitChange();
-    break;
-    }
-
   default:
     break;
 }

@@ -271,11 +271,9 @@ render()
 
   return(
     <g className="draggable drag-drop" {...gProps} transform={blockTranslate} ref={(node) => {this.g = node}}>
-      <BlockRectangle blockId={this.props.id}
-                      blockType={this.props.blockInfo.type}
+      <BlockRectangle blockType={this.props.blockInfo.type}
                       blockIconURL={this.props.blockInfo.iconURL}
                       blockIconSVG={this.props.blockIconSVG}
-                      portThatHasBeenClicked={this.props.portThatHasBeenClicked}
                       selected={this.props.selected}
                       nports={nports}
                       blockStyling={this.props.blockStyling}

@@ -30,9 +30,10 @@ let clickedPortBlockInfo      = null;
 // Block drawing parameter constants no stored in one place only.
 let blockStyling = BlockStore.drawingParams;
 
+// Move the default starting position of the blocks away from the app bar and drawer
 let graphPosition = {
-  x: 0,
-  y: 0
+  x: 600,
+  y: 200
 };
 
 let graphZoomScale = 1.0;
@@ -673,7 +674,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
     let fromPortValueType;
     let toPortValueType;
 
-    /* For the malcolmCall that updates the dropdown menu list
+    /* For the malcolmPost that updates the dropdown menu list
      specifying what port the block's inport is connected to */
     let inportBlock;
 
@@ -722,7 +723,7 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
       {
       /* Proceed with the connection as we have compatible port value types */
 
-      /* Create new edges by sending a malcolmCall */
+      /* Create new edges by sending a malcolmPost */
 
       inportBlock = endBlock;
       /* the 'method' argument */
@@ -742,8 +743,8 @@ isInportConnected(inport, inportIndex, block, edgeInfo, types)
         let mri      = item.mri();
         let endpoint = [mri, endBlockPort, "value"];
         let newValue = newDropdownValue.toUpperCase();
-        MalcolmActionCreators.malcolmPut(inportBlock, endpoint, newValue);
-        //MalcolmActionCreators.malcolmCall(inportBlock, inputFieldSetMethod, argsObject);
+        MalcolmActionCreators.malcolmPut(endpoint, newValue);
+        //MalcolmActionCreators.malcolmPost(inportBlock, inputFieldSetMethod, argsObject);
         }
 
       this.resetPortClickStorage();

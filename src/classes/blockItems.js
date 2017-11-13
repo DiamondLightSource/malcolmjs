@@ -87,32 +87,35 @@ parseLayoutSchema(schemaIn)
     {
     let self = this;
 
-    let iteration = function (layout, attr, callbackDone)
-      {
-      if ((attr !== 'typeid') && (schema.layout.value.hasOwnProperty(attr)))
-        {
-        self.attributes[attr] = {};
-        let t1                = JSON.stringify(schema.layout.value[attr][self.index]);
-        let t2                = JSON.stringify(self.attributes[attr]);
-        if (t1 !== t2)
-          {
-          self.attributes[attr] = JSON.parse(t1);
-          //console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
-          self.collection.blockItemUpdated(self.index);
+    if (self.index < schema.layout.value["name"].length) {
+      // This is a child block
+      let iteration = function (layout, attr, callbackDone) {
+        if ((attr !== 'typeid') && (schema.layout.value.hasOwnProperty(attr))) {
+          self.attributes[attr] = {};
+          let t1 = JSON.stringify(schema.layout.value[attr][self.index]);
+          let t2 = JSON.stringify(self.attributes[attr]);
+          if (t1 !== t2) {
+            self.attributes[attr] = JSON.parse(t1);
+            //console.log(`blockItems.parseLayoutSchema block change detected Block: ${attr} Attributes: ${self.attributes[attr]}`);
+            self.collection.blockItemUpdated(self.index);
           }
-        callbackDone();
+          callbackDone();
         }
       };
 
-    let callbackError = function (err)
-      {
-      if (err)
-        {
-        console.error(err.message);
+      let callbackError = function (err) {
+        if (err) {
+          console.error(err.message);
         }
       };
 
-    eachOf(schema.layout.meta.elements, iteration, callbackError);
+      eachOf(schema.layout.meta.elements, iteration, callbackError);
+    } else {
+      // This is the parent
+      self.attributes = schema;
+      self.attributes.name = "";
+      this.collection.blockItemUpdated(this.index);
+    }
 
     }
   }
@@ -133,30 +136,49 @@ updateFromSchema(schemaIn)
     {
     let self = this;
 
-    let iteration = function (layout, attr, callbackDone)
-      {
-      if ((attr !== 'typeid') && (schema.layout.value.hasOwnProperty(attr)))
-        {
-        let t1 = JSON.stringify(schema.layout.value[attr][self.index]);
-        let t2 = JSON.stringify(self.attributes[attr]);
-        if (t1 !== t2)
-          {
-          self.attributes[attr] = JSON.parse(t1);
-          changed               = true;
+      if (self.index < schema.layout.value["name"].length) {
+        // This is the child block
+        let iteration = function (layout, attr, callbackDone) {
+          if ((attr !== 'typeid') && (schema.layout.value.hasOwnProperty(attr))) {
+            let t1 = JSON.stringify(schema.layout.value[attr][self.index]);
+            let t2 = JSON.stringify(self.attributes[attr]);
+            if (t1 !== t2) {
+              self.attributes[attr] = JSON.parse(t1);
+              changed = true;
+            }
+            callbackDone();
           }
-        callbackDone();
-        }
-      };
+        };
 
-    let callbackError = function (err)
-      {
-      if (err)
-        {
-        console.error(err.message);
-        }
-      };
+        let callbackError = function (err) {
+          if (err) {
+            console.error(err.message);
+          }
+        };
 
-    eachOf(schema.layout.meta.elements, iteration, callbackError);
+        eachOf(schema.layout.meta.elements, iteration, callbackError);
+      } else {
+        // This is a parent block
+        let iteration = function (layout, attr, callbackDone) {
+          if ((attr !== 'typeid') && (schema.hasOwnProperty(attr))) {
+            let t1 = JSON.stringify(schema[attr]);
+            let t2 = JSON.stringify(self.attributes[attr]);
+            if (t1 !== t2) {
+              self.attributes[attr] = JSON.parse(t1);
+              changed = true;
+            }
+            callbackDone();
+          }
+        };
+
+        let callbackError = function (err) {
+          if (err) {
+            console.error(err.message);
+          }
+        };
+
+        eachOf(schema, iteration, callbackError);
+      }
     }
   else // The incoming schema describes an individual block.
     {
@@ -280,6 +302,7 @@ get icon()
   return (ret);
   }
 
+
 get visible()
   {
   let ret = false;
@@ -319,7 +342,7 @@ y()
 
 putXY(newX, newY)
   {
-  MalcolmActionCreators.malcolmPut("", [MalcolmActionCreators.getdeviceId(), "layout", "value"],
+  MalcolmActionCreators.malcolmPut([MalcolmActionCreators.getdeviceId(), "layout", "value"],
     {"typeid":"malcolm:core/Table:1.0",
       "name":[this.blockName()],
       "mri":[this.mri()],
@@ -330,7 +353,7 @@ putXY(newX, newY)
 
 putVisible(visibility)
   {
-  MalcolmActionCreators.malcolmPut("", [MalcolmActionCreators.getdeviceId(), "layout", "value"],
+  MalcolmActionCreators.malcolmPut([MalcolmActionCreators.getdeviceId(), "layout", "value"],
     {"typeid":"malcolm:core/Table:1.0",
       "name":[this.blockName()],
       "mri":[this.mri()],
@@ -479,7 +502,7 @@ putAttributeValue(attributeName, value)
   {
   // {"typeid":"malcolm:core/Put:1.0","id":0,"path":["P:PGEN2","trig","value"],"value":"PULSE1.OUT"}
   let mri = this.mri();
-  MalcolmActionCreators.malcolmPut("", [mri, attributeName, "value"],value);
+  MalcolmActionCreators.malcolmPut([mri, attributeName, "value"], value);
   }
 }
 /* Class BlockItem */
@@ -625,7 +648,14 @@ createBlockItemsFromSchema(topLevelSchema)
 
     eachOf(this._layoutSchema.layout.value.name, iteration, callbackError);
 
-    /**
+    // TODO: hacky hacky, the top item shouldn't be created here
+    let top = new BlockItem(blockCollection._allBlockItems.length, blockCollection);
+    top.attributes.mri = MalcolmActionCreators.deviceId;
+    blockCollection._allBlockItems.push(top);
+    blockCollection._blockItemByName[""] = top;
+
+
+      /**
      * Each BlockItem is referenced in the layout by its position in the attribute arrays. The same index value valid
      * for each attribute list. So can construct each BlockItem, providing it with its unique index and a pointer to
      * the layout schema - each BlockItem can then populate all its attributes from the schema.
@@ -798,6 +828,15 @@ getBlockItem(index)
   return (retBlockItem);
   }
 
+getBlockItemByMri(mri)
+{
+  for (let i=0; i < this._allBlockItems.length; i++) {
+    let bi = this._allBlockItems[i];
+    if (bi.mri() === mri) return bi
+  }
+  return null;
+}
+
 getBlockItemByName(blockName)
   {
   let retBlockItem = null;
@@ -830,17 +869,6 @@ getAllBlockItems()
 getLayoutSchema()
   {
   return (JSON.parse(JSON.stringify(this._layoutSchema)));
-  }
-
-putLayoutSchema()
-  {
-  MalcolmActionCreators.malcolmCall(
-    this.props.id, '_set_coords', {
-      X_COORD: this.props.blockPosition.x * this.props.graphZoomScale,
-      Y_COORD: this.props.blockPosition.y * this.props.graphZoomScale
-    }
-  );
-
   }
 
 setItemProtocolIndex(itemIndex, protocolIndex)
@@ -952,17 +980,6 @@ dispatcherCallback(payload)
       /* item is {name: <name>, x: <x>, y: <y>} */
       // item should be of type class DroppedPaletteInfo - defined in flowChartActions.
       this.droppedBlockFromList(item);
-      break;
-
-    case appConstants.MALCOLM_BLOCK_ATTRIBUTE_EDITED:
-      {
-      let blockItem = this.getBlockItemByName(item.blockName);
-      if (blockItem instanceof BlockItem)
-        {
-        console.log(`BlockCollection: Dispatch message received: MALCOLM_BLOCK_ATTRIBUTE_EDITED, Block ${blockItem.blockName()}  attribute  ${item.attribute_path}  value  ${item.newValue}`);
-        blockItem.putAttributeValue(item.attribute_path, item.newValue);
-        }
-      }
       break;
 
     case appConstants.REMOVE_BLOCK:

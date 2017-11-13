@@ -23,6 +23,7 @@ const styles = theme => ({
   disconnected: {
     color: theme.palette.disconnected
   }
+
 });
 
 class WidgetStatusIcon extends React.Component {
@@ -47,14 +48,13 @@ class WidgetStatusIcon extends React.Component {
      or fail somehow too
      */
 
-    let {classes, blockAttributeStatus, blockAttribute} = this.props;
+    let {classes, blockAttributeStatus, blockAttributeAlarm, theme} = this.props;
     let icon = "info_outline";
-    console.log(blockAttributeStatus);
 
     if (blockAttributeStatus !== undefined) {
       switch (blockAttributeStatus.value) {
         case 'pending':
-          icon = <CircularProgress/>;
+          icon = <CircularProgress size={theme.spacing.unit * 3}/>;
           break;
         case 'failure':
           icon = <Icon color="error">error</Icon>;
@@ -64,8 +64,8 @@ class WidgetStatusIcon extends React.Component {
       }
     }
 
-    if (blockAttribute.alarm !== undefined) {
-      switch(blockAttribute.alarm.severity) {
+    if (blockAttributeAlarm !== undefined) {
+      switch(blockAttributeAlarm.severity) {
         case AlarmStatus.UNDEFINED_ALARM:
         case AlarmStatus.INVALID_ALARM:
           icon = <Icon className={classes.disconnected}>highlight_off</Icon>;
@@ -90,11 +90,12 @@ class WidgetStatusIcon extends React.Component {
 }
 
 WidgetStatusIcon.propTypes = {
-  classes: PropTypes.object.isRequired,  
-  blockAttribute: PropTypes.object,
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  blockAttributeAlarm: PropTypes.object,
   blockAttributeStatus: PropTypes.object,
   blockName: PropTypes.string,
   attributeName: PropTypes.string
 };
 
-export default withStyles(styles)(WidgetStatusIcon);
+export default withStyles(styles, {withTheme: true})(WidgetStatusIcon);

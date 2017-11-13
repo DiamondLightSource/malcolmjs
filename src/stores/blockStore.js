@@ -183,17 +183,17 @@ function addBlock(blockItem) {
             inports.push({name: inportName, type: inportValueType, value: String(inportValue), connected: false, connectedTo: null});
 
             if (inportValue.indexOf('ZERO') !== -1) {
-              /* Then the block is connected to a .ZERO port,
+              /* Then the block is connected to a ZERO port,
                ie, it's disconnected, so no need to do anything
                */
-            } else if (inportValue.indexOf('ZERO') === -1) {
+            } else {
               /* The inport is connected to an outport,
                so need to do more here
                */
 
               initialEdgeInfoKeyValueName = blockItem.blockName() + "." + attrName;
 
-              initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName; // TODO: Revisit these colons - I suspect they should be dots (as was)
+              initialEdgeInfo[inportValue] = initialEdgeInfoKeyValueName;
 
             }
           } else if (allBlockInfo[inportValue.slice(0, inportValue.indexOf('.'))] !== undefined) {
