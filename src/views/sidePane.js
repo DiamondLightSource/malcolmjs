@@ -23,7 +23,8 @@ const styles = theme => ({
   },
   drawer: {
     width: theme.size.drawer,
-    overflowX: "hidden"
+    overflowX: "hidden",
+    marginBottom: document.getElementById('root').getAttribute("data-nav-height")
   },
   palette: {
     display: "flex",

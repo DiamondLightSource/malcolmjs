@@ -75,6 +75,7 @@ const styles = theme => ({
     right: theme.size.fab,
     width: theme.size.fab,
     height: theme.size.fab,
+    marginBottom: document.getElementById('root').getAttribute("data-nav-height")
   },
 });
 
