@@ -10,4 +10,10 @@ bundle.js
 lib
 coverage
 *.map
+.settings
+test.*
+out
+tsDist
+webstorm-debugger.js
+.flowconfig
 
