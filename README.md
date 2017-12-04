@@ -21,13 +21,13 @@ Go get some tea for 5 minutes...
 First of all you need the simulator running:
 
 ```bash
-/dls_sw/work/targetOS/zebra2-server/simserver
+/dls_sw/work/targetOS/PandABlocks-server/simserver -f /dls_sw/work/targetOS/PandABlocks-FPGA
 ```
 
 Then in another terminal you need the malcolm server:
 
 ```bash
-/home/tmc43/common/python/pymalcolm/examples/pandabox_onboard.py
+/dls_sw/work/targetOS/PandABlocks-webcontrol/test_start.sh
 ```
 
 Running: 
@@ -38,7 +38,7 @@ npm start
 
 Runs the app in the development mode.
 
-Open [http://localhost:3000/?wsHost=localhost:8080]() to view it in the browser.
+Open [http://localhost:3000/?wsHost=localhost:8008]() to view it in the browser.
 
 The page will reload if you make edits.
 
