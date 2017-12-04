@@ -328,6 +328,7 @@ addEdgePreview(eventdata)
       }
 
     endOfEdgePortOffsetX = this.props.blockStyling.outerRectangleWidth;
+    //endOfEdgePortOffsetX = 0; // tmporary test...
     endOfEdgePortOffsetY = BlockStore.drawingParams.verticalMargin + (BlockStore.drawingParams.interPortSpacing * outportArrayIndex);
     //endOfEdgePortOffsetY = this.props.blockStyling.outerRectangleHeight / (outportArrayLength + 1) * (outportArrayIndex + 1);
     portType             = "outport";
