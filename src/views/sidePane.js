@@ -126,7 +126,7 @@ class SidePane extends React.Component {
                 blockName={this.props.tabObject.label}
                 attributeName={"*" + paramName}
                 widgetType={tags.widgetType}
-                key={attributeName + paramName}
+                key={attributeName + paramName + attribute.method_parameters[paramName].value}
               />
             );
           }
@@ -178,7 +178,7 @@ class SidePane extends React.Component {
               blockName={this.props.tabObject.label}
               attributeName={attributeName}
               widgetType={tags.widgetType}
-              key={attributeName}
+              key={attributeName + attribute.value}
             />
           );
         }

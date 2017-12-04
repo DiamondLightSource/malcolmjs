@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import blockCollection from '../classes/blockItems';
 import {Input} from 'material-ui';
+import attributeStore from '../stores/attributeStore';
+
 
 export default class WidgetTextInput extends React.Component {
 
@@ -30,7 +32,6 @@ export default class WidgetTextInput extends React.Component {
       this.resetState();
     }
   }
-
   /*
   componentDidMount() {
     this.resetState();
@@ -60,6 +61,8 @@ export default class WidgetTextInput extends React.Component {
       if (this.props.attributeName[0] === "*") {
         // It's a parameter
         this.props.blockAttribute.value = this.state.value;
+        console.log("Update!");
+        attributeStore.emitChange()
       } else {
         // It's an attribute
         let blockItem = blockCollection.getBlockItemByName(this.props.blockName);

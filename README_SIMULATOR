@@ -1,8 +1,0 @@
-To run the PandABox simulator:
-
-/dls_sw/work/targetOS/zebra2-server/simserver
-
-Then in another terminal:
-cd /home/ig43/zebra2/pymalcolm
-dls-python ./examples/pandabox_onboard.py
-
