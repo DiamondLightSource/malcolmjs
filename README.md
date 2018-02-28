@@ -7,52 +7,60 @@ Within a directory of your choosing:
 git clone git@github.com:/dls-controls/malcolmjs.git
 ```
 
-In the root of this project directory,
-type:
-```bash
-yarn install
-```
-
-go get some tea for 5 minutes...
-
-
-
-# Building
-
-Uses webpack (version 3).
-From the project root directory, use the following command to build bundle.js
+You need a local version of [node](https://nodejs.org) (v6 upwards should work) which you can install
+on /scratch and put on your path. Then in the root of this project directory, type:
 
 ```bash
-webpack
+npm install
 ```
 
-#Reconfiguring the server URL
-In js/utils/config.js is the class Config constructor; this is where to
-specify any new PandA type servers. The key is a unique identifier to refer to the server
-url internally. The url string follows as the value.
+Go get some tea for 5 minutes...
 
-```javascript
- this._serverURLTable = Object.freeze({
-    pc70     : 'ws://pc0070.cs.diamond.ac.uk:8080/ws',
-    pc4      : 'ws://pc0004.cs.diamond.ac.uk:8080/ws',
-    isaDev   : 'ws://172.23.252.202/ws',
-    isaSpare : 'ws://172.23.252.201/ws',
-    simulator: 'ws://localhost:8080/ws'
-  });
-```
-Around the very last vew lines of js/wsWebSocketClient.js
-you can hard code the server to use. Example:
-```javascript
-config.setServerName('pc4');
-```
+# Running in development mode
 
-Then it's just a matter of typing webpack and waiting a few seconds.
+First of all you need the simulator running:
 
-#Browser rendering
-In a browser on you local machine, browse to malcolmjs/index.html
-e.g.
 ```bash
-file:///scratch/test/malcolmjs/index.html
+/dls_sw/work/targetOS/PandABlocks-server/simserver -f /dls_sw/work/targetOS/PandABlocks-FPGA
 ```
-index.html will load the bundle.js file transpiled with babel via webpack.
 
+Then in another terminal you need the malcolm server:
+
+```bash
+/dls_sw/work/targetOS/PandABlocks-webcontrol/test_start.sh
+```
+
+Running: 
+
+```bash
+npm start
+```
+
+Runs the app in the development mode.
+
+Open [http://localhost:3000/?wsHost=localhost:8008]() to view it in the browser.
+
+The page will reload if you make edits.
+
+You will also see any lint errors in the console.
+
+# Building a production version
+
+Running:
+ 
+```bash
+npm run build
+```
+
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.
+
+The contents of the build directory can now be copied to the pymalcolm malcolm/modules/web/www directory
+
+# More information
+
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+Further information on building can be found there.

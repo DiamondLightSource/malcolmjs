@@ -1,4 +1,0 @@
-#!/bin/bash
-
-docco js/*.js js/actions/*.js js/dispatcher/appDispatcher.js js/classes/*.js js/stores/*.js js/views/*.js js/utils/*.js js/constants/*.js
-
