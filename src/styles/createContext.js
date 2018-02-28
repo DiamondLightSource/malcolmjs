@@ -3,7 +3,7 @@
 import { create, SheetsRegistry } from 'jss';
 import preset from 'jss-preset-default';
 import { createMuiTheme } from 'material-ui/styles';
-import { blue, orange, purple } from 'material-ui/colors';
+import { blue, orange, purple, green } from 'material-ui/colors';
 import createGenerateClassName from 'material-ui/styles/createGenerateClassName';
 import params from '../utils/queryParams';
 
@@ -22,7 +22,9 @@ const theme = createMuiTheme({
     },
     ports: {
       bool: blue,
-      int32: orange
+      int32: orange,
+      motor: green,
+      NDArray: purple
     },
   },
   size: {
