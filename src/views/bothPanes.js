@@ -159,9 +159,9 @@ class BothPanes extends React.Component {
           <IconButton
             onClick={this.toggleLeft}
             className={classNames(this.state.leftOpen && classes.hideDesktop)}
-            color="contrast"
+            color="secondary"
           >
-            menu
+              <Icon>menu</Icon>
           </IconButton>
           <MjsBreadcrumbs/>
           {/*<IconButton>open_in_new</IconButton>*/}
@@ -208,7 +208,7 @@ class BothPanes extends React.Component {
     if (flowChartStore.getHeldBlock() === null) {
       fab = (
         <Button
-          fab
+          variant="fab"
           className={classes.fab}
           onClick={this.toggleRight}
         >
@@ -227,7 +227,7 @@ class BothPanes extends React.Component {
         <Hidden xsDown>
           <div>
             <Drawer
-              type="persistent"
+              variant="persistent"
               anchor="left"
               open={this.state.leftOpen}
             >
@@ -237,7 +237,7 @@ class BothPanes extends React.Component {
               {appBar}
             </div>
             <Drawer
-              type="persistent"
+              variant="persistent"
               anchor="right"
               open={this.state.sidebarOpen}
             >
@@ -248,7 +248,7 @@ class BothPanes extends React.Component {
         <Hidden smUp>
           <div>
             <Drawer
-              type="temporary"
+              variant="temporary"
               anchor="left"
               open={this.state.leftOpen}
               onRequestClose={this.toggleLeft}
@@ -262,7 +262,7 @@ class BothPanes extends React.Component {
               {appBar}
             </div>
             <Drawer
-              type="temporary"
+              variant="temporary"
               anchor="right"
               open={this.state.sidebarOpen}
               onRequestClose={this.toggleRight}

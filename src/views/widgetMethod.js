@@ -25,7 +25,7 @@ export default class WidgetMethod extends React.Component {
   render() {
     return (
       <Button
-        raised
+        variant="raised"
         disabled={!this.props.blockAttributeWriteable}
         className={this.props.className}
         onClick={this.onClick}

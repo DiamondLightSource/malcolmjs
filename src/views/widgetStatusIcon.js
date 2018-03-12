@@ -49,7 +49,7 @@ class WidgetStatusIcon extends React.Component {
      */
 
     let {classes, blockAttributeStatus, blockAttributeAlarm, theme} = this.props;
-    let icon = "info_outline";
+  let icon = <Icon>info_outline</Icon>;
 
     if (blockAttributeStatus !== undefined) {
       switch (blockAttributeStatus.value) {

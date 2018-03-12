@@ -9,7 +9,7 @@ import blockCollection from '../classes/blockItems';
 import attributeStore from '../stores/attributeStore';
 import MalcolmUtils from '../utils/MalcolmUtils';
 import appConstants from '../constants/appConstants';
-import {Typography, ListItem, ListItemText, Button, Icon, Divider, List, withStyles, Toolbar, IconButton} from 'material-ui';
+import {Typography, ListItem, ListItemText, Button, Icon, Divider, withStyles, Toolbar, IconButton} from 'material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 import MalcolmActionCreators from '../actions/MalcolmActionCreators';
 import DNDPaletteSelector from './dndPaletteSelector';
@@ -221,7 +221,7 @@ class SidePane extends React.Component {
         </ListItem>
       );
       blockAttributeDivs.push(
-        <Collapse in={expanded} transitionDuration="auto" unmountOnExit
+        <Collapse in={expanded} timeout="auto" unmountOnExit
                   key={groupName + "collapse"}>
           {groupsObject[groupName]}
         </Collapse>
@@ -323,7 +323,7 @@ class SidePane extends React.Component {
     return (
       <div className={classes.drawer}>
         <Toolbar disableGutters>
-          <IconButton onClick={onClose}>close</IconButton>
+            <IconButton onClick={onClose}><Icon>close</Icon></IconButton>
           {title}
           {/*<IconButton>open_in_new</IconButton>*/}
         </Toolbar>
