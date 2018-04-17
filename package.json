@@ -1,0 +1,33 @@
+{
+  "name": "malcolmjs",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "radium": "^0.24.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "react-scripts": "1.1.4",
+    "redux": "^3.7.2",
+    "redux-socket.io": "^1.4.0",
+    "redux-thunk": "^2.2.0",
+    "socket.io": "^2.1.0",
+    "socket.io-client": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "cypress": "^2.1.0",
+    "nodemon": "^1.17.3",
+    "react-test-renderer": "^16.3.2",
+    "storybook": "^1.0.0",
+    "storybook-router": "^0.3.4"
+  }
+}
