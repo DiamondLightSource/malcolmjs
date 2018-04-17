@@ -19,12 +19,12 @@
     "socket.io-client": "^2.1.0"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,scss,css}": [
+    "src/**/*.{js,jsx,json}": [
       "eslint --fix",
       "prettier --config .prettierrc --write",
       "git add"
     ],
-    "cypress/**/*.{js,jsx,json,scss,css}": [
+    "cypress/**/*.{js,jsx,json}": [
       "eslint --fix",
       "prettier --config .prettierrc --write",
       "git add"
