@@ -4,7 +4,7 @@ Malcolm
 Malcolm is a middlelayer framework that implements high level configure/run
 behaviour of control system components like those used in continuous scans.
 This `repository`_ contains a JavaScript client and Web GUI (malcolmjs). 
-There is also a Python implementation 'pymalcolm'_ allowing the 
+There is also a Python implementation `pymalcolm`_ allowing the 
 creation of Malcolm servers and clients and a `jmalcolm`_ Java client.
 
 Malcolm was created as part of the `Mapping project`_ at `Diamond Light Source`_

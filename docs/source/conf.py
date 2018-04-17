@@ -22,28 +22,37 @@ import shlex
 #sys.path.insert(0, os.path.abspath('.'))
 
 # -- General configuration ------------------------------------------------
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.graphviz',
+    'IPython.sphinxext.ipython_console_highlighting',
+]
 
-# If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
+autoclass_content = "both"
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = []
+autodoc_member_order = 'bysource'
+
+graphviz_output_format = "svg"
+
+# If true, Sphinx will warn about all references where the target can't be found
+nitpicky = True
+
+# The name of a reST role (builtin or Sphinx extension) to use as the default
+# role, that is, for text marked up `like this`
+default_role = "any"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
+# The suffix of source filenames.
 source_suffix = '.rst'
 
-# The encoding of source files.
-#source_encoding = 'utf-8-sig'
-
 # The master toctree document.
-master_doc = 'index'
+master_doc = 'contents'
 
 # General information about the project.
 project = u'malcolmjs'
@@ -94,63 +103,38 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-# A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
+intersphinx_mapping = dict(
+    python=('https://docs.python.org/2.7/', None),
+    scanpointgenerator=(
+        'http://scanpointgenerator.readthedocs.io/en/latest/', None),
+    numpy=('https://docs.scipy.org/doc/numpy/', None),
+    tornado=('http://www.tornadoweb.org/en/stable/', None),
+)
 
-# If true, keep warnings as "system message" paragraphs in the built documents.
-#keep_warnings = False
-
-# If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
-
+# A dictionary of graphviz graph attributes for inheritance diagrams.
+inheritance_graph_attrs = dict(rankdir="TB")
 
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#html_theme_options = {}
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_context = dict(css_files=[])
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
-
-# The name for this set of Sphinx documents.  If None, it defaults to
-# "<project> v<release> documentation".
-#html_title = None
-
-# A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
-
-# The name of an image file (relative to this directory) to place at the top
-# of the sidebar.
-#html_logo = None
-
-# The name of an image file (within the static path) to use as favicon of the
-# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-#html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-# Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-#html_extra_path = []
-
-# If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
-
-# If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
@@ -159,45 +143,20 @@ html_static_path = ['_static']
 # template names.
 #html_additional_pages = {}
 
-# If false, no module index is generated.
-#html_domain_indices = True
-
-# If false, no index is generated.
-#html_use_index = True
-
-# If true, the index is split into individual pages for each letter.
-#html_split_index = False
-
-# If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
-
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-#html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
-#html_show_copyright = True
+html_show_copyright = True
 
-# If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
+# Output file base name for HTML help builder.
+htmlhelp_basename = 'malcolmdoc'
 
-# This is the file name suffix for HTML files (e.g. ".xhtml").
-#html_file_suffix = None
+# Logo
+html_logo = 'malcolm-logo.svg'
+html_favicon = 'malcolm-logo.ico'
 
-# Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
 
-# A dictionary with options for the search language support, empty by default.
-# Now only 'ja' uses this config value
-#html_search_options = {'type': 'default'}
-
-# The name of a javascript file (relative to the configuration directory) that
-# implements a search results scorer. If empty, the default will be used.
-#html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'malcolmjsdoc'
