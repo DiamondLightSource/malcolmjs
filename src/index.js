@@ -15,7 +15,7 @@ const history = createHistory();
 const router = routerMiddleware(history);
 
 const middleware = [router, thunk];
-let store = createStore(AppReducer, applyMiddleware(...middleware));
+const store = createStore(AppReducer, applyMiddleware(...middleware));
 
 ReactDOM.render(
   <Provider store={store}>
