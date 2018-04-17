@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "history": "^4.7.2",
     "radium": "^0.24.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -17,7 +18,25 @@
     "socket.io": "^2.1.0",
     "socket.io-client": "^2.1.0"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,scss,css}": [
+      "eslint --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ],
+    "cypress/**/*.{js,jsx,json,scss,css}": [
+      "eslint --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ],
+    "src/**/*.{scss,css}": [
+      "stylelint --config=.stylelintrc --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ]
+  },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "serve:prod": "npm run build & http-server ./build -p 3030 ",
@@ -26,16 +45,29 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "e2e:interactive": "start-server-and-test serve:prod http://localhost:3030 cy:open",
-    "e2e": "start-server-and-test serve:prod http://localhost:3030 cy:run"
+    "e2e": "start-server-and-test serve:prod http://localhost:3030 cy:run",
+    "lint:js": "eslint --ext=js --ext=jsx ./src",
+    "lint:css": "stylelint --config=.stylelintrc './src/**/*.css'"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
     "cypress": "^2.1.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
     "http-server": "^0.11.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.4",
     "nodemon": "^1.17.3",
+    "prettier": "^1.12.1",
     "react-test-renderer": "^16.3.2",
     "start-server-and-test": "^1.4.1",
     "storybook": "^1.0.0",
-    "storybook-router": "^0.3.4"
+    "storybook-router": "^0.3.4",
+    "stylelint": "^9.2.0",
+    "stylelint-config-standard": "^18.2.0"
   }
 }

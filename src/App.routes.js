@@ -1,12 +1,11 @@
 import React from 'react';
-import { Route } from 'react-router-dom'
-import App from './App'
+import { Route } from 'react-router-dom';
+import App from './App';
 
-const AppRouter = (props) => {
-  return(
+const AppRouter = () => (
   <div>
     <Route exact path="/" component={App} />
-  </div>);
-}
+  </div>
+);
 
-export default AppRouter
+export default AppRouter;
