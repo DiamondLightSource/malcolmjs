@@ -12,8 +12,8 @@ script:
   - npm run lint:css
   - npm run lint:js
   # do a production build
-  - npm build 
+  - npm run build 
   # run the unit tests
-  - npm test
+  - npm run test
   # run the e2e tests
   - npm run e2e
