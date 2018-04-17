@@ -21,7 +21,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --verbose",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e:interactive": "cypress open",
+    "e2e": "cypress run"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
