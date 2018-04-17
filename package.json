@@ -17,7 +17,18 @@
     "socket.io": "^2.1.0",
     "socket.io-client": "^2.1.0"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,scss,css}": [
+      "prettier --config .prettierrc --write",
+      "git add"
+    ],
+    "cypress/**/*.{js,jsx,json,scss,css}": [
+      "prettier --config .prettierrc --write",
+      "git add"
+    ]
+  },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "serve:prod": "npm run build & http-server ./build -p 3030 ",
@@ -32,7 +43,10 @@
     "concurrently": "^3.5.1",
     "cypress": "^2.1.0",
     "http-server": "^0.11.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.4",
     "nodemon": "^1.17.3",
+    "prettier": "^1.12.1",
     "react-test-renderer": "^16.3.2",
     "start-server-and-test": "^1.4.1",
     "storybook": "^1.0.0",
