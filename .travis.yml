@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "iojs"
+  - "8"
+
+script:
+  # check the code meets coding standards
+  - npm run lint:css
+  - npm run lint:js
+  # do a production build
+  - npm build 
+  # run the unit tests
+  - npm test
+  # run the e2e tests
+  - npm run e2e
