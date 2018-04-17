@@ -20,16 +20,21 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve:prod": "npm run build & http-server ./build -p 3030 ",
     "test": "react-scripts test --env=jsdom --verbose",
     "eject": "react-scripts eject",
-    "e2e:interactive": "cypress open",
-    "e2e": "cypress run"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "e2e:interactive": "start-server-and-test serve:prod http://localhost:3030 cy:open",
+    "e2e": "start-server-and-test serve:prod http://localhost:3030 cy:run"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
     "cypress": "^2.1.0",
+    "http-server": "^0.11.1",
     "nodemon": "^1.17.3",
     "react-test-renderer": "^16.3.2",
+    "start-server-and-test": "^1.4.1",
     "storybook": "^1.0.0",
     "storybook-router": "^0.3.4"
   }

@@ -1,6 +1,6 @@
 describe('MalcolmJS', function () {
   it('.should() - load correctly', function () {
-    cy.visit('http://localhost:3000')
+    cy.visit('/')
     cy.title().should('equal', 'MalcolmJS')
   })
 });
