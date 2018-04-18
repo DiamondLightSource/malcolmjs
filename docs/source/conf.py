@@ -29,7 +29,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.graphviz',
-    'IPython.sphinxext.ipython_console_highlighting',
 ]
 
 autoclass_content = "both"
