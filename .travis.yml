@@ -28,3 +28,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: dls-controls/malcolmjs
+    all_branches: true
