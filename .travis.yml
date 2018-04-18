@@ -15,5 +15,6 @@ script:
   - npm run build 
   # run the unit tests
   - npm run test
+  - npm run ci:upload-coverage
   # run the e2e tests
   - npm run e2e

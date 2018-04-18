@@ -40,7 +40,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "serve:prod": "npm run build & http-server ./build -p 3030 ",
-    "test": "react-scripts test --env=jsdom --verbose",
+    "test": "react-scripts test --env=jsdom --verbose --coverage",
+    "ci:upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
+    "coveralls": "^3.0.0",
     "cypress": "^2.1.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
