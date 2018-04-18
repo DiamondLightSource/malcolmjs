@@ -46,9 +46,7 @@ how Diamond uses it, but it can also be used in other ways:
 How is the documentation structured?
 ------------------------------------
 
-The documentation is structured into a series of `tutorials-doc` and some
-general `reference-doc` documentation. End users and developers need different
-documentation, so links for various categories of user are listed below:
+The documentation is structured into two main sections; one targeted at end users and the other at developers/power users.
 
 .. _installation_guide:
 

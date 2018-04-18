@@ -1,7 +1,7 @@
 Malcolm
 =======
 
-|build_status| |coverage| |health| |pypi_version| |readthedocs|
+|buildstatus| |coverage| |health| |readthedocs|
 
 Malcolm is a middlelayer framework that implements high level configure/run
 behaviour of control system components like those used in continuous scans. 
@@ -33,7 +33,7 @@ License
 APACHE License. (see `LICENSE`_)
 
 
-.. |build_status| image:: https://travis-ci.org/dls-controls/pymalcolm.svg?branch=master
+.. |buildstatus| image:: https://travis-ci.org/dls-controls/pymalcolm.svg?branch=master
     :target: https://travis-ci.org/dls-controls/pymalcolm
     :alt: Build Status
 

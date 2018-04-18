@@ -6,36 +6,19 @@ Contents
 
     Introduction <index>
 
-.. _tutorials-doc:
+.. toctree::
+    :caption: User Guide
+    
+    userguide/intro
 
 .. toctree::
-    :caption: Tutorials
-
-    tutorials/hello
-    tutorials/counter
-    tutorials/generator
-    tutorials/areadetector
-    tutorials/scanning
-
-.. _reference-doc:
-
+    :caption: System Maintenance Guide 
+  
+    SMG/architecture_context
+    SMG/architecture
+   
 .. toctree::
-    :caption: Reference
-
-    reference/glossary
-    reference/structure
-    reference/messages
-    reference/tags
-    reference/statesets
-    reference/contributing
-    reference/release_notes
-
-.. toctree::
-    :caption: API
-
-    api/core_api
-    api/tags_api
-    build/modules_api
+    :caption: API  
 
 * :ref:`genindex`
 

@@ -6,13 +6,14 @@ MODULEVER=0.0
 # Override with any release info
 -include Makefile.private
 
+# Build docs
+docs:
+	sphinx-build -b html docs/source docs/build/html
+
 # Clean the module
 clean:
 	rm -rf docs/html
 	find -name '*~' -delete
 
-# Build docs
-docs:
-	sphinx-build -b html docs docs/html
 
 .PHONY: docs
