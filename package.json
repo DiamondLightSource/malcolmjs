@@ -19,12 +19,12 @@
     "socket.io-client": "^2.1.0"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,scss,css}": [
+    "src/**/*.{js,jsx,json}": [
       "eslint --fix",
       "prettier --config .prettierrc --write",
       "git add"
     ],
-    "cypress/**/*.{js,jsx,json,scss,css}": [
+    "cypress/**/*.{js,jsx,json}": [
       "eslint --fix",
       "prettier --config .prettierrc --write",
       "git add"
@@ -40,7 +40,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "serve:prod": "npm run build & http-server ./build -p 3030 ",
-    "test": "react-scripts test --env=jsdom --verbose",
+    "test": "react-scripts test --env=jsdom --verbose --coverage",
+    "ci:upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -51,11 +52,12 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
+    "coveralls": "^3.0.0",
     "cypress": "^2.1.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
     "http-server": "^0.11.1",
