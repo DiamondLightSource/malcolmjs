@@ -16,7 +16,8 @@ script:
 - codecov
 - npm run e2e
 before_deploy:
-  - $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+  - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+  - $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR
 deploy:
   provider: releases
   api_key:

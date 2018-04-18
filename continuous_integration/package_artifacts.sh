@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
 
+working_dir=$1
+cd $working_dir
+
 VERSION=`git describe --tags --long`
 echo "Packageing version: $VERSION"
 
-pwd
- 
 if [ -d `eval echo "./artifacts"` ]; then
 	rm -rf ./artifacts
 fi
