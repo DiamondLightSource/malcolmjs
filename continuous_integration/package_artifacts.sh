@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-VERSION=`eval git describe --tags --long`
+VERSION=`git describe --tags --long`
 echo "Packageing version: $VERSION"
 
+pwd
+ 
 if [ -d `eval echo "./artifacts"` ]; then
 	rm -rf ./artifacts
 fi
