@@ -16,15 +16,14 @@ script:
 - codecov
 - npm run e2e
 before_deploy:
-  - zip ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.zip ${REPO}/build
-  - tar -zcf ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz ${REPO}/build
+  - $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
 deploy:
   provider: releases
   api_key:
     secure: Nzws/rGOzhB+0LQbqTzfzD12Gl5KGYcGUKdOwmb5PHF0/V1SJTRhZX2NVH4WBS/wMqUqYIp/K0jxneGKCLqgb6BXumnddHDTfBT/waO526hHMZ4tJv+AiUmtg/CythoNytdPgDlmWYzjpRYvfDwVENwkje/pDnm76JJdyEE351IbNFxLqGs2uzWqKd72ZduKhvUs+KwSrCCephQqPvKqXq/7fiGdngC3U/hx7eXMdF2/F8ZEY60WGMlTRa1Ncsi184FyZwwbuxNRLtrMmXwU4z79shnZ/GuG6GJqK/KI5aNaY0XP0wv7xR4BvE0KPAVcRfphTk6A/HHYi5GsrhEQXOnBY+1caLkSdUqd+E8yZOWGckL50N9RZhDWdSvgkO50F6E4JVDRY7t0LQK2OoBBKoy4ovcRHZG8itdQUhXIQD/2nWlBSZjffRaVAHfBEAgq+m2Ot/61Cu/fqDS5eFuViy530Ohai1z1G+oZKFpsiC2wDDRQex8hhXIeWo14nZnfeXlp9djO4NvsscpOEeyAcMpy9xzB5XdlMP5zq2UTOaGi6MRsUmjORRCkjd1F/p73tN9D2nBtLgPDCgChShelzCiKPyJTKGySXublWVQiaoSY3osVwUPCQU2I4fR2/UD5aYFTTCrrYTscrgZhgwh/h9dQXv+4huFN9PULN9Rh88k=
   file: 
-    - ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.zip
-    - ${TRAVIS_BUILD_DIR}${REPO}-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+    - ${TRAVIS_BUILD_DIR}/artifacts/*.zip
+    - ${TRAVIS_BUILD_DIR}/artifacts/*.tar.gz
   skip_cleanup: true
   on:
     repo: dls-controls/malcolmjs
