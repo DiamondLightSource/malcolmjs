@@ -37,8 +37,8 @@ APACHE License. (see `LICENSE`_)
     :target: https://travis-ci.org/dls-controls/pymalcolm
     :alt: Build Status
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/pymalcolm/branch/version1/graph/badge.svg
-    :target: https://codecov.io/gh/dls-controls/pymalcolm/branch/version1/
+.. |coverage| image:: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/graph/badge.svg
+    :target: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/
     :alt: Test coverage
 
 .. |readthedocs| image:: https://readthedocs.org/projects/malcolmjs/badge/?version=latest
