@@ -28,3 +28,4 @@ deploy:
   on:
     repo: dls-controls/malcolmjs
     all_branches: true
+    tags: true
