@@ -10,6 +10,9 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AppReducer from './App.reducer';
 import AppRouter from './App.routes';
+import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
+import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
+import { malcolmGetAction } from './malcolm/malcolmActionCreators';
 
 const history = createHistory();
 const router = routerMiddleware(history);
@@ -18,16 +21,15 @@ const socket = io('http://localhost:8000', {
   transports: ['websocket'],
 });
 
-socket.on('connect', () => {
-  socket.send('hi');
+const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socket);
 
-  socket.on('message', msg => {
-    console.log(`got: ${msg}`);
-  });
-});
-
-const middleware = [router, thunk];
+const middleware = [router, thunk, malcolmReduxMiddleware];
 const store = createStore(AppReducer, applyMiddleware(...middleware));
+
+configureMalcolmSocketHandlers(socket, store);
+
+// example dispatch, this will be deleted
+store.dispatch(malcolmGetAction(['BL18I:XSPRESS3', 'state', 'value']));
 
 ReactDOM.render(
   <Provider store={store}>

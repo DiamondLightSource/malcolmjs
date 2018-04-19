@@ -11,7 +11,7 @@ console.log('listening on port ', port);
 
 function handleMessage(socket, message) {
   console.log(message);
-  socket.send(message + ' received');
+  socket.send(JSON.stringify(message) + ' received');
 }
 
 function handleDisconnect() {
