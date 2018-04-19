@@ -9,7 +9,7 @@ function findNextId(messagesInFlight) {
   if (!messagesInFlight || messagesInFlight.length === 0) {
     return 1;
   }
-  const maxId = Math.max(messagesInFlight.map(m => m.id));
+  const maxId = Math.max(...messagesInFlight.map(m => m.id));
   return maxId + 1;
 }
 
