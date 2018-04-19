@@ -49,6 +49,7 @@
     "build": "react-scripts build",
     "serve:prod": "npm run build & concurrently \"npm run server\" \"http-server ./build -p 3030\"",
     "test": "react-scripts test --env=jsdom --verbose --coverage",
+    "test:watch": "react-scripts test --env=jsdom --verbose --watch",
     "ci:upload-coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
