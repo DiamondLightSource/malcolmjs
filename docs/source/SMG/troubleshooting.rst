@@ -1,1 +1,2 @@
-troubleshooting.rst
+Troubleshooting
+================

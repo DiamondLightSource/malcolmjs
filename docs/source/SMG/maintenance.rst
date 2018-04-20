@@ -1,1 +1,2 @@
-maintenance.rst
+Maintenance
+==============

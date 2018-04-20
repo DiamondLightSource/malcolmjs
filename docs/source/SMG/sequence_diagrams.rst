@@ -1,1 +1,2 @@
-sequence_diagrams.rst
+Sequence Diagrams
+==================

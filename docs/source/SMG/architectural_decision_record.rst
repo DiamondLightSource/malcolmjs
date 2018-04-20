@@ -1,1 +1,2 @@
-architectural_decision_record.rst
+Architectural Decision Record
+=============================
