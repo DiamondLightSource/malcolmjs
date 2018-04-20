@@ -1,9 +1,9 @@
 Malcolm
 =======
 
-|buildstatus| |coverage| |readthedocs|
+|buildstatus| |coverage| |readthedocs| |code analysis: airbnb| |code style: prettier|
 
-Malcolm is a middlelayer framework that implements high level configure/run
+MalcolmJS is a user interface layer for interacting with Malcolm. Malcolm is a middlelayer framework that implements high level configure/run
 behaviour of control system components like those used in continuous scans. 
 This repository contains a Javascript implementation providing a client and Web GUI. 
 
@@ -44,6 +44,14 @@ APACHE License. (see `LICENSE`_)
 .. |readthedocs| image:: https://readthedocs.org/projects/malcolmjs/badge/?version=latest
     :target: http://malcolmjs.readthedocs.org
     :alt: Documentation
+
+.. |code analysis: airbnb| image:: https://img.shields.io/badge/code_analysis-eslint_airbnb-ff69b4.svg
+    :target: http://airbnb.io/javascript/
+    :alt: Code analysis: eslint - airbnb
+
+.. |code style: prettier| image:: https://img.shields.io/badge/code_style-prettier-ff69b4.svg
+    :target: https://github.com/prettier/prettier
+    :alt: Code style: prettier
 
 .. _CHANGELOG:
     https://github.com/dls-controls/malcolmjs/blob/master/CHANGELOG.rst
