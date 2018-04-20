@@ -34,20 +34,16 @@ APACHE License. (see `LICENSE`_)
 
 
 .. |buildstatus| image:: https://travis-ci.org/dls-controls/malcolmjs.svg?branch=version1
-    :target: https://travis-ci.org/dls-controls/pymalcolm
+    :target: https://travis-ci.org/dls-controls/malcolmjs
     :alt: Build Status
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/pymalcolm/branch/version1/graph/badge.svg
-    :target: https://codecov.io/gh/dls-controls/pymalcolm/branch/version1/
+.. |coverage| image:: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/graph/badge.svg
+    :target: https://codecov.io/gh/dls-controls/malcolmjs/branch/version1/
     :alt: Test coverage
 
 .. |readthedocs| image:: https://readthedocs.org/projects/malcolmjs/badge/?version=latest
     :target: http://malcolmjs.readthedocs.org
     :alt: Documentation
-
-.. |health| image:: https://landscape.io/github/dls-controls/pymalcolm/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/dls-controls/pymalcolm/master
-   :alt: Code Health
 
 .. _CHANGELOG:
     https://github.com/dls-controls/malcolmjs/blob/master/CHANGELOG.rst
