@@ -83,5 +83,15 @@
     "storybook": "^1.0.0",
     "stylelint": "^9.2.0",
     "stylelint-config-standard": "^18.2.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/*.stories.js",
+      "!**/stories/index.js",
+      "!src/index.js",
+      "!src/registerServiceWorker.js",
+      "!src/App.reducer.js"
+    ]
   }
 }
