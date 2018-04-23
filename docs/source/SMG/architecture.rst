@@ -32,6 +32,27 @@ TODO: diagram of components
 Description of components
 
 
+Deployment View
+###################
+
+There are two main deployment scenarios, the primary deployment scenario is where MalcolmJS is packaged up with Malcolm and served from a web server inside Malcolm on the same PANDA box.
+
+.. figure:: architecture_diagrams/malcolmjs_local_deployment.png
+    :align: center
+
+    Serving MalcolmJS from the same server as Malcolm
+
+
+The second scenario is where MalcolmJS is served from a different web server inside the Diamond network (it may or may not be from a PANDA box in this case) but connecting to the Malcolm socket on a different PANDA box.
+
+.. figure:: architecture_diagrams/malcolmjs_remote_deployment.png
+    :align: center
+
+    Connecting to Malcolm on a different server
+
+UI Mockups
+#################
+
 
 Technologies
 #############
@@ -109,6 +130,7 @@ Branches should use the naming convention ``feature/{descriptive name}-#{issue n
 
 When creating a pull request you should also add the comment
 ::
+
     connect to #{issue number}
 
 to the description to link the pull request to the issue.

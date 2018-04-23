@@ -4,7 +4,31 @@ Setting up a Development Environment
 Code Development
 ##################
 
+To develop MalcolmJS you need a stable version of `node <https://nodejs.org/en/>`_ (>=8.9.0) and your OS needs to be able to run Chromium (for the end-to-end tests).
 
+You will also need a git client of some form and then you can clone the code from `the MalcolmJS github page <https://github.com/dls-controls/malcolmjs>`_
+
+Navigate to the root of the repository and run
+::
+
+    npm install
+
+This will install all dependencies and development dependencies to run and develop MalcolmJS.
+
+The available commands for developing with are listed in ``package.json`` as well as being documented in the :ref:`Maintenance` chapter; 
+all commands are runnable from the shell using node so should be cross platform. The only exception is the ``ci:upload-coverage`` target 
+as this requires ``cat`` and assumes the build is running on a linux machine.
+
+However, the main commands needed to develop are:
+::
+
+    npm start
+    npm run storybook
+    npm test
+    npm run e2e
+
+
+While in theory you can develop the code in any text editor, it is recommended that some form of IDE is used with syntax support for JavaScript and React. Both Webstorm and Visual Studio Code were used during this latest phase of development.
 
 
 Documentation Development
