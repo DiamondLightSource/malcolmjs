@@ -20,9 +20,58 @@ The other minor use case is to allow engineers to view block attributes on their
 Containers
 ###########
 
-TODO: container diagram
+The container view for MalcolmJS breaks down in to the main user interface categories as well as the interface for interacting with Malcolm.
 
-Description of container level
+.. figure:: architecture_diagrams/malcolmjs_containers.png
+    :align: center
+
+    MalcolmJS container view
+
+**Malcolm Interface:-**
+TODO
+
+**Block Details:-**
+TODO
+
+**View Details:-**
+TODO
+
+**Navigation:-**
+TODO
+
+**Attribute Tracking:-**
+TODO
+
+**Connection Monitoring:-**
+TODO
+
+One of the best ways to think about the high level structure for MalcolmJS is to consider the high level user interface mock ups. They show the main sections of the interface and thus how the application breaks down into containers.
+
+.. figure:: architecture_diagrams/malcolmjs_desktop_mockup.png
+    :align: center
+
+    MalcolmJS desktop view
+
+
+The user interface breaks down in to three main components:
+
+- the parent block (the left panel)
+- the layout view (the central panel)
+- the child block (the right panel)
+
+Users typically navigate to a top level block and then navigate down the block structure depending on their needs. They can change the view in the middle panel for any that are available in the parents block details panel in the views section.
+
+Once they click on a block in the central panel then it will display information about that child block in the right hand panel. This information will include attributes, and may additionally include views and methods of its own. If the user clicks on the view button for the child's layout attribute then the contents of the child panel become the contents of the parent panel and the user can navigate one more level down the tree.
+
+On a multi-monitor system it can be useful to keep track of block details for various blocks in the tree, this is why there is a pop-out button. The user can choose to show the attributes for a particular block in a standalone window. It it worth noting that this is also what the mobile view would display.
+
+
+.. figure:: architecture_diagrams/malcolmjs_phone_mockup.png
+    :align: center
+
+    MalcolmJS mobile view
+
+The mobile view is simply intended to give engineers a quick view on the information being output from devices whilst adjusting them, it is not meant to be a full MalcolmJS environment. Never-the-less, they can click on an attribute for more information and it will close the draw for the attributes and show graphs/tables/etc. in the central panel just like the desktop version.
 
 Components
 ############
@@ -49,9 +98,6 @@ The second scenario is where MalcolmJS is served from a different web server ins
     :align: center
 
     Connecting to Malcolm on a different server
-
-UI Mockups
-#################
 
 
 Technologies
