@@ -49,10 +49,7 @@ Then to run the sphinx build run:
 	sphinx-build -b html docs/source docs/build/html
 
 
-To then serve the built documentation you need to have a system for serving a static site. A recommended option is the npm package ``http-server`` which can be installed with ``npm i -g http-server``), then the docs are served with:
-::
-
-    http-server .\docs\build\html\ -p 4000
+You can then open ``.\docs\build\html\index.html`` in a browser to view the results.
 
 
 The diagrams are all made with `draw.io <https://www.draw.io/>`_ and the files exported as xml so they can be versioned in this code base and edited by others. If you edit the diagrams you should export a copy of the updated xml back to the ``architectural_diagrams`` folder as well as an updated ``png``.
