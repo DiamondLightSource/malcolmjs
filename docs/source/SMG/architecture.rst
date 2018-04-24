@@ -83,7 +83,25 @@ Components
 
     MalcolmJS component view
 
-**TODO**
+- **Malcolm Interface**
+    The Malcolm Interface consists of all the parts needed to integrate it in to the Redux lifecycle. It is better described by the diagram below:
+
+	.. figure:: architecture_diagrams/malcolmjs_redux_integration.png
+	    :align: center
+
+	    Malcolm redux integration
+
+    By ensuring that components need to create actions using the Malcolm Action Creators and processing data through the Malcolm reducer ensures there is a consistent data model for components to use. Messages intended for the socket are intercepted in the middleware and responses from the socket are injected back into the cycle as a new action in the Malcolm Socket handlers.
+
+- **Attribute Details**
+    All of the information for rendering the MalcolmJS interface is returned as part of the websocket response, part of the metadata describes the widget to show for the attribute in question. This means that we are going to need a collection of components to represent these widgets, e.g. a numerical label, an LED indicator, etc.
+
+    The attributes break down in to three main areas; parameters, views and methods. Views contain buttons to populate the central panel with information about that view, e.g. the layout, a table of information, etc. The method components lists the methods on the block and allows the user to click on a button to call them as well as displaying what other inputs from the block are used.
+
+- **View Details**
+    The view details provides more information about the parent block being viewed, while there are component and table views, the main view is the layout view. The layout view shows how the current block is wired to child blocks, it allows new connections to be made, and allows a user to add new child blocks.
+
+    The user can drag blocks around in the layout view as well as connect output ports to input ports.
 
 
 Deployment View
