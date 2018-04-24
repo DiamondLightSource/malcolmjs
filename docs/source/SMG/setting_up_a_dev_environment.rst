@@ -16,8 +16,7 @@ Navigate to the root of the repository and run
 This will install all dependencies and development dependencies to run and develop MalcolmJS.
 
 The available commands for developing with are listed in ``package.json`` as well as being documented in the :ref:`Maintenance` chapter; 
-all commands are runnable from the shell using node so should be cross platform. The only exception is the ``ci:upload-coverage`` target 
-as this requires ``cat`` and assumes the build is running on a linux machine.
+all commands are runnable from the shell using node so should be cross platform. 
 
 However, the main commands needed to develop are:
 ::

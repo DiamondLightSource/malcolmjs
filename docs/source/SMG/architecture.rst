@@ -28,22 +28,24 @@ The container view for MalcolmJS breaks down in to the main user interface categ
     MalcolmJS container view
 
 **Malcolm Interface:-**
-TODO
+The malcolm interface will allow MalcolmJS to be decoupled from Malcolm by isolating the code that interacts with the socket layer. This will also be the point at which we can integrate the Malcolm information with the Redux state that can be used by the presentation components.
+
+The secondary reason for doing this is so that the Malcolm related code could be released as a library for others to create their own React dashboards from Malcolm data.
 
 **Block Details:-**
-TODO
+This presentational layer container will contain all the React components for displays information about the details for a block, i.e. information about the attributes it has. There will be quite a large collection of components in here for the various attributes, e.g. number inputs, LED status, combo selections, etc. The attributes will roughly break down into summary information, parameters, views and methods.
 
 **View Details:-**
-TODO
+When the user selects a view options, e.g. layout, table, etc. from the block details then MalcolmJS will populate a central panel with the details about that view. For example, if they select layout then they will get a flow diagram showing the various blocks that are currently connected.
 
 **Navigation:-**
-TODO
+The navigation container has all the presentational components for showing how far down the block tree a user is and allow them to select different levels as well as different views easily from one place.
 
 **Attribute Tracking:-**
-TODO
+Currently there is no functionality in Malcolm to track the history of a numeric attribute over time, therefore to display a graph of that attribute we need to track its values over the time that the browser is open.
 
 **Connection Monitoring:-**
-TODO
+Malcolm works on a subscribe/unsubscribe model - in order to clean up connections we need to have sufficient monitoring. This will also making it easier to have a status indicator for connections as well as handling connection errors.
 
 One of the best ways to think about the high level structure for MalcolmJS is to consider the high level user interface mock ups. They show the main sections of the interface and thus how the application breaks down into containers.
 
@@ -76,28 +78,23 @@ The mobile view is simply intended to give engineers a quick view on the informa
 Components
 ############
 
-TODO: diagram of components
+.. figure:: architecture_diagrams/malcolmjs_components.png
+    :align: center
 
-Description of components
+    MalcolmJS component view
+
+**TODO**
 
 
 Deployment View
 ###################
 
-There are two main deployment scenarios, the primary deployment scenario is where MalcolmJS is packaged up with Malcolm and served from a web server inside Malcolm on the same PANDA box.
+The primary deployment scenario is where MalcolmJS is packaged up with Malcolm and served from a web server inside Malcolm on the same PANDA box. The websocket connection is to the same server, so there should be no cross-origin issues. During development we'll introduce a proxy when connecting to a test instance.
 
-.. figure:: architecture_diagrams/malcolmjs_local_deployment.png
+.. figure:: architecture_diagrams/malcolmjs_deployment.png
     :align: center
 
     Serving MalcolmJS from the same server as Malcolm
-
-
-The second scenario is where MalcolmJS is served from a different web server inside the Diamond network (it may or may not be from a PANDA box in this case) but connecting to the Malcolm socket on a different PANDA box.
-
-.. figure:: architecture_diagrams/malcolmjs_remote_deployment.png
-    :align: center
-
-    Connecting to Malcolm on a different server
 
 
 Technologies
@@ -166,7 +163,8 @@ Static code analysis is done by running ESLint against the code with the `AirBnB
 Unit testing is all done with Jest which provides code coverage information using the ``--coverage`` flag, this generates an LCOV report with all the coverage information. The coverage information is tracked on CodeCov, where during this phase of development, all the information is on the `version 1 branch <https://codecov.io/gh/dls-controls/malcolmjs/branch/version1>`_.
 
 .. figure:: images/coverage-chart.png
-    
+    :align: center
+
     Unit test coverage for the last 6 months on branch ``version1``
 
 
