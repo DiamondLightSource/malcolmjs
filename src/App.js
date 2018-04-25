@@ -1,6 +1,14 @@
 import React from 'react';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import logo from './logo.svg';
+import DrawerContainer from './drawerContainer/drawerContainer.component';
 import './App.css';
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 const App = () => (
   <div className="App">
@@ -11,6 +19,9 @@ const App = () => (
     <p className="App-intro">
       To get started, edit <code>src/App.js</code> and save to reload.
     </p>
+    <MuiThemeProvider theme={theme}>
+      <DrawerContainer open openSecondary />
+    </MuiThemeProvider>
   </div>
 );
 

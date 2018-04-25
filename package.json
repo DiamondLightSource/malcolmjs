@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/icons": "^1.0.0-beta.43",
     "@storybook/addon-actions": "^3.4.0",
     "@storybook/addon-info": "^3.4.2",
     "@storybook/addon-links": "^3.4.0",
@@ -10,7 +11,8 @@
     "@storybook/react": "^3.4.0",
     "express": "^4.16.3",
     "history": "^4.7.2",
-    "material-ui": "^0.20.0",
+    "material-ui": "^1.0.0-beta.43",
+    "prop-types": "^15.6.1",
     "radium": "^0.24.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -57,7 +59,7 @@
     "e2e:serve": "npm run build & node ./server/e2e-test-server.js",
     "e2e:interactive": "start-server-and-test e2e:serve http://localhost:3030 cy:open",
     "e2e": "start-server-and-test e2e:serve http://localhost:3030 cy:run",
-    "lint:js": "eslint --ext=js --ext=jsx ./src",
+    "lint:js": "eslint --ext=js --ext=jsx --fix ./src",
     "lint:css": "stylelint --config=.stylelintrc './src/**/*.css'",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
