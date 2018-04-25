@@ -93,7 +93,8 @@
       "!**/stories/index.js",
       "!src/index.js",
       "!src/registerServiceWorker.js",
-      "!src/App.reducer.js"
+      "!src/App.reducer.js",
+      "!src/App.routes.js"
     ]
   }
 }

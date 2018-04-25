@@ -22,8 +22,8 @@ const DrawerHeader = props => (
   <div>
     <AppBar position="static">
       <Toolbar style={styles.toolbar}>
-        <IconButton>
-          <NavigationClose onClick={props.closeAction} />
+        <IconButton onClick={props.closeAction}>
+          <NavigationClose />
         </IconButton>
         <Typography variant="title" color="inherit" style={styles.title}>
           Title
