@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -10,18 +11,19 @@ const styles = {
   toolbar: {
     minWidth: 320,
     display: 'flex',
+    padding: '0 8px',
   },
   title: {
     flexGrow: 1,
   },
 };
 
-const DrawerHeader = () => (
+const DrawerHeader = props => (
   <div>
     <AppBar position="static">
       <Toolbar style={styles.toolbar}>
         <IconButton>
-          <NavigationClose />
+          <NavigationClose onClick={props.closeAction} />
         </IconButton>
         <Typography variant="title" color="inherit" style={styles.title}>
           Title
@@ -33,5 +35,9 @@ const DrawerHeader = () => (
     </AppBar>
   </div>
 );
+
+DrawerHeader.propTypes = {
+  closeAction: PropTypes.func.isRequired,
+};
 
 export default DrawerHeader;

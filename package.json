@@ -9,6 +9,7 @@
     "@storybook/addon-links": "^3.4.0",
     "@storybook/addons": "^3.4.0",
     "@storybook/react": "^3.4.0",
+    "classnames": "^2.2.5",
     "express": "^4.16.3",
     "history": "^4.7.2",
     "material-ui": "^1.0.0-beta.43",
