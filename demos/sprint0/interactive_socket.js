@@ -1,5 +1,6 @@
 const io = require('socket.io-client');
 const fs = require('fs');
+const { print, stringify } = require('q-i');
 
 const stdin = process.openStdin();
 const socket = io('http://localhost:8000', {
@@ -8,7 +9,7 @@ const socket = io('http://localhost:8000', {
 
 const sendMessage = (msg) => {
   console.log("Sending...");
-  console.log(JSON.stringify(msg, null, 2));
+  console.log(stringify(msg));
   socket.send(msg);
 }
 
@@ -24,7 +25,7 @@ stdin.addListener("data", function(d) {
   const command = input[0];
   const parameters = input[1];
 
-  if (command === 'subscribe') {
+  if (command === 'canned') {
     fs.readFile('../../server/canned_data/Sub/request_' + parameters, 'utf8', function (err,data) {
       if (err) {
         console.log('File doesn\'t exist, sending a subscribe with that path');
@@ -52,5 +53,5 @@ socket.on('connect', () => {
 
 socket.on('message', data => {
   console.log("Received...");
-  console.log(JSON.stringify(data, null, 2));
+  console.log(stringify(data));
 });

@@ -49,6 +49,15 @@ The main commands you are most likely to need during development are:
 ======================= ===========================================================
 
 
+Running the dev server
+^^^^^^^^^^^^^^^^^^^^^^^^
 
+The MalcolmJS code base comes with a development server to simulate the messages that go to and from Malcolm.
+
+To run the server you can run the ``server`` or ``server:dev`` npm commands, the server will be started as part of the ``npm start`` target.
+
+This server only has very limited capability by returning canned responses captured from using PyMalcolm, as well as handling unsubscribing. For a more realistic scenario, MalcolmJS should be tested against a real instance of PyMalcolm.
+
+More request/response pairs can be added by adding more files to ``canned_data`` as long as the names start ``request_`` and ``response_``.
 
 
