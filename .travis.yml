@@ -17,15 +17,13 @@ script:
 - codecov
 - npm run e2e
 before_deploy:
-  - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
-  - $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR
+- chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+- "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
 deploy:
   provider: releases
   api_key:
-    secure: Nzws/rGOzhB+0LQbqTzfzD12Gl5KGYcGUKdOwmb5PHF0/V1SJTRhZX2NVH4WBS/wMqUqYIp/K0jxneGKCLqgb6BXumnddHDTfBT/waO526hHMZ4tJv+AiUmtg/CythoNytdPgDlmWYzjpRYvfDwVENwkje/pDnm76JJdyEE351IbNFxLqGs2uzWqKd72ZduKhvUs+KwSrCCephQqPvKqXq/7fiGdngC3U/hx7eXMdF2/F8ZEY60WGMlTRa1Ncsi184FyZwwbuxNRLtrMmXwU4z79shnZ/GuG6GJqK/KI5aNaY0XP0wv7xR4BvE0KPAVcRfphTk6A/HHYi5GsrhEQXOnBY+1caLkSdUqd+E8yZOWGckL50N9RZhDWdSvgkO50F6E4JVDRY7t0LQK2OoBBKoy4ovcRHZG8itdQUhXIQD/2nWlBSZjffRaVAHfBEAgq+m2Ot/61Cu/fqDS5eFuViy530Ohai1z1G+oZKFpsiC2wDDRQex8hhXIeWo14nZnfeXlp9djO4NvsscpOEeyAcMpy9xzB5XdlMP5zq2UTOaGi6MRsUmjORRCkjd1F/p73tN9D2nBtLgPDCgChShelzCiKPyJTKGySXublWVQiaoSY3osVwUPCQU2I4fR2/UD5aYFTTCrrYTscrgZhgwh/h9dQXv+4huFN9PULN9Rh88k=
-  file_glob: true
-  file: ${TRAVIS_BUILD_DIR}/artifacts/*
-  skip_cleanup: true
+    secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
+  file: "${TRAVIS_BUILD_DIR}/artifacts/*"
   on:
     repo: dls-controls/malcolmjs
     all_branches: true

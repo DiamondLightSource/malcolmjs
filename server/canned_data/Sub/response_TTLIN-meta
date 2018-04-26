@@ -1,0 +1,25 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": 41, 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": false, 
+        "label": "TTL input 1", 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "term", 
+          "outputs", 
+          "val"
+        ]
+      }
+    ]
+  ]
+}
