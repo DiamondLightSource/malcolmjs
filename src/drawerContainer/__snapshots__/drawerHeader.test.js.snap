@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DrawerHeader renders correctly 1`] = `
+<div>
+  <WithStyles(AppBar)
+    position="static"
+  >
+    <WithStyles(Toolbar)
+      style={
+        Object {
+          "display": "flex",
+          "minWidth": 320,
+          "padding": "0 8px",
+        }
+      }
+    >
+      <WithStyles(IconButton)
+        onClick={[Function]}
+      >
+        <pure(Close) />
+      </WithStyles(IconButton)>
+      <WithStyles(Typography)
+        color="inherit"
+        style={
+          Object {
+            "flexGrow": 1,
+          }
+        }
+        variant="title"
+      >
+        Title
+      </WithStyles(Typography)>
+      <WithStyles(IconButton)>
+        <pure(OpenInNew) />
+      </WithStyles(IconButton)>
+    </WithStyles(Toolbar)>
+  </WithStyles(AppBar)>
+</div>
+`;
