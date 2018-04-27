@@ -1,0 +1,1133 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": 43, 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/Block:1.0", 
+        "meta": {
+          "typeid": "malcolm:core/BlockMeta:1.0", 
+          "description": "", 
+          "tags": [], 
+          "writeable": false, 
+          "label": "Input encoder 1", 
+          "fields": [
+            "health", 
+            "icon", 
+            "label", 
+            "parameters", 
+            "protocol", 
+            "bypass", 
+            "clkPeriod", 
+            "clkPeriodUnits", 
+            "framePeriod", 
+            "framePeriodUnits", 
+            "bits", 
+            "setp", 
+            "rstOnZ", 
+            "readbacks", 
+            "status", 
+            "dcardId", 
+            "outputs", 
+            "a", 
+            "b", 
+            "z", 
+            "data", 
+            "inputs", 
+            "clk", 
+            "clkCurrent", 
+            "clkDelay", 
+            "conn", 
+            "val", 
+            "valUnits", 
+            "valScale", 
+            "valOffset", 
+            "valScaled", 
+            "valCapture", 
+            "valDataDelay"
+          ]
+        }, 
+        "health": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "OK", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 207125902, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "Displays OK or an error message", 
+            "tags": [
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Health"
+          }
+        }, 
+        "icon": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "<svg version=\"1.1\" viewBox=\"0 0 120 160\" xmlns=\"http://www.w3.org/2000/svg\">\n <path d=\"m70 30h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m70 50h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m70 70h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m70 90h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m70 110h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m70 130h20\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <rect x=\"55\" y=\"20\" width=\"20\" height=\"120\" fill=\"#e6e6e6\" stroke=\"#000\"/>\n <path d=\"m45 37h17c5 0 8 5 8 10v66c0 5-3 10-8 10h-17\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\"1px\"/>\n <path d=\"m45 37c5 0 8 5 8 10v66c0 5-3 10-8 10-3 0-5-2-5-5v-76c0-3.001 2-5 5-5z\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\"1px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"-10\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,-10 c 0,1.5187831 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.2312169 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"-45\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,-45 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"-20\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,-20 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"-30\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,-30 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"-40\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,-40 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"20\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,20 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" cy=\"10\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,10 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.5187831 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.2312169 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-50\" rx=\"1.5\" ry=\"2.75\" d=\"m -48.5,0 c 0,1.5187831 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.2312169 -1.5,-2.75 0,-1.5187831 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.2312169 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"5\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,5 c 0,1.5187831 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.2312169 -1.5,-2.75 0,-1.5187831 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.2312169 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"-5\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,-5 c 0,1.5187831 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.2312169 -1.5,-2.75 0,-1.5187831 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.2312169 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"-15\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,-15 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"-25\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,-25 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"25\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,25 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"15\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,15 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-45\" cy=\"-35\" rx=\"1.5\" ry=\"2.75\" d=\"m -43.5,-35 c 0,1.518783 -0.671573,2.75 -1.5,2.75 -0.828427,0 -1.5,-1.231217 -1.5,-2.75 0,-1.518783 0.671573,-2.75 1.5,-2.75 0.828427,0 1.5,1.231217 1.5,2.75 z\"/>\n <path d=\"m60 134h5c1 0 2-2 2-4s-1-4-2-4h-5\" fill=\"#e6e6e6\" stroke=\"#000\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-60\" cy=\"40\" rx=\"2\" ry=\"4\" d=\"m -58,40 c 0,2.209139 -0.895431,4 -2,4 -1.104569,0 -2,-1.790861 -2,-4 0,-2.209139 0.895431,-4 2,-4 1.104569,0 2,1.790861 2,4 z\" fill=\"#e6e6e6\" stroke=\"#000\"/>\n <path d=\"m61 34h4c1 0 2-2 2-4s-1-4-2-4h-5\" fill=\"#e6e6e6\" stroke=\"#000\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,90)\" cx=\"-60\" cy=\"-60\" rx=\"2\" ry=\"4\" d=\"m -58,-60 c 0,2.209139 -0.895431,4 -2,4 -1.104569,0 -2,-1.790861 -2,-4 0,-2.209139 0.895431,-4 2,-4 1.104569,0 2,1.790861 2,4 z\" fill=\"#e6e6e6\" stroke=\"#000\"/>\n</svg>\n", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 201848983, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "SVG icon for the Block", 
+            "tags": [
+              "widget:icon"
+            ], 
+            "writeable": false, 
+            "label": "Icon"
+          }
+        }, 
+        "label": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "Input encoder 1", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 207161903, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "Label for the block", 
+            "tags": [
+              "widget:title", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Label"
+          }
+        }, 
+        "parameters": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 202183961, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All parameters attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Parameters"
+          }
+        }, 
+        "protocol": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "Quadrature", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912686109, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Type of absolute/incremental protocol", 
+            "choices": [
+              "Quadrature", 
+              "SSI", 
+              "BISS", 
+              "enDat"
+            ], 
+            "tags": [
+              "group:parameters", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Protocol"
+          }
+        }, 
+        "bypass": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "Off", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912734985, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Bypass/Pass Through encoder signals", 
+            "choices": [
+              "Off", 
+              "On"
+            ], 
+            "tags": [
+              "group:parameters", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bypass"
+          }
+        }, 
+        "clkPeriod": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912298917, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Clock rate", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:2"
+            ], 
+            "writeable": true, 
+            "label": "Clk Period"
+          }
+        }, 
+        "clkPeriodUnits": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "s", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912316083, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Clock rate time units", 
+            "choices": [
+              "s", 
+              "ms", 
+              "us"
+            ], 
+            "tags": [
+              "group:parameters", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Clk Period Units"
+          }
+        }, 
+        "framePeriod": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912753105, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Frame rate", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:2"
+            ], 
+            "writeable": true, 
+            "label": "Frame Period"
+          }
+        }, 
+        "framePeriodUnits": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "s", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912771940, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Frame rate time units", 
+            "choices": [
+              "s", 
+              "ms", 
+              "us"
+            ], 
+            "tags": [
+              "group:parameters", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Frame Period Units"
+          }
+        }, 
+        "bits": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912717103, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint32", 
+            "description": "Number of bits", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bits"
+          }
+        }, 
+        "setp": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 203586101, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "int32", 
+            "description": "Set point", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Setp"
+          }
+        }, 
+        "rstOnZ": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912698030, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Zero position on Z rising edge", 
+            "tags": [
+              "group:parameters", 
+              "widget:checkbox", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Rst On Z"
+          }
+        }, 
+        "readbacks": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 203917026, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All readbacks attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Readbacks"
+          }
+        }, 
+        "status": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "Link Down", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912180900, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Encoder status read from device", 
+            "choices": [
+              "Link Down", 
+              "Link Up"
+            ], 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Status"
+          }
+        }, 
+        "dcardId": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "DCARD id 0", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912199020, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Daughter card jumper mode", 
+            "choices": [
+              "DCARD id 0", 
+              "Encoder Monitor", 
+              "DCARD id 2", 
+              "Encoder Control", 
+              "DCARD id 3", 
+              "DCARD id 4", 
+              "DCARD id 5", 
+              "Unplugged"
+            ], 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Dcard Id"
+          }
+        }, 
+        "outputs": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 204524040, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All outputs attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Outputs"
+          }
+        }, 
+        "a": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950018882, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Quadrature A if in incremental mode", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:INENC1.A", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "A"
+          }
+        }, 
+        "b": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950032949, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Quadrature B if in incremental mode", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:INENC1.B", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "B"
+          }
+        }, 
+        "z": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950046062, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Z index channel if in incremental mode", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:INENC1.Z", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Z"
+          }
+        }, 
+        "data": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 949979066, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Data input from slave encoder", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:INENC1.DATA", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Data"
+          }
+        }, 
+        "inputs": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 205195903, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All inputs attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Inputs"
+          }
+        }, 
+        "clk": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912239074, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Clock output to slave encoder", 
+            "choices": [
+              "TTLIN1.VAL", 
+              "TTLIN2.VAL", 
+              "TTLIN3.VAL", 
+              "TTLIN4.VAL", 
+              "TTLIN5.VAL", 
+              "TTLIN6.VAL", 
+              "LVDSIN1.VAL", 
+              "LVDSIN2.VAL", 
+              "INENC1.A", 
+              "INENC2.A", 
+              "INENC3.A", 
+              "INENC4.A", 
+              "INENC1.B", 
+              "INENC2.B", 
+              "INENC3.B", 
+              "INENC4.B", 
+              "INENC1.Z", 
+              "INENC2.Z", 
+              "INENC3.Z", 
+              "INENC4.Z", 
+              "INENC1.DATA", 
+              "INENC2.DATA", 
+              "INENC3.DATA", 
+              "INENC4.DATA", 
+              "INENC1.CONN", 
+              "INENC2.CONN", 
+              "INENC3.CONN", 
+              "INENC4.CONN", 
+              "OUTENC1.CLK", 
+              "OUTENC2.CLK", 
+              "OUTENC3.CLK", 
+              "OUTENC4.CLK", 
+              "LUT1.OUT", 
+              "LUT2.OUT", 
+              "LUT3.OUT", 
+              "LUT4.OUT", 
+              "LUT5.OUT", 
+              "LUT6.OUT", 
+              "LUT7.OUT", 
+              "LUT8.OUT", 
+              "SRGATE1.OUT", 
+              "SRGATE2.OUT", 
+              "SRGATE3.OUT", 
+              "SRGATE4.OUT", 
+              "DIV1.OUTD", 
+              "DIV2.OUTD", 
+              "DIV3.OUTD", 
+              "DIV4.OUTD", 
+              "DIV1.OUTN", 
+              "DIV2.OUTN", 
+              "DIV3.OUTN", 
+              "DIV4.OUTN", 
+              "PULSE1.OUT", 
+              "PULSE2.OUT", 
+              "PULSE3.OUT", 
+              "PULSE4.OUT", 
+              "SEQ1.ACTIVE", 
+              "SEQ2.ACTIVE", 
+              "SEQ3.ACTIVE", 
+              "SEQ4.ACTIVE", 
+              "SEQ1.OUTA", 
+              "SEQ2.OUTA", 
+              "SEQ3.OUTA", 
+              "SEQ4.OUTA", 
+              "SEQ1.OUTB", 
+              "SEQ2.OUTB", 
+              "SEQ3.OUTB", 
+              "SEQ4.OUTB", 
+              "SEQ1.OUTC", 
+              "SEQ2.OUTC", 
+              "SEQ3.OUTC", 
+              "SEQ4.OUTC", 
+              "SEQ1.OUTD", 
+              "SEQ2.OUTD", 
+              "SEQ3.OUTD", 
+              "SEQ4.OUTD", 
+              "SEQ1.OUTE", 
+              "SEQ2.OUTE", 
+              "SEQ3.OUTE", 
+              "SEQ4.OUTE", 
+              "SEQ1.OUTF", 
+              "SEQ2.OUTF", 
+              "SEQ3.OUTF", 
+              "SEQ4.OUTF", 
+              "POSENC1.A", 
+              "POSENC2.A", 
+              "POSENC3.A", 
+              "POSENC4.A", 
+              "POSENC1.B", 
+              "POSENC2.B", 
+              "POSENC3.B", 
+              "POSENC4.B", 
+              "COUNTER1.CARRY", 
+              "COUNTER2.CARRY", 
+              "COUNTER3.CARRY", 
+              "COUNTER4.CARRY", 
+              "COUNTER5.CARRY", 
+              "COUNTER6.CARRY", 
+              "COUNTER7.CARRY", 
+              "COUNTER8.CARRY", 
+              "PCOMP1.ACTIVE", 
+              "PCOMP2.ACTIVE", 
+              "PCOMP3.ACTIVE", 
+              "PCOMP4.ACTIVE", 
+              "PCOMP1.OUT", 
+              "PCOMP2.OUT", 
+              "PCOMP3.OUT", 
+              "PCOMP4.OUT", 
+              "PCAP.ACTIVE", 
+              "BITS.OUTA", 
+              "BITS.OUTB", 
+              "BITS.OUTC", 
+              "BITS.OUTD", 
+              "CLOCKS.OUTA", 
+              "CLOCKS.OUTB", 
+              "CLOCKS.OUTC", 
+              "CLOCKS.OUTD", 
+              "FMC.INP1", 
+              "FMC.INP2", 
+              "FMC.INP3", 
+              "FMC.INP4", 
+              "FMC.INP5", 
+              "FMC.INP6", 
+              "FMC.INP7", 
+              "FMC.INP8", 
+              "FILTER.READY", 
+              "ZERO", 
+              "ONE"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:bool:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Clk"
+          }
+        }, 
+        "clkCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912250041, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "CLK current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Clk Current"
+          }
+        }, 
+        "clkDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912269115, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay input", 
+            "tags": [
+              "group:inputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Clk Delay"
+          }
+        }, 
+        "conn": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 949992895, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Signal detected", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:INENC1.CONN", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Conn"
+          }
+        }, 
+        "val": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912334918, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "int32", 
+            "description": "Current position", 
+            "tags": [
+              "group:outputs", 
+              "outport:int32:INENC1.VAL", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Val"
+          }
+        }, 
+        "valUnits": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912419080, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "Units for position fields on this block", 
+            "tags": [
+              "group:outputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Val Units"
+          }
+        }, 
+        "valScale": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 1.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912616014, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Scale for block position fields", 
+            "tags": [
+              "group:outputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Val Scale"
+          }
+        }, 
+        "valOffset": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912585020, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Offset for block position fields", 
+            "tags": [
+              "group:outputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Val Offset"
+          }
+        }, 
+        "valScaled": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912657022, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Current scaled value of position field", 
+            "tags": [
+              "group:outputs", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Val Scaled"
+          }
+        }, 
+        "valCapture": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "No", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912645101, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Capture VAL in PCAP?", 
+            "choices": [
+              "No", 
+              "Value", 
+              "Diff", 
+              "Sum", 
+              "Mean", 
+              "Min", 
+              "Max", 
+              "Min Max"
+            ], 
+            "tags": [
+              "group:outputs", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Val Capture"
+          }
+        }, 
+        "valDataDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 912457942, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay data capture", 
+            "tags": [
+              "group:outputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Val Data Delay"
+          }
+        }
+      }
+    ]
+  ]
+}

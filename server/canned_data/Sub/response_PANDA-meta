@@ -1,0 +1,27 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": 41, 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "writeable": false, 
+        "label": "PANDA", 
+        "fields": [
+          "health", 
+          "state", 
+          "disable", 
+          "reset", 
+          "layout", 
+          "design", 
+          "exports", 
+          "modified", 
+          "save"
+        ]
+      }
+    ]
+  ]
+}
