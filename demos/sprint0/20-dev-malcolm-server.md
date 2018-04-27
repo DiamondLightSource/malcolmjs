@@ -6,12 +6,12 @@
     ```
     npm run server:dev
     ```
-1. Start the interactive socket demo server
+1. Start the interactive socket demo client
     ```
     cd demos/sprint0
     node ./interactive_socket.js
     ```
-1. Send a canned message by typing in the console for the interactive socket server
+1. Send a canned message by typing in the console for the interactive socket client
     ```
     canned:TTLIN-meta
     ```
