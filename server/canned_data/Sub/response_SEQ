@@ -1,0 +1,1958 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "id": 43, 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "malcolm:core/Block:1.0", 
+        "meta": {
+          "typeid": "malcolm:core/BlockMeta:1.0", 
+          "description": "", 
+          "tags": [], 
+          "writeable": false, 
+          "label": "Sequencer 1", 
+          "fields": [
+            "health", 
+            "icon", 
+            "label", 
+            "parameters", 
+            "table", 
+            "prescale", 
+            "prescaleUnits", 
+            "repeats", 
+            "inputs", 
+            "enable", 
+            "enableCurrent", 
+            "enableDelay", 
+            "bita", 
+            "bitaCurrent", 
+            "bitaDelay", 
+            "bitb", 
+            "bitbCurrent", 
+            "bitbDelay", 
+            "bitc", 
+            "bitcCurrent", 
+            "bitcDelay", 
+            "posa", 
+            "posaCurrent", 
+            "posb", 
+            "posbCurrent", 
+            "posc", 
+            "poscCurrent", 
+            "outputs", 
+            "active", 
+            "outa", 
+            "outb", 
+            "outc", 
+            "outd", 
+            "oute", 
+            "outf", 
+            "readbacks", 
+            "tableRepeat", 
+            "tableLine", 
+            "lineRepeat", 
+            "state"
+          ]
+        }, 
+        "health": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "OK", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 326261997, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "Displays OK or an error message", 
+            "tags": [
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Health"
+          }
+        }, 
+        "icon": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "<svg/>", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 316180944, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "SVG icon for the Block", 
+            "tags": [
+              "widget:icon"
+            ], 
+            "writeable": false, 
+            "label": "Icon"
+          }
+        }, 
+        "label": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "Sequencer 1", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 326301097, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/StringMeta:1.0", 
+            "description": "Label for the block", 
+            "tags": [
+              "widget:title", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Label"
+          }
+        }, 
+        "parameters": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 316559076, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All parameters attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Parameters"
+          }
+        }, 
+        "table": {
+          "typeid": "epics:nt/NTTable:1.0", 
+          "labels": [
+            "Repeats", 
+            "Trigger", 
+            "Position", 
+            "Time1", 
+            "Outa1", 
+            "Outb1", 
+            "Outc1", 
+            "Outd1", 
+            "Oute1", 
+            "Outf1", 
+            "Time2", 
+            "Outa2", 
+            "Outb2", 
+            "Outc2", 
+            "Outd2", 
+            "Oute2", 
+            "Outf2"
+          ], 
+          "value": {
+            "typeid": "malcolm:core/Table:1.0", 
+            "repeats": [], 
+            "trigger": [], 
+            "position": [], 
+            "time1": [], 
+            "outa1": [], 
+            "outb1": [], 
+            "outc1": [], 
+            "outd1": [], 
+            "oute1": [], 
+            "outf1": [], 
+            "time2": [], 
+            "outa2": [], 
+            "outb2": [], 
+            "outc2": [], 
+            "outd2": [], 
+            "oute2": [], 
+            "outf2": []
+          }, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917608022, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/TableMeta:1.0", 
+            "description": "Sequencer table of lines", 
+            "tags": [
+              "widget:table", 
+              "group:parameters", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Table", 
+            "elements": {
+              "repeats": {
+                "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+                "dtype": "uint16", 
+                "description": "REPEATS", 
+                "tags": [
+                  "widget:textinput"
+                ], 
+                "writeable": true, 
+                "label": "Repeats"
+              }, 
+              "trigger": {
+                "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+                "dtype": "uint8", 
+                "description": "TRIGGER", 
+                "tags": [
+                  "widget:textinput"
+                ], 
+                "writeable": true, 
+                "label": "Trigger"
+              }, 
+              "position": {
+                "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+                "dtype": "uint32", 
+                "description": "POSITION", 
+                "tags": [
+                  "widget:textinput"
+                ], 
+                "writeable": true, 
+                "label": "Position"
+              }, 
+              "time1": {
+                "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+                "dtype": "uint32", 
+                "description": "TIME1", 
+                "tags": [
+                  "widget:textinput"
+                ], 
+                "writeable": true, 
+                "label": "Time1"
+              }, 
+              "outa1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTA1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outa1"
+              }, 
+              "outb1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTB1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outb1"
+              }, 
+              "outc1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTC1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outc1"
+              }, 
+              "outd1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTD1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outd1"
+              }, 
+              "oute1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTE1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Oute1"
+              }, 
+              "outf1": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTF1", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outf1"
+              }, 
+              "time2": {
+                "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+                "dtype": "uint32", 
+                "description": "TIME2", 
+                "tags": [
+                  "widget:textinput"
+                ], 
+                "writeable": true, 
+                "label": "Time2"
+              }, 
+              "outa2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTA2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outa2"
+              }, 
+              "outb2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTB2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outb2"
+              }, 
+              "outc2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTC2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outc2"
+              }, 
+              "outd2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTD2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outd2"
+              }, 
+              "oute2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTE2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Oute2"
+              }, 
+              "outf2": {
+                "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+                "description": "OUTF2", 
+                "tags": [
+                  "widget:checkbox"
+                ], 
+                "writeable": true, 
+                "label": "Outf2"
+              }
+            }
+          }
+        }, 
+        "prescale": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0.0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916819095, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "float64", 
+            "description": "Prescalar for sequencer table times", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:2"
+            ], 
+            "writeable": true, 
+            "label": "Prescale"
+          }
+        }, 
+        "prescaleUnits": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "s", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916836977, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Prescalar for sequencer table times time units", 
+            "choices": [
+              "s", 
+              "ms", 
+              "us"
+            ], 
+            "tags": [
+              "group:parameters", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Prescale Units"
+          }
+        }, 
+        "repeats": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917686939, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint32", 
+            "description": "Number of times the table will repeat", 
+            "tags": [
+              "group:parameters", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Repeats"
+          }
+        }, 
+        "inputs": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 320874929, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All inputs attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Inputs"
+          }
+        }, 
+        "enable": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916749954, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Stop on falling edge, reset and enable on rising edge", 
+            "choices": [
+              "TTLIN1.VAL", 
+              "TTLIN2.VAL", 
+              "TTLIN3.VAL", 
+              "TTLIN4.VAL", 
+              "TTLIN5.VAL", 
+              "TTLIN6.VAL", 
+              "LVDSIN1.VAL", 
+              "LVDSIN2.VAL", 
+              "INENC1.A", 
+              "INENC2.A", 
+              "INENC3.A", 
+              "INENC4.A", 
+              "INENC1.B", 
+              "INENC2.B", 
+              "INENC3.B", 
+              "INENC4.B", 
+              "INENC1.Z", 
+              "INENC2.Z", 
+              "INENC3.Z", 
+              "INENC4.Z", 
+              "INENC1.DATA", 
+              "INENC2.DATA", 
+              "INENC3.DATA", 
+              "INENC4.DATA", 
+              "INENC1.CONN", 
+              "INENC2.CONN", 
+              "INENC3.CONN", 
+              "INENC4.CONN", 
+              "OUTENC1.CLK", 
+              "OUTENC2.CLK", 
+              "OUTENC3.CLK", 
+              "OUTENC4.CLK", 
+              "LUT1.OUT", 
+              "LUT2.OUT", 
+              "LUT3.OUT", 
+              "LUT4.OUT", 
+              "LUT5.OUT", 
+              "LUT6.OUT", 
+              "LUT7.OUT", 
+              "LUT8.OUT", 
+              "SRGATE1.OUT", 
+              "SRGATE2.OUT", 
+              "SRGATE3.OUT", 
+              "SRGATE4.OUT", 
+              "DIV1.OUTD", 
+              "DIV2.OUTD", 
+              "DIV3.OUTD", 
+              "DIV4.OUTD", 
+              "DIV1.OUTN", 
+              "DIV2.OUTN", 
+              "DIV3.OUTN", 
+              "DIV4.OUTN", 
+              "PULSE1.OUT", 
+              "PULSE2.OUT", 
+              "PULSE3.OUT", 
+              "PULSE4.OUT", 
+              "SEQ1.ACTIVE", 
+              "SEQ2.ACTIVE", 
+              "SEQ3.ACTIVE", 
+              "SEQ4.ACTIVE", 
+              "SEQ1.OUTA", 
+              "SEQ2.OUTA", 
+              "SEQ3.OUTA", 
+              "SEQ4.OUTA", 
+              "SEQ1.OUTB", 
+              "SEQ2.OUTB", 
+              "SEQ3.OUTB", 
+              "SEQ4.OUTB", 
+              "SEQ1.OUTC", 
+              "SEQ2.OUTC", 
+              "SEQ3.OUTC", 
+              "SEQ4.OUTC", 
+              "SEQ1.OUTD", 
+              "SEQ2.OUTD", 
+              "SEQ3.OUTD", 
+              "SEQ4.OUTD", 
+              "SEQ1.OUTE", 
+              "SEQ2.OUTE", 
+              "SEQ3.OUTE", 
+              "SEQ4.OUTE", 
+              "SEQ1.OUTF", 
+              "SEQ2.OUTF", 
+              "SEQ3.OUTF", 
+              "SEQ4.OUTF", 
+              "POSENC1.A", 
+              "POSENC2.A", 
+              "POSENC3.A", 
+              "POSENC4.A", 
+              "POSENC1.B", 
+              "POSENC2.B", 
+              "POSENC3.B", 
+              "POSENC4.B", 
+              "COUNTER1.CARRY", 
+              "COUNTER2.CARRY", 
+              "COUNTER3.CARRY", 
+              "COUNTER4.CARRY", 
+              "COUNTER5.CARRY", 
+              "COUNTER6.CARRY", 
+              "COUNTER7.CARRY", 
+              "COUNTER8.CARRY", 
+              "PCOMP1.ACTIVE", 
+              "PCOMP2.ACTIVE", 
+              "PCOMP3.ACTIVE", 
+              "PCOMP4.ACTIVE", 
+              "PCOMP1.OUT", 
+              "PCOMP2.OUT", 
+              "PCOMP3.OUT", 
+              "PCOMP4.OUT", 
+              "PCAP.ACTIVE", 
+              "BITS.OUTA", 
+              "BITS.OUTB", 
+              "BITS.OUTC", 
+              "BITS.OUTD", 
+              "CLOCKS.OUTA", 
+              "CLOCKS.OUTB", 
+              "CLOCKS.OUTC", 
+              "CLOCKS.OUTD", 
+              "FMC.INP1", 
+              "FMC.INP2", 
+              "FMC.INP3", 
+              "FMC.INP4", 
+              "FMC.INP5", 
+              "FMC.INP6", 
+              "FMC.INP7", 
+              "FMC.INP8", 
+              "FILTER.READY", 
+              "ZERO", 
+              "ONE"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:bool:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Enable"
+          }
+        }, 
+        "enableCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916760921, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "ENABLE current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Enable Current"
+          }
+        }, 
+        "enableDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916780948, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay input", 
+            "tags": [
+              "group:inputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Enable Delay"
+          }
+        }, 
+        "bita": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916888952, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "BITA for optional trigger condition", 
+            "choices": [
+              "TTLIN1.VAL", 
+              "TTLIN2.VAL", 
+              "TTLIN3.VAL", 
+              "TTLIN4.VAL", 
+              "TTLIN5.VAL", 
+              "TTLIN6.VAL", 
+              "LVDSIN1.VAL", 
+              "LVDSIN2.VAL", 
+              "INENC1.A", 
+              "INENC2.A", 
+              "INENC3.A", 
+              "INENC4.A", 
+              "INENC1.B", 
+              "INENC2.B", 
+              "INENC3.B", 
+              "INENC4.B", 
+              "INENC1.Z", 
+              "INENC2.Z", 
+              "INENC3.Z", 
+              "INENC4.Z", 
+              "INENC1.DATA", 
+              "INENC2.DATA", 
+              "INENC3.DATA", 
+              "INENC4.DATA", 
+              "INENC1.CONN", 
+              "INENC2.CONN", 
+              "INENC3.CONN", 
+              "INENC4.CONN", 
+              "OUTENC1.CLK", 
+              "OUTENC2.CLK", 
+              "OUTENC3.CLK", 
+              "OUTENC4.CLK", 
+              "LUT1.OUT", 
+              "LUT2.OUT", 
+              "LUT3.OUT", 
+              "LUT4.OUT", 
+              "LUT5.OUT", 
+              "LUT6.OUT", 
+              "LUT7.OUT", 
+              "LUT8.OUT", 
+              "SRGATE1.OUT", 
+              "SRGATE2.OUT", 
+              "SRGATE3.OUT", 
+              "SRGATE4.OUT", 
+              "DIV1.OUTD", 
+              "DIV2.OUTD", 
+              "DIV3.OUTD", 
+              "DIV4.OUTD", 
+              "DIV1.OUTN", 
+              "DIV2.OUTN", 
+              "DIV3.OUTN", 
+              "DIV4.OUTN", 
+              "PULSE1.OUT", 
+              "PULSE2.OUT", 
+              "PULSE3.OUT", 
+              "PULSE4.OUT", 
+              "SEQ1.ACTIVE", 
+              "SEQ2.ACTIVE", 
+              "SEQ3.ACTIVE", 
+              "SEQ4.ACTIVE", 
+              "SEQ1.OUTA", 
+              "SEQ2.OUTA", 
+              "SEQ3.OUTA", 
+              "SEQ4.OUTA", 
+              "SEQ1.OUTB", 
+              "SEQ2.OUTB", 
+              "SEQ3.OUTB", 
+              "SEQ4.OUTB", 
+              "SEQ1.OUTC", 
+              "SEQ2.OUTC", 
+              "SEQ3.OUTC", 
+              "SEQ4.OUTC", 
+              "SEQ1.OUTD", 
+              "SEQ2.OUTD", 
+              "SEQ3.OUTD", 
+              "SEQ4.OUTD", 
+              "SEQ1.OUTE", 
+              "SEQ2.OUTE", 
+              "SEQ3.OUTE", 
+              "SEQ4.OUTE", 
+              "SEQ1.OUTF", 
+              "SEQ2.OUTF", 
+              "SEQ3.OUTF", 
+              "SEQ4.OUTF", 
+              "POSENC1.A", 
+              "POSENC2.A", 
+              "POSENC3.A", 
+              "POSENC4.A", 
+              "POSENC1.B", 
+              "POSENC2.B", 
+              "POSENC3.B", 
+              "POSENC4.B", 
+              "COUNTER1.CARRY", 
+              "COUNTER2.CARRY", 
+              "COUNTER3.CARRY", 
+              "COUNTER4.CARRY", 
+              "COUNTER5.CARRY", 
+              "COUNTER6.CARRY", 
+              "COUNTER7.CARRY", 
+              "COUNTER8.CARRY", 
+              "PCOMP1.ACTIVE", 
+              "PCOMP2.ACTIVE", 
+              "PCOMP3.ACTIVE", 
+              "PCOMP4.ACTIVE", 
+              "PCOMP1.OUT", 
+              "PCOMP2.OUT", 
+              "PCOMP3.OUT", 
+              "PCOMP4.OUT", 
+              "PCAP.ACTIVE", 
+              "BITS.OUTA", 
+              "BITS.OUTB", 
+              "BITS.OUTC", 
+              "BITS.OUTD", 
+              "CLOCKS.OUTA", 
+              "CLOCKS.OUTB", 
+              "CLOCKS.OUTC", 
+              "CLOCKS.OUTD", 
+              "FMC.INP1", 
+              "FMC.INP2", 
+              "FMC.INP3", 
+              "FMC.INP4", 
+              "FMC.INP5", 
+              "FMC.INP6", 
+              "FMC.INP7", 
+              "FMC.INP8", 
+              "FILTER.READY", 
+              "ZERO", 
+              "ONE"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:bool:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bita"
+          }
+        }, 
+        "bitaCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916910886, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "BITA current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Bita Current"
+          }
+        }, 
+        "bitaDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916945934, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay input", 
+            "tags": [
+              "group:inputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bita Delay"
+          }
+        }, 
+        "bitb": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917037010, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "BITB for optional trigger condition", 
+            "choices": [
+              "TTLIN1.VAL", 
+              "TTLIN2.VAL", 
+              "TTLIN3.VAL", 
+              "TTLIN4.VAL", 
+              "TTLIN5.VAL", 
+              "TTLIN6.VAL", 
+              "LVDSIN1.VAL", 
+              "LVDSIN2.VAL", 
+              "INENC1.A", 
+              "INENC2.A", 
+              "INENC3.A", 
+              "INENC4.A", 
+              "INENC1.B", 
+              "INENC2.B", 
+              "INENC3.B", 
+              "INENC4.B", 
+              "INENC1.Z", 
+              "INENC2.Z", 
+              "INENC3.Z", 
+              "INENC4.Z", 
+              "INENC1.DATA", 
+              "INENC2.DATA", 
+              "INENC3.DATA", 
+              "INENC4.DATA", 
+              "INENC1.CONN", 
+              "INENC2.CONN", 
+              "INENC3.CONN", 
+              "INENC4.CONN", 
+              "OUTENC1.CLK", 
+              "OUTENC2.CLK", 
+              "OUTENC3.CLK", 
+              "OUTENC4.CLK", 
+              "LUT1.OUT", 
+              "LUT2.OUT", 
+              "LUT3.OUT", 
+              "LUT4.OUT", 
+              "LUT5.OUT", 
+              "LUT6.OUT", 
+              "LUT7.OUT", 
+              "LUT8.OUT", 
+              "SRGATE1.OUT", 
+              "SRGATE2.OUT", 
+              "SRGATE3.OUT", 
+              "SRGATE4.OUT", 
+              "DIV1.OUTD", 
+              "DIV2.OUTD", 
+              "DIV3.OUTD", 
+              "DIV4.OUTD", 
+              "DIV1.OUTN", 
+              "DIV2.OUTN", 
+              "DIV3.OUTN", 
+              "DIV4.OUTN", 
+              "PULSE1.OUT", 
+              "PULSE2.OUT", 
+              "PULSE3.OUT", 
+              "PULSE4.OUT", 
+              "SEQ1.ACTIVE", 
+              "SEQ2.ACTIVE", 
+              "SEQ3.ACTIVE", 
+              "SEQ4.ACTIVE", 
+              "SEQ1.OUTA", 
+              "SEQ2.OUTA", 
+              "SEQ3.OUTA", 
+              "SEQ4.OUTA", 
+              "SEQ1.OUTB", 
+              "SEQ2.OUTB", 
+              "SEQ3.OUTB", 
+              "SEQ4.OUTB", 
+              "SEQ1.OUTC", 
+              "SEQ2.OUTC", 
+              "SEQ3.OUTC", 
+              "SEQ4.OUTC", 
+              "SEQ1.OUTD", 
+              "SEQ2.OUTD", 
+              "SEQ3.OUTD", 
+              "SEQ4.OUTD", 
+              "SEQ1.OUTE", 
+              "SEQ2.OUTE", 
+              "SEQ3.OUTE", 
+              "SEQ4.OUTE", 
+              "SEQ1.OUTF", 
+              "SEQ2.OUTF", 
+              "SEQ3.OUTF", 
+              "SEQ4.OUTF", 
+              "POSENC1.A", 
+              "POSENC2.A", 
+              "POSENC3.A", 
+              "POSENC4.A", 
+              "POSENC1.B", 
+              "POSENC2.B", 
+              "POSENC3.B", 
+              "POSENC4.B", 
+              "COUNTER1.CARRY", 
+              "COUNTER2.CARRY", 
+              "COUNTER3.CARRY", 
+              "COUNTER4.CARRY", 
+              "COUNTER5.CARRY", 
+              "COUNTER6.CARRY", 
+              "COUNTER7.CARRY", 
+              "COUNTER8.CARRY", 
+              "PCOMP1.ACTIVE", 
+              "PCOMP2.ACTIVE", 
+              "PCOMP3.ACTIVE", 
+              "PCOMP4.ACTIVE", 
+              "PCOMP1.OUT", 
+              "PCOMP2.OUT", 
+              "PCOMP3.OUT", 
+              "PCOMP4.OUT", 
+              "PCAP.ACTIVE", 
+              "BITS.OUTA", 
+              "BITS.OUTB", 
+              "BITS.OUTC", 
+              "BITS.OUTD", 
+              "CLOCKS.OUTA", 
+              "CLOCKS.OUTB", 
+              "CLOCKS.OUTC", 
+              "CLOCKS.OUTD", 
+              "FMC.INP1", 
+              "FMC.INP2", 
+              "FMC.INP3", 
+              "FMC.INP4", 
+              "FMC.INP5", 
+              "FMC.INP6", 
+              "FMC.INP7", 
+              "FMC.INP8", 
+              "FILTER.READY", 
+              "ZERO", 
+              "ONE"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:bool:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bitb"
+          }
+        }, 
+        "bitbCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917047023, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "BITB current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Bitb Current"
+          }
+        }, 
+        "bitbDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917067050, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay input", 
+            "tags": [
+              "group:inputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bitb Delay"
+          }
+        }, 
+        "bitc": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916985988, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "BITC for optional trigger condition", 
+            "choices": [
+              "TTLIN1.VAL", 
+              "TTLIN2.VAL", 
+              "TTLIN3.VAL", 
+              "TTLIN4.VAL", 
+              "TTLIN5.VAL", 
+              "TTLIN6.VAL", 
+              "LVDSIN1.VAL", 
+              "LVDSIN2.VAL", 
+              "INENC1.A", 
+              "INENC2.A", 
+              "INENC3.A", 
+              "INENC4.A", 
+              "INENC1.B", 
+              "INENC2.B", 
+              "INENC3.B", 
+              "INENC4.B", 
+              "INENC1.Z", 
+              "INENC2.Z", 
+              "INENC3.Z", 
+              "INENC4.Z", 
+              "INENC1.DATA", 
+              "INENC2.DATA", 
+              "INENC3.DATA", 
+              "INENC4.DATA", 
+              "INENC1.CONN", 
+              "INENC2.CONN", 
+              "INENC3.CONN", 
+              "INENC4.CONN", 
+              "OUTENC1.CLK", 
+              "OUTENC2.CLK", 
+              "OUTENC3.CLK", 
+              "OUTENC4.CLK", 
+              "LUT1.OUT", 
+              "LUT2.OUT", 
+              "LUT3.OUT", 
+              "LUT4.OUT", 
+              "LUT5.OUT", 
+              "LUT6.OUT", 
+              "LUT7.OUT", 
+              "LUT8.OUT", 
+              "SRGATE1.OUT", 
+              "SRGATE2.OUT", 
+              "SRGATE3.OUT", 
+              "SRGATE4.OUT", 
+              "DIV1.OUTD", 
+              "DIV2.OUTD", 
+              "DIV3.OUTD", 
+              "DIV4.OUTD", 
+              "DIV1.OUTN", 
+              "DIV2.OUTN", 
+              "DIV3.OUTN", 
+              "DIV4.OUTN", 
+              "PULSE1.OUT", 
+              "PULSE2.OUT", 
+              "PULSE3.OUT", 
+              "PULSE4.OUT", 
+              "SEQ1.ACTIVE", 
+              "SEQ2.ACTIVE", 
+              "SEQ3.ACTIVE", 
+              "SEQ4.ACTIVE", 
+              "SEQ1.OUTA", 
+              "SEQ2.OUTA", 
+              "SEQ3.OUTA", 
+              "SEQ4.OUTA", 
+              "SEQ1.OUTB", 
+              "SEQ2.OUTB", 
+              "SEQ3.OUTB", 
+              "SEQ4.OUTB", 
+              "SEQ1.OUTC", 
+              "SEQ2.OUTC", 
+              "SEQ3.OUTC", 
+              "SEQ4.OUTC", 
+              "SEQ1.OUTD", 
+              "SEQ2.OUTD", 
+              "SEQ3.OUTD", 
+              "SEQ4.OUTD", 
+              "SEQ1.OUTE", 
+              "SEQ2.OUTE", 
+              "SEQ3.OUTE", 
+              "SEQ4.OUTE", 
+              "SEQ1.OUTF", 
+              "SEQ2.OUTF", 
+              "SEQ3.OUTF", 
+              "SEQ4.OUTF", 
+              "POSENC1.A", 
+              "POSENC2.A", 
+              "POSENC3.A", 
+              "POSENC4.A", 
+              "POSENC1.B", 
+              "POSENC2.B", 
+              "POSENC3.B", 
+              "POSENC4.B", 
+              "COUNTER1.CARRY", 
+              "COUNTER2.CARRY", 
+              "COUNTER3.CARRY", 
+              "COUNTER4.CARRY", 
+              "COUNTER5.CARRY", 
+              "COUNTER6.CARRY", 
+              "COUNTER7.CARRY", 
+              "COUNTER8.CARRY", 
+              "PCOMP1.ACTIVE", 
+              "PCOMP2.ACTIVE", 
+              "PCOMP3.ACTIVE", 
+              "PCOMP4.ACTIVE", 
+              "PCOMP1.OUT", 
+              "PCOMP2.OUT", 
+              "PCOMP3.OUT", 
+              "PCOMP4.OUT", 
+              "PCAP.ACTIVE", 
+              "BITS.OUTA", 
+              "BITS.OUTB", 
+              "BITS.OUTC", 
+              "BITS.OUTD", 
+              "CLOCKS.OUTA", 
+              "CLOCKS.OUTB", 
+              "CLOCKS.OUTC", 
+              "CLOCKS.OUTD", 
+              "FMC.INP1", 
+              "FMC.INP2", 
+              "FMC.INP3", 
+              "FMC.INP4", 
+              "FMC.INP5", 
+              "FMC.INP6", 
+              "FMC.INP7", 
+              "FMC.INP8", 
+              "FILTER.READY", 
+              "ZERO", 
+              "ONE"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:bool:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bitc"
+          }
+        }, 
+        "bitcCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916997909, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "BITC current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Bitc Current"
+          }
+        }, 
+        "bitcDelay": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917017936, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint8", 
+            "description": "How many FPGA ticks to delay input", 
+            "tags": [
+              "group:inputs", 
+              "widget:textinput", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Bitc Delay"
+          }
+        }, 
+        "posa": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917782068, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "POSA for optional trigger condition", 
+            "choices": [
+              "INENC1.VAL", 
+              "INENC2.VAL", 
+              "INENC3.VAL", 
+              "INENC4.VAL", 
+              "QDEC1.OUT", 
+              "QDEC2.OUT", 
+              "QDEC3.OUT", 
+              "QDEC4.OUT", 
+              "ADDER1.OUT", 
+              "ADDER2.OUT", 
+              "COUNTER1.OUT", 
+              "COUNTER2.OUT", 
+              "COUNTER3.OUT", 
+              "COUNTER4.OUT", 
+              "COUNTER5.OUT", 
+              "COUNTER6.OUT", 
+              "COUNTER7.OUT", 
+              "COUNTER8.OUT", 
+              "PGEN1.OUT", 
+              "PGEN2.OUT", 
+              "FILTER.OUT", 
+              "ZERO"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:int32:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Posa"
+          }
+        }, 
+        "posaCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917793035, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "int32", 
+            "description": "POSA current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Posa Current"
+          }
+        }, 
+        "posb": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917706012, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "POSB for optional trigger condition", 
+            "choices": [
+              "INENC1.VAL", 
+              "INENC2.VAL", 
+              "INENC3.VAL", 
+              "INENC4.VAL", 
+              "QDEC1.OUT", 
+              "QDEC2.OUT", 
+              "QDEC3.OUT", 
+              "QDEC4.OUT", 
+              "ADDER1.OUT", 
+              "ADDER2.OUT", 
+              "COUNTER1.OUT", 
+              "COUNTER2.OUT", 
+              "COUNTER3.OUT", 
+              "COUNTER4.OUT", 
+              "COUNTER5.OUT", 
+              "COUNTER6.OUT", 
+              "COUNTER7.OUT", 
+              "COUNTER8.OUT", 
+              "PGEN1.OUT", 
+              "PGEN2.OUT", 
+              "FILTER.OUT", 
+              "ZERO"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:int32:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Posb"
+          }
+        }, 
+        "posbCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917718887, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "int32", 
+            "description": "POSB current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Posb Current"
+          }
+        }, 
+        "posc": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "ZERO", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917737007, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "POSC for optional trigger condition", 
+            "choices": [
+              "INENC1.VAL", 
+              "INENC2.VAL", 
+              "INENC3.VAL", 
+              "INENC4.VAL", 
+              "QDEC1.OUT", 
+              "QDEC2.OUT", 
+              "QDEC3.OUT", 
+              "QDEC4.OUT", 
+              "ADDER1.OUT", 
+              "ADDER2.OUT", 
+              "COUNTER1.OUT", 
+              "COUNTER2.OUT", 
+              "COUNTER3.OUT", 
+              "COUNTER4.OUT", 
+              "COUNTER5.OUT", 
+              "COUNTER6.OUT", 
+              "COUNTER7.OUT", 
+              "COUNTER8.OUT", 
+              "PGEN1.OUT", 
+              "PGEN2.OUT", 
+              "FILTER.OUT", 
+              "ZERO"
+            ], 
+            "tags": [
+              "group:inputs", 
+              "inport:int32:ZERO", 
+              "widget:combo", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Posc"
+          }
+        }, 
+        "poscCurrent": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917748928, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "int32", 
+            "description": "POSC current value", 
+            "tags": [
+              "group:inputs", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Posc Current"
+          }
+        }, 
+        "outputs": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 324219942, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All outputs attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Outputs"
+          }
+        }, 
+        "active": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950841903, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Sequencer active flag", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.ACTIVE", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Active"
+          }
+        }, 
+        "outa": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950776100, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output A for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTA", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Outa"
+          }
+        }, 
+        "outb": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950815916, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output B for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTB", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Outb"
+          }
+        }, 
+        "outc": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950802087, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output C for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTC", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Outc"
+          }
+        }, 
+        "outd": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950723886, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output D for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTD", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Outd"
+          }
+        }, 
+        "oute": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950696945, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output E for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTE", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Oute"
+          }
+        }, 
+        "outf": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": false, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 950750112, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/BooleanMeta:1.0", 
+            "description": "Output F for phase outputs", 
+            "tags": [
+              "group:outputs", 
+              "outport:bool:SEQ1.OUTF", 
+              "widget:led"
+            ], 
+            "writeable": false, 
+            "label": "Outf"
+          }
+        }, 
+        "readbacks": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "expanded", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 325326919, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "All readbacks attributes", 
+            "choices": [
+              "expanded", 
+              "collapsed"
+            ], 
+            "tags": [
+              "widget:group", 
+              "config:1"
+            ], 
+            "writeable": true, 
+            "label": "Readbacks"
+          }
+        }, 
+        "tableRepeat": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917644023, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint32", 
+            "description": "Current iteration through the entire table", 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Table Repeat"
+          }
+        }, 
+        "tableLine": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 917666912, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint32", 
+            "description": "Current line in the table that is active", 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Table Line"
+          }
+        }, 
+        "lineRepeat": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": 0, 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916800975, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/NumberMeta:1.0", 
+            "dtype": "uint32", 
+            "description": "Current iteration of the active table line", 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "Line Repeat"
+          }
+        }, 
+        "state": {
+          "typeid": "epics:nt/NTScalar:1.0", 
+          "value": "WAIT_ENABLE", 
+          "alarm": {
+            "typeid": "alarm_t", 
+            "severity": 0, 
+            "status": 0, 
+            "message": ""
+          }, 
+          "timeStamp": {
+            "typeid": "time_t", 
+            "secondsPastEpoch": 1524482096, 
+            "nanoseconds": 916968107, 
+            "userTag": 0
+          }, 
+          "meta": {
+            "typeid": "malcolm:core/ChoiceMeta:1.0", 
+            "description": "Internal statemachine state", 
+            "choices": [
+              "WAIT_ENABLE", 
+              "LOAD_TABLE", 
+              "WAIT_TRIGGER", 
+              "PHASE1", 
+              "PHASE2"
+            ], 
+            "tags": [
+              "group:readbacks", 
+              "widget:textupdate"
+            ], 
+            "writeable": false, 
+            "label": "State"
+          }
+        }
+      }
+    ]
+  ]
+}
