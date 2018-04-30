@@ -13,7 +13,6 @@ import AppReducer from './App.reducer';
 import AppRouter from './App.routes';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
-import { malcolmGetAction } from './malcolm/malcolmActionCreators';
 
 require('typeface-roboto');
 
@@ -41,9 +40,6 @@ const store = createStore(
 );
 
 configureMalcolmSocketHandlers(socket, store);
-
-// example dispatch, this will be deleted
-store.dispatch(malcolmGetAction(['BL18I:XSPRESS3', 'state', 'value']));
 
 ReactDOM.render(
   <Provider store={store}>

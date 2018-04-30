@@ -1,11 +1,19 @@
-function buildMalcolmMessage(action, nextId) {
-  const message = { ...action, id: nextId };
+import queryString from 'query-string';
+import {
+  malcolmSubscribeAction,
+  malcolmNewParentBlockAction,
+} from './malcolmActionCreators';
+import { MalcolmSend } from './malcolm.types';
+
+function buildMalcolmMessage(payload) {
+  const message = { ...payload };
   delete message.type;
 
   return message;
 }
 
-function findNextId(messagesInFlight) {
+function findNextId(store) {
+  const { messagesInFlight } = store.getState().malcolm;
   if (!messagesInFlight || messagesInFlight.length === 0) {
     return 1;
   }
@@ -13,12 +21,29 @@ function findNextId(messagesInFlight) {
   return maxId + 1;
 }
 
+function handleLocationChange(queryParams, store) {
+  const parameters = queryString.parse(queryParams);
+  store.dispatch(malcolmNewParentBlockAction(parameters.block));
+  store.dispatch(malcolmSubscribeAction([parameters.block, 'meta']));
+}
+
 // eslint-disable-next-line no-unused-vars
 const buildMalcolmReduxMiddleware = socket => store => next => action => {
-  if (action.type === 'malcolm:send') {
-    // we need to put some more logic in here to make the right kind of malcolm message
-    const nextId = findNextId(store.getState().malcolm.messagesInFlight);
-    socket.send(buildMalcolmMessage(action, nextId));
+  const updatedAction = { ...action };
+
+  switch (action.type) {
+    case MalcolmSend:
+      updatedAction.payload.id = findNextId(store);
+      socket.send(buildMalcolmMessage(action.payload));
+      break;
+
+    case '@@router/LOCATION_CHANGE':
+      handleLocationChange(action.payload.search, store);
+
+      break;
+
+    default:
+      break;
   }
 
   return next(action);

@@ -76,15 +76,17 @@ const DrawerContainer = props => (
           </IconButton>
         </Toolbar>
       </AppBar>
-      {props.children}
+      {props.children.filter(
+        (c, i) => i !== 0 && i !== props.children.length - 1
+      )}
     </div>
     <Drawer variant="persistent" open={props.open} anchor="left">
       <DrawerHeader closeAction={props.closeParent} />
-      <div>Drawer contents</div>
+      {props.children[0]}
     </Drawer>
     <Drawer variant="persistent" open={props.openSecondary} anchor="right">
       <DrawerHeader closeAction={props.closeChild} />
-      <div>Drawer contents</div>
+      {props.children[props.children.length - 1]}
     </Drawer>
   </div>
 );

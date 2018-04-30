@@ -16,6 +16,7 @@
     "history": "^4.7.2",
     "material-ui": "^1.0.0-beta.43",
     "prop-types": "^15.6.1",
+    "query-string": "^6.0.0",
     "radium": "^0.24.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

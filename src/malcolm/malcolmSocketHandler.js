@@ -7,7 +7,10 @@ const configureMalcolmSocketHandlers = (socket, store) => {
     // for the moment we are just sending this round the store, but in future we need to do some processing on the result
     store.dispatch({
       type: 'malcolm:received',
-      data,
+      payload: {
+        id: data.id,
+        typeid: data.typeid,
+      },
     });
   });
 };
