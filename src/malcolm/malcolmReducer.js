@@ -1,4 +1,4 @@
-import { MalcolmNewBlock } from './malcolm.types';
+import { MalcolmNewBlock, MalcolmSend, MalcolmError } from './malcolm.types';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -45,10 +45,10 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
     case MalcolmNewBlock:
       return registerNewBlock(state, action);
 
-    case 'malcolm:send':
+    case MalcolmSend:
       return updateMessagesInFlight(state, action);
 
-    case 'malcolm:error':
+    case MalcolmError:
       return stopTrackingMessage(state, action);
 
     default:

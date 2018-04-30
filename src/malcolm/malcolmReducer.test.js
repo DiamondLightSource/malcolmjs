@@ -1,8 +1,12 @@
 import malcolmReducer from './malcolmReducer';
+import { malcolmNewParentBlockAction } from './malcolmActionCreators';
 
-const buildAction = type => ({
+const buildAction = (type, id) => ({
   type,
-  typeid: 'malcolm:core/Get:1.0',
+  payload: {
+    id,
+    typeid: 'malcolm:core/Get:1.0',
+  },
 });
 
 describe('malcolm reducer', () => {
@@ -11,6 +15,7 @@ describe('malcolm reducer', () => {
   beforeEach(() => {
     state = {
       messagesInFlight: [],
+      blocks: {},
     };
   });
 
@@ -33,5 +38,25 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, buildAction('malcolm:send'));
 
     expect(state.messagesInFlight.length).toEqual(2);
+  });
+
+  it('stops tracking a message once an error response is received', () => {
+    state = {
+      messagesInFlight: [{ id: 1 }, { id: 123 }],
+    };
+
+    const newState = malcolmReducer(state, buildAction('malcolm:error', 1));
+
+    expect(newState.messagesInFlight.length).toEqual(1);
+    expect(newState.messagesInFlight[0].id).toEqual(123);
+  });
+
+  it('registers a new block when one is requested', () => {
+    state = malcolmReducer(state, malcolmNewParentBlockAction('block1'));
+
+    expect(state.blocks.block1).toBeDefined();
+    expect(state.blocks.block1.name).toEqual('block1');
+    expect(state.blocks.block1.loading).toEqual(true);
+    expect(state.parentBlock).toEqual('block1');
   });
 });
