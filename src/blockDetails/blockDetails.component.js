@@ -11,12 +11,12 @@ const styles = theme => ({
   },
 });
 
-const blockLoading = (block, classes) => {
+const blockLoading = block => {
   if (block && block.loading) {
     return (
-      <div className={classes.progressContainer}>
+      <div>
         <CircularProgress color="secondary" />
-        <Typography color="inherit">Loading...</Typography>
+        <Typography>Loading...</Typography>
       </div>
     );
   }
@@ -24,8 +24,21 @@ const blockLoading = (block, classes) => {
   return null;
 };
 
+const displayBlock = block => {
+  if (block && !block.loading) {
+    return (
+      <div>{block.fields.map(f => <Typography key={f}>{f}</Typography>)}</div>
+    );
+  }
+
+  return null;
+};
+
 const BlockDetails = props => (
-  <div>{blockLoading(props.block, props.classes)}</div>
+  <div className={props.classes.progressContainer}>
+    {blockLoading(props.block)}
+    {displayBlock(props.block)}
+  </div>
 );
 
 BlockDetails.propTypes = {

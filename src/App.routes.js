@@ -4,7 +4,7 @@ import App from './App';
 
 const AppRouter = () => (
   <div>
-    <Route exact path="/" component={App} />
+    <Route exact path="/gui" component={App} />
   </div>
 );
 

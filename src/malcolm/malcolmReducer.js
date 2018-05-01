@@ -1,4 +1,9 @@
-import { MalcolmNewBlock, MalcolmSend, MalcolmError } from './malcolm.types';
+import {
+  MalcolmNewBlock,
+  MalcolmSend,
+  MalcolmError,
+  MalcolmBlockMeta,
+} from './malcolm.types';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -40,6 +45,29 @@ function registerNewBlock(state, action) {
   };
 }
 
+function updateBlock(state, payload) {
+  const blocks = { ...state.blocks };
+
+  if (payload.delta) {
+    const blockName = state.messagesInFlight.find(m => m.id === payload.id)
+      .path[0];
+
+    if (Object.prototype.hasOwnProperty.call(blocks, blockName)) {
+      blocks[blockName] = {
+        ...blocks[blockName],
+        loading: false,
+        label: payload.label,
+        fields: payload.fields,
+      };
+    }
+  }
+
+  return {
+    ...state,
+    blocks,
+  };
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -50,6 +78,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmError:
       return stopTrackingMessage(state, action);
+
+    case MalcolmBlockMeta:
+      return updateBlock(state, action.payload);
 
     default:
       return state;

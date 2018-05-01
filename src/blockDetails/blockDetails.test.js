@@ -14,6 +14,7 @@ it('renders correctly when loading', () => {
 it('renders correctly when loaded', () => {
   const block = {
     loading: false,
+    fields: ['health', 'icon'],
   };
 
   const tree = renderer.create(<BlockDetails block={block} />).toJSON();
