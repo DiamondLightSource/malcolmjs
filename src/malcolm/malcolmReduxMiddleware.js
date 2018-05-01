@@ -1,4 +1,3 @@
-import queryString from 'query-string';
 import {
   malcolmSubscribeAction,
   malcolmNewParentBlockAction,
@@ -22,7 +21,16 @@ function findNextId(store) {
 }
 
 function handleLocationChange(queryParams, store) {
-  const parameters = queryString.parse(queryParams);
+  // temporary until we sort proper route handling
+  const parameters = {};
+  queryParams
+    .substr(1)
+    .split('&')
+    .map(kvp => kvp.split('='))
+    .forEach(kvp => {
+      const [key, value] = kvp;
+      parameters[key] = value;
+    });
   store.dispatch(malcolmNewParentBlockAction(parameters.block));
   store.dispatch(malcolmSubscribeAction([parameters.block, 'meta']));
 }
