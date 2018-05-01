@@ -1,5 +1,6 @@
 import malcolmReducer from './malcolmReducer';
 import { malcolmNewParentBlockAction } from './malcolmActionCreators';
+import { MalcolmBlockMeta } from './malcolm.types';
 
 const buildAction = (type, id) => ({
   type,
@@ -58,5 +59,33 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.name).toEqual('block1');
     expect(state.blocks.block1.loading).toEqual(true);
     expect(state.parentBlock).toEqual('block1');
+  });
+
+  it('updates block if it exists', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+    };
+
+    state.messagesInFlight.push({
+      id: 1,
+      path: ['block1', 'meta'],
+    });
+
+    const action = {
+      type: MalcolmBlockMeta,
+      payload: {
+        id: 1,
+        delta: true,
+        label: 'Block 1',
+        fields: ['health', 'icon'],
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.loading).toEqual(false);
+    expect(state.blocks.block1.label).toEqual('Block 1');
+    expect(state.blocks.block1.fields).toEqual(['health', 'icon']);
   });
 });
