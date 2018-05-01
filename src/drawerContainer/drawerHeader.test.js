@@ -16,7 +16,9 @@ describe('DrawerHeader', () => {
   });
 
   it('renders correctly', () => {
-    const wrapper = shallow(<DrawerHeader closeAction={() => {}} />);
+    const wrapper = shallow(
+      <DrawerHeader closeAction={() => {}} title="TTLIN1" />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 

@@ -81,11 +81,11 @@ const DrawerContainer = props => (
       )}
     </div>
     <Drawer variant="persistent" open={props.open} anchor="left">
-      <DrawerHeader closeAction={props.closeParent} />
+      <DrawerHeader closeAction={props.closeParent} title={props.parentTitle} />
       {props.children[0]}
     </Drawer>
     <Drawer variant="persistent" open={props.openSecondary} anchor="right">
-      <DrawerHeader closeAction={props.closeChild} />
+      <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
       {props.children[props.children.length - 1]}
     </Drawer>
   </div>
@@ -108,6 +108,8 @@ DrawerContainer.propTypes = {
   openParent: PropTypes.func.isRequired,
   closeParent: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,
+  parentTitle: PropTypes.string.isRequired,
+  childTitle: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string,
     appBarShift: PropTypes.string,

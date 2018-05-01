@@ -6,7 +6,7 @@ import BlockDetails from '../blockDetails/blockDetails.component';
 
 const MainMalcolmView = props => (
   <div>
-    <DrawerContainer>
+    <DrawerContainer parentTitle={props.parentBlockTitle} childTitle="">
       <BlockDetails block={props.parentBlock} />
       <div>Middle content</div>
       <div>Right content</div>
@@ -14,16 +14,21 @@ const MainMalcolmView = props => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  parentBlock: state.malcolm.parentBlock
+const mapStateToProps = state => {
+  const parentBlock = state.malcolm.parentBlock
     ? state.malcolm.blocks[state.malcolm.parentBlock]
-    : undefined,
-});
+    : undefined;
+  return {
+    parentBlock,
+    parentBlockTitle: parentBlock ? parentBlock.name : '',
+  };
+};
 
 const mapDispatchToProps = () => ({});
 
 MainMalcolmView.propTypes = {
   parentBlock: PropTypes.shape({}),
+  parentBlockTitle: PropTypes.string.isRequired,
 };
 
 MainMalcolmView.defaultProps = {

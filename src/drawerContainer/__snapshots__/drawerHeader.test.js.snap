@@ -28,7 +28,7 @@ exports[`DrawerHeader renders correctly 1`] = `
         }
         variant="title"
       >
-        Title
+        TTLIN1
       </WithStyles(Typography)>
       <WithStyles(IconButton)>
         <pure(OpenInNew) />
