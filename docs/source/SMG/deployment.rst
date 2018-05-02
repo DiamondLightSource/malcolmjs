@@ -5,6 +5,6 @@ The continuous integration environment using Travis automatically deploys the bu
 
 Once the resulting build is complete then the release will appear in the list of `MalcolmJS releases <https://github.com/dls-controls/malcolmjs/releases>`_.
 
-Tags should take the form major.minor.patch ``#.#.#``, the artifacts then use ``git describe`` to append the number of commits since the tag as well as the SHA if relevant.
+Tags should take the form major.minor.patch ``#-#-#``, the artifacts then use ``git describe`` to append the number of commits since the tag as well as the SHA if relevant.
 
 The resulting code package can then be downloaded and bundled into a deployment of PyMalcolm. Alternatively you can statically serve the bundle locally using something like the npm package ``http-server``.

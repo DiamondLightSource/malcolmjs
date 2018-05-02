@@ -1,7 +1,7 @@
 Architectural Decision Record
 =============================
 
-**1. Malcolm related code should be grouped together**
+**1. Malcolm protocal related code should be grouped together**
 
 ------------
 
