@@ -16,6 +16,7 @@
     "history": "^4.7.2",
     "material-ui": "^1.0.0-beta.43",
     "prop-types": "^15.6.1",
+    "query-string": "^6.0.0",
     "radium": "^0.24.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -68,7 +69,8 @@
     "lint:js": "eslint --ext=js --ext=jsx --fix ./src",
     "lint:css": "stylelint --config=.stylelintrc './src/**/*.css'",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "build-docs": "sphinx-build -b html docs/source docs/build/html"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

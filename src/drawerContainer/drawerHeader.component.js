@@ -26,7 +26,7 @@ const DrawerHeader = props => (
           <NavigationClose />
         </IconButton>
         <Typography variant="title" color="inherit" style={styles.title}>
-          Title
+          {props.title}
         </Typography>
         <IconButton>
           <OpenInNew />
@@ -37,6 +37,7 @@ const DrawerHeader = props => (
 );
 
 DrawerHeader.propTypes = {
+  title: PropTypes.string.isRequired,
   closeAction: PropTypes.func.isRequired,
 };
 

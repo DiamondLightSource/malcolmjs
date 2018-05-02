@@ -2,7 +2,21 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import BlockDetails from './blockDetails.component';
 
-it('renders correctly', () => {
-  const tree = renderer.create(<BlockDetails />).toJSON();
+it('renders correctly when loading', () => {
+  const block = {
+    loading: true,
+  };
+
+  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+it('renders correctly when loaded', () => {
+  const block = {
+    loading: false,
+    fields: ['health', 'icon'],
+  };
+
+  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
   expect(tree).toMatchSnapshot();
 });

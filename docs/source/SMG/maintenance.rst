@@ -36,7 +36,7 @@ The main commands you are most likely to need during development are:
 ``build``               create a production optimized build of the site
 ``test``                run the tests and report coverage
 ``test:watch``          the same as ``test`` but watches for file changes and re-runs automatically
-``eject``               a standard create-react-app command that generates all the config files and webpack settings as standalone files if custom editing needs to be done - this should be avoided unless absolutely necessary/delayed as long as possible
+``eject``               **This should be avoided at all costs so we can update create-react-app** a standard create-react-app command that generates all the config files and webpack settings as standalone files if custom editing needs to be done - this should be avoided unless absolutely necessary/delayed as long as possible
 ``cy:open``             open the cypress interactive runner
 ``cy:run``              run the cypress tests in a headless mode
 ``e2e:serve``           create a production build and serve both MalcolmJS and the websocket connection from the same process (otherwise the end-to-end tests don't exit without a fault on Travis)
