@@ -54,7 +54,7 @@ const buildMalcolmReduxMiddleware = socket => store => next => action => {
       break;
   }
 
-  return next(action);
+  return next(updatedAction);
 };
 
 export default buildMalcolmReduxMiddleware;
