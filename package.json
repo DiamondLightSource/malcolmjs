@@ -69,7 +69,8 @@
     "lint:js": "eslint --ext=js --ext=jsx --fix ./src",
     "lint:css": "stylelint --config=.stylelintrc './src/**/*.css'",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "build-docs": "sphinx-build -b html docs/source docs/build/html"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

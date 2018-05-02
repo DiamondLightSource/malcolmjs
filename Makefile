@@ -12,7 +12,7 @@ docs:
 
 # Clean the module
 clean:
-	rm -rf docs/html
+	rm -rf docs/build/html
 	find -name '*~' -delete
 
 

@@ -32,11 +32,11 @@ The malcolm interface will allow MalcolmJS to be decoupled from Malcolm by isola
 
 The secondary reason for doing this is so that the Malcolm related code could be released as a library for others to create their own React dashboards from Malcolm data.
 
-**Block Details:-**
+**Block Pane:-**
 This presentational layer container will contain all the React components for displays information about the details for a block, i.e. information about the attributes it has. There will be quite a large collection of components in here for the various attributes, e.g. number inputs, LED status, combo selections, etc. The attributes will roughly break down into summary information, parameters, views and methods.
 
-**View Details:-**
-When the user selects a view options, e.g. layout, table, etc. from the block details then MalcolmJS will populate a central panel with the details about that view. For example, if they select layout then they will get a flow diagram showing the various blocks that are currently connected.
+**View Pane:-**
+When the user selects a view options, e.g. layout, table, etc. from the block pane then MalcolmJS will populate a central panel with the details about that view. For example, if they select layout then they will get a flow diagram showing the various blocks that are currently connected.
 
 **Navigation:-**
 The navigation container has all the presentational components for showing how far down the block tree a user is and allow them to select different levels as well as different views easily from one place.

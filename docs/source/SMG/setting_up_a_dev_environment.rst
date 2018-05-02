@@ -48,6 +48,7 @@ Then to run the sphinx build run:
 
 	sphinx-build -b html docs/source docs/build/html
 
+The same build step can be done by running the ``Makefile`` in the root of the repo.
 
 You can then open ``.\docs\build\html\index.html`` in a browser to view the results.
 
