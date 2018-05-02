@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 104, 
+  "path": [
+    "PANDA:SEQ1", 
+    "posa"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,234 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTTable:1.0", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277290, 
+          "userTag": 0, 
+          "nanoseconds": 918589115
+        }, 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "labels": [
+          "Repeats", 
+          "Trigger", 
+          "Position", 
+          "Time1", 
+          "Outa1", 
+          "Outb1", 
+          "Outc1", 
+          "Outd1", 
+          "Oute1", 
+          "Outf1", 
+          "Time2", 
+          "Outa2", 
+          "Outb2", 
+          "Outc2", 
+          "Outd2", 
+          "Oute2", 
+          "Outf2"
+        ], 
+        "value": {
+          "typeid": "malcolm:core/Table:1.0", 
+          "outf1": [], 
+          "outd1": [], 
+          "oute1": [], 
+          "outa2": [], 
+          "outf2": [], 
+          "outa1": [], 
+          "time1": [], 
+          "time2": [], 
+          "oute2": [], 
+          "outc1": [], 
+          "outc2": [], 
+          "trigger": [], 
+          "outb2": [], 
+          "outb1": [], 
+          "position": [], 
+          "repeats": [], 
+          "outd2": []
+        }, 
+        "meta": {
+          "writeable": true, 
+          "typeid": "malcolm:core/TableMeta:1.0", 
+          "elements": {
+            "outf2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outf2", 
+              "description": "OUTF2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outf1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outf1", 
+              "description": "OUTF1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outd1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outd1", 
+              "description": "OUTD1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "oute1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Oute1", 
+              "description": "OUTE1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outa2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outa2", 
+              "description": "OUTA2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outa1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outa1", 
+              "description": "OUTA1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "time1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "description": "TIME1", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "dtype": "uint32", 
+              "label": "Time1"
+            }, 
+            "time2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "description": "TIME2", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "dtype": "uint32", 
+              "label": "Time2"
+            }, 
+            "oute2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Oute2", 
+              "description": "OUTE2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outc1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outc1", 
+              "description": "OUTC1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outc2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outc2", 
+              "description": "OUTC2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "trigger": {
+              "writeable": true, 
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "description": "TRIGGER", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "dtype": "uint8", 
+              "label": "Trigger"
+            }, 
+            "outb2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outb2", 
+              "description": "OUTB2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "outb1": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outb1", 
+              "description": "OUTB1", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }, 
+            "position": {
+              "writeable": true, 
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "description": "POSITION", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "dtype": "uint32", 
+              "label": "Position"
+            }, 
+            "repeats": {
+              "writeable": true, 
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "description": "REPEATS", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "dtype": "uint16", 
+              "label": "Repeats"
+            }, 
+            "outd2": {
+              "writeable": true, 
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "label": "Outd2", 
+              "description": "OUTD2", 
+              "tags": [
+                "widget:checkbox"
+              ]
+            }
+          }, 
+          "description": "Sequencer table of lines", 
+          "tags": [
+            "widget:table", 
+            "group:parameters", 
+            "config:1"
+          ], 
+          "label": "Table"
+        }
+      }
+    ]
+  ], 
+  "id": 87
+}

@@ -1,0 +1,34 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": false, 
+          "typeid": "malcolm:core/BooleanMeta:1.0", 
+          "label": "Modified", 
+          "description": "Whether the design is modified", 
+          "tags": [
+            "widget:led"
+          ]
+        }, 
+        "value": false, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277292, 
+          "userTag": 0, 
+          "nanoseconds": 43981075
+        }
+      }
+    ]
+  ], 
+  "id": 9
+}

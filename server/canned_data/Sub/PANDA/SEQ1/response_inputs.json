@@ -1,0 +1,39 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": true, 
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "All inputs attributes", 
+          "tags": [
+            "widget:group", 
+            "config:1"
+          ], 
+          "label": "Inputs", 
+          "choices": [
+            "expanded", 
+            "collapsed"
+          ]
+        }, 
+        "value": "expanded", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277290, 
+          "userTag": 0, 
+          "nanoseconds": 330553054
+        }
+      }
+    ]
+  ], 
+  "id": 91
+}

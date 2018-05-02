@@ -1,0 +1,37 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": true, 
+          "typeid": "malcolm:core/NumberMeta:1.0", 
+          "description": "Number of bits", 
+          "tags": [
+            "group:parameters", 
+            "widget:textinput", 
+            "config:1"
+          ], 
+          "dtype": "uint32", 
+          "label": "Bits"
+        }, 
+        "value": 0, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277290, 
+          "userTag": 0, 
+          "nanoseconds": 913511037
+        }
+      }
+    ]
+  ], 
+  "id": 30
+}

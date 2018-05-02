@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 13, 
+  "path": [
+    "PANDA:TTLIN1", 
+    "icon"
+  ], 
+  "delta": true
+}
