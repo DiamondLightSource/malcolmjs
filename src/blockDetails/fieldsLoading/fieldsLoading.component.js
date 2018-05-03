@@ -31,9 +31,10 @@ const styles = () => ({
 
 const FieldsLoading = props => (
   <div>
-    {props.fields.map(f => (
-      <div key={f.name} className={props.classes.loadingRow}>
-        {f.loading ? (
+    <Typography>Loading attributes...</Typography>
+    {props.attributes.map(a => (
+      <div key={a.name} className={props.classes.loadingRow}>
+        {a.loading ? (
           <CircularProgress
             className={props.classes.progress}
             color="secondary"
@@ -42,14 +43,14 @@ const FieldsLoading = props => (
         ) : (
           <CheckCircle className={props.classes.success} />
         )}
-        <Typography className={props.classes.fieldName}>{f.name}</Typography>
+        <Typography className={props.classes.fieldName}>{a.name}</Typography>
       </div>
     ))}
   </div>
 );
 
 FieldsLoading.propTypes = {
-  fields: PropTypes.arrayOf(
+  attributes: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       loading: PropTypes.bool,
@@ -64,7 +65,7 @@ FieldsLoading.propTypes = {
 };
 
 FieldsLoading.defaultProps = {
-  fields: [],
+  attributes: [],
 };
 
 export default withStyles(styles, { withTheme: true })(FieldsLoading);

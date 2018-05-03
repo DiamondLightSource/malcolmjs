@@ -40,7 +40,7 @@ function handleMessage(socket, message) {
 function sendResponse(socket, message) {
   setTimeout(() => {
     socket.send(message)
-  }, settings.delay);
+  }, Math.ceil(settings.delay*Math.random()));
 }
 
 function handleDisconnect() {

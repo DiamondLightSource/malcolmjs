@@ -14,7 +14,7 @@ it('renders correctly when loading', () => {
 it('renders correctly when metadata loaded and waiting for attributes', () => {
   const block = {
     loading: false,
-    fields: [
+    attributes: [
       { name: 'health', loading: true },
       { name: 'icon', loading: true },
     ],
@@ -27,7 +27,7 @@ it('renders correctly when metadata loaded and waiting for attributes', () => {
 it('renders correctly when metadata loaded and attributes loaded', () => {
   const block = {
     loading: false,
-    fields: [
+    attributes: [
       { name: 'health', loading: false },
       { name: 'icon', loading: false },
     ],

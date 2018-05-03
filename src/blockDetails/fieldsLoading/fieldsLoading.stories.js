@@ -25,5 +25,5 @@ storiesOf('Fields Loading', module).add(
   'default',
   withInfo(`
       A container to show the loading state of the attributes in a block
-    `)(() => displayContainer(<FieldsLoading fields={fields} />))
+    `)(() => displayContainer(<FieldsLoading attributes={fields} />))
 );

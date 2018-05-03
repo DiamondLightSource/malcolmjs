@@ -25,11 +25,11 @@ const blockLoading = block => {
   return null;
 };
 
-const displayBlock = block => {
-  if (block && !block.loading) {
+const attributesLoading = block => {
+  if (block && !block.loading && block.attributes.some(a => a.loading)) {
     return (
       <div>
-        <FieldsLoading fields={block.fields} />
+        <FieldsLoading attributes={block.attributes} />
       </div>
     );
   }
@@ -40,7 +40,7 @@ const displayBlock = block => {
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
     {blockLoading(props.block)}
-    {displayBlock(props.block)}
+    {attributesLoading(props.block)}
   </div>
 );
 

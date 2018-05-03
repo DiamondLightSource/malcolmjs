@@ -42,56 +42,7 @@ exports[`renders correctly when loading 1`] = `
 exports[`renders correctly when metadata loaded and attributes loaded 1`] = `
 <div
   className="BlockDetails-progressContainer-1"
->
-  <div>
-    <div>
-      <div
-        className="FieldsLoading-loadingRow-33"
-      >
-        <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root-37 FieldsLoading-success-36"
-          color={undefined}
-          focusable="false"
-          viewBox="0 0 24 24"
-        >
-          <g>
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-            />
-          </g>
-        </svg>
-        <p
-          className="MuiTypography-root-9 MuiTypography-body1-18 FieldsLoading-fieldName-34"
-        >
-          health
-        </p>
-      </div>
-      <div
-        className="FieldsLoading-loadingRow-33"
-      >
-        <svg
-          aria-hidden="true"
-          className="MuiSvgIcon-root-37 FieldsLoading-success-36"
-          color={undefined}
-          focusable="false"
-          viewBox="0 0 24 24"
-        >
-          <g>
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-            />
-          </g>
-        </svg>
-        <p
-          className="MuiTypography-root-9 MuiTypography-body1-18 FieldsLoading-fieldName-34"
-        >
-          icon
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+/>
 `;
 
 exports[`renders correctly when metadata loaded and waiting for attributes 1`] = `
@@ -100,6 +51,11 @@ exports[`renders correctly when metadata loaded and waiting for attributes 1`] =
 >
   <div>
     <div>
+      <p
+        className="MuiTypography-root-9 MuiTypography-body1-18"
+      >
+        Loading attributes...
+      </p>
       <div
         className="FieldsLoading-loadingRow-33"
       >
