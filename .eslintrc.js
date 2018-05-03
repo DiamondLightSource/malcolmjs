@@ -4,6 +4,7 @@ module.exports = {
     'jest': true,
     'es6': true,
     'node': true,
+    'cypress/globals': true
   },
   'extends': [
     'airbnb',
@@ -11,6 +12,7 @@ module.exports = {
   ],
   'plugins': [
     'prettier',
+    'cypress'
   ],
   'rules': {
     'react/jsx-filename-extension': 'off',
