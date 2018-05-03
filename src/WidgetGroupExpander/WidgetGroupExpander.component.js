@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 const styles = theme => ({
   div: {
     backgroundColor: theme.palette.background.paper,
-    maxWidth: 200,
+    maxWidth: 500,
   },
   Heading: {
     padding: 4,
@@ -27,7 +27,7 @@ const WidgetGroupExpander = props => (
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <div>{props.children}</div>
+        <div className={props.classes.div}>{props.children}</div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   </div>
