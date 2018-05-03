@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
+import FieldsLoading from './fieldsLoading/fieldsLoading.component';
 
 const styles = theme => ({
   progressContainer: {
@@ -27,7 +28,9 @@ const blockLoading = block => {
 const displayBlock = block => {
   if (block && !block.loading) {
     return (
-      <div>{block.fields.map(f => <Typography key={f}>{f}</Typography>)}</div>
+      <div>
+        <FieldsLoading fields={block.fields} />
+      </div>
     );
   }
 

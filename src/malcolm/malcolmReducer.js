@@ -57,7 +57,7 @@ function updateBlock(state, payload) {
         ...blocks[blockName],
         loading: false,
         label: payload.label,
-        fields: payload.fields,
+        fields: payload.fields.map(f => ({ name: f, loading: true })),
       };
     }
   }
