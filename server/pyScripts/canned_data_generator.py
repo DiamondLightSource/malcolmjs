@@ -3,12 +3,22 @@ import shutil
 from tornado.websocket import websocket_connect
 from tornado import gen, options
 from tornado.ioloop import IOLoop
-
 from collections import OrderedDict
-from malcolm.core import Queue, Process
-from cothread import Spawn, Yield
+from malcolm.core import Queue
 from commands import getstatusoutput
 from filestring_utils import *
+
+try:
+    from cothread import Spawn, Yield
+    print "Cothread loaded & used..."
+except ImportError:
+    print "Cothread failed to import; running in sync mode..."
+
+    def Spawn(*args):
+        return None
+
+    def Yield():
+        pass
 
 
 class MalcolmServerConnect:
@@ -32,15 +42,21 @@ class MalcolmServerConnect:
         resp = json.loads(resp)
         self.responses.put(resp)
         conn.close()
-        Yield()
+        if self.conn is not None:
+            Yield()
 
     def do_task(self, task, *args):
-        self._loop.add_callback(task, *args)
-        return
+        def dummy_func():
+            return task(*args)
+        if self.conn is None:
+            self._loop.run_sync(dummy_func)
+        else:
+            self._loop.add_callback(task, *args)
 
     def disconnect(self):
-        self._loop.add_callback(self._loop.close())
-        self.conn = None
+        if self.conn is not None:
+            self._loop.add_callback(self._loop.close())
+            self.conn = None
 
 
 class BashMalcolmServerConnect:

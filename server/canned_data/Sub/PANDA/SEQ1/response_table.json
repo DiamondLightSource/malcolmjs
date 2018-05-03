@@ -7,9 +7,9 @@
         "typeid": "epics:nt/NTTable:1.0", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525277290, 
+          "secondsPastEpoch": 1525279465, 
           "userTag": 0, 
-          "nanoseconds": 918589115
+          "nanoseconds": 267260074
         }, 
         "alarm": {
           "status": 0, 

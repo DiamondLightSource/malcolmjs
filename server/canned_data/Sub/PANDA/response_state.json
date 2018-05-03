@@ -32,9 +32,9 @@
         "value": "Ready", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525277292, 
+          "secondsPastEpoch": 1525279466, 
           "userTag": 0, 
-          "nanoseconds": 50129890
+          "nanoseconds": 327646017
         }
       }
     ]
