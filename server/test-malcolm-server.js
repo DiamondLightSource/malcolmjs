@@ -1,23 +1,11 @@
 const io = require('socket.io')();
 const fs = require('fs');
+const dataLoader = require('./loadCannedData')
 
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
-let malcolmMessages = {};
+let malcolmMessages = dataLoader.loadData('./server/canned_data/');
 let subscriptions = [];
-
-const dataFolder = './server/canned_data/Sub/';
-fs.readdir(dataFolder, (err, files) => {
-  files.filter(f => f.startsWith('request_')).forEach(file => {
-    const request = JSON.parse(fs.readFileSync(dataFolder + file).toString());
-    delete request.id;
-
-    const response = JSON.parse(fs.readFileSync((dataFolder + file).replace('request_', 'response_')).toString());
-    delete response.id;
-
-    malcolmMessages[JSON.stringify(request)] = response;
-  });
-})
 
 io.on('connection', function (socket) {
   socket.on('message', message => handleMessage(socket, message));
