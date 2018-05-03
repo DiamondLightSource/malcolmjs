@@ -11,6 +11,7 @@ import Typography from 'material-ui/Typography';
 const styles = theme => ({
   div: {
     backgroundColor: theme.palette.background.paper,
+    maxWidth: 200,
   },
   Heading: {
     padding: 4,
