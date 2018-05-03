@@ -1,0 +1,36 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": false, 
+          "typeid": "malcolm:core/BooleanMeta:1.0", 
+          "label": "Outa", 
+          "description": "Output A for phase outputs", 
+          "tags": [
+            "group:outputs", 
+            "outport:bool:SEQ1.OUTA", 
+            "widget:led"
+          ]
+        }, 
+        "value": false, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277290, 
+          "userTag": 0, 
+          "nanoseconds": 972018003
+        }
+      }
+    ]
+  ], 
+  "id": 112
+}

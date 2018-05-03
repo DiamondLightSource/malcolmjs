@@ -1,0 +1,46 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": true, 
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "Capture VAL in PCAP?", 
+          "tags": [
+            "group:outputs", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "label": "Val Capture", 
+          "choices": [
+            "No", 
+            "Value", 
+            "Diff", 
+            "Sum", 
+            "Mean", 
+            "Min", 
+            "Max", 
+            "Min Max"
+          ]
+        }, 
+        "value": "No", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 1525277290, 
+          "userTag": 0, 
+          "nanoseconds": 913431882
+        }
+      }
+    ]
+  ], 
+  "id": 51
+}
