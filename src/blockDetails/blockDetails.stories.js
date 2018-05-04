@@ -19,7 +19,10 @@ const displayContainer = node => <div style={styles.layout}>{node}</div>;
 
 const block = loading => ({
   loading,
-  fields: [{ name: 'health', loading: true }, { name: 'icon', loading: false }],
+  attributes: [
+    { name: 'health', loading: true },
+    { name: 'icon', loading: false },
+  ],
 });
 
 storiesOf('Block Details', module)
