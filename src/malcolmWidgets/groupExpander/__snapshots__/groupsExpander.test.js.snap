@@ -4,8 +4,11 @@ exports[`GroupExpander renders when default expanded is false 1`] = `
 <WidgetGroupExpander
   classes={
     Object {
-      "div": "WidgetGroupExpander-div-1",
-      "heading": "WidgetGroupExpander-heading-2",
+      "content": "WidgetGroupExpander-content-3",
+      "expandIcon": "WidgetGroupExpander-expandIcon-4",
+      "expanded": "WidgetGroupExpander-expanded-2",
+      "heading": "WidgetGroupExpander-heading-5",
+      "root": "WidgetGroupExpander-root-1",
     }
   }
   expanded={false}
@@ -278,8 +281,11 @@ exports[`GroupExpander renders when default expanded is true 1`] = `
 <WidgetGroupExpander
   classes={
     Object {
-      "div": "WidgetGroupExpander-div-1",
-      "heading": "WidgetGroupExpander-heading-2",
+      "content": "WidgetGroupExpander-content-3",
+      "expandIcon": "WidgetGroupExpander-expandIcon-4",
+      "expanded": "WidgetGroupExpander-expanded-2",
+      "heading": "WidgetGroupExpander-heading-5",
+      "root": "WidgetGroupExpander-root-1",
     }
   }
   expanded={true}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
-import FieldsLoading from './fieldsLoading/fieldsLoading.component';
+import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 
 const styles = theme => ({
   progressContainer: {
@@ -12,35 +12,48 @@ const styles = theme => ({
   },
 });
 
-const blockLoading = block => {
-  if (block && block.loading) {
+const ignoredAttributes = ['icon'];
+
+export const isBlockLoading = block =>
+  block && (block.loading || block.attributes.some(a => a.loading));
+export const isRootLevelAttribute = a =>
+  !a.inGroup &&
+  !a.isGroup &&
+  !ignoredAttributes.some(ignored => a.name === ignored);
+export const areAttributesAvailable = block => block && block.attributes;
+
+const blockLoading = () => (
+  <div>
+    <CircularProgress color="secondary" />
+    <Typography>Loading...</Typography>
+  </div>
+);
+
+const displayAttributes = block => {
+  if (areAttributesAvailable(block)) {
     return (
       <div>
-        <CircularProgress color="secondary" />
-        <Typography>Loading...</Typography>
+        {block.attributes
+          .filter(a => isRootLevelAttribute(a))
+          .map(a => <div key={a.name}>{a.name}</div>)}
+        {block.attributes.filter(a => a.isGroup).map(group => (
+          <GroupExpander key={group.name} groupName={group.name}>
+            {block.attributes
+              .filter(a => a.group === group.name)
+              .map(a => <div key={a.name}>{a.name}</div>)}
+          </GroupExpander>
+        ))}
       </div>
     );
   }
-
-  return null;
-};
-
-const attributesLoading = block => {
-  if (block && !block.loading && block.attributes.some(a => a.loading)) {
-    return (
-      <div>
-        <FieldsLoading attributes={block.attributes} />
-      </div>
-    );
-  }
-
   return null;
 };
 
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
-    {blockLoading(props.block)}
-    {attributesLoading(props.block)}
+    {isBlockLoading(props.block)
+      ? blockLoading(props.block)
+      : displayAttributes(props.block)}
   </div>
 );
 

@@ -9,25 +9,50 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from 'material-ui/Typography';
 
 const styles = theme => ({
-  div: {
-    backgroundColor: theme.palette.background.paper,
-    maxWidth: 500,
+  root: {
+    backgroundColor: theme.palette.primary.main,
+    paddingTop: 0,
+    paddingBottom: 0,
+    minHeight: 24,
+  },
+  expanded: {
+    backgroundColor: theme.palette.primary.main,
+    margin: '0px 0 !important',
+    minHeight: '36px !important',
+  },
+  content: {
+    backgroundColor: theme.palette.primary.main,
+    margin: '0px 0 !important',
+    minHeight: '24px !important',
+    display: 'flex',
+  },
+  expandIcon: {
+    width: '24px',
+    height: '24px',
   },
   heading: {
-    padding: 4,
+    alignSelf: 'center',
   },
 });
 
 const WidgetGroupExpander = props => (
-  <div className={props.classes.div}>
+  <div>
     <ExpansionPanel defaultExpanded={props.expanded}>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        classes={{
+          root: props.classes.root,
+          content: props.classes.content,
+          expanded: props.classes.expanded,
+          expandIcon: props.classes.expandIcon,
+        }}
+      >
         <Typography className={props.classes.heading}>
           {props.groupName}
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <div className={props.classes.div}>{props.children}</div>
+        <div>{props.children}</div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   </div>
@@ -38,7 +63,10 @@ WidgetGroupExpander.propTypes = {
   groupName: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   classes: PropTypes.shape({
-    div: PropTypes.string,
+    root: PropTypes.string,
+    expanded: PropTypes.string,
+    content: PropTypes.string,
+    expandIcon: PropTypes.string,
     heading: PropTypes.string,
   }).isRequired,
 };

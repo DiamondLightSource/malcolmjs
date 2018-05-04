@@ -49,6 +49,9 @@ describe('malcolm socket handler', () => {
           {
             typeid: 'malcolm:core/BlockMeta:1.0',
             label: 'Block 1',
+            meta: {
+              tags: [],
+            },
           },
         ],
       ],
@@ -73,6 +76,9 @@ describe('malcolm socket handler', () => {
           {
             typeid: 'epics:nt/NTScalar:1.0',
             label: 'Attribute 1',
+            meta: {
+              tags: [],
+            },
           },
         ],
       ],

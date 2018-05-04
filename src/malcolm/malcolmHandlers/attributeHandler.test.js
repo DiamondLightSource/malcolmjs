@@ -19,6 +19,9 @@ describe('attribute handler', () => {
       typeid: 'NTScalar',
       label: 'Block 1',
       fields: ['health', 'icon'],
+      meta: {
+        tags: [],
+      },
     };
 
     AttributeHandler.processScalarAttribute(request, changes, dispatch);
