@@ -11,10 +11,26 @@ it('renders correctly when loading', () => {
   expect(tree).toMatchSnapshot();
 });
 
-it('renders correctly when loaded', () => {
+it('renders correctly when metadata loaded and waiting for attributes', () => {
   const block = {
     loading: false,
-    fields: ['health', 'icon'],
+    attributes: [
+      { name: 'health', loading: true },
+      { name: 'icon', loading: true },
+    ],
+  };
+
+  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+it('renders correctly when metadata loaded and attributes loaded', () => {
+  const block = {
+    loading: false,
+    attributes: [
+      { name: 'health', loading: false },
+      { name: 'icon', loading: false },
+    ],
   };
 
   const tree = renderer.create(<BlockDetails block={block} />).toJSON();
