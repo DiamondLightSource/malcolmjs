@@ -22,7 +22,7 @@ const styles = theme => ({
   },
 });
 
-const SimpleAttr = props => (
+const AttributeDetails = props => (
   <div className={props.classes.div}>
     <Typography className={props.classes.textName}>{props.name}: </Typography>
     {props.children}
@@ -34,7 +34,7 @@ const SimpleAttr = props => (
   </div>
 );
 
-SimpleAttr.propTypes = {
+AttributeDetails.propTypes = {
   alarm: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
@@ -45,4 +45,4 @@ SimpleAttr.propTypes = {
   }).isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(SimpleAttr);
+export default withStyles(styles, { withTheme: true })(AttributeDetails);
