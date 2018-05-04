@@ -26,7 +26,7 @@ stdin.addListener("data", function(d) {
   const parameters = input[1];
 
   if (command === 'canned') {
-    fs.readFile('../../server/canned_data/Sub/request_' + parameters, 'utf8', function (err,data) {
+    fs.readFile('../../server/canned_data/Sub/' + parameters, 'utf8', function (err,data) {
       if (err) {
         console.log('File doesn\'t exist, sending a subscribe with that path');
         const defaultSubscribe = {

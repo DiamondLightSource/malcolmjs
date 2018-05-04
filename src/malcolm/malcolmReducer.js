@@ -3,6 +3,7 @@ import {
   MalcolmSend,
   MalcolmError,
   MalcolmBlockMeta,
+  MalcolmAttributeData,
 } from './malcolm.types';
 
 const initialMalcolmState = {
@@ -57,7 +58,7 @@ function updateBlock(state, payload) {
         ...blocks[blockName],
         loading: false,
         label: payload.label,
-        fields: payload.fields,
+        attributes: payload.fields.map(f => ({ name: f, loading: true })),
       };
     }
   }
@@ -66,6 +67,38 @@ function updateBlock(state, payload) {
     ...state,
     blocks,
   };
+}
+
+function updateAttribute(state, payload) {
+  if (payload.delta) {
+    const { path } = state.messagesInFlight.find(m => m.id === payload.id);
+    const blockName = path[0];
+    const attributeName = path[1];
+
+    if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+      const attributes = [...state.blocks[blockName].attributes];
+
+      const matchingAttribute = attributes.findIndex(
+        a => a.name === attributeName
+      );
+      if (matchingAttribute >= 0) {
+        attributes[matchingAttribute] = {
+          ...attributes[matchingAttribute],
+          loading: false,
+        };
+      }
+
+      const blocks = { ...state.blocks };
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+      return {
+        ...state,
+        blocks,
+      };
+    }
+  }
+
+  return state;
 }
 
 const malcolmReducer = (state = initialMalcolmState, action) => {
@@ -81,6 +114,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmBlockMeta:
       return updateBlock(state, action.payload);
+
+    case MalcolmAttributeData:
+      return updateAttribute(state, action.payload);
 
     default:
       return state;
