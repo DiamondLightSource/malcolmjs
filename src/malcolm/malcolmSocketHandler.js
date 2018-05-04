@@ -27,8 +27,10 @@ const configureMalcolmSocketHandlers = (socket, store) => {
           break;
 
         default:
-          console.log('Unprocessed delta');
-          console.log(changes);
+          store.dispatch({
+            type: 'unprocessed_delta',
+            payload: changes,
+          });
           break;
       }
     }
