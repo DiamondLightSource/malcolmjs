@@ -13,17 +13,17 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     maxWidth: 500,
   },
-  Heading: {
+  heading: {
     padding: 4,
   },
 });
 
 const WidgetGroupExpander = props => (
   <div className={props.classes.div}>
-    <ExpansionPanel>
+    <ExpansionPanel defaultExpanded={props.expanded}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={props.classes.Heading}>
-          {props.GroupName}
+        <Typography className={props.classes.heading}>
+          {props.groupName}
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
@@ -34,12 +34,18 @@ const WidgetGroupExpander = props => (
 );
 
 WidgetGroupExpander.propTypes = {
-  GroupName: PropTypes.string.isRequired,
+  expanded: PropTypes.bool,
+  groupName: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
-    Heading: PropTypes.string,
+    heading: PropTypes.string,
   }).isRequired,
 };
 
+WidgetGroupExpander.defaultProps = {
+  expanded: false,
+};
+
+export const GroupExpanderComponent = WidgetGroupExpander;
 export default withStyles(styles, { withTheme: true })(WidgetGroupExpander);
