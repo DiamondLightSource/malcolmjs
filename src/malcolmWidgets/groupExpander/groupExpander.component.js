@@ -52,7 +52,7 @@ const WidgetGroupExpander = props => (
         </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>
-        <div>{props.children}</div>
+        <div style={{ width: '100%' }}>{props.children}</div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   </div>

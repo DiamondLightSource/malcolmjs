@@ -13,7 +13,7 @@ Docs                     http://malcolmjs.readthedocs.io/en/latest/
 PyMalcolm Docs           http://pymalcolm.readthedocs.io/en/latest/
 ======================= ===========================================================
 
-npm commands
+NPM commands
 ^^^^^^^^^^^^^^^^
 
 The main commands you are most likely to need during development are:
@@ -46,11 +46,28 @@ The main commands you are most likely to need during development are:
 ``lint:css``            runs stylelint on the css files in ``src/``
 ``storybook``           runs React Storybook for interactive development of the presentational components
 ``build-storybook``     builds a static site for the presentation components that can be hosted as a styleguide.
+``build-docs``          builds the documentation using sphinx
 ======================= ===========================================================
 
+Pull Request Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Running the dev server
-^^^^^^^^^^^^^^^^^^^^^^^^
+When a branch is ready to be merged back in then you should create a pull request in GitHub. The description should contain:
+
+- A general description of the changes in the pull request
+- A link for waffle to connect the PR to the issue (``connect to #{issue number}``)
+- A method for testing the changes, particularly if they are visual in nature (e.g. describe which StoryBook story to look at or which url to visit). You may also want to consider adding a screenshot of the changes.
+
+Before approving, a reviewer should:
+
+- review the code
+- ensure the build passes
+- assess the impact on code coverage
+- run the method for testing as described by the developer as assess the visual impact of the changes
+
+
+The malcolm development server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The MalcolmJS code base comes with a development server to simulate the messages that go to and from Malcolm.
 

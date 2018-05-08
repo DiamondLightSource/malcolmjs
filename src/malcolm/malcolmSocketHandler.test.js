@@ -86,8 +86,11 @@ describe('malcolm socket handler', () => {
 
     socket.send('message', message);
 
-    expect(dispatches.length).toEqual(1);
+    expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual('unprocessed_delta');
     expect(dispatches[0].payload.typeid).toEqual('unknown type');
+
+    expect(dispatches[1].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[1].payload.unableToProcess).toEqual(true);
   });
 });

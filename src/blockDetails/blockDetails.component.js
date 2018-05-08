@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
+import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 
 const styles = theme => ({
   progressContainer: {
@@ -38,9 +39,11 @@ const displayAttributes = block => {
           .map(a => <div key={a.name}>{a.name}</div>)}
         {block.attributes.filter(a => a.isGroup).map(group => (
           <GroupExpander key={group.name} groupName={group.name}>
-            {block.attributes
-              .filter(a => a.group === group.name)
-              .map(a => <div key={a.name}>{a.name}</div>)}
+            {block.attributes.filter(a => a.group === group.name).map(a => (
+              <AttributeDetails key={a.name} attribute={a}>
+                <div>Hello</div>
+              </AttributeDetails>
+            ))}
           </GroupExpander>
         ))}
       </div>

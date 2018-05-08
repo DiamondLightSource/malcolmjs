@@ -1,5 +1,6 @@
 import BlockMetaHandler from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
+import { MalcolmAttributeData } from './malcolm.types';
 
 const configureMalcolmSocketHandlers = (socket, store) => {
   socket.on('connect', () => {
@@ -30,6 +31,14 @@ const configureMalcolmSocketHandlers = (socket, store) => {
           store.dispatch({
             type: 'unprocessed_delta',
             payload: changes,
+          });
+          store.dispatch({
+            type: MalcolmAttributeData,
+            payload: {
+              id: originalRequest.id,
+              delta: true,
+              unableToProcess: true,
+            },
           });
           break;
       }
