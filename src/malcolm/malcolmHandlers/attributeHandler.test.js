@@ -14,19 +14,51 @@ describe('attribute handler', () => {
     path: ['block1', 'health'],
   };
 
-  it('processes and dispatches a scalar attribute update', () => {
-    const changes = {
-      typeid: 'NTScalar',
-      label: 'Block 1',
-      fields: ['health', 'icon'],
-    };
+  const changes = tags => ({
+    typeid: 'NTScalar',
+    label: 'Block 1',
+    fields: ['health', 'icon'],
+    meta: {
+      tags,
+    },
+  });
 
-    AttributeHandler.processScalarAttribute(request, changes, dispatch);
+  it('processes and dispatches a scalar attribute update', () => {
+    AttributeHandler.processScalarAttribute(request, changes([]), dispatch);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].payload.id).toEqual(1);
     expect(dispatches[0].payload.typeid).toEqual('NTScalar');
     expect(dispatches[0].payload.delta).toEqual(true);
+  });
+
+  it('detects group attributes', () => {
+    AttributeHandler.processScalarAttribute(
+      request,
+      changes(['widget:group']),
+      dispatch
+    );
+    expect(dispatches[0].payload.isGroup).toEqual(true);
+  });
+
+  it('detects attributes in groups', () => {
+    AttributeHandler.processScalarAttribute(
+      request,
+      changes(['group:outputs']),
+      dispatch
+    );
+    expect(dispatches[0].payload.inGroup).toEqual(true);
+    expect(dispatches[0].payload.group).toEqual('outputs');
+  });
+
+  it('detects root level attributes', () => {
+    AttributeHandler.processScalarAttribute(
+      request,
+      changes(['widget:led']),
+      dispatch
+    );
+    expect(dispatches[0].payload.inGroup).toEqual(false);
+    expect(dispatches[0].payload.isGroup).toEqual(false);
   });
 });

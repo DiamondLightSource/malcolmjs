@@ -85,6 +85,7 @@ function updateAttribute(state, payload) {
         attributes[matchingAttribute] = {
           ...attributes[matchingAttribute],
           loading: false,
+          ...payload,
         };
       }
 
