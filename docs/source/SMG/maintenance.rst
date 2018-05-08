@@ -58,6 +58,8 @@ When a branch is ready to be merged back in then you should create a pull reques
 - A link for waffle to connect the PR to the issue (``connect to #{issue number}``)
 - A method for testing the changes, particularly if they are visual in nature (e.g. describe which StoryBook story to look at or which url to visit). You may also want to consider adding a screenshot of the changes.
 
+**If this is your first time reviewing then you will need a development environment set up first, see** :ref:`Setting up a Development Environment`
+
 Before approving, a reviewer should:
 
 - review the code
