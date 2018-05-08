@@ -53,7 +53,7 @@ const styles = theme => ({
     width: 48,
     transition: theme.transitions.create(['width', 'opacity'], {
       easing: theme.transitions.easing.easeInOut,
-      duration: 2 * theme.transitions.duration.enteringScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
   },
   hide: {
@@ -73,7 +73,7 @@ const styles = theme => ({
     marginLeft: 0,
     transition: theme.transitions.create('margin-left', {
       easing: theme.transitions.easing.easeInOut,
-      duration: 2 * theme.transitions.duration.enteringScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
   },
   titleShift: {
