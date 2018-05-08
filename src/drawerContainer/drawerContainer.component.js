@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from 'material-ui/Drawer';
 import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
 import { connect } from 'react-redux';
 import DrawerHeader from './drawerHeader.component';
 import {
@@ -48,10 +49,35 @@ const styles = theme => ({
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 20,
+    opacity: 1,
+    width: 48,
+    transition: theme.transitions.create(['width', 'opacity'], {
+      easing: theme.transitions.easing.easeInOut,
+      duration: 2 * theme.transitions.duration.enteringScreen,
+    }),
   },
   hide: {
-    display: 'none',
+    width: 0,
+    opacity: 0,
+    overflow: 'hidden',
+  },
+  drawer: {
+    width: 360,
+  },
+  drawerContents: {
+    maxWidth: '100%',
+    height: '100%',
+    overflowX: 'hidden',
+  },
+  title: {
+    marginLeft: 0,
+    transition: theme.transitions.create('margin-left', {
+      easing: theme.transitions.easing.easeInOut,
+      duration: 2 * theme.transitions.duration.enteringScreen,
+    }),
+  },
+  titleShift: {
+    marginLeft: 20,
   },
 });
 
@@ -74,19 +100,43 @@ const DrawerContainer = props => (
           >
             <MenuIcon />
           </IconButton>
+          <Typography
+            className={classNames(props.classes.title, {
+              [props.classes.titleShift]: props.open,
+            })}
+          >
+            PANDABOX
+          </Typography>
         </Toolbar>
       </AppBar>
       {props.children.filter(
         (c, i) => i !== 0 && i !== props.children.length - 1
       )}
     </div>
-    <Drawer variant="persistent" open={props.open} anchor="left">
-      <DrawerHeader closeAction={props.closeParent} title={props.parentTitle} />
-      {props.children[0]}
+    <Drawer
+      variant="persistent"
+      open={props.open}
+      anchor="left"
+      classes={{ paper: props.classes.drawer }}
+    >
+      <div className={props.classes.drawerContents}>
+        <DrawerHeader
+          closeAction={props.closeParent}
+          title={props.parentTitle}
+        />
+        {props.children[0]}
+      </div>
     </Drawer>
-    <Drawer variant="persistent" open={props.openSecondary} anchor="right">
-      <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
-      {props.children[props.children.length - 1]}
+    <Drawer
+      variant="persistent"
+      open={props.openSecondary}
+      anchor="right"
+      classes={{ paper: props.classes.drawer }}
+    >
+      <div className={props.classes.drawerContents}>
+        <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
+        {props.children[props.children.length - 1]}
+      </div>
     </Drawer>
   </div>
 );
@@ -117,6 +167,10 @@ DrawerContainer.propTypes = {
     'appBarShift-right': PropTypes.string,
     menuButton: PropTypes.string,
     hide: PropTypes.string,
+    title: PropTypes.string,
+    titleShift: PropTypes.string,
+    drawer: PropTypes.string,
+    drawerContents: PropTypes.string,
   }).isRequired,
   children: PropTypes.node.isRequired,
 };
