@@ -1,16 +1,12 @@
 import React from 'react';
-import { createMount } from 'material-ui/test-utils';
+import { createShallow } from 'material-ui/test-utils';
 import AttributeDetails from './attributeDetails.component';
 
 describe('AttributeDetails', () => {
-  let mount;
+  let shallow;
 
   beforeEach(() => {
-    mount = createMount();
-  });
-
-  afterEach(() => {
-    mount.cleanUp();
+    shallow = createShallow({ dive: true });
   });
 
   it('renders correctly', () => {
@@ -19,13 +15,12 @@ describe('AttributeDetails', () => {
       alarm: {
         severity: 0,
       },
+      meta: {
+        label: 'Attribute 1',
+      },
     };
 
-    const wrapper = mount(
-      <AttributeDetails attribute={attribute}>
-        <div>value</div>
-      </AttributeDetails>
-    );
+    const wrapper = shallow(<AttributeDetails attribute={attribute} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -38,11 +33,7 @@ describe('AttributeDetails', () => {
       unableToProcess: true,
     };
 
-    const wrapper = mount(
-      <AttributeDetails attribute={attribute}>
-        <div>value</div>
-      </AttributeDetails>
-    );
+    const wrapper = shallow(<AttributeDetails attribute={attribute} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

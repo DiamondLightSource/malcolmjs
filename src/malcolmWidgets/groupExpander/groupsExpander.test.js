@@ -6,7 +6,7 @@ describe('GroupExpander', () => {
   let shallow;
 
   beforeEach(() => {
-    shallow = createShallow();
+    shallow = createShallow({ dive: true });
   });
 
   const expander = expanded => (
