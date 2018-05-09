@@ -14,7 +14,7 @@ const AttributeSelector = props => {
         <WidgetLED
           LEDState={props.attribute.value}
           colorBorder={props.theme.palette.primary.light}
-          colorCenter={props.theme.palette.secondary.main}
+          colorCenter={props.theme.palette.primary.light}
         />
       );
     }
