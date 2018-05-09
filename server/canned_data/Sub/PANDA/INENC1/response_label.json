@@ -24,9 +24,9 @@
         "value": "Input encoder 1", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525277290, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 197807073
+          "nanoseconds": 0
         }
       }
     ]
