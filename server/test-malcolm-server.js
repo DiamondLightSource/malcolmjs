@@ -1,6 +1,7 @@
 const io = require('socket.io')();
 const fs = require('fs');
 const dataLoader = require('./loadCannedData')
+const subscriptionFeed = require('./subscriptionFeed')
 
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
@@ -30,6 +31,7 @@ function handleMessage(socket, message) {
     }
 
     let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
+    subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r))
     sendResponse(socket, response);
 
   } else {
@@ -45,6 +47,7 @@ function sendResponse(socket, message) {
 
 function handleDisconnect() {
   console.log('client disconnected');
+  subscriptionFeed.cancelAllSubscriptions();
 }
 
 function buildErrorMessage(id, message) {
