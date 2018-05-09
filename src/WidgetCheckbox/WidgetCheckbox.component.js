@@ -18,7 +18,7 @@ const styles = theme => ({
   checkBoxChecked: {},
 
   spinner: {
-    size: 55,
+    size: 44,
     color: darken(theme.palette.primary.light, 0.25),
   },
 });
