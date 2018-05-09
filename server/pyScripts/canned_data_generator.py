@@ -59,7 +59,6 @@ def main():
     write_lines_to_file('../canned_data/Sub/%s/request_info.json' % block_path,
                         json.dumps(SimServer.message, indent=2))
     block_meta = SimServer.responses.get(timeout=2)
-    print json.dumps(block_meta)
     write_lines_to_file('../canned_data/Sub/%s/response_info.json' % block_path,
                         json.dumps(block_meta, indent=2))
 
@@ -71,15 +70,19 @@ def main():
         write_lines_to_file('../canned_data/Sub/%s/request_meta.json' % block_path,
                             json.dumps(SimServer.message, indent=2))
         block_meta = SimServer.responses.get(timeout=2)
-        print json.dumps(block_meta)
         write_lines_to_file('../canned_data/Sub/%s/response_meta.json' % block_path,
                             json.dumps(block_meta, indent=2))
+        print "...Getting %s fields for %s..." % (len(block_meta["changes"][0][1]["fields"]), block)
         for field in block_meta["changes"][0][1]["fields"]:
             SimServer.send_subscribe((block, field))
             write_lines_to_file('../canned_data/Sub/%s/request_%s.json' % (block_path, field),
                                 json.dumps(SimServer.message, indent=2))
             block_field = SimServer.responses.get(timeout=2)
-            print json.dumps(block_field)
+
+            if 'timeStamp' in block_field['changes'][0][1].keys():
+                block_field['changes'][0][1]['timeStamp']['secondsPastEpoch'] = 0
+                block_field['changes'][0][1]['timeStamp']['nanoseconds'] = 0
+
             write_lines_to_file('../canned_data/Sub/%s/response_%s.json' % (block_path, field),
                                 json.dumps(block_field, indent=2))
 

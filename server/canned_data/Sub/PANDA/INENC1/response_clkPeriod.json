@@ -26,9 +26,9 @@
         "value": 0.0, 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525279465, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 261764049
+          "nanoseconds": 0
         }
       }
     ]

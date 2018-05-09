@@ -24,9 +24,9 @@
         "value": "Logic lookup table 1", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525279464, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 855060100
+          "nanoseconds": 0
         }
       }
     ]

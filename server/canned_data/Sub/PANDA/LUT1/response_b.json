@@ -31,9 +31,9 @@
         "value": "Input Value", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525279465, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 274698972
+          "nanoseconds": 0
         }
       }
     ]
