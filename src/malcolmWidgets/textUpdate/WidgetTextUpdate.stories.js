@@ -3,10 +3,10 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 
-import WidgetTextUpdate from './WidgetTextUpdate.component';
+import ContainedWidgetTextUpdate from './WidgetTextUpdate.stories.container';
 
 const TextUpdate = (text, units) => (
-  <WidgetTextUpdate Text={text} Units={units} />
+  <ContainedWidgetTextUpdate Text={text} Units={units} />
 );
 
 storiesOf('WidgetTextUpdate', module)
