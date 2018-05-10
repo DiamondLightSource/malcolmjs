@@ -24,9 +24,9 @@
         "value": "TTL input 1", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525277289, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 905787944
+          "nanoseconds": 0
         }
       }
     ]

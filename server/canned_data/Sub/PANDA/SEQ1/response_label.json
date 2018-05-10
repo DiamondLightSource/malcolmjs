@@ -24,9 +24,9 @@
         "value": "Sequencer 1", 
         "timeStamp": {
           "typeid": "time_t", 
-          "secondsPastEpoch": 1525277290, 
+          "secondsPastEpoch": 0, 
           "userTag": 0, 
-          "nanoseconds": 336741924
+          "nanoseconds": 0
         }
       }
     ]
