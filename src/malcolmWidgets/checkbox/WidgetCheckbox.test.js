@@ -7,7 +7,7 @@ describe('WidgetCheckbox', () => {
   let mount;
 
   beforeEach(() => {
-    shallow = createShallow();
+    shallow = createShallow({ dive: true });
     mount = createMount();
   });
 

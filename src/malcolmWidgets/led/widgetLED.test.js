@@ -7,7 +7,7 @@ describe('WidgetLED', () => {
   let shallow;
 
   beforeEach(() => {
-    shallow = createShallow();
+    shallow = createShallow({ dive: true });
   });
 
   it('renders off', () => {
