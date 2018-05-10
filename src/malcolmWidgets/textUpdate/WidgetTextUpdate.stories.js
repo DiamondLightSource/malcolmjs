@@ -21,4 +21,10 @@ storiesOf('WidgetTextUpdate', module)
     withInfo(`
   A simple field for displaying some text (with units).
   `)(() => TextUpdate('1.21', 'GW'))
+  )
+  .add(
+    'text supplied as number',
+    withInfo(`
+  A simple field for displaying some text (with units).
+  `)(() => TextUpdate(1.21, 'GW'))
   );
