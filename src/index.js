@@ -7,10 +7,12 @@ import createHistory from 'history/createBrowserHistory';
 import io from 'socket.io-client';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AppReducer from './App.reducer';
 import AppRouter from './App.routes';
+import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
 
@@ -41,13 +43,19 @@ const store = createStore(
 
 configureMalcolmSocketHandlers(socket, store);
 
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
+
 ReactDOM.render(
   <Provider store={store}>
-    <div>
+    <div className="App">
       <ConnectedRouter history={history}>
-        <div>
+        <MuiThemeProvider theme={theme}>
           <AppRouter />
-        </div>
+        </MuiThemeProvider>
       </ConnectedRouter>
     </div>
   </Provider>,
