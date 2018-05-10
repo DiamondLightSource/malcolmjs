@@ -1,8 +1,8 @@
 Maintenance
-==============
+===========
 
 Useful URLs
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 ======================= ===========================================================
 Code                     https://github.com/dls-controls/malcolmjs
@@ -14,7 +14,7 @@ PyMalcolm Docs           http://pymalcolm.readthedocs.io/en/latest/
 ======================= ===========================================================
 
 npm commands
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^
 
 The main commands you are most likely to need during development are:
 ::
@@ -50,7 +50,7 @@ The main commands you are most likely to need during development are:
 
 
 Running the dev server
-^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 The MalcolmJS code base comes with a development server to simulate the messages that go to and from Malcolm.
 
@@ -58,6 +58,46 @@ To run the server you can run the ``server`` or ``server:dev`` npm commands, the
 
 This server only has very limited capability by returning canned responses captured from using PyMalcolm, as well as handling unsubscribing. For a more realistic scenario, MalcolmJS should be tested against a real instance of PyMalcolm.
 
-More request/response pairs can be added by adding more files to ``canned_data`` as long as the names start ``request_`` and ``response_``.
+More request/response pairs can be added by adding more files to ``canned_data`` as long as the names start ``request_`` and ``response_`` (see below).
+
+
+Running pyMalcolm + PandA simulator & Generating canned data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+As mentioned above, it is possible to run up a simulator for a PandABox along with a corresponding pyMalcolm server to provide a more accurate and complete testing environment.
+It is also necessary to run up the simulator to update the stored canned data for the simple dev server (required when pyMalcolm or the PandA software is updated).
+
+Simulator
+---------
+
+In order to run the simulator, there are several things required:
+
+#. PandABlocks-* files [server, FPGA, rootfs, webcontrol]
+#. The corresponding version of pyMalcolm (clone from https://github.com/dls-controls/pymalcolm)
+#. YAML config file for pyMalcolm
+
+The appropriate versions of the PandABlocks-* components should be obtained from Tom Cobb; once they have been placed on a local machine,
+the simulator can be started by running ``<path to pandablocks>/PandABlocks-server/simserver -f <path to pandablocks>/PandABlocks-FPGA`` from a terminal.
+
+Once the simulator is running (should display "Server started" in last line of terminal), we can now start the pyMalcolm server;
+this should be done by running ``<path to pymalcolm>/pymalcolm/malcolm/imalcolm.py <path to yaml>/YAMLNAME.yaml`` from a terminal.
+The YAML file for pyMalcolm should contain the following:
+
+.. code-block:: yaml
+
+    - pandablocks.blocks.pandablocks_manager_block:
+        config_dir: /tmp
+        mri: PANDA
+        hostname: 127.0.0.1
+
+    - web.blocks.web_server_block:
+        mri: WEB
+
+Canned Data
+-----------
+
+Once the simulator and pyMalcolm are running, it is possible to generate a fresh set of canned data. To do this, simply run the
+canned_data_generator.py python script (located in *<malcolmJS root>/server/pyScripts*).
+This will delete the contents of the *<malcolmJS root>/server/canned_data* folder and generate new json files for a set of pre-programmed blocks, subscribing to their meta and all their attributes.
+Currently, these blocks are: ["PANDA", "PANDA:TTLIN1", "PANDA:INENC1", "PANDA:LUT1", "PANDA:SEQ1"] (in addition to the list of all blocks available on the PANDA simulator)
 
 
