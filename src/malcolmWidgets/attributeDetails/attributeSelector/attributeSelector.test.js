@@ -27,7 +27,7 @@ describe('AttributeSelector', () => {
   });
 
   it('selects an textUpdate correctly', () => {
-    const attribute = buildAttribute('textupdate', true);
+    const attribute = buildAttribute('textupdate', '1.23456');
     runSelectorTest(attribute);
   });
 });

@@ -10,6 +10,6 @@ exports[`AttributeSelector selects an LED correctly 1`] = `
 
 exports[`AttributeSelector selects an textUpdate correctly 1`] = `
 <WithStyles(WidgetTextUpdate)
-  Text={true}
+  Text="1.23456"
 />
 `;
