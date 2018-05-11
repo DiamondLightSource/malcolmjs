@@ -28,11 +28,12 @@ const mapDispatchToProps = () => ({});
 
 MainMalcolmView.propTypes = {
   parentBlock: PropTypes.shape({}),
-  parentBlockTitle: PropTypes.string.isRequired,
+  parentBlockTitle: PropTypes.string,
 };
 
 MainMalcolmView.defaultProps = {
   parentBlock: undefined,
+  parentBlockTitle: '',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMalcolmView);
