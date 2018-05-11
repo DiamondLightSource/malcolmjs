@@ -1,6 +1,6 @@
 import React from 'react';
 import { createShallow, createMount } from 'material-ui/test-utils';
-import WidgetCheckbox from './WidgetCheckbox.component';
+import WidgetCheckbox from './checkbox.component';
 
 describe('WidgetCheckbox', () => {
   let shallow;

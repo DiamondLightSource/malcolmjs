@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainMalcolmView renders correctly 1`] = `
+<div>
+  <Connect(WithStyles(DrawerContainer))
+    childTitle=""
+    parentTitle="Test main view"
+  >
+    <WithStyles(BlockDetails)
+      block={
+        Object {
+          "name": "Test main view",
+        }
+      }
+    />
+    <div>
+      Middle content
+    </div>
+    <div>
+      Right content
+    </div>
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;

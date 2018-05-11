@@ -2,21 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import WidgetLED from '../../led/widgetLED.component';
+import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
 
 const styles = {};
 
 const AttributeSelector = props => {
   if (props.attribute && props.attribute.meta && props.attribute.meta.tags) {
     const { tags } = props.attribute.meta;
+    const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
 
-    if (tags.some(t => t === 'widget:led')) {
-      return (
-        <WidgetLED
-          LEDState={props.attribute.value}
-          colorBorder={props.theme.palette.primary.light}
-          colorCenter={props.theme.palette.primary.light}
-        />
-      );
+    if (widgetTagIndex !== -1) {
+      if (tags[widgetTagIndex] === 'widget:led') {
+        return (
+          <WidgetLED
+            LEDState={props.attribute.value}
+            colorBorder={props.theme.palette.primary.light}
+            colorCenter={props.theme.palette.primary.light}
+          />
+        );
+      } else if (tags[widgetTagIndex] === 'widget:textupdate') {
+        return <TextUpdate Text={props.attribute.value} />;
+      }
     }
   }
 

@@ -8,7 +8,6 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 2,
   },
   svg: {
     width: 24,

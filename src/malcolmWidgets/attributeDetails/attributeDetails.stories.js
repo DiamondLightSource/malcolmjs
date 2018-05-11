@@ -19,6 +19,11 @@ const attribute = alarmStateValue => ({
   alarm: {
     severity: alarmStateValue,
   },
+  meta: {
+    label: 'Attribute 1',
+    tags: ['widget:led'],
+  },
+  value: true,
 });
 
 const generateComponent = alarmStateValue => (

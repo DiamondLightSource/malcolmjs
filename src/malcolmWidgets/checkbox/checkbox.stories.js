@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
 
-import WidgetCheckbox from './WidgetCheckbox.component';
+import WidgetCheckbox from './checkbox.component';
 
 const checkbox = (checked, pending) => (
   <WidgetCheckbox
