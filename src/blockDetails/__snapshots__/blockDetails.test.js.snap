@@ -1,91 +1,78 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly when loading 1`] = `
+exports[`Block Details renders correctly when loading 1`] = `
 <div
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <div
-      className="MuiCircularProgress-root-2 MuiCircularProgress-colorSecondary-4"
-      role="progressbar"
-      style={
-        Object {
-          "height": 40,
-          "width": 40,
-        }
-      }
-    >
-      <svg
-        className="MuiCircularProgress-svg-5 MuiCircularProgress-svgIndeterminate-6"
-        viewBox="0 0 50 50"
-      >
-        <circle
-          className="MuiCircularProgress-circle-7 MuiCircularProgress-circleIndeterminate-8"
-          cx={25}
-          cy={25}
-          fill="none"
-          r={20}
-          strokeWidth={3.6}
-          style={Object {}}
-        />
-      </svg>
-    </div>
-    <p
-      className="MuiTypography-root-9 MuiTypography-body1-18"
-    >
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
       Loading...
-    </p>
+    </WithStyles(Typography)>
   </div>
 </div>
 `;
 
-exports[`renders correctly when metadata loaded and attributes loaded 1`] = `
+exports[`Block Details renders correctly when metadata loaded and attributes loaded 1`] = `
 <div
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <div>
-      health
-    </div>
+    <WithStyles(AttributeDetails)
+      attribute={
+        Object {
+          "alarm": Object {
+            "severity": 0,
+          },
+          "loading": false,
+          "meta": Object {
+            "label": "health 1",
+          },
+          "name": "health",
+        }
+      }
+      key="health"
+    >
+      <div>
+        Hello
+      </div>
+    </WithStyles(AttributeDetails)>
+    <WithStyles(AttributeDetails)
+      attribute={
+        Object {
+          "alarm": Object {
+            "severity": 0,
+          },
+          "loading": false,
+          "meta": Object {
+            "label": "icon 1",
+          },
+          "name": "icon",
+        }
+      }
+      key="icon"
+    >
+      <div>
+        Hello
+      </div>
+    </WithStyles(AttributeDetails)>
   </div>
 </div>
 `;
 
-exports[`renders correctly when metadata loaded and waiting for attributes 1`] = `
+exports[`Block Details renders correctly when metadata loaded and waiting for attributes 1`] = `
 <div
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <div
-      className="MuiCircularProgress-root-2 MuiCircularProgress-colorSecondary-4"
-      role="progressbar"
-      style={
-        Object {
-          "height": 40,
-          "width": 40,
-        }
-      }
-    >
-      <svg
-        className="MuiCircularProgress-svg-5 MuiCircularProgress-svgIndeterminate-6"
-        viewBox="0 0 50 50"
-      >
-        <circle
-          className="MuiCircularProgress-circle-7 MuiCircularProgress-circleIndeterminate-8"
-          cx={25}
-          cy={25}
-          fill="none"
-          r={20}
-          strokeWidth={3.6}
-          style={Object {}}
-        />
-      </svg>
-    </div>
-    <p
-      className="MuiTypography-root-9 MuiTypography-body1-18"
-    >
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
       Loading...
-    </p>
+    </WithStyles(Typography)>
   </div>
 </div>
 `;

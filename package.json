@@ -104,7 +104,7 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!**/*.stories.js",
+      "!**/*.stories.*",
       "!**/stories/index.js",
       "!src/index.js",
       "!src/registerServiceWorker.js",

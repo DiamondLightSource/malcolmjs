@@ -5,8 +5,8 @@ exports[`WidgetLED renders off 1`] = `
   className="WidgetLED-div-1"
 >
   <svg
-    viewBox="-24 -24 96 96"
-    width={50}
+    className="WidgetLED-svg-2"
+    viewBox="0 0 48 48"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -23,8 +23,8 @@ exports[`WidgetLED renders on 1`] = `
   className="WidgetLED-div-1"
 >
   <svg
-    viewBox="-24 -24 96 96"
-    width={50}
+    className="WidgetLED-svg-2"
+    viewBox="0 0 48 48"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -33,8 +33,8 @@ exports[`WidgetLED renders on 1`] = `
     />
     ;
     <circle
-      cx="24"
-      cy="24"
+      cx="24.5"
+      cy="24.5"
       fill="#1976d2"
       r="12"
     />

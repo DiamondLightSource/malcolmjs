@@ -1,38 +1,58 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { createShallow } from 'material-ui/test-utils';
 import BlockDetails from './blockDetails.component';
 
-it('renders correctly when loading', () => {
-  const block = {
-    loading: true,
-  };
+describe('Block Details', () => {
+  let shallow;
 
-  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+  beforeEach(() => {
+    shallow = createShallow({
+      dive: true,
+    });
+  });
 
-it('renders correctly when metadata loaded and waiting for attributes', () => {
-  const block = {
-    loading: false,
-    attributes: [
-      { name: 'health', loading: true },
-      { name: 'icon', loading: true },
-    ],
-  };
+  it('renders correctly when loading', () => {
+    const block = {
+      loading: true,
+    };
 
-  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+    const tree = shallow(<BlockDetails block={block} />);
+    expect(tree).toMatchSnapshot();
+  });
 
-it('renders correctly when metadata loaded and attributes loaded', () => {
-  const block = {
-    loading: false,
-    attributes: [
-      { name: 'health', loading: false },
-      { name: 'icon', loading: false },
-    ],
-  };
+  it('renders correctly when metadata loaded and waiting for attributes', () => {
+    const block = {
+      loading: false,
+      attributes: [
+        { name: 'health', loading: true },
+        { name: 'icon', loading: true },
+      ],
+    };
 
-  const tree = renderer.create(<BlockDetails block={block} />).toJSON();
-  expect(tree).toMatchSnapshot();
+    const tree = shallow(<BlockDetails block={block} />);
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('renders correctly when metadata loaded and attributes loaded', () => {
+    const block = {
+      loading: false,
+      attributes: [
+        {
+          name: 'health',
+          loading: false,
+          alarm: { severity: 0 },
+          meta: { label: 'health 1' },
+        },
+        {
+          name: 'icon',
+          loading: false,
+          alarm: { severity: 0 },
+          meta: { label: 'icon 1' },
+        },
+      ],
+    };
+
+    const tree = shallow(<BlockDetails block={block} />);
+    expect(tree).toMatchSnapshot();
+  });
 });

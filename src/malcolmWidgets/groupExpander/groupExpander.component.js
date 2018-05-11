@@ -33,6 +33,10 @@ const styles = theme => ({
   heading: {
     alignSelf: 'center',
   },
+  detailsRoot: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
 });
 
 const WidgetGroupExpander = props => (
@@ -51,7 +55,11 @@ const WidgetGroupExpander = props => (
           {props.groupName}
         </Typography>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      <ExpansionPanelDetails
+        classes={{
+          root: props.classes.detailsRoot,
+        }}
+      >
         <div style={{ width: '100%' }}>{props.children}</div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
@@ -68,6 +76,7 @@ WidgetGroupExpander.propTypes = {
     content: PropTypes.string,
     expandIcon: PropTypes.string,
     heading: PropTypes.string,
+    detailsRoot: PropTypes.string,
   }).isRequired,
 };
 
