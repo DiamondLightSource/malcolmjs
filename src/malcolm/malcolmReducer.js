@@ -4,6 +4,7 @@ import {
   MalcolmError,
   MalcolmBlockMeta,
   MalcolmAttributeData,
+  MalcolmAttributePending,
 } from './malcolm.types';
 
 const initialMalcolmState = {
@@ -14,6 +15,7 @@ const initialMalcolmState = {
 
 function updateMessagesInFlight(state, action) {
   const newState = state;
+
   newState.messagesInFlight = [
     ...state.messagesInFlight,
     { ...action.payload },
@@ -85,6 +87,8 @@ function updateAttribute(state, payload) {
         attributes[matchingAttribute] = {
           ...attributes[matchingAttribute],
           loading: false,
+          path,
+          pending: false,
           ...payload,
         };
       }
@@ -102,10 +106,41 @@ function updateAttribute(state, payload) {
   return state;
 }
 
+function setPending(state, path) {
+  const blockName = path[0];
+  const attributeName = path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const attributes = [...state.blocks[blockName].attributes];
+
+    const matchingAttribute = attributes.findIndex(
+      a => a.name === attributeName
+    );
+    if (matchingAttribute >= 0) {
+      attributes[matchingAttribute] = {
+        ...attributes[matchingAttribute],
+        pending: true,
+      };
+    }
+
+    const blocks = { ...state.blocks };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+    return {
+      ...state,
+      blocks,
+    };
+  }
+  return state;
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(state, action);
+
+    case MalcolmAttributePending:
+      return setPending(state, action.payload.path);
 
     case MalcolmSend:
       return updateMessagesInFlight(state, action);

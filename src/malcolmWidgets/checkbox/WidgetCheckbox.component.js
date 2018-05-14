@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'material-ui/Checkbox';
 import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
 import { darken, lighten } from 'material-ui/styles/colorManipulator';
 
 const styles = theme => ({
@@ -25,19 +24,16 @@ const styles = theme => ({
 
 const WidgetCheckbox = props => (
   <div className={props.classes.div}>
-    {props.Pending ? (
-      <CircularProgress size={44} className={props.classes.spinner} />
-    ) : (
-      <Checkbox
-        checked={props.CheckState}
-        onChange={props.checkEventHandler}
-        classes={{
-          root: props.classes.checkBoxRoot,
-          checked: props.classes.checkBoxChecked,
-        }}
-        value={props.Label}
-      />
-    )}
+    <Checkbox
+      checked={props.CheckState}
+      onChange={(event, checked) => props.checkEventHandler(checked)}
+      classes={{
+        root: props.classes.checkBoxRoot,
+        checked: props.classes.checkBoxChecked,
+      }}
+      value={props.Label}
+      disabled={props.Pending}
+    />
   </div>
 );
 
@@ -50,7 +46,6 @@ WidgetCheckbox.propTypes = {
     div: PropTypes.string,
     checkBoxRoot: PropTypes.string,
     checkBoxChecked: PropTypes.string,
-    spinner: PropTypes.string,
   }).isRequired,
 };
 
