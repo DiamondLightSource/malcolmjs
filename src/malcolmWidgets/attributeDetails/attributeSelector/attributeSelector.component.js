@@ -32,21 +32,19 @@ const AttributeSelector = props => {
             colorCenter={props.theme.palette.primary.light}
           />
         );
+      } else if (tags[widgetTagIndex] === 'widget:checkbox') {
+        return (
+          <WidgetCheckbox
+            CheckState={props.attribute.value}
+            Pending={props.attribute.pending}
+            checkEventHandler={isChecked =>
+              props.checkHandler(props.attribute.path, isChecked)
+            }
+          />
+        );
       } else if (tags[widgetTagIndex] === 'widget:textupdate') {
         return <TextUpdate Text={props.attribute.value} />;
       }
-    }
-
-    if (tags.some(t => t === 'widget:checkbox')) {
-      return (
-        <WidgetCheckbox
-          CheckState={props.attribute.value}
-          Pending={props.attribute.pending}
-          checkEventHandler={isChecked =>
-            props.checkHandler(props.attribute.path, isChecked)
-          }
-        />
-      );
     }
   }
   return <div>Hello</div>;
