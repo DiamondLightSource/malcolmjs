@@ -21,7 +21,8 @@ require('typeface-roboto');
 const history = createHistory();
 const router = routerMiddleware(history);
 
-const socketContainer = new MalcolmSocketContainer('localhost', '8000');
+const webSocket = new WebSocket('ws://localhost:8000/ws');
+const socketContainer = new MalcolmSocketContainer(webSocket);
 
 const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
 

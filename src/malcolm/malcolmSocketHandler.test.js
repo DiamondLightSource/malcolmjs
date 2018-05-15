@@ -3,7 +3,7 @@ import { MalcolmBlockMeta, MalcolmAttributeData } from './malcolm.types';
 
 describe('malcolm socket handler', () => {
   let dispatches = [];
-  let socketMethods = {};
+  const drain = [];
 
   const state = {
     malcolm: {
@@ -25,32 +25,52 @@ describe('malcolm socket handler', () => {
     getState: () => state,
   };
 
-  const socket = {
-    on: (methodName, operation) => {
-      socketMethods[methodName] = operation;
+  const socketContainer = {
+    socket: {
+      onmessage: () => {},
+      onerror: () => {},
+      onopen: () => {},
+      onclose: () => {},
+      send: payload => {
+        const event = {
+          data: payload,
+        };
+        socketContainer.socket.onmessage(event);
+      },
     },
-    send: (methodName, payload) => socketMethods[methodName](payload),
+    isConnected: false,
+    queue: [],
+    flush: () => {
+      drain.push(socketContainer.queue.shift());
+    },
   };
 
-  const buildMessage = (typeid, id, payload) => ({
-    typeid: 'malcolm:core/Delta:1.0',
-    id,
-    changes: [
-      [
-        [],
-        {
-          typeid,
-          ...payload,
-        },
+  const buildMessage = (typeid, id, payload) =>
+    JSON.stringify({
+      typeid: 'malcolm:core/Delta:1.0',
+      id,
+      changes: [
+        [
+          [],
+          {
+            typeid,
+            ...payload,
+          },
+        ],
       ],
-    ],
-  });
+    });
 
   beforeEach(() => {
     dispatches = [];
-    socketMethods = {};
+    socketContainer.queue = [];
+    configureMalcolmSocketHandlers(socketContainer, store);
+  });
 
-    configureMalcolmSocketHandlers(socket, store);
+  it('sets flag and flushes on open', () => {
+    socketContainer.queue.push('flushed test');
+    socketContainer.socket.onopen();
+    expect(socketContainer.isConnected).toEqual(true);
+    expect(drain).toEqual(['flushed test']);
   });
 
   it('handles block meta updates', () => {
@@ -58,7 +78,7 @@ describe('malcolm socket handler', () => {
       label: 'Block 1',
     });
 
-    socket.send('message', message);
+    socketContainer.socket.send(message);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmBlockMeta);
@@ -74,7 +94,7 @@ describe('malcolm socket handler', () => {
     };
     const message = buildMessage('epics:nt/NTScalar:1.0', 2, changes);
 
-    socket.send('message', message);
+    socketContainer.socket.send(message);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -84,7 +104,7 @@ describe('malcolm socket handler', () => {
   it('dispatches a message for unhandled deltas', () => {
     const message = buildMessage('unknown type', 1, {});
 
-    socket.send('message', message);
+    socketContainer.socket.send(message);
 
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual('unprocessed_delta');
