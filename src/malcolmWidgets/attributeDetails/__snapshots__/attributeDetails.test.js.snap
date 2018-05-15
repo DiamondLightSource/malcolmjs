@@ -18,7 +18,7 @@ exports[`AttributeDetails renders correctly 1`] = `
     <div
       className="AttributeDetails-controlContainer-3"
     >
-      <WithStyles(AttributeSelector)
+      <Connect(WithStyles(AttributeSelector))
         attribute={
           Object {
             "alarm": Object {

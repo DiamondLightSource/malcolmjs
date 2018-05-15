@@ -12,6 +12,7 @@ exports[`WidgetCheckbox renders checked 1`] = `
         "root": "WidgetCheckbox-checkBoxRoot-2",
       }
     }
+    disabled={false}
     onChange={[Function]}
     value="TestBox"
   />
@@ -30,6 +31,7 @@ exports[`WidgetCheckbox renders unchecked 1`] = `
         "root": "WidgetCheckbox-checkBoxRoot-2",
       }
     }
+    disabled={false}
     onChange={[Function]}
     value="TestBox"
   />

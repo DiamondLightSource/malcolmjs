@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AttributeSelector selects a checkbox correctly 1`] = `
+<WithStyles(WidgetCheckbox)
+  CheckState={true}
+  checkEventHandler={[Function]}
+/>
+`;
+
 exports[`AttributeSelector selects an LED correctly 1`] = `
 <WithStyles(WidgetLED)
   LEDState={true}
