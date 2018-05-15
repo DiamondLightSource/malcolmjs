@@ -67,6 +67,18 @@ Before approving, a reviewer should:
 - assess the impact on code coverage
 - run the method for testing as described by the developer as assess the visual impact of the changes
 
+Editing documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User Guide
+#############
+
+Any new features in the UI should be documented in the User Guide, this should be done as part of the story so we can build a user guide over time.
+
+SMG
+#############
+
+If you ever need to edit the architecture documents then the png files can be opened in https://www.draw.io/ (or the offline thick client) and changed, you don't need to re-export the images; saving should automatically update the png.
+
 
 The malcolm development server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
