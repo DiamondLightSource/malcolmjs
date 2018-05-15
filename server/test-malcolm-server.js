@@ -1,27 +1,31 @@
-const io = require('socket.io')();
+const WebSocket = require('ws');
 const fs = require('fs');
-const dataLoader = require('./loadCannedData')
-const subscriptionFeed = require('./subscriptionFeed')
+const dataLoader = require('./loadCannedData');
+const subscriptionFeed = require('./subscriptionFeed');
 
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
 let malcolmMessages = dataLoader.loadData('./server/canned_data/');
 let subscriptions = [];
 
+const io = new WebSocket.Server({port: 8000});
+
 io.on('connection', function (socket) {
-  socket.on('message', message => handleMessage(socket, message));
+  socket.on('message', message => {
+    message = JSON.parse(message);
+    handleMessage(socket, message);
+  });
   socket.on('disconnect', () => handleDisconnect());
 });
 
 const port = 8000;
-io.listen(port);
 console.log('listening on port ', port);
 
 function handleMessage(socket, message) {
   let simplifiedMessage = message;
   const originalId = message.id;
-  delete simplifiedMessage.id
-
+  delete simplifiedMessage.id;
+  console.log(message);
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
 
@@ -41,7 +45,7 @@ function handleMessage(socket, message) {
 
 function sendResponse(socket, message) {
   setTimeout(() => {
-    socket.send(message)
+    socket.send(JSON.stringify(message))
   }, Math.ceil(settings.delay*Math.random()));
 }
 

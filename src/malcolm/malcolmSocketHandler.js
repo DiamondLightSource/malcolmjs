@@ -2,12 +2,26 @@ import BlockMetaHandler from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import { MalcolmAttributeData } from './malcolm.types';
 
-const configureMalcolmSocketHandlers = (socket, store) => {
-  socket.on('connect', () => {
-    console.log('connected to socket');
-  });
+const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
+  const socketContainer = inputSocketContainer;
 
-  socket.on('message', data => {
+  socketContainer.socket.onerror = error => {
+    const errorString = JSON.stringify(error);
+    console.log(`WebSocket Error: ${errorString}`);
+  };
+
+  socketContainer.socket.onopen = () => {
+    console.log('connected to socket');
+    socketContainer.isConnected = true;
+    socketContainer.flush();
+  };
+
+  socketContainer.socket.onclose = () => {
+    console.log('socket disconnected');
+  };
+
+  socketContainer.socket.onmessage = event => {
+    const data = JSON.parse(event.data);
     if (data.typeid === 'malcolm:core/Delta:1.0') {
       const changes = data.changes[0][1];
       const originalRequest = store
@@ -43,7 +57,7 @@ const configureMalcolmSocketHandlers = (socket, store) => {
           break;
       }
     }
-  });
+  };
 };
 
 export default configureMalcolmSocketHandlers;

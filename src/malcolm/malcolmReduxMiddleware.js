@@ -4,11 +4,12 @@ import {
 } from './malcolmActionCreators';
 import { MalcolmSend } from './malcolm.types';
 
-function buildMalcolmMessage(payload) {
+function sendMalcolmMessage(socketContainer, payload) {
   const message = { ...payload };
   delete message.type;
-
-  return message;
+  const msg = JSON.stringify(message);
+  socketContainer.queue.push(msg);
+  socketContainer.flush();
 }
 
 function findNextId(store) {
@@ -36,13 +37,12 @@ function handleLocationChange(queryParams, store) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const buildMalcolmReduxMiddleware = socket => store => next => action => {
+const buildMalcolmReduxMiddleware = socketContainer => store => next => action => {
   const updatedAction = { ...action };
-
   switch (action.type) {
     case MalcolmSend:
       updatedAction.payload.id = findNextId(store);
-      socket.send(buildMalcolmMessage(action.payload));
+      sendMalcolmMessage(socketContainer, action.payload);
       break;
 
     case '@@router/LOCATION_CHANGE':
