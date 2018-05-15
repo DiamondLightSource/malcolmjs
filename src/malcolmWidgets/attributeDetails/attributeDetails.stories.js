@@ -26,10 +26,10 @@ const attribute = alarmStateValue => ({
   meta: {
     writeable: false,
     typeid: 'malcolm:core/BooleanMeta:1.0',
-    label: 'Val',
-    description: 'TTL input value',
-    tags: ['group:outputs', 'outport:bool:TTLIN1.VAL', 'widget:led'],
+    label: 'Attribute 1',
+    tags: ['widget:led'],
   },
+  value: true,
 });
 
 const generateComponent = alarmStateValue => (

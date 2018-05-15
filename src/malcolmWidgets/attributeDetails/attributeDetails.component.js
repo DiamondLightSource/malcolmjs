@@ -9,7 +9,6 @@ const styles = theme => ({
   div: {
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    width: '100%',
     paddingLeft: 5,
     paddingRight: 5,
     alignItems: 'center',
@@ -22,6 +21,7 @@ const styles = theme => ({
   },
   controlContainer: {
     width: 150,
+    padding: 2,
   },
 });
 

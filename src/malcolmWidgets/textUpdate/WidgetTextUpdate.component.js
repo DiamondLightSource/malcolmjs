@@ -21,7 +21,7 @@ const WidgetTextUpdate = props => (
 );
 
 WidgetTextUpdate.propTypes = {
-  Text: PropTypes.string.isRequired,
+  Text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   Units: PropTypes.string,
   classes: PropTypes.shape({
     textUpdate: PropTypes.string,

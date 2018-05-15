@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttributeSelector selects an LED correctly 1`] = `
+<WithStyles(WidgetLED)
+  LEDState={true}
+  colorBorder="#7986cb"
+  colorCenter="#7986cb"
+/>
+`;
+
+exports[`AttributeSelector selects an textUpdate correctly 1`] = `
+<WithStyles(WidgetTextUpdate)
+  Text="1.23456"
+/>
+`;
