@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import Paper from 'material-ui/Paper';
-import BlockPortWidget from './blockPortWidget.component';
+import BlockPortWidget from './blockPort/blockPortWidget.component';
 
 const styles = {
   block: {
@@ -15,6 +15,7 @@ const styles = {
     textAlign: 'center',
     marginTop: 2,
     marginBottom: 1,
+    fontSize: 16,
   },
   blockContents: {
     display: 'flex',
@@ -43,9 +44,11 @@ const styles = {
   iconContents: {
     width: 120,
     flexGrow: 1,
+    opacity: 0.35,
   },
   description: {
     textAlign: 'center',
+    fontSize: 12,
   },
 };
 
@@ -63,8 +66,8 @@ const BlockWidget = props => {
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
   return (
-    <Paper className={props.classes.block} elevation={4}>
-      <Typography variant="title" className={props.classes.title}>
+    <Paper className={props.classes.block} elevation={8}>
+      <Typography className={props.classes.title}>
         {props.node.label}
       </Typography>
       <div className={props.classes.blockContents} style={{ minHeight }}>

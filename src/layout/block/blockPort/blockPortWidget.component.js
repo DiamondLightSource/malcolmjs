@@ -9,9 +9,9 @@ const styles = {
     alignItems: 'center',
   },
   port: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
     ':hover': {
       background: 'rgb(192,255,0)',
     },

@@ -1,6 +1,4 @@
-import { NodeModel, DefaultPortModel } from 'storm-react-diagrams';
-
-const uuidv4 = require('uuid/v4');
+import { NodeModel, DefaultPortModel, Toolkit } from 'storm-react-diagrams';
 
 class BlockNodeModel extends NodeModel {
   constructor(label, description) {
@@ -13,7 +11,9 @@ class BlockNodeModel extends NodeModel {
   }
 
   addBlockPort(port) {
-    return this.addPort(new DefaultPortModel(port.input, uuidv4(), port.label));
+    return this.addPort(
+      new DefaultPortModel(port.input, Toolkit.UID(), port.label)
+    );
   }
 
   addIcon(icon) {
