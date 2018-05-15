@@ -41,7 +41,7 @@ WidgetCheckbox.propTypes = {
   CheckState: PropTypes.bool.isRequired,
   checkEventHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,
-  Label: PropTypes.string.isRequired,
+  Label: PropTypes.string,
   classes: PropTypes.shape({
     div: PropTypes.string,
     checkBoxRoot: PropTypes.string,
@@ -51,6 +51,7 @@ WidgetCheckbox.propTypes = {
 
 WidgetCheckbox.defaultProps = {
   Pending: false,
+  Label: '',
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetCheckbox);
