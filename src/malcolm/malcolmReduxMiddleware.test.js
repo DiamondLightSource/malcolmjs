@@ -4,8 +4,18 @@ import { MalcolmNewBlock, MalcolmSend } from './malcolm.types';
 describe('malcolm reducer', () => {
   let socketMessages = [];
   let dispatches = [];
-  const socket = {
-    send: msg => socketMessages.push(msg),
+  const socketContainer = {
+    socket: {
+      send: msg => socketMessages.push(JSON.parse(msg)),
+    },
+    isConnected: true,
+    queue: [],
+    flush: () => {
+      while (socketContainer.queue.length > 0) {
+        socketContainer.socket.send(socketContainer.queue[0]);
+        socketContainer.queue.shift();
+      }
+    },
   };
   let middleware = {};
   let store = {};
@@ -15,7 +25,7 @@ describe('malcolm reducer', () => {
   beforeEach(() => {
     socketMessages = [];
     dispatches = [];
-    middleware = buildMalcolmReduxMiddleware(socket);
+    middleware = buildMalcolmReduxMiddleware(socketContainer);
 
     store = {
       getState: () => ({

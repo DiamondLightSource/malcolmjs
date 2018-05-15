@@ -4,7 +4,6 @@ import logger from 'redux-logger';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
-import io from 'socket.io-client';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
@@ -15,17 +14,17 @@ import AppRouter from './App.routes';
 import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
+import MalcolmSocketContainer from './malcolm/malcolmSocket';
 
 require('typeface-roboto');
 
 const history = createHistory();
 const router = routerMiddleware(history);
 
-const socket = io('http://localhost:8000', {
-  transports: ['websocket'],
-});
+const webSocket = new WebSocket('ws://localhost:8000/ws');
+const socketContainer = new MalcolmSocketContainer(webSocket);
 
-const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socket);
+const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
 
 const middleware = [router, thunk, malcolmReduxMiddleware];
 if (process.env.NODE_ENV === `development`) {
@@ -41,7 +40,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 );
 
-configureMalcolmSocketHandlers(socket, store);
+configureMalcolmSocketHandlers(socketContainer, store);
 
 const theme = createMuiTheme({
   palette: {
