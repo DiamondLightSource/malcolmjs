@@ -20,6 +20,7 @@ const processScalarAttribute = (request, changes, dispatch) => {
       alarm: changes.alarm,
       value: changes.value,
       delta: true,
+      pending: false,
     },
   };
 

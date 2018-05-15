@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Warning, Error, InfoOutline, HighlightOff } from '@material-ui/icons';
+import { CircularProgress } from 'material-ui/Progress';
 
 export const AlarmStates = {
   NO_ALARM: 0,
@@ -8,6 +9,7 @@ export const AlarmStates = {
   MAJOR_ALARM: 2,
   INVALID_ALARM: 3,
   UNDEFINED_ALARM: 4,
+  PENDING: -1,
 };
 
 const AttributeAlarm = props => {
@@ -26,6 +28,9 @@ const AttributeAlarm = props => {
 
     case AlarmStates.UNDEFINED_ALARM:
       return <HighlightOff nativeColor="#573c8b" />;
+
+    case AlarmStates.PENDING:
+      return <CircularProgress size={24} color="secondary" />;
 
     default:
       return <div />;

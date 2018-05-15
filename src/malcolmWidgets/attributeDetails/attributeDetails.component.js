@@ -37,7 +37,11 @@ const AttributeDetails = props => (
       </Typography>
     ) : (
       <div className={props.classes.div}>
-        <AttributeAlarm alarmSeverity={props.attribute.alarm.severity} />
+        {props.attribute.pending ? (
+          <AttributeAlarm alarmSeverity={-1} />
+        ) : (
+          <AttributeAlarm alarmSeverity={props.attribute.alarm.severity} />
+        )}
         <Typography className={props.classes.textName}>
           {props.attribute.meta.label}:{' '}
         </Typography>
@@ -52,6 +56,7 @@ const AttributeDetails = props => (
 AttributeDetails.propTypes = {
   attribute: PropTypes.shape({
     name: PropTypes.string,
+    pending: PropTypes.bool,
     alarm: PropTypes.shape({
       severity: PropTypes.number,
     }),

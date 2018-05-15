@@ -1,6 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { Provider } from 'react-redux';
 import { withInfo } from '@storybook/addon-info';
+import configureStore from 'redux-mock-store';
 import AttributeDetails, {
   AttributeDetailsComponent,
 } from './attributeDetails.component';
@@ -14,12 +16,16 @@ const generateInfo = alarmState => ({
   propTablesExclude: [AttributeDetails],
 });
 
+const mockStore = configureStore();
+
 const attribute = alarmStateValue => ({
   name: 'attribute 1',
   alarm: {
     severity: alarmStateValue,
   },
   meta: {
+    writeable: false,
+    typeid: 'malcolm:core/BooleanMeta:1.0',
     label: 'Attribute 1',
     tags: ['widget:led'],
   },
@@ -27,9 +33,11 @@ const attribute = alarmStateValue => ({
 });
 
 const generateComponent = alarmStateValue => (
-  <AttributeDetails attribute={attribute(alarmStateValue)}>
-    <div>Hello</div>
-  </AttributeDetails>
+  <Provider store={mockStore({})}>
+    <AttributeDetails attribute={attribute(alarmStateValue)}>
+      <div>Hello</div>
+    </AttributeDetails>
+  </Provider>
 );
 
 storiesOf('Attribute Details', module)
@@ -40,4 +48,8 @@ storiesOf('Attribute Details', module)
   .add(
     'undefined',
     withInfo(generateInfo('UNDEFINED'))(() => generateComponent(4))
+  )
+  .add(
+    'pending',
+    withInfo(generateInfo('PENDING'))(() => generateComponent(-1))
   );

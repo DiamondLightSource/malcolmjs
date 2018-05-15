@@ -24,6 +24,13 @@ exports[`AttributeAlarm renders no_alarm correctly 1`] = `
 />
 `;
 
+exports[`AttributeAlarm renders pending correctly 1`] = `
+<WithStyles(CircularProgress)
+  color="secondary"
+  size={24}
+/>
+`;
+
 exports[`AttributeAlarm renders undefined_alarm correctly 1`] = `
 <pure(HighlightOff)
   nativeColor="#573c8b"
