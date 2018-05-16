@@ -63,8 +63,8 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       }
 
       // apply changes in delta
-      changes.forEach(currentChange => {
-        const path = currentChange[0];
+      changes.forEach(change => {
+        const path = change[0];
         if (path.length !== 0) {
           let update = attribute;
           path.slice(0, -1).forEach(element => {
@@ -72,14 +72,14 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               ? update[element]
               : {};
           });
-          if (currentChange.length === 1) {
-            delete update[path[0]];
+          if (change.length === 1) {
+            delete update[path[-1]];
           } else {
             // eslint-disable-next-line prefer-destructuring
-            update[path[0]] = currentChange[1];
+            update[path[-1]] = change[1];
           }
-        } else if (currentChange.length === 2) {
-          attribute = { ...currentChange[1] };
+        } else if (change.length === 2) {
+          attribute = { ...change[1] };
         }
       });
 

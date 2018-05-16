@@ -17,6 +17,7 @@ describe('malcolm socket handler', () => {
           path: ['block1', 'health'],
         },
       ],
+      blocks: {},
     },
   };
 
