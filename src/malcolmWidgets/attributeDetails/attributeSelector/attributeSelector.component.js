@@ -5,6 +5,7 @@ import { darken } from 'material-ui/styles/colorManipulator';
 import { connect } from 'react-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
+import WidgetComboBox from '../../comboBox/comboBox.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
 import {
   malcolmPutAction,
@@ -38,7 +39,18 @@ const AttributeSelector = props => {
             CheckState={props.attribute.value}
             Pending={props.attribute.pending}
             checkEventHandler={isChecked =>
-              props.checkHandler(props.attribute.path, isChecked)
+              props.eventHandler(props.attribute.path, isChecked)
+            }
+          />
+        );
+      } else if (tags[widgetTagIndex] === 'widget:combo') {
+        return (
+          <WidgetComboBox
+            Value={props.attribute.value}
+            Pending={props.attribute.pending}
+            Choices={props.attribute.meta.choices}
+            selectEventHandler={event =>
+              props.eventHandler(props.attribute.path, event.target.value)
             }
           />
         );
@@ -53,7 +65,7 @@ const AttributeSelector = props => {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  checkHandler: (path, isChecked) => {
+  eventHandler: (path, isChecked) => {
     dispatch(malcolmSetPending(path));
     dispatch(malcolmPutAction(path, isChecked));
   },
@@ -63,6 +75,7 @@ AttributeSelector.propTypes = {
   attribute: PropTypes.shape({
     meta: PropTypes.shape({
       tags: PropTypes.arrayOf(PropTypes.string),
+      choices: PropTypes.arrayOf(PropTypes.string),
     }),
     path: PropTypes.string,
     value: PropTypes.oneOfType([
@@ -82,7 +95,7 @@ AttributeSelector.propTypes = {
       }),
     }),
   }).isRequired,
-  checkHandler: PropTypes.func.isRequired,
+  eventHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
