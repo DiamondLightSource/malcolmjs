@@ -114,4 +114,6 @@ describe('malcolm socket handler', () => {
     expect(dispatches[1].type).toEqual(MalcolmAttributeData);
     expect(dispatches[1].payload.unableToProcess).toEqual(true);
   });
+
+  // TODO: add tests for DELTA handling
 });

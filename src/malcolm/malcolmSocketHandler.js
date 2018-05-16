@@ -73,10 +73,10 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               : {};
           });
           if (change.length === 1) {
-            delete update[path[-1]];
+            delete update[path.slice(-1)[0]];
           } else {
             // eslint-disable-next-line prefer-destructuring
-            update[path[-1]] = change[1];
+            update[path.slice(-1)[0]] = change[1];
           }
         } else if (change.length === 2) {
           attribute = { ...change[1] };
