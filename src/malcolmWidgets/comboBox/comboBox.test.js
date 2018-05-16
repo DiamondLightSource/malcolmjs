@@ -1,8 +1,8 @@
 import React from 'react';
 import { createShallow, createMount } from 'material-ui/test-utils';
-import WidgetCheckbox from './comboBox.component';
+import WidgetComboBox from './comboBox.component';
 
-describe('WidgetCheckbox', () => {
+describe('WidgetComboBox', () => {
   let shallow;
   let mount;
 
@@ -15,17 +15,19 @@ describe('WidgetCheckbox', () => {
     mount.cleanUp();
   });
 
-  it('renders unchecked', () => {
+  it('renders correctly', () => {
     const wrapper = shallow(
-      <WidgetCheckbox
-        CheckState={false}
-        checkEventHandler={() => {}}
-        Label="TestBox"
+      <WidgetComboBox
+        Value="2"
+        Pending={false}
+        Choices={['1', '2', '3']}
+        selectEventHandler={() => {}}
       />
     );
     expect(wrapper).toMatchSnapshot();
   });
 
+  /*
   it('calls check', () => {
     const checkAction = jest.fn();
     const wrapper = mount(
@@ -42,28 +44,5 @@ describe('WidgetCheckbox', () => {
 
     expect(checkAction.mock.calls.length).toEqual(1);
   });
-
-  it('renders checked', () => {
-    const wrapper = shallow(
-      <WidgetCheckbox CheckState checkEventHandler={() => {}} Label="TestBox" />
-    );
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('calls uncheck', () => {
-    const uncheckAction = jest.fn();
-    const wrapper = mount(
-      <WidgetCheckbox
-        CheckState
-        checkEventHandler={() => {
-          uncheckAction();
-        }}
-        Label="TestBox"
-      />
-    );
-
-    wrapper.find('input').simulate('change');
-
-    expect(uncheckAction.mock.calls.length).toEqual(1);
-  });
+  */
 });
