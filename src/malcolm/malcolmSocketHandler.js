@@ -21,19 +21,21 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   };
 
   socketContainer.socket.onmessage = event => {
+    console.log(event.data);
     const data = JSON.parse(event.data);
     if (data.typeid === 'malcolm:core/Delta:1.0') {
-      const changes = data.changes[0][1];
+      const { changes } = data;
       const originalRequest = store
         .getState()
         .malcolm.messagesInFlight.find(m => m.id === data.id);
 
       // Messy Bits
-      const { path } = originalRequest;
-      const blockName = path[0];
-      const attributeName = path[1];
+      const attributePath = originalRequest.path;
+      const blockName = attributePath[0];
+      const attributeName = attributePath[1];
       let attribute;
 
+      // Pull attribute from store (if exists)
       if (
         Object.prototype.hasOwnProperty.call(
           store.getState().malcolm.blocks,
@@ -60,16 +62,27 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         }
       }
 
-      let delta = {};
-      if (data.changes[0][0].length !== 0) {
-        delta[data.changes[0][0]] = changes;
-      } else {
-        delta = { ...changes };
-      }
-      attribute = {
-        ...attribute,
-        ...delta,
-      };
+      // apply changes in delta
+      changes.forEach(currentChange => {
+        const path = currentChange[0];
+        if (path.length !== 0) {
+          let update = attribute;
+          path.slice(0, -1).forEach(element => {
+            update = Object.prototype.hasOwnProperty.call(update, element)
+              ? update[element]
+              : {};
+          });
+          if (currentChange.length === 1) {
+            delete update[path[0]];
+          } else {
+            // eslint-disable-next-line prefer-destructuring
+            update[path[0]] = currentChange[1];
+          }
+        } else if (currentChange.length === 2) {
+          attribute = { ...currentChange[1] };
+        }
+      });
+
       // Mess done
 
       switch (attribute.typeid) {
