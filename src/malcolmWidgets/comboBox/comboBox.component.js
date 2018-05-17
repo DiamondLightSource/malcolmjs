@@ -8,6 +8,9 @@ const styles = theme => ({
   div: {
     backgroundColor: theme.palette.background.paper,
   },
+  formControl: {
+    margin: 0,
+  },
 });
 
 const WidgetComboBox = props => {
@@ -23,13 +26,16 @@ const WidgetComboBox = props => {
     ];
   });
   return (
-    <div className={props.classes.div}>
-      <FormControl disabled={props.Pending}>
-        <Select native value={props.Value} onChange={props.selectEventHandler}>
-          {options}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl disabled={props.Pending} fullWidth>
+      <Select
+        native
+        value={props.Value}
+        onChange={props.selectEventHandler}
+        className={props.classes.formControl}
+      >
+        {options}
+      </Select>
+    </FormControl>
   );
 };
 
@@ -39,7 +45,7 @@ WidgetComboBox.propTypes = {
   Choices: PropTypes.arrayOf(PropTypes.string).isRequired,
   Pending: PropTypes.bool,
   classes: PropTypes.shape({
-    div: PropTypes.string,
+    formControl: PropTypes.string,
   }).isRequired,
 };
 

@@ -25,38 +25,28 @@ const styles = theme => ({
   },
 });
 
-const ableToRenderAttribute = attribute =>
-  attribute &&
-  Object.prototype.hasOwnProperty.call(attribute, 'unableToProcess');
-
 const AttributeDetails = props => {
   let widgetTagIndex = null;
   if (Object.prototype.hasOwnProperty.call(props.attribute, 'meta')) {
     const { tags } = props.attribute.meta;
-    widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+    if (tags !== null) {
+      widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+    }
   }
   if (widgetTagIndex !== null) {
     return (
-      <div>
-        {ableToRenderAttribute(props.attribute) ? (
-          <Typography style={{ padding: 8 }}>
-            Unable to render attribute {props.attribute.name}
-          </Typography>
+      <div className={props.classes.div}>
+        {props.attribute.pending ? (
+          <AttributeAlarm alarmSeverity={-1} />
         ) : (
-          <div className={props.classes.div}>
-            {props.attribute.pending ? (
-              <AttributeAlarm alarmSeverity={-1} />
-            ) : (
-              <AttributeAlarm alarmSeverity={props.attribute.alarm.severity} />
-            )}
-            <Typography className={props.classes.textName}>
-              {props.attribute.meta.label}:{' '}
-            </Typography>
-            <div className={props.classes.controlContainer}>
-              <AttributeSelector attribute={props.attribute} />
-            </div>
-          </div>
+          <AttributeAlarm alarmSeverity={props.attribute.alarm.severity} />
         )}
+        <Typography className={props.classes.textName}>
+          {props.attribute.meta.label}:{' '}
+        </Typography>
+        <div className={props.classes.controlContainer}>
+          <AttributeSelector attribute={props.attribute} />
+        </div>
       </div>
     );
   }

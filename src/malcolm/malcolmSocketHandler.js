@@ -21,7 +21,6 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   };
 
   socketContainer.socket.onmessage = event => {
-    console.log(event.data);
     const data = JSON.parse(event.data);
     if (data.typeid === 'malcolm:core/Delta:1.0') {
       const { changes } = data;

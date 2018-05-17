@@ -17,6 +17,7 @@ describe('AttributeDetails', () => {
       },
       meta: {
         label: 'Attribute 1',
+        tags: ['widget:NOTAWIDGET'],
       },
     };
 
