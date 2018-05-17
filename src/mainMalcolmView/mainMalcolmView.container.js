@@ -6,7 +6,17 @@ import BlockDetails from '../blockDetails/blockDetails.component';
 
 const MainMalcolmView = props => (
   <div>
-    <DrawerContainer parentTitle={props.parentBlockTitle} childTitle="">
+    <DrawerContainer
+      parentTitle={props.parentBlockTitle}
+      popOutParent={width =>
+        window.open(
+          `http://localhost:3000/gui/?block=${props.parentBlockTitle}`,
+          props.parentBlockTitle,
+          `width=${width}`
+        )
+      }
+      childTitle=""
+    >
       <BlockDetails block={props.parentBlock} />
       <div>Middle content</div>
       <div>Right content</div>

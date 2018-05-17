@@ -5,6 +5,7 @@ exports[`MainMalcolmView renders correctly 1`] = `
   <Connect(WithStyles(DrawerContainer))
     childTitle=""
     parentTitle="Test main view"
+    popOutParent={[Function]}
   >
     <WithStyles(BlockDetails)
       block={

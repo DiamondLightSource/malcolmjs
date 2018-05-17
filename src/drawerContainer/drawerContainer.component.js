@@ -122,6 +122,7 @@ const DrawerContainer = props => (
       <div className={props.classes.drawerContents}>
         <DrawerHeader
           closeAction={props.closeParent}
+          popOutAction={() => props.popOutParent(361)}
           title={props.parentTitle}
         />
         {props.children[0]}
@@ -134,7 +135,11 @@ const DrawerContainer = props => (
       classes={{ paper: props.classes.drawer }}
     >
       <div className={props.classes.drawerContents}>
-        <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
+        <DrawerHeader
+          closeAction={props.closeChild}
+          title={props.childTitle}
+          popOutAction={() => {}}
+        />
         {props.children[props.children.length - 1]}
       </div>
     </Drawer>
@@ -157,6 +162,7 @@ DrawerContainer.propTypes = {
   openSecondary: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
   closeParent: PropTypes.func.isRequired,
+  popOutParent: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,
   parentTitle: PropTypes.string.isRequired,
   childTitle: PropTypes.string.isRequired,
