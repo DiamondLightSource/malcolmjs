@@ -1,12 +1,14 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { blue } from 'material-ui/colors';
 
 const req = require.context('../', true, /\.stories\.js$/);
 
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: blue,
   },
 });
 
