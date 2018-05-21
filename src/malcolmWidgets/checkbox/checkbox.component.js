@@ -9,6 +9,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   checkBoxRoot: {
+    height: 'auto',
     color: lighten(theme.palette.primary.light, 0.1),
     '&$checkBoxChecked': {
       color: theme.palette.primary.light,
@@ -23,18 +24,16 @@ const styles = theme => ({
 });
 
 const WidgetCheckbox = props => (
-  <div className={props.classes.div}>
-    <Checkbox
-      checked={props.CheckState}
-      onChange={(event, checked) => props.checkEventHandler(checked)}
-      classes={{
-        root: props.classes.checkBoxRoot,
-        checked: props.classes.checkBoxChecked,
-      }}
-      value={props.Label}
-      disabled={props.Pending}
-    />
-  </div>
+  <Checkbox
+    checked={props.CheckState}
+    onChange={(event, checked) => props.checkEventHandler(checked)}
+    classes={{
+      root: props.classes.checkBoxRoot,
+      checked: props.classes.checkBoxChecked,
+    }}
+    value={props.Label}
+    disabled={props.Pending}
+  />
 );
 
 WidgetCheckbox.propTypes = {
