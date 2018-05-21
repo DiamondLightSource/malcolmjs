@@ -53,7 +53,7 @@ def main():
             pass
 
     print "Getting blocks..."
-    block_path = ".blocks"
+    block_path = "blocks"
     mkdir_p('../canned_data/Sub/%s' % block_path)
     SimServer.send_subscribe((".", "blocks"))
     write_lines_to_file('../canned_data/Sub/%s/request_info.json' % block_path,
