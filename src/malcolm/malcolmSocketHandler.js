@@ -94,6 +94,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             if (change.length === 1) {
               delete update[path.slice(-1)[0]];
             } else {
+              // Seems to be a false positive for this rule?
               // eslint-disable-next-line prefer-destructuring
               update[path.slice(-1)[0]] = change[1];
             }

@@ -22,7 +22,7 @@
           "dtype": "uint32", 
           "label": "Line Repeat"
         }, 
-        "value": 0, 
+        "value": 2, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
@@ -32,5 +32,5 @@
       }
     ]
   ], 
-  "id": 121
+  "id": "CANNED"
 }
