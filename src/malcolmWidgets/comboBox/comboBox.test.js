@@ -27,22 +27,22 @@ describe('WidgetComboBox', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  /*
   it('calls check', () => {
-    const checkAction = jest.fn();
+    const eventAction = jest.fn();
     const wrapper = mount(
-      <WidgetCheckbox
-        CheckState={false}
-        checkEventHandler={() => {
-          checkAction();
-        }}
-        Label="TestBox"
+      <WidgetComboBox
+        Value="2"
+        Pending={false}
+        Choices={['1', '2', '3']}
+        selectEventHandler={eventAction}
       />
     );
+    wrapper
+      .find('option')
+      .first()
+      .simulate('change');
 
-    wrapper.find('input').simulate('change');
-
-    expect(checkAction.mock.calls.length).toEqual(1);
+    expect(eventAction.mock.calls.length).toEqual(1);
+    expect(eventAction.mock.calls[0][0].target.value).toEqual('1');
   });
-  */
 });

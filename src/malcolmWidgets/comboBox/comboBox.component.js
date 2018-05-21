@@ -14,17 +14,13 @@ const styles = theme => ({
 });
 
 const WidgetComboBox = props => {
-  let options = [];
-  props.Choices.forEach((choice, index) => {
-    options = [
-      ...options,
-      // Rule prevents behaviour we want in this case
-      // eslint-disable-next-line react/no-array-index-key
-      <option value={choice} key={index}>
-        {choice}
-      </option>,
-    ];
-  });
+  const options = props.Choices.map((choice, index) => (
+    // Rule prevents behaviour we want in this case
+    // eslint-disable-next-line react/no-array-index-key
+    <option value={choice} key={index}>
+      {choice}
+    </option>
+  ));
   return (
     <FormControl disabled={props.Pending} fullWidth>
       <Select
