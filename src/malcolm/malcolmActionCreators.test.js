@@ -2,6 +2,7 @@ import {
   malcolmGetAction,
   malcolmSubscribeAction,
   malcolmNewParentBlockAction,
+  malcolmSnackbarState,
 } from './malcolmActionCreators';
 
 it('malcolm GET actions have right properties', () => {
@@ -31,4 +32,14 @@ it('malcolm new block action has right properties', () => {
   expect(action.payload.blockName).toEqual(blockName);
   expect(action.payload.parent).toEqual(true);
   expect(action.payload.child).toEqual(false);
+});
+
+it('malcolm snackbar actions have right properties', () => {
+  const isOpen = true;
+  const message = 'this is a test';
+  const subscribeAction = malcolmSnackbarState(isOpen, message);
+
+  expect(subscribeAction.type).toEqual('malcolm:snackbar');
+  expect(subscribeAction.snackbar.open).toEqual(true);
+  expect(subscribeAction.snackbar.message).toEqual('this is a test');
 });

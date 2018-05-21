@@ -25,7 +25,7 @@ const MessageSnackBar = props => (
     open={props.open}
     message={props.message}
     onClose={props.handleClose}
-    autoHideDuration={5000}
+    autoHideDuration={props.timeout}
     className={props.classes.snackbar}
     ContentProps={{ className: props.classes.snackbarContent }}
     action={[
@@ -37,6 +37,7 @@ const MessageSnackBar = props => (
 );
 
 MessageSnackBar.propTypes = {
+  timeout: PropTypes.number,
   open: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
@@ -44,6 +45,10 @@ MessageSnackBar.propTypes = {
     snackbar: PropTypes.string.isRequired,
     snackbarContent: PropTypes.string.isRequired,
   }).isRequired,
+};
+
+MessageSnackBar.defaultProps = {
+  timeout: null,
 };
 
 const mapStateToProps = state => ({

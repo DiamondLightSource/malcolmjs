@@ -1,44 +1,29 @@
 import BlockMetaHandler from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
-import { MalcolmAttributeData, MalcolmSnackbar } from './malcolm.types';
+import { malcolmSnackbarState } from './malcolmActionCreators';
+import { MalcolmAttributeData } from './malcolm.types';
 
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
 
   socketContainer.socket.onerror = error => {
     const errorString = JSON.stringify(error);
-    store.dispatch({
-      type: MalcolmSnackbar,
-      snackbar: {
-        open: true,
-        message: `WebSocket Error: ${errorString}`,
-      },
-    });
+    store.dispatch(
+      malcolmSnackbarState(true, `WebSocket Error: ${errorString}`)
+    );
     console.log(`WebSocket Error: ${errorString}`);
   };
 
   socketContainer.socket.onopen = () => {
     console.log('connected to socket');
-    store.dispatch({
-      type: MalcolmSnackbar,
-      snackbar: {
-        open: true,
-        message: `Connected to WebSocket`,
-      },
-    });
+    store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
     socketContainer.isConnected = true;
     socketContainer.flush();
   };
 
   socketContainer.socket.onclose = () => {
     console.log('socket disconnected');
-    store.dispatch({
-      type: MalcolmSnackbar,
-      snackbar: {
-        open: true,
-        message: `WebSocket disconnected`,
-      },
-    });
+    store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
   };
 
   socketContainer.socket.onmessage = event => {
@@ -52,7 +37,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
         // Messy Bits
         const attributePath = originalRequest.path;
-        // TODO: handle attribute path properly for mor general cases
+        // TODO: handle attribute path properly for more general cases
         const blockName = attributePath[0];
         const attributeName = attributePath[1];
         let attribute;
@@ -150,47 +135,53 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           Object.prototype.hasOwnProperty.call(
             store.getState().malcolm.blocks,
             blockName
+          ) &&
+          Object.prototype.hasOwnProperty.call(
+            store.getState().malcolm.blocks[blockName],
+            'attributes'
           )
         ) {
-          if (
-            Object.prototype.hasOwnProperty.call(
-              store.getState().malcolm.blocks[blockName],
-              'attributes'
-            )
-          ) {
-            const attributes = [
-              ...store.getState().malcolm.blocks[blockName].attributes,
+          const attributes = [
+            ...store.getState().malcolm.blocks[blockName].attributes,
+          ];
+          const matchingAttribute = attributes.findIndex(
+            a => a.name === attributeName
+          );
+          if (matchingAttribute >= 0) {
+            attribute = store.getState().malcolm.blocks[blockName].attributes[
+              matchingAttribute
             ];
-            const matchingAttribute = attributes.findIndex(
-              a => a.name === attributeName
-            );
-            if (matchingAttribute >= 0) {
-              attribute = store.getState().malcolm.blocks[blockName].attributes[
-                matchingAttribute
-              ];
+            if (Object.prototype.hasOwnProperty.call(attribute, 'pending')) {
+              attribute.pending = false;
             }
           }
-        }
-        if (Object.prototype.hasOwnProperty.call(attribute, 'pending')) {
-          attribute.pending = false;
         }
         break;
       }
       case 'malcolm:core/Error:1.0': {
-        const originalRequest = store
-          .getState()
-          .malcolm.messagesInFlight.find(m => m.id === data.id);
+        if (data.id !== -1) {
+          const originalRequest = store
+            .getState()
+            .malcolm.messagesInFlight.find(m => m.id === data.id);
 
-        store.dispatch({
-          type: MalcolmSnackbar,
-          snackbar: {
-            open: true,
-            message: `Error in attribute ${
-              originalRequest.path.slice(-1)[0]
-            } for block ${originalRequest.path.slice(0, -1)}`,
-          },
-        });
-        break;
+          store.dispatch(
+            malcolmSnackbarState(
+              true,
+              `Error in attribute ${
+                originalRequest.path.slice(-1)[0]
+              } for block ${originalRequest.path.slice(0, -1)}`
+            )
+          );
+          break;
+        } else {
+          store.dispatch(
+            malcolmSnackbarState(
+              true,
+              `Error reported by malcolm server: "${data.message}"`
+            )
+          );
+          break;
+        }
       }
       default: {
         break;

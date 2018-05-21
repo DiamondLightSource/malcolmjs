@@ -7,6 +7,13 @@ exports[`AttributeSelector selects a checkbox correctly 1`] = `
 />
 `;
 
+exports[`AttributeSelector selects a comboBox correctly 1`] = `
+<WithStyles(WidgetComboBox)
+  Value="1"
+  selectEventHandler={[Function]}
+/>
+`;
+
 exports[`AttributeSelector selects an LED correctly 1`] = `
 <WithStyles(WidgetLED)
   LEDState={true}
