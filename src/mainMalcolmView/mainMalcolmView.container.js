@@ -8,9 +8,9 @@ const MainMalcolmView = props => (
   <div>
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
-      popOutParent={width =>
+      popOutParent={(url, width) =>
         window.open(
-          `http://localhost:3000/gui/?block=${props.parentBlockTitle}`,
+          `${url}/details/?block=${props.parentBlockTitle}`,
           props.parentBlockTitle,
           `width=${width}`
         )

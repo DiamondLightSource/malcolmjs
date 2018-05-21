@@ -122,7 +122,15 @@ const DrawerContainer = props => (
       <div className={props.classes.drawerContents}>
         <DrawerHeader
           closeAction={props.closeParent}
-          popOutAction={() => props.popOutParent(361)}
+          popOutAction={() =>
+            props.popOutParent(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              360
+            )
+          }
           title={props.parentTitle}
         />
         {props.children[0]}
