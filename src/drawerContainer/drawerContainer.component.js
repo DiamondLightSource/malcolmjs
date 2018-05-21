@@ -14,7 +14,6 @@ import {
   openParentPanel,
   openChildPanel,
 } from '../viewState/viewState.actions';
-import MessageSnackBar from '../Snackbar/snackbar.component';
 
 const drawerWidth = 320;
 
@@ -113,7 +112,6 @@ const DrawerContainer = props => (
       {props.children.filter(
         (c, i) => i !== 0 && i !== props.children.length - 1
       )}
-      <MessageSnackBar />
     </div>
     <Drawer
       variant="persistent"

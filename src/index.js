@@ -15,6 +15,7 @@ import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
+import MessageSnackBar from './Snackbar/snackbar.component';
 
 require('typeface-roboto');
 
@@ -54,6 +55,7 @@ ReactDOM.render(
       <ConnectedRouter history={history}>
         <MuiThemeProvider theme={theme}>
           <AppRouter />
+          <MessageSnackBar />
         </MuiThemeProvider>
       </ConnectedRouter>
     </div>

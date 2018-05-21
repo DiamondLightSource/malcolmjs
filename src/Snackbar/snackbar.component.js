@@ -27,9 +27,9 @@ const MessageSnackBar = props => (
     onClose={props.handleClose}
     autoHideDuration={5000}
     className={props.classes.snackbar}
-    SnackbarContentProps={{ className: props.classes.snackbarContent }}
+    ContentProps={{ className: props.classes.snackbarContent }}
     action={[
-      <IconButton key="close" onClick={props.handleClose} color="secondary">
+      <IconButton key="close" onClick={props.handleClose}>
         <CloseIcon />
       </IconButton>,
     ]}
