@@ -12,6 +12,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.textColor,
     height: 20,
+    padding: 6,
     flexWrap: 'nowrap',
   },
   snackbar: {
