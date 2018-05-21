@@ -52,7 +52,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
         // Messy Bits
         const attributePath = originalRequest.path;
-        // TODO: handle path properly for mor general cases
+        // TODO: handle attribute path properly for mor general cases
         const blockName = attributePath[0];
         const attributeName = attributePath[1];
         let attribute;
@@ -62,25 +62,22 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           Object.prototype.hasOwnProperty.call(
             store.getState().malcolm.blocks,
             blockName
+          ) &&
+          Object.prototype.hasOwnProperty.call(
+            store.getState().malcolm.blocks[blockName],
+            'attributes'
           )
         ) {
-          if (
-            Object.prototype.hasOwnProperty.call(
-              store.getState().malcolm.blocks[blockName],
-              'attributes'
-            )
-          ) {
-            const attributes = [
-              ...store.getState().malcolm.blocks[blockName].attributes,
+          const attributes = [
+            ...store.getState().malcolm.blocks[blockName].attributes,
+          ];
+          const matchingAttribute = attributes.findIndex(
+            a => a.name === attributeName
+          );
+          if (matchingAttribute >= 0) {
+            attribute = store.getState().malcolm.blocks[blockName].attributes[
+              matchingAttribute
             ];
-            const matchingAttribute = attributes.findIndex(
-              a => a.name === attributeName
-            );
-            if (matchingAttribute >= 0) {
-              attribute = store.getState().malcolm.blocks[blockName].attributes[
-                matchingAttribute
-              ];
-            }
           }
         }
 
