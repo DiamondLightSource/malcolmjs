@@ -46,7 +46,7 @@ To build the final documentation locally you need to have ``Python`` and ``pip``
 Then to run the sphinx build run:
 ::
 
-	sphinx-build -b html docs/source docs/build/html
+	npm run build-docs
 
 The same build step can be done by running the ``Makefile`` in the root of the repo.
 

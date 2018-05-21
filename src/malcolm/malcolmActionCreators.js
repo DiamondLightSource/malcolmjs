@@ -1,4 +1,8 @@
-import { MalcolmSend, MalcolmNewBlock } from './malcolm.types';
+import {
+  MalcolmSend,
+  MalcolmNewBlock,
+  MalcolmAttributePending,
+} from './malcolm.types';
 
 export const malcolmGetAction = path => ({
   type: MalcolmSend,
@@ -26,8 +30,26 @@ export const malcolmNewParentBlockAction = blockName => ({
   },
 });
 
+export const malcolmPutAction = (path, value) => ({
+  type: MalcolmSend,
+  payload: {
+    typeid: 'malcolm:core/Put:1.0',
+    path,
+    value,
+  },
+});
+
+export const malcolmSetPending = path => ({
+  type: MalcolmAttributePending,
+  payload: {
+    path,
+  },
+});
+
 export default {
   malcolmGetAction,
   malcolmSubscribeAction,
   malcolmNewParentBlockAction,
+  malcolmPutAction,
+  malcolmSetPending,
 };

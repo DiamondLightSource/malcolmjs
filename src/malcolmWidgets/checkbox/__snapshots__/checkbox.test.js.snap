@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WidgetCheckbox renders checked 1`] = `
+<div
+  className="WidgetCheckbox-div-1"
+>
+  <WithStyles(Checkbox)
+    checked={true}
+    classes={
+      Object {
+        "checked": "WidgetCheckbox-checkBoxChecked-3",
+        "root": "WidgetCheckbox-checkBoxRoot-2",
+      }
+    }
+    disabled={false}
+    onChange={[Function]}
+    value="TestBox"
+  />
+</div>
+`;
+
+exports[`WidgetCheckbox renders unchecked 1`] = `
+<div
+  className="WidgetCheckbox-div-1"
+>
+  <WithStyles(Checkbox)
+    checked={false}
+    classes={
+      Object {
+        "checked": "WidgetCheckbox-checkBoxChecked-3",
+        "root": "WidgetCheckbox-checkBoxRoot-2",
+      }
+    }
+    disabled={false}
+    onChange={[Function]}
+    value="TestBox"
+  />
+</div>
+`;
