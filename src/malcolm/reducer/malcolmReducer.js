@@ -99,7 +99,6 @@ function updateAttribute(state, payload) {
           ...payload,
         };
       }
-
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
 

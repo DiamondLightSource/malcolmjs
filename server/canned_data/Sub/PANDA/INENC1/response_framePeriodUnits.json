@@ -27,7 +27,7 @@
             "us"
           ]
         }, 
-        "value": "s", 
+        "value": "ms", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
@@ -37,5 +37,5 @@
       }
     ]
   ], 
-  "id": 29
+  "id": "CANNED"
 }

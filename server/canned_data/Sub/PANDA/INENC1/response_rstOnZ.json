@@ -22,7 +22,7 @@
             "config:1"
           ]
         }, 
-        "value": false, 
+        "value": true, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
@@ -32,5 +32,5 @@
       }
     ]
   ], 
-  "id": 32
+  "id": "CANNED"
 }

@@ -64,7 +64,7 @@ AttributeSelector.propTypes = {
     meta: PropTypes.shape({
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
-    path: PropTypes.string,
+    path: PropTypes.arrayOf(PropTypes.string),
     value: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.number,
