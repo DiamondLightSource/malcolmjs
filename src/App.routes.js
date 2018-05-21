@@ -5,8 +5,8 @@ import malcolmPopOut from './mainMalcolmView/malcolmPopOut.container';
 
 const AppRouter = () => (
   <div>
-    <Route exact path="/gui" component={MainMalcolmView} />
-    <Route exact path="/details" component={malcolmPopOut} />
+    <Route exact path="/gui/*" component={MainMalcolmView} />
+    <Route exact path="/details/*" component={malcolmPopOut} />
   </div>
 );
 

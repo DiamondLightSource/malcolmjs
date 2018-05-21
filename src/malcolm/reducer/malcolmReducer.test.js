@@ -1,10 +1,10 @@
 import malcolmReducer from './malcolmReducer';
-import { malcolmNewParentBlockAction } from './malcolmActionCreators';
+import { malcolmNewBlockAction } from '../malcolmActionCreators';
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
-} from './malcolm.types';
+} from '../malcolm.types';
 
 const buildAction = (type, id) => ({
   type,
@@ -57,7 +57,7 @@ describe('malcolm reducer', () => {
   });
 
   it('registers a new block when one is requested', () => {
-    state = malcolmReducer(state, malcolmNewParentBlockAction('block1'));
+    state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
 
     expect(state.blocks.block1).toBeDefined();
     expect(state.blocks.block1.name).toEqual('block1');

@@ -13,7 +13,7 @@ import AppReducer from './App.reducer';
 import AppRouter from './App.routes';
 import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
-import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
+import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddleware';
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
 
 require('typeface-roboto');

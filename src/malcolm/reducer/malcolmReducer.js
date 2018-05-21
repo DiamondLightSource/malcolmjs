@@ -5,12 +5,16 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
-} from './malcolm.types';
+  MalcolmNavigationPathUpdate,
+} from '../malcolm.types';
+import NavigationReducer from './navigation.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
+  navigation: [],
   blocks: {},
   parentBlock: undefined,
+  childBlock: undefined,
 };
 
 function updateMessagesInFlight(state, action) {
@@ -45,6 +49,9 @@ function registerNewBlock(state, action) {
     parentBlock: action.payload.parent
       ? action.payload.blockName
       : state.parentBlock,
+    childBlock: action.payload.child
+      ? action.payload.blockName
+      : state.childBlock,
   };
 }
 
@@ -153,6 +160,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmAttributeData:
       return updateAttribute(state, action.payload);
+
+    case MalcolmNavigationPathUpdate:
+      return NavigationReducer.updateNavigationPath(state, action.payload);
 
     default:
       return state;

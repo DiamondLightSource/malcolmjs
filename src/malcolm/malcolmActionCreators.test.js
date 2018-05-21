@@ -1,7 +1,7 @@
 import {
   malcolmGetAction,
   malcolmSubscribeAction,
-  malcolmNewParentBlockAction,
+  malcolmNewBlockAction,
 } from './malcolmActionCreators';
 
 it('malcolm GET actions have right properties', () => {
@@ -25,7 +25,7 @@ it('malcolm SUBSCRIBE actions have right properties', () => {
 
 it('malcolm new block action has right properties', () => {
   const blockName = 'TTLIN1';
-  const action = malcolmNewParentBlockAction(blockName);
+  const action = malcolmNewBlockAction(blockName, true, false);
 
   expect(action.type).toEqual('malcolm:newblock');
   expect(action.payload.blockName).toEqual(blockName);

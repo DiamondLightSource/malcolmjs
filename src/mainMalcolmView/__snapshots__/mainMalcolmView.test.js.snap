@@ -16,9 +16,7 @@ exports[`MainMalcolmView renders correctly 1`] = `
     <div>
       Middle content
     </div>
-    <div>
-      Right content
-    </div>
+    <WithStyles(BlockDetails) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;
