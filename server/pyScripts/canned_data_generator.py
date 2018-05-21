@@ -59,6 +59,7 @@ def main():
     write_lines_to_file('../canned_data/Sub/%s/request_info.json' % block_path,
                         json.dumps(SimServer.message, indent=2))
     block_meta = SimServer.responses.get(timeout=2)
+    block_meta['id'] = "CANNED"
     write_lines_to_file('../canned_data/Sub/%s/response_info.json' % block_path,
                         json.dumps(block_meta, indent=2))
 
@@ -70,6 +71,7 @@ def main():
         write_lines_to_file('../canned_data/Sub/%s/request_meta.json' % block_path,
                             json.dumps(SimServer.message, indent=2))
         block_meta = SimServer.responses.get(timeout=2)
+        block_meta['id'] = "CANNED"
         write_lines_to_file('../canned_data/Sub/%s/response_meta.json' % block_path,
                             json.dumps(block_meta, indent=2))
         print "...Getting %s fields for %s..." % (len(block_meta["changes"][0][1]["fields"]), block)
@@ -78,6 +80,7 @@ def main():
             write_lines_to_file('../canned_data/Sub/%s/request_%s.json' % (block_path, field),
                                 json.dumps(SimServer.message, indent=2))
             block_field = SimServer.responses.get(timeout=2)
+            block_field['id'] = "CANNED"
 
             if 'timeStamp' in block_field['changes'][0][1].keys():
                 block_field['changes'][0][1]['timeStamp']['secondsPastEpoch'] = 0
