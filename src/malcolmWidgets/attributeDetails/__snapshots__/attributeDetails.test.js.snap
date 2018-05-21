@@ -1,52 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AttributeDetails renders correctly 1`] = `
-<div>
-  <div
-    className="AttributeDetails-div-1"
+<div
+  className="AttributeDetails-div-1"
+>
+  <AttributeAlarm
+    alarmSeverity={0}
+  />
+  <WithStyles(Typography)
+    className="AttributeDetails-textName-2"
   >
-    <AttributeAlarm
-      alarmSeverity={0}
-    />
-    <WithStyles(Typography)
-      className="AttributeDetails-textName-2"
-    >
-      Attribute 1
-      :
-       
-    </WithStyles(Typography)>
-    <div
-      className="AttributeDetails-controlContainer-3"
-    >
-      <Connect(WithStyles(AttributeSelector))
-        attribute={
-          Object {
-            "alarm": Object {
-              "severity": 0,
-            },
-            "meta": Object {
-              "label": "Attribute 1",
-            },
-            "name": "Attribute 1",
-          }
+    Attribute 1
+    :
+     
+  </WithStyles(Typography)>
+  <div
+    className="AttributeDetails-controlContainer-3"
+  >
+    <Connect(WithStyles(AttributeSelector))
+      attribute={
+        Object {
+          "alarm": Object {
+            "severity": 0,
+          },
+          "meta": Object {
+            "label": "Attribute 1",
+            "tags": Array [
+              "widget:NOTAWIDGET",
+            ],
+          },
+          "name": "Attribute 1",
         }
-      />
-    </div>
+      }
+    />
   </div>
 </div>
 `;
 
-exports[`AttributeDetails shows that it is unable to render unprocessed attributes 1`] = `
-<div>
-  <WithStyles(Typography)
-    style={
-      Object {
-        "padding": 8,
-      }
-    }
-  >
-    Unable to render attribute 
-    Attribute 1
-  </WithStyles(Typography)>
-</div>
-`;
+exports[`AttributeDetails shows that it is unable to render unprocessed attributes 1`] = `""`;
