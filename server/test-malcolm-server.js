@@ -1,38 +1,31 @@
-const io = require('socket.io')();
+const WebSocket = require('ws');
 const fs = require('fs');
+const dataLoader = require('./loadCannedData');
+const subscriptionFeed = require('./subscriptionFeed');
 
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
-let malcolmMessages = {};
+let malcolmMessages = dataLoader.loadData('./server/canned_data/');
 let subscriptions = [];
 
-const dataFolder = './server/canned_data/Sub/';
-fs.readdir(dataFolder, (err, files) => {
-  files.filter(f => f.startsWith('request_')).forEach(file => {
-    const request = JSON.parse(fs.readFileSync(dataFolder + file).toString());
-    delete request.id;
-
-    const response = JSON.parse(fs.readFileSync((dataFolder + file).replace('request_', 'response_')).toString());
-    delete response.id;
-
-    malcolmMessages[JSON.stringify(request)] = response;
-  });
-})
+const io = new WebSocket.Server({port: 8000});
 
 io.on('connection', function (socket) {
-  socket.on('message', message => handleMessage(socket, message));
+  socket.on('message', message => {
+    message = JSON.parse(message);
+    handleMessage(socket, message);
+  });
   socket.on('disconnect', () => handleDisconnect());
 });
 
 const port = 8000;
-io.listen(port);
 console.log('listening on port ', port);
 
 function handleMessage(socket, message) {
   let simplifiedMessage = message;
   const originalId = message.id;
-  delete simplifiedMessage.id
-
+  delete simplifiedMessage.id;
+  console.log(message);
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
 
@@ -42,6 +35,7 @@ function handleMessage(socket, message) {
     }
 
     let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
+    subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r))
     sendResponse(socket, response);
 
   } else {
@@ -51,12 +45,13 @@ function handleMessage(socket, message) {
 
 function sendResponse(socket, message) {
   setTimeout(() => {
-    socket.send(message)
-  }, settings.delay);
+    socket.send(JSON.stringify(message))
+  }, Math.ceil(settings.delay*Math.random()));
 }
 
 function handleDisconnect() {
   console.log('client disconnected');
+  subscriptionFeed.cancelAllSubscriptions();
 }
 
 function buildErrorMessage(id, message) {

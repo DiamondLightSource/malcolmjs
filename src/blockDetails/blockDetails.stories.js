@@ -9,21 +9,32 @@ const styles = {
     backgroundColor: 'rgb(66,66,66)',
     display: 'block',
     textAlign: 'center',
+    width: 400,
+    height: 300,
+    paddingTop: 1,
   },
 };
 
 const displayContainer = node => <div style={styles.layout}>{node}</div>;
 
+const block = loading => ({
+  loading,
+  attributes: [
+    { name: 'health', loading: true },
+    { name: 'icon', loading: false },
+  ],
+});
+
 storiesOf('Block Details', module)
   .add(
-    'block loaded',
+    'block meta loaded - attributes loading',
     withInfo(`
-      A container to hold all the details about a block, typically attributes and methods.
-    `)(() => displayContainer(<BlockDetails block={{ loading: false }} />))
+      What the block details component looks like when the block meta data has loaded but the attribute data is still being loaded.
+    `)(() => displayContainer(<BlockDetails block={block(false)} />))
   )
   .add(
     'block loading',
     withInfo(`
       Shows that the block details are loading
-    `)(() => displayContainer(<BlockDetails block={{ loading: true }} />))
+    `)(() => displayContainer(<BlockDetails block={block(true)} />))
   );

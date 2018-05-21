@@ -3,6 +3,8 @@ import {
   MalcolmSend,
   MalcolmError,
   MalcolmBlockMeta,
+  MalcolmAttributeData,
+  MalcolmAttributePending,
 } from './malcolm.types';
 
 const initialMalcolmState = {
@@ -13,6 +15,7 @@ const initialMalcolmState = {
 
 function updateMessagesInFlight(state, action) {
   const newState = state;
+
   newState.messagesInFlight = [
     ...state.messagesInFlight,
     { ...action.payload },
@@ -57,7 +60,7 @@ function updateBlock(state, payload) {
         ...blocks[blockName],
         loading: false,
         label: payload.label,
-        fields: payload.fields,
+        attributes: payload.fields.map(f => ({ name: f, loading: true })),
       };
     }
   }
@@ -68,10 +71,75 @@ function updateBlock(state, payload) {
   };
 }
 
+function updateAttribute(state, payload) {
+  if (payload.delta) {
+    const { path } = state.messagesInFlight.find(m => m.id === payload.id);
+    const blockName = path[0];
+    const attributeName = path[1];
+
+    if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+      const attributes = [...state.blocks[blockName].attributes];
+
+      const matchingAttribute = attributes.findIndex(
+        a => a.name === attributeName
+      );
+      if (matchingAttribute >= 0) {
+        attributes[matchingAttribute] = {
+          ...attributes[matchingAttribute],
+          loading: false,
+          path,
+          pending: false,
+          ...payload,
+        };
+      }
+      const blocks = { ...state.blocks };
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+      return {
+        ...state,
+        blocks,
+      };
+    }
+  }
+
+  return state;
+}
+
+function setPending(state, path) {
+  const blockName = path[0];
+  const attributeName = path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const attributes = [...state.blocks[blockName].attributes];
+
+    const matchingAttribute = attributes.findIndex(
+      a => a.name === attributeName
+    );
+    if (matchingAttribute >= 0) {
+      attributes[matchingAttribute] = {
+        ...attributes[matchingAttribute],
+        pending: true,
+      };
+    }
+
+    const blocks = { ...state.blocks };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+    return {
+      ...state,
+      blocks,
+    };
+  }
+  return state;
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(state, action);
+
+    case MalcolmAttributePending:
+      return setPending(state, action.payload.path);
 
     case MalcolmSend:
       return updateMessagesInFlight(state, action);
@@ -81,6 +149,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmBlockMeta:
       return updateBlock(state, action.payload);
+
+    case MalcolmAttributeData:
+      return updateAttribute(state, action.payload);
 
     default:
       return state;

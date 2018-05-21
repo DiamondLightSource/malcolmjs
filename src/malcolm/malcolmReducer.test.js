@@ -1,6 +1,10 @@
 import malcolmReducer from './malcolmReducer';
 import { malcolmNewParentBlockAction } from './malcolmActionCreators';
-import { MalcolmBlockMeta } from './malcolm.types';
+import {
+  MalcolmBlockMeta,
+  MalcolmAttributeData,
+  MalcolmAttributePending,
+} from './malcolm.types';
 
 const buildAction = (type, id) => ({
   type,
@@ -86,6 +90,74 @@ describe('malcolm reducer', () => {
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
-    expect(state.blocks.block1.fields).toEqual(['health', 'icon']);
+    expect(state.blocks.block1.attributes).toEqual([
+      { name: 'health', loading: true },
+      { name: 'icon', loading: true },
+    ]);
+  });
+
+  it('updates attribute data', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+      attributes: [
+        {
+          name: 'health',
+          loading: true,
+        },
+      ],
+    };
+
+    state.messagesInFlight.push({
+      id: 1,
+      path: ['block1', 'health'],
+    });
+
+    const action = {
+      type: MalcolmAttributeData,
+      payload: {
+        id: 1,
+        delta: true,
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.attributes.length).toEqual(1);
+    expect(state.blocks.block1.attributes[0].name).toEqual('health');
+    expect(state.blocks.block1.attributes[0].path).toEqual([
+      'block1',
+      'health',
+    ]);
+    expect(state.blocks.block1.attributes[0].loading).toEqual(false);
+  });
+
+  it('sets attribute pending', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+      attributes: [
+        {
+          name: 'health',
+          loading: true,
+          path: ['block1', 'health'],
+          pending: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: MalcolmAttributePending,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.attributes.length).toEqual(1);
+    expect(state.blocks.block1.attributes[0].name).toEqual('health');
+    expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 });

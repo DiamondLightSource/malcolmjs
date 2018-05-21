@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MalcolmPopOut renders correctly 1`] = `
+<div
+  className="Connect-MalcolmPopOut--container-1"
+>
+  <WithStyles(AppBar)
+    position="static"
+  >
+    <WithStyles(Toolbar)
+      className="Connect-MalcolmPopOut--toolbar-2"
+    >
+      <WithStyles(Typography)
+        className="Connect-MalcolmPopOut--title-3"
+        color="inherit"
+        variant="title"
+      >
+        Test main view
+      </WithStyles(Typography)>
+    </WithStyles(Toolbar)>
+  </WithStyles(AppBar)>
+  <WithStyles(BlockDetails)
+    block={
+      Object {
+        "name": "Test main view",
+      }
+    }
+  />
+</div>
+`;

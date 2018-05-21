@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttributeAlarm renders invalid_alarm correctly 1`] = `
+<pure(HighlightOff)
+  nativeColor="#573c8b"
+/>
+`;
+
+exports[`AttributeAlarm renders major_alarm correctly 1`] = `
+<pure(Error)
+  nativeColor="#c01a19"
+/>
+`;
+
+exports[`AttributeAlarm renders minor_alarm correctly 1`] = `
+<pure(Warning)
+  nativeColor="#ffd42a"
+/>
+`;
+
+exports[`AttributeAlarm renders no_alarm correctly 1`] = `
+<pure(InfoOutline)
+  nativeColor="#72a7cf"
+/>
+`;
+
+exports[`AttributeAlarm renders pending correctly 1`] = `
+<WithStyles(CircularProgress)
+  color="secondary"
+  size={24}
+/>
+`;
+
+exports[`AttributeAlarm renders undefined_alarm correctly 1`] = `
+<pure(HighlightOff)
+  nativeColor="#573c8b"
+/>
+`;

@@ -24,7 +24,9 @@ describe('DrawerHeader', () => {
 
   it('closeAction calls the close method', () => {
     const closeAction = jest.fn();
-    const wrapper = mount(<DrawerHeader closeAction={closeAction} />);
+    const wrapper = mount(
+      <DrawerHeader title="TTLIN1" closeAction={closeAction} />
+    );
 
     wrapper
       .find('button')
