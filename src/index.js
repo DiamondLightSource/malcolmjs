@@ -55,7 +55,7 @@ ReactDOM.render(
       <ConnectedRouter history={history}>
         <MuiThemeProvider theme={theme}>
           <AppRouter />
-          <MessageSnackBar />
+          <MessageSnackBar timeout={5000} />
         </MuiThemeProvider>
       </ConnectedRouter>
     </div>
