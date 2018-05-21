@@ -1,7 +1,9 @@
 {
   "typeid": "malcolm:core/Update:1.0", 
-  "id": 0, 
+  "id": "CANNED", 
   "value": [
+    "PANDA", 
+    "WEB", 
     "PANDA:TTLIN1", 
     "PANDA:TTLIN2", 
     "PANDA:TTLIN3", 
@@ -84,8 +86,6 @@
     "PANDA:QDEC1", 
     "PANDA:QDEC2", 
     "PANDA:QDEC3", 
-    "PANDA:QDEC4", 
-    "PANDA", 
-    "WEB"
+    "PANDA:QDEC4"
   ]
 }
