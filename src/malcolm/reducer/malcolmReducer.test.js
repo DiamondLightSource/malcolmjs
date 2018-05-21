@@ -1,10 +1,16 @@
 import malcolmReducer from './malcolmReducer';
-import { malcolmNewBlockAction } from '../malcolmActionCreators';
+import {
+  malcolmNewBlockAction,
+  malcolmNavigationPath,
+} from '../malcolmActionCreators';
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
 } from '../malcolm.types';
+import NavigationReducer from './navigation.reducer';
+
+jest.mock('./navigation.reducer');
 
 const buildAction = (type, id) => ({
   type,
@@ -159,5 +165,13 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes.length).toEqual(1);
     expect(state.blocks.block1.attributes[0].name).toEqual('health');
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
+  });
+
+  it('calls the navigation reducer when path update is received', () => {
+    const action = malcolmNavigationPath(['PANDA', 'layout', 'PANDA:TTLIN1']);
+
+    state = malcolmReducer(state, action);
+
+    expect(NavigationReducer.updateNavigationPath).toHaveBeenCalledTimes(1);
   });
 });
