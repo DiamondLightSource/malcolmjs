@@ -77,7 +77,7 @@ AttributeSelector.propTypes = {
       tags: PropTypes.arrayOf(PropTypes.string),
       choices: PropTypes.arrayOf(PropTypes.string),
     }),
-    path: PropTypes.string,
+    path: PropTypes.arrayOf(PropTypes.string),
     value: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.number,
