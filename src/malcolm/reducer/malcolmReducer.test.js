@@ -1,11 +1,17 @@
 import malcolmReducer from './malcolmReducer';
-import { malcolmNewParentBlockAction } from './malcolmActionCreators';
+import {
+  malcolmNewBlockAction,
+  malcolmNavigationPath,
+} from '../malcolmActionCreators';
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
   MalcolmSnackbar,
-} from './malcolm.types';
+} from '../malcolm.types';
+import NavigationReducer from './navigation.reducer';
+
+jest.mock('./navigation.reducer');
 
 const buildAction = (type, id) => ({
   type,
@@ -58,7 +64,7 @@ describe('malcolm reducer', () => {
   });
 
   it('registers a new block when one is requested', () => {
-    state = malcolmReducer(state, malcolmNewParentBlockAction('block1'));
+    state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
 
     expect(state.blocks.block1).toBeDefined();
     expect(state.blocks.block1.name).toEqual('block1');
@@ -160,6 +166,14 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes.length).toEqual(1);
     expect(state.blocks.block1.attributes[0].name).toEqual('health');
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
+  });
+
+  it('calls the navigation reducer when path update is received', () => {
+    const action = malcolmNavigationPath(['PANDA', 'layout', 'PANDA:TTLIN1']);
+
+    state = malcolmReducer(state, action);
+
+    expect(NavigationReducer.updateNavigationPath).toHaveBeenCalledTimes(1);
   });
 
   it('updates snackbar', () => {

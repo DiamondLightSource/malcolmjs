@@ -3,6 +3,7 @@ import {
   MalcolmNewBlock,
   MalcolmAttributePending,
   MalcolmSnackbar,
+  MalcolmNavigationPathUpdate,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -22,12 +23,12 @@ export const malcolmSubscribeAction = path => ({
   },
 });
 
-export const malcolmNewParentBlockAction = blockName => ({
+export const malcolmNewBlockAction = (blockName, parent, child) => ({
   type: MalcolmNewBlock,
   payload: {
     blockName,
-    parent: true,
-    child: false,
+    parent,
+    child,
   },
 });
 
@@ -55,11 +56,19 @@ export const malcolmSnackbarState = (open, message) => ({
   },
 });
 
+export const malcolmNavigationPath = blockPaths => ({
+  type: MalcolmNavigationPathUpdate,
+  payload: {
+    blockPaths,
+  },
+});
+
 export default {
   malcolmGetAction,
   malcolmSubscribeAction,
-  malcolmNewParentBlockAction,
+  malcolmNewBlockAction,
   malcolmPutAction,
   malcolmSetPending,
   malcolmSnackbarState,
+  malcolmNavigationPath,
 };
