@@ -5,13 +5,17 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
+  MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
-} from './malcolm.types';
+} from '../malcolm.types';
+import NavigationReducer from './navigation.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
+  navigation: [],
   blocks: {},
   parentBlock: undefined,
+  childBlock: undefined,
   snackbar: {
     message: '',
     open: false,
@@ -50,6 +54,9 @@ function registerNewBlock(state, action) {
     parentBlock: action.payload.parent
       ? action.payload.blockName
       : state.parentBlock,
+    childBlock: action.payload.child
+      ? action.payload.blockName
+      : state.childBlock,
   };
 }
 
@@ -165,6 +172,8 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
     case MalcolmAttributeData:
       return updateAttribute(state, action.payload);
 
+    case MalcolmNavigationPathUpdate:
+      return NavigationReducer.updateNavigationPath(state, action.payload);
     case MalcolmSnackbar:
       return updateSnackbar(state, action.snackbar);
 

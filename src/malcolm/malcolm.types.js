@@ -5,3 +5,4 @@ export const MalcolmBlockMeta = 'malcolm:blockmeta';
 export const MalcolmAttributeData = 'malcolm:attributedata';
 export const MalcolmAttributePending = 'malcolm:attributepending';
 export const MalcolmSnackbar = 'malcolm:snackbar';
+export const MalcolmNavigationPathUpdate = 'malcolm:navigationpaths';

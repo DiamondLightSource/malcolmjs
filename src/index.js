@@ -13,7 +13,7 @@ import AppReducer from './App.reducer';
 import AppRouter from './App.routes';
 import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
-import buildMalcolmReduxMiddleware from './malcolm/malcolmReduxMiddleware';
+import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddleware';
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
 import MessageSnackBar from './Snackbar/snackbar.component';
 
@@ -22,7 +22,7 @@ require('typeface-roboto');
 const history = createHistory();
 const router = routerMiddleware(history);
 
-const webSocket = new WebSocket('ws://localhost:8008/ws');
+const webSocket = new WebSocket('ws://localhost:8000/ws');
 const socketContainer = new MalcolmSocketContainer(webSocket);
 
 const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);

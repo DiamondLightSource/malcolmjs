@@ -1,8 +1,5 @@
-import {
-  malcolmSubscribeAction,
-  malcolmNewParentBlockAction,
-} from './malcolmActionCreators';
-import { MalcolmSend } from './malcolm.types';
+import { MalcolmSend } from '../malcolm.types';
+import handleLocationChange from './malcolmRouting';
 
 function sendMalcolmMessage(socketContainer, payload) {
   const message = { ...payload };
@@ -21,21 +18,6 @@ function findNextId(store) {
   return maxId + 1;
 }
 
-function handleLocationChange(queryParams, store) {
-  // temporary until we sort proper route handling
-  const parameters = {};
-  queryParams
-    .substr(1)
-    .split('&')
-    .map(kvp => kvp.split('='))
-    .forEach(kvp => {
-      const [key, value] = kvp;
-      parameters[key] = value;
-    });
-  store.dispatch(malcolmNewParentBlockAction(parameters.block));
-  store.dispatch(malcolmSubscribeAction([parameters.block, 'meta']));
-}
-
 // eslint-disable-next-line no-unused-vars
 const buildMalcolmReduxMiddleware = socketContainer => store => next => action => {
   const updatedAction = { ...action };
@@ -46,7 +28,7 @@ const buildMalcolmReduxMiddleware = socketContainer => store => next => action =
       break;
 
     case '@@router/LOCATION_CHANGE':
-      handleLocationChange(action.payload.search, store);
+      handleLocationChange(action.payload.pathname, store.dispatch);
 
       break;
 

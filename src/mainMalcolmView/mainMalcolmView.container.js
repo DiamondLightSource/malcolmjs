@@ -19,11 +19,11 @@ const MainMalcolmView = props => (
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
       popOutAction={popOutFunction}
-      childTitle=""
+      childTitle={props.childBlockTitle}
     >
       <BlockDetails block={props.parentBlock} />
       <div>Middle content</div>
-      <div>Right content</div>
+      <BlockDetails block={props.childBlock} />
     </DrawerContainer>
   </div>
 );
@@ -32,9 +32,16 @@ const mapStateToProps = state => {
   const parentBlock = state.malcolm.parentBlock
     ? state.malcolm.blocks[state.malcolm.parentBlock]
     : undefined;
+
+  const childBlock = state.malcolm.childBlock
+    ? state.malcolm.blocks[state.malcolm.childBlock]
+    : undefined;
+
   return {
     parentBlock,
     parentBlockTitle: parentBlock ? parentBlock.name : '',
+    childBlock,
+    childBlockTitle: childBlock ? childBlock.name : '',
   };
 };
 
@@ -43,11 +50,15 @@ const mapDispatchToProps = () => ({});
 MainMalcolmView.propTypes = {
   parentBlock: PropTypes.shape({}),
   parentBlockTitle: PropTypes.string,
+  childBlock: PropTypes.shape({}),
+  childBlockTitle: PropTypes.string,
 };
 
 MainMalcolmView.defaultProps = {
   parentBlock: undefined,
   parentBlockTitle: '',
+  childBlock: undefined,
+  childBlockTitle: '',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMalcolmView);
