@@ -123,12 +123,13 @@ const DrawerContainer = props => (
         <DrawerHeader
           closeAction={props.closeParent}
           popOutAction={() =>
-            props.popOutParent(
+            props.popOutAction(
               window.location.href
                 .split('/')
                 .slice(0, -2)
                 .join('/'),
-              360
+              360,
+              props.parentTitle
             )
           }
           title={props.parentTitle}
@@ -146,7 +147,16 @@ const DrawerContainer = props => (
         <DrawerHeader
           closeAction={props.closeChild}
           title={props.childTitle}
-          popOutAction={() => {}}
+          popOutAction={() =>
+            props.popOutAction(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              360,
+              props.childTitle
+            )
+          }
         />
         {props.children[props.children.length - 1]}
       </div>
@@ -170,7 +180,7 @@ DrawerContainer.propTypes = {
   openSecondary: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
   closeParent: PropTypes.func.isRequired,
-  popOutParent: PropTypes.func.isRequired,
+  popOutAction: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,
   parentTitle: PropTypes.string.isRequired,
   childTitle: PropTypes.string.isRequired,

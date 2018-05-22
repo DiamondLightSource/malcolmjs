@@ -4,17 +4,18 @@ import { connect } from 'react-redux';
 import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 
+const popOutFunction = (url, width, blockTitle) =>
+  window.open(
+    `${url}/details/?block=${blockTitle}`,
+    blockTitle,
+    `width=${width}`
+  );
+
 const MainMalcolmView = props => (
   <div>
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
-      popOutParent={(url, width) =>
-        window.open(
-          `${url}/details/?block=${props.parentBlockTitle}`,
-          props.parentBlockTitle,
-          `width=${width}`
-        )
-      }
+      popOutAction={popOutFunction}
       childTitle=""
     >
       <BlockDetails block={props.parentBlock} />
