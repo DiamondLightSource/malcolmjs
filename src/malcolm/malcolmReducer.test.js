@@ -4,6 +4,7 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
+  MalcolmSnackbar,
 } from './malcolm.types';
 
 const buildAction = (type, id) => ({
@@ -159,5 +160,25 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes.length).toEqual(1);
     expect(state.blocks.block1.attributes[0].name).toEqual('health');
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
+  });
+
+  it('updates snackbar', () => {
+    state.snackbar = {
+      open: false,
+      message: '',
+    };
+
+    const action = {
+      type: MalcolmSnackbar,
+      snackbar: {
+        open: true,
+        message: 'This is a test!',
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.snackbar.open).toEqual(true);
+    expect(state.snackbar.message).toEqual('This is a test!');
   });
 });

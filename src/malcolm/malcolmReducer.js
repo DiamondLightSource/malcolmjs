@@ -5,12 +5,17 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
+  MalcolmSnackbar,
 } from './malcolm.types';
 
 const initialMalcolmState = {
   messagesInFlight: [],
   blocks: {},
   parentBlock: undefined,
+  snackbar: {
+    message: '',
+    open: false,
+  },
 };
 
 function updateMessagesInFlight(state, action) {
@@ -133,6 +138,13 @@ function setPending(state, path) {
   return state;
 }
 
+function updateSnackbar(state, newSnackbar) {
+  return {
+    ...state,
+    snackbar: { ...newSnackbar },
+  };
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -152,6 +164,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmAttributeData:
       return updateAttribute(state, action.payload);
+
+    case MalcolmSnackbar:
+      return updateSnackbar(state, action.snackbar);
 
     default:
       return state;

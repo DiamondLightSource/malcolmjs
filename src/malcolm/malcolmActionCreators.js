@@ -2,6 +2,7 @@ import {
   MalcolmSend,
   MalcolmNewBlock,
   MalcolmAttributePending,
+  MalcolmSnackbar,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -46,10 +47,19 @@ export const malcolmSetPending = path => ({
   },
 });
 
+export const malcolmSnackbarState = (open, message) => ({
+  type: MalcolmSnackbar,
+  snackbar: {
+    open,
+    message,
+  },
+});
+
 export default {
   malcolmGetAction,
   malcolmSubscribeAction,
   malcolmNewParentBlockAction,
   malcolmPutAction,
   malcolmSetPending,
+  malcolmSnackbarState,
 };
