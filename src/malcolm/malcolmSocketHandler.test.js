@@ -1,5 +1,9 @@
 import configureMalcolmSocketHandlers from './malcolmSocketHandler';
-import { MalcolmBlockMeta, MalcolmAttributeData } from './malcolm.types';
+import {
+  MalcolmBlockMeta,
+  MalcolmAttributeData,
+  MalcolmSnackbar,
+} from './malcolm.types';
 
 describe('malcolm socket handler', () => {
   let dispatches = [];
@@ -16,8 +20,24 @@ describe('malcolm socket handler', () => {
           id: 2,
           path: ['block1', 'health'],
         },
+        {
+          typeid: 'malcolm:core/Put:1.0',
+          id: 3,
+          path: ['TestBlock', 'TestAttr'],
+          value: null,
+        },
       ],
-      blocks: {},
+      blocks: {
+        TestBlock: {
+          attributes: [
+            {
+              name: 'TestAttr',
+              value: 0,
+              pending: true,
+            },
+          ],
+        },
+      },
     },
   };
 
@@ -72,6 +92,10 @@ describe('malcolm socket handler', () => {
     socketContainer.socket.onopen();
     expect(socketContainer.isConnected).toEqual(true);
     expect(drain).toEqual(['flushed test']);
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(`Connected to WebSocket`);
   });
 
   it('handles block meta updates', () => {
@@ -115,5 +139,68 @@ describe('malcolm socket handler', () => {
     expect(dispatches[1].payload.unableToProcess).toEqual(true);
   });
 
+  it('updates snackbar on socket error', () => {
+    const error = {
+      type: 'TestError',
+      message: 'This is a test',
+    };
+    const errorString = JSON.stringify(error);
+    socketContainer.socket.onerror(error);
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(
+      `WebSocket Error: ${errorString}`
+    );
+  });
+
+  it('updates snackbar on socket close', () => {
+    socketContainer.socket.onclose();
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(`WebSocket disconnected`);
+  });
+
+  it('updates snackbar on malcolm error (no matching request)', () => {
+    const malcolmError = JSON.stringify({
+      typeid: 'malcolm:core/Error:1.0',
+      id: -1,
+      message: 'Error: this is a test!',
+    });
+    socketContainer.socket.send(malcolmError);
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(
+      'Error reported by malcolm server: "Error: this is a test!"'
+    );
+  });
+
+  it('updates snackbar on malcolm error (with matching request)', () => {
+    const malcolmError = JSON.stringify({
+      typeid: 'malcolm:core/Error:1.0',
+      id: 3,
+      message: 'Error: this is a test!',
+    });
+    socketContainer.socket.send(malcolmError);
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(
+      'Error in attribute TestAttr for block TestBlock'
+    );
+  });
+
+  it('removes pending on return', () => {
+    const malcolmReturn = JSON.stringify({
+      typeid: 'malcolm:core/Return:1.0',
+      id: 3,
+    });
+    socketContainer.socket.send(malcolmReturn);
+    expect(
+      store.getState().malcolm.blocks.TestBlock.attributes[0].pending
+    ).toEqual(false);
+  });
   // TODO: add tests for DELTA handling
 });
