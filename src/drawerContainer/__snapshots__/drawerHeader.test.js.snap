@@ -30,7 +30,9 @@ exports[`DrawerHeader renders correctly 1`] = `
       >
         TTLIN1
       </WithStyles(Typography)>
-      <WithStyles(IconButton)>
+      <WithStyles(IconButton)
+        onClick={[Function]}
+      >
         <pure(OpenInNew) />
       </WithStyles(IconButton)>
     </WithStyles(Toolbar)>

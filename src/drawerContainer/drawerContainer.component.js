@@ -15,7 +15,8 @@ import {
   openChildPanel,
 } from '../viewState/viewState.actions';
 
-const drawerWidth = 320;
+const drawerWidth = 360;
+const drawerWidthWithoutButton = drawerWidth - 40;
 
 const styles = theme => ({
   content: {
@@ -35,17 +36,17 @@ const styles = theme => ({
     }),
   },
   appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: `calc(100% - ${drawerWidthWithoutButton}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   'appBarShift-left': {
-    marginLeft: drawerWidth,
+    marginLeft: drawerWidthWithoutButton,
   },
   'appBarShift-right': {
-    marginRight: drawerWidth,
+    marginRight: drawerWidthWithoutButton,
   },
   menuButton: {
     marginLeft: 12,
@@ -62,7 +63,7 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   drawer: {
-    width: 360,
+    width: drawerWidth,
   },
   drawerContents: {
     maxWidth: '100%',
@@ -122,6 +123,16 @@ const DrawerContainer = props => (
       <div className={props.classes.drawerContents}>
         <DrawerHeader
           closeAction={props.closeParent}
+          popOutAction={() =>
+            props.popOutAction(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              drawerWidth,
+              props.parentTitle
+            )
+          }
           title={props.parentTitle}
         />
         {props.children[0]}
@@ -134,7 +145,20 @@ const DrawerContainer = props => (
       classes={{ paper: props.classes.drawer }}
     >
       <div className={props.classes.drawerContents}>
-        <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
+        <DrawerHeader
+          closeAction={props.closeChild}
+          title={props.childTitle}
+          popOutAction={() =>
+            props.popOutAction(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              drawerWidth,
+              props.childTitle
+            )
+          }
+        />
         {props.children[props.children.length - 1]}
       </div>
     </Drawer>
@@ -157,6 +181,7 @@ DrawerContainer.propTypes = {
   openSecondary: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
   closeParent: PropTypes.func.isRequired,
+  popOutAction: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,
   parentTitle: PropTypes.string.isRequired,
   childTitle: PropTypes.string.isRequired,
