@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 
-const popOutFunction = (url, width, blockTitle) =>
+const blockDetailsUrl = (rootUrl, blockTitle) =>
+  `${rootUrl}/details/?block=${blockTitle}`;
+
+const popOutFunction = (rootUrl, width, blockTitle) =>
   window.open(
-    `${url}/details/?block=${blockTitle}`,
+    blockDetailsUrl(rootUrl, blockTitle),
     blockTitle,
     `width=${width}`
   );

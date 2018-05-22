@@ -15,7 +15,8 @@ import {
   openChildPanel,
 } from '../viewState/viewState.actions';
 
-const drawerWidth = 320;
+const drawerWidth = 360;
+const drawerWidthWithoutButton = drawerWidth - 40;
 
 const styles = theme => ({
   content: {
@@ -35,17 +36,17 @@ const styles = theme => ({
     }),
   },
   appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: `calc(100% - ${drawerWidthWithoutButton}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   'appBarShift-left': {
-    marginLeft: drawerWidth,
+    marginLeft: drawerWidthWithoutButton,
   },
   'appBarShift-right': {
-    marginRight: drawerWidth,
+    marginRight: drawerWidthWithoutButton,
   },
   menuButton: {
     marginLeft: 12,
@@ -62,7 +63,7 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   drawer: {
-    width: 360,
+    width: drawerWidth,
   },
   drawerContents: {
     maxWidth: '100%',
@@ -128,7 +129,7 @@ const DrawerContainer = props => (
                 .split('/')
                 .slice(0, -2)
                 .join('/'),
-              360,
+              drawerWidth,
               props.parentTitle
             )
           }
@@ -153,7 +154,7 @@ const DrawerContainer = props => (
                 .split('/')
                 .slice(0, -2)
                 .join('/'),
-              360,
+              drawerWidth,
               props.childTitle
             )
           }
