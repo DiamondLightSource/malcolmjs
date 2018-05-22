@@ -1,43 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DrawerContainer renders correctly 1`] = `
-<WithStyles(DrawerContainer)
-  closeChild={[Function]}
-  closeParent={[Function]}
-  dispatch={[Function]}
-  open={true}
-  openParent={[Function]}
-  openSecondary={true}
-  store={
-    Object {
-      "clearActions": [Function],
-      "dispatch": [Function],
-      "getActions": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
+<div>
+  <div>
+    <WithStyles(Connect(NavBar)) />
+    <div>
+      Middle
+    </div>
+  </div>
+  <WithStyles(Drawer)
+    anchor="left"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
     }
-  }
-  storeSubscription={
-    Subscription {
-      "listeners": Object {
-        "clear": [Function],
-        "get": [Function],
-        "notify": [Function],
-        "subscribe": [Function],
-      },
-      "onStateChange": [Function],
-      "parentSub": undefined,
-      "store": Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      },
-      "unsubscribe": [Function],
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        title="Parent"
+      />
+      <div>
+        Left
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+  <WithStyles(Drawer)
+    anchor="right"
+    classes={
+      Object {
+        "paper": "DrawerContainer-drawer-1",
+      }
     }
-  }
-/>
+    open={true}
+    variant="persistent"
+  >
+    <div
+      className="DrawerContainer-drawerContents-2"
+    >
+      <DrawerHeader
+        closeAction={[Function]}
+        title="Child"
+      />
+      <div>
+        Right
+      </div>
+    </div>
+  </WithStyles(Drawer)>
+</div>
 `;

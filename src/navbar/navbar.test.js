@@ -1,12 +1,12 @@
 import React from 'react';
 import { createShallow } from 'material-ui/test-utils';
 import configureStore from 'redux-mock-store';
-import DrawerContainer from './drawerContainer.component';
+import NavBar from './navbar.component';
 
 const mockStore = configureStore();
 const dispatch = jest.fn();
 
-describe('DrawerContainer', () => {
+describe('NavBar', () => {
   let shallow;
 
   beforeEach(() => {
@@ -19,19 +19,13 @@ describe('DrawerContainer', () => {
         openParentPanel: true,
         openChildPanel: true,
       },
+      malcolm: {
+        navigation: ['PANDA', 'layout', 'PANDA:SEQ1'],
+      },
     };
 
     const wrapper = shallow(
-      <DrawerContainer
-        store={mockStore(state)}
-        dispatch={dispatch}
-        parentTitle="Parent"
-        childTitle="Child"
-      >
-        <div>Left</div>
-        <div>Middle</div>
-        <div>Right</div>
-      </DrawerContainer>
+      <NavBar store={mockStore(state)} dispatch={dispatch} />
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });
