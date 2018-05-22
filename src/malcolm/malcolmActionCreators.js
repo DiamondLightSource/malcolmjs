@@ -4,6 +4,7 @@ import {
   MalcolmAttributePending,
   MalcolmSnackbar,
   MalcolmNavigationPathUpdate,
+  MalcolmCleanBlocks,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -63,6 +64,10 @@ export const malcolmNavigationPath = blockPaths => ({
   },
 });
 
+export const malcolmCleanBlocks = () => ({
+  type: MalcolmCleanBlocks,
+});
+
 export default {
   malcolmGetAction,
   malcolmSubscribeAction,
@@ -71,4 +76,5 @@ export default {
   malcolmSetPending,
   malcolmSnackbarState,
   malcolmNavigationPath,
+  malcolmCleanBlocks,
 };

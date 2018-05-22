@@ -7,6 +7,7 @@ import {
   MalcolmAttributePending,
   MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
+  MalcolmCleanBlocks,
 } from '../malcolm.types';
 import NavigationReducer from './navigation.reducer';
 
@@ -152,6 +153,20 @@ function updateSnackbar(state, newSnackbar) {
   };
 }
 
+function cleanBlocks(state) {
+  const blocks = { ...state.blocks };
+  Object.keys(blocks).forEach(blockName => {
+    blocks[blockName] = {
+      name: blockName,
+      loading: true,
+    };
+  });
+  return {
+    ...state,
+    blocks,
+  };
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -174,8 +189,12 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmNavigationPathUpdate:
       return NavigationReducer.updateNavigationPath(state, action.payload);
+
     case MalcolmSnackbar:
       return updateSnackbar(state, action.snackbar);
+
+    case MalcolmCleanBlocks:
+      return cleanBlocks(state);
 
     default:
       return state;

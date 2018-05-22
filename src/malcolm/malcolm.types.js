@@ -6,3 +6,4 @@ export const MalcolmAttributeData = 'malcolm:attributedata';
 export const MalcolmAttributePending = 'malcolm:attributepending';
 export const MalcolmSnackbar = 'malcolm:snackbar';
 export const MalcolmNavigationPathUpdate = 'malcolm:navigationpaths';
+export const MalcolmCleanBlocks = 'malcolm:cleanblocks';
