@@ -7,6 +7,7 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributePending,
+  MalcolmSnackbar,
 } from '../malcolm.types';
 import NavigationReducer from './navigation.reducer';
 
@@ -173,5 +174,25 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
 
     expect(NavigationReducer.updateNavigationPath).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates snackbar', () => {
+    state.snackbar = {
+      open: false,
+      message: '',
+    };
+
+    const action = {
+      type: MalcolmSnackbar,
+      snackbar: {
+        open: true,
+        message: 'This is a test!',
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.snackbar.open).toEqual(true);
+    expect(state.snackbar.message).toEqual('This is a test!');
   });
 });

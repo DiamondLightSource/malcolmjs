@@ -6,6 +6,7 @@ import {
   MalcolmAttributeData,
   MalcolmAttributePending,
   MalcolmNavigationPathUpdate,
+  MalcolmSnackbar,
 } from '../malcolm.types';
 import NavigationReducer from './navigation.reducer';
 
@@ -15,6 +16,10 @@ const initialMalcolmState = {
   blocks: {},
   parentBlock: undefined,
   childBlock: undefined,
+  snackbar: {
+    message: '',
+    open: false,
+  },
 };
 
 function updateMessagesInFlight(state, action) {
@@ -140,6 +145,13 @@ function setPending(state, path) {
   return state;
 }
 
+function updateSnackbar(state, newSnackbar) {
+  return {
+    ...state,
+    snackbar: { ...newSnackbar },
+  };
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -162,6 +174,8 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmNavigationPathUpdate:
       return NavigationReducer.updateNavigationPath(state, action.payload);
+    case MalcolmSnackbar:
+      return updateSnackbar(state, action.snackbar);
 
     default:
       return state;
