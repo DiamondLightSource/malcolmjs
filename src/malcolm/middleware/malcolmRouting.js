@@ -6,8 +6,15 @@ import {
 
 const handleLocationChange = (path, dispatch) => {
   // remove the first part of the url e.g. /gui/ or /details/
-  const tokens = path.split('/').slice(2);
+  const tokens = path
+    .replace(/\/$/, '')
+    .split('/')
+    .slice(2);
   dispatch(malcolmNavigationPath(tokens));
+
+  // Get the root list of blocks
+  dispatch(malcolmNewBlockAction('.blocks', false, false));
+  dispatch(malcolmSubscribeAction(['.', 'blocks']));
 
   // TODO: handle layout routing
 

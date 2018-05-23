@@ -1,4 +1,4 @@
-import BlockMetaHandler from './blockMetaHandler';
+import { BlockMetaHandler } from './blockMetaHandler';
 import { MalcolmBlockMeta, MalcolmSend } from '../malcolm.types';
 
 describe('block meta handler', () => {

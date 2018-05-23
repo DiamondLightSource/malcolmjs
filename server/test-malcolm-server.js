@@ -12,11 +12,22 @@ const io = new WebSocket.Server({port: 8000});
 
 io.on('connection', function (socket) {
   socket.on('message', message => {
-    message = JSON.parse(message);
-    handleMessage(socket, message);
+    try {
+      message = JSON.parse(message);
+      handleMessage(socket, message);
+    } catch (error) {
+      console.log(error);
+    }
   });
   socket.on('disconnect', () => handleDisconnect());
+  socket.on('error', (err) => {
+    subscriptionFeed.cancelAllSubscriptions();
+    console.log('errored');
+    console.log(err);
+  });
 });
+
+
 
 const port = 8000;
 console.log('listening on port ', port);
@@ -45,7 +56,9 @@ function handleMessage(socket, message) {
 
 function sendResponse(socket, message) {
   setTimeout(() => {
-    socket.send(JSON.stringify(message))
+    if (socket.readyState === socket.OPEN) {
+      socket.send(JSON.stringify(message))
+    }
   }, Math.ceil(settings.delay*Math.random()));
 }
 

@@ -1,7 +1,7 @@
-import { MalcolmBlockMeta } from '../malcolm.types';
+import { MalcolmBlockMeta, MalcolmRootBlockMeta } from '../malcolm.types';
 import { malcolmSubscribeAction } from '../malcolmActionCreators';
 
-const BlockMetaHandler = (request, changes, dispatch) => {
+export const BlockMetaHandler = (request, changes, dispatch) => {
   const action = {
     type: MalcolmBlockMeta,
     payload: {
@@ -20,6 +20,18 @@ const BlockMetaHandler = (request, changes, dispatch) => {
       dispatch(malcolmSubscribeAction([...request.path.slice(0, -1), field]));
     });
   }
+};
+
+export const RootBlockHandler = (request, blocks, dispatch) => {
+  const action = {
+    type: MalcolmRootBlockMeta,
+    payload: {
+      id: request.id,
+      blocks,
+    },
+  };
+
+  dispatch(action);
 };
 
 export default BlockMetaHandler;
