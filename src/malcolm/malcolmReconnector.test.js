@@ -2,6 +2,8 @@ import MalcolmReconnector from './malcolmReconnector';
 
 /* eslint no-underscore-dangle: 0 */
 
+jest.useFakeTimers();
+
 class TestSocket {
   constructor(url) {
     this.url = url;
@@ -18,15 +20,17 @@ class TestSocket {
   }
 }
 
+const socketTimeout = 5000;
+
 describe('malcolm socket reconnector', () => {
   let testReconnect;
   beforeEach(() => {
-    testReconnect = new MalcolmReconnector('TEST', 0, TestSocket);
+    testReconnect = new MalcolmReconnector('TEST', socketTimeout, TestSocket);
   });
 
   it('constructs properly', () => {
     expect(testReconnect.url).toEqual('TEST');
-    expect(testReconnect.interval).toEqual(0);
+    expect(testReconnect.interval).toEqual(socketTimeout);
     expect(testReconnect.Generator).toEqual(TestSocket);
     expect(testReconnect.isReconnection).toEqual(false);
   });
@@ -59,7 +63,10 @@ describe('malcolm socket reconnector', () => {
     testReconnect.url = 'TEST#2';
     expect(testReconnect._socket.url).toEqual('TEST#1');
     testReconnect._socket.onclose();
+    jest.runTimersToTime(1000);
     expect(testReconnect.isReconnection).toEqual(true);
-    setTimeout(() => expect(testReconnect._socket.url).toEqual('TEST#2'), 100);
+    expect(testReconnect._socket).toEqual({});
+    jest.runTimersToTime(4050);
+    expect(testReconnect._socket.url).toEqual('TEST#2');
   });
 });
