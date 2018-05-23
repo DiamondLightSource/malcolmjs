@@ -28,6 +28,7 @@ class MalcolmReconnector {
   }
   reconnect() {
     this.isReconnection = true;
+    this._socket = {};
     setTimeout(this.connect, this.interval, this);
   }
 }
