@@ -17,7 +17,11 @@ describe('DrawerHeader', () => {
 
   it('renders correctly', () => {
     const wrapper = shallow(
-      <DrawerHeader closeAction={() => {}} title="TTLIN1" />
+      <DrawerHeader
+        closeAction={() => {}}
+        popOutAction={() => {}}
+        title="TTLIN1"
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
@@ -25,7 +29,11 @@ describe('DrawerHeader', () => {
   it('closeAction calls the close method', () => {
     const closeAction = jest.fn();
     const wrapper = mount(
-      <DrawerHeader title="TTLIN1" closeAction={closeAction} />
+      <DrawerHeader
+        title="TTLIN1"
+        closeAction={closeAction}
+        popOutAction={() => {}}
+      />
     );
 
     wrapper
@@ -34,5 +42,23 @@ describe('DrawerHeader', () => {
       .simulate('click');
 
     expect(closeAction.mock.calls.length).toEqual(1);
+  });
+
+  it('popOutAction calls the popOut method', () => {
+    const popOutAction = jest.fn();
+    const wrapper = mount(
+      <DrawerHeader
+        title="TTLIN1"
+        popOutAction={popOutAction}
+        closeAction={() => {}}
+      />
+    );
+
+    wrapper
+      .find('button')
+      .last()
+      .simulate('click');
+
+    expect(popOutAction.mock.calls.length).toEqual(1);
   });
 });

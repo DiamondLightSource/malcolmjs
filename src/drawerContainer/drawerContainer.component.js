@@ -10,9 +10,10 @@ import {
 } from '../viewState/viewState.actions';
 import NavBar from '../navbar/navbar.component';
 
+const drawerWidth = 360;
 const styles = () => ({
   drawer: {
-    width: 360,
+    width: drawerWidth,
   },
   drawerContents: {
     maxWidth: '100%',
@@ -38,6 +39,16 @@ const DrawerContainer = props => (
       <div className={props.classes.drawerContents}>
         <DrawerHeader
           closeAction={props.closeParent}
+          popOutAction={() =>
+            props.popOutAction(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              drawerWidth,
+              props.parentTitle
+            )
+          }
           title={props.parentTitle}
         />
         {props.children[0]}
@@ -50,7 +61,20 @@ const DrawerContainer = props => (
       classes={{ paper: props.classes.drawer }}
     >
       <div className={props.classes.drawerContents}>
-        <DrawerHeader closeAction={props.closeChild} title={props.childTitle} />
+        <DrawerHeader
+          closeAction={props.closeChild}
+          title={props.childTitle}
+          popOutAction={() =>
+            props.popOutAction(
+              window.location.href
+                .split('/')
+                .slice(0, -2)
+                .join('/'),
+              drawerWidth,
+              props.childTitle
+            )
+          }
+        />
         {props.children[props.children.length - 1]}
       </div>
     </Drawer>
@@ -71,6 +95,7 @@ DrawerContainer.propTypes = {
   open: PropTypes.bool.isRequired,
   openSecondary: PropTypes.bool.isRequired,
   closeParent: PropTypes.func.isRequired,
+  popOutAction: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,
   parentTitle: PropTypes.string.isRequired,
   childTitle: PropTypes.string.isRequired,
