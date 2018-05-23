@@ -190,7 +190,7 @@ function setDisconnected(state) {
             ...attributes[attr],
             alarm: {
               ...attributes[attr].alarm,
-              severity: AlarmStates.INVALID_ALARM,
+              severity: AlarmStates.UNDEFINED_ALARM,
             },
           };
         }

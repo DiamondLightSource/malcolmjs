@@ -13,7 +13,7 @@ class MalcolmSocketContainer {
     }
     return this._isConnected;
   }
-  setConnected(state = true) {
+  setConnected(state) {
     this._isConnected = state;
     if (Object.prototype.hasOwnProperty.call(this.socket, 'isConnected')) {
       this.socket.isConnected = state;

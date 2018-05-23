@@ -70,4 +70,17 @@ describe('malcolm socket reconnector', () => {
     jest.runTimersToTime(4050);
     expect(testReconnect._socket.url).toEqual('TEST#2');
   });
+
+  it("calls reconnect on close, but doesn't set reconnect flag if never opened", () => {
+    testReconnect.url = 'TEST#1';
+    testReconnect.connect(testReconnect);
+    testReconnect.url = 'TEST#2';
+    expect(testReconnect._socket.url).toEqual('TEST#1');
+    testReconnect._socket.onclose();
+    jest.runTimersToTime(1000);
+    expect(testReconnect.isReconnection).toEqual(false);
+    expect(testReconnect._socket).toEqual({});
+    jest.runTimersToTime(4050);
+    expect(testReconnect._socket.url).toEqual('TEST#2');
+  });
 });
