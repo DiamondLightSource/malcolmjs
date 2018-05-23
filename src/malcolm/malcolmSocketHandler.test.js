@@ -3,6 +3,7 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmSnackbar,
+  MalcolmCleanBlocks,
 } from './malcolm.types';
 
 describe('malcolm socket handler', () => {
@@ -92,10 +93,11 @@ describe('malcolm socket handler', () => {
     socketContainer.socket.onopen();
     expect(socketContainer.isConnected).toEqual(true);
     expect(drain).toEqual(['flushed test']);
-    expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
-    expect(dispatches[0].snackbar.open).toEqual(true);
-    expect(dispatches[0].snackbar.message).toEqual(`Connected to WebSocket`);
+    expect(dispatches.length).toEqual(2);
+    expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
+    expect(dispatches[1].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[1].snackbar.open).toEqual(true);
+    expect(dispatches[1].snackbar.message).toEqual(`Connected to WebSocket`);
   });
 
   it('handles block meta updates', () => {

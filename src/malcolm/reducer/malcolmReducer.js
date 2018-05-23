@@ -101,6 +101,7 @@ function updateAttribute(state, payload) {
           ...attributes[matchingAttribute],
           loading: false,
           path,
+          subscriptionID: payload.id,
           pending: false,
           ...payload,
         };

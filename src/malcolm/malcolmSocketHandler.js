@@ -5,12 +5,13 @@ import {
   malcolmCleanBlocks,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
-import MalcolmReconnectingSocket from './malcolmReconnectingSocket';
+import MalcolmReconnector from './malcolmReconnector';
+import handleLocationChange from './middleware/malcolmRouting';
 
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
 
-  if (socketContainer.socket instanceof MalcolmReconnectingSocket) {
+  if (socketContainer.socket instanceof MalcolmReconnector) {
     setTimeout(socketContainer.socket.connect, 0, socketContainer.socket);
   }
 
@@ -24,7 +25,14 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onopen = () => {
     console.log('connected to socket');
+    let path = `${store.getState().malcolm.navigation}`;
+    path = `/gui/${path.split(',').join('/')}`;
     store.dispatch(malcolmCleanBlocks());
+    if (socketContainer.socket.isReconnection) {
+      const malcolmState = store.getState().malcolm;
+      malcolmState.messagesInFlight = [];
+      handleLocationChange(path, store.dispatch);
+    }
     store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
     socketContainer.isConnected = true;
     socketContainer.flush();
@@ -32,12 +40,16 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onclose = () => {
     console.log('socket disconnected');
-    store.dispatch(
-      malcolmSnackbarState(
-        true,
-        `WebSocket disconnected; attempting reconnect...`
-      )
-    );
+    if (socketContainer.socket instanceof MalcolmReconnector) {
+      store.dispatch(
+        malcolmSnackbarState(
+          true,
+          `WebSocket disconnected; attempting to reconnect...`
+        )
+      );
+    } else {
+      store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
+    }
   };
 
   socketContainer.socket.onmessage = event => {

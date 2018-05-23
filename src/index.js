@@ -16,14 +16,17 @@ import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddleware';
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
 import MessageSnackBar from './Snackbar/snackbar.component';
-import MalcolmReconnectingSocket from './malcolm/malcolmReconnectingSocket';
+import MalcolmReconnector from './malcolm/malcolmReconnector';
 
 require('typeface-roboto');
 
 const history = createHistory();
 const router = routerMiddleware(history);
-
-const webSocket = new MalcolmReconnectingSocket('ws://localhost:8008/ws', 5000);
+const webSocket = new MalcolmReconnector(
+  'ws://localhost:8008/ws',
+  5000,
+  WebSocket
+);
 const socketContainer = new MalcolmSocketContainer(webSocket);
 
 const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
