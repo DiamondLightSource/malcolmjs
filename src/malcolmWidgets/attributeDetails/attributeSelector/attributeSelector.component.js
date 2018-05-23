@@ -24,6 +24,9 @@ const AttributeSelector = props => {
     const { tags } = props.attribute.meta;
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
 
+    const setDisabled =
+      props.attribute.pending || !props.attribute.meta.writeable;
+
     if (widgetTagIndex !== -1) {
       if (tags[widgetTagIndex] === 'widget:led') {
         return (
@@ -37,7 +40,7 @@ const AttributeSelector = props => {
         return (
           <WidgetCheckbox
             CheckState={props.attribute.value}
-            Pending={props.attribute.pending}
+            Pending={setDisabled}
             checkEventHandler={isChecked =>
               props.eventHandler(props.attribute.path, isChecked)
             }
@@ -47,7 +50,7 @@ const AttributeSelector = props => {
         return (
           <WidgetComboBox
             Value={props.attribute.value}
-            Pending={props.attribute.pending}
+            Pending={setDisabled}
             Choices={props.attribute.meta.choices}
             selectEventHandler={event =>
               props.eventHandler(props.attribute.path, event.target.value)
@@ -76,6 +79,7 @@ AttributeSelector.propTypes = {
     meta: PropTypes.shape({
       tags: PropTypes.arrayOf(PropTypes.string),
       choices: PropTypes.arrayOf(PropTypes.string),
+      writeable: PropTypes.bool,
     }),
     path: PropTypes.arrayOf(PropTypes.string),
     value: PropTypes.oneOfType([

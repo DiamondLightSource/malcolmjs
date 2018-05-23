@@ -4,10 +4,12 @@ import {
   MalcolmAttributeData,
   MalcolmSnackbar,
   MalcolmCleanBlocks,
+  MalcolmDisconnected,
 } from './malcolm.types';
 
 describe('malcolm socket handler', () => {
   let dispatches = [];
+  let connectionState = false;
   const drain = [];
 
   const state = {
@@ -60,7 +62,10 @@ describe('malcolm socket handler', () => {
         socketContainer.socket.onmessage(event);
       },
     },
-    isConnected: false,
+    isConnected: () => connectionState,
+    setConnected: connected => {
+      connectionState = connected;
+    },
     queue: [],
     flush: () => {
       drain.push(socketContainer.queue.shift());
@@ -91,7 +96,7 @@ describe('malcolm socket handler', () => {
   it('sets flag and flushes on open', () => {
     socketContainer.queue.push('flushed test');
     socketContainer.socket.onopen();
-    expect(socketContainer.isConnected).toEqual(true);
+    expect(socketContainer.isConnected()).toEqual(true);
     expect(drain).toEqual(['flushed test']);
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
@@ -158,10 +163,11 @@ describe('malcolm socket handler', () => {
 
   it('updates snackbar on socket close', () => {
     socketContainer.socket.onclose();
-    expect(dispatches.length).toEqual(1);
+    expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmSnackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(`WebSocket disconnected`);
+    expect(dispatches[1].type).toEqual(MalcolmDisconnected);
   });
 
   it('updates snackbar on malcolm error (no matching request)', () => {

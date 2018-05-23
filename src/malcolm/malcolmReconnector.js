@@ -6,6 +6,7 @@ class MalcolmReconnector {
     this.interval = reconnectInterval;
     this.Generator = connectionGenerator;
     this._socket = {};
+    this.isConnected = false;
     this.isReconnection = false;
     this.onmessage = () => {};
     this.onopen = () => {};
@@ -27,7 +28,9 @@ class MalcolmReconnector {
     socket._socket.onerror = socket.onerror;
   }
   reconnect() {
-    this.isReconnection = true;
+    if (this.isConnected) {
+      this.isReconnection = true;
+    }
     this._socket = {};
     setTimeout(this.connect, this.interval, this);
   }

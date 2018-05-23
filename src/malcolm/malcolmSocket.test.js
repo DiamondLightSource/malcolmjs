@@ -20,7 +20,7 @@ describe('malcolm socket handler', () => {
 
   it('flushes single item if open', () => {
     socketContainer.queue.push('0');
-    socketContainer.isConnected = true;
+    socketContainer.setConnected(true);
     const flushStatus = socketContainer.flush();
     expect(flushStatus).toEqual(0);
     expect(messages).toEqual(['0']);
@@ -29,7 +29,7 @@ describe('malcolm socket handler', () => {
 
   it('flushes many items if open', () => {
     socketContainer.queue.push('1', '2', '3');
-    socketContainer.isConnected = true;
+    socketContainer.setConnected(true);
     const flushStatus = socketContainer.flush();
     expect(flushStatus).toEqual(0);
     expect(messages.length).toEqual(3);
@@ -38,7 +38,7 @@ describe('malcolm socket handler', () => {
 
   it("doesn't flush if closed", () => {
     socketContainer.queue.push('1', '2', '3');
-    socketContainer.isConnected = false;
+    socketContainer.setConnected(false);
     const flushStatus = socketContainer.flush();
     expect(flushStatus).toEqual(1);
     expect(messages.length).toEqual(0);

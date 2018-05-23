@@ -3,6 +3,7 @@ import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
   malcolmSnackbarState,
   malcolmCleanBlocks,
+  malcolmSetDisconnected,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
 import MalcolmReconnector from './malcolmReconnector';
@@ -34,7 +35,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       handleLocationChange(path, store.dispatch);
     }
     store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
-    socketContainer.isConnected = true;
+    socketContainer.setConnected(true);
     socketContainer.flush();
   };
 
@@ -50,6 +51,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     } else {
       store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
     }
+    store.dispatch(malcolmSetDisconnected());
   };
 
   socketContainer.socket.onmessage = event => {

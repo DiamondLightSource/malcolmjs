@@ -3,12 +3,14 @@
 exports[`AttributeSelector selects a checkbox correctly 1`] = `
 <WithStyles(WidgetCheckbox)
   CheckState={true}
+  Pending={false}
   checkEventHandler={[Function]}
 />
 `;
 
 exports[`AttributeSelector selects a comboBox correctly 1`] = `
 <WithStyles(WidgetComboBox)
+  Pending={false}
   Value="1"
   selectEventHandler={[Function]}
 />

@@ -60,6 +60,7 @@ describe('malcolm socket reconnector', () => {
   it('calls reconnect on close', () => {
     testReconnect.url = 'TEST#1';
     testReconnect.connect(testReconnect);
+    testReconnect.isConnected = true;
     testReconnect.url = 'TEST#2';
     expect(testReconnect._socket.url).toEqual('TEST#1');
     testReconnect._socket.onclose();
