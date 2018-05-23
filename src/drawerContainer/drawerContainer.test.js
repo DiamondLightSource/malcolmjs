@@ -25,6 +25,7 @@ describe('DrawerContainer', () => {
         openChildPanel: true,
       },
       malcolm: {
+        blocks: {},
         navigation: ['PANDA'],
       },
     };

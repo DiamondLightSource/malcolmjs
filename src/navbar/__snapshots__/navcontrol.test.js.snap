@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavControl disables menu item if children is empty 1`] = `
+<div
+  className="NavControl-container-1"
+>
+  <WithStyles(IconButton)
+    disabled={true}
+    onClick={[Function]}
+  >
+    <pure(KeyboardArrowDown) />
+  </WithStyles(IconButton)>
+  <WithStyles(Typography)>
+    PANDA
+  </WithStyles(Typography)>
+  <WithStyles(Menu)
+    anchorEl={null}
+    id="simple-menu"
+    onClose={[Function]}
+    open={false}
+  />
+</div>
+`;
+
+exports[`NavControl renders correctly 1`] = `
+<div
+  className="NavControl-container-1"
+>
+  <WithStyles(IconButton)
+    disabled={false}
+    onClick={[Function]}
+  >
+    <pure(KeyboardArrowDown) />
+  </WithStyles(IconButton)>
+  <WithStyles(Typography)>
+    PANDA
+  </WithStyles(Typography)>
+  <WithStyles(Menu)
+    anchorEl={null}
+    id="simple-menu"
+    onClose={[Function]}
+    open={false}
+  >
+    <WithStyles(MenuItem)
+      key="layout"
+      onClick={[Function]}
+    >
+      layout
+    </WithStyles(MenuItem)>
+    <WithStyles(MenuItem)
+      key="table"
+      onClick={[Function]}
+    >
+      table
+    </WithStyles(MenuItem)>
+  </WithStyles(Menu)>
+</div>
+`;
