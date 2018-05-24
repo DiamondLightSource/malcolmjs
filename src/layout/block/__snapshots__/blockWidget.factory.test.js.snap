@@ -182,6 +182,7 @@ exports[`BlockWidgetFactory generates react widget 1`] = `
           "lineHeight": "1.71429em",
         },
         "button": Object {
+          "color": "rgba(0, 0, 0, 0.87)",
           "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
           "fontSize": "0.875rem",
           "fontWeight": 500,

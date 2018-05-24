@@ -1,5 +1,5 @@
 import React from 'react';
-import { createShallow, createMount } from 'material-ui/test-utils';
+import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import NavBar from './navbar.component';
 import { openParentPanelType } from '../viewState/viewState.actions';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createShallow, createMount } from 'material-ui/test-utils';
+import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import MessageSnackBar from './snackbar.component';
 import { malcolmSnackbarState } from '../malcolm/malcolmActionCreators';
