@@ -28,7 +28,7 @@ const DrawerHeader = props => (
         <Typography variant="title" color="inherit" style={styles.title}>
           {props.title}
         </Typography>
-        <IconButton>
+        <IconButton onClick={props.popOutAction}>
           <OpenInNew />
         </IconButton>
       </Toolbar>
@@ -39,6 +39,7 @@ const DrawerHeader = props => (
 DrawerHeader.propTypes = {
   title: PropTypes.string.isRequired,
   closeAction: PropTypes.func.isRequired,
+  popOutAction: PropTypes.func.isRequired,
 };
 
 export default DrawerHeader;
