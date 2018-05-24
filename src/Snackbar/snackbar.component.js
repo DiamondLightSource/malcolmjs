@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Snackbar from 'material-ui/Snackbar';
-import IconButton from 'material-ui/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles/index';
+import { withStyles } from '@material-ui/core/styles/index';
 import { malcolmSnackbarState } from '../malcolm/malcolmActionCreators';
 
 const styles = theme => ({

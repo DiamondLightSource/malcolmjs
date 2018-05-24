@@ -11,7 +11,7 @@ exports[`renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-31 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-33 MuiCircularProgress-indeterminate-31 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -21,11 +21,11 @@ exports[`renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-32 MuiCircularProgress-svgIndeterminate-33"
+        className="MuiCircularProgress-svg-34"
         viewBox="0 0 50 50"
       >
         <circle
-          className="MuiCircularProgress-circle-34 MuiCircularProgress-circleIndeterminate-35"
+          className="MuiCircularProgress-circle-35 MuiCircularProgress-circleIndeterminate-37"
           cx={25}
           cy={25}
           fill="none"
@@ -46,7 +46,7 @@ exports[`renders correctly 1`] = `
   >
     <svg
       aria-hidden="true"
-      className="MuiSvgIcon-root-36 FieldsLoading-success-4"
+      className="MuiSvgIcon-root-38 FieldsLoading-success-4"
       color={undefined}
       focusable="false"
       viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ exports[`renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-31 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-33 MuiCircularProgress-indeterminate-31 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -77,11 +77,11 @@ exports[`renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-32 MuiCircularProgress-svgIndeterminate-33"
+        className="MuiCircularProgress-svg-34"
         viewBox="0 0 50 50"
       >
         <circle
-          className="MuiCircularProgress-circle-34 MuiCircularProgress-circleIndeterminate-35"
+          className="MuiCircularProgress-circle-35 MuiCircularProgress-circleIndeterminate-37"
           cx={25}
           cy={25}
           fill="none"

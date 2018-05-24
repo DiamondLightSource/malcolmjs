@@ -1,5 +1,5 @@
 import React from 'react';
-import { createShallow, createMount } from 'material-ui/test-utils';
+import { createShallow, createMount } from '@material-ui/core/test-utils';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import DrawerContainer from './drawerContainer.component';

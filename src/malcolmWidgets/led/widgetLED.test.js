@@ -1,6 +1,6 @@
 import React from 'react';
-import { createShallow } from 'material-ui/test-utils';
-import blue from 'material-ui/colors/blue';
+import { createShallow } from '@material-ui/core/test-utils';
+import blue from '@material-ui/core/colors/blue';
 import WidgetLED from './widgetLED.component';
 
 describe('WidgetLED', () => {

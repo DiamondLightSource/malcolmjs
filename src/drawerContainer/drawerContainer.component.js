@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Drawer from 'material-ui/Drawer';
-import { withStyles } from 'material-ui/styles';
+import Drawer from '@material-ui/core/Drawer';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import DrawerHeader from './drawerHeader.component';
 import {

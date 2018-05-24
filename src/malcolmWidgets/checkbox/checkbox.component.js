@@ -1,8 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from 'material-ui/Checkbox';
-import { withStyles } from 'material-ui/styles';
-import { darken, lighten } from 'material-ui/styles/colorManipulator';
+import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   div: {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-import blue from 'material-ui/colors/blue';
+import blue from '@material-ui/core/colors/blue';
 
 import WidgetLED from './widgetLED.component';
 
