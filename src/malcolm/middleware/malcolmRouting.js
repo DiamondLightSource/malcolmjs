@@ -7,7 +7,7 @@ import {
 const handleLocationChange = (path, dispatch) => {
   // remove the first part of the url e.g. /gui/ or /details/
   const tokens = path
-    .replace(/\/$/, '')
+    .replace(/\/$/, '') // strip off the trailing /
     .split('/')
     .slice(2);
   dispatch(malcolmNavigationPath(tokens));
