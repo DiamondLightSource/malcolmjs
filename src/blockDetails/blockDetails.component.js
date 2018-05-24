@@ -62,7 +62,7 @@ const displayAttributes = block => {
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
     {isBlockLoading(props.block)
-      ? blockLoading(props.block)
+      ? blockLoading()
       : displayAttributes(props.block)}
   </div>
 );
