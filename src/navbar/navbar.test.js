@@ -22,6 +22,7 @@ describe('NavBar', () => {
         openChildPanel: true,
       },
       malcolm: {
+        blocks: {},
         navigation: ['PANDA', 'layout', 'PANDA:SEQ1'],
       },
     };
@@ -44,7 +45,10 @@ describe('NavBar', () => {
 
     const wrapper = mount(<NavBar store={store} />);
 
-    wrapper.find('button').simulate('click');
+    wrapper
+      .find('button')
+      .at(0)
+      .simulate('click');
 
     const actions = store.getActions();
     expect(actions.length).toEqual(1);

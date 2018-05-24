@@ -25,6 +25,7 @@ describe('DrawerContainer', () => {
         openChildPanel: true,
       },
       malcolm: {
+        blocks: {},
         navigation: ['PANDA'],
       },
     };
@@ -40,6 +41,7 @@ describe('DrawerContainer', () => {
         store={mockStore(state)}
         parentTitle="Parent"
         childTitle="Child"
+        popOutAction={() => {}}
       >
         <div>Left</div>
         <div>Middle</div>
@@ -54,7 +56,11 @@ describe('DrawerContainer', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <DrawerContainer parentTitle="Parent" childTitle="Child">
+        <DrawerContainer
+          parentTitle="Parent"
+          childTitle="Child"
+          popOutAction={() => {}}
+        >
           <div>Left</div>
           <div>Middle</div>
           <div>Right</div>
@@ -80,7 +86,11 @@ describe('DrawerContainer', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <DrawerContainer parentTitle="Parent" childTitle="Child">
+        <DrawerContainer
+          parentTitle="Parent"
+          childTitle="Child"
+          popOutAction={() => {}}
+        >
           <div>Left</div>
           <div>Middle</div>
           <div>Right</div>

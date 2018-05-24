@@ -16,24 +16,33 @@ exports[`NavBar renders correctly 1`] = `
     <div
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
     >
-      <WithStyles(Typography)
-        className="Connect-NavBar--navPath-9"
+      <WithStyles(NavControl)
         key="PANDA"
-      >
-        PANDA
-      </WithStyles(Typography)>
-      <WithStyles(Typography)
-        className="Connect-NavBar--navPath-9"
+        nav={
+          Object {
+            "children": Array [],
+            "path": "PANDA",
+          }
+        }
+      />
+      <WithStyles(NavControl)
         key="layout"
-      >
-        layout
-      </WithStyles(Typography)>
-      <WithStyles(Typography)
-        className="Connect-NavBar--navPath-9"
+        nav={
+          Object {
+            "children": Array [],
+            "path": "layout",
+          }
+        }
+      />
+      <WithStyles(NavControl)
         key="PANDA:SEQ1"
-      >
-        PANDA:SEQ1
-      </WithStyles(Typography)>
+        nav={
+          Object {
+            "children": Array [],
+            "path": "PANDA:SEQ1",
+          }
+        }
+      />
     </div>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>

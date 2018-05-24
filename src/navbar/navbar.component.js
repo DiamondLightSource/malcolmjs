@@ -6,9 +6,11 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Typography from 'material-ui/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
 import { openParentPanel } from '../viewState/viewState.actions';
+import NavControl from './navcontrol.component';
+import NavBarSelector from './navbar.selector';
 
 const drawerWidth = 320;
 
@@ -49,6 +51,7 @@ const styles = theme => ({
   },
   title: {
     display: 'flex',
+    alignItems: 'center',
     marginLeft: 0,
     transition: theme.transitions.create('margin-left', {
       easing: theme.transitions.easing.easeInOut,
@@ -85,11 +88,10 @@ const NavBar = props => (
           [props.classes.titleShift]: props.open,
         })}
       >
-        {props.navigation.map(path => (
-          <Typography key={path} className={props.classes.navPath}>
-            {path}
-          </Typography>
-        ))}
+        {props.navigation.map(nav => <NavControl key={nav.path} nav={nav} />)}
+        {props.navigation.length === 1 && props.navigation[0].path === '' ? (
+          <Typography>Select a root node</Typography>
+        ) : null}
       </div>
     </Toolbar>
   </AppBar>
@@ -97,7 +99,10 @@ const NavBar = props => (
 
 const mapStateToProps = state => ({
   open: state.viewState.openParentPanel,
-  navigation: state.malcolm.navigation,
+  navigation: NavBarSelector.processNavigationLists(
+    state.malcolm.navigation,
+    state.malcolm.blocks
+  ),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -106,7 +111,12 @@ const mapDispatchToProps = dispatch => ({
 
 NavBar.propTypes = {
   open: PropTypes.bool.isRequired,
-  navigation: PropTypes.arrayOf(PropTypes.string),
+  navigation: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string,
+      children: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
   openParent: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string,

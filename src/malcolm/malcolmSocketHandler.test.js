@@ -3,6 +3,7 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmSnackbar,
+  MalcolmRootBlockMeta,
 } from './malcolm.types';
 
 describe('malcolm socket handler', () => {
@@ -25,6 +26,10 @@ describe('malcolm socket handler', () => {
           id: 3,
           path: ['TestBlock', 'TestAttr'],
           value: null,
+        },
+        {
+          id: 4,
+          path: ['.', 'blocks'],
         },
       ],
       blocks: {
@@ -110,7 +115,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].payload.label).toEqual('Block 1');
   });
 
-  it('handles attribute updates', () => {
+  it('handles scalar attribute updates', () => {
     const changes = {
       label: 'Attribute 1',
       meta: {
@@ -124,6 +129,22 @@ describe('malcolm socket handler', () => {
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTScalar:1.0');
+  });
+
+  it('handles table attribute updates', () => {
+    const changes = {
+      label: 'Attribute 1',
+      meta: {
+        tags: [],
+      },
+    };
+    const message = buildMessage('epics:nt/NTTable:1.0', 2, changes);
+
+    socketContainer.socket.send(message);
+
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTTable:1.0');
   });
 
   it('dispatches a message for unhandled deltas', () => {
@@ -201,6 +222,24 @@ describe('malcolm socket handler', () => {
     expect(
       store.getState().malcolm.blocks.TestBlock.attributes[0].pending
     ).toEqual(false);
+  });
+
+  it('only processes an update for the root .blocks item', () => {
+    const message = JSON.stringify({
+      typeid: 'malcolm:core/Update:1.0',
+      id: 4,
+      value: ['block1', 'block2', 'block3'],
+    });
+
+    socketContainer.socket.send(message);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual(MalcolmRootBlockMeta);
+    expect(dispatches[0].payload.blocks).toEqual([
+      'block1',
+      'block2',
+      'block3',
+    ]);
   });
   // TODO: add tests for DELTA handling
 });

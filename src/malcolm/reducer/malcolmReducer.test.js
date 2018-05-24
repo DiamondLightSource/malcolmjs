@@ -8,6 +8,7 @@ import {
   MalcolmAttributeData,
   MalcolmAttributePending,
   MalcolmSnackbar,
+  MalcolmRootBlockMeta,
 } from '../malcolm.types';
 import NavigationReducer from './navigation.reducer';
 
@@ -98,8 +99,8 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
     expect(state.blocks.block1.attributes).toEqual([
-      { name: 'health', loading: true },
-      { name: 'icon', loading: true },
+      { name: 'health', loading: true, children: [] },
+      { name: 'icon', loading: true, children: [] },
     ]);
   });
 
@@ -194,5 +195,24 @@ describe('malcolm reducer', () => {
 
     expect(state.snackbar.open).toEqual(true);
     expect(state.snackbar.message).toEqual('This is a test!');
+  });
+
+  it('updates the root block', () => {
+    const blocks = ['block1', 'block2'];
+    const action = {
+      type: MalcolmRootBlockMeta,
+      payload: {
+        id: 1,
+        blocks,
+      },
+    };
+
+    state.blocks['.blocks'] = {
+      children: [],
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks['.blocks'].children).toEqual(blocks);
   });
 });

@@ -82,6 +82,7 @@ AttributeSelector.propTypes = {
       PropTypes.bool,
       PropTypes.number,
       PropTypes.string,
+      PropTypes.shape({}),
     ]),
     pending: PropTypes.bool,
   }).isRequired,
