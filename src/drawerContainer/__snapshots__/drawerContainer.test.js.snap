@@ -23,6 +23,7 @@ exports[`DrawerContainer renders correctly 1`] = `
     >
       <DrawerHeader
         closeAction={[Function]}
+        popOutAction={[Function]}
         title="Parent"
       />
       <div>
@@ -45,6 +46,7 @@ exports[`DrawerContainer renders correctly 1`] = `
     >
       <DrawerHeader
         closeAction={[Function]}
+        popOutAction={[Function]}
         title="Child"
       />
       <div>
