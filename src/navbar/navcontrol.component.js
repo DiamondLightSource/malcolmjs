@@ -34,7 +34,7 @@ class NavControl extends Component {
   }
 
   render() {
-    const { classes, nav } = this.props;
+    const { classes, nav, navigateToChild } = this.props;
     const { anchorEl } = this.state;
 
     return (
@@ -53,7 +53,13 @@ class NavControl extends Component {
           onClose={this.handleClose}
         >
           {nav.children.map(child => (
-            <MenuItem key={child} onClick={this.handleClose}>
+            <MenuItem
+              key={child}
+              onClick={() => {
+                this.handleClose();
+                navigateToChild(child);
+              }}
+            >
               {child}
             </MenuItem>
           ))}
@@ -68,6 +74,7 @@ NavControl.propTypes = {
     path: PropTypes.string,
     children: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,

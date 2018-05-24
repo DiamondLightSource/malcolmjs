@@ -5,27 +5,28 @@ import NavControl from './navcontrol.component';
 describe('NavControl', () => {
   let shallow;
 
+  const nav = {
+    path: 'PANDA',
+    children: ['layout', 'table'],
+  };
+
   beforeEach(() => {
     shallow = createShallow({ dive: true });
   });
 
   it('renders correctly', () => {
-    const nav = {
-      path: 'PANDA',
-      children: ['layout', 'table'],
-    };
-
-    const wrapper = shallow(<NavControl nav={nav} />);
+    const wrapper = shallow(
+      <NavControl nav={nav} navigateToChild={() => {}} />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 
   it('disables menu item if children is empty', () => {
-    const nav = {
-      path: 'PANDA',
-      children: [],
-    };
+    nav.children = [];
 
-    const wrapper = shallow(<NavControl nav={nav} />);
+    const wrapper = shallow(
+      <NavControl nav={nav} navigateToChild={() => {}} />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 });

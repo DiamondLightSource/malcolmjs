@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -88,7 +89,15 @@ const NavBar = props => (
           [props.classes.titleShift]: props.open,
         })}
       >
-        {props.navigation.map(nav => <NavControl key={nav.path} nav={nav} />)}
+        {props.navigation.map(nav => (
+          <NavControl
+            key={nav.path}
+            nav={nav}
+            navigateToChild={child =>
+              props.navigateToChild(nav.basePath, child)
+            }
+          />
+        ))}
         {props.navigation.length === 1 && props.navigation[0].path === '' ? (
           <Typography>Select a root node</Typography>
         ) : null}
@@ -107,6 +116,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
+  navigateToChild: (basePath, child) =>
+    dispatch(push(`/gui${basePath}${child}`)),
 });
 
 NavBar.propTypes = {
