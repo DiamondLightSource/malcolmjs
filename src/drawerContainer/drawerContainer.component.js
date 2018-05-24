@@ -11,6 +11,7 @@ import {
 import NavBar from '../navbar/navbar.component';
 
 const drawerWidth = 360;
+
 const styles = () => ({
   drawer: {
     width: drawerWidth,
