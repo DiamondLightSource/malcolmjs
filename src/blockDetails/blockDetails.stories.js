@@ -25,7 +25,7 @@ const block = loading => ({
   ],
 });
 
-storiesOf('Block Details', module)
+storiesOf('Details/Block Details', module)
   .add(
     'block meta loaded - attributes loading',
     withInfo(`

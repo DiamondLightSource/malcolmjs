@@ -15,7 +15,7 @@ const checkbox = (value, pending) => (
   />
 );
 
-storiesOf('combobbox', module).add(
+storiesOf('Widgets/combobbox', module).add(
   'simple',
   withInfo(`
   A simple combobox.

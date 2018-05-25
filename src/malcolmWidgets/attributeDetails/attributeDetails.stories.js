@@ -40,7 +40,7 @@ const generateComponent = alarmStateValue => (
   </Provider>
 );
 
-storiesOf('Attribute Details', module)
+storiesOf('Details/Attribute Details', module)
   .add('info', withInfo(generateInfo('INFO'))(() => generateComponent(0)))
   .add('warning', withInfo(generateInfo('WARNING'))(() => generateComponent(1)))
   .add('error', withInfo(generateInfo('ERROR'))(() => generateComponent(2)))

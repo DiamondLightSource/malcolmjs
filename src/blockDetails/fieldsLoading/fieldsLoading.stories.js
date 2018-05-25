@@ -21,7 +21,7 @@ const fields = [
   { name: 'parameters', loading: true },
 ];
 
-storiesOf('Fields Loading', module).add(
+storiesOf('Details/Fields Loading', module).add(
   'default',
   withInfo(`
       A container to show the loading state of the attributes in a block
