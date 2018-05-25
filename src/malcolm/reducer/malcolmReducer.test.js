@@ -181,6 +181,7 @@ describe('malcolm reducer', () => {
       payload: {
         id: 1,
         path: ['block1', 'health'],
+        pending: true,
       },
     };
 

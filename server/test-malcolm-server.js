@@ -40,7 +40,7 @@ function handleMessage(socket, message) {
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
 
-  } else if(malcolmMessages.hasOwnProperty(JSON.stringify(simplifiedMessage))){
+  } else if (malcolmMessages.hasOwnProperty(JSON.stringify(simplifiedMessage))) {
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
       subscriptions.push(originalId.toString());
     }
@@ -49,6 +49,10 @@ function handleMessage(socket, message) {
     subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r))
     sendResponse(socket, response);
 
+  } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
+    let response = {id: originalId, typeid: 'malcolm:core/Return:1.0'};
+    console.log(response);
+    sendResponse(socket, response);
   } else {
     sendResponse(socket, buildErrorMessage(originalId, message));
   }

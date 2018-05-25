@@ -7,6 +7,7 @@ import {
   malcolmSnackbarState,
   malcolmCleanBlocks,
   malcolmSetDisconnected,
+  malcolmSetPending,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
 import MalcolmReconnector from './malcolmReconnector';
@@ -175,40 +176,10 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         const originalRequest = store
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
-
-        const attributePath = originalRequest.path;
-        const blockName = attributePath[0];
-        const attributeName = attributePath[1];
-        let attribute;
-
-        // Pull attribute from store (if exists)
-        if (
-          Object.prototype.hasOwnProperty.call(
-            store.getState().malcolm.blocks,
-            blockName
-          ) &&
-          Object.prototype.hasOwnProperty.call(
-            store.getState().malcolm.blocks[blockName],
-            'attributes'
-          )
-        ) {
-          const attributes = [
-            ...store.getState().malcolm.blocks[blockName].attributes,
-          ];
-          const matchingAttribute = attributes.findIndex(
-            a => a.name === attributeName
-          );
-          if (matchingAttribute >= 0) {
-            attribute = store.getState().malcolm.blocks[blockName].attributes[
-              matchingAttribute
-            ];
-            if (Object.prototype.hasOwnProperty.call(attribute, 'pending')) {
-              attribute.pending = false;
-            }
-          }
-        }
+        store.dispatch(malcolmSetPending(originalRequest.path, false));
         break;
       }
+
       case 'malcolm:core/Error:1.0': {
         if (data.id !== -1) {
           const originalRequest = store

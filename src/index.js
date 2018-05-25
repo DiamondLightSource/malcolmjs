@@ -24,7 +24,7 @@ const history = createHistory();
 const router = routerMiddleware(history);
 
 const webSocket = new MalcolmReconnector(
-  'ws://localhost:8008/ws',
+  'ws://localhost:8000/ws',
   5000,
   WebSocket
 );
