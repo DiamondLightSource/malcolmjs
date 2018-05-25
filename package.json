@@ -1,37 +1,117 @@
 {
   "name": "malcolmjs",
-  "version": "0.4.0",
-  "license": "Apache-2.0",
-  "author": "Ian Gillingham <ian.gillingham@diamond.ac.uk>",
-  "contributors": [
-    "Tom Cobb <tom.cobb@diamond.ac.uk>"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:/dls-controls/malcolmjs.git"
-  },
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "collections": "^5.0.7",
-    "flux": "^3.1.2",
-    "immutability-helper": "^2.3.0",
-    "interactjs": "^1.2.9",
-    "material-ui": "^1.0.0-beta.20",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
-    "react-modal": "^2.2.4",
-    "react-scripts": "^1.0.14",
-    "react-router-dom": "^4.1.2",
-    "react-dnd": "^2.4.0",
-    "react-dnd-html5-backend": "^2.4.1",
-    "react-query-params": "^1.0.7",
-    "react-render-html": "^0.5.0",
-    "websocket": "^1.0.24"
+    "@material-ui/icons": "^1.0.0-beta.43",
+    "@storybook/addon-actions": "^3.4.0",
+    "@storybook/addon-info": "^3.4.2",
+    "@storybook/addon-links": "^3.4.0",
+    "@storybook/addons": "^3.4.0",
+    "@storybook/react": "^3.4.0",
+    "classnames": "^2.2.5",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "express": "^4.16.3",
+    "history": "^4.7.2",
+    "material-ui": "^1.0.0-beta.43",
+    "prop-types": "^15.6.1",
+    "query-string": "^6.0.0",
+    "radium": "^0.24.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "react-scripts": "1.1.4",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.1",
+    "redux-socket.io": "^1.4.0",
+    "redux-thunk": "^2.2.0",
+    "serve-static": "^1.13.2",
+    "socket.io": "^2.1.0",
+    "socket.io-client": "^2.1.0",
+    "storm-react-diagrams": "^5.2.1",
+    "typeface-roboto": "0.0.54",
+    "uuid": "^3.2.1"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json}": [
+      "eslint --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ],
+    "cypress/**/*.{js,jsx,json}": [
+      "eslint --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ],
+    "src/**/*.{scss,css}": [
+      "stylelint --config=.stylelintrc --fix",
+      "prettier --config .prettierrc --write",
+      "git add"
+    ]
   },
   "scripts": {
-    "start": "react-scripts start",
+    "precommit": "lint-staged",
+    "server": "node ./server/test-malcolm-server.js",
+    "server:dev": "nodemon ./server/test-malcolm-server.js",
+    "start": "concurrently \"npm run server:dev\" \"react-scripts start\"",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom --verbose --coverage",
+    "test:watch": "react-scripts test --env=jsdom --watch",
+    "eject": "react-scripts eject",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "e2e:serve": "npm run build & node ./server/e2e-test-server.js",
+    "e2e:interactive": "start-server-and-test e2e:serve http://localhost:3030 cy:open",
+    "e2e": "start-server-and-test e2e:serve http://localhost:3030 cy:run",
+    "lint:js": "eslint --ext=js --ext=jsx --fix ./src",
+    "lint:cypress": "eslint --ext=js --ext=jsx --fix ./cypress",
+    "lint:css": "stylelint --config=.stylelintrc './src/**/*.css'",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public",
+    "build-docs": "sphinx-build -b html docs/source docs/build/html"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "concurrently": "^3.5.1",
+    "coveralls": "^3.0.0",
+    "cypress": "^2.1.0",
+    "enzyme-to-json": "^3.3.3",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-cypress": "^2.0.1",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
+    "http-server": "^0.11.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.4",
+    "nodemon": "^1.17.4",
+    "prettier": "^1.12.1",
+    "q-i": "^2.0.1",
+    "react-test-renderer": "^16.3.2",
+    "start-server-and-test": "^1.4.1",
+    "storybook": "^1.0.0",
+    "stylelint": "^9.2.0",
+    "stylelint-config-standard": "^18.2.0"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/*.stories.*",
+      "!**/stories/index.js",
+      "!src/index.js",
+      "!src/registerServiceWorker.js",
+      "!src/App.reducer.js",
+      "!src/App.routes.js"
+    ]
   }
 }

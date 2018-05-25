@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1858, 
+  "path": [
+    "PANDA:QDEC4", 
+    "outCapture"
+  ], 
+  "delta": true
+}

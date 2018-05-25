@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 110, 
+  "path": [
+    "PANDA:OUTENC1", 
+    "conn"
+  ], 
+  "delta": true
+}

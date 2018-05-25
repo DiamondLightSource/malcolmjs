@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 406, 
+  "path": [
+    "PANDA:PCAP", 
+    "gateDelay"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1048, 
+  "path": [
+    "PANDA:PULSE4", 
+    "errPeriod"
+  ], 
+  "delta": true
+}

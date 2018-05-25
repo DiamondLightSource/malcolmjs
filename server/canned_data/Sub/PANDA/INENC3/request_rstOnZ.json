@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 583, 
+  "path": [
+    "PANDA:INENC3", 
+    "rstOnZ"
+  ], 
+  "delta": true
+}

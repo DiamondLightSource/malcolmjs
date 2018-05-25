@@ -1,0 +1,407 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BlockWidget block renders correctly 1`] = `
+<WithStyles(Paper)
+  className="BlockWidget-block-1"
+  elevation={8}
+>
+  <WithStyles(Typography)
+    className="BlockWidget-title-2"
+  >
+    block 1
+  </WithStyles(Typography)>
+  <div
+    className="BlockWidget-blockContents-3"
+    style={
+      Object {
+        "minHeight": 44,
+      }
+    }
+  >
+    <div
+      className="BlockWidget-inputPortsContainer-4"
+    >
+      <BlockPortWidget
+        key="2"
+        node={
+          BlockNodeModel {
+            "addBlockPort": [Function],
+            "addIcon": [Function],
+            "description": "block 1 description",
+            "extras": Object {},
+            "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+            "id": "1",
+            "label": "block 1",
+            "listeners": Object {},
+            "locked": false,
+            "ports": Object {
+              "2": DefaultPortModel {
+                "id": "3",
+                "in": true,
+                "label": "in 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "2",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "4": DefaultPortModel {
+                "id": "5",
+                "in": false,
+                "label": "out 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "4",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "6": DefaultPortModel {
+                "id": "7",
+                "in": false,
+                "label": "out 2",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "6",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+            },
+            "selected": false,
+            "type": "malcolmjsblock",
+            "x": 0,
+            "y": 0,
+          }
+        }
+        port={
+          DefaultPortModel {
+            "id": "3",
+            "in": true,
+            "label": "in 1",
+            "links": Object {},
+            "listeners": Object {},
+            "locked": false,
+            "maximumLinks": undefined,
+            "name": "2",
+            "parent": BlockNodeModel {
+              "addBlockPort": [Function],
+              "addIcon": [Function],
+              "description": "block 1 description",
+              "extras": Object {},
+              "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+              "id": "1",
+              "label": "block 1",
+              "listeners": Object {},
+              "locked": false,
+              "ports": Object {
+                "2": [Circular],
+                "4": DefaultPortModel {
+                  "id": "5",
+                  "in": false,
+                  "label": "out 1",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "4",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+                "6": DefaultPortModel {
+                  "id": "7",
+                  "in": false,
+                  "label": "out 2",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "6",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+              },
+              "selected": false,
+              "type": "malcolmjsblock",
+              "x": 0,
+              "y": 0,
+            },
+            "selected": false,
+            "type": "default",
+          }
+        }
+        portColour="#3f51b5"
+      />
+    </div>
+    <div
+      className="BlockWidget-iconContents-7"
+    >
+      <span
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+          }
+        }
+      />
+    </div>
+    <div
+      className="BlockWidget-outputPortsContainer-5"
+    >
+      <BlockPortWidget
+        key="4"
+        node={
+          BlockNodeModel {
+            "addBlockPort": [Function],
+            "addIcon": [Function],
+            "description": "block 1 description",
+            "extras": Object {},
+            "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+            "id": "1",
+            "label": "block 1",
+            "listeners": Object {},
+            "locked": false,
+            "ports": Object {
+              "2": DefaultPortModel {
+                "id": "3",
+                "in": true,
+                "label": "in 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "2",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "4": DefaultPortModel {
+                "id": "5",
+                "in": false,
+                "label": "out 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "4",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "6": DefaultPortModel {
+                "id": "7",
+                "in": false,
+                "label": "out 2",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "6",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+            },
+            "selected": false,
+            "type": "malcolmjsblock",
+            "x": 0,
+            "y": 0,
+          }
+        }
+        port={
+          DefaultPortModel {
+            "id": "5",
+            "in": false,
+            "label": "out 1",
+            "links": Object {},
+            "listeners": Object {},
+            "locked": false,
+            "maximumLinks": undefined,
+            "name": "4",
+            "parent": BlockNodeModel {
+              "addBlockPort": [Function],
+              "addIcon": [Function],
+              "description": "block 1 description",
+              "extras": Object {},
+              "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+              "id": "1",
+              "label": "block 1",
+              "listeners": Object {},
+              "locked": false,
+              "ports": Object {
+                "2": DefaultPortModel {
+                  "id": "3",
+                  "in": true,
+                  "label": "in 1",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "2",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+                "4": [Circular],
+                "6": DefaultPortModel {
+                  "id": "7",
+                  "in": false,
+                  "label": "out 2",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "6",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+              },
+              "selected": false,
+              "type": "malcolmjsblock",
+              "x": 0,
+              "y": 0,
+            },
+            "selected": false,
+            "type": "default",
+          }
+        }
+        portColour="#3f51b5"
+      />
+      <BlockPortWidget
+        key="6"
+        node={
+          BlockNodeModel {
+            "addBlockPort": [Function],
+            "addIcon": [Function],
+            "description": "block 1 description",
+            "extras": Object {},
+            "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+            "id": "1",
+            "label": "block 1",
+            "listeners": Object {},
+            "locked": false,
+            "ports": Object {
+              "2": DefaultPortModel {
+                "id": "3",
+                "in": true,
+                "label": "in 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "2",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "4": DefaultPortModel {
+                "id": "5",
+                "in": false,
+                "label": "out 1",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "4",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+              "6": DefaultPortModel {
+                "id": "7",
+                "in": false,
+                "label": "out 2",
+                "links": Object {},
+                "listeners": Object {},
+                "locked": false,
+                "maximumLinks": undefined,
+                "name": "6",
+                "parent": [Circular],
+                "selected": false,
+                "type": "default",
+              },
+            },
+            "selected": false,
+            "type": "malcolmjsblock",
+            "x": 0,
+            "y": 0,
+          }
+        }
+        port={
+          DefaultPortModel {
+            "id": "7",
+            "in": false,
+            "label": "out 2",
+            "links": Object {},
+            "listeners": Object {},
+            "locked": false,
+            "maximumLinks": undefined,
+            "name": "6",
+            "parent": BlockNodeModel {
+              "addBlockPort": [Function],
+              "addIcon": [Function],
+              "description": "block 1 description",
+              "extras": Object {},
+              "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
+              "id": "1",
+              "label": "block 1",
+              "listeners": Object {},
+              "locked": false,
+              "ports": Object {
+                "2": DefaultPortModel {
+                  "id": "3",
+                  "in": true,
+                  "label": "in 1",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "2",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+                "4": DefaultPortModel {
+                  "id": "5",
+                  "in": false,
+                  "label": "out 1",
+                  "links": Object {},
+                  "listeners": Object {},
+                  "locked": false,
+                  "maximumLinks": undefined,
+                  "name": "4",
+                  "parent": [Circular],
+                  "selected": false,
+                  "type": "default",
+                },
+                "6": [Circular],
+              },
+              "selected": false,
+              "type": "malcolmjsblock",
+              "x": 0,
+              "y": 0,
+            },
+            "selected": false,
+            "type": "default",
+          }
+        }
+        portColour="#3f51b5"
+      />
+    </div>
+  </div>
+  <WithStyles(Typography)
+    className="BlockWidget-description-8"
+  >
+    block 1 description
+  </WithStyles(Typography)>
+</WithStyles(Paper)>
+`;

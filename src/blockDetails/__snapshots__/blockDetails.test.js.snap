@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Block Details renders correctly when loading 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
+      Loading...
+    </WithStyles(Typography)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders correctly when metadata loaded and attributes loaded 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(AttributeDetails)
+      attribute={
+        Object {
+          "alarm": Object {
+            "severity": 0,
+          },
+          "loading": false,
+          "meta": Object {
+            "label": "health 1",
+          },
+          "name": "health",
+        }
+      }
+      key="health"
+    >
+      <div>
+        Hello
+      </div>
+    </WithStyles(AttributeDetails)>
+    <WithStyles(AttributeDetails)
+      attribute={
+        Object {
+          "alarm": Object {
+            "severity": 0,
+          },
+          "loading": false,
+          "meta": Object {
+            "label": "icon 1",
+          },
+          "name": "icon",
+        }
+      }
+      key="icon"
+    >
+      <div>
+        Hello
+      </div>
+    </WithStyles(AttributeDetails)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders correctly when metadata loaded and waiting for attributes 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(CircularProgress)
+      color="secondary"
+    />
+    <WithStyles(Typography)>
+      Loading...
+    </WithStyles(Typography)>
+  </div>
+</div>
+`;

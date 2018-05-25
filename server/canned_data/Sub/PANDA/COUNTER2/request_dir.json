@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1480, 
+  "path": [
+    "PANDA:COUNTER2", 
+    "dir"
+  ], 
+  "delta": true
+}

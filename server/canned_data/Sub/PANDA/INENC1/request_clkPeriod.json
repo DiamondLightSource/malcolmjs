@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 509, 
+  "path": [
+    "PANDA:INENC1", 
+    "clkPeriod"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,41 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "preStart", 
+          "start", 
+          "width", 
+          "step", 
+          "pulses", 
+          "relative", 
+          "dir", 
+          "inputs", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "inp", 
+          "inpCurrent", 
+          "outputs", 
+          "active", 
+          "out", 
+          "readbacks", 
+          "produced", 
+          "state"
+        ], 
+        "label": "Position compare 4"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

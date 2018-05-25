@@ -1,0 +1,46 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": true, 
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "Capture OUT in PCAP?", 
+          "tags": [
+            "group:outputs", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "label": "Out Capture", 
+          "choices": [
+            "No", 
+            "Value", 
+            "Diff", 
+            "Sum", 
+            "Mean", 
+            "Min", 
+            "Max", 
+            "Min Max"
+          ]
+        }, 
+        "value": "No", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "userTag": 0, 
+          "nanoseconds": 0
+        }
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 764, 
+  "path": [
+    "PANDA:POSENC3", 
+    "enable"
+  ], 
+  "delta": true
+}

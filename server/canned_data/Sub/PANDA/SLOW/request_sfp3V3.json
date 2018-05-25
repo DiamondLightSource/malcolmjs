@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 651, 
+  "path": [
+    "PANDA:SLOW", 
+    "sfp3V3"
+  ], 
+  "delta": true
+}
