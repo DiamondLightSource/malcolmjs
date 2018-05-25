@@ -6,7 +6,7 @@ describe('AttributeAlarm', () => {
   let shallow;
 
   beforeEach(() => {
-    shallow = createShallow();
+    shallow = createShallow({ dive: true });
   });
 
   it('renders no_alarm correctly', () => {
@@ -18,7 +18,10 @@ describe('AttributeAlarm', () => {
 
   it('renders minor_alarm correctly', () => {
     const wrapper = shallow(
-      <AttributeAlarm alarmSeverity={AlarmStates.MINOR_ALARM} />
+      <AttributeAlarm
+        alarmSeverity={AlarmStates.MINOR_ALARM}
+        theme={{ alarmState: { warning: '#fff' } }}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
