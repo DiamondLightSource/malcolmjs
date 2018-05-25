@@ -1,4 +1,4 @@
-import { createShallow } from 'material-ui/test-utils';
+import { createShallow } from '@material-ui/core/test-utils';
 import BlockWidgetFactory from './blockWidget.factory';
 import BlockNodeModel from './block.model';
 

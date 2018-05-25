@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import { CircularProgress } from 'material-ui/Progress';
-import Typography from 'material-ui/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 
@@ -62,7 +62,7 @@ const displayAttributes = block => {
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
     {isBlockLoading(props.block)
-      ? blockLoading(props.block)
+      ? blockLoading()
       : displayAttributes(props.block)}
   </div>
 );

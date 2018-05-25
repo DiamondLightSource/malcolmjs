@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Warning, Error, InfoOutline, HighlightOff } from '@material-ui/icons';
-import { CircularProgress } from 'material-ui/Progress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const AlarmStates = {
   NO_ALARM: 0,

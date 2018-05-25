@@ -61,4 +61,16 @@ describe('attribute handler', () => {
     expect(dispatches[0].payload.inGroup).toEqual(false);
     expect(dispatches[0].payload.isGroup).toEqual(false);
   });
+
+  it('processes and dispatches a table attribute update', () => {
+    const tableChanges = changes(['group:outputs']);
+    tableChanges.typeid = 'NTTable';
+    AttributeHandler.processTableAttribute(request, tableChanges, dispatch);
+
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[0].payload.id).toEqual(1);
+    expect(dispatches[0].payload.typeid).toEqual('NTTable');
+    expect(dispatches[0].payload.delta).toEqual(true);
+  });
 });

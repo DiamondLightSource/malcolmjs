@@ -1,7 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import { BaseWidget } from 'storm-react-diagrams';
-import Typography from 'material-ui/Typography';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   container: {

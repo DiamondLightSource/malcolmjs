@@ -1,8 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import { emphasize } from 'material-ui/styles/colorManipulator';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   textUpdate: {

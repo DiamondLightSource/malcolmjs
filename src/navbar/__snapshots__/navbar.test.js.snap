@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavBar renders correctly 1`] = `
+<WithStyles(AppBar)
+  className="Connect-NavBar--appBar-1 Connect-NavBar--appBarShift-2 Connect-NavBar--appBarShift-left-3"
+>
+  <WithStyles(Toolbar)
+    disableGutters={false}
+  >
+    <WithStyles(IconButton)
+      className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
+      onClick={[Function]}
+    >
+      <pure(Menu) />
+    </WithStyles(IconButton)>
+    <div
+      className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
+    >
+      <WithStyles(NavControl)
+        key="PANDA"
+        nav={
+          Object {
+            "children": Array [],
+            "path": "PANDA",
+          }
+        }
+      />
+      <WithStyles(NavControl)
+        key="layout"
+        nav={
+          Object {
+            "children": Array [],
+            "path": "layout",
+          }
+        }
+      />
+      <WithStyles(NavControl)
+        key="PANDA:SEQ1"
+        nav={
+          Object {
+            "children": Array [],
+            "path": "PANDA:SEQ1",
+          }
+        }
+      />
+    </div>
+  </WithStyles(Toolbar)>
+</WithStyles(AppBar)>
+`;

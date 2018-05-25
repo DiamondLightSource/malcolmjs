@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AppReducer from './App.reducer';
@@ -22,6 +22,7 @@ require('typeface-roboto');
 
 const history = createHistory();
 const router = routerMiddleware(history);
+
 const webSocket = new MalcolmReconnector(
   'ws://localhost:8008/ws',
   5000,

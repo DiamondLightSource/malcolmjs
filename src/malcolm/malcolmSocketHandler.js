@@ -1,4 +1,7 @@
-import BlockMetaHandler from './malcolmHandlers/blockMetaHandler';
+import {
+  BlockMetaHandler,
+  RootBlockHandler,
+} from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
   malcolmSnackbarState,
@@ -57,6 +60,17 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   socketContainer.socket.onmessage = event => {
     const data = JSON.parse(event.data);
     switch (data.typeid) {
+      case 'malcolm:core/Update:1.0': {
+        const originalRequest = store
+          .getState()
+          .malcolm.messagesInFlight.find(m => m.id === data.id);
+
+        if (originalRequest.path.join('') === '.blocks') {
+          RootBlockHandler(originalRequest, data.value, store.dispatch);
+        }
+
+        break;
+      }
       case 'malcolm:core/Delta:1.0': {
         const { changes } = data;
         const originalRequest = store
@@ -125,6 +139,14 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
           case 'epics:nt/NTScalar:1.0':
             AttributeHandler.processScalarAttribute(
+              originalRequest,
+              attribute,
+              store.dispatch
+            );
+            break;
+
+          case 'epics:nt/NTTable:1.0':
+            AttributeHandler.processTableAttribute(
               originalRequest,
               attribute,
               store.dispatch

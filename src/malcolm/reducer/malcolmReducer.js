@@ -9,9 +9,11 @@ import {
   MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
+  MalcolmRootBlockMeta,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
+import AttributeReducer from './attribute.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -49,6 +51,7 @@ function registerNewBlock(state, action) {
   blocks[action.payload.blockName] = {
     name: action.payload.blockName,
     loading: true,
+    children: [],
   };
 
   return {
@@ -75,7 +78,12 @@ function updateBlock(state, payload) {
         ...blocks[blockName],
         loading: false,
         label: payload.label,
-        attributes: payload.fields.map(f => ({ name: f, loading: true })),
+        attributes: payload.fields.map(f => ({
+          name: f,
+          loading: true,
+          children: [],
+        })),
+        children: ['none', ...payload.fields],
       };
     }
   }
@@ -86,39 +94,13 @@ function updateBlock(state, payload) {
   };
 }
 
-function updateAttribute(state, payload) {
-  if (payload.delta) {
-    const { path } = state.messagesInFlight.find(m => m.id === payload.id);
-    const blockName = path[0];
-    const attributeName = path[1];
-
-    if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
-      const attributes = [...state.blocks[blockName].attributes];
-
-      const matchingAttribute = attributes.findIndex(
-        a => a.name === attributeName
-      );
-      if (matchingAttribute >= 0) {
-        attributes[matchingAttribute] = {
-          ...attributes[matchingAttribute],
-          loading: false,
-          path,
-          subscriptionID: payload.id,
-          pending: false,
-          ...payload,
-        };
-      }
-      const blocks = { ...state.blocks };
-      blocks[blockName] = { ...state.blocks[blockName], attributes };
-
-      return {
-        ...state,
-        blocks,
-      };
-    }
-  }
-
-  return state;
+function updateRootBlock(state, payload) {
+  const blocks = { ...state.blocks };
+  blocks['.blocks'].children = payload.blocks;
+  return {
+    ...state,
+    blocks,
+  };
 }
 
 function setPending(state, path) {
@@ -162,6 +144,7 @@ function cleanBlocks(state) {
     blocks[blockName] = {
       name: blockName,
       loading: true,
+      children: [],
     };
   });
   return {
@@ -221,8 +204,11 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
     case MalcolmBlockMeta:
       return updateBlock(state, action.payload);
 
+    case MalcolmRootBlockMeta:
+      return updateRootBlock(state, action.payload);
+
     case MalcolmAttributeData:
-      return updateAttribute(state, action.payload);
+      return AttributeReducer.updateAttribute(state, action.payload);
 
     case MalcolmNavigationPathUpdate:
       return NavigationReducer.updateNavigationPath(state, action.payload);

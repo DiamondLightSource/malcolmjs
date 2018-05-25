@@ -1,7 +1,7 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import { blue } from 'material-ui/colors';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
 
 const req = require.context('../', true, /\.stories\.js$/);
 
