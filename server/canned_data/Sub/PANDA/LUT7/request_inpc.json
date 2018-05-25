@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1384, 
+  "path": [
+    "PANDA:LUT7", 
+    "inpc"
+  ], 
+  "delta": true
+}

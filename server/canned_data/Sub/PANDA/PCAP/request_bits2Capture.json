@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 422, 
+  "path": [
+    "PANDA:PCAP", 
+    "bits2Capture"
+  ], 
+  "delta": true
+}

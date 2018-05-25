@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 700, 
+  "path": [
+    "PANDA:PGEN2", 
+    "outDataDelay"
+  ], 
+  "delta": true
+}

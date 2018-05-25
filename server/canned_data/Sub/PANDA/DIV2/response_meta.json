@@ -1,0 +1,36 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "divisor", 
+          "firstPulse", 
+          "inputs", 
+          "inp", 
+          "inpCurrent", 
+          "inpDelay", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "outputs", 
+          "outd", 
+          "outn", 
+          "readbacks", 
+          "count"
+        ], 
+        "label": "Pulse divider 2"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

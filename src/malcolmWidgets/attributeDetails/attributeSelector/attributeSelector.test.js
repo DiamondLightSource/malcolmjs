@@ -19,6 +19,7 @@ describe('AttributeSelector', () => {
       return {
         meta: {
           tags: [`widget:${widget}`],
+          writeable: true,
         },
         value,
         choices,
@@ -27,6 +28,7 @@ describe('AttributeSelector', () => {
     return {
       meta: {
         tags: [`widget:${widget}`],
+        writeable: true,
       },
       value,
     };

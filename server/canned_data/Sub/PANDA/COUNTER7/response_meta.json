@@ -1,0 +1,43 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "start", 
+          "step", 
+          "inputs", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "trig", 
+          "trigCurrent", 
+          "trigDelay", 
+          "dir", 
+          "dirCurrent", 
+          "dirDelay", 
+          "outputs", 
+          "carry", 
+          "out", 
+          "outUnits", 
+          "outScale", 
+          "outOffset", 
+          "outScaled", 
+          "outCapture", 
+          "outDataDelay"
+        ], 
+        "label": "Up/Down pulse counter 7"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

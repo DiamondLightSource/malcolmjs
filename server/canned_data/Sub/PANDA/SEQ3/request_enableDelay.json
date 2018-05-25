@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 886, 
+  "path": [
+    "PANDA:SEQ3", 
+    "enableDelay"
+  ], 
+  "delta": true
+}

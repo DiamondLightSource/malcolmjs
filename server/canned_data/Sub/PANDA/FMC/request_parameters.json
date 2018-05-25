@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1171, 
+  "path": [
+    "PANDA:FMC", 
+    "parameters"
+  ], 
+  "delta": true
+}

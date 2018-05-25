@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 763, 
+  "path": [
+    "PANDA:POSENC3", 
+    "qperiodUnits"
+  ], 
+  "delta": true
+}

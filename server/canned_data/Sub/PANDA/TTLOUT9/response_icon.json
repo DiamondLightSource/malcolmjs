@@ -1,0 +1,34 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": false, 
+          "typeid": "malcolm:core/StringMeta:1.0", 
+          "label": "Icon", 
+          "description": "SVG icon for the Block", 
+          "tags": [
+            "widget:icon"
+          ]
+        }, 
+        "value": "<svg version=\"1.1\" viewBox=\"0 0 120 60\" xmlns=\"http://www.w3.org/2000/svg\">\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-54.935\" cy=\"40\" rx=\"11\" ry=\"28\" d=\"m -43.935001,40 c 0,15.463973 -4.924868,28 -11,28 -6.075133,0 -11,-12.536027 -11,-28 0,-15.463973 4.924867,-28 11,-28 6.075132,0 11,12.536027 11,28 z\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\"1.2832px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-54.935\" cy=\"40\" rx=\"6\" ry=\"20\" d=\"m -48.935001,40 c 0,11.045695 -2.686292,20 -6,20 -3.313709,0 -6,-8.954305 -6,-20 0,-11.045695 2.686291,-20 6,-20 3.313708,0 6,8.954305 6,20 z\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\".97826px\"/>\n <rect transform=\"scale(-1,1)\" x=\"-84.935\" y=\"10\" width=\"30\" height=\"40\" fill=\"#e6e6e6\"/>\n <path d=\"m54.935 10h30\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.0009px\"/>\n <path d=\"m54.935 50h30\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.0009px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-70.935\" cy=\"30.579\" rx=\"1.3933\" ry=\"1.4215\" d=\"m -69.541698,30.579 c 0,0.785073 -0.623801,1.4215 -1.3933,1.4215 -0.769498,0 -1.3933,-0.636427 -1.3933,-1.4215 0,-0.785072 0.623802,-1.421499 1.3933,-1.421499 0.769499,0 1.3933,0.636427 1.3933,1.421499 z\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\".11159px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-69.935\" cy=\"29.579\" rx=\"1.3933\" ry=\"1.4215\" d=\"m -68.541698,29.579 c 0,0.785073 -0.623801,1.4215 -1.3933,1.4215 -0.769498,0 -1.3933,-0.636427 -1.3933,-1.4215 0,-0.785072 0.623802,-1.421499 1.3933,-1.421499 0.769499,0 1.3933,0.636427 1.3933,1.421499 z\" fill=\"#fff\" fill-rule=\"evenodd\"/>\n <path d=\"m43.935 30h-14\" fill=\"none\" stroke=\"#000\" stroke-width=\"1px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-84.935\" cy=\"40\" rx=\"6\" ry=\"20\" d=\"m -78.934998,40 c 0,11.045695 -2.686291,20 -6,20 -3.313708,0 -6,-8.954305 -6,-20 0,-11.045695 2.686292,-20 6,-20 3.313709,0 6,8.954305 6,20 z\" fill=\"#e6e6e6\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\".97826px\"/>\n <ellipse transform=\"matrix(-1,0,0,1,0,-10)\" cx=\"-81.935\" cy=\"40\" rx=\"3\" ry=\"10\" d=\"m -78.934998,40 c 0,5.522847 -1.343145,10 -3,10 -1.656854,0 -3,-4.477153 -3,-10 0,-5.522847 1.343146,-10 3,-10 1.656855,0 3,4.477153 3,10 z\" fill=\"#fff\" fill-rule=\"evenodd\" stroke=\"#000\" stroke-width=\".97826px\"/>\n <ellipse transform=\"translate(0,-10)\" cx=\"80.435\" cy=\"40\" rx=\"1.5\" ry=\"4.5\" d=\"m 81.934998,40 c 0,2.485281 -0.671573,4.5 -1.5,4.5 -0.828428,0 -1.5,-2.014719 -1.5,-4.5 0,-2.485281 0.671572,-4.5 1.5,-4.5 0.828427,0 1.5,2.014719 1.5,4.5 z\"/>\n</svg>\n", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "userTag": 0, 
+          "nanoseconds": 0
+        }
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 946, 
+  "path": [
+    "PANDA:SEQ4", 
+    "outb"
+  ], 
+  "delta": true
+}

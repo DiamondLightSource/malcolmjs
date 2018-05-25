@@ -7,8 +7,11 @@ import {
   MalcolmAttributePending,
   MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
+  MalcolmCleanBlocks,
+  MalcolmDisconnected,
   MalcolmRootBlockMeta,
 } from '../malcolm.types';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 import AttributeReducer from './attribute.reducer';
 
@@ -104,7 +107,6 @@ function updateBlock(state, payload) {
 function updateRootBlock(state, payload) {
   const blocks = { ...state.blocks };
   blocks['.blocks'].children = payload.blocks;
-
   return {
     ...state,
     blocks,
@@ -146,6 +148,55 @@ function updateSnackbar(state, newSnackbar) {
   };
 }
 
+function cleanBlocks(state) {
+  const blocks = { ...state.blocks };
+  Object.keys(blocks).forEach(blockName => {
+    blocks[blockName] = {
+      name: blockName,
+      loading: true,
+      children: [],
+    };
+  });
+  return {
+    ...state,
+    blocks,
+  };
+}
+
+function setDisconnected(state) {
+  const blocks = { ...state.blocks };
+  Object.keys(blocks).forEach(blockName => {
+    if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
+      const attributes = [...state.blocks[blockName].attributes];
+      for (let attr = 0; attr < attributes.length; attr += 1) {
+        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'meta')) {
+          attributes[attr] = {
+            ...attributes[attr],
+            meta: {
+              ...attributes[attr].meta,
+              writeable: false,
+            },
+          };
+        }
+        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'alarm')) {
+          attributes[attr] = {
+            ...attributes[attr],
+            alarm: {
+              ...attributes[attr].alarm,
+              severity: AlarmStates.UNDEFINED_ALARM,
+            },
+          };
+        }
+      }
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
+    }
+  });
+  return {
+    ...state,
+    blocks,
+  };
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -171,8 +222,15 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmNavigationPathUpdate:
       return NavigationReducer.updateNavigationPath(state, action.payload);
+
     case MalcolmSnackbar:
       return updateSnackbar(state, action.snackbar);
+
+    case MalcolmCleanBlocks:
+      return cleanBlocks(state);
+
+    case MalcolmDisconnected:
+      return setDisconnected(state);
 
     default:
       return state;

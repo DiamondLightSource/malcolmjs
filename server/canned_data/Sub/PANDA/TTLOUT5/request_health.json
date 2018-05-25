@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 349, 
+  "path": [
+    "PANDA:TTLOUT5", 
+    "health"
+  ], 
+  "delta": true
+}
