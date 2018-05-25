@@ -6,7 +6,9 @@ const subscriptionFeed = require('./subscriptionFeed');
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
 let malcolmMessages = dataLoader.loadData('./server/canned_data/');
+let pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
 let subscriptions = [];
+let subscribedPaths = {};
 
 const io = new WebSocket.Server({port: 8000});
 
@@ -43,15 +45,30 @@ function handleMessage(socket, message) {
   } else if (malcolmMessages.hasOwnProperty(JSON.stringify(simplifiedMessage))) {
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
       subscriptions.push(originalId.toString());
+      subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
     }
 
     let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
-    subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r))
+    subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r));
     sendResponse(socket, response);
 
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
-    let response = {id: originalId, typeid: 'malcolm:core/Return:1.0'};
-    console.log(response);
+    let response;
+    if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+      pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value = simplifiedMessage.value;
+      if (subscribedPaths.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+        response = {
+          ...pathIndexedMessages[JSON.stringify(simplifiedMessage.path)],
+          id: parseInt(subscribedPaths[JSON.stringify(simplifiedMessage.path)]),
+        };
+        console.log(response);
+        sendResponse(socket, response);
+      }
+
+      response = {id: originalId, typeid: 'malcolm:core/Return:1.0'};
+    } else {
+      response = buildErrorMessage(originalId, message);
+    }
     sendResponse(socket, response);
   } else {
     sendResponse(socket, buildErrorMessage(originalId, message));
