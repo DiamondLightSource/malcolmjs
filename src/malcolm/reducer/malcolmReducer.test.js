@@ -8,8 +8,11 @@ import {
   MalcolmAttributeData,
   MalcolmAttributePending,
   MalcolmSnackbar,
+  MalcolmCleanBlocks,
+  MalcolmDisconnected,
   MalcolmRootBlockMeta,
 } from '../malcolm.types';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 
 jest.mock('./navigation.reducer');
@@ -21,6 +24,25 @@ const buildAction = (type, id) => ({
     typeid: 'malcolm:core/Get:1.0',
   },
 });
+
+const testBlock = {
+  testBlock: {
+    attributes: [
+      {
+        name: 'foo',
+        value: 1,
+        alarm: { severity: 0 },
+        meta: { tags: {}, writeable: false },
+      },
+      {
+        name: 'bar',
+        value: 2,
+        alarm: { severity: 2 },
+        meta: { tags: {}, writeable: true },
+      },
+    ],
+  },
+};
 
 describe('malcolm reducer', () => {
   let state = {};
@@ -195,6 +217,32 @@ describe('malcolm reducer', () => {
 
     expect(state.snackbar.open).toEqual(true);
     expect(state.snackbar.message).toEqual('This is a test!');
+  });
+
+  it('does clean', () => {
+    state.blocks = testBlock;
+    const tidyBlock = {
+      name: 'testBlock',
+      loading: true,
+      children: [],
+    };
+    const action = { type: MalcolmCleanBlocks };
+    state = malcolmReducer(state, action);
+    expect(state.blocks.testBlock).toEqual(tidyBlock);
+  });
+
+  it('does disconnect', () => {
+    state.blocks = testBlock;
+    const action = { type: MalcolmDisconnected };
+    state = malcolmReducer(state, action);
+    expect(state.blocks.testBlock.attributes[0].meta.writeable).toEqual(false);
+    expect(state.blocks.testBlock.attributes[1].meta.writeable).toEqual(false);
+    expect(state.blocks.testBlock.attributes[0].alarm.severity).toEqual(
+      AlarmStates.UNDEFINED_ALARM
+    );
+    expect(state.blocks.testBlock.attributes[1].alarm.severity).toEqual(
+      AlarmStates.UNDEFINED_ALARM
+    );
   });
 
   it('updates the root block', () => {

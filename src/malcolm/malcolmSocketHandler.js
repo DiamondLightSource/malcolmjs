@@ -3,11 +3,21 @@ import {
   RootBlockHandler,
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
-import { malcolmSnackbarState } from './malcolmActionCreators';
+import {
+  malcolmSnackbarState,
+  malcolmCleanBlocks,
+  malcolmSetDisconnected,
+} from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
+import MalcolmReconnector from './malcolmReconnector';
+import handleLocationChange from './middleware/malcolmRouting';
 
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
+
+  if (socketContainer.socket instanceof MalcolmReconnector) {
+    setTimeout(socketContainer.socket.connect, 0, socketContainer.socket);
+  }
 
   socketContainer.socket.onerror = error => {
     const errorString = JSON.stringify(error);
@@ -19,14 +29,33 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onopen = () => {
     console.log('connected to socket');
+    store.dispatch(malcolmCleanBlocks());
+    if (socketContainer.socket.isReconnection) {
+      const malcolmState = store.getState().malcolm;
+      malcolmState.messagesInFlight = [];
+      handleLocationChange(
+        store.getState().router.location.pathname,
+        store.dispatch
+      );
+    }
     store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
-    socketContainer.isConnected = true;
+    socketContainer.setConnected(true);
     socketContainer.flush();
   };
 
   socketContainer.socket.onclose = () => {
     console.log('socket disconnected');
-    store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
+    if (socketContainer.socket instanceof MalcolmReconnector) {
+      store.dispatch(
+        malcolmSnackbarState(
+          true,
+          `WebSocket disconnected; attempting to reconnect...`
+        )
+      );
+    } else {
+      store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
+    }
+    store.dispatch(malcolmSetDisconnected());
   };
 
   socketContainer.socket.onmessage = event => {
