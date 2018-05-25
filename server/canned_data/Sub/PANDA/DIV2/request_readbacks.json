@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 462, 
+  "path": [
+    "PANDA:DIV2", 
+    "readbacks"
+  ], 
+  "delta": true
+}

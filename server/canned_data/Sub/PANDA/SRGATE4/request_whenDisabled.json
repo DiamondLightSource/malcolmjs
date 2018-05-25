@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1123, 
+  "path": [
+    "PANDA:SRGATE4", 
+    "whenDisabled"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,23 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "outputs", 
+          "val"
+        ], 
+        "label": "LVDS input 2"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

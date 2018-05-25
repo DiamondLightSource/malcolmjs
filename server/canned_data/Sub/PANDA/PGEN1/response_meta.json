@@ -1,0 +1,41 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "cycles", 
+          "inputs", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "trig", 
+          "trigCurrent", 
+          "trigDelay", 
+          "outputs", 
+          "out", 
+          "outUnits", 
+          "outScale", 
+          "outOffset", 
+          "outScaled", 
+          "outCapture", 
+          "outDataDelay", 
+          "table", 
+          "readbacks", 
+          "tableStatus"
+        ], 
+        "label": "Position generator 1"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

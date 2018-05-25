@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1090, 
+  "path": [
+    "PANDA:SRGATE2", 
+    "setDelay"
+  ], 
+  "delta": true
+}

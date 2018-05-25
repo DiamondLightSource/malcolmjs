@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 636, 
+  "path": [
+    "PANDA:INENC4", 
+    "valCapture"
+  ], 
+  "delta": true
+}

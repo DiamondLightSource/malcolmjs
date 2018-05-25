@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 157, 
+  "path": [
+    "PANDA:OUTENC3", 
+    "bits"
+  ], 
+  "delta": true
+}

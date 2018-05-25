@@ -26,7 +26,7 @@
             "50-Ohm"
           ]
         }, 
-        "value": "High-Z", 
+        "value": "50-Ohm", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

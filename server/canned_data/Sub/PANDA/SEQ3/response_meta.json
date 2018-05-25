@@ -1,0 +1,58 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "table", 
+          "prescale", 
+          "prescaleUnits", 
+          "repeats", 
+          "inputs", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "bita", 
+          "bitaCurrent", 
+          "bitaDelay", 
+          "bitb", 
+          "bitbCurrent", 
+          "bitbDelay", 
+          "bitc", 
+          "bitcCurrent", 
+          "bitcDelay", 
+          "posa", 
+          "posaCurrent", 
+          "posb", 
+          "posbCurrent", 
+          "posc", 
+          "poscCurrent", 
+          "outputs", 
+          "active", 
+          "outa", 
+          "outb", 
+          "outc", 
+          "outd", 
+          "oute", 
+          "outf", 
+          "readbacks", 
+          "tableRepeat", 
+          "tableLine", 
+          "lineRepeat", 
+          "state"
+        ], 
+        "label": "Sequencer 3"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}
