@@ -29,7 +29,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onopen = () => {
     console.log('connected to socket');
-    let path = `${store.getState().malcolm.navigation}`;
+    let path = store.getState().router.location.pathname;
     path = `/gui/${path.split(',').join('/')}`;
     store.dispatch(malcolmCleanBlocks());
     if (socketContainer.socket.isReconnection) {
