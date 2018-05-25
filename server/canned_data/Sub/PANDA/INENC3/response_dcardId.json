@@ -1,0 +1,45 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": false, 
+          "typeid": "malcolm:core/ChoiceMeta:1.0", 
+          "description": "Daughter card jumper mode", 
+          "tags": [
+            "group:readbacks", 
+            "widget:textupdate"
+          ], 
+          "label": "Dcard Id", 
+          "choices": [
+            "DCARD id 0", 
+            "Encoder Monitor", 
+            "DCARD id 2", 
+            "Encoder Control", 
+            "DCARD id 3", 
+            "DCARD id 4", 
+            "DCARD id 5", 
+            "Unplugged"
+          ]
+        }, 
+        "value": "DCARD id 0", 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "userTag": 0, 
+          "nanoseconds": 0
+        }
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

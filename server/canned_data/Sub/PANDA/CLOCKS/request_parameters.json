@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1706, 
+  "path": [
+    "PANDA:CLOCKS", 
+    "parameters"
+  ], 
+  "delta": true
+}

@@ -1,0 +1,37 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "typeid": "epics:nt/NTScalar:1.0", 
+        "alarm": {
+          "status": 0, 
+          "typeid": "alarm_t", 
+          "message": "", 
+          "severity": 0
+        }, 
+        "meta": {
+          "writeable": false, 
+          "typeid": "malcolm:core/NumberMeta:1.0", 
+          "description": "Current counter value", 
+          "tags": [
+            "group:outputs", 
+            "outport:int32:COUNTER5.OUT", 
+            "widget:textupdate"
+          ], 
+          "dtype": "int32", 
+          "label": "Out"
+        }, 
+        "value": 0, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "userTag": 0, 
+          "nanoseconds": 0
+        }
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

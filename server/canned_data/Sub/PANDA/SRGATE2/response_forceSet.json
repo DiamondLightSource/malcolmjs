@@ -1,0 +1,29 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": true, 
+        "typeid": "malcolm:core/Method:1.0", 
+        "takes": {
+          "typeid": "malcolm:core/MapMeta:1.0", 
+          "elements": {}, 
+          "required": []
+        }, 
+        "tags": [
+          "group:parameters"
+        ], 
+        "label": "Force Set", 
+        "returns": {
+          "typeid": "malcolm:core/MapMeta:1.0", 
+          "elements": {}, 
+          "required": []
+        }, 
+        "defaults": {}, 
+        "description": "Set output to 1"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

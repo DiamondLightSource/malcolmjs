@@ -1,0 +1,43 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "mode", 
+          "inputs", 
+          "trig", 
+          "trigCurrent", 
+          "trigDelay", 
+          "inp", 
+          "inpCurrent", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "outputs", 
+          "out", 
+          "outUnits", 
+          "outScale", 
+          "outOffset", 
+          "outScaled", 
+          "outCapture", 
+          "outDataDelay", 
+          "ready", 
+          "readbacks", 
+          "err"
+        ], 
+        "label": "Filter block modes are Difference and Divider "
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

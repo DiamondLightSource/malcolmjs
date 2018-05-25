@@ -26,7 +26,7 @@
             "On"
           ]
         }, 
-        "value": "Off", 
+        "value": "On", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

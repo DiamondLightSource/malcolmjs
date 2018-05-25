@@ -28,7 +28,7 @@
             "PHASE2"
           ]
         }, 
-        "value": "WAIT_ENABLE", 
+        "value": "PHASE2", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

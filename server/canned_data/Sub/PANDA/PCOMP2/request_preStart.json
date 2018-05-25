@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 249, 
+  "path": [
+    "PANDA:PCOMP2", 
+    "preStart"
+  ], 
+  "delta": true
+}

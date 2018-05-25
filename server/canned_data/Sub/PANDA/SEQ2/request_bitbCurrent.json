@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 850, 
+  "path": [
+    "PANDA:SEQ2", 
+    "bitbCurrent"
+  ], 
+  "delta": true
+}

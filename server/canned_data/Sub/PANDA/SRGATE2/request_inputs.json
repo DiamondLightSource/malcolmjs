@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1084, 
+  "path": [
+    "PANDA:SRGATE2", 
+    "inputs"
+  ], 
+  "delta": true
+}

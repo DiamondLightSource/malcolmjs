@@ -1,0 +1,33 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "readbacks", 
+          "link1Up", 
+          "error1Count", 
+          "link2Up", 
+          "error2Count", 
+          "link3Up", 
+          "error3Count", 
+          "sfpClk1", 
+          "sfpClk2", 
+          "sfpClk3", 
+          "parameters", 
+          "softReset"
+        ], 
+        "label": "SFP Block Status "
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

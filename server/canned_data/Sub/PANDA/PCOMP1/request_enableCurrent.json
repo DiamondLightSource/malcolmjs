@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 234, 
+  "path": [
+    "PANDA:PCOMP1", 
+    "enableCurrent"
+  ], 
+  "delta": true
+}
