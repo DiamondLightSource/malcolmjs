@@ -7,7 +7,7 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const styles = {
+const styles = () => ({
   container: {
     display: 'flex',
     alignItems: 'center',
@@ -15,7 +15,7 @@ const styles = {
   currentLink: {
     cursor: 'pointer',
   },
-};
+});
 
 class NavControl extends Component {
   constructor(props) {
@@ -85,6 +85,7 @@ NavControl.propTypes = {
   navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
+    currentLink: PropTypes.string,
   }).isRequired,
 };
 

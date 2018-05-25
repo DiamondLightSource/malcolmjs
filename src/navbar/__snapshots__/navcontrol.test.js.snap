@@ -10,7 +10,10 @@ exports[`NavControl disables menu item if children is empty 1`] = `
   >
     <pure(KeyboardArrowDown) />
   </WithStyles(IconButton)>
-  <WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="NavControl-currentLink-2"
+    onClick={[Function]}
+  >
     PANDA
   </WithStyles(Typography)>
   <WithStyles(Menu)
@@ -32,7 +35,10 @@ exports[`NavControl renders correctly 1`] = `
   >
     <pure(KeyboardArrowDown) />
   </WithStyles(IconButton)>
-  <WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="NavControl-currentLink-2"
+    onClick={[Function]}
+  >
     PANDA
   </WithStyles(Typography)>
   <WithStyles(Menu)

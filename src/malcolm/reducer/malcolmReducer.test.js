@@ -14,11 +14,12 @@ import NavigationReducer from './navigation.reducer';
 
 jest.mock('./navigation.reducer');
 
-const buildAction = (type, id) => ({
+const buildAction = (type, id, path = ['.', 'blocks']) => ({
   type,
   payload: {
     id,
     typeid: 'malcolm:core/Get:1.0',
+    path,
   },
 });
 
@@ -47,10 +48,17 @@ describe('malcolm reducer', () => {
   });
 
   it('tracks multiple malcolm messages in the state', () => {
-    state = malcolmReducer(state, buildAction('malcolm:send'));
-    state = malcolmReducer(state, buildAction('malcolm:send'));
+    state = malcolmReducer(state, buildAction('malcolm:send', 1));
+    state = malcolmReducer(state, buildAction('malcolm:send', 2, ['PANDA']));
 
     expect(state.messagesInFlight.length).toEqual(2);
+  });
+
+  it('does not tracks multiple malcolm messages with the same path', () => {
+    state = malcolmReducer(state, buildAction('malcolm:send', 1));
+    state = malcolmReducer(state, buildAction('malcolm:send', 1));
+
+    expect(state.messagesInFlight.length).toEqual(1);
   });
 
   it('stops tracking a message once an error response is received', () => {
@@ -71,6 +79,18 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.name).toEqual('block1');
     expect(state.blocks.block1.loading).toEqual(true);
     expect(state.parentBlock).toEqual('block1');
+  });
+
+  it('does not register a new block if it already exists', () => {
+    // initialise the block
+    state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
+    state.blocks.block1.children = ['block2'];
+
+    // attempt to re-register the block
+    state = malcolmReducer(state, malcolmNewBlockAction('block1', true, false));
+
+    // check the state has not been changed
+    expect(state.blocks.block1.children).toEqual(['block2']);
   });
 
   it('updates block if it exists', () => {
