@@ -52,6 +52,9 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
   },
+  alarmState: {
+    warning: '#e6c01c',
+  },
 });
 
 ReactDOM.render(

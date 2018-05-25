@@ -6,7 +6,7 @@ Context
 
 `Malcolm <http://pymalcolm.readthedocs.io/en/latest/>`_ provides a higher level abstraction over EPICS for monitoring and controlling devices (e.g. motor controllers or area detectors). **MalcolmJS** is a user interface for Malcolm that allows blocks to be wired together and more complex behaviours to be programmed into the hardware (e.g. custom scan patterns).
 
-.. figure:: architecture_diagrams/malcolmjs_context.png
+.. figure:: architecture_diagrams/malcolmjs_context.draw-io.png
     :align: center
 
     MalcolmJS context within its wider environment
@@ -22,7 +22,7 @@ Containers
 
 The container view for MalcolmJS breaks down in to the main user interface categories as well as the interface for interacting with Malcolm.
 
-.. figure:: architecture_diagrams/malcolmjs_containers.png
+.. figure:: architecture_diagrams/malcolmjs_containers.draw-io.png
     :align: center
 
     MalcolmJS container view
@@ -49,7 +49,7 @@ Malcolm works on a subscribe/unsubscribe model - in order to clean up connection
 
 One of the best ways to think about the high level structure for MalcolmJS is to consider the high level user interface mock ups. They show the main sections of the interface and thus how the application breaks down into containers.
 
-.. figure:: architecture_diagrams/malcolmjs_desktop_mockup.png
+.. figure:: architecture_diagrams/malcolmjs_desktop_mockup.draw-io.png
     :align: center
 
     MalcolmJS desktop view
@@ -68,7 +68,7 @@ Once they click on a block in the central panel then it will display information
 On a multi-monitor system it can be useful to keep track of block details for various blocks in the tree, this is why there is a pop-out button. The user can choose to show the attributes for a particular block in a standalone window. It it worth noting that this is also what the mobile view would display.
 
 
-.. figure:: architecture_diagrams/malcolmjs_phone_mockup.png
+.. figure:: architecture_diagrams/malcolmjs_phone_mockup.draw-io.png
     :align: center
 
     MalcolmJS mobile view
@@ -78,7 +78,7 @@ The mobile view is simply intended to give engineers a quick view on the informa
 Components
 ############
 
-.. figure:: architecture_diagrams/malcolmjs_components.png
+.. figure:: architecture_diagrams/malcolmjs_components.draw-io.png
     :align: center
 
     MalcolmJS component view
@@ -86,7 +86,7 @@ Components
 - **Malcolm Interface**
     The Malcolm Interface consists of all the parts needed to integrate it in to the Redux lifecycle. It is better described by the diagram below:
 
-	.. figure:: architecture_diagrams/malcolmjs_redux_integration.png
+	.. figure:: architecture_diagrams/malcolmjs_redux_integration.draw-io.png
 	    :align: center
 
 	    Malcolm redux integration
@@ -109,7 +109,7 @@ Deployment View
 
 The primary deployment scenario is where MalcolmJS is packaged up with Malcolm and served from a web server inside Malcolm on the same PANDA box. The websocket connection is to the same server, so there should be no cross-origin issues. During development we'll introduce a proxy when connecting to a test instance.
 
-.. figure:: architecture_diagrams/malcolmjs_deployment.png
+.. figure:: architecture_diagrams/malcolmjs_deployment.draw-io.png
     :align: center
 
     Serving MalcolmJS from the same server as Malcolm
