@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1805, 
+  "path": [
+    "PANDA:QDEC2", 
+    "outScale"
+  ], 
+  "delta": true
+}

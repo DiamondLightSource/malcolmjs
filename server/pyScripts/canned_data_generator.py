@@ -39,8 +39,8 @@ class MalcolmServerConnect:
         self._loop.run_sync(self.message_coroutine)
 
 
-def main():
-    blocks_to_query = ["PANDA", "PANDA:TTLIN1", "PANDA:INENC1", "PANDA:LUT1", "PANDA:SEQ1"]
+def main(get_all_blocks):
+
     try:
         SimServer = MalcolmServerConnect(8008)
     except Exception as e:
@@ -62,6 +62,11 @@ def main():
     block_meta['id'] = "CANNED"
     write_lines_to_file('../canned_data/Sub/%s/response_info.json' % block_path,
                         json.dumps(block_meta, indent=2))
+
+    if get_all_blocks:
+        blocks_to_query = block_meta['value']
+    else:
+        blocks_to_query = ["PANDA", "PANDA:TTLIN1", "PANDA:INENC1", "PANDA:LUT1", "PANDA:SEQ1"]
 
     for block in blocks_to_query:
         print "Getting %s meta..." % block
@@ -91,5 +96,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(True)
 

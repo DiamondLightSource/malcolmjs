@@ -1,0 +1,47 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "inputs", 
+          "enable", 
+          "enableCurrent", 
+          "enableDelay", 
+          "gate", 
+          "gateCurrent", 
+          "gateDelay", 
+          "capture", 
+          "captureCurrent", 
+          "captureDelay", 
+          "parameters", 
+          "captureEdge", 
+          "shiftSum", 
+          "readbacks", 
+          "outputs", 
+          "active", 
+          "tsStartCapture", 
+          "tsEndCapture", 
+          "tsCaptureCapture", 
+          "samplesCapture", 
+          "bits0Capture", 
+          "bits1Capture", 
+          "bits2Capture", 
+          "bits3Capture", 
+          "arm", 
+          "disarm"
+        ], 
+        "label": "Position capture control "
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

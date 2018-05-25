@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1714, 
+  "path": [
+    "PANDA:CLOCKS", 
+    "dPeriodUnits"
+  ], 
+  "delta": true
+}

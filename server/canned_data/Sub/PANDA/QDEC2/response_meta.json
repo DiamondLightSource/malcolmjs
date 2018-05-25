@@ -1,0 +1,42 @@
+{
+  "typeid": "malcolm:core/Delta:1.0", 
+  "changes": [
+    [
+      [], 
+      {
+        "writeable": false, 
+        "typeid": "malcolm:core/BlockMeta:1.0", 
+        "description": "", 
+        "tags": [], 
+        "fields": [
+          "health", 
+          "icon", 
+          "label", 
+          "parameters", 
+          "rstOnZ", 
+          "setp", 
+          "inputs", 
+          "a", 
+          "aCurrent", 
+          "aDelay", 
+          "b", 
+          "bCurrent", 
+          "bDelay", 
+          "z", 
+          "zCurrent", 
+          "zDelay", 
+          "outputs", 
+          "out", 
+          "outUnits", 
+          "outScale", 
+          "outOffset", 
+          "outScaled", 
+          "outCapture", 
+          "outDataDelay"
+        ], 
+        "label": "Quadrature decoder 2"
+      }
+    ]
+  ], 
+  "id": "CANNED"
+}

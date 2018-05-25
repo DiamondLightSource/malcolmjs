@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 1568, 
+  "path": [
+    "PANDA:COUNTER5", 
+    "outCapture"
+  ], 
+  "delta": true
+}

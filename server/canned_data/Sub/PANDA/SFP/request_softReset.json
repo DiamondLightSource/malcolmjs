@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 79, 
+  "path": [
+    "PANDA:SFP", 
+    "softReset"
+  ], 
+  "delta": true
+}

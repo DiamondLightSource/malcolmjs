@@ -1,0 +1,9 @@
+{
+  "typeid": "malcolm:core/Subscribe:1.0", 
+  "id": 411, 
+  "path": [
+    "PANDA:PCAP", 
+    "captureEdge"
+  ], 
+  "delta": true
+}
