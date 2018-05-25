@@ -14,6 +14,11 @@ describe('malcolm socket handler', () => {
   const drain = [];
 
   const state = {
+    router: {
+      location: {
+        pathname: '',
+      },
+    },
     malcolm: {
       messagesInFlight: [
         {

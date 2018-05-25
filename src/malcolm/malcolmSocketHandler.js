@@ -29,13 +29,14 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onopen = () => {
     console.log('connected to socket');
-    let path = store.getState().router.location.pathname;
-    path = `/gui/${path.split(',').join('/')}`;
     store.dispatch(malcolmCleanBlocks());
     if (socketContainer.socket.isReconnection) {
       const malcolmState = store.getState().malcolm;
       malcolmState.messagesInFlight = [];
-      handleLocationChange(path, store.dispatch);
+      handleLocationChange(
+        store.getState().router.location.pathname,
+        store.dispatch
+      );
     }
     store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
     socketContainer.setConnected(true);
