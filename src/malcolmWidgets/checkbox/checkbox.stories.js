@@ -15,7 +15,7 @@ const checkbox = (checked, pending) => (
   />
 );
 
-storiesOf('checkbox', module)
+storiesOf('Widgets/Checkbox', module)
   .add(
     'unchecked',
     withInfo(`

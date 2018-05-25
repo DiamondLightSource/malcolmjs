@@ -2,12 +2,14 @@ const processNavigationLists = (paths, blocks) => {
   const navigationLists = paths.map(p => ({
     path: p,
     children: [],
+    basePath: '/',
   }));
 
   if (navigationLists.length === 0) {
     navigationLists.push({
       path: '',
       children: [],
+      basePath: '/',
     });
   }
 
@@ -16,8 +18,10 @@ const processNavigationLists = (paths, blocks) => {
   }
 
   let previousBlock;
+  let basePath = '/';
   for (let i = 1; i < paths.length; i += 1) {
     const path = paths[i - 1];
+    basePath = `${basePath + path}/`;
 
     if (Object.prototype.hasOwnProperty.call(blocks, path)) {
       previousBlock = blocks[path];
@@ -31,6 +35,8 @@ const processNavigationLists = (paths, blocks) => {
         navigationLists[i].children = attribute.children;
       }
     }
+
+    navigationLists[i].basePath = basePath;
   }
 
   return navigationLists;

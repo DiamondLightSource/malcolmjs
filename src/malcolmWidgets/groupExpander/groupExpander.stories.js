@@ -21,7 +21,7 @@ const buildExpanderGroup = expanded => (
   </WidgetGroupExpander>
 );
 
-storiesOf('GroupExpander', module).add(
+storiesOf('Widgets/GroupExpander', module).add(
   'default open',
   withInfo({
     text: `

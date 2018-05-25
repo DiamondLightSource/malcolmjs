@@ -10,7 +10,7 @@ const LED = on => (
   <WidgetLED LEDState={on} colorBorder={blue[300]} colorCenter={blue[700]} />
 );
 
-storiesOf('led', module)
+storiesOf('Widgets/LED', module)
   .add(
     'turned off',
     withInfo(`

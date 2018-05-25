@@ -30,10 +30,17 @@ const initialMalcolmState = {
 function updateMessagesInFlight(state, action) {
   const newState = state;
 
-  newState.messagesInFlight = [
-    ...state.messagesInFlight,
-    { ...action.payload },
-  ];
+  if (
+    !state.messagesInFlight.some(
+      m => m.path.join() === action.payload.path.join()
+    )
+  ) {
+    newState.messagesInFlight = [
+      ...state.messagesInFlight,
+      { ...action.payload },
+    ];
+  }
+
   return newState;
 }
 
@@ -48,11 +55,14 @@ function stopTrackingMessage(state, action) {
 
 function registerNewBlock(state, action) {
   const blocks = { ...state.blocks };
-  blocks[action.payload.blockName] = {
-    name: action.payload.blockName,
-    loading: true,
-    children: [],
-  };
+
+  if (!Object.prototype.hasOwnProperty.call(blocks, action.payload.blockName)) {
+    blocks[action.payload.blockName] = {
+      name: action.payload.blockName,
+      loading: true,
+      children: [],
+    };
+  }
 
   return {
     ...state,

@@ -9,7 +9,7 @@ const TextUpdate = (text, units) => (
   <ContainedWidgetTextUpdate Text={text} Units={units} />
 );
 
-storiesOf('WidgetTextUpdate', module)
+storiesOf('Widgets/WidgetTextUpdate', module)
   .add(
     'simple text',
     withInfo(`

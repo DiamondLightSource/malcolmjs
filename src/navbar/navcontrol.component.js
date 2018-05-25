@@ -7,12 +7,15 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const styles = {
+const styles = () => ({
   container: {
     display: 'flex',
     alignItems: 'center',
   },
-};
+  currentLink: {
+    cursor: 'pointer',
+  },
+});
 
 class NavControl extends Component {
   constructor(props) {
@@ -34,7 +37,7 @@ class NavControl extends Component {
   }
 
   render() {
-    const { classes, nav } = this.props;
+    const { classes, nav, navigateToChild } = this.props;
     const { anchorEl } = this.state;
 
     return (
@@ -45,7 +48,12 @@ class NavControl extends Component {
         >
           <KeyboardArrowDown />
         </IconButton>
-        <Typography>{nav.path}</Typography>
+        <Typography
+          className={classes.currentLink}
+          onClick={() => navigateToChild(nav.path)}
+        >
+          {nav.path}
+        </Typography>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -53,7 +61,13 @@ class NavControl extends Component {
           onClose={this.handleClose}
         >
           {nav.children.map(child => (
-            <MenuItem key={child} onClick={this.handleClose}>
+            <MenuItem
+              key={child}
+              onClick={() => {
+                this.handleClose();
+                navigateToChild(child);
+              }}
+            >
               {child}
             </MenuItem>
           ))}
@@ -68,8 +82,10 @@ NavControl.propTypes = {
     path: PropTypes.string,
     children: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
+    currentLink: PropTypes.string,
   }).isRequired,
 };
 

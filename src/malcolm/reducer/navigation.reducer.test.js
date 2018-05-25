@@ -13,4 +13,16 @@ describe('navigation reducer', () => {
     expect(state.navigation).not.toBeNull();
     expect(state.navigation).toEqual(blockPaths);
   });
+
+  it('resets the parent and child blocks when navigating to a different route', () => {
+    let state = {
+      parentBlock: 'parent',
+      childBlock: 'child',
+    };
+
+    state = NavigationReducer.updateNavigationPath(state, {});
+
+    expect(state.parentBlock).toBeUndefined();
+    expect(state.childBlock).toBeUndefined();
+  });
 });

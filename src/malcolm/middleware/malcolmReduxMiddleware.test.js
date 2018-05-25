@@ -5,7 +5,7 @@ import {
   MalcolmNavigationPathUpdate,
 } from '../malcolm.types';
 
-describe('malcolm reducer', () => {
+describe('malcolm redux middleware', () => {
   let socketMessages = [];
   let dispatches = [];
   const socketContainer = {
@@ -46,7 +46,7 @@ describe('malcolm reducer', () => {
       type: 'non-malcolm',
     };
 
-    const result = middleware({})(next)(action);
+    const result = middleware(store)(next)(action);
 
     expect(result).toEqual('next called');
   });
@@ -82,18 +82,35 @@ describe('malcolm reducer', () => {
       type: 'malcolm:send',
       payload: {
         typeid: 'malcolm:core/Get:1.0',
+        path: ['PANDA'],
       },
     };
 
-    messagesInFlight.push({ id: 1 });
-    messagesInFlight.push({ id: 3 });
-    messagesInFlight.push({ id: 5 });
+    messagesInFlight.push({ id: 1, path: ['PANDA1'] });
+    messagesInFlight.push({ id: 3, path: ['PANDA2'] });
+    messagesInFlight.push({ id: 5, path: ['PANDA3'] });
 
     middleware(store)(next)(action);
 
     expect(socketMessages.length).toEqual(1);
     expect(socketMessages[0].typeid).toEqual('malcolm:core/Get:1.0');
     expect(socketMessages[0].id).toEqual(6);
+  });
+
+  it('does not subscribe again if the path is already being tracked', () => {
+    const action = {
+      type: 'malcolm:send',
+      payload: {
+        typeid: 'malcolm:core/Get:1.0',
+        path: ['PANDA'],
+      },
+    };
+
+    messagesInFlight.push({ id: 1, path: ['PANDA'] });
+
+    middleware(store)(next)(action);
+
+    expect(socketMessages.length).toEqual(0);
   });
 
   it('loads block details on location change', () => {
