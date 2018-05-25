@@ -12,6 +12,9 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
   },
+  currentLink: {
+    cursor: 'pointer',
+  },
 };
 
 class NavControl extends Component {
@@ -45,7 +48,12 @@ class NavControl extends Component {
         >
           <KeyboardArrowDown />
         </IconButton>
-        <Typography>{nav.path}</Typography>
+        <Typography
+          className={classes.currentLink}
+          onClick={() => navigateToChild(nav.path)}
+        >
+          {nav.path}
+        </Typography>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
