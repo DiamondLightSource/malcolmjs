@@ -10,6 +10,7 @@ import {
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
+  MalcolmReturn,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
@@ -17,6 +18,7 @@ import AttributeReducer from './attribute.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
+  messageCounter: 0,
   navigation: [],
   blocks: {},
   parentBlock: undefined,
@@ -31,6 +33,7 @@ function updateMessagesInFlight(state, action) {
   const newState = state;
 
   if (
+    action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
     !state.messagesInFlight.some(
       m => m.path.join() === action.payload.path.join()
     )
@@ -194,6 +197,7 @@ function setDisconnected(state) {
   return {
     ...state,
     blocks,
+    counter: 0,
   };
 }
 
@@ -209,6 +213,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return updateMessagesInFlight(state, action);
 
     case MalcolmError:
+      return stopTrackingMessage(state, action);
+
+    case MalcolmReturn:
       return stopTrackingMessage(state, action);
 
     case MalcolmBlockMeta:

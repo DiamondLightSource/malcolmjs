@@ -6,6 +6,7 @@ import {
   MalcolmNavigationPathUpdate,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
+  MalcolmReturn,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -72,6 +73,13 @@ export const malcolmCleanBlocks = () => ({
 
 export const malcolmSetDisconnected = () => ({
   type: MalcolmDisconnected,
+});
+
+export const malcolmHailReturn = id => ({
+  type: MalcolmReturn,
+  payload: {
+    id,
+  },
 });
 
 export default {
