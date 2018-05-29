@@ -58,14 +58,19 @@ function handleMessage(socket, message) {
       pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value = simplifiedMessage.value;
       if (subscribedPaths.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
         response = {
-          ...pathIndexedMessages[JSON.stringify(simplifiedMessage.path)],
           id: parseInt(subscribedPaths[JSON.stringify(simplifiedMessage.path)]),
+          typeid: 'malcolm:core/Delta:1.0',
+          changes: [
+            [
+              ["value"],
+              pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value,
+            ],
+          ],
         };
-        console.log(response);
         sendResponse(socket, response);
       }
 
-      response = {id: originalId, typeid: 'malcolm:core/Return:1.0'};
+      response = { id: originalId, typeid: 'malcolm:core/Return:1.0' };
     } else {
       response = buildErrorMessage(originalId, message);
     }

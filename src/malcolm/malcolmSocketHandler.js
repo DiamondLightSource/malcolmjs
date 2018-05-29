@@ -80,10 +80,10 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           .malcolm.messagesInFlight.find(m => m.id === data.id);
 
         // Messy Bits
-        const attributePath = originalRequest.path;
+        const pathToAttr = originalRequest.path;
         // TODO: handle attribute path properly for more general cases
-        const blockName = attributePath[0];
-        const attributeName = attributePath[1];
+        const blockName = pathToAttr[0];
+        const attributeName = pathToAttr[1];
         let attribute;
 
         // Pull attribute from store (if exists)
@@ -112,26 +112,25 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
         // apply changes in delta
         changes.forEach(change => {
-          const path = change[0];
-          if (path.length !== 0) {
+          const pathWithinAttr = change[0];
+          if (pathWithinAttr.length !== 0) {
             let update = attribute;
-            path.slice(0, -1).forEach(element => {
+            pathWithinAttr.slice(0, -1).forEach(element => {
               update = Object.prototype.hasOwnProperty.call(update, element)
                 ? update[element]
                 : {};
             });
             if (change.length === 1) {
-              delete update[path.slice(-1)[0]];
+              delete update[pathWithinAttr.slice(-1)[0]];
             } else {
               // Seems to be a false positive for this rule?
               // eslint-disable-next-line prefer-destructuring
-              update[path.slice(-1)[0]] = change[1];
+              update[pathWithinAttr.slice(-1)[0]] = change[1];
             }
           } else if (change.length === 2) {
             attribute = { ...change[1] };
           }
         });
-
         // Mess done
 
         switch (attribute.typeid) {
