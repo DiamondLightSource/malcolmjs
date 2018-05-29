@@ -3,6 +3,7 @@ import {
   MalcolmNewBlock,
   MalcolmSend,
   MalcolmNavigationPathUpdate,
+  MalcolmMainAttributeUpdate,
 } from '../malcolm.types';
 
 describe('malcolm redux middleware', () => {
@@ -35,6 +36,7 @@ describe('malcolm redux middleware', () => {
       getState: () => ({
         malcolm: {
           messagesInFlight,
+          blocks: {},
         },
       }),
       dispatch: action => dispatches.push(action),
@@ -123,7 +125,7 @@ describe('malcolm redux middleware', () => {
 
     middleware(store)(next)(action);
 
-    expect(dispatches.length).toEqual(7);
+    expect(dispatches.length).toEqual(8);
 
     expect(dispatches[0].type).toEqual(MalcolmNavigationPathUpdate);
     expect(dispatches[0].payload.blockPaths).toEqual([
@@ -146,11 +148,14 @@ describe('malcolm redux middleware', () => {
     expect(dispatches[4].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
     expect(dispatches[4].payload.path).toEqual(['PANDA', 'meta']);
 
-    expect(dispatches[5].type).toEqual(MalcolmNewBlock);
-    expect(dispatches[5].payload.blockName).toEqual('PANDA:TTLIN1');
+    expect(dispatches[5].type).toEqual(MalcolmMainAttributeUpdate);
+    expect(dispatches[5].payload.attribute).toEqual('layout');
 
-    expect(dispatches[6].type).toEqual(MalcolmSend);
-    expect(dispatches[6].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[6].payload.path).toEqual(['PANDA:TTLIN1', 'meta']);
+    expect(dispatches[6].type).toEqual(MalcolmNewBlock);
+    expect(dispatches[6].payload.blockName).toEqual('PANDA:TTLIN1');
+
+    expect(dispatches[7].type).toEqual(MalcolmSend);
+    expect(dispatches[7].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[7].payload.path).toEqual(['PANDA:TTLIN1', 'meta']);
   });
 });

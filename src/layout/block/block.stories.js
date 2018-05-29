@@ -83,7 +83,10 @@ const block2 = {
   description: 'Input Encoder 1',
   ports: [
     buildPort('clk', true),
-    buildPort('a', false),
+    buildPort(
+      'a-dfkheiurheriuthe-weitniewuntiuret==ekjnwetnieruwtnoijmoiwe=etjnektrjnt',
+      false
+    ),
     buildPort('b', false),
     buildPort('z', false),
     buildPort('data', false),
