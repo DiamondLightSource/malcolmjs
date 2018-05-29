@@ -1,4 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
+// Takes a constructor for a webSocket-like object and adds some simple reconnection behaviour,
+// whilst exposing the same methods/attributes as a standard webSocket to the rest of malcolmJS
 
 class MalcolmReconnector {
   constructor(url, reconnectInterval, connectionGenerator) {
