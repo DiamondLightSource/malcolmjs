@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import { blue } from '@material-ui/core/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -24,7 +25,7 @@ const history = createHistory();
 const router = routerMiddleware(history);
 
 const webSocket = new MalcolmReconnector(
-  'ws://localhost:8008/ws',
+  'ws://localhost:8000/ws',
   5000,
   WebSocket
 );
@@ -51,6 +52,7 @@ configureMalcolmSocketHandlers(socketContainer, store);
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
+    primary: blue,
   },
 });
 

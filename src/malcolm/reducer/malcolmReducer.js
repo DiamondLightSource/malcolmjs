@@ -10,6 +10,7 @@ import {
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
+  MalcolmMainAttributeUpdate,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
@@ -21,6 +22,7 @@ const initialMalcolmState = {
   blocks: {},
   parentBlock: undefined,
   childBlock: undefined,
+  mainAttribute: undefined,
   snackbar: {
     message: '',
     open: false,
@@ -219,6 +221,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmAttributeData:
       return AttributeReducer.updateAttribute(state, action.payload);
+
+    case MalcolmMainAttributeUpdate:
+      return AttributeReducer.setMainAttribute(state, action.payload);
 
     case MalcolmNavigationPathUpdate:
       return NavigationReducer.updateNavigationPath(state, action.payload);

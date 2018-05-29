@@ -25,7 +25,7 @@ function subscriptionActive(path, messagesInFlight) {
 // eslint-disable-next-line no-unused-vars
 const buildMalcolmReduxMiddleware = socketContainer => store => next => action => {
   const updatedAction = { ...action };
-  const { messagesInFlight } = store.getState().malcolm;
+  const { messagesInFlight, blocks } = store.getState().malcolm;
 
   switch (action.type) {
     case MalcolmSend:
@@ -38,7 +38,7 @@ const buildMalcolmReduxMiddleware = socketContainer => store => next => action =
       break;
 
     case '@@router/LOCATION_CHANGE':
-      handleLocationChange(action.payload.pathname, store.dispatch);
+      handleLocationChange(action.payload.pathname, blocks, store.dispatch);
 
       break;
 

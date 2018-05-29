@@ -150,6 +150,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             AttributeHandler.processTableAttribute(
               originalRequest,
               attribute,
+              store.getState().malcolm,
               store.dispatch
             );
             break;

@@ -10,6 +10,35 @@ function updateAttributeChildren(attribute) {
   return updatedAttribute;
 }
 
+function checkForFlowGraph(attribute) {
+  if (
+    attribute &&
+    attribute.meta &&
+    attribute.meta.tags &&
+    attribute.meta.tags.some(t => t === 'widget:flowgraph')
+  ) {
+    const updatedAttribute = { ...attribute };
+
+    const { value } = updatedAttribute;
+    updatedAttribute.layout = {
+      blocks: value.mri.map((mri, i) => ({
+        name: value.name[i],
+        mri,
+        visible: value.visible[i],
+        position: {
+          x: value.x[i],
+          y: value.y[i],
+        },
+        ports: [],
+        icon: undefined,
+      })),
+    };
+
+    return updatedAttribute;
+  }
+  return attribute;
+}
+
 function updateAttribute(state, payload) {
   if (payload.delta) {
     const { path } = state.messagesInFlight.find(m => m.id === payload.id);
@@ -31,6 +60,10 @@ function updateAttribute(state, payload) {
           ...payload,
         };
 
+        attributes[matchingAttribute] = checkForFlowGraph(
+          attributes[matchingAttribute]
+        );
+
         attributes[matchingAttribute] = updateAttributeChildren(
           attributes[matchingAttribute]
         );
@@ -48,6 +81,14 @@ function updateAttribute(state, payload) {
   return state;
 }
 
+function setMainAttribute(state, payload) {
+  return {
+    ...state,
+    mainAttribute: payload.attribute,
+  };
+}
+
 export default {
   updateAttribute,
+  setMainAttribute,
 };
