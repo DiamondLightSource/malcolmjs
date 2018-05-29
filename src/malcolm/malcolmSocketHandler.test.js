@@ -226,15 +226,21 @@ describe('malcolm socket handler', () => {
     );
   });
 
-  it('removes pending on return', () => {
+  it('disptaches remove pending action on return', () => {
+    const pendingAction = {
+      payload: {
+        path: ['TestBlock', 'TestAttr'],
+        pending: false,
+      },
+      type: 'malcolm:attributepending',
+    };
     const malcolmReturn = JSON.stringify({
       typeid: 'malcolm:core/Return:1.0',
       id: 3,
     });
     socketContainer.socket.send(malcolmReturn);
-    expect(
-      store.getState().malcolm.blocks.TestBlock.attributes[0].pending
-    ).toEqual(false);
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0]).toEqual(pendingAction);
   });
 
   it('only processes an update for the root .blocks item', () => {

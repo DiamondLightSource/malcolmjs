@@ -113,7 +113,7 @@ function updateRootBlock(state, payload) {
   };
 }
 
-function setPending(state, path) {
+function setPending(state, path, pending) {
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -126,7 +126,7 @@ function setPending(state, path) {
     if (matchingAttribute >= 0) {
       attributes[matchingAttribute] = {
         ...attributes[matchingAttribute],
-        pending: true,
+        pending,
       };
     }
 
@@ -203,7 +203,7 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return registerNewBlock(state, action);
 
     case MalcolmAttributePending:
-      return setPending(state, action.payload.path);
+      return setPending(state, action.payload.path, action.payload.pending);
 
     case MalcolmSend:
       return updateMessagesInFlight(state, action);

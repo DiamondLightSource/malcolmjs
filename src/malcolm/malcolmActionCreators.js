@@ -43,10 +43,11 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmSetPending = path => ({
+export const malcolmSetPending = (path, pending) => ({
   type: MalcolmAttributePending,
   payload: {
     path,
+    pending,
   },
 });
 
