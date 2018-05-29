@@ -54,6 +54,9 @@ const theme = createMuiTheme({
     type: 'dark',
     primary: blue,
   },
+  alarmState: {
+    warning: '#e6c01c',
+  },
 });
 
 ReactDOM.render(

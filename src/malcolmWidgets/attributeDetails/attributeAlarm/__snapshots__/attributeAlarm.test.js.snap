@@ -2,37 +2,41 @@
 
 exports[`AttributeAlarm renders invalid_alarm correctly 1`] = `
 <pure(HighlightOff)
-  nativeColor="#573c8b"
+  nativeColor="#303f9f"
 />
 `;
 
 exports[`AttributeAlarm renders major_alarm correctly 1`] = `
 <pure(Error)
-  nativeColor="#c01a19"
+  nativeColor="#f44336"
 />
 `;
 
 exports[`AttributeAlarm renders minor_alarm correctly 1`] = `
 <pure(Warning)
-  nativeColor="#ffd42a"
+  nativeColor="#fff"
 />
 `;
 
 exports[`AttributeAlarm renders no_alarm correctly 1`] = `
 <pure(InfoOutline)
-  nativeColor="#72a7cf"
+  nativeColor="#7986cb"
 />
 `;
 
 exports[`AttributeAlarm renders pending correctly 1`] = `
 <WithStyles(CircularProgress)
-  color="secondary"
   size={24}
+  style={
+    Object {
+      "color": "#ff4081",
+    }
+  }
 />
 `;
 
 exports[`AttributeAlarm renders undefined_alarm correctly 1`] = `
 <pure(HighlightOff)
-  nativeColor="#573c8b"
+  nativeColor="#303f9f"
 />
 `;

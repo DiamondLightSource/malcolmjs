@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Warning, Error, InfoOutline, HighlightOff } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { withTheme } from '@material-ui/core/styles/index';
 
 export const AlarmStates = {
   NO_ALARM: 0,
@@ -15,22 +16,27 @@ export const AlarmStates = {
 const AttributeAlarm = props => {
   switch (props.alarmSeverity) {
     case AlarmStates.NO_ALARM:
-      return <InfoOutline nativeColor="#72a7cf" />;
+      return <InfoOutline nativeColor={props.theme.palette.primary.light} />;
 
     case AlarmStates.MINOR_ALARM:
-      return <Warning nativeColor="#ffd42a" />;
+      return <Warning nativeColor={props.theme.alarmState.warning} />;
 
     case AlarmStates.MAJOR_ALARM:
-      return <Error nativeColor="#c01a19" />;
+      return <Error nativeColor={props.theme.palette.error.main} />;
 
     case AlarmStates.INVALID_ALARM:
-      return <HighlightOff nativeColor="#573c8b" />;
+      return <HighlightOff nativeColor={props.theme.palette.primary.dark} />;
 
     case AlarmStates.UNDEFINED_ALARM:
-      return <HighlightOff nativeColor="#573c8b" />;
+      return <HighlightOff nativeColor={props.theme.palette.primary.dark} />;
 
     case AlarmStates.PENDING:
-      return <CircularProgress size={24} color="secondary" />;
+      return (
+        <CircularProgress
+          size={24}
+          style={{ color: props.theme.palette.secondary.light }}
+        />
+      );
 
     default:
       return <div />;
@@ -39,6 +45,7 @@ const AttributeAlarm = props => {
 
 AttributeAlarm.propTypes = {
   alarmSeverity: PropTypes.number,
+  theme: PropTypes.shape({}),
 };
 
-export default AttributeAlarm;
+export default withTheme()(AttributeAlarm);

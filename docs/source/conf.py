@@ -29,7 +29,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.graphviz',
-    'sphinx.ext.autosectionlabel'
 ]
 
 autoclass_content = "both"

@@ -22,6 +22,7 @@ Contents
     SMG/maintenance
     SMG/deployment
     SMG/troubleshooting
+    SMG/MUI_theming
 
    
 .. toctree::
