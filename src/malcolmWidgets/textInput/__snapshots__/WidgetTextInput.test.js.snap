@@ -12,6 +12,7 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
   }
   className="WidgetTextInput-textInput-1"
   disabled={true}
+  error={false}
   inputProps={
     Object {
       "className": "WidgetTextInput-inputStyle-2",
@@ -39,6 +40,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
   }
   className="WidgetTextInput-textInput-1"
   disabled={false}
+  error={false}
   inputProps={
     Object {
       "className": "WidgetTextInput-inputStyle-2",
@@ -68,6 +70,7 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   }
   className="WidgetTextInput-textInput-1"
   disabled={false}
+  error={false}
   inputProps={
     Object {
       "className": "WidgetTextInput-inputStyle-2",

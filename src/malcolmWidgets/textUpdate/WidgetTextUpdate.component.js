@@ -8,9 +8,8 @@ const styles = theme => ({
   textUpdate: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     padding: 4,
+    paddingRight: 16,
     textAlign: 'Right',
-    marginLeft: 4,
-    marginRight: 4,
   },
 });
 

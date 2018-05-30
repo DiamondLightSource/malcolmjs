@@ -7,7 +7,8 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   textInput: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
+    backgroundColor: emphasize(theme.palette.background.paper, 0.07),
+    width: '100%',
   },
   inputStyle: {
     padding: 5,
@@ -35,12 +36,19 @@ class WidgetTextInput extends React.Component {
   }
 
   render() {
+    const didSubmit = event => {
+      if (event.key === 'Enter') {
+        this.props.submitEventHandler(event);
+      }
+    };
+
     return (
       <TextField
+        error={this.props.Error}
         disabled={this.props.Pending}
         value={this.state.localValue}
         onChange={this.handleChange}
-        onKeyPress={this.props.submitEventHandler}
+        onKeyPress={didSubmit}
         onBlur={this.props.blurHandler}
         onFocus={this.props.focusHandler}
         className={this.props.classes.textInput}
@@ -63,6 +71,7 @@ WidgetTextInput.propTypes = {
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,
+  Error: PropTypes.bool,
   Units: PropTypes.string,
   classes: PropTypes.shape({
     textInput: PropTypes.string,
@@ -73,6 +82,7 @@ WidgetTextInput.propTypes = {
 
 WidgetTextInput.defaultProps = {
   Pending: false,
+  Error: false,
   Units: null,
 };
 

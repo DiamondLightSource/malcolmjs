@@ -6,19 +6,11 @@ import { action } from '@storybook/addon-actions';
 
 import ContainedTextInput from './WidgetTextInput.stories.container';
 
-const submitAction = action('submitted:');
-
-const submitEvent = event => {
-  if (event.key === 'Enter') {
-    submitAction(event.target.value);
-  }
-};
-
 const checkbox = (value, pending, units) => (
   <ContainedTextInput
     Value={value}
     Pending={pending}
-    submitEventHandler={submitEvent}
+    submitEventHandler={action('submitted:')}
     focusHandler={action('focused')}
     blurHandler={action('blurred')}
     Units={units}
