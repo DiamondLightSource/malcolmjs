@@ -1,5 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 
+// Takes a webSocket-like object and wraps it with a queue and some simple methods
+
 class MalcolmSocketContainer {
   constructor(webSocket) {
     this.socket = webSocket;

@@ -6,6 +6,7 @@ import {
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
+  MalcolmReturn,
 } from './malcolm.types';
 
 describe('malcolm socket handler', () => {
@@ -218,15 +219,17 @@ describe('malcolm socket handler', () => {
       message: 'Error: this is a test!',
     });
     socketContainer.socket.send(malcolmError);
-    expect(dispatches.length).toEqual(1);
+    expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmSnackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       'Error in attribute TestAttr for block TestBlock'
     );
+    expect(dispatches[1].type).toEqual(MalcolmReturn);
+    expect(dispatches[1].payload.id).toEqual(3);
   });
 
-  it('disptaches remove pending action on return', () => {
+  it('disptaches remove pending + stop tracking actions on return', () => {
     const pendingAction = {
       payload: {
         path: ['TestBlock', 'TestAttr'],
@@ -234,13 +237,15 @@ describe('malcolm socket handler', () => {
       },
       type: 'malcolm:attributepending',
     };
-    const malcolmReturn = JSON.stringify({
+    const malcolmReturnMessage = JSON.stringify({
       typeid: 'malcolm:core/Return:1.0',
       id: 3,
     });
-    socketContainer.socket.send(malcolmReturn);
-    expect(dispatches.length).toEqual(1);
+    socketContainer.socket.send(malcolmReturnMessage);
+    expect(dispatches.length).toEqual(2);
     expect(dispatches[0]).toEqual(pendingAction);
+    expect(dispatches[1].type).toEqual(MalcolmReturn);
+    expect(dispatches[1].payload.id).toEqual(3);
   });
 
   it('only processes an update for the root .blocks item', () => {

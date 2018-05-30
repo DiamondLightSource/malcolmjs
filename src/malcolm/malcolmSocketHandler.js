@@ -8,6 +8,7 @@ import {
   malcolmCleanBlocks,
   malcolmSetDisconnected,
   malcolmSetPending,
+  malcolmHailReturn,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
 import MalcolmReconnector from './malcolmReconnector';
@@ -176,6 +177,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
         store.dispatch(malcolmSetPending(originalRequest.path, false));
+        store.dispatch(malcolmHailReturn(data.id));
         break;
       }
 
@@ -193,6 +195,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               } for block ${originalRequest.path.slice(0, -1)}`
             )
           );
+          store.dispatch(malcolmHailReturn(data.id));
           break;
         } else {
           store.dispatch(

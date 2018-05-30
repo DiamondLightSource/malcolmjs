@@ -9,3 +9,4 @@ export const MalcolmSnackbar = 'malcolm:snackbar';
 export const MalcolmNavigationPathUpdate = 'malcolm:navigationpaths';
 export const MalcolmCleanBlocks = 'malcolm:cleanblocks';
 export const MalcolmDisconnected = 'malcolm:disconnect';
+export const MalcolmReturn = 'malcolm:return';

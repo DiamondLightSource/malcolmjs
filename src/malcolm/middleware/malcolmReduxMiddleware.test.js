@@ -23,6 +23,7 @@ describe('malcolm redux middleware', () => {
   };
   let middleware = {};
   let store = {};
+  let malcolmState;
   const messagesInFlight = [];
   const next = () => 'next called';
 
@@ -30,13 +31,12 @@ describe('malcolm redux middleware', () => {
     socketMessages = [];
     dispatches = [];
     middleware = buildMalcolmReduxMiddleware(socketContainer);
-
+    malcolmState = {
+      messagesInFlight,
+      counter: 0,
+    };
     store = {
-      getState: () => ({
-        malcolm: {
-          messagesInFlight,
-        },
-      }),
+      getState: () => ({ malcolm: malcolmState }),
       dispatch: action => dispatches.push(action),
     };
   });
@@ -87,9 +87,9 @@ describe('malcolm redux middleware', () => {
     };
 
     messagesInFlight.push({ id: 1, path: ['PANDA1'] });
-    messagesInFlight.push({ id: 3, path: ['PANDA2'] });
+    messagesInFlight.push({ id: 2, path: ['PANDA2'] });
     messagesInFlight.push({ id: 5, path: ['PANDA3'] });
-
+    malcolmState.counter = 5;
     middleware(store)(next)(action);
 
     expect(socketMessages.length).toEqual(1);
@@ -101,12 +101,16 @@ describe('malcolm redux middleware', () => {
     const action = {
       type: 'malcolm:send',
       payload: {
-        typeid: 'malcolm:core/Get:1.0',
+        typeid: 'malcolm:core/Subscribe:1.0',
         path: ['PANDA'],
       },
     };
 
-    messagesInFlight.push({ id: 1, path: ['PANDA'] });
+    messagesInFlight.push({
+      id: 1,
+      typeid: 'malcolm:core/Subscribe:1.0',
+      path: ['PANDA'],
+    });
 
     middleware(store)(next)(action);
 
