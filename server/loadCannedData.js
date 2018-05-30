@@ -17,6 +17,22 @@ function loadData(dataFolder) {
   return malcolmMessages;
 }
 
+function loadDatabyPath(dataFolder) {
+  let malcolmMessages = {};
+
+  findFilesRecursively(dataFolder).filter(f => f.includes('request_')).forEach(file => {
+    const request = JSON.parse(fs.readFileSync(file).toString());
+    delete request.id;
+
+    const response = JSON.parse(fs.readFileSync((file).replace('request_', 'response_')).toString());
+    delete response.id;
+
+    malcolmMessages[JSON.stringify(request.path)] = response;
+  });
+
+  return malcolmMessages;
+}
+
 function findFilesRecursively(directory) {
   const allFilesAndFoldersInDirectory = fs.readdirSync(directory).map(f => path.join(directory, f))
   let filesInDirectory = allFilesAndFoldersInDirectory.filter(p => !fs.lstatSync(p).isDirectory())
@@ -30,5 +46,6 @@ function findFilesRecursively(directory) {
 }
 
 module.exports = {
-  loadData
+  loadData,
+  loadDatabyPath,
 }

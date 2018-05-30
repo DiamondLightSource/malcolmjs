@@ -69,7 +69,7 @@ const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, isChecked) => {
-    dispatch(malcolmSetPending(path));
+    dispatch(malcolmSetPending(path, true));
     dispatch(malcolmPutAction(path, isChecked));
   },
 });

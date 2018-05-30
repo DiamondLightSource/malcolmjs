@@ -7,6 +7,8 @@ import {
   malcolmSnackbarState,
   malcolmCleanBlocks,
   malcolmSetDisconnected,
+  malcolmSetPending,
+  malcolmHailReturn,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
 import MalcolmReconnector from './malcolmReconnector';
@@ -80,10 +82,10 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           .malcolm.messagesInFlight.find(m => m.id === data.id);
 
         // Messy Bits
-        const attributePath = originalRequest.path;
+        const pathToAttr = originalRequest.path;
         // TODO: handle attribute path properly for more general cases
-        const blockName = attributePath[0];
-        const attributeName = attributePath[1];
+        const blockName = pathToAttr[0];
+        const attributeName = pathToAttr[1];
         let attribute;
 
         // Pull attribute from store (if exists)
@@ -112,26 +114,25 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
         // apply changes in delta
         changes.forEach(change => {
-          const path = change[0];
-          if (path.length !== 0) {
+          const pathWithinAttr = change[0];
+          if (pathWithinAttr.length !== 0) {
             let update = attribute;
-            path.slice(0, -1).forEach(element => {
+            pathWithinAttr.slice(0, -1).forEach(element => {
               update = Object.prototype.hasOwnProperty.call(update, element)
                 ? update[element]
                 : {};
             });
             if (change.length === 1) {
-              delete update[path.slice(-1)[0]];
+              delete update[pathWithinAttr.slice(-1)[0]];
             } else {
               // Seems to be a false positive for this rule?
               // eslint-disable-next-line prefer-destructuring
-              update[path.slice(-1)[0]] = change[1];
+              update[pathWithinAttr.slice(-1)[0]] = change[1];
             }
           } else if (change.length === 2) {
             attribute = { ...change[1] };
           }
         });
-
         // Mess done
 
         switch (attribute.typeid) {
@@ -177,40 +178,11 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         const originalRequest = store
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
-
-        const attributePath = originalRequest.path;
-        const blockName = attributePath[0];
-        const attributeName = attributePath[1];
-        let attribute;
-
-        // Pull attribute from store (if exists)
-        if (
-          Object.prototype.hasOwnProperty.call(
-            store.getState().malcolm.blocks,
-            blockName
-          ) &&
-          Object.prototype.hasOwnProperty.call(
-            store.getState().malcolm.blocks[blockName],
-            'attributes'
-          )
-        ) {
-          const attributes = [
-            ...store.getState().malcolm.blocks[blockName].attributes,
-          ];
-          const matchingAttribute = attributes.findIndex(
-            a => a.name === attributeName
-          );
-          if (matchingAttribute >= 0) {
-            attribute = store.getState().malcolm.blocks[blockName].attributes[
-              matchingAttribute
-            ];
-            if (Object.prototype.hasOwnProperty.call(attribute, 'pending')) {
-              attribute.pending = false;
-            }
-          }
-        }
+        store.dispatch(malcolmSetPending(originalRequest.path, false));
+        store.dispatch(malcolmHailReturn(data.id));
         break;
       }
+
       case 'malcolm:core/Error:1.0': {
         if (data.id !== -1) {
           const originalRequest = store
@@ -225,6 +197,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               } for block ${originalRequest.path.slice(0, -1)}`
             )
           );
+          store.dispatch(malcolmHailReturn(data.id));
           break;
         } else {
           store.dispatch(

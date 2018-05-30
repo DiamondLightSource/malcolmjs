@@ -21,7 +21,7 @@ const buildAction = (type, id, path = ['.', 'blocks']) => ({
   type,
   payload: {
     id,
-    typeid: 'malcolm:core/Get:1.0',
+    typeid: 'malcolm:core/Subscribe:1.0',
     path,
   },
 });
@@ -66,7 +66,9 @@ describe('malcolm reducer', () => {
 
     expect(newState.messagesInFlight.length).toEqual(1);
     expect(newState.messagesInFlight[0].type).not.toBeDefined();
-    expect(newState.messagesInFlight[0].typeid).toEqual('malcolm:core/Get:1.0');
+    expect(newState.messagesInFlight[0].typeid).toEqual(
+      'malcolm:core/Subscribe:1.0'
+    );
   });
 
   it('tracks multiple malcolm messages in the state', () => {
@@ -76,11 +78,18 @@ describe('malcolm reducer', () => {
     expect(state.messagesInFlight.length).toEqual(2);
   });
 
-  it('does not tracks multiple malcolm messages with the same path', () => {
+  it('does not tracks multiple malcolm subscriptions with the same path', () => {
     state = malcolmReducer(state, buildAction('malcolm:send', 1));
-    state = malcolmReducer(state, buildAction('malcolm:send', 1));
-
+    state = malcolmReducer(state, buildAction('malcolm:send', 2));
     expect(state.messagesInFlight.length).toEqual(1);
+  });
+
+  it('does track multiple malcolm non-subscription messages with the same path', () => {
+    state = malcolmReducer(state, buildAction('malcolm:send', 1));
+    const malcolmGetAction = buildAction('malcolm:send', 2);
+    malcolmGetAction.payload.typeid = 'malcolm:core/Get:1.0';
+    state = malcolmReducer(state, malcolmGetAction);
+    expect(state.messagesInFlight.length).toEqual(2);
   });
 
   it('stops tracking a message once an error response is received', () => {
@@ -89,6 +98,17 @@ describe('malcolm reducer', () => {
     };
 
     const newState = malcolmReducer(state, buildAction('malcolm:error', 1));
+
+    expect(newState.messagesInFlight.length).toEqual(1);
+    expect(newState.messagesInFlight[0].id).toEqual(123);
+  });
+
+  it('stops tracking a message once an return response is received', () => {
+    state = {
+      messagesInFlight: [{ id: 1 }, { id: 123 }],
+    };
+
+    const newState = malcolmReducer(state, buildAction('malcolm:return', 1));
 
     expect(newState.messagesInFlight.length).toEqual(1);
     expect(newState.messagesInFlight[0].id).toEqual(123);
@@ -201,6 +221,7 @@ describe('malcolm reducer', () => {
       payload: {
         id: 1,
         path: ['block1', 'health'],
+        pending: true,
       },
     };
 

@@ -11,6 +11,7 @@ import {
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
   MalcolmMainAttributeUpdate,
+  MalcolmReturn,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
@@ -18,6 +19,7 @@ import AttributeReducer from './attribute.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
+  messageCounter: 0,
   navigation: [],
   blocks: {},
   parentBlock: undefined,
@@ -33,6 +35,7 @@ function updateMessagesInFlight(state, action) {
   const newState = state;
 
   if (
+    action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
     !state.messagesInFlight.some(
       m => m.path.join() === action.payload.path.join()
     )
@@ -115,7 +118,7 @@ function updateRootBlock(state, payload) {
   };
 }
 
-function setPending(state, path) {
+function setPending(state, path, pending) {
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -128,7 +131,7 @@ function setPending(state, path) {
     if (matchingAttribute >= 0) {
       attributes[matchingAttribute] = {
         ...attributes[matchingAttribute],
-        pending: true,
+        pending,
       };
     }
 
@@ -196,6 +199,7 @@ function setDisconnected(state) {
   return {
     ...state,
     blocks,
+    counter: 0,
   };
 }
 
@@ -205,12 +209,15 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return registerNewBlock(state, action);
 
     case MalcolmAttributePending:
-      return setPending(state, action.payload.path);
+      return setPending(state, action.payload.path, action.payload.pending);
 
     case MalcolmSend:
       return updateMessagesInFlight(state, action);
 
     case MalcolmError:
+      return stopTrackingMessage(state, action);
+
+    case MalcolmReturn:
       return stopTrackingMessage(state, action);
 
     case MalcolmBlockMeta:

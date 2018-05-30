@@ -7,6 +7,7 @@ import {
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmMainAttributeUpdate,
+  MalcolmReturn,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -44,10 +45,11 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmSetPending = path => ({
+export const malcolmSetPending = (path, pending) => ({
   type: MalcolmAttributePending,
   payload: {
     path,
+    pending,
   },
 });
 
@@ -78,6 +80,13 @@ export const malcolmMainAttribute = attribute => ({
   type: MalcolmMainAttributeUpdate,
   payload: {
     attribute,
+  },
+});
+
+export const malcolmHailReturn = id => ({
+  type: MalcolmReturn,
+  payload: {
+    id,
   },
 });
 
