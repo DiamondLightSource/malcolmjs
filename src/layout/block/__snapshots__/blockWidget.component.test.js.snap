@@ -14,7 +14,7 @@ exports[`BlockWidget block renders correctly 1`] = `
     className="BlockWidget-blockContents-3"
     style={
       Object {
-        "minHeight": 44,
+        "minHeight": 46,
       }
     }
   >

@@ -17,6 +17,7 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
       blocks={
         Array [
           Object {
+            "description": undefined,
             "icon": "icon svg",
             "mri": "block2",
             "name": "counter 1",
