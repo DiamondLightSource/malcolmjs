@@ -10,6 +10,7 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     Object {
       "alignItems": "center",
       "display": "flex",
+      "height": 20,
     }
   }
 >
@@ -30,6 +31,11 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
   />
   <WithStyles(Typography)
     key=".1"
+    style={
+      Object {
+        "fontSize": 12,
+      }
+    }
   >
     val 1
   </WithStyles(Typography)>
@@ -46,11 +52,17 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     Object {
       "alignItems": "center",
       "display": "flex",
+      "height": 20,
     }
   }
 >
   <WithStyles(Typography)
     key=".0"
+    style={
+      Object {
+        "fontSize": 12,
+      }
+    }
   >
     val 1
   </WithStyles(Typography)>

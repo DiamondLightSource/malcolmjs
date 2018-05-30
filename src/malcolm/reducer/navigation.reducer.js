@@ -5,6 +5,7 @@ function updateNavigationPath(state, payload) {
     navigation,
     parentBlock: undefined,
     childBlock: undefined,
+    mainAttribute: undefined,
   };
 }
 

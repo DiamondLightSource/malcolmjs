@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
+import MiddlePanelContainer from './middlePanel.container';
 
 const blockDetailsUrl = (rootUrl, blockTitle) =>
   `${rootUrl}/details/${blockTitle}`;
@@ -22,7 +23,7 @@ const MainMalcolmView = props => (
       childTitle={props.childBlockTitle}
     >
       <BlockDetails block={props.parentBlock} />
-      <div>Middle content</div>
+      <MiddlePanelContainer />
       <BlockDetails block={props.childBlock} />
     </DrawerContainer>
   </div>

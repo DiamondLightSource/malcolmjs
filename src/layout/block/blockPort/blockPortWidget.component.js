@@ -7,6 +7,7 @@ const styles = {
   container: {
     display: 'flex',
     alignItems: 'center',
+    height: 20,
   },
   port: {
     width: 12,
@@ -21,6 +22,9 @@ const styles = {
   },
   portOut: {
     marginLeft: 3,
+  },
+  portLabel: {
+    fontSize: 12,
   },
 };
 
@@ -56,7 +60,9 @@ class BlockPortWidget extends BaseWidget {
         style={portStyle}
       />
     );
-    const label = <Typography>{this.props.port.label}</Typography>;
+    const label = (
+      <Typography style={styles.portLabel}>{this.props.port.label}</Typography>
+    );
 
     return (
       <div
