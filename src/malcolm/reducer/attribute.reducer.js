@@ -18,7 +18,6 @@ function checkForFlowGraph(attribute) {
     attribute.meta.tags.some(t => t === 'widget:flowgraph')
   ) {
     const updatedAttribute = { ...attribute };
-
     const { value } = updatedAttribute;
     updatedAttribute.layout = {
       blocks: value.mri.map((mri, i) => ({

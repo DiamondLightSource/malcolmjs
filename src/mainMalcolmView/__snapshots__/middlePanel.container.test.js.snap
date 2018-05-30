@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not layout 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+/>
+`;
+
+exports[`MalcolmMiddlePanel renders correctly 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+>
+  <div
+    className="MiddlePanelContainer-layoutArea-2"
+  >
+    <Layout
+      blocks={
+        Array [
+          Object {
+            "icon": "icon svg",
+            "mri": "block2",
+            "name": "counter 1",
+            "ports": Array [
+              Object {
+                "input": true,
+                "label": "in1",
+              },
+              Object {
+                "input": false,
+                "label": "out1",
+              },
+            ],
+            "position": Object {
+              "x": 512,
+              "y": 320,
+            },
+            "visible": "true",
+          },
+        ]
+      }
+    />
+  </div>
+</div>
+`;
