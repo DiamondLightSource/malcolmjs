@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 
 import ContainedTextInput from './WidgetTextInput.stories.container';
 
-const checkbox = (value, pending, units) => (
+const textInput = (value, pending, units) => (
   <ContainedTextInput
     Value={value}
     Pending={pending}
@@ -22,17 +22,17 @@ storiesOf('Widgets/textinput', module)
     'simple',
     withInfo(`
   textinput.
-  `)(() => checkbox('someText', false, null))
+  `)(() => textInput('someText', false, null))
   )
   .add(
     'with units',
     withInfo(`
   textinput.
-  `)(() => checkbox('1.21', false, 'GW'))
+  `)(() => textInput('1.21', false, 'GW'))
   )
   .add(
     'disabled',
     withInfo(`
   textinput.
-  `)(() => checkbox('someText', true, null))
+  `)(() => textInput('someText', true, null))
   );
