@@ -1,5 +1,22 @@
+/* eslint-disable */
 import AttributeHandler from './attributeHandler';
 import { MalcolmAttributeData } from '../malcolm.types';
+
+const path = '';
+const testDeltas = [
+  {
+    id: 1,
+    changes: [[[path], {}], [[path], {}]],
+  },
+  {
+    id: 1,
+    changes: [[[path], {}], [[path], {}]],
+  },
+  {
+    id: 1,
+    changes: [[[path], {}], [[path], {}]],
+  },
+];
 
 describe('attribute handler', () => {
   let dispatches = [];
