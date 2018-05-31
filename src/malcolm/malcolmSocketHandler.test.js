@@ -1,3 +1,4 @@
+/* eslint-disable */
 import configureMalcolmSocketHandlers from './malcolmSocketHandler';
 import {
   MalcolmBlockMeta,
@@ -54,6 +55,22 @@ describe('malcolm socket handler', () => {
       },
     },
   };
+
+  const path = '';
+  const testDeltas = [
+    {
+      id: 1,
+      changes: [[[path], {}], [[path], {}]],
+    },
+    {
+      id: 1,
+      changes: [[[path], {}], [[path], {}]],
+    },
+    {
+      id: 1,
+      changes: [[[path], {}], [[path], {}]],
+    },
+  ];
 
   const store = {
     dispatch: action => dispatches.push(action),
