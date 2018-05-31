@@ -37,6 +37,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       malcolmState.messagesInFlight = [];
       handleLocationChange(
         store.getState().router.location.pathname,
+        store.getState().malcolm.blocks,
         store.dispatch
       );
     }
@@ -102,6 +103,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             AttributeHandler.processTableAttribute(
               originalRequest,
               attribute,
+              store.getState().malcolm,
               store.dispatch
             );
             break;

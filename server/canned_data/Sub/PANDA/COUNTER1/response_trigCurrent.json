@@ -21,7 +21,7 @@
             "widget:led"
           ]
         }, 
-        "value": true, 
+        "value": false, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

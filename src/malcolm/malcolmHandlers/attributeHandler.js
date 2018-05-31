@@ -1,4 +1,5 @@
 import { MalcolmAttributeData } from '../malcolm.types';
+import LayoutHandler from './layoutHandler';
 
 const processDeltaMessage = (changes, originalRequest, store) => {
   const pathToAttr = originalRequest.path;
@@ -74,7 +75,7 @@ const processScalarAttribute = (request, changes, dispatch) => {
   dispatch(action);
 };
 
-const processTableAttribute = (request, changes, dispatch) => {
+const processTableAttribute = (request, changes, malcolmState, dispatch) => {
   const inGroup = changes.meta.tags.some(t => t.indexOf('group:') > -1);
   const group = inGroup
     ? changes.meta.tags
@@ -100,6 +101,14 @@ const processTableAttribute = (request, changes, dispatch) => {
   };
 
   dispatch(action);
+
+  if (request.path[request.path.length - 1] === 'layout') {
+    LayoutHandler.layoutAttributeReceived(
+      action.payload,
+      malcolmState.mainAttribute,
+      dispatch
+    );
+  }
 };
 
 export default {

@@ -15,7 +15,7 @@ const styles = {
     textAlign: 'center',
     marginTop: 2,
     marginBottom: 1,
-    fontSize: 16,
+    fontSize: 14,
   },
   blockContents: {
     display: 'flex',
@@ -48,7 +48,7 @@ const styles = {
   },
   description: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 11,
   },
 };
 

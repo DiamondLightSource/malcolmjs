@@ -22,7 +22,7 @@
           "dtype": "float64", 
           "label": "Out Scaled"
         }, 
-        "value": 345.904, 
+        "value": 0.289, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
