@@ -6,7 +6,19 @@ const path = '';
 const testDeltas = [
   {
     id: 1,
-    changes: [[[path], {}], [[path], {}]],
+    changes: [[[], {}]],
+  },
+  {
+    id: 1,
+    changes: [[[path], {}]],
+  },
+  {
+    id: 1,
+    changes: [[[path]]],
+  },
+  {
+    id: 1,
+    changes: [[[path, path], {}]],
   },
   {
     id: 1,
@@ -90,4 +102,18 @@ describe('attribute handler', () => {
     expect(dispatches[0].payload.typeid).toEqual('NTTable');
     expect(dispatches[0].payload.delta).toEqual(true);
   });
+
+  it('applies delta to whole block', () => {});
+
+  it('applies delta to subset of block', () => {});
+
+  it('applies delta to single value for single element path', () => {});
+
+  it('applies delta to single value for multi element path', () => {});
+
+  it('applies delta which deletes a field', () => {});
+
+  it('applies delta with multiple changes', () => {});
+
+  it('applies delta where 2nd change overwrites first', () => {});
 });
