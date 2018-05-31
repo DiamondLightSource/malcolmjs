@@ -28,7 +28,7 @@
             "Either Edge"
           ]
         }, 
-        "value": "Input Value", 
+        "value": "Either Edge", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

@@ -27,7 +27,7 @@
             "Rising or Falling"
           ]
         }, 
-        "value": "Rising", 
+        "value": "Falling", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

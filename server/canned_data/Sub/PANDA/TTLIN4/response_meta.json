@@ -4,7 +4,7 @@
     [
       [], 
       {
-        "writeable": false, 
+        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
