@@ -86,44 +86,28 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           store
         );
 
-        switch (attribute.typeid) {
-          case 'malcolm:core/BlockMeta:1.0':
-            BlockMetaHandler(originalRequest, attribute, store.dispatch);
-            break;
-
-          case 'epics:nt/NTTable:1.0':
-          case 'epics:nt/NTScalar:1.0':
-            AttributeHandler.processAttribute(
-              originalRequest,
-              attribute,
-              store.getState().malcolm,
-              store.dispatch
-            );
-            break;
-
-          case 'epics:nt/ETTable:1.0':
-            AttributeHandler.processTableAttribute(
-              originalRequest,
-              attribute,
-              store.getState().malcolm,
-              store.dispatch
-            );
-            break;
-
-          default:
-            store.dispatch({
-              type: 'unprocessed_delta',
-              payload: attribute,
-            });
-            store.dispatch({
-              type: MalcolmAttributeData,
-              payload: {
-                id: originalRequest.id,
-                delta: true,
-                unableToProcess: true,
-              },
-            });
-            break;
+        if (attribute.typeid === 'malcolm:core/BlockMeta:1.0') {
+          BlockMetaHandler(originalRequest, attribute, store.dispatch);
+        } else if (attribute.typeid.slice(0, 8) === 'epics:nt') {
+          AttributeHandler.processAttribute(
+            originalRequest,
+            attribute,
+            store.getState().malcolm,
+            store.dispatch
+          );
+        } else {
+          store.dispatch({
+            type: 'unprocessed_delta',
+            payload: attribute,
+          });
+          store.dispatch({
+            type: MalcolmAttributeData,
+            payload: {
+              id: originalRequest.id,
+              delta: true,
+              unableToProcess: true,
+            },
+          });
         }
         break;
       }
