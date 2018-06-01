@@ -51,10 +51,17 @@ const processDeltaMessage = (changes, originalRequest, store) => {
   return attribute;
 };
 
-const processScalarAttribute = (request, changes, dispatch) => {
-  const inGroup = changes.meta.tags.some(t => t.indexOf('group:') > -1);
+const processAttribute = (
+  request,
+  changedAttribute,
+  malcolmState,
+  dispatch
+) => {
+  const inGroup = changedAttribute.meta.tags.some(
+    t => t.indexOf('group:') > -1
+  );
   const group = inGroup
-    ? changes.meta.tags
+    ? changedAttribute.meta.tags
         .find(t => t.indexOf('group:') > -1)
         .replace('group:', '')
     : '';
@@ -63,38 +70,10 @@ const processScalarAttribute = (request, changes, dispatch) => {
     type: MalcolmAttributeData,
     payload: {
       id: request.id,
-      ...changes,
-      isGroup: changes.meta.tags.some(t => t === 'widget:group'),
+      ...changedAttribute,
+      isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
       inGroup,
       group,
-      delta: true,
-      pending: false,
-    },
-  };
-
-  dispatch(action);
-};
-
-const processTableAttribute = (request, changes, malcolmState, dispatch) => {
-  const inGroup = changes.meta.tags.some(t => t.indexOf('group:') > -1);
-  const group = inGroup
-    ? changes.meta.tags
-        .find(t => t.indexOf('group:') > -1)
-        .replace('group:', '')
-    : '';
-
-  const action = {
-    type: MalcolmAttributeData,
-    payload: {
-      id: request.id,
-      typeid: changes.typeid,
-      isGroup: changes.meta.tags.some(t => t === 'widget:group'),
-      inGroup,
-      group,
-      meta: changes.meta,
-      alarm: changes.alarm,
-      labels: changes.labels,
-      value: changes.value,
       delta: true,
       pending: false,
     },
@@ -112,7 +91,6 @@ const processTableAttribute = (request, changes, malcolmState, dispatch) => {
 };
 
 export default {
-  processScalarAttribute,
-  processTableAttribute,
+  processAttribute,
   processDeltaMessage,
 };

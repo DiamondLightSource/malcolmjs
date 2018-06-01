@@ -91,15 +91,17 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             BlockMetaHandler(originalRequest, attribute, store.dispatch);
             break;
 
+          case 'epics:nt/NTTable:1.0':
           case 'epics:nt/NTScalar:1.0':
-            AttributeHandler.processScalarAttribute(
+            AttributeHandler.processAttribute(
               originalRequest,
               attribute,
+              store.getState().malcolm,
               store.dispatch
             );
             break;
 
-          case 'epics:nt/NTTable:1.0':
+          case 'epics:nt/ETTable:1.0':
             AttributeHandler.processTableAttribute(
               originalRequest,
               attribute,

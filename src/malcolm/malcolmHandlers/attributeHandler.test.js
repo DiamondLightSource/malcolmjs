@@ -92,7 +92,7 @@ describe('attribute handler', () => {
   });
 
   it('processes and dispatches a scalar attribute update', () => {
-    AttributeHandler.processScalarAttribute(request, changes([]), dispatch);
+    AttributeHandler.processAttribute(request, changes([]), {}, dispatch);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -102,18 +102,20 @@ describe('attribute handler', () => {
   });
 
   it('detects group attributes', () => {
-    AttributeHandler.processScalarAttribute(
+    AttributeHandler.processAttribute(
       request,
       changes(['widget:group']),
+      {},
       dispatch
     );
     expect(dispatches[0].payload.isGroup).toEqual(true);
   });
 
   it('detects attributes in groups', () => {
-    AttributeHandler.processScalarAttribute(
+    AttributeHandler.processAttribute(
       request,
       changes(['group:outputs']),
+      {},
       dispatch
     );
     expect(dispatches[0].payload.inGroup).toEqual(true);
@@ -121,9 +123,10 @@ describe('attribute handler', () => {
   });
 
   it('detects root level attributes', () => {
-    AttributeHandler.processScalarAttribute(
+    AttributeHandler.processAttribute(
       request,
       changes(['widget:led']),
+      {},
       dispatch
     );
     expect(dispatches[0].payload.inGroup).toEqual(false);
@@ -133,7 +136,7 @@ describe('attribute handler', () => {
   it('processes and dispatches a table attribute update', () => {
     const tableChanges = changes(['group:outputs']);
     tableChanges.typeid = 'NTTable';
-    AttributeHandler.processTableAttribute(request, tableChanges, {}, dispatch);
+    AttributeHandler.processAttribute(request, tableChanges, {}, dispatch);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
