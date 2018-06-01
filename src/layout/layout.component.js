@@ -7,6 +7,7 @@ import {
 } from 'storm-react-diagrams';
 import BlockNodeFactory from './block/blockWidget.factory';
 import BlockNodeModel from './block/block.model';
+import MalcolmLinkFactory from './link/link.factory';
 
 require('storm-react-diagrams/dist/style.min.css');
 
@@ -24,6 +25,7 @@ const Layout = props => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
   engine.registerNodeFactory(new BlockNodeFactory());
+  engine.registerLinkFactory(new MalcolmLinkFactory());
 
   const model = new DiagramModel();
 

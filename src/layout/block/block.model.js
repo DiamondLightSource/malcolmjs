@@ -1,4 +1,5 @@
-import { NodeModel, DefaultPortModel, Toolkit } from 'storm-react-diagrams';
+import { NodeModel, Toolkit } from 'storm-react-diagrams';
+import MalcolmPortModel from '../blockPort/blockPort.model';
 
 class BlockNodeModel extends NodeModel {
   constructor(label, description) {
@@ -12,7 +13,7 @@ class BlockNodeModel extends NodeModel {
 
   addBlockPort(port) {
     return this.addPort(
-      new DefaultPortModel(port.input, Toolkit.UID(), port.label)
+      new MalcolmPortModel(port.input, Toolkit.UID(), port.label)
     );
   }
 

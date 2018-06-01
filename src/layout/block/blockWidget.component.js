@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import BlockPortWidget from './blockPort/blockPortWidget.component';
+import BlockPortWidget from '../blockPort/blockPortWidget.component';
 
 const styles = {
   block: {
