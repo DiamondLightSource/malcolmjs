@@ -3,6 +3,7 @@
 exports[`WidgetTextUpdate displays text 1`] = `
 <WithStyles(Typography)
   className="WidgetTextUpdate-textUpdate-1"
+  noWrap={true}
 >
   Hello World
    
@@ -12,6 +13,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
 exports[`WidgetTextUpdate displays with units 1`] = `
 <WithStyles(Typography)
   className="WidgetTextUpdate-textUpdate-1"
+  noWrap={true}
 >
   1.21
    

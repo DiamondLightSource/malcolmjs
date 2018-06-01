@@ -14,7 +14,7 @@ const styles = theme => ({
 });
 
 const WidgetTextUpdate = props => (
-  <Typography className={props.classes.textUpdate}>
+  <Typography className={props.classes.textUpdate} noWrap>
     {props.Text} {props.Units ? props.Units : null}
   </Typography>
 );
