@@ -9,6 +9,8 @@ import {
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
   MalcolmReturn,
+  MalcolmAttributePending,
+  MalcolmError,
 } from './malcolm.types';
 
 jest.mock('./middleware/malcolmRouting');
@@ -277,14 +279,16 @@ describe('malcolm socket handler', () => {
       message: 'Error: this is a test!',
     });
     socketContainer.socket.send(malcolmError);
-    expect(dispatches.length).toEqual(2);
+    expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(MalcolmSnackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       'Error in attribute TestAttr for block TestBlock'
     );
-    expect(dispatches[1].type).toEqual(MalcolmReturn);
-    expect(dispatches[1].payload.id).toEqual(3);
+    expect(dispatches[1].type).toEqual(MalcolmAttributePending);
+    expect(dispatches[1].payload.path).toEqual(['TestBlock', 'TestAttr']);
+    expect(dispatches[2].type).toEqual(MalcolmError);
+    expect(dispatches[2].payload.id).toEqual(3);
   });
 
   it('disptaches remove pending + stop tracking actions on return', () => {

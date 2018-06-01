@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import AttributeAlarm from './attributeAlarm/attributeAlarm.component';
+import AttributeAlarm, {
+  AlarmStates,
+} from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 
 const styles = theme => ({
@@ -34,13 +36,12 @@ const AttributeDetails = props => {
     }
   }
   if (widgetTagIndex !== null) {
+    let alarm = props.attribute.alarm.severity;
+    alarm = props.attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm = props.attribute.pending ? AlarmStates.PENDING : alarm;
     return (
       <div className={props.classes.div}>
-        {props.attribute.pending ? (
-          <AttributeAlarm alarmSeverity={-1} />
-        ) : (
-          <AttributeAlarm alarmSeverity={props.attribute.alarm.severity} />
-        )}
+        <AttributeAlarm alarmSeverity={alarm} />
         <Typography className={props.classes.textName}>
           {props.attribute.meta.label}:{' '}
         </Typography>
@@ -57,6 +58,7 @@ AttributeDetails.propTypes = {
   attribute: PropTypes.shape({
     name: PropTypes.string,
     pending: PropTypes.bool,
+    errorState: PropTypes.bool,
     alarm: PropTypes.shape({
       severity: PropTypes.number,
     }),

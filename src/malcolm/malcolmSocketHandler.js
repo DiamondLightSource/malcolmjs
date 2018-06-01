@@ -116,7 +116,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
         store.dispatch(malcolmSetPending(originalRequest.path, false));
-        store.dispatch(malcolmHailReturn(data.id));
+        store.dispatch(malcolmHailReturn(data.id, false));
         break;
       }
 
@@ -134,7 +134,8 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               } for block ${originalRequest.path.slice(0, -1)}`
             )
           );
-          store.dispatch(malcolmHailReturn(data.id));
+          store.dispatch(malcolmSetPending(originalRequest.path, false));
+          store.dispatch(malcolmHailReturn(data.id, true));
           break;
         } else {
           store.dispatch(

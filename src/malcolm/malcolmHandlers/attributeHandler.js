@@ -49,6 +49,7 @@ const processDeltaMessage = (changes, originalRequest, store) => {
     }
   });
   return attribute;
+
 };
 
 const processAttribute = (

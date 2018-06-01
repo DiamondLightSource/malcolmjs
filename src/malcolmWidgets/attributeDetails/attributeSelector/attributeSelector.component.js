@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
+import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
 import {
   malcolmPutAction,
@@ -26,6 +27,8 @@ const AttributeSelector = props => {
 
     const setDisabled =
       props.attribute.pending || !props.attribute.meta.writeable;
+
+    const isErrorState = props.attribute.errorState;
 
     if (widgetTagIndex !== -1) {
       if (tags[widgetTagIndex] === 'widget:led') {
@@ -59,6 +62,19 @@ const AttributeSelector = props => {
         );
       } else if (tags[widgetTagIndex] === 'widget:textupdate') {
         return <TextUpdate Text={props.attribute.value} />;
+      } else if (tags[widgetTagIndex] === 'widget:textinput') {
+        return (
+          <WidgetTextInput
+            Error={isErrorState}
+            Value={props.attribute.value}
+            Pending={setDisabled}
+            submitEventHandler={event =>
+              props.eventHandler(props.attribute.path, event.target.value)
+            }
+            focusHandler={() => {}}
+            blurHandler={() => {}}
+          />
+        );
       }
     }
   }
@@ -89,6 +105,10 @@ AttributeSelector.propTypes = {
       PropTypes.shape({}),
     ]),
     pending: PropTypes.bool,
+    errorState: PropTypes.bool,
+    alarm: PropTypes.shape({
+      severity: PropTypes.number,
+    }),
   }).isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
