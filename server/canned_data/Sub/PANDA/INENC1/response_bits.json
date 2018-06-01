@@ -23,7 +23,7 @@
           "dtype": "uint32", 
           "label": "Bits"
         }, 
-        "value": 0, 
+        "value": 1, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

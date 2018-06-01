@@ -23,7 +23,7 @@
           "dtype": "float64", 
           "label": "Width"
         }, 
-        "value": 0.0, 
+        "value": 1.0, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

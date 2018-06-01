@@ -153,7 +153,7 @@
             "ONE"
           ]
         }, 
-        "value": "ZERO", 
+        "value": "PULSE1.OUT", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

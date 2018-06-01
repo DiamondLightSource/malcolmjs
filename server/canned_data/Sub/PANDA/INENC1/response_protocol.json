@@ -28,7 +28,7 @@
             "enDat"
           ]
         }, 
-        "value": "Quadrature", 
+        "value": "SSI", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
