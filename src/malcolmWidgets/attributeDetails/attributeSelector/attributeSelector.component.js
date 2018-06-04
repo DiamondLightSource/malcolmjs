@@ -84,9 +84,9 @@ const AttributeSelector = props => {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
-  eventHandler: (path, isChecked) => {
+  eventHandler: (path, value) => {
     dispatch(malcolmSetPending(path, true));
-    dispatch(malcolmPutAction(path, isChecked));
+    dispatch(malcolmPutAction(path, value));
   },
 });
 

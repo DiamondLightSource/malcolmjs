@@ -1,20 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WidgetTextUpdate displays text 1`] = `
-<WithStyles(Typography)
-  className="WidgetTextUpdate-textUpdate-1"
+<div
+  className="WidgetTextUpdate-div-1"
 >
-  Hello World
-   
-</WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-textUpdate100-3"
+    noWrap={true}
+  >
+    Hello World
+  </WithStyles(Typography)>
+</div>
 `;
 
 exports[`WidgetTextUpdate displays with units 1`] = `
-<WithStyles(Typography)
-  className="WidgetTextUpdate-textUpdate-1"
+<div
+  className="WidgetTextUpdate-div-1"
 >
-  1.21
-   
-  GW
-</WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-textUpdate80-2"
+    noWrap={true}
+  >
+    1.21
+  </WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-unitBox-4"
+    noWrap={true}
+  >
+    GW
+  </WithStyles(Typography)>
+</div>
 `;
