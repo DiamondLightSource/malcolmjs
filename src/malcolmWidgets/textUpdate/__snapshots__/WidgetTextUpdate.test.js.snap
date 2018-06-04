@@ -18,7 +18,7 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   className="WidgetTextUpdate-div-1"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdate75-2"
+    className="WidgetTextUpdate-textUpdate80-2"
     noWrap={true}
   >
     1.21
