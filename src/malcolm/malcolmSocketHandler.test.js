@@ -1,3 +1,5 @@
+import handleLocationChange from './middleware/malcolmRouting';
+import MalcolmReconnector from './malcolmReconnector';
 import configureMalcolmSocketHandlers from './malcolmSocketHandler';
 import {
   MalcolmBlockMeta,
@@ -7,7 +9,12 @@ import {
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
   MalcolmReturn,
+  MalcolmAttributePending,
+  MalcolmError,
 } from './malcolm.types';
+
+jest.mock('./middleware/malcolmRouting');
+jest.useFakeTimers();
 
 describe('malcolm socket handler', () => {
   let dispatches = [];
@@ -60,19 +67,36 @@ describe('malcolm socket handler', () => {
     getState: () => state,
   };
 
-  const socketContainer = {
-    socket: {
-      onmessage: () => {},
-      onerror: () => {},
-      onopen: () => {},
-      onclose: () => {},
-      send: payload => {
+  class DummySocketConstructor {
+    constructor(url) {
+      this.url = url;
+      this.onmessage = () => {};
+      this.onerror = () => {};
+      this.onopen = () => {};
+      this.onclose = () => {};
+      this.send = payload => {
         const event = {
           data: payload,
         };
-        socketContainer.socket.onmessage(event);
-      },
+        this.onmessage(event);
+      };
+    }
+  }
+
+  const socketContainer = {
+    socket: {},
+    isConnected: () => connectionState,
+    setConnected: connected => {
+      connectionState = connected;
     },
+    queue: [],
+    flush: () => {
+      drain.push(socketContainer.queue.shift());
+    },
+  };
+
+  const reconnectingSocketContainer = {
+    socket: {},
     isConnected: () => connectionState,
     setConnected: connected => {
       connectionState = connected;
@@ -100,8 +124,26 @@ describe('malcolm socket handler', () => {
 
   beforeEach(() => {
     dispatches = [];
+    socketContainer.socket = new DummySocketConstructor('');
+    reconnectingSocketContainer.socket = new MalcolmReconnector(
+      '',
+      0,
+      DummySocketConstructor
+    );
+    reconnectingSocketContainer.socket.mockConnect = jest.fn();
+    reconnectingSocketContainer.socket.connect = inputSocket =>
+      inputSocket.mockConnect(inputSocket);
     socketContainer.queue = [];
+    handleLocationChange.mockClear();
     configureMalcolmSocketHandlers(socketContainer, store);
+  });
+
+  it('calls connect on reconnecting socket at configure', () => {
+    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
+    jest.runTimersToTime(100);
+    expect(
+      reconnectingSocketContainer.socket.mockConnect.mock.calls.length
+    ).toEqual(1);
   });
 
   it('sets flag and flushes on open', () => {
@@ -114,6 +156,12 @@ describe('malcolm socket handler', () => {
     expect(dispatches[1].type).toEqual(MalcolmSnackbar);
     expect(dispatches[1].snackbar.open).toEqual(true);
     expect(dispatches[1].snackbar.message).toEqual(`Connected to WebSocket`);
+  });
+
+  it('does nothing on receiving a non-malcolm message', () => {
+    const message = JSON.stringify({ typeid: 'notAMalcolmMessage', id: 1 });
+    socketContainer.socket.send(message);
+    expect(dispatches.length).toEqual(0);
   });
 
   it('handles block meta updates', () => {
@@ -197,6 +245,18 @@ describe('malcolm socket handler', () => {
     expect(dispatches[1].type).toEqual(MalcolmDisconnected);
   });
 
+  it('updates snackbar on reconnecting socket close', () => {
+    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
+    reconnectingSocketContainer.socket.onclose();
+    expect(dispatches.length).toEqual(2);
+    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].snackbar.open).toEqual(true);
+    expect(dispatches[0].snackbar.message).toEqual(
+      `WebSocket disconnected; attempting to reconnect...`
+    );
+    expect(dispatches[1].type).toEqual(MalcolmDisconnected);
+  });
+
   it('updates snackbar on malcolm error (no matching request)', () => {
     const malcolmError = JSON.stringify({
       typeid: 'malcolm:core/Error:1.0',
@@ -219,14 +279,16 @@ describe('malcolm socket handler', () => {
       message: 'Error: this is a test!',
     });
     socketContainer.socket.send(malcolmError);
-    expect(dispatches.length).toEqual(2);
+    expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(MalcolmSnackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       'Error in attribute TestAttr for block TestBlock'
     );
-    expect(dispatches[1].type).toEqual(MalcolmReturn);
-    expect(dispatches[1].payload.id).toEqual(3);
+    expect(dispatches[1].type).toEqual(MalcolmAttributePending);
+    expect(dispatches[1].payload.path).toEqual(['TestBlock', 'TestAttr']);
+    expect(dispatches[2].type).toEqual(MalcolmError);
+    expect(dispatches[2].payload.id).toEqual(3);
   });
 
   it('disptaches remove pending + stop tracking actions on return', () => {
@@ -248,7 +310,7 @@ describe('malcolm socket handler', () => {
     expect(dispatches[1].payload.id).toEqual(3);
   });
 
-  it('only processes an update for the root .blocks item', () => {
+  it('does process an update for the root .blocks item', () => {
     const message = JSON.stringify({
       typeid: 'malcolm:core/Update:1.0',
       id: 4,
@@ -265,5 +327,24 @@ describe('malcolm socket handler', () => {
       'block3',
     ]);
   });
-  // TODO: add tests for DELTA handling
+
+  it('doesnt process an update for if request wasnt for .blocks', () => {
+    const message = JSON.stringify({
+      typeid: 'malcolm:core/Update:1.0',
+      id: 1,
+      value: ['block1', 'block2', 'block3'],
+    });
+
+    socketContainer.socket.send(message);
+
+    expect(dispatches).toHaveLength(0);
+  });
+
+  it('wipes state on reconnect', () => {
+    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
+    reconnectingSocketContainer.socket.isReconnection = true;
+    reconnectingSocketContainer.socket.onopen();
+    expect(state.malcolm.messagesInFlight).toEqual([]);
+    expect(handleLocationChange).toHaveBeenCalledTimes(1);
+  });
 });

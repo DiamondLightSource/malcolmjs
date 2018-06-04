@@ -12,7 +12,7 @@ const popOutFunction = (rootUrl, width, blockTitle) =>
   window.open(
     blockDetailsUrl(rootUrl, blockTitle),
     blockTitle,
-    `width=${width}`
+    `width=${width},height=${window.innerHeight}`
   );
 
 const MainMalcolmView = props => (

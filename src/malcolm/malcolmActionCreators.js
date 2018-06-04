@@ -8,6 +8,7 @@ import {
   MalcolmDisconnected,
   MalcolmMainAttributeUpdate,
   MalcolmReturn,
+  MalcolmError,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -83,8 +84,8 @@ export const malcolmMainAttribute = attribute => ({
   },
 });
 
-export const malcolmHailReturn = id => ({
-  type: MalcolmReturn,
+export const malcolmHailReturn = (id, isErrorState) => ({
+  type: isErrorState ? MalcolmError : MalcolmReturn,
   payload: {
     id,
   },

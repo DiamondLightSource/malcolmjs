@@ -23,7 +23,7 @@
           "dtype": "int32", 
           "label": "Out"
         }, 
-        "value": 345904, 
+        "value": 289, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

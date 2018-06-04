@@ -23,7 +23,7 @@
           "dtype": "uint8", 
           "label": "Enable Delay"
         }, 
-        "value": 0, 
+        "value": 1, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

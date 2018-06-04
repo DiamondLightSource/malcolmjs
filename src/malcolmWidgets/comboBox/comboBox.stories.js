@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 
 import WidgetComboBox from './comboBox.component';
 
-const checkbox = (value, pending) => (
+const combobox = (value, pending) => (
   <WidgetComboBox
     Value={value}
     Pending={pending}
@@ -19,5 +19,5 @@ storiesOf('Widgets/combobbox', module).add(
   'simple',
   withInfo(`
   A simple combobox.
-  `)(() => checkbox('2', false))
+  `)(() => combobox('2', false))
 );

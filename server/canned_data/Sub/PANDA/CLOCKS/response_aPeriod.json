@@ -23,7 +23,7 @@
           "dtype": "float64", 
           "label": "A Period"
         }, 
-        "value": 0.001, 
+        "value": 0.5, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 

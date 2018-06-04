@@ -219,6 +219,37 @@ function setDisconnected(state) {
   };
 }
 
+function setErrorState(state, id, errorState) {
+  const { path } = state.messagesInFlight.find(m => m.id === id);
+  if (path) {
+    const blockName = path[0];
+    const attributeName = path[1];
+
+    if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+      const attributes = [...state.blocks[blockName].attributes];
+
+      const matchingAttribute = attributes.findIndex(
+        a => a.name === attributeName
+      );
+      if (matchingAttribute >= 0) {
+        attributes[matchingAttribute] = {
+          ...attributes[matchingAttribute],
+          errorState,
+        };
+      }
+
+      const blocks = { ...state.blocks };
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+      return {
+        ...state,
+        blocks,
+      };
+    }
+  }
+  return state;
+}
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -231,10 +262,16 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return updateMessagesInFlight(state, action);
 
     case MalcolmError:
-      return stopTrackingMessage(state, action);
+      return stopTrackingMessage(
+        setErrorState(state, action.payload.id, true),
+        action
+      );
 
     case MalcolmReturn:
-      return stopTrackingMessage(state, action);
+      return stopTrackingMessage(
+        setErrorState(state, action.payload.id, false),
+        action
+      );
 
     case MalcolmBlockMeta:
       return updateBlock(state, action.payload);

@@ -46,7 +46,7 @@ const displayAttributes = block => {
         {block.attributes.filter(a => a.isGroup).map(group => (
           <GroupExpander
             key={group.name}
-            groupName={group.name}
+            groupName={group.meta.label}
             expanded={group.value === 'expanded'}
           >
             {block.attributes

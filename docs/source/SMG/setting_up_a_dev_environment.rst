@@ -37,18 +37,55 @@ The documentation is all in reStructuredText. The documentation can be edited in
 
 The final documentation is built for `Read the Docs <https://readthedocs.org/>`_ using `Sphinx <http://www.sphinx-doc.org/en/master/>`_.
 
-To build the final documentation locally you need to have ``Python`` and ``pip`` installed, then you need to install ``Sphinx`` and ``sphinx-rtd-theme`` using:
+Setting up a virtual environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To build the documentation locally you need to have a virtual environment set up:
 ::
 
-    pip install Sphinx
-    pip install sphinx-rtd-theme
+    pip install virtualenv
 
-Then to run the sphinx build run:
+To make it easier to work with virtual environments you should install ``virtualenvwrapper`` on linux or ``virtualenvwrapper-win`` on Windows
 ::
 
-	npm run build-docs
+    pip install virtualenvwrapper
 
-The same build step can be done by running the ``Makefile`` in the root of the repo.
+or on windows
+::
+
+    pip install virtualenvwrapper-win
+
+Then make a new virtual environment:
+::
+
+    mkvirtualenv malcolmjs-docs
+
+Change in to the root of the code and connect the codebase with the virtual environment:
+::
+
+    cd {root of code base e.g. C:\code\malcolmjs}
+    setproject dir .
+
+Install the dependencies:
+::
+
+    pip install -r ./docs/source/requirements.txt
+
+To deactivate the environment run:
+::
+
+    deactivate
+
+Running a docs build
+^^^^^^^^^^^^^^^^^^^^
+
+To drop into the virtual env to run the build 
+::
+
+    workon malcolmjs-docs
+    npm run build-docs
+
+The same build step can be done by running the ``Makefile`` in the root of the repo or manually running the command ``sphinx-build -b html docs/source docs/build/html``
 
 You can then open ``.\docs\build\html\index.html`` in a browser to view the results.
 

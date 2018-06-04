@@ -66,6 +66,9 @@ const processLayout = malcolmState => {
           if (hasMatchingBlock) {
             const updatedBlock = { ...b };
             const matchingBlock = malcolmState.blocks[b.mri];
+
+            updatedBlock.description = matchingBlock.label;
+
             if (matchingBlock.attributes) {
               const iconAttribute = matchingBlock.attributes.find(
                 a => a.name === 'icon'

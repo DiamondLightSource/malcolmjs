@@ -52,7 +52,7 @@ const styles = {
   },
 };
 
-const portHeight = 22;
+const portHeight = 23;
 
 const BlockWidget = props => {
   const inputPorts = Object.keys(props.node.ports).filter(
@@ -82,7 +82,11 @@ const BlockWidget = props => {
           ))}
         </div>
         <div className={props.classes.iconContents}>
-          <span dangerouslySetInnerHTML={{ __html: props.node.icon }} />
+          {props.node.icon === '<svg/>' ? (
+            <span />
+          ) : (
+            <span dangerouslySetInnerHTML={{ __html: props.node.icon }} />
+          )}
         </div>
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (
