@@ -7,15 +7,11 @@ exports[`MainMalcolmView renders correctly 1`] = `
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
-    <WithStyles(BlockDetails)
-      block={
-        Object {
-          "name": "Test main view",
-        }
-      }
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
     />
     <Connect(WithStyles(MiddlePanelContainer)) />
-    <WithStyles(BlockDetails) />
+    <Connect(WithStyles(BlockDetails)) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;

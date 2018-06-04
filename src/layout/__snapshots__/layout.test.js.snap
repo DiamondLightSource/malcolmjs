@@ -18,61 +18,61 @@ exports[`Layout renders correctly 1`] = `
       "canvasMatrix": Array [],
       "diagramModel": DiagramModel {
         "gridSize": 0,
-        "id": "6",
+        "id": "7",
         "links": Object {},
         "listeners": Object {},
         "locked": false,
         "nodes": Object {
-          "7": BlockNodeModel {
+          "8": BlockNodeModel {
             "addBlockPort": [Function],
             "addIcon": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-            "id": "7",
+            "id": "8",
             "label": "block 1",
             "listeners": Object {
-              "14": Object {
+              "15": Object {
                 "entityRemoved": [Function],
               },
             },
             "locked": false,
             "ports": Object {
-              "10": DefaultPortModel {
-                "id": "11",
+              "11": MalcolmPortModel {
+                "id": "12",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "10",
+                "name": "11",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "12": DefaultPortModel {
-                "id": "13",
+              "13": MalcolmPortModel {
+                "id": "14",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "12",
+                "name": "13",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "8": DefaultPortModel {
-                "id": "9",
+              "9": MalcolmPortModel {
+                "id": "10",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "8",
+                "name": "9",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
@@ -99,6 +99,9 @@ exports[`Layout renders correctly 1`] = `
       "linkFactories": Object {
         "default": DefaultLinkFactory {
           "type": "default",
+        },
+        "malcolmlink": MalcolmLinkFactory {
+          "type": "malcolmlink",
         },
       },
       "linksThatHaveInitiallyRendered": Object {},

@@ -4,7 +4,9 @@ import NavigationReducer, {
 
 describe('navigation reducer', () => {
   it('updateNavigationPath set navigation on state', () => {
-    let state = {};
+    let state = {
+      blocks: {},
+    };
     const blockPaths = ['PANDA', 'layout', 'PANDA:TTLIN1'];
     const payload = {
       blockPaths,
@@ -13,16 +15,23 @@ describe('navigation reducer', () => {
     state = NavigationReducer.updateNavigationPath(state, payload);
 
     expect(state.navigation).not.toBeNull();
-    expect(state.navigation).toEqual(blockPaths);
+    expect(state.navigation).toHaveLength(3);
+    expect(state.navigation[0].path).toEqual('PANDA');
+    expect(state.navigation[0].basePath).toEqual('/');
+    expect(state.navigation[1].path).toEqual('layout');
+    expect(state.navigation[1].basePath).toEqual('/PANDA/');
+    expect(state.navigation[2].path).toEqual('PANDA:TTLIN1');
+    expect(state.navigation[2].basePath).toEqual('/PANDA/layout/');
   });
 
   it('resets the parent and child blocks when navigating to a different route', () => {
     let state = {
       parentBlock: 'parent',
       childBlock: 'child',
+      blocks: {},
     };
 
-    state = NavigationReducer.updateNavigationPath(state, {});
+    state = NavigationReducer.updateNavigationPath(state, { blockPaths: [] });
 
     expect(state.parentBlock).toBeUndefined();
     expect(state.childBlock).toBeUndefined();

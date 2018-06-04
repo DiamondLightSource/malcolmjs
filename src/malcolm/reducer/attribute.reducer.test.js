@@ -22,6 +22,7 @@ describe('attribute reducer', () => {
           ],
         },
       },
+      navigation: [],
     };
 
     payload = {

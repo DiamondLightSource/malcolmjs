@@ -35,7 +35,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": DefaultPortModel {
+              "2": MalcolmPortModel {
                 "id": "3",
                 "in": true,
                 "label": "in 1",
@@ -48,7 +48,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "4": DefaultPortModel {
+              "4": MalcolmPortModel {
                 "id": "5",
                 "in": false,
                 "label": "out 1",
@@ -61,7 +61,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "6": DefaultPortModel {
+              "6": MalcolmPortModel {
                 "id": "7",
                 "in": false,
                 "label": "out 2",
@@ -82,7 +82,7 @@ exports[`BlockWidget block renders correctly 1`] = `
           }
         }
         port={
-          DefaultPortModel {
+          MalcolmPortModel {
             "id": "3",
             "in": true,
             "label": "in 1",
@@ -103,7 +103,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "locked": false,
               "ports": Object {
                 "2": [Circular],
-                "4": DefaultPortModel {
+                "4": MalcolmPortModel {
                   "id": "5",
                   "in": false,
                   "label": "out 1",
@@ -116,7 +116,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "selected": false,
                   "type": "default",
                 },
-                "6": DefaultPortModel {
+                "6": MalcolmPortModel {
                   "id": "7",
                   "in": false,
                   "label": "out 2",
@@ -170,7 +170,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": DefaultPortModel {
+              "2": MalcolmPortModel {
                 "id": "3",
                 "in": true,
                 "label": "in 1",
@@ -183,7 +183,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "4": DefaultPortModel {
+              "4": MalcolmPortModel {
                 "id": "5",
                 "in": false,
                 "label": "out 1",
@@ -196,7 +196,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "6": DefaultPortModel {
+              "6": MalcolmPortModel {
                 "id": "7",
                 "in": false,
                 "label": "out 2",
@@ -217,7 +217,7 @@ exports[`BlockWidget block renders correctly 1`] = `
           }
         }
         port={
-          DefaultPortModel {
+          MalcolmPortModel {
             "id": "5",
             "in": false,
             "label": "out 1",
@@ -237,7 +237,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "listeners": Object {},
               "locked": false,
               "ports": Object {
-                "2": DefaultPortModel {
+                "2": MalcolmPortModel {
                   "id": "3",
                   "in": true,
                   "label": "in 1",
@@ -251,7 +251,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "type": "default",
                 },
                 "4": [Circular],
-                "6": DefaultPortModel {
+                "6": MalcolmPortModel {
                   "id": "7",
                   "in": false,
                   "label": "out 2",
@@ -290,7 +290,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": DefaultPortModel {
+              "2": MalcolmPortModel {
                 "id": "3",
                 "in": true,
                 "label": "in 1",
@@ -303,7 +303,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "4": DefaultPortModel {
+              "4": MalcolmPortModel {
                 "id": "5",
                 "in": false,
                 "label": "out 1",
@@ -316,7 +316,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "selected": false,
                 "type": "default",
               },
-              "6": DefaultPortModel {
+              "6": MalcolmPortModel {
                 "id": "7",
                 "in": false,
                 "label": "out 2",
@@ -337,7 +337,7 @@ exports[`BlockWidget block renders correctly 1`] = `
           }
         }
         port={
-          DefaultPortModel {
+          MalcolmPortModel {
             "id": "7",
             "in": false,
             "label": "out 2",
@@ -357,7 +357,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "listeners": Object {},
               "locked": false,
               "ports": Object {
-                "2": DefaultPortModel {
+                "2": MalcolmPortModel {
                   "id": "3",
                   "in": true,
                   "label": "in 1",
@@ -370,7 +370,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "selected": false,
                   "type": "default",
                 },
-                "4": DefaultPortModel {
+                "4": MalcolmPortModel {
                   "id": "5",
                   "in": false,
                   "label": "out 1",

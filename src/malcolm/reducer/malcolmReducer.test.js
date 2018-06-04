@@ -52,6 +52,7 @@ describe('malcolm reducer', () => {
     state = {
       messagesInFlight: [],
       blocks: {},
+      navigation: [],
     };
   });
 
