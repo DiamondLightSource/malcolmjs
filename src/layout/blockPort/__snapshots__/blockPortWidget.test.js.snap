@@ -34,7 +34,6 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     style={
       Object {
         "fontSize": 12,
-        "padding": -50,
       }
     }
   >
@@ -59,7 +58,6 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     style={
       Object {
         "fontSize": 12,
-        "padding": -50,
       }
     }
   >

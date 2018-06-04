@@ -25,7 +25,6 @@ const styles = {
   },
   portLabel: {
     fontSize: 12,
-    padding: -50,
   },
 };
 
