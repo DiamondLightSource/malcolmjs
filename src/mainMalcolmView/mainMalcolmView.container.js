@@ -22,9 +22,9 @@ const MainMalcolmView = props => (
       popOutAction={popOutFunction}
       childTitle={props.childBlockTitle}
     >
-      <BlockDetails block={props.parentBlock} />
+      <BlockDetails parent />
       <MiddlePanelContainer />
-      <BlockDetails block={props.childBlock} />
+      <BlockDetails />
     </DrawerContainer>
   </div>
 );
@@ -39,9 +39,7 @@ const mapStateToProps = state => {
     : undefined;
 
   return {
-    parentBlock,
     parentBlockTitle: parentBlock ? parentBlock.name : '',
-    childBlock,
     childBlockTitle: childBlock ? childBlock.name : '',
   };
 };
@@ -49,16 +47,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = () => ({});
 
 MainMalcolmView.propTypes = {
-  parentBlock: PropTypes.shape({}),
   parentBlockTitle: PropTypes.string,
-  childBlock: PropTypes.shape({}),
   childBlockTitle: PropTypes.string,
 };
 
 MainMalcolmView.defaultProps = {
-  parentBlock: undefined,
   parentBlockTitle: '',
-  childBlock: undefined,
   childBlockTitle: '',
 };
 

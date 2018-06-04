@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -80,4 +81,25 @@ BlockDetails.defaultProps = {
   block: undefined,
 };
 
-export default withStyles(styles, { withTheme: true })(BlockDetails);
+const mapStateToProps = (state, ownProps) => {
+  let block;
+  if (ownProps.parent) {
+    block = state.malcolm.parentBlock
+      ? state.malcolm.blocks[state.malcolm.parentBlock]
+      : undefined;
+  } else {
+    block = state.malcolm.childBlock
+      ? state.malcolm.blocks[state.malcolm.childBlock]
+      : undefined;
+  }
+
+  return {
+    block,
+  };
+};
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles, { withTheme: true })(BlockDetails)
+);

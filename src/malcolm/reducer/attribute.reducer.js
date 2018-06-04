@@ -1,3 +1,5 @@
+import { processNavigationLists } from './navigation.reducer';
+
 function updateAttributeChildren(attribute) {
   const updatedAttribute = { ...attribute };
   if (updatedAttribute.meta) {
@@ -70,9 +72,23 @@ function updateAttribute(state, payload) {
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
 
+      // update the navigation if the attribute was part of the path
+      let { navigation } = state;
+      if (
+        state.navigation
+          .map(nav => nav.path)
+          .findIndex(navPath => navPath === attributeName) > -1
+      ) {
+        navigation = processNavigationLists(
+          state.navigation.map(nav => nav.path),
+          blocks
+        );
+      }
+
       return {
         ...state,
         blocks,
+        navigation,
       };
     }
   }

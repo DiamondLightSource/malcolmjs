@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { openParentPanel } from '../viewState/viewState.actions';
 import NavControl from './navcontrol.component';
-import NavBarSelector from './navbar.selector';
 
 const drawerWidth = 320;
 
@@ -108,10 +107,7 @@ const NavBar = props => (
 
 const mapStateToProps = state => ({
   open: state.viewState.openParentPanel,
-  navigation: NavBarSelector.processNavigationLists(
-    state.malcolm.navigation,
-    state.malcolm.blocks
-  ),
+  navigation: state.malcolm.navigation,
 });
 
 const mapDispatchToProps = dispatch => ({
