@@ -32,9 +32,19 @@ const attribute = alarmStateValue => ({
   value: true,
 });
 
+const buildState = alarmStateValue => ({
+  malcolm: {
+    blocks: {
+      block1: {
+        attributes: [attribute(alarmStateValue)],
+      },
+    },
+  },
+});
+
 const generateComponent = alarmStateValue => (
-  <Provider store={mockStore({})}>
-    <AttributeDetails attribute={attribute(alarmStateValue)}>
+  <Provider store={mockStore(buildState(alarmStateValue))}>
+    <AttributeDetails blockName="block1" attributeName="attribute 1">
       <div>Hello</div>
     </AttributeDetails>
   </Provider>
