@@ -19,7 +19,7 @@ exports[`MalcolmPopOut renders correctly 1`] = `
       </WithStyles(Typography)>
     </WithStyles(Toolbar)>
   </WithStyles(AppBar)>
-  <WithStyles(BlockDetails)
+  <Connect(WithStyles(BlockDetails))
     block={
       Object {
         "name": "Test main view",

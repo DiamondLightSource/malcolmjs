@@ -20,7 +20,6 @@ exports[`NavBar renders correctly 1`] = `
         key="PANDA"
         nav={
           Object {
-            "basePath": "/",
             "children": Array [],
             "path": "PANDA",
           }
@@ -31,7 +30,6 @@ exports[`NavBar renders correctly 1`] = `
         key="layout"
         nav={
           Object {
-            "basePath": "/PANDA/",
             "children": Array [],
             "path": "layout",
           }
@@ -42,7 +40,6 @@ exports[`NavBar renders correctly 1`] = `
         key="PANDA:SEQ1"
         nav={
           Object {
-            "basePath": "/PANDA/layout/",
             "children": Array [],
             "path": "PANDA:SEQ1",
           }

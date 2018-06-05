@@ -58,6 +58,9 @@ class BlockPortWidget extends BaseWidget {
           this.setState({ selected: false });
         }}
         style={portStyle}
+        {...this.getProps()}
+        data-name={this.props.port.name}
+        data-nodeid={this.props.port.getParent().getID()}
       />
     );
     const label = (
@@ -65,12 +68,7 @@ class BlockPortWidget extends BaseWidget {
     );
 
     return (
-      <div
-        {...this.getProps()}
-        style={styles.container}
-        data-name={this.props.port.name}
-        data-nodeid={this.props.port.getParent().getID()}
-      >
+      <div style={styles.container}>
         {this.props.port.in ? port : label}
         {this.props.port.in ? label : port}
       </div>

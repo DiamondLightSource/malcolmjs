@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
@@ -13,10 +13,9 @@ import {
   malcolmSetPending,
 } from '../../../malcolm/malcolmActionCreators';
 
-const styles = theme => ({
-  spinner: {
-    size: 44,
-    color: darken(theme.palette.primary.light, 0.25),
+const styles = () => ({
+  missingAttribute: {
+    color: 'red',
   },
 });
 
@@ -78,7 +77,7 @@ const AttributeSelector = props => {
       }
     }
   }
-  return <div>Hello</div>;
+  return <BugReport className={props.classes.missingAttribute} />;
 };
 
 const mapStateToProps = () => ({});
@@ -119,6 +118,9 @@ AttributeSelector.propTypes = {
         main: PropTypes.string,
       }),
     }),
+  }).isRequired,
+  classes: PropTypes.shape({
+    missingAttribute: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
 };

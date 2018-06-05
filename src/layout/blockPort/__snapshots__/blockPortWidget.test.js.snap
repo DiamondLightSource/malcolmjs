@@ -2,9 +2,6 @@
 
 exports[`BlockPortWidget input port renders correctly 1`] = `
 <div
-  className="port malcolm-port "
-  data-name="val1"
-  data-nodeid="123456"
   data-radium={true}
   style={
     Object {
@@ -15,6 +12,9 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
   }
 >
   <div
+    className="port malcolm-port "
+    data-name="val1"
+    data-nodeid="123456"
     data-radium={true}
     key=".0"
     onMouseEnter={[Function]}
@@ -44,9 +44,6 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
 
 exports[`BlockPortWidget output port renders correctly 1`] = `
 <div
-  className="port malcolm-port "
-  data-name="val1"
-  data-nodeid="123456"
   data-radium={true}
   style={
     Object {
@@ -67,6 +64,9 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     val 1
   </WithStyles(Typography)>
   <div
+    className="port malcolm-port "
+    data-name="val1"
+    data-nodeid="123456"
     data-radium={true}
     key=".1"
     onMouseEnter={[Function]}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
+import configureStore from 'redux-mock-store';
 
 import BlockDetails from '../blockDetails/blockDetails.component';
 
@@ -16,6 +17,7 @@ const styles = {
 };
 
 const displayContainer = node => <div style={styles.layout}>{node}</div>;
+const mockStore = configureStore();
 
 const block = loading => ({
   loading,
@@ -25,16 +27,33 @@ const block = loading => ({
   ],
 });
 
+const buildState = loading => ({
+  malcolm: {
+    parentBlock: 'block1',
+    blocks: {
+      block1: block(loading),
+    },
+  },
+});
+
 storiesOf('Details/Block Details', module)
   .add(
     'block meta loaded - attributes loading',
     withInfo(`
       What the block details component looks like when the block meta data has loaded but the attribute data is still being loaded.
-    `)(() => displayContainer(<BlockDetails block={block(false)} />))
+    `)(() =>
+      displayContainer(
+        <BlockDetails parent store={mockStore(buildState(false))} />
+      )
+    )
   )
   .add(
     'block loading',
     withInfo(`
       Shows that the block details are loading
-    `)(() => displayContainer(<BlockDetails block={block(true)} />))
+    `)(() =>
+      displayContainer(
+        <BlockDetails parent store={mockStore(buildState(true))} />
+      )
+    )
   );

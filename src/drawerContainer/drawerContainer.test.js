@@ -26,7 +26,7 @@ describe('DrawerContainer', () => {
       },
       malcolm: {
         blocks: {},
-        navigation: ['PANDA'],
+        navigation: [{ path: 'PANDA', children: [] }],
       },
     };
   });

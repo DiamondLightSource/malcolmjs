@@ -5,6 +5,7 @@ function sendMalcolmMessage(socketContainer, payload) {
   const message = { ...payload };
   delete message.type;
   const msg = JSON.stringify(message);
+
   socketContainer.queue.push(msg);
   socketContainer.flush();
 }
