@@ -14,31 +14,7 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
     className="MiddlePanelContainer-layoutArea-2"
   >
     <Layout
-      blocks={
-        Array [
-          Object {
-            "description": undefined,
-            "icon": "icon svg",
-            "mri": "block2",
-            "name": "counter 1",
-            "ports": Array [
-              Object {
-                "input": true,
-                "label": "in1",
-              },
-              Object {
-                "input": false,
-                "label": "out1",
-              },
-            ],
-            "position": Object {
-              "x": 512,
-              "y": 320,
-            },
-            "visible": "true",
-          },
-        ]
-      }
+      blocks={Array []}
     />
   </div>
 </div>

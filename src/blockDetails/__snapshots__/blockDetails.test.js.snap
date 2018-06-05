@@ -20,44 +20,14 @@ exports[`Block Details renders correctly when metadata loaded and attributes loa
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <WithStyles(AttributeDetails)
-      attribute={
-        Object {
-          "alarm": Object {
-            "severity": 0,
-          },
-          "loading": false,
-          "meta": Object {
-            "label": "health 1",
-          },
-          "name": "health",
-        }
-      }
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="health"
       key="health"
-    >
-      <div>
-        Hello
-      </div>
-    </WithStyles(AttributeDetails)>
-    <WithStyles(AttributeDetails)
-      attribute={
-        Object {
-          "alarm": Object {
-            "severity": 0,
-          },
-          "loading": false,
-          "meta": Object {
-            "label": "icon 1",
-          },
-          "name": "icon",
-        }
-      }
+    />
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="icon"
       key="icon"
-    >
-      <div>
-        Hello
-      </div>
-    </WithStyles(AttributeDetails)>
+    />
   </div>
 </div>
 `;
