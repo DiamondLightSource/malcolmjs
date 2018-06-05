@@ -18,6 +18,7 @@ import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
 import AttributeReducer from './attribute.reducer';
+import layoutReducer from './layout.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -30,6 +31,9 @@ const initialMalcolmState = {
   snackbar: {
     message: '',
     open: false,
+  },
+  layout: {
+    blocks: [],
   },
 };
 
@@ -86,7 +90,7 @@ function registerNewBlock(state, action) {
 
 function updateBlock(state, payload) {
   const blocks = { ...state.blocks };
-  let { navigation } = state;
+  let { navigation, layout } = state;
 
   if (payload.delta) {
     const blockName = state.messagesInFlight.find(m => m.id === payload.id)
@@ -116,21 +120,33 @@ function updateBlock(state, payload) {
         blocks
       );
     }
+
+    if (state.mainAttribute === 'layout') {
+      layout = layoutReducer.processLayout(state);
+    }
   }
 
   return {
     ...state,
     blocks,
     navigation,
+    layout,
   };
 }
 
 function updateRootBlock(state, payload) {
   const blocks = { ...state.blocks };
   blocks['.blocks'].children = payload.blocks;
+
+  const navigation = processNavigationLists(
+    state.navigation.map(nav => nav.path),
+    blocks
+  );
+
   return {
     ...state,
     blocks,
+    navigation,
   };
 }
 

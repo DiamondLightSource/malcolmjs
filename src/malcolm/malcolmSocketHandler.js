@@ -63,6 +63,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onmessage = event => {
     const data = JSON.parse(event.data);
+
     switch (data.typeid) {
       case 'malcolm:core/Update:1.0': {
         const originalRequest = store

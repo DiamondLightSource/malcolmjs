@@ -15,7 +15,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outa" ],
     index: 0,
-    interval: 3000,
+    interval: 1000,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
@@ -24,7 +24,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outc" ],
     index: 0,
-    interval: 5000,
+    interval: 3000,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
@@ -36,7 +36,13 @@ function pathsMatch(a, b) {
   return a.length === b.length && a.every((a, i) => a === b[i]);
 }
 
-function checkForActiveSubscription(request, response, sendMethod) {
+function sendResponse(socket, message) {
+  if (socket.readyState === socket.OPEN) {
+    socket.send(JSON.stringify(message))
+  }
+}
+
+function checkForActiveSubscription(request, response, socket) {
   const matchingUpdate = activeSubscriptions.findIndex(s => pathsMatch(s.path, request.path));
 
   if (matchingUpdate > -1) {
@@ -44,8 +50,13 @@ function checkForActiveSubscription(request, response, sendMethod) {
     const timer = setInterval(() => {
       subscription.index = subscription.index + 1;
       const updatedResponse = subscription.update(response, subscription.index);
-      sendMethod(updatedResponse);
+      sendResponse(socket, updatedResponse);
     }, subscription.interval);
+
+    if (subscriptionTimers[response.id]) {
+      console.log(`timer already exists for ${subscription.path}`)
+      clearInterval(subscriptionTimers[response.id]);
+    }
 
     subscriptionTimers[response.id] = timer;
   }
@@ -55,6 +66,7 @@ function cancelAllSubscriptions() {
   Object.keys(subscriptionTimers).forEach(k => {
     clearInterval(subscriptionTimers[k]);
   })
+  subscriptionTimers = {};
 }
 
 

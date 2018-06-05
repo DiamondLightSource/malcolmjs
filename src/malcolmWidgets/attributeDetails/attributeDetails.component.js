@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AttributeAlarm, {
   AlarmStates,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
+import blockUtils from '../../malcolm/blockUtils';
 
 const styles = theme => ({
   div: {
@@ -75,5 +77,22 @@ AttributeDetails.propTypes = {
   }).isRequired,
 };
 
+const mapStateToProps = (state, ownProps) => {
+  let attribute;
+  if (ownProps.attributeName && ownProps.blockName) {
+    attribute = blockUtils.findAttribute(
+      state.malcolm.blocks,
+      ownProps.blockName,
+      ownProps.attributeName
+    );
+  }
+
+  return {
+    attribute,
+  };
+};
+
 export const AttributeDetailsComponent = AttributeDetails;
-export default withStyles(styles, { withTheme: true })(AttributeDetails);
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(AttributeDetails)
+);

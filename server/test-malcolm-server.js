@@ -24,6 +24,8 @@ io.on('connection', function (socket) {
   socket.on('disconnect', () => handleDisconnect());
   socket.on('error', (err) => {
     subscriptionFeed.cancelAllSubscriptions();
+    subscriptions = [];
+    subscribedPaths = {};
     console.log('errored');
     console.log(err);
   });
@@ -38,20 +40,22 @@ function handleMessage(socket, message) {
   let simplifiedMessage = message;
   const originalId = message.id;
   delete simplifiedMessage.id;
-  console.log(message);
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
 
   } else if (malcolmMessages.hasOwnProperty(JSON.stringify(simplifiedMessage))) {
+    let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
+
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
       subscriptions.push(originalId.toString());
       subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
+
+      subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
     }
 
-    let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
-    subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, r => sendResponse(socket, r));
     sendResponse(socket, response);
 
+    
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
     let response;
     if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
@@ -85,12 +89,14 @@ function sendResponse(socket, message) {
     if (socket.readyState === socket.OPEN) {
       socket.send(JSON.stringify(message))
     }
-  }, Math.ceil(settings.delay*Math.random()));
+  }, Math.ceil(settings.delay));
 }
 
 function handleDisconnect() {
   console.log('client disconnected');
   subscriptionFeed.cancelAllSubscriptions();
+  subscriptions = [];
+  subscribedPaths = {};
 }
 
 function buildErrorMessage(id, message) {

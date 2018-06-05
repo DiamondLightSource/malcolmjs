@@ -1,4 +1,5 @@
 import { processNavigationLists } from './navigation.reducer';
+import LayoutReducer from './layout.reducer';
 
 function updateAttributeChildren(attribute) {
   const updatedAttribute = { ...attribute };
@@ -38,6 +39,42 @@ function checkForFlowGraph(attribute) {
     return updatedAttribute;
   }
   return attribute;
+}
+
+function portsAreDifferent(oldAttribute, newAttribute) {
+  if (oldAttribute && oldAttribute.meta) {
+    if (oldAttribute.meta.label !== newAttribute.meta.label) {
+      return true;
+    }
+
+    if (oldAttribute.meta.tags) {
+      // find inport and compare
+      const inPortTag = newAttribute.meta.tags.find(
+        t => t.indexOf('inport:') > -1
+      );
+      if (
+        inPortTag !== undefined &&
+        oldAttribute.meta.tags.findIndex(t => t === inPortTag) === -1
+      ) {
+        return true;
+      }
+
+      // find outport and compare
+      const outPortTag = newAttribute.meta.tags.find(
+        t => t.indexOf('outport:') > -1
+      );
+      if (
+        outPortTag !== undefined &&
+        oldAttribute.meta.tags.findIndex(t => t === outPortTag) === -1
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return true;
 }
 
 function updateAttribute(state, payload) {
@@ -85,10 +122,46 @@ function updateAttribute(state, payload) {
         );
       }
 
-      return {
+      let { layout } = state;
+
+      const updatedState = {
         ...state,
         blocks,
         navigation,
+      };
+
+      if (attributeName === 'layout') {
+        layout = LayoutReducer.processLayout(updatedState);
+      }
+
+      if (
+        matchingAttribute > -1 &&
+        attributes[matchingAttribute].meta &&
+        attributes[matchingAttribute].meta.tags
+      ) {
+        if (
+          attributes[matchingAttribute].meta.tags.some(t => t === 'widget:icon')
+        ) {
+          layout = LayoutReducer.processLayout(updatedState);
+        } else if (
+          (attributes[matchingAttribute].meta.tags.some(
+            t => t.indexOf('inport:') > -1
+          ) ||
+            attributes[matchingAttribute].meta.tags.some(
+              t => t.indexOf('outport:') > -1
+            )) &&
+          portsAreDifferent(
+            state.blocks[blockName].attributes[matchingAttribute],
+            attributes[matchingAttribute]
+          )
+        ) {
+          layout = LayoutReducer.processLayout(updatedState);
+        }
+      }
+
+      return {
+        ...updatedState,
+        layout,
       };
     }
   }
@@ -97,9 +170,15 @@ function updateAttribute(state, payload) {
 }
 
 function setMainAttribute(state, payload) {
+  let { layout } = state;
+  if (payload.mainAttribute === 'layout') {
+    layout = LayoutReducer.processLayout(state);
+  }
+
   return {
     ...state,
     mainAttribute: payload.attribute,
+    layout,
   };
 }
 
