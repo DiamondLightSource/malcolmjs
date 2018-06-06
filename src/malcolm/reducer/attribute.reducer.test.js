@@ -1,10 +1,14 @@
-import AttributeReducer from './attribute.reducer';
+import AttributeReducer, { updateLayout } from './attribute.reducer';
+import LayoutReducer from './layout.reducer';
+
+jest.mock('./layout.reducer');
 
 describe('attribute reducer', () => {
   let state = {};
   let payload = {};
 
   beforeEach(() => {
+    LayoutReducer.processLayout.mockClear();
     state = {
       messagesInFlight: [
         {
@@ -79,5 +83,86 @@ describe('attribute reducer', () => {
     expect(
       state.blocks.block1.attributes[0].layout.blocks[2].position.y
     ).toEqual(5);
+  });
+
+  it('setMainAttribute sets the main attribute on the state', () => {
+    state = AttributeReducer.setMainAttribute(state, { attribute: 'health' });
+    expect(state.mainAttribute).toEqual('health');
+  });
+
+  it('if the main attribute is layout then the layout reducer is called', () => {
+    state = AttributeReducer.setMainAttribute(state, { attribute: 'layout' });
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout updates the layout if the attribute is called layout', () => {
+    updateLayout(state, state, 'block1', 'layout');
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout returns early if the attribute is not found', () => {
+    const updatedLayout = updateLayout(state, state, 'block1', 'non-existent');
+    expect(updatedLayout).toBe(state.layout);
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(0);
+  });
+
+  it('updateLayout updates the layout if the attribute is an icon', () => {
+    state.blocks.block1.attributes.push({
+      name: 'icon attr',
+      meta: {
+        tags: ['widget:icon'],
+      },
+    });
+
+    updateLayout(state, state, 'block1', 'icon attr');
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout updates the layout if the attribute is a port and the ports are different', () => {
+    const updatedState = {
+      ...state,
+      blocks: {
+        ...state.blocks,
+        block1: {
+          ...state.blocks.block1,
+          attributes: [
+            ...state.blocks.block1.attributes,
+            {
+              name: 'port 1',
+              meta: {
+                tags: ['inport:bool:ZERO'],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    updateLayout(state, updatedState, 'block1', 'port 1');
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+  });
+
+  it('updateLayout does not update the layout if the attribute is a port and the ports are the same', () => {
+    const updatedState = {
+      ...state,
+      blocks: {
+        ...state.blocks,
+        block1: {
+          ...state.blocks.block1,
+          attributes: [
+            ...state.blocks.block1.attributes,
+            {
+              name: 'port 1',
+              meta: {
+                tags: ['inport:bool:ZERO'],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    updateLayout(updatedState, updatedState, 'block1', 'port 1');
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(0);
   });
 });

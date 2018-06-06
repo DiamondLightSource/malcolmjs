@@ -94,4 +94,24 @@ describe('Block Utilities', () => {
     expect(BlockUtils.findBlock({}, 'block1')).toBeUndefined();
     expect(BlockUtils.findBlock(undefined, 'block1')).toBeUndefined();
   });
+
+  it('attributeHasTag returns true if tag found', () => {
+    expect(
+      BlockUtils.attributeHasTag({ meta: { tags: ['tag1', 'tag2'] } }, 'tag1')
+    ).toBeTruthy();
+  });
+
+  it('attributeHasTag returns false if tag not found', () => {
+    expect(
+      BlockUtils.attributeHasTag({ meta: { tags: ['tag1', 'tag2'] } }, 'tag3')
+    ).toBeFalsy();
+  });
+
+  it('attributeHasTag returns false if no meta', () => {
+    expect(BlockUtils.attributeHasTag({}, 'tag1')).toBeFalsy();
+  });
+
+  it('attributeHasTag returns false if no tags', () => {
+    expect(BlockUtils.attributeHasTag({ meta: {} }, 'tag3')).toBeFalsy();
+  });
 });
