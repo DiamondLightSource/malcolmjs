@@ -1,13 +1,18 @@
 import BlockUtils from './blockUtils';
 
+const buildAttribute = (name, tags = []) => ({
+  name,
+  meta: {
+    tags,
+  },
+});
+
 describe('Block Utilities', () => {
   let blocks = {};
   let layoutAttribute = {};
 
   beforeEach(() => {
-    layoutAttribute = {
-      name: 'layout',
-    };
+    layoutAttribute = buildAttribute('layout');
 
     blocks = {
       block1: {
@@ -43,5 +48,50 @@ describe('Block Utilities', () => {
       'not an attribute'
     );
     expect(attribute).toBeUndefined();
+  });
+
+  it('findAttributesWithTag returns attributes with matching tags', () => {
+    const block = {
+      attributes: [
+        buildAttribute('att1', ['widget:test', 'another tag']),
+        buildAttribute('att2', ['test']),
+        buildAttribute('att3', ['widget:test']),
+      ],
+    };
+    const attributes = BlockUtils.findAttributesWithTag(block, 'widget:test');
+
+    expect(attributes).toHaveLength(2);
+    expect(attributes[0]).toBe(block.attributes[0]);
+    expect(attributes[1]).toBe(block.attributes[2]);
+  });
+
+  it('findAttributesWithTag uses partial matches', () => {
+    const block = {
+      attributes: [
+        buildAttribute('att1', ['widget:test', 'another tag']),
+        buildAttribute('att2', ['test']),
+        buildAttribute('att3', ['widget:test']),
+      ],
+    };
+    const attributes = BlockUtils.findAttributesWithTag(block, 'widget:');
+
+    expect(attributes).toHaveLength(2);
+    expect(attributes[0]).toBe(block.attributes[0]);
+    expect(attributes[1]).toBe(block.attributes[2]);
+  });
+
+  it('findBlock returns block if it exists', () => {
+    blocks = {
+      block1: {
+        name: 'block1',
+      },
+    };
+
+    expect(BlockUtils.findBlock(blocks, 'block1')).toBe(blocks.block1);
+  });
+
+  it('findBlock returns undefined if block does not exist', () => {
+    expect(BlockUtils.findBlock({}, 'block1')).toBeUndefined();
+    expect(BlockUtils.findBlock(undefined, 'block1')).toBeUndefined();
   });
 });
