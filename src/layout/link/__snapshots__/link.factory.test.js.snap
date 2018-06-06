@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkFactory generates react widget 1`] = `
+<g
+  className="srd-default-link "
+>
+  <g
+    key="link-0"
+  >
+    <path
+      className=""
+      d={
+        Array [
+          "M 0,0 C -6.666666666666667,6.666666666666667 16.666666666666668,6.666666666666667 10,0",
+        ]
+      }
+      stroke="rgba(255,255,255,0.5)"
+      strokeWidth={3}
+    />
+    <path
+      className=""
+      d={
+        Array [
+          "M 0,0 C -6.666666666666667,6.666666666666667 16.666666666666668,6.666666666666667 10,0",
+        ]
+      }
+      data-linkid="1"
+      data-point={0}
+      onContextMenu={[Function]}
+      onMouseDown={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      stroke="rgba(255,255,255,0.5)"
+      strokeLinecap="round"
+      strokeOpacity={0}
+      strokeWidth={20}
+    />
+  </g>
+  <g
+    key="point-5"
+  >
+    <circle
+      className="point srd-default-link__point "
+      cx={10}
+      cy={0}
+      r={5}
+    />
+    <circle
+      className="point srd-default-link__point "
+      cx={10}
+      cy={0}
+      data-id="5"
+      data-linkid="1"
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      opacity={0}
+      r={15}
+    />
+  </g>
+</g>
+`;
