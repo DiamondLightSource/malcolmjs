@@ -24,6 +24,32 @@ export const offSetPosition = layoutBlock => ({
   },
 });
 
+export const updateLayoutBlock = (layoutBlock, malcolmState) => {
+  const matchingBlock = blockUtils.findBlock(
+    malcolmState.blocks,
+    layoutBlock.mri
+  );
+  if (matchingBlock && matchingBlock.attributes) {
+    const updatedBlock = { ...layoutBlock };
+    updatedBlock.description = matchingBlock.label;
+
+    const iconAttribute = blockUtils.findAttributesWithTag(
+      matchingBlock,
+      'widget:icon'
+    );
+
+    if (iconAttribute.length > 0) {
+      updatedBlock.icon = iconAttribute[0].value;
+    }
+
+    updatedBlock.ports = buildPorts(matchingBlock);
+
+    return updatedBlock;
+  }
+
+  return layoutBlock;
+};
+
 const processLayout = malcolmState => {
   const layout = {
     blocks: [],
@@ -39,31 +65,7 @@ const processLayout = malcolmState => {
       const layoutBlocks = attribute.layout.blocks
         .filter(b => b.visible)
         .map(b => offSetPosition(b))
-        .map(b => {
-          const matchingBlock = blockUtils.findBlock(
-            malcolmState.blocks,
-            b.mri
-          );
-          if (matchingBlock && matchingBlock.attributes) {
-            const updatedBlock = { ...b };
-            updatedBlock.description = matchingBlock.label;
-
-            const iconAttribute = blockUtils.findAttributesWithTag(
-              matchingBlock,
-              'widget:icon'
-            );
-
-            if (iconAttribute.length > 0) {
-              updatedBlock.icon = iconAttribute[0].value;
-            }
-
-            updatedBlock.ports = buildPorts(matchingBlock);
-
-            return updatedBlock;
-          }
-
-          return b;
-        });
+        .map(b => updateLayoutBlock(b, malcolmState));
       layout.blocks = layoutBlocks;
     }
   }
