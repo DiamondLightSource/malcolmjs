@@ -46,7 +46,7 @@ class NavControl extends Component {
           className={classes.currentLink}
           onClick={() => navigateToChild('')}
         >
-          {nav.path}
+          {nav.label}
         </Typography>
         <IconButton
           onClick={this.handleClick}

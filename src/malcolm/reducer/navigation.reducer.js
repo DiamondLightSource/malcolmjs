@@ -3,6 +3,7 @@ export const processNavigationLists = (paths, blocks) => {
     path: p,
     children: [],
     basePath: '/',
+    label: p,
   }));
 
   if (navigationLists.length === 0) {
@@ -10,6 +11,7 @@ export const processNavigationLists = (paths, blocks) => {
       path: '',
       children: [],
       basePath: '/',
+      label: '',
     });
   }
 
@@ -31,6 +33,7 @@ export const processNavigationLists = (paths, blocks) => {
     if (Object.prototype.hasOwnProperty.call(blocks, path)) {
       previousBlock = blocks[path];
       navigationLists[i].children = previousBlock.children;
+      navigationLists[i].label = i === 0 ? path : previousBlock.label;
     } else if (previousBlock && previousBlock.attributes) {
       const matchingAttribute = previousBlock.attributes.findIndex(
         a => a.name === path
@@ -39,6 +42,8 @@ export const processNavigationLists = (paths, blocks) => {
         const attribute = previousBlock.attributes[matchingAttribute];
         navigationLists[i].children = attribute.children;
       }
+
+      navigationLists[i].label = path;
     }
 
     navigationLists[i].basePath = basePath;
