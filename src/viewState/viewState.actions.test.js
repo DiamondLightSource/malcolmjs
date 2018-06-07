@@ -1,4 +1,4 @@
-import { openParentPanel, openChildPanel } from './viewState.actions';
+import { openParentPanel, closeChildPanel } from './viewState.actions';
 
 it('openParentPanel signals the open state of the parent panel', () => {
   const action = openParentPanel(true);
@@ -7,9 +7,9 @@ it('openParentPanel signals the open state of the parent panel', () => {
   expect(action.openParentPanel).toEqual(true);
 });
 
-it('openChildPanel signals the open state of the child panel', () => {
-  const action = openChildPanel(true);
+it('closeChildPanel updates the route to remove the child', () => {
+  const action = closeChildPanel('/gui/PANDA/layout/PANDA:SEQ1');
 
-  expect(action.type).toEqual('OPEN_CHILD_PANEL');
-  expect(action.openChildPanel).toEqual(true);
+  expect(action.type).toEqual('@@router/CALL_HISTORY_METHOD');
+  expect(action.payload.args[0]).toEqual('/gui/PANDA/layout');
 });

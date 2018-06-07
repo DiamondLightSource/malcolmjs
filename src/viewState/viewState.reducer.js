@@ -1,4 +1,4 @@
-import { openParentPanelType, openChildPanelType } from './viewState.actions';
+import { openParentPanelType } from './viewState.actions';
 
 const initialViewState = {
   openParentPanel: true,
@@ -9,9 +9,6 @@ const viewStateReducer = (state = initialViewState, action) => {
   switch (action.type) {
     case openParentPanelType:
       return { ...state, openParentPanel: action.openParentPanel };
-
-    case openChildPanelType:
-      return { ...state, openChildPanel: action.openChildPanel };
 
     default:
       return state;

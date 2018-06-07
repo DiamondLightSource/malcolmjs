@@ -26,7 +26,10 @@ describe('attribute reducer', () => {
           ],
         },
       },
-      navigation: [],
+      navigation: {
+        navigationLists: [],
+        rootNav: {},
+      },
     };
 
     payload = {

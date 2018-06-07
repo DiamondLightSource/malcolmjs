@@ -241,8 +241,9 @@ function setDisconnected(state) {
   };
 }
 
-function setErrorState(state, id, errorState) {
-  const { path } = state.messagesInFlight.find(m => m.id === id);
+export const setErrorState = (state, id, errorState) => {
+  const matchingMessage = state.messagesInFlight.find(m => m.id === id);
+  const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
     const blockName = path[0];
     const attributeName = path[1];
@@ -270,7 +271,7 @@ function setErrorState(state, id, errorState) {
     }
   }
   return state;
-}
+};
 
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
