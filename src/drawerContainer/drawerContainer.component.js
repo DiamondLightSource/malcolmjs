@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import DrawerHeader from './drawerHeader.component';
 import {
   openParentPanel,
-  openChildPanel,
+  closeChildPanel,
 } from '../viewState/viewState.actions';
 import NavBar from '../navbar/navbar.component';
 
@@ -63,7 +63,7 @@ const DrawerContainer = props => (
     >
       <div className={props.classes.drawerContents}>
         <DrawerHeader
-          closeAction={props.closeChild}
+          closeAction={() => props.closeChild(props.urlPath)}
           title={props.childTitle}
           popOutAction={() =>
             props.popOutAction(
@@ -84,17 +84,19 @@ const DrawerContainer = props => (
 
 const mapStateToProps = state => ({
   open: state.viewState.openParentPanel,
-  openSecondary: state.viewState.openChildPanel,
+  openSecondary: state.malcolm.childBlock !== undefined,
+  urlPath: state.router.location.pathname,
 });
 
 const mapDispatchToProps = dispatch => ({
   closeParent: () => dispatch(openParentPanel(false)),
-  closeChild: () => dispatch(openChildPanel(false)),
+  closeChild: urlPath => dispatch(closeChildPanel(urlPath)),
 });
 
 DrawerContainer.propTypes = {
   open: PropTypes.bool.isRequired,
   openSecondary: PropTypes.bool.isRequired,
+  urlPath: PropTypes.string.isRequired,
   closeParent: PropTypes.func.isRequired,
   popOutAction: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,

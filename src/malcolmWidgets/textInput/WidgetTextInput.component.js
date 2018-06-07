@@ -83,7 +83,7 @@ WidgetTextInput.propTypes = {
 WidgetTextInput.defaultProps = {
   Pending: false,
   Error: false,
-  Units: null,
+  Units: '',
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetTextInput);

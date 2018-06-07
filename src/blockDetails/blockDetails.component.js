@@ -17,7 +17,8 @@ const styles = theme => ({
 const ignoredAttributes = ['widget:icon', 'widget:title'];
 
 export const isBlockLoading = block =>
-  block && (block.loading || block.attributes.some(a => a.loading));
+  block !== undefined &&
+  (block.loading || block.attributes.some(a => a.loading));
 export const isRootLevelAttribute = a =>
   !a.inGroup &&
   !a.isGroup &&

@@ -65,7 +65,7 @@ const AttributeSelector = props => {
         return (
           <WidgetTextInput
             Error={isErrorState}
-            Value={props.attribute.value}
+            Value={props.attribute.value.toString()}
             Pending={setDisabled}
             submitEventHandler={event =>
               props.eventHandler(props.attribute.path, event.target.value)

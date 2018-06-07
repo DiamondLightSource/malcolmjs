@@ -17,6 +17,19 @@ exports[`NavBar renders correctly 1`] = `
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
     >
       <WithStyles(NavControl)
+        key=".blocks"
+        nav={
+          Object {
+            "children": Array [
+              "PANDA",
+              "PANDA:SEQ1",
+            ],
+            "path": "",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+      <WithStyles(NavControl)
         key="PANDA"
         nav={
           Object {

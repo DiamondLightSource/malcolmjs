@@ -42,18 +42,18 @@ class NavControl extends Component {
 
     return (
       <div className={classes.container}>
+        <Typography
+          className={classes.currentLink}
+          onClick={() => navigateToChild('')}
+        >
+          {nav.path}
+        </Typography>
         <IconButton
           onClick={this.handleClick}
           disabled={nav.children.length === 0}
         >
           <KeyboardArrowDown />
         </IconButton>
-        <Typography
-          className={classes.currentLink}
-          onClick={() => navigateToChild(nav.path)}
-        >
-          {nav.path}
-        </Typography>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}

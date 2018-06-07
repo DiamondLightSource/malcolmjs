@@ -3,10 +3,7 @@ import { createShallow, createMount } from '@material-ui/core/test-utils';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import DrawerContainer from './drawerContainer.component';
-import {
-  openParentPanelType,
-  openChildPanelType,
-} from '../viewState/viewState.actions';
+import { openParentPanelType } from '../viewState/viewState.actions';
 
 const mockStore = configureStore();
 
@@ -26,7 +23,13 @@ describe('DrawerContainer', () => {
       },
       malcolm: {
         blocks: {},
+        childBlock: 'CHILD',
         navigation: [{ path: 'PANDA', children: [] }],
+      },
+      router: {
+        location: {
+          pathname: '/gui/PANDA/layout/CHILD',
+        },
       },
     };
   });
@@ -107,7 +110,7 @@ describe('DrawerContainer', () => {
 
     const actions = store.getActions();
     expect(actions.length).toEqual(1);
-    expect(actions[0].type).toBe(openChildPanelType);
-    expect(actions[0].openParentPanel).toBeFalsy();
+    expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
+    expect(actions[0].payload.args[0]).toEqual('/gui/PANDA/layout');
   });
 });

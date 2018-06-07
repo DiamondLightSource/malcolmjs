@@ -23,7 +23,13 @@ import layoutReducer from './layout.reducer';
 const initialMalcolmState = {
   messagesInFlight: [],
   messageCounter: 0,
-  navigation: [],
+  navigation: {
+    navigationLists: [],
+    rootNav: {
+      path: '',
+      children: [],
+    },
+  },
   blocks: {},
   parentBlock: undefined,
   childBlock: undefined,
@@ -111,12 +117,12 @@ function updateBlock(state, payload) {
     }
 
     if (
-      state.navigation
+      state.navigation.navigationLists
         .map(nav => nav.path)
         .findIndex(path => path === blockName) > -1
     ) {
       navigation = processNavigationLists(
-        state.navigation.map(nav => nav.path),
+        state.navigation.navigationLists.map(nav => nav.path),
         blocks
       );
     }
@@ -139,7 +145,7 @@ function updateRootBlock(state, payload) {
   blocks['.blocks'].children = payload.blocks;
 
   const navigation = processNavigationLists(
-    state.navigation.map(nav => nav.path),
+    state.navigation.navigationLists.map(nav => nav.path),
     blocks
   );
 
@@ -235,8 +241,9 @@ function setDisconnected(state) {
   };
 }
 
-function setErrorState(state, id, errorState) {
-  const { path } = state.messagesInFlight.find(m => m.id === id);
+export const setErrorState = (state, id, errorState) => {
+  const matchingMessage = state.messagesInFlight.find(m => m.id === id);
+  const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
     const blockName = path[0];
     const attributeName = path[1];
@@ -264,7 +271,7 @@ function setErrorState(state, id, errorState) {
     }
   }
   return state;
-}
+};
 
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {

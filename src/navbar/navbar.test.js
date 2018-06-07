@@ -23,11 +23,17 @@ describe('NavBar', () => {
       },
       malcolm: {
         blocks: {},
-        navigation: [
-          { path: 'PANDA', children: [] },
-          { path: 'layout', children: [] },
-          { path: 'PANDA:SEQ1', children: [] },
-        ],
+        navigation: {
+          navigationLists: [
+            { path: 'PANDA', children: [] },
+            { path: 'layout', children: [] },
+            { path: 'PANDA:SEQ1', children: [] },
+          ],
+          rootNav: {
+            path: '',
+            children: ['PANDA', 'PANDA:SEQ1'],
+          },
+        },
       },
     };
   });

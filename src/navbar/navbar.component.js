@@ -88,6 +88,11 @@ const NavBar = props => (
           [props.classes.titleShift]: props.open,
         })}
       >
+        <NavControl
+          key=".blocks"
+          nav={props.rootNav}
+          navigateToChild={child => props.navigateToChild('/', child)}
+        />
         {props.navigation.map(nav => (
           <NavControl
             key={nav.path}
@@ -107,7 +112,8 @@ const NavBar = props => (
 
 const mapStateToProps = state => ({
   open: state.viewState.openParentPanel,
-  navigation: state.malcolm.navigation,
+  navigation: state.malcolm.navigation.navigationLists,
+  rootNav: state.malcolm.navigation.rootNav,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -124,7 +130,12 @@ NavBar.propTypes = {
       children: PropTypes.arrayOf(PropTypes.string),
     })
   ),
+  rootNav: PropTypes.shape({
+    path: PropTypes.string,
+    children: PropTypes.arrayOf(PropTypes.string),
+  }),
   openParent: PropTypes.func.isRequired,
+  navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string,
     appBarShift: PropTypes.string,
@@ -140,6 +151,10 @@ NavBar.propTypes = {
 
 NavBar.defaultProps = {
   navigation: [],
+  rootNav: {
+    path: '',
+    children: [],
+  },
 };
 
 export default withStyles(styles, { withTheme: true })(

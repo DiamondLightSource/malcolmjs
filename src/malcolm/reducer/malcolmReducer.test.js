@@ -1,4 +1,4 @@
-import malcolmReducer from './malcolmReducer';
+import malcolmReducer, { setErrorState } from './malcolmReducer';
 import {
   malcolmNewBlockAction,
   malcolmNavigationPath,
@@ -52,7 +52,13 @@ describe('malcolm reducer', () => {
     state = {
       messagesInFlight: [],
       blocks: {},
-      navigation: [],
+      navigation: {
+        navigationLists: [],
+        rootNav: {
+          path: '',
+          children: [],
+        },
+      },
     };
   });
 
@@ -304,5 +310,29 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
 
     expect(state.blocks['.blocks'].children).toEqual(blocks);
+  });
+
+  it('setErrorState returns state if message with id is not found', () => {
+    let updatedState = setErrorState(state, 1234567, 1);
+    expect(updatedState).toBe(state);
+
+    state.messagesInFlight.push({ id: 1 });
+    updatedState = setErrorState(state, 1234567, 1);
+    expect(updatedState).toBe(state);
+  });
+
+  it('setErrorState updates the error state on the matching attribute', () => {
+    state.blocks = testBlock;
+    state.messagesInFlight.push({
+      id: 1,
+      path: ['testBlock', 'foo'],
+    });
+
+    const updatedState = setErrorState(state, 1, 123);
+
+    const attribute = updatedState.blocks.testBlock.attributes.find(
+      a => a.name === 'foo'
+    );
+    expect(attribute.errorState).toEqual(123);
   });
 });

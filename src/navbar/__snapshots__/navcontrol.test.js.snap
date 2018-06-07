@@ -4,18 +4,18 @@ exports[`NavControl disables menu item if children is empty 1`] = `
 <div
   className="NavControl-container-1"
 >
-  <WithStyles(IconButton)
-    disabled={true}
-    onClick={[Function]}
-  >
-    <pure(KeyboardArrowDown) />
-  </WithStyles(IconButton)>
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
     onClick={[Function]}
   >
     PANDA
   </WithStyles(Typography)>
+  <WithStyles(IconButton)
+    disabled={true}
+    onClick={[Function]}
+  >
+    <pure(KeyboardArrowDown) />
+  </WithStyles(IconButton)>
   <WithStyles(Menu)
     anchorEl={null}
     id="simple-menu"
@@ -29,18 +29,18 @@ exports[`NavControl renders correctly 1`] = `
 <div
   className="NavControl-container-1"
 >
-  <WithStyles(IconButton)
-    disabled={false}
-    onClick={[Function]}
-  >
-    <pure(KeyboardArrowDown) />
-  </WithStyles(IconButton)>
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
     onClick={[Function]}
   >
     PANDA
   </WithStyles(Typography)>
+  <WithStyles(IconButton)
+    disabled={false}
+    onClick={[Function]}
+  >
+    <pure(KeyboardArrowDown) />
+  </WithStyles(IconButton)>
   <WithStyles(Menu)
     anchorEl={null}
     id="simple-menu"
