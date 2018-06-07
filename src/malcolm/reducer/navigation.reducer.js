@@ -13,14 +13,19 @@ export const processNavigationLists = (paths, blocks) => {
     });
   }
 
+  const rootNav = {
+    path: '',
+    children: [],
+  };
+
   if (Object.prototype.hasOwnProperty.call(blocks, '.blocks')) {
-    navigationLists[0].children = blocks['.blocks'].children;
+    rootNav.children = blocks['.blocks'].children;
   }
 
   let previousBlock;
   let basePath = '/';
-  for (let i = 1; i < paths.length; i += 1) {
-    const path = paths[i - 1];
+  for (let i = 0; i < paths.length; i += 1) {
+    const path = paths[i];
     basePath = `${basePath + path}/`;
 
     if (Object.prototype.hasOwnProperty.call(blocks, path)) {
@@ -39,7 +44,10 @@ export const processNavigationLists = (paths, blocks) => {
     navigationLists[i].basePath = basePath;
   }
 
-  return navigationLists;
+  return {
+    navigationLists,
+    rootNav,
+  };
 };
 
 function updateNavigationPath(state, payload) {

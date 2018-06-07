@@ -76,12 +76,12 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
 export const updateNavigation = (state, attributeName) => {
   let { navigation } = state;
   if (
-    navigation
+    navigation.navigationLists
       .map(nav => nav.path)
       .findIndex(navPath => navPath === attributeName) > -1
   ) {
     navigation = processNavigationLists(
-      state.navigation.map(nav => nav.path),
+      state.navigation.navigationLists.map(nav => nav.path),
       state.blocks
     );
   }
@@ -157,14 +157,13 @@ function updateAttribute(state, payload) {
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
 
-      // update the navigation if the attribute was part of the path
-      const navigation = updateNavigation(state, attributeName);
-
       const updatedState = {
         ...state,
         blocks,
-        navigation,
       };
+
+      // update the navigation if the attribute was part of the path
+      const navigation = updateNavigation(updatedState, attributeName);
 
       const layout = updateLayout(
         state,
@@ -176,6 +175,7 @@ function updateAttribute(state, payload) {
       return {
         ...updatedState,
         layout,
+        navigation,
       };
     }
   }
@@ -186,7 +186,10 @@ function updateAttribute(state, payload) {
 function setMainAttribute(state, payload) {
   let { layout } = state;
   if (payload.attribute === 'layout') {
-    layout = LayoutReducer.processLayout(state);
+    layout = LayoutReducer.processLayout({
+      ...state,
+      mainAttribute: payload.attribute,
+    });
   }
 
   return {

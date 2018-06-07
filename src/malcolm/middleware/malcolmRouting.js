@@ -30,14 +30,14 @@ const handleLocationChange = (path, blocks, dispatch) => {
       dispatch(malcolmSubscribeAction([tokens[i], 'meta']));
     } else {
       const isMainAttribute =
-        i === tokens.length - 3 + tokens.length % 2 ||
+        i === tokens.length - 1 - tokens.length % 2 ||
         (i === 1 && tokens.length <= 2);
       if (isMainAttribute) {
-        dispatch(malcolmMainAttribute(tokens[i]));
-
         if (tokens[i] === 'layout') {
           LayoutHandler.layoutRouteSelected(blocks, tokens[i - 1], dispatch);
         }
+
+        dispatch(malcolmMainAttribute(tokens[i]));
       }
     }
   }

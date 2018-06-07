@@ -23,7 +23,13 @@ import layoutReducer from './layout.reducer';
 const initialMalcolmState = {
   messagesInFlight: [],
   messageCounter: 0,
-  navigation: [],
+  navigation: {
+    navigationLists: [],
+    rootNav: {
+      path: '',
+      children: [],
+    },
+  },
   blocks: {},
   parentBlock: undefined,
   childBlock: undefined,
@@ -111,12 +117,12 @@ function updateBlock(state, payload) {
     }
 
     if (
-      state.navigation
+      state.navigation.navigationLists
         .map(nav => nav.path)
         .findIndex(path => path === blockName) > -1
     ) {
       navigation = processNavigationLists(
-        state.navigation.map(nav => nav.path),
+        state.navigation.navigationLists.map(nav => nav.path),
         blocks
       );
     }
@@ -139,7 +145,7 @@ function updateRootBlock(state, payload) {
   blocks['.blocks'].children = payload.blocks;
 
   const navigation = processNavigationLists(
-    state.navigation.map(nav => nav.path),
+    state.navigation.navigationLists.map(nav => nav.path),
     blocks
   );
 
