@@ -49,6 +49,7 @@ describe('processNavigationLists', () => {
         children: ['block1', 'block2'],
       },
       block1: {
+        label: 'block 1',
         attributes: [
           {
             name: 'layout',
@@ -58,6 +59,7 @@ describe('processNavigationLists', () => {
         children: ['block2'],
       },
       block2: {
+        label: 'block 2',
         children: ['block3', 'block4'],
       },
     };
@@ -76,9 +78,11 @@ describe('processNavigationLists', () => {
 
     expect(navLists).toHaveLength(2);
     expect(navLists[0].path).toBe('block1');
+    expect(navLists[0].label).toBe('block1');
     expect(navLists[0].children).toBe(blocks.block1.children);
 
     expect(navLists[1].path).toBe('block2');
+    expect(navLists[1].label).toBe('block 2');
     expect(navLists[1].children).toBe(blocks.block2.children);
   });
 
@@ -88,12 +92,15 @@ describe('processNavigationLists', () => {
 
     expect(navLists).toHaveLength(3);
     expect(navLists[0].path).toBe('block1');
+    expect(navLists[0].label).toBe('block1');
     expect(navLists[0].children).toBe(blocks.block1.children);
 
     expect(navLists[1].path).toBe('layout');
+    expect(navLists[1].label).toBe('layout');
     expect(navLists[1].children).toEqual(['block5', 'block6']);
 
     expect(navLists[2].path).toBe('block3');
+    expect(navLists[2].label).toBe('block3');
     expect(navLists[2].children).toHaveLength(0);
   });
 });

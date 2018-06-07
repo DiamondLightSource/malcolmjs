@@ -7,8 +7,9 @@ describe('NavControl', () => {
   let mount;
 
   const nav = {
-    path: 'PANDA',
+    path: 'PANDA:mri',
     children: ['layout', 'table'],
+    label: 'PANDA',
   };
 
   beforeEach(() => {
