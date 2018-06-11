@@ -11,3 +11,6 @@ export const MalcolmCleanBlocks = 'malcolm:cleanblocks';
 export const MalcolmDisconnected = 'malcolm:disconnect';
 export const MalcolmMainAttributeUpdate = 'malcolm:mainattributeupdate';
 export const MalcolmReturn = 'malcolm:return';
+export const MalcolmUpdateBlockPosition = 'malcolm:updateblockposition';
+export const MalcolmSelectBlock = 'malcolm:selectblock';
+export const MalcolmShiftButton = 'malcolm:shiftbutton';

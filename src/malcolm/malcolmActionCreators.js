@@ -9,6 +9,9 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmReturn,
   MalcolmError,
+  MalcolmUpdateBlockPosition,
+  MalcolmSelectBlock,
+  MalcolmShiftButton,
 } from './malcolm.types';
 
 export const malcolmGetAction = path => ({
@@ -84,6 +87,27 @@ export const malcolmMainAttribute = attribute => ({
   },
 });
 
+export const malcolmLayoutUpdatePosition = position => ({
+  type: MalcolmUpdateBlockPosition,
+  payload: {
+    position,
+  },
+});
+
+export const malcolmSelectBlock = blockName => ({
+  type: MalcolmSelectBlock,
+  payload: {
+    blockName,
+  },
+});
+
+export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
+  type: MalcolmShiftButton,
+  payload: {
+    shiftIsPressed,
+  },
+});
+
 export const malcolmHailReturn = (id, isErrorState) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
   payload: {
@@ -102,4 +126,7 @@ export default {
   malcolmCleanBlocks,
   malcolmSetDisconnected,
   malcolmMainAttribute,
+  malcolmLayoutUpdatePosition,
+  malcolmSelectBlock,
+  malcolmLayoutShiftIsPressed,
 };

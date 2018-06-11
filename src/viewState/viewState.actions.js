@@ -17,4 +17,14 @@ export const closeChildPanel = currentUrl => {
   return push(urlWithoutChild);
 };
 
-export default { openParentPanel, closeChildPanel };
+export const updateChildPanel = (currentUrl, newChild) => {
+  const tokens = currentUrl.replace(/\/$/, '').split('/');
+
+  if (tokens[tokens.length - 1] === 'layout') {
+    return push([...tokens, newChild].join('/'));
+  }
+
+  return push([...tokens.slice(0, -1), newChild].join('/'));
+};
+
+export default { openParentPanel, closeChildPanel, updateChildPanel };

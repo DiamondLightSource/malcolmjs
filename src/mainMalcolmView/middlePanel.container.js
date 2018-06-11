@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Layout from '../layout/layout.component';
+import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 
 const styles = () => ({
   container: {
@@ -33,8 +34,18 @@ const findAttributeComponent = props => {
   return null;
 };
 
+const resetSelection = dispatch => {
+  dispatch(malcolmSelectBlock(''));
+};
+
 const MiddlePanelContainer = props => (
-  <div className={props.classes.container}>{findAttributeComponent(props)}</div>
+  <div
+    className={props.classes.container}
+    onClick={() => props.resetSelection()}
+    role="presentation"
+  >
+    {findAttributeComponent(props)}
+  </div>
 );
 
 const mapStateToProps = state => ({
@@ -42,7 +53,9 @@ const mapStateToProps = state => ({
   layout: state.malcolm.layout,
 });
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  resetSelection: () => resetSelection(dispatch),
+});
 
 findAttributeComponent.propTypes = {
   mainAttribute: PropTypes.string.isRequired,
@@ -64,6 +77,7 @@ MiddlePanelContainer.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,
+  resetSelection: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
