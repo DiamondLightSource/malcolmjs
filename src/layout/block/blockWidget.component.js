@@ -66,7 +66,11 @@ const BlockWidget = props => {
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
   return (
-    <Paper className={props.classes.block} elevation={8}>
+    <Paper
+      className={props.classes.block}
+      elevation={8}
+      onClick={e => props.node.clickHandler(e)}
+    >
       <Typography className={props.classes.title}>
         {props.node.label}
       </Typography>
@@ -112,6 +116,7 @@ BlockWidget.propTypes = {
     icon: PropTypes.string,
     ports: PropTypes.shape({}),
     description: PropTypes.string,
+    clickHandler: PropTypes.func,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

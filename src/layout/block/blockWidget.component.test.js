@@ -18,7 +18,7 @@ describe('BlockWidget', () => {
     '<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />' +
     '</svg>';
 
-  const block = new BlockModel('block 1', 'block 1 description');
+  const block = new BlockModel('block 1', 'block 1 description', 'block1');
   block.addIcon(icon);
   block.addBlockPort({ label: 'in 1', input: true });
   block.addBlockPort({ label: 'out 1', input: false });

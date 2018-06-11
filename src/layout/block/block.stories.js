@@ -1,6 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
+import { action } from '@storybook/addon-actions';
+import configureStore from 'redux-mock-store';
 import Layout from '../layout.component';
 
 const styles = {
@@ -98,11 +100,25 @@ const block2 = {
   },
 };
 
-const buildDiagram = blocks => (
-  <div style={styles.layoutArea}>
-    <Layout blocks={blocks} />
-  </div>
-);
+const mockStore = configureStore();
+
+const state = {
+  router: {
+    location: {
+      pathname: '/gui/PANDA/layout/PANDA:SEQ1',
+    },
+  },
+};
+
+const buildDiagram = blocks => {
+  const store = mockStore(state);
+  store.dispatch = msg => action('dispatch')(msg);
+  return (
+    <div style={styles.layoutArea}>
+      <Layout blocks={blocks} store={store} />
+    </div>
+  );
+};
 
 storiesOf('Layout/block', module)
   .add(

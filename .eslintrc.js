@@ -16,6 +16,7 @@ module.exports = {
   ],
   'rules': {
     'react/jsx-filename-extension': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
     'prettier/prettier': ['error', {
       'singleQuote': true,
       'trailingComma': 'es5'

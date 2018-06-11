@@ -184,18 +184,9 @@ function updateAttribute(state, payload) {
 }
 
 function setMainAttribute(state, payload) {
-  let { layout } = state;
-  if (payload.attribute === 'layout') {
-    layout = LayoutReducer.processLayout({
-      ...state,
-      mainAttribute: payload.attribute,
-    });
-  }
-
   return {
     ...state,
     mainAttribute: payload.attribute,
-    layout,
   };
 }
 

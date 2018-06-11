@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   DiagramEngine,
   DiagramModel,
@@ -8,40 +9,127 @@ import {
 import BlockNodeFactory from './block/blockWidget.factory';
 import BlockNodeModel from './block/block.model';
 import MalcolmLinkFactory from './link/link.factory';
+import { updateChildPanel } from '../viewState/viewState.actions';
+import {
+  malcolmSelectBlock,
+  malcolmLayoutUpdatePosition,
+  malcolmLayoutShiftIsPressed,
+} from '../malcolm/malcolmActionCreators';
 
 require('storm-react-diagrams/dist/style.min.css');
 
-const buildBlockNode = block => {
-  const node = new BlockNodeModel(block.name, block.description);
+const buildBlockNode = (block, selectedBlocks, clickHandler) => {
+  const node = new BlockNodeModel(block.name, block.description, block.mri);
   block.ports.forEach(p => node.addBlockPort(p));
-
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);
+  node.addClickHandler(clickHandler);
+  node.selected = selectedBlocks.some(b => b === block.mri);
 
   return node;
 };
 
-const Layout = props => {
-  const engine = new DiagramEngine();
-  engine.installDefaultFactories();
-  engine.registerNodeFactory(new BlockNodeFactory());
-  engine.registerLinkFactory(new MalcolmLinkFactory());
+class Layout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+  }
 
-  const model = new DiagramModel();
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('keyup', this.handleKeyUp);
+  }
 
-  const nodes = props.blocks.map(b => buildBlockNode(b));
-  model.addAll(...nodes);
-  engine.setDiagramModel(model);
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('keyup', this.handleKeyUp);
+  }
 
-  return <DiagramWidget diagramEngine={engine} />;
-};
+  handleKeyPress(event) {
+    if (event.key === 'Shift' && !this.props.shiftPressed) {
+      this.props.shiftKeyHandler(true);
+    }
+  }
+
+  handleKeyUp(event) {
+    if (event.key === 'Shift' && this.props.shiftPressed) {
+      this.props.shiftKeyHandler(false);
+    }
+  }
+
+  render() {
+    const { props } = this;
+
+    const engine = new DiagramEngine();
+    engine.installDefaultFactories();
+    engine.registerNodeFactory(new BlockNodeFactory());
+    engine.registerLinkFactory(new MalcolmLinkFactory());
+
+    const model = new DiagramModel();
+
+    const nodes = props.blocks.map(b =>
+      buildBlockNode(b, props.selectedBlocks, node =>
+        props.clickHandler(
+          props.url,
+          b,
+          props.layoutCenter,
+          node,
+          props.selectedBlocks
+        )
+      )
+    );
+    model.addAll(...nodes);
+    engine.setDiagramModel(model);
+
+    return <DiagramWidget diagramEngine={engine} />;
+  }
+}
 
 Layout.propTypes = {
-  blocks: PropTypes.arrayOf(PropTypes.shape({})),
+  shiftPressed: PropTypes.bool.isRequired,
+  shiftKeyHandler: PropTypes.func.isRequired,
 };
 
-Layout.defaultProps = {
-  blocks: [],
-};
+Layout.defaultProps = {};
 
-export default Layout;
+const mapStateToProps = state => ({
+  blocks: state.malcolm.layout.blocks,
+  url: state.router.location.pathname,
+  layoutCenter: state.malcolm.layoutCenter,
+  shiftPressed: state.malcolm.layoutState.shiftIsPressed,
+  selectedBlocks: state.malcolm.layoutState.selectedBlocks,
+});
+
+const mapDispatchToProps = dispatch => ({
+  clickHandler: (url, block, layoutCenter, node, selectedBlocks) => {
+    const translation = {
+      x: node.x - block.position.x,
+      y: node.y - block.position.y,
+    };
+
+    if (!selectedBlocks.some(b => b === block.mri)) {
+      dispatch(malcolmSelectBlock(block.mri));
+    }
+
+    if (
+      Math.abs(node.x - block.position.x) > 3 ||
+      Math.abs(node.y - block.position.y) > 3
+    ) {
+      dispatch(malcolmLayoutUpdatePosition(translation));
+    }
+
+    if (
+      url
+        .replace(/\/$/, '')
+        .split('/')
+        .slice(-1) !== block.mri
+    ) {
+      dispatch(updateChildPanel(url, block.mri));
+    }
+  },
+  shiftKeyHandler: shiftIsDown =>
+    dispatch(malcolmLayoutShiftIsPressed(shiftIsDown)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

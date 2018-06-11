@@ -1,13 +1,14 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import { Toolkit } from 'storm-react-diagrams';
+import configureStore from 'redux-mock-store';
 import Layout from './layout.component';
 
 describe('Layout', () => {
   let shallow;
 
   beforeEach(() => {
-    shallow = createShallow();
+    shallow = createShallow({ dive: true });
   });
 
   Toolkit.TESTING = true;
@@ -19,6 +20,7 @@ describe('Layout', () => {
 
   const block = {
     name: 'block 1',
+    mri: 'block1',
     description: 'block 1 description',
     icon,
     ports: [
@@ -32,8 +34,27 @@ describe('Layout', () => {
     },
   };
 
+  const mockStore = configureStore();
+
+  const state = {
+    malcolm: {
+      layout: {
+        blocks: [block],
+      },
+      layoutState: {
+        shiftIsPressed: false,
+        selectedBlocks: [],
+      },
+    },
+    router: {
+      location: {
+        pathname: '/gui/PANDA/layout/PANDA:SEQ1',
+      },
+    },
+  };
+
   it('renders correctly', () => {
-    const wrapper = shallow(<Layout blocks={[block]} />);
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

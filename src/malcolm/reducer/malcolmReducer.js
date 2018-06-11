@@ -12,6 +12,9 @@ import {
   MalcolmRootBlockMeta,
   MalcolmMainAttributeUpdate,
   MalcolmReturn,
+  MalcolmUpdateBlockPosition,
+  MalcolmSelectBlock,
+  MalcolmShiftButton,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer, {
@@ -22,6 +25,10 @@ import layoutReducer from './layout.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
+  layoutCenter: {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2 - 64,
+  },
   messageCounter: 0,
   navigation: {
     navigationLists: [],
@@ -40,6 +47,10 @@ const initialMalcolmState = {
   },
   layout: {
     blocks: [],
+  },
+  layoutState: {
+    shiftIsPressed: false,
+    selectedBlocks: [],
   },
 };
 
@@ -319,6 +330,23 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmDisconnected:
       return setDisconnected(state);
+
+    case MalcolmUpdateBlockPosition:
+      layoutReducer.updateBlockPosition(state, action.payload.position);
+
+      return {
+        ...state,
+        layout: layoutReducer.processLayout(state),
+      };
+
+    case MalcolmSelectBlock:
+      return {
+        ...state,
+        layoutState: layoutReducer.selectBlock(state, action.payload.blockName),
+      };
+
+    case MalcolmShiftButton:
+      return layoutReducer.shiftIsPressed(state, action.payload);
 
     default:
       return state;

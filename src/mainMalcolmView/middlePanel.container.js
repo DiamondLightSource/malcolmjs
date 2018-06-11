@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Layout from '../layout/layout.component';
+import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 
 const styles = () => ({
   container: {
@@ -25,7 +26,7 @@ const findAttributeComponent = props => {
   if (props.mainAttribute === 'layout') {
     return (
       <div className={props.classes.layoutArea}>
-        <Layout blocks={props.layout.blocks} />
+        <Layout />
       </div>
     );
   }
@@ -33,37 +34,40 @@ const findAttributeComponent = props => {
   return null;
 };
 
+const resetSelection = dispatch => {
+  dispatch(malcolmSelectBlock(''));
+};
+
 const MiddlePanelContainer = props => (
-  <div className={props.classes.container}>{findAttributeComponent(props)}</div>
+  <div
+    className={props.classes.container}
+    onClick={() => props.resetSelection()}
+    role="presentation"
+  >
+    {findAttributeComponent(props)}
+  </div>
 );
 
 const mapStateToProps = state => ({
   mainAttribute: state.malcolm.mainAttribute,
-  layout: state.malcolm.layout,
 });
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+  resetSelection: () => resetSelection(dispatch),
+});
 
 findAttributeComponent.propTypes = {
   mainAttribute: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     layoutArea: PropTypes.string,
   }).isRequired,
-  layout: PropTypes.shape({
-    blocks: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-};
-
-findAttributeComponent.defaultProps = {
-  layout: {
-    blocks: [],
-  },
 };
 
 MiddlePanelContainer.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,
+  resetSelection: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
