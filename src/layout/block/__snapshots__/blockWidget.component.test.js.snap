@@ -4,6 +4,7 @@ exports[`BlockWidget block renders correctly 1`] = `
 <WithStyles(Paper)
   className="BlockWidget-block-1"
   elevation={8}
+  onClick={[Function]}
 >
   <WithStyles(Typography)
     className="BlockWidget-title-2"
@@ -22,54 +23,55 @@ exports[`BlockWidget block renders correctly 1`] = `
       className="BlockWidget-inputPortsContainer-4"
     >
       <BlockPortWidget
-        key="2"
+        key="block1-in 1"
         node={
           BlockNodeModel {
             "addBlockPort": [Function],
+            "addClickHandler": [Function],
             "addIcon": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-            "id": "1",
+            "id": "block1",
             "label": "block 1",
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": MalcolmPortModel {
-                "id": "3",
+              "block1-in 1": MalcolmPortModel {
+                "id": "2",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "2",
+                "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "4": MalcolmPortModel {
-                "id": "5",
+              "block1-out 1": MalcolmPortModel {
+                "id": "3",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "4",
+                "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "6": MalcolmPortModel {
-                "id": "7",
+              "block1-out 2": MalcolmPortModel {
+                "id": "4",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "6",
+                "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
@@ -83,48 +85,49 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "3",
+            "id": "2",
             "in": true,
             "label": "in 1",
             "links": Object {},
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
-            "name": "2",
+            "name": "block1-in 1",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
+              "addClickHandler": [Function],
               "addIcon": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-              "id": "1",
+              "id": "block1",
               "label": "block 1",
               "listeners": Object {},
               "locked": false,
               "ports": Object {
-                "2": [Circular],
-                "4": MalcolmPortModel {
-                  "id": "5",
+                "block1-in 1": [Circular],
+                "block1-out 1": MalcolmPortModel {
+                  "id": "3",
                   "in": false,
                   "label": "out 1",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "4",
+                  "name": "block1-out 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
-                "6": MalcolmPortModel {
-                  "id": "7",
+                "block1-out 2": MalcolmPortModel {
+                  "id": "4",
                   "in": false,
                   "label": "out 2",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "6",
+                  "name": "block1-out 2",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
@@ -157,54 +160,55 @@ exports[`BlockWidget block renders correctly 1`] = `
       className="BlockWidget-outputPortsContainer-5"
     >
       <BlockPortWidget
-        key="4"
+        key="block1-out 1"
         node={
           BlockNodeModel {
             "addBlockPort": [Function],
+            "addClickHandler": [Function],
             "addIcon": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-            "id": "1",
+            "id": "block1",
             "label": "block 1",
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": MalcolmPortModel {
-                "id": "3",
+              "block1-in 1": MalcolmPortModel {
+                "id": "2",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "2",
+                "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "4": MalcolmPortModel {
-                "id": "5",
+              "block1-out 1": MalcolmPortModel {
+                "id": "3",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "4",
+                "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "6": MalcolmPortModel {
-                "id": "7",
+              "block1-out 2": MalcolmPortModel {
+                "id": "4",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "6",
+                "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
@@ -218,48 +222,49 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "5",
+            "id": "3",
             "in": false,
             "label": "out 1",
             "links": Object {},
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
-            "name": "4",
+            "name": "block1-out 1",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
+              "addClickHandler": [Function],
               "addIcon": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-              "id": "1",
+              "id": "block1",
               "label": "block 1",
               "listeners": Object {},
               "locked": false,
               "ports": Object {
-                "2": MalcolmPortModel {
-                  "id": "3",
+                "block1-in 1": MalcolmPortModel {
+                  "id": "2",
                   "in": true,
                   "label": "in 1",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "2",
+                  "name": "block1-in 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
-                "4": [Circular],
-                "6": MalcolmPortModel {
-                  "id": "7",
+                "block1-out 1": [Circular],
+                "block1-out 2": MalcolmPortModel {
+                  "id": "4",
                   "in": false,
                   "label": "out 2",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "6",
+                  "name": "block1-out 2",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
@@ -277,54 +282,55 @@ exports[`BlockWidget block renders correctly 1`] = `
         portColour="#3f51b5"
       />
       <BlockPortWidget
-        key="6"
+        key="block1-out 2"
         node={
           BlockNodeModel {
             "addBlockPort": [Function],
+            "addClickHandler": [Function],
             "addIcon": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-            "id": "1",
+            "id": "block1",
             "label": "block 1",
             "listeners": Object {},
             "locked": false,
             "ports": Object {
-              "2": MalcolmPortModel {
-                "id": "3",
+              "block1-in 1": MalcolmPortModel {
+                "id": "2",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "2",
+                "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "4": MalcolmPortModel {
-                "id": "5",
+              "block1-out 1": MalcolmPortModel {
+                "id": "3",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "4",
+                "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
-              "6": MalcolmPortModel {
-                "id": "7",
+              "block1-out 2": MalcolmPortModel {
+                "id": "4",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
-                "name": "6",
+                "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
@@ -338,52 +344,53 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "7",
+            "id": "4",
             "in": false,
             "label": "out 2",
             "links": Object {},
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
-            "name": "6",
+            "name": "block1-out 2",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
+              "addClickHandler": [Function],
               "addIcon": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-              "id": "1",
+              "id": "block1",
               "label": "block 1",
               "listeners": Object {},
               "locked": false,
               "ports": Object {
-                "2": MalcolmPortModel {
-                  "id": "3",
+                "block1-in 1": MalcolmPortModel {
+                  "id": "2",
                   "in": true,
                   "label": "in 1",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "2",
+                  "name": "block1-in 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
-                "4": MalcolmPortModel {
-                  "id": "5",
+                "block1-out 1": MalcolmPortModel {
+                  "id": "3",
                   "in": false,
                   "label": "out 1",
                   "links": Object {},
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
-                  "name": "4",
+                  "name": "block1-out 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
-                "6": [Circular],
+                "block1-out 2": [Circular],
               },
               "selected": false,
               "type": "malcolmjsblock",

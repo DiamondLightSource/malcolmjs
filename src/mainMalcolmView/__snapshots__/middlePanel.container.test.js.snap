@@ -3,19 +3,21 @@
 exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not layout 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
 />
 `;
 
 exports[`MalcolmMiddlePanel renders correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
 >
   <div
     className="MiddlePanelContainer-layoutArea-2"
   >
-    <Layout
-      blocks={Array []}
-    />
+    <Connect(Layout) />
   </div>
 </div>
 `;

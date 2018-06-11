@@ -93,11 +93,6 @@ describe('attribute reducer', () => {
     expect(state.mainAttribute).toEqual('health');
   });
 
-  it('if the main attribute is layout then the layout reducer is called', () => {
-    state = AttributeReducer.setMainAttribute(state, { attribute: 'layout' });
-    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
-  });
-
   it('updateLayout updates the layout if the attribute is called layout', () => {
     updateLayout(state, state, 'block1', 'layout');
     expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);

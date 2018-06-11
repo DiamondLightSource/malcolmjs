@@ -26,7 +26,7 @@ const findAttributeComponent = props => {
   if (props.mainAttribute === 'layout') {
     return (
       <div className={props.classes.layoutArea}>
-        <Layout blocks={props.layout.blocks} />
+        <Layout />
       </div>
     );
   }
@@ -50,7 +50,6 @@ const MiddlePanelContainer = props => (
 
 const mapStateToProps = state => ({
   mainAttribute: state.malcolm.mainAttribute,
-  layout: state.malcolm.layout,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -62,15 +61,6 @@ findAttributeComponent.propTypes = {
   classes: PropTypes.shape({
     layoutArea: PropTypes.string,
   }).isRequired,
-  layout: PropTypes.shape({
-    blocks: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-};
-
-findAttributeComponent.defaultProps = {
-  layout: {
-    blocks: [],
-  },
 };
 
 MiddlePanelContainer.propTypes = {

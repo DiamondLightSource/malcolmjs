@@ -94,6 +94,7 @@ Layout.propTypes = {
 Layout.defaultProps = {};
 
 const mapStateToProps = state => ({
+  blocks: state.malcolm.layout.blocks,
   url: state.router.location.pathname,
   layoutCenter: state.malcolm.layoutCenter,
   shiftPressed: state.malcolm.layoutState.shiftIsPressed,

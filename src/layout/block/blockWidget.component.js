@@ -116,7 +116,7 @@ BlockWidget.propTypes = {
     icon: PropTypes.string,
     ports: PropTypes.shape({}),
     description: PropTypes.string,
-    clickHandler: PropTypes.func.isRequired,
+    clickHandler: PropTypes.func,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

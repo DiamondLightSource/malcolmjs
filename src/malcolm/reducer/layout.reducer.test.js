@@ -14,6 +14,13 @@ const buildLayoutBlock = () => ({
 });
 
 const buildMalcolmState = () => ({
+  layout: {
+    blocks: [],
+  },
+  layoutCenter: {
+    x: 100,
+    y: 150,
+  },
   blocks: {
     block1: {
       label: 'block1 label',
@@ -78,10 +85,10 @@ describe('Layout Reducer', () => {
   });
 
   it('offSetPosition moves the blocks to the center of the layout area', () => {
-    const updatedBlock = offSetPosition(buildLayoutBlock());
+    const updatedBlock = offSetPosition(buildLayoutBlock(), { x: 100, y: 150 });
 
-    expect(updatedBlock.position.x).toEqual(10 + 512);
-    expect(updatedBlock.position.y).toEqual(20 + 768 / 2 - 64);
+    expect(updatedBlock.position.x).toEqual(10 + 100);
+    expect(updatedBlock.position.y).toEqual(20 + 150);
   });
 
   it('updateLayoutBlock updates the icon on a layout block', () => {
@@ -163,7 +170,7 @@ describe('Layout Reducer', () => {
 
     expect(layout.blocks).toHaveLength(1);
     expect(layout.blocks[0].icon).toEqual('icon 123');
-    expect(layout.blocks[0].position.x).toEqual(522);
+    expect(layout.blocks[0].position.x).toEqual(110);
     expect(layout.blocks[0].ports[0].label).toEqual('att1');
   });
 });
