@@ -26,7 +26,6 @@ class BlockNodeModel extends NodeModel {
   addClickHandler(handler) {
     this.clickHandler = e => {
       handler(this);
-      console.log('stopping propagation');
       e.stopPropagation();
     };
   }

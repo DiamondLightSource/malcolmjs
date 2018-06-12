@@ -58,9 +58,9 @@ function handleMessage(socket, message) {
     
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
     let response;
-    if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+    if (pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]) {
       pathIndexedMessages[JSON.stringify(simplifiedMessage.path)].changes[0][1].value = simplifiedMessage.value;
-      if (subscribedPaths.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+      if (subscribedPaths[JSON.stringify(simplifiedMessage.path)]) {
         response = {
           id: parseInt(subscribedPaths[JSON.stringify(simplifiedMessage.path)]),
           typeid: 'malcolm:core/Delta:1.0',
@@ -75,12 +75,38 @@ function handleMessage(socket, message) {
       }
 
       response = { id: originalId, typeid: 'malcolm:core/Return:1.0' };
+    } else if (pathIndexedMessages[JSON.stringify([...simplifiedMessage.path].slice(0, -1))]) {
+      // the last token in the path was something else
+      
+      const shortenedPath = JSON.stringify([...simplifiedMessage.path].slice(0, -1));
+      const lastToken = simplifiedMessage.path.slice(-1);
+      pathIndexedMessages[shortenedPath].changes[0][1][lastToken] = simplifiedMessage.value;
+
+      sendPutResponse(shortenedPath, lastToken, socket);
+      response = { id: originalId, typeid: 'malcolm:core/Return:1.0' };
     } else {
       response = buildErrorMessage(originalId, message);
     }
     sendResponse(socket, response);
   } else {
     sendResponse(socket, buildErrorMessage(originalId, message));
+  }
+}
+
+function sendPutResponse(jsonPath, changedProperty, socket) {
+  if (subscribedPaths[jsonPath]) {
+    response = {
+      id: parseInt(subscribedPaths[jsonPath]),
+      typeid: 'malcolm:core/Delta:1.0',
+      changes: [
+        [
+          ["value"],
+          pathIndexedMessages[jsonPath].changes[0][1][changedProperty],
+        ],
+      ],
+    };
+
+    sendResponse(socket, response);
   }
 }
 
