@@ -71,6 +71,7 @@ const block2Icon =
 
 const block1 = {
   name: 'TTLOUT3',
+  mri: 'TTLOUT3',
   description: 'TTL output 3',
   ports: [buildPort('val', true)],
   icon: block1Icon,
@@ -82,6 +83,7 @@ const block1 = {
 
 const block2 = {
   name: 'INENC1',
+  mri: 'INENC1',
   description: 'Input Encoder 1',
   ports: [
     buildPort('clk', true),
@@ -108,14 +110,25 @@ const state = {
       pathname: '/gui/PANDA/layout/PANDA:SEQ1',
     },
   },
+  malcolm: {
+    layout: {
+      blocks: [],
+    },
+    layoutState: {
+      shiftIsPressed: false,
+      selectedBlocks: [],
+    },
+  },
 };
 
 const buildDiagram = blocks => {
+  state.malcolm.layout.blocks = blocks;
+
   const store = mockStore(state);
   store.dispatch = msg => action('dispatch')(msg);
   return (
     <div style={styles.layoutArea}>
-      <Layout blocks={blocks} store={store} />
+      <Layout store={store} />
     </div>
   );
 };
