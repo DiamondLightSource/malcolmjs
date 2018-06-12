@@ -292,6 +292,7 @@ const handleErrorMessage = (state, action) => {
   let updatedState = { ...state };
   if (
     matchingMessage &&
+    matchingMessage.path &&
     matchingMessage.path.length > 2 &&
     matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
   ) {

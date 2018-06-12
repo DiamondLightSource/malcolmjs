@@ -18,6 +18,28 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
     className="MiddlePanelContainer-layoutArea-2"
   >
     <Connect(Layout) />
+    <div
+      className="MiddlePanelContainer-alarm-3"
+      style={
+        Object {
+          "right": 5,
+        }
+      }
+    >
+      <WithStyles(Typography)
+        className="MiddlePanelContainer-alarmText-4"
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      >
+        Saving...
+      </WithStyles(Typography)>
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={-1}
+      />
+    </div>
   </div>
 </div>
 `;
