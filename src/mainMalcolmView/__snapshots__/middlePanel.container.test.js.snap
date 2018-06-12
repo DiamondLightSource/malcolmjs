@@ -18,6 +18,18 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
     className="MiddlePanelContainer-layoutArea-2"
   >
     <Connect(Layout) />
+    <div
+      className="MiddlePanelContainer-alarm-3"
+      style={
+        Object {
+          "left": 365,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={-1}
+      />
+    </div>
   </div>
 </div>
 `;

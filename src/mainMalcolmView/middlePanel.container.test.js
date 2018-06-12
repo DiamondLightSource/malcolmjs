@@ -19,6 +19,9 @@ describe('MalcolmMiddlePanel', () => {
           blocks: [],
         },
       },
+      viewState: {
+        openParentPanel: true,
+      },
     };
 
     const mockStore = configureStore();
@@ -34,6 +37,9 @@ describe('MalcolmMiddlePanel', () => {
         layout: {
           blocks: [],
         },
+      },
+      viewState: {
+        openParentPanel: true,
       },
     };
 

@@ -24,6 +24,10 @@ exports[`NavBar renders correctly 1`] = `
               "PANDA",
               "PANDA:SEQ1",
             ],
+            "childrenLabels": Array [
+              "PANDA",
+              "PANDA:SEQ1",
+            ],
             "path": "",
           }
         }
@@ -34,6 +38,7 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "children": Array [],
+            "childrenLabels": Array [],
             "path": "PANDA",
           }
         }
@@ -44,6 +49,7 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "children": Array [],
+            "childrenLabels": Array [],
             "path": "layout",
           }
         }
@@ -54,6 +60,7 @@ exports[`NavBar renders correctly 1`] = `
         nav={
           Object {
             "children": Array [],
+            "childrenLabels": Array [],
             "path": "PANDA:SEQ1",
           }
         }

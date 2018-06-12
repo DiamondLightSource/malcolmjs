@@ -60,7 +60,7 @@ class NavControl extends Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          {nav.children.map(child => (
+          {nav.children.map((child, i) => (
             <MenuItem
               key={child}
               onClick={() => {
@@ -68,7 +68,7 @@ class NavControl extends Component {
                 navigateToChild(child);
               }}
             >
-              {child}
+              {nav.childrenLabels[i]}
             </MenuItem>
           ))}
         </Menu>

@@ -20,8 +20,9 @@ export const processNavigationLists = (paths, blocks) => {
     children: [],
   };
 
-  if (Object.prototype.hasOwnProperty.call(blocks, '.blocks')) {
+  if (blocks['.blocks']) {
     rootNav.children = blocks['.blocks'].children;
+    rootNav.childrenLabels = blocks['.blocks'].children;
   }
 
   let previousBlock;
@@ -30,10 +31,34 @@ export const processNavigationLists = (paths, blocks) => {
     const path = paths[i];
     basePath = `${basePath + path}/`;
 
-    if (Object.prototype.hasOwnProperty.call(blocks, path)) {
+    if (blocks[path]) {
       previousBlock = blocks[path];
       navigationLists[i].children = previousBlock.children;
-      navigationLists[i].label = i === 0 ? path : previousBlock.label;
+      navigationLists[i].childrenLabels = [...previousBlock.children];
+
+      navigationLists[i].label = path;
+
+      // if the part of the path before is layout then lookup the name
+      if (
+        i > 1 &&
+        blocks[paths[i - 2]] &&
+        blocks[paths[i - 2]].attributes &&
+        paths[i - 1] === 'layout'
+      ) {
+        const layoutAttribute = blocks[paths[i - 2]].attributes.find(
+          a => a.name === 'layout'
+        );
+
+        if (layoutAttribute && layoutAttribute.value) {
+          const matchingIndex = layoutAttribute.value.mri.findIndex(
+            mri => mri === path
+          );
+          navigationLists[i].label =
+            matchingIndex > -1
+              ? layoutAttribute.value.name[matchingIndex]
+              : 'not found';
+        }
+      }
     } else if (previousBlock && previousBlock.attributes) {
       const matchingAttribute = previousBlock.attributes.findIndex(
         a => a.name === path
@@ -41,6 +66,20 @@ export const processNavigationLists = (paths, blocks) => {
       if (matchingAttribute > -1) {
         const attribute = previousBlock.attributes[matchingAttribute];
         navigationLists[i].children = attribute.children;
+
+        if (path === 'layout') {
+          // get child labels from attribute table
+          navigationLists[i].childrenLabels = attribute.children
+            .map(child => attribute.value.mri.findIndex(mri => mri === child))
+            .map(
+              (mriIndex, j) =>
+                mriIndex > -1
+                  ? attribute.value.name[mriIndex]
+                  : attribute.value.mri[j]
+            );
+        } else {
+          navigationLists[i].childrenLabels = [...attribute.children];
+        }
       }
 
       navigationLists[i].label = path;

@@ -13,6 +13,7 @@ import {
   MalcolmSelectBlock,
   MalcolmShiftButton,
 } from './malcolm.types';
+import blockUtils from './blockUtils';
 
 export const malcolmGetAction = path => ({
   type: MalcolmSend,
@@ -87,12 +88,46 @@ export const malcolmMainAttribute = attribute => ({
   },
 });
 
-export const malcolmLayoutUpdatePosition = position => ({
-  type: MalcolmUpdateBlockPosition,
-  payload: {
-    position,
-  },
-});
+export const malcolmLayoutUpdatePosition = translation => (
+  dispatch,
+  getState
+) => {
+  dispatch({
+    type: MalcolmUpdateBlockPosition,
+    payload: {
+      translation,
+    },
+  });
+
+  const state = getState().malcolm;
+  const blockName = state.parentBlock;
+  const layoutAttribute = blockUtils.findAttribute(
+    state.blocks,
+    blockName,
+    'layout'
+  );
+
+  const { selectedBlocks } = state.layoutState;
+  if (layoutAttribute) {
+    const updateLayoutIndices = selectedBlocks.map(b =>
+      layoutAttribute.value.mri.findIndex(val => val === b)
+    );
+    const updateLayout = {
+      name: updateLayoutIndices.map(i => layoutAttribute.value.name[i]),
+      visible: updateLayoutIndices.map(i => layoutAttribute.value.visible[i]),
+      mri: selectedBlocks,
+      x: updateLayoutIndices.map(
+        i => layoutAttribute.value.x[i] + translation.x
+      ),
+      y: updateLayoutIndices.map(
+        i => layoutAttribute.value.y[i] + translation.y
+      ),
+    };
+
+    dispatch(malcolmSetPending([blockName, 'layout'], true));
+    dispatch(malcolmPutAction([blockName, 'layout', 'value'], updateLayout));
+  }
+};
 
 export const malcolmSelectBlock = blockName => ({
   type: MalcolmSelectBlock,

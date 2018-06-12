@@ -284,6 +284,31 @@ export const setErrorState = (state, id, errorState) => {
   return state;
 };
 
+const handleErrorMessage = (state, action) => {
+  const matchingMessage = state.messagesInFlight.find(
+    m => m.id === action.payload.id
+  );
+
+  let updatedState = { ...state };
+  if (
+    matchingMessage &&
+    matchingMessage.path &&
+    matchingMessage.path.length > 2 &&
+    matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
+  ) {
+    // reset the layout
+    updatedState = AttributeReducer.updateAttribute(state, {
+      id: action.payload.id,
+      delta: true,
+    });
+  }
+
+  return stopTrackingMessage(
+    setErrorState(updatedState, action.payload.id, true),
+    action
+  );
+};
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -296,10 +321,7 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return updateMessagesInFlight(state, action);
 
     case MalcolmError:
-      return stopTrackingMessage(
-        setErrorState(state, action.payload.id, true),
-        action
-      );
+      return handleErrorMessage(state, action);
 
     case MalcolmReturn:
       return stopTrackingMessage(
@@ -332,7 +354,7 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return setDisconnected(state);
 
     case MalcolmUpdateBlockPosition:
-      layoutReducer.updateBlockPosition(state, action.payload.position);
+      layoutReducer.updateBlockPosition(state, action.payload.translation);
 
       return {
         ...state,
