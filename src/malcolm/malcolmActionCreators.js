@@ -109,30 +109,23 @@ export const malcolmLayoutUpdatePosition = translation => (
 
   const { selectedBlocks } = state.layoutState;
   if (layoutAttribute) {
-    const updateLayoutAttribute = {
-      ...layoutAttribute.value,
-      x: layoutAttribute.value.x.map(
-        (val, i) =>
-          selectedBlocks.some(
-            selected => selected === layoutAttribute.value.mri[i]
-          )
-            ? val + translation.x
-            : val
+    const updateLayoutIndices = selectedBlocks.map(b =>
+      layoutAttribute.value.mri.findIndex(val => val === b)
+    );
+    const updateLayout = {
+      name: updateLayoutIndices.map(i => layoutAttribute.value.name[i]),
+      visible: updateLayoutIndices.map(i => layoutAttribute.value.visible[i]),
+      mri: selectedBlocks,
+      x: updateLayoutIndices.map(
+        i => layoutAttribute.value.x[i] + translation.x
       ),
-      y: layoutAttribute.value.y.map(
-        (val, i) =>
-          selectedBlocks.some(
-            selected => selected === layoutAttribute.value.mri[i]
-          )
-            ? val + translation.y
-            : val
+      y: updateLayoutIndices.map(
+        i => layoutAttribute.value.y[i] + translation.y
       ),
     };
 
     dispatch(malcolmSetPending([blockName, 'layout'], true));
-    dispatch(
-      malcolmPutAction([blockName, 'layout', 'value'], updateLayoutAttribute)
-    );
+    dispatch(malcolmPutAction([blockName, 'layout', 'value'], updateLayout));
   }
 };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { Typography } from '@material-ui/core';
 import Layout from '../layout/layout.component';
 import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 import AttributeAlarm, {
@@ -31,7 +30,6 @@ const styles = () => ({
     alignItems: 'center',
     position: 'absolute',
     margin: 15,
-    right: 5,
     top: 5,
   },
   alarmText: {
@@ -46,14 +44,8 @@ const findAttributeComponent = props => {
         <Layout />
         <div
           className={props.classes.alarm}
-          style={{ right: props.openSecondary ? 365 : 5 }}
+          style={{ left: props.openParent ? 365 : 5 }}
         >
-          <Typography
-            className={props.classes.alarmText}
-            style={{ display: props.showSavingMessage }}
-          >
-            Saving...
-          </Typography>
           <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
         </div>
       </div>
@@ -95,8 +87,7 @@ const mapStateToProps = state => {
   return {
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
-    showSavingMessage: alarm === AlarmStates.PENDING ? 'block' : 'none',
-    openSecondary: state.malcolm.childBlock !== undefined,
+    openParent: state.viewState.openParentPanel,
   };
 };
 
@@ -107,8 +98,7 @@ const mapDispatchToProps = dispatch => ({
 findAttributeComponent.propTypes = {
   mainAttribute: PropTypes.string.isRequired,
   mainAttributeAlarmState: PropTypes.number.isRequired,
-  showSavingMessage: PropTypes.string.isRequired,
-  openSecondary: PropTypes.bool.isRequired,
+  openParent: PropTypes.bool.isRequired,
   classes: PropTypes.shape({
     layoutArea: PropTypes.string,
     alarm: PropTypes.string,

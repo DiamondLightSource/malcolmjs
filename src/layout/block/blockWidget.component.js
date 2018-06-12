@@ -19,6 +19,7 @@ const styles = {
   },
   blockContents: {
     display: 'flex',
+    position: 'relative',
     alignItems: 'center',
     marginBottom: 3,
   },
@@ -47,6 +48,8 @@ const styles = {
     opacity: 0.35,
   },
   description: {
+    width: 120,
+    wordWrap: 'normal',
     textAlign: 'center',
     fontSize: 11,
   },

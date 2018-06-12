@@ -79,8 +79,27 @@ function handleMessage(socket, message) {
       // the last token in the path was something else
       
       const shortenedPath = JSON.stringify([...simplifiedMessage.path].slice(0, -1));
+      let update = simplifiedMessage.value;
+
+      // if it was the layout table then we need to update the rows
+      if (simplifiedMessage.path[simplifiedMessage.path.length - 2] === 'layout') {
+        let originalTable = pathIndexedMessages[shortenedPath].changes[0][1].value;
+
+        for (let i = 0; i < simplifiedMessage.value.mri.length; i++) {
+          const matchingRow = originalTable.mri.findIndex(mri => mri === simplifiedMessage.value.mri[i]);
+          if (matchingRow > -1) {
+            originalTable.name[matchingRow] = simplifiedMessage.value.name[i]
+            originalTable.visible[matchingRow] = simplifiedMessage.value.visible[i]
+            originalTable.x[matchingRow] = simplifiedMessage.value.x[i]
+            originalTable.y[matchingRow] = simplifiedMessage.value.y[i]
+          }
+        }
+
+        update = originalTable;
+      }
+
       const lastToken = simplifiedMessage.path.slice(-1);
-      pathIndexedMessages[shortenedPath].changes[0][1][lastToken] = simplifiedMessage.value;
+      pathIndexedMessages[shortenedPath].changes[0][1][lastToken] = update;
 
       sendPutResponse(shortenedPath, lastToken, socket);
       response = { id: originalId, typeid: 'malcolm:core/Return:1.0' };

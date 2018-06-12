@@ -25,13 +25,14 @@ describe('NavBar', () => {
         blocks: {},
         navigation: {
           navigationLists: [
-            { path: 'PANDA', children: [] },
-            { path: 'layout', children: [] },
-            { path: 'PANDA:SEQ1', children: [] },
+            { path: 'PANDA', children: [], childrenLabels: [] },
+            { path: 'layout', children: [], childrenLabels: [] },
+            { path: 'PANDA:SEQ1', children: [], childrenLabels: [] },
           ],
           rootNav: {
             path: '',
             children: ['PANDA', 'PANDA:SEQ1'],
+            childrenLabels: ['PANDA', 'PANDA:SEQ1'],
           },
         },
       },

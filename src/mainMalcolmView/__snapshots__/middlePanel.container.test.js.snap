@@ -22,20 +22,10 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
       className="MiddlePanelContainer-alarm-3"
       style={
         Object {
-          "right": 5,
+          "left": 365,
         }
       }
     >
-      <WithStyles(Typography)
-        className="MiddlePanelContainer-alarmText-4"
-        style={
-          Object {
-            "display": "block",
-          }
-        }
-      >
-        Saving...
-      </WithStyles(Typography)>
       <WithTheme(AttributeAlarm)
         alarmSeverity={-1}
       />

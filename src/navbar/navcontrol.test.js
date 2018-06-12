@@ -9,6 +9,7 @@ describe('NavControl', () => {
   const nav = {
     path: 'PANDA:mri',
     children: ['layout', 'table'],
+    childrenLabels: ['layout', 'table'],
     label: 'PANDA',
   };
 
