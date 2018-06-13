@@ -46,7 +46,7 @@ System Qualities
 |                                 | the site refreshes reasonably and remains usable.                         |
 |                                 |                                                                           |
 +---------------------------------+---------------------------------------------------------------------------+
-| Security                        | MalcolmJS currently has no security constraints as the site will be      |
+| Security                        | MalcolmJS currently has no security constraints as the site will be       |
 |                                 | deployed from a PANDA box inside the Diamond network. Even when externally|
 |                                 | hosted, all of the information comes from the websocket connection in     |
 |                                 | Malcolm (which is inside the Diamond network). There are no user access   |
