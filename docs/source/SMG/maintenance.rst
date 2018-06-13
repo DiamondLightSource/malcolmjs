@@ -8,7 +8,7 @@ Useful URLs
 Code                     https://github.com/dls-controls/malcolmjs
 Agile board              https://waffle.io/dls-controls/malcolmjs
 Travis                   https://travis-ci.org/dls-controls/malcolmjs
-Coverage                 https://codecov.io/gh/dls-controls/malcolmjs/
+Coverage                 https://codecov.io/gh/dls-controls/malcolmjs/branch/version1
 Docs                     http://malcolmjs.readthedocs.io/en/latest/
 PyMalcolm Docs           http://pymalcolm.readthedocs.io/en/latest/
 ======================= ===========================================================
@@ -19,12 +19,12 @@ NPM commands
 The main commands you are most likely to need during development are:
 ::
 
-    npm start
-    npm test
-    npm e2e
-    npm e2e:interactive
-    npm lint:js
-    npm storybook
+    npm [run] start
+    npm [run] test
+    npm run e2e
+    npm run e2e:interactive
+    npm run lint:js
+    npm run storybook
 
 
 

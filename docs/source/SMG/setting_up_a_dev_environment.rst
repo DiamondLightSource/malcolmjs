@@ -38,6 +38,13 @@ The documentation is all in reStructuredText. The documentation can be edited in
 The final documentation is built for `Read the Docs <https://readthedocs.org/>`_ using `Sphinx <http://www.sphinx-doc.org/en/master/>`_.
 
 Setting up a virtual environment
+********************************
+In a Diamond environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[To be written]
+
+In an environment you control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To build the documentation locally you need to have a virtual environment set up:
@@ -77,7 +84,7 @@ To deactivate the environment run:
     deactivate
 
 Running a docs build
-^^^^^^^^^^^^^^^^^^^^
+********************************
 
 To drop into the virtual env to run the build 
 ::

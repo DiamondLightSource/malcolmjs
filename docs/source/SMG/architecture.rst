@@ -202,7 +202,7 @@ Pull requests are gated so the automated build in Travis needs to succeed and th
 Security
 ^^^^^^^^^
 
-There are no current security restrictions on MalcolmJS as it has to be able to communicate with a Malcolm enabled devide which are all inside the Diamond internal network and so MalcolmJS will also have to be accessed from inside the network. Once inside the network anyone is allowed the configure the Malcolm settings.
+There are no current security restrictions on MalcolmJS as it has to be able to communicate with a Malcolm enabled device which are all inside the Diamond internal network and so MalcolmJS will also have to be accessed from inside the network. Once inside the network anyone is allowed the configure the Malcolm settings.
 
 Testing
 ^^^^^^^^^
