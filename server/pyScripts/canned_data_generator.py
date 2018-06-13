@@ -24,7 +24,7 @@ class MalcolmServerConnect:
         msg = json.dumps(self.message)
         conn.write_message(msg)
         resp = yield conn.read_message()
-        resp = json.loads(resp)
+        resp = json.loads(resp, object_pairs_hook=OrderedDict)
         self.responses.put(resp)
         conn.close()
 

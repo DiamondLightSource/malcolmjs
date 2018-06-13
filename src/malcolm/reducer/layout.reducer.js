@@ -8,10 +8,19 @@ export const buildPorts = block => {
     ...inputs.map(input => ({
       label: input.name,
       input: true,
+      tag: input.meta.tags
+        .find(t => t.indexOf('inport:') > -1)
+        .split(':')
+        .slice(-1)[0],
+      value: input.value,
     })),
     ...outputs.map(output => ({
       label: output.name,
       input: false,
+      tag: output.meta.tags
+        .find(t => t.indexOf('outport:') > -1)
+        .split(':')
+        .slice(-1)[0],
     })),
   ];
 };

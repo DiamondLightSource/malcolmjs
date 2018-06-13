@@ -79,7 +79,36 @@ class Layout extends React.Component {
         )
       )
     );
-    model.addAll(...nodes);
+
+    const links = [];
+    props.blocks.forEach(b => {
+      const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
+
+      const startNode = nodes.find(n => n.id === b.mri);
+      linkStarts.forEach(start => {
+        const startPort = startNode.ports[`${b.mri}-${start.label}`];
+
+        if (startPort !== undefined) {
+          // need to find the target port and link them together
+          const targetPortValue = start.value;
+          const endBlock = props.blocks.find(block =>
+            block.ports.some(p => !p.input && p.tag === targetPortValue)
+          );
+
+          if (endBlock) {
+            const end = endBlock.ports.find(
+              p => !p.input && p.tag === targetPortValue
+            );
+
+            const endNode = nodes.find(n => n.id === endBlock.mri);
+            const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+            links.push(endPort.link(startPort));
+          }
+        }
+      });
+    });
+
+    model.addAll(...nodes, ...links);
     engine.setDiagramModel(model);
 
     return <DiagramWidget diagramEngine={engine} />;
