@@ -1,13 +1,11 @@
 import {
   openParentPanelType,
   updateVersionNumerType,
-  siteLoadingType,
 } from './viewState.actions';
 
 const initialViewState = {
   openParentPanel: true,
   openChildPanel: true,
-  siteLoading: true,
 };
 
 const viewStateReducer = (state = initialViewState, action) => {
@@ -20,12 +18,6 @@ const viewStateReducer = (state = initialViewState, action) => {
         document.title = `MalcolmJS ${action.payload.version}`;
       }
       return state;
-
-    case siteLoadingType:
-      return {
-        ...state,
-        siteLoading: action.payload.siteLoading,
-      };
 
     default:
       return state;

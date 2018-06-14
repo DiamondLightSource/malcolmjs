@@ -132,7 +132,7 @@ exports[`Layout renders correctly 1`] = `
     }
   }
   inverseZoom={false}
-  maxNumberPointsPerLink={Infinity}
+  maxNumberPointsPerLink={0}
   smartRouting={false}
 />
 `;

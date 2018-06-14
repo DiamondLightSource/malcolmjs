@@ -3,7 +3,6 @@ import { push } from 'react-router-redux';
 export const openParentPanelType = 'OPEN_PARENT_PANEL';
 export const openChildPanelType = 'OPEN_CHILD_PANEL';
 export const updateVersionNumerType = 'UPDATE_VERSION';
-export const siteLoadingType = 'SITE_LOADING';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -36,16 +35,8 @@ export const updateVersionNumber = version => ({
   },
 });
 
-export const siteLoading = loading => ({
-  type: siteLoadingType,
-  payload: {
-    siteLoading: loading,
-  },
-});
-
 export default {
   openParentPanel,
   closeChildPanel,
   updateChildPanel,
-  siteLoading,
 };

@@ -48,4 +48,12 @@ describe('NavControl', () => {
 
     expect(navigateFunction.mock.calls.length).toEqual(1);
   });
+
+  it('handles the nav drop down being clicked', () => {
+    const wrapper = mount(<NavControl nav={nav} navigateToChild={() => {}} />);
+
+    wrapper.find('IconButton').simulate('click');
+
+    expect(wrapper.state.anchorEl).toEqual('werwer');
+  });
 });
