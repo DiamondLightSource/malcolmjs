@@ -10,6 +10,8 @@ install:
 - npm install -g codecov
 - npm install
 script:
+- chmod +x $TRAVIS_BUILD_DIR/continuous_integration/make_settings.sh
+- "$TRAVIS_BUILD_DIR/continuous_integration/make_settings.sh $TRAVIS_BUILD_DIR"
 - npm run lint:css
 - npm run lint:js
 - npm run build

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import renderHTML from 'react-render-html';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -43,9 +44,11 @@ const styles = {
     alignItems: 'center',
   },
   iconContents: {
-    width: 120,
     flexGrow: 1,
+    height: '100%',
+    width: 120,
     opacity: 0.35,
+    lineHeight: 0,
   },
   description: {
     width: 120,
@@ -89,11 +92,9 @@ const BlockWidget = props => {
           ))}
         </div>
         <div className={props.classes.iconContents}>
-          {props.node.icon === '<svg/>' ? (
-            <span />
-          ) : (
-            <span dangerouslySetInnerHTML={{ __html: props.node.icon }} />
-          )}
+          {props.node.icon && props.node.icon !== '<svg/>'
+            ? renderHTML(props.node.icon)
+            : null}
         </div>
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (

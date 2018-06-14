@@ -15,6 +15,7 @@ import {
   MalcolmUpdateBlockPosition,
   MalcolmSelectBlock,
   MalcolmShiftButton,
+  MalcolmSocketConnect,
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer, {
@@ -309,6 +310,17 @@ const handleErrorMessage = (state, action) => {
   );
 };
 
+const updateSocket = (state, payload) => {
+  const { socketContainer } = payload;
+  socketContainer.socket.url = payload.socketUrl;
+  socketContainer.socket.connect(socketContainer.socket);
+
+  return {
+    ...state,
+    socketContainer,
+  };
+};
+
 const malcolmReducer = (state = initialMalcolmState, action) => {
   switch (action.type) {
     case MalcolmNewBlock:
@@ -369,6 +381,9 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
 
     case MalcolmShiftButton:
       return layoutReducer.shiftIsPressed(state, action.payload);
+
+    case MalcolmSocketConnect:
+      return updateSocket(state, action.payload);
 
     default:
       return state;

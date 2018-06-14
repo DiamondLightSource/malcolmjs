@@ -18,17 +18,14 @@ import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddle
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
 import MessageSnackBar from './Snackbar/snackbar.component';
 import MalcolmReconnector from './malcolm/malcolmReconnector';
+import { configureSocket } from './malcolm/actions/socket.actions';
 
 require('typeface-roboto');
 
 const history = createHistory();
 const router = routerMiddleware(history);
 
-const webSocket = new MalcolmReconnector(
-  'ws://localhost:8000/ws',
-  5000,
-  WebSocket
-);
+const webSocket = new MalcolmReconnector('', 5000, WebSocket);
 const socketContainer = new MalcolmSocketContainer(webSocket);
 
 const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
@@ -48,6 +45,8 @@ const store = createStore(
 );
 
 configureMalcolmSocketHandlers(socketContainer, store);
+
+store.dispatch(configureSocket(socketContainer));
 
 const theme = createMuiTheme({
   palette: {
