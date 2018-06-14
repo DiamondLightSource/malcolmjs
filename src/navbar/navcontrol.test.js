@@ -54,6 +54,7 @@ describe('NavControl', () => {
 
     wrapper.find('IconButton').simulate('click');
 
-    expect(wrapper.state.anchorEl).toEqual('werwer');
+    console.log(wrapper.state());
+    expect(wrapper.state('anchorEl')).toEqual('werwer');
   });
 });

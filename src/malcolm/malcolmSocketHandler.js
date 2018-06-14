@@ -17,10 +17,6 @@ import handleLocationChange from './middleware/malcolmRouting';
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
 
-  if (socketContainer.socket instanceof MalcolmReconnector) {
-    // setTimeout(socketContainer.socket.connect, 0, socketContainer.socket);
-  }
-
   socketContainer.socket.onerror = error => {
     const errorString = JSON.stringify(error);
     store.dispatch(

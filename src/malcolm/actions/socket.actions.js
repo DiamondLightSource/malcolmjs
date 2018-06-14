@@ -11,18 +11,22 @@ export const registerSocketAndConnect = (socketContainer, socketUrl) => ({
 });
 
 export const configureSocket = socketContainer => dispatch => {
-  const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
   axios.get(`${baseUrl}/settings.json`).then(res => {
     const settings = res.data;
     console.log(settings);
     dispatch(updateVersionNumber(settings.version));
 
-    const malcolmSocket =
-      settings.malcolmSocket || `ws://${window.location.host}/ws`;
-    dispatch(registerSocketAndConnect(socketContainer, malcolmSocket));
+    // in production no socket will be defined and it will default to ws://{{host}}/ws
+    if (settings.malcolmSocket) {
+      dispatch(
+        registerSocketAndConnect(socketContainer, settings.malcolmSocket)
+      );
+    }
   });
 };
 
 export default {
   configureSocket,
+  registerSocketAndConnect,
 };
