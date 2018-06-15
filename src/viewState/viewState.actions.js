@@ -2,6 +2,7 @@ import { push } from 'react-router-redux';
 
 export const openParentPanelType = 'OPEN_PARENT_PANEL';
 export const openChildPanelType = 'OPEN_CHILD_PANEL';
+export const updateVersionNumerType = 'UPDATE_VERSION';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -27,4 +28,15 @@ export const updateChildPanel = (currentUrl, newChild) => {
   return push([...tokens.slice(0, -1), newChild].join('/'));
 };
 
-export default { openParentPanel, closeChildPanel, updateChildPanel };
+export const updateVersionNumber = version => ({
+  type: updateVersionNumerType,
+  payload: {
+    version,
+  },
+});
+
+export default {
+  openParentPanel,
+  closeChildPanel,
+  updateChildPanel,
+};

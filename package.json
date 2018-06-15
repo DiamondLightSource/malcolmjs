@@ -10,6 +10,7 @@
     "@storybook/addon-links": "^3.4.0",
     "@storybook/addons": "^3.4.0",
     "@storybook/react": "^3.4.0",
+    "axios": "^0.18.0",
     "classnames": "^2.2.5",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -21,6 +22,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
+    "react-render-html": "^0.6.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
@@ -59,8 +61,9 @@
     "precommit": "lint-staged",
     "server": "node ./server/test-malcolm-server.js",
     "server:dev": "nodemon ./server/test-malcolm-server.js",
-    "start": "concurrently \"npm run server:dev\" \"react-scripts start\"",
-    "build": "react-scripts build",
+    "start": "npm run config:dev & concurrently \"npm run server:dev\" \"react-scripts start\"",
+    "build": "npm run config:dev & react-scripts build",
+    "build:prod": "npm run build & npm run config:prod",
     "test": "react-scripts test --env=jsdom --coverage",
     "test:watch": "react-scripts test --env=jsdom --watch",
     "eject": "react-scripts eject",
@@ -75,7 +78,9 @@
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "build-docs": "sphinx-build -b html docs/source docs/build/html",
-    "sonarqube": "sonar-scanner"
+    "sonarqube": "sonar-scanner",
+    "config:dev": "node ./continuous_integration/update_settings.js dev",
+    "config:prod": "node ./continuous_integration/update_settings.js prod"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

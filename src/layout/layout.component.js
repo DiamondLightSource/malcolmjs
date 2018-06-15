@@ -111,7 +111,7 @@ class Layout extends React.Component {
     model.addAll(...nodes, ...links);
     engine.setDiagramModel(model);
 
-    return <DiagramWidget diagramEngine={engine} />;
+    return <DiagramWidget diagramEngine={engine} maxNumberPointsPerLink={0} />;
   }
 }
 

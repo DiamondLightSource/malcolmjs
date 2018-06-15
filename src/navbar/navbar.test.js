@@ -5,7 +5,6 @@ import NavBar from './navbar.component';
 import { openParentPanelType } from '../viewState/viewState.actions';
 
 const mockStore = configureStore();
-const dispatch = jest.fn();
 
 describe('NavBar', () => {
   let shallow;
@@ -25,7 +24,12 @@ describe('NavBar', () => {
         blocks: {},
         navigation: {
           navigationLists: [
-            { path: 'PANDA', children: [], childrenLabels: [] },
+            {
+              path: 'PANDA',
+              basePath: '/PANDA/',
+              children: ['layout'],
+              childrenLabels: ['layout'],
+            },
             { path: 'layout', children: [], childrenLabels: [] },
             { path: 'PANDA:SEQ1', children: [], childrenLabels: [] },
           ],
@@ -44,9 +48,13 @@ describe('NavBar', () => {
   });
 
   it('renders correctly', () => {
-    const wrapper = shallow(
-      <NavBar store={mockStore(state)} dispatch={dispatch} />
-    );
+    const wrapper = shallow(<NavBar store={mockStore(state)} />);
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('shows a select root node message if there is no parent block', () => {
+    state.malcolm.navigation.navigationLists = [];
+    const wrapper = shallow(<NavBar store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
@@ -65,5 +73,47 @@ describe('NavBar', () => {
     expect(actions.length).toEqual(1);
     expect(actions[0].type).toBe(openParentPanelType);
     expect(actions[0].openParentPanel).toBeTruthy();
+  });
+
+  it('navigating to .block item changes the route', () => {
+    const store = mockStore(state);
+    const wrapper = mount(<NavBar store={store} />);
+
+    // .blocks drop down
+    wrapper
+      .find('IconButton')
+      .at(1)
+      .simulate('click');
+    // click on PANDA:SEQ1 in the list of blocks
+    wrapper
+      .find('MenuItem')
+      .at(1)
+      .simulate('click');
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(1);
+    expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
+    expect(actions[0].payload.args).toEqual(['/gui/PANDA:SEQ1']);
+  });
+
+  it('navigating to nav item changes the route', () => {
+    const store = mockStore(state);
+    const wrapper = mount(<NavBar store={store} />);
+
+    // PANDA drop down
+    wrapper
+      .find('IconButton')
+      .at(2)
+      .simulate('click');
+    // click on PANDA:SEQ1 in the list of blocks
+    wrapper
+      .find('MenuItem')
+      .at(0)
+      .simulate('click');
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(1);
+    expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
+    expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout']);
   });
 });

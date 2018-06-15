@@ -17,6 +17,7 @@ script:
 - codecov
 - npm run e2e
 before_deploy:
+- npm run config:prod
 - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
 - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
 deploy:

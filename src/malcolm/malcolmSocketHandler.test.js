@@ -138,14 +138,6 @@ describe('malcolm socket handler', () => {
     configureMalcolmSocketHandlers(socketContainer, store);
   });
 
-  it('calls connect on reconnecting socket at configure', () => {
-    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
-    jest.runTimersToTime(100);
-    expect(
-      reconnectingSocketContainer.socket.mockConnect.mock.calls.length
-    ).toEqual(1);
-  });
-
   it('sets flag and flushes on open', () => {
     socketContainer.queue.push('flushed test');
     socketContainer.socket.onopen();

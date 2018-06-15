@@ -6,19 +6,22 @@ describe('NavControl', () => {
   let shallow;
   let mount;
 
-  const nav = {
-    path: 'PANDA:mri',
-    children: ['layout', 'table'],
-    childrenLabels: ['layout', 'table'],
-    label: 'PANDA',
-  };
+  let nav;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
+    mount = createMount();
+
+    nav = {
+      path: 'PANDA:mri',
+      children: ['layout', 'table'],
+      childrenLabels: ['layout', 'table'],
+      label: 'PANDA',
+    };
   });
 
   afterEach(() => {
-    mount = createMount();
+    mount.cleanUp();
   });
 
   it('renders correctly', () => {
@@ -46,6 +49,46 @@ describe('NavControl', () => {
 
     wrapper.find('p').simulate('click');
 
+    expect(navigateFunction.mock.calls.length).toEqual(1);
+  });
+
+  it('handles the nav drop down being clicked', () => {
+    const wrapper = mount(<NavControl nav={nav} navigateToChild={() => {}} />);
+    wrapper.find('IconButton').simulate('click');
+
+    expect(
+      wrapper
+        .find(NavControl)
+        .childAt(0)
+        .instance().state.anchorEl
+    ).toBeInstanceOf(HTMLButtonElement);
+  });
+
+  it('clicking on a menu item should close the menu and navigate to child', () => {
+    const navigateFunction = jest.fn();
+    const wrapper = mount(
+      <NavControl nav={nav} navigateToChild={navigateFunction} />
+    );
+
+    // open the menu
+    wrapper.find('IconButton').simulate('click');
+    expect(
+      wrapper
+        .find(NavControl)
+        .childAt(0)
+        .instance().state.anchorEl
+    ).toBeInstanceOf(HTMLButtonElement);
+
+    wrapper
+      .find('MenuItem')
+      .at(0)
+      .simulate('click');
+    expect(
+      wrapper
+        .find(NavControl)
+        .childAt(0)
+        .instance().state.anchorEl
+    ).toBeNull();
     expect(navigateFunction.mock.calls.length).toEqual(1);
   });
 });
