@@ -12,6 +12,7 @@ import {
   malcolmPutAction,
   malcolmSetPending,
 } from '../../../malcolm/malcolmActionCreators';
+import ButtonAction from '../../buttonAction/buttonAction.component';
 
 const styles = () => ({
   missingAttribute: {
@@ -74,6 +75,8 @@ const AttributeSelector = props => {
             blurHandler={() => {}}
           />
         );
+      } else if (tags[widgetTagIndex] === 'widget:flowgraph') {
+        return <ButtonAction text="View" clickAction={() => {}} />;
       }
     }
   }
