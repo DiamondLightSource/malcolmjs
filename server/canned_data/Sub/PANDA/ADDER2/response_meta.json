@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Position adder 2", 
         "fields": [
           "health", 
           "icon", 
@@ -35,10 +37,8 @@
           "outScaled", 
           "outCapture", 
           "outDataDelay"
-        ], 
-        "label": "Position adder 2"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

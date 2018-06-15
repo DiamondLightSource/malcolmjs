@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 297, 
+  "id": "CANNED", 
   "path": [
     "PANDA:PCOMP4", 
     "preStart"

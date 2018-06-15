@@ -1,36 +1,29 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "ZERO", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "POSC for optional trigger condition", 
-          "tags": [
-            "group:inputs", 
-            "inport:int32:ZERO", 
-            "widget:combo", 
-            "config:1"
-          ], 
-          "label": "Posc", 
           "choices": [
-            "INENC1.VAL", 
-            "INENC2.VAL", 
-            "INENC3.VAL", 
-            "INENC4.VAL", 
-            "QDEC1.OUT", 
-            "QDEC2.OUT", 
-            "QDEC3.OUT", 
-            "QDEC4.OUT", 
+            "ZERO", 
             "ADDER1.OUT", 
             "ADDER2.OUT", 
             "COUNTER1.OUT", 
@@ -41,21 +34,28 @@
             "COUNTER6.OUT", 
             "COUNTER7.OUT", 
             "COUNTER8.OUT", 
+            "FILTER.OUT", 
+            "INENC1.VAL", 
+            "INENC2.VAL", 
+            "INENC3.VAL", 
+            "INENC4.VAL", 
             "PGEN1.OUT", 
             "PGEN2.OUT", 
-            "FILTER.OUT", 
-            "ZERO"
-          ]
-        }, 
-        "value": "ZERO", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+            "QDEC1.OUT", 
+            "QDEC2.OUT", 
+            "QDEC3.OUT", 
+            "QDEC4.OUT"
+          ], 
+          "tags": [
+            "group:inputs", 
+            "inport:int32:ZERO", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "Posc"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

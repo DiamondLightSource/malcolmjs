@@ -1,22 +1,11 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTTable:1.0", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
-        }, 
-        "alarm": {
-          "status": 0, 
-          "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
-        }, 
         "labels": [
           "Repeats", 
           "Trigger", 
@@ -38,197 +27,208 @@
         ], 
         "value": {
           "typeid": "malcolm:core/Table:1.0", 
-          "outf1": [], 
+          "repeats": [], 
+          "trigger": [], 
+          "position": [], 
+          "time1": [], 
+          "outa1": [], 
+          "outb1": [], 
+          "outc1": [], 
           "outd1": [], 
           "oute1": [], 
-          "outa2": [], 
-          "outf2": [], 
-          "outa1": [], 
-          "time1": [], 
+          "outf1": [], 
           "time2": [], 
-          "oute2": [], 
-          "outc1": [], 
-          "outc2": [], 
-          "trigger": [], 
+          "outa2": [], 
           "outb2": [], 
-          "outb1": [], 
-          "position": [], 
-          "repeats": [], 
-          "outd2": []
+          "outc2": [], 
+          "outd2": [], 
+          "oute2": [], 
+          "outf2": []
+        }, 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/TableMeta:1.0", 
-          "elements": {
-            "outf2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outf2", 
-              "description": "OUTF2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outf1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outf1", 
-              "description": "OUTF1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outd1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outd1", 
-              "description": "OUTD1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "oute1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Oute1", 
-              "description": "OUTE1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outa2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outa2", 
-              "description": "OUTA2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outa1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outa1", 
-              "description": "OUTA1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "time1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "TIME1", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint32", 
-              "label": "Time1"
-            }, 
-            "time2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "TIME2", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint32", 
-              "label": "Time2"
-            }, 
-            "oute2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Oute2", 
-              "description": "OUTE2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outc1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outc1", 
-              "description": "OUTC1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outc2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outc2", 
-              "description": "OUTC2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "trigger": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "TRIGGER", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint8", 
-              "label": "Trigger"
-            }, 
-            "outb2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outb2", 
-              "description": "OUTB2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "outb1": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outb1", 
-              "description": "OUTB1", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }, 
-            "position": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "POSITION", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint32", 
-              "label": "Position"
-            }, 
-            "repeats": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "REPEATS", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint16", 
-              "label": "Repeats"
-            }, 
-            "outd2": {
-              "writeable": true, 
-              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "label": "Outd2", 
-              "description": "OUTD2", 
-              "tags": [
-                "widget:checkbox"
-              ]
-            }
-          }, 
           "description": "Sequencer table of lines", 
           "tags": [
             "widget:table", 
             "group:parameters", 
             "config:1"
           ], 
-          "label": "Table"
+          "writeable": true, 
+          "label": "Table", 
+          "elements": {
+            "repeats": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint16", 
+              "description": "REPEATS", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Repeats"
+            }, 
+            "trigger": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint8", 
+              "description": "TRIGGER", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Trigger"
+            }, 
+            "position": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint32", 
+              "description": "POSITION", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Position"
+            }, 
+            "time1": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint32", 
+              "description": "TIME1", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Time1"
+            }, 
+            "outa1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTA1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outa1"
+            }, 
+            "outb1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTB1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outb1"
+            }, 
+            "outc1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTC1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outc1"
+            }, 
+            "outd1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTD1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outd1"
+            }, 
+            "oute1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTE1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Oute1"
+            }, 
+            "outf1": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTF1", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outf1"
+            }, 
+            "time2": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint32", 
+              "description": "TIME2", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Time2"
+            }, 
+            "outa2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTA2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outa2"
+            }, 
+            "outb2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTB2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outb2"
+            }, 
+            "outc2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTC2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outc2"
+            }, 
+            "outd2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTD2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outd2"
+            }, 
+            "oute2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTE2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Oute2"
+            }, 
+            "outf2": {
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
+              "description": "OUTF2", 
+              "tags": [
+                "widget:checkbox"
+              ], 
+              "writeable": false, 
+              "label": "Outf2"
+            }
+          }
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

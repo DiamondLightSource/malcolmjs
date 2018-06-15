@@ -1,42 +1,42 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "Input Value", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Source of the value of B for calculation", 
-          "tags": [
-            "group:parameters", 
-            "widget:combo", 
-            "config:1"
-          ], 
-          "label": "B", 
           "choices": [
             "Input Value", 
             "Rising Edge", 
             "Falling Edge", 
             "Either Edge"
-          ]
-        }, 
-        "value": "Input Value", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          ], 
+          "tags": [
+            "group:parameters", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "B"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

@@ -1,22 +1,11 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTTable:1.0", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
-        }, 
-        "alarm": {
-          "status": 0, 
-          "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
-        }, 
         "labels": [
           "Value"
         ], 
@@ -24,31 +13,42 @@
           "typeid": "malcolm:core/Table:1.0", 
           "value": []
         }, 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/TableMeta:1.0", 
-          "elements": {
-            "value": {
-              "writeable": true, 
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "description": "VALUE", 
-              "tags": [
-                "widget:textinput"
-              ], 
-              "dtype": "uint32", 
-              "label": "Value"
-            }
-          }, 
           "description": "Table of positions to be output", 
           "tags": [
             "widget:table", 
             "group:parameters", 
             "config:1"
           ], 
-          "label": "Table"
+          "writeable": true, 
+          "label": "Table", 
+          "elements": {
+            "value": {
+              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
+              "dtype": "uint32", 
+              "description": "VALUE", 
+              "tags": [
+                "widget:textinput"
+              ], 
+              "writeable": false, 
+              "label": "Value"
+            }
+          }
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Position capture control ", 
         "fields": [
           "health", 
           "icon", 
@@ -38,10 +40,8 @@
           "bits3Capture", 
           "arm", 
           "disarm"
-        ], 
-        "label": "Position capture control "
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

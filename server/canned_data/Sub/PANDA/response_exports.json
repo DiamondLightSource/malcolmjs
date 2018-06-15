@@ -1,43 +1,44 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTTable:1.0", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
-        }, 
-        "alarm": {
-          "status": 0, 
-          "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
-        }, 
         "labels": [
           "source", 
           "export"
         ], 
         "value": {
           "typeid": "malcolm:core/Table:1.0", 
-          "export": [], 
-          "source": []
+          "source": [], 
+          "export": []
+        }, 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/TableMeta:1.0", 
+          "description": "Exported fields of child blocks", 
+          "tags": [
+            "widget:table"
+          ], 
+          "writeable": true, 
+          "label": "Exports", 
           "elements": {
             "source": {
-              "writeable": true, 
               "typeid": "malcolm:core/ChoiceArrayMeta:1.0", 
               "description": "Name of the block.field to export", 
-              "tags": [
-                "widget:combo"
-              ], 
-              "label": "", 
               "choices": [
                 "TTLIN1.health", 
                 "TTLIN1.icon", 
@@ -129,6 +130,7 @@
                 "OUTENC1.connCurrent", 
                 "OUTENC1.connDelay", 
                 "OUTENC1.readbacks", 
+                "OUTENC1.dcardId", 
                 "OUTENC1.qstate", 
                 "OUTENC2.health", 
                 "OUTENC2.icon", 
@@ -163,6 +165,7 @@
                 "OUTENC2.connCurrent", 
                 "OUTENC2.connDelay", 
                 "OUTENC2.readbacks", 
+                "OUTENC2.dcardId", 
                 "OUTENC2.qstate", 
                 "OUTENC3.health", 
                 "OUTENC3.icon", 
@@ -197,6 +200,7 @@
                 "OUTENC3.connCurrent", 
                 "OUTENC3.connDelay", 
                 "OUTENC3.readbacks", 
+                "OUTENC3.dcardId", 
                 "OUTENC3.qstate", 
                 "OUTENC4.health", 
                 "OUTENC4.icon", 
@@ -231,6 +235,7 @@
                 "OUTENC4.connCurrent", 
                 "OUTENC4.connDelay", 
                 "OUTENC4.readbacks", 
+                "OUTENC4.dcardId", 
                 "OUTENC4.qstate", 
                 "PCOMP1.health", 
                 "PCOMP1.icon", 
@@ -430,12 +435,12 @@
                 "DIV1.divisor", 
                 "DIV1.firstPulse", 
                 "DIV1.inputs", 
-                "DIV1.inp", 
-                "DIV1.inpCurrent", 
-                "DIV1.inpDelay", 
                 "DIV1.enable", 
                 "DIV1.enableCurrent", 
                 "DIV1.enableDelay", 
+                "DIV1.inp", 
+                "DIV1.inpCurrent", 
+                "DIV1.inpDelay", 
                 "DIV1.outputs", 
                 "DIV1.outd", 
                 "DIV1.outn", 
@@ -448,12 +453,12 @@
                 "DIV2.divisor", 
                 "DIV2.firstPulse", 
                 "DIV2.inputs", 
-                "DIV2.inp", 
-                "DIV2.inpCurrent", 
-                "DIV2.inpDelay", 
                 "DIV2.enable", 
                 "DIV2.enableCurrent", 
                 "DIV2.enableDelay", 
+                "DIV2.inp", 
+                "DIV2.inpCurrent", 
+                "DIV2.inpDelay", 
                 "DIV2.outputs", 
                 "DIV2.outd", 
                 "DIV2.outn", 
@@ -466,12 +471,12 @@
                 "DIV3.divisor", 
                 "DIV3.firstPulse", 
                 "DIV3.inputs", 
-                "DIV3.inp", 
-                "DIV3.inpCurrent", 
-                "DIV3.inpDelay", 
                 "DIV3.enable", 
                 "DIV3.enableCurrent", 
                 "DIV3.enableDelay", 
+                "DIV3.inp", 
+                "DIV3.inpCurrent", 
+                "DIV3.inpDelay", 
                 "DIV3.outputs", 
                 "DIV3.outd", 
                 "DIV3.outn", 
@@ -484,12 +489,12 @@
                 "DIV4.divisor", 
                 "DIV4.firstPulse", 
                 "DIV4.inputs", 
-                "DIV4.inp", 
-                "DIV4.inpCurrent", 
-                "DIV4.inpDelay", 
                 "DIV4.enable", 
                 "DIV4.enableCurrent", 
                 "DIV4.enableDelay", 
+                "DIV4.inp", 
+                "DIV4.inpCurrent", 
+                "DIV4.inpDelay", 
                 "DIV4.outputs", 
                 "DIV4.outd", 
                 "DIV4.outn", 
@@ -506,6 +511,8 @@
                 "INENC1.framePeriod", 
                 "INENC1.framePeriodUnits", 
                 "INENC1.bits", 
+                "INENC1.lsbDiscard", 
+                "INENC1.msbDiscard", 
                 "INENC1.setp", 
                 "INENC1.rstOnZ", 
                 "INENC1.readbacks", 
@@ -539,6 +546,8 @@
                 "INENC2.framePeriod", 
                 "INENC2.framePeriodUnits", 
                 "INENC2.bits", 
+                "INENC2.lsbDiscard", 
+                "INENC2.msbDiscard", 
                 "INENC2.setp", 
                 "INENC2.rstOnZ", 
                 "INENC2.readbacks", 
@@ -572,6 +581,8 @@
                 "INENC3.framePeriod", 
                 "INENC3.framePeriodUnits", 
                 "INENC3.bits", 
+                "INENC3.lsbDiscard", 
+                "INENC3.msbDiscard", 
                 "INENC3.setp", 
                 "INENC3.rstOnZ", 
                 "INENC3.readbacks", 
@@ -605,6 +616,8 @@
                 "INENC4.framePeriod", 
                 "INENC4.framePeriodUnits", 
                 "INENC4.bits", 
+                "INENC4.lsbDiscard", 
+                "INENC4.msbDiscard", 
                 "INENC4.setp", 
                 "INENC4.rstOnZ", 
                 "INENC4.readbacks", 
@@ -644,6 +657,9 @@
                 "SLOW.fmc15Vp", 
                 "SLOW.enc24V", 
                 "SLOW.fmc12V", 
+                "SLOW.parameters", 
+                "SLOW.temp", 
+                "SLOW.vccint", 
                 "PGEN1.health", 
                 "PGEN1.icon", 
                 "PGEN1.label", 
@@ -941,12 +957,12 @@
                 "PULSE1.width", 
                 "PULSE1.widthUnits", 
                 "PULSE1.inputs", 
-                "PULSE1.inp", 
-                "PULSE1.inpCurrent", 
-                "PULSE1.inpDelay", 
                 "PULSE1.enable", 
                 "PULSE1.enableCurrent", 
                 "PULSE1.enableDelay", 
+                "PULSE1.inp", 
+                "PULSE1.inpCurrent", 
+                "PULSE1.inpDelay", 
                 "PULSE1.outputs", 
                 "PULSE1.out", 
                 "PULSE1.readbacks", 
@@ -964,12 +980,12 @@
                 "PULSE2.width", 
                 "PULSE2.widthUnits", 
                 "PULSE2.inputs", 
-                "PULSE2.inp", 
-                "PULSE2.inpCurrent", 
-                "PULSE2.inpDelay", 
                 "PULSE2.enable", 
                 "PULSE2.enableCurrent", 
                 "PULSE2.enableDelay", 
+                "PULSE2.inp", 
+                "PULSE2.inpCurrent", 
+                "PULSE2.inpDelay", 
                 "PULSE2.outputs", 
                 "PULSE2.out", 
                 "PULSE2.readbacks", 
@@ -987,12 +1003,12 @@
                 "PULSE3.width", 
                 "PULSE3.widthUnits", 
                 "PULSE3.inputs", 
-                "PULSE3.inp", 
-                "PULSE3.inpCurrent", 
-                "PULSE3.inpDelay", 
                 "PULSE3.enable", 
                 "PULSE3.enableCurrent", 
                 "PULSE3.enableDelay", 
+                "PULSE3.inp", 
+                "PULSE3.inpCurrent", 
+                "PULSE3.inpDelay", 
                 "PULSE3.outputs", 
                 "PULSE3.out", 
                 "PULSE3.readbacks", 
@@ -1010,12 +1026,12 @@
                 "PULSE4.width", 
                 "PULSE4.widthUnits", 
                 "PULSE4.inputs", 
-                "PULSE4.inp", 
-                "PULSE4.inpCurrent", 
-                "PULSE4.inpDelay", 
                 "PULSE4.enable", 
                 "PULSE4.enableCurrent", 
                 "PULSE4.enableDelay", 
+                "PULSE4.inp", 
+                "PULSE4.inpCurrent", 
+                "PULSE4.inpDelay", 
                 "PULSE4.outputs", 
                 "PULSE4.out", 
                 "PULSE4.readbacks", 
@@ -1672,14 +1688,14 @@
                 "FILTER.parameters", 
                 "FILTER.mode", 
                 "FILTER.inputs", 
+                "FILTER.enable", 
+                "FILTER.enableCurrent", 
+                "FILTER.enableDelay", 
                 "FILTER.trig", 
                 "FILTER.trigCurrent", 
                 "FILTER.trigDelay", 
                 "FILTER.inp", 
                 "FILTER.inpCurrent", 
-                "FILTER.enable", 
-                "FILTER.enableCurrent", 
-                "FILTER.enableDelay", 
                 "FILTER.outputs", 
                 "FILTER.out", 
                 "FILTER.outUnits", 
@@ -1800,26 +1816,25 @@
                 "QDEC4.outScaled", 
                 "QDEC4.outCapture", 
                 "QDEC4.outDataDelay"
-              ]
+              ], 
+              "tags": [
+                "widget:combo"
+              ], 
+              "writeable": false, 
+              "label": ""
             }, 
             "export": {
-              "writeable": true, 
               "typeid": "malcolm:core/StringArrayMeta:1.0", 
-              "label": "", 
               "description": "Name of the field to export as", 
               "tags": [
-                "widget:textupdate"
-              ]
+                "widget:textinput"
+              ], 
+              "writeable": true, 
+              "label": ""
             }
-          }, 
-          "description": "Exported fields of child blocks", 
-          "tags": [
-            "widget:table"
-          ], 
-          "label": "Exports"
+          }
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

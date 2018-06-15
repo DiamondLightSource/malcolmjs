@@ -1,40 +1,40 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "OK", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": false, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Error", 
-          "tags": [
-            "group:readbacks", 
-            "widget:textupdate"
-          ], 
-          "label": "Err", 
           "choices": [
             "OK", 
             "Accumulator overflow", 
             "Divider retrigger"
-          ]
-        }, 
-        "value": "OK", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          ], 
+          "tags": [
+            "group:readbacks", 
+            "widget:textupdate"
+          ], 
+          "writeable": false, 
+          "label": "Err"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

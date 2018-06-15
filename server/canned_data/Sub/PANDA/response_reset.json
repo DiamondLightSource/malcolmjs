@@ -1,27 +1,27 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": false, 
         "typeid": "malcolm:core/Method:1.0", 
         "takes": {
           "typeid": "malcolm:core/MapMeta:1.0", 
           "elements": {}, 
           "required": []
         }, 
+        "defaults": {}, 
+        "description": "", 
         "tags": [], 
+        "writeable": false, 
         "label": "Reset", 
         "returns": {
           "typeid": "malcolm:core/MapMeta:1.0", 
           "elements": {}, 
           "required": []
-        }, 
-        "defaults": {}, 
-        "description": ""
+        }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

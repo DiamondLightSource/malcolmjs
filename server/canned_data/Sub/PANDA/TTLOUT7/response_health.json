@@ -1,34 +1,34 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "alarm": {
-          "status": 0, 
-          "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
-        }, 
-        "meta": {
-          "writeable": false, 
-          "typeid": "malcolm:core/StringMeta:1.0", 
-          "label": "Health", 
-          "description": "Displays OK or an error message", 
-          "tags": [
-            "widget:textupdate"
-          ]
-        }, 
         "value": "OK", 
+        "alarm": {
+          "typeid": "alarm_t", 
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/StringMeta:1.0", 
+          "description": "Displays OK or an error message", 
+          "tags": [
+            "widget:textupdate"
+          ], 
+          "writeable": false, 
+          "label": "Health"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

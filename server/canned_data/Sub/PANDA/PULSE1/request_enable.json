@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 969, 
+  "id": "CANNED", 
   "path": [
     "PANDA:PULSE1", 
     "enable"

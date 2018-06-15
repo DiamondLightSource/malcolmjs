@@ -1,41 +1,41 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "Rising", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Output set edge (0 = rising edge, 1 = falling edge, 2 = Rising or Falling)", 
+          "choices": [
+            "Rising", 
+            "Falling", 
+            "Rising or Falling"
+          ], 
           "tags": [
             "group:parameters", 
             "widget:combo", 
             "config:1"
           ], 
-          "label": "Set Edge", 
-          "choices": [
-            "Rising", 
-            "Falling", 
-            "Rising or Falling"
-          ]
-        }, 
-        "value": "Rising", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          "writeable": true, 
+          "label": "Set Edge"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

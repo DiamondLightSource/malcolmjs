@@ -1,40 +1,40 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "Off", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Bypass/Pass Through encoder signals", 
+          "choices": [
+            "Off", 
+            "On"
+          ], 
           "tags": [
             "group:parameters", 
             "widget:combo", 
             "config:1"
           ], 
-          "label": "Bypass", 
-          "choices": [
-            "Off", 
-            "On"
-          ]
-        }, 
-        "value": "Off", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          "writeable": true, 
+          "label": "Bypass"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

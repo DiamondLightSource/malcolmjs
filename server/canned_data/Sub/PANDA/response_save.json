@@ -1,39 +1,39 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/Method:1.0", 
         "takes": {
           "typeid": "malcolm:core/MapMeta:1.0", 
           "elements": {
             "design": {
-              "writeable": true, 
               "typeid": "malcolm:core/StringMeta:1.0", 
-              "label": "Design", 
               "description": "Name of design to save, if different from current design", 
               "tags": [
                 "widget:textinput"
-              ]
+              ], 
+              "writeable": true, 
+              "label": "Design"
             }
           }, 
-          "required": []
-        }, 
-        "tags": [], 
-        "label": "Save", 
-        "returns": {
-          "typeid": "malcolm:core/MapMeta:1.0", 
-          "elements": {}, 
           "required": []
         }, 
         "defaults": {
           "design": ""
         }, 
-        "description": "Save the current design to file"
+        "description": "Save the current design to file", 
+        "tags": [], 
+        "writeable": true, 
+        "label": "Save", 
+        "returns": {
+          "typeid": "malcolm:core/MapMeta:1.0", 
+          "elements": {}, 
+          "required": []
+        }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }
