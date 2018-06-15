@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 1481, 
+  "id": "CANNED", 
   "path": [
     "PANDA:COUNTER2", 
     "dirCurrent"

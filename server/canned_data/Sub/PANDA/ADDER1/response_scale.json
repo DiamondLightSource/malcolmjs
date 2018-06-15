@@ -1,42 +1,42 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "/1", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Scale divisor after add", 
-          "tags": [
-            "group:parameters", 
-            "widget:combo", 
-            "config:1"
-          ], 
-          "label": "Scale", 
           "choices": [
             "/1", 
             "/2", 
             "/4", 
             "/8"
-          ]
-        }, 
-        "value": "/1", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          ], 
+          "tags": [
+            "group:parameters", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "Scale"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

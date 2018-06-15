@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 1152, 
+  "id": "CANNED", 
   "path": [
     "PANDA:FMC", 
     "out2Delay"

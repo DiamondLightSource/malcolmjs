@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Position compare 2", 
         "fields": [
           "health", 
           "icon", 
@@ -32,10 +34,8 @@
           "readbacks", 
           "produced", 
           "state"
-        ], 
-        "label": "Position compare 2"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

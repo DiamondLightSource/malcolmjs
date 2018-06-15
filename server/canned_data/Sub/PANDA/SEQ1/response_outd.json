@@ -1,36 +1,36 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": false, 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": false, 
           "typeid": "malcolm:core/BooleanMeta:1.0", 
-          "label": "Outd", 
           "description": "Output D for phase outputs", 
           "tags": [
             "group:outputs", 
             "outport:bool:SEQ1.OUTD", 
             "widget:led"
-          ]
-        }, 
-        "value": false, 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          ], 
+          "writeable": false, 
+          "label": "Outd"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

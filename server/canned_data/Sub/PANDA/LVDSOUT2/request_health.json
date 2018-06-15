@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 1433, 
+  "id": "CANNED", 
   "path": [
     "PANDA:LVDSOUT2", 
     "health"

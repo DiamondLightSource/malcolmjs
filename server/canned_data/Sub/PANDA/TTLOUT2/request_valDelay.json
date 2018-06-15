@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 331, 
+  "id": "CANNED", 
   "path": [
     "PANDA:TTLOUT2", 
     "valDelay"

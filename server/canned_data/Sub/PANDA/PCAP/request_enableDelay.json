@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 403, 
+  "id": "CANNED", 
   "path": [
     "PANDA:PCAP", 
     "enableDelay"

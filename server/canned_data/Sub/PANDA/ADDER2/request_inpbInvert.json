@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 1690, 
+  "id": "CANNED", 
   "path": [
     "PANDA:ADDER2", 
     "inpbInvert"

@@ -1,36 +1,36 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": -4.006, 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": false, 
           "typeid": "malcolm:core/NumberMeta:1.0", 
+          "dtype": "float64", 
           "description": "Current scaled value of position field", 
           "tags": [
             "group:outputs", 
             "widget:textupdate"
           ], 
-          "dtype": "float64", 
+          "writeable": false, 
           "label": "Val Scaled"
-        }, 
-        "value": 0.0, 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

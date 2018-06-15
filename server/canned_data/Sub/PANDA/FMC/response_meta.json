@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "FMC 24V IO Module ", 
         "fields": [
           "health", 
           "icon", 
@@ -60,10 +62,8 @@
           "inp6", 
           "inp7", 
           "inp8"
-        ], 
-        "label": "FMC 24V IO Module "
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }
