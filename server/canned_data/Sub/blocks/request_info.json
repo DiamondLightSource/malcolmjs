@@ -1,9 +1,9 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 0, 
+  "id": "CANNED", 
   "path": [
     ".", 
     "blocks"
   ], 
-  "delta": true
+  "delta": false
 }

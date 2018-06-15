@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Sequencer 2", 
         "fields": [
           "health", 
           "icon", 
@@ -49,10 +51,8 @@
           "tableLine", 
           "lineRepeat", 
           "state"
-        ], 
-        "label": "Sequencer 2"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 79, 
+  "id": "CANNED", 
   "path": [
     "PANDA:SFP", 
     "softReset"

@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 1605, 
+  "id": "CANNED", 
   "path": [
     "PANDA:COUNTER7", 
     "enableCurrent"

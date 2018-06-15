@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 72, 
+  "id": "CANNED", 
   "path": [
     "PANDA:SFP", 
     "error2Count"

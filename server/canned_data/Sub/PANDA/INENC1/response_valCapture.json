@@ -1,26 +1,27 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "Min Max Mean", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Capture VAL in PCAP?", 
-          "tags": [
-            "group:outputs", 
-            "widget:combo", 
-            "config:1"
-          ], 
-          "label": "Val Capture", 
           "choices": [
             "No", 
             "Value", 
@@ -29,18 +30,18 @@
             "Mean", 
             "Min", 
             "Max", 
-            "Min Max"
-          ]
-        }, 
-        "value": "No", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+            "Min Max", 
+            "Min Max Mean"
+          ], 
+          "tags": [
+            "group:outputs", 
+            "widget:combo", 
+            "config:1"
+          ], 
+          "writeable": true, 
+          "label": "Val Capture"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

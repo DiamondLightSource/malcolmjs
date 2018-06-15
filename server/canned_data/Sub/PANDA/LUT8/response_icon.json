@@ -1,34 +1,34 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "<?xml version=\"1.0\" ?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 120 100\">\n <path color=\"#000000\" d=\"m55 70h-15v20l-8 8e-5\" fill=\"none\" id=\"E\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".98616\" />\n <path color=\"#000000\" d=\"m55 60h-20v10l-3 8e-5\" fill=\"none\" id=\"D\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".98984\" />\n <path color=\"#000000\" d=\"m55 50-23 8e-5\" fill=\"none\" id=\"C\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99913\" />\n <path color=\"#000000\" d=\"m55 40h-20v-10l-3 8e-5\" fill=\"none\" id=\"B\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99963\" />\n <path color=\"#000000\" d=\"m55 30h-15v-20l-8 8e-5\" fill=\"none\" id=\"A\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\"1.0017\" />\n <path color=\"#000000\" d=\"m93 50-18-8e-5\" fill=\"none\" id=\"OUT\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99913\" />\n <rect fill=\"#e6e6e6\" height=\"60\" id=\"LUT\" stroke=\"#000\" width=\"35\" x=\"45\" y=\"20\" />\n </svg>", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
         }, 
-        "meta": {
-          "writeable": false, 
-          "typeid": "malcolm:core/StringMeta:1.0", 
-          "label": "Icon", 
-          "description": "SVG icon for the Block", 
-          "tags": [
-            "widget:icon"
-          ]
-        }, 
-        "value": "<?xml version=\"1.0\" ?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 120 140\">\n <path color=\"#000000\" d=\"m55 90h-15v20h-10\" fill=\"none\" id=\"E\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".98616\" />\n <path color=\"#000000\" d=\"m55 80h-20v10h-5\" fill=\"none\" id=\"D\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".98984\" />\n <path color=\"#000000\" d=\"m55 70h-25\" fill=\"none\" id=\"C\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99913\" />\n <path color=\"#000000\" d=\"m55 60h-20v-10h-5\" fill=\"none\" id=\"B\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99963\" />\n <path color=\"#000000\" d=\"m55 50h-15v-20h-10\" fill=\"none\" id=\"A\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\"1.0017\" />\n <path color=\"#000000\" d=\"m95 30h-10v40h-10\" fill=\"none\" id=\"OUT\" stroke=\"#000\" stroke-linecap=\"square\" stroke-width=\".99913\" />\n <rect fill=\"#e6e6e6\" height=\"60\" id=\"LUT\" stroke=\"#000\" width=\"35\" x=\"45\" y=\"40\" />\n </svg>", 
         "timeStamp": {
           "typeid": "time_t", 
           "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          "nanoseconds": 0, 
+          "userTag": 0
+        }, 
+        "meta": {
+          "typeid": "malcolm:core/StringMeta:1.0", 
+          "description": "SVG icon for the Block", 
+          "tags": [
+            "widget:icon"
+          ], 
+          "writeable": false, 
+          "label": "Icon"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Slow control FPGA ", 
         "fields": [
           "health", 
           "icon", 
@@ -25,11 +27,12 @@
           "fmc15Vn", 
           "fmc15Vp", 
           "enc24V", 
-          "fmc12V"
-        ], 
-        "label": "Slow control FPGA "
+          "fmc12V", 
+          "parameters", 
+          "temp", 
+          "vccint"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

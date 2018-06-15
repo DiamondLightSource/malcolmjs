@@ -1,37 +1,37 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": 4, 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": true, 
           "typeid": "malcolm:core/NumberMeta:1.0", 
+          "dtype": "int32", 
           "description": "Counter start value", 
           "tags": [
             "group:parameters", 
             "widget:textinput", 
             "config:1"
           ], 
-          "dtype": "uint32", 
+          "writeable": true, 
           "label": "Start"
-        }, 
-        "value": 0, 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

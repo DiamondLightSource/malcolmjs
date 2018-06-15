@@ -1,6 +1,6 @@
 {
   "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": 422, 
+  "id": "CANNED", 
   "path": [
     "PANDA:PCAP", 
     "bits2Capture"

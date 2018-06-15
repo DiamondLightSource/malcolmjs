@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Input encoder 4", 
         "fields": [
           "health", 
           "icon", 
@@ -20,6 +22,8 @@
           "framePeriod", 
           "framePeriodUnits", 
           "bits", 
+          "lsbDiscard", 
+          "msbDiscard", 
           "setp", 
           "rstOnZ", 
           "readbacks", 
@@ -42,10 +46,8 @@
           "valScaled", 
           "valCapture", 
           "valDataDelay"
-        ], 
-        "label": "Input encoder 4"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

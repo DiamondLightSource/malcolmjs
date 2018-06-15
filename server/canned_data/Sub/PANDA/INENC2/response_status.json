@@ -1,39 +1,39 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
+        "value": "Link Up", 
         "alarm": {
-          "status": 0, 
           "typeid": "alarm_t", 
-          "message": "", 
-          "severity": 0
+          "severity": 0, 
+          "status": 0, 
+          "message": ""
+        }, 
+        "timeStamp": {
+          "typeid": "time_t", 
+          "secondsPastEpoch": 0, 
+          "nanoseconds": 0, 
+          "userTag": 0
         }, 
         "meta": {
-          "writeable": false, 
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Encoder status read from device", 
+          "choices": [
+            "Link Down", 
+            "Link Up"
+          ], 
           "tags": [
             "group:readbacks", 
             "widget:textupdate"
           ], 
-          "label": "Status", 
-          "choices": [
-            "Link Down", 
-            "Link Up"
-          ]
-        }, 
-        "value": "Link Down", 
-        "timeStamp": {
-          "typeid": "time_t", 
-          "secondsPastEpoch": 0, 
-          "userTag": 0, 
-          "nanoseconds": 0
+          "writeable": false, 
+          "label": "Status"
         }
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Pulse divider 3", 
         "fields": [
           "health", 
           "icon", 
@@ -16,21 +18,19 @@
           "divisor", 
           "firstPulse", 
           "inputs", 
-          "inp", 
-          "inpCurrent", 
-          "inpDelay", 
           "enable", 
           "enableCurrent", 
           "enableDelay", 
+          "inp", 
+          "inpCurrent", 
+          "inpDelay", 
           "outputs", 
           "outd", 
           "outn", 
           "readbacks", 
           "count"
-        ], 
-        "label": "Pulse divider 3"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

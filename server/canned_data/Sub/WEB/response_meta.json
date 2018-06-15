@@ -1,22 +1,22 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "WEB", 
         "fields": [
           "health", 
           "state", 
           "disable", 
           "reset"
-        ], 
-        "label": "WEB"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

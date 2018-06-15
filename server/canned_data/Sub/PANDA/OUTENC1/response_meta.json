@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "Output encoder 1", 
         "fields": [
           "health", 
           "icon", 
@@ -42,11 +44,10 @@
           "connCurrent", 
           "connDelay", 
           "readbacks", 
+          "dcardId", 
           "qstate"
-        ], 
-        "label": "Output encoder 1"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }

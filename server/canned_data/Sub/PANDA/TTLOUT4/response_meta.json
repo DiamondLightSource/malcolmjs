@@ -1,13 +1,15 @@
 {
   "typeid": "malcolm:core/Delta:1.0", 
+  "id": "CANNED", 
   "changes": [
     [
       [], 
       {
-        "writeable": true, 
         "typeid": "malcolm:core/BlockMeta:1.0", 
         "description": "", 
         "tags": [], 
+        "writeable": true, 
+        "label": "TTL output 4", 
         "fields": [
           "health", 
           "icon", 
@@ -16,10 +18,8 @@
           "val", 
           "valCurrent", 
           "valDelay"
-        ], 
-        "label": "TTL output 4"
+        ]
       }
     ]
-  ], 
-  "id": "CANNED"
+  ]
 }
