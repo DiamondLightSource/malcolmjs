@@ -102,7 +102,7 @@ const NavBar = props => (
             }
           />
         ))}
-        {props.navigation.length === 1 && props.navigation[0].path === '' ? (
+        {props.navigation.length === 0 ? (
           <Typography>Select a root node</Typography>
         ) : null}
       </div>

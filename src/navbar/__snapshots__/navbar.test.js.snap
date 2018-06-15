@@ -37,8 +37,13 @@ exports[`NavBar renders correctly 1`] = `
         key="PANDA"
         nav={
           Object {
-            "children": Array [],
-            "childrenLabels": Array [],
+            "basePath": "/PANDA/",
+            "children": Array [
+              "layout",
+            ],
+            "childrenLabels": Array [
+              "layout",
+            ],
             "path": "PANDA",
           }
         }
@@ -66,6 +71,47 @@ exports[`NavBar renders correctly 1`] = `
         }
         navigateToChild={[Function]}
       />
+    </div>
+  </WithStyles(Toolbar)>
+</WithStyles(AppBar)>
+`;
+
+exports[`NavBar shows a select root node message if there is no parent block 1`] = `
+<WithStyles(AppBar)
+  className="Connect-NavBar--appBar-1 Connect-NavBar--appBarShift-2 Connect-NavBar--appBarShift-left-3"
+>
+  <WithStyles(Toolbar)
+    disableGutters={false}
+  >
+    <WithStyles(IconButton)
+      className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
+      onClick={[Function]}
+    >
+      <pure(Menu) />
+    </WithStyles(IconButton)>
+    <div
+      className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
+    >
+      <WithStyles(NavControl)
+        key=".blocks"
+        nav={
+          Object {
+            "children": Array [
+              "PANDA",
+              "PANDA:SEQ1",
+            ],
+            "childrenLabels": Array [
+              "PANDA",
+              "PANDA:SEQ1",
+            ],
+            "path": "",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+      <WithStyles(Typography)>
+        Select a root node
+      </WithStyles(Typography)>
     </div>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>

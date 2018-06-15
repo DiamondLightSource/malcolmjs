@@ -12,9 +12,8 @@ export const registerSocketAndConnect = (socketContainer, socketUrl) => ({
 
 export const configureSocket = socketContainer => dispatch => {
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  axios.get(`${baseUrl}/settings.json`).then(res => {
+  return axios.get(`${baseUrl}/settings.json`).then(res => {
     const settings = res.data;
-    console.log(settings);
     dispatch(updateVersionNumber(settings.version));
 
     // in production no socket will be defined and it will default to ws://{{host}}/ws
