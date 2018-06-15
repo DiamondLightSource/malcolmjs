@@ -23,12 +23,12 @@ export const malcolmGetAction = path => ({
   },
 });
 
-export const malcolmSubscribeAction = path => ({
+export const malcolmSubscribeAction = (path, delta = true) => ({
   type: MalcolmSend,
   payload: {
     typeid: 'malcolm:core/Subscribe:1.0',
     path,
-    delta: true,
+    delta,
   },
 });
 

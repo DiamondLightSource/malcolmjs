@@ -6,15 +6,6 @@ export const processNavigationLists = (paths, blocks) => {
     label: p,
   }));
 
-  if (navigationLists.length === 0) {
-    navigationLists.push({
-      path: '',
-      children: [],
-      basePath: '/',
-      label: '',
-    });
-  }
-
   const rootNav = {
     path: '',
     children: [],
