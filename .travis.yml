@@ -6,22 +6,23 @@ node_js:
 cache:
   directories:
   - node_modules
-install:
-- npm install -g codecov
-- npm install
 jobs:
   include:
-    - stage: Linting
-      script: npm run lint:css
-    - stage: Linting
-      script: npm run lint:js
-    - stage: Build and Test
+    - stage: NPM install
+      install:
+        - npm install -g codecov
+        - npm install
+    - stage: Build
       script: npm run build
-    - stage: Build and Test
+    - stage: Test
+      script: npm run lint:css
+    - stage: Test
+      script: npm run lint:js
+    - stage: Test
       script:
         - npm run test      
         - codecov
-    - stage: Build and Test
+    - stage: Test
       script:
         - npm run e2e
     - stage: Deploy
