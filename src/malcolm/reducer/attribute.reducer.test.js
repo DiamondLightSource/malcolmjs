@@ -1,5 +1,9 @@
 import AttributeReducer, { updateLayout } from './attribute.reducer';
 import LayoutReducer from './layout.reducer';
+import {
+  MalcolmAttributeData,
+  MalcolmMainAttributeUpdate,
+} from '../malcolm.types';
 
 jest.mock('./layout.reducer');
 
@@ -51,8 +55,13 @@ describe('attribute reducer', () => {
     };
   });
 
+  const buildAction = (type, args) => ({
+    type,
+    payload: args,
+  });
+
   it('updates children for layout attribute', () => {
-    state = AttributeReducer.updateAttribute(state, payload);
+    state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
     expect(state.blocks.block1.attributes[0].children).toHaveLength(3);
     expect(state.blocks.block1.attributes[0].children).toEqual([
@@ -67,13 +76,16 @@ describe('attribute reducer', () => {
       property: 'test',
     };
 
-    const updatedState = AttributeReducer.updateAttribute(state, {});
+    const updatedState = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, {})
+    );
 
     expect(updatedState).toBe(state);
   });
 
   it('updates with a layout property if widget:layout', () => {
-    state = AttributeReducer.updateAttribute(state, payload);
+    state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
     expect(state.blocks.block1.attributes[0].layout).not.toBeUndefined();
     expect(state.blocks.block1.attributes[0].layout.blocks).toHaveLength(3);
@@ -89,7 +101,10 @@ describe('attribute reducer', () => {
   });
 
   it('setMainAttribute sets the main attribute on the state', () => {
-    state = AttributeReducer.setMainAttribute(state, { attribute: 'health' });
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmMainAttributeUpdate, { attribute: 'health' })
+    );
     expect(state.mainAttribute).toEqual('health');
   });
 
