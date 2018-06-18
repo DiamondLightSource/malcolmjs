@@ -1,6 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AttributeSelector selects a buttonAction correctly 1`] = `
+exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
+<WithStyles(ButtonAction)
+  clickAction={[Function]}
+  text="View"
+/>
+`;
+
+exports[`AttributeSelector selects a buttonAction correctly for table 1`] = `
 <WithStyles(ButtonAction)
   clickAction={[Function]}
   text="View"

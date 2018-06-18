@@ -66,8 +66,13 @@ describe('AttributeSelector', () => {
     runSelectorTest(attribute);
   });
 
-  it('selects a buttonAction correctly', () => {
+  it('selects a buttonAction correctly for layout', () => {
     const attribute = buildAttribute('flowgraph', {});
+    runSelectorTest(attribute);
+  });
+
+  it('selects a buttonAction correctly for table', () => {
+    const attribute = buildAttribute('table', {});
     runSelectorTest(attribute);
   });
 

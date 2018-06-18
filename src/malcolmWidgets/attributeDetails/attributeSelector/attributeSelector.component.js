@@ -77,6 +77,8 @@ const AttributeSelector = props => {
         );
       } else if (tags[widgetTagIndex] === 'widget:flowgraph') {
         return <ButtonAction text="View" clickAction={() => {}} />;
+      } else if (tags[widgetTagIndex] === 'widget:table') {
+        return <ButtonAction text="View" clickAction={() => {}} />;
       }
     }
   }
