@@ -23,11 +23,10 @@ jobs:
       script:
         - npm run e2e
     - stage: Deploy
-      script:
-        -npm run build
       before_deploy:
-      - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
-      - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
+        - npm run build
+        - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+        - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
       deploy:
         provider: releases
         api_key:
