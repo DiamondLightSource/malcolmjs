@@ -48,13 +48,13 @@ const store = createStore(
 );
 
 configureMalcolmSocketHandlers(socketContainer, store);
-
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
   // if production connect directly to ws://{{host}}/ws
   store.dispatch(
     registerSocketAndConnect(socketContainer, `ws://${window.location.host}/ws`)
   );
 }
+
 store.dispatch(configureSocket(socketContainer));
 
 const theme = createMuiTheme({

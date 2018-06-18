@@ -10,7 +10,8 @@ let pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
 let subscriptions = [];
 let subscribedPaths = {};
 
-const io = new WebSocket.Server({port: 8000});
+const port = 8000
+const io = new WebSocket.Server({port});
 
 io.on('connection', function (socket) {
   socket.on('message', message => {
@@ -32,8 +33,6 @@ io.on('connection', function (socket) {
 });
 
 
-
-const port = 8000;
 console.log('listening on port ', port);
 
 function handleMessage(socket, message) {
