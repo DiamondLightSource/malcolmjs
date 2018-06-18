@@ -73,7 +73,7 @@ const processLayout = malcolmState => {
     if (attribute && attribute.layout) {
       const layoutBlocks = attribute.layout.blocks
         .filter(b => b.visible)
-        .map(b => offSetPosition(b, malcolmState.layoutCenter))
+        .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
         .map(b => updateLayoutBlock(b, malcolmState));
       layout.blocks = layoutBlocks;
     }

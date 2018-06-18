@@ -26,11 +26,7 @@ import layoutReducer from './layout.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
-  layoutCenter: {
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2 - 64,
-  },
-  messageCounter: 0,
+  counter: 0,
   navigation: {
     navigationLists: [],
     rootNav: {
@@ -52,6 +48,10 @@ const initialMalcolmState = {
   layoutState: {
     shiftIsPressed: false,
     selectedBlocks: [],
+    layoutCenter: {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2 - 64,
+    },
   },
 };
 

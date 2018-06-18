@@ -16,7 +16,7 @@ const handleLocationChange = (path, blocks, dispatch) => {
 
   // Get the root list of blocks
   dispatch(malcolmNewBlockAction('.blocks', false, false));
-  dispatch(malcolmSubscribeAction(['.', 'blocks']));
+  dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
 
   for (let i = 0; i < tokens.length; i += 1) {
     if (i % 2 === 0) {

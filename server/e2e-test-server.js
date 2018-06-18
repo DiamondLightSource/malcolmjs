@@ -7,6 +7,12 @@ var app = express()
 
 app.use(serveStatic(path.resolve('./build'), {'index': ['index.html', 'index.htm']}))
 
+
+
+app.get('/settings.json', function (req, res) {
+  res.sendFile(path.resolve('./build/settings.json'));
+});
+
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve('./build/index.html'));
 });
