@@ -8,10 +8,6 @@ cache:
   - node_modules
 jobs:
   include:
-    - stage: NPM install
-      script:
-        - npm install -g codecov
-        - npm install
     - stage: Build
       script: npm run build
     - stage: Test
@@ -20,7 +16,8 @@ jobs:
       script: npm run lint:js
     - stage: Test
       script:
-        - npm run test      
+        - npm run test    
+        - npm install -g codecov  
         - codecov
     - stage: Test
       script:
