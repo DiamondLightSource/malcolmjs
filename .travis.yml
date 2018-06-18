@@ -9,7 +9,7 @@ cache:
 jobs:
   include:
     - stage: NPM install
-      install:
+      script:
         - npm install -g codecov
         - npm install
     - stage: Build

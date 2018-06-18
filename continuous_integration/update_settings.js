@@ -14,7 +14,10 @@ if (process.argv[2] === 'dev') {
   const gitInfo = execSync('git describe --tags --long').toString();
   console.log('Packaging version ' + gitInfo);
 
+  console.log(process.cwd())
+  console.log(__dirname);
   let prodConfig = JSON.parse(fs.readFileSync('./settings.prod.json', 'utf8'));
+  console.log(prodConfig)
   prodConfig.version = gitInfo.replace('\r', '').replace('\n', '');
 
   fs.writeFileSync('./build/settings.json', JSON.stringify(prodConfig, null, 2), 'utf8');
