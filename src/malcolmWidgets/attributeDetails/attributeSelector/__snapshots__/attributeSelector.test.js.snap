@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
+<WithStyles(ButtonAction)
+  clickAction={[Function]}
+  text="View"
+/>
+`;
+
+exports[`AttributeSelector selects a buttonAction correctly for table 1`] = `
+<WithStyles(ButtonAction)
+  clickAction={[Function]}
+  text="View"
+/>
+`;
+
 exports[`AttributeSelector selects a checkbox correctly 1`] = `
 <WithStyles(WidgetCheckbox)
   CheckState={true}
@@ -16,6 +30,16 @@ exports[`AttributeSelector selects a comboBox correctly 1`] = `
 />
 `;
 
+exports[`AttributeSelector selects a textInput correctly 1`] = `
+<WithStyles(WidgetTextInput)
+  Pending={false}
+  Value="[object Object]"
+  blurHandler={[Function]}
+  focusHandler={[Function]}
+  submitEventHandler={[Function]}
+/>
+`;
+
 exports[`AttributeSelector selects an LED correctly 1`] = `
 <WithStyles(WidgetLED)
   LEDState={true}
@@ -27,5 +51,11 @@ exports[`AttributeSelector selects an LED correctly 1`] = `
 exports[`AttributeSelector selects an textUpdate correctly 1`] = `
 <WithStyles(WidgetTextUpdate)
   Text="1.23456"
+/>
+`;
+
+exports[`AttributeSelector shows a bug icon if the widget is not handled 1`] = `
+<pure(BugReport)
+  className="AttributeSelector-missingAttribute-1"
 />
 `;

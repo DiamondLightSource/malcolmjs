@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ButtonAction renders correctly 1`] = `
+<div
+  className="ButtonAction-container-1"
+>
+  <WithStyles(Button)
+    className="ButtonAction-button-2"
+    color="primary"
+    onClick={[Function]}
+    variant="raised"
+  >
+    View
+  </WithStyles(Button)>
+</div>
+`;

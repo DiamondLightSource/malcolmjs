@@ -1,6 +1,6 @@
 describe('MalcolmJS', () => {
   it('.should() - load correctly', () => {
-    cy.visit('/gui/?block=PANDA:TTLIN1');
-    cy.title().should('equal', 'MalcolmJS');
+    cy.visit('/gui/');
+    cy.title().should('equal', 'MalcolmJS 1.0.0');
   });
 });

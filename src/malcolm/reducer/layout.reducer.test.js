@@ -17,9 +17,11 @@ const buildMalcolmState = () => ({
   layout: {
     blocks: [],
   },
-  layoutCenter: {
-    x: 100,
-    y: 150,
+  layoutState: {
+    layoutCenter: {
+      x: 100,
+      y: 150,
+    },
   },
   blocks: {
     block1: {

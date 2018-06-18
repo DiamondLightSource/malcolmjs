@@ -18,7 +18,10 @@ import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddle
 import MalcolmSocketContainer from './malcolm/malcolmSocket';
 import MessageSnackBar from './Snackbar/snackbar.component';
 import MalcolmReconnector from './malcolm/malcolmReconnector';
-import { configureSocket } from './malcolm/actions/socket.actions';
+import {
+  configureSocket,
+  registerSocketAndConnect,
+} from './malcolm/actions/socket.actions';
 
 require('typeface-roboto');
 
@@ -45,6 +48,12 @@ const store = createStore(
 );
 
 configureMalcolmSocketHandlers(socketContainer, store);
+if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
+  // if production connect directly to ws://{{host}}/ws
+  store.dispatch(
+    registerSocketAndConnect(socketContainer, `ws://${window.location.host}/ws`)
+  );
+}
 
 store.dispatch(configureSocket(socketContainer));
 

@@ -70,13 +70,7 @@ class Layout extends React.Component {
 
     const nodes = props.blocks.map(b =>
       buildBlockNode(b, props.selectedBlocks, node =>
-        props.clickHandler(
-          props.url,
-          b,
-          props.layoutCenter,
-          node,
-          props.selectedBlocks
-        )
+        props.clickHandler(props.url, b, node, props.selectedBlocks)
       )
     );
 
@@ -125,13 +119,12 @@ Layout.defaultProps = {};
 const mapStateToProps = state => ({
   blocks: state.malcolm.layout.blocks,
   url: state.router.location.pathname,
-  layoutCenter: state.malcolm.layoutCenter,
   shiftPressed: state.malcolm.layoutState.shiftIsPressed,
   selectedBlocks: state.malcolm.layoutState.selectedBlocks,
 });
 
 const mapDispatchToProps = dispatch => ({
-  clickHandler: (url, block, layoutCenter, node, selectedBlocks) => {
+  clickHandler: (url, block, node, selectedBlocks) => {
     const translation = {
       x: node.x - block.position.x,
       y: node.y - block.position.y,

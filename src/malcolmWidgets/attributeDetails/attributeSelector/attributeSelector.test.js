@@ -41,6 +41,11 @@ describe('AttributeSelector', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   };
 
+  it('shows a bug icon if the widget is not handled', () => {
+    const attribute = buildAttribute('unknown', {});
+    runSelectorTest(attribute);
+  });
+
   it('selects an LED correctly', () => {
     const attribute = buildAttribute('led', true);
     runSelectorTest(attribute);
@@ -58,6 +63,21 @@ describe('AttributeSelector', () => {
 
   it('selects a comboBox correctly', () => {
     const attribute = buildAttribute('combo', '1', ['1', '2', '3']);
+    runSelectorTest(attribute);
+  });
+
+  it('selects a buttonAction correctly for layout', () => {
+    const attribute = buildAttribute('flowgraph', {});
+    runSelectorTest(attribute);
+  });
+
+  it('selects a buttonAction correctly for table', () => {
+    const attribute = buildAttribute('table', {});
+    runSelectorTest(attribute);
+  });
+
+  it('selects a textInput correctly', () => {
+    const attribute = buildAttribute('textinput', {});
     runSelectorTest(attribute);
   });
 
