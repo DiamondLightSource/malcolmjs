@@ -6,53 +6,58 @@ node_js:
 cache:
   directories:
   - node_modules
-jobs:
-  include:
-    - stage: Build
-      script: npm run build
-    - stage: Test
-      script: npm run lint:css
-      script: npm run lint:js
-    - stage: Test
-      script:
-        - npm run test 
-      after_success:   
-        - npm install -g codecov  
-        - codecov
-    - stage: Test
-      script:
-        - npm run e2e
-    - stage: Deploy
-      script:
-        - npm run build
-      before_deploy:
-        - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
-        - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
-      deploy:
-        provider: releases
-        api_key:
-          secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
-        file: "${TRAVIS_BUILD_DIR}/artifacts/*"
-        on:
-          all_branches: true
-          tags: true
+-install:
+ - npm install -g codecov
+ - npm install
+script:
+- npm run lint:css
+- npm run lint:js
+- npm run build
+- npm run test
+- codecov
+- npm run e2e
+before_deploy:
+- npm run build
+- chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+- "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
+deploy:
+  provider: releases
+  api_key:
+    secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
+  file: "${TRAVIS_BUILD_DIR}/artifacts/*"
+  on:
+    all_branches: true
+    tags: true
 
-# script:
-# - npm run lint:css
-# - npm run lint:js
-# - npm run build
-# - npm run test
-# - codecov
-# - npm run e2e
-# - npm run build
-# before_deploy:
-# - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
-# - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
-# deploy:
-#   provider: releases
-#   api_key:
-#     secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
-#   file: "${TRAVIS_BUILD_DIR}/artifacts/*"
-#   on:
-#     all_branches: true
-#     tags: true
+# jobs:
+#   include:
+#     - stage: Build
+#       script: npm run build
+#     - stage: Test
+#       script: npm run lint:css
+#       script: npm run lint:js
+#     - stage: Test
+#       script:
+#         - npm run test 
+#       after_success:   
+#         - npm install -g codecov  
+#         - codecov
+#     - stage: Test
+#       script:
+#         - npm run e2e
+#     - stage: Deploy
+#       script:
+#         - npm run build
+#       before_deploy:
+#         - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+#         - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
+#       deploy:
+#         provider: releases
+#         api_key:
+#           secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
+#         file: "${TRAVIS_BUILD_DIR}/artifacts/*"
+#         on:
+#           all_branches: true
+#           tags: true
+
+
