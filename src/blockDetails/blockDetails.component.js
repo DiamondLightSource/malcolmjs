@@ -40,6 +40,7 @@ const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.every((old, i) => old.name === newAttributes[i].name) &&
   oldAttributes.every((old, i) => old.inGroup === newAttributes[i].inGroup) &&
   oldAttributes.every((old, i) => old.isGroup === newAttributes[i].isGroup) &&
+  oldAttributes.every((old, i) => old.isMethod === newAttributes[i].isMethod) &&
   oldAttributes.every(
     (old, i) =>
       isRootLevelAttribute(old) === isRootLevelAttribute(newAttributes[i])
@@ -140,9 +141,9 @@ const mapStateToProps = (state, ownProps, memory) => {
     blockName: block ? block.name : '',
     blockLoading: isBlockLoading(block),
     attributesAvailable: areAttributesAvailable(block) !== undefined,
-    rootAttributes: memory.rootAttributes,
-    groups: memory.groups,
-    methods: memory.methods,
+    rootAttributes: stateMemory.rootAttributes,
+    groups: stateMemory.groups,
+    methods: stateMemory.methods,
   };
 };
 
