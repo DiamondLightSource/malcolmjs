@@ -7,7 +7,7 @@ import WidgetTable from './table.component';
 const styles = theme => ({
   testDiv: {
     backgroundColor: theme.palette.background.paper,
-    width: 700,
+    width: 500,
     padding: 10,
     margin: 'none',
   },

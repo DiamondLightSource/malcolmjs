@@ -15,6 +15,9 @@ import TableRow from '@material-ui/core/TableRow';
 import WidgetSelector, { getWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
+  tableLayout: {
+    tableLayout: 'fixed',
+  },
   rowFormat: {
     height: '30px',
   },
@@ -26,8 +29,6 @@ const styles = theme => ({
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Center',
     padding: '2px',
-    minWidth: '120px',
-    maxWidth: '120px',
   },
 });
 
@@ -49,7 +50,7 @@ const WidgetTable = props => {
     label => props.attribute.value[label]
   );
   return (
-    <Table>
+    <Table className={props.classes.tableLayout}>
       <TableHead>
         <TableRow className={props.classes.rowFormat}>
           {columnHeadings}
@@ -99,6 +100,7 @@ WidgetTable.propTypes = {
     unableToProcess: PropTypes.bool,
   }).isRequired,
   classes: PropTypes.shape({
+    tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
