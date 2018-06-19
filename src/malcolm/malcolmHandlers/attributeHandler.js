@@ -1,5 +1,6 @@
 import { MalcolmAttributeData } from '../malcolm.types';
 import LayoutHandler from './layoutHandler';
+import { buildMethodUpdate } from '../actions/method.actions';
 
 const processDeltaMessage = (changes, originalRequest, store) => {
   const pathToAttr = originalRequest.path;
@@ -90,7 +91,12 @@ const processAttribute = (
   }
 };
 
+const processMethod = (request, changedMethod, dispatch) => {
+  dispatch(buildMethodUpdate(request.id, changedMethod));
+};
+
 export default {
   processAttribute,
+  processMethod,
   processDeltaMessage,
 };

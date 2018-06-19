@@ -71,6 +71,9 @@ const displayAttributes = props => {
             ))}
           </GroupExpander>
         ))}
+        {props.methods.map(method => (
+          <GroupExpander key={method.label} groupName={method.label} expanded />
+        ))}
       </div>
     );
   }
@@ -99,6 +102,7 @@ displayAttributes.propTypes = {
   attributesAvailable: PropTypes.bool.isRequired,
   rootAttributes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   groups: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  methods: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const mapStateToProps = (state, ownProps, memory) => {
@@ -127,6 +131,8 @@ const mapStateToProps = (state, ownProps, memory) => {
       children: block.attributes.filter(a => a.group === group.name),
     }));
 
+    stateMemory.methods = block.attributes.filter(a => a.isMethod);
+
     stateMemory.oldAttributes = block.attributes;
   }
 
@@ -136,6 +142,7 @@ const mapStateToProps = (state, ownProps, memory) => {
     attributesAvailable: areAttributesAvailable(block) !== undefined,
     rootAttributes: memory.rootAttributes,
     groups: memory.groups,
+    methods: memory.methods,
   };
 };
 
@@ -144,6 +151,7 @@ const memoizedMapStateToProps = () => {
     oldAttributes: [],
     rootAttributes: [],
     groups: [],
+    methods: [],
   };
 
   return (state, ownProps) =>
