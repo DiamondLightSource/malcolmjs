@@ -20,6 +20,62 @@ const styles = () => ({
   },
 });
 
+export const selectorFunction = (
+  widgetTag,
+  value,
+  setDisabled,
+  isErrorState,
+  eventHandler,
+  path,
+  style,
+  objectMeta
+) => {
+  if (widgetTag === 'widget:led') {
+    return (
+      <WidgetLED
+        LEDState={value}
+        colorBorder={style.colorLED}
+        colorCenter={style.colorLED}
+      />
+    );
+  } else if (widgetTag === 'widget:checkbox') {
+    return (
+      <WidgetCheckbox
+        CheckState={value}
+        Pending={setDisabled}
+        checkEventHandler={isChecked => eventHandler(path, isChecked)}
+      />
+    );
+  } else if (widgetTag === 'widget:combo') {
+    return (
+      <WidgetComboBox
+        Value={value}
+        Pending={setDisabled}
+        Choices={objectMeta.choices}
+        selectEventHandler={event => eventHandler(path, event.target.value)}
+      />
+    );
+  } else if (widgetTag === 'widget:textupdate') {
+    return <TextUpdate Text={value} />;
+  } else if (widgetTag === 'widget:textinput') {
+    return (
+      <WidgetTextInput
+        Error={isErrorState}
+        Value={value.toString()}
+        Pending={setDisabled}
+        submitEventHandler={event => eventHandler(path, event.target.value)}
+        focusHandler={() => {}}
+        blurHandler={() => {}}
+      />
+    );
+  } else if (widgetTag === 'widget:flowgraph') {
+    return <ButtonAction text="View" clickAction={() => {}} />;
+  } else if (widgetTag === 'widget:table') {
+    return <ButtonAction text="View" clickAction={() => {}} />;
+  }
+  return <BugReport className={style.missingAttribute} />;
+};
+
 const AttributeSelector = props => {
   if (props.attribute && props.attribute.meta && props.attribute.meta.tags) {
     const { tags } = props.attribute.meta;
@@ -31,58 +87,22 @@ const AttributeSelector = props => {
     const isErrorState = props.attribute.errorState;
 
     if (widgetTagIndex !== -1) {
-      if (tags[widgetTagIndex] === 'widget:led') {
-        return (
-          <WidgetLED
-            LEDState={props.attribute.value}
-            colorBorder={props.theme.palette.primary.light}
-            colorCenter={props.theme.palette.primary.light}
-          />
-        );
-      } else if (tags[widgetTagIndex] === 'widget:checkbox') {
-        return (
-          <WidgetCheckbox
-            CheckState={props.attribute.value}
-            Pending={setDisabled}
-            checkEventHandler={isChecked =>
-              props.eventHandler(props.attribute.path, isChecked)
-            }
-          />
-        );
-      } else if (tags[widgetTagIndex] === 'widget:combo') {
-        return (
-          <WidgetComboBox
-            Value={props.attribute.value}
-            Pending={setDisabled}
-            Choices={props.attribute.meta.choices}
-            selectEventHandler={event =>
-              props.eventHandler(props.attribute.path, event.target.value)
-            }
-          />
-        );
-      } else if (tags[widgetTagIndex] === 'widget:textupdate') {
-        return <TextUpdate Text={props.attribute.value} />;
-      } else if (tags[widgetTagIndex] === 'widget:textinput') {
-        return (
-          <WidgetTextInput
-            Error={isErrorState}
-            Value={props.attribute.value.toString()}
-            Pending={setDisabled}
-            submitEventHandler={event =>
-              props.eventHandler(props.attribute.path, event.target.value)
-            }
-            focusHandler={() => {}}
-            blurHandler={() => {}}
-          />
-        );
-      } else if (tags[widgetTagIndex] === 'widget:flowgraph') {
-        return <ButtonAction text="View" clickAction={() => {}} />;
-      } else if (tags[widgetTagIndex] === 'widget:table') {
-        return <ButtonAction text="View" clickAction={() => {}} />;
-      }
+      return selectorFunction(
+        tags[widgetTagIndex],
+        props.attribute.value,
+        setDisabled,
+        isErrorState,
+        props.eventHandler,
+        props.attribute.path,
+        {
+          colorLED: props.theme.palette.primary.light,
+          missingAttribute: props.classes.missingAttribute,
+        },
+        props.attribute.meta
+      );
     }
   }
-  return <BugReport className={props.classes.missingAttribute} />;
+  return null;
 };
 
 const mapStateToProps = () => ({});

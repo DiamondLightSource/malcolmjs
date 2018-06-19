@@ -1,13 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { BugReport } from '@material-ui/icons';
-import WidgetLED from '../led/widgetLED.component';
-import WidgetCheckbox from '../checkbox/checkbox.component';
-import WidgetComboBox from '../comboBox/comboBox.component';
-import WidgetTextInput from '../textInput/WidgetTextInput.component';
-import TextUpdate from '../textUpdate/WidgetTextUpdate.component';
-import ButtonAction from '../buttonAction/buttonAction.component';
+import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = () => ({
   missingAttribute: {
@@ -28,55 +21,28 @@ export const getWidgetTags = attribute =>
 const WidgetSelector = props => {
   const setDisabled = false;
   const isErrorState = false;
-  if (props.columnWidget === 'widget:led') {
-    return (
-      <WidgetLED
-        LEDState={props.value}
-        colorBorder={props.theme.palette.primary.light}
-        colorCenter={props.theme.palette.primary.light}
-      />
-    );
-  } else if (props.columnWidget === 'widget:checkbox') {
-    return (
-      <WidgetCheckbox
-        CheckState={props.value}
-        Pending={setDisabled}
-        checkEventHandler={isChecked => props.rowChangeHandler(isChecked)}
-      />
-    );
-  } else if (props.columnWidget === 'widget:combo') {
-    return (
-      <WidgetComboBox
-        Value={props.value}
-        Pending={setDisabled}
-        Choices={[]}
-        selectEventHandler={event => props.rowChangeHandler(event.target.value)}
-      />
-    );
-  } else if (props.columnWidget === 'widget:textupdate') {
-    return <TextUpdate Text={props.value} />;
-  } else if (props.columnWidget === 'widget:textinput') {
-    return (
-      <WidgetTextInput
-        Error={isErrorState}
-        Value={props.value.toString()}
-        Pending={setDisabled}
-        submitEventHandler={event => props.rowChangeHandler(event.target.value)}
-        focusHandler={() => {}}
-        blurHandler={() => {}}
-      />
-    );
-  } else if (props.columnWidget === 'widget:flowgraph') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
-  } else if (props.columnWidget === 'widget:table') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
-  }
-  return <BugReport className={props.classes.missingAttribute} />;
+  return selectorFunction(
+    props.columnWidgetTag,
+    props.value,
+    setDisabled,
+    isErrorState,
+    props.rowChangeHandler,
+    props.rowPath,
+    {
+      colorLED: props.theme.palette.primary.light,
+      missingAttribute: props.classes.missingAttribute,
+    },
+    props.columnMeta
+  );
 };
 
 WidgetSelector.propTypes = {
-  value: PropTypes.oneOf(PropTypes.string, PropTypes.number).isRequired,
-  columnWidget: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.bool,
+  ]).isRequired,
+  columnWidgetTag: PropTypes.string.isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       primary: PropTypes.shape({
@@ -91,6 +57,11 @@ WidgetSelector.propTypes = {
     missingAttribute: PropTypes.string,
   }).isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
+  rowPath: PropTypes.shape({
+    label: PropTypes.string,
+    row: PropTypes.number,
+  }).isRequired,
+  columnMeta: PropTypes.shape({}).isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetSelector);

@@ -31,7 +31,7 @@ const ContainedTable = props =>
   );
 
 ContainedTable.propTypes = {
-  simple: PropTypes.bool.isRequired,
+  simple: PropTypes.bool,
   attribute: PropTypes.shape({
     labels: PropTypes.arrayOf(PropTypes.string),
     values: PropTypes.shape({}),
@@ -39,7 +39,12 @@ ContainedTable.propTypes = {
   classes: PropTypes.shape({
     testDiv: PropTypes.string,
   }).isRequired,
-  eventHandler: PropTypes.func.isRequired,
+  eventHandler: PropTypes.func,
+};
+
+ContainedTable.defaultProps = {
+  eventHandler: () => {},
+  simple: false,
 };
 
 export default withStyles(styles, { withTheme: true })(ContainedTable);

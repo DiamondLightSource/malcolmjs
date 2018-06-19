@@ -1,3 +1,5 @@
+/* eslint react/no-array-index-key: 0 */
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,9 +35,13 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
-  const columnWidgets = getWidgetTags(props.attribute);
-  const columnHeadings = props.attribute.labels.map(label => (
-    <TableCell className={props.classes.textHeadings} padding="none">
+  const columnWidgetTags = getWidgetTags(props.attribute);
+  const columnHeadings = props.attribute.labels.map((label, column) => (
+    <TableCell
+      className={props.classes.textHeadings}
+      padding="none"
+      key={column}
+    >
       {label}
     </TableCell>
   ));
@@ -51,15 +57,19 @@ const WidgetTable = props => {
       </TableHead>
       <TableBody>
         {table[0].map((value, row) => (
-          <TableRow className={props.classes.rowFormat}>
+          <TableRow className={props.classes.rowFormat} key={row}>
             {props.attribute.labels.map((label, column) => (
-              <TableCell className={props.classes.textBody} padding="none">
+              <TableCell
+                className={props.classes.textBody}
+                padding="none"
+                key={[row, column]}
+              >
                 <WidgetSelector
-                  columnWidget={columnWidgets[column]}
+                  columnWidgetTag={columnWidgetTags[column]}
                   value={table[column][row]}
-                  rowChangeHandler={putValue =>
-                    props.eventHandler(putValue, label, row)
-                  }
+                  rowPath={{ label, row }}
+                  rowChangeHandler={props.eventHandler}
+                  columnMeta={props.attribute.meta.elements[label]}
                 />
               </TableCell>
             ))}

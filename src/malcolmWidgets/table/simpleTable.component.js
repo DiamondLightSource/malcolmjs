@@ -1,3 +1,4 @@
+/* eslint react/no-array-index-key: 0 */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -24,8 +25,12 @@ const styles = theme => ({
 });
 
 const SimpleTable = props => {
-  const columnHeadings = props.labels.map(label => (
-    <TableCell className={props.classes.textHeadings} padding="none">
+  const columnHeadings = props.labels.map((label, column) => (
+    <TableCell
+      className={props.classes.textHeadings}
+      padding="none"
+      key={column}
+    >
       {label}
     </TableCell>
   ));
@@ -39,9 +44,13 @@ const SimpleTable = props => {
       </TableHead>
       <TableBody>
         {table[0].map((value, row) => (
-          <TableRow className={props.classes.rowFormat}>
+          <TableRow className={props.classes.rowFormat} key={row}>
             {props.labels.map((label, column) => (
-              <TableCell className={props.classes.textBody} padding="none">
+              <TableCell
+                className={props.classes.textBody}
+                padding="none"
+                key={[row, column]}
+              >
                 {table[column][row]}
               </TableCell>
             ))}
