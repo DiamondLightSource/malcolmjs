@@ -19,6 +19,7 @@ const styles = theme => ({
   textBody: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Center',
+    width: '150px',
   },
 });
 
