@@ -36,6 +36,7 @@ exports[`AttributeSelector selects a textInput correctly 1`] = `
   Value="[object Object]"
   blurHandler={[Function]}
   focusHandler={[Function]}
+  setDirty={[Function]}
   submitEventHandler={[Function]}
 />
 `;

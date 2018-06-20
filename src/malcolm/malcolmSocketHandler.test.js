@@ -9,7 +9,7 @@ import {
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
   MalcolmReturn,
-  MalcolmAttributePending,
+  MalcolmAttributeFlag,
   MalcolmError,
 } from './malcolm.types';
 
@@ -277,19 +277,21 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].snackbar.message).toEqual(
       'Error in attribute TestAttr for block TestBlock'
     );
-    expect(dispatches[1].type).toEqual(MalcolmAttributePending);
-    expect(dispatches[1].payload.path).toEqual(['TestBlock', 'TestAttr']);
-    expect(dispatches[2].type).toEqual(MalcolmError);
-    expect(dispatches[2].payload.id).toEqual(3);
+    expect(dispatches[2].type).toEqual(MalcolmAttributeFlag);
+    expect(dispatches[2].payload.path).toEqual(['TestBlock', 'TestAttr']);
+    expect(dispatches[2].payload.flagType).toEqual('pending');
+    expect(dispatches[1].type).toEqual(MalcolmError);
+    expect(dispatches[1].payload.id).toEqual(3);
   });
 
   it('disptaches remove pending + stop tracking actions on return', () => {
     const pendingAction = {
       payload: {
         path: ['TestBlock', 'TestAttr'],
-        pending: false,
+        flagType: 'pending',
+        flagState: false,
       },
-      type: 'malcolm:attributepending',
+      type: 'malcolm:attributeflag',
     };
     const malcolmReturnMessage = JSON.stringify({
       typeid: 'malcolm:core/Return:1.0',
@@ -297,9 +299,9 @@ describe('malcolm socket handler', () => {
     });
     socketContainer.socket.send(malcolmReturnMessage);
     expect(dispatches.length).toEqual(2);
-    expect(dispatches[0]).toEqual(pendingAction);
-    expect(dispatches[1].type).toEqual(MalcolmReturn);
-    expect(dispatches[1].payload.id).toEqual(3);
+    expect(dispatches[1]).toEqual(pendingAction);
+    expect(dispatches[0].type).toEqual(MalcolmReturn);
+    expect(dispatches[0].payload.id).toEqual(3);
   });
 
   it('does process an update for the root .blocks item', () => {

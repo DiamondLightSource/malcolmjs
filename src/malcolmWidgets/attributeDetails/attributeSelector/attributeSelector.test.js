@@ -93,9 +93,10 @@ describe('AttributeSelector', () => {
     const pendingAction = {
       payload: {
         path: undefined,
-        pending: true,
+        flagType: 'pending',
+        flagState: true,
       },
-      type: 'malcolm:attributepending',
+      type: 'malcolm:attributeflag',
     };
     const putAction = {
       payload: {

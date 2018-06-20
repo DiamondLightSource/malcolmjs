@@ -6,7 +6,7 @@ import {
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
-  MalcolmAttributePending,
+  MalcolmAttributeFlag,
   MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
@@ -224,11 +224,12 @@ describe('malcolm reducer', () => {
     };
 
     const action = {
-      type: MalcolmAttributePending,
+      type: MalcolmAttributeFlag,
       payload: {
         id: 1,
         path: ['block1', 'health'],
-        pending: true,
+        flagType: 'pending',
+        flagState: true,
       },
     };
 

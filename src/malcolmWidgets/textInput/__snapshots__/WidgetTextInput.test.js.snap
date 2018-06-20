@@ -8,6 +8,9 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
       "endAdornment": <WithStyles(InputAdornment)
         position="end"
     />,
+      "startAdornment": <WithStyles(InputAdornment)
+        position="start"
+    />,
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -35,6 +38,9 @@ exports[`WidgetTextUpdate displays text 1`] = `
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": <WithStyles(InputAdornment)
         position="end"
+    />,
+      "startAdornment": <WithStyles(InputAdornment)
+        position="start"
     />,
     }
   }
@@ -66,6 +72,9 @@ exports[`WidgetTextUpdate displays with units 1`] = `
     >
         GW
     </WithStyles(InputAdornment)>,
+      "startAdornment": <WithStyles(InputAdornment)
+        position="start"
+    />,
     }
   }
   className="WidgetTextInput-textInput-1"

@@ -7,7 +7,7 @@ import {
   malcolmSnackbarState,
   malcolmCleanBlocks,
   malcolmSetDisconnected,
-  malcolmSetPending,
+  malcolmSetFlag,
   malcolmHailReturn,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
@@ -59,7 +59,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onmessage = event => {
     const data = JSON.parse(event.data);
-
+    console.log(data);
     switch (data.typeid) {
       case 'malcolm:core/Update:1.0': {
         const originalRequest = store
@@ -112,8 +112,8 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         const originalRequest = store
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
-        store.dispatch(malcolmSetPending(originalRequest.path, false));
         store.dispatch(malcolmHailReturn(data.id, false));
+        store.dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
         break;
       }
 
@@ -132,8 +132,10 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               } for block ${originalRequest.path.slice(0, -1)}`
             )
           );
-          store.dispatch(malcolmSetPending(originalRequest.path, false));
           store.dispatch(malcolmHailReturn(data.id, true, data.message));
+          store.dispatch(
+            malcolmSetFlag(originalRequest.path, 'pending', false)
+          );
           break;
         } else {
           store.dispatch(

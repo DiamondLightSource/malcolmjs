@@ -75,7 +75,6 @@ const processAttribute = (
       inGroup,
       group,
       delta: true,
-      pending: false,
     },
   };
 

@@ -4,7 +4,7 @@ import {
   MalcolmError,
   MalcolmBlockMeta,
   MalcolmAttributeData,
-  MalcolmAttributePending,
+  MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
   MalcolmCleanBlocks,
@@ -168,7 +168,7 @@ function updateRootBlock(state, payload) {
   };
 }
 
-function setPending(state, path, pending) {
+function setFlag(state, path, flagType, flagState) {
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -187,10 +187,17 @@ function setPending(state, path, pending) {
       a => a.name === attributeName
     );
     if (matchingAttribute >= 0) {
-      attributes[matchingAttribute] = {
-        ...attributes[matchingAttribute],
-        pending,
-      };
+      if (flagType === 'pending') {
+        attributes[matchingAttribute] = {
+          ...attributes[matchingAttribute],
+          pending: flagState,
+        };
+      } else if (flagType === 'dirty') {
+        attributes[matchingAttribute] = {
+          ...attributes[matchingAttribute],
+          dirty: flagState,
+        };
+      }
     }
 
     const blocks = { ...state.blocks };
@@ -335,8 +342,13 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
     case MalcolmNewBlock:
       return registerNewBlock(state, action);
 
-    case MalcolmAttributePending:
-      return setPending(state, action.payload.path, action.payload.pending);
+    case MalcolmAttributeFlag:
+      return setFlag(
+        state,
+        action.payload.path,
+        action.payload.flagType,
+        action.payload.flagState
+      );
 
     case MalcolmSend:
       return updateMessagesInFlight(state, action);

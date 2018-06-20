@@ -10,7 +10,7 @@ import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
 import {
   malcolmPutAction,
-  malcolmSetPending,
+  malcolmSetFlag,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 
@@ -25,7 +25,9 @@ export const selectorFunction = (
   value,
   setDisabled,
   isErrorState,
+  isDirty,
   eventHandler,
+  setDirty,
   path,
   style,
   objectMeta
@@ -64,6 +66,8 @@ export const selectorFunction = (
         Value={value.toString()}
         Pending={setDisabled}
         submitEventHandler={event => eventHandler(path, event.target.value)}
+        isDirty={isDirty}
+        setDirty={state => setDirty(path, state)}
         focusHandler={() => {}}
         blurHandler={() => {}}
       />
@@ -92,7 +96,9 @@ const AttributeSelector = props => {
         props.attribute.value,
         setDisabled,
         isErrorState,
+        props.attribute.dirty,
         props.eventHandler,
+        props.setDirty,
         props.attribute.path,
         {
           colorLED: props.theme.palette.primary.light,
@@ -109,8 +115,11 @@ const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value) => {
-    dispatch(malcolmSetPending(path, true));
+    dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPutAction(path, value));
+  },
+  setDirty: (path, state) => {
+    dispatch(malcolmSetFlag(path, 'dirty', state));
   },
 });
 

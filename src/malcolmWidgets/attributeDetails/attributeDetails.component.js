@@ -77,7 +77,7 @@ AttributeDetails.propTypes = {
     name: PropTypes.string,
     pending: PropTypes.bool,
     errorState: PropTypes.bool,
-    errorMessage: PropTypes.string.isOptional,
+    errorMessage: PropTypes.string,
     alarm: PropTypes.shape({
       severity: PropTypes.number,
     }),

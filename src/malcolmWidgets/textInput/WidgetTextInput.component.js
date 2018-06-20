@@ -25,6 +25,7 @@ class WidgetTextInput extends React.Component {
     super(props);
     this.state = {
       localValue: props.Value,
+      awaitingResponse: false,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -35,12 +36,46 @@ class WidgetTextInput extends React.Component {
     });
   }
 
+  revertValue() {
+    this.props.setDirty(false);
+    this.state.localValue = this.props.Value;
+    this.props.submitEventHandler({ target: { value: this.props.Value } });
+  }
+
   render() {
     const didSubmit = event => {
       if (event.key === 'Enter') {
-        this.props.submitEventHandler(event);
+        if (event.target.value === 'qqq') {
+          this.revertValue();
+        } else {
+          this.props.submitEventHandler(event);
+          this.state.awaitingResponse = true;
+        }
       }
     };
+
+    const inFocus = () => {
+      this.props.setDirty(true);
+      this.props.focusHandler();
+    };
+
+    const deFocus = () => {
+      if (this.state.localValue === this.props.Value) {
+        this.props.setDirty(false);
+      }
+      this.props.blurHandler();
+    };
+
+    if (this.state.awaitingResponse && this.props.Pending === false) {
+      this.state.awaitingResponse = false;
+      if (!this.props.Error) {
+        this.props.setDirty(false);
+      }
+    }
+
+    if (!this.props.isDirty) {
+      this.state.localValue = this.props.Value;
+    }
 
     return (
       <TextField
@@ -49,12 +84,17 @@ class WidgetTextInput extends React.Component {
         value={this.state.localValue}
         onChange={this.handleChange}
         onKeyPress={didSubmit}
-        onBlur={this.props.blurHandler}
-        onFocus={this.props.focusHandler}
+        onBlur={deFocus}
+        onFocus={inFocus}
         className={this.props.classes.textInput}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">{this.props.Units}</InputAdornment>
+          ),
+          startAdornment: (
+            <InputAdornment position="start">
+              {this.props.isDirty ? '*' : ''}
+            </InputAdornment>
           ),
           className: this.props.classes.InputStyle,
         }}
@@ -68,10 +108,12 @@ class WidgetTextInput extends React.Component {
 WidgetTextInput.propTypes = {
   Value: PropTypes.string.isRequired,
   submitEventHandler: PropTypes.func.isRequired,
+  setDirty: PropTypes.func.isRequired,
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,
   Error: PropTypes.bool,
+  isDirty: PropTypes.bool,
   Units: PropTypes.string,
   classes: PropTypes.shape({
     textInput: PropTypes.string,
@@ -83,6 +125,7 @@ WidgetTextInput.propTypes = {
 WidgetTextInput.defaultProps = {
   Pending: false,
   Error: false,
+  isDirty: false,
   Units: '',
 };
 
