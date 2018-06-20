@@ -118,6 +118,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       }
 
       case 'malcolm:core/Error:1.0': {
+        console.log(data);
         if (data.id !== -1) {
           const originalRequest = store
             .getState()
@@ -132,7 +133,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             )
           );
           store.dispatch(malcolmSetPending(originalRequest.path, false));
-          store.dispatch(malcolmHailReturn(data.id, true));
+          store.dispatch(malcolmHailReturn(data.id, true, data.message));
           break;
         } else {
           store.dispatch(

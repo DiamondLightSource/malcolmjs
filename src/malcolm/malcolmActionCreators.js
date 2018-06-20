@@ -143,10 +143,11 @@ export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
   },
 });
 
-export const malcolmHailReturn = (id, isErrorState) => ({
+export const malcolmHailReturn = (id, isErrorState, error = undefined) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
   payload: {
     id,
+    error,
   },
 });
 

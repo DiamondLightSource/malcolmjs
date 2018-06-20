@@ -261,7 +261,7 @@ function setDisconnected(state) {
   };
 }
 
-export const setErrorState = (state, id, errorState) => {
+export const setErrorState = (state, id, errorState, errorMessage) => {
   const matchingMessage = state.messagesInFlight.find(m => m.id === id);
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
@@ -278,6 +278,7 @@ export const setErrorState = (state, id, errorState) => {
         attributes[matchingAttribute] = {
           ...attributes[matchingAttribute],
           errorState,
+          errorMessage,
         };
       }
 
@@ -313,7 +314,7 @@ const handleErrorMessage = (state, action) => {
   }
 
   return stopTrackingMessage(
-    setErrorState(updatedState, action.payload.id, true),
+    setErrorState(updatedState, action.payload.id, true, action.payload.error),
     action
   );
 };
