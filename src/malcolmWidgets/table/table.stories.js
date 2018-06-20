@@ -17,6 +17,7 @@ const simpleAttribute = {
 
 const harderAttribute = {
   typeid: 'epics:nt/NTTable:1.0',
+  path: ['PANDA', 'layout'],
   labels: ['name', 'mri', 'x', 'y', 'visible'],
   value: {
     typeid: 'malcolm:core/Table:1.0',

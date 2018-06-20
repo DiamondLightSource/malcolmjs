@@ -4,14 +4,17 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-// import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+/*
+import { connect } from 'react-redux';
 
-// import blockUtils from '../../malcolm/blockUtils';
+import blockUtils from '../../malcolm/blockUtils';
+import {malcolmPutAction, malcolmSetPending} from "../../malcolm/malcolmActionCreators";
+*/
 import WidgetSelector, { getWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
@@ -36,7 +39,17 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
+  const rowChangeHandler = (rowPath, value) => {
+    const rowValue = {};
+    props.attribute.labels.forEach(label => {
+      rowValue[label] = props.attribute.value[label][rowPath.row];
+      return 0;
+    });
+    rowValue[rowPath.label] = value;
+    props.eventHandler(props.attribute.path, rowValue);
+  };
   const columnWidgetTags = getWidgetTags(props.attribute);
+  const rowNames = props.attribute.value[props.attribute.labels[0]];
   const columnHeadings = props.attribute.labels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
@@ -46,9 +59,6 @@ const WidgetTable = props => {
       {label}
     </TableCell>
   ));
-  const table = props.attribute.labels.map(
-    label => props.attribute.value[label]
-  );
   return (
     <Table className={props.classes.tableLayout}>
       <TableHead>
@@ -57,7 +67,7 @@ const WidgetTable = props => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {table[0].map((value, row) => (
+        {rowNames.map((name, row) => (
           <TableRow className={props.classes.rowFormat} key={row}>
             {props.attribute.labels.map((label, column) => (
               <TableCell
@@ -67,9 +77,9 @@ const WidgetTable = props => {
               >
                 <WidgetSelector
                   columnWidgetTag={columnWidgetTags[column]}
-                  value={table[column][row]}
-                  rowPath={{ label, row }}
-                  rowChangeHandler={props.eventHandler}
+                  value={props.attribute.value[label][row]}
+                  rowPath={{ label, row, column }}
+                  rowChangeHandler={rowChangeHandler}
                   columnMeta={props.attribute.meta.elements[label]}
                 />
               </TableCell>
@@ -83,7 +93,8 @@ const WidgetTable = props => {
 
 WidgetTable.propTypes = {
   attribute: PropTypes.shape({
-    value: PropTypes.shape({}).isRequired,
+    path: PropTypes.arrayOf(PropTypes.string),
+    value: PropTypes.shape({}),
     name: PropTypes.string,
     typeid: PropTypes.string,
     labels: PropTypes.arrayOf(PropTypes.string),
@@ -105,8 +116,6 @@ WidgetTable.propTypes = {
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
   }).isRequired,
-  // lint analysis giving false positive here...
-  // eslint-disable-next-line react/no-unused-prop-types
   eventHandler: PropTypes.func.isRequired,
 };
 
@@ -125,7 +134,14 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(
+const mapDispatchToProps = dispatch => ({
+  eventHandler: (path, value) => {
+    dispatch(malcolmSetPending(path, true));
+    dispatch(malcolmPutAction(path, value));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(WidgetTable)
 );
 */
