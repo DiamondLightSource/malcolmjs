@@ -171,6 +171,14 @@ function setPending(state, path, pending) {
   const attributeName = path[1];
 
   if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    if (
+      !Object.prototype.hasOwnProperty.call(
+        state.blocks[blockName],
+        'attributes'
+      )
+    ) {
+      return state;
+    }
     const attributes = [...state.blocks[blockName].attributes];
 
     const matchingAttribute = attributes.findIndex(

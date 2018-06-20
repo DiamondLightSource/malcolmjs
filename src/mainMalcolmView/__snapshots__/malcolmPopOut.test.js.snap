@@ -20,11 +20,7 @@ exports[`MalcolmPopOut renders correctly 1`] = `
     </WithStyles(Toolbar)>
   </WithStyles(AppBar)>
   <Connect(WithStyles(BlockDetails))
-    block={
-      Object {
-        "name": "Test main view",
-      }
-    }
+    parent={true}
   />
 </div>
 `;

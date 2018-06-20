@@ -36,7 +36,7 @@ const MalcolmPopOut = props => (
         </Typography>
       </Toolbar>
     </AppBar>
-    <BlockDetails block={props.parentBlock} />
+    <BlockDetails parent />
   </div>
 );
 
@@ -53,17 +53,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = () => ({});
 
 MalcolmPopOut.propTypes = {
-  parentBlock: PropTypes.shape({}),
   parentBlockTitle: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
     toolbar: PropTypes.string,
     title: PropTypes.string,
   }).isRequired,
-};
-
-MalcolmPopOut.defaultProps = {
-  parentBlock: undefined,
 };
 
 export default withStyles(styles, { withTheme: true })(
