@@ -34,14 +34,14 @@ exports[`Layout renders correctly 1`] = `
             "id": "block1",
             "label": "block 1",
             "listeners": Object {
-              "12": Object {
+              "9": Object {
                 "entityRemoved": [Function],
               },
             },
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
-                "id": "9",
+                "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
@@ -54,7 +54,7 @@ exports[`Layout renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
-                "id": "10",
+                "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
@@ -67,7 +67,7 @@ exports[`Layout renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
-                "id": "11",
+                "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},

@@ -92,6 +92,12 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             store.getState().malcolm,
             store.dispatch
           );
+        } else if (attribute.typeid === 'malcolm:core/Method:1.0') {
+          AttributeHandler.processMethod(
+            originalRequest,
+            attribute,
+            store.dispatch
+          );
         } else {
           store.dispatch({
             type: 'unprocessed_delta',

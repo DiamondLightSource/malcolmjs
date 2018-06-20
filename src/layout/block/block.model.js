@@ -15,7 +15,12 @@ class BlockNodeModel extends NodeModel {
 
   addBlockPort(port) {
     return this.addPort(
-      new MalcolmPortModel(port.input, `${this.id}-${port.label}`, port.label)
+      new MalcolmPortModel(
+        port.input,
+        `${this.id}-${port.label}`,
+        port.label,
+        `${this.id}-${port.label}`
+      )
     );
   }
 

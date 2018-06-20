@@ -1,6 +1,11 @@
 import { processNavigationLists } from './navigation.reducer';
 import LayoutReducer from './layout.reducer';
 import blockUtils from '../blockUtils';
+import createReducer from './createReducer';
+import {
+  MalcolmAttributeData,
+  MalcolmMainAttributeUpdate,
+} from '../malcolm.types';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -190,7 +195,12 @@ function setMainAttribute(state, payload) {
   };
 }
 
-export default {
-  updateAttribute,
-  setMainAttribute,
-};
+const AttributeReducer = createReducer(
+  {},
+  {
+    [MalcolmAttributeData]: updateAttribute,
+    [MalcolmMainAttributeUpdate]: setMainAttribute,
+  }
+);
+
+export default AttributeReducer;

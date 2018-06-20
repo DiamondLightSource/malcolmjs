@@ -1,7 +1,17 @@
-import AttributeReducer, { updateLayout } from './attribute.reducer';
+import AttributeReducer, {
+  updateLayout,
+  updateNavigation,
+  portsAreDifferent,
+} from './attribute.reducer';
 import LayoutReducer from './layout.reducer';
+import { processNavigationLists } from './navigation.reducer';
+import {
+  MalcolmAttributeData,
+  MalcolmMainAttributeUpdate,
+} from '../malcolm.types';
 
 jest.mock('./layout.reducer');
+jest.mock('./navigation.reducer');
 
 describe('attribute reducer', () => {
   let state = {};
@@ -9,6 +19,8 @@ describe('attribute reducer', () => {
 
   beforeEach(() => {
     LayoutReducer.processLayout.mockClear();
+    processNavigationLists.mockClear();
+
     state = {
       messagesInFlight: [
         {
@@ -51,8 +63,13 @@ describe('attribute reducer', () => {
     };
   });
 
+  const buildAction = (type, args) => ({
+    type,
+    payload: args,
+  });
+
   it('updates children for layout attribute', () => {
-    state = AttributeReducer.updateAttribute(state, payload);
+    state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
     expect(state.blocks.block1.attributes[0].children).toHaveLength(3);
     expect(state.blocks.block1.attributes[0].children).toEqual([
@@ -67,13 +84,16 @@ describe('attribute reducer', () => {
       property: 'test',
     };
 
-    const updatedState = AttributeReducer.updateAttribute(state, {});
+    const updatedState = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, {})
+    );
 
     expect(updatedState).toBe(state);
   });
 
   it('updates with a layout property if widget:layout', () => {
-    state = AttributeReducer.updateAttribute(state, payload);
+    state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
     expect(state.blocks.block1.attributes[0].layout).not.toBeUndefined();
     expect(state.blocks.block1.attributes[0].layout.blocks).toHaveLength(3);
@@ -89,7 +109,10 @@ describe('attribute reducer', () => {
   });
 
   it('setMainAttribute sets the main attribute on the state', () => {
-    state = AttributeReducer.setMainAttribute(state, { attribute: 'health' });
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmMainAttributeUpdate, { attribute: 'health' })
+    );
     expect(state.mainAttribute).toEqual('health');
   });
 
@@ -162,5 +185,47 @@ describe('attribute reducer', () => {
 
     updateLayout(updatedState, updatedState, 'block1', 'port 1');
     expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(0);
+  });
+
+  it('updateNavigation only updates navigation if the attribute is in the path', () => {
+    state.navigation.navigationLists = [{ path: 'PANDA' }, { path: 'layout' }];
+
+    updateNavigation(state, 'layout');
+    expect(processNavigationLists).toHaveBeenCalledTimes(1);
+
+    processNavigationLists.mockClear();
+    updateNavigation(state, 'not in path');
+    expect(processNavigationLists).toHaveBeenCalledTimes(0);
+  });
+
+  it('portsAreDifferent returns true without metadata', () => {
+    const oldAttribute = {};
+    const newAttribute = {};
+    expect(portsAreDifferent(undefined, newAttribute)).toBeTruthy();
+    expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
+  });
+
+  it('portsAreDifferent returns true if labels are different', () => {
+    const oldAttribute = { meta: { label: 'old' } };
+    const newAttribute = { meta: { label: 'new' } };
+    expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
+  });
+
+  it('portsAreDifferent returns false if there are no tags', () => {
+    const oldAttribute = { meta: { label: 'label' } };
+    const newAttribute = { meta: { label: 'label' } };
+    expect(portsAreDifferent(oldAttribute, newAttribute)).toBeFalsy();
+  });
+
+  it('portsAreDifferent returns true if inports are different', () => {
+    const oldAttribute = { meta: { label: 'label', tags: [] } };
+    const newAttribute = { meta: { label: 'label', tags: ['inport:bool'] } };
+    expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
+  });
+
+  it('portsAreDifferent returns true if outports are different', () => {
+    const oldAttribute = { meta: { label: 'label', tags: [] } };
+    const newAttribute = { meta: { label: 'label', tags: ['outport:bool'] } };
+    expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
 });
