@@ -7,6 +7,7 @@ exports[`ButtonAction renders correctly 1`] = `
   <WithStyles(Button)
     className="ButtonAction-button-2"
     color="primary"
+    disabled={false}
     onClick={[Function]}
     variant="raised"
   >

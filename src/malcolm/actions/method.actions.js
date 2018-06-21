@@ -6,6 +6,8 @@ export const buildMethodUpdate = (id, data) => ({
     id,
     ...data,
     isMethod: true,
+    inputs: {},
+    outputs: {},
     delta: true,
     pending: false,
   },
