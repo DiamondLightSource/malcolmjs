@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Cached, Lock, LockOpen } from '@material-ui/icons';
+import { Cached, Edit } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
@@ -45,7 +45,7 @@ class WidgetTextInput extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.deFocus = this.deFocus.bind(this);
     this.inFocus = this.inFocus.bind(this);
-    this.revertValue = this.revertValue.bind(this);
+    this.refreshValue = this.refreshValue.bind(this);
     this.didSubmit = this.didSubmit.bind(this);
   }
 
@@ -58,7 +58,7 @@ class WidgetTextInput extends React.Component {
     });
   }
 
-  revertValue() {
+  refreshValue() {
     this.props.setDirty(false);
     this.setState({
       localValue: this.props.Value,
@@ -68,11 +68,7 @@ class WidgetTextInput extends React.Component {
 
   didSubmit(event) {
     if (event.key === 'Enter') {
-      if (event.target.value === 'qqq') {
-        this.revertValue();
-      } else {
-        this.props.submitEventHandler(event);
-      }
+      this.props.submitEventHandler(event);
     }
   }
 
@@ -97,26 +93,30 @@ class WidgetTextInput extends React.Component {
       if (this.props.isDirty) {
         return (
           <InputAdornment position="start">
-            <IconButton
-              className={this.props.classes.button}
-              disableRipple
-              onClick={this.revertValue}
-            >
-              {this.props.Value === this.state.localValue ? (
-                <Lock nativeColor={iconColor} />
-              ) : (
+            {this.props.Value === this.state.localValue ? (
+              <Edit nativeColor={iconColor} />
+            ) : (
+              <IconButton
+                className={this.props.classes.button}
+                disableRipple
+                onClick={this.refreshValue}
+              >
                 <Cached nativeColor={iconColor} />
-              )}
-            </IconButton>
+              </IconButton>
+            )}
           </InputAdornment>
         );
       }
       return (
         <InputAdornment position="start">
-          <LockOpen nativeColor={this.props.theme.palette.background.paper} />
+          <Edit nativeColor={this.props.theme.palette.background.paper} />
         </InputAdornment>
       );
     };
+
+    const endAdornment = this.props.Units ? (
+      <InputAdornment position="end">{this.props.Units}</InputAdornment>
+    ) : null;
 
     return (
       <TextField
@@ -129,9 +129,7 @@ class WidgetTextInput extends React.Component {
         onFocus={this.inFocus}
         className={this.props.classes.textInput}
         InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">{this.props.Units}</InputAdornment>
-          ),
+          endAdornment,
           startAdornment: dirtyIcon(),
           className: this.props.classes.InputStyle,
         }}
@@ -149,7 +147,7 @@ WidgetTextInput.propTypes = {
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,
-  Error: PropTypes.bool,
+  Error: PropTypes.bool.isRequired,
   isDirty: PropTypes.bool,
   Units: PropTypes.string,
   classes: PropTypes.shape({
@@ -175,7 +173,6 @@ WidgetTextInput.propTypes = {
 
 WidgetTextInput.defaultProps = {
   Pending: false,
-  Error: false,
   isDirty: false,
   Units: '',
 };

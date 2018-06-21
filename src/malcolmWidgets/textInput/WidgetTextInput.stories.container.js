@@ -17,17 +17,21 @@ const styles = theme => ({
 const ContainedTextInput = props => (
   <div className={props.classes.div}>
     <WidgetTextInput
+      Error={props.Error}
       Value={props.Value}
       Pending={props.Pending}
       submitEventHandler={props.submitEventHandler}
       focusHandler={props.focusHandler}
       blurHandler={props.blurHandler}
       Units={props.Units}
+      isDirty={props.isDirty}
+      setDirty={props.setDirty}
     />
   </div>
 );
 
 ContainedTextInput.propTypes = {
+  Error: PropTypes.bool.isRequired,
   Value: PropTypes.string.isRequired,
   submitEventHandler: PropTypes.func.isRequired,
   blurHandler: PropTypes.func.isRequired,
@@ -37,6 +41,8 @@ ContainedTextInput.propTypes = {
   classes: PropTypes.shape({
     div: PropTypes.string,
   }).isRequired,
+  isDirty: PropTypes.bool.isRequired,
+  setDirty: PropTypes.func.isRequired,
 };
 
 ContainedTextInput.defaultProps = {
