@@ -11,7 +11,7 @@ import AttributeAlarm, {
 import ButtonAction from '../buttonAction/buttonAction.component';
 import blockUtils from '../../malcolm/blockUtils';
 import {
-  malcolmSetPending,
+  malcolmSetFlag,
   malcolmUpdateMethodInput,
 } from '../../malcolm/malcolmActionCreators';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
@@ -63,15 +63,18 @@ const buildInputComponent = (input, props) => {
       inputValue,
       setDisabled,
       isErrorState,
+      false,
       (path, value) => {
         props.updateInput(path, input[0], value);
       },
+      () => {},
       props.methodPath,
       {
         colorLED: props.theme.palette.primary.light,
         missingAttribute: props.classes.missingAttribute,
       },
-      {}
+      {},
+      false
     );
   }
   return null;
@@ -164,7 +167,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
-    dispatch(malcolmSetPending(path, true));
+    dispatch(malcolmSetFlag(path, 'pending', true));
     console.log(`Running method [${path}] with inputs:`);
     console.log(inputs);
   },
