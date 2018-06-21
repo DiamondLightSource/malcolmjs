@@ -74,7 +74,7 @@ class WidgetTextInput extends React.Component {
   }
 
   didSubmit(event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' || this.props.continuousSend) {
       this.props.submitEventHandler(event);
     }
   }
@@ -182,6 +182,7 @@ WidgetTextInput.propTypes = {
       }),
     }),
   }).isRequired,
+  continuousSend: PropTypes.bool,
 };
 
 WidgetTextInput.defaultProps = {
@@ -189,6 +190,7 @@ WidgetTextInput.defaultProps = {
   isDirty: false,
   Units: '',
   Error: false,
+  continuousSend: false,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetTextInput);
