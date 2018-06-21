@@ -23,6 +23,8 @@ const styles = () => ({
   },
 });
 
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
+
 const DrawerContainer = props => (
   <div>
     <div>
@@ -41,7 +43,7 @@ const DrawerContainer = props => (
         <DrawerHeader
           closeAction={props.closeParent}
           popOutAction={() =>
-            props.popOutAction(props.baseUrl, drawerWidth, props.parentTitle)
+            props.popOutAction(baseUrl, drawerWidth, props.parentTitle)
           }
           title={props.parentTitle}
         />
@@ -59,7 +61,7 @@ const DrawerContainer = props => (
           closeAction={() => props.closeChild(props.urlPath)}
           title={props.childTitle}
           popOutAction={() =>
-            props.popOutAction(props.baseUrl, drawerWidth, props.childTitle)
+            props.popOutAction(baseUrl, drawerWidth, props.childTitle)
           }
         />
         {props.children[props.children.length - 1]}
@@ -72,9 +74,6 @@ const mapStateToProps = state => ({
   open: state.viewState.openParentPanel,
   openSecondary: state.malcolm.childBlock !== undefined,
   urlPath: state.router.location.pathname,
-  baseUrl: Object.prototype.hasOwnProperty.call(state, 'navigation')
-    ? state.navigation.basePath
-    : '',
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -86,7 +85,6 @@ DrawerContainer.propTypes = {
   open: PropTypes.bool.isRequired,
   openSecondary: PropTypes.bool.isRequired,
   urlPath: PropTypes.string.isRequired,
-  baseUrl: PropTypes.string.isRequired,
   closeParent: PropTypes.func.isRequired,
   popOutAction: PropTypes.func.isRequired,
   closeChild: PropTypes.func.isRequired,

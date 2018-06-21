@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
 } from './attributeAlarm/attributeAlarm.component';
@@ -27,6 +29,13 @@ const styles = theme => ({
     width: 150,
     padding: 2,
   },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 const AttributeDetails = props => {
@@ -41,9 +50,16 @@ const AttributeDetails = props => {
     let alarm = props.attribute.alarm.severity;
     alarm = props.attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
     alarm = props.attribute.pending ? AlarmStates.PENDING : alarm;
+    const message = props.attribute.errorMessage
+      ? props.attribute.errorMessage
+      : '';
     return (
       <div className={props.classes.div}>
-        <AttributeAlarm alarmSeverity={alarm} />
+        <Tooltip id="1" title={message} placement="bottom">
+          <IconButton className={props.classes.button} disableRipple>
+            <AttributeAlarm alarmSeverity={alarm} />
+          </IconButton>
+        </Tooltip>
         <Typography className={props.classes.textName}>
           {props.attribute.meta.label}:{' '}
         </Typography>
@@ -61,6 +77,7 @@ AttributeDetails.propTypes = {
     name: PropTypes.string,
     pending: PropTypes.bool,
     errorState: PropTypes.bool,
+    errorMessage: PropTypes.string,
     alarm: PropTypes.shape({
       severity: PropTypes.number,
     }),
@@ -74,6 +91,7 @@ AttributeDetails.propTypes = {
     div: PropTypes.string,
     textName: PropTypes.string,
     controlContainer: PropTypes.string,
+    button: PropTypes.string,
   }).isRequired,
 };
 
