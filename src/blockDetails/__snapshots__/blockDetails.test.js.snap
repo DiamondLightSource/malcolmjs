@@ -46,3 +46,50 @@ exports[`Block Details renders correctly when metadata loaded and waiting for at
   </div>
 </div>
 `;
+
+exports[`Block Details renders even if the block is undefined 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+/>
+`;
+
+exports[`Block Details renders groups correctly 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(WidgetGroupExpander)
+      expanded={false}
+      groupName="health 1"
+      key="parameters"
+    >
+      <Connect(WithStyles(AttributeDetails))
+        attributeName="health"
+        key="health"
+      />
+      <Connect(WithStyles(AttributeDetails))
+        attributeName="icon"
+        key="icon"
+      />
+    </WithStyles(WidgetGroupExpander)>
+  </div>
+</div>
+`;
+
+exports[`Block Details renders methods correctly 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <WithStyles(WidgetGroupExpander)
+      expanded={true}
+      groupName="save method"
+      key="save"
+    >
+      <Connect(WithStyles(MethodDetails))
+        attributeName="save"
+      />
+    </WithStyles(WidgetGroupExpander)>
+  </div>
+</div>
+`;

@@ -21,6 +21,7 @@ const ButtonAction = props => (
       color="primary"
       className={props.classes.button}
       onClick={props.clickAction}
+      disabled={props.disabled}
     >
       {props.text}
     </Button>
@@ -30,10 +31,15 @@ const ButtonAction = props => (
 ButtonAction.propTypes = {
   text: PropTypes.string.isRequired,
   clickAction: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   classes: PropTypes.shape({
     button: PropTypes.string,
     container: PropTypes.string,
   }).isRequired,
+};
+
+ButtonAction.defaultProps = {
+  disabled: false,
 };
 
 export default withStyles(styles, { withTheme: true })(ButtonAction);

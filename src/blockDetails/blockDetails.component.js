@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
+import MethodDetails from '../malcolmWidgets/method/method.component';
 
 const styles = theme => ({
   progressContainer: {
@@ -22,6 +23,7 @@ export const isBlockLoading = block =>
 export const isRootLevelAttribute = a =>
   !a.inGroup &&
   !a.isGroup &&
+  !a.isMethod &&
   !ignoredAttributes.some(
     ignored =>
       a.meta && a.meta.tags && a.meta.tags.findIndex(t => t === ignored) > -1
@@ -35,7 +37,7 @@ const blockLoading = () => (
   </div>
 );
 
-const areAttributesTheSame = (oldAttributes, newAttributes) =>
+export const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.length === newAttributes.length &&
   oldAttributes.every((old, i) => old.name === newAttributes[i].name) &&
   oldAttributes.every((old, i) => old.inGroup === newAttributes[i].inGroup) &&
@@ -73,7 +75,12 @@ const displayAttributes = props => {
           </GroupExpander>
         ))}
         {props.methods.map(method => (
-          <GroupExpander key={method.label} groupName={method.label} expanded />
+          <GroupExpander key={method.name} groupName={method.label} expanded>
+            <MethodDetails
+              blockName={props.blockName}
+              attributeName={method.name}
+            />
+          </GroupExpander>
         ))}
       </div>
     );
