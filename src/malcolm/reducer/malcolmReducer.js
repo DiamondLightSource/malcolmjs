@@ -187,17 +187,11 @@ function setFlag(state, path, flagType, flagState) {
       a => a.name === attributeName
     );
     if (matchingAttribute >= 0) {
-      if (flagType === 'pending') {
-        attributes[matchingAttribute] = {
-          ...attributes[matchingAttribute],
-          pending: flagState,
-        };
-      } else if (flagType === 'dirty') {
-        attributes[matchingAttribute] = {
-          ...attributes[matchingAttribute],
-          dirty: flagState,
-        };
-      }
+      const attributeCopy = {
+        ...attributes[matchingAttribute],
+      };
+      attributeCopy[flagType] = flagState;
+      attributes[matchingAttribute] = attributeCopy;
     }
 
     const blocks = { ...state.blocks };
@@ -287,6 +281,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
           errorState,
           errorMessage,
           isDirty: errorState,
+          forceOnNextUpdate: !errorState,
         };
       }
 

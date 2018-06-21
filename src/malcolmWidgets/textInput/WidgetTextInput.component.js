@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { Cached, Edit } from '@material-ui/icons';
+import { Cached, Edit, Lock } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
@@ -32,7 +32,14 @@ const styles = theme => ({
 class WidgetTextInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (!props.isDirty) {
-      return { localValue: props.Value };
+      return {
+        localValue: props.Value,
+      };
+    } else if (props.forceUpdate) {
+      props.setFlag('forceUpdate', false);
+      return {
+        localValue: props.Value,
+      };
     }
     return state;
   }
@@ -51,7 +58,7 @@ class WidgetTextInput extends React.Component {
 
   handleChange(event) {
     if (!this.props.isDirty) {
-      this.props.setDirty(true);
+      this.props.setFlag('dirty', true);
     }
     this.setState({
       localValue: event.target.value,
@@ -59,7 +66,7 @@ class WidgetTextInput extends React.Component {
   }
 
   refreshValue() {
-    this.props.setDirty(false);
+    this.props.setFlag('dirty', false);
     this.setState({
       localValue: this.props.Value,
     });
@@ -73,13 +80,13 @@ class WidgetTextInput extends React.Component {
   }
 
   inFocus() {
-    this.props.setDirty(true);
+    this.props.setFlag('dirty', true);
     this.props.focusHandler();
   }
 
   deFocus() {
     if (this.state.localValue === this.props.Value) {
-      this.props.setDirty(false);
+      this.props.setFlag('dirty', false);
     }
     this.props.blurHandler();
   }
@@ -104,6 +111,12 @@ class WidgetTextInput extends React.Component {
                 <Cached nativeColor={iconColor} />
               </IconButton>
             )}
+          </InputAdornment>
+        );
+      } else if (this.props.Pending) {
+        return (
+          <InputAdornment position="start">
+            <Lock nativeColor={this.props.theme.palette.background.paper} />
           </InputAdornment>
         );
       }
@@ -143,7 +156,7 @@ class WidgetTextInput extends React.Component {
 WidgetTextInput.propTypes = {
   Value: PropTypes.string.isRequired,
   submitEventHandler: PropTypes.func.isRequired,
-  setDirty: PropTypes.func.isRequired,
+  setFlag: PropTypes.func.isRequired,
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,

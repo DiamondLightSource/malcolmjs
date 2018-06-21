@@ -9,7 +9,7 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
       "startAdornment": <WithStyles(InputAdornment)
         position="start"
     >
-        <pure(Edit)
+        <pure(Lock)
             nativeColor="#fff"
         />
     </WithStyles(InputAdornment)>,

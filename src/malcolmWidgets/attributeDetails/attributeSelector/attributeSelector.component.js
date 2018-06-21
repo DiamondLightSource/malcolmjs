@@ -27,10 +27,11 @@ export const selectorFunction = (
   isErrorState,
   isDirty,
   eventHandler,
-  setDirty,
+  setFlag,
   path,
   style,
-  objectMeta
+  objectMeta,
+  forceUpdate
 ) => {
   if (widgetTag === 'widget:led') {
     return (
@@ -67,9 +68,10 @@ export const selectorFunction = (
         Pending={setDisabled}
         submitEventHandler={event => eventHandler(path, event.target.value)}
         isDirty={isDirty}
-        setDirty={state => setDirty(path, state)}
+        setFlag={(flag, state) => setFlag(path, flag, state)}
         focusHandler={() => {}}
         blurHandler={() => {}}
+        forceUpdate={forceUpdate}
       />
     );
   } else if (widgetTag === 'widget:flowgraph') {
@@ -98,13 +100,14 @@ const AttributeSelector = props => {
         isErrorState,
         props.attribute.dirty,
         props.eventHandler,
-        props.setDirty,
+        props.setFlag,
         props.attribute.path,
         {
           colorLED: props.theme.palette.primary.light,
           missingAttribute: props.classes.missingAttribute,
         },
-        props.attribute.meta
+        props.attribute.meta,
+        props.attribute.forceUpdate
       );
     }
   }
@@ -118,8 +121,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPutAction(path, value));
   },
-  setDirty: (path, state) => {
-    dispatch(malcolmSetFlag(path, 'dirty', state));
+  setFlag: (path, flag, state) => {
+    dispatch(malcolmSetFlag(path, flag, state));
   },
 });
 

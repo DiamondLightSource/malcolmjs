@@ -142,9 +142,16 @@ function updateAttribute(state, payload) {
           ...attributes[matchingAttribute],
           loading: false,
           path,
-          pending: false,
           ...payload,
         };
+
+        if (attributes[matchingAttribute].forceOnNextUpdate === true) {
+          attributes[matchingAttribute] = {
+            ...attributes[matchingAttribute],
+            forceOnNextUpdate: false,
+            forceUpdate: true,
+          };
+        }
 
         attributes[matchingAttribute] = checkForFlowGraph(
           attributes[matchingAttribute]
