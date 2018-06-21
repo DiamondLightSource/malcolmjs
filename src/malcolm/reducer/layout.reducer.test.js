@@ -22,6 +22,7 @@ const buildMalcolmState = () => ({
       x: 100,
       y: 150,
     },
+    selectedBlocks: [],
   },
   blocks: {
     block1: {
@@ -174,5 +175,33 @@ describe('Layout Reducer', () => {
     expect(layout.blocks[0].icon).toEqual('icon 123');
     expect(layout.blocks[0].position.x).toEqual(110);
     expect(layout.blocks[0].ports[0].label).toEqual('att1');
+  });
+
+  it('selectBlock replaces the selection if shift is not pressed', () => {
+    const state = buildMalcolmState();
+    state.layoutState.selectedBlocks = ['block2'];
+    const layout = LayoutReducer.selectBlock(state, 'block1');
+
+    expect(layout.selectedBlocks).toEqual(['block1']);
+  });
+
+  it('selectBlock adds to the selection if shift is pressed', () => {
+    const state = buildMalcolmState();
+    state.layoutState.selectedBlocks = ['block2'];
+    state.layoutState.shiftIsPressed = true;
+
+    const layout = LayoutReducer.selectBlock(state, 'block1');
+
+    expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
+  });
+
+  it('selectBlock returns the same array if the block is already selected', () => {
+    const state = buildMalcolmState();
+    state.layoutState.selectedBlocks = ['block1'];
+    state.layoutState.shiftIsPressed = true;
+
+    const layout = LayoutReducer.selectBlock(state, 'block1');
+
+    expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
   });
 });
