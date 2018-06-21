@@ -5,9 +5,7 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
   InputProps={
     Object {
       "className": "WidgetTextInput-InputStyle-3",
-      "endAdornment": <WithStyles(InputAdornment)
-        position="end"
-    />,
+      "endAdornment": null,
       "startAdornment": <WithStyles(InputAdornment)
         position="start"
     >
@@ -40,9 +38,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
   InputProps={
     Object {
       "className": "WidgetTextInput-InputStyle-3",
-      "endAdornment": <WithStyles(InputAdornment)
-        position="end"
-    />,
+      "endAdornment": null,
       "startAdornment": <WithStyles(InputAdornment)
         position="start"
     >

@@ -147,7 +147,7 @@ WidgetTextInput.propTypes = {
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
   Pending: PropTypes.bool,
-  Error: PropTypes.bool.isRequired,
+  Error: PropTypes.bool,
   isDirty: PropTypes.bool,
   Units: PropTypes.string,
   classes: PropTypes.shape({
@@ -175,6 +175,7 @@ WidgetTextInput.defaultProps = {
   Pending: false,
   isDirty: false,
   Units: '',
+  Error: false,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetTextInput);
