@@ -286,6 +286,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
           ...attributes[matchingAttribute],
           errorState,
           errorMessage,
+          isDirty: errorState,
         };
       }
 
