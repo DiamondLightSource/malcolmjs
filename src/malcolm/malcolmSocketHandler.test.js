@@ -200,6 +200,22 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTTable:1.0');
   });
 
+  it('handles method updates', () => {
+    const changes = {
+      label: 'Method 1',
+      meta: {
+        tags: [],
+      },
+    };
+    const message = buildMessage('malcolm:core/Method:1.0', 2, changes);
+
+    socketContainer.socket.send(message);
+
+    expect(dispatches.length).toEqual(1);
+    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[0].payload.typeid).toEqual('malcolm:core/Method:1.0');
+  });
+
   it('dispatches a message for unhandled deltas', () => {
     const message = buildMessage('unknown type', 1, {});
 

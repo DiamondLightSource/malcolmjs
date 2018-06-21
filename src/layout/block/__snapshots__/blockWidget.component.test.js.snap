@@ -38,7 +38,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
-                "id": "2",
+                "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
@@ -51,7 +51,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
-                "id": "3",
+                "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
@@ -64,7 +64,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
-                "id": "4",
+                "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
@@ -85,7 +85,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "2",
+            "id": "block1-in 1",
             "in": true,
             "label": "in 1",
             "links": Object {},
@@ -107,7 +107,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "ports": Object {
                 "block1-in 1": [Circular],
                 "block1-out 1": MalcolmPortModel {
-                  "id": "3",
+                  "id": "block1-out 1",
                   "in": false,
                   "label": "out 1",
                   "links": Object {},
@@ -120,7 +120,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "type": "default",
                 },
                 "block1-out 2": MalcolmPortModel {
-                  "id": "4",
+                  "id": "block1-out 2",
                   "in": false,
                   "label": "out 2",
                   "links": Object {},
@@ -183,7 +183,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
-                "id": "2",
+                "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
@@ -196,7 +196,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
-                "id": "3",
+                "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
@@ -209,7 +209,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
-                "id": "4",
+                "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
@@ -230,7 +230,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "3",
+            "id": "block1-out 1",
             "in": false,
             "label": "out 1",
             "links": Object {},
@@ -251,7 +251,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "locked": false,
               "ports": Object {
                 "block1-in 1": MalcolmPortModel {
-                  "id": "2",
+                  "id": "block1-in 1",
                   "in": true,
                   "label": "in 1",
                   "links": Object {},
@@ -265,7 +265,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 },
                 "block1-out 1": [Circular],
                 "block1-out 2": MalcolmPortModel {
-                  "id": "4",
+                  "id": "block1-out 2",
                   "in": false,
                   "label": "out 2",
                   "links": Object {},
@@ -305,7 +305,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
-                "id": "2",
+                "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
                 "links": Object {},
@@ -318,7 +318,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
-                "id": "3",
+                "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
                 "links": Object {},
@@ -331,7 +331,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
-                "id": "4",
+                "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
                 "links": Object {},
@@ -352,7 +352,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
-            "id": "4",
+            "id": "block1-out 2",
             "in": false,
             "label": "out 2",
             "links": Object {},
@@ -373,7 +373,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "locked": false,
               "ports": Object {
                 "block1-in 1": MalcolmPortModel {
-                  "id": "2",
+                  "id": "block1-in 1",
                   "in": true,
                   "label": "in 1",
                   "links": Object {},
@@ -386,7 +386,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "type": "default",
                 },
                 "block1-out 1": MalcolmPortModel {
-                  "id": "3",
+                  "id": "block1-out 1",
                   "in": false,
                   "label": "out 1",
                   "links": Object {},

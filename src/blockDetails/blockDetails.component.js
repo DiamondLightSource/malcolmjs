@@ -40,6 +40,7 @@ const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.every((old, i) => old.name === newAttributes[i].name) &&
   oldAttributes.every((old, i) => old.inGroup === newAttributes[i].inGroup) &&
   oldAttributes.every((old, i) => old.isGroup === newAttributes[i].isGroup) &&
+  oldAttributes.every((old, i) => old.isMethod === newAttributes[i].isMethod) &&
   oldAttributes.every(
     (old, i) =>
       isRootLevelAttribute(old) === isRootLevelAttribute(newAttributes[i])
@@ -71,6 +72,9 @@ const displayAttributes = props => {
             ))}
           </GroupExpander>
         ))}
+        {props.methods.map(method => (
+          <GroupExpander key={method.label} groupName={method.label} expanded />
+        ))}
       </div>
     );
   }
@@ -99,6 +103,7 @@ displayAttributes.propTypes = {
   attributesAvailable: PropTypes.bool.isRequired,
   rootAttributes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   groups: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  methods: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const mapStateToProps = (state, ownProps, memory) => {
@@ -127,6 +132,8 @@ const mapStateToProps = (state, ownProps, memory) => {
       children: block.attributes.filter(a => a.group === group.name),
     }));
 
+    stateMemory.methods = block.attributes.filter(a => a.isMethod);
+
     stateMemory.oldAttributes = block.attributes;
   }
 
@@ -134,8 +141,9 @@ const mapStateToProps = (state, ownProps, memory) => {
     blockName: block ? block.name : '',
     blockLoading: isBlockLoading(block),
     attributesAvailable: areAttributesAvailable(block) !== undefined,
-    rootAttributes: memory.rootAttributes,
-    groups: memory.groups,
+    rootAttributes: stateMemory.rootAttributes,
+    groups: stateMemory.groups,
+    methods: stateMemory.methods,
   };
 };
 
@@ -144,6 +152,7 @@ const memoizedMapStateToProps = () => {
     oldAttributes: [],
     rootAttributes: [],
     groups: [],
+    methods: [],
   };
 
   return (state, ownProps) =>

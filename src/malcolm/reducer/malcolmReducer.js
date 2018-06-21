@@ -3,14 +3,12 @@ import {
   MalcolmSend,
   MalcolmError,
   MalcolmBlockMeta,
-  MalcolmAttributeData,
   MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
-  MalcolmMainAttributeUpdate,
   MalcolmReturn,
   MalcolmUpdateBlockPosition,
   MalcolmSelectBlock,
@@ -334,9 +332,10 @@ const updateSocket = (state, payload) => {
 };
 
 const malcolmReducer = (state = initialMalcolmState, action) => {
+  const updatedState = AttributeReducer(state, action);
   switch (action.type) {
     case MalcolmNewBlock:
-      return registerNewBlock(state, action);
+      return registerNewBlock(updatedState, action);
 
     case MalcolmAttributeFlag:
       return setFlag(
@@ -347,63 +346,66 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       );
 
     case MalcolmSend:
-      return updateMessagesInFlight(state, action);
+      return updateMessagesInFlight(updatedState, action);
 
     case MalcolmError:
-      return handleErrorMessage(state, action);
+      return handleErrorMessage(updatedState, action);
 
     case MalcolmReturn:
       return stopTrackingMessage(
-        setErrorState(state, action.payload.id, false),
+        setErrorState(updatedState, action.payload.id, false),
         action
       );
 
     case MalcolmBlockMeta:
-      return updateBlock(state, action.payload);
+      return updateBlock(updatedState, action.payload);
 
     case MalcolmRootBlockMeta:
-      return updateRootBlock(state, action.payload);
-
-    case MalcolmAttributeData:
-      return AttributeReducer.updateAttribute(state, action.payload);
-
-    case MalcolmMainAttributeUpdate:
-      return AttributeReducer.setMainAttribute(state, action.payload);
+      return updateRootBlock(updatedState, action.payload);
 
     case MalcolmNavigationPathUpdate:
-      return NavigationReducer.updateNavigationPath(state, action.payload);
+      return NavigationReducer.updateNavigationPath(
+        updatedState,
+        action.payload
+      );
 
     case MalcolmSnackbar:
-      return updateSnackbar(state, action.snackbar);
+      return updateSnackbar(updatedState, action.snackbar);
 
     case MalcolmCleanBlocks:
-      return cleanBlocks(state);
+      return cleanBlocks(updatedState);
 
     case MalcolmDisconnected:
-      return setDisconnected(state);
+      return setDisconnected(updatedState);
 
     case MalcolmUpdateBlockPosition:
-      layoutReducer.updateBlockPosition(state, action.payload.translation);
+      layoutReducer.updateBlockPosition(
+        updatedState,
+        action.payload.translation
+      );
 
       return {
-        ...state,
-        layout: layoutReducer.processLayout(state),
+        ...updatedState,
+        layout: layoutReducer.processLayout(updatedState),
       };
 
     case MalcolmSelectBlock:
       return {
-        ...state,
-        layoutState: layoutReducer.selectBlock(state, action.payload.blockName),
+        ...updatedState,
+        layoutState: layoutReducer.selectBlock(
+          updatedState,
+          action.payload.blockName
+        ),
       };
 
     case MalcolmShiftButton:
-      return layoutReducer.shiftIsPressed(state, action.payload);
+      return layoutReducer.shiftIsPressed(updatedState, action.payload);
 
     case MalcolmSocketConnect:
-      return updateSocket(state, action.payload);
+      return updateSocket(updatedState, action.payload);
 
     default:
-      return state;
+      return updatedState;
   }
 };
 
