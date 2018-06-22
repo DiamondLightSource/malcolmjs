@@ -13,6 +13,7 @@ import blockUtils from '../../malcolm/blockUtils';
 import {
   malcolmSetFlag,
   malcolmUpdateMethodInput,
+  malcolmPostAction,
 } from '../../malcolm/malcolmActionCreators';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
@@ -44,18 +45,29 @@ const styles = () => ({
 
 const widgetDefaultValues = {
   'widget:textinput': '',
-  'widget:textupdate': '',
+  'widget:textupdate': '...',
   'widget:checkbox': false,
   'widget:led': false,
 };
 
-const buildInputComponent = (input, props) => {
+const buildInputComponent = (input, props, Value) => {
   const { tags } = input[1];
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
   const setDisabled = props.methodPending || !input[1].writeable;
   const isErrorState = props.methodErrored;
+  const defaultValue =
+    props.defaultValues[input[0]] !== undefined
+      ? props.defaultValues[input[0]].toString()
+      : null;
   const inputValue =
-    props.inputValues[input[0]] || widgetDefaultValues[widgetTag];
+    props.inputValues[input[0]] ||
+    Value ||
+    defaultValue ||
+    widgetDefaultValues[widgetTag];
+
+  const submitHandler = (path, value) => {
+    props.updateInput(path, input[0], value);
+  };
 
   if (widgetTag !== -1) {
     return selectorFunction(
@@ -63,18 +75,19 @@ const buildInputComponent = (input, props) => {
       inputValue,
       setDisabled,
       isErrorState,
-      false,
-      (path, value) => {
-        props.updateInput(path, input[0], value);
+      props.dirtyInputs[input[0]],
+      submitHandler,
+      (path, flagName, isDirty) => {
+        props.updateInput(path, input[0], { isDirty });
       },
-      () => {},
       props.methodPath,
       {
         colorLED: props.theme.palette.primary.light,
         missingAttribute: props.classes.missingAttribute,
       },
       {},
-      false
+      false,
+      true
     );
   }
   return null;
@@ -84,7 +97,7 @@ const MethodDetails = props => (
   <div>
     {Object.entries(props.inputs).map(input => (
       <div key={input[0]} className={props.classes.div}>
-        <AttributeAlarm alarmSeverity={0} />
+        <AttributeAlarm alarmSeverity={props.methodAlarm} />
         <Tooltip title={input[1].description}>
           <Typography className={props.classes.textName}>
             {input[1].label}:{' '}
@@ -117,7 +130,9 @@ const MethodDetails = props => (
           <Typography className={props.classes.textName}>
             {output[1].label}:{' '}
           </Typography>
-          <div className={props.classes.controlContainer} />
+          <div className={props.classes.controlContainer}>
+            {buildInputComponent(output, props, props.outputValues.value)}
+          </div>
         </div>
       ))}
     </div>
@@ -131,6 +146,9 @@ MethodDetails.propTypes = {
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
+  outputValues: PropTypes.shape({
+    value: PropTypes.any,
+  }).isRequired,
   runMethod: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
@@ -150,8 +168,8 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let alarm = AlarmStates.NO_ALARM;
-  alarm = method && method.pending ? AlarmStates.PENDING : alarm;
   alarm = method && method.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.pending ? AlarmStates.PENDING : alarm;
 
   return {
     methodName: method.label,
@@ -161,13 +179,18 @@ const mapStateToProps = (state, ownProps) => {
     methodPath: method.path,
     inputs: method ? method.takes.elements : {},
     inputValues: method.inputs || {},
+    dirtyInputs: method.dirtyInputs || {},
     outputs: method ? method.returns.elements : {},
+    outputValues: method.outputs || {},
+    required: method ? method.required : {},
+    defaultValues: method ? method.defaults : {},
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
+    dispatch(malcolmPostAction(path, inputs));
     console.log(`Running method [${path}] with inputs:`);
     console.log(inputs);
   },

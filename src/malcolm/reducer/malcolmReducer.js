@@ -15,6 +15,7 @@ import {
   MalcolmShiftButton,
   MalcolmSocketConnect,
 } from '../malcolm.types';
+import blockUtils from '../blockUtils';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer, {
   processNavigationLists,
@@ -268,33 +269,66 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
     const blockName = path[0];
     const attributeName = path[1];
 
-    if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
-      const attributes = [...state.blocks[blockName].attributes];
-
-      const matchingAttribute = attributes.findIndex(
-        a => a.name === attributeName
-      );
-      if (matchingAttribute >= 0) {
-        attributes[matchingAttribute] = {
-          ...attributes[matchingAttribute],
-          errorState,
-          errorMessage,
-          isDirty: errorState,
-          forceOnNextUpdate: !errorState,
-        };
-      }
-
-      const blocks = { ...state.blocks };
-      blocks[blockName] = { ...state.blocks[blockName], attributes };
-
-      return {
-        ...state,
-        blocks,
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
+      state.blocks,
+      blockName,
+      attributeName
+    );
+    const blocks = { ...state.blocks };
+    if (matchingAttributeIndex >= 0) {
+      const { attributes } = state.blocks[blockName];
+      attributes[matchingAttributeIndex] = {
+        ...attributes[matchingAttributeIndex],
+        errorState,
+        errorMessage,
+        isDirty: errorState,
+        forceOnNextUpdate: !errorState,
       };
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
+    return {
+      ...state,
+      blocks,
+    };
   }
   return state;
 };
+
+function handleReturnMessage(state, action) {
+  const matchingMessage = state.messagesInFlight.find(
+    m => m.id === action.payload.id
+  );
+  const path = matchingMessage ? matchingMessage.path : undefined;
+
+  let updatedState = { ...state };
+
+  if (path && matchingMessage.typeid === 'malcolm:core/Post:1.0') {
+    const blockName = path[0];
+    const attributeName = path[1];
+    const matchingAttribute = blockUtils.findAttributeIndex(
+      updatedState.blocks,
+      blockName,
+      attributeName
+    );
+    const blocks = { ...updatedState.blocks };
+    if (matchingAttribute >= 0) {
+      const { attributes } = blocks[blockName];
+      attributes[matchingAttribute] = {
+        ...attributes[matchingAttribute],
+        outputs: {
+          value: action.payload.value,
+        },
+      };
+      blocks[blockName] = { ...updatedState.blocks[blockName], attributes };
+    }
+    updatedState = {
+      ...state,
+      blocks,
+    };
+  }
+  const newState = setErrorState(updatedState, action.payload.id, false);
+  return stopTrackingMessage(newState, action);
+}
 
 const handleErrorMessage = (state, action) => {
   const matchingMessage = state.messagesInFlight.find(
@@ -354,10 +388,7 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
       return handleErrorMessage(updatedState, action);
 
     case MalcolmReturn:
-      return stopTrackingMessage(
-        setErrorState(updatedState, action.payload.id, false),
-        action
-      );
+      return handleReturnMessage(updatedState, action);
 
     case MalcolmBlockMeta:
       return updateBlock(updatedState, action.payload);

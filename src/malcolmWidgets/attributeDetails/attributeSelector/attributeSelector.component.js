@@ -31,7 +31,8 @@ export const selectorFunction = (
   path,
   style,
   objectMeta,
-  forceUpdate
+  forceUpdate,
+  continuousSend = false
 ) => {
   if (widgetTag === 'widget:led') {
     return (
@@ -72,6 +73,7 @@ export const selectorFunction = (
         focusHandler={() => {}}
         blurHandler={() => {}}
         forceUpdate={forceUpdate}
+        continuousSend={continuousSend}
       />
     );
   } else if (widgetTag === 'widget:flowgraph') {
@@ -142,6 +144,7 @@ AttributeSelector.propTypes = {
     ]),
     pending: PropTypes.bool,
     errorState: PropTypes.bool,
+    dirty: PropTypes.bool,
     alarm: PropTypes.shape({
       severity: PropTypes.number,
     }),

@@ -51,6 +51,15 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
+export const malcolmPostAction = (path, parameters) => ({
+  type: MalcolmSend,
+  payload: {
+    typeid: 'malcolm:core/Post:1.0',
+    path,
+    parameters,
+  },
+});
+
 export const malcolmSetFlag = (path, flagType, flagState) => ({
   type: MalcolmAttributeFlag,
   payload: {
@@ -145,11 +154,10 @@ export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
   },
 });
 
-export const malcolmHailReturn = (id, isErrorState, error = undefined) => ({
+export const malcolmHailReturn = (payload, isErrorState) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
   payload: {
-    id,
-    error,
+    ...payload,
   },
 });
 
@@ -163,6 +171,7 @@ export const malcolmUpdateMethodInput = (path, name, value) => ({
 });
 
 export default {
+  malcolmHailReturn,
   malcolmGetAction,
   malcolmSubscribeAction,
   malcolmNewBlockAction,
@@ -176,4 +185,5 @@ export default {
   malcolmLayoutUpdatePosition,
   malcolmSelectBlock,
   malcolmLayoutShiftIsPressed,
+  malcolmPostAction,
 };

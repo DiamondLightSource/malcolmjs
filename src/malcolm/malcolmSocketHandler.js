@@ -117,7 +117,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         const originalRequest = store
           .getState()
           .malcolm.messagesInFlight.find(m => m.id === data.id);
-        store.dispatch(malcolmHailReturn(data.id, false));
+        store.dispatch(malcolmHailReturn(data, false));
         store.dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
         break;
       }
@@ -129,6 +129,16 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             .getState()
             .malcolm.messagesInFlight.find(m => m.id === data.id);
 
+          if (
+            originalRequest.path.slice(-1)[0] === 'meta' &&
+            !store.getState().malcolm.blocks[originalRequest.path[0]].attributes
+          ) {
+            const block = store.getState().malcolm.blocks[
+              originalRequest.path[0]
+            ];
+            block.loading = 404;
+          }
+
           store.dispatch(
             malcolmSnackbarState(
               true,
@@ -137,7 +147,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
               } for block ${originalRequest.path.slice(0, -1)}`
             )
           );
-          store.dispatch(malcolmHailReturn(data.id, true, data.message));
+          store.dispatch(malcolmHailReturn(data, true));
           store.dispatch(
             malcolmSetFlag(originalRequest.path, 'pending', false)
           );
