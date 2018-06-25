@@ -95,7 +95,11 @@ const MethodDetails = props => (
   <div>
     {Object.entries(props.inputs).map(input => (
       <div key={input[0]} className={props.classes.div}>
-        <AttributeAlarm alarmSeverity={props.methodAlarm} />
+        <Tooltip title={props.methodErrorMessage}>
+          <div>
+            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          </div>
+        </Tooltip>
         <Tooltip title={input[1].description}>
           <Typography className={props.classes.textName}>
             {input[1].label}:{' '}
@@ -142,12 +146,11 @@ const MethodDetails = props => (
 MethodDetails.propTypes = {
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
+  methodErrorMessage: PropTypes.string.isRequired,
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
-  outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
@@ -175,6 +178,7 @@ const mapStateToProps = (state, ownProps) => {
     methodAlarm: alarm,
     methodPending: method.pending,
     methodErrored: method.errorState,
+    methodErrorMessage: method.errorMessage ? method.errorMessage : '',
     methodPath: method.path,
     inputs: method ? method.takes.elements : {},
     inputValues: method.inputs || {},

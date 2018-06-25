@@ -102,6 +102,7 @@ storiesOf('Widgets/WidgetTable', module)
       <ContainedTable
         attribute={harderAttribute}
         eventHandler={action(`row was changed!: `)}
+        setFlag={action(`dirty flag set!: `)}
       />
     ))
   );
