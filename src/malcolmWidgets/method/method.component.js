@@ -50,7 +50,7 @@ const widgetDefaultValues = {
   'widget:led': false,
 };
 
-const buildInputComponent = (input, props, Value) => {
+const buildIOComponent = (input, props, isOutput) => {
   const { tags } = input[1];
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
   const setDisabled = props.methodPending || !input[1].writeable;
@@ -59,11 +59,9 @@ const buildInputComponent = (input, props, Value) => {
     props.defaultValues[input[0]] !== undefined
       ? props.defaultValues[input[0]].toString()
       : null;
+  const valueMap = isOutput ? props.outputValues : props.inputValues;
   const inputValue =
-    props.inputValues[input[0]] ||
-    Value ||
-    defaultValue ||
-    widgetDefaultValues[widgetTag];
+    valueMap[input[0]] || defaultValue || widgetDefaultValues[widgetTag];
 
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
@@ -104,7 +102,7 @@ const MethodDetails = props => (
           </Typography>
         </Tooltip>
         <div className={props.classes.controlContainer}>
-          {buildInputComponent(input, props)}
+          {buildIOComponent(input, props, false)}
         </div>
       </div>
     ))}
@@ -121,21 +119,23 @@ const MethodDetails = props => (
         />
       </div>
     </div>
-    <div>
-      <Typography className={props.classes.textName}>Last Return:</Typography>
-      <Divider />
-      {Object.entries(props.outputs).map(output => (
-        <div key={output[0]} className={props.classes.div}>
-          <AttributeAlarm alarmSeverity={0} />
-          <Typography className={props.classes.textName}>
-            {output[1].label}:{' '}
-          </Typography>
-          <div className={props.classes.controlContainer}>
-            {buildInputComponent(output, props, props.outputValues.value)}
+    {Object.keys(props.outputs).length !== 0 ? (
+      <div>
+        <Typography className={props.classes.textName}>Last Return:</Typography>
+        <Divider />
+        {Object.entries(props.outputs).map(output => (
+          <div key={output[0]} className={props.classes.div}>
+            <AttributeAlarm alarmSeverity={0} />
+            <Typography className={props.classes.textName}>
+              {output[1].label}:{' '}
+            </Typography>
+            <div className={props.classes.controlContainer}>
+              {buildIOComponent(output, props, true)}
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    ) : null}
   </div>
 );
 
@@ -146,9 +146,8 @@ MethodDetails.propTypes = {
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
-  outputValues: PropTypes.shape({
-    value: PropTypes.any,
-  }).isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
@@ -191,8 +190,6 @@ const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPostAction(path, inputs));
-    console.log(`Running method [${path}] with inputs:`);
-    console.log(inputs);
   },
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));

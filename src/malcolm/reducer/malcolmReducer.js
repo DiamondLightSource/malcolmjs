@@ -22,7 +22,7 @@ import NavigationReducer, {
 } from './navigation.reducer';
 import AttributeReducer from './attribute.reducer';
 import layoutReducer from './layout.reducer';
-import methodReducer from './method.reducer';
+import methodReducer, { handleMethodReturn } from './method.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -303,28 +303,7 @@ function handleReturnMessage(state, action) {
   let updatedState = { ...state };
 
   if (path && matchingMessage.typeid === 'malcolm:core/Post:1.0') {
-    const blockName = path[0];
-    const attributeName = path[1];
-    const matchingAttribute = blockUtils.findAttributeIndex(
-      updatedState.blocks,
-      blockName,
-      attributeName
-    );
-    const blocks = { ...updatedState.blocks };
-    if (matchingAttribute >= 0) {
-      const { attributes } = blocks[blockName];
-      attributes[matchingAttribute] = {
-        ...attributes[matchingAttribute],
-        outputs: {
-          value: action.payload.value,
-        },
-      };
-      blocks[blockName] = { ...updatedState.blocks[blockName], attributes };
-    }
-    updatedState = {
-      ...state,
-      blocks,
-    };
+    updatedState = handleMethodReturn(updatedState, action, path);
   }
   const newState = setErrorState(updatedState, action.payload.id, false);
   return stopTrackingMessage(newState, action);
@@ -350,7 +329,12 @@ const handleErrorMessage = (state, action) => {
   }
 
   return stopTrackingMessage(
-    setErrorState(updatedState, action.payload.id, true, action.payload.error),
+    setErrorState(
+      updatedState,
+      action.payload.id,
+      true,
+      action.payload.message
+    ),
     action
   );
 };

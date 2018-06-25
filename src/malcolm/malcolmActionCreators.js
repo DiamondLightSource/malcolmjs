@@ -156,9 +156,7 @@ export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
 
 export const malcolmHailReturn = (payload, isErrorState) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
-  payload: {
-    ...payload,
-  },
+  payload,
 });
 
 export const malcolmUpdateMethodInput = (path, name, value) => ({
