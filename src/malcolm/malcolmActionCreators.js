@@ -12,7 +12,6 @@ import {
   MalcolmUpdateBlockPosition,
   MalcolmSelectBlock,
   MalcolmShiftButton,
-  MalcolmUpdateMethodInputType,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -157,15 +156,6 @@ export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
 export const malcolmHailReturn = (payload, isErrorState) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
   payload,
-});
-
-export const malcolmUpdateMethodInput = (path, name, value) => ({
-  type: MalcolmUpdateMethodInputType,
-  payload: {
-    path,
-    name,
-    value,
-  },
 });
 
 export default {

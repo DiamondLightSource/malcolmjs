@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Method component renders correctly 1`] = `
+<div>
+  <div
+    className="MethodDetails-div-1"
+    key="design"
+  >
+    <WithTheme(AttributeAlarm)
+      alarmSeverity={0}
+    />
+    <WithStyles(Tooltip)
+      title="test description"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        test led
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetLED)
+        LEDState={false}
+        colorBorder="#7986cb"
+        colorCenter="#7986cb"
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+  >
+    <WithTheme(AttributeAlarm)
+      alarmSeverity={0}
+    />
+    <WithStyles(Typography)
+      className="MethodDetails-textName-2"
+    />
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        disabled={false}
+        text="save method"
+      />
+    </div>
+  </div>
+  <div>
+    <WithStyles(Typography)
+      className="MethodDetails-textName-2"
+    >
+      Last Return:
+    </WithStyles(Typography)>
+    <WithStyles(Divider) />
+  </div>
+</div>
+`;
