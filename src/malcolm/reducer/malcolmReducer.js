@@ -22,7 +22,7 @@ import NavigationReducer, {
 } from './navigation.reducer';
 import AttributeReducer from './attribute.reducer';
 import layoutReducer from './layout.reducer';
-import methodReducer, { handleMethodReturn } from './method.reducer';
+import methodReducer from './method.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -295,17 +295,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
 };
 
 function handleReturnMessage(state, action) {
-  const matchingMessage = state.messagesInFlight.find(
-    m => m.id === action.payload.id
-  );
-  const path = matchingMessage ? matchingMessage.path : undefined;
-
-  let updatedState = { ...state };
-
-  if (path && matchingMessage.typeid === 'malcolm:core/Post:1.0') {
-    updatedState = handleMethodReturn(updatedState, action, path);
-  }
-  const newState = setErrorState(updatedState, action.payload.id, false);
+  const newState = setErrorState(state, action.payload.id, false);
   return stopTrackingMessage(newState, action);
 }
 

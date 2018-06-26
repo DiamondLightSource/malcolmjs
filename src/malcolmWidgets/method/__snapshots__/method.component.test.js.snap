@@ -1,21 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Method component renders correctly 1`] = `
+exports[`Method component renders correctly with default inputs 1`] = `
 <div>
   <div
     className="MethodDetails-div-1"
-    key="design"
+    key="first"
   >
-    <WithTheme(AttributeAlarm)
-      alarmSeverity={0}
-    />
     <WithStyles(Tooltip)
-      title="test description"
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
     >
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       >
-        test led
+        First input
         :
          
       </WithStyles(Typography)>
@@ -23,10 +29,56 @@ exports[`Method component renders correctly 1`] = `
     <div
       className="MethodDetails-controlContainer-3"
     >
-      <WithStyles(WidgetLED)
-        LEDState={false}
-        colorBorder="#7986cb"
-        colorCenter="#7986cb"
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value="1"
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+    key="second"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value="two"
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
       />
     </div>
   </div>
@@ -45,7 +97,319 @@ exports[`Method component renders correctly 1`] = `
       <WithStyles(ButtonAction)
         clickAction={[Function]}
         disabled={false}
-        text="save method"
+        text="Test"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Method component renders correctly with empty inputs 1`] = `
+<div>
+  <div
+    className="MethodDetails-div-1"
+    key="first"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value=""
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+    key="second"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value=""
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+  >
+    <WithTheme(AttributeAlarm)
+      alarmSeverity={0}
+    />
+    <WithStyles(Typography)
+      className="MethodDetails-textName-2"
+    />
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        disabled={false}
+        text="Test"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Method component renders correctly with existing input values 1`] = `
+<div>
+  <div
+    className="MethodDetails-div-1"
+    key="first"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value="3"
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+    key="second"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value="four"
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+  >
+    <WithTheme(AttributeAlarm)
+      alarmSeverity={0}
+    />
+    <WithStyles(Typography)
+      className="MethodDetails-textName-2"
+    />
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        disabled={false}
+        text="Test"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Method component renders correctly with return value 1`] = `
+<div>
+  <div
+    className="MethodDetails-div-1"
+    key="first"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value=""
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+    key="second"
+  >
+    <WithStyles(Tooltip)
+      title=""
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+    </WithStyles(Tooltip)>
+    <WithStyles(Tooltip)
+      title="a test input"
+    >
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+        :
+         
+      </WithStyles(Typography)>
+    </WithStyles(Tooltip)>
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(WidgetTextInput)
+        Error={false}
+        Pending={true}
+        Value=""
+        blurHandler={[Function]}
+        continuousSend={true}
+        focusHandler={[Function]}
+        forceUpdate={false}
+        setFlag={[Function]}
+        submitEventHandler={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="MethodDetails-div-1"
+  >
+    <WithTheme(AttributeAlarm)
+      alarmSeverity={0}
+    />
+    <WithStyles(Typography)
+      className="MethodDetails-textName-2"
+    />
+    <div
+      className="MethodDetails-controlContainer-3"
+    >
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        disabled={false}
+        text="Test"
       />
     </div>
   </div>
@@ -56,6 +420,52 @@ exports[`Method component renders correctly 1`] = `
       Last Return:
     </WithStyles(Typography)>
     <WithStyles(Divider) />
+    <div
+      className="MethodDetails-div-1"
+      key="first"
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={0}
+      />
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First output
+        :
+         
+      </WithStyles(Typography)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetLED)
+          LEDState={true}
+          colorBorder="#7986cb"
+          colorCenter="#7986cb"
+        />
+      </div>
+    </div>
+    <div
+      className="MethodDetails-div-1"
+      key="second"
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={0}
+      />
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second output
+        :
+         
+      </WithStyles(Typography)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetTextUpdate)
+          Text="done"
+        />
+      </div>
+    </div>
   </div>
 </div>
 `;
