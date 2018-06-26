@@ -10,6 +10,8 @@ const textInput = (value, pending, units) => (
     focusHandler={() => {}}
     blurHandler={() => {}}
     Units={units}
+    isDirty={false}
+    setFlag={() => {}}
   />
 );
 

@@ -4,9 +4,20 @@ exports[`AttributeDetails renders correctly 1`] = `
 <div
   className="AttributeDetails-div-1"
 >
-  <WithTheme(AttributeAlarm)
-    alarmSeverity={0}
-  />
+  <WithStyles(Tooltip)
+    id="1"
+    placement="bottom"
+    title=""
+  >
+    <WithStyles(IconButton)
+      className="AttributeDetails-button-4"
+      disableRipple={true}
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={0}
+      />
+    </WithStyles(IconButton)>
+  </WithStyles(Tooltip)>
   <WithStyles(Typography)
     className="AttributeDetails-textName-2"
   >

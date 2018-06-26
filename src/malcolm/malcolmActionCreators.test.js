@@ -85,9 +85,10 @@ it('malcolmLayoutUpdatePosition updates position locally and then on the server'
   expect(actions[0].type).toEqual('malcolm:updateblockposition');
   expect(actions[0].payload.translation).toEqual(translation);
 
-  expect(actions[1].type).toEqual('malcolm:attributepending');
+  expect(actions[1].type).toEqual('malcolm:attributeflag');
   expect(actions[1].payload.path).toEqual(['PANDA', 'layout']);
-  expect(actions[1].payload.pending).toBeTruthy();
+  expect(actions[1].payload.flagType).toEqual('pending');
+  expect(actions[1].payload.flagState).toBeTruthy();
 
   expect(actions[2].type).toEqual('malcolm:send');
   expect(actions[2].payload.typeid).toEqual('malcolm:core/Put:1.0');

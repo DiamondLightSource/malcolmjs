@@ -1,7 +1,7 @@
 import {
   MalcolmSend,
   MalcolmNewBlock,
-  MalcolmAttributePending,
+  MalcolmAttributeFlag,
   MalcolmSnackbar,
   MalcolmNavigationPathUpdate,
   MalcolmCleanBlocks,
@@ -50,11 +50,12 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmSetPending = (path, pending) => ({
-  type: MalcolmAttributePending,
+export const malcolmSetFlag = (path, flagType, flagState) => ({
+  type: MalcolmAttributeFlag,
   payload: {
     path,
-    pending,
+    flagType,
+    flagState,
   },
 });
 
@@ -124,7 +125,7 @@ export const malcolmLayoutUpdatePosition = translation => (
       ),
     };
 
-    dispatch(malcolmSetPending([blockName, 'layout'], true));
+    dispatch(malcolmSetFlag([blockName, 'layout'], 'pending', true));
     dispatch(malcolmPutAction([blockName, 'layout', 'value'], updateLayout));
   }
 };
@@ -143,10 +144,11 @@ export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
   },
 });
 
-export const malcolmHailReturn = (id, isErrorState) => ({
+export const malcolmHailReturn = (id, isErrorState, error = undefined) => ({
   type: isErrorState ? MalcolmError : MalcolmReturn,
   payload: {
     id,
+    error,
   },
 });
 
@@ -155,7 +157,7 @@ export default {
   malcolmSubscribeAction,
   malcolmNewBlockAction,
   malcolmPutAction,
-  malcolmSetPending,
+  malcolmSetFlag,
   malcolmSnackbarState,
   malcolmNavigationPath,
   malcolmCleanBlocks,

@@ -11,7 +11,7 @@ import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
 import {
   malcolmPutAction,
-  malcolmSetPending,
+  malcolmSetFlag,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 
@@ -26,11 +26,14 @@ export const selectorFunction = (
   value,
   setDisabled,
   isErrorState,
+  isDirty,
   eventHandler,
+  setFlag,
   buttonClickHandler,
   path,
   style,
-  objectMeta
+  objectMeta,
+  forceUpdate
 ) => {
   if (widgetTag === 'widget:led') {
     return (
@@ -66,8 +69,11 @@ export const selectorFunction = (
         Value={value.toString()}
         Pending={setDisabled}
         submitEventHandler={event => eventHandler(path, event.target.value)}
+        isDirty={isDirty}
+        setFlag={(flag, state) => setFlag(path, flag, state)}
         focusHandler={() => {}}
         blurHandler={() => {}}
+        forceUpdate={forceUpdate}
       />
     );
   } else if (widgetTag === 'widget:flowgraph') {
@@ -104,14 +110,17 @@ const AttributeSelector = props => {
         props.attribute.value,
         setDisabled,
         isErrorState,
+        props.attribute.dirty,
         props.eventHandler,
+        props.setFlag,
         props.buttonClickHandler,
         props.attribute.path,
         {
           colorLED: props.theme.palette.primary.light,
           missingAttribute: props.classes.missingAttribute,
         },
-        props.attribute.meta
+        props.attribute.meta,
+        props.attribute.forceUpdate
       );
     }
   }
@@ -127,17 +136,17 @@ const mapStateToProps = () => ({});
  * @param dispatch
  * @returns {{eventHandler: eventHandler, buttonClickHandler: (function(*): *)}}
  */
-const mapDispatchToProps = dispatch =>
-  // const n = path => dispatch(push(`/gui/${path}/table`));
-  ({
-    eventHandler: (path, value) => {
-      dispatch(malcolmSetPending(path, true));
-      dispatch(malcolmPutAction(path, value));
-    },
-    // buttonClickHandler: n,
-    buttonClickHandler: (path, blockAttribute) =>
-      dispatch(push(`/gui/${path[0]}/${blockAttribute}`)),
-  });
+const mapDispatchToProps = dispatch => ({
+  eventHandler: (path, value) => {
+    dispatch(malcolmSetFlag(path, 'pending', true));
+    dispatch(malcolmPutAction(path, value));
+  },
+  setFlag: (path, flag, state) => {
+    dispatch(malcolmSetFlag(path, flag, state));
+  },
+  buttonClickHandler: (path, blockAttribute) =>
+    dispatch(push(`/gui/${path[0]}/${blockAttribute}`)),
+});
 
 AttributeSelector.propTypes = {
   attribute: PropTypes.shape({

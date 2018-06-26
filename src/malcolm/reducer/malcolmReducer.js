@@ -3,7 +3,7 @@ import {
   MalcolmSend,
   MalcolmError,
   MalcolmBlockMeta,
-  MalcolmAttributePending,
+  MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
   MalcolmSnackbar,
   MalcolmCleanBlocks,
@@ -21,6 +21,7 @@ import NavigationReducer, {
 } from './navigation.reducer';
 import AttributeReducer from './attribute.reducer';
 import layoutReducer from './layout.reducer';
+import methodReducer from './method.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -166,7 +167,7 @@ function updateRootBlock(state, payload) {
   };
 }
 
-function setPending(state, path, pending) {
+function setFlag(state, path, flagType, flagState) {
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -185,10 +186,11 @@ function setPending(state, path, pending) {
       a => a.name === attributeName
     );
     if (matchingAttribute >= 0) {
-      attributes[matchingAttribute] = {
+      const attributeCopy = {
         ...attributes[matchingAttribute],
-        pending,
       };
+      attributeCopy[flagType] = flagState;
+      attributes[matchingAttribute] = attributeCopy;
     }
 
     const blocks = { ...state.blocks };
@@ -259,7 +261,7 @@ function setDisconnected(state) {
   };
 }
 
-export const setErrorState = (state, id, errorState) => {
+export const setErrorState = (state, id, errorState, errorMessage) => {
   const matchingMessage = state.messagesInFlight.find(m => m.id === id);
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
@@ -276,6 +278,9 @@ export const setErrorState = (state, id, errorState) => {
         attributes[matchingAttribute] = {
           ...attributes[matchingAttribute],
           errorState,
+          errorMessage,
+          isDirty: errorState,
+          forceOnNextUpdate: !errorState,
         };
       }
 
@@ -311,7 +316,7 @@ const handleErrorMessage = (state, action) => {
   }
 
   return stopTrackingMessage(
-    setErrorState(updatedState, action.payload.id, true),
+    setErrorState(updatedState, action.payload.id, true, action.payload.error),
     action
   );
 };
@@ -328,16 +333,18 @@ const updateSocket = (state, payload) => {
 };
 
 const malcolmReducer = (state = initialMalcolmState, action) => {
-  const updatedState = AttributeReducer(state, action);
+  let updatedState = AttributeReducer(state, action);
+  updatedState = methodReducer(updatedState, action);
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(updatedState, action);
 
-    case MalcolmAttributePending:
-      return setPending(
-        updatedState,
+    case MalcolmAttributeFlag:
+      return setFlag(
+        state,
         action.payload.path,
-        action.payload.pending
+        action.payload.flagType,
+        action.payload.flagState
       );
 
     case MalcolmSend:

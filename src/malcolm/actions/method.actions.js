@@ -1,4 +1,7 @@
-import { MalcolmAttributeData } from '../malcolm.types';
+import {
+  MalcolmAttributeData,
+  MalcolmUpdateMethodInputType,
+} from '../malcolm.types';
 
 export const buildMethodUpdate = (id, data) => ({
   type: MalcolmAttributeData,
@@ -6,11 +9,23 @@ export const buildMethodUpdate = (id, data) => ({
     id,
     ...data,
     isMethod: true,
+    inputs: {},
+    outputs: {},
     delta: true,
     pending: false,
   },
 });
 
+export const malcolmUpdateMethodInput = (path, name, value) => ({
+  type: MalcolmUpdateMethodInputType,
+  payload: {
+    path,
+    name,
+    value,
+  },
+});
+
 export default {
   buildMethodUpdate,
+  malcolmUpdateMethodInput,
 };
