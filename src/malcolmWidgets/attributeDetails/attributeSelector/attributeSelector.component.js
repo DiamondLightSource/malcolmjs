@@ -71,10 +71,18 @@ export const selectorFunction = (
       />
     );
   } else if (widgetTag === 'widget:flowgraph') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
+    return (
+      <ButtonAction
+        text="View"
+        clickAction={() => buttonClickHandler(path, 'layout')}
+      />
+    );
   } else if (widgetTag === 'widget:table') {
     return (
-      <ButtonAction text="View" clickAction={() => buttonClickHandler(path)} />
+      <ButtonAction
+        text="View"
+        clickAction={() => buttonClickHandler(path, 'table')}
+      />
     );
   }
   return <BugReport className={style.missingAttribute} />;
@@ -127,7 +135,8 @@ const mapDispatchToProps = dispatch =>
       dispatch(malcolmPutAction(path, value));
     },
     // buttonClickHandler: n,
-    buttonClickHandler: path => dispatch(push(`/gui/${path[0]}/table`)),
+    buttonClickHandler: (path, blockAttribute) =>
+      dispatch(push(`/gui/${path[0]}/${blockAttribute}`)),
   });
 
 AttributeSelector.propTypes = {
