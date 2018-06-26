@@ -2,6 +2,19 @@ import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
 import { MalcolmUpdateMethodInputType, MalcolmReturn } from '../malcolm.types';
 
+const mapReturnValues = (returnKeys, payload) => {
+  const valueMap = { outputs: {} };
+  returnKeys.forEach(returnVar => {
+    if (payload.value[returnVar] !== undefined) {
+      valueMap.outputs[returnVar] = payload.value[returnVar];
+    } else {
+      valueMap.errorState = true;
+      valueMap.errorMessage = `MethodError: expected value ${returnVar} missing from return`;
+    }
+  });
+  return valueMap;
+};
+
 const updateMethodInput = (state, payload) => {
   const blockName = payload.path[0];
   const attributeName = payload.path[1];
@@ -52,7 +65,7 @@ export const handleMethodReturn = (state, payload) => {
     const blocks = { ...state.blocks };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
-      const valueMap = {};
+      let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
         attributes[matchingAttribute].returns.elements
       );
@@ -62,27 +75,13 @@ export const handleMethodReturn = (state, payload) => {
           'method:return:unpacked'
         )
       ) {
-        if (returnKeys.length === 1) {
-          valueMap[returnKeys[0]] = payload.value;
-        }
+        valueMap.outputs[returnKeys[0]] = payload.value;
       } else {
-        returnKeys.forEach(returnVar => {
-          if (payload.value[returnVar] !== undefined) {
-            valueMap[returnVar] = payload.value[returnVar];
-          } else {
-            console.log(
-              `MethodError: expected value ${returnVar} missing from return`
-            );
-            attributes[matchingAttribute].errorState = true;
-            attributes[
-              matchingAttribute
-            ].errorMessage = `MethodError: expected value ${returnVar} missing from return`;
-          }
-        });
+        valueMap = mapReturnValues(returnKeys, payload);
       }
       attributes[matchingAttribute] = {
         ...attributes[matchingAttribute],
-        outputs: { ...valueMap },
+        ...valueMap,
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
     }

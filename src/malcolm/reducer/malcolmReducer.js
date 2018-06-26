@@ -282,7 +282,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
         errorState,
         errorMessage,
         isDirty: errorState,
-        forceOnNextUpdate: !errorState,
+        forceUpdate: !errorState,
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
     }

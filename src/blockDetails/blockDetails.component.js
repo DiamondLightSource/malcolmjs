@@ -8,14 +8,13 @@ import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.compone
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 import MethodDetails from '../malcolmWidgets/method/method.component';
 
-const error404 = [
-  '             __   __    _____     __   __',
-  '            |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\',
-  '            \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\',
-  '             \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\',
-  '              \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\',
-  '                     \\|__|  \\|_____|        \\|__|',
-];
+const ascii404 =
+  '             __   __    _____     __   __ \n' +
+  '            |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\ \n' +
+  '            \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\ \n' +
+  '             \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
+  '              \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
+  '                     \\|__|  \\|_____|        \\|__| \n';
 
 const styles = theme => ({
   progressContainer: {
@@ -49,12 +48,7 @@ const blockLoading = notFound =>
   notFound ? (
     <div>
       <div align="left" style={{ whiteSpace: 'pre' }}>
-        {error404.map(line => (
-          <span>
-            {line}
-            <br />
-          </span>
-        ))}
+        {ascii404}
       </div>
       <br />
       <br />
