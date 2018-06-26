@@ -10,10 +10,8 @@ import AttributeAlarm, {
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
 import blockUtils from '../../malcolm/blockUtils';
-import {
-  malcolmSetFlag,
-  malcolmUpdateMethodInput,
-} from '../../malcolm/malcolmActionCreators';
+import { malcolmSetFlag } from '../../malcolm/malcolmActionCreators';
+import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = () => ({
@@ -165,7 +163,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
     console.log(`Running method [${path}] with inputs:`);

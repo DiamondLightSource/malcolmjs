@@ -14,8 +14,10 @@ import {
 } from '../malcolm.types';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
+import MethodReducer from './method.reducer';
 
 jest.mock('./navigation.reducer');
+jest.mock('./method.reducer');
 
 const buildAction = (type, id, path = ['.', 'blocks']) => ({
   type,
@@ -49,6 +51,9 @@ describe('malcolm reducer', () => {
   let state = {};
 
   beforeEach(() => {
+    MethodReducer.mockClear();
+    MethodReducer.mockImplementation(s => s);
+
     state = {
       messagesInFlight: [],
       blocks: {},
@@ -66,6 +71,11 @@ describe('malcolm reducer', () => {
     const newState = malcolmReducer(state, buildAction('not malcolm:send'));
 
     expect(newState).toEqual(state);
+  });
+
+  it('passes through to the methodReducer', () => {
+    malcolmReducer(state, buildAction('test'));
+    expect(MethodReducer).toHaveBeenCalledTimes(1);
   });
 
   it('tracks malcolm messages in the state', () => {
