@@ -141,19 +141,41 @@ describe('Block Details', () => {
     expect(tree.dive()).toMatchSnapshot();
   });
 
-  const buildAttributes = () => [
-    {
-      name: 'test1',
-    },
-    {
-      name: 'test2',
-    },
-  ];
+  const buildAttributes = updateFunction => {
+    const attributes = [
+      {
+        name: 'test1',
+        inGroup: true,
+        isGroup: false,
+        isMethod: false,
+      },
+      {
+        name: 'test2',
+      },
+    ];
+
+    if (updateFunction) {
+      attributes[0] = updateFunction(attributes[0]);
+    }
+
+    return attributes;
+  };
 
   it('areAttributesTheSame returns true if length, name, groups and methods are the same', () => {
     const oldAttributes = buildAttributes();
-    const newAttributes = buildAttributes();
-    const same = areAttributesTheSame(oldAttributes, newAttributes);
-    expect(same).toBeTruthy();
+    let newAttributes = buildAttributes();
+    expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeTruthy();
+
+    newAttributes = buildAttributes(a => ({ ...a, name: 'test1 new' }));
+    expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
+
+    newAttributes = buildAttributes(a => ({ ...a, inGroup: false }));
+    expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
+
+    newAttributes = buildAttributes(a => ({ ...a, isGroup: true }));
+    expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
+
+    newAttributes = buildAttributes(a => ({ ...a, isMethod: true }));
+    expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
   });
 });
