@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
@@ -26,6 +27,7 @@ export const selectorFunction = (
   setDisabled,
   isErrorState,
   eventHandler,
+  buttonClickHandler,
   path,
   style,
   objectMeta
@@ -71,7 +73,12 @@ export const selectorFunction = (
   } else if (widgetTag === 'widget:flowgraph') {
     return <ButtonAction text="View" clickAction={() => {}} />;
   } else if (widgetTag === 'widget:table') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
+    /* TODO: IG - push table route to redux router and display table in centre pane
+     *            relevant properties available: path[] (array of strings)
+     * */
+    return (
+      <ButtonAction text="View" clickAction={() => buttonClickHandler(path)} />
+    );
   }
   return <BugReport className={style.missingAttribute} />;
 };
@@ -93,6 +100,7 @@ const AttributeSelector = props => {
         setDisabled,
         isErrorState,
         props.eventHandler,
+        props.buttonClickHandler,
         props.attribute.path,
         {
           colorLED: props.theme.palette.primary.light,
@@ -107,12 +115,23 @@ const AttributeSelector = props => {
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => ({
-  eventHandler: (path, value) => {
-    dispatch(malcolmSetPending(path, true));
-    dispatch(malcolmPutAction(path, value));
-  },
-});
+/**
+ * mapDispatchToProps:
+ * This is a clean mechanism to allow a component event
+ * to dispatch notifications to the appropriate action creators.
+ * @param dispatch
+ * @returns {{eventHandler: eventHandler, buttonClickHandler: (function(*): *)}}
+ */
+const mapDispatchToProps = dispatch =>
+  // const n = path => dispatch(push(`/gui/${path}/table`));
+  ({
+    eventHandler: (path, value) => {
+      dispatch(malcolmSetPending(path, true));
+      dispatch(malcolmPutAction(path, value));
+    },
+    // buttonClickHandler: n,
+    buttonClickHandler: path => dispatch(push(`/gui/${path[0]}/table`)),
+  });
 
 AttributeSelector.propTypes = {
   attribute: PropTypes.shape({
@@ -148,6 +167,7 @@ AttributeSelector.propTypes = {
     missingAttribute: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
