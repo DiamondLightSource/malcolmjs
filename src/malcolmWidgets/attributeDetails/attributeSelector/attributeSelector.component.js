@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
@@ -28,6 +29,7 @@ export const selectorFunction = (
   isDirty,
   eventHandler,
   setFlag,
+  buttonClickHandler,
   path,
   style,
   objectMeta,
@@ -75,9 +77,19 @@ export const selectorFunction = (
       />
     );
   } else if (widgetTag === 'widget:flowgraph') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
+    return (
+      <ButtonAction
+        text="View"
+        clickAction={() => buttonClickHandler(path, 'layout')}
+      />
+    );
   } else if (widgetTag === 'widget:table') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
+    return (
+      <ButtonAction
+        text="View"
+        clickAction={() => buttonClickHandler(path, 'table')}
+      />
+    );
   }
   return <BugReport className={style.missingAttribute} />;
 };
@@ -101,6 +113,7 @@ const AttributeSelector = props => {
         props.attribute.dirty,
         props.eventHandler,
         props.setFlag,
+        props.buttonClickHandler,
         props.attribute.path,
         {
           colorLED: props.theme.palette.primary.light,
@@ -116,6 +129,13 @@ const AttributeSelector = props => {
 
 const mapStateToProps = () => ({});
 
+/**
+ * mapDispatchToProps:
+ * This is a clean mechanism to allow a component event
+ * to dispatch notifications to the appropriate action creators.
+ * @param dispatch
+ * @returns {{eventHandler: eventHandler, buttonClickHandler: (function(*): *)}}
+ */
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
@@ -124,6 +144,8 @@ const mapDispatchToProps = dispatch => ({
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetFlag(path, flag, state));
   },
+  buttonClickHandler: (path, blockAttribute) =>
+    dispatch(push(`/gui/${path[0]}/${blockAttribute}`)),
 });
 
 AttributeSelector.propTypes = {
@@ -160,6 +182,7 @@ AttributeSelector.propTypes = {
     missingAttribute: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
