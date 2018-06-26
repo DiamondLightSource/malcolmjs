@@ -13,22 +13,22 @@ const updateMethodInput = (state, payload) => {
   const blocks = { ...state.blocks };
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
-    const attributeCopy = { ...attributes[matchingAttribute] };
+    const attributeCopy = attributes[matchingAttribute];
     if (payload.value.isDirty !== undefined) {
-      if (!attributes[matchingAttribute].dirtyInputs) {
-        attributes[matchingAttribute].dirtyInputs = {};
+      if (!attributeCopy.dirtyInputs) {
+        attributeCopy.dirtyInputs = {};
       }
-      attributes[matchingAttribute].dirtyInputs = {
+      attributeCopy.dirtyInputs = {
         ...attributeCopy.dirtyInputs,
       };
-      attributes[matchingAttribute].dirtyInputs[payload.name] =
-        payload.value.isDirty;
+      attributeCopy.dirtyInputs[payload.name] = payload.value.isDirty;
     } else {
-      attributes[matchingAttribute].inputs = {
-        ...attributes[matchingAttribute].inputs,
+      attributeCopy.inputs = {
+        ...attributeCopy.inputs,
       };
-      attributes[matchingAttribute].inputs[payload.name] = payload.value;
+      attributeCopy.inputs[payload.name] = payload.value;
     }
+    attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
   }
   return {
@@ -52,14 +52,26 @@ export const handleMethodReturn = (state, action, path) => {
     const returnKeys = Object.keys(
       attributes[matchingAttribute].returns.elements
     );
-    returnKeys.forEach(returnVar => {
-      if (action.payload.value[returnVar] !== undefined) {
-        valueMap[returnVar] = action.payload.value[returnVar];
-      } else if (!(action.payload.value instanceof Object)) {
-        valueMap[returnVar] = action.payload.value;
+    if (
+      blockUtils.attributeHasTag(
+        attributes[matchingAttribute],
+        'method:return:unpacked'
+      )
+    ) {
+      if (returnKeys.length === 1) {
+        valueMap[returnKeys[0]] = action.payload.value;
+      } else {
+        // do Error here
       }
-    });
-
+    } else {
+      returnKeys.forEach(returnVar => {
+        if (action.payload.value[returnVar] !== undefined) {
+          valueMap[returnVar] = action.payload.value[returnVar];
+        } else {
+          // do Error here
+        }
+      });
+    }
     attributes[matchingAttribute] = {
       ...attributes[matchingAttribute],
       outputs: { ...valueMap },

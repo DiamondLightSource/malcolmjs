@@ -36,9 +36,10 @@ const findAttributesWithTag = (block, searchTag) =>
 
 const attributeHasTag = (attribute, tag) =>
   attribute &&
-  attribute.meta &&
-  attribute.meta.tags &&
-  attribute.meta.tags.some(t => t.indexOf(tag) > -1);
+  ((attribute.meta &&
+    attribute.meta.tags &&
+    attribute.meta.tags.some(t => t.indexOf(tag) > -1)) ||
+    (attribute.tags && attribute.tags.some(t => t.indexOf(tag) > -1)));
 
 export default {
   findBlock,

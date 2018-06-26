@@ -123,7 +123,7 @@ const MethodDetails = props => (
         />
       </div>
     </div>
-    {Object.keys(props.outputs).length !== 0 ? (
+    {Object.keys(props.outputValues).length !== 0 ? (
       <div>
         <Typography className={props.classes.textName}>Last Return:</Typography>
         <Divider />
@@ -151,6 +151,7 @@ MethodDetails.propTypes = {
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
+  outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,

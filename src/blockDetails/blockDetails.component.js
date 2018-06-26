@@ -59,7 +59,7 @@ const blockLoading = notFound =>
       <br />
       <br />
       Block not found! <br />
-      (hint: URLs are case sensitive (for now...))
+      (hint: URLs are case sensitive)
     </div>
   ) : (
     <div>
