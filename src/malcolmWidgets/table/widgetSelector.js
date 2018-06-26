@@ -8,7 +8,7 @@ const styles = () => ({
   },
 });
 
-export const getWidgetTags = attribute =>
+export const getTableWidgetTags = attribute =>
   attribute.labels.map(label => {
     const { tags } = attribute.meta.elements[label];
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);

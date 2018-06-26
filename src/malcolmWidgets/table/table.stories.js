@@ -15,7 +15,8 @@ const simpleAttribute = {
   },
 };
 
-const harderAttribute = {
+// eslint-disable-next-line import/prefer-default-export
+export const harderAttribute = {
   typeid: 'epics:nt/NTTable:1.0',
   path: ['PANDA', 'layout'],
   labels: ['name', 'mri', 'x', 'y', 'visible'],
