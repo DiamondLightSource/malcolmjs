@@ -73,9 +73,6 @@ export const selectorFunction = (
   } else if (widgetTag === 'widget:flowgraph') {
     return <ButtonAction text="View" clickAction={() => {}} />;
   } else if (widgetTag === 'widget:table') {
-    /* TODO: IG - push table route to redux router and display table in centre pane
-     *            relevant properties available: path[] (array of strings)
-     * */
     return (
       <ButtonAction text="View" clickAction={() => buttonClickHandler(path)} />
     );
