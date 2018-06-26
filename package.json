@@ -15,6 +15,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "express": "^4.16.3",
+    "fs": "0.0.1-security",
     "history": "^4.7.2",
     "prop-types": "^15.6.1",
     "query-string": "^6.0.0",
