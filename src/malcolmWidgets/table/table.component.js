@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import blockUtils from '../../malcolm/blockUtils';
 import {malcolmPutAction, malcolmSetPending} from "../../malcolm/malcolmActionCreators";
 */
-import WidgetSelector, { getWidgetTags } from './widgetSelector';
+import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
   tableLayout: {
@@ -48,7 +48,7 @@ const WidgetTable = props => {
     rowValue[rowPath.label] = value;
     props.eventHandler(props.attribute.path, rowValue);
   };
-  const columnWidgetTags = getWidgetTags(props.attribute);
+  const columnWidgetTags = getTableWidgetTags(props.attribute);
   const rowNames = props.attribute.value[props.attribute.labels[0]];
   const columnHeadings = props.attribute.labels.map((label, column) => (
     <TableCell
