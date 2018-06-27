@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withTheme } from '@material-ui/core/styles';
 import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
 import WidgetLED from '../../led/widgetLED.component';
@@ -14,12 +14,6 @@ import {
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 
-const styles = () => ({
-  missingAttribute: {
-    color: 'red',
-  },
-});
-
 export const selectorFunction = (
   widgetTag,
   path,
@@ -27,59 +21,64 @@ export const selectorFunction = (
   valueHandler,
   flags,
   flagHandler,
-  style,
+  colorLED,
   objectMeta,
   forceUpdate,
   continuousSend = false
 ) => {
-  if (widgetTag === 'widget:led') {
-    return (
-      <WidgetLED
-        LEDState={value}
-        colorBorder={style.colorLED}
-        colorCenter={style.colorLED}
-      />
-    );
-  } else if (widgetTag === 'widget:checkbox') {
-    return (
-      <WidgetCheckbox
-        CheckState={value}
-        Pending={flags.isDisabled}
-        checkEventHandler={isChecked => valueHandler(path, isChecked)}
-      />
-    );
-  } else if (widgetTag === 'widget:combo') {
-    return (
-      <WidgetComboBox
-        Value={value}
-        Pending={flags.isDisabled}
-        Choices={objectMeta.choices}
-        selectEventHandler={event => valueHandler(path, event.target.value)}
-      />
-    );
-  } else if (widgetTag === 'widget:textupdate') {
-    return <TextUpdate Text={value} />;
-  } else if (widgetTag === 'widget:textinput') {
-    return (
-      <WidgetTextInput
-        Error={flags.isErrorState}
-        Value={value.toString()}
-        Pending={flags.isDisabled}
-        submitEventHandler={event => valueHandler(path, event.target.value)}
-        isDirty={flags.isDirty}
-        setFlag={(flag, state) => flagHandler(path, flag, state)}
-        focusHandler={() => {}}
-        blurHandler={() => {}}
-        forceUpdate={forceUpdate}
-        continuousSend={continuousSend}
-      />
-    );
-  } else if (widgetTag === 'widget:flowgraph') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
-  } else if (widgetTag === 'widget:table') {
-    return <ButtonAction text="View" clickAction={() => {}} />;
+  switch (widgetTag) {
+    case 'widget:led':
+      return (
+        <WidgetLED
+          LEDState={value}
+          colorBorder={colorLED}
+          colorCenter={colorLED}
+        />
+      );
+    case 'widget:checkbox':
+      return (
+        <WidgetCheckbox
+          CheckState={value}
+          Pending={flags.isDisabled}
+          checkEventHandler={isChecked => valueHandler(path, isChecked)}
+        />
+      );
+    case 'widget:combo':
+      return (
+        <WidgetComboBox
+          Value={value}
+          Pending={flags.isDisabled}
+          Choices={objectMeta.choices}
+          selectEventHandler={event => valueHandler(path, event.target.value)}
+        />
+      );
+    case 'widget:textupdate':
+      return <TextUpdate Text={value} />;
+    case 'widget:textinput':
+      return (
+        <WidgetTextInput
+          Error={flags.isErrorState}
+          Value={value.toString()}
+          Pending={flags.isDisabled}
+          submitEventHandler={event => valueHandler(path, event.target.value)}
+          isDirty={flags.isDirty}
+          setFlag={(flag, state) => flagHandler(path, flag, state)}
+          focusHandler={() => {}}
+          blurHandler={() => {}}
+          forceUpdate={forceUpdate}
+          continuousSend={continuousSend}
+        />
+      );
+    case 'widget:flowgraph':
+      return <ButtonAction text="View" clickAction={() => {}} />;
+    case 'widget:table':
+      return <ButtonAction text="View" clickAction={() => {}} />;
+    default:
+      if (widgetTag.split(':')[0] === 'widget') {
+        return <BugReport styles={{ color: 'red' }} />;
+      }
+      throw new Error('no widget tag supplied!');
   }
-  return <BugReport className={style.missingAttribute} />;
 };
 
 const AttributeSelector = props => {
@@ -100,10 +99,7 @@ const AttributeSelector = props => {
         props.eventHandler,
         flags,
         props.setFlag,
-        {
-          colorLED: props.theme.palette.primary.light,
-          missingAttribute: props.classes.missingAttribute,
-        },
+        props.theme.palette.primary.light,
         props.attribute.meta,
         props.attribute.forceUpdate
       );
@@ -162,5 +158,5 @@ AttributeSelector.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, { withTheme: true })(AttributeSelector)
+  withTheme()(AttributeSelector)
 );

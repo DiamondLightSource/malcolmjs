@@ -86,10 +86,7 @@ const buildIOComponent = (input, props, isOutput) => {
       submitHandler,
       flags,
       setFlag,
-      {
-        colorLED: props.theme.palette.primary.light,
-        missingAttribute: props.classes.missingAttribute,
-      },
+      props.theme.palette.primary.light,
       parameterMeta,
       false,
       updateStoreOnEveryValueChange

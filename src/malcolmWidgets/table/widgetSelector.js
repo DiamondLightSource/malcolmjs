@@ -1,12 +1,6 @@
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withTheme } from '@material-ui/core/styles';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
-
-const styles = () => ({
-  missingAttribute: {
-    color: 'red',
-  },
-});
 
 export const getTableWidgetTags = attribute =>
   attribute.labels.map(label => {
@@ -33,10 +27,7 @@ const WidgetSelector = props => {
       isDirty,
     },
     props.setFlag,
-    {
-      colorLED: props.theme.palette.primary.light,
-      missingAttribute: props.classes.missingAttribute,
-    },
+    props.theme.palette.primary.light,
     props.columnMeta
   );
 };
@@ -70,4 +61,4 @@ WidgetSelector.propTypes = {
   setFlag: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(WidgetSelector);
+export default withTheme()(WidgetSelector);

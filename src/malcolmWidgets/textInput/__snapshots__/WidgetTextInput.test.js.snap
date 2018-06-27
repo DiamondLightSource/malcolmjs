@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`WidgetTextUpdate displays dirty 1`] = `
+<TextField
+  InputProps={
+    Object {
+      "className": "WidgetTextInput-InputStyle-3",
+      "endAdornment": null,
+      "startAdornment": <WithStyles(InputAdornment)
+        position="start"
+    >
+        <pure(Lock)
+            nativeColor="#fff"
+        />
+    </WithStyles(InputAdornment)>,
+    }
+  }
+  className="WidgetTextInput-textInput-1"
+  disabled={true}
+  error={false}
+  inputProps={
+    Object {
+      "className": "WidgetTextInput-inputStyle-2",
+    }
+  }
+  onBlur={[Function]}
+  onChange={[Function]}
+  onFocus={[Function]}
+  onKeyPress={[Function]}
+  required={false}
+  select={false}
+  value="Goodbye World"
+/>
+`;
+
 exports[`WidgetTextUpdate displays disabled 1`] = `
 <TextField
   InputProps={

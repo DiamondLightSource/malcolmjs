@@ -1,6 +1,7 @@
 import React from 'react';
+import { createShallow } from '@material-ui/core/test-utils/index';
+
 import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
-// eslint-disable-next-line no-unused-vars
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../attributeDetails/attributeSelector/attributeSelector.component');
@@ -30,7 +31,27 @@ describe('table widget selector', () => {
   });
 
   it('calls selector function with right args', () => {
+    const shallow = createShallow({ dive: true });
     // eslint-disable-next-line no-unused-vars
-    const testSelector = <WidgetSelector />;
+    const wrapper = shallow(
+      <WidgetSelector
+        columnWidgetTag="widget:foo"
+        value={0}
+        rowPath="test"
+        rowChangeHandler="aFunction"
+        columnMeta={{ choices: 'an illusion' }}
+        setFlag="anotherFunction"
+      />
+    );
+    expect(selectorFunction).toHaveBeenCalledWith(
+      'widget:foo',
+      'test',
+      0,
+      'aFunction',
+      { isDirty: true, isDisabled: false, isErrorState: false },
+      'anotherFunction',
+      '#7986cb',
+      { choices: 'an illusion' }
+    );
   });
 });
