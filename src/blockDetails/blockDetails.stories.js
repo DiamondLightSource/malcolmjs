@@ -56,4 +56,14 @@ storiesOf('Details/Block Details', module)
         <BlockDetails parent store={mockStore(buildState(true))} />
       )
     )
+  )
+  .add(
+    'block not found',
+    withInfo(`
+      Shows that the block details could not be found
+    `)(() =>
+      displayContainer(
+        <BlockDetails parent store={mockStore(buildState(404))} />
+      )
+    )
   );

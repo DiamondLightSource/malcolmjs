@@ -81,6 +81,7 @@ const WidgetTable = props => {
                   rowPath={{ label, row, column }}
                   rowChangeHandler={rowChangeHandler}
                   columnMeta={props.attribute.meta.elements[label]}
+                  setFlag={props.setFlag}
                 />
               </TableCell>
             ))}
@@ -117,6 +118,8 @@ WidgetTable.propTypes = {
     rowFormat: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  setFlag: PropTypes.func.isRequired,
 };
 
 /*

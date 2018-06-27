@@ -63,6 +63,9 @@ class WidgetTextInput extends React.Component {
     this.setState({
       localValue: event.target.value,
     });
+    if (this.props.continuousSend) {
+      this.props.submitEventHandler(event);
+    }
   }
 
   refreshValue() {
@@ -97,7 +100,13 @@ class WidgetTextInput extends React.Component {
       : this.props.theme.palette.primary.light;
 
     const dirtyIcon = () => {
-      if (this.props.isDirty) {
+      if (this.props.Pending) {
+        return (
+          <InputAdornment position="start">
+            <Lock nativeColor={this.props.theme.palette.background.paper} />
+          </InputAdornment>
+        );
+      } else if (this.props.isDirty) {
         return (
           <InputAdornment position="start">
             {this.props.Value === this.state.localValue ? (
@@ -111,12 +120,6 @@ class WidgetTextInput extends React.Component {
                 <Cached nativeColor={iconColor} />
               </IconButton>
             )}
-          </InputAdornment>
-        );
-      } else if (this.props.Pending) {
-        return (
-          <InputAdornment position="start">
-            <Lock nativeColor={this.props.theme.palette.background.paper} />
           </InputAdornment>
         );
       }
@@ -182,6 +185,7 @@ WidgetTextInput.propTypes = {
       }),
     }),
   }).isRequired,
+  continuousSend: PropTypes.bool,
 };
 
 WidgetTextInput.defaultProps = {
@@ -189,6 +193,7 @@ WidgetTextInput.defaultProps = {
   isDirty: false,
   Units: '',
   Error: false,
+  continuousSend: false,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetTextInput);

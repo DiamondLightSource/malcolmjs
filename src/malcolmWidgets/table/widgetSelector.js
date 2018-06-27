@@ -21,12 +21,15 @@ export const getWidgetTags = attribute =>
 const WidgetSelector = props => {
   const setDisabled = false;
   const isErrorState = false;
+  const isDirty = true;
   return selectorFunction(
     props.columnWidgetTag,
     props.value,
     setDisabled,
     isErrorState,
+    isDirty,
     props.rowChangeHandler,
+    props.setFlag,
     props.rowPath,
     {
       colorLED: props.theme.palette.primary.light,
@@ -62,6 +65,7 @@ WidgetSelector.propTypes = {
     row: PropTypes.number,
   }).isRequired,
   columnMeta: PropTypes.shape({}).isRequired,
+  setFlag: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetSelector);

@@ -35,6 +35,7 @@ exports[`AttributeSelector selects a textInput correctly 1`] = `
   Pending={false}
   Value="[object Object]"
   blurHandler={[Function]}
+  continuousSend={false}
   focusHandler={[Function]}
   setFlag={[Function]}
   submitEventHandler={[Function]}

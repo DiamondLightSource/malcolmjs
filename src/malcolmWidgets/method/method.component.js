@@ -10,8 +10,12 @@ import AttributeAlarm, {
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
 import blockUtils from '../../malcolm/blockUtils';
-import { malcolmSetFlag } from '../../malcolm/malcolmActionCreators';
+import {
+  malcolmSetFlag,
+  malcolmPostAction,
+} from '../../malcolm/malcolmActionCreators';
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = () => ({
@@ -42,18 +46,27 @@ const styles = () => ({
 
 const widgetDefaultValues = {
   'widget:textinput': '',
-  'widget:textupdate': '',
+  'widget:textupdate': '...',
   'widget:checkbox': false,
   'widget:led': false,
 };
 
-const buildInputComponent = (input, props) => {
+const buildIOComponent = (input, props, isOutput) => {
   const { tags } = input[1];
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
   const setDisabled = props.methodPending || !input[1].writeable;
   const isErrorState = props.methodErrored;
+  const defaultValue =
+    props.defaultValues[input[0]] !== undefined
+      ? props.defaultValues[input[0]].toString()
+      : null;
+  const valueMap = isOutput ? props.outputValues : props.inputValues;
   const inputValue =
-    props.inputValues[input[0]] || widgetDefaultValues[widgetTag];
+    valueMap[input[0]] || defaultValue || widgetDefaultValues[widgetTag];
+
+  const submitHandler = (path, value) => {
+    props.updateInput(path, input[0], value);
+  };
 
   if (widgetTag !== -1) {
     return selectorFunction(
@@ -61,18 +74,19 @@ const buildInputComponent = (input, props) => {
       inputValue,
       setDisabled,
       isErrorState,
-      false,
-      (path, value) => {
-        props.updateInput(path, input[0], value);
+      props.dirtyInputs[input[0]],
+      submitHandler,
+      (path, flagName, isDirty) => {
+        props.updateInput(path, input[0], { isDirty });
       },
-      () => {},
       props.methodPath,
       {
         colorLED: props.theme.palette.primary.light,
         missingAttribute: props.classes.missingAttribute,
       },
       {},
-      false
+      false,
+      true
     );
   }
   return null;
@@ -82,14 +96,18 @@ const MethodDetails = props => (
   <div>
     {Object.entries(props.inputs).map(input => (
       <div key={input[0]} className={props.classes.div}>
-        <AttributeAlarm alarmSeverity={0} />
+        <Tooltip title={props.methodErrorMessage}>
+          <div>
+            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          </div>
+        </Tooltip>
         <Tooltip title={input[1].description}>
           <Typography className={props.classes.textName}>
             {input[1].label}:{' '}
           </Typography>
         </Tooltip>
         <div className={props.classes.controlContainer}>
-          {buildInputComponent(input, props)}
+          {buildIOComponent(input, props, false)}
         </div>
       </div>
     ))}
@@ -106,29 +124,35 @@ const MethodDetails = props => (
         />
       </div>
     </div>
-    <div>
-      <Typography className={props.classes.textName}>Last Return:</Typography>
-      <Divider />
-      {Object.entries(props.outputs).map(output => (
-        <div key={output[0]} className={props.classes.div}>
-          <AttributeAlarm alarmSeverity={0} />
-          <Typography className={props.classes.textName}>
-            {output[1].label}:{' '}
-          </Typography>
-          <div className={props.classes.controlContainer} />
-        </div>
-      ))}
-    </div>
+    {Object.keys(props.outputValues).length !== 0 ? (
+      <div>
+        <Typography className={props.classes.textName}>Last Return:</Typography>
+        <Divider />
+        {Object.entries(props.outputs).map(output => (
+          <div key={output[0]} className={props.classes.div}>
+            <AttributeAlarm alarmSeverity={0} />
+            <Typography className={props.classes.textName}>
+              {output[1].label}:{' '}
+            </Typography>
+            <div className={props.classes.controlContainer}>
+              {buildIOComponent(output, props, true)}
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : null}
   </div>
 );
 
 MethodDetails.propTypes = {
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
+  methodErrorMessage: PropTypes.string.isRequired,
   methodPath: PropTypes.arrayOf(PropTypes.string).isRequired,
   inputs: PropTypes.shape({}).isRequired,
   inputValues: PropTypes.shape({}).isRequired,
   outputs: PropTypes.shape({}).isRequired,
+  outputValues: PropTypes.shape({}).isRequired,
   runMethod: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
@@ -148,26 +172,30 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let alarm = AlarmStates.NO_ALARM;
-  alarm = method && method.pending ? AlarmStates.PENDING : alarm;
   alarm = method && method.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.pending ? AlarmStates.PENDING : alarm;
 
   return {
     methodName: method.label,
     methodAlarm: alarm,
     methodPending: method.pending,
     methodErrored: method.errorState,
+    methodErrorMessage: method.errorMessage ? method.errorMessage : '',
     methodPath: method.path,
     inputs: method ? method.takes.elements : {},
     inputValues: method.inputs || {},
+    dirtyInputs: method.dirtyInputs || {},
     outputs: method ? method.returns.elements : {},
+    outputValues: method.outputs || {},
+    required: method ? method.required : {},
+    defaultValues: method ? method.defaults : {},
   };
 };
 
 export const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
-    console.log(`Running method [${path}] with inputs:`);
-    console.log(inputs);
+    dispatch(malcolmPostAction(path, inputs));
   },
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));

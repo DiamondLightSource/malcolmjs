@@ -26,6 +26,7 @@ const ContainedTable = props =>
       <WidgetTable
         attribute={props.attribute}
         eventHandler={props.eventHandler}
+        setFlag={props.setFlag}
       />
     </div>
   );
@@ -40,10 +41,12 @@ ContainedTable.propTypes = {
     testDiv: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func,
+  setFlag: PropTypes.func,
 };
 
 ContainedTable.defaultProps = {
   eventHandler: () => {},
+  setFlag: () => {},
   simple: false,
 };
 

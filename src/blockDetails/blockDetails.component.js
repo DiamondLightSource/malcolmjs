@@ -8,6 +8,14 @@ import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.compone
 import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetails.component';
 import MethodDetails from '../malcolmWidgets/method/method.component';
 
+const ascii404 =
+  '             __   __    _____     __   __ \n' +
+  '            |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\ \n' +
+  '            \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\ \n' +
+  '             \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
+  '              \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
+  '                     \\|__|  \\|_____|        \\|__| \n';
+
 const styles = theme => ({
   progressContainer: {
     marginTop: 15,
@@ -17,9 +25,15 @@ const styles = theme => ({
 
 const ignoredAttributes = ['widget:icon', 'widget:title'];
 
-export const isBlockLoading = block =>
-  block !== undefined &&
-  (block.loading || block.attributes.some(a => a.loading));
+export const isBlockLoading = block => {
+  if (block !== undefined && block.loading === 404) {
+    return 404;
+  }
+  return (
+    block !== undefined &&
+    (block.loading || block.attributes.some(a => a.loading))
+  );
+};
 export const isRootLevelAttribute = a =>
   !a.inGroup &&
   !a.isGroup &&
@@ -30,12 +44,23 @@ export const isRootLevelAttribute = a =>
   );
 export const areAttributesAvailable = block => block && block.attributes;
 
-const blockLoading = () => (
-  <div>
-    <CircularProgress color="secondary" />
-    <Typography>Loading...</Typography>
-  </div>
-);
+const blockLoading = notFound =>
+  notFound ? (
+    <div>
+      <div align="left" style={{ whiteSpace: 'pre' }}>
+        {ascii404}
+      </div>
+      <br />
+      <br />
+      Block not found! <br />
+      (hint: URLs are case sensitive)
+    </div>
+  ) : (
+    <div>
+      <CircularProgress color="secondary" />
+      <Typography>Loading...</Typography>
+    </div>
+  );
 
 export const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.length === newAttributes.length &&
@@ -90,12 +115,15 @@ const displayAttributes = props => {
 
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
-    {props.blockLoading ? blockLoading() : displayAttributes(props)}
+    {props.blockLoading
+      ? blockLoading(props.blockLoading === 404)
+      : displayAttributes(props)}
   </div>
 );
 
 BlockDetails.propTypes = {
-  blockLoading: PropTypes.bool.isRequired,
+  blockLoading: PropTypes.oneOfType([PropTypes.bool, PropTypes.number])
+    .isRequired,
   classes: PropTypes.shape({
     progressContainer: PropTypes.string,
   }).isRequired,
