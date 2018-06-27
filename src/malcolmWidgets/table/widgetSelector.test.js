@@ -32,8 +32,7 @@ describe('table widget selector', () => {
 
   it('calls selector function with right args', () => {
     const shallow = createShallow({ dive: true });
-    // eslint-disable-next-line no-unused-vars
-    const wrapper = shallow(
+    shallow(
       <WidgetSelector
         columnWidgetTag="widget:foo"
         value={0}
