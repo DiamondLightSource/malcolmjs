@@ -40,12 +40,15 @@
 
 
 ## Demo running order
-1. Configurable socket address
-1. Redux store review
-1. New links
+1. (Ray) Configurable socket address
+1. (Ray) Redux store review
+1. (Ray) New links
 
-1. Methods
-1. Tables
-1. Long text updates
+1. (Bryan) Text Inputs
+1. (Bryan) Methods
+1. (Bryan) Tables
+1. (Bryan) Long text updates
+
+1. (Ian) Discuss experience on-boarding and demo view table button
 
 
