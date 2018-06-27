@@ -22,13 +22,11 @@ const styles = () => ({
 
 export const selectorFunction = (
   widgetTag,
-  value,
-  setDisabled,
-  isErrorState,
-  isDirty,
-  eventHandler,
-  setFlag,
   path,
+  value,
+  valueHandler,
+  flags,
+  flagHandler,
   style,
   objectMeta,
   forceUpdate,
@@ -46,17 +44,17 @@ export const selectorFunction = (
     return (
       <WidgetCheckbox
         CheckState={value}
-        Pending={setDisabled}
-        checkEventHandler={isChecked => eventHandler(path, isChecked)}
+        Pending={flags.isDisabled}
+        checkEventHandler={isChecked => valueHandler(path, isChecked)}
       />
     );
   } else if (widgetTag === 'widget:combo') {
     return (
       <WidgetComboBox
         Value={value}
-        Pending={setDisabled}
+        Pending={flags.isDisabled}
         Choices={objectMeta.choices}
-        selectEventHandler={event => eventHandler(path, event.target.value)}
+        selectEventHandler={event => valueHandler(path, event.target.value)}
       />
     );
   } else if (widgetTag === 'widget:textupdate') {
@@ -64,12 +62,12 @@ export const selectorFunction = (
   } else if (widgetTag === 'widget:textinput') {
     return (
       <WidgetTextInput
-        Error={isErrorState}
+        Error={flags.isErrorState}
         Value={value.toString()}
-        Pending={setDisabled}
-        submitEventHandler={event => eventHandler(path, event.target.value)}
-        isDirty={isDirty}
-        setFlag={(flag, state) => setFlag(path, flag, state)}
+        Pending={flags.isDisabled}
+        submitEventHandler={event => valueHandler(path, event.target.value)}
+        isDirty={flags.isDirty}
+        setFlag={(flag, state) => flagHandler(path, flag, state)}
         focusHandler={() => {}}
         blurHandler={() => {}}
         forceUpdate={forceUpdate}
@@ -88,22 +86,20 @@ const AttributeSelector = props => {
   if (props.attribute && props.attribute.meta && props.attribute.meta.tags) {
     const { tags } = props.attribute.meta;
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
-
-    const setDisabled =
-      props.attribute.pending || !props.attribute.meta.writeable;
-
-    const isErrorState = props.attribute.errorState;
+    const flags = {
+      isDirty: props.attribute.dirty,
+      isDisabled: props.attribute.pending || !props.attribute.meta.writeable,
+      isErrorState: props.attribute.errorState,
+    };
 
     if (widgetTagIndex !== -1) {
       return selectorFunction(
         tags[widgetTagIndex],
-        props.attribute.value,
-        setDisabled,
-        isErrorState,
-        props.attribute.dirty,
-        props.eventHandler,
-        props.setFlag,
         props.attribute.path,
+        props.attribute.value,
+        props.eventHandler,
+        flags,
+        props.setFlag,
         {
           colorLED: props.theme.palette.primary.light,
           missingAttribute: props.classes.missingAttribute,

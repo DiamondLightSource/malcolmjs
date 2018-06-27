@@ -19,18 +19,20 @@ export const getWidgetTags = attribute =>
   });
 
 const WidgetSelector = props => {
-  const setDisabled = false;
+  const isDisabled = false;
   const isErrorState = false;
   const isDirty = true;
   return selectorFunction(
     props.columnWidgetTag,
-    props.value,
-    setDisabled,
-    isErrorState,
-    isDirty,
-    props.rowChangeHandler,
-    props.setFlag,
     props.rowPath,
+    props.value,
+    props.rowChangeHandler,
+    {
+      isDisabled,
+      isErrorState,
+      isDirty,
+    },
+    props.setFlag,
     {
       colorLED: props.theme.palette.primary.light,
       missingAttribute: props.classes.missingAttribute,
