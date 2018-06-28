@@ -19,6 +19,8 @@ Contents
     SMG/architectural_decision_record
     SMG/sequence_diagrams
     SMG/setting_up_a_dev_environment
+    SMG/workflow
+    SMG/testing_strategy
     SMG/maintenance
     SMG/deployment
     SMG/troubleshooting
