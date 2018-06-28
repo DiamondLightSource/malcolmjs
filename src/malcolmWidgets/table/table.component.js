@@ -9,12 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-/*
-import { connect } from 'react-redux';
 
-import blockUtils from '../../malcolm/blockUtils';
-import {malcolmPutAction, malcolmSetPending} from "../../malcolm/malcolmActionCreators";
-*/
 import WidgetSelector, { getWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
@@ -123,29 +118,6 @@ WidgetTable.propTypes = {
 };
 
 /*
-const mapStateToProps = (state, ownProps) => {
-  let attribute;
-  if (ownProps.attributeName && ownProps.blockName) {
-    attribute = blockUtils.findAttribute(
-      state.malcolm.blocks,
-      ownProps.blockName,
-      ownProps.attributeName
-    );
-  }
-  return {
-    attribute,
-  };
-};
 
-const mapDispatchToProps = dispatch => ({
-  eventHandler: (path, value) => {
-    dispatch(malcolmSetPending(path, true));
-    dispatch(malcolmPutAction(path, value));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, { withTheme: true })(WidgetTable)
-);
 */
 export default withStyles(styles, { withTheme: true })(WidgetTable);

@@ -5,7 +5,17 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
   className="MiddlePanelContainer-container-1"
   onClick={[Function]}
   role="presentation"
-/>
+>
+  <div>
+    <br />
+    <br />
+    <br />
+    <img
+      alt=" "
+      src="malcolm-logo.png"
+    />
+  </div>
+</div>
 `;
 
 exports[`MalcolmMiddlePanel renders correctly 1`] = `
@@ -23,6 +33,7 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
       style={
         Object {
           "left": 365,
+          "top": 5,
         }
       }
     >
