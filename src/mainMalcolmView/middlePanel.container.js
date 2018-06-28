@@ -47,7 +47,9 @@ const styles = () => ({
     verticalAlign: 'middle',
   },
   plainBackground: {
+    display: 'flex',
     width: '100%',
+    minHeight: 'calc(100vh - 64px)',
     backgroundColor: divBackground,
   },
 });
@@ -90,10 +92,12 @@ const findAttributeComponent = props => {
             <TableContainer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
+              footerItems={[
+                <AttributeAlarm
+                  alarmSeverity={props.mainAttributeAlarmState}
+                />,
+              ]}
             />
-            <div className={props.classes.alarm}>
-              <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
-            </div>
           </div>
         </div>
       );

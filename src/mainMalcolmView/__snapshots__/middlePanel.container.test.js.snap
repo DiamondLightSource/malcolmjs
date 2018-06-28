@@ -6,7 +6,9 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
   onClick={[Function]}
   role="presentation"
 >
-  <div>
+  <div
+    className="MiddlePanelContainer-plainBackground-6"
+  >
     <br />
     <br />
     <br />

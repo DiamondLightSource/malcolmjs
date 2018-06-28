@@ -16,10 +16,12 @@ export const copyAttributeValue = (state, payload) => {
     matchingAttributeIndex >= 0 &&
     attributes[matchingAttributeIndex].value !== undefined
   ) {
-    attributes[matchingAttributeIndex].localState = {
-      value: attributes[matchingAttributeIndex].value,
-      labels: Object.keys(attributes[matchingAttributeIndex].meta.elements),
+    const attribute = { ...attributes[matchingAttributeIndex] };
+    attribute.localState = {
+      value: JSON.parse(JSON.stringify(attribute.value)),
+      labels: Object.keys(attribute.meta.elements),
     };
+    attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
   return {
@@ -38,12 +40,12 @@ export const updateTableLocal = (state, payload) => {
   );
   const blocks = { ...state.blocks };
   const { attributes } = state.blocks[blockName];
-  const valueCopy = attributes[matchingAttributeIndex].localState;
-  if (matchingAttributeIndex >= 0 && valueCopy !== undefined) {
-    valueCopy.labels.forEach(label => {
-      valueCopy.value[label][payload.row] = payload.value[label];
+  const attribute = { ...attributes[matchingAttributeIndex] };
+  if (matchingAttributeIndex >= 0 && attribute.localState !== undefined) {
+    attribute.localState.labels.forEach(label => {
+      attribute.localState.value[label][payload.row] = payload.value[label];
     });
-    attributes[matchingAttributeIndex].localState = valueCopy;
+    attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
   return {

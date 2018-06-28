@@ -62,6 +62,7 @@ describe('WidgetTable', () => {
     expect(setValue.mock.calls[0]).toEqual([
       ['PANDA', 'layout'],
       { mri: 'PANDA:INENC2', name: 'INENC2', visible: false, x: 0, y: 0 },
+      3,
     ]);
   });
 });
