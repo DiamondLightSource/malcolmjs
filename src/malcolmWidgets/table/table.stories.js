@@ -5,17 +5,8 @@ import { action } from '@storybook/addon-actions';
 
 import ContainedTable from './table.stories.container';
 
-const simpleAttribute = {
-  labels: ['Test', '1', '2', '3'],
-  values: {
-    Test: ['#1', '#2', '#3'],
-    '1': ['a', 'b', 'c'],
-    '2': ['d', 'e', 'f'],
-    '3': ['g', 'h', 'i'],
-  },
-};
-
-const harderAttribute = {
+// eslint-disable-next-line import/prefer-default-export
+export const harderAttribute = {
   typeid: 'epics:nt/NTTable:1.0',
   path: ['PANDA', 'layout'],
   labels: ['name', 'mri', 'x', 'y', 'visible'],
@@ -87,22 +78,17 @@ const harderAttribute = {
   },
 };
 
-storiesOf('Widgets/WidgetTable', module)
-  .add(
-    'Simple Table',
-    withInfo(`
-    A simple table (containing text).
-    `)(() => <ContainedTable attribute={simpleAttribute} simple />)
-  )
-  .add(
-    'Complex Table',
-    withInfo(`
+const table = (
+  <ContainedTable
+    attribute={harderAttribute}
+    eventHandler={action(`row was changed!: `)}
+    setFlag={action(`dirty flag set!: `)}
+  />
+);
+
+storiesOf('Widgets/WidgetTable', module).add(
+  'a table',
+  withInfo(`
     A more complex table (containing widgets).
-    `)(() => (
-      <ContainedTable
-        attribute={harderAttribute}
-        eventHandler={action(`row was changed!: `)}
-        setFlag={action(`dirty flag set!: `)}
-      />
-    ))
-  );
+    `)(() => table)
+);

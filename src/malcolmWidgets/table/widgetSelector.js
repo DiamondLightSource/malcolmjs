@@ -1,14 +1,8 @@
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withTheme } from '@material-ui/core/styles';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
-const styles = () => ({
-  missingAttribute: {
-    color: 'red',
-  },
-});
-
-export const getWidgetTags = attribute =>
+export const getTableWidgetTags = attribute =>
   attribute.labels.map(label => {
     const { tags } = attribute.meta.elements[label];
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
@@ -19,22 +13,21 @@ export const getWidgetTags = attribute =>
   });
 
 const WidgetSelector = props => {
-  const setDisabled = false;
+  const isDisabled = false;
   const isErrorState = false;
   const isDirty = true;
   return selectorFunction(
     props.columnWidgetTag,
-    props.value,
-    setDisabled,
-    isErrorState,
-    isDirty,
-    props.rowChangeHandler,
-    props.setFlag,
     props.rowPath,
+    props.value,
+    props.rowChangeHandler,
     {
-      colorLED: props.theme.palette.primary.light,
-      missingAttribute: props.classes.missingAttribute,
+      isDisabled,
+      isErrorState,
+      isDirty,
     },
+    props.setFlag,
+    props.theme.palette.primary.light,
     props.columnMeta
   );
 };
@@ -56,9 +49,6 @@ WidgetSelector.propTypes = {
       }),
     }),
   }).isRequired,
-  classes: PropTypes.shape({
-    missingAttribute: PropTypes.string,
-  }).isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
   rowPath: PropTypes.shape({
     label: PropTypes.string,
@@ -68,4 +58,4 @@ WidgetSelector.propTypes = {
   setFlag: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(WidgetSelector);
+export default withTheme()(WidgetSelector);
