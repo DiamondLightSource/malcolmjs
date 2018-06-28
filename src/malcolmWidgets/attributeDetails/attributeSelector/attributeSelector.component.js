@@ -151,9 +151,6 @@ AttributeSelector.propTypes = {
       }),
     }),
   }).isRequired,
-  classes: PropTypes.shape({
-    missingAttribute: PropTypes.string,
-  }).isRequired,
   eventHandler: PropTypes.func.isRequired,
 };
 

@@ -49,9 +49,6 @@ WidgetSelector.propTypes = {
       }),
     }),
   }).isRequired,
-  classes: PropTypes.shape({
-    missingAttribute: PropTypes.string,
-  }).isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
   rowPath: PropTypes.shape({
     label: PropTypes.string,

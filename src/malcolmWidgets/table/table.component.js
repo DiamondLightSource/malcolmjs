@@ -39,9 +39,12 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
+
+  const columnLabels = Object.keys(props.attribute.meta.elements);
+
   const rowChangeHandler = (rowPath, value) => {
     const rowValue = {};
-    props.attribute.labels.forEach(label => {
+    columnLabels.forEach(label => {
       rowValue[label] = props.attribute.value[label][rowPath.row];
       return 0;
     });
@@ -50,7 +53,7 @@ const WidgetTable = props => {
   };
   const columnWidgetTags = getTableWidgetTags(props.attribute);
   const rowNames = props.attribute.value[props.attribute.labels[0]];
-  const columnHeadings = props.attribute.labels.map((label, column) => (
+  const columnHeadings = columnLabels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
       padding="none"

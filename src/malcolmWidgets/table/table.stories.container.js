@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import SimpleTable from './simpleTable.component';
 import WidgetTable from './table.component';
 
 const styles = theme => ({
@@ -13,26 +12,17 @@ const styles = theme => ({
   },
 });
 
-const ContainedTable = props =>
-  props.simple ? (
-    <div className={props.classes.testDiv}>
-      <SimpleTable
-        labels={props.attribute.labels}
-        values={props.attribute.values}
-      />
-    </div>
-  ) : (
-    <div className={props.classes.testDiv}>
-      <WidgetTable
-        attribute={props.attribute}
-        eventHandler={props.eventHandler}
-        setFlag={props.setFlag}
-      />
-    </div>
-  );
+const ContainedTable = props => (
+  <div className={props.classes.testDiv}>
+    <WidgetTable
+      attribute={props.attribute}
+      eventHandler={props.eventHandler}
+      setFlag={props.setFlag}
+    />
+  </div>
+);
 
 ContainedTable.propTypes = {
-  simple: PropTypes.bool,
   attribute: PropTypes.shape({
     labels: PropTypes.arrayOf(PropTypes.string),
     values: PropTypes.shape({}),
@@ -47,7 +37,6 @@ ContainedTable.propTypes = {
 ContainedTable.defaultProps = {
   eventHandler: () => {},
   setFlag: () => {},
-  simple: false,
 };
 
 export default withStyles(styles, { withTheme: true })(ContainedTable);
