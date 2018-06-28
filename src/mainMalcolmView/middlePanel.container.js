@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import Layout from '../layout/layout.component';
 import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
@@ -8,6 +9,8 @@ import AttributeAlarm, {
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
+
+import malcolmLogo from '../malcolm-logo.png';
 
 const styles = () => ({
   container: {
@@ -35,24 +38,60 @@ const styles = () => ({
   alarmText: {
     marginRight: 5,
   },
+  tableArea: {
+    width: '100%',
+    height: 'calc(100vh - 64px)',
+    backgroundColor: 'rgb(48, 48, 48)',
+    align: 'center',
+    verticalAlign: 'middle',
+  },
 });
 
 const findAttributeComponent = props => {
-  if (props.mainAttribute === 'layout') {
-    return (
-      <div className={props.classes.layoutArea}>
-        <Layout />
-        <div
-          className={props.classes.alarm}
-          style={{ left: props.openParent ? 365 : 5 }}
-        >
-          <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+  switch (props.mainAttribute) {
+    case 'layout':
+      return (
+        <div className={props.classes.layoutArea}>
+          <Layout />
+          <div
+            className={props.classes.alarm}
+            style={{ left: props.openParent ? 365 : 5 }}
+          >
+            <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    case 'table':
+      return (
+        <div className={props.classes.tableArea}>
+          <br />
+          <br />
+          <br />
+          <br />
+          <Typography variant="title">(╯°□°)╯︵ ┻━┻</Typography>
+          <br />
+          <br />
+          <br />
+          <br />
+          <Typography variant="title">No table found!</Typography>
+          <div
+            className={props.classes.alarm}
+            style={{ left: props.openParent ? 365 : 5 }}
+          >
+            <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+          </div>
+        </div>
+      );
+    default:
+      return (
+        <div className={props.classes.tableArea}>
+          <br />
+          <br />
+          <br />
+          <img src={malcolmLogo} alt=" " />
+        </div>
+      );
   }
-
-  return null;
 };
 
 const resetSelection = dispatch => {
@@ -103,6 +142,7 @@ findAttributeComponent.propTypes = {
     layoutArea: PropTypes.string,
     alarm: PropTypes.string,
     alarmText: PropTypes.string,
+    tableArea: PropTypes.string,
   }).isRequired,
 };
 
