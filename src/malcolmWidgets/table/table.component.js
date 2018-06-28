@@ -10,7 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import WidgetSelector, { getWidgetTags } from './widgetSelector';
+import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
   tableLayout: {
@@ -34,20 +34,23 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
+
   const values =
     props.localState === undefined ? props.attribute.value : props.localState;
+  const columnLabels = Object.keys(props.attribute.meta.elements);
   const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
-    props.attribute.labels.forEach(label => {
+    columnLabels.forEach(label => {
       rowValue[label] = values[label][rowPath.row];
       return 0;
     });
     rowValue[rowPath.label] = newValue;
     props.eventHandler(props.attribute.path, rowValue, rowPath.row);
   };
-  const columnWidgetTags = getWidgetTags(props.attribute);
+
+  const columnWidgetTags = getTableWidgetTags(props.attribute);
   const rowNames = values[props.attribute.labels[0]];
-  const columnHeadings = props.attribute.labels.map((label, column) => (
+  const columnHeadings = columnLabels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
