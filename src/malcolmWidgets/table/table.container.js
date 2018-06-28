@@ -22,7 +22,7 @@ const TableContainer = props => {
     ...props.footerItems,
     <ButtonAction clickAction={() => props.copyTable(path)} text="Revert" />,
     <ButtonAction
-      onClick={() => props.putTable(path, props.attribute.localState.value)}
+      clickAction={() => props.putTable(path, props.attribute.localState.value)}
       text="Submit"
     />,
   ];
@@ -79,7 +79,11 @@ TableContainer.propTypes = {
   setFlag: PropTypes.func.isRequired,
   copyTable: PropTypes.func.isRequired,
   putTable: PropTypes.func.isRequired,
-  footerItems: PropTypes.arrayOf(PropTypes.node).isRequired,
+  footerItems: PropTypes.arrayOf(PropTypes.node),
+};
+
+TableContainer.defaultProps = {
+  footerItems: [],
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
