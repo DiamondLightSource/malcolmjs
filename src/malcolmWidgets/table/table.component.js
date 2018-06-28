@@ -34,17 +34,19 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
-  const rowChangeHandler = (rowPath, value) => {
+  const values =
+    props.localState === undefined ? props.attribute.value : props.localState;
+  const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
     props.attribute.labels.forEach(label => {
-      rowValue[label] = props.attribute.value[label][rowPath.row];
+      rowValue[label] = values[label][rowPath.row];
       return 0;
     });
-    rowValue[rowPath.label] = value;
-    props.eventHandler(props.attribute.path, rowValue);
+    rowValue[rowPath.label] = newValue;
+    props.eventHandler(props.attribute.path, rowValue, rowPath.row);
   };
   const columnWidgetTags = getWidgetTags(props.attribute);
-  const rowNames = props.attribute.value[props.attribute.labels[0]];
+  const rowNames = values[props.attribute.labels[0]];
   const columnHeadings = props.attribute.labels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
@@ -72,7 +74,7 @@ const WidgetTable = props => {
               >
                 <WidgetSelector
                   columnWidgetTag={columnWidgetTags[column]}
-                  value={props.attribute.value[label][row]}
+                  value={values[label][row]}
                   rowPath={{ label, row, column }}
                   rowChangeHandler={rowChangeHandler}
                   columnMeta={props.attribute.meta.elements[label]}
@@ -106,6 +108,7 @@ WidgetTable.propTypes = {
     }),
     unableToProcess: PropTypes.bool,
   }).isRequired,
+  localState: PropTypes.shape({}),
   classes: PropTypes.shape({
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
@@ -117,7 +120,7 @@ WidgetTable.propTypes = {
   setFlag: PropTypes.func.isRequired,
 };
 
-/*
-
-*/
+WidgetTable.defaultProps = {
+  localState: undefined,
+};
 export default withStyles(styles, { withTheme: true })(WidgetTable);

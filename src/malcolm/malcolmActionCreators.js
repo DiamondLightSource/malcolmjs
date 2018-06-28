@@ -12,6 +12,8 @@ import {
   MalcolmUpdateBlockPosition,
   MalcolmSelectBlock,
   MalcolmShiftButton,
+  MalcolmLocalCopy,
+  MalcolmTableUpdate,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -95,6 +97,22 @@ export const malcolmMainAttribute = attribute => ({
   type: MalcolmMainAttributeUpdate,
   payload: {
     attribute,
+  },
+});
+
+export const malcolmCopyValue = path => ({
+  type: MalcolmLocalCopy,
+  payload: {
+    path,
+  },
+});
+
+export const malcolmUpdateTable = (path, value, row) => ({
+  type: MalcolmTableUpdate,
+  payload: {
+    path,
+    value,
+    row,
   },
 });
 

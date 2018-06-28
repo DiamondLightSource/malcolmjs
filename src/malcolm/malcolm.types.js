@@ -17,3 +17,5 @@ export const MalcolmShiftButton = 'malcolm:shiftbutton';
 export const MalcolmSocketConnect = 'malcolm:socketconnect';
 export const MalcolmMethodUpdate = 'malcolm:methodupdate';
 export const MalcolmUpdateMethodInputType = 'malcolm:updatemethodinput';
+export const MalcolmLocalCopy = 'malcolm:localcopy';
+export const MalcolmTableUpdate = 'malcolm:updatetable';

@@ -99,7 +99,7 @@ const findAttributeComponent = props => {
       );
     default:
       return (
-        <div className={props.classes.tableArea}>
+        <div className={props.classes.plainBackground}>
           <br />
           <br />
           <br />
