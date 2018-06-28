@@ -2,7 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import ButtonAction from '../buttonAction/buttonAction.component';
 
 import blockUtils from '../../malcolm/blockUtils';
 import {
@@ -20,12 +20,11 @@ const TableContainer = props => {
   }
   const footerItems = [
     ...props.footerItems,
-    <Button onClick={() => props.copyTable(path)}>Revert</Button>,
-    <Button
+    <ButtonAction clickAction={() => props.copyTable(path)} text="Revert" />,
+    <ButtonAction
       onClick={() => props.putTable(path, props.attribute.localState.value)}
-    >
-      Submit
-    </Button>,
+      text="Submit"
+    />,
   ];
   return (
     <WidgetTable

@@ -23,7 +23,7 @@ const styles = theme => ({
   },
   tableBody: {
     overflowY: 'auto',
-    height: 'calc(100% - 70px)',
+    height: 'calc(100% - 75px)',
     width: '100%',
   },
   rowFormat: {
