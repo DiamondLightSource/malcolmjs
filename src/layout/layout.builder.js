@@ -3,9 +3,9 @@ import BlockNodeFactory from './block/blockWidget.factory';
 import BlockNodeModel from './block/block.model';
 import MalcolmLinkFactory from './link/link.factory';
 
-const buildBlockNode = (block, selectedBlocks, clickHandler) => {
+const buildBlockNode = (block, selectedBlocks, clickHandler, portMouseDown) => {
   const node = new BlockNodeModel(block.name, block.description, block.mri);
-  block.ports.forEach(p => node.addBlockPort(p));
+  block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);
   node.addClickHandler(clickHandler);
@@ -18,7 +18,8 @@ export const buildDiagramEngine = (
   blocks,
   selectedBlocks,
   url,
-  clickHandler
+  clickHandler,
+  portMouseDown
 ) => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
@@ -28,8 +29,11 @@ export const buildDiagramEngine = (
   const model = new DiagramModel();
 
   const nodes = blocks.map(b =>
-    buildBlockNode(b, selectedBlocks, node =>
-      clickHandler(url, b, node, selectedBlocks)
+    buildBlockNode(
+      b,
+      selectedBlocks,
+      node => clickHandler(url, b, node, selectedBlocks),
+      portMouseDown
     )
   );
 

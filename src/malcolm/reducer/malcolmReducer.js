@@ -14,6 +14,7 @@ import {
   MalcolmSelectBlock,
   MalcolmShiftButton,
   MalcolmSocketConnect,
+  MalcolmSelectPortType,
 } from '../malcolm.types';
 import blockUtils from '../blockUtils';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -53,6 +54,8 @@ const initialMalcolmState = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2 - 64,
     },
+    startPortForLink: undefined,
+    endPortForLink: undefined,
   },
 };
 
@@ -406,6 +409,13 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
           action.payload.blockName
         ),
       };
+
+    case MalcolmSelectPortType:
+      return layoutReducer.selectPortForLink(
+        updatedState,
+        action.payload.portId,
+        action.payload.start
+      );
 
     case MalcolmShiftButton:
       return layoutReducer.shiftIsPressed(updatedState, action.payload);

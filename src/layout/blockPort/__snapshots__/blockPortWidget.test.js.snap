@@ -17,8 +17,11 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     data-nodeid="123456"
     data-radium={true}
     key=".0"
+    onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
     style={
       Object {
         "background": undefined,
@@ -69,8 +72,11 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     data-nodeid="123456"
     data-radium={true}
     key=".1"
+    onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
     style={
       Object {
         "background": undefined,

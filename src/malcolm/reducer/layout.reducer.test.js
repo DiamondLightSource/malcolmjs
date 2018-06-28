@@ -15,14 +15,18 @@ const buildLayoutBlock = () => ({
 
 const buildMalcolmState = () => ({
   layout: {
-    blocks: [],
+    blocks: [
+      {
+        mri: 'block1',
+      },
+    ],
   },
   layoutState: {
     layoutCenter: {
       x: 100,
       y: 150,
     },
-    selectedBlocks: [],
+    selectedBlocks: ['block1'],
   },
   blocks: {
     block1: {
@@ -203,5 +207,47 @@ describe('Layout Reducer', () => {
     const layout = LayoutReducer.selectBlock(state, 'block1');
 
     expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
+  });
+
+  it('updateBlockPosition updates the positions of selected blocks', () => {
+    const state = buildMalcolmState();
+    state.layoutState.selectedBlocks = ['block1'];
+    state.parentBlock = 'block1';
+    state.mainAttribute = 'layout';
+
+    LayoutReducer.updateBlockPosition(state, { x: 100, y: 200 });
+    const { layout } = state.blocks.block1.attributes[2];
+    expect(layout.blocks[0].position.x).toEqual(110);
+    expect(layout.blocks[0].position.y).toEqual(220);
+  });
+
+  it('selectPortForLink resets the ports in links if both are undefined', () => {
+    let state = buildMalcolmState();
+    state.layoutState.startPortForLink = 'start';
+    state.layoutState.endPortForLink = 'end';
+
+    state = LayoutReducer.selectPortForLink(state, 'port', true);
+    expect(state.layoutState.startPortForLink).toEqual('port');
+    expect(state.layoutState.endPortForLink).toBeUndefined();
+  });
+
+  it('selectPortForLink optimistically adds a link if the end port is being set', () => {
+    let state = buildMalcolmState();
+    state.layoutState.startPortForLink = 'PANDA-start';
+    state.layout.blocks = [
+      {
+        mri: 'PANDA',
+        ports: [
+          { label: 'start', input: false, tag: 'START' },
+          { label: 'end', input: true, tag: 'END', value: 'END' },
+        ],
+      },
+    ];
+
+    state = LayoutReducer.selectPortForLink(state, 'PANDA-end', false);
+
+    expect(state.layoutState.startPortForLink).toEqual('PANDA-start');
+    expect(state.layoutState.endPortForLink).toEqual('PANDA-end');
+    expect(state.layout.blocks[0].ports[1].value).toEqual('START');
   });
 });
