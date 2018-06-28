@@ -38,6 +38,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
@@ -45,12 +46,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
@@ -58,12 +61,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
@@ -71,6 +76,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
@@ -85,6 +91,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
+            "addMouseDownHandler": [Function],
             "id": "block1-in 1",
             "in": true,
             "label": "in 1",
@@ -92,6 +99,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
+            "mouseDownHandler": [Function],
             "name": "block1-in 1",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
@@ -107,6 +115,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "ports": Object {
                 "block1-in 1": [Circular],
                 "block1-out 1": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-out 1",
                   "in": false,
                   "label": "out 1",
@@ -114,12 +123,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-out 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
                 "block1-out 2": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-out 2",
                   "in": false,
                   "label": "out 2",
@@ -127,6 +138,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-out 2",
                   "parent": [Circular],
                   "selected": false,
@@ -183,6 +195,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
@@ -190,12 +203,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
@@ -203,12 +218,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
@@ -216,6 +233,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
@@ -230,6 +248,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
+            "addMouseDownHandler": [Function],
             "id": "block1-out 1",
             "in": false,
             "label": "out 1",
@@ -237,6 +256,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
+            "mouseDownHandler": [Function],
             "name": "block1-out 1",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
@@ -251,6 +271,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "locked": false,
               "ports": Object {
                 "block1-in 1": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-in 1",
                   "in": true,
                   "label": "in 1",
@@ -258,6 +279,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-in 1",
                   "parent": [Circular],
                   "selected": false,
@@ -265,6 +287,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 },
                 "block1-out 1": [Circular],
                 "block1-out 2": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-out 2",
                   "in": false,
                   "label": "out 2",
@@ -272,6 +295,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-out 2",
                   "parent": [Circular],
                   "selected": false,
@@ -305,6 +329,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "locked": false,
             "ports": Object {
               "block1-in 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-in 1",
                 "in": true,
                 "label": "in 1",
@@ -312,12 +337,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-in 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 1": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 1",
                 "in": false,
                 "label": "out 1",
@@ -325,12 +352,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 1",
                 "parent": [Circular],
                 "selected": false,
                 "type": "default",
               },
               "block1-out 2": MalcolmPortModel {
+                "addMouseDownHandler": [Function],
                 "id": "block1-out 2",
                 "in": false,
                 "label": "out 2",
@@ -338,6 +367,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                 "listeners": Object {},
                 "locked": false,
                 "maximumLinks": undefined,
+                "mouseDownHandler": [Function],
                 "name": "block1-out 2",
                 "parent": [Circular],
                 "selected": false,
@@ -352,6 +382,7 @@ exports[`BlockWidget block renders correctly 1`] = `
         }
         port={
           MalcolmPortModel {
+            "addMouseDownHandler": [Function],
             "id": "block1-out 2",
             "in": false,
             "label": "out 2",
@@ -359,6 +390,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "listeners": Object {},
             "locked": false,
             "maximumLinks": undefined,
+            "mouseDownHandler": [Function],
             "name": "block1-out 2",
             "parent": BlockNodeModel {
               "addBlockPort": [Function],
@@ -373,6 +405,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "locked": false,
               "ports": Object {
                 "block1-in 1": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-in 1",
                   "in": true,
                   "label": "in 1",
@@ -380,12 +413,14 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-in 1",
                   "parent": [Circular],
                   "selected": false,
                   "type": "default",
                 },
                 "block1-out 1": MalcolmPortModel {
+                  "addMouseDownHandler": [Function],
                   "id": "block1-out 1",
                   "in": false,
                   "label": "out 1",
@@ -393,6 +428,7 @@ exports[`BlockWidget block renders correctly 1`] = `
                   "listeners": Object {},
                   "locked": false,
                   "maximumLinks": undefined,
+                  "mouseDownHandler": [Function],
                   "name": "block1-out 1",
                   "parent": [Circular],
                   "selected": false,

@@ -137,9 +137,53 @@ const shiftIsPressed = (malcolmState, payload) => ({
   },
 });
 
+const findPort = (blocks, id) => {
+  const path = id.split('-');
+  const block = blocks.find(b => b.mri === path[0]);
+  const port = block.ports.find(p => p.label === path[1]);
+
+  return port;
+};
+
+const selectPortForLink = (malcolmState, portId, start) => {
+  let { startPortForLink, endPortForLink } = malcolmState.layoutState;
+
+  if (startPortForLink && endPortForLink) {
+    // Reset
+    startPortForLink = undefined;
+    endPortForLink = undefined;
+  }
+
+  startPortForLink = start ? portId : startPortForLink;
+  endPortForLink = !start ? portId : undefined;
+
+  const { layout } = malcolmState;
+
+  if (startPortForLink && endPortForLink) {
+    layout.blocks = [...layout.blocks];
+    const startPort = findPort(layout.blocks, startPortForLink);
+    const endPort = findPort(layout.blocks, endPortForLink);
+
+    const inputPort = startPort.input ? startPort : endPort;
+    const outputPort = startPort.input ? endPort : startPort;
+    inputPort.value = outputPort.tag;
+  }
+
+  return {
+    ...malcolmState,
+    layout,
+    layoutState: {
+      ...malcolmState.layoutState,
+      startPortForLink,
+      endPortForLink,
+    },
+  };
+};
+
 export default {
   processLayout,
   updateBlockPosition,
   selectBlock,
   shiftIsPressed,
+  selectPortForLink,
 };

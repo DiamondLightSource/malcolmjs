@@ -61,6 +61,9 @@ class BlockPortWidget extends BaseWidget {
         {...this.getProps()}
         data-name={this.props.port.name}
         data-nodeid={this.props.port.getParent().getID()}
+        role="presentation"
+        onMouseDown={e => this.props.port.mouseDownHandler(e, true)}
+        onMouseUp={e => this.props.port.mouseDownHandler(e, false)}
       />
     );
     const label = (

@@ -9,6 +9,7 @@ import {
   malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
 import { buildDiagramEngine } from './layout.builder';
+import { selectPort } from '../malcolm/actions/layout.action';
 
 require('storm-react-diagrams/dist/style.min.css');
 
@@ -42,12 +43,19 @@ class Layout extends React.Component {
   }
 
   render() {
-    const { blocks, selectedBlocks, url, clickHandler } = this.props;
+    const {
+      blocks,
+      selectedBlocks,
+      url,
+      clickHandler,
+      portMouseDown,
+    } = this.props;
     const engine = buildDiagramEngine(
       blocks,
       selectedBlocks,
       url,
-      clickHandler
+      clickHandler,
+      portMouseDown
     );
     return <DiagramWidget diagramEngine={engine} maxNumberPointsPerLink={0} />;
   }
@@ -60,6 +68,7 @@ Layout.propTypes = {
   clickHandler: PropTypes.func.isRequired,
   shiftPressed: PropTypes.bool.isRequired,
   shiftKeyHandler: PropTypes.func.isRequired,
+  portMouseDown: PropTypes.func.isRequired,
 };
 
 Layout.defaultProps = {};
@@ -100,6 +109,9 @@ export const mapDispatchToProps = dispatch => ({
   },
   shiftKeyHandler: shiftIsDown =>
     dispatch(malcolmLayoutShiftIsPressed(shiftIsDown)),
+  portMouseDown: (portId, start) => {
+    dispatch(selectPort(portId, start));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
