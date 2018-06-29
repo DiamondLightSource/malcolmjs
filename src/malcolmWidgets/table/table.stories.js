@@ -7,6 +7,7 @@ import ContainedTable from './table.stories.container';
 
 // eslint-disable-next-line import/prefer-default-export
 export const harderAttribute = {
+  name: 'layout',
   typeid: 'epics:nt/NTTable:1.0',
   path: ['PANDA', 'layout'],
   labels: ['name', 'mri', 'x', 'y', 'visible'],

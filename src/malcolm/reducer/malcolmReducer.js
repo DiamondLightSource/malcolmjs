@@ -24,6 +24,7 @@ import NavigationReducer, {
 import AttributeReducer from './attribute.reducer';
 import layoutReducer from './layout.reducer';
 import methodReducer from './method.reducer';
+import tableReducer from './table.reducer';
 
 const initialMalcolmState = {
   messagesInFlight: [],
@@ -346,6 +347,7 @@ const updateSocket = (state, payload) => {
 const malcolmReducer = (state = initialMalcolmState, action) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
+  updatedState = tableReducer(updatedState, action);
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(updatedState, action);
