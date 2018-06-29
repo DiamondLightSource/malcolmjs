@@ -1,3 +1,4 @@
+import configureStore from 'redux-mock-store';
 import BlockUtils from './blockUtils';
 
 const buildAttribute = (name, tags = []) => ({
@@ -29,6 +30,20 @@ describe('Block Utilities', () => {
 
   it('findAttribute returns undefined if block is not found', () => {
     const attribute = BlockUtils.findAttribute(blocks, 'not a block', 'layout');
+    expect(attribute).toBeUndefined();
+  });
+
+  it('findAttributeIndex finds attribute in matching block', () => {
+    const attribute = BlockUtils.findAttributeIndex(blocks, 'block1', 'layout');
+    expect(attribute).toEqual(0);
+  });
+
+  it('findAttributeIndex returns undefined if block is not found', () => {
+    const attribute = BlockUtils.findAttributeIndex(
+      blocks,
+      'not a block',
+      'layout'
+    );
     expect(attribute).toBeUndefined();
   });
 
@@ -113,5 +128,11 @@ describe('Block Utilities', () => {
 
   it('attributeHasTag returns false if no tags', () => {
     expect(BlockUtils.attributeHasTag({ meta: {} }, 'tag3')).toBeFalsy();
+  });
+
+  it('sets 404 flag if error message for failed block load', () => {
+    const originalRequest = { path: ['block1', 'meta'] };
+    const store = configureStore()({ malcolm: { blocks: { block1: {} } } });
+    BlockUtils.didBlockLoadFail(originalRequest, store);
   });
 });

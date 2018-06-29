@@ -1,3 +1,14 @@
+import { malcolmSetFlag } from './malcolmActionCreators';
+
+const didBlockLoadFail = (originalRequest, store) => {
+  if (
+    originalRequest.path.slice(-1)[0] === 'meta' &&
+    !store.getState().malcolm.blocks[originalRequest.path[0]].attributes
+  ) {
+    store.dispatch(malcolmSetFlag([originalRequest.path[0]], 'loading', 404));
+  }
+};
+
 const findBlock = (blocks, blockName) => blocks && blocks[blockName];
 
 const findAttribute = (blocks, blockName, attributeName) => {
@@ -47,4 +58,5 @@ export default {
   findAttributeIndex,
   findAttributesWithTag,
   attributeHasTag,
+  didBlockLoadFail,
 };

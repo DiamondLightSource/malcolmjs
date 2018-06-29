@@ -173,6 +173,16 @@ function updateRootBlock(state, payload) {
 }
 
 function setFlag(state, path, flagType, flagState) {
+  if (path.length === 1) {
+    const blocks = { ...state.blocks };
+    const block = { ...blocks[path[0]] };
+    block[flagType] = flagState;
+    blocks[path[0]] = block;
+    return {
+      ...state,
+      blocks,
+    };
+  }
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -206,6 +216,7 @@ function setFlag(state, path, flagType, flagState) {
       blocks,
     };
   }
+
   return state;
 }
 
