@@ -13,15 +13,16 @@ class BlockNodeModel extends NodeModel {
     this.addClickHandler = this.addClickHandler.bind(this);
   }
 
-  addBlockPort(port) {
-    return this.addPort(
-      new MalcolmPortModel(
-        port.input,
-        `${this.id}-${port.label}`,
-        port.label,
-        `${this.id}-${port.label}`
-      )
+  addBlockPort(port, portMouseDown) {
+    const newPort = new MalcolmPortModel(
+      port.input,
+      `${this.id}-${port.label}`,
+      port.label,
+      `${this.id}-${port.label}`
     );
+
+    newPort.addMouseDownHandler(portMouseDown);
+    return this.addPort(newPort);
   }
 
   addIcon(icon) {

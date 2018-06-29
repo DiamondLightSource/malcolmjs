@@ -5,25 +5,43 @@ import MiddlePanel from './middlePanel.container';
 
 describe('MalcolmMiddlePanel', () => {
   let shallow;
+  let state;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
-  });
-
-  it('renders correctly', () => {
-    const state = {
+    state = {
       malcolm: {
         parentBlock: 'test1',
         mainAttribute: 'layout',
         layout: {
           blocks: [],
         },
+        blocks: {
+          test1: {
+            attributes: [
+              {
+                name: 'layout',
+                meta: {
+                  tags: ['widget:flowgraph'],
+                },
+              },
+              {
+                name: 'health',
+                meta: {
+                  tags: ['widget:textupdate'],
+                },
+              },
+            ],
+          },
+        },
       },
       viewState: {
         openParentPanel: true,
       },
     };
+  });
 
+  it('renders correctly', () => {
     const mockStore = configureStore();
 
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
@@ -31,17 +49,7 @@ describe('MalcolmMiddlePanel', () => {
   });
 
   it('renders a container only if the mainAttribute is not layout', () => {
-    const state = {
-      malcolm: {
-        mainAttribute: 'health',
-        layout: {
-          blocks: [],
-        },
-      },
-      viewState: {
-        openParentPanel: true,
-      },
-    };
+    state.malcolm.mainAttribute = 'health';
 
     const mockStore = configureStore();
 

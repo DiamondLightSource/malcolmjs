@@ -54,8 +54,15 @@ const widgetDefaultValues = {
 const buildIOComponent = (input, props, isOutput) => {
   const { tags } = input[1];
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
-  const setDisabled = props.methodPending || !input[1].writeable;
-  const isErrorState = props.methodErrored;
+  const flags = {
+    isDisabled: props.methodPending || !input[1].writeable,
+    isErrorState: props.methodErrored,
+    isDirty: props.dirtyInputs[input[0]],
+  };
+  const updateStoreOnEveryValueChange = true;
+
+  const parameterMeta = {};
+
   const defaultValue =
     props.defaultValues[input[0]] !== undefined
       ? props.defaultValues[input[0]].toString()
@@ -67,26 +74,22 @@ const buildIOComponent = (input, props, isOutput) => {
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };
+  const setFlag = (path, flagName, isDirty) => {
+    props.updateInput(path, input[0], { isDirty });
+  };
 
   if (widgetTag !== -1) {
     return selectorFunction(
       widgetTag,
-      inputValue,
-      setDisabled,
-      isErrorState,
-      props.dirtyInputs[input[0]],
-      submitHandler,
-      (path, flagName, isDirty) => {
-        props.updateInput(path, input[0], { isDirty });
-      },
       props.methodPath,
-      {
-        colorLED: props.theme.palette.primary.light,
-        missingAttribute: props.classes.missingAttribute,
-      },
-      {},
+      inputValue,
+      submitHandler,
+      flags,
+      setFlag,
+      props.theme.palette.primary.light,
+      parameterMeta,
       false,
-      true
+      updateStoreOnEveryValueChange
     );
   }
   return null;

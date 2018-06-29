@@ -9,17 +9,22 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-/*
-import { connect } from 'react-redux';
+import TableFooter from '@material-ui/core/TableFooter';
 
-import blockUtils from '../../malcolm/blockUtils';
-import {malcolmPutAction, malcolmSetPending} from "../../malcolm/malcolmActionCreators";
-*/
-import WidgetSelector, { getWidgetTags } from './widgetSelector';
+import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
+  headerLayout: {
+    tableLayout: 'fixed',
+    width: 'calc(100% - 15px)',
+  },
   tableLayout: {
     tableLayout: 'fixed',
+  },
+  tableBody: {
+    overflowY: 'auto',
+    height: 'calc(100% - 75px)',
+    width: '100%',
   },
   rowFormat: {
     height: '30px',
@@ -39,18 +44,25 @@ const WidgetTable = props => {
   if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
     return null;
   }
-  const rowChangeHandler = (rowPath, value) => {
+
+  const values =
+    props.localState === undefined
+      ? props.attribute.value
+      : props.localState.value;
+  const columnLabels = Object.keys(props.attribute.meta.elements);
+  const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
-    props.attribute.labels.forEach(label => {
-      rowValue[label] = props.attribute.value[label][rowPath.row];
+    columnLabels.forEach(label => {
+      rowValue[label] = values[label][rowPath.row];
       return 0;
     });
-    rowValue[rowPath.label] = value;
-    props.eventHandler(props.attribute.path, rowValue);
+    rowValue[rowPath.label] = newValue;
+    props.eventHandler(props.attribute.path, rowValue, rowPath.row);
   };
-  const columnWidgetTags = getWidgetTags(props.attribute);
-  const rowNames = props.attribute.value[props.attribute.labels[0]];
-  const columnHeadings = props.attribute.labels.map((label, column) => (
+
+  const columnWidgetTags = getTableWidgetTags(props.attribute);
+  const rowNames = values[columnLabels[0]];
+  const columnHeadings = columnLabels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
@@ -60,35 +72,50 @@ const WidgetTable = props => {
     </TableCell>
   ));
   return (
-    <Table className={props.classes.tableLayout}>
-      <TableHead>
-        <TableRow className={props.classes.rowFormat}>
-          {columnHeadings}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {rowNames.map((name, row) => (
-          <TableRow className={props.classes.rowFormat} key={row}>
-            {props.attribute.labels.map((label, column) => (
-              <TableCell
-                className={props.classes.textBody}
-                padding="none"
-                key={[row, column]}
-              >
-                <WidgetSelector
-                  columnWidgetTag={columnWidgetTags[column]}
-                  value={props.attribute.value[label][row]}
-                  rowPath={{ label, row, column }}
-                  rowChangeHandler={rowChangeHandler}
-                  columnMeta={props.attribute.meta.elements[label]}
-                  setFlag={props.setFlag}
-                />
-              </TableCell>
+    <div>
+      <Table className={props.classes.headerLayout}>
+        <TableHead>
+          <TableRow className={props.classes.rowFormat}>
+            {columnHeadings}
+          </TableRow>
+        </TableHead>
+      </Table>
+      <div className={props.classes.tableBody}>
+        <Table className={props.classes.tableLayout}>
+          <TableBody>
+            {rowNames.map((name, row) => (
+              <TableRow className={props.classes.rowFormat} key={row}>
+                {columnLabels.map((label, column) => (
+                  <TableCell
+                    className={props.classes.textBody}
+                    padding="none"
+                    key={[row, column]}
+                  >
+                    <WidgetSelector
+                      columnWidgetTag={columnWidgetTags[column]}
+                      value={values[label][row]}
+                      rowPath={{ label, row, column }}
+                      rowChangeHandler={rowChangeHandler}
+                      columnMeta={props.attribute.meta.elements[label]}
+                      setFlag={props.setFlag}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <Table className={props.classes.headerLayout}>
+        <TableFooter>
+          <TableRow className={props.classes.rowFormat}>
+            {props.footerItems.map((item, key) => (
+              <TableCell key={key}>{item}</TableCell>
             ))}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableFooter>
+      </Table>
+    </div>
   );
 };
 
@@ -111,7 +138,12 @@ WidgetTable.propTypes = {
     }),
     unableToProcess: PropTypes.bool,
   }).isRequired,
+  localState: PropTypes.shape({
+    value: PropTypes.shape({}),
+  }),
   classes: PropTypes.shape({
+    tableBody: PropTypes.string,
+    headerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
     textBody: PropTypes.string,
@@ -120,32 +152,11 @@ WidgetTable.propTypes = {
   eventHandler: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,
+  footerItems: PropTypes.arrayOf(PropTypes.node),
 };
 
-/*
-const mapStateToProps = (state, ownProps) => {
-  let attribute;
-  if (ownProps.attributeName && ownProps.blockName) {
-    attribute = blockUtils.findAttribute(
-      state.malcolm.blocks,
-      ownProps.blockName,
-      ownProps.attributeName
-    );
-  }
-  return {
-    attribute,
-  };
+WidgetTable.defaultProps = {
+  localState: undefined,
+  footerItems: [],
 };
-
-const mapDispatchToProps = dispatch => ({
-  eventHandler: (path, value) => {
-    dispatch(malcolmSetPending(path, true));
-    dispatch(malcolmPutAction(path, value));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, { withTheme: true })(WidgetTable)
-);
-*/
 export default withStyles(styles, { withTheme: true })(WidgetTable);
