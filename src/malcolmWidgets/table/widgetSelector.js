@@ -12,7 +12,7 @@ export const getTableWidgetTags = attribute =>
     return -1;
   });
 
-const WidgetSelector = props => {
+const TableWidgetSelector = props => {
   const isDisabled = false;
   const isErrorState = false;
   const isDirty = true;
@@ -32,7 +32,7 @@ const WidgetSelector = props => {
   );
 };
 
-WidgetSelector.propTypes = {
+TableWidgetSelector.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -58,4 +58,4 @@ WidgetSelector.propTypes = {
   setFlag: PropTypes.func.isRequired,
 };
 
-export default withTheme()(WidgetSelector);
+export default withTheme()(TableWidgetSelector);

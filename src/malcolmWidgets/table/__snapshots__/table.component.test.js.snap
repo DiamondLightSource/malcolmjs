@@ -63,7 +63,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="0,0"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
@@ -93,7 +93,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="0,1"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
@@ -123,7 +123,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="0,2"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "X Coordinates of child blocks",
@@ -154,7 +154,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="0,3"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Y Coordinates of child blocks",
@@ -185,7 +185,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="0,4"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
@@ -220,7 +220,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="1,0"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
@@ -250,7 +250,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="1,1"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
@@ -280,7 +280,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="1,2"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "X Coordinates of child blocks",
@@ -311,7 +311,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="1,3"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Y Coordinates of child blocks",
@@ -342,7 +342,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="1,4"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
@@ -377,7 +377,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="2,0"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
@@ -407,7 +407,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="2,1"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
@@ -437,7 +437,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="2,2"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "X Coordinates of child blocks",
@@ -468,7 +468,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="2,3"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Y Coordinates of child blocks",
@@ -499,7 +499,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="2,4"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
@@ -534,7 +534,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="3,0"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
@@ -564,7 +564,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="3,1"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
@@ -594,7 +594,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="3,2"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "X Coordinates of child blocks",
@@ -625,7 +625,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="3,3"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Y Coordinates of child blocks",
@@ -656,7 +656,7 @@ exports[`WidgetTable renders correctly 1`] = `
             key="3,4"
             padding="none"
           >
-            <WithTheme(WidgetSelector)
+            <WithTheme(TableWidgetSelector)
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",

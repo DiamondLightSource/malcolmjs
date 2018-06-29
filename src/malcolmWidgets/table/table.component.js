@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 
-import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
+import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
   headerLayout: {
@@ -91,7 +91,7 @@ const WidgetTable = props => {
                     padding="none"
                     key={[row, column]}
                   >
-                    <WidgetSelector
+                    <TableWidgetSelector
                       columnWidgetTag={columnWidgetTags[column]}
                       value={values[label][row]}
                       rowPath={{ label, row, column }}

@@ -1,7 +1,9 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
-import AttributeSelector from './attributeSelector.component';
+import AttributeSelector, {
+  selectorFunction,
+} from './attributeSelector.component';
 
 describe('AttributeSelector', () => {
   let shallow;
@@ -15,10 +17,11 @@ describe('AttributeSelector', () => {
   });
 
   const buildAttribute = (widget, value, choices) => {
+    const tag = widget ? `widget:${widget}` : 'notAWidget';
     if (choices) {
       return {
         meta: {
-          tags: [`widget:${widget}`],
+          tags: [tag],
           writeable: true,
         },
         value,
@@ -27,7 +30,7 @@ describe('AttributeSelector', () => {
     }
     return {
       meta: {
-        tags: [`widget:${widget}`],
+        tags: [tag],
         writeable: true,
       },
       value,
@@ -81,6 +84,11 @@ describe('AttributeSelector', () => {
     runSelectorTest(attribute);
   });
 
+  it('renders empty on no widget tag', () => {
+    const attribute = buildAttribute(null, {});
+    runSelectorTest(attribute);
+  });
+
   it('dispatches change and pending on click', () => {
     const testStore = mockStore({});
     const wrapper = mount(
@@ -108,5 +116,11 @@ describe('AttributeSelector', () => {
     };
     expect(testStore.getActions()[0]).toEqual(pendingAction);
     expect(testStore.getActions()[1]).toEqual(putAction);
+  });
+
+  it('selector Function errors on no widget tag', () => {
+    expect(() => selectorFunction('notAWidget')).toThrow(
+      Error('no widget tag supplied!')
+    );
   });
 });

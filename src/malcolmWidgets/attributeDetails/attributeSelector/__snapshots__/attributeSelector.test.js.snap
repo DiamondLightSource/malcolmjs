@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
+
 exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
 <WithStyles(ButtonAction)
   clickAction={[Function]}

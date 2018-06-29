@@ -1,7 +1,7 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils/index';
 
-import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
+import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../attributeDetails/attributeSelector/attributeSelector.component');
@@ -33,7 +33,7 @@ describe('table widget selector', () => {
   it('calls selector function with right args', () => {
     const shallow = createShallow({ dive: true });
     shallow(
-      <WidgetSelector
+      <TableWidgetSelector
         columnWidgetTag="widget:foo"
         value={0}
         rowPath="test"
