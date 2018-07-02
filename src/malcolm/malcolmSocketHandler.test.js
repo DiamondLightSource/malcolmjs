@@ -28,26 +28,26 @@ describe('malcolm socket handler', () => {
       },
     },
     malcolm: {
-      messagesInFlight: [
-        {
+      messagesInFlight: {
+        1: {
           id: 1,
           path: ['block1', 'meta'],
         },
-        {
+        2: {
           id: 2,
           path: ['block1', 'health'],
         },
-        {
+        3: {
           typeid: 'malcolm:core/Put:1.0',
           id: 3,
           path: ['TestBlock', 'TestAttr'],
           value: null,
         },
-        {
+        4: {
           id: 4,
           path: ['.', 'blocks'],
         },
-      ],
+      },
       blocks: {
         TestBlock: {
           attributes: [
@@ -354,7 +354,7 @@ describe('malcolm socket handler', () => {
     configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
     reconnectingSocketContainer.socket.isReconnection = true;
     reconnectingSocketContainer.socket.onopen();
-    expect(state.malcolm.messagesInFlight).toEqual([]);
+    expect(state.malcolm.messagesInFlight).toEqual({});
     expect(handleLocationChange).toHaveBeenCalledTimes(1);
   });
 });

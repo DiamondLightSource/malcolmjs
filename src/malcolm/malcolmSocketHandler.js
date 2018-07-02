@@ -31,7 +31,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     store.dispatch(malcolmCleanBlocks());
     if (socketContainer.socket.isReconnection) {
       const malcolmState = store.getState().malcolm;
-      malcolmState.messagesInFlight = [];
+      malcolmState.messagesInFlight = {};
       handleLocationChange(
         store.getState().router.location.pathname,
         store.getState().malcolm.blocks,
@@ -62,9 +62,9 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     const data = JSON.parse(event.data);
     switch (data.typeid) {
       case 'malcolm:core/Update:1.0': {
-        const originalRequest = store
-          .getState()
-          .malcolm.messagesInFlight.find(m => m.id === data.id);
+        const originalRequest = store.getState().malcolm.messagesInFlight[
+          data.id
+        ];
 
         if (originalRequest.path.join('') === '.blocks') {
           RootBlockHandler(originalRequest, data.value, store.dispatch);
@@ -74,9 +74,9 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       }
       case 'malcolm:core/Delta:1.0': {
         const { changes } = data;
-        const originalRequest = store
-          .getState()
-          .malcolm.messagesInFlight.find(m => m.id === data.id);
+        const originalRequest = store.getState().malcolm.messagesInFlight[
+          data.id
+        ];
         const attribute = AttributeHandler.processDeltaMessage(
           changes,
           originalRequest,
@@ -115,9 +115,9 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         break;
       }
       case 'malcolm:core/Return:1.0': {
-        const originalRequest = store
-          .getState()
-          .malcolm.messagesInFlight.find(m => m.id === data.id);
+        const originalRequest = store.getState().malcolm.messagesInFlight[
+          data.id
+        ];
         store.dispatch(malcolmHailReturn(data, false));
         store.dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
         break;
@@ -126,10 +126,9 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       case 'malcolm:core/Error:1.0': {
         console.log(data);
         if (data.id !== -1) {
-          const originalRequest = store
-            .getState()
-            .malcolm.messagesInFlight.find(m => m.id === data.id);
-
+          const originalRequest = store.getState().malcolm.messagesInFlight[
+            data.id
+          ];
           BlockUtils.didBlockLoadFail(originalRequest, store);
 
           store.dispatch(

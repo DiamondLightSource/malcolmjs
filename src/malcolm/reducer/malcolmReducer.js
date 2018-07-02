@@ -27,7 +27,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const initialMalcolmState = {
-  messagesInFlight: [],
+  messagesInFlight: {},
   counter: 0,
   navigation: {
     navigationLists: [],
@@ -64,25 +64,25 @@ function updateMessagesInFlight(state, action) {
 
   if (
     action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
-    !state.messagesInFlight.some(
-      m => m.path.join() === action.payload.path.join()
+    !Object.keys(state.messagesInFlight).some(
+      m => state.messagesInFlight[m].path.join() === action.payload.path.join()
     )
   ) {
-    newState.messagesInFlight = [
+    newState.messagesInFlight = {
       ...state.messagesInFlight,
-      { ...action.payload },
-    ];
+    };
+    newState.messagesInFlight[action.payload.id] = action.payload;
   }
 
   return newState;
 }
 
 function stopTrackingMessage(state, action) {
+  const filteredMessages = { ...state.messagesInFlight };
+  filteredMessages[action.payload.id] = undefined;
   return {
     ...state,
-    messagesInFlight: state.messagesInFlight.filter(
-      m => m.id !== action.payload.id
-    ),
+    messagesInFlight: filteredMessages,
   };
 }
 
@@ -115,8 +115,7 @@ function updateBlock(state, payload) {
   let { navigation, layout } = state;
 
   if (payload.delta) {
-    const blockName = state.messagesInFlight.find(m => m.id === payload.id)
-      .path[0];
+    const blockName = state.messagesInFlight[payload.id].path[0];
 
     if (Object.prototype.hasOwnProperty.call(blocks, blockName)) {
       blocks[blockName] = {
@@ -275,7 +274,7 @@ function setDisconnected(state) {
 }
 
 export const setErrorState = (state, id, errorState, errorMessage) => {
-  const matchingMessage = state.messagesInFlight.find(m => m.id === id);
+  const matchingMessage = state.messagesInFlight[id];
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
     const blockName = path[0];
@@ -312,10 +311,7 @@ function handleReturnMessage(state, action) {
 }
 
 const handleErrorMessage = (state, action) => {
-  const matchingMessage = state.messagesInFlight.find(
-    m => m.id === action.payload.id
-  );
-
+  const matchingMessage = state.messagesInFlight[action.payload.id];
   // TODO: fix this......
   let updatedState = { ...state };
   if (
