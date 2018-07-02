@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
@@ -24,7 +25,8 @@ export const selectorFunction = (
   colorLED,
   objectMeta,
   forceUpdate,
-  continuousSend = false
+  continuousSend = false,
+  buttonClickHandler = () => {}
 ) => {
   switch (widgetTag) {
     case 'widget:led':
@@ -71,9 +73,19 @@ export const selectorFunction = (
         />
       );
     case 'widget:flowgraph':
-      return <ButtonAction text="View" clickAction={() => {}} />;
+      return (
+        <ButtonAction
+          text="View"
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
     case 'widget:table':
-      return <ButtonAction text="View" clickAction={() => {}} />;
+      return (
+        <ButtonAction
+          text="View"
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return <BugReport styles={{ color: 'red' }} />;
@@ -91,6 +103,7 @@ const AttributeSelector = props => {
       isDisabled: props.attribute.pending || !props.attribute.meta.writeable,
       isErrorState: props.attribute.errorState,
     };
+    const continuousSend = false;
 
     if (widgetTagIndex !== -1) {
       return selectorFunction(
@@ -102,7 +115,9 @@ const AttributeSelector = props => {
         props.setFlag,
         props.theme.palette.primary.light,
         props.attribute.meta,
-        props.attribute.forceUpdate
+        props.attribute.forceUpdate,
+        continuousSend,
+        props.buttonClickHandler
       );
     }
   }
@@ -118,6 +133,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetFlag(path, flag, state));
+  },
+  buttonClickHandler: path => {
+    dispatch(push(`/gui/${path[0]}/${path[1]}`));
   },
 });
 
@@ -153,6 +171,7 @@ AttributeSelector.propTypes = {
     }),
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
