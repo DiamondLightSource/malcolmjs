@@ -2,7 +2,7 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import MessageSnackBar from './snackbar.component';
-import { malcolmSnackbarState } from '../malcolm/malcolmActionCreators';
+import { snackbarState } from '../viewState/viewState.actions';
 
 describe('MessageSnackBar', () => {
   let shallow;
@@ -57,6 +57,6 @@ describe('MessageSnackBar', () => {
     testStore = mockStore(initialState);
     const wrapper = mount(<MessageSnackBar store={testStore} />);
     wrapper.find('button').simulate('click');
-    expect(testStore.getActions()[0]).toEqual(malcolmSnackbarState(false, ''));
+    expect(testStore.getActions()[0]).toEqual(snackbarState(false, ''));
   });
 });

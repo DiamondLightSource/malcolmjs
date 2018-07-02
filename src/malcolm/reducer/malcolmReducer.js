@@ -5,7 +5,6 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
-  MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
@@ -40,10 +39,6 @@ const initialMalcolmState = {
   parentBlock: undefined,
   childBlock: undefined,
   mainAttribute: undefined,
-  snackbar: {
-    message: '',
-    open: false,
-  },
   layout: {
     blocks: [],
   },
@@ -218,13 +213,6 @@ function setFlag(state, path, flagType, flagState) {
   return state;
 }
 
-function updateSnackbar(state, newSnackbar) {
-  return {
-    ...state,
-    snackbar: { ...newSnackbar },
-  };
-}
-
 function cleanBlocks(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
@@ -387,9 +375,6 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
         updatedState,
         action.payload
       );
-
-    case MalcolmSnackbar:
-      return updateSnackbar(updatedState, action.snackbar);
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);

@@ -4,12 +4,12 @@ import {
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
-  malcolmSnackbarState,
   malcolmCleanBlocks,
   malcolmSetDisconnected,
   malcolmSetFlag,
   malcolmHailReturn,
 } from './malcolmActionCreators';
+import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
 import MalcolmReconnector from './malcolmReconnector';
@@ -20,9 +20,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
 
   socketContainer.socket.onerror = error => {
     const errorString = JSON.stringify(error);
-    store.dispatch(
-      malcolmSnackbarState(true, `WebSocket Error: ${errorString}`)
-    );
+    store.dispatch(snackbarState(true, `WebSocket Error: ${errorString}`));
     console.log(`WebSocket Error: ${errorString}`);
   };
 
@@ -38,7 +36,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         store.dispatch
       );
     }
-    store.dispatch(malcolmSnackbarState(true, `Connected to WebSocket`));
+    store.dispatch(snackbarState(true, `Connected to WebSocket`));
     socketContainer.setConnected(true);
     socketContainer.flush();
   };
@@ -47,13 +45,13 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     console.log('socket disconnected');
     if (socketContainer.socket instanceof MalcolmReconnector) {
       store.dispatch(
-        malcolmSnackbarState(
+        snackbarState(
           true,
           `WebSocket disconnected; attempting to reconnect...`
         )
       );
     } else {
-      store.dispatch(malcolmSnackbarState(true, `WebSocket disconnected`));
+      store.dispatch(snackbarState(true, `WebSocket disconnected`));
     }
     store.dispatch(malcolmSetDisconnected());
   };
@@ -132,7 +130,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           BlockUtils.didBlockLoadFail(originalRequest, store);
 
           store.dispatch(
-            malcolmSnackbarState(
+            snackbarState(
               true,
               `Error in attribute ${
                 originalRequest.path.slice(-1)[0]
@@ -146,7 +144,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           break;
         } else {
           store.dispatch(
-            malcolmSnackbarState(
+            snackbarState(
               true,
               `Error reported by malcolm server: "${data.message}"`
             )
