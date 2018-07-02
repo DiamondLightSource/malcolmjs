@@ -18,6 +18,10 @@ const styles = theme => ({
     tableLayout: 'fixed',
     width: 'calc(100% - 15px)',
   },
+  headerLayoutNoScroll: {
+    tableLayout: 'fixed',
+    width: '100%',
+  },
   tableLayout: {
     tableLayout: 'fixed',
   },
@@ -69,7 +73,13 @@ const WidgetTable = props => {
   ));
   return (
     <div>
-      <Table className={props.classes.headerLayout}>
+      <Table
+        className={
+          rowNames.length > 20
+            ? props.classes.headerLayout
+            : props.classes.headerLayoutNoScroll
+        }
+      >
         <TableHead>
           <TableRow className={props.classes.rowFormat}>
             {columnHeadings}
@@ -139,6 +149,7 @@ WidgetTable.propTypes = {
   }),
   classes: PropTypes.shape({
     tableBody: PropTypes.string,
+    headerLayoutNoScroll: PropTypes.string,
     headerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
