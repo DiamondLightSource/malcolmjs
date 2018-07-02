@@ -26,6 +26,13 @@ exports[`AttributeSelector selects a checkbox correctly 1`] = `
 
 exports[`AttributeSelector selects a comboBox correctly 1`] = `
 <WithStyles(WidgetComboBox)
+  Choices={
+    Array [
+      "1",
+      "2",
+      "3",
+    ]
+  }
   Pending={false}
   Value="1"
   selectEventHandler={[Function]}

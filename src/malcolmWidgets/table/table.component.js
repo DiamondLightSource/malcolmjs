@@ -41,10 +41,6 @@ const styles = theme => ({
 });
 
 const WidgetTable = props => {
-  if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
-    return null;
-  }
-
   const values =
     props.localState === undefined
       ? props.attribute.value

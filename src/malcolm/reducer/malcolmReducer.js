@@ -21,7 +21,7 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import AttributeReducer from './attribute.reducer';
+import AttributeReducer, { updateAttribute } from './attribute.reducer';
 import layoutReducer from './layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
@@ -195,6 +195,7 @@ function setFlag(state, path, flagType, flagState) {
     ) {
       return state;
     }
+    const blocks = { ...state.blocks };
     const attributes = [...state.blocks[blockName].attributes];
 
     const matchingAttribute = attributes.findIndex(
@@ -206,17 +207,13 @@ function setFlag(state, path, flagType, flagState) {
       };
       attributeCopy[flagType] = flagState;
       attributes[matchingAttribute] = attributeCopy;
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
-
-    const blocks = { ...state.blocks };
-    blocks[blockName] = { ...state.blocks[blockName], attributes };
-
     return {
       ...state,
       blocks,
     };
   }
-
   return state;
 }
 
@@ -327,7 +324,7 @@ const handleErrorMessage = (state, action) => {
     matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
   ) {
     // reset the layout
-    updatedState = AttributeReducer.updateAttribute(state, {
+    updatedState = updateAttribute(state, {
       id: action.payload.id,
       delta: true,
     });

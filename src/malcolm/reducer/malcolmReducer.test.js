@@ -250,6 +250,47 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 
+  it('does nothing if block has no attributes yet', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+    const newState = malcolmReducer(state, action);
+    expect(newState).toEqual(state);
+  });
+
+  it('sets flag on block if path is single element array', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.redHerring).toBeDefined();
+    expect(state.blocks.block1.redHerring).toEqual(true);
+  });
+
   it('calls the navigation reducer when path update is received', () => {
     const action = malcolmNavigationPath(['PANDA', 'layout', 'PANDA:TTLIN1']);
 
@@ -346,4 +387,17 @@ describe('malcolm reducer', () => {
     );
     expect(attribute.errorState).toEqual(123);
   });
+
+  /* TODO: this needs to be fixed in the malcolm reducer
+  it('setErrorState resets layout if its PUT returns an error', () => {
+    jest.mock('./attribute.reducer');
+    state.messagesInFlight.push({
+      id: 1,
+      path: ['testBlock', 'layout'],
+    });
+
+    setErrorState(state, 1, 123);
+    expect(updateAttribute).toHaveBeenCalledWith(state, { id: 1, delta: true });
+  });
+  */
 });

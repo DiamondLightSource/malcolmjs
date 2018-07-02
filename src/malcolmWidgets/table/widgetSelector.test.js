@@ -50,7 +50,9 @@ describe('table widget selector', () => {
       { isDirty: true, isDisabled: false, isErrorState: false },
       'anotherFunction',
       '#7986cb',
-      { choices: 'an illusion' }
+      { choices: 'an illusion' },
+      false,
+      true
     );
   });
 });

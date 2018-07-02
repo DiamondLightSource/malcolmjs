@@ -16,6 +16,8 @@ const TableWidgetSelector = props => {
   const isDisabled = false;
   const isErrorState = false;
   const isDirty = true;
+  const forceUpdate = false;
+  const continuousSend = true;
   return selectorFunction(
     props.columnWidgetTag,
     props.rowPath,
@@ -28,7 +30,9 @@ const TableWidgetSelector = props => {
     },
     props.setFlag,
     props.theme.palette.primary.light,
-    props.columnMeta
+    props.columnMeta,
+    forceUpdate,
+    continuousSend
   );
 };
 

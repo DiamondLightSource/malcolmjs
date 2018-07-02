@@ -19,4 +19,5 @@ export const MalcolmMethodUpdate = 'malcolm:methodupdate';
 export const MalcolmUpdateMethodInputType = 'malcolm:updatemethodinput';
 export const MalcolmLocalCopy = 'malcolm:localcopy';
 export const MalcolmTableUpdate = 'malcolm:updatetable';
+export const MalcolmTableFlag = 'malcolm:settableflag';
 export const MalcolmSelectPortType = 'malcolm:selectport';
