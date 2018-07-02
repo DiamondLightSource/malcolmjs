@@ -316,6 +316,7 @@ const handleErrorMessage = (state, action) => {
     m => m.id === action.payload.id
   );
 
+  // TODO: fix this......
   let updatedState = { ...state };
   if (
     matchingMessage &&
