@@ -251,7 +251,7 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 
-  it('sets attribute pending', () => {
+  it('set flag sets attribute pending', () => {
     state.blocks.block1 = {
       name: 'block1',
       loading: true,
@@ -282,7 +282,21 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 
-  it('does nothing if block has no attributes yet', () => {
+  it('set flag does nothing if block does not exist', () => {
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+    const newState = malcolmReducer(state, action);
+    expect(newState).toEqual(state);
+  });
+
+  it('set flag does nothing if block has no attributes yet', () => {
     state.blocks.block1 = {
       name: 'block1',
       loading: true,
@@ -301,7 +315,7 @@ describe('malcolm reducer', () => {
     expect(newState).toEqual(state);
   });
 
-  it('does nothing if block has attributes but not specified one', () => {
+  it('set flag does nothing if block has attributes but not specified one', () => {
     state.blocks.block1 = {
       name: 'block1',
       loading: true,
