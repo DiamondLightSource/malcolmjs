@@ -42,9 +42,15 @@ export const updateTableLocal = (state, payload) => {
   const { attributes } = state.blocks[blockName];
   const attribute = { ...attributes[matchingAttributeIndex] };
   if (matchingAttributeIndex >= 0 && attribute.localState !== undefined) {
-    attribute.localState.labels.forEach(label => {
-      attribute.localState.value[label][payload.row] = payload.value[label];
-    });
+    if (payload.value.insertRow) {
+      attribute.localState.labels.forEach(label => {
+        attribute.localState.value[label].splice(payload.row, 0, undefined);
+      });
+    } else {
+      attribute.localState.labels.forEach(label => {
+        attribute.localState.value[label][payload.row] = payload.value[label];
+      });
+    }
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }

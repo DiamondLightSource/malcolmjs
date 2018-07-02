@@ -21,6 +21,7 @@ exports[`AttributeSelector selects a checkbox correctly 1`] = `
   CheckState={true}
   Pending={false}
   checkEventHandler={[Function]}
+  isUndefined={false}
 />
 `;
 

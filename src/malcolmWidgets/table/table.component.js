@@ -4,6 +4,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import IconButton from '@material-ui/core/IconButton';
+import { Add } from '@material-ui/icons';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -33,6 +35,11 @@ const styles = theme => ({
   rowFormat: {
     height: '30px',
   },
+  incompleteRowFormat: {
+    backgroundColor: emphasize(theme.palette.background.paper, 0.5),
+    textAlign: 'Center',
+    padding: '2px',
+  },
   textHeadings: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.3),
     textAlign: 'Center',
@@ -59,7 +66,6 @@ const WidgetTable = props => {
     rowValue[rowPath.label] = newValue;
     props.eventHandler(props.attribute.path, rowValue, rowPath.row);
   };
-
   const columnWidgetTags = getTableWidgetTags(props.attribute);
   const rowNames = values[columnLabels[0]];
   const columnHeadings = columnLabels.map((label, column) => (
@@ -109,6 +115,26 @@ const WidgetTable = props => {
                 ))}
               </TableRow>
             ))}
+            {props.attribute.meta.writeable ? (
+              <TableRow
+                className={props.classes.rowFormat}
+                key={rowNames.length}
+              >
+                <TableCell
+                  className={props.classes.incompleteRowFormat}
+                  padding="none"
+                  key={[rowNames.length, 0]}
+                >
+                  <IconButton
+                    onClick={() =>
+                      props.addRow(props.attribute.path, rowNames.length)
+                    }
+                  >
+                    <Add />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ) : null}
           </TableBody>
         </Table>
       </div>
@@ -138,6 +164,7 @@ WidgetTable.propTypes = {
       severity: PropTypes.number,
     }),
     meta: PropTypes.shape({
+      writeable: PropTypes.bool.isRequired,
       label: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
       elements: PropTypes.shape({}),
@@ -146,6 +173,7 @@ WidgetTable.propTypes = {
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.shape({}),
+    hasIncompleteRow: PropTypes.bool,
   }),
   classes: PropTypes.shape({
     tableBody: PropTypes.string,
@@ -155,8 +183,10 @@ WidgetTable.propTypes = {
     textHeadings: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
+    incompleteRowFormat: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  addRow: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),

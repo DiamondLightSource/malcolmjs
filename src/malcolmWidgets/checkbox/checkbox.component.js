@@ -33,6 +33,7 @@ const WidgetCheckbox = props => (
     }}
     value={props.Label}
     disabled={props.Pending}
+    indeterminate={props.isUndefined}
   />
 );
 
@@ -46,11 +47,13 @@ WidgetCheckbox.propTypes = {
     checkBoxRoot: PropTypes.string,
     checkBoxChecked: PropTypes.string,
   }).isRequired,
+  isUndefined: PropTypes.bool,
 };
 
 WidgetCheckbox.defaultProps = {
   Pending: false,
   Label: '',
+  isUndefined: false,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetCheckbox);

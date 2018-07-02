@@ -21,7 +21,10 @@ const TableContainer = props => {
   }
   const footerItems = [
     ...props.footerItems,
-    <ButtonAction clickAction={() => props.copyTable(path)} text="Revert" />,
+    <ButtonAction
+      clickAction={() => props.copyTable(path)}
+      text="Discard changes"
+    />,
     <ButtonAction
       clickAction={() => props.putTable(path, props.attribute.localState.value)}
       text="Submit"
@@ -34,6 +37,7 @@ const TableContainer = props => {
       eventHandler={props.eventHandler}
       setFlag={props.setFlag}
       footerItems={footerItems}
+      addRow={props.addRow}
     />
   );
 };
@@ -55,6 +59,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value, row) => {
     dispatch(malcolmUpdateTable(path, value, row));
+  },
+  addRow: (path, row) => {
+    dispatch(malcolmUpdateTable(path, { insertRow: true }, row));
   },
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetTableFlag(path, flag, state));
@@ -78,6 +85,7 @@ TableContainer.propTypes = {
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
+  addRow: PropTypes.func.isRequired,
   copyTable: PropTypes.func.isRequired,
   putTable: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),

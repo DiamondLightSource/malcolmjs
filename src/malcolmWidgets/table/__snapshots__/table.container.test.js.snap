@@ -2,6 +2,7 @@
 
 exports[`Table container renders correctly 1`] = `
 <TableContainer
+  addRow={[Function]}
   attribute={
     Object {
       "alarm": Object {

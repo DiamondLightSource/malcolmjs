@@ -15,7 +15,7 @@ export const getTableWidgetTags = attribute =>
 const TableWidgetSelector = props => {
   const isDisabled = false;
   const isErrorState = false;
-  const isDirty = true;
+  const isDirty = false;
   const forceUpdate = false;
   const continuousSend = true;
   return selectorFunction(

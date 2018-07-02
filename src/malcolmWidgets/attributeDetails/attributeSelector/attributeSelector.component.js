@@ -41,6 +41,7 @@ export const selectorFunction = (
           CheckState={value}
           Pending={flags.isDisabled}
           checkEventHandler={isChecked => valueHandler(path, isChecked)}
+          isUndefined={value === undefined}
         />
       );
     case 'widget:combo':
@@ -58,7 +59,7 @@ export const selectorFunction = (
       return (
         <WidgetTextInput
           Error={flags.isErrorState}
-          Value={value.toString()}
+          Value={value !== undefined ? value.toString() : '-'}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
           isDirty={flags.isDirty}

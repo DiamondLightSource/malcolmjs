@@ -79,8 +79,8 @@ describe('Table container', () => {
       .find('input')
       .first()
       .simulate('change', { target: { value: 'test' } });
-    expect(testStore.getActions().length).toEqual(2);
-    expect(testStore.getActions()[1]).toEqual(
+    expect(testStore.getActions().length).toEqual(3);
+    expect(testStore.getActions()[2]).toEqual(
       malcolmUpdateTable(
         ['test1', 'layout'],
         {
@@ -117,7 +117,7 @@ describe('Table container', () => {
     );
   });
 
-  it('revert button hooks up correctly', () => {
+  it('add row button hooks up correctly', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
@@ -125,6 +125,21 @@ describe('Table container', () => {
     wrapper
       .find('button')
       .first()
+      .simulate('click');
+    expect(testStore.getActions().length).toEqual(2);
+    expect(testStore.getActions()[1]).toEqual(
+      malcolmUpdateTable(['test1', 'layout'], { insertRow: true }, 4)
+    );
+  });
+
+  it('revert button hooks up correctly', () => {
+    const testStore = mockStore(state);
+    const wrapper = mount(
+      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
+    );
+    wrapper
+      .find('button')
+      .at(1)
       .simulate('click');
     expect(testStore.getActions().length).toEqual(2);
     expect(testStore.getActions()[1]).toEqual(
