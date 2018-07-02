@@ -65,7 +65,9 @@ function updateMessagesInFlight(state, action) {
   if (
     action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
     !Object.keys(state.messagesInFlight).some(
-      m => state.messagesInFlight[m].path.join() === action.payload.path.join()
+      m =>
+        state.messagesInFlight[m] !== undefined &&
+        state.messagesInFlight[m].path.join() === action.payload.path.join()
     )
   ) {
     newState.messagesInFlight = {
