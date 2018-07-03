@@ -22,12 +22,12 @@ describe('attribute reducer', () => {
     processNavigationLists.mockClear();
 
     state = {
-      messagesInFlight: [
-        {
+      messagesInFlight: {
+        1: {
           id: 1,
           path: ['block1', 'layout'],
         },
-      ],
+      },
       blocks: {
         block1: {
           attributes: [

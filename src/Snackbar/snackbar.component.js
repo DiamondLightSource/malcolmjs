@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles/index';
-import { malcolmSnackbarState } from '../malcolm/malcolmActionCreators';
+import { snackbarState } from '../viewState/viewState.actions';
 
 const styles = theme => ({
   snackbarContent: {
@@ -52,12 +52,12 @@ MessageSnackBar.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  open: state.malcolm.snackbar.open,
-  message: state.malcolm.snackbar.message,
+  open: state.viewState.snackbar.open,
+  message: state.viewState.snackbar.message,
 });
 
 const mapDispatchToProps = dispatch => ({
-  handleClose: () => dispatch(malcolmSnackbarState(false, '')),
+  handleClose: () => dispatch(snackbarState(false, '')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
