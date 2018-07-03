@@ -15,45 +15,30 @@ describe('MessageSnackBar', () => {
     mockStore = configureStore();
     mount = createMount();
     shallow = createShallow({ dive: true });
-  });
-
-  it('renders open', () => {
     initialState = {
-      malcolm: {
+      viewState: {
         snackbar: {
           open: true,
           message: 'TEST',
         },
       },
     };
+  });
+
+  it('renders open', () => {
     testStore = mockStore(initialState);
     const wrapper = shallow(<MessageSnackBar store={testStore} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('renders hidden', () => {
-    initialState = {
-      malcolm: {
-        snackbar: {
-          open: false,
-          message: 'TEST',
-        },
-      },
-    };
+    initialState.viewState.snackbar.open = false;
     testStore = mockStore(initialState);
     const wrapper = shallow(<MessageSnackBar store={testStore} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('dispatches close', () => {
-    initialState = {
-      malcolm: {
-        snackbar: {
-          open: true,
-          message: 'TEST',
-        },
-      },
-    };
     testStore = mockStore(initialState);
     const wrapper = mount(<MessageSnackBar store={testStore} />);
     wrapper.find('button').simulate('click');
