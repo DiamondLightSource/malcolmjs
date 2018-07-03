@@ -42,7 +42,7 @@ describe('SMG screenshots', () => {
       .get('[data-cy=navmenu]')
       .first()
       .click();
-    cy.screenshot('navcontrol children', {
+    cy.screenshot('navcontrol-children', {
       clip: { x: 360, y: 0, width: 450, height: 300 },
     });
   });

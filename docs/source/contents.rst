@@ -19,6 +19,7 @@ Contents
     SMG/architectural_decision_record
     SMG/sequence_diagrams
     SMG/setting_up_a_dev_environment
+    SMG/code_structure
     SMG/maintenance
     SMG/deployment
     SMG/troubleshooting
