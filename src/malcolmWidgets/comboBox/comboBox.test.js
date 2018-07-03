@@ -27,7 +27,7 @@ describe('WidgetComboBox', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('calls check', () => {
+  it('calls change', () => {
     const eventAction = jest.fn();
     const wrapper = mount(
       <WidgetComboBox

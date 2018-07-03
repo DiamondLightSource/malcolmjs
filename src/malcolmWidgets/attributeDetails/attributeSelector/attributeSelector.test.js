@@ -1,7 +1,9 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
-import AttributeSelector from './attributeSelector.component';
+import AttributeSelector, {
+  selectorFunction,
+} from './attributeSelector.component';
 
 describe('AttributeSelector', () => {
   let shallow;
@@ -15,19 +17,20 @@ describe('AttributeSelector', () => {
   });
 
   const buildAttribute = (widget, value, choices) => {
+    const tag = widget ? `widget:${widget}` : 'notAWidget';
     if (choices) {
       return {
         meta: {
-          tags: [`widget:${widget}`],
+          tags: [tag],
           writeable: true,
+          choices,
         },
         value,
-        choices,
       };
     }
     return {
       meta: {
-        tags: [`widget:${widget}`],
+        tags: [tag],
         writeable: true,
       },
       value,
@@ -81,7 +84,12 @@ describe('AttributeSelector', () => {
     runSelectorTest(attribute);
   });
 
-  it('dispatches change and pending on click', () => {
+  it('renders empty on no widget tag', () => {
+    const attribute = buildAttribute(null, {});
+    runSelectorTest(attribute);
+  });
+
+  it('dispatches change and pending on click correctly for checkbox', () => {
     const testStore = mockStore({});
     const wrapper = mount(
       <AttributeSelector
@@ -108,5 +116,63 @@ describe('AttributeSelector', () => {
     };
     expect(testStore.getActions()[0]).toEqual(pendingAction);
     expect(testStore.getActions()[1]).toEqual(putAction);
+  });
+
+  it('dispatches change and pending on click correctly for combobox', () => {
+    const testStore = mockStore({});
+    const wrapper = mount(
+      <AttributeSelector
+        attribute={buildAttribute('combo', '2', ['1', '2', '3'])}
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('option')
+      .first()
+      .simulate('change');
+    const pendingAction = {
+      payload: {
+        path: undefined,
+        flagType: 'pending',
+        flagState: true,
+      },
+      type: 'malcolm:attributeflag',
+    };
+    const putAction = {
+      payload: {
+        path: undefined,
+        typeid: 'malcolm:core/Put:1.0',
+        value: '1',
+      },
+      type: 'malcolm:send',
+    };
+    expect(testStore.getActions()[0]).toEqual(pendingAction);
+    expect(testStore.getActions()[1]).toEqual(putAction);
+  });
+
+  it('dispatches dirty on focus for textipnut', () => {
+    const testStore = mockStore({});
+    const wrapper = mount(
+      <AttributeSelector
+        attribute={buildAttribute('textinput', {})}
+        store={testStore}
+      />
+    );
+    wrapper.find('input').simulate('focus');
+    const dirtyAction = {
+      payload: {
+        path: undefined,
+        flagType: 'dirty',
+        flagState: true,
+      },
+      type: 'malcolm:attributeflag',
+    };
+    expect(testStore.getActions()[0]).toEqual(dirtyAction);
+  });
+
+  it('selector Function errors on no widget tag', () => {
+    expect(() => selectorFunction('notAWidget')).toThrow(
+      Error('no widget tag supplied!')
+    );
   });
 });

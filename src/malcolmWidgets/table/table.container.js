@@ -7,6 +7,7 @@ import ButtonAction from '../buttonAction/buttonAction.component';
 import blockUtils from '../../malcolm/blockUtils';
 import {
   malcolmUpdateTable,
+  malcolmSetTableFlag,
   malcolmSetFlag,
   malcolmCopyValue,
   malcolmPutAction,
@@ -56,7 +57,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmUpdateTable(path, value, row));
   },
   setFlag: (path, flag, state) => {
-    dispatch(malcolmSetFlag(path, flag, state));
+    dispatch(malcolmSetTableFlag(path, flag, state));
   },
   copyTable: path => {
     dispatch(malcolmCopyValue(path));

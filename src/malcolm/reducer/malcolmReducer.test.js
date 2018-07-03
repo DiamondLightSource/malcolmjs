@@ -3,6 +3,7 @@ import {
   malcolmNewBlockAction,
   malcolmNavigationPath,
 } from '../malcolmActionCreators';
+import { registerSocketAndConnect } from '../actions/socket.actions';
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
@@ -250,6 +251,119 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 
+  it('set flag sets attribute pending', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+      attributes: [
+        {
+          name: 'health',
+          loading: true,
+          path: ['block1', 'health'],
+          pending: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+        flagType: 'pending',
+        flagState: true,
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.attributes.length).toEqual(1);
+    expect(state.blocks.block1.attributes[0].name).toEqual('health');
+    expect(state.blocks.block1.attributes[0].pending).toEqual(true);
+  });
+
+  it('set flag does nothing if block does not exist', () => {
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+    const newState = malcolmReducer(state, action);
+    expect(newState).toEqual(state);
+  });
+
+  it('set flag does nothing if block has no attributes yet', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'health'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+    const newState = malcolmReducer(state, action);
+    expect(newState).toEqual(state);
+  });
+
+  it('set flag does nothing if block has attributes but not specified one', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+      attributes: [
+        {
+          name: 'health',
+          loading: true,
+          path: ['block1', 'health'],
+          pending: false,
+        },
+      ],
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1', 'layout'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+    const newState = malcolmReducer(state, action);
+    expect(newState).toEqual(state);
+  });
+
+  it('sets flag on block if path is single element array', () => {
+    state.blocks.block1 = {
+      name: 'block1',
+      loading: true,
+    };
+
+    const action = {
+      type: MalcolmAttributeFlag,
+      payload: {
+        id: 1,
+        path: ['block1'],
+        flagType: 'redHerring',
+        flagState: true,
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.redHerring).toBeDefined();
+    expect(state.blocks.block1.redHerring).toEqual(true);
+  });
+
   it('calls the navigation reducer when path update is received', () => {
     const action = malcolmNavigationPath(['PANDA', 'layout', 'PANDA:TTLIN1']);
 
@@ -323,6 +437,30 @@ describe('malcolm reducer', () => {
     expect(state.blocks['.blocks'].children).toEqual(blocks);
   });
 
+  it('updates socket on socket connect actions', () => {
+    const messages = [];
+    const dummyReconnectorSocket = {
+      socket: {
+        url: '',
+        connect: jest.fn(),
+        send: payload => {
+          messages.push(payload);
+        },
+        isConnected: false,
+      },
+    };
+    const action = registerSocketAndConnect(
+      dummyReconnectorSocket,
+      'test:8008'
+    );
+    state = malcolmReducer(state, action);
+    expect(dummyReconnectorSocket.socket.url).toEqual('test:8008');
+    expect(dummyReconnectorSocket.socket.connect.mock.calls.length).toEqual(1);
+    expect(dummyReconnectorSocket.socket.connect.mock.calls[0]).toEqual([
+      dummyReconnectorSocket.socket,
+    ]);
+  });
+
   it('setErrorState returns state if message with id is not found', () => {
     let updatedState = setErrorState(state, 1234567, 1);
     expect(updatedState).toBe(state);
@@ -346,4 +484,17 @@ describe('malcolm reducer', () => {
     );
     expect(attribute.errorState).toEqual(123);
   });
+
+  /* TODO: this needs to be fixed in the malcolm reducer
+  it('setErrorState resets layout if its PUT returns an error', () => {
+    jest.mock('./attribute.reducer');
+    state.messagesInFlight.push({
+      id: 1,
+      path: ['testBlock', 'layout'],
+    });
+
+    setErrorState(state, 1, 123);
+    expect(updateAttribute).toHaveBeenCalledWith(state, { id: 1, delta: true });
+  });
+  */
 });

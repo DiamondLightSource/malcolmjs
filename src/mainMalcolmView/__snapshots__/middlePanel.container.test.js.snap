@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not layout 1`] = `
+exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not one of allowed type 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   onClick={[Function]}
@@ -20,7 +20,54 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
 </div>
 `;
 
-exports[`MalcolmMiddlePanel renders correctly 1`] = `
+exports[`MalcolmMiddlePanel renders a container only if the no widget tag found for mainAttribute 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-plainBackground-6"
+  >
+    <br />
+    <br />
+    <br />
+    <img
+      alt=" "
+      src="malcolm-logo.png"
+    />
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-layoutArea-2"
+  >
+    <Connect(Layout) />
+    <div
+      className="MiddlePanelContainer-alarm-3"
+      style={
+        Object {
+          "left": 365,
+          "top": 5,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={4}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
   onClick={[Function]}
@@ -41,6 +88,95 @@ exports[`MalcolmMiddlePanel renders correctly 1`] = `
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={-1}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-layoutArea-2"
+  >
+    <Connect(Layout) />
+    <div
+      className="MiddlePanelContainer-alarm-3"
+      style={
+        Object {
+          "left": 365,
+          "top": 5,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={-1}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-layoutArea-2"
+  >
+    <Connect(Layout) />
+    <div
+      className="MiddlePanelContainer-alarm-3"
+      style={
+        Object {
+          "left": 365,
+          "top": 5,
+        }
+      }
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={-1}
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders table correctly 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  onClick={[Function]}
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-plainBackground-6"
+  >
+    <div
+      className="MiddlePanelContainer-tableContainer-5"
+      style={
+        Object {
+          "left": 365,
+          "transition": "width 1s, left 1s",
+          "width": "calc(100% - 370px)",
+        }
+      }
+    >
+      <Connect(WithTheme(TableContainer))
+        attributeName="layout"
+        blockName="test1"
+        footerItems={
+          Array [
+            <WithTheme(AttributeAlarm)
+              alarmSeverity={-1}
+          />,
+          ]
+        }
       />
     </div>
   </div>

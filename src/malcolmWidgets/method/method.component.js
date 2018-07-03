@@ -78,7 +78,7 @@ const buildIOComponent = (input, props, isOutput) => {
     props.updateInput(path, input[0], { isDirty });
   };
 
-  if (widgetTag !== -1) {
+  if (widgetTag) {
     return selectorFunction(
       widgetTag,
       props.methodPath,

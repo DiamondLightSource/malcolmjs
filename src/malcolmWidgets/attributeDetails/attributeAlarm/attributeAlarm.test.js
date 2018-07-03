@@ -52,4 +52,9 @@ describe('AttributeAlarm', () => {
     );
     expect(wrapper).toMatchSnapshot();
   });
+
+  it('renders blank if no alarm severity specified', () => {
+    const wrapper = shallow(<AttributeAlarm />);
+    expect(wrapper).toMatchSnapshot();
+  });
 });

@@ -9,7 +9,7 @@ import ContainedTable from './table.stories.container';
 export const harderAttribute = {
   name: 'layout',
   typeid: 'epics:nt/NTTable:1.0',
-  path: ['PANDA', 'layout'],
+  path: ['test1', 'layout'],
   labels: ['name', 'mri', 'x', 'y', 'visible'],
   value: {
     typeid: 'malcolm:core/Table:1.0',

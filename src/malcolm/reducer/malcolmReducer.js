@@ -21,7 +21,7 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import AttributeReducer from './attribute.reducer';
+import AttributeReducer, { updateAttribute } from './attribute.reducer';
 import layoutReducer from './layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
@@ -173,6 +173,16 @@ function updateRootBlock(state, payload) {
 }
 
 function setFlag(state, path, flagType, flagState) {
+  if (path.length === 1) {
+    const blocks = { ...state.blocks };
+    const block = { ...blocks[path[0]] };
+    block[flagType] = flagState;
+    blocks[path[0]] = block;
+    return {
+      ...state,
+      blocks,
+    };
+  }
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -185,6 +195,7 @@ function setFlag(state, path, flagType, flagState) {
     ) {
       return state;
     }
+    const blocks = { ...state.blocks };
     const attributes = [...state.blocks[blockName].attributes];
 
     const matchingAttribute = attributes.findIndex(
@@ -196,11 +207,8 @@ function setFlag(state, path, flagType, flagState) {
       };
       attributeCopy[flagType] = flagState;
       attributes[matchingAttribute] = attributeCopy;
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
-
-    const blocks = { ...state.blocks };
-    blocks[blockName] = { ...state.blocks[blockName], attributes };
-
     return {
       ...state,
       blocks,
@@ -308,6 +316,7 @@ const handleErrorMessage = (state, action) => {
     m => m.id === action.payload.id
   );
 
+  // TODO: fix this......
   let updatedState = { ...state };
   if (
     matchingMessage &&
@@ -316,7 +325,7 @@ const handleErrorMessage = (state, action) => {
     matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
   ) {
     // reset the layout
-    updatedState = AttributeReducer.updateAttribute(state, {
+    updatedState = updateAttribute(state, {
       id: action.payload.id,
       delta: true,
     });

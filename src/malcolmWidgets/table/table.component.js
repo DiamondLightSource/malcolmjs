@@ -11,12 +11,16 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 
-import WidgetSelector, { getTableWidgetTags } from './widgetSelector';
+import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
   headerLayout: {
     tableLayout: 'fixed',
     width: 'calc(100% - 15px)',
+  },
+  headerLayoutNoScroll: {
+    tableLayout: 'fixed',
+    width: '100%',
   },
   tableLayout: {
     tableLayout: 'fixed',
@@ -41,10 +45,6 @@ const styles = theme => ({
 });
 
 const WidgetTable = props => {
-  if (!(props.attribute.typeid === 'epics:nt/NTTable:1.0')) {
-    return null;
-  }
-
   const values =
     props.localState === undefined
       ? props.attribute.value
@@ -73,7 +73,13 @@ const WidgetTable = props => {
   ));
   return (
     <div>
-      <Table className={props.classes.headerLayout}>
+      <Table
+        className={
+          rowNames.length > 20
+            ? props.classes.headerLayout
+            : props.classes.headerLayoutNoScroll
+        }
+      >
         <TableHead>
           <TableRow className={props.classes.rowFormat}>
             {columnHeadings}
@@ -91,7 +97,7 @@ const WidgetTable = props => {
                     padding="none"
                     key={[row, column]}
                   >
-                    <WidgetSelector
+                    <TableWidgetSelector
                       columnWidgetTag={columnWidgetTags[column]}
                       value={values[label][row]}
                       rowPath={{ label, row, column }}
@@ -143,6 +149,7 @@ WidgetTable.propTypes = {
   }),
   classes: PropTypes.shape({
     tableBody: PropTypes.string,
+    headerLayoutNoScroll: PropTypes.string,
     headerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,

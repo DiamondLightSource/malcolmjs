@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AttributeAlarm renders blank if no alarm severity specified 1`] = `<div />`;
+
 exports[`AttributeAlarm renders invalid_alarm correctly 1`] = `
 <pure(HighlightOff)
   nativeColor="#303f9f"

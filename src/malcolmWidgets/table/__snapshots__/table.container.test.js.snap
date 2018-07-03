@@ -77,7 +77,7 @@ exports[`Table container renders correctly 1`] = `
       },
       "name": "layout",
       "path": Array [
-        "PANDA",
+        "test1",
         "layout",
       ],
       "timeStamp": Object {

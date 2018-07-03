@@ -5,6 +5,8 @@ import WidgetTable from './table.container';
 import { harderAttribute } from './table.stories';
 import {
   malcolmSetFlag,
+  malcolmSetTableFlag,
+  malcolmUpdateTable,
   malcolmCopyValue,
   malcolmPutAction,
 } from '../../malcolm/malcolmActionCreators';
@@ -45,7 +47,7 @@ describe('Table container', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('dispatches copy action correctly', () => {
+  it('dispatches copy action correctly on first render', () => {
     const testStore = mockStore(state);
     mount(
       <WidgetTable
@@ -59,6 +61,59 @@ describe('Table container', () => {
     expect(testStore.getActions().length).toEqual(1);
     expect(testStore.getActions()[0]).toEqual(
       malcolmCopyValue(['test1', 'layout'])
+    );
+  });
+
+  it('dispatches submit action on change', () => {
+    const testStore = mockStore(state);
+    const wrapper = mount(
+      <WidgetTable
+        blockName="test1"
+        attributeName="layout"
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: 'test' } });
+    expect(testStore.getActions().length).toEqual(2);
+    expect(testStore.getActions()[1]).toEqual(
+      malcolmUpdateTable(
+        ['test1', 'layout'],
+        {
+          mri: 'PANDA:TTLIN1',
+          name: 'TTLIN1',
+          visible: false,
+          x: 'test',
+          y: 0,
+        },
+        0
+      )
+    );
+  });
+
+  it('dispatches set flag on textinput focus', () => {
+    const testStore = mockStore(state);
+    const wrapper = mount(
+      <WidgetTable
+        blockName="test1"
+        attributeName="layout"
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('focus');
+
+    expect(testStore.getActions().length).toEqual(2);
+    expect(testStore.getActions()[1]).toEqual(
+      malcolmSetTableFlag({ column: 2, label: 'x', row: 0 }, 'dirty', true)
     );
   });
 

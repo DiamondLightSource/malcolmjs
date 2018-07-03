@@ -11,6 +11,7 @@ import {
   malcolmHailReturn,
 } from './malcolmActionCreators';
 import { MalcolmAttributeData } from './malcolm.types';
+import BlockUtils from './blockUtils';
 import MalcolmReconnector from './malcolmReconnector';
 import handleLocationChange from './middleware/malcolmRouting';
 
@@ -129,15 +130,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
             .getState()
             .malcolm.messagesInFlight.find(m => m.id === data.id);
 
-          if (
-            originalRequest.path.slice(-1)[0] === 'meta' &&
-            !store.getState().malcolm.blocks[originalRequest.path[0]].attributes
-          ) {
-            const block = store.getState().malcolm.blocks[
-              originalRequest.path[0]
-            ];
-            block.loading = 404;
-          }
+          BlockUtils.didBlockLoadFail(originalRequest, store);
 
           store.dispatch(
             malcolmSnackbarState(
