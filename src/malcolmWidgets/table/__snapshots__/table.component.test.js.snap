@@ -13,37 +13,27 @@ exports[`WidgetTable renders correctly 1`] = `
           className="WidgetTable-textHeadings-7"
           key="0"
           padding="none"
-        >
-          name
-        </WithStyles(TableCell)>
+        />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-7"
           key="1"
           padding="none"
-        >
-          mri
-        </WithStyles(TableCell)>
+        />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-7"
           key="2"
           padding="none"
-        >
-          x
-        </WithStyles(TableCell)>
+        />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-7"
           key="3"
           padding="none"
-        >
-          y
-        </WithStyles(TableCell)>
+        />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-7"
           key="4"
           padding="none"
-        >
-          visible
-        </WithStyles(TableCell)>
+        />
       </WithStyles(TableRow)>
     </WithStyles(TableHead)>
   </WithStyles(Table)>
@@ -682,6 +672,10 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
         </WithStyles(TableRow)>
+      </WithStyles(TableBody)>
+    </WithStyles(Table)>
+    <WithStyles(Table)>
+      <WithStyles(TableFooter)>
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-5"
           key="4"
@@ -698,7 +692,7 @@ exports[`WidgetTable renders correctly 1`] = `
             </WithStyles(IconButton)>
           </WithStyles(TableCell)>
         </WithStyles(TableRow)>
-      </WithStyles(TableBody)>
+      </WithStyles(TableFooter)>
     </WithStyles(Table)>
   </div>
   <WithStyles(Table)

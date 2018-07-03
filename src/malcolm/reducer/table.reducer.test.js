@@ -1,9 +1,16 @@
 import TableReducer from './table.reducer';
 import { MalcolmTableUpdate, MalcolmLocalCopy } from '../malcolm.types';
+import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { harderAttribute } from '../../malcolmWidgets/table/table.stories';
 
 const addRow = (table, columns, row) => {
-  columns.forEach(label => table[label].splice(row, 0, undefined));
+  columns.forEach(label =>
+    table[label].splice(
+      row,
+      0,
+      getDefaultFromType(harderAttribute.meta.elements[label])
+    )
+  );
   return table;
 };
 

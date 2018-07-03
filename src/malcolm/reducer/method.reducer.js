@@ -50,7 +50,7 @@ const updateMethodInput = (state, payload) => {
   };
 };
 
-export const handleMethodReturn = (state, payload) => {
+const handleMethodReturn = (state, payload) => {
   const matchingMessage = state.messagesInFlight.find(m => m.id === payload.id);
   const path = matchingMessage ? matchingMessage.path : undefined;
 

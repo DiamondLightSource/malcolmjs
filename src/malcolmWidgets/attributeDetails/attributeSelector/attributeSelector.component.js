@@ -15,6 +15,25 @@ import {
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 
+export const getDefaultFromType = objectMeta => {
+  switch (objectMeta.typeid) {
+    case 'malcolm:core/BooleanMeta:1.0':
+      return false;
+    case 'malcolm:core/StringMeta:1.0':
+      return 'dog';
+    case 'malcolm:core/NumberMeta:1.0':
+      return 0;
+    case 'malcolm:core/BooleanArrayMeta:1.0':
+      return false;
+    case 'malcolm:core/StringArrayMeta:1.0':
+      return '';
+    case 'malcolm:core/NumberArrayMeta:1.0':
+      return 0;
+    default:
+      return undefined;
+  }
+};
+
 export const selectorFunction = (
   widgetTag,
   path,

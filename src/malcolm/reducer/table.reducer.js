@@ -1,6 +1,7 @@
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
 import { MalcolmLocalCopy, MalcolmTableUpdate } from '../malcolm.types';
+import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const copyAttributeValue = (state, payload) => {
   const blockName = payload.path[0];
@@ -44,7 +45,11 @@ export const updateTableLocal = (state, payload) => {
   if (matchingAttributeIndex >= 0 && attribute.localState !== undefined) {
     if (payload.value.insertRow) {
       attribute.localState.labels.forEach(label => {
-        attribute.localState.value[label].splice(payload.row, 0, undefined);
+        attribute.localState.value[label].splice(
+          payload.row,
+          0,
+          getDefaultFromType(attribute.meta.elements[label])
+        );
       });
     } else {
       attribute.localState.labels.forEach(label => {

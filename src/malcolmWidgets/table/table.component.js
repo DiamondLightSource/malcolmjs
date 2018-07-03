@@ -74,7 +74,7 @@ const WidgetTable = props => {
       padding="none"
       key={column}
     >
-      {label}
+      {props.attribute.meta.elements[label].label}
     </TableCell>
   ));
   return (
@@ -115,6 +115,10 @@ const WidgetTable = props => {
                 ))}
               </TableRow>
             ))}
+          </TableBody>
+        </Table>
+        <Table>
+          <TableFooter>
             {props.attribute.meta.writeable ? (
               <TableRow
                 className={props.classes.rowFormat}
@@ -135,9 +139,10 @@ const WidgetTable = props => {
                 </TableCell>
               </TableRow>
             ) : null}
-          </TableBody>
+          </TableFooter>
         </Table>
       </div>
+
       <Table className={props.classes.headerLayout}>
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
