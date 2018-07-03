@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ButtonAction from '../buttonAction/buttonAction.component';
 
 import blockUtils from '../../malcolm/blockUtils';
@@ -19,8 +20,25 @@ const TableContainer = props => {
   if (props.attribute.localState === undefined) {
     props.copyTable(path);
   }
+
   const footerItems = [
     ...props.footerItems,
+    <Typography>
+      State is edited:{' '}
+      {`${!!(
+        props.attribute.localState &&
+        props.attribute.localState.flags.table.dirty
+      )}`}
+    </Typography>,
+    props.attribute.localState &&
+    props.attribute.localState.flags.table.fresh ? (
+      <Typography>Up to date!</Typography>
+    ) : (
+      <Typography>
+        Update received @{' '}
+        {`${new Date(props.attribute.timeStamp.secondsPastEpoch * 1000)}`}
+      </Typography>
+    ),
     <ButtonAction
       clickAction={() => props.copyTable(path)}
       text="Discard changes"
@@ -63,8 +81,8 @@ const mapDispatchToProps = dispatch => ({
   addRow: (path, row) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true }, row));
   },
-  setFlag: (path, flag, state) => {
-    dispatch(malcolmSetTableFlag(path, flag, state));
+  setFlag: (path, row, flagType, rowFlags) => {
+    dispatch(malcolmSetTableFlag(path, row, flagType, rowFlags));
   },
   copyTable: path => {
     dispatch(malcolmCopyValue(path));
@@ -81,6 +99,16 @@ TableContainer.propTypes = {
   attribute: PropTypes.shape({
     localState: PropTypes.shape({
       value: PropTypes.shape({}),
+      isDirty: PropTypes.bool,
+      flags: PropTypes.shape({
+        table: PropTypes.shape({
+          dirty: PropTypes.bool,
+          fresh: PropTypes.bool,
+        }),
+      }),
+    }),
+    timeStamp: PropTypes.shape({
+      secondsPastEpoch: PropTypes.string,
     }),
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
@@ -89,6 +117,16 @@ TableContainer.propTypes = {
   copyTable: PropTypes.func.isRequired,
   putTable: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
+  /* theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      primary: PropTypes.shape({
+        light: PropTypes.string,
+      }),
+      background: PropTypes.shape({
+        paper: PropTypes.string,
+      }),
+    }),
+  }).isRequired, */
 };
 
 TableContainer.defaultProps = {

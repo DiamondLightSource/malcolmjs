@@ -20,6 +20,9 @@ const styles = theme => ({
     tableLayout: 'fixed',
     width: 'calc(100% - 15px)',
   },
+  footerLayout: {
+    width: '100%',
+  },
   headerLayoutNoScroll: {
     tableLayout: 'fixed',
     width: '100%',
@@ -66,6 +69,22 @@ const WidgetTable = props => {
     rowValue[rowPath.label] = newValue;
     props.eventHandler(props.attribute.path, rowValue, rowPath.row);
   };
+  const rowFlagHandler = (rowPath, flagType, flagState) => {
+    if (props.localState !== undefined) {
+      const rowFlags =
+        props.localState.flags.rows[rowPath.row] === undefined
+          ? {}
+          : props.localState.flags.rows[rowPath.row];
+      if (rowFlags[flagType] === undefined) {
+        rowFlags[flagType] = {};
+      }
+      rowFlags[flagType][rowPath.label] = flagState;
+      rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
+        val => val
+      );
+      props.setFlag(props.attribute.path, rowPath.row, flagType, rowFlags);
+    }
+  };
   const columnWidgetTags = getTableWidgetTags(props.attribute);
   const rowNames = values[columnLabels[0]];
   const columnHeadings = columnLabels.map((label, column) => (
@@ -109,7 +128,7 @@ const WidgetTable = props => {
                       rowPath={{ label, row, column }}
                       rowChangeHandler={rowChangeHandler}
                       columnMeta={props.attribute.meta.elements[label]}
-                      setFlag={props.setFlag}
+                      setFlag={rowFlagHandler}
                     />
                   </TableCell>
                 ))}
@@ -143,7 +162,7 @@ const WidgetTable = props => {
         </Table>
       </div>
 
-      <Table className={props.classes.headerLayout}>
+      <Table className={props.classes.footerLayout}>
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
             {props.footerItems.map((item, key) => (
@@ -178,12 +197,16 @@ WidgetTable.propTypes = {
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.shape({}),
+    flags: PropTypes.shape({
+      rows: PropTypes.shape({}),
+    }),
     hasIncompleteRow: PropTypes.bool,
   }),
   classes: PropTypes.shape({
     tableBody: PropTypes.string,
     headerLayoutNoScroll: PropTypes.string,
     headerLayout: PropTypes.string,
+    footerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
     textBody: PropTypes.string,

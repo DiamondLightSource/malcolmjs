@@ -26,6 +26,13 @@ describe('Table reducer', () => {
   const expectedCopy = {
     value: harderAttribute.value,
     labels: Object.keys(harderAttribute.meta.elements),
+    flags: {
+      rows: [],
+      table: {
+        fresh: true,
+        timeStamp: harderAttribute.timeStamp,
+      },
+    },
   };
 
   const expectedValue = JSON.parse(JSON.stringify(harderAttribute.value));

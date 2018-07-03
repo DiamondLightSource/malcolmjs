@@ -20,7 +20,7 @@ export const getDefaultFromType = objectMeta => {
     case 'malcolm:core/BooleanMeta:1.0':
       return false;
     case 'malcolm:core/StringMeta:1.0':
-      return 'dog';
+      return '';
     case 'malcolm:core/NumberMeta:1.0':
       return 0;
     case 'malcolm:core/BooleanArrayMeta:1.0':

@@ -27,8 +27,19 @@ describe('Table container', () => {
       malcolm: {
         blocks: {
           test1: {
-            attributes: [harderAttribute],
+            attributes: [{ ...harderAttribute, localState: {} }],
           },
+        },
+      },
+    };
+    state.malcolm.blocks.test1.attributes[0].localState = {
+      value: JSON.parse(JSON.stringify(harderAttribute.value)),
+      labels: Object.keys(harderAttribute.meta.elements),
+      flags: {
+        rows: [],
+        table: {
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(harderAttribute.timeStamp)),
         },
       },
     };
@@ -44,10 +55,11 @@ describe('Table container', () => {
         store={mockStore(state)}
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('dispatches copy action correctly on first render', () => {
+    state.malcolm.blocks.test1.attributes[0].localState = undefined;
     const testStore = mockStore(state);
     mount(
       <WidgetTable
@@ -79,8 +91,8 @@ describe('Table container', () => {
       .find('input')
       .first()
       .simulate('change', { target: { value: 'test' } });
-    expect(testStore.getActions().length).toEqual(3);
-    expect(testStore.getActions()[2]).toEqual(
+    expect(testStore.getActions().length).toEqual(2);
+    expect(testStore.getActions()[1]).toEqual(
       malcolmUpdateTable(
         ['test1', 'layout'],
         {
@@ -111,9 +123,12 @@ describe('Table container', () => {
       .first()
       .simulate('focus');
 
-    expect(testStore.getActions().length).toEqual(2);
-    expect(testStore.getActions()[1]).toEqual(
-      malcolmSetTableFlag({ column: 2, label: 'x', row: 0 }, 'dirty', true)
+    expect(testStore.getActions().length).toEqual(1);
+    expect(testStore.getActions()[0]).toEqual(
+      malcolmSetTableFlag(['test1', 'layout'], 0, 'dirty', {
+        _dirty: true,
+        dirty: { x: true },
+      })
     );
   });
 
@@ -126,8 +141,8 @@ describe('Table container', () => {
       .find('button')
       .first()
       .simulate('click');
-    expect(testStore.getActions().length).toEqual(2);
-    expect(testStore.getActions()[1]).toEqual(
+    expect(testStore.getActions().length).toEqual(1);
+    expect(testStore.getActions()[0]).toEqual(
       malcolmUpdateTable(['test1', 'layout'], { insertRow: true }, 4)
     );
   });
@@ -141,16 +156,13 @@ describe('Table container', () => {
       .find('button')
       .at(1)
       .simulate('click');
-    expect(testStore.getActions().length).toEqual(2);
-    expect(testStore.getActions()[1]).toEqual(
+    expect(testStore.getActions().length).toEqual(1);
+    expect(testStore.getActions()[0]).toEqual(
       malcolmCopyValue(['test1', 'layout'])
     );
   });
 
   it('submit button hooks up correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].localState = {
-      value: JSON.parse(JSON.stringify(harderAttribute.value)),
-    };
     const testStore = mockStore(state);
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />

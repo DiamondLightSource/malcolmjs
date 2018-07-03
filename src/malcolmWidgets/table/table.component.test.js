@@ -30,6 +30,17 @@ describe('WidgetTable', () => {
     const wrapper = mount(
       <WidgetTable
         attribute={harderAttribute}
+        localState={{
+          value: harderAttribute.value,
+          labels: Object.keys(harderAttribute.meta.elements),
+          flags: {
+            rows: [],
+            table: {
+              fresh: true,
+              timeStamp: harderAttribute.timeStamp,
+            },
+          },
+        }}
         eventHandler={() => {}}
         setFlag={setFlag}
         addRow={() => {}}
@@ -41,10 +52,28 @@ describe('WidgetTable', () => {
       .simulate('focus');
     expect(setFlag.mock.calls.length).toEqual(1);
     expect(setFlag.mock.calls[0]).toEqual([
-      { column: 2, label: 'x', row: 0 },
+      ['test1', 'layout'],
+      0,
       'dirty',
-      true,
+      { _dirty: true, dirty: { x: true } },
     ]);
+  });
+
+  it('doesnt call set flag on click if no local state defined', () => {
+    const setFlag = jest.fn();
+    const wrapper = mount(
+      <WidgetTable
+        attribute={harderAttribute}
+        eventHandler={() => {}}
+        setFlag={setFlag}
+        addRow={() => {}}
+      />
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('focus');
+    expect(setFlag.mock.calls.length).toEqual(0);
   });
 
   it('calls set value on checkbox click', () => {

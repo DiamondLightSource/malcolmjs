@@ -3,34 +3,34 @@
 exports[`WidgetTable renders correctly 1`] = `
 <div>
   <WithStyles(Table)
-    className="WidgetTable-headerLayoutNoScroll-2"
+    className="WidgetTable-headerLayoutNoScroll-3"
   >
     <WithStyles(TableHead)>
       <WithStyles(TableRow)
-        className="WidgetTable-rowFormat-5"
+        className="WidgetTable-rowFormat-6"
       >
         <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-7"
+          className="WidgetTable-textHeadings-8"
           key="0"
           padding="none"
         />
         <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-7"
+          className="WidgetTable-textHeadings-8"
           key="1"
           padding="none"
         />
         <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-7"
+          className="WidgetTable-textHeadings-8"
           key="2"
           padding="none"
         />
         <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-7"
+          className="WidgetTable-textHeadings-8"
           key="3"
           padding="none"
         />
         <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-7"
+          className="WidgetTable-textHeadings-8"
           key="4"
           padding="none"
         />
@@ -38,18 +38,18 @@ exports[`WidgetTable renders correctly 1`] = `
     </WithStyles(TableHead)>
   </WithStyles(Table)>
   <div
-    className="WidgetTable-tableBody-4"
+    className="WidgetTable-tableBody-5"
   >
     <WithStyles(Table)
-      className="WidgetTable-tableLayout-3"
+      className="WidgetTable-tableLayout-4"
     >
       <WithStyles(TableBody)>
         <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-5"
+          className="WidgetTable-rowFormat-6"
           key="0"
         >
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="0,0"
             padding="none"
           >
@@ -79,7 +79,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="0,1"
             padding="none"
           >
@@ -109,7 +109,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="0,2"
             padding="none"
           >
@@ -140,7 +140,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="0,3"
             padding="none"
           >
@@ -171,7 +171,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="0,4"
             padding="none"
           >
@@ -202,11 +202,11 @@ exports[`WidgetTable renders correctly 1`] = `
           </WithStyles(TableCell)>
         </WithStyles(TableRow)>
         <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-5"
+          className="WidgetTable-rowFormat-6"
           key="1"
         >
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="1,0"
             padding="none"
           >
@@ -236,7 +236,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="1,1"
             padding="none"
           >
@@ -266,7 +266,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="1,2"
             padding="none"
           >
@@ -297,7 +297,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="1,3"
             padding="none"
           >
@@ -328,7 +328,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="1,4"
             padding="none"
           >
@@ -359,11 +359,11 @@ exports[`WidgetTable renders correctly 1`] = `
           </WithStyles(TableCell)>
         </WithStyles(TableRow)>
         <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-5"
+          className="WidgetTable-rowFormat-6"
           key="2"
         >
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="2,0"
             padding="none"
           >
@@ -393,7 +393,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="2,1"
             padding="none"
           >
@@ -423,7 +423,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="2,2"
             padding="none"
           >
@@ -454,7 +454,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="2,3"
             padding="none"
           >
@@ -485,7 +485,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="2,4"
             padding="none"
           >
@@ -516,11 +516,11 @@ exports[`WidgetTable renders correctly 1`] = `
           </WithStyles(TableCell)>
         </WithStyles(TableRow)>
         <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-5"
+          className="WidgetTable-rowFormat-6"
           key="3"
         >
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="3,0"
             padding="none"
           >
@@ -550,7 +550,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="3,1"
             padding="none"
           >
@@ -580,7 +580,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="3,2"
             padding="none"
           >
@@ -611,7 +611,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="3,3"
             padding="none"
           >
@@ -642,7 +642,7 @@ exports[`WidgetTable renders correctly 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-textBody-8"
+            className="WidgetTable-textBody-9"
             key="3,4"
             padding="none"
           >
@@ -677,11 +677,11 @@ exports[`WidgetTable renders correctly 1`] = `
     <WithStyles(Table)>
       <WithStyles(TableFooter)>
         <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-5"
+          className="WidgetTable-rowFormat-6"
           key="4"
         >
           <WithStyles(TableCell)
-            className="WidgetTable-incompleteRowFormat-6"
+            className="WidgetTable-incompleteRowFormat-7"
             key="4,0"
             padding="none"
           >
@@ -696,11 +696,11 @@ exports[`WidgetTable renders correctly 1`] = `
     </WithStyles(Table)>
   </div>
   <WithStyles(Table)
-    className="WidgetTable-headerLayout-1"
+    className="WidgetTable-footerLayout-2"
   >
     <WithStyles(TableFooter)>
       <WithStyles(TableRow)
-        className="WidgetTable-rowFormat-5"
+        className="WidgetTable-rowFormat-6"
       />
     </WithStyles(TableFooter)>
   </WithStyles(Table)>
