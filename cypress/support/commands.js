@@ -41,3 +41,7 @@ Cypress.Commands.add('waitForSnackbarToDisappear', () => {
     .contains('Connected to WebSocket', { timeout: 15000 })
     .should('have.length', 0);
 });
+
+Cypress.Commands.add('waitForDetailsToLoad', () => {
+  cy.contains('Health');
+});

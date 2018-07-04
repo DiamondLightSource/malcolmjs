@@ -2,7 +2,7 @@ describe('User guide screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
-    cy.contains('Health'); // wait for details to load
+    cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
   });
@@ -25,7 +25,7 @@ describe('User guide screenshots', () => {
     cy.screenshot('block-list');
 
     cy.contains('PANDA').click();
-    cy.contains('Health'); // wait for details to load
+    cy.waitForDetailsToLoad();
     cy.screenshot('PANDA-block-details');
 
     cy.screenshot('layout-button', {
@@ -33,7 +33,7 @@ describe('User guide screenshots', () => {
     });
 
     cy.visit('/gui/PANDA/layout');
-    cy.contains('Health');
+    cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('PANDA-layout');
   });

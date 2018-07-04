@@ -2,15 +2,15 @@ describe('SMG screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
-    cy.wait(3000);
-    cy.wait(1000);
+    cy.waitForDetailsToLoad();
+    cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
   });
 
   it('block details', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA');
-    cy.wait(2000);
+    cy.waitForDetailsToLoad();
 
     cy.screenshot('block-details', {
       clip: { x: 0, y: 0, width: 360, height: 675 },
@@ -28,7 +28,7 @@ describe('SMG screenshots', () => {
   it('navbar', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
-    cy.wait(2000);
+    cy.waitForDetailsToLoad();
 
     cy.screenshot('navbar', {
       clip: { x: 360, y: 0, width: 450, height: 65 },
@@ -50,7 +50,8 @@ describe('SMG screenshots', () => {
   it('layout', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
-    cy.wait(2000);
+    cy.waitForDetailsToLoad();
+    cy.waitForSnackbarToDisappear();
 
     cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
     cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
