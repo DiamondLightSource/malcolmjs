@@ -123,7 +123,14 @@ Each NavControl represents a node of the navigation tree that has been previousl
 Layout
 ########
 
-``TODO``
+The layout folder in the code base contains everything related to displaying the layout of Malcolm blocks. In the example below we can see various blocks that each have ports and those ports have links joining them together.
+
+The blocks, ports and links all have folders with corresponding code.
+
+.. figure:: screenshots/layout.png
+    :align: center
+
+    An example of the layout component
 
 
 Malcolm

@@ -46,4 +46,24 @@ describe('SMG screenshots', () => {
       clip: { x: 360, y: 0, width: 450, height: 300 },
     });
   });
+
+  it('layout', () => {
+    cy.viewport(1200, 675);
+    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.wait(2000);
+
+    cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
+    cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
+    cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
+    cy.moveBlock('LVDS output', { x: 850, y: 280 });
+
+    cy
+      .get('[data-cy=closedrawer]')
+      .eq(1)
+      .click();
+
+    cy.screenshot('layout', {
+      clip: { x: 360, y: 65, width: 650, height: 700 },
+    });
+  });
 });

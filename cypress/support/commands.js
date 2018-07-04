@@ -23,3 +23,21 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('moveBlock', (blockName, newLocation) => {
+  cy
+    .contains(blockName)
+    .trigger('mousedown')
+    .trigger('mousemove', { clientX: newLocation.x, clientY: newLocation.y })
+    .trigger('mouseup', { force: true })
+    .click('left');
+
+  cy.wait(1000);
+});
+
+Cypress.Commands.add('waitForSnackbarToDisappear', () => {
+  // wait for the snackbar to disappear
+  cy
+    .contains('Connected to WebSocket', { timeout: 15000 })
+    .should('have.length', 0);
+});

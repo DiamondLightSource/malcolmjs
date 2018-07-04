@@ -2,15 +2,20 @@ describe('User guide screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
-    cy.wait(3000);
-    cy.wait(1000);
+    cy.contains('Health'); // wait for details to load
+    cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
   });
 
   it('starting UI', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/');
-    cy.wait(1000);
+    cy.contains('Select a root node').should('be.visible');
+    cy
+      .get('[data-cy=navmenu]')
+      .first()
+      .should('not.be.disabled');
+    cy.waitForSnackbarToDisappear();
     cy.screenshot('starting-ui');
 
     cy
@@ -28,8 +33,8 @@ describe('User guide screenshots', () => {
     });
 
     cy.visit('/gui/PANDA/layout');
-    cy.wait(3000);
-    cy.wait(1000);
+    cy.contains('Health');
+    cy.waitForSnackbarToDisappear();
     cy.screenshot('PANDA-layout');
   });
 });

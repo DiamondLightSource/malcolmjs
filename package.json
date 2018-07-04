@@ -82,7 +82,8 @@
     "sonarqube": "sonar-scanner",
     "config:dev": "node ./continuous_integration/update_settings.js dev",
     "config:prod": "node ./continuous_integration/update_settings.js prod",
-    "screenshots:smg": "start-server-and-test e2e:serve http://localhost:3030 \"cypress open --config integrationFolder=cypress/automated_screenshots\""
+    "cy:screenshots": "cypress open --config integrationFolder=cypress/automated_screenshots",
+    "screenshots:smg": "start-server-and-test e2e:serve http://localhost:3030 cy:screenshots"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
