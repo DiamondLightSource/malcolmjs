@@ -10,6 +10,7 @@ Contents
     :caption: User Guide
     
     userguide/intro
+    userguide/quick-start
 
 .. toctree::
     :caption: System Maintenance Guide 
