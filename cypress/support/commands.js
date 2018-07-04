@@ -27,8 +27,12 @@
 Cypress.Commands.add('moveBlock', (blockName, newLocation) => {
   cy
     .contains(blockName)
-    .trigger('mousedown')
-    .trigger('mousemove', { clientX: newLocation.x, clientY: newLocation.y })
+    .trigger('mousedown', { force: true })
+    .trigger('mousemove', {
+      clientX: newLocation.x,
+      clientY: newLocation.y,
+      force: true,
+    })
     .trigger('mouseup', { force: true })
     .click('left');
 
@@ -43,5 +47,26 @@ Cypress.Commands.add('waitForSnackbarToDisappear', () => {
 });
 
 Cypress.Commands.add('waitForDetailsToLoad', () => {
-  cy.contains('Health');
+  cy.log('waiting for details to load');
+  cy.contains('Health', { log: false });
 });
+
+Cypress.Commands.add(
+  'highlightLink',
+  { prevSubject: true },
+  (subject, location) => {
+    cy.log(`Highlighting link at (${location.x}, ${location.y})`);
+
+    return cy
+      .wrap(subject)
+      .children()
+      .first()
+      .children('path')
+      .last()
+      .trigger('mouseover', {
+        clientX: location.x,
+        clientY: location.y,
+        force: true,
+      });
+  }
+);

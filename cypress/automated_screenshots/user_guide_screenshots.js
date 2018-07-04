@@ -7,7 +7,7 @@ describe('User guide screenshots', () => {
     cy.screenshot('example-ui');
   });
 
-  it('starting UI', () => {
+  it('quick start', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/');
     cy.contains('Select a root node').should('be.visible');
@@ -36,5 +36,33 @@ describe('User guide screenshots', () => {
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('PANDA-layout');
+
+    cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
+    cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
+    cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
+    cy.moveBlock('LVDS output', { x: 850, y: 280 });
+
+    cy.contains('Configurable clocks').click();
+
+    cy.screenshot('PANDA-layout-spread-out');
+
+    cy
+      .get('.port')
+      .last()
+      .trigger('mousedown', { force: true })
+      .trigger('mousemove', { clientX: 700, clientY: 150, force: true });
+
+    cy
+      .get('.srd-default-link')
+      .last()
+      .highlightLink({ x: 695, y: 150 });
+
+    cy.wait(1000);
+    cy.screenshot('PANDA-new-link');
+
+    cy
+      .get('.port')
+      .last()
+      .trigger('mouseup', { force: true });
   });
 });
