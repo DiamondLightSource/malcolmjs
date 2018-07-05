@@ -74,20 +74,6 @@ const buildPath = knots => {
   let secondControl;
 
   if (n === 1) {
-    firstControl = {
-      x: (2 * knots[0].x + knots[1].x) / 3,
-      y: (2 * knots[0].y + knots[1].y) / 3,
-    };
-
-    path += `C${firstControl.x},${firstControl.y} `;
-    secondControl = {
-      x: 2 * firstControl.x - knots[0].x,
-      y: 2 * firstControl.y - knots[0].y,
-    };
-
-    path += `${secondControl.x},${secondControl.y} `;
-    path += `${knots[1].x},${knots[1].y}`;
-
     return [buildTwoPointPath(knots)];
   }
 
