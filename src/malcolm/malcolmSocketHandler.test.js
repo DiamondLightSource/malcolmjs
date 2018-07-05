@@ -168,52 +168,32 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].payload.label).toEqual('Block 1');
   });
 
-  it('handles scalar attribute updates', () => {
+  const runAttributeUpdateTest = typeid => {
     const changes = {
       label: 'Attribute 1',
       meta: {
         tags: [],
       },
     };
-    const message = buildMessage('epics:nt/NTScalar:1.0', 2, changes);
+    const message = buildMessage(typeid, 2, changes);
 
     socketContainer.socket.send(message);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTScalar:1.0');
+    expect(dispatches[0].payload.typeid).toEqual(typeid);
+  };
+
+  it('handles scalar attribute updates', () => {
+    runAttributeUpdateTest('epics:nt/NTScalar:1.0');
   });
 
   it('handles table attribute updates', () => {
-    const changes = {
-      label: 'Attribute 1',
-      meta: {
-        tags: [],
-      },
-    };
-    const message = buildMessage('epics:nt/NTTable:1.0', 2, changes);
-
-    socketContainer.socket.send(message);
-
-    expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTTable:1.0');
+    runAttributeUpdateTest('epics:nt/NTTable:1.0');
   });
 
   it('handles method updates', () => {
-    const changes = {
-      label: 'Method 1',
-      meta: {
-        tags: [],
-      },
-    };
-    const message = buildMessage('malcolm:core/Method:1.0', 2, changes);
-
-    socketContainer.socket.send(message);
-
-    expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('malcolm:core/Method:1.0');
+    runAttributeUpdateTest('malcolm:core/Method:1.0');
   });
 
   it('dispatches a message for unhandled deltas', () => {

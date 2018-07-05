@@ -69,25 +69,10 @@ const buildTwoPointPath = points => {
 // algorithm from here https://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-2D-Points-wit
 const buildPath = knots => {
   const n = knots.length - 1;
-  let path = `M${knots[0].x},${knots[0].y} `;
   let firstControl;
   let secondControl;
 
   if (n === 1) {
-    firstControl = {
-      x: (2 * knots[0].x + knots[1].x) / 3,
-      y: (2 * knots[0].y + knots[1].y) / 3,
-    };
-
-    path += `C${firstControl.x},${firstControl.y} `;
-    secondControl = {
-      x: 2 * firstControl.x - knots[0].x,
-      y: 2 * firstControl.y - knots[0].y,
-    };
-
-    path += `${secondControl.x},${secondControl.y} `;
-    path += `${knots[1].x},${knots[1].y}`;
-
     return [buildTwoPointPath(knots)];
   }
 
@@ -108,6 +93,7 @@ const buildPath = knots => {
   const y = getFirstControlPoints(rhs);
 
   const paths = [];
+  let path;
   for (let i = 0; i < n; i += 1) {
     path = `M${knots[i].x},${knots[i].y} `;
 

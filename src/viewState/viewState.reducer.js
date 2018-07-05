@@ -13,7 +13,7 @@ const initialViewState = {
   },
 };
 
-const viewStateReducer = (state = initialViewState, action) => {
+const viewStateReducer = (state = initialViewState, action = {}) => {
   switch (action.type) {
     case openParentPanelType:
       return { ...state, openParentPanel: action.openParentPanel };

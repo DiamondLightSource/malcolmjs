@@ -65,7 +65,7 @@ describe('Block Utilities', () => {
     expect(attribute).toBeUndefined();
   });
 
-  it('findAttributesWithTag returns attributes with matching tags', () => {
+  const runMatchingAttributesTest = tag => {
     const block = {
       attributes: [
         buildAttribute('att1', ['widget:test', 'another tag']),
@@ -73,26 +73,19 @@ describe('Block Utilities', () => {
         buildAttribute('att3', ['widget:test']),
       ],
     };
-    const attributes = BlockUtils.findAttributesWithTag(block, 'widget:test');
+    const attributes = BlockUtils.findAttributesWithTag(block, tag);
 
     expect(attributes).toHaveLength(2);
     expect(attributes[0]).toBe(block.attributes[0]);
     expect(attributes[1]).toBe(block.attributes[2]);
+  };
+
+  it('findAttributesWithTag returns attributes with matching tags', () => {
+    runMatchingAttributesTest('widget:test');
   });
 
   it('findAttributesWithTag uses partial matches', () => {
-    const block = {
-      attributes: [
-        buildAttribute('att1', ['widget:test', 'another tag']),
-        buildAttribute('att2', ['test']),
-        buildAttribute('att3', ['widget:test']),
-      ],
-    };
-    const attributes = BlockUtils.findAttributesWithTag(block, 'widget:');
-
-    expect(attributes).toHaveLength(2);
-    expect(attributes[0]).toBe(block.attributes[0]);
-    expect(attributes[1]).toBe(block.attributes[2]);
+    runMatchingAttributesTest('widget:');
   });
 
   it('findBlock returns block if it exists', () => {

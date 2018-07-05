@@ -219,37 +219,6 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.attributes[0].loading).toEqual(false);
   });
 
-  it('sets attribute pending', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-      attributes: [
-        {
-          name: 'health',
-          loading: true,
-          path: ['block1', 'health'],
-          pending: false,
-        },
-      ],
-    };
-
-    const action = {
-      type: MalcolmAttributeFlag,
-      payload: {
-        id: 1,
-        path: ['block1', 'health'],
-        flagType: 'pending',
-        flagState: true,
-      },
-    };
-
-    state = malcolmReducer(state, action);
-
-    expect(state.blocks.block1.attributes.length).toEqual(1);
-    expect(state.blocks.block1.attributes[0].name).toEqual('health');
-    expect(state.blocks.block1.attributes[0].pending).toEqual(true);
-  });
-
   it('set flag sets attribute pending', () => {
     state.blocks.block1 = {
       name: 'block1',
@@ -417,14 +386,11 @@ describe('malcolm reducer', () => {
   });
 
   it('updates socket on socket connect actions', () => {
-    const messages = [];
     const dummyReconnectorSocket = {
       socket: {
         url: '',
         connect: jest.fn(),
-        send: payload => {
-          messages.push(payload);
-        },
+        send: () => {},
         isConnected: false,
       },
     };
