@@ -6,15 +6,14 @@ node_js:
 cache:
   directories:
   - node_modules
-  - /home/travis/.cache/Cypress
+  - "/home/travis/.cache/Cypress"
 addons:
-  # cypress uses xvfb so this is an attempt to make the travis build less flaky
   apt:
     packages:
-      - xvfb
+    - xvfb
 install:
- - npm install -g codecov
- - npm install
+- npm install -g codecov
+- npm install
 script:
 - npm run lint:css
 - npm run lint:js
@@ -36,3 +35,8 @@ deploy:
   on:
     all_branches: true
     tags: true
+notifications:
+  slack:
+    on_success: never
+    on_failure: always
+    secure: bzzLHiGYj4EAGpbXoTHRh106+At4AiBej1c7byZOP0FWNYGj5x/yShmaQTlH2rdY91TEEyHgk3cyM+EJHGzvjWdyKnQO1Kec4EqztDhh88DKm88/bl8mO+DUIa4LuI8VrddWPzMiVHjBJCqUnMk9I2gjLO5ahCo1wjRq8/Urvd8221W5nBJwR8B6WAD/kORAn6ZXzpXQR/6/twKLz6Sm2OdXEcIXf0mcQIggeL/yQJUmWWLZ2jo0mPFqqFgrReLhZxYDuj86wHPyNGTEHN5SF2RihQd8ZB3dA3eybP3JZeeKNDtS1OLMmqtf/O1pXz4d3tBodd0xvZJ+kbTPf+RGUdzUodiLCsz6N6BqaWR8nK94eGyod2klZlRbpelzVxnSF57H+IYeHUZTB0yl/509wMqDw/xbmj/xpUuiRkERKw4jE4oVbJqbm1VnfQH1ZwQJ2aYdZ74JFgpuM41HqDPU/pvNc5UfLHUf9TtWdo4ZAfYRdCXNyVPNdEtcmBIJthc22A92m3BPtsKE2MYw/n4jMALSMTycFU25f1Cd1zWfScMrarEl6BsaSC0/168f7lUgoPzkuW+Re/nbt8sYcyqsCBiacNL658KgqaFKpdrmA5KMkKbJxsmebAHHwaYh4sVVf6RcRFShBd2vTugziE5dbpm3XM6d0N5hVJlr4lHAAk4=

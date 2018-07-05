@@ -1,4 +1,4 @@
-import MalcolmPortModel from './blockPort.model';
+import MalcolmPortModel from './MalcolmPortModel';
 import MalcolmLinkModel from '../link/link.model';
 
 describe('BlockPortModel', () => {

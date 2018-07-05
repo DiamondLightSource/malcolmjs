@@ -339,7 +339,7 @@ const updateSocket = (state, payload) => {
   };
 };
 
-const malcolmReducer = (state = initialMalcolmState, action) => {
+const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
   updatedState = tableReducer(updatedState, action);
