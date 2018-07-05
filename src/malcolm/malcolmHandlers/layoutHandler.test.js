@@ -36,9 +36,7 @@ describe('LayoutHandler', () => {
     };
   });
 
-  it('layoutRouteSelected dispatches new subscriptions for visible blocks', () => {
-    LayoutHandler.layoutRouteSelected(blocks, 'block1', dispatch);
-
+  const checkBlockAddedAndSubscribed = () => {
     expect(actions).toHaveLength(2);
     expect(actions[0].type).toEqual(MalcolmNewBlock);
     expect(actions[0].payload.blockName).toEqual('block2');
@@ -48,6 +46,12 @@ describe('LayoutHandler', () => {
     expect(actions[1].type).toEqual(MalcolmSend);
     expect(actions[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
     expect(actions[1].payload.path).toEqual(['block2', 'meta']);
+  };
+
+  it('layoutRouteSelected dispatches new subscriptions for visible blocks', () => {
+    LayoutHandler.layoutRouteSelected(blocks, 'block1', dispatch);
+
+    checkBlockAddedAndSubscribed();
   });
 
   it('layoutRouteSelected ignores blocks that are not visible', () => {
@@ -61,15 +65,7 @@ describe('LayoutHandler', () => {
   it('layoutAttributeReceived dispatches new subscriptions for visible blocks', () => {
     LayoutHandler.layoutAttributeReceived(layoutAttribute, 'layout', dispatch);
 
-    expect(actions).toHaveLength(2);
-    expect(actions[0].type).toEqual(MalcolmNewBlock);
-    expect(actions[0].payload.blockName).toEqual('block2');
-    expect(actions[0].payload.parent).toBeFalsy();
-    expect(actions[0].payload.child).toBeFalsy();
-
-    expect(actions[1].type).toEqual(MalcolmSend);
-    expect(actions[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(actions[1].payload.path).toEqual(['block2', 'meta']);
+    checkBlockAddedAndSubscribed();
   });
 
   it('layoutAttributeReceived ignores blocks that are not visible', () => {
