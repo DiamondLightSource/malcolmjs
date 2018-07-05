@@ -1,5 +1,5 @@
 import { NodeModel } from 'storm-react-diagrams';
-import MalcolmPortModel from '../blockPort/blockPort.model';
+import MalcolmPortModel from '../blockPort/MalcolmPortModel';
 
 class BlockNodeModel extends NodeModel {
   constructor(label, description, mri) {
