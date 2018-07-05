@@ -386,14 +386,11 @@ describe('malcolm reducer', () => {
   });
 
   it('updates socket on socket connect actions', () => {
-    const messages = [];
     const dummyReconnectorSocket = {
       socket: {
         url: '',
         connect: jest.fn(),
-        send: payload => {
-          messages.push(payload);
-        },
+        send: () => {},
         isConnected: false,
       },
     };
