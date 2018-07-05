@@ -3,10 +3,10 @@ import { routerReducer } from 'react-router-redux';
 import malcolmReducer from './malcolm/reducer/malcolmReducer';
 import viewStateReducer from './viewState/viewState.reducer';
 
-const appReducer = combineReducers({
+const AppReducer = combineReducers({
   router: routerReducer,
   malcolm: malcolmReducer,
   viewState: viewStateReducer,
 });
 
-export default appReducer;
+export default AppReducer;
