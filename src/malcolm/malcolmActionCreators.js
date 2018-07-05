@@ -2,7 +2,6 @@ import {
   MalcolmSend,
   MalcolmNewBlock,
   MalcolmAttributeFlag,
-  MalcolmSnackbar,
   MalcolmNavigationPathUpdate,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
@@ -68,14 +67,6 @@ export const malcolmSetFlag = (path, flagType, flagState) => ({
     path,
     flagType,
     flagState,
-  },
-});
-
-export const malcolmSnackbarState = (open, message) => ({
-  type: MalcolmSnackbar,
-  snackbar: {
-    open,
-    message,
   },
 });
 
@@ -193,7 +184,6 @@ export default {
   malcolmNewBlockAction,
   malcolmPutAction,
   malcolmSetFlag,
-  malcolmSnackbarState,
   malcolmNavigationPath,
   malcolmCleanBlocks,
   malcolmSetDisconnected,

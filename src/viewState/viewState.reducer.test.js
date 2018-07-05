@@ -1,5 +1,9 @@
 import ViewStateReducer from './viewState.reducer';
-import { openParentPanel, updateVersionNumber } from './viewState.actions';
+import {
+  openParentPanel,
+  updateVersionNumber,
+  snackbarState,
+} from './viewState.actions';
 
 describe('view state reducer', () => {
   let state = {};
@@ -8,6 +12,10 @@ describe('view state reducer', () => {
     state = {
       openParentPanel: true,
       openChildPanel: true,
+      snackbar: {
+        open: false,
+        message: '',
+      },
     };
   });
 
@@ -27,5 +35,15 @@ describe('view state reducer', () => {
 
     expect(newState).toBe(state);
     expect(document.title).toEqual('MalcolmJS 1.2.3');
+  });
+
+  it('updates snackbar', () => {
+    const newState = ViewStateReducer(
+      state,
+      snackbarState(true, 'This is a test!')
+    );
+
+    expect(newState.snackbar.open).toEqual(true);
+    expect(newState.snackbar.message).toEqual('This is a test!');
   });
 });
