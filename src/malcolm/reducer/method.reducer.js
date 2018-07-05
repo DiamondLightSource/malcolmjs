@@ -51,7 +51,7 @@ const updateMethodInput = (state, payload) => {
 };
 
 export const handleMethodReturn = (state, payload) => {
-  const matchingMessage = state.messagesInFlight.find(m => m.id === payload.id);
+  const matchingMessage = state.messagesInFlight[payload.id];
   const path = matchingMessage ? matchingMessage.path : undefined;
 
   if (path && matchingMessage.typeid === 'malcolm:core/Post:1.0') {

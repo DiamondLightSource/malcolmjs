@@ -25,8 +25,9 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('moveBlock', (blockName, newLocation) => {
+  cy.log(`Moving block ${blockName} to (${newLocation.x},${newLocation.y})`);
   cy
-    .contains(blockName)
+    .contains(blockName, { log: false })
     .trigger('mousedown', { force: true })
     .trigger('mousemove', {
       clientX: newLocation.x,
@@ -36,13 +37,15 @@ Cypress.Commands.add('moveBlock', (blockName, newLocation) => {
     .trigger('mouseup', { force: true })
     .click('left');
 
-  cy.wait(1000);
+  cy.wait(1000, { log: false });
 });
 
 Cypress.Commands.add('waitForSnackbarToDisappear', () => {
   // wait for the snackbar to disappear
+  cy.log('Waiting for snackbar to disappear');
+  cy.wait(1000, { log: false });
   cy
-    .contains('Connected to WebSocket', { timeout: 15000 })
+    .contains('Connected to WebSocket', { timeout: 15000, log: false })
     .should('have.length', 0);
 });
 

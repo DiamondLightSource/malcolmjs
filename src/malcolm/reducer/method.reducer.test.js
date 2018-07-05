@@ -93,7 +93,9 @@ describe('method reducer', () => {
 
   it('handleMethodReturn should update the output on a method with return map', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
-    state.messagesInFlight = [testMessage];
+    state.messagesInFlight = {
+      2: testMessage,
+    };
 
     const payload = {
       id: 2,
@@ -117,7 +119,9 @@ describe('method reducer', () => {
   it('handleMethodReturn should update the output on a method with return unpacked', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
     state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
-    state.messagesInFlight = [testMessage];
+    state.messagesInFlight = {
+      2: testMessage,
+    };
 
     const payload = {
       id: 2,
@@ -142,13 +146,13 @@ describe('method reducer', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
     state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
 
-    state.messagesInFlight = [
-      {
+    state.messagesInFlight = {
+      2: {
         id: 2,
         typeid: 'malcolm:core/Put:1.0',
         path: ['block1', 'attr1'],
       },
-    ];
+    };
 
     const payload = {
       id: 2,
@@ -168,7 +172,10 @@ describe('method reducer', () => {
     state.blocks.block1.attributes[0].returns = {
       elements: { output1: {}, output2: {} },
     };
-    state.messagesInFlight = [testMessage];
+    state.messagesInFlight = {
+      2: testMessage,
+    };
+
     const payload = {
       id: 2,
       value: { output1: 456 },

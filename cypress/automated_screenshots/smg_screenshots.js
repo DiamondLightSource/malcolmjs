@@ -21,7 +21,7 @@ describe('SMG screenshots', () => {
     });
 
     cy.screenshot('methods', {
-      clip: { x: 0, y: 500, width: 360, height: 145 },
+      clip: { x: 0, y: 540, width: 360, height: 145 },
     });
   });
 

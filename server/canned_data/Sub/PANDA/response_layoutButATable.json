@@ -460,7 +460,7 @@
             "widget:table"
           ], 
           "writeable": true, 
-          "label": "Layout", 
+          "label": "Layout Table", 
           "elements": {
             "name": {
               "typeid": "malcolm:core/StringArrayMeta:1.0", 
