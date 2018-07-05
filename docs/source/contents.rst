@@ -10,6 +10,7 @@ Contents
     :caption: User Guide
     
     userguide/intro
+    userguide/quick-start
 
 .. toctree::
     :caption: System Maintenance Guide 
@@ -21,6 +22,7 @@ Contents
     SMG/setting_up_a_dev_environment
     SMG/workflow
     SMG/testing_strategy
+    SMG/code_structure
     SMG/maintenance
     SMG/deployment
     SMG/troubleshooting

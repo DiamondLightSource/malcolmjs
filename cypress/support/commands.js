@@ -23,3 +23,53 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('moveBlock', (blockName, newLocation) => {
+  cy.log(`Moving block ${blockName} to (${newLocation.x},${newLocation.y})`);
+  cy
+    .contains(blockName, { log: false })
+    .trigger('mousedown', { force: true })
+    .trigger('mousemove', {
+      clientX: newLocation.x,
+      clientY: newLocation.y,
+      force: true,
+    })
+    .trigger('mouseup', { force: true })
+    .click('left');
+
+  cy.wait(1000, { log: false });
+});
+
+Cypress.Commands.add('waitForSnackbarToDisappear', () => {
+  // wait for the snackbar to disappear
+  cy.log('Waiting for snackbar to disappear');
+  cy.wait(1000, { log: false });
+  cy
+    .contains('Connected to WebSocket', { timeout: 15000, log: false })
+    .should('have.length', 0);
+});
+
+Cypress.Commands.add('waitForDetailsToLoad', () => {
+  cy.log('waiting for details to load');
+  cy.contains('Health', { log: false });
+});
+
+Cypress.Commands.add(
+  'highlightLink',
+  { prevSubject: true },
+  (subject, location) => {
+    cy.log(`Highlighting link at (${location.x}, ${location.y})`);
+
+    return cy
+      .wrap(subject)
+      .children()
+      .first()
+      .children('path')
+      .last()
+      .trigger('mouseover', {
+        clientX: location.x,
+        clientY: location.y,
+        force: true,
+      });
+  }
+);

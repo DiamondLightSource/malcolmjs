@@ -11,6 +11,7 @@ exports[`NavControl disables menu item if children is empty 1`] = `
     PANDA
   </WithStyles(Typography)>
   <WithStyles(IconButton)
+    data-cy="navmenu"
     disabled={true}
     onClick={[Function]}
   >
@@ -36,6 +37,7 @@ exports[`NavControl renders correctly 1`] = `
     PANDA
   </WithStyles(Typography)>
   <WithStyles(IconButton)
+    data-cy="navmenu"
     disabled={false}
     onClick={[Function]}
   >

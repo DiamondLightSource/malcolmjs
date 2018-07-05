@@ -116,8 +116,7 @@ describe('malcolm reducer', () => {
 
     const newState = malcolmReducer(state, buildAction('malcolm:error', 1));
 
-    expect(Object.keys(newState.messagesInFlight).length).toEqual(2);
-    expect(newState.messagesInFlight[1]).toBeUndefined();
+    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
     expect(newState.messagesInFlight[123].id).toEqual(123);
   });
 
@@ -128,8 +127,7 @@ describe('malcolm reducer', () => {
 
     const newState = malcolmReducer(state, buildAction('malcolm:return', 1));
 
-    expect(Object.keys(newState.messagesInFlight).length).toEqual(2);
-    expect(newState.messagesInFlight[1]).toBeUndefined();
+    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
     expect(newState.messagesInFlight[123].id).toEqual(123);
   });
 

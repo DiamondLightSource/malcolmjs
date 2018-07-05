@@ -6,6 +6,7 @@ node_js:
 cache:
   directories:
   - node_modules
+  - /home/travis/.cache/Cypress
 addons:
   # cypress uses xvfb so this is an attempt to make the travis build less flaky
   apt:

@@ -76,7 +76,7 @@ function updateMessagesInFlight(state, action) {
 
 function stopTrackingMessage(state, action) {
   const filteredMessages = { ...state.messagesInFlight };
-  filteredMessages[action.payload.id] = undefined;
+  delete filteredMessages[action.payload.id];
   return {
     ...state,
     messagesInFlight: filteredMessages,
