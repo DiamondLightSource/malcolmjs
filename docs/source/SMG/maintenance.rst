@@ -49,23 +49,6 @@ The main commands you are most likely to need during development are:
 ``build-docs``          builds the documentation using sphinx
 ======================= ===========================================================
 
-Pull Request Procedure
-^^^^^^^^^^^^^^^^^^^^^^
-
-When a branch is ready to be merged back in then you should create a pull request in GitHub. The description should contain:
-
-- A general description of the changes in the pull request
-- A link for waffle to connect the PR to the issue (``connect to #{issue number}``)
-- A method for testing the changes, particularly if they are visual in nature (e.g. describe which StoryBook story to look at or which url to visit). You may also want to consider adding a screenshot of the changes.
-
-**If this is your first time reviewing then you will need a development environment set up first, see** :ref:`Setting up a Development Environment`
-
-Before approving, a reviewer should:
-
-- review the code
-- ensure the build passes
-- assess the impact on code coverage
-- run the method for testing as described by the developer as assess the visual impact of the changes
 
 Editing documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

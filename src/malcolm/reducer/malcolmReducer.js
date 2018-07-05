@@ -5,7 +5,6 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
-  MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
@@ -21,12 +20,13 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import AttributeReducer from './attribute.reducer';
+import AttributeReducer, { updateAttribute } from './attribute.reducer';
 import layoutReducer from './layout.reducer';
 import methodReducer from './method.reducer';
+import tableReducer from './table.reducer';
 
 const initialMalcolmState = {
-  messagesInFlight: [],
+  messagesInFlight: {},
   counter: 0,
   navigation: {
     navigationLists: [],
@@ -39,10 +39,6 @@ const initialMalcolmState = {
   parentBlock: undefined,
   childBlock: undefined,
   mainAttribute: undefined,
-  snackbar: {
-    message: '',
-    open: false,
-  },
   layout: {
     blocks: [],
   },
@@ -63,25 +59,27 @@ function updateMessagesInFlight(state, action) {
 
   if (
     action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
-    !state.messagesInFlight.some(
-      m => m.path.join() === action.payload.path.join()
+    !Object.keys(state.messagesInFlight).some(
+      m =>
+        state.messagesInFlight[m] !== undefined &&
+        state.messagesInFlight[m].path.join() === action.payload.path.join()
     )
   ) {
-    newState.messagesInFlight = [
+    newState.messagesInFlight = {
       ...state.messagesInFlight,
-      { ...action.payload },
-    ];
+    };
+    newState.messagesInFlight[action.payload.id] = action.payload;
   }
 
   return newState;
 }
 
 function stopTrackingMessage(state, action) {
+  const filteredMessages = { ...state.messagesInFlight };
+  filteredMessages[action.payload.id] = undefined;
   return {
     ...state,
-    messagesInFlight: state.messagesInFlight.filter(
-      m => m.id !== action.payload.id
-    ),
+    messagesInFlight: filteredMessages,
   };
 }
 
@@ -114,8 +112,7 @@ function updateBlock(state, payload) {
   let { navigation, layout } = state;
 
   if (payload.delta) {
-    const blockName = state.messagesInFlight.find(m => m.id === payload.id)
-      .path[0];
+    const blockName = state.messagesInFlight[payload.id].path[0];
 
     if (Object.prototype.hasOwnProperty.call(blocks, blockName)) {
       blocks[blockName] = {
@@ -172,6 +169,16 @@ function updateRootBlock(state, payload) {
 }
 
 function setFlag(state, path, flagType, flagState) {
+  if (path.length === 1) {
+    const blocks = { ...state.blocks };
+    const block = { ...blocks[path[0]] };
+    block[flagType] = flagState;
+    blocks[path[0]] = block;
+    return {
+      ...state,
+      blocks,
+    };
+  }
   const blockName = path[0];
   const attributeName = path[1];
 
@@ -184,6 +191,7 @@ function setFlag(state, path, flagType, flagState) {
     ) {
       return state;
     }
+    const blocks = { ...state.blocks };
     const attributes = [...state.blocks[blockName].attributes];
 
     const matchingAttribute = attributes.findIndex(
@@ -195,24 +203,14 @@ function setFlag(state, path, flagType, flagState) {
       };
       attributeCopy[flagType] = flagState;
       attributes[matchingAttribute] = attributeCopy;
+      blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
-
-    const blocks = { ...state.blocks };
-    blocks[blockName] = { ...state.blocks[blockName], attributes };
-
     return {
       ...state,
       blocks,
     };
   }
   return state;
-}
-
-function updateSnackbar(state, newSnackbar) {
-  return {
-    ...state,
-    snackbar: { ...newSnackbar },
-  };
 }
 
 function cleanBlocks(state) {
@@ -266,7 +264,7 @@ function setDisconnected(state) {
 }
 
 export const setErrorState = (state, id, errorState, errorMessage) => {
-  const matchingMessage = state.messagesInFlight.find(m => m.id === id);
+  const matchingMessage = state.messagesInFlight[id];
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
     const blockName = path[0];
@@ -303,10 +301,8 @@ function handleReturnMessage(state, action) {
 }
 
 const handleErrorMessage = (state, action) => {
-  const matchingMessage = state.messagesInFlight.find(
-    m => m.id === action.payload.id
-  );
-
+  const matchingMessage = state.messagesInFlight[action.payload.id];
+  // TODO: fix this......
   let updatedState = { ...state };
   if (
     matchingMessage &&
@@ -315,7 +311,7 @@ const handleErrorMessage = (state, action) => {
     matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
   ) {
     // reset the layout
-    updatedState = AttributeReducer.updateAttribute(state, {
+    updatedState = updateAttribute(state, {
       id: action.payload.id,
       delta: true,
     });
@@ -346,6 +342,7 @@ const updateSocket = (state, payload) => {
 const malcolmReducer = (state = initialMalcolmState, action) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
+  updatedState = tableReducer(updatedState, action);
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(updatedState, action);
@@ -378,9 +375,6 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
         updatedState,
         action.payload
       );
-
-    case MalcolmSnackbar:
-      return updateSnackbar(updatedState, action.snackbar);
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);

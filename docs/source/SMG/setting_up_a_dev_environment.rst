@@ -4,7 +4,10 @@ Setting up a Development Environment
 Code Development
 ##################
 
-To develop MalcolmJS you need a stable version of `node <https://nodejs.org/en/>`_ (>=8.9.0) and your OS needs to be able to run Chromium (for the end-to-end tests) - this means RHEL 7 or above but Windows has also been used as a development environment.
+Requirements:
+ - node >= 8.5.0
+
+To develop MalcolmJS you need a stable version of `node <https://nodejs.org/en/>`_ (>=8.5.0 but it was developed against 8.9.0) and your OS needs to be able to run Chromium (for the end-to-end tests) - this means RHEL 7 or above but Windows has also been used as a development environment.
 
 You will also need a git client of some form and then you can clone the code from `the MalcolmJS github page <https://github.com/dls-controls/malcolmjs>`_
 

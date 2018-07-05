@@ -14,21 +14,9 @@ describe('Method component', () => {
   let shallow;
   let mockStore;
   let mount;
+  let testInputs;
 
   const state = { malcolm: { blocks: { Test: { attributes: [] } } } };
-
-  const testInputs = {
-    first: {
-      label: 'First input',
-      description: 'a test input',
-      tags: ['widget:textinput'],
-    },
-    second: {
-      label: 'Second input',
-      description: 'a test input',
-      tags: ['widget:textinput'],
-    },
-  };
 
   const defaultInputs = {
     first: 1,
@@ -101,6 +89,19 @@ describe('Method component', () => {
 
     shallow = createShallow({ dive: true });
     mount = createMount();
+
+    testInputs = {
+      first: {
+        label: 'First input',
+        description: 'a test input',
+        tags: ['widget:textinput'],
+      },
+      second: {
+        label: 'Second input',
+        description: 'a test input',
+        tags: ['widget:textinput'],
+      },
+    };
   });
 
   afterEach(() => {
@@ -181,5 +182,11 @@ describe('Method component', () => {
       'first',
       { isDirty: true }
     );
+  });
+
+  it('buildIOcomponent returns null if no widget tag', () => {
+    testInputs.second.tags = [];
+    const wrapper = shallow(testMethod(testInputs, {}, {}, {}, {}, ''));
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 });

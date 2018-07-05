@@ -3,7 +3,7 @@ import { withTheme } from '@material-ui/core/styles';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 export const getTableWidgetTags = attribute =>
-  attribute.labels.map(label => {
+  Object.keys(attribute.meta.elements).map(label => {
     const { tags } = attribute.meta.elements[label];
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
     if (widgetTagIndex !== -1) {
@@ -12,10 +12,12 @@ export const getTableWidgetTags = attribute =>
     return -1;
   });
 
-const WidgetSelector = props => {
+const TableWidgetSelector = props => {
   const isDisabled = false;
   const isErrorState = false;
   const isDirty = true;
+  const forceUpdate = false;
+  const continuousSend = true;
   return selectorFunction(
     props.columnWidgetTag,
     props.rowPath,
@@ -28,11 +30,13 @@ const WidgetSelector = props => {
     },
     props.setFlag,
     props.theme.palette.primary.light,
-    props.columnMeta
+    props.columnMeta,
+    forceUpdate,
+    continuousSend
   );
 };
 
-WidgetSelector.propTypes = {
+TableWidgetSelector.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -58,4 +62,4 @@ WidgetSelector.propTypes = {
   setFlag: PropTypes.func.isRequired,
 };
 
-export default withTheme()(WidgetSelector);
+export default withTheme()(TableWidgetSelector);

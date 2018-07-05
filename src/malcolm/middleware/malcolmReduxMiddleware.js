@@ -21,9 +21,10 @@ function getNextId(malcolmState) {
 }
 
 function subscriptionActive(path, messagesInFlight) {
-  return messagesInFlight.some(
+  return Object.keys(messagesInFlight).some(
     m =>
-      m.typeid === 'malcolm:core/Subscribe:1.0' && m.path.join() === path.join()
+      messagesInFlight[m].typeid === 'malcolm:core/Subscribe:1.0' &&
+      messagesInFlight[m].path.join() === path.join()
   );
 }
 

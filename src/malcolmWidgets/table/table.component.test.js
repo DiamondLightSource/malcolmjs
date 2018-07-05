@@ -60,8 +60,9 @@ describe('WidgetTable', () => {
       .simulate('change');
     expect(setValue.mock.calls.length).toEqual(1);
     expect(setValue.mock.calls[0]).toEqual([
-      ['PANDA', 'layout'],
+      ['test1', 'layout'],
       { mri: 'PANDA:INENC2', name: 'INENC2', visible: false, x: 0, y: 0 },
+      3,
     ]);
   });
 });

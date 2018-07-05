@@ -2,7 +2,6 @@ import {
   MalcolmSend,
   MalcolmNewBlock,
   MalcolmAttributeFlag,
-  MalcolmSnackbar,
   MalcolmNavigationPathUpdate,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
@@ -12,6 +11,9 @@ import {
   MalcolmUpdateBlockPosition,
   MalcolmSelectBlock,
   MalcolmShiftButton,
+  MalcolmLocalCopy,
+  MalcolmTableUpdate,
+  MalcolmTableFlag,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -68,14 +70,6 @@ export const malcolmSetFlag = (path, flagType, flagState) => ({
   },
 });
 
-export const malcolmSnackbarState = (open, message) => ({
-  type: MalcolmSnackbar,
-  snackbar: {
-    open,
-    message,
-  },
-});
-
 export const malcolmNavigationPath = blockPaths => ({
   type: MalcolmNavigationPathUpdate,
   payload: {
@@ -95,6 +89,31 @@ export const malcolmMainAttribute = attribute => ({
   type: MalcolmMainAttributeUpdate,
   payload: {
     attribute,
+  },
+});
+
+export const malcolmCopyValue = path => ({
+  type: MalcolmLocalCopy,
+  payload: {
+    path,
+  },
+});
+
+export const malcolmSetTableFlag = (path, flagType, flagState) => ({
+  type: MalcolmTableFlag,
+  payload: {
+    path,
+    flagType,
+    flagState,
+  },
+});
+
+export const malcolmUpdateTable = (path, value, row) => ({
+  type: MalcolmTableUpdate,
+  payload: {
+    path,
+    value,
+    row,
   },
 });
 
@@ -165,7 +184,6 @@ export default {
   malcolmNewBlockAction,
   malcolmPutAction,
   malcolmSetFlag,
-  malcolmSnackbarState,
   malcolmNavigationPath,
   malcolmCleanBlocks,
   malcolmSetDisconnected,

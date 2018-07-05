@@ -138,6 +138,32 @@ describe('method reducer', () => {
     expect(attribute.outputs.output1).toEqual(456);
   });
 
+  it('handleMethodReturn should do nothing if original request wasnt a post', () => {
+    state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
+    state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
+
+    state.messagesInFlight = [
+      {
+        id: 2,
+        typeid: 'malcolm:core/Put:1.0',
+        path: ['block1', 'attr1'],
+      },
+    ];
+
+    const payload = {
+      id: 2,
+      value: 456,
+    };
+
+    const action = {
+      type: MalcolmReturn,
+      payload,
+    };
+
+    const updatedState = MethodReducer(state, action);
+    expect(updatedState).toEqual(state);
+  });
+
   it('handleMethodReturn should error if return map is missing an output', () => {
     state.blocks.block1.attributes[0].returns = {
       elements: { output1: {}, output2: {} },

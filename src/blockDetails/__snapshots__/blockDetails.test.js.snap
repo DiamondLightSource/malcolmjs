@@ -1,5 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Block Details renders correctly when block not found 1`] = `
+<div
+  className="BlockDetails-progressContainer-1"
+>
+  <div>
+    <div
+      align="left"
+      style={
+        Object {
+          "whiteSpace": "pre",
+        }
+      }
+    >
+                   __   __    _____     __   __ 
+                  |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\ 
+                  \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\ 
+                   \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ 
+                    \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ 
+                           \\|__|  \\|_____|        \\|__| 
+      
+    </div>
+    <br />
+    <br />
+    Block not found! 
+    <br />
+    (hint: URLs are case sensitive)
+  </div>
+</div>
+`;
+
 exports[`Block Details renders correctly when loading 1`] = `
 <div
   className="BlockDetails-progressContainer-1"

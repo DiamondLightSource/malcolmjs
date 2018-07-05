@@ -37,6 +37,17 @@ describe('Block Details', () => {
     expect(tree.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly when block not found', () => {
+    const block = {
+      loading: 404,
+    };
+
+    state.malcolm.blocks.test1 = block;
+
+    const tree = shallow(<BlockDetails parent store={mockStore(state)} />);
+    expect(tree.dive()).toMatchSnapshot();
+  });
+
   it('renders correctly when metadata loaded and waiting for attributes', () => {
     const block = {
       loading: false,
