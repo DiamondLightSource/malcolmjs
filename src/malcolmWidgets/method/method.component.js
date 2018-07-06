@@ -16,7 +16,10 @@ import {
 } from '../../malcolm/malcolmActionCreators';
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 
-import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
+import {
+  selectorFunction,
+  getDefaultFromType,
+} from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = () => ({
   div: {
@@ -44,13 +47,6 @@ const styles = () => ({
   },
 });
 
-const widgetDefaultValues = {
-  'widget:textinput': '',
-  'widget:textupdate': '...',
-  'widget:checkbox': false,
-  'widget:led': false,
-};
-
 const buildIOComponent = (input, props, isOutput) => {
   const { tags } = input[1];
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
@@ -63,14 +59,16 @@ const buildIOComponent = (input, props, isOutput) => {
 
   const parameterMeta = {};
 
-  const defaultValue =
-    props.defaultValues[input[0]] !== undefined
-      ? props.defaultValues[input[0]].toString()
-      : null;
   const valueMap = isOutput ? props.outputValues : props.inputValues;
-  const inputValue =
-    valueMap[input[0]] || defaultValue || widgetDefaultValues[widgetTag];
-
+  let inputValue;
+  if (valueMap[input[0]] !== undefined) {
+    inputValue = valueMap[input[0]];
+  } else if (props.defaultValues[input[0]] !== undefined) {
+    inputValue = props.defaultValues[input[0]];
+  } else {
+    inputValue = getDefaultFromType(input[1]);
+    props.updateInput(props.methodPath, input[0], inputValue);
+  }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
   };

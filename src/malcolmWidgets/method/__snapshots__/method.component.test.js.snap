@@ -32,7 +32,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       <WithStyles(WidgetTextInput)
         Error={false}
         Pending={true}
-        Value=""
+        Value="-"
         blurHandler={[Function]}
         continuousSend={true}
         focusHandler={[Function]}
@@ -228,7 +228,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       <WithStyles(WidgetTextInput)
         Error={false}
         Pending={true}
-        Value=""
+        Value="-"
         blurHandler={[Function]}
         continuousSend={true}
         focusHandler={[Function]}
@@ -268,7 +268,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       <WithStyles(WidgetTextInput)
         Error={false}
         Pending={true}
-        Value=""
+        Value="-"
         blurHandler={[Function]}
         continuousSend={true}
         focusHandler={[Function]}
@@ -436,7 +436,7 @@ exports[`Method component renders correctly with return value 1`] = `
       <WithStyles(WidgetTextInput)
         Error={false}
         Pending={true}
-        Value=""
+        Value="-"
         blurHandler={[Function]}
         continuousSend={true}
         focusHandler={[Function]}
@@ -476,7 +476,7 @@ exports[`Method component renders correctly with return value 1`] = `
       <WithStyles(WidgetTextInput)
         Error={false}
         Pending={true}
-        Value=""
+        Value="-"
         blurHandler={[Function]}
         continuousSend={true}
         focusHandler={[Function]}

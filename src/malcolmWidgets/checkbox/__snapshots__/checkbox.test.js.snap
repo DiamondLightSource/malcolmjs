@@ -10,6 +10,7 @@ exports[`WidgetCheckbox renders checked 1`] = `
     }
   }
   disabled={false}
+  indeterminate={false}
   onChange={[Function]}
   value="TestBox"
 />
@@ -25,6 +26,7 @@ exports[`WidgetCheckbox renders unchecked 1`] = `
     }
   }
   disabled={false}
+  indeterminate={false}
   onChange={[Function]}
   value="TestBox"
 />
