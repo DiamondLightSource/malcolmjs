@@ -85,7 +85,8 @@ const processAttribute = (
     LayoutHandler.layoutAttributeReceived(
       action.payload,
       malcolmState.mainAttribute,
-      dispatch
+      dispatch,
+      malcolmState.blocks
     );
   }
 };

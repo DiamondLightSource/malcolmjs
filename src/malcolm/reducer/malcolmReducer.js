@@ -312,19 +312,20 @@ function handleReturnMessage(state, action) {
 
 const handleErrorMessage = (state, action) => {
   const matchingMessage = state.messagesInFlight[action.payload.id];
-  // TODO: fix this......
   let updatedState = { ...state };
-  if (
-    matchingMessage &&
-    matchingMessage.path &&
-    matchingMessage.path.length > 2 &&
-    matchingMessage.path[matchingMessage.path.length - 2] === 'layout'
-  ) {
-    // reset the layout
-    updatedState = updateAttribute(state, {
-      id: action.payload.id,
-      delta: true,
-    });
+  if (matchingMessage && matchingMessage.path) {
+    const attribute = blockUtils.findAttribute(
+      state.blocks,
+      matchingMessage.path[0],
+      matchingMessage.path[1]
+    );
+    if (attribute && attribute.meta.tags.some(t => t === 'widget:flowgraph')) {
+      // reset the layout
+      updatedState = updateAttribute(state, {
+        id: action.payload.id,
+        delta: true,
+      });
+    }
   }
 
   updatedState = setErrorState(

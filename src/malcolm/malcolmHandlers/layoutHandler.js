@@ -4,24 +4,33 @@ import {
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
 
-const layoutRouteSelected = (blocks, blockName, dispatch) => {
-  const layoutAttribute = BlockUtils.findAttribute(blocks, blockName, 'layout');
+const layoutRouteSelected = (blocks, path, dispatch) => {
+  const layoutAttribute = BlockUtils.findAttribute(blocks, path[0], path[1]);
 
   if (layoutAttribute && layoutAttribute.layout) {
     layoutAttribute.layout.blocks.filter(b => b.visible).forEach(block => {
-      dispatch(malcolmNewBlockAction(block.mri, false, false));
-      dispatch(malcolmSubscribeAction([block.mri, 'meta']));
+      if (!blocks[block.mri]) {
+        dispatch(malcolmNewBlockAction(block.mri, false, false));
+        dispatch(malcolmSubscribeAction([block.mri, 'meta']));
+      }
     });
   }
 };
 
-const layoutAttributeReceived = (layoutAttribute, mainAttribute, dispatch) => {
-  if (mainAttribute === 'layout') {
+const layoutAttributeReceived = (
+  layoutAttribute,
+  mainAttribute,
+  dispatch,
+  blocks
+) => {
+  if (mainAttribute === layoutAttribute.name) {
     layoutAttribute.value.visible.forEach((visible, i) => {
       if (visible) {
         const blockName = layoutAttribute.value.mri[i];
-        dispatch(malcolmNewBlockAction(blockName, false, false));
-        dispatch(malcolmSubscribeAction([blockName, 'meta']));
+        if (!blocks[blockName]) {
+          dispatch(malcolmNewBlockAction(blockName, false, false));
+          dispatch(malcolmSubscribeAction([blockName, 'meta']));
+        }
       }
     });
   }

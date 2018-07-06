@@ -4,6 +4,7 @@ import {
   malcolmNavigationPath,
   malcolmMainAttribute,
 } from '../malcolmActionCreators';
+import BlockUtils from '../blockUtils';
 import LayoutHandler from '../malcolmHandlers/layoutHandler';
 
 const handleLocationChange = (path, blocks, dispatch) => {
@@ -33,8 +34,20 @@ const handleLocationChange = (path, blocks, dispatch) => {
         i === tokens.length - 1 - tokens.length % 2 ||
         (i === 1 && tokens.length <= 2);
       if (isMainAttribute) {
-        if (tokens[i] === 'layout') {
-          LayoutHandler.layoutRouteSelected(blocks, tokens[i - 1], dispatch);
+        const mainAttribute = BlockUtils.findAttribute(
+          blocks,
+          tokens[i - 1],
+          tokens[i]
+        );
+        if (
+          mainAttribute &&
+          mainAttribute.meta.tags.some(t => t === 'widget:flowgraph')
+        ) {
+          LayoutHandler.layoutRouteSelected(
+            blocks,
+            tokens.slice(i - 1, i + 1),
+            dispatch
+          );
         }
 
         dispatch(malcolmMainAttribute(tokens[i]));

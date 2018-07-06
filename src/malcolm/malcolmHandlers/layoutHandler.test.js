@@ -49,7 +49,7 @@ describe('LayoutHandler', () => {
   };
 
   it('layoutRouteSelected dispatches new subscriptions for visible blocks', () => {
-    LayoutHandler.layoutRouteSelected(blocks, 'block1', dispatch);
+    LayoutHandler.layoutRouteSelected(blocks, ['block1', 'layout'], dispatch);
 
     checkBlockAddedAndSubscribed();
   });
@@ -57,13 +57,18 @@ describe('LayoutHandler', () => {
   it('layoutRouteSelected ignores blocks that are not visible', () => {
     blocks.block1.attributes[0].layout.blocks[0].visible = false;
 
-    LayoutHandler.layoutRouteSelected(blocks, 'block1', dispatch);
+    LayoutHandler.layoutRouteSelected(blocks, ['block1', 'layout'], dispatch);
 
     expect(actions).toHaveLength(0);
   });
 
   it('layoutAttributeReceived dispatches new subscriptions for visible blocks', () => {
-    LayoutHandler.layoutAttributeReceived(layoutAttribute, 'layout', dispatch);
+    LayoutHandler.layoutAttributeReceived(
+      layoutAttribute,
+      'layout',
+      dispatch,
+      blocks
+    );
 
     checkBlockAddedAndSubscribed();
   });
@@ -71,7 +76,12 @@ describe('LayoutHandler', () => {
   it('layoutAttributeReceived ignores blocks that are not visible', () => {
     layoutAttribute.value.visible[0] = false;
 
-    LayoutHandler.layoutAttributeReceived(layoutAttribute, 'layout', dispatch);
+    LayoutHandler.layoutAttributeReceived(
+      layoutAttribute,
+      'layout',
+      dispatch,
+      blocks
+    );
 
     expect(actions).toHaveLength(0);
   });
