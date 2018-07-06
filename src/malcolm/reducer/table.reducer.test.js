@@ -1,5 +1,10 @@
+/* eslint no-underscore-dangle: 0 */
 import TableReducer from './table.reducer';
-import { MalcolmTableUpdate, MalcolmLocalCopy } from '../malcolm.types';
+import {
+  MalcolmTableUpdate,
+  MalcolmLocalCopy,
+  MalcolmTableFlag,
+} from '../malcolm.types';
 import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { harderAttribute } from '../../malcolmWidgets/table/table.stories';
 
@@ -46,7 +51,7 @@ describe('Table reducer', () => {
     state = {
       blocks: {
         block1: {
-          attributes: [harderAttribute],
+          attributes: [JSON.parse(JSON.stringify(harderAttribute))],
         },
       },
     };
@@ -83,6 +88,33 @@ describe('Table reducer', () => {
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       expectedValue
     );
+  });
+
+  it('flags existing row and table as changed on put', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      value: {
+        name: 'TTLIN2',
+        mri: 'PANDA:TTLIN2',
+        x: 10.0,
+        y: 15.0,
+        visible: true,
+      },
+      row: 1,
+    };
+    const action = {
+      type: MalcolmTableUpdate,
+      payload,
+    };
+    let testState = TableReducer(state, copyAction);
+    testState = TableReducer(testState, action);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]
+    ).toEqual({ _isChanged: true });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.dirty
+    ).toBeTruthy();
   });
 
   it('adds row to bottom of local state', () => {
@@ -132,5 +164,86 @@ describe('Table reducer', () => {
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       harderAttribute.value
     );
+  });
+
+  it('set flag adds flags from payload to row state', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      row: 1,
+      flagType: 'testFlag',
+      flags: { testFlag: true },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload,
+    };
+    let testState = TableReducer(state, copyAction);
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]
+    ).toEqual({ testFlag: true });
+  });
+
+  it('set flag sets table as dirty if a dirty flag is set to true', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      row: 1,
+      flagType: 'dirty',
+      flags: { _dirty: true, dirty: { testVal: true } },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload,
+    };
+    let testState = TableReducer(state, copyAction);
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]._dirty
+    ).toBeTruthy();
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.dirty
+    ).toBeTruthy();
+  });
+
+  it('set flag doesnt unset table as dirty if a dirty flag is set to false but some row has been altered', () => {
+    const flagPayload = {
+      path: ['block1', 'layout'],
+      row: 1,
+      flagType: 'dirty',
+      flags: { _dirty: false, dirty: { testVal: false } },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload: flagPayload,
+    };
+
+    const putPayload = {
+      path: ['block1', 'layout'],
+      value: {
+        name: 'TTLIN2',
+        mri: 'PANDA:TTLIN2',
+        x: 10.0,
+        y: 15.0,
+        visible: true,
+      },
+      row: 1,
+    };
+    const putAction = {
+      type: MalcolmTableUpdate,
+      payload: putPayload,
+    };
+
+    let testState = TableReducer(state, copyAction);
+    testState = TableReducer(testState, putAction);
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]._dirty
+    ).toBeFalsy();
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.dirty
+    ).toBeTruthy();
   });
 });

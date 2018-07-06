@@ -70,13 +70,11 @@ export const updateTableLocal = (state, payload) => {
       attribute.localState.labels.forEach(label => {
         attribute.localState.value[label][payload.row] = payload.value[label];
       });
-      const rowIsDifferent = attribute.localState.labels
-        .map(
-          label =>
-            `${attribute.localState.value[label][payload.row]}` !==
-            `${attribute.value[label][payload.row]}`
-        )
-        .some(val => val);
+      const rowIsDifferent = attribute.localState.labels.some(
+        label =>
+          `${attribute.localState.value[label][payload.row]}` !==
+          `${attribute.value[label][payload.row]}`
+      );
 
       attribute.localState.flags.rows[payload.row] = {
         ...attribute.localState.flags.rows[payload.row],
