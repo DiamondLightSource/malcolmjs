@@ -81,7 +81,7 @@ const processAttribute = (
 
   dispatch(action);
 
-  if (request.path[request.path.length - 1] === 'layout') {
+  if (changedAttribute.meta.tags.some(t => t === 'widget:flowgraph')) {
     LayoutHandler.layoutAttributeReceived(
       action.payload,
       malcolmState.mainAttribute,

@@ -108,12 +108,16 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     return layout;
   }
 
-  if (attributeName === 'layout') {
+  const attribute = attributes[matchingAttribute];
+
+  if (
+    attribute &&
+    attribute.meta &&
+    attribute.meta.tags.some(t => t === 'widget:flowgraph')
+  ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
   }
-
-  const attribute = attributes[matchingAttribute];
 
   if (blockUtils.attributeHasTag(attribute, 'widget:icon')) {
     layout = LayoutReducer.processLayout(updatedState);

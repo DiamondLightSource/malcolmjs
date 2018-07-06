@@ -139,7 +139,17 @@ function updateBlock(state, payload) {
       );
     }
 
-    if (state.mainAttribute === 'layout') {
+    const mainAttribute = blockUtils.findAttribute(
+      blocks,
+      blockName,
+      state.mainAttribute
+    );
+
+    if (
+      mainAttribute &&
+      mainAttribute.meta &&
+      mainAttribute.meta.tags.some(t => t === 'widget:flowgraph')
+    ) {
       layout = layoutReducer.processLayout(state);
     }
   }
@@ -317,15 +327,13 @@ const handleErrorMessage = (state, action) => {
     });
   }
 
-  return stopTrackingMessage(
-    setErrorState(
-      updatedState,
-      action.payload.id,
-      true,
-      action.payload.message
-    ),
-    action
+  updatedState = setErrorState(
+    updatedState,
+    action.payload.id,
+    true,
+    action.payload.message
   );
+  return stopTrackingMessage(updatedState, action);
 };
 
 const updateSocket = (state, payload) => {
