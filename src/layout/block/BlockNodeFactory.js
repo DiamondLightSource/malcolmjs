@@ -1,7 +1,7 @@
 import { AbstractNodeFactory } from 'storm-react-diagrams';
 import React from 'react';
 import BlockWidget from './blockWidget.component';
-import BlockNodeModel from './block.model';
+import BlockNodeModel from './BlockNodeModel';
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["generateReactWidget", "getNewInstance"] }] */
 export default class BlockNodeFactory extends AbstractNodeFactory {

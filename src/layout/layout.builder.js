@@ -1,6 +1,6 @@
 import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
-import BlockNodeFactory from './block/blockWidget.factory';
-import BlockNodeModel from './block/block.model';
+import BlockNodeFactory from './block/BlockNodeFactory';
+import BlockNodeModel from './block/BlockNodeModel';
 import MalcolmLinkFactory from './link/link.factory';
 
 const buildBlockNode = (block, selectedBlocks, clickHandler, portMouseDown) => {

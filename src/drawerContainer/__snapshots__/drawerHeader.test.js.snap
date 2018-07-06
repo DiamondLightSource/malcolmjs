@@ -15,6 +15,7 @@ exports[`DrawerHeader renders correctly 1`] = `
       }
     >
       <WithStyles(IconButton)
+        data-cy="closedrawer"
         onClick={[Function]}
       >
         <pure(Close) />

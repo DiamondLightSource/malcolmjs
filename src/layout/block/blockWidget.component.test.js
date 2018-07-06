@@ -2,7 +2,7 @@ import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import { Toolkit } from 'storm-react-diagrams';
 import BlockWidget from './blockWidget.component';
-import BlockModel from './block.model';
+import BlockModel from './BlockNodeModel';
 
 describe('BlockWidget', () => {
   let shallow;

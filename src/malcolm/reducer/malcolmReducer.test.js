@@ -8,7 +8,6 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
   MalcolmAttributeFlag,
-  MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
@@ -56,7 +55,7 @@ describe('malcolm reducer', () => {
     MethodReducer.mockImplementation(s => s);
 
     state = {
-      messagesInFlight: [],
+      messagesInFlight: {},
       blocks: {},
       navigation: {
         navigationLists: [],
@@ -80,11 +79,11 @@ describe('malcolm reducer', () => {
   });
 
   it('tracks malcolm messages in the state', () => {
-    const newState = malcolmReducer(state, buildAction('malcolm:send'));
+    const newState = malcolmReducer(state, buildAction('malcolm:send', 1));
 
-    expect(newState.messagesInFlight.length).toEqual(1);
-    expect(newState.messagesInFlight[0].type).not.toBeDefined();
-    expect(newState.messagesInFlight[0].typeid).toEqual(
+    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
+    expect(newState.messagesInFlight[1].type).not.toBeDefined();
+    expect(newState.messagesInFlight[1].typeid).toEqual(
       'malcolm:core/Subscribe:1.0'
     );
   });
@@ -93,13 +92,13 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, buildAction('malcolm:send', 1));
     state = malcolmReducer(state, buildAction('malcolm:send', 2, ['PANDA']));
 
-    expect(state.messagesInFlight.length).toEqual(2);
+    expect(Object.keys(state.messagesInFlight).length).toEqual(2);
   });
 
   it('does not tracks multiple malcolm subscriptions with the same path', () => {
     state = malcolmReducer(state, buildAction('malcolm:send', 1));
     state = malcolmReducer(state, buildAction('malcolm:send', 2));
-    expect(state.messagesInFlight.length).toEqual(1);
+    expect(Object.keys(state.messagesInFlight).length).toEqual(1);
   });
 
   it('does track multiple malcolm non-subscription messages with the same path', () => {
@@ -107,29 +106,29 @@ describe('malcolm reducer', () => {
     const malcolmGetAction = buildAction('malcolm:send', 2);
     malcolmGetAction.payload.typeid = 'malcolm:core/Get:1.0';
     state = malcolmReducer(state, malcolmGetAction);
-    expect(state.messagesInFlight.length).toEqual(2);
+    expect(Object.keys(state.messagesInFlight).length).toEqual(2);
   });
 
   it('stops tracking a message once an error response is received', () => {
     state = {
-      messagesInFlight: [{ id: 1 }, { id: 123 }],
+      messagesInFlight: { 1: { id: 1 }, 123: { id: 123 } },
     };
 
     const newState = malcolmReducer(state, buildAction('malcolm:error', 1));
 
-    expect(newState.messagesInFlight.length).toEqual(1);
-    expect(newState.messagesInFlight[0].id).toEqual(123);
+    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
+    expect(newState.messagesInFlight[123].id).toEqual(123);
   });
 
   it('stops tracking a message once an return response is received', () => {
     state = {
-      messagesInFlight: [{ id: 1 }, { id: 123 }],
+      messagesInFlight: { 1: { id: 1 }, 123: { id: 123 } },
     };
 
     const newState = malcolmReducer(state, buildAction('malcolm:return', 1));
 
-    expect(newState.messagesInFlight.length).toEqual(1);
-    expect(newState.messagesInFlight[0].id).toEqual(123);
+    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
+    expect(newState.messagesInFlight[123].id).toEqual(123);
   });
 
   it('registers a new block when one is requested', () => {
@@ -159,10 +158,10 @@ describe('malcolm reducer', () => {
       loading: true,
     };
 
-    state.messagesInFlight.push({
+    state.messagesInFlight[1] = {
       id: 1,
       path: ['block1', 'meta'],
-    });
+    };
 
     const action = {
       type: MalcolmBlockMeta,
@@ -196,10 +195,10 @@ describe('malcolm reducer', () => {
       ],
     };
 
-    state.messagesInFlight.push({
+    state.messagesInFlight[1] = {
       id: 1,
       path: ['block1', 'health'],
-    });
+    };
 
     const action = {
       type: MalcolmAttributeData,
@@ -218,37 +217,6 @@ describe('malcolm reducer', () => {
       'health',
     ]);
     expect(state.blocks.block1.attributes[0].loading).toEqual(false);
-  });
-
-  it('sets attribute pending', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-      attributes: [
-        {
-          name: 'health',
-          loading: true,
-          path: ['block1', 'health'],
-          pending: false,
-        },
-      ],
-    };
-
-    const action = {
-      type: MalcolmAttributeFlag,
-      payload: {
-        id: 1,
-        path: ['block1', 'health'],
-        flagType: 'pending',
-        flagState: true,
-      },
-    };
-
-    state = malcolmReducer(state, action);
-
-    expect(state.blocks.block1.attributes.length).toEqual(1);
-    expect(state.blocks.block1.attributes[0].name).toEqual('health');
-    expect(state.blocks.block1.attributes[0].pending).toEqual(true);
   });
 
   it('set flag sets attribute pending', () => {
@@ -372,26 +340,6 @@ describe('malcolm reducer', () => {
     expect(NavigationReducer.updateNavigationPath).toHaveBeenCalledTimes(1);
   });
 
-  it('updates snackbar', () => {
-    state.snackbar = {
-      open: false,
-      message: '',
-    };
-
-    const action = {
-      type: MalcolmSnackbar,
-      snackbar: {
-        open: true,
-        message: 'This is a test!',
-      },
-    };
-
-    state = malcolmReducer(state, action);
-
-    expect(state.snackbar.open).toEqual(true);
-    expect(state.snackbar.message).toEqual('This is a test!');
-  });
-
   it('does clean', () => {
     state.blocks = testBlock;
     const tidyBlock = {
@@ -438,14 +386,11 @@ describe('malcolm reducer', () => {
   });
 
   it('updates socket on socket connect actions', () => {
-    const messages = [];
     const dummyReconnectorSocket = {
       socket: {
         url: '',
         connect: jest.fn(),
-        send: payload => {
-          messages.push(payload);
-        },
+        send: () => {},
         isConnected: false,
       },
     };
@@ -465,17 +410,17 @@ describe('malcolm reducer', () => {
     let updatedState = setErrorState(state, 1234567, 1);
     expect(updatedState).toBe(state);
 
-    state.messagesInFlight.push({ id: 1 });
+    state.messagesInFlight[1] = { id: 1 };
     updatedState = setErrorState(state, 1234567, 1);
     expect(updatedState).toBe(state);
   });
 
   it('setErrorState updates the error state on the matching attribute', () => {
     state.blocks = testBlock;
-    state.messagesInFlight.push({
+    state.messagesInFlight[1] = {
       id: 1,
       path: ['testBlock', 'foo'],
-    });
+    };
 
     const updatedState = setErrorState(state, 1, 123);
 

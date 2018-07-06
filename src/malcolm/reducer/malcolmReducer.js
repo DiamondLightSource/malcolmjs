@@ -5,7 +5,6 @@ import {
   MalcolmBlockMeta,
   MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
-  MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
@@ -27,7 +26,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const initialMalcolmState = {
-  messagesInFlight: [],
+  messagesInFlight: {},
   counter: 0,
   navigation: {
     navigationLists: [],
@@ -40,10 +39,6 @@ const initialMalcolmState = {
   parentBlock: undefined,
   childBlock: undefined,
   mainAttribute: undefined,
-  snackbar: {
-    message: '',
-    open: false,
-  },
   layout: {
     blocks: [],
   },
@@ -64,25 +59,27 @@ function updateMessagesInFlight(state, action) {
 
   if (
     action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
-    !state.messagesInFlight.some(
-      m => m.path.join() === action.payload.path.join()
+    !Object.keys(state.messagesInFlight).some(
+      m =>
+        state.messagesInFlight[m] !== undefined &&
+        state.messagesInFlight[m].path.join() === action.payload.path.join()
     )
   ) {
-    newState.messagesInFlight = [
+    newState.messagesInFlight = {
       ...state.messagesInFlight,
-      { ...action.payload },
-    ];
+    };
+    newState.messagesInFlight[action.payload.id] = action.payload;
   }
 
   return newState;
 }
 
 function stopTrackingMessage(state, action) {
+  const filteredMessages = { ...state.messagesInFlight };
+  delete filteredMessages[action.payload.id];
   return {
     ...state,
-    messagesInFlight: state.messagesInFlight.filter(
-      m => m.id !== action.payload.id
-    ),
+    messagesInFlight: filteredMessages,
   };
 }
 
@@ -115,8 +112,7 @@ function updateBlock(state, payload) {
   let { navigation, layout } = state;
 
   if (payload.delta) {
-    const blockName = state.messagesInFlight.find(m => m.id === payload.id)
-      .path[0];
+    const blockName = state.messagesInFlight[payload.id].path[0];
 
     if (Object.prototype.hasOwnProperty.call(blocks, blockName)) {
       blocks[blockName] = {
@@ -217,13 +213,6 @@ function setFlag(state, path, flagType, flagState) {
   return state;
 }
 
-function updateSnackbar(state, newSnackbar) {
-  return {
-    ...state,
-    snackbar: { ...newSnackbar },
-  };
-}
-
 function cleanBlocks(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
@@ -275,7 +264,7 @@ function setDisconnected(state) {
 }
 
 export const setErrorState = (state, id, errorState, errorMessage) => {
-  const matchingMessage = state.messagesInFlight.find(m => m.id === id);
+  const matchingMessage = state.messagesInFlight[id];
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
     const blockName = path[0];
@@ -312,10 +301,7 @@ function handleReturnMessage(state, action) {
 }
 
 const handleErrorMessage = (state, action) => {
-  const matchingMessage = state.messagesInFlight.find(
-    m => m.id === action.payload.id
-  );
-
+  const matchingMessage = state.messagesInFlight[action.payload.id];
   // TODO: fix this......
   let updatedState = { ...state };
   if (
@@ -353,7 +339,7 @@ const updateSocket = (state, payload) => {
   };
 };
 
-const malcolmReducer = (state = initialMalcolmState, action) => {
+const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
   updatedState = tableReducer(updatedState, action);
@@ -389,9 +375,6 @@ const malcolmReducer = (state = initialMalcolmState, action) => {
         updatedState,
         action.payload
       );
-
-    case MalcolmSnackbar:
-      return updateSnackbar(updatedState, action.snackbar);
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);

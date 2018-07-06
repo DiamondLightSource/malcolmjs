@@ -4,7 +4,6 @@ import configureMalcolmSocketHandlers from './malcolmSocketHandler';
 import {
   MalcolmBlockMeta,
   MalcolmAttributeData,
-  MalcolmSnackbar,
   MalcolmCleanBlocks,
   MalcolmDisconnected,
   MalcolmRootBlockMeta,
@@ -12,6 +11,7 @@ import {
   MalcolmAttributeFlag,
   MalcolmError,
 } from './malcolm.types';
+import { snackbar } from '../viewState/viewState.actions';
 
 jest.mock('./middleware/malcolmRouting');
 jest.useFakeTimers();
@@ -28,26 +28,26 @@ describe('malcolm socket handler', () => {
       },
     },
     malcolm: {
-      messagesInFlight: [
-        {
+      messagesInFlight: {
+        1: {
           id: 1,
           path: ['block1', 'meta'],
         },
-        {
+        2: {
           id: 2,
           path: ['block1', 'health'],
         },
-        {
+        3: {
           typeid: 'malcolm:core/Put:1.0',
           id: 3,
           path: ['TestBlock', 'TestAttr'],
           value: null,
         },
-        {
+        4: {
           id: 4,
           path: ['.', 'blocks'],
         },
-      ],
+      },
       blocks: {
         TestBlock: {
           attributes: [
@@ -145,7 +145,7 @@ describe('malcolm socket handler', () => {
     expect(drain).toEqual(['flushed test']);
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
-    expect(dispatches[1].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[1].type).toEqual(snackbar);
     expect(dispatches[1].snackbar.open).toEqual(true);
     expect(dispatches[1].snackbar.message).toEqual(`Connected to WebSocket`);
   });
@@ -168,52 +168,32 @@ describe('malcolm socket handler', () => {
     expect(dispatches[0].payload.label).toEqual('Block 1');
   });
 
-  it('handles scalar attribute updates', () => {
+  const runAttributeUpdateTest = typeid => {
     const changes = {
       label: 'Attribute 1',
       meta: {
         tags: [],
       },
     };
-    const message = buildMessage('epics:nt/NTScalar:1.0', 2, changes);
+    const message = buildMessage(typeid, 2, changes);
 
     socketContainer.socket.send(message);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTScalar:1.0');
+    expect(dispatches[0].payload.typeid).toEqual(typeid);
+  };
+
+  it('handles scalar attribute updates', () => {
+    runAttributeUpdateTest('epics:nt/NTScalar:1.0');
   });
 
   it('handles table attribute updates', () => {
-    const changes = {
-      label: 'Attribute 1',
-      meta: {
-        tags: [],
-      },
-    };
-    const message = buildMessage('epics:nt/NTTable:1.0', 2, changes);
-
-    socketContainer.socket.send(message);
-
-    expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('epics:nt/NTTable:1.0');
+    runAttributeUpdateTest('epics:nt/NTTable:1.0');
   });
 
   it('handles method updates', () => {
-    const changes = {
-      label: 'Method 1',
-      meta: {
-        tags: [],
-      },
-    };
-    const message = buildMessage('malcolm:core/Method:1.0', 2, changes);
-
-    socketContainer.socket.send(message);
-
-    expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.typeid).toEqual('malcolm:core/Method:1.0');
+    runAttributeUpdateTest('malcolm:core/Method:1.0');
   });
 
   it('dispatches a message for unhandled deltas', () => {
@@ -237,7 +217,7 @@ describe('malcolm socket handler', () => {
     const errorString = JSON.stringify(error);
     socketContainer.socket.onerror(error);
     expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       `WebSocket Error: ${errorString}`
@@ -247,7 +227,7 @@ describe('malcolm socket handler', () => {
   it('updates snackbar on socket close', () => {
     socketContainer.socket.onclose();
     expect(dispatches.length).toEqual(2);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(`WebSocket disconnected`);
     expect(dispatches[1].type).toEqual(MalcolmDisconnected);
@@ -257,7 +237,7 @@ describe('malcolm socket handler', () => {
     configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
     reconnectingSocketContainer.socket.onclose();
     expect(dispatches.length).toEqual(2);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       `WebSocket disconnected; attempting to reconnect...`
@@ -273,7 +253,7 @@ describe('malcolm socket handler', () => {
     });
     socketContainer.socket.send(malcolmError);
     expect(dispatches.length).toEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       'Error reported by malcolm server: "Error: this is a test!"'
@@ -288,7 +268,7 @@ describe('malcolm socket handler', () => {
     });
     socketContainer.socket.send(malcolmError);
     expect(dispatches.length).toEqual(3);
-    expect(dispatches[0].type).toEqual(MalcolmSnackbar);
+    expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
     expect(dispatches[0].snackbar.message).toEqual(
       'Error in attribute TestAttr for block TestBlock'
@@ -354,7 +334,7 @@ describe('malcolm socket handler', () => {
     configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
     reconnectingSocketContainer.socket.isReconnection = true;
     reconnectingSocketContainer.socket.onopen();
-    expect(state.malcolm.messagesInFlight).toEqual([]);
+    expect(state.malcolm.messagesInFlight).toEqual({});
     expect(handleLocationChange).toHaveBeenCalledTimes(1);
   });
 });

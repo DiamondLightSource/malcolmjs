@@ -151,7 +151,6 @@ const selectPortForLink = (malcolmState, portId, start) => {
   if (startPortForLink && endPortForLink) {
     // Reset
     startPortForLink = undefined;
-    endPortForLink = undefined;
   }
 
   startPortForLink = start ? portId : startPortForLink;

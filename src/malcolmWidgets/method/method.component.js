@@ -177,17 +177,18 @@ const mapStateToProps = (state, ownProps) => {
   alarm = method && method.pending ? AlarmStates.PENDING : alarm;
 
   return {
-    methodName: method.label,
+    methodName: method ? method.label : 'Not found',
     methodAlarm: alarm,
-    methodPending: method.pending,
-    methodErrored: method.errorState,
-    methodErrorMessage: method.errorMessage ? method.errorMessage : '',
-    methodPath: method.path,
+    methodPending: method ? method.pending : false,
+    methodErrored: method ? method.errorState : false,
+    methodErrorMessage:
+      method && method.errorMessage ? method.errorMessage : '',
+    methodPath: method ? method.path : [],
     inputs: method ? method.takes.elements : {},
-    inputValues: method.inputs || {},
-    dirtyInputs: method.dirtyInputs || {},
+    inputValues: (method && method.inputs) || {},
+    dirtyInputs: (method && method.dirtyInputs) || {},
     outputs: method ? method.returns.elements : {},
-    outputValues: method.outputs || {},
+    outputValues: (method && method.outputs) || {},
     required: method ? method.required : {},
     defaultValues: method ? method.defaults : {},
   };

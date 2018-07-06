@@ -51,6 +51,7 @@ class NavControl extends Component {
         <IconButton
           onClick={this.handleClick}
           disabled={nav.children.length === 0}
+          data-cy="navmenu"
         >
           <KeyboardArrowDown />
         </IconButton>

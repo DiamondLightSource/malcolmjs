@@ -1,10 +1,10 @@
 import { createShallow } from '@material-ui/core/test-utils';
-import BlockWidgetFactory from './blockWidget.factory';
-import BlockNodeModel from './block.model';
+import BlockNodeFactory from './BlockNodeFactory';
+import BlockNodeModel from './BlockNodeModel';
 
 describe('BlockWidgetFactory', () => {
   let shallow;
-  const blockWidgetFactory = new BlockWidgetFactory();
+  const blockWidgetFactory = new BlockNodeFactory();
 
   beforeEach(() => {
     shallow = createShallow();

@@ -22,19 +22,15 @@ describe('method reducer', () => {
           ],
         },
       },
-      messagesInFlight: [],
+      messagesInFlight: {
+        2: testMessage,
+      },
     };
   });
 
-  it('updateMethodInput should update the input on a method', () => {
-    const payload = {
-      path: ['block1', 'attr1'],
-      name: 'input1',
-      value: 123,
-    };
-
+  const runReducer = (actionType, payload) => {
     const action = {
-      type: MalcolmUpdateMethodInputType,
+      type: actionType,
       payload,
     };
 
@@ -44,6 +40,18 @@ describe('method reducer', () => {
       'block1',
       'attr1'
     );
+
+    return attribute;
+  };
+
+  it('updateMethodInput should update the input on a method', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input1',
+      value: 123,
+    };
+
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.inputs.input1).toEqual(123);
   });
 
@@ -54,17 +62,7 @@ describe('method reducer', () => {
       value: { isDirty: true },
     };
 
-    const action = {
-      type: MalcolmUpdateMethodInputType,
-      payload,
-    };
-
-    const updatedState = MethodReducer(state, action);
-    const attribute = blockUtils.findAttribute(
-      updatedState.blocks,
-      'block1',
-      'attr1'
-    );
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.dirtyInputs.input1).toBeTruthy();
   });
 
@@ -77,64 +75,32 @@ describe('method reducer', () => {
       value: { isDirty: true },
     };
 
-    const action = {
-      type: MalcolmUpdateMethodInputType,
-      payload,
-    };
-
-    const updatedState = MethodReducer(state, action);
-    const attribute = blockUtils.findAttribute(
-      updatedState.blocks,
-      'block1',
-      'attr1'
-    );
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.dirtyInputs.input1).toBeTruthy();
   });
 
   it('handleMethodReturn should update the output on a method with return map', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
-    state.messagesInFlight = [testMessage];
 
     const payload = {
       id: 2,
       value: { output1: 456 },
     };
 
-    const action = {
-      type: MalcolmReturn,
-      payload,
-    };
-
-    const updatedState = MethodReducer(state, action);
-    const attribute = blockUtils.findAttribute(
-      updatedState.blocks,
-      'block1',
-      'attr1'
-    );
+    const attribute = runReducer(MalcolmReturn, payload);
     expect(attribute.outputs.output1).toEqual(456);
   });
 
   it('handleMethodReturn should update the output on a method with return unpacked', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
     state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
-    state.messagesInFlight = [testMessage];
 
     const payload = {
       id: 2,
       value: 456,
     };
 
-    const action = {
-      type: MalcolmReturn,
-      payload,
-    };
-
-    const updatedState = MethodReducer(state, action);
-    const attribute = blockUtils.findAttribute(
-      updatedState.blocks,
-      'block1',
-      'attr1'
-    );
+    const attribute = runReducer(MalcolmReturn, payload);
     expect(attribute.outputs.output1).toEqual(456);
   });
 
@@ -142,13 +108,13 @@ describe('method reducer', () => {
     state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
     state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
 
-    state.messagesInFlight = [
-      {
+    state.messagesInFlight = {
+      2: {
         id: 2,
         typeid: 'malcolm:core/Put:1.0',
         path: ['block1', 'attr1'],
       },
-    ];
+    };
 
     const payload = {
       id: 2,
@@ -168,23 +134,13 @@ describe('method reducer', () => {
     state.blocks.block1.attributes[0].returns = {
       elements: { output1: {}, output2: {} },
     };
-    state.messagesInFlight = [testMessage];
+
     const payload = {
       id: 2,
       value: { output1: 456 },
     };
 
-    const action = {
-      type: MalcolmReturn,
-      payload,
-    };
-
-    const updatedState = MethodReducer(state, action);
-    const attribute = blockUtils.findAttribute(
-      updatedState.blocks,
-      'block1',
-      'attr1'
-    );
+    const attribute = runReducer(MalcolmReturn, payload);
     expect(attribute.errorState).toBeTruthy();
   });
 });
