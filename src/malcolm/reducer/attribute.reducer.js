@@ -43,30 +43,39 @@ export const checkForFlowGraph = attribute => {
 };
 
 export const portsAreDifferent = (oldAttribute, newAttribute) => {
-  if (oldAttribute && oldAttribute.meta) {
-    if (oldAttribute.meta.label !== newAttribute.meta.label) {
+  if (oldAttribute) {
+    let oldMeta;
+    let newMeta;
+    // #refactorDuplication
+    if (oldAttribute.state && oldAttribute.state.meta) {
+      oldMeta = oldAttribute.state.meta;
+      newMeta = newAttribute.state.meta;
+    } else if (oldAttribute.meta) {
+      oldMeta = oldAttribute.meta;
+      newMeta = newAttribute.meta;
+    } else {
+      return true;
+    }
+
+    if (oldMeta.label !== newMeta.label) {
       return true;
     }
 
     if (oldAttribute.meta.tags) {
       // find inport and compare
-      const inPortTag = newAttribute.meta.tags.find(
-        t => t.indexOf('inport:') > -1
-      );
+      const inPortTag = newMeta.tags.find(t => t.indexOf('inport:') > -1);
       if (
         inPortTag !== undefined &&
-        oldAttribute.meta.tags.findIndex(t => t === inPortTag) === -1
+        oldMeta.tags.findIndex(t => t === inPortTag) === -1
       ) {
         return true;
       }
 
       // find outport and compare
-      const outPortTag = newAttribute.meta.tags.find(
-        t => t.indexOf('outport:') > -1
-      );
+      const outPortTag = newMeta.tags.find(t => t.indexOf('outport:') > -1);
       if (
         outPortTag !== undefined &&
-        oldAttribute.meta.tags.findIndex(t => t === outPortTag) === -1
+        oldMeta.tags.findIndex(t => t === outPortTag) === -1
       ) {
         return true;
       }
@@ -103,7 +112,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 
   const { attributes } = updatedState.blocks[blockName];
   const matchingAttributeIndex = blockUtils.findAttributeIndex(
-    state.blocks,
+    updatedState.blocks,
     blockName,
     attributeName
   );
@@ -116,8 +125,11 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 
   if (
     attribute &&
-    attribute.state.meta &&
-    attribute.state.meta.tags.some(t => t === 'widget:flowgraph')
+    ((attribute.state &&
+      attribute.state.meta &&
+      attribute.state.meta.tags.some(t => t === 'widget:flowgraph')) ||
+      (attribute.meta &&
+        attribute.meta.tags.some(t => t === 'widget:flowgraph')))
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
