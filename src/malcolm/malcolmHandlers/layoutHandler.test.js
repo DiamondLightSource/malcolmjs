@@ -63,7 +63,7 @@ describe('LayoutHandler', () => {
   });
 
   it('layoutAttributeReceived dispatches new subscriptions for visible blocks', () => {
-    LayoutHandler.layoutAttributeReceived(layoutAttribute, 'layout', dispatch);
+    LayoutHandler.layoutAttributeReceived(layoutAttribute, dispatch);
 
     checkBlockAddedAndSubscribed();
   });
@@ -71,7 +71,7 @@ describe('LayoutHandler', () => {
   it('layoutAttributeReceived ignores blocks that are not visible', () => {
     layoutAttribute.value.visible[0] = false;
 
-    LayoutHandler.layoutAttributeReceived(layoutAttribute, 'layout', dispatch);
+    LayoutHandler.layoutAttributeReceived(layoutAttribute, dispatch);
 
     expect(actions).toHaveLength(0);
   });

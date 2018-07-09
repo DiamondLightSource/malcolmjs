@@ -16,15 +16,15 @@ const layoutRouteSelected = (blocks, blockName, dispatch) => {
 };
 
 const layoutAttributeReceived = (layoutAttribute, mainAttribute, dispatch) => {
-  if (mainAttribute === 'layout') {
-    layoutAttribute.value.visible.forEach((visible, i) => {
-      if (visible) {
-        const blockName = layoutAttribute.value.mri[i];
-        dispatch(malcolmNewBlockAction(blockName, false, false));
-        dispatch(malcolmSubscribeAction([blockName, 'meta']));
-      }
-    });
-  }
+  // if (mainAttribute === 'layout') {
+  layoutAttribute.value.visible.forEach((visible, i) => {
+    if (visible) {
+      const blockName = layoutAttribute.value.mri[i];
+      dispatch(malcolmNewBlockAction(blockName, false, false));
+      dispatch(malcolmSubscribeAction([blockName, 'meta']));
+    }
+  });
+  // }
 };
 
 export default {

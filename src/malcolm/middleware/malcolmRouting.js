@@ -2,11 +2,10 @@ import {
   malcolmNewBlockAction,
   malcolmSubscribeAction,
   malcolmNavigationPath,
-  malcolmMainAttribute,
 } from '../malcolmActionCreators';
-import LayoutHandler from '../malcolmHandlers/layoutHandler';
+import NavTypes from '../NavTypes';
 
-const handleLocationChange = (path, blocks, dispatch) => {
+const handleLocationChange = (path, blocks, dispatch, getState) => {
   // remove the first part of the url e.g. /gui/ or /details/
   const tokens = path
     .replace(/\/$/, '') // strip off the trailing /
@@ -15,31 +14,18 @@ const handleLocationChange = (path, blocks, dispatch) => {
   dispatch(malcolmNavigationPath(tokens));
 
   // Get the root list of blocks
-  dispatch(malcolmNewBlockAction('.blocks', false, false));
-  dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
-
-  for (let i = 0; i < tokens.length; i += 1) {
-    if (i % 2 === 0) {
-      const isChild =
-        i === tokens.length - 2 + tokens.length % 2 && tokens.length > 2;
-      const isParent =
-        i === tokens.length - 4 + tokens.length % 2 ||
-        (i === 0 && tokens.length <= 2);
-
-      dispatch(malcolmNewBlockAction(tokens[i], isParent, isChild));
-      dispatch(malcolmSubscribeAction([tokens[i], 'meta']));
-    } else {
-      const isMainAttribute =
-        i === tokens.length - 1 - tokens.length % 2 ||
-        (i === 1 && tokens.length <= 2);
-      if (isMainAttribute) {
-        if (tokens[i] === 'layout') {
-          LayoutHandler.layoutRouteSelected(blocks, tokens[i - 1], dispatch);
-        }
-
-        dispatch(malcolmMainAttribute(tokens[i]));
-      }
-    }
+  if (!blocks['.blocks']) {
+    dispatch(malcolmNewBlockAction('.blocks', false, false));
+    dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+  } else {
+    const { navigationLists } = getState().malcolm.navigation;
+    const newBlocks = navigationLists.filter(
+      nav => nav.navType === NavTypes.Block && !blocks[nav.blockMri]
+    );
+    newBlocks.forEach(nav => {
+      dispatch(malcolmNewBlockAction(nav.blockMri, false, false));
+      dispatch(malcolmSubscribeAction([nav.blockMri, 'meta']));
+    });
   }
 };
 

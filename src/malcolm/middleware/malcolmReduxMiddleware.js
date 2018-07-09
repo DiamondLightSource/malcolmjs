@@ -47,7 +47,12 @@ const buildMalcolmReduxMiddleware = socketContainer => store => next => action =
       break;
 
     case '@@router/LOCATION_CHANGE':
-      handleLocationChange(action.payload.pathname, blocks, store.dispatch);
+      handleLocationChange(
+        action.payload.pathname,
+        blocks,
+        store.dispatch,
+        store.getState
+      );
 
       break;
 

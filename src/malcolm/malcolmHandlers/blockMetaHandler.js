@@ -1,5 +1,8 @@
 import { MalcolmBlockMeta, MalcolmRootBlockMeta } from '../malcolm.types';
-import { malcolmSubscribeAction } from '../malcolmActionCreators';
+import {
+  malcolmSubscribeAction,
+  malcolmNewBlockAction,
+} from '../malcolmActionCreators';
 
 export const BlockMetaHandler = (request, changes, dispatch) => {
   const action = {
@@ -22,7 +25,7 @@ export const BlockMetaHandler = (request, changes, dispatch) => {
   }
 };
 
-export const RootBlockHandler = (request, blocks, dispatch) => {
+export const RootBlockHandler = (request, blocks, dispatch, state) => {
   const action = {
     type: MalcolmRootBlockMeta,
     payload: {
@@ -32,6 +35,20 @@ export const RootBlockHandler = (request, blocks, dispatch) => {
   };
 
   dispatch(action);
+
+  // once we have the list of blocks subscribe to anything in the URL that is a block
+  const { navigationLists } = state.malcolm.navigation;
+
+  for (let i = 0; i < navigationLists.length; i += 1) {
+    const nav = navigationLists[i];
+    if (
+      !state.malcolm.blocks[nav.path] &&
+      blocks.findIndex(block => block === nav.path) > -1
+    ) {
+      dispatch(malcolmNewBlockAction(nav.path, false, false));
+      dispatch(malcolmSubscribeAction([nav.path, 'meta']));
+    }
+  }
 };
 
 export default BlockMetaHandler;

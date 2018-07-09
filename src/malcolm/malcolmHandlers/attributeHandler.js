@@ -1,6 +1,7 @@
 import { MalcolmAttributeData } from '../malcolm.types';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
+import navigationActions from '../actions/navigation.actions';
 
 const processDeltaMessage = (changes, originalRequest, store) => {
   const pathToAttr = originalRequest.path;
@@ -80,6 +81,15 @@ const processAttribute = (
   };
 
   dispatch(action);
+  dispatch(navigationActions.subscribeToNewBlocksInRoute());
+
+  if (changedAttribute.meta.tags.some(t => t === 'widget:flowgraph')) {
+    LayoutHandler.layoutAttributeReceived(
+      action.payload,
+      malcolmState.mainAttribute,
+      dispatch
+    );
+  }
 
   if (request.path[request.path.length - 1] === 'layout') {
     LayoutHandler.layoutAttributeReceived(
