@@ -20,7 +20,7 @@ const layoutRouteSelected = (blocks, path, dispatch) => {
 const layoutAttributeReceived = (path, getState, dispatch) => {
   const { mainAttribute, blocks } = getState().malcolm;
   const layoutAttribute = BlockUtils.findAttribute(blocks, path[0], path[1]);
-  if (mainAttribute === layoutAttribute.name) {
+  if (layoutAttribute && mainAttribute === layoutAttribute.name) {
     layoutAttribute.value.visible.forEach((visible, i) => {
       if (visible) {
         const blockName = layoutAttribute.value.mri[i];

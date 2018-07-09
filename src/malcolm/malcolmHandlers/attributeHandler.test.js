@@ -92,7 +92,12 @@ describe('attribute handler', () => {
   });
 
   it('processes and dispatches a scalar attribute update', () => {
-    AttributeHandler.processAttribute(request, changes([]), {}, dispatch);
+    AttributeHandler.processAttribute(
+      request,
+      changes([]),
+      store.getState,
+      dispatch
+    );
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -105,7 +110,7 @@ describe('attribute handler', () => {
     AttributeHandler.processAttribute(
       request,
       changes(['widget:group']),
-      {},
+      store.getState,
       dispatch
     );
     expect(dispatches[0].payload.isGroup).toEqual(true);
@@ -115,7 +120,7 @@ describe('attribute handler', () => {
     AttributeHandler.processAttribute(
       request,
       changes(['group:outputs']),
-      {},
+      store.getState,
       dispatch
     );
     expect(dispatches[0].payload.inGroup).toEqual(true);
@@ -126,7 +131,7 @@ describe('attribute handler', () => {
     AttributeHandler.processAttribute(
       request,
       changes(['widget:led']),
-      {},
+      store.getState,
       dispatch
     );
     expect(dispatches[0].payload.inGroup).toEqual(false);
@@ -136,7 +141,12 @@ describe('attribute handler', () => {
   it('processes and dispatches a table attribute update', () => {
     const tableChanges = changes(['group:outputs']);
     tableChanges.typeid = 'NTTable';
-    AttributeHandler.processAttribute(request, tableChanges, {}, dispatch);
+    AttributeHandler.processAttribute(
+      request,
+      tableChanges,
+      store.getState,
+      dispatch
+    );
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -150,7 +160,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[0].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual(testDeltas[0].changes[0][1]);
   });
@@ -159,7 +169,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({ ...attribute, meta: { writeable: false } });
   });
@@ -168,7 +178,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({
       ...attribute,
@@ -180,7 +190,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[3].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({
       ...attribute,
@@ -192,7 +202,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[4].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({
       isATest: true,
@@ -205,7 +215,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[5].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({
       ...attribute,
@@ -218,7 +228,7 @@ describe('attribute handler', () => {
     attribute = AttributeHandler.processDeltaMessage(
       testDeltas[6].changes,
       subscription,
-      store
+      store.getState
     );
     expect(attribute).toEqual({
       ...attribute,

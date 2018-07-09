@@ -4,16 +4,22 @@ import { MalcolmNewBlock, MalcolmSend } from '../malcolm.types';
 describe('LayoutHandler', () => {
   let actions = [];
   let blocks = {};
-  let layoutAttribute = {};
+  let mainAttribute = 'layout';
   const dispatch = action => actions.push(action);
+  const getState = () => ({ malcolm: { mainAttribute, blocks } });
 
   beforeEach(() => {
+    mainAttribute = 'layout';
     actions = [];
     blocks = {
       block1: {
         attributes: [
           {
             name: 'layout',
+            value: {
+              mri: ['block2'],
+              visible: [true],
+            },
             layout: {
               blocks: [
                 {
@@ -26,16 +32,7 @@ describe('LayoutHandler', () => {
         ],
       },
     };
-
-    layoutAttribute = {
-      name: 'layout',
-      value: {
-        mri: ['block2'],
-        visible: [true],
-      },
-    };
   });
-
   const checkBlockAddedAndSubscribed = () => {
     expect(actions).toHaveLength(2);
     expect(actions[0].type).toEqual(MalcolmNewBlock);
@@ -64,25 +61,31 @@ describe('LayoutHandler', () => {
 
   it('layoutAttributeReceived dispatches new subscriptions for visible blocks', () => {
     LayoutHandler.layoutAttributeReceived(
-      layoutAttribute,
-      'layout',
-      dispatch,
-      blocks
+      ['block1', 'layout'],
+      getState,
+      dispatch
     );
 
     checkBlockAddedAndSubscribed();
   });
 
-  it('layoutAttributeReceived ignores blocks that are not visible', () => {
-    layoutAttribute.value.visible[0] = false;
-
+  it('layoutAttributeReceived doesnt dispatch new subscriptions if the main attribute isnt the flowgraph', () => {
+    mainAttribute = 'table';
     LayoutHandler.layoutAttributeReceived(
-      layoutAttribute,
-      'layout',
-      dispatch,
-      blocks
+      ['block1', 'layout'],
+      getState,
+      dispatch
     );
+    expect(actions).toHaveLength(0);
+  });
 
+  it('layoutAttributeReceived ignores blocks that are not visible', () => {
+    blocks.block1.attributes[0].value.visible[0] = false;
+    LayoutHandler.layoutAttributeReceived(
+      ['block1', 'layout'],
+      getState,
+      dispatch
+    );
     expect(actions).toHaveLength(0);
   });
 });
