@@ -13,14 +13,15 @@ const addRow = (table, columns, row) => {
     table[label].splice(
       row,
       0,
-      getDefaultFromType(harderAttribute.meta.elements[label])
+      getDefaultFromType(harderAttribute.state.meta.elements[label])
     )
   );
   return table;
 };
 
 describe('Table reducer', () => {
-  const labels = Object.keys(harderAttribute.meta.elements);
+  let testState;
+  const labels = Object.keys(harderAttribute.state.meta.elements);
   const copyAction = {
     type: MalcolmLocalCopy,
     payload: {
@@ -29,18 +30,19 @@ describe('Table reducer', () => {
   };
 
   const expectedCopy = {
-    value: harderAttribute.value,
-    labels: Object.keys(harderAttribute.meta.elements),
+    value: JSON.parse(JSON.stringify(harderAttribute.state.value)),
+    meta: JSON.parse(JSON.stringify(harderAttribute.state.meta)),
+    labels: Object.keys(harderAttribute.state.meta.elements),
     flags: {
       rows: [],
       table: {
         fresh: true,
-        timeStamp: harderAttribute.timeStamp,
+        timeStamp: JSON.parse(JSON.stringify(harderAttribute.state.timeStamp)),
       },
     },
   };
 
-  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.value));
+  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
   expectedValue.x[1] = 10;
   expectedValue.y[1] = 15;
   expectedValue.visible[1] = true;
@@ -55,10 +57,15 @@ describe('Table reducer', () => {
         },
       },
     };
+    testState = JSON.parse(JSON.stringify(state));
+    testState.blocks.block1.attributes[0].localState = JSON.parse(
+      JSON.stringify(expectedCopy)
+    );
   });
 
   it('creates local state copy', () => {
-    const testState = TableReducer(state, copyAction);
+    testState = {};
+    testState = TableReducer(state, copyAction);
 
     expect(testState.blocks.block1.attributes[0]).toEqual({
       ...harderAttribute,
@@ -82,7 +89,6 @@ describe('Table reducer', () => {
       type: MalcolmTableUpdate,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, action);
 
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
@@ -106,7 +112,6 @@ describe('Table reducer', () => {
       type: MalcolmTableUpdate,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, action);
 
     expect(
@@ -127,9 +132,8 @@ describe('Table reducer', () => {
       type: MalcolmTableUpdate,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.value));
+    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
     splicedValue = addRow(splicedValue, labels, 4);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -146,9 +150,8 @@ describe('Table reducer', () => {
       type: MalcolmTableUpdate,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.value));
+    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
     splicedValue = addRow(splicedValue, labels, 1);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -156,13 +159,11 @@ describe('Table reducer', () => {
   });
 
   it('updates existing local state copy', () => {
-    state.localState = expectedCopy;
-    state.value = expectedValue;
-
-    const testState = TableReducer(state, copyAction);
+    testState.blocks.block1.attributes[0].localState.value = expectedValue;
+    testState = TableReducer(state, copyAction);
 
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
-      harderAttribute.value
+      harderAttribute.state.value
     );
   });
 
@@ -177,7 +178,6 @@ describe('Table reducer', () => {
       type: MalcolmTableFlag,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, flagAction);
 
     expect(
@@ -196,7 +196,6 @@ describe('Table reducer', () => {
       type: MalcolmTableFlag,
       payload,
     };
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, flagAction);
 
     expect(
@@ -235,7 +234,6 @@ describe('Table reducer', () => {
       payload: putPayload,
     };
 
-    let testState = TableReducer(state, copyAction);
     testState = TableReducer(testState, putAction);
     testState = TableReducer(testState, flagAction);
 

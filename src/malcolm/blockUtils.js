@@ -16,9 +16,11 @@ const findAttribute = (blocks, blockName, attributeName) => {
   if (matchingBlock) {
     if (matchingBlock.attributes) {
       const matchingAttribute = matchingBlock.attributes.find(
-        a => a.name === attributeName
+        a =>
+          a.calculated
+            ? a.calculated.name === attributeName
+            : a.name === attributeName
       );
-
       return matchingAttribute || undefined;
     }
   }
@@ -31,7 +33,10 @@ const findAttributeIndex = (blocks, blockName, attributeName) => {
   if (matchingBlock) {
     if (matchingBlock.attributes) {
       const matchingAttributeIndex = matchingBlock.attributes.findIndex(
-        a => a.name === attributeName
+        a =>
+          a.calculated
+            ? a.calculated.name === attributeName
+            : a.name === attributeName
       );
       return matchingAttributeIndex;
     }
@@ -50,6 +55,10 @@ const attributeHasTag = (attribute, tag) =>
   ((attribute.meta &&
     attribute.meta.tags &&
     attribute.meta.tags.some(t => t.indexOf(tag) > -1)) ||
+    (attribute.state &&
+      attribute.state.meta &&
+      attribute.state.meta.tags &&
+      attribute.state.meta.tags.some(t => t.indexOf(tag) > -1)) ||
     (attribute.tags && attribute.tags.some(t => t.indexOf(tag) > -1)));
 
 export default {

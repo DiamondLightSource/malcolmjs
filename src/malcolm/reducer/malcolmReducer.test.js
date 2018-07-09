@@ -177,10 +177,16 @@ describe('malcolm reducer', () => {
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
-    expect(state.blocks.block1.attributes).toEqual([
-      { name: 'health', loading: true, children: [] },
-      { name: 'icon', loading: true, children: [] },
-    ]);
+    expect(state.blocks.block1.attributes[0].calculated).toEqual({
+      name: 'health',
+      loading: true,
+      children: [],
+    });
+    expect(state.blocks.block1.attributes[1].calculated).toEqual({
+      name: 'icon',
+      loading: true,
+      children: [],
+    });
   });
 
   it('updates attribute data', () => {

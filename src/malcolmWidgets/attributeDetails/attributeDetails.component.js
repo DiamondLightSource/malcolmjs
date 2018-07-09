@@ -47,12 +47,26 @@ const AttributeDetails = props => {
     }
   }
   if (widgetTagIndex !== null) {
-    let alarm = props.attribute.alarm.severity;
-    alarm = props.attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-    alarm = props.attribute.pending ? AlarmStates.PENDING : alarm;
-    const message = props.attribute.errorMessage
-      ? props.attribute.errorMessage
-      : '';
+    // #refactorDuplication
+    let alarm;
+    let message;
+    if (props.attribute.state) {
+      alarm = props.attribute.state.alarm.severity;
+      alarm = props.attribute.calculated.errorState
+        ? AlarmStates.MAJOR_ALARM
+        : alarm;
+      alarm = props.attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+      message = props.attribute.calculated.errorMessage
+        ? props.attribute.calculated.errorMessage
+        : '';
+    } else {
+      alarm = props.attribute.alarm.severity;
+      alarm = props.attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+      alarm = props.attribute.pending ? AlarmStates.PENDING : alarm;
+      message = props.attribute.errorMessage
+        ? props.attribute.errorMessage
+        : '';
+    }
     return (
       <div className={props.classes.div}>
         <Tooltip id="1" title={message} placement="bottom">
@@ -86,6 +100,22 @@ AttributeDetails.propTypes = {
       tags: PropTypes.arrayOf(PropTypes.string),
     }),
     unableToProcess: PropTypes.bool,
+    calculated: PropTypes.shape({
+      name: PropTypes.string,
+      pending: PropTypes.bool,
+      errorState: PropTypes.bool,
+      errorMessage: PropTypes.string,
+      unableToProcess: PropTypes.bool,
+    }),
+    state: PropTypes.shape({
+      meta: PropTypes.shape({
+        label: PropTypes.string,
+        tags: PropTypes.arrayOf(PropTypes.string),
+      }),
+      alarm: PropTypes.shape({
+        severity: PropTypes.number,
+      }),
+    }),
   }).isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,

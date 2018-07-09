@@ -1,4 +1,5 @@
 import { MalcolmAttributeData } from '../malcolm.types';
+import BlockUtils from '../blockUtils';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 
@@ -8,14 +9,15 @@ const processDeltaMessage = (changes, originalRequest, getState) => {
   const attributeName = pathToAttr[1];
   let attribute;
   const { blocks } = getState().malcolm;
-  if (blocks[blockName] && blocks[blockName].attributes) {
-    const attributes = [...blocks[blockName].attributes];
-    const matchingAttribute = attributes.findIndex(
-      a => a.name === attributeName
+  const matchingAttribute = BlockUtils.findAttributeIndex(
+    blocks,
+    blockName,
+    attributeName
+  );
+  if (matchingAttribute >= 0) {
+    attribute = JSON.parse(
+      JSON.stringify(blocks[blockName].attributes[matchingAttribute].state)
     );
-    if (matchingAttribute >= 0) {
-      attribute = blocks[blockName].attributes[matchingAttribute];
-    }
   }
   changes.forEach(change => {
     const pathWithinAttr = change[0];
@@ -58,6 +60,14 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
       inGroup,
       group,
       delta: true,
+      state: { ...changedAttribute },
+      calculated: {
+        id: request.id,
+        isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
+        inGroup,
+        group,
+        delta: true,
+      },
     },
   };
 

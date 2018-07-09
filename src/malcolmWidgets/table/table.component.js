@@ -57,9 +57,16 @@ const styles = theme => ({
 const WidgetTable = props => {
   const values =
     props.localState === undefined
-      ? props.attribute.value
+      ? props.attribute.state.value
       : props.localState.value;
-  const columnLabels = Object.keys(props.attribute.meta.elements);
+  const columnLabels =
+    props.localState === undefined
+      ? Object.keys(props.attribute.state.meta.elements)
+      : props.localState.labels;
+  const meta =
+    props.localState === undefined
+      ? props.attribute.state.meta
+      : props.localState.meta;
   const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
     columnLabels.forEach(label => {
@@ -67,7 +74,7 @@ const WidgetTable = props => {
       return 0;
     });
     rowValue[rowPath.label] = newValue;
-    props.eventHandler(props.attribute.path, rowValue, rowPath.row);
+    props.eventHandler(props.attribute.calculated.path, rowValue, rowPath.row);
   };
   const rowFlagHandler = (rowPath, flagType, flagState) => {
     if (props.localState !== undefined) {
@@ -82,7 +89,12 @@ const WidgetTable = props => {
       rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
         val => val
       );
-      props.setFlag(props.attribute.path, rowPath.row, flagType, rowFlags);
+      props.setFlag(
+        props.attribute.calculated.path,
+        rowPath.row,
+        flagType,
+        rowFlags
+      );
     }
   };
   const columnWidgetTags = getTableWidgetTags(props.attribute);
@@ -93,7 +105,7 @@ const WidgetTable = props => {
       padding="none"
       key={column}
     >
-      {props.attribute.meta.elements[label].label}
+      {meta.elements[label].label}
     </TableCell>
   ));
   return (
@@ -127,7 +139,7 @@ const WidgetTable = props => {
                       value={values[label][row]}
                       rowPath={{ label, row, column }}
                       rowChangeHandler={rowChangeHandler}
-                      columnMeta={props.attribute.meta.elements[label]}
+                      columnMeta={meta.elements[label]}
                       setFlag={rowFlagHandler}
                     />
                   </TableCell>
@@ -138,7 +150,7 @@ const WidgetTable = props => {
         </Table>
         <Table>
           <TableFooter>
-            {props.attribute.meta.writeable ? (
+            {meta.writeable ? (
               <TableRow
                 className={props.classes.rowFormat}
                 key={rowNames.length}
@@ -150,7 +162,10 @@ const WidgetTable = props => {
                 >
                   <IconButton
                     onClick={() =>
-                      props.addRow(props.attribute.path, rowNames.length)
+                      props.addRow(
+                        props.attribute.calculated.path,
+                        rowNames.length
+                      )
                     }
                   >
                     <Add />
@@ -177,23 +192,27 @@ const WidgetTable = props => {
 
 WidgetTable.propTypes = {
   attribute: PropTypes.shape({
-    path: PropTypes.arrayOf(PropTypes.string),
-    value: PropTypes.shape({}),
-    name: PropTypes.string,
-    typeid: PropTypes.string,
-    labels: PropTypes.arrayOf(PropTypes.string),
-    pending: PropTypes.bool,
-    errorState: PropTypes.bool,
-    alarm: PropTypes.shape({
-      severity: PropTypes.number,
+    calculated: PropTypes.shape({
+      name: PropTypes.string,
+      path: PropTypes.arrayOf(PropTypes.string),
+      pending: PropTypes.bool,
+      errorState: PropTypes.bool,
+      unableToProcess: PropTypes.bool,
     }),
-    meta: PropTypes.shape({
-      writeable: PropTypes.bool.isRequired,
-      label: PropTypes.string,
-      tags: PropTypes.arrayOf(PropTypes.string),
-      elements: PropTypes.shape({}),
+    state: PropTypes.shape({
+      value: PropTypes.shape({}),
+      typeid: PropTypes.string,
+      labels: PropTypes.arrayOf(PropTypes.string),
+      alarm: PropTypes.shape({
+        severity: PropTypes.number,
+      }),
+      meta: PropTypes.shape({
+        writeable: PropTypes.bool.isRequired,
+        label: PropTypes.string,
+        tags: PropTypes.arrayOf(PropTypes.string),
+        elements: PropTypes.shape({}),
+      }),
     }),
-    unableToProcess: PropTypes.bool,
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.shape({}),
@@ -201,6 +220,13 @@ WidgetTable.propTypes = {
       rows: PropTypes.shape({}),
     }),
     hasIncompleteRow: PropTypes.bool,
+    labels: PropTypes.arrayOf(PropTypes.string),
+    meta: PropTypes.shape({
+      writeable: PropTypes.bool.isRequired,
+      label: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.string),
+      elements: PropTypes.shape({}),
+    }),
   }),
   classes: PropTypes.shape({
     tableBody: PropTypes.string,

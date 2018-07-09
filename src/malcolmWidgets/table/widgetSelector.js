@@ -3,8 +3,8 @@ import { withTheme } from '@material-ui/core/styles';
 import { selectorFunction } from '../attributeDetails/attributeSelector/attributeSelector.component';
 
 export const getTableWidgetTags = attribute =>
-  Object.keys(attribute.meta.elements).map(label => {
-    const { tags } = attribute.meta.elements[label];
+  Object.keys(attribute.state.meta.elements).map(label => {
+    const { tags } = attribute.state.meta.elements[label];
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
     if (widgetTagIndex !== -1) {
       return tags[widgetTagIndex];
