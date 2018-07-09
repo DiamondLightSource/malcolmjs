@@ -2,32 +2,19 @@ import { MalcolmAttributeData } from '../malcolm.types';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 
-const processDeltaMessage = (changes, originalRequest, store) => {
+const processDeltaMessage = (changes, originalRequest, getState) => {
   const pathToAttr = originalRequest.path;
-  // TODO: handle attribute path properly for more general cases
   const blockName = pathToAttr[0];
   const attributeName = pathToAttr[1];
   let attribute;
-  if (
-    Object.prototype.hasOwnProperty.call(
-      store.getState().malcolm.blocks,
-      blockName
-    ) &&
-    Object.prototype.hasOwnProperty.call(
-      store.getState().malcolm.blocks[blockName],
-      'attributes'
-    )
-  ) {
-    const attributes = [
-      ...store.getState().malcolm.blocks[blockName].attributes,
-    ];
+  const { blocks } = getState().malcolm;
+  if (blocks[blockName] && blocks[blockName].attributes) {
+    const attributes = [...blocks[blockName].attributes];
     const matchingAttribute = attributes.findIndex(
       a => a.name === attributeName
     );
     if (matchingAttribute >= 0) {
-      attribute = store.getState().malcolm.blocks[blockName].attributes[
-        matchingAttribute
-      ];
+      attribute = blocks[blockName].attributes[matchingAttribute];
     }
   }
   changes.forEach(change => {
@@ -52,12 +39,7 @@ const processDeltaMessage = (changes, originalRequest, store) => {
   return attribute;
 };
 
-const processAttribute = (
-  request,
-  changedAttribute,
-  malcolmState,
-  dispatch
-) => {
+const processAttribute = (request, changedAttribute, getState, dispatch) => {
   const inGroup = changedAttribute.meta.tags.some(
     t => t.indexOf('group:') > -1
   );
@@ -70,8 +52,8 @@ const processAttribute = (
   const action = {
     type: MalcolmAttributeData,
     payload: {
-      id: request.id,
       ...changedAttribute,
+      id: request.id,
       isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
       inGroup,
       group,
@@ -82,12 +64,7 @@ const processAttribute = (
   dispatch(action);
 
   if (changedAttribute.meta.tags.some(t => t === 'widget:flowgraph')) {
-    LayoutHandler.layoutAttributeReceived(
-      action.payload,
-      malcolmState.mainAttribute,
-      dispatch,
-      malcolmState.blocks
-    );
+    LayoutHandler.layoutAttributeReceived(request.path, getState, dispatch);
   }
 };
 

@@ -137,6 +137,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 export function updateAttribute(oldState, payload) {
   if (payload.delta) {
     const state = oldState;
+
     const { path } = state.messagesInFlight[payload.id];
     const blockName = path[0];
     const attributeName = path[1];
