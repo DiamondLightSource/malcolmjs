@@ -33,7 +33,8 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
       handleLocationChange(
         store.getState().router.location.pathname,
         store.getState().malcolm.blocks,
-        store.dispatch
+        store.dispatch,
+        store.getState
       );
     }
     store.dispatch(snackbarState(true, `Connected to WebSocket`));
@@ -65,7 +66,12 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         ];
 
         if (originalRequest.path.join('') === '.blocks') {
-          RootBlockHandler(originalRequest, data.value, store.dispatch);
+          RootBlockHandler(
+            originalRequest,
+            data.value,
+            store.dispatch,
+            store.getState()
+          );
         }
 
         break;
