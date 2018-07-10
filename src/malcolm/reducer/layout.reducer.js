@@ -96,7 +96,7 @@ const updateBlockPosition = (malcolmState, translation) => {
   if (parentBlock && parentBlock.attributes) {
     const attribute = malcolmState.blocks[
       malcolmState.parentBlock
-    ].attributes.find(a => a.name === malcolmState.mainAttribute);
+    ].attributes.find(a => a.calculated.name === malcolmState.mainAttribute);
 
     if (attribute && attribute.layout) {
       const layoutBlocks = attribute.layout.blocks.map(

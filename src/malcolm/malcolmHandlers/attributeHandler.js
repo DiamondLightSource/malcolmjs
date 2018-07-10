@@ -79,7 +79,11 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
   }
 };
 
-const processMethod = (request, changedMethod, dispatch) => {
+const processMethod = (request, method, dispatch) => {
+  const changedMethod = {
+    raw: { ...method },
+  };
+
   dispatch(buildMethodUpdate(request.id, changedMethod));
 };
 

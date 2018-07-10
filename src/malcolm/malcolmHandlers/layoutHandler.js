@@ -20,10 +20,10 @@ const layoutRouteSelected = (blocks, path, dispatch) => {
 const layoutAttributeReceived = (path, getState, dispatch) => {
   const { mainAttribute, blocks } = getState().malcolm;
   const layoutAttribute = BlockUtils.findAttribute(blocks, path[0], path[1]);
-  if (layoutAttribute && mainAttribute === layoutAttribute.name) {
-    layoutAttribute.value.visible.forEach((visible, i) => {
+  if (layoutAttribute && mainAttribute === layoutAttribute.calculated.name) {
+    layoutAttribute.raw.value.visible.forEach((visible, i) => {
       if (visible) {
-        const blockName = layoutAttribute.value.mri[i];
+        const blockName = layoutAttribute.raw.value.mri[i];
         if (!blocks[blockName]) {
           dispatch(malcolmNewBlockAction(blockName, false, false));
           dispatch(malcolmSubscribeAction([blockName, 'meta']));

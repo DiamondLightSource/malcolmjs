@@ -173,24 +173,27 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   let alarm = AlarmStates.NO_ALARM;
-  alarm = method && method.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-  alarm = method && method.pending ? AlarmStates.PENDING : alarm;
+  alarm =
+    method && method.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+  alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
 
   return {
-    methodName: method ? method.label : 'Not found',
+    methodName: method ? method.raw.label : 'Not found',
     methodAlarm: alarm,
-    methodPending: method ? method.pending : false,
-    methodErrored: method ? method.errorState : false,
+    methodPending: method ? method.calculated.pending : false,
+    methodErrored: method ? method.calculated.errorState : false,
     methodErrorMessage:
-      method && method.errorMessage ? method.errorMessage : '',
-    methodPath: method ? method.path : [],
-    inputs: method ? method.takes.elements : {},
-    inputValues: (method && method.inputs) || {},
-    dirtyInputs: (method && method.dirtyInputs) || {},
-    outputs: method ? method.returns.elements : {},
-    outputValues: (method && method.outputs) || {},
-    required: method ? method.required : {},
-    defaultValues: method ? method.defaults : {},
+      method && method.calculated.errorMessage
+        ? method.calculated.errorMessage
+        : '',
+    methodPath: method ? method.calculated.path : [],
+    inputs: method ? method.raw.takes.elements : {},
+    inputValues: (method && method.calculated.inputs) || {},
+    dirtyInputs: (method && method.calculated.dirtyInputs) || {},
+    outputs: method ? method.raw.returns.elements : {},
+    outputValues: (method && method.calculated.outputs) || {},
+    required: method ? method.raw.required : {},
+    defaultValues: method ? method.raw.defaults : {},
   };
 };
 

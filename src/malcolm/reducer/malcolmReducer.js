@@ -270,6 +270,7 @@ function setDisconnected(state) {
             };
           }
         } else {
+          /*
           if (Object.prototype.hasOwnProperty.call(attributes[attr], 'meta')) {
             attributes[attr] = {
               ...attributes[attr],
@@ -287,7 +288,7 @@ function setDisconnected(state) {
                 severity: AlarmStates.UNDEFINED_ALARM,
               },
             };
-          }
+          } */
         }
       }
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -354,7 +355,11 @@ const handleErrorMessage = (state, action) => {
       matchingMessage.path[0],
       matchingMessage.path[1]
     );
-    if (attribute && attribute.meta.tags.some(t => t === 'widget:flowgraph')) {
+    if (
+      attribute &&
+      attribute.raw &&
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')
+    ) {
       // reset the layout
       const id = attribute.id === undefined ? attribute.id : action.payload.id;
       updatedState = updateAttribute(state, {
