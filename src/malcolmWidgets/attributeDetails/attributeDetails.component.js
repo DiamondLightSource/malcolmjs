@@ -50,8 +50,8 @@ const AttributeDetails = props => {
     // #refactorDuplication
     let alarm;
     let message;
-    if (props.attribute.state) {
-      alarm = props.attribute.state.alarm.severity;
+    if (props.attribute.raw) {
+      alarm = props.attribute.raw.alarm.severity;
       alarm = props.attribute.calculated.errorState
         ? AlarmStates.MAJOR_ALARM
         : alarm;
@@ -107,7 +107,7 @@ AttributeDetails.propTypes = {
       errorMessage: PropTypes.string,
       unableToProcess: PropTypes.bool,
     }),
-    state: PropTypes.shape({
+    raw: PropTypes.shape({
       meta: PropTypes.shape({
         label: PropTypes.string,
         tags: PropTypes.arrayOf(PropTypes.string),

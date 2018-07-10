@@ -124,7 +124,7 @@ function updateBlock(state, payload) {
           name: f,
           loading: true,
           children: [],
-          state: {},
+          raw: {},
           calculated: {
             name: f,
             loading: true,
@@ -246,28 +246,25 @@ function setDisconnected(state) {
     if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
       const attributes = [...state.blocks[blockName].attributes];
       for (let attr = 0; attr < attributes.length; attr += 1) {
-        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'state')) {
+        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'raw')) {
           if (
-            Object.prototype.hasOwnProperty.call(attributes[attr].state, 'meta')
+            Object.prototype.hasOwnProperty.call(attributes[attr].raw, 'meta')
           ) {
-            attributes[attr].state = {
-              ...attributes[attr].state,
+            attributes[attr].raw = {
+              ...attributes[attr].raw,
               meta: {
-                ...attributes[attr].state.meta,
+                ...attributes[attr].raw.meta,
                 writeable: false,
               },
             };
           }
           if (
-            Object.prototype.hasOwnProperty.call(
-              attributes[attr].state,
-              'alarm'
-            )
+            Object.prototype.hasOwnProperty.call(attributes[attr].raw, 'alarm')
           ) {
-            attributes[attr].state = {
-              ...attributes[attr].state,
+            attributes[attr].raw = {
+              ...attributes[attr].raw,
               alarm: {
-                ...attributes[attr].state.alarm,
+                ...attributes[attr].raw.alarm,
                 severity: AlarmStates.UNDEFINED_ALARM,
               },
             };

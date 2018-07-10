@@ -87,7 +87,7 @@ describe('attribute handler', () => {
       calculated: {
         name: 'NewTestAttr',
       },
-      state: {
+      raw: {
         value: {
           isATest: true,
         },
@@ -201,7 +201,7 @@ describe('attribute handler', () => {
       store.getState
     );
     expect(testAttributeState).toEqual({
-      ...newStyleAttribute.state,
+      ...newStyleAttribute.raw,
       meta: { writeable: false },
     });
   });
@@ -224,7 +224,7 @@ describe('attribute handler', () => {
       store.getState
     );
     expect(testAttributeState).toEqual({
-      ...newStyleAttribute.state,
+      ...newStyleAttribute.raw,
       value: 'overwritten',
     });
   });
@@ -236,7 +236,7 @@ describe('attribute handler', () => {
       store.getState
     );
     expect(testAttributeState).toEqual({
-      ...newStyleAttribute.state,
+      ...newStyleAttribute.raw,
       meta: { meaning: 'meat, but spelt wrong' },
     });
   });
@@ -260,7 +260,7 @@ describe('attribute handler', () => {
       store.getState
     );
     expect(testAttributeState).toEqual({
-      ...newStyleAttribute.state,
+      ...newStyleAttribute.raw,
       value: { isATest: 'True, but as a string' },
       timeStamp: { time: 1, units: 's' },
     });
@@ -273,7 +273,7 @@ describe('attribute handler', () => {
       store.getState
     );
     expect(testAttributeState).toEqual({
-      ...newStyleAttribute.state,
+      ...newStyleAttribute.raw,
       timeStamp: { time: 2000, units: 'ms' },
     });
   });

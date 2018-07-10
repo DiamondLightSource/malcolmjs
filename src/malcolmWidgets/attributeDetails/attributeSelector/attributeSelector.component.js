@@ -114,27 +114,34 @@ export const selectorFunction = (
 };
 
 const AttributeSelector = props => {
-  if (props.attribute && props.attribute.meta && props.attribute.meta.tags) {
-    const { tags } = props.attribute.meta;
+  if (
+    props.attribute &&
+    props.attribute.raw &&
+    props.attribute.raw.meta &&
+    props.attribute.raw.meta.tags
+  ) {
+    const { tags } = props.attribute.raw.meta;
     const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
     const flags = {
-      isDirty: props.attribute.dirty,
-      isDisabled: props.attribute.pending || !props.attribute.meta.writeable,
-      isErrorState: props.attribute.errorState,
+      isDirty: props.attribute.calculated.dirty,
+      isDisabled:
+        props.attribute.calculated.pending ||
+        !props.attribute.raw.meta.writeable,
+      isErrorState: props.attribute.calculated.errorState,
     };
     const continuousSend = false;
 
     if (widgetTagIndex !== -1) {
       return selectorFunction(
         tags[widgetTagIndex],
-        props.attribute.path,
-        props.attribute.value,
+        props.attribute.calculated.path,
+        props.attribute.raw.value,
         props.eventHandler,
         flags,
         props.setFlag,
         props.theme.palette.primary.light,
-        props.attribute.meta,
-        props.attribute.forceUpdate,
+        props.attribute.raw.meta,
+        props.attribute.calculated.forceUpdate,
         continuousSend,
         props.buttonClickHandler
       );

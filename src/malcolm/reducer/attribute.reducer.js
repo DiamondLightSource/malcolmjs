@@ -47,9 +47,9 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
     let oldMeta;
     let newMeta;
     // #refactorDuplication
-    if (oldAttribute.state && oldAttribute.state.meta) {
-      oldMeta = oldAttribute.state.meta;
-      newMeta = newAttribute.state.meta;
+    if (oldAttribute.raw && oldAttribute.raw.meta) {
+      oldMeta = oldAttribute.raw.meta;
+      newMeta = newAttribute.raw.meta;
     } else if (oldAttribute.meta) {
       oldMeta = oldAttribute.meta;
       newMeta = newAttribute.meta;
@@ -123,11 +123,12 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 
   const attribute = attributes[matchingAttributeIndex];
 
+  // #refactorDuplication
   if (
     attribute &&
-    ((attribute.state &&
-      attribute.state.meta &&
-      attribute.state.meta.tags.some(t => t === 'widget:flowgraph')) ||
+    ((attribute.raw &&
+      attribute.raw.meta &&
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')) ||
       (attribute.meta &&
         attribute.meta.tags.some(t => t === 'widget:flowgraph')))
   ) {
@@ -172,9 +173,9 @@ export function updateAttribute(oldState, payload) {
           loading: false,
           path,
           ...payload,
-          state: {
-            ...attributes[matchingAttributeIndex].state,
-            ...payload.state,
+          raw: {
+            ...attributes[matchingAttributeIndex].raw,
+            ...payload.raw,
           },
           calculated: {
             ...attributes[matchingAttributeIndex].calculated,

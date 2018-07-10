@@ -16,7 +16,7 @@ const processDeltaMessage = (changes, originalRequest, getState) => {
   );
   if (matchingAttribute >= 0) {
     attribute = JSON.parse(
-      JSON.stringify(blocks[blockName].attributes[matchingAttribute].state)
+      JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
     );
   }
   changes.forEach(change => {
@@ -51,6 +51,7 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
         .replace('group:', '')
     : '';
 
+  // #refactorDuplication
   const action = {
     type: MalcolmAttributeData,
     payload: {
@@ -60,7 +61,7 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
       inGroup,
       group,
       delta: true,
-      state: { ...changedAttribute },
+      raw: { ...changedAttribute },
       calculated: {
         id: request.id,
         isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
