@@ -110,12 +110,16 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     return layout;
   }
 
-  if (attributeName === 'layout') {
+  const attribute = attributes[matchingAttribute];
+
+  if (
+    attribute &&
+    attribute.meta &&
+    attribute.meta.tags.some(t => t === 'widget:flowgraph')
+  ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
   }
-
-  const attribute = attributes[matchingAttribute];
 
   if (blockUtils.attributeHasTag(attribute, 'widget:icon')) {
     layout = LayoutReducer.processLayout(updatedState);
@@ -132,8 +136,10 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
-export function updateAttribute(state, payload) {
+export function updateAttribute(oldState, payload) {
   if (payload.delta) {
+    const state = oldState;
+
     const { path } = state.messagesInFlight[payload.id];
     const blockName = path[0];
     const attributeName = path[1];
@@ -159,6 +165,28 @@ export function updateAttribute(state, payload) {
         attributes[matchingAttribute] = updateAttributeChildren(
           attributes[matchingAttribute]
         );
+
+        if (attributes[matchingAttribute].localState !== undefined) {
+          if (!attributes[matchingAttribute].localState.flags.table.dirty) {
+            attributes[matchingAttribute].localState = {
+              value: JSON.parse(
+                JSON.stringify(attributes[matchingAttribute].value)
+              ),
+              labels: Object.keys(attributes[matchingAttribute].meta.elements),
+              flags: {
+                rows: {},
+                table: {
+                  fresh: true,
+                },
+                timeStamp: JSON.parse(
+                  JSON.stringify(attributes[matchingAttribute].timeStamp)
+                ),
+              },
+            };
+          } else {
+            attributes[matchingAttribute].localState.flags.table.fresh = false;
+          }
+        }
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -188,7 +216,7 @@ export function updateAttribute(state, payload) {
     }
   }
 
-  return state;
+  return oldState;
 }
 
 function setMainAttribute(state, payload) {

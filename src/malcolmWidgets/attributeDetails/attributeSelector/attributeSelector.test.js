@@ -1,8 +1,10 @@
 import React from 'react';
+import { push } from 'react-router-redux';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import AttributeSelector, {
   selectorFunction,
+  getDefaultFromType,
 } from './attributeSelector.component';
 
 describe('AttributeSelector', () => {
@@ -26,6 +28,7 @@ describe('AttributeSelector', () => {
           choices,
         },
         value,
+        path: ['test1', 'attr'],
       };
     }
     return {
@@ -34,6 +37,7 @@ describe('AttributeSelector', () => {
         writeable: true,
       },
       value,
+      path: ['test1', 'attr'],
     };
   };
 
@@ -100,7 +104,7 @@ describe('AttributeSelector', () => {
     wrapper.find('input').simulate('change');
     const pendingAction = {
       payload: {
-        path: undefined,
+        path: ['test1', 'attr'],
         flagType: 'pending',
         flagState: true,
       },
@@ -108,7 +112,7 @@ describe('AttributeSelector', () => {
     };
     const putAction = {
       payload: {
-        path: undefined,
+        path: ['test1', 'attr'],
         typeid: 'malcolm:core/Put:1.0',
         value: true,
       },
@@ -132,7 +136,7 @@ describe('AttributeSelector', () => {
       .simulate('change');
     const pendingAction = {
       payload: {
-        path: undefined,
+        path: ['test1', 'attr'],
         flagType: 'pending',
         flagState: true,
       },
@@ -140,7 +144,7 @@ describe('AttributeSelector', () => {
     };
     const putAction = {
       payload: {
-        path: undefined,
+        path: ['test1', 'attr'],
         typeid: 'malcolm:core/Put:1.0',
         value: '1',
       },
@@ -148,6 +152,36 @@ describe('AttributeSelector', () => {
     };
     expect(testStore.getActions()[0]).toEqual(pendingAction);
     expect(testStore.getActions()[1]).toEqual(putAction);
+  });
+
+  it('dispatches path change on table button click', () => {
+    const testStore = mockStore({});
+    const wrapper = mount(
+      <AttributeSelector
+        attribute={buildAttribute('table')}
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(testStore.getActions()[0]).toEqual(push('/gui/test1/attr'));
+  });
+
+  it('dispatches path change on flowgraph button click', () => {
+    const testStore = mockStore({});
+    const wrapper = mount(
+      <AttributeSelector
+        attribute={buildAttribute('flowgraph')}
+        store={testStore}
+      />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(testStore.getActions()[0]).toEqual(push('/gui/test1/attr'));
   });
 
   it('dispatches dirty on focus for textipnut', () => {
@@ -161,7 +195,7 @@ describe('AttributeSelector', () => {
     wrapper.find('input').simulate('focus');
     const dirtyAction = {
       payload: {
-        path: undefined,
+        path: ['test1', 'attr'],
         flagType: 'dirty',
         flagState: true,
       },
@@ -174,5 +208,26 @@ describe('AttributeSelector', () => {
     expect(() => selectorFunction('notAWidget')).toThrow(
       Error('no widget tag supplied!')
     );
+  });
+
+  it('getDefaultFromType returns correctly', () => {
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/BooleanMeta:1.0' })
+    ).toEqual(false);
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/StringMeta:1.0' })
+    ).toEqual('');
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/NumberMeta:1.0' })
+    ).toEqual(0);
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/BooleanArrayMeta:1.0' })
+    ).toEqual(false);
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/StringArrayMeta:1.0' })
+    ).toEqual('');
+    expect(
+      getDefaultFromType({ typeid: 'malcolm:core/NumberArrayMeta:1.0' })
+    ).toEqual(0);
   });
 });

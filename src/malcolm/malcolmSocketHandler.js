@@ -84,7 +84,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         const attribute = AttributeHandler.processDeltaMessage(
           changes,
           originalRequest,
-          store
+          store.getState
         );
 
         if (attribute.typeid === 'malcolm:core/BlockMeta:1.0') {
@@ -93,7 +93,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           AttributeHandler.processAttribute(
             originalRequest,
             attribute,
-            store.getState().malcolm,
+            store.getState,
             store.dispatch
           );
         } else if (attribute.typeid === 'malcolm:core/Method:1.0') {

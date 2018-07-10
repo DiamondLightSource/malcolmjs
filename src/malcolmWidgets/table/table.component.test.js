@@ -19,6 +19,7 @@ describe('WidgetTable', () => {
         attribute={harderAttribute}
         eventHandler={() => {}}
         setFlag={() => {}}
+        addRow={() => {}}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -29,8 +30,20 @@ describe('WidgetTable', () => {
     const wrapper = mount(
       <WidgetTable
         attribute={harderAttribute}
+        localState={{
+          value: harderAttribute.value,
+          labels: Object.keys(harderAttribute.meta.elements),
+          flags: {
+            rows: [],
+            table: {
+              fresh: true,
+              timeStamp: harderAttribute.timeStamp,
+            },
+          },
+        }}
         eventHandler={() => {}}
         setFlag={setFlag}
+        addRow={() => {}}
       />
     );
     wrapper
@@ -39,10 +52,28 @@ describe('WidgetTable', () => {
       .simulate('focus');
     expect(setFlag.mock.calls.length).toEqual(1);
     expect(setFlag.mock.calls[0]).toEqual([
-      { column: 2, label: 'x', row: 0 },
+      ['test1', 'layout'],
+      0,
       'dirty',
-      true,
+      { _dirty: true, dirty: { x: true } },
     ]);
+  });
+
+  it('doesnt call set flag on click if no local state defined', () => {
+    const setFlag = jest.fn();
+    const wrapper = mount(
+      <WidgetTable
+        attribute={harderAttribute}
+        eventHandler={() => {}}
+        setFlag={setFlag}
+        addRow={() => {}}
+      />
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('focus');
+    expect(setFlag.mock.calls.length).toEqual(0);
   });
 
   it('calls set value on checkbox click', () => {
@@ -52,6 +83,7 @@ describe('WidgetTable', () => {
         attribute={harderAttribute}
         eventHandler={setValue}
         setFlag={() => {}}
+        addRow={() => {}}
       />
     );
     wrapper
@@ -64,5 +96,23 @@ describe('WidgetTable', () => {
       { mri: 'PANDA:INENC2', name: 'INENC2', visible: false, x: 0, y: 0 },
       3,
     ]);
+  });
+
+  it('adds row on button click', () => {
+    const addRow = jest.fn();
+    const wrapper = mount(
+      <WidgetTable
+        attribute={harderAttribute}
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        addRow={addRow}
+      />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(addRow.mock.calls.length).toEqual(1);
+    expect(addRow.mock.calls[0]).toEqual([['test1', 'layout'], 4]);
   });
 });

@@ -36,6 +36,9 @@ describe('attribute reducer', () => {
           attributes: [
             {
               name: 'layout',
+              meta: {
+                tags: ['widget:flowgraph'],
+              },
               children: [],
             },
           ],
