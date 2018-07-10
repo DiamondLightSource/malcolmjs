@@ -84,19 +84,7 @@ const processAttribute = (
   dispatch(navigationActions.subscribeToNewBlocksInRoute());
 
   if (changedAttribute.meta.tags.some(t => t === 'widget:flowgraph')) {
-    LayoutHandler.layoutAttributeReceived(
-      action.payload,
-      malcolmState.mainAttribute,
-      dispatch
-    );
-  }
-
-  if (request.path[request.path.length - 1] === 'layout') {
-    LayoutHandler.layoutAttributeReceived(
-      action.payload,
-      malcolmState.mainAttribute,
-      dispatch
-    );
+    LayoutHandler.layoutAttributeReceived(action.payload, dispatch);
   }
 };
 

@@ -15,8 +15,7 @@ const layoutRouteSelected = (blocks, blockName, dispatch) => {
   }
 };
 
-const layoutAttributeReceived = (layoutAttribute, mainAttribute, dispatch) => {
-  // if (mainAttribute === 'layout') {
+const layoutAttributeReceived = (layoutAttribute, dispatch) => {
   layoutAttribute.value.visible.forEach((visible, i) => {
     if (visible) {
       const blockName = layoutAttribute.value.mri[i];
@@ -24,7 +23,6 @@ const layoutAttributeReceived = (layoutAttribute, mainAttribute, dispatch) => {
       dispatch(malcolmSubscribeAction([blockName, 'meta']));
     }
   });
-  // }
 };
 
 export default {
