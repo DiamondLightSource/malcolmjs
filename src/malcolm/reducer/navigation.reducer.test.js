@@ -83,11 +83,9 @@ describe('processNavigationLists', () => {
     expect(navLists).toHaveLength(2);
     expect(navLists[0].path).toBe('block1');
     expect(navLists[0].label).toBe('block1');
-    expect(navLists[0].children).toBe(blocks.block1.children);
 
     expect(navLists[1].path).toBe('block2');
     expect(navLists[1].label).toBe('block2');
-    expect(navLists[1].children).toBe(blocks.block2.children);
   });
 
   it('populates nav lists from attributes of the previous block if no block is found', () => {
@@ -97,19 +95,11 @@ describe('processNavigationLists', () => {
     expect(navLists).toHaveLength(3);
     expect(navLists[0].path).toBe('block1');
     expect(navLists[0].label).toBe('block1');
-    expect(navLists[0].children).toBe(blocks.block1.children);
-    expect(navLists[0].childrenLabels).toEqual(blocks.block1.children);
 
     expect(navLists[1].path).toBe('layout');
     expect(navLists[1].label).toBe('layout');
-    expect(navLists[1].children).toEqual(['block5', 'block6']);
-    expect(navLists[1].childrenLabels).toEqual([
-      'block5 display name',
-      'block6 display name',
-    ]);
 
     expect(navLists[2].path).toBe('block3');
     expect(navLists[2].label).toBe('block3');
-    expect(navLists[2].children).toHaveLength(0);
   });
 });

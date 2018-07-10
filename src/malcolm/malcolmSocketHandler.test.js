@@ -59,6 +59,9 @@ describe('malcolm socket handler', () => {
           ],
         },
       },
+      navigation: {
+        navigationLists: [],
+      },
     },
   };
 
@@ -179,7 +182,7 @@ describe('malcolm socket handler', () => {
 
     socketContainer.socket.send(message);
 
-    expect(dispatches.length).toEqual(1);
+    expect(dispatches.length).toBeGreaterThanOrEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
     expect(dispatches[0].payload.typeid).toEqual(typeid);
   };
