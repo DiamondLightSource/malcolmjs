@@ -44,3 +44,44 @@ describe('subscribeToNewBlocksInRoute', () => {
     expect(dispatches[1].payload.path).toEqual(['PANDA:SEQ2', 'meta']);
   });
 });
+
+describe('navigateToAttribute', () => {
+  it('changes the url to look at the attribute', () => {
+    const dispatches = [];
+    const state = {
+      malcolm: {
+        navigation: {
+          navigationLists: [
+            {
+              path: 'PANDA',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA',
+            },
+            {
+              path: 'layout',
+              navType: NavTypes.Attribute,
+            },
+            {
+              path: 'SEQ2',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA:SEQ2',
+            },
+          ],
+        },
+      },
+    };
+
+    const navAction = navigationActions.navigateToAttribute(
+      'PANDA:SEQ2',
+      'table'
+    );
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual(
+      '/gui/PANDA/layout/SEQ2/table'
+    );
+  });
+});
