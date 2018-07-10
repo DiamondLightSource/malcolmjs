@@ -9,7 +9,7 @@ jest.mock('../attributeDetails/attributeSelector/attributeSelector.component');
 describe('table widget selector', () => {
   it('finds widget tags from list', () => {
     const attribute = {
-      state: {
+      raw: {
         labels: ['a', 'b', 'c'],
         meta: {
           elements: {

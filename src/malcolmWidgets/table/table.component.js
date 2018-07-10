@@ -57,15 +57,15 @@ const styles = theme => ({
 const WidgetTable = props => {
   const values =
     props.localState === undefined
-      ? props.attribute.state.value
+      ? props.attribute.raw.value
       : props.localState.value;
   const columnLabels =
     props.localState === undefined
-      ? Object.keys(props.attribute.state.meta.elements)
+      ? Object.keys(props.attribute.raw.meta.elements)
       : props.localState.labels;
   const meta =
     props.localState === undefined
-      ? props.attribute.state.meta
+      ? props.attribute.raw.meta
       : props.localState.meta;
   const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
@@ -199,7 +199,7 @@ WidgetTable.propTypes = {
       errorState: PropTypes.bool,
       unableToProcess: PropTypes.bool,
     }),
-    state: PropTypes.shape({
+    raw: PropTypes.shape({
       value: PropTypes.shape({}),
       typeid: PropTypes.string,
       labels: PropTypes.arrayOf(PropTypes.string),

@@ -124,7 +124,7 @@ exports[`Table container renders correctly 1`] = `
           ],
         },
       },
-      "state": Object {
+      "raw": Object {
         "alarm": Object {
           "message": "",
           "severity": 0,

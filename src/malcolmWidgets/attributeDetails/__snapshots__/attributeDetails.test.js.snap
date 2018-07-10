@@ -31,16 +31,20 @@ exports[`AttributeDetails renders correctly 1`] = `
     <Connect(WithTheme(AttributeSelector))
       attribute={
         Object {
-          "alarm": Object {
-            "severity": 0,
+          "calculated": Object {
+            "name": "Attribute 1",
           },
-          "meta": Object {
-            "label": "Attribute 1",
-            "tags": Array [
-              "widget:NOTAWIDGET",
-            ],
+          "raw": Object {
+            "alarm": Object {
+              "severity": 0,
+            },
+            "meta": Object {
+              "label": "Attribute 1",
+              "tags": Array [
+                "widget:NOTAWIDGET",
+              ],
+            },
           },
-          "name": "Attribute 1",
         }
       }
     />

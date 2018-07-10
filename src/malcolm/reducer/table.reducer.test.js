@@ -13,7 +13,7 @@ const addRow = (table, columns, row) => {
     table[label].splice(
       row,
       0,
-      getDefaultFromType(harderAttribute.state.meta.elements[label])
+      getDefaultFromType(harderAttribute.raw.meta.elements[label])
     )
   );
   return table;
@@ -21,7 +21,7 @@ const addRow = (table, columns, row) => {
 
 describe('Table reducer', () => {
   let testState;
-  const labels = Object.keys(harderAttribute.state.meta.elements);
+  const labels = Object.keys(harderAttribute.raw.meta.elements);
   const copyAction = {
     type: MalcolmLocalCopy,
     payload: {
@@ -30,19 +30,19 @@ describe('Table reducer', () => {
   };
 
   const expectedCopy = {
-    value: JSON.parse(JSON.stringify(harderAttribute.state.value)),
-    meta: JSON.parse(JSON.stringify(harderAttribute.state.meta)),
-    labels: Object.keys(harderAttribute.state.meta.elements),
+    value: JSON.parse(JSON.stringify(harderAttribute.raw.value)),
+    meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
+    labels: Object.keys(harderAttribute.raw.meta.elements),
     flags: {
       rows: [],
       table: {
         fresh: true,
-        timeStamp: JSON.parse(JSON.stringify(harderAttribute.state.timeStamp)),
+        timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
       },
     },
   };
 
-  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
+  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
   expectedValue.x[1] = 10;
   expectedValue.y[1] = 15;
   expectedValue.visible[1] = true;
@@ -133,7 +133,7 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
+    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
     splicedValue = addRow(splicedValue, labels, 4);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -151,7 +151,7 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.state.value));
+    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
     splicedValue = addRow(splicedValue, labels, 1);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -163,7 +163,7 @@ describe('Table reducer', () => {
     testState = TableReducer(state, copyAction);
 
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
-      harderAttribute.state.value
+      harderAttribute.raw.value
     );
   });
 

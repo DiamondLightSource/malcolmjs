@@ -31,9 +31,9 @@ describe('WidgetTable', () => {
       <WidgetTable
         attribute={harderAttribute}
         localState={{
-          value: harderAttribute.state.value,
-          meta: harderAttribute.state.meta,
-          labels: Object.keys(harderAttribute.state.meta.elements),
+          value: harderAttribute.raw.value,
+          meta: harderAttribute.raw.meta,
+          labels: Object.keys(harderAttribute.raw.meta.elements),
           flags: {
             rows: [],
             table: {

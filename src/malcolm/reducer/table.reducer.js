@@ -20,18 +20,18 @@ export const copyAttributeValue = (state, payload) => {
   const { attributes } = state.blocks[blockName];
   if (
     matchingAttributeIndex >= 0 &&
-    attributes[matchingAttributeIndex].state.value !== undefined
+    attributes[matchingAttributeIndex].raw.value !== undefined
   ) {
     const attribute = { ...attributes[matchingAttributeIndex] };
     attribute.localState = {
-      meta: JSON.parse(JSON.stringify(attribute.state.meta)),
-      value: JSON.parse(JSON.stringify(attribute.state.value)),
-      labels: Object.keys(attribute.state.meta.elements),
+      meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+      value: JSON.parse(JSON.stringify(attribute.raw.value)),
+      labels: Object.keys(attribute.raw.meta.elements),
       flags: {
         rows: [],
         table: {
           fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(attribute.state.timeStamp)),
+          timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
         },
       },
     };
@@ -61,7 +61,7 @@ export const updateTableLocal = (state, payload) => {
         attribute.localState.value[label].splice(
           payload.row,
           0,
-          getDefaultFromType(attribute.state.meta.elements[label])
+          getDefaultFromType(attribute.raw.meta.elements[label])
         );
       });
       attribute.localState.flags.rows.splice(payload.row, 0, {
@@ -74,7 +74,7 @@ export const updateTableLocal = (state, payload) => {
       const rowIsDifferent = attribute.localState.labels.some(
         label =>
           `${attribute.localState.value[label][payload.row]}` !==
-          `${attribute.state.value[label][payload.row]}`
+          `${attribute.raw.value[label][payload.row]}`
       );
 
       attribute.localState.flags.rows[payload.row] = {

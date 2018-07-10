@@ -196,20 +196,20 @@ export function updateAttribute(oldState, payload) {
         if (attributes[matchingAttributeIndex].localState !== undefined) {
           if (
             !attributes[matchingAttributeIndex].localState.flags.table.dirty ||
-            JSON.stringify(attributes[matchingAttributeIndex].state.value) ===
+            JSON.stringify(attributes[matchingAttributeIndex].raw.value) ===
               JSON.stringify(
                 attributes[matchingAttributeIndex].localState.value
               )
           ) {
             attributes[matchingAttributeIndex].localState = {
               value: JSON.parse(
-                JSON.stringify(attributes[matchingAttributeIndex].state.value)
+                JSON.stringify(attributes[matchingAttributeIndex].raw.value)
               ),
               meta: JSON.parse(
-                JSON.stringify(attributes[matchingAttributeIndex].state.meta)
+                JSON.stringify(attributes[matchingAttributeIndex].raw.meta)
               ),
               labels: Object.keys(
-                attributes[matchingAttributeIndex].state.meta.elements
+                attributes[matchingAttributeIndex].raw.meta.elements
               ),
               flags: {
                 rows: [],
@@ -218,7 +218,7 @@ export function updateAttribute(oldState, payload) {
                 },
                 timeStamp: JSON.parse(
                   JSON.stringify(
-                    attributes[matchingAttributeIndex].state.timeStamp
+                    attributes[matchingAttributeIndex].raw.timeStamp
                   )
                 ),
               },

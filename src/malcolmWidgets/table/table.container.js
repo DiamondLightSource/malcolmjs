@@ -36,7 +36,7 @@ const TableContainer = props => {
     ) : (
       <Typography>
         Update received @{' '}
-        {`${new Date(props.attribute.state.timeStamp.secondsPastEpoch * 1000)}`}
+        {`${new Date(props.attribute.raw.timeStamp.secondsPastEpoch * 1000)}`}
       </Typography>
     ),
     <ButtonAction
@@ -107,7 +107,7 @@ TableContainer.propTypes = {
         }),
       }),
     }),
-    state: PropTypes.shape({
+    raw: PropTypes.shape({
       timeStamp: PropTypes.shape({
         secondsPastEpoch: PropTypes.string,
       }),

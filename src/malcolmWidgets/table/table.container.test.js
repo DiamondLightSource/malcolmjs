@@ -33,16 +33,14 @@ describe('Table container', () => {
       },
     };
     state.malcolm.blocks.test1.attributes[0].localState = {
-      value: JSON.parse(JSON.stringify(harderAttribute.state.value)),
-      meta: harderAttribute.state.meta,
-      labels: Object.keys(harderAttribute.state.meta.elements),
+      value: JSON.parse(JSON.stringify(harderAttribute.raw.value)),
+      meta: harderAttribute.raw.meta,
+      labels: Object.keys(harderAttribute.raw.meta.elements),
       flags: {
         rows: [],
         table: {
           fresh: true,
-          timeStamp: JSON.parse(
-            JSON.stringify(harderAttribute.state.timeStamp)
-          ),
+          timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
         },
       },
     };
@@ -179,7 +177,7 @@ describe('Table container', () => {
       malcolmSetFlag(['test1', 'layout'], 'pending', true)
     );
     expect(testStore.getActions()[1]).toEqual(
-      malcolmPutAction(['test1', 'layout'], harderAttribute.state.value)
+      malcolmPutAction(['test1', 'layout'], harderAttribute.raw.value)
     );
   });
 });

@@ -40,33 +40,22 @@ const styles = theme => ({
 
 const AttributeDetails = props => {
   let widgetTagIndex = null;
-  if (Object.prototype.hasOwnProperty.call(props.attribute, 'meta')) {
-    const { tags } = props.attribute.meta;
+  if (props.attribute && props.attribute.raw && props.attribute.raw.meta) {
+    const { tags } = props.attribute.raw.meta;
     if (tags !== null) {
       widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
     }
   }
   if (widgetTagIndex !== null) {
-    // #refactorDuplication
-    let alarm;
-    let message;
-    if (props.attribute.raw) {
-      alarm = props.attribute.raw.alarm.severity;
-      alarm = props.attribute.calculated.errorState
-        ? AlarmStates.MAJOR_ALARM
-        : alarm;
-      alarm = props.attribute.calculated.pending ? AlarmStates.PENDING : alarm;
-      message = props.attribute.calculated.errorMessage
-        ? props.attribute.calculated.errorMessage
-        : '';
-    } else {
-      alarm = props.attribute.alarm.severity;
-      alarm = props.attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-      alarm = props.attribute.pending ? AlarmStates.PENDING : alarm;
-      message = props.attribute.errorMessage
-        ? props.attribute.errorMessage
-        : '';
-    }
+    let alarm = props.attribute.raw.alarm.severity;
+    alarm = props.attribute.calculated.errorState
+      ? AlarmStates.MAJOR_ALARM
+      : alarm;
+    alarm = props.attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+    const message = props.attribute.calculated.errorMessage
+      ? props.attribute.calculated.errorMessage
+      : '';
+
     return (
       <div className={props.classes.div}>
         <Tooltip id="1" title={message} placement="bottom">
@@ -75,7 +64,7 @@ const AttributeDetails = props => {
           </IconButton>
         </Tooltip>
         <Typography className={props.classes.textName}>
-          {props.attribute.meta.label}:{' '}
+          {props.attribute.raw.meta.label}:{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
           <AttributeSelector attribute={props.attribute} />
@@ -88,18 +77,6 @@ const AttributeDetails = props => {
 
 AttributeDetails.propTypes = {
   attribute: PropTypes.shape({
-    name: PropTypes.string,
-    pending: PropTypes.bool,
-    errorState: PropTypes.bool,
-    errorMessage: PropTypes.string,
-    alarm: PropTypes.shape({
-      severity: PropTypes.number,
-    }),
-    meta: PropTypes.shape({
-      label: PropTypes.string,
-      tags: PropTypes.arrayOf(PropTypes.string),
-    }),
-    unableToProcess: PropTypes.bool,
     calculated: PropTypes.shape({
       name: PropTypes.string,
       pending: PropTypes.bool,
