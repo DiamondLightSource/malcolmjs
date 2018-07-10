@@ -116,6 +116,7 @@ function updateNavTypes(state) {
               if (nameIndex > -1) {
                 nav.navType = NavTypes.Block;
                 nav.blockMri = matchingAttribute.value.mri[nameIndex];
+                nav.label = nav.path;
                 updateBlockChildren(nav, state.blocks);
               }
             }
