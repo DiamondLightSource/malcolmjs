@@ -53,16 +53,20 @@ describe('Method component', () => {
     errorMsg
   ) => {
     const method = {
-      name: 'Method',
-      label: 'Test',
-      errorState: !!errorMsg,
-      errorMessage: errorMsg,
-      path: ['Test', 'Method'],
-      defaults,
-      inputs: inputValues,
-      takes: { elements: { ...inputs } },
-      returns: { elements: { ...outputs } },
-      outputs: outputValues,
+      calculated: {
+        name: 'Method',
+        path: ['Test', 'Method'],
+        errorState: !!errorMsg,
+        errorMessage: errorMsg,
+        inputs: inputValues,
+        outputs: outputValues,
+      },
+      raw: {
+        label: 'Test',
+        defaults,
+        takes: { elements: { ...inputs } },
+        returns: { elements: { ...outputs } },
+      },
     };
 
     state.malcolm.blocks.Test.attributes = [method];

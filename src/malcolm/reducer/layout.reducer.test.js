@@ -33,21 +33,29 @@ const buildMalcolmState = () => ({
       label: 'block1 label',
       attributes: [
         {
-          meta: {
-            tags: ['widget:icon'],
-          },
-          value: 'icon 123',
-        },
-        {
-          name: 'att1',
-          meta: {
-            tags: ['inport:bool:ZERO'],
+          raw: {
+            meta: {
+              tags: ['widget:icon'],
+            },
+            value: 'icon 123',
           },
         },
         {
-          name: 'layout',
-          layout: {
-            blocks: [buildLayoutBlock()],
+          calculated: {
+            name: 'att1',
+          },
+          raw: {
+            meta: {
+              tags: ['inport:bool:ZERO'],
+            },
+          },
+        },
+        {
+          calculated: {
+            name: 'layout',
+            layout: {
+              blocks: [buildLayoutBlock()],
+            },
           },
         },
       ],
@@ -60,21 +68,33 @@ describe('Layout Reducer', () => {
     const block = {
       attributes: [
         {
-          name: 'att1',
-          meta: {
-            tags: ['inport:bool:ZERO'],
+          calculated: {
+            name: 'att1',
+          },
+          raw: {
+            meta: {
+              tags: ['inport:bool:ZERO'],
+            },
           },
         },
         {
-          name: 'att2',
-          meta: {
-            tags: ['outport:bool:SEQ1'],
+          calculated: {
+            name: 'att2',
+          },
+          raw: {
+            meta: {
+              tags: ['outport:bool:SEQ1'],
+            },
           },
         },
         {
-          name: 'att3',
-          meta: {
-            tags: ['inport:bool:ZERO'],
+          calculated: {
+            name: 'att3',
+          },
+          raw: {
+            meta: {
+              tags: ['inport:bool:ZERO'],
+            },
           },
         },
       ],
@@ -216,7 +236,7 @@ describe('Layout Reducer', () => {
     state.mainAttribute = 'layout';
 
     LayoutReducer.updateBlockPosition(state, { x: 100, y: 200 });
-    const { layout } = state.blocks.block1.attributes[2];
+    const { layout } = state.blocks.block1.attributes[2].calculated;
     expect(layout.blocks[0].position.x).toEqual(110);
     expect(layout.blocks[0].position.y).toEqual(220);
   });

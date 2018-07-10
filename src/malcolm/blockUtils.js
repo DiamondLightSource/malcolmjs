@@ -47,7 +47,11 @@ const findAttributeIndex = (blocks, blockName, attributeName) => {
 
 const findAttributesWithTag = (block, searchTag) =>
   block.attributes.filter(
-    a => a.meta && a.meta.tags.some(tag => tag.indexOf(searchTag) !== -1)
+    a =>
+      (a.raw &&
+        a.raw.meta &&
+        a.raw.meta.tags.some(tag => tag.indexOf(searchTag) !== -1)) ||
+      (a.meta && a.meta.tags.some(tag => tag.indexOf(searchTag) !== -1))
   );
 
 const attributeHasTag = (attribute, tag) =>
@@ -55,11 +59,14 @@ const attributeHasTag = (attribute, tag) =>
   ((attribute.meta &&
     attribute.meta.tags &&
     attribute.meta.tags.some(t => t.indexOf(tag) > -1)) ||
-    (attribute.state &&
-      attribute.state.meta &&
-      attribute.state.meta.tags &&
-      attribute.state.meta.tags.some(t => t.indexOf(tag) > -1)) ||
-    (attribute.tags && attribute.tags.some(t => t.indexOf(tag) > -1)));
+    (attribute.raw &&
+      attribute.raw.meta &&
+      attribute.raw.meta.tags &&
+      attribute.raw.meta.tags.some(t => t.indexOf(tag) > -1)) ||
+    (attribute.tags && attribute.tags.some(t => t.indexOf(tag) > -1)) ||
+    (attribute.raw &&
+      attribute.raw.tags &&
+      attribute.raw.tags.some(t => t.indexOf(tag) > -1)));
 
 export default {
   findBlock,

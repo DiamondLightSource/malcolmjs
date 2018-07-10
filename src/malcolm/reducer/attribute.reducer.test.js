@@ -32,11 +32,15 @@ describe('attribute reducer', () => {
         block1: {
           attributes: [
             {
-              name: 'layout',
-              meta: {
-                tags: ['widget:flowgraph'],
+              calculated: {
+                name: 'layout',
+                children: [],
               },
-              children: [],
+              raw: {
+                meta: {
+                  tags: ['widget:flowgraph'],
+                },
+              },
             },
           ],
         },
@@ -50,18 +54,20 @@ describe('attribute reducer', () => {
     payload = {
       delta: true,
       id: 1,
-      meta: {
-        tags: ['widget:flowgraph'],
-        elements: {
-          mri: {},
+      raw: {
+        meta: {
+          tags: ['widget:flowgraph'],
+          elements: {
+            mri: {},
+          },
         },
-      },
-      value: {
-        mri: ['block2', 'block3', 'block4'],
-        name: ['block2', 'block3', 'block4'],
-        visible: [true, true, false],
-        x: [0, 1, 2],
-        y: [3, 4, 5],
+        value: {
+          mri: ['block2', 'block3', 'block4'],
+          name: ['block2', 'block3', 'block4'],
+          visible: [true, true, false],
+          x: [0, 1, 2],
+          y: [3, 4, 5],
+        },
       },
     };
   });
@@ -74,8 +80,10 @@ describe('attribute reducer', () => {
   it('updates children for layout attribute', () => {
     state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
-    expect(state.blocks.block1.attributes[0].children).toHaveLength(3);
-    expect(state.blocks.block1.attributes[0].children).toEqual([
+    expect(state.blocks.block1.attributes[0].calculated.children).toHaveLength(
+      3
+    );
+    expect(state.blocks.block1.attributes[0].calculated.children).toEqual([
       'block2',
       'block3',
       'block4',
@@ -98,16 +106,20 @@ describe('attribute reducer', () => {
   it('updates with a layout property if widget:layout', () => {
     state = AttributeReducer(state, buildAction(MalcolmAttributeData, payload));
 
-    expect(state.blocks.block1.attributes[0].layout).not.toBeUndefined();
-    expect(state.blocks.block1.attributes[0].layout.blocks).toHaveLength(3);
     expect(
-      state.blocks.block1.attributes[0].layout.blocks[2].visible
+      state.blocks.block1.attributes[0].calculated.layout
+    ).not.toBeUndefined();
+    expect(
+      state.blocks.block1.attributes[0].calculated.layout.blocks
+    ).toHaveLength(3);
+    expect(
+      state.blocks.block1.attributes[0].calculated.layout.blocks[2].visible
     ).toBeFalsy();
     expect(
-      state.blocks.block1.attributes[0].layout.blocks[2].position.x
+      state.blocks.block1.attributes[0].calculated.layout.blocks[2].position.x
     ).toEqual(2);
     expect(
-      state.blocks.block1.attributes[0].layout.blocks[2].position.y
+      state.blocks.block1.attributes[0].calculated.layout.blocks[2].position.y
     ).toEqual(5);
   });
 
@@ -132,9 +144,13 @@ describe('attribute reducer', () => {
 
   it('updateLayout updates the layout if the attribute is an icon', () => {
     state.blocks.block1.attributes.push({
-      name: 'icon attr',
-      meta: {
-        tags: ['widget:icon'],
+      calculated: {
+        name: 'icon attr',
+      },
+      raw: {
+        meta: {
+          tags: ['widget:icon'],
+        },
       },
     });
 
@@ -152,9 +168,13 @@ describe('attribute reducer', () => {
           attributes: [
             ...state.blocks.block1.attributes,
             {
-              name: 'port 1',
-              meta: {
-                tags: ['inport:bool:ZERO'],
+              calculated: {
+                name: 'port 1',
+              },
+              raw: {
+                meta: {
+                  tags: ['inport:bool:ZERO'],
+                },
               },
             },
           ],
@@ -176,9 +196,13 @@ describe('attribute reducer', () => {
           attributes: [
             ...state.blocks.block1.attributes,
             {
-              name: 'port 1',
-              meta: {
-                tags: ['inport:bool:ZERO'],
+              calculated: {
+                name: 'port 1',
+              },
+              raw: {
+                meta: {
+                  tags: ['inport:bool:ZERO'],
+                },
               },
             },
           ],
@@ -209,26 +233,30 @@ describe('attribute reducer', () => {
   });
 
   it('portsAreDifferent returns true if labels are different', () => {
-    const oldAttribute = { meta: { label: 'old' } };
-    const newAttribute = { meta: { label: 'new' } };
+    const oldAttribute = { raw: { meta: { label: 'old' } } };
+    const newAttribute = { raw: { meta: { label: 'new' } } };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
 
   it('portsAreDifferent returns false if there are no tags', () => {
-    const oldAttribute = { meta: { label: 'label' } };
-    const newAttribute = { meta: { label: 'label' } };
+    const oldAttribute = { raw: { meta: { label: 'label' } } };
+    const newAttribute = { raw: { meta: { label: 'label' } } };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeFalsy();
   });
 
   it('portsAreDifferent returns true if inports are different', () => {
-    const oldAttribute = { meta: { label: 'label', tags: [] } };
-    const newAttribute = { meta: { label: 'label', tags: ['inport:bool'] } };
+    const oldAttribute = { raw: { meta: { label: 'label', tags: [] } } };
+    const newAttribute = {
+      raw: { meta: { label: 'label', tags: ['inport:bool'] } },
+    };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
 
   it('portsAreDifferent returns true if outports are different', () => {
-    const oldAttribute = { meta: { label: 'label', tags: [] } };
-    const newAttribute = { meta: { label: 'label', tags: ['outport:bool'] } };
+    const oldAttribute = { raw: { meta: { label: 'label', tags: [] } } };
+    const newAttribute = {
+      raw: { meta: { label: 'label', tags: ['outport:bool'] } },
+    };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
 });

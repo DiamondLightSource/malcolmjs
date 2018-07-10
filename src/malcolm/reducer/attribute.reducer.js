@@ -9,10 +9,13 @@ import {
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
-  if (updatedAttribute.meta) {
+  if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
-    if (updatedAttribute.meta.elements && updatedAttribute.meta.elements.mri) {
-      updatedAttribute.children = updatedAttribute.value.mri;
+    if (
+      updatedAttribute.raw.meta.elements &&
+      updatedAttribute.raw.meta.elements.mri
+    ) {
+      updatedAttribute.calculated.children = updatedAttribute.raw.value.mri;
     }
   }
 
@@ -22,8 +25,8 @@ export const updateAttributeChildren = attribute => {
 export const checkForFlowGraph = attribute => {
   if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
     const updatedAttribute = { ...attribute };
-    const { value } = updatedAttribute;
-    updatedAttribute.layout = {
+    const { value } = updatedAttribute.raw;
+    updatedAttribute.calculated.layout = {
       blocks: value.mri.map((mri, i) => ({
         name: value.name[i],
         mri,
@@ -61,7 +64,7 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
       return true;
     }
 
-    if (oldAttribute.meta.tags) {
+    if (oldMeta.tags) {
       // find inport and compare
       const inPortTag = newMeta.tags.find(t => t.indexOf('inport:') > -1);
       if (
@@ -167,6 +170,7 @@ export function updateAttribute(oldState, payload) {
         blockName,
         attributeName
       );
+      // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
         attributes[matchingAttributeIndex] = {
           ...attributes[matchingAttributeIndex],

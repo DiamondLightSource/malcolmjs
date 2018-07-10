@@ -40,6 +40,7 @@ export const isRootLevelAttribute = a =>
   !a.calculated.isMethod &&
   !ignoredAttributes.some(
     ignored =>
+      a.raw &&
       a.raw.meta &&
       a.raw.meta.tags &&
       a.raw.meta.tags.findIndex(t => t === ignored) > -1
@@ -180,7 +181,9 @@ const mapStateToProps = (state, ownProps, memory) => {
       .filter(a => a.calculated.isGroup)
       .map(group => ({
         attribute: group,
-        children: block.attributes.filter(a => a.group === group.name),
+        children: block.attributes.filter(
+          a => a.calculated.group === group.name
+        ),
       }));
 
     stateMemory.methods = block.attributes.filter(a => a.calculated.isMethod);

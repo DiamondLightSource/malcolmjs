@@ -139,7 +139,7 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.isGroup).toEqual(true);
+    expect(dispatches[0].payload.calculated.isGroup).toEqual(true);
   });
 
   it('detects attributes in groups', () => {
@@ -149,8 +149,8 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.inGroup).toEqual(true);
-    expect(dispatches[0].payload.group).toEqual('outputs');
+    expect(dispatches[0].payload.calculated.inGroup).toEqual(true);
+    expect(dispatches[0].payload.calculated.group).toEqual('outputs');
   });
 
   it('detects root level attributes', () => {
@@ -160,8 +160,8 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.inGroup).toEqual(false);
-    expect(dispatches[0].payload.isGroup).toEqual(false);
+    expect(dispatches[0].payload.calculated.inGroup).toEqual(false);
+    expect(dispatches[0].payload.calculated.isGroup).toEqual(false);
   });
 
   it('processes and dispatches a table attribute update', () => {

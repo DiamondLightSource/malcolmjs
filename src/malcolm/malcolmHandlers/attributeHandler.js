@@ -57,17 +57,17 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
     payload: {
       ...changedAttribute,
       id: request.id,
+      /*
       isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
       inGroup,
-      group,
+      group, */
+      typeid: changedAttribute.typeid,
       delta: true,
       raw: { ...changedAttribute },
       calculated: {
-        id: request.id,
         isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
         inGroup,
         group,
-        delta: true,
       },
     },
   };
@@ -81,6 +81,7 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
 
 const processMethod = (request, method, dispatch) => {
   const changedMethod = {
+    typeid: method.typeid,
     raw: { ...method },
   };
 

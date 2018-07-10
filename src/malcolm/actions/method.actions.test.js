@@ -11,11 +11,11 @@ describe('method actions', () => {
     expect(action.type).toEqual(MalcolmAttributeData);
     expect(action.payload.id).toEqual(123);
     expect(action.payload.prop).toEqual('test');
-    expect(action.payload.isMethod).toBeTruthy();
+    expect(action.payload.calculated.isMethod).toBeTruthy();
     expect(action.payload.delta).toBeTruthy();
-    expect(action.payload.pending).toBeFalsy();
-    expect(action.payload.inputs).toEqual({});
-    expect(action.payload.outputs).toEqual({});
+    expect(action.payload.calculated.pending).toBeFalsy();
+    expect(action.payload.calculated.inputs).toEqual({});
+    expect(action.payload.calculated.outputs).toEqual({});
   });
 
   it('malcolmUpdateMethodInput sends the info needed to update an input', () => {

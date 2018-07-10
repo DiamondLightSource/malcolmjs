@@ -32,16 +32,24 @@ const testBlock = {
   testBlock: {
     attributes: [
       {
-        name: 'foo',
-        value: 1,
-        alarm: { severity: 0 },
-        meta: { tags: {}, writeable: false },
+        calculated: {
+          name: 'foo',
+        },
+        raw: {
+          value: 1,
+          alarm: { severity: 0 },
+          meta: { tags: {}, writeable: false },
+        },
       },
       {
-        name: 'bar',
-        value: 2,
-        alarm: { severity: 2 },
-        meta: { tags: {}, writeable: true },
+        calculated: {
+          name: 'bar',
+        },
+        raw: {
+          value: 2,
+          alarm: { severity: 2 },
+          meta: { tags: {}, writeable: true },
+        },
       },
     ],
   },
@@ -362,12 +370,16 @@ describe('malcolm reducer', () => {
     state.blocks = testBlock;
     const action = { type: MalcolmDisconnected };
     state = malcolmReducer(state, action);
-    expect(state.blocks.testBlock.attributes[0].meta.writeable).toEqual(false);
-    expect(state.blocks.testBlock.attributes[1].meta.writeable).toEqual(false);
-    expect(state.blocks.testBlock.attributes[0].alarm.severity).toEqual(
+    expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
+      false
+    );
+    expect(state.blocks.testBlock.attributes[1].raw.meta.writeable).toEqual(
+      false
+    );
+    expect(state.blocks.testBlock.attributes[0].raw.alarm.severity).toEqual(
       AlarmStates.UNDEFINED_ALARM
     );
-    expect(state.blocks.testBlock.attributes[1].alarm.severity).toEqual(
+    expect(state.blocks.testBlock.attributes[1].raw.alarm.severity).toEqual(
       AlarmStates.UNDEFINED_ALARM
     );
   });
@@ -431,7 +443,7 @@ describe('malcolm reducer', () => {
     const updatedState = setErrorState(state, 1, 123);
 
     const attribute = updatedState.blocks.testBlock.attributes.find(
-      a => a.name === 'foo'
+      a => a.calculated.name === 'foo'
     );
     expect(attribute.errorState).toEqual(123);
   });
