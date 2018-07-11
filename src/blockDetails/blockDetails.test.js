@@ -52,8 +52,8 @@ describe('Block Details', () => {
     const block = {
       loading: false,
       attributes: [
-        { name: 'health', loading: true },
-        { name: 'icon', loading: true },
+        { calculated: { name: 'health', loading: true } },
+        { calculated: { name: 'icon', loading: true } },
       ],
     };
 
@@ -68,16 +68,24 @@ describe('Block Details', () => {
       loading: false,
       attributes: [
         {
-          name: 'health',
-          loading: false,
-          alarm: { severity: 0 },
-          meta: { label: 'health 1' },
+          calculated: {
+            name: 'health',
+            loading: false,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            meta: { label: 'health 1' },
+          },
         },
         {
-          name: 'icon',
-          loading: false,
-          alarm: { severity: 0 },
-          meta: { label: 'icon 1' },
+          calculated: {
+            name: 'icon',
+            loading: false,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            meta: { label: 'icon 1' },
+          },
         },
       ],
     };
@@ -93,27 +101,39 @@ describe('Block Details', () => {
       loading: false,
       attributes: [
         {
-          name: 'parameters',
-          loading: false,
-          alarm: { severity: 0 },
-          meta: { label: 'health 1' },
-          isGroup: true,
+          calculated: {
+            name: 'parameters',
+            loading: false,
+            isGroup: true,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            meta: { label: 'health 1' },
+          },
         },
         {
-          name: 'health',
-          loading: false,
-          alarm: { severity: 0 },
-          meta: { label: 'health 1' },
-          group: 'parameters',
-          inGroup: true,
+          calculated: {
+            name: 'health',
+            loading: false,
+            inGroup: true,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            meta: { label: 'health 1' },
+            group: 'parameters',
+          },
         },
         {
-          name: 'icon',
-          loading: false,
-          alarm: { severity: 0 },
-          meta: { label: 'icon 1' },
-          group: 'parameters',
-          inGroup: true,
+          calculated: {
+            name: 'icon',
+            loading: false,
+            inGroup: true,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            meta: { label: 'icon 1' },
+            group: 'parameters',
+          },
         },
       ],
     };
@@ -136,12 +156,16 @@ describe('Block Details', () => {
       loading: false,
       attributes: [
         {
-          name: 'save',
-          loading: false,
-          alarm: { severity: 0 },
-          label: 'save method',
-          isMethod: true,
-          inGroup: false,
+          calculated: {
+            name: 'save',
+            loading: false,
+            isMethod: true,
+            inGroup: false,
+          },
+          raw: {
+            alarm: { severity: 0 },
+            label: 'save method',
+          },
         },
       ],
     };
@@ -155,13 +179,17 @@ describe('Block Details', () => {
   const buildAttributes = updateFunction => {
     const attributes = [
       {
-        name: 'test1',
-        inGroup: true,
-        isGroup: false,
-        isMethod: false,
+        calculated: {
+          name: 'test1',
+          inGroup: true,
+          isGroup: false,
+          isMethod: false,
+        },
       },
       {
-        name: 'test2',
+        calculated: {
+          name: 'test2',
+        },
       },
     ];
 
@@ -177,16 +205,28 @@ describe('Block Details', () => {
     let newAttributes = buildAttributes();
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeTruthy();
 
-    newAttributes = buildAttributes(a => ({ ...a, name: 'test1 new' }));
+    newAttributes = buildAttributes(a => ({
+      ...a,
+      calculated: { ...a.calculated, name: 'test1 new' },
+    }));
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
 
-    newAttributes = buildAttributes(a => ({ ...a, inGroup: false }));
+    newAttributes = buildAttributes(a => ({
+      ...a,
+      calculated: { ...a.calculated, inGroup: false },
+    }));
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
 
-    newAttributes = buildAttributes(a => ({ ...a, isGroup: true }));
+    newAttributes = buildAttributes(a => ({
+      ...a,
+      calculated: { ...a.calculated, isGroup: true },
+    }));
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
 
-    newAttributes = buildAttributes(a => ({ ...a, isMethod: true }));
+    newAttributes = buildAttributes(a => ({
+      ...a,
+      calculated: { ...a.calculated, isMethod: true },
+    }));
     expect(areAttributesTheSame(oldAttributes, newAttributes)).toBeFalsy();
   });
 });

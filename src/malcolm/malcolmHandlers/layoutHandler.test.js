@@ -15,18 +15,22 @@ describe('LayoutHandler', () => {
       block1: {
         attributes: [
           {
-            name: 'layout',
-            value: {
-              mri: ['block2'],
-              visible: [true],
+            calculated: {
+              name: 'layout',
+              layout: {
+                blocks: [
+                  {
+                    mri: 'block2',
+                    visible: 'true',
+                  },
+                ],
+              },
             },
-            layout: {
-              blocks: [
-                {
-                  mri: 'block2',
-                  visible: 'true',
-                },
-              ],
+            raw: {
+              value: {
+                mri: ['block2'],
+                visible: [true],
+              },
             },
           },
         ],
@@ -52,7 +56,7 @@ describe('LayoutHandler', () => {
   });
 
   it('layoutRouteSelected ignores blocks that are not visible', () => {
-    blocks.block1.attributes[0].layout.blocks[0].visible = false;
+    blocks.block1.attributes[0].calculated.layout.blocks[0].visible = false;
 
     LayoutHandler.layoutRouteSelected(blocks, ['block1', 'layout'], dispatch);
 
@@ -81,7 +85,7 @@ describe('LayoutHandler', () => {
   });
 
   it('layoutAttributeReceived ignores blocks that are not visible', () => {
-    blocks.block1.attributes[0].value.visible[0] = false;
+    blocks.block1.attributes[0].raw.value.visible[0] = false;
     LayoutHandler.layoutAttributeReceived(
       ['block1', 'layout'],
       getState,

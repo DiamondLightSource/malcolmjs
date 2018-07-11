@@ -8,11 +8,13 @@ export const buildMethodUpdate = (id, data) => ({
   payload: {
     id,
     ...data,
-    isMethod: true,
-    inputs: {},
-    outputs: {},
     delta: true,
-    pending: false,
+    calculated: {
+      isMethod: true,
+      inputs: {},
+      outputs: {},
+      pending: false,
+    },
   },
 });
 

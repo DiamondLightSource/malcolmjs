@@ -6,18 +6,18 @@ export const buildPorts = block => {
 
   return [
     ...inputs.map(input => ({
-      label: input.name,
+      label: input.calculated.name,
       input: true,
-      tag: input.meta.tags
+      tag: input.raw.meta.tags
         .find(t => t.indexOf('inport:') > -1)
         .split(':')
         .slice(-1)[0],
-      value: input.value,
+      value: input.raw.value,
     })),
     ...outputs.map(output => ({
-      label: output.name,
+      label: output.calculated.name,
       input: false,
-      tag: output.meta.tags
+      tag: output.raw.meta.tags
         .find(t => t.indexOf('outport:') > -1)
         .split(':')
         .slice(-1)[0],
@@ -48,7 +48,7 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
     );
 
     if (iconAttribute.length > 0) {
-      updatedBlock.icon = iconAttribute[0].value;
+      updatedBlock.icon = iconAttribute[0].raw.value;
     }
 
     updatedBlock.ports = buildPorts(matchingBlock);
@@ -68,10 +68,12 @@ const processLayout = malcolmState => {
   if (parentBlock && parentBlock.attributes) {
     const attribute = malcolmState.blocks[
       malcolmState.parentBlock
-    ].attributes.find(a => a.name === malcolmState.mainAttribute);
+    ].attributes.find(
+      a => a.calculated && a.calculated.name === malcolmState.mainAttribute
+    );
 
-    if (attribute && attribute.layout) {
-      const layoutBlocks = attribute.layout.blocks
+    if (attribute && attribute.calculated.layout) {
+      const layoutBlocks = attribute.calculated.layout.blocks
         .filter(b => b.visible)
         .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
         .map(b => updateLayoutBlock(b, malcolmState));
@@ -96,10 +98,12 @@ const updateBlockPosition = (malcolmState, translation) => {
   if (parentBlock && parentBlock.attributes) {
     const attribute = malcolmState.blocks[
       malcolmState.parentBlock
-    ].attributes.find(a => a.name === malcolmState.mainAttribute);
+    ].attributes.find(
+      a => a.calculated && a.calculated.name === malcolmState.mainAttribute
+    );
 
-    if (attribute && attribute.layout) {
-      const layoutBlocks = attribute.layout.blocks.map(
+    if (attribute && attribute.calculated && attribute.calculated.layout) {
+      const layoutBlocks = attribute.calculated.layout.blocks.map(
         b =>
           malcolmState.layoutState.selectedBlocks.some(name => name === b.mri)
             ? {
@@ -112,7 +116,7 @@ const updateBlockPosition = (malcolmState, translation) => {
             : b
       );
 
-      attribute.layout.blocks = layoutBlocks;
+      attribute.calculated.layout.blocks = layoutBlocks;
     }
   }
 };

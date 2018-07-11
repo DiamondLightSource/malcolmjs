@@ -53,16 +53,20 @@ describe('NavigationReducer.updateNavTypes', () => {
         PANDA: {
           attributes: [
             {
-              name: 'layout',
-              meta: {
-                label: 'Layout',
-                tags: ['widget:flowgraph'],
+              calculated: {
+                name: 'layout',
+                children: ['SEQ1', 'SEQ2'],
               },
-              value: {
-                name: ['SEQ1', 'SEQ2'],
-                mri: ['PANDA:SEQ1', 'PANDA:SEQ2'],
+              raw: {
+                meta: {
+                  label: 'Layout',
+                  tags: ['widget:flowgraph'],
+                },
+                value: {
+                  name: ['SEQ1', 'SEQ2'],
+                  mri: ['PANDA:SEQ1', 'PANDA:SEQ2'],
+                },
               },
-              children: ['SEQ1', 'SEQ2'],
             },
           ],
           children: ['layout', 'health'],
@@ -159,7 +163,10 @@ describe('NavigationReducer.updateNavTypes', () => {
     state.blocks['PANDA:SEQ2'] = {
       attributes: [
         {
-          name: 'table',
+          calculated: {
+            name: 'table',
+          },
+          raw: {},
         },
       ],
       children: ['table'],

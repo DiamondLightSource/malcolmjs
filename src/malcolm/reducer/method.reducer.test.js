@@ -16,8 +16,11 @@ describe('method reducer', () => {
         block1: {
           attributes: [
             {
-              name: 'attr1',
-              inputs: {},
+              calculated: {
+                name: 'attr1',
+                inputs: {},
+              },
+              raw: {},
             },
           ],
         },
@@ -52,7 +55,7 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.inputs.input1).toEqual(123);
+    expect(attribute.calculated.inputs.input1).toEqual(123);
   });
 
   it('updateMethodInput should flag an input on a method as dirty', () => {
@@ -63,11 +66,13 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.dirtyInputs.input1).toBeTruthy();
+    expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
   });
 
   it('updateMethodInput should update dirty state of an input on a method', () => {
-    state.blocks.block1.attributes[0].dirtyInputs = { input1: false };
+    state.blocks.block1.attributes[0].calculated.dirtyInputs = {
+      input1: false,
+    };
 
     const payload = {
       path: ['block1', 'attr1'],
@@ -76,11 +81,13 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
-    expect(attribute.dirtyInputs.input1).toBeTruthy();
+    expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
   });
 
   it('handleMethodReturn should update the output on a method with return map', () => {
-    state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
+    state.blocks.block1.attributes[0].raw.returns = {
+      elements: { output1: {} },
+    };
 
     const payload = {
       id: 2,
@@ -88,12 +95,14 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmReturn, payload);
-    expect(attribute.outputs.output1).toEqual(456);
+    expect(attribute.calculated.outputs.output1).toEqual(456);
   });
 
   it('handleMethodReturn should update the output on a method with return unpacked', () => {
-    state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
-    state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
+    state.blocks.block1.attributes[0].raw.returns = {
+      elements: { output1: {} },
+    };
+    state.blocks.block1.attributes[0].raw.tags = ['method:return:unpacked'];
 
     const payload = {
       id: 2,
@@ -101,12 +110,14 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmReturn, payload);
-    expect(attribute.outputs.output1).toEqual(456);
+    expect(attribute.calculated.outputs.output1).toEqual(456);
   });
 
   it('handleMethodReturn should do nothing if original request wasnt a post', () => {
-    state.blocks.block1.attributes[0].returns = { elements: { output1: {} } };
-    state.blocks.block1.attributes[0].tags = ['method:return:unpacked'];
+    state.blocks.block1.attributes[0].raw.returns = {
+      elements: { output1: {} },
+    };
+    state.blocks.block1.attributes[0].raw.tags = ['method:return:unpacked'];
 
     state.messagesInFlight = {
       2: {
@@ -131,7 +142,7 @@ describe('method reducer', () => {
   });
 
   it('handleMethodReturn should error if return map is missing an output', () => {
-    state.blocks.block1.attributes[0].returns = {
+    state.blocks.block1.attributes[0].raw.returns = {
       elements: { output1: {}, output2: {} },
     };
 
@@ -141,6 +152,6 @@ describe('method reducer', () => {
     };
 
     const attribute = runReducer(MalcolmReturn, payload);
-    expect(attribute.errorState).toBeTruthy();
+    expect(attribute.calculated.errorState).toBeTruthy();
   });
 });

@@ -32,16 +32,24 @@ const testBlock = {
   testBlock: {
     attributes: [
       {
-        name: 'foo',
-        value: 1,
-        alarm: { severity: 0 },
-        meta: { tags: {}, writeable: false },
+        calculated: {
+          name: 'foo',
+        },
+        raw: {
+          value: 1,
+          alarm: { severity: 0 },
+          meta: { tags: {}, writeable: false },
+        },
       },
       {
-        name: 'bar',
-        value: 2,
-        alarm: { severity: 2 },
-        meta: { tags: {}, writeable: true },
+        calculated: {
+          name: 'bar',
+        },
+        raw: {
+          value: 2,
+          alarm: { severity: 2 },
+          meta: { tags: {}, writeable: true },
+        },
       },
     ],
   },
@@ -179,10 +187,16 @@ describe('malcolm reducer', () => {
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
-    expect(state.blocks.block1.attributes).toEqual([
-      { name: 'health', loading: true, children: [] },
-      { name: 'icon', loading: true, children: [] },
-    ]);
+    expect(state.blocks.block1.attributes[0].calculated).toEqual({
+      name: 'health',
+      loading: true,
+      children: [],
+    });
+    expect(state.blocks.block1.attributes[1].calculated).toEqual({
+      name: 'icon',
+      loading: true,
+      children: [],
+    });
   });
 
   it('updates attribute data', () => {
@@ -191,8 +205,10 @@ describe('malcolm reducer', () => {
       loading: true,
       attributes: [
         {
-          name: 'health',
-          loading: true,
+          calculated: {
+            name: 'health',
+            loading: true,
+          },
         },
       ],
     };
@@ -213,12 +229,12 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
 
     expect(state.blocks.block1.attributes.length).toEqual(1);
-    expect(state.blocks.block1.attributes[0].name).toEqual('health');
-    expect(state.blocks.block1.attributes[0].path).toEqual([
+    expect(state.blocks.block1.attributes[0].calculated.name).toEqual('health');
+    expect(state.blocks.block1.attributes[0].calculated.path).toEqual([
       'block1',
       'health',
     ]);
-    expect(state.blocks.block1.attributes[0].loading).toEqual(false);
+    expect(state.blocks.block1.attributes[0].calculated.loading).toEqual(false);
   });
 
   it('set flag sets attribute pending', () => {
@@ -227,10 +243,12 @@ describe('malcolm reducer', () => {
       loading: true,
       attributes: [
         {
-          name: 'health',
-          loading: true,
-          path: ['block1', 'health'],
-          pending: false,
+          calculated: {
+            name: 'health',
+            loading: true,
+            path: ['block1', 'health'],
+            pending: false,
+          },
         },
       ],
     };
@@ -248,8 +266,8 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
 
     expect(state.blocks.block1.attributes.length).toEqual(1);
-    expect(state.blocks.block1.attributes[0].name).toEqual('health');
-    expect(state.blocks.block1.attributes[0].pending).toEqual(true);
+    expect(state.blocks.block1.attributes[0].calculated.name).toEqual('health');
+    expect(state.blocks.block1.attributes[0].calculated.pending).toEqual(true);
   });
 
   it('set flag does nothing if block does not exist', () => {
@@ -358,12 +376,16 @@ describe('malcolm reducer', () => {
     state.blocks = testBlock;
     const action = { type: MalcolmDisconnected };
     state = malcolmReducer(state, action);
-    expect(state.blocks.testBlock.attributes[0].meta.writeable).toEqual(false);
-    expect(state.blocks.testBlock.attributes[1].meta.writeable).toEqual(false);
-    expect(state.blocks.testBlock.attributes[0].alarm.severity).toEqual(
+    expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
+      false
+    );
+    expect(state.blocks.testBlock.attributes[1].raw.meta.writeable).toEqual(
+      false
+    );
+    expect(state.blocks.testBlock.attributes[0].raw.alarm.severity).toEqual(
       AlarmStates.UNDEFINED_ALARM
     );
-    expect(state.blocks.testBlock.attributes[1].alarm.severity).toEqual(
+    expect(state.blocks.testBlock.attributes[1].raw.alarm.severity).toEqual(
       AlarmStates.UNDEFINED_ALARM
     );
   });
@@ -427,9 +449,9 @@ describe('malcolm reducer', () => {
     const updatedState = setErrorState(state, 1, 123);
 
     const attribute = updatedState.blocks.testBlock.attributes.find(
-      a => a.name === 'foo'
+      a => a.calculated.name === 'foo'
     );
-    expect(attribute.errorState).toEqual(123);
+    expect(attribute.calculated.errorState).toEqual(123);
   });
 
   /* TODO: this needs to be fixed in the malcolm reducer

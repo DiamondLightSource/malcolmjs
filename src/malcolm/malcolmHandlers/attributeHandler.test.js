@@ -1,13 +1,15 @@
 import AttributeHandler from './attributeHandler';
 import { MalcolmAttributeData } from '../malcolm.types';
 
-let attribute;
+let oldStyleAttribute;
+let newStyleAttribute;
+let testAttributeState;
 const store = {
   getState: () => ({
     malcolm: {
       blocks: {
         TestBlock: {
-          attributes: [attribute],
+          attributes: [oldStyleAttribute, newStyleAttribute],
         },
       },
     },
@@ -23,7 +25,13 @@ const testDeltas = [
   {
     id: 1,
     changes: [
-      [[], { isATest: true, meta: { meaning: 'weird, but for the future' } }],
+      [
+        [],
+        {
+          value: { isATest: true },
+          meta: { meaning: 'weird, but for the future' },
+        },
+      ],
     ],
   },
   {
@@ -32,7 +40,7 @@ const testDeltas = [
   },
   {
     id: 1,
-    changes: [[['isATest'], 'True, but as a string']],
+    changes: [[['value'], 'overwritten']],
   },
   {
     id: 1,
@@ -45,7 +53,7 @@ const testDeltas = [
   {
     id: 1,
     changes: [
-      [['isATest'], 'True, but as a string'],
+      [['value', 'isATest'], 'True, but as a string'],
       [['timeStamp', 'time'], 1],
     ],
   },
@@ -62,8 +70,9 @@ describe('attribute handler', () => {
   let dispatches = [];
 
   beforeEach(() => {
+    testAttributeState = {};
     dispatches = [];
-    attribute = {
+    oldStyleAttribute = {
       isATest: true,
       meta: {
         meaning: 'weird, but for the future',
@@ -73,6 +82,23 @@ describe('attribute handler', () => {
         units: 's',
       },
       name: 'TestAttr',
+    };
+    newStyleAttribute = {
+      calculated: {
+        name: 'NewTestAttr',
+      },
+      raw: {
+        value: {
+          isATest: true,
+        },
+        meta: {
+          meaning: 'weird, but for the future',
+        },
+        timeStamp: {
+          time: 0,
+          units: 's',
+        },
+      },
     };
   });
 
@@ -113,7 +139,7 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.isGroup).toEqual(true);
+    expect(dispatches[0].payload.calculated.isGroup).toEqual(true);
   });
 
   it('detects attributes in groups', () => {
@@ -123,8 +149,8 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.inGroup).toEqual(true);
-    expect(dispatches[0].payload.group).toEqual('outputs');
+    expect(dispatches[0].payload.calculated.inGroup).toEqual(true);
+    expect(dispatches[0].payload.calculated.group).toEqual('outputs');
   });
 
   it('detects root level attributes', () => {
@@ -134,8 +160,8 @@ describe('attribute handler', () => {
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.inGroup).toEqual(false);
-    expect(dispatches[0].payload.isGroup).toEqual(false);
+    expect(dispatches[0].payload.calculated.inGroup).toEqual(false);
+    expect(dispatches[0].payload.calculated.isGroup).toEqual(false);
   });
 
   it('processes and dispatches a table attribute update', () => {
@@ -155,83 +181,99 @@ describe('attribute handler', () => {
     expect(dispatches[0].payload.delta).toEqual(true);
   });
 
+  // delta tests will run against new style attribute structure
+  subscription.path[1] = 'NewTestAttr';
+
   it('applies delta to whole block', () => {
-    attribute = {};
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = {};
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[0].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual(testDeltas[0].changes[0][1]);
+    expect(testAttributeState).toEqual(testDeltas[0].changes[0][1]);
   });
 
   it('applies delta to subset of block', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({ ...attribute, meta: { writeable: false } });
+    expect(testAttributeState).toEqual({
+      ...newStyleAttribute.raw,
+      meta: { writeable: false },
+    });
+  });
+
+  it('delta application doesnt mutate state', () => {
+    const backupAttribute = JSON.parse(JSON.stringify(newStyleAttribute));
+    testAttributeState = {};
+    testAttributeState = AttributeHandler.processDeltaMessage(
+      testDeltas[1].changes,
+      subscription,
+      store.getState
+    );
+    expect(newStyleAttribute).toEqual(backupAttribute);
   });
 
   it('applies delta to single value for single element path', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({
-      ...attribute,
-      isATest: 'True, but as a string',
+    expect(testAttributeState).toEqual({
+      ...newStyleAttribute.raw,
+      value: 'overwritten',
     });
   });
 
   it('applies delta to single value for multi element path', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[3].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({
-      ...attribute,
+    expect(testAttributeState).toEqual({
+      ...newStyleAttribute.raw,
       meta: { meaning: 'meat, but spelt wrong' },
     });
   });
 
   it('applies delta which deletes a field', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[4].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({
-      isATest: true,
+    expect(testAttributeState).toEqual({
+      value: { isATest: true },
       timeStamp: { time: 0, units: 's' },
-      name: 'TestAttr',
     });
   });
 
   it('applies delta with multiple changes', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[5].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({
-      ...attribute,
-      isATest: 'True, but as a string',
+    expect(testAttributeState).toEqual({
+      ...newStyleAttribute.raw,
+      value: { isATest: 'True, but as a string' },
       timeStamp: { time: 1, units: 's' },
     });
   });
 
   it('applies delta where 2nd change overwrites first', () => {
-    attribute = AttributeHandler.processDeltaMessage(
+    testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[6].changes,
       subscription,
       store.getState
     );
-    expect(attribute).toEqual({
-      ...attribute,
+    expect(testAttributeState).toEqual({
+      ...newStyleAttribute.raw,
       timeStamp: { time: 2000, units: 'ms' },
     });
   });

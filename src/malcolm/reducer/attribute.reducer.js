@@ -11,10 +11,13 @@ import {
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
-  if (updatedAttribute.meta) {
+  if (updatedAttribute.raw && updatedAttribute.raw.meta) {
     // Find children for the layout attribute
-    if (updatedAttribute.meta.elements && updatedAttribute.meta.elements.name) {
-      updatedAttribute.children = updatedAttribute.value.name;
+    if (
+      updatedAttribute.raw.meta.elements &&
+      updatedAttribute.raw.meta.elements.name
+    ) {
+      updatedAttribute.calculated.children = updatedAttribute.raw.value.name;
     }
   }
 
@@ -24,8 +27,8 @@ export const updateAttributeChildren = attribute => {
 export const checkForFlowGraph = attribute => {
   if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
     const updatedAttribute = { ...attribute };
-    const { value } = updatedAttribute;
-    updatedAttribute.layout = {
+    const { value } = updatedAttribute.raw;
+    updatedAttribute.calculated.layout = {
       blocks: value.mri.map((mri, i) => ({
         name: value.name[i],
         mri,
@@ -45,30 +48,39 @@ export const checkForFlowGraph = attribute => {
 };
 
 export const portsAreDifferent = (oldAttribute, newAttribute) => {
-  if (oldAttribute && oldAttribute.meta) {
-    if (oldAttribute.meta.label !== newAttribute.meta.label) {
+  if (oldAttribute) {
+    let oldMeta;
+    let newMeta;
+    // #refactorDuplication
+    if (oldAttribute.raw && oldAttribute.raw.meta) {
+      oldMeta = oldAttribute.raw.meta;
+      newMeta = newAttribute.raw.meta;
+      /* } else if (oldAttribute.meta) {
+      oldMeta = oldAttribute.meta;
+      newMeta = newAttribute.meta; */
+    } else {
       return true;
     }
 
-    if (oldAttribute.meta.tags) {
+    if (oldMeta.label !== newMeta.label) {
+      return true;
+    }
+
+    if (oldMeta.tags) {
       // find inport and compare
-      const inPortTag = newAttribute.meta.tags.find(
-        t => t.indexOf('inport:') > -1
-      );
+      const inPortTag = newMeta.tags.find(t => t.indexOf('inport:') > -1);
       if (
         inPortTag !== undefined &&
-        oldAttribute.meta.tags.findIndex(t => t === inPortTag) === -1
+        oldMeta.tags.findIndex(t => t === inPortTag) === -1
       ) {
         return true;
       }
 
       // find outport and compare
-      const outPortTag = newAttribute.meta.tags.find(
-        t => t.indexOf('outport:') > -1
-      );
+      const outPortTag = newMeta.tags.find(t => t.indexOf('outport:') > -1);
       if (
         outPortTag !== undefined &&
-        oldAttribute.meta.tags.findIndex(t => t === outPortTag) === -1
+        oldMeta.tags.findIndex(t => t === outPortTag) === -1
       ) {
         return true;
       }
@@ -104,18 +116,26 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   let { layout } = state;
 
   const { attributes } = updatedState.blocks[blockName];
-  const matchingAttribute = attributes.findIndex(a => a.name === attributeName);
+  const matchingAttributeIndex = blockUtils.findAttributeIndex(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
 
-  if (matchingAttribute < 0) {
+  if (matchingAttributeIndex < 0) {
     return layout;
   }
 
-  const attribute = attributes[matchingAttribute];
+  const attribute = attributes[matchingAttributeIndex];
 
+  // #refactorDuplication
   if (
     attribute &&
-    attribute.meta &&
-    attribute.meta.tags.some(t => t === 'widget:flowgraph')
+    ((attribute.raw &&
+      attribute.raw.meta &&
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')) ||
+      (attribute.meta &&
+        attribute.meta.tags.some(t => t === 'widget:flowgraph')))
   ) {
     layout = LayoutReducer.processLayout(updatedState);
     return layout;
@@ -147,44 +167,70 @@ export function updateAttribute(oldState, payload) {
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
 
-      const matchingAttribute = attributes.findIndex(
-        a => a.name === attributeName
+      const matchingAttributeIndex = blockUtils.findAttributeIndex(
+        state.blocks,
+        blockName,
+        attributeName
       );
-      if (matchingAttribute >= 0) {
-        attributes[matchingAttribute] = {
-          ...attributes[matchingAttribute],
+      // #refactorDuplication
+      if (matchingAttributeIndex >= 0) {
+        attributes[matchingAttributeIndex] = {
+          ...attributes[
+            matchingAttributeIndex
+          ] /*
           loading: false,
           path,
-          ...payload,
+          ...payload, */,
+          raw: {
+            ...attributes[matchingAttributeIndex].raw,
+            ...payload.raw,
+          },
+          calculated: {
+            ...attributes[matchingAttributeIndex].calculated,
+            ...payload.calculated,
+            loading: false,
+            path,
+          },
         };
 
-        attributes[matchingAttribute] = checkForFlowGraph(
-          attributes[matchingAttribute]
+        attributes[matchingAttributeIndex] = checkForFlowGraph(
+          attributes[matchingAttributeIndex]
         );
 
-        attributes[matchingAttribute] = updateAttributeChildren(
-          attributes[matchingAttribute]
+        attributes[matchingAttributeIndex] = updateAttributeChildren(
+          attributes[matchingAttributeIndex]
         );
 
-        if (attributes[matchingAttribute].localState !== undefined) {
-          if (!attributes[matchingAttribute].localState.flags.table.dirty) {
-            attributes[matchingAttribute].localState = {
+        if (attributes[matchingAttributeIndex].localState !== undefined) {
+          if (
+            !attributes[matchingAttributeIndex].localState.flags.table.dirty
+          ) {
+            attributes[matchingAttributeIndex].localState = {
               value: JSON.parse(
-                JSON.stringify(attributes[matchingAttribute].value)
+                JSON.stringify(attributes[matchingAttributeIndex].raw.value)
               ),
-              labels: Object.keys(attributes[matchingAttribute].meta.elements),
+              meta: JSON.parse(
+                JSON.stringify(attributes[matchingAttributeIndex].raw.meta)
+              ),
+              labels: Object.keys(
+                attributes[matchingAttributeIndex].raw.meta.elements
+              ),
               flags: {
-                rows: {},
+                rows: [],
                 table: {
                   fresh: true,
                 },
                 timeStamp: JSON.parse(
-                  JSON.stringify(attributes[matchingAttribute].timeStamp)
+                  JSON.stringify(
+                    attributes[matchingAttributeIndex].raw.timeStamp
+                  )
                 ),
               },
             };
           } else {
-            attributes[matchingAttribute].localState.flags.table.fresh = false;
+            attributes[
+              matchingAttributeIndex
+            ].localState.flags.table.fresh = false;
           }
         }
       }

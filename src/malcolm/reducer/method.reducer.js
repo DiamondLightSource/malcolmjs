@@ -28,18 +28,19 @@ const updateMethodInput = (state, payload) => {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
     if (payload.value.isDirty !== undefined) {
-      if (!attributeCopy.dirtyInputs) {
-        attributeCopy.dirtyInputs = {};
+      if (!attributeCopy.calculated.dirtyInputs) {
+        attributeCopy.calculated.dirtyInputs = {};
       }
-      attributeCopy.dirtyInputs = {
-        ...attributeCopy.dirtyInputs,
+      attributeCopy.calculated.dirtyInputs = {
+        ...attributeCopy.calculated.dirtyInputs,
       };
-      attributeCopy.dirtyInputs[payload.name] = payload.value.isDirty;
+      attributeCopy.calculated.dirtyInputs[payload.name] =
+        payload.value.isDirty;
     } else {
-      attributeCopy.inputs = {
-        ...attributeCopy.inputs,
+      attributeCopy.calculated.inputs = {
+        ...attributeCopy.calculated.inputs,
       };
-      attributeCopy.inputs[payload.name] = payload.value;
+      attributeCopy.calculated.inputs[payload.name] = payload.value;
     }
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
@@ -67,7 +68,7 @@ export const handleMethodReturn = (state, payload) => {
       const { attributes } = blocks[blockName];
       let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
-        attributes[matchingAttribute].returns.elements
+        attributes[matchingAttribute].raw.returns.elements
       );
       if (
         blockUtils.attributeHasTag(
@@ -81,7 +82,10 @@ export const handleMethodReturn = (state, payload) => {
       }
       attributes[matchingAttribute] = {
         ...attributes[matchingAttribute],
-        ...valueMap,
+        calculated: {
+          ...attributes[matchingAttribute].calculated,
+          ...valueMap,
+        },
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
     }

@@ -13,27 +13,37 @@ exports[`WidgetTable renders correctly 1`] = `
           className="WidgetTable-textHeadings-8"
           key="0"
           padding="none"
-        />
+        >
+          Name
+        </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="1"
           padding="none"
-        />
+        >
+          MRI
+        </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="2"
           padding="none"
-        />
+        >
+          x
+        </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="3"
           padding="none"
-        />
+        >
+          y
+        </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="4"
           padding="none"
-        />
+        >
+          Visible
+        </WithStyles(TableCell)>
       </WithStyles(TableRow)>
     </WithStyles(TableHead)>
   </WithStyles(Table)>
@@ -57,7 +67,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
-                  "label": "",
+                  "label": "Name",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -87,7 +97,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
-                  "label": "",
+                  "label": "MRI",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -118,7 +128,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "x",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -149,7 +159,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "y",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -179,7 +189,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
-                  "label": "",
+                  "label": "Visible",
                   "tags": Array [
                     "widget:checkbox",
                   ],
@@ -214,7 +224,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
-                  "label": "",
+                  "label": "Name",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -244,7 +254,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
-                  "label": "",
+                  "label": "MRI",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -275,7 +285,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "x",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -306,7 +316,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "y",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -336,7 +346,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
-                  "label": "",
+                  "label": "Visible",
                   "tags": Array [
                     "widget:checkbox",
                   ],
@@ -371,7 +381,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
-                  "label": "",
+                  "label": "Name",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -401,7 +411,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
-                  "label": "",
+                  "label": "MRI",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -432,7 +442,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "x",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -463,7 +473,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "y",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -493,7 +503,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
-                  "label": "",
+                  "label": "Visible",
                   "tags": Array [
                     "widget:checkbox",
                   ],
@@ -528,7 +538,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Names of the layout parts",
-                  "label": "",
+                  "label": "Name",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -558,7 +568,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Malcolm full names of child blocks",
-                  "label": "",
+                  "label": "MRI",
                   "tags": Array [
                     "widget:textupdate",
                   ],
@@ -589,7 +599,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "x",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -620,7 +630,7 @@ exports[`WidgetTable renders correctly 1`] = `
                 Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
-                  "label": "",
+                  "label": "y",
                   "tags": Array [
                     "widget:textinput",
                   ],
@@ -650,7 +660,7 @@ exports[`WidgetTable renders correctly 1`] = `
               columnMeta={
                 Object {
                   "description": "Whether child blocks are visible",
-                  "label": "",
+                  "label": "Visible",
                   "tags": Array [
                     "widget:checkbox",
                   ],

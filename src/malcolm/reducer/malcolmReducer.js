@@ -119,10 +119,18 @@ function updateBlock(state, payload) {
         ...blocks[blockName],
         loading: false,
         label: payload.label,
+        // #refactorDuplication
         attributes: payload.fields.map(f => ({
+          /*
           name: f,
           loading: true,
-          children: [],
+          children: [], */
+          raw: {},
+          calculated: {
+            name: f,
+            loading: true,
+            children: [],
+          },
         })),
         children: [...payload.fields],
       };
@@ -192,35 +200,29 @@ function setFlag(state, path, flagType, flagState) {
   const blockName = path[0];
   const attributeName = path[1];
 
-  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
-    if (
-      !Object.prototype.hasOwnProperty.call(
-        state.blocks[blockName],
-        'attributes'
-      )
-    ) {
-      return state;
-    }
-    const blocks = { ...state.blocks };
+  const blocks = { ...state.blocks };
+  const matchingAttribute = blockUtils.findAttributeIndex(
+    blocks,
+    blockName,
+    attributeName
+  );
+  if (matchingAttribute >= 0) {
     const attributes = [...state.blocks[blockName].attributes];
-
-    const matchingAttribute = attributes.findIndex(
-      a => a.name === attributeName
-    );
-    if (matchingAttribute >= 0) {
-      const attributeCopy = {
-        ...attributes[matchingAttribute],
-      };
-      attributeCopy[flagType] = flagState;
-      attributes[matchingAttribute] = attributeCopy;
-      blocks[blockName] = { ...state.blocks[blockName], attributes };
-    }
-    return {
-      ...state,
-      blocks,
+    const attributeCopy = {
+      ...attributes[matchingAttribute],
     };
+    // #refactorDuplication
+    // if (attributeCopy.calculated) {
+    attributeCopy.calculated[flagType] = flagState;
+    // }
+    // attributeCopy[flagType] = flagState;
+    attributes[matchingAttribute] = attributeCopy;
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
-  return state;
+  return {
+    ...state,
+    blocks,
+  };
 }
 
 function cleanBlocks(state) {
@@ -239,28 +241,55 @@ function cleanBlocks(state) {
 }
 
 function setDisconnected(state) {
+  // #refactorDuplication
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
     if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
       const attributes = [...state.blocks[blockName].attributes];
       for (let attr = 0; attr < attributes.length; attr += 1) {
-        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'meta')) {
-          attributes[attr] = {
-            ...attributes[attr],
-            meta: {
-              ...attributes[attr].meta,
-              writeable: false,
-            },
-          };
-        }
-        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'alarm')) {
-          attributes[attr] = {
-            ...attributes[attr],
-            alarm: {
-              ...attributes[attr].alarm,
-              severity: AlarmStates.UNDEFINED_ALARM,
-            },
-          };
+        if (Object.prototype.hasOwnProperty.call(attributes[attr], 'raw')) {
+          if (
+            Object.prototype.hasOwnProperty.call(attributes[attr].raw, 'meta')
+          ) {
+            attributes[attr].raw = {
+              ...attributes[attr].raw,
+              meta: {
+                ...attributes[attr].raw.meta,
+                writeable: false,
+              },
+            };
+          }
+          if (
+            Object.prototype.hasOwnProperty.call(attributes[attr].raw, 'alarm')
+          ) {
+            attributes[attr].raw = {
+              ...attributes[attr].raw,
+              alarm: {
+                ...attributes[attr].raw.alarm,
+                severity: AlarmStates.UNDEFINED_ALARM,
+              },
+            };
+          }
+        } else {
+          /*
+          if (Object.prototype.hasOwnProperty.call(attributes[attr], 'meta')) {
+            attributes[attr] = {
+              ...attributes[attr],
+              meta: {
+                ...attributes[attr].meta,
+                writeable: false,
+              },
+            };
+          }
+          if (Object.prototype.hasOwnProperty.call(attributes[attr], 'alarm')) {
+            attributes[attr] = {
+              ...attributes[attr],
+              alarm: {
+                ...attributes[attr].alarm,
+                severity: AlarmStates.UNDEFINED_ALARM,
+              },
+            };
+          } */
         }
       }
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -274,6 +303,7 @@ function setDisconnected(state) {
 }
 
 export const setErrorState = (state, id, errorState, errorMessage) => {
+  // #refactorDuplication
   const matchingMessage = state.messagesInFlight[id];
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
@@ -289,11 +319,20 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
     if (matchingAttributeIndex >= 0) {
       const { attributes } = state.blocks[blockName];
       attributes[matchingAttributeIndex] = {
-        ...attributes[matchingAttributeIndex],
+        ...attributes[
+          matchingAttributeIndex
+        ] /*
         errorState,
         errorMessage,
         isDirty: errorState,
-        forceUpdate: !errorState,
+        forceUpdate: !errorState, */,
+        calculated: {
+          ...attributes[matchingAttributeIndex].calculated,
+          errorState,
+          errorMessage,
+          isDirty: errorState,
+          forceUpdate: !errorState,
+        },
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
@@ -319,7 +358,11 @@ const handleErrorMessage = (state, action) => {
       matchingMessage.path[0],
       matchingMessage.path[1]
     );
-    if (attribute && attribute.meta.tags.some(t => t === 'widget:flowgraph')) {
+    if (
+      attribute &&
+      attribute.raw &&
+      attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')
+    ) {
       // reset the layout
       const id = attribute.id === undefined ? attribute.id : action.payload.id;
       updatedState = updateAttribute(state, {

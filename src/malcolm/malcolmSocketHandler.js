@@ -86,17 +86,17 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
           originalRequest,
           store.getState
         );
-
-        if (attribute.typeid === 'malcolm:core/BlockMeta:1.0') {
+        const typeid = attribute.typeid ? attribute.typeid : '';
+        if (typeid === 'malcolm:core/BlockMeta:1.0') {
           BlockMetaHandler(originalRequest, attribute, store.dispatch);
-        } else if (attribute.typeid.slice(0, 8) === 'epics:nt') {
+        } else if (typeid.slice(0, 8) === 'epics:nt') {
           AttributeHandler.processAttribute(
             originalRequest,
             attribute,
             store.getState,
             store.dispatch
           );
-        } else if (attribute.typeid === 'malcolm:core/Method:1.0') {
+        } else if (typeid === 'malcolm:core/Method:1.0') {
           AttributeHandler.processMethod(
             originalRequest,
             attribute,

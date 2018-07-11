@@ -25,13 +25,17 @@ describe('AttributeDetails', () => {
 
   it('renders correctly', () => {
     const attribute = {
-      name: 'Attribute 1',
-      alarm: {
-        severity: 0,
+      calculated: {
+        name: 'Attribute 1',
       },
-      meta: {
-        label: 'Attribute 1',
-        tags: ['widget:NOTAWIDGET'],
+      raw: {
+        alarm: {
+          severity: 0,
+        },
+        meta: {
+          label: 'Attribute 1',
+          tags: ['widget:NOTAWIDGET'],
+        },
       },
     };
 

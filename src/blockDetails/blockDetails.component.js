@@ -35,12 +35,15 @@ export const isBlockLoading = block => {
   );
 };
 export const isRootLevelAttribute = a =>
-  !a.inGroup &&
-  !a.isGroup &&
-  !a.isMethod &&
+  !a.calculated.inGroup &&
+  !a.calculated.isGroup &&
+  !a.calculated.isMethod &&
   !ignoredAttributes.some(
     ignored =>
-      a.meta && a.meta.tags && a.meta.tags.findIndex(t => t === ignored) > -1
+      a.raw &&
+      a.raw.meta &&
+      a.raw.meta.tags &&
+      a.raw.meta.tags.findIndex(t => t === ignored) > -1
   );
 export const areAttributesAvailable = block => block && block.attributes;
 
@@ -64,10 +67,18 @@ const blockLoading = notFound =>
 
 export const areAttributesTheSame = (oldAttributes, newAttributes) =>
   oldAttributes.length === newAttributes.length &&
-  oldAttributes.every((old, i) => old.name === newAttributes[i].name) &&
-  oldAttributes.every((old, i) => old.inGroup === newAttributes[i].inGroup) &&
-  oldAttributes.every((old, i) => old.isGroup === newAttributes[i].isGroup) &&
-  oldAttributes.every((old, i) => old.isMethod === newAttributes[i].isMethod) &&
+  oldAttributes.every(
+    (old, i) => old.calculated.name === newAttributes[i].calculated.name
+  ) &&
+  oldAttributes.every(
+    (old, i) => old.calculated.inGroup === newAttributes[i].calculated.inGroup
+  ) &&
+  oldAttributes.every(
+    (old, i) => old.calculated.isGroup === newAttributes[i].calculated.isGroup
+  ) &&
+  oldAttributes.every(
+    (old, i) => old.calculated.isMethod === newAttributes[i].calculated.isMethod
+  ) &&
   oldAttributes.every(
     (old, i) =>
       isRootLevelAttribute(old) === isRootLevelAttribute(newAttributes[i])
@@ -79,31 +90,35 @@ const displayAttributes = props => {
       <div>
         {props.rootAttributes.map(a => (
           <AttributeDetails
-            key={a.name}
-            attributeName={a.name}
+            key={a.calculated.name}
+            attributeName={a.calculated.name}
             blockName={props.blockName}
           />
         ))}
         {props.groups.map(group => (
           <GroupExpander
-            key={group.attribute.name}
-            groupName={group.attribute.meta.label}
-            expanded={group.attribute.value === 'expanded'}
+            key={group.attribute.calculated.name}
+            groupName={group.attribute.raw.meta.label}
+            expanded={group.attribute.raw.value === 'expanded'}
           >
             {group.children.map(a => (
               <AttributeDetails
-                key={a.name}
-                attributeName={a.name}
+                key={a.calculated.name}
+                attributeName={a.calculated.name}
                 blockName={props.blockName}
               />
             ))}
           </GroupExpander>
         ))}
         {props.methods.map(method => (
-          <GroupExpander key={method.name} groupName={method.label} expanded>
+          <GroupExpander
+            key={method.calculated.name}
+            groupName={method.raw.label}
+            expanded
+          >
             <MethodDetails
               blockName={props.blockName}
-              attributeName={method.name}
+              attributeName={method.calculated.name}
             />
           </GroupExpander>
         ))}
@@ -162,12 +177,16 @@ const mapStateToProps = (state, ownProps, memory) => {
     stateMemory.rootAttributes = block.attributes.filter(a =>
       isRootLevelAttribute(a)
     );
-    stateMemory.groups = block.attributes.filter(a => a.isGroup).map(group => ({
-      attribute: group,
-      children: block.attributes.filter(a => a.group === group.name),
-    }));
+    stateMemory.groups = block.attributes
+      .filter(a => a.calculated.isGroup)
+      .map(group => ({
+        attribute: group,
+        children: block.attributes.filter(
+          a => a.calculated.group === group.calculated.name
+        ),
+      }));
 
-    stateMemory.methods = block.attributes.filter(a => a.isMethod);
+    stateMemory.methods = block.attributes.filter(a => a.calculated.isMethod);
 
     stateMemory.oldAttributes = block.attributes;
   }

@@ -29,21 +29,33 @@ describe('MalcolmMiddlePanel', () => {
           test1: {
             attributes: [
               {
-                name: 'layout',
-                meta: {
-                  tags: ['widget:flowgraph'],
+                calculated: {
+                  name: 'layout',
+                },
+                raw: {
+                  meta: {
+                    tags: ['widget:flowgraph'],
+                  },
                 },
               },
               {
-                name: 'health',
-                meta: {
-                  tags: ['widget:textupdate'],
+                calculated: {
+                  name: 'health',
+                },
+                raw: {
+                  meta: {
+                    tags: ['widget:textupdate'],
+                  },
                 },
               },
               {
-                name: 'notAWidget',
-                meta: {
-                  tags: ['notAWidgetTag'],
+                calculated: {
+                  name: 'notAWidget',
+                },
+                raw: {
+                  meta: {
+                    tags: ['notAWidgetTag'],
+                  },
                 },
               },
             ],
@@ -68,13 +80,13 @@ describe('MalcolmMiddlePanel', () => {
   });
 
   it('renders table correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].meta.tags = ['widget:table'];
+    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders alarmed correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].alarm = {
+    state.malcolm.blocks.test1.attributes[0].raw.alarm = {
       severity: AlarmStates.UNDEFINED_ALARM,
     };
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
@@ -82,14 +94,14 @@ describe('MalcolmMiddlePanel', () => {
   });
 
   it('renders errored correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].errorState = true;
+    state.malcolm.blocks.test1.attributes[0].calculated.errorState = true;
 
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders pending correctly', () => {
-    state.malcolm.blocks.test1.attributes[0].pending = true;
+    state.malcolm.blocks.test1.attributes[0].calculated.pending = true;
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });

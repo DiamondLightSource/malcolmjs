@@ -32,22 +32,30 @@ describe('AttributeSelector', () => {
     const tag = widget ? `widget:${widget}` : 'notAWidget';
     if (choices) {
       return {
-        meta: {
-          tags: [tag],
-          writeable: true,
-          choices,
+        raw: {
+          meta: {
+            tags: [tag],
+            writeable: true,
+            choices,
+          },
+          value,
         },
-        value,
-        path: ['test1', 'attr'],
+        calculated: {
+          path: ['test1', 'attr'],
+        },
       };
     }
     return {
-      meta: {
-        tags: [tag],
-        writeable: true,
+      raw: {
+        meta: {
+          tags: [tag],
+          writeable: true,
+        },
+        value,
       },
-      value,
-      path: ['test1', 'attr'],
+      calculated: {
+        path: ['test1', 'attr'],
+      },
     };
   };
 

@@ -140,17 +140,19 @@ export const malcolmLayoutUpdatePosition = translation => (
   const { selectedBlocks } = state.layoutState;
   if (layoutAttribute) {
     const updateLayoutIndices = selectedBlocks.map(b =>
-      layoutAttribute.value.mri.findIndex(val => val === b)
+      layoutAttribute.raw.value.mri.findIndex(val => val === b)
     );
     const updateLayout = {
-      name: updateLayoutIndices.map(i => layoutAttribute.value.name[i]),
-      visible: updateLayoutIndices.map(i => layoutAttribute.value.visible[i]),
+      name: updateLayoutIndices.map(i => layoutAttribute.raw.value.name[i]),
+      visible: updateLayoutIndices.map(
+        i => layoutAttribute.raw.value.visible[i]
+      ),
       mri: selectedBlocks,
       x: updateLayoutIndices.map(
-        i => layoutAttribute.value.x[i] + translation.x
+        i => layoutAttribute.raw.value.x[i] + translation.x
       ),
       y: updateLayoutIndices.map(
-        i => layoutAttribute.value.y[i] + translation.y
+        i => layoutAttribute.raw.value.y[i] + translation.y
       ),
     };
 

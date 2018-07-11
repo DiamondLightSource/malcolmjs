@@ -67,12 +67,14 @@ exports[`Block Details renders correctly when metadata loaded and waiting for at
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <WithStyles(CircularProgress)
-      color="secondary"
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="health"
+      key="health"
     />
-    <WithStyles(Typography)>
-      Loading...
-    </WithStyles(Typography)>
+    <Connect(WithStyles(AttributeDetails))
+      attributeName="icon"
+      key="icon"
+    />
   </div>
 </div>
 `;
@@ -92,16 +94,7 @@ exports[`Block Details renders groups correctly 1`] = `
       expanded={false}
       groupName="health 1"
       key="parameters"
-    >
-      <Connect(WithStyles(AttributeDetails))
-        attributeName="health"
-        key="health"
-      />
-      <Connect(WithStyles(AttributeDetails))
-        attributeName="icon"
-        key="icon"
-      />
-    </WithStyles(WidgetGroupExpander)>
+    />
   </div>
 </div>
 `;
