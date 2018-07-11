@@ -1,11 +1,13 @@
 import React from 'react';
-import { push } from 'react-router-redux';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import AttributeSelector, {
   selectorFunction,
   getDefaultFromType,
 } from './attributeSelector.component';
+import navigationActions from '../../../malcolm/actions/navigation.actions';
+
+jest.mock('../../../malcolm/actions/navigation.actions');
 
 describe('AttributeSelector', () => {
   let shallow;
@@ -13,6 +15,14 @@ describe('AttributeSelector', () => {
   let mount;
 
   beforeEach(() => {
+    navigationActions.navigateToAttribute.mockImplementation(
+      (blockName, attribute) => ({
+        type: 'TEST',
+        blockName,
+        attribute,
+      })
+    );
+
     mockStore = configureStore();
     shallow = createShallow({ dive: true });
     mount = createMount();
@@ -174,7 +184,11 @@ describe('AttributeSelector', () => {
       .find('button')
       .first()
       .simulate('click');
-    expect(testStore.getActions()[0]).toEqual(push('/gui/test1/attr'));
+
+    const actions = testStore.getActions();
+    expect(actions[0].type).toEqual('TEST');
+    expect(actions[0].blockName).toEqual('test1');
+    expect(actions[0].attribute).toEqual('attr');
   });
 
   it('dispatches path change on flowgraph button click', () => {
@@ -189,7 +203,11 @@ describe('AttributeSelector', () => {
       .find('button')
       .first()
       .simulate('click');
-    expect(testStore.getActions()[0]).toEqual(push('/gui/test1/attr'));
+
+    const actions = testStore.getActions();
+    expect(actions[0].type).toEqual('TEST');
+    expect(actions[0].blockName).toEqual('test1');
+    expect(actions[0].attribute).toEqual('attr');
   });
 
   it('dispatches dirty on focus for textipnut', () => {

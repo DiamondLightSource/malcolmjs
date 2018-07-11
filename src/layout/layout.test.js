@@ -102,7 +102,7 @@ describe('Layout', () => {
     expect(updateChildPanel).toHaveBeenCalledTimes(1);
 
     updateChildPanel.mockClear();
-    props.clickHandler('/gui/PANDA/layout/block1', block, node, []);
+    props.clickHandler('/gui/PANDA/layout/block 1', block, node, []);
     expect(updateChildPanel).toHaveBeenCalledTimes(0);
   });
 

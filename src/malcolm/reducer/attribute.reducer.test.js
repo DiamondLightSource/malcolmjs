@@ -4,7 +4,9 @@ import AttributeReducer, {
   portsAreDifferent,
 } from './attribute.reducer';
 import LayoutReducer from './layout.reducer';
-import { processNavigationLists } from './navigation.reducer';
+import navigationReducer, {
+  processNavigationLists,
+} from './navigation.reducer';
 import {
   MalcolmAttributeData,
   MalcolmMainAttributeUpdate,
@@ -20,6 +22,7 @@ describe('attribute reducer', () => {
   beforeEach(() => {
     LayoutReducer.processLayout.mockClear();
     processNavigationLists.mockClear();
+    navigationReducer.updateNavTypes.mockImplementation(s => s);
 
     state = {
       messagesInFlight: {

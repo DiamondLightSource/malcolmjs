@@ -415,16 +415,25 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       return handleReturnMessage(updatedState, action);
 
     case MalcolmBlockMeta:
-      return updateBlock(updatedState, action.payload);
+      updatedState = updateBlock(updatedState, action.payload);
+      return NavigationReducer.updateNavTypes(updatedState);
 
     case MalcolmRootBlockMeta:
-      return updateRootBlock(updatedState, action.payload);
+      updatedState = updateRootBlock(updatedState, action.payload);
+      return NavigationReducer.updateNavTypes(updatedState);
 
     case MalcolmNavigationPathUpdate:
-      return NavigationReducer.updateNavigationPath(
+      updatedState = NavigationReducer.updateNavigationPath(
         updatedState,
         action.payload
       );
+
+      updatedState = NavigationReducer.updateNavTypes(updatedState);
+
+      return {
+        ...updatedState,
+        layout: layoutReducer.processLayout(updatedState),
+      };
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);

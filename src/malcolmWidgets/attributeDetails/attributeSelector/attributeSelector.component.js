@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import { BugReport } from '@material-ui/icons';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
@@ -14,6 +13,7 @@ import {
   malcolmSetFlag,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
+import navigationActions from '../../../malcolm/actions/navigation.actions';
 
 export const getDefaultFromType = objectMeta => {
   switch (objectMeta.typeid) {
@@ -161,7 +161,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmSetFlag(path, flag, state));
   },
   buttonClickHandler: path => {
-    dispatch(push(`/gui/${path[0]}/${path[1]}`));
+    dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
+    // dispatch(push(`/gui/${path[0]}/${path[1]}`));
   },
 });
 

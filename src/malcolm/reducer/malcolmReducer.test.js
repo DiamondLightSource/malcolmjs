@@ -61,6 +61,8 @@ describe('malcolm reducer', () => {
   beforeEach(() => {
     MethodReducer.mockClear();
     MethodReducer.mockImplementation(s => s);
+    NavigationReducer.updateNavTypes.mockImplementation(s => s);
+    NavigationReducer.updateNavigationPath.mockImplementation(s => s);
 
     state = {
       messagesInFlight: {},

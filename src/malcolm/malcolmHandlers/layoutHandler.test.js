@@ -73,14 +73,15 @@ describe('LayoutHandler', () => {
     checkBlockAddedAndSubscribed();
   });
 
-  it('layoutAttributeReceived doesnt dispatch new subscriptions if the main attribute isnt the flowgraph', () => {
+  it('layoutAttributeReceived dispatches new subscriptions even if the main attribute isnt the flowgraph', () => {
     mainAttribute = 'table';
     LayoutHandler.layoutAttributeReceived(
       ['block1', 'layout'],
       getState,
       dispatch
     );
-    expect(actions).toHaveLength(0);
+
+    checkBlockAddedAndSubscribed();
   });
 
   it('layoutAttributeReceived ignores blocks that are not visible', () => {

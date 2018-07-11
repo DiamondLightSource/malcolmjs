@@ -1,9 +1,13 @@
+import NavTypes from '../NavTypes';
+import blockUtils from '../blockUtils';
+
 export const processNavigationLists = (paths, blocks) => {
   const navigationLists = paths.map(p => ({
     path: p,
     children: [],
     basePath: '/',
     label: p,
+    navType: undefined,
   }));
 
   const rootNav = {
@@ -16,66 +20,10 @@ export const processNavigationLists = (paths, blocks) => {
     rootNav.childrenLabels = blocks['.blocks'].children;
   }
 
-  let previousBlock;
   let basePath = '/';
   for (let i = 0; i < paths.length; i += 1) {
     const path = paths[i];
     basePath = `${basePath + path}/`;
-
-    if (blocks[path]) {
-      previousBlock = blocks[path];
-      navigationLists[i].children = previousBlock.children;
-      navigationLists[i].childrenLabels = [...previousBlock.children];
-
-      navigationLists[i].label = path;
-
-      // if the part of the path before is layout then lookup the name
-      if (
-        i > 1 &&
-        blocks[paths[i - 2]] &&
-        blocks[paths[i - 2]].attributes &&
-        paths[i - 1] === 'layout'
-      ) {
-        const layoutAttribute = blocks[paths[i - 2]].attributes.find(
-          a => a.name === 'layout'
-        );
-
-        if (layoutAttribute && layoutAttribute.value) {
-          const matchingIndex = layoutAttribute.value.mri.findIndex(
-            mri => mri === path
-          );
-          navigationLists[i].label =
-            matchingIndex > -1
-              ? layoutAttribute.value.name[matchingIndex]
-              : 'not found';
-        }
-      }
-    } else if (previousBlock && previousBlock.attributes) {
-      const matchingAttribute = previousBlock.attributes.findIndex(
-        a => a.name === path
-      );
-      if (matchingAttribute > -1) {
-        const attribute = previousBlock.attributes[matchingAttribute];
-        navigationLists[i].children = attribute.children;
-
-        if (path === 'layout') {
-          // get child labels from attribute table
-          navigationLists[i].childrenLabels = attribute.children
-            .map(child => attribute.value.mri.findIndex(mri => mri === child))
-            .map(
-              (mriIndex, j) =>
-                mriIndex > -1
-                  ? attribute.value.name[mriIndex]
-                  : attribute.value.mri[j]
-            );
-        } else {
-          navigationLists[i].childrenLabels = [...attribute.children];
-        }
-      }
-
-      navigationLists[i].label = path;
-    }
-
     navigationLists[i].basePath = basePath;
   }
 
@@ -95,6 +43,130 @@ function updateNavigationPath(state, payload) {
   };
 }
 
+const isBlockMri = (navPath, blocks) =>
+  blocks['.blocks'] &&
+  blocks['.blocks'].children.findIndex(block => block === navPath) > -1;
+
+const previousNavIsBlock = (i, navigationLists, blocks) =>
+  i > 0 &&
+  navigationLists[i - 1].navType === NavTypes.Block &&
+  blocks[navigationLists[i - 1].blockMri];
+
+const previousNavIsAttribute = (i, navigationLists) =>
+  i > 1 && navigationLists[i - 1].navType === NavTypes.Attribute;
+
+const updateBlockChildren = (nav, blocks) => {
+  const updatedNav = nav;
+  if (blocks[nav.blockMri]) {
+    updatedNav.children = blocks[nav.blockMri].children;
+    updatedNav.childrenLabels = updatedNav.children.map(child => {
+      const attribute = blocks[nav.blockMri].attributes.find(
+        a => a.name === child
+      );
+      return attribute && attribute.meta ? attribute.meta.label : child;
+    });
+  }
+};
+
+function updateNavTypes(state) {
+  let updatedState = state;
+  let { navigationLists } = updatedState.navigation;
+
+  if (navigationLists.filter(nav => nav.navType === undefined).length > 0) {
+    updatedState = { ...state };
+
+    ({ navigationLists } = updatedState.navigation);
+    navigationLists
+      .filter(nav => nav.navType === undefined)
+      .forEach((originalNav, i) => {
+        const nav = originalNav;
+        if (nav.path === '.info') {
+          nav.navType = NavTypes.Info;
+          nav.label = 'Info';
+        } else if (isBlockMri(nav.path, state.blocks)) {
+          nav.navType = NavTypes.Block;
+          nav.blockMri = nav.path;
+          nav.label = nav.path;
+          updateBlockChildren(nav, state.blocks);
+        } else if (previousNavIsBlock(i, navigationLists, state.blocks)) {
+          const { attributes } = state.blocks[navigationLists[i - 1].blockMri];
+          if (attributes && attributes.some(a => a.name === nav.path)) {
+            nav.navType = NavTypes.Attribute;
+
+            const matchingAttribute = attributes.find(a => a.name === nav.path);
+            nav.children = matchingAttribute.children;
+            nav.childrenLabels = matchingAttribute.children;
+            nav.label = matchingAttribute.meta
+              ? matchingAttribute.meta.label
+              : nav.path;
+          }
+        } else if (previousNavIsAttribute(i, navigationLists)) {
+          const matchingAttribute = blockUtils.findAttribute(
+            state.blocks,
+            navigationLists[i - 2].blockMri,
+            navigationLists[i - 1].path
+          );
+          if (matchingAttribute) {
+            if (
+              blockUtils.attributeHasTag(matchingAttribute, 'widget:flowgraph')
+            ) {
+              const nameIndex = matchingAttribute.value.name.findIndex(
+                n => n === nav.path
+              );
+              if (nameIndex > -1) {
+                nav.navType = NavTypes.Block;
+                nav.blockMri = matchingAttribute.value.mri[nameIndex];
+                nav.label = nav.path;
+                updateBlockChildren(nav, state.blocks);
+              }
+            }
+          }
+        }
+      });
+  }
+
+  // find parentBlock
+  const details = navigationLists.filter(
+    nav => nav.navType === NavTypes.Block || nav.navType === NavTypes.Info
+  );
+  if (details.length === 1) {
+    updatedState.parentBlock = details[0].path;
+  } else if (details.length > 1) {
+    // if there is something after the last block/info then it must become the parent
+    if (
+      details[details.length - 1] ===
+      navigationLists[navigationLists.length - 1]
+    ) {
+      updatedState.parentBlock = details[details.length - 2].blockMri;
+      const lastDetails = details[details.length - 1];
+      updatedState.childBlock =
+        lastDetails.navType === NavTypes.Block
+          ? lastDetails.blockMri
+          : lastDetails.path;
+    } else {
+      updatedState.parentBlock = details[details.length - 1].blockMri;
+    }
+  }
+
+  // find attributes
+  const attributes = navigationLists.filter(
+    nav => nav.navType === NavTypes.Attribute
+  );
+  if (attributes.length > 0) {
+    const lastAttribute = attributes[attributes.length - 1];
+    const indexOfLastAttribute = navigationLists.findIndex(
+      nav => nav === lastAttribute
+    );
+
+    if (indexOfLastAttribute >= navigationLists.length - 2) {
+      updatedState.mainAttribute = lastAttribute.path;
+    }
+  }
+
+  return updatedState;
+}
+
 export default {
   updateNavigationPath,
+  updateNavTypes,
 };

@@ -1,4 +1,6 @@
-import { processNavigationLists } from './navigation.reducer';
+import navigationReducer, {
+  processNavigationLists,
+} from './navigation.reducer';
 import LayoutReducer from './layout.reducer';
 import blockUtils from '../blockUtils';
 import createReducer from './createReducer';
@@ -13,9 +15,9 @@ export const updateAttributeChildren = attribute => {
     // Find children for the layout attribute
     if (
       updatedAttribute.raw.meta.elements &&
-      updatedAttribute.raw.meta.elements.mri
+      updatedAttribute.raw.meta.elements.name
     ) {
-      updatedAttribute.calculated.children = updatedAttribute.raw.value.mri;
+      updatedAttribute.calculated.children = updatedAttribute.raw.value.name;
     }
   }
 
@@ -237,7 +239,7 @@ export function updateAttribute(oldState, payload) {
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
 
-      const updatedState = {
+      let updatedState = {
         ...state,
         blocks,
       };
@@ -252,11 +254,13 @@ export function updateAttribute(oldState, payload) {
         attributeName
       );
 
-      return {
+      updatedState = {
         ...updatedState,
         layout,
         navigation,
       };
+
+      return navigationReducer.updateNavTypes(updatedState);
     }
   }
 

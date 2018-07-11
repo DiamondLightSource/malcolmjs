@@ -102,9 +102,9 @@ export const mapDispatchToProps = dispatch => ({
       url
         .replace(/\/$/, '')
         .split('/')
-        .slice(-1)[0] !== block.mri
+        .slice(-1)[0] !== block.name
     ) {
-      dispatch(updateChildPanel(url, block.mri));
+      dispatch(updateChildPanel(url, block.name));
     }
   },
   shiftKeyHandler: shiftIsDown =>
