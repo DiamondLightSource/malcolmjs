@@ -15,6 +15,7 @@ const findAttribute = (blocks, blockName, attributeName) => {
   const matchingBlock = findBlock(blocks, blockName);
   if (matchingBlock) {
     if (matchingBlock.attributes) {
+      // #refactorDuplication
       const matchingAttribute = matchingBlock.attributes.find(
         a =>
           a.calculated
@@ -32,6 +33,7 @@ const findAttributeIndex = (blocks, blockName, attributeName) => {
   const matchingBlock = findBlock(blocks, blockName);
   if (matchingBlock) {
     if (matchingBlock.attributes) {
+      // #refactorDuplication
       const matchingAttributeIndex = matchingBlock.attributes.findIndex(
         a =>
           a.calculated
@@ -46,6 +48,7 @@ const findAttributeIndex = (blocks, blockName, attributeName) => {
 };
 
 const findAttributesWithTag = (block, searchTag) =>
+  // #refactorDuplication
   block.attributes.filter(
     a =>
       (a.raw &&
@@ -55,6 +58,7 @@ const findAttributesWithTag = (block, searchTag) =>
   );
 
 const attributeHasTag = (attribute, tag) =>
+  // #refactorDuplication
   attribute &&
   ((attribute.meta &&
     attribute.meta.tags &&
