@@ -25,7 +25,7 @@ const ContainedTextInput = props => (
       blurHandler={props.blurHandler}
       Units={props.Units}
       isDirty={props.isDirty}
-      setDirty={props.setDirty}
+      setFlag={props.setDirty}
     />
   </div>
 );
