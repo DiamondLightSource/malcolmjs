@@ -30,6 +30,7 @@ export const copyAttributeValue = (state, payload) => {
       flags: {
         rows: Object.keys(attribute.raw.meta.elements).map(() => ({})),
         table: {
+          dirty: false,
           fresh: true,
           timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
         },

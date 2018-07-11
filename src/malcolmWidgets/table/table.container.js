@@ -23,13 +23,6 @@ const TableContainer = props => {
 
   const footerItems = [
     ...props.footerItems,
-    <Typography>
-      State is edited:{' '}
-      {`${!!(
-        props.attribute.localState &&
-        props.attribute.localState.flags.table.dirty
-      )}`}
-    </Typography>,
     props.attribute.localState &&
     props.attribute.localState.flags.table.fresh ? (
       <Typography>Up to date!</Typography>
