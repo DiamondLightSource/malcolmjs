@@ -121,9 +121,10 @@ function updateBlock(state, payload) {
         label: payload.label,
         // #refactorDuplication
         attributes: payload.fields.map(f => ({
+          /*
           name: f,
           loading: true,
-          children: [],
+          children: [], */
           raw: {},
           calculated: {
             name: f,
@@ -211,10 +212,10 @@ function setFlag(state, path, flagType, flagState) {
       ...attributes[matchingAttribute],
     };
     // #refactorDuplication
-    if (attributeCopy.calculated) {
-      attributeCopy.calculated[flagType] = flagState;
-    }
-    attributeCopy[flagType] = flagState;
+    // if (attributeCopy.calculated) {
+    attributeCopy.calculated[flagType] = flagState;
+    // }
+    // attributeCopy[flagType] = flagState;
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
@@ -318,11 +319,13 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
     if (matchingAttributeIndex >= 0) {
       const { attributes } = state.blocks[blockName];
       attributes[matchingAttributeIndex] = {
-        ...attributes[matchingAttributeIndex],
+        ...attributes[
+          matchingAttributeIndex
+        ] /*
         errorState,
         errorMessage,
         isDirty: errorState,
-        forceUpdate: !errorState,
+        forceUpdate: !errorState, */,
         calculated: {
           ...attributes[matchingAttributeIndex].calculated,
           errorState,

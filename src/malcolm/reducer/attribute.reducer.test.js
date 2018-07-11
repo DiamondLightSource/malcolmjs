@@ -62,10 +62,11 @@ describe('attribute reducer', () => {
           tags: ['widget:flowgraph'],
           elements: {
             mri: {},
+            name: {},
           },
         },
         value: {
-          mri: ['block2', 'block3', 'block4'],
+          mri: ['test:block2', 'test:block3', 'test:block4'],
           name: ['block2', 'block3', 'block4'],
           visible: [true, true, false],
           x: [0, 1, 2],

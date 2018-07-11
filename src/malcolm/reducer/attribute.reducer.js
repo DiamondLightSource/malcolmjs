@@ -55,9 +55,9 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
     if (oldAttribute.raw && oldAttribute.raw.meta) {
       oldMeta = oldAttribute.raw.meta;
       newMeta = newAttribute.raw.meta;
-    } else if (oldAttribute.meta) {
+      /* } else if (oldAttribute.meta) {
       oldMeta = oldAttribute.meta;
-      newMeta = newAttribute.meta;
+      newMeta = newAttribute.meta; */
     } else {
       return true;
     }
@@ -175,10 +175,11 @@ export function updateAttribute(oldState, payload) {
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
         attributes[matchingAttributeIndex] = {
+          /*
           ...attributes[matchingAttributeIndex],
           loading: false,
           path,
-          ...payload,
+          ...payload, */
           raw: {
             ...attributes[matchingAttributeIndex].raw,
             ...payload.raw,
@@ -201,11 +202,7 @@ export function updateAttribute(oldState, payload) {
 
         if (attributes[matchingAttributeIndex].localState !== undefined) {
           if (
-            !attributes[matchingAttributeIndex].localState.flags.table.dirty ||
-            JSON.stringify(attributes[matchingAttributeIndex].raw.value) ===
-              JSON.stringify(
-                attributes[matchingAttributeIndex].localState.value
-              )
+            !attributes[matchingAttributeIndex].localState.flags.table.dirty
           ) {
             attributes[matchingAttributeIndex].localState = {
               value: JSON.parse(
