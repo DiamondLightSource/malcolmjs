@@ -1,4 +1,5 @@
 /* eslint react/no-array-index-key: 0 */
+/* eslint no-underscore-dangle: 0 */
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -13,6 +14,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 
+import AttributeAlarm, {
+  AlarmStates,
+} from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
@@ -47,6 +51,10 @@ const styles = theme => ({
     backgroundColor: emphasize(theme.palette.background.paper, 0.3),
     textAlign: 'Center',
   },
+  blankCell: {
+    backgroundColor: 'rgb(48, 48, 48)',
+    textAlign: 'Center',
+  },
   textBody: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Center',
@@ -59,6 +67,10 @@ const WidgetTable = props => {
     props.localState === undefined
       ? props.attribute.raw.value
       : props.localState.value;
+  const flags =
+    props.localState === undefined
+      ? { rows: [], table: {} }
+      : props.localState.flags;
   const columnLabels =
     props.localState === undefined
       ? Object.keys(props.attribute.raw.meta.elements)
@@ -119,7 +131,14 @@ const WidgetTable = props => {
       >
         <TableHead>
           <TableRow className={props.classes.rowFormat}>
-            {columnHeadings}
+            {[
+              <TableCell
+                className={props.classes.blankCell}
+                padding="none"
+                key={-1}
+              />,
+              ...columnHeadings,
+            ]}
           </TableRow>
         </TableHead>
       </Table>
@@ -128,22 +147,38 @@ const WidgetTable = props => {
           <TableBody>
             {rowNames.map((name, row) => (
               <TableRow className={props.classes.rowFormat} key={row}>
-                {columnLabels.map((label, column) => (
+                {[
                   <TableCell
-                    className={props.classes.textBody}
+                    className={props.classes.blankCell}
                     padding="none"
-                    key={[row, column]}
+                    key={-1}
                   >
-                    <TableWidgetSelector
-                      columnWidgetTag={columnWidgetTags[column]}
-                      value={values[label][row]}
-                      rowPath={{ label, row, column }}
-                      rowChangeHandler={rowChangeHandler}
-                      columnMeta={meta.elements[label]}
-                      setFlag={rowFlagHandler}
+                    <AttributeAlarm
+                      alarmSeverity={
+                        flags.rows[row] &&
+                        (flags.rows[row]._dirty || flags.rows[row]._isChanged)
+                          ? AlarmStates.DIRTY
+                          : AlarmStates.NO_ALARM
+                      }
                     />
-                  </TableCell>
-                ))}
+                  </TableCell>,
+                  ...columnLabels.map((label, column) => (
+                    <TableCell
+                      className={props.classes.textBody}
+                      padding="none"
+                      key={[row, column]}
+                    >
+                      <TableWidgetSelector
+                        columnWidgetTag={columnWidgetTags[column]}
+                        value={values[label][row]}
+                        rowPath={{ label, row, column }}
+                        rowChangeHandler={rowChangeHandler}
+                        columnMeta={meta.elements[label]}
+                        setFlag={rowFlagHandler}
+                      />
+                    </TableCell>
+                  )),
+                ]}
               </TableRow>
             ))}
           </TableBody>
@@ -235,6 +270,7 @@ WidgetTable.propTypes = {
     footerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
+    blankCell: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
