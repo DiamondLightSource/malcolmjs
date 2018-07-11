@@ -56,7 +56,7 @@ master_doc = 'contents'
 
 # General information about the project.
 project = u'malcolmjs'
-copyright = u'2018, Tom Cobb, Ray Millward, Bryan Tester'
+copyright = u'2018, Diamond Light Source'
 author = u'Tom Cobb, Ray Millward, Bryan Tester'
 
 # The version info for the project you're documenting, acts as replacement for

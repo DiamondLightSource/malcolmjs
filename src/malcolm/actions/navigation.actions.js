@@ -40,7 +40,39 @@ const navigateToAttribute = (blockMri, attributeName) => (
   }
 };
 
+const closeChildPanel = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+  if (navigationLists.slice(-1)[0].navType === NavTypes.Block) {
+    const newPath = `/gui/${navigationLists
+      .slice(0, -1)
+      .map(nav => nav.path)
+      .join('/')}`;
+    dispatch(push(newPath));
+  }
+};
+
+const updateChildPanel = newChild => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  let newPath;
+  if (navigationLists.slice(-1)[0].navType === NavTypes.Block) {
+    newPath = `/gui/${navigationLists
+      .slice(0, -1)
+      .map(nav => nav.path)
+      .join('/')}/${newChild}`;
+  } else {
+    newPath = `/gui/${navigationLists
+      .map(nav => nav.path)
+      .join('/')}/${newChild}`;
+  }
+  dispatch(push(newPath));
+};
+
 export default {
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
+  updateChildPanel,
+  closeChildPanel,
 };

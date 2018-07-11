@@ -8,10 +8,10 @@ import {
   malcolmLayoutUpdatePosition,
   malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
-import { updateChildPanel } from '../viewState/viewState.actions';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 jest.mock('../malcolm/malcolmActionCreators');
-jest.mock('../viewState/viewState.actions');
+jest.mock('../malcolm/actions/navigation.actions');
 
 describe('Layout', () => {
   let shallow;
@@ -21,7 +21,7 @@ describe('Layout', () => {
     malcolmSelectBlock.mockClear();
     malcolmLayoutUpdatePosition.mockClear();
     malcolmLayoutShiftIsPressed.mockClear();
-    updateChildPanel.mockClear();
+    navigationActions.updateChildPanel.mockClear();
   });
 
   Toolkit.TESTING = true;
@@ -99,11 +99,11 @@ describe('Layout', () => {
   it('mapDispatchToProps clickHandler selects the block as the child panel if not in url', () => {
     const props = mapDispatchToProps(() => {});
     props.clickHandler('/gui/PANDA/layout/PANDA:SEQ1', block, node, []);
-    expect(updateChildPanel).toHaveBeenCalledTimes(1);
+    expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(1);
 
-    updateChildPanel.mockClear();
+    navigationActions.updateChildPanel.mockClear();
     props.clickHandler('/gui/PANDA/layout/block 1', block, node, []);
-    expect(updateChildPanel).toHaveBeenCalledTimes(0);
+    expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(0);
   });
 
   it('mapDispatchToProps shiftKeyHandler signals when shift is clicked', () => {
