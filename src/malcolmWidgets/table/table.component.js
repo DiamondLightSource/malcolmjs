@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
-import { Add } from '@material-ui/icons';
+import { AddCircle } from '@material-ui/icons';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -191,7 +191,7 @@ const WidgetTable = props => {
                 key={rowNames.length}
               >
                 <TableCell
-                  className={props.classes.incompleteRowFormat}
+                  className={props.classes.blankCell}
                   padding="none"
                   key={[rowNames.length, 0]}
                 >
@@ -203,7 +203,7 @@ const WidgetTable = props => {
                       )
                     }
                   >
-                    <Add />
+                    <AddCircle style={{ width: '30px', height: '30px' }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
