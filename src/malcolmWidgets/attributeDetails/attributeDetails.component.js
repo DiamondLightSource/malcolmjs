@@ -48,6 +48,7 @@ const AttributeDetails = props => {
   }
   if (widgetTagIndex !== null) {
     let alarm = props.attribute.raw.alarm.severity;
+    alarm = props.attribute.calculated.dirty ? AlarmStates.DIRTY : alarm;
     alarm = props.attribute.calculated.errorState
       ? AlarmStates.MAJOR_ALARM
       : alarm;
@@ -83,6 +84,7 @@ AttributeDetails.propTypes = {
       errorState: PropTypes.bool,
       errorMessage: PropTypes.string,
       unableToProcess: PropTypes.bool,
+      dirty: PropTypes.bool,
     }),
     raw: PropTypes.shape({
       meta: PropTypes.shape({

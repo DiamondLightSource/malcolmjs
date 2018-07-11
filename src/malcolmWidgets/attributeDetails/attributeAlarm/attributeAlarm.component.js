@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Warning, Error, InfoOutline, HighlightOff } from '@material-ui/icons';
+import {
+  Warning,
+  Error,
+  InfoOutline,
+  HighlightOff,
+  Edit,
+} from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 
@@ -11,6 +17,7 @@ export const AlarmStates = {
   INVALID_ALARM: 3,
   UNDEFINED_ALARM: 4,
   PENDING: -1,
+  DIRTY: -2,
 };
 
 const AttributeAlarm = props => {
@@ -37,6 +44,9 @@ const AttributeAlarm = props => {
           style={{ color: props.theme.palette.secondary.light }}
         />
       );
+
+    case AlarmStates.DIRTY:
+      return <Edit nativeColor={props.theme.palette.primary.light} />;
 
     default:
       return <div />;
