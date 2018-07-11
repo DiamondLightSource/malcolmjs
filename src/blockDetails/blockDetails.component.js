@@ -182,7 +182,7 @@ const mapStateToProps = (state, ownProps, memory) => {
       .map(group => ({
         attribute: group,
         children: block.attributes.filter(
-          a => a.calculated.group === group.name
+          a => a.calculated.group === group.calculated.name
         ),
       }));
 

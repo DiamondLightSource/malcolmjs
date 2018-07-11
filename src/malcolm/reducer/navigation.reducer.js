@@ -61,9 +61,9 @@ const updateBlockChildren = (nav, blocks) => {
     updatedNav.children = blocks[nav.blockMri].children;
     updatedNav.childrenLabels = updatedNav.children.map(child => {
       const attribute = blocks[nav.blockMri].attributes.find(
-        a => a.name === child
+        a => a.calculated.name === child
       );
-      return attribute && attribute.meta ? attribute.meta.label : child;
+      return attribute && attribute.raw.meta ? attribute.raw.meta.label : child;
     });
   }
 };
@@ -89,15 +89,18 @@ function updateNavTypes(state) {
           nav.label = nav.path;
           updateBlockChildren(nav, state.blocks);
         } else if (previousNavIsBlock(i, navigationLists, state.blocks)) {
-          const { attributes } = state.blocks[navigationLists[i - 1].blockMri];
-          if (attributes && attributes.some(a => a.name === nav.path)) {
-            nav.navType = NavTypes.Attribute;
+          const matchingAttribute = blockUtils.findAttribute(
+            state.blocks,
+            navigationLists[i - 1].blockMri,
+            nav.path
+          );
 
-            const matchingAttribute = attributes.find(a => a.name === nav.path);
-            nav.children = matchingAttribute.children;
-            nav.childrenLabels = matchingAttribute.children;
-            nav.label = matchingAttribute.meta
-              ? matchingAttribute.meta.label
+          if (matchingAttribute) {
+            nav.navType = NavTypes.Attribute;
+            nav.children = matchingAttribute.calculated.children;
+            nav.childrenLabels = matchingAttribute.calculated.children;
+            nav.label = matchingAttribute.raw.meta
+              ? matchingAttribute.raw.meta.label
               : nav.path;
           }
         } else if (previousNavIsAttribute(i, navigationLists)) {
@@ -110,12 +113,12 @@ function updateNavTypes(state) {
             if (
               blockUtils.attributeHasTag(matchingAttribute, 'widget:flowgraph')
             ) {
-              const nameIndex = matchingAttribute.value.name.findIndex(
+              const nameIndex = matchingAttribute.raw.value.name.findIndex(
                 n => n === nav.path
               );
               if (nameIndex > -1) {
                 nav.navType = NavTypes.Block;
-                nav.blockMri = matchingAttribute.value.mri[nameIndex];
+                nav.blockMri = matchingAttribute.raw.value.mri[nameIndex];
                 nav.label = nav.path;
                 updateBlockChildren(nav, state.blocks);
               }

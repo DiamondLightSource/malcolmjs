@@ -48,13 +48,17 @@ it('malcolmLayoutUpdatePosition updates position locally and then on the server'
         PANDA: {
           attributes: [
             {
-              name: 'layout',
-              value: {
-                mri: ['PANDA:CLOCKS'],
-                name: ['PANDA:CLOCKS'],
-                visible: [true],
-                x: [0],
-                y: [0],
+              calculated: {
+                name: 'layout',
+              },
+              raw: {
+                value: {
+                  mri: ['PANDA:CLOCKS'],
+                  name: ['PANDA:CLOCKS'],
+                  visible: [true],
+                  x: [0],
+                  y: [0],
+                },
               },
             },
           ],

@@ -175,11 +175,12 @@ export function updateAttribute(oldState, payload) {
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
         attributes[matchingAttributeIndex] = {
-          /*
-          ...attributes[matchingAttributeIndex],
+          ...attributes[
+            matchingAttributeIndex
+          ] /*
           loading: false,
           path,
-          ...payload, */
+          ...payload, */,
           raw: {
             ...attributes[matchingAttributeIndex].raw,
             ...payload.raw,

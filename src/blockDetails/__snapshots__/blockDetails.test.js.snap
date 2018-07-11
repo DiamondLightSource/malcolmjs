@@ -94,20 +94,7 @@ exports[`Block Details renders groups correctly 1`] = `
       expanded={false}
       groupName="health 1"
       key="parameters"
-    >
-      <Connect(WithStyles(AttributeDetails))
-        attributeName="parameters"
-        key="parameters"
-      />
-      <Connect(WithStyles(AttributeDetails))
-        attributeName="health"
-        key="health"
-      />
-      <Connect(WithStyles(AttributeDetails))
-        attributeName="icon"
-        key="icon"
-      />
-    </WithStyles(WidgetGroupExpander)>
+    />
   </div>
 </div>
 `;

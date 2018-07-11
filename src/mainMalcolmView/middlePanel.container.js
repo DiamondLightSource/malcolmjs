@@ -51,6 +51,7 @@ const styles = () => ({
     width: '100%',
     minHeight: 'calc(100vh - 64px)',
     backgroundColor: divBackground,
+    align: 'center',
   },
 });
 
@@ -104,10 +105,20 @@ const findAttributeComponent = props => {
     default:
       return (
         <div className={props.classes.plainBackground}>
-          <br />
-          <br />
-          <br />
-          <img src={malcolmLogo} alt=" " />
+          <div
+            className={props.classes.tablesContainer}
+            style={{
+              left: props.openParent ? 365 : 5,
+              width: `calc(100% - ${(props.openChild ? 365 : 5) +
+                (props.openParent ? 365 : 5)}px)`,
+              transition: 'width 1s, left 1s',
+            }}
+          >
+            <br />
+            <br />
+            <br />
+            <img src={malcolmLogo} alt=" " />
+          </div>
         </div>
       );
   }
@@ -136,19 +147,18 @@ const mapStateToProps = state => {
 
   let alarm = AlarmStates.PENDING;
 
-  if (attribute && attribute.alarm) {
-    alarm = attribute.alarm.severity;
-    alarm = attribute.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-    alarm = attribute.pending ? AlarmStates.PENDING : alarm;
+  if (attribute && attribute.raw.alarm) {
+    alarm = attribute.raw.alarm.severity;
+    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
   }
-
   return {
     parentBlock: state.malcolm.parentBlock,
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
-    tags: attribute && attribute.meta ? attribute.meta.tags : [],
+    tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
   };
 };
 
