@@ -4,7 +4,9 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import DrawerContainer from './drawerContainer.component';
 import { openParentPanelType } from '../viewState/viewState.actions';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
+jest.mock('../malcolm/actions/navigation.actions');
 const mockStore = configureStore();
 
 describe('DrawerContainer', () => {
@@ -85,7 +87,12 @@ describe('DrawerContainer', () => {
   });
 
   it('closeChild calls the close method', () => {
-    const store = mockStore(state);
+    const actions = [];
+    const store = {
+      getState: () => state,
+      dispatch: action => actions.push(action),
+      subscribe: () => {},
+    };
 
     const wrapper = mount(
       <Provider store={store}>
@@ -108,9 +115,7 @@ describe('DrawerContainer', () => {
       .at(0)
       .simulate('click');
 
-    const actions = store.getActions();
     expect(actions.length).toEqual(1);
-    expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
-    expect(actions[0].payload.args[0]).toEqual('/gui/PANDA/layout');
+    expect(navigationActions.closeChildPanel).toHaveBeenCalled();
   });
 });

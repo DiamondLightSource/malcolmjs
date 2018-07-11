@@ -4,10 +4,8 @@ import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import DrawerHeader from './drawerHeader.component';
-import {
-  openParentPanel,
-  closeChildPanel,
-} from '../viewState/viewState.actions';
+import { openParentPanel } from '../viewState/viewState.actions';
+import navigationActions from '../malcolm/actions/navigation.actions';
 import NavBar from '../navbar/navbar.component';
 
 const drawerWidth = 360;
@@ -78,7 +76,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeParent: () => dispatch(openParentPanel(false)),
-  closeChild: urlPath => dispatch(closeChildPanel(urlPath)),
+  closeChild: () => dispatch(navigationActions.closeChildPanel()),
 });
 
 DrawerContainer.propTypes = {

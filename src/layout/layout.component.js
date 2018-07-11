@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DiagramWidget } from 'storm-react-diagrams';
-import { updateChildPanel } from '../viewState/viewState.actions';
+import navigationActions from '../malcolm/actions/navigation.actions';
 import {
   malcolmSelectBlock,
   malcolmLayoutUpdatePosition,
@@ -104,7 +104,7 @@ export const mapDispatchToProps = dispatch => ({
         .split('/')
         .slice(-1)[0] !== block.name
     ) {
-      dispatch(updateChildPanel(url, block.name));
+      dispatch(navigationActions.updateChildPanel(block.name));
     }
   },
   shiftKeyHandler: shiftIsDown =>

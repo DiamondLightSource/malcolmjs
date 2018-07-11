@@ -85,3 +85,87 @@ describe('navigateToAttribute', () => {
     );
   });
 });
+
+describe('updateChildPanel', () => {
+  let state;
+  let dispatches;
+  beforeEach(() => {
+    dispatches = [];
+    state = {
+      malcolm: {
+        navigation: {
+          navigationLists: [
+            {
+              path: 'PANDA',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA',
+            },
+            {
+              path: 'layout',
+              navType: NavTypes.Attribute,
+            },
+            {
+              path: 'SEQ2',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA:SEQ2',
+            },
+          ],
+        },
+      },
+    };
+  });
+  it('updateChildPanel adds to the end of the route if it ends in layout', () => {
+    state.malcolm.navigation.navigationLists.pop();
+    const navAction = navigationActions.updateChildPanel('SEQ1');
+    navAction(action => dispatches.push(action), () => state);
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/SEQ1');
+  });
+
+  it('updateChildPanel replaces the end of the route if it does not end in layout', () => {
+    const navAction = navigationActions.updateChildPanel('SEQ1');
+    navAction(action => dispatches.push(action), () => state);
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/SEQ1');
+  });
+});
+
+describe('closeChildPanel', () => {
+  let state;
+  let dispatches;
+  beforeEach(() => {
+    dispatches = [];
+    state = {
+      malcolm: {
+        navigation: {
+          navigationLists: [
+            {
+              path: 'PANDA',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA',
+            },
+            {
+              path: 'layout',
+              navType: NavTypes.Attribute,
+            },
+            {
+              path: 'SEQ2',
+              navType: NavTypes.Block,
+              blockMri: 'PANDA:SEQ2',
+            },
+          ],
+        },
+      },
+    };
+  });
+
+  it('closeChildPanel updates the route to remove the child', () => {
+    const navAction = navigationActions.closeChildPanel();
+    navAction(action => dispatches.push(action), () => state);
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout');
+  });
+  it('closeChildPanel does nothing if no child panel is open', () => {
+    state.malcolm.navigation.navigationLists.pop();
+    const navAction = navigationActions.closeChildPanel();
+    navAction(action => dispatches.push(action), () => state);
+    expect(dispatches.length).toEqual(0);
+  });
+});
