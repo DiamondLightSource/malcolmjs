@@ -15,6 +15,22 @@ export const rowIsDifferent = (attribute, row) =>
       `${attribute.raw.value[label][row]}`
   );
 
+export const shouldClearDirtyFlag = inputAttribute => {
+  const attribute = inputAttribute;
+  if (attribute.localState.flags.table.dirty) {
+    attribute.localState.flags.rows.forEach((row, index) => {
+      attribute.localState.flags.rows[index] = {
+        ...row,
+        _isChanged: rowIsDifferent(attribute, index),
+      };
+    });
+    attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
+      row => row._dirty || row._isChanged
+    );
+  }
+  return attribute;
+};
+
 export const copyAttributeValue = (state, payload) => {
   const blockName = payload.path[0];
   const attributeName = payload.path[1];
@@ -118,15 +134,19 @@ const setTableFlag = (state, payload) => {
       ...attribute.localState.flags.rows[payload.row],
       ...payload.flags,
     };
+    if (payload.flagType === 'selected') {
+      attribute.localState.flags.table.selectedRow = payload.row;
+    } else {
+      attribute.localState.flags.table[
+        payload.flagType
+      ] = attribute.localState.flags.rows.some(
+        row =>
+          row[`_${payload.flagType}`] ||
+          (payload.flagType === 'dirty' && row._isChanged)
+      );
+    }
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
-    attribute.localState.flags.table[
-      payload.flagType
-    ] = attribute.localState.flags.rows.some(
-      row =>
-        row[`_${payload.flagType}`] ||
-        (payload.flagType === 'dirty' && row._isChanged)
-    );
   }
   return {
     ...state,

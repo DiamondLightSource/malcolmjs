@@ -54,11 +54,19 @@ const styles = theme => ({
   blankCell: {
     backgroundColor: 'rgb(48, 48, 48)',
     textAlign: 'Center',
+    padding: '2px',
   },
   textBody: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Center',
     padding: '2px',
+  },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
 });
 
@@ -155,22 +163,43 @@ const WidgetTable = props => {
               <TableRow className={props.classes.rowFormat} key={row}>
                 {[
                   <TableCell
-                    className={props.classes.textBody}
+                    className={
+                      flags.table.selectedRow === row
+                        ? props.classes.blankCell
+                        : props.classes.textBody
+                    }
                     padding="none"
                     key={-1}
                   >
-                    <AttributeAlarm
-                      alarmSeverity={
-                        flags.rows[row] &&
-                        (flags.rows[row]._dirty || flags.rows[row]._isChanged)
-                          ? AlarmStates.DIRTY
-                          : AlarmStates.NO_ALARM
+                    <IconButton
+                      className={props.classes.button}
+                      disableRipple
+                      onClick={() =>
+                        props.setFlag(
+                          props.attribute.calculated.path,
+                          row,
+                          'selected',
+                          { selected: true }
+                        )
                       }
-                    />
+                    >
+                      <AttributeAlarm
+                        alarmSeverity={
+                          flags.rows[row] &&
+                          (flags.rows[row]._dirty || flags.rows[row]._isChanged)
+                            ? AlarmStates.DIRTY
+                            : AlarmStates.NO_ALARM
+                        }
+                      />
+                    </IconButton>
                   </TableCell>,
                   ...columnLabels.map((label, column) => (
                     <TableCell
-                      className={props.classes.textBody}
+                      className={
+                        flags.table.selectedRow === row
+                          ? props.classes.blankCell
+                          : props.classes.textBody
+                      }
                       padding="none"
                       key={[row, column]}
                     >
@@ -257,6 +286,9 @@ WidgetTable.propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
+      table: PropTypes.shape({
+        selectedRow: PropTypes.number,
+      }),
     }),
     hasIncompleteRow: PropTypes.bool,
     labels: PropTypes.arrayOf(PropTypes.string),
@@ -268,6 +300,7 @@ WidgetTable.propTypes = {
     }),
   }),
   classes: PropTypes.shape({
+    button: PropTypes.string,
     tableBody: PropTypes.string,
     headerLayoutNoScroll: PropTypes.string,
     headerLayout: PropTypes.string,

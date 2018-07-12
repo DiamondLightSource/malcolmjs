@@ -9,6 +9,7 @@ import {
 } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
+import EditError from './EditError.component';
 
 export const AlarmStates = {
   NO_ALARM: 0,
@@ -18,6 +19,7 @@ export const AlarmStates = {
   UNDEFINED_ALARM: 4,
   PENDING: -1,
   DIRTY: -2,
+  DIRTYANDERROR: -3,
 };
 
 const AttributeAlarm = props => {
@@ -47,6 +49,9 @@ const AttributeAlarm = props => {
 
     case AlarmStates.DIRTY:
       return <Edit nativeColor={props.theme.palette.primary.light} />;
+
+    case AlarmStates.DIRTYANDERROR:
+      return <EditError nativeColor={props.theme.palette.error.main} />;
 
     default:
       return <div />;

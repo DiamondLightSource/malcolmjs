@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
@@ -53,6 +55,13 @@ const styles = () => ({
     backgroundColor: divBackground,
     align: 'center',
   },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 const getWidgetType = tags => {
@@ -94,9 +103,13 @@ const findAttributeComponent = props => {
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
               footerItems={[
-                <AttributeAlarm
-                  alarmSeverity={props.mainAttributeAlarmState}
-                />,
+                <Tooltip id="1" title={props.errorMessage} placement="right">
+                  <IconButton className={props.classes.button} disableRipple>
+                    <AttributeAlarm
+                      alarmSeverity={props.mainAttributeAlarmState}
+                    />
+                  </IconButton>
+                </Tooltip>,
               ]}
             />
           </div>
@@ -146,7 +159,7 @@ const mapStateToProps = state => {
   );
 
   let alarm = AlarmStates.PENDING;
-
+  let errorMessage;
   if (attribute && attribute.raw.alarm) {
     alarm = attribute.raw.alarm.severity;
     alarm =
@@ -155,8 +168,12 @@ const mapStateToProps = state => {
         : alarm;
     alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
     alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+    errorMessage = attribute.calculated.errorState
+      ? attribute.calculated.errorMessage
+      : '';
   }
   return {
+    errorMessage,
     parentBlock: state.malcolm.parentBlock,
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
@@ -176,7 +193,9 @@ findAttributeComponent.propTypes = {
   mainAttributeAlarmState: PropTypes.number.isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   classes: PropTypes.shape({
+    button: PropTypes.string,
     layoutArea: PropTypes.string,
     alarm: PropTypes.string,
     alarmText: PropTypes.string,

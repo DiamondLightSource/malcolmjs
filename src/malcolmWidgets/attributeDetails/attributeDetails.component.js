@@ -48,10 +48,14 @@ const AttributeDetails = props => {
   }
   if (widgetTagIndex !== null) {
     let alarm = props.attribute.raw.alarm.severity;
-    alarm = props.attribute.calculated.dirty ? AlarmStates.DIRTY : alarm;
     alarm = props.attribute.calculated.errorState
       ? AlarmStates.MAJOR_ALARM
       : alarm;
+    alarm = props.attribute.calculated.dirty ? AlarmStates.DIRTY : alarm;
+    alarm =
+      props.attribute.calculated.dirty && props.attribute.calculated.errorState
+        ? AlarmStates.DIRTYANDERROR
+        : alarm;
     alarm = props.attribute.calculated.pending ? AlarmStates.PENDING : alarm;
     const message = props.attribute.calculated.errorMessage
       ? props.attribute.calculated.errorMessage

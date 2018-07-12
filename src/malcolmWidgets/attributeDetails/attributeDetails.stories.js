@@ -67,4 +67,8 @@ storiesOf('Details/Attribute Details', module)
     'pending',
     withInfo(generateInfo('PENDING'))(() => generateComponent(-1))
   )
-  .add('dirty', withInfo(generateInfo('DIRTY'))(() => generateComponent(-2)));
+  .add('dirty', withInfo(generateInfo('DIRTY'))(() => generateComponent(-2)))
+  .add(
+    'dirty & error',
+    withInfo(generateInfo('DIRTY & ERROR'))(() => generateComponent(-3))
+  );
