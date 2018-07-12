@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
-import { AddCircle } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -63,18 +63,25 @@ const styles = theme => ({
 });
 
 const WidgetTable = props => {
+  const columnLabels =
+    props.localState === undefined
+      ? Object.keys(props.attribute.raw.meta.elements)
+      : props.localState.labels;
+
   const values =
     props.localState === undefined
-      ? props.attribute.raw.value
+      ? props.attribute.raw.value[columnLabels[0]].map((val, row) => {
+          const rowData = {};
+          columnLabels.forEach(label => {
+            rowData[label] = props.attribute.raw.value[label][row];
+          });
+          return rowData;
+        })
       : props.localState.value;
   const flags =
     props.localState === undefined
       ? { rows: [], table: {} }
       : props.localState.flags;
-  const columnLabels =
-    props.localState === undefined
-      ? Object.keys(props.attribute.raw.meta.elements)
-      : props.localState.labels;
   const meta =
     props.localState === undefined
       ? props.attribute.raw.meta
@@ -82,7 +89,7 @@ const WidgetTable = props => {
   const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
     columnLabels.forEach(label => {
-      rowValue[label] = values[label][rowPath.row];
+      rowValue[label] = values[rowPath.row][label];
       return 0;
     });
     rowValue[rowPath.label] = newValue;
@@ -110,7 +117,6 @@ const WidgetTable = props => {
     }
   };
   const columnWidgetTags = getTableWidgetTags(props.attribute);
-  const rowNames = values[columnLabels[0]];
   const columnHeadings = columnLabels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
@@ -124,7 +130,7 @@ const WidgetTable = props => {
     <div>
       <Table
         className={
-          rowNames.length > 20
+          values.length > 20
             ? props.classes.headerLayout
             : props.classes.headerLayoutNoScroll
         }
@@ -133,7 +139,7 @@ const WidgetTable = props => {
           <TableRow className={props.classes.rowFormat}>
             {[
               <TableCell
-                className={props.classes.blankCell}
+                className={props.classes.textHeadings}
                 padding="none"
                 key={-1}
               />,
@@ -145,11 +151,11 @@ const WidgetTable = props => {
       <div className={props.classes.tableBody}>
         <Table className={props.classes.tableLayout}>
           <TableBody>
-            {rowNames.map((name, row) => (
+            {values.map((rowValue, row) => (
               <TableRow className={props.classes.rowFormat} key={row}>
                 {[
                   <TableCell
-                    className={props.classes.blankCell}
+                    className={props.classes.textBody}
                     padding="none"
                     key={-1}
                   >
@@ -170,7 +176,7 @@ const WidgetTable = props => {
                     >
                       <TableWidgetSelector
                         columnWidgetTag={columnWidgetTags[column]}
-                        value={values[label][row]}
+                        value={values[row][label]}
                         rowPath={{ label, row, column }}
                         rowChangeHandler={rowChangeHandler}
                         columnMeta={meta.elements[label]}
@@ -186,24 +192,21 @@ const WidgetTable = props => {
         <Table>
           <TableFooter>
             {meta.writeable ? (
-              <TableRow
-                className={props.classes.rowFormat}
-                key={rowNames.length}
-              >
+              <TableRow className={props.classes.rowFormat} key={values.length}>
                 <TableCell
-                  className={props.classes.blankCell}
+                  className={props.classes.incompleteRowFormat}
                   padding="none"
-                  key={[rowNames.length, 0]}
+                  key={[values.length, 0]}
                 >
                   <IconButton
                     onClick={() =>
                       props.addRow(
                         props.attribute.calculated.path,
-                        rowNames.length
+                        values.length
                       )
                     }
                   >
-                    <AddCircle style={{ width: '30px', height: '30px' }} />
+                    <Add style={{ width: '30px', height: '30px' }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -251,6 +254,7 @@ WidgetTable.propTypes = {
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.shape({}),
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
     }),

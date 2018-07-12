@@ -8,6 +8,7 @@ import {
   MalcolmAttributeData,
   MalcolmMainAttributeUpdate,
 } from '../malcolm.types';
+import { rowIsDifferent } from './table.reducer';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -174,7 +175,7 @@ export function updateAttribute(oldState, payload) {
       );
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
-        attributes[matchingAttributeIndex] = {
+        let attribute = {
           ...attributes[
             matchingAttributeIndex
           ] /*
@@ -193,46 +194,44 @@ export function updateAttribute(oldState, payload) {
           },
         };
 
-        attributes[matchingAttributeIndex] = checkForFlowGraph(
-          attributes[matchingAttributeIndex]
-        );
+        attribute = checkForFlowGraph(attribute);
 
-        attributes[matchingAttributeIndex] = updateAttributeChildren(
-          attributes[matchingAttributeIndex]
-        );
+        attribute = updateAttributeChildren(attribute);
 
-        if (attributes[matchingAttributeIndex].localState !== undefined) {
-          if (
-            !attributes[matchingAttributeIndex].localState.flags.table.dirty
-          ) {
-            attributes[matchingAttributeIndex].localState = {
-              value: JSON.parse(
-                JSON.stringify(attributes[matchingAttributeIndex].raw.value)
-              ),
-              meta: JSON.parse(
-                JSON.stringify(attributes[matchingAttributeIndex].raw.meta)
-              ),
-              labels: Object.keys(
-                attributes[matchingAttributeIndex].raw.meta.elements
-              ),
+        if (attribute.localState !== undefined) {
+          const labels = Object.keys(attribute.raw.meta.elements);
+          if (!attribute.localState.flags.table.dirty) {
+            attribute.localState = {
+              value: attribute.raw.value[labels[0]].map((value, row) => {
+                const dataRow = {};
+                labels.forEach(label => {
+                  dataRow[label] = attribute.raw.value[label][row];
+                });
+                return dataRow;
+              }),
+              meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+              labels,
               flags: {
                 rows: [],
                 table: {
                   fresh: true,
                 },
-                timeStamp: JSON.parse(
-                  JSON.stringify(
-                    attributes[matchingAttributeIndex].raw.timeStamp
-                  )
-                ),
+                timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
               },
             };
           } else {
             attributes[
               matchingAttributeIndex
             ].localState.flags.table.fresh = false;
+            attribute.localState.flags.rows.forEach((row, index) => {
+              attribute.localState.flags.rows[index] = {
+                ...row,
+                _isChanged: rowIsDifferent(attribute, index),
+              };
+            });
           }
         }
+        attributes[matchingAttributeIndex] = attribute;
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
