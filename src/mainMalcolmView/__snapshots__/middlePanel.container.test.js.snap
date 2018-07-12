@@ -266,7 +266,7 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
               title={undefined}
           >
               <WithStyles(IconButton)
-                  className="MiddlePanelContainer-button-7"
+                  className="MiddlePanelContainer-button-8"
                   disableRipple={true}
               >
                   <WithTheme(AttributeAlarm)
