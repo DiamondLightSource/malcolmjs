@@ -87,7 +87,6 @@ function updateNavTypes(state) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
           nav.label = nav.path;
-          updateBlockChildren(nav, state.blocks);
         } else if (previousNavIsBlock(i, navigationLists, state.blocks)) {
           const matchingAttribute = blockUtils.findAttribute(
             state.blocks,
@@ -120,13 +119,18 @@ function updateNavTypes(state) {
                 nav.navType = NavTypes.Block;
                 nav.blockMri = matchingAttribute.raw.value.mri[nameIndex];
                 nav.label = nav.path;
-                updateBlockChildren(nav, state.blocks);
               }
             }
           }
         }
       });
   }
+
+  navigationLists.forEach(nav => {
+    if (nav.navType === NavTypes.Block) {
+      updateBlockChildren(nav, state.blocks);
+    }
+  });
 
   // find parentBlock
   const details = navigationLists.filter(

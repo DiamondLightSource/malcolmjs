@@ -34,7 +34,6 @@ const styles = () => ({
     display: 'flex',
     alignItems: 'center',
     position: 'absolute',
-    margin: 15,
   },
   alarmText: {
     marginRight: 5,
@@ -72,7 +71,7 @@ const findAttributeComponent = props => {
           <Layout />
           <div
             className={props.classes.alarm}
-            style={{ left: props.openParent ? 365 : 5, top: 5 }}
+            style={{ left: props.openParent ? 360 + 29 : 29, bottom: 12 }}
           >
             <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
           </div>

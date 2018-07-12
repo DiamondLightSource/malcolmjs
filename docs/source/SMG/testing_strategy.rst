@@ -34,7 +34,7 @@ The test strategy for each sprint is split into development testing, system test
 
 Builds will progress through the various stages when they succeed at all previous levels. For example, builds passing all unit, integration and system tests will be deployed to a PandA for user acceptance tests, etc.
 
-Gnerally the number of tests and time for execution should follow the pyramid of testings shown in the diagram below and explained in this blob post by Uncle Bob https://codingjourneyman.com/tag/uncle-bob/page/2/
+Gnerally the number of tests and time for execution should follow the pyramid of testings shown in the diagram below and explained in this blob post by Uncle Bob https://codingjourneyman.com/2014/09/24/the-clean-coder-testing-strategies/
 
 .. figure:: images/tests-pyramid.png
     :align: center
