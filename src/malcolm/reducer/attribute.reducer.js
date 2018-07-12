@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
@@ -200,6 +201,17 @@ export function updateAttribute(oldState, payload) {
 
         if (attribute.localState !== undefined) {
           const labels = Object.keys(attribute.raw.meta.elements);
+          if (attribute.localState.flags.table.dirty) {
+            attribute.localState.flags.rows.forEach((row, index) => {
+              attribute.localState.flags.rows[index] = {
+                ...row,
+                _isChanged: rowIsDifferent(attribute, index),
+              };
+            });
+            attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
+              row => row._dirty || row._isChanged
+            );
+          }
           if (!attribute.localState.flags.table.dirty) {
             attribute.localState = {
               value: attribute.raw.value[labels[0]].map((value, row) => {
@@ -220,15 +232,7 @@ export function updateAttribute(oldState, payload) {
               },
             };
           } else {
-            attributes[
-              matchingAttributeIndex
-            ].localState.flags.table.fresh = false;
-            attribute.localState.flags.rows.forEach((row, index) => {
-              attribute.localState.flags.rows[index] = {
-                ...row,
-                _isChanged: rowIsDifferent(attribute, index),
-              };
-            });
+            attribute.localState.flags.table.fresh = false;
           }
         }
         attributes[matchingAttributeIndex] = attribute;
