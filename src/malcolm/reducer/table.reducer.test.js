@@ -230,6 +230,34 @@ describe('Table reducer', () => {
     ).toEqual(1);
   });
 
+  it('set flag deselects all other rows', () => {
+    testState.blocks.block1.attributes[0].localState.flags.table.selectedRow = 1;
+    testState.blocks.block1.attributes[0].localState.flags.rows[1] = {
+      selected: true,
+    };
+    const payload = {
+      path: ['block1', 'layout'],
+      row: 2,
+      flagType: 'selected',
+      flags: { selected: true },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload,
+    };
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]
+    ).toEqual({ selected: false });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[2]
+    ).toEqual({ selected: true });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.selectedRow
+    ).toEqual(2);
+  });
+
   it('set flag sets table as dirty if a dirty flag is set to true', () => {
     const payload = {
       path: ['block1', 'layout'],

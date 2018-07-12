@@ -162,11 +162,17 @@ const mapStateToProps = state => {
   let errorMessage;
   if (attribute && attribute.raw.alarm) {
     alarm = attribute.raw.alarm.severity;
+    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
     alarm =
       attribute.localState && attribute.localState.flags.table.dirty
         ? AlarmStates.DIRTY
         : alarm;
-    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm =
+      attribute.localState &&
+      attribute.localState.flags.table.dirty &&
+      attribute.calculated.errorState
+        ? AlarmStates.DIRTYANDERROR
+        : alarm;
     alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
     errorMessage = attribute.calculated.errorState
       ? attribute.calculated.errorMessage

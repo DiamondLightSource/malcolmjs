@@ -6,6 +6,7 @@ exports[`Table container renders correctly 1`] = `
   attribute={
     Object {
       "calculated": Object {
+        "dirty": false,
         "name": "layout",
         "path": Array [
           "test1",

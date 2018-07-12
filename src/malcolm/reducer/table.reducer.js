@@ -27,6 +27,7 @@ export const shouldClearDirtyFlag = inputAttribute => {
     attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
       row => row._dirty || row._isChanged
     );
+    attribute.calculated.dirty = attribute.localState.flags.table.dirty;
   }
   return attribute;
 };
@@ -66,6 +67,7 @@ export const copyAttributeValue = (state, payload) => {
         },
       },
     };
+    attribute.calculated.dirty = false;
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
@@ -135,6 +137,9 @@ const setTableFlag = (state, payload) => {
       ...payload.flags,
     };
     if (payload.flagType === 'selected') {
+      attribute.localState.flags.rows.forEach((row, index) => {
+        attribute.localState.flags.rows[index].selected = index === payload.row;
+      });
       attribute.localState.flags.table.selectedRow = payload.row;
     } else {
       attribute.localState.flags.table[
@@ -144,6 +149,9 @@ const setTableFlag = (state, payload) => {
           row[`_${payload.flagType}`] ||
           (payload.flagType === 'dirty' && row._isChanged)
       );
+      if (payload.flagType === 'dirty') {
+        attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+      }
     }
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };

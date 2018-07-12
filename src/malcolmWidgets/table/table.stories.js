@@ -10,6 +10,7 @@ export const harderAttribute = {
   calculated: {
     name: 'layout',
     path: ['test1', 'layout'],
+    dirty: false,
   },
   raw: {
     typeid: 'epics:nt/NTTable:1.0',
