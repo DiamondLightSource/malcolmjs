@@ -2,36 +2,38 @@ import navigationActions from './navigation.actions';
 import NavTypes from '../NavTypes';
 import { MalcolmNewBlock, MalcolmSend } from '../malcolm.types';
 
+const buildNavState = () => ({
+  malcolm: {
+    blocks: {
+      PANDA: {},
+    },
+    navigation: {
+      navigationLists: [
+        {
+          path: 'PANDA',
+          navType: NavTypes.Block,
+          blockMri: 'PANDA',
+        },
+        {
+          path: 'layout',
+          navType: NavTypes.Attribute,
+        },
+        {
+          path: 'SEQ2',
+          navType: NavTypes.Block,
+          blockMri: 'PANDA:SEQ2',
+        },
+      ],
+    },
+  },
+});
+
 describe('subscribeToNewBlocksInRoute', () => {
   it('subscribes to new blocks', () => {
     const navAction = navigationActions.subscribeToNewBlocksInRoute();
 
     const dispatches = [];
-    const state = {
-      malcolm: {
-        blocks: {
-          PANDA: {},
-        },
-        navigation: {
-          navigationLists: [
-            {
-              path: 'PANDA',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA',
-            },
-            {
-              path: 'layout',
-              navType: NavTypes.Attribute,
-            },
-            {
-              path: 'SEQ2',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA:SEQ2',
-            },
-          ],
-        },
-      },
-    };
+    const state = buildNavState();
 
     navAction(action => dispatches.push(action), () => state);
 
@@ -48,28 +50,7 @@ describe('subscribeToNewBlocksInRoute', () => {
 describe('navigateToAttribute', () => {
   it('changes the url to look at the attribute', () => {
     const dispatches = [];
-    const state = {
-      malcolm: {
-        navigation: {
-          navigationLists: [
-            {
-              path: 'PANDA',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA',
-            },
-            {
-              path: 'layout',
-              navType: NavTypes.Attribute,
-            },
-            {
-              path: 'SEQ2',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA:SEQ2',
-            },
-          ],
-        },
-      },
-    };
+    const state = buildNavState();
 
     const navAction = navigationActions.navigateToAttribute(
       'PANDA:SEQ2',
@@ -86,33 +67,27 @@ describe('navigateToAttribute', () => {
   });
 });
 
+describe('navigateToPalette', () => {
+  it('changes the url to show the palette', () => {
+    const dispatches = [];
+    const state = buildNavState();
+
+    const navAction = navigationActions.navigateToPalette();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/.palette');
+  });
+});
+
 describe('updateChildPanel', () => {
   let state;
   let dispatches;
   beforeEach(() => {
     dispatches = [];
-    state = {
-      malcolm: {
-        navigation: {
-          navigationLists: [
-            {
-              path: 'PANDA',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA',
-            },
-            {
-              path: 'layout',
-              navType: NavTypes.Attribute,
-            },
-            {
-              path: 'SEQ2',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA:SEQ2',
-            },
-          ],
-        },
-      },
-    };
+    state = buildNavState();
   });
   it('updateChildPanel adds to the end of the route if it ends in layout', () => {
     state.malcolm.navigation.navigationLists.pop();
@@ -133,28 +108,7 @@ describe('closeChildPanel', () => {
   let dispatches;
   beforeEach(() => {
     dispatches = [];
-    state = {
-      malcolm: {
-        navigation: {
-          navigationLists: [
-            {
-              path: 'PANDA',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA',
-            },
-            {
-              path: 'layout',
-              navType: NavTypes.Attribute,
-            },
-            {
-              path: 'SEQ2',
-              navType: NavTypes.Block,
-              blockMri: 'PANDA:SEQ2',
-            },
-          ],
-        },
-      },
-    };
+    state = buildNavState();
   });
 
   it('closeChildPanel updates the route to remove the child', () => {

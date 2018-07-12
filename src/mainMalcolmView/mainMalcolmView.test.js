@@ -5,13 +5,13 @@ import MainMalcolmView from './mainMalcolmView.container';
 
 describe('MainMalcolmView', () => {
   let shallow;
+  let state;
+  let mockStore;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
-  });
 
-  it('renders correctly', () => {
-    const state = {
+    state = {
       malcolm: {
         parentBlock: 'test1',
         blocks: {
@@ -22,8 +22,22 @@ describe('MainMalcolmView', () => {
       },
     };
 
-    const mockStore = configureStore();
+    mockStore = configureStore();
+  });
 
+  it('renders correctly', () => {
+    const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders palette if child block is .palette', () => {
+    state.malcolm.childBlock = '.palette';
+    const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders info if child block is .info', () => {
+    state.malcolm.childBlock = '.info';
     const wrapper = shallow(<MainMalcolmView store={mockStore(state)} />);
     expect(wrapper).toMatchSnapshot();
   });
