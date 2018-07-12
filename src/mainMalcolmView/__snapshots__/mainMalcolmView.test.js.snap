@@ -15,3 +15,37 @@ exports[`MainMalcolmView renders correctly 1`] = `
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;
+
+exports[`MainMalcolmView renders info if child block is .info 1`] = `
+<div>
+  <Connect(WithStyles(DrawerContainer))
+    childTitle="Info"
+    parentTitle="Test main view"
+    popOutAction={[Function]}
+  >
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
+    />
+    <Connect(WithStyles(MiddlePanelContainer)) />
+    <div>
+      Info goes here
+    </div>
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;
+
+exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
+<div>
+  <Connect(WithStyles(DrawerContainer))
+    childTitle="Palette"
+    parentTitle="Test main view"
+    popOutAction={[Function]}
+  >
+    <Connect(WithStyles(BlockDetails))
+      parent={true}
+    />
+    <Connect(WithStyles(MiddlePanelContainer)) />
+    <WithStyles(Palette) />
+  </Connect(WithStyles(DrawerContainer))>
+</div>
+`;

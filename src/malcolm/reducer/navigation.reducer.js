@@ -83,6 +83,9 @@ function updateNavTypes(state) {
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
           nav.label = 'Info';
+        } else if (nav.path === '.palette') {
+          nav.navType = NavTypes.Palette;
+          nav.label = 'Palette';
         } else if (isBlockMri(nav.path, state.blocks)) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
@@ -134,7 +137,10 @@ function updateNavTypes(state) {
 
   // find parentBlock
   const details = navigationLists.filter(
-    nav => nav.navType === NavTypes.Block || nav.navType === NavTypes.Info
+    nav =>
+      nav.navType === NavTypes.Block ||
+      nav.navType === NavTypes.Info ||
+      nav.navType === NavTypes.Palette
   );
   if (details.length === 1) {
     updatedState.parentBlock = details[0].path;
