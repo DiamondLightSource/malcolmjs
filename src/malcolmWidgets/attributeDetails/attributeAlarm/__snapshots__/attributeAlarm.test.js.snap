@@ -2,6 +2,12 @@
 
 exports[`AttributeAlarm renders blank if no alarm severity specified 1`] = `<div />`;
 
+exports[`AttributeAlarm renders dirty & error correctly 1`] = `
+<EditError
+  nativeColor="#f44336"
+/>
+`;
+
 exports[`AttributeAlarm renders dirty correctly 1`] = `
 <pure(Edit)
   nativeColor="#7986cb"

@@ -61,6 +61,13 @@ describe('AttributeAlarm', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  it('renders dirty & error correctly', () => {
+    const wrapper = shallow(
+      <AttributeAlarm alarmSeverity={AlarmStates.DIRTYANDERROR} />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
   it('renders blank if no alarm severity specified', () => {
     const wrapper = shallow(<AttributeAlarm />);
     expect(wrapper).toMatchSnapshot();

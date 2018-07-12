@@ -9,13 +9,13 @@ import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attrib
 import { harderAttribute } from '../../malcolmWidgets/table/table.stories';
 
 const addRow = (table, columns, row) => {
-  columns.forEach(label =>
-    table[label].splice(
-      row,
-      0,
-      getDefaultFromType(harderAttribute.raw.meta.elements[label])
-    )
-  );
+  const defaultRow = {};
+  columns.forEach(label => {
+    defaultRow[label] = getDefaultFromType(
+      harderAttribute.raw.meta.elements[label]
+    );
+  });
+  table.splice(row, 0, defaultRow);
   return table;
 };
 
@@ -29,23 +29,36 @@ describe('Table reducer', () => {
     },
   };
 
+  const rowValues = harderAttribute.raw.value[
+    Object.keys(harderAttribute.raw.meta.elements)[0]
+  ].map((val, row) => {
+    const rowData = {};
+    Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+      rowData[label] = harderAttribute.raw.value[label][row];
+    });
+    return rowData;
+  });
+
   const expectedCopy = {
-    value: JSON.parse(JSON.stringify(harderAttribute.raw.value)),
+    value: JSON.parse(JSON.stringify(rowValues)),
     meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
     labels: Object.keys(harderAttribute.raw.meta.elements),
     flags: {
-      rows: [],
+      rows: harderAttribute.raw.value[
+        Object.keys(harderAttribute.raw.meta.elements)[0]
+      ].map(() => ({})),
       table: {
+        dirty: false,
         fresh: true,
         timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
       },
     },
   };
 
-  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
-  expectedValue.x[1] = 10;
-  expectedValue.y[1] = 15;
-  expectedValue.visible[1] = true;
+  const expectedValue = JSON.parse(JSON.stringify(rowValues));
+  expectedValue[1].x = 10;
+  expectedValue[1].y = 15;
+  expectedValue[1].visible = true;
 
   let state;
 
@@ -133,7 +146,15 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
+    let splicedValue = harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map((val, row) => {
+      const rowData = {};
+      Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+        rowData[label] = harderAttribute.raw.value[label][row];
+      });
+      return rowData;
+    });
     splicedValue = addRow(splicedValue, labels, 4);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -151,7 +172,15 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
+    let splicedValue = harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map((val, row) => {
+      const rowData = {};
+      Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+        rowData[label] = harderAttribute.raw.value[label][row];
+      });
+      return rowData;
+    });
     splicedValue = addRow(splicedValue, labels, 1);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -163,7 +192,15 @@ describe('Table reducer', () => {
     testState = TableReducer(state, copyAction);
 
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
-      harderAttribute.raw.value
+      harderAttribute.raw.value[
+        Object.keys(harderAttribute.raw.meta.elements)[0]
+      ].map((val, row) => {
+        const rowData = {};
+        Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+          rowData[label] = harderAttribute.raw.value[label][row];
+        });
+        return rowData;
+      })
     );
   });
 

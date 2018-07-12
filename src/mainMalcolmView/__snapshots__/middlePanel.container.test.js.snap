@@ -192,9 +192,20 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
         blockName="test1"
         footerItems={
           Array [
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={-1}
-          />,
+            <WithStyles(Tooltip)
+              id="1"
+              placement="right"
+              title={undefined}
+          >
+              <WithStyles(IconButton)
+                  className="MiddlePanelContainer-button-7"
+                  disableRipple={true}
+              >
+                  <WithTheme(AttributeAlarm)
+                      alarmSeverity={-1}
+                  />
+              </WithStyles(IconButton)>
+          </WithStyles(Tooltip)>,
           ]
         }
       />

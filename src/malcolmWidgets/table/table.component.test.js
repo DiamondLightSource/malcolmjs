@@ -31,7 +31,15 @@ describe('WidgetTable', () => {
       <WidgetTable
         attribute={harderAttribute}
         localState={{
-          value: harderAttribute.raw.value,
+          value: harderAttribute.raw.value[
+            Object.keys(harderAttribute.raw.meta.elements)[0]
+          ].map((val, row) => {
+            const rowData = {};
+            Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+              rowData[label] = harderAttribute.raw.value[label][row];
+            });
+            return rowData;
+          }),
           meta: harderAttribute.raw.meta,
           labels: Object.keys(harderAttribute.raw.meta.elements),
           flags: {
@@ -111,7 +119,7 @@ describe('WidgetTable', () => {
     );
     wrapper
       .find('button')
-      .first()
+      .last()
       .simulate('click');
     expect(addRow.mock.calls.length).toEqual(1);
     expect(addRow.mock.calls[0]).toEqual([['test1', 'layout'], 4]);
