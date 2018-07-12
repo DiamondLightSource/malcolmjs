@@ -6,13 +6,6 @@ exports[`WidgetTextUpdate displays dirty 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
-      "startAdornment": <WithStyles(InputAdornment)
-        position="start"
-    >
-        <pure(Lock)
-            nativeColor="#fff"
-        />
-    </WithStyles(InputAdornment)>,
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -39,13 +32,6 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
-      "startAdornment": <WithStyles(InputAdornment)
-        position="start"
-    >
-        <pure(Lock)
-            nativeColor="#fff"
-        />
-    </WithStyles(InputAdornment)>,
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -72,13 +58,6 @@ exports[`WidgetTextUpdate displays text 1`] = `
     Object {
       "className": "WidgetTextInput-InputStyle-3",
       "endAdornment": null,
-      "startAdornment": <WithStyles(InputAdornment)
-        position="start"
-    >
-        <pure(Edit)
-            nativeColor="#fff"
-        />
-    </WithStyles(InputAdornment)>,
     }
   }
   className="WidgetTextInput-textInput-1"
@@ -108,13 +87,6 @@ exports[`WidgetTextUpdate displays with units 1`] = `
         position="end"
     >
         GW
-    </WithStyles(InputAdornment)>,
-      "startAdornment": <WithStyles(InputAdornment)
-        position="start"
-    >
-        <pure(Edit)
-            nativeColor="#fff"
-        />
     </WithStyles(InputAdornment)>,
     }
   }

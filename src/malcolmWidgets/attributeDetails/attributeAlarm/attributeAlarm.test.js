@@ -46,9 +46,17 @@ describe('AttributeAlarm', () => {
     );
     expect(wrapper).toMatchSnapshot();
   });
+
   it('renders pending correctly', () => {
     const wrapper = shallow(
       <AttributeAlarm alarmSeverity={AlarmStates.PENDING} />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders dirty correctly', () => {
+    const wrapper = shallow(
+      <AttributeAlarm alarmSeverity={AlarmStates.DIRTY} />
     );
     expect(wrapper).toMatchSnapshot();
   });

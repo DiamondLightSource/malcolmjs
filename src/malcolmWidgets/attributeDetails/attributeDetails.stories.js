@@ -19,17 +19,21 @@ const generateInfo = alarmState => ({
 const mockStore = configureStore();
 
 const attribute = alarmStateValue => ({
-  name: 'attribute 1',
-  alarm: {
-    severity: alarmStateValue,
+  calculated: {
+    name: 'attribute 1',
   },
-  meta: {
-    writeable: false,
-    typeid: 'malcolm:core/BooleanMeta:1.0',
-    label: 'Attribute 1',
-    tags: ['widget:led'],
+  raw: {
+    alarm: {
+      severity: alarmStateValue,
+    },
+    meta: {
+      writeable: false,
+      typeid: 'malcolm:core/BooleanMeta:1.0',
+      label: 'Attribute 1',
+      tags: [alarmStateValue === -2 ? 'widget:textinput' : 'widget:led'],
+    },
+    value: true,
   },
-  value: true,
 });
 
 const buildState = alarmStateValue => ({
@@ -62,4 +66,5 @@ storiesOf('Details/Attribute Details', module)
   .add(
     'pending',
     withInfo(generateInfo('PENDING'))(() => generateComponent(-1))
-  );
+  )
+  .add('dirty', withInfo(generateInfo('DIRTY'))(() => generateComponent(-2)));

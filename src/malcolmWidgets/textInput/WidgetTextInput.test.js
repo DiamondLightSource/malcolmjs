@@ -9,7 +9,8 @@ const textInput = (
   isDirty,
   setFlag = () => {},
   setValue = () => {},
-  forceUpdate = false
+  forceUpdate = false,
+  error = false
 ) => (
   <WidgetTextInput
     Value={value}
@@ -21,6 +22,7 @@ const textInput = (
     isDirty={isDirty}
     setFlag={setFlag}
     forceUpdate={forceUpdate}
+    Error={error}
   />
 );
 
@@ -116,30 +118,19 @@ describe('WidgetTextUpdate', () => {
     expect(setFlag.mock.calls[0]).toEqual(['forceUpdate', false]);
   });
 
-  it('button unsets dirty and calls revert value when clicked if local state changed', () => {
-    const setDirty = jest.fn();
-    const mockData = { mock: { calls: [] } };
-    const setValue = event => {
-      mockData.mock.calls.push(event.target.value);
-    };
-    const wrapper = mount(
-      textInput('Hello World', false, null, true, setDirty, setValue)
+  it('updates, calls unset flag and sends put with last known malcolm value if forceUpdate is true and is error', () => {
+    const setFlag = jest.fn();
+    const setValue = jest.fn();
+    mount(
+      textInput('Hello World', false, null, true, setFlag, setValue, true, true)
     );
-    wrapper
-      .find('input')
-      .first()
-      .simulate('focus')
-      .find('input')
-      .first()
-      .simulate('change', { target: { value: 'test' } });
-    wrapper.update();
-    wrapper
-      .find('button')
-      .first()
-      .simulate('click');
-    expect(setDirty.mock.calls.length).toEqual(2);
-    expect(setDirty.mock.calls[1]).toEqual(['dirty', false]);
-    expect(mockData.mock.calls.length).toEqual(1);
-    expect(mockData.mock.calls[0]).toEqual('Hello World');
+    expect(setFlag.mock.calls.length).toEqual(1);
+    expect(setFlag.mock.calls[0]).toEqual(['forceUpdate', false]);
+    expect(setValue.mock.calls.length).toEqual(1);
+    expect(setValue.mock.calls[0]).toEqual([
+      {
+        target: { value: 'Hello World' },
+      },
+    ]);
   });
 });
