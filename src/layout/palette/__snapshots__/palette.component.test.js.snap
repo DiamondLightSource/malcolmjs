@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Palette renders correctly 1`] = `
+<div
+  className="Palette-container-1"
+>
+  Palette goes here
+</div>
+`;

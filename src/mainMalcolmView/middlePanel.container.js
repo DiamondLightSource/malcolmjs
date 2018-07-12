@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +15,7 @@ import AttributeAlarm, {
 import blockUtils from '../malcolm/blockUtils';
 
 import malcolmLogo from '../malcolm-logo.png';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 const divBackground = 'rgb(48, 48, 48)';
 
@@ -36,10 +39,12 @@ const styles = () => ({
     display: 'flex',
     alignItems: 'center',
     position: 'absolute',
-    margin: 15,
   },
   alarmText: {
     marginRight: 5,
+  },
+  paletteButton: {
+    position: 'absolute',
   },
   tableContainer: {
     display: 'flex',
@@ -81,9 +86,21 @@ const findAttributeComponent = props => {
           <Layout />
           <div
             className={props.classes.alarm}
-            style={{ left: props.openParent ? 365 : 5, top: 5 }}
+            style={{ left: props.openParent ? 360 + 29 : 29, bottom: 12 }}
           >
             <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+          </div>
+          <div
+            className={props.classes.paletteButton}
+            style={{ right: props.openChild ? 360 + 29 : 29, bottom: 12 }}
+          >
+            <Button
+              variant="fab"
+              color="secondary"
+              onClick={() => props.openPalette()}
+            >
+              <AddIcon />
+            </Button>
           </div>
         </div>
       );
@@ -191,6 +208,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   resetSelection: () => resetSelection(dispatch),
+  openPalette: () => dispatch(navigationActions.navigateToPalette()),
 });
 
 findAttributeComponent.propTypes = {
@@ -208,6 +226,7 @@ findAttributeComponent.propTypes = {
     tableContainer: PropTypes.string,
     plainBackground: PropTypes.string,
   }).isRequired,
+  openPalette: PropTypes.func.isRequired,
 };
 
 MiddlePanelContainer.propTypes = {

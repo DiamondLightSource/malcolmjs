@@ -165,3 +165,5 @@ MalcolmWidgets
 
 The folder contains all the UI components for displaying attributes, however these components are more generally used throughout the UI to show inputs for methods as well as controls inside table cells.
 
+To review these components individually you can run Storybook with ``npm run storybook`` to explore these components outside of the MalcolmJS interface. 
+

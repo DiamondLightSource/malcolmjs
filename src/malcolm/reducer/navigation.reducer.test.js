@@ -94,6 +94,19 @@ describe('NavigationReducer.updateNavTypes', () => {
     expect(state.navigation.navigationLists[3].navType).toEqual(NavTypes.Info);
   });
 
+  it('updateNavTypes adds the nav type for palette', () => {
+    state.navigation.navigationLists = [
+      { path: 'PANDA' },
+      { path: 'layout' },
+      { path: '.palette' },
+    ];
+    state = NavigationReducer.updateNavTypes(state);
+
+    expect(state.navigation.navigationLists[2].navType).toEqual(
+      NavTypes.Palette
+    );
+  });
+
   it('updateNavTypes loads children for each nav element', () => {
     state = NavigationReducer.updateNavTypes(state);
 
@@ -128,6 +141,17 @@ describe('NavigationReducer.updateNavTypes', () => {
     expect(state.parentBlock).toEqual('PANDA:SEQ2');
     expect(state.mainAttribute).toEqual(undefined);
     expect(state.childBlock).toEqual('.info');
+  });
+
+  it('updateNavTypes sets parent/child blocks if palette', () => {
+    state.navigation.navigationLists = [
+      { path: 'PANDA' },
+      { path: 'layout' },
+      { path: '.palette' },
+    ];
+    state = NavigationReducer.updateNavTypes(state);
+
+    expect(state.childBlock).toEqual('.palette');
   });
 
   it('updateNavTypes sets main attribute', () => {

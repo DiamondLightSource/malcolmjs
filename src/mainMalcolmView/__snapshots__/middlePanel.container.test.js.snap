@@ -7,7 +7,7 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-6"
+    className="MiddlePanelContainer-plainBackground-7"
   >
     <div
       style={
@@ -37,7 +37,7 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-6"
+    className="MiddlePanelContainer-plainBackground-7"
   >
     <div
       style={
@@ -74,14 +74,31 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
       className="MiddlePanelContainer-alarm-3"
       style={
         Object {
-          "left": 365,
-          "top": 5,
+          "bottom": 12,
+          "left": 389,
         }
       }
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={4}
       />
+    </div>
+    <div
+      className="MiddlePanelContainer-paletteButton-5"
+      style={
+        Object {
+          "bottom": 12,
+          "right": 29,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="fab"
+      >
+        <pure(Add) />
+      </WithStyles(Button)>
     </div>
   </div>
 </div>
@@ -101,14 +118,31 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       className="MiddlePanelContainer-alarm-3"
       style={
         Object {
-          "left": 365,
-          "top": 5,
+          "bottom": 12,
+          "left": 389,
         }
       }
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={-1}
       />
+    </div>
+    <div
+      className="MiddlePanelContainer-paletteButton-5"
+      style={
+        Object {
+          "bottom": 12,
+          "right": 29,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="fab"
+      >
+        <pure(Add) />
+      </WithStyles(Button)>
     </div>
   </div>
 </div>
@@ -128,14 +162,31 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
       className="MiddlePanelContainer-alarm-3"
       style={
         Object {
-          "left": 365,
-          "top": 5,
+          "bottom": 12,
+          "left": 389,
         }
       }
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={-1}
       />
+    </div>
+    <div
+      className="MiddlePanelContainer-paletteButton-5"
+      style={
+        Object {
+          "bottom": 12,
+          "right": 29,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="fab"
+      >
+        <pure(Add) />
+      </WithStyles(Button)>
     </div>
   </div>
 </div>
@@ -155,14 +206,31 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       className="MiddlePanelContainer-alarm-3"
       style={
         Object {
-          "left": 365,
-          "top": 5,
+          "bottom": 12,
+          "left": 389,
         }
       }
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={-1}
       />
+    </div>
+    <div
+      className="MiddlePanelContainer-paletteButton-5"
+      style={
+        Object {
+          "bottom": 12,
+          "right": 29,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="fab"
+      >
+        <pure(Add) />
+      </WithStyles(Button)>
     </div>
   </div>
 </div>
@@ -175,10 +243,10 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-6"
+    className="MiddlePanelContainer-plainBackground-7"
   >
     <div
-      className="MiddlePanelContainer-tableContainer-5"
+      className="MiddlePanelContainer-tableContainer-6"
       style={
         Object {
           "left": 365,
