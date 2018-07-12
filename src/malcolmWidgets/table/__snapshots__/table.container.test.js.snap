@@ -14,8 +14,14 @@ exports[`Table container renders correctly 1`] = `
       },
       "localState": Object {
         "flags": Object {
-          "rows": Array [],
+          "rows": Array [
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+          ],
           "table": Object {
+            "dirty": false,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -255,8 +261,14 @@ exports[`Table container renders correctly 1`] = `
   localState={
     Object {
       "flags": Object {
-        "rows": Array [],
+        "rows": Array [
+          Object {},
+          Object {},
+          Object {},
+          Object {},
+        ],
         "table": Object {
+          "dirty": false,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,

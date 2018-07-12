@@ -2,7 +2,7 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import WidgetTable from './table.container';
-import { harderAttribute } from './table.stories';
+import { harderAttribute, expectedCopy } from './table.stories';
 import {
   malcolmSetFlag,
   malcolmSetTableFlag,
@@ -32,26 +32,9 @@ describe('Table container', () => {
         },
       },
     };
-    state.malcolm.blocks.test1.attributes[0].localState = {
-      value: harderAttribute.raw.value[
-        Object.keys(harderAttribute.raw.meta.elements)[0]
-      ].map((val, row) => {
-        const rowData = {};
-        Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
-          rowData[label] = harderAttribute.raw.value[label][row];
-        });
-        return rowData;
-      }),
-      meta: harderAttribute.raw.meta,
-      labels: Object.keys(harderAttribute.raw.meta.elements),
-      flags: {
-        rows: [],
-        table: {
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
-        },
-      },
-    };
+    state.malcolm.blocks.test1.attributes[0].localState = JSON.parse(
+      JSON.stringify(expectedCopy)
+    );
   });
 
   it('renders correctly', () => {

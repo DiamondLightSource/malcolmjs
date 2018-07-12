@@ -83,6 +83,32 @@ export const harderAttribute = {
   },
 };
 
+const rowValues = harderAttribute.raw.value[
+  Object.keys(harderAttribute.raw.meta.elements)[0]
+].map((val, row) => {
+  const rowData = {};
+  Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+    rowData[label] = harderAttribute.raw.value[label][row];
+  });
+  return rowData;
+});
+
+export const expectedCopy = {
+  value: JSON.parse(JSON.stringify(rowValues)),
+  meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
+  labels: Object.keys(harderAttribute.raw.meta.elements),
+  flags: {
+    rows: harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map(() => ({})),
+    table: {
+      dirty: false,
+      fresh: true,
+      timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
+    },
+  },
+};
+
 const table = (
   <ContainedTable
     attribute={harderAttribute}

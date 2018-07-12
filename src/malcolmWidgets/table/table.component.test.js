@@ -2,21 +2,38 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 
 import WidgetTable from './table.component';
-import { harderAttribute } from './table.stories';
+import { harderAttribute, expectedCopy } from './table.stories';
 
 describe('WidgetTable', () => {
   let shallow;
   let mount;
+  let localState;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
     mount = createMount();
+    localState = expectedCopy;
   });
 
-  it('renders correctly', () => {
+  it('renders correctly with no selected row', () => {
     const wrapper = shallow(
       <WidgetTable
         attribute={harderAttribute}
+        localState={localState}
+        eventHandler={() => {}}
+        setFlag={() => {}}
+        addRow={() => {}}
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders correctly with selected row', () => {
+    localState.flags.table.selectedRow = 1;
+    const wrapper = shallow(
+      <WidgetTable
+        attribute={harderAttribute}
+        localState={localState}
         eventHandler={() => {}}
         setFlag={() => {}}
         addRow={() => {}}
@@ -123,5 +140,33 @@ describe('WidgetTable', () => {
       .simulate('click');
     expect(addRow.mock.calls.length).toEqual(1);
     expect(addRow.mock.calls[0]).toEqual([['test1', 'layout'], 4]);
+  });
+
+  it('adds row on button click', () => {
+    const setFlag = jest.fn();
+    const wrapper = mount(
+      <WidgetTable
+        attribute={harderAttribute}
+        eventHandler={() => {}}
+        setFlag={setFlag}
+        addRow={() => {}}
+      />
+    );
+    const buttons = wrapper.find('button');
+    buttons.at(0).simulate('click');
+    buttons.at(3).simulate('click');
+    expect(setFlag.mock.calls.length).toEqual(2);
+    expect(setFlag.mock.calls[0]).toEqual([
+      ['test1', 'layout'],
+      0,
+      'selected',
+      { selected: true },
+    ]);
+    expect(setFlag.mock.calls[1]).toEqual([
+      ['test1', 'layout'],
+      3,
+      'selected',
+      { selected: true },
+    ]);
   });
 });

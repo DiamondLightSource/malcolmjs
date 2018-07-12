@@ -282,7 +282,7 @@ WidgetTable.propTypes = {
     }),
   }).isRequired,
   localState: PropTypes.shape({
-    value: PropTypes.shape({}),
+    value: PropTypes.arrayOf(PropTypes.shape({})),
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
