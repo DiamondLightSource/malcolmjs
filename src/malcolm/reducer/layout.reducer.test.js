@@ -201,33 +201,57 @@ describe('Layout Reducer', () => {
     expect(layout.blocks[0].ports[0].label).toEqual('att1');
   });
 
-  it('selectBlock replaces the selection if shift is not pressed', () => {
+  it('selectBlock adds to selection if isSelected is true', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block1');
-
-    expect(layout.selectedBlocks).toEqual(['block1']);
-  });
-
-  it('selectBlock adds to the selection if shift is pressed', () => {
-    const state = buildMalcolmState();
-    state.layoutState.selectedBlocks = ['block2'];
-    state.layoutState.shiftIsPressed = true;
-
-    const layout = LayoutReducer.selectBlock(state, 'block1');
+    const layout = LayoutReducer.selectBlock(state, 'block1', true);
 
     expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
   });
 
-  it('selectBlock returns the same array if the block is already selected', () => {
+  it('selectBlock removes from selection if isSelected is false', () => {
     const state = buildMalcolmState();
-    state.layoutState.selectedBlocks = ['block1'];
-    state.layoutState.shiftIsPressed = true;
+    state.layoutState.selectedBlocks = ['block2'];
+    const layout = LayoutReducer.selectBlock(state, 'block2', false);
 
-    const layout = LayoutReducer.selectBlock(state, 'block1');
+    expect(layout.selectedBlocks).toEqual([]);
+  });
+
+  it('selectBlock does not change selected if block is already selected', () => {
+    const state = buildMalcolmState();
+    state.layoutState.selectedBlocks = ['block2'];
+    const layout = LayoutReducer.selectBlock(state, 'block2', true);
 
     expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
   });
+
+  // it('selectBlock replaces the selection if shift is not pressed', () => {
+  //   const state = buildMalcolmState();
+  //   state.layoutState.selectedBlocks = ['block2'];
+  //   const layout = LayoutReducer.selectBlock(state, 'block1');
+
+  //   expect(layout.selectedBlocks).toEqual(['block1']);
+  // });
+
+  // it('selectBlock adds to the selection if shift is pressed', () => {
+  //   const state = buildMalcolmState();
+  //   state.layoutState.selectedBlocks = ['block2'];
+  //   state.layoutState.shiftIsPressed = true;
+
+  //   const layout = LayoutReducer.selectBlock(state, 'block1');
+
+  //   expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
+  // });
+
+  // it('selectBlock returns the same array if the block is already selected', () => {
+  //   const state = buildMalcolmState();
+  //   state.layoutState.selectedBlocks = ['block1'];
+  //   state.layoutState.shiftIsPressed = true;
+
+  //   const layout = LayoutReducer.selectBlock(state, 'block1');
+
+  //   expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
+  // });
 
   it('updateBlockPosition updates the positions of selected blocks', () => {
     const state = buildMalcolmState();

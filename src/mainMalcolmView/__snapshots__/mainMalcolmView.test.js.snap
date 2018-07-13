@@ -45,7 +45,7 @@ exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
       parent={true}
     />
     <Connect(WithStyles(MiddlePanelContainer)) />
-    <WithStyles(Palette) />
+    <Connect(WithStyles(Palette)) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;
