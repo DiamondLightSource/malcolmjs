@@ -1,4 +1,5 @@
 /* eslint react/no-array-index-key: 0 */
+/* eslint no-underscore-dangle: 0 */
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -13,6 +14,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 
+import AttributeAlarm, {
+  AlarmStates,
+} from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
@@ -47,22 +51,45 @@ const styles = theme => ({
     backgroundColor: emphasize(theme.palette.background.paper, 0.3),
     textAlign: 'Center',
   },
+  blankCell: {
+    backgroundColor: 'rgb(48, 48, 48)',
+    textAlign: 'Center',
+    padding: '2px',
+  },
   textBody: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Center',
     padding: '2px',
   },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 const WidgetTable = props => {
-  const values =
-    props.localState === undefined
-      ? props.attribute.raw.value
-      : props.localState.value;
   const columnLabels =
     props.localState === undefined
       ? Object.keys(props.attribute.raw.meta.elements)
       : props.localState.labels;
+
+  const values =
+    props.localState === undefined
+      ? props.attribute.raw.value[columnLabels[0]].map((val, row) => {
+          const rowData = {};
+          columnLabels.forEach(label => {
+            rowData[label] = props.attribute.raw.value[label][row];
+          });
+          return rowData;
+        })
+      : props.localState.value;
+  const flags =
+    props.localState === undefined
+      ? { rows: [], table: {} }
+      : props.localState.flags;
   const meta =
     props.localState === undefined
       ? props.attribute.raw.meta
@@ -70,7 +97,7 @@ const WidgetTable = props => {
   const rowChangeHandler = (rowPath, newValue) => {
     const rowValue = {};
     columnLabels.forEach(label => {
-      rowValue[label] = values[label][rowPath.row];
+      rowValue[label] = values[rowPath.row][label];
       return 0;
     });
     rowValue[rowPath.label] = newValue;
@@ -98,7 +125,6 @@ const WidgetTable = props => {
     }
   };
   const columnWidgetTags = getTableWidgetTags(props.attribute);
-  const rowNames = values[columnLabels[0]];
   const columnHeadings = columnLabels.map((label, column) => (
     <TableCell
       className={props.classes.textHeadings}
@@ -112,38 +138,82 @@ const WidgetTable = props => {
     <div>
       <Table
         className={
-          rowNames.length > 20
+          values.length > 20
             ? props.classes.headerLayout
             : props.classes.headerLayoutNoScroll
         }
       >
         <TableHead>
           <TableRow className={props.classes.rowFormat}>
-            {columnHeadings}
+            {[
+              <TableCell
+                className={props.classes.textHeadings}
+                padding="none"
+                key={-1}
+              />,
+              ...columnHeadings,
+            ]}
           </TableRow>
         </TableHead>
       </Table>
       <div className={props.classes.tableBody}>
         <Table className={props.classes.tableLayout}>
           <TableBody>
-            {rowNames.map((name, row) => (
+            {values.map((rowValue, row) => (
               <TableRow className={props.classes.rowFormat} key={row}>
-                {columnLabels.map((label, column) => (
+                {[
                   <TableCell
-                    className={props.classes.textBody}
+                    className={
+                      flags.table.selectedRow === row
+                        ? props.classes.blankCell
+                        : props.classes.textBody
+                    }
                     padding="none"
-                    key={[row, column]}
+                    key={[row, -1]}
                   >
-                    <TableWidgetSelector
-                      columnWidgetTag={columnWidgetTags[column]}
-                      value={values[label][row]}
-                      rowPath={{ label, row, column }}
-                      rowChangeHandler={rowChangeHandler}
-                      columnMeta={meta.elements[label]}
-                      setFlag={rowFlagHandler}
-                    />
-                  </TableCell>
-                ))}
+                    <IconButton
+                      className={props.classes.button}
+                      disableRipple
+                      onClick={() =>
+                        props.setFlag(
+                          props.attribute.calculated.path,
+                          row,
+                          'selected',
+                          { selected: true }
+                        )
+                      }
+                    >
+                      <AttributeAlarm
+                        alarmSeverity={
+                          flags.rows[row] &&
+                          (flags.rows[row]._dirty || flags.rows[row]._isChanged)
+                            ? AlarmStates.DIRTY
+                            : AlarmStates.NO_ALARM
+                        }
+                      />
+                    </IconButton>
+                  </TableCell>,
+                  ...columnLabels.map((label, column) => (
+                    <TableCell
+                      className={
+                        flags.table.selectedRow === row
+                          ? props.classes.blankCell
+                          : props.classes.textBody
+                      }
+                      padding="none"
+                      key={[row, column]}
+                    >
+                      <TableWidgetSelector
+                        columnWidgetTag={columnWidgetTags[column]}
+                        value={values[row][label]}
+                        rowPath={{ label, row, column }}
+                        rowChangeHandler={rowChangeHandler}
+                        columnMeta={meta.elements[label]}
+                        setFlag={rowFlagHandler}
+                      />
+                    </TableCell>
+                  )),
+                ]}
               </TableRow>
             ))}
           </TableBody>
@@ -151,24 +221,21 @@ const WidgetTable = props => {
         <Table>
           <TableFooter>
             {meta.writeable ? (
-              <TableRow
-                className={props.classes.rowFormat}
-                key={rowNames.length}
-              >
+              <TableRow className={props.classes.rowFormat} key={values.length}>
                 <TableCell
                   className={props.classes.incompleteRowFormat}
                   padding="none"
-                  key={[rowNames.length, 0]}
+                  key={[values.length, 0]}
                 >
                   <IconButton
                     onClick={() =>
                       props.addRow(
                         props.attribute.calculated.path,
-                        rowNames.length
+                        values.length
                       )
                     }
                   >
-                    <Add />
+                    <Add style={{ width: '30px', height: '30px' }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -215,9 +282,13 @@ WidgetTable.propTypes = {
     }),
   }).isRequired,
   localState: PropTypes.shape({
-    value: PropTypes.shape({}),
+    value: PropTypes.arrayOf(PropTypes.shape({})),
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
+      table: PropTypes.shape({
+        selectedRow: PropTypes.number,
+      }),
     }),
     hasIncompleteRow: PropTypes.bool,
     labels: PropTypes.arrayOf(PropTypes.string),
@@ -229,12 +300,14 @@ WidgetTable.propTypes = {
     }),
   }),
   classes: PropTypes.shape({
+    button: PropTypes.string,
     tableBody: PropTypes.string,
     headerLayoutNoScroll: PropTypes.string,
     headerLayout: PropTypes.string,
     footerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
+    blankCell: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,

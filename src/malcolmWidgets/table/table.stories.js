@@ -10,6 +10,7 @@ export const harderAttribute = {
   calculated: {
     name: 'layout',
     path: ['test1', 'layout'],
+    dirty: false,
   },
   raw: {
     typeid: 'epics:nt/NTTable:1.0',
@@ -79,6 +80,32 @@ export const harderAttribute = {
           label: 'Visible',
         },
       },
+    },
+  },
+};
+
+const rowValues = harderAttribute.raw.value[
+  Object.keys(harderAttribute.raw.meta.elements)[0]
+].map((val, row) => {
+  const rowData = {};
+  Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+    rowData[label] = harderAttribute.raw.value[label][row];
+  });
+  return rowData;
+});
+
+export const expectedCopy = {
+  value: JSON.parse(JSON.stringify(rowValues)),
+  meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
+  labels: Object.keys(harderAttribute.raw.meta.elements),
+  flags: {
+    rows: harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map(() => ({})),
+    table: {
+      dirty: false,
+      fresh: true,
+      timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
     },
   },
 };

@@ -23,13 +23,6 @@ const TableContainer = props => {
 
   const footerItems = [
     ...props.footerItems,
-    <Typography>
-      State is edited:{' '}
-      {`${!!(
-        props.attribute.localState &&
-        props.attribute.localState.flags.table.dirty
-      )}`}
-    </Typography>,
     props.attribute.localState &&
     props.attribute.localState.flags.table.fresh ? (
       <Typography>Up to date!</Typography>
@@ -44,7 +37,7 @@ const TableContainer = props => {
       text="Discard changes"
     />,
     <ButtonAction
-      clickAction={() => props.putTable(path, props.attribute.localState.value)}
+      clickAction={() => props.putTable(path, props.attribute.localState)}
       text="Submit"
     />,
   ];
@@ -87,7 +80,17 @@ const mapDispatchToProps = dispatch => ({
   copyTable: path => {
     dispatch(malcolmCopyValue(path));
   },
-  putTable: (path, value) => {
+  putTable: (path, tableState) => {
+    const value = {};
+    tableState.labels.forEach(label => {
+      value[label] = [];
+    });
+    tableState.value.forEach(row => {
+      tableState.labels.forEach(label => {
+        value[label] = [...value[label], row[label]];
+      });
+    });
+
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPutAction(path, value));
   },

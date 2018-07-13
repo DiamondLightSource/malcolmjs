@@ -2,7 +2,7 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import WidgetTable from './table.container';
-import { harderAttribute } from './table.stories';
+import { harderAttribute, expectedCopy } from './table.stories';
 import {
   malcolmSetFlag,
   malcolmSetTableFlag,
@@ -32,18 +32,9 @@ describe('Table container', () => {
         },
       },
     };
-    state.malcolm.blocks.test1.attributes[0].localState = {
-      value: JSON.parse(JSON.stringify(harderAttribute.raw.value)),
-      meta: harderAttribute.raw.meta,
-      labels: Object.keys(harderAttribute.raw.meta.elements),
-      flags: {
-        rows: [],
-        table: {
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
-        },
-      },
-    };
+    state.malcolm.blocks.test1.attributes[0].localState = JSON.parse(
+      JSON.stringify(expectedCopy)
+    );
   });
 
   it('renders correctly', () => {
@@ -138,10 +129,8 @@ describe('Table container', () => {
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
     );
-    wrapper
-      .find('button')
-      .first()
-      .simulate('click');
+    const buttons = wrapper.find('button');
+    buttons.at(buttons.length - 3).simulate('click');
     expect(testStore.getActions().length).toEqual(1);
     expect(testStore.getActions()[0]).toEqual(
       malcolmUpdateTable(['test1', 'layout'], { insertRow: true }, 4)
@@ -153,10 +142,8 @@ describe('Table container', () => {
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
     );
-    wrapper
-      .find('button')
-      .at(1)
-      .simulate('click');
+    const buttons = wrapper.find('button');
+    buttons.at(buttons.length - 2).simulate('click');
     expect(testStore.getActions().length).toEqual(1);
     expect(testStore.getActions()[0]).toEqual(
       malcolmCopyValue(['test1', 'layout'])
@@ -176,8 +163,10 @@ describe('Table container', () => {
     expect(testStore.getActions()[0]).toEqual(
       malcolmSetFlag(['test1', 'layout'], 'pending', true)
     );
+    const expectedSent = harderAttribute.raw.value;
+    delete expectedSent.typeid;
     expect(testStore.getActions()[1]).toEqual(
-      malcolmPutAction(['test1', 'layout'], harderAttribute.raw.value)
+      malcolmPutAction(['test1', 'layout'], expectedSent)
     );
   });
 });

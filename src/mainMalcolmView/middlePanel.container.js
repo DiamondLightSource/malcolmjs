@@ -4,10 +4,13 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 import AttributeAlarm, {
+  getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
@@ -57,6 +60,13 @@ const styles = () => ({
     minHeight: 'calc(100vh - 64px)',
     backgroundColor: divBackground,
     align: 'center',
+  },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
 });
 
@@ -111,9 +121,13 @@ const findAttributeComponent = props => {
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
               footerItems={[
-                <AttributeAlarm
-                  alarmSeverity={props.mainAttributeAlarmState}
-                />,
+                <Tooltip id="1" title={props.errorMessage} placement="right">
+                  <IconButton className={props.classes.button} disableRipple>
+                    <AttributeAlarm
+                      alarmSeverity={props.mainAttributeAlarmState}
+                    />
+                  </IconButton>
+                </Tooltip>,
               ]}
             />
           </div>
@@ -163,13 +177,15 @@ const mapStateToProps = state => {
   );
 
   let alarm = AlarmStates.PENDING;
-
-  if (attribute && attribute.raw.alarm) {
-    alarm = attribute.raw.alarm.severity;
-    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+  let errorMessage;
+  if (attribute) {
+    alarm = getAlarmState(attribute);
+    errorMessage = attribute.calculated.errorState
+      ? attribute.calculated.errorMessage
+      : '';
   }
   return {
+    errorMessage,
     parentBlock: state.malcolm.parentBlock,
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
@@ -190,7 +206,9 @@ findAttributeComponent.propTypes = {
   mainAttributeAlarmState: PropTypes.number.isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string.isRequired,
   classes: PropTypes.shape({
+    button: PropTypes.string,
     layoutArea: PropTypes.string,
     alarm: PropTypes.string,
     alarmText: PropTypes.string,

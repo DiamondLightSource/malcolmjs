@@ -1,23 +1,36 @@
 /* eslint no-underscore-dangle: 0 */
-import TableReducer from './table.reducer';
+import TableReducer, { shouldClearDirtyFlag } from './table.reducer';
 import {
   MalcolmTableUpdate,
   MalcolmLocalCopy,
   MalcolmTableFlag,
 } from '../malcolm.types';
 import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
-import { harderAttribute } from '../../malcolmWidgets/table/table.stories';
+import {
+  harderAttribute,
+  expectedCopy,
+} from '../../malcolmWidgets/table/table.stories';
 
 const addRow = (table, columns, row) => {
-  columns.forEach(label =>
-    table[label].splice(
-      row,
-      0,
-      getDefaultFromType(harderAttribute.raw.meta.elements[label])
-    )
-  );
+  const defaultRow = {};
+  columns.forEach(label => {
+    defaultRow[label] = getDefaultFromType(
+      harderAttribute.raw.meta.elements[label]
+    );
+  });
+  table.splice(row, 0, defaultRow);
   return table;
 };
+
+const rowValues = harderAttribute.raw.value[
+  Object.keys(harderAttribute.raw.meta.elements)[0]
+].map((val, row) => {
+  const rowData = {};
+  Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+    rowData[label] = harderAttribute.raw.value[label][row];
+  });
+  return rowData;
+});
 
 describe('Table reducer', () => {
   let testState;
@@ -29,23 +42,10 @@ describe('Table reducer', () => {
     },
   };
 
-  const expectedCopy = {
-    value: JSON.parse(JSON.stringify(harderAttribute.raw.value)),
-    meta: JSON.parse(JSON.stringify(harderAttribute.raw.meta)),
-    labels: Object.keys(harderAttribute.raw.meta.elements),
-    flags: {
-      rows: [],
-      table: {
-        fresh: true,
-        timeStamp: JSON.parse(JSON.stringify(harderAttribute.raw.timeStamp)),
-      },
-    },
-  };
-
-  const expectedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
-  expectedValue.x[1] = 10;
-  expectedValue.y[1] = 15;
-  expectedValue.visible[1] = true;
+  const expectedValue = JSON.parse(JSON.stringify(rowValues));
+  expectedValue[1].x = 10;
+  expectedValue[1].y = 15;
+  expectedValue[1].visible = true;
 
   let state;
 
@@ -133,7 +133,15 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
+    let splicedValue = harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map((val, row) => {
+      const rowData = {};
+      Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+        rowData[label] = harderAttribute.raw.value[label][row];
+      });
+      return rowData;
+    });
     splicedValue = addRow(splicedValue, labels, 4);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -151,7 +159,15 @@ describe('Table reducer', () => {
       payload,
     };
     testState = TableReducer(testState, action);
-    let splicedValue = JSON.parse(JSON.stringify(harderAttribute.raw.value));
+    let splicedValue = harderAttribute.raw.value[
+      Object.keys(harderAttribute.raw.meta.elements)[0]
+    ].map((val, row) => {
+      const rowData = {};
+      Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+        rowData[label] = harderAttribute.raw.value[label][row];
+      });
+      return rowData;
+    });
     splicedValue = addRow(splicedValue, labels, 1);
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
@@ -163,7 +179,15 @@ describe('Table reducer', () => {
     testState = TableReducer(state, copyAction);
 
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
-      harderAttribute.raw.value
+      harderAttribute.raw.value[
+        Object.keys(harderAttribute.raw.meta.elements)[0]
+      ].map((val, row) => {
+        const rowData = {};
+        Object.keys(harderAttribute.raw.meta.elements).forEach(label => {
+          rowData[label] = harderAttribute.raw.value[label][row];
+        });
+        return rowData;
+      })
     );
   });
 
@@ -183,6 +207,55 @@ describe('Table reducer', () => {
     expect(
       testState.blocks.block1.attributes[0].localState.flags.rows[1]
     ).toEqual({ testFlag: true });
+  });
+
+  it('set flag sets row selected on table', () => {
+    const payload = {
+      path: ['block1', 'layout'],
+      row: 1,
+      flagType: 'selected',
+      flags: { selected: true },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload,
+    };
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]
+    ).toEqual({ selected: true });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.selectedRow
+    ).toEqual(1);
+  });
+
+  it('set flag deselects all other rows', () => {
+    testState.blocks.block1.attributes[0].localState.flags.table.selectedRow = 1;
+    testState.blocks.block1.attributes[0].localState.flags.rows[1] = {
+      selected: true,
+    };
+    const payload = {
+      path: ['block1', 'layout'],
+      row: 2,
+      flagType: 'selected',
+      flags: { selected: true },
+    };
+    const flagAction = {
+      type: MalcolmTableFlag,
+      payload,
+    };
+    testState = TableReducer(testState, flagAction);
+
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[1]
+    ).toEqual({ selected: false });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows[2]
+    ).toEqual({ selected: true });
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.table.selectedRow
+    ).toEqual(2);
   });
 
   it('set flag sets table as dirty if a dirty flag is set to true', () => {
@@ -243,5 +316,32 @@ describe('Table reducer', () => {
     expect(
       testState.blocks.block1.attributes[0].localState.flags.table.dirty
     ).toBeTruthy();
+  });
+
+  it('should clear dirty clears dirty does nothing if dirty flag not true', () => {
+    let testAttr = shouldClearDirtyFlag(testState.blocks.block1.attributes[0]);
+    expect(testAttr.localState.flags.table.dirty).toBeFalsy();
+    testState.blocks.block1.attributes[0].raw.value.visible[0] = !testState
+      .blocks.block1.attributes[0].raw.value.visible[0];
+    testAttr = shouldClearDirtyFlag(testState.blocks.block1.attributes[0]);
+    expect(testAttr.localState.flags.table.dirty).toBeFalsy();
+  });
+
+  it('should clear dirty clears dirty if all rows match', () => {
+    testState.blocks.block1.attributes[0].localState.flags.table.dirty = true;
+    const testAttr = shouldClearDirtyFlag(
+      testState.blocks.block1.attributes[0]
+    );
+    expect(testAttr.localState.flags.table.dirty).toBeFalsy();
+  });
+
+  it('should clear dirty doesnt clear dirty if not all rows match', () => {
+    testState.blocks.block1.attributes[0].localState.flags.table.dirty = true;
+    testState.blocks.block1.attributes[0].raw.value.visible[0] = !testState
+      .blocks.block1.attributes[0].raw.value.visible[0];
+    const testAttr = shouldClearDirtyFlag(
+      testState.blocks.block1.attributes[0]
+    );
+    expect(testAttr.localState.flags.table.dirty).toBeTruthy();
   });
 });

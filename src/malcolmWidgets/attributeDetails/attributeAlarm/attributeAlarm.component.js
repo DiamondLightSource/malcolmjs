@@ -9,6 +9,7 @@ import {
 } from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
+import EditError from './EditError.component';
 
 export const AlarmStates = {
   NO_ALARM: 0,
@@ -18,6 +19,22 @@ export const AlarmStates = {
   UNDEFINED_ALARM: 4,
   PENDING: -1,
   DIRTY: -2,
+  DIRTYANDERROR: -3,
+};
+
+export const getAlarmState = attribute => {
+  let alarm = AlarmStates.NO_ALARM;
+  if (attribute && attribute.raw && attribute.raw.alarm) {
+    alarm = attribute.raw.alarm.severity;
+    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm = attribute.calculated.dirty ? AlarmStates.DIRTY : alarm;
+    alarm =
+      attribute.calculated.dirty && attribute.calculated.errorState
+        ? AlarmStates.DIRTYANDERROR
+        : alarm;
+    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+  }
+  return alarm;
 };
 
 const AttributeAlarm = props => {
@@ -47,6 +64,9 @@ const AttributeAlarm = props => {
 
     case AlarmStates.DIRTY:
       return <Edit nativeColor={props.theme.palette.primary.light} />;
+
+    case AlarmStates.DIRTYANDERROR:
+      return <EditError nativeColor={props.theme.palette.error.main} />;
 
     default:
       return <div />;

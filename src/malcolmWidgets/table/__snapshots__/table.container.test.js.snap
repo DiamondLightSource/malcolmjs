@@ -6,6 +6,7 @@ exports[`Table container renders correctly 1`] = `
   attribute={
     Object {
       "calculated": Object {
+        "dirty": false,
         "name": "layout",
         "path": Array [
           "test1",
@@ -14,8 +15,14 @@ exports[`Table container renders correctly 1`] = `
       },
       "localState": Object {
         "flags": Object {
-          "rows": Array [],
+          "rows": Array [
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+          ],
           "table": Object {
+            "dirty": false,
             "fresh": true,
             "timeStamp": Object {
               "nanoseconds": 0,
@@ -90,39 +97,36 @@ exports[`Table container renders correctly 1`] = `
           "typeid": "malcolm:core/TableMeta:1.0",
           "writeable": true,
         },
-        "value": Object {
-          "mri": Array [
-            "PANDA:TTLIN1",
-            "PANDA:TTLIN2",
-            "PANDA:INENC1",
-            "PANDA:INENC2",
-          ],
-          "name": Array [
-            "TTLIN1",
-            "TTLIN2",
-            "INENC1",
-            "INENC2",
-          ],
-          "typeid": "malcolm:core/Table:1.0",
-          "visible": Array [
-            false,
-            false,
-            false,
-            false,
-          ],
-          "x": Array [
-            0,
-            0,
-            0,
-            0,
-          ],
-          "y": Array [
-            0,
-            0,
-            0,
-            0,
-          ],
-        },
+        "value": Array [
+          Object {
+            "mri": "PANDA:TTLIN1",
+            "name": "TTLIN1",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:TTLIN2",
+            "name": "TTLIN2",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:INENC1",
+            "name": "INENC1",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:INENC2",
+            "name": "INENC2",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+        ],
       },
       "raw": Object {
         "alarm": Object {
@@ -243,11 +247,6 @@ exports[`Table container renders correctly 1`] = `
   footerItems={
     Array [
       <WithStyles(Typography)>
-        State is edited:
-         
-        false
-    </WithStyles(Typography)>,
-      <WithStyles(Typography)>
         Up to date!
     </WithStyles(Typography)>,
       <WithStyles(ButtonAction)
@@ -263,8 +262,14 @@ exports[`Table container renders correctly 1`] = `
   localState={
     Object {
       "flags": Object {
-        "rows": Array [],
+        "rows": Array [
+          Object {},
+          Object {},
+          Object {},
+          Object {},
+        ],
         "table": Object {
+          "dirty": false,
           "fresh": true,
           "timeStamp": Object {
             "nanoseconds": 0,
@@ -339,39 +344,36 @@ exports[`Table container renders correctly 1`] = `
         "typeid": "malcolm:core/TableMeta:1.0",
         "writeable": true,
       },
-      "value": Object {
-        "mri": Array [
-          "PANDA:TTLIN1",
-          "PANDA:TTLIN2",
-          "PANDA:INENC1",
-          "PANDA:INENC2",
-        ],
-        "name": Array [
-          "TTLIN1",
-          "TTLIN2",
-          "INENC1",
-          "INENC2",
-        ],
-        "typeid": "malcolm:core/Table:1.0",
-        "visible": Array [
-          false,
-          false,
-          false,
-          false,
-        ],
-        "x": Array [
-          0,
-          0,
-          0,
-          0,
-        ],
-        "y": Array [
-          0,
-          0,
-          0,
-          0,
-        ],
-      },
+      "value": Array [
+        Object {
+          "mri": "PANDA:TTLIN1",
+          "name": "TTLIN1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:TTLIN2",
+          "name": "TTLIN2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC1",
+          "name": "INENC1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC2",
+          "name": "INENC2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+      ],
     }
   }
   setFlag={[Function]}
