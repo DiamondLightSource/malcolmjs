@@ -22,6 +22,21 @@ export const AlarmStates = {
   DIRTYANDERROR: -3,
 };
 
+export const getAlarmState = attribute => {
+  let alarm = AlarmStates.NO_ALARM;
+  if (attribute && attribute.raw && attribute.raw.alarm) {
+    alarm = attribute.raw.alarm.severity;
+    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm = attribute.calculated.dirty ? AlarmStates.DIRTY : alarm;
+    alarm =
+      attribute.calculated.dirty && attribute.calculated.errorState
+        ? AlarmStates.DIRTYANDERROR
+        : alarm;
+    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+  }
+  return alarm;
+};
+
 const AttributeAlarm = props => {
   switch (props.alarmSeverity) {
     case AlarmStates.NO_ALARM:

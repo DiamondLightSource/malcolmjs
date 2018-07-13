@@ -169,7 +169,7 @@ const WidgetTable = props => {
                         : props.classes.textBody
                     }
                     padding="none"
-                    key={-1}
+                    key={[row, -1]}
                   >
                     <IconButton
                       className={props.classes.button}

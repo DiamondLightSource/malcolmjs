@@ -10,6 +10,7 @@ import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 import AttributeAlarm, {
+  getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
@@ -177,20 +178,8 @@ const mapStateToProps = state => {
 
   let alarm = AlarmStates.PENDING;
   let errorMessage;
-  if (attribute && attribute.raw.alarm) {
-    alarm = attribute.raw.alarm.severity;
-    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
-    alarm =
-      attribute.localState && attribute.localState.flags.table.dirty
-        ? AlarmStates.DIRTY
-        : alarm;
-    alarm =
-      attribute.localState &&
-      attribute.localState.flags.table.dirty &&
-      attribute.calculated.errorState
-        ? AlarmStates.DIRTYANDERROR
-        : alarm;
-    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+  if (attribute) {
+    alarm = getAlarmState(attribute);
     errorMessage = attribute.calculated.errorState
       ? attribute.calculated.errorMessage
       : '';

@@ -65,7 +65,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="0,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -237,7 +237,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="1,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -409,7 +409,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="2,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -581,7 +581,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="3,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -854,7 +854,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="0,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -1026,7 +1026,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-blankCell-9"
-            key="-1"
+            key="1,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -1198,7 +1198,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="2,-1"
             padding="none"
           >
             <WithStyles(IconButton)
@@ -1370,7 +1370,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
-            key="-1"
+            key="3,-1"
             padding="none"
           >
             <WithStyles(IconButton)
