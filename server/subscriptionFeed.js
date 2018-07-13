@@ -59,7 +59,11 @@ function checkForActiveSubscription(request, response, socket) {
     }
 
     subscriptionTimers[response.id] = timer;
+
+    return subscription.update(response, subscription.index);
   }
+
+  return response;
 }
 
 function cancelAllSubscriptions() {

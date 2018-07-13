@@ -1,5 +1,9 @@
-import { MalcolmSelectPortType } from '../malcolm.types';
+import {
+  MalcolmSelectPortType,
+  MalcolmMakeBlockVisibleType,
+} from '../malcolm.types';
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
+import blockUtils from '../blockUtils';
 
 const findPort = (blocks, id) => {
   const path = id.split('-');
@@ -38,6 +42,49 @@ export const selectPort = (portId, start) => (dispatch, getState) => {
   }
 };
 
+const makeBlockVisible = (mri, position) => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const positionRelativeToCenter = {
+    x: position.x - state.layoutState.layoutCenter.x,
+    y: position.y - state.layoutState.layoutCenter.y,
+  };
+
+  dispatch({
+    type: MalcolmMakeBlockVisibleType,
+    payload: {
+      mri,
+      position: positionRelativeToCenter,
+    },
+  });
+
+  const blockName = state.parentBlock;
+  const attributeName = state.mainAttribute;
+  const layoutAttribute = blockUtils.findAttribute(
+    state.blocks,
+    blockName,
+    attributeName
+  );
+
+  if (layoutAttribute) {
+    const visibleBlockIndex = layoutAttribute.raw.value.mri.findIndex(
+      val => val === mri
+    );
+    const updateLayout = {
+      name: [layoutAttribute.raw.value.name[visibleBlockIndex]],
+      visible: [true],
+      mri: [mri],
+      x: [positionRelativeToCenter.x],
+      y: [positionRelativeToCenter.y],
+    };
+
+    dispatch(malcolmSetFlag([blockName, attributeName], 'pending', true));
+    dispatch(
+      malcolmPutAction([blockName, attributeName, 'value'], updateLayout)
+    );
+  }
+};
+
 export default {
   selectPort,
+  makeBlockVisible,
 };

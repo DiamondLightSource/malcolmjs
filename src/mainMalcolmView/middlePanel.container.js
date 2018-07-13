@@ -6,7 +6,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 import AttributeAlarm, {
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -141,16 +140,8 @@ const findAttributeComponent = props => {
   }
 };
 
-const resetSelection = dispatch => {
-  dispatch(malcolmSelectBlock(''));
-};
-
 const MiddlePanelContainer = props => (
-  <div
-    className={props.classes.container}
-    onClick={() => props.resetSelection()}
-    role="presentation"
-  >
+  <div className={props.classes.container} role="presentation">
     {findAttributeComponent(props)}
   </div>
 );
@@ -180,7 +171,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  resetSelection: () => resetSelection(dispatch),
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
 });
 
@@ -204,7 +194,6 @@ MiddlePanelContainer.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,
-  resetSelection: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

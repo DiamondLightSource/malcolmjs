@@ -252,9 +252,18 @@ export function updateAttribute(oldState, payload) {
         attributeName
       );
 
+      const layoutLoading = layout.blocks.some(b => b.loading);
+      const layoutEngine = !layoutLoading
+        ? LayoutReducer.buildLayoutEngine(
+            layout,
+            updatedState.layoutState.selectedBlocks
+          )
+        : updatedState.layoutEngine;
+
       updatedState = {
         ...updatedState,
         layout,
+        layoutEngine,
         navigation,
       };
 

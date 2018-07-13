@@ -1,4 +1,10 @@
+import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
+import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
+import { MalcolmMakeBlockVisibleType } from '../malcolm.types';
+import BlockNodeFactory from '../../layout/block/BlockNodeFactory';
+import BlockNodeModel from '../../layout/block/BlockNodeModel';
+import MalcolmLinkFactory from '../../layout/link/link.factory';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, 'inport:');
@@ -52,6 +58,10 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
     }
 
     updatedBlock.ports = buildPorts(matchingBlock);
+
+    updatedBlock.loading =
+      matchingBlock.loading ||
+      matchingBlock.attributes.some(a => a.calculated.loading);
 
     return updatedBlock;
   }
@@ -121,15 +131,19 @@ const updateBlockPosition = (malcolmState, translation) => {
   }
 };
 
-const selectBlock = (malcolmState, blockName) => {
-  const { shiftIsPressed, selectedBlocks } = malcolmState.layoutState;
+const selectBlock = (malcolmState, blockName, isSelected) => {
+  const { selectedBlocks } = malcolmState.layoutState;
 
-  const updatedBlocks = selectedBlocks.find(b => b === blockName)
-    ? selectedBlocks
-    : [...selectedBlocks, blockName];
+  let updatedBlocks = selectedBlocks;
+  if (isSelected && !selectedBlocks.find(b => b === blockName)) {
+    updatedBlocks = [...selectedBlocks, blockName];
+  } else if (!isSelected) {
+    updatedBlocks = selectedBlocks.filter(b => b !== blockName);
+  }
+
   return {
     ...malcolmState.layoutState,
-    selectedBlocks: shiftIsPressed ? updatedBlocks : [blockName],
+    selectedBlocks: updatedBlocks,
   };
 };
 
@@ -183,10 +197,129 @@ const selectPortForLink = (malcolmState, portId, start) => {
   };
 };
 
+const makeBlockVisible = (state, payload) => {
+  const updatedState = state;
+  const parentBlock = state.blocks[state.parentBlock];
+  if (parentBlock && parentBlock.attributes) {
+    const attribute = state.blocks[state.parentBlock].attributes.find(
+      a => a.calculated && a.calculated.name === state.mainAttribute
+    );
+
+    if (attribute && attribute.calculated && attribute.calculated.layout) {
+      const layoutBlocks = [...attribute.calculated.layout.blocks];
+      const matchingLayoutBlock = layoutBlocks.find(b => b.mri === payload.mri);
+      if (matchingLayoutBlock) {
+        matchingLayoutBlock.visible = true;
+        matchingLayoutBlock.position = payload.position;
+      } else {
+        layoutBlocks.push({
+          name: payload.mri,
+          mri: payload.mri,
+          visible: true,
+          position: payload.position,
+        });
+      }
+
+      attribute.calculated.layout.blocks = layoutBlocks;
+      updatedState.layout = processLayout(state);
+    }
+  }
+
+  return updatedState;
+};
+
+const buildBlockNode = (block, selectedBlocks, clickHandler, portMouseDown) => {
+  const node = new BlockNodeModel(block.name, block.description, block.mri);
+  block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
+  node.addIcon(block.icon);
+  node.setPosition(block.position.x, block.position.y);
+  node.addClickHandler(clickHandler);
+  node.selected = selectedBlocks.some(b => b === block.mri);
+  node.block = block;
+
+  return node;
+};
+
+const buildLayoutEngine = (layout, selectedBlocks) => {
+  const engine = new DiagramEngine();
+  engine.installDefaultFactories();
+  engine.registerNodeFactory(new BlockNodeFactory());
+  engine.registerLinkFactory(new MalcolmLinkFactory());
+
+  const model = new DiagramModel();
+
+  engine.portMouseDown = () => {};
+  engine.clickHandler = () => {};
+
+  const nodes = layout.blocks.map(b =>
+    buildBlockNode(
+      b,
+      selectedBlocks,
+      node => engine.clickHandler(b, node),
+      (portId, start) => engine.portMouseDown(portId, start)
+    )
+  );
+
+  const links = [];
+  layout.blocks.forEach(b => {
+    const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
+
+    const startNode = nodes.find(n => n.id === b.mri);
+    linkStarts.forEach(start => {
+      const startPort = startNode.ports[`${b.mri}-${start.label}`];
+
+      if (startPort !== undefined) {
+        // need to find the target port and link them together
+        const targetPortValue = start.value;
+        const endBlock = layout.blocks.find(block =>
+          block.ports.some(p => !p.input && p.tag === targetPortValue)
+        );
+
+        if (endBlock) {
+          const end = endBlock.ports.find(
+            p => !p.input && p.tag === targetPortValue
+          );
+
+          const endNode = nodes.find(n => n.id === endBlock.mri);
+          const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+
+          const newLink = endPort.link(startPort);
+          newLink.id = `${endPort.name}-${startPort.name}`;
+          links.push(newLink);
+        }
+      }
+    });
+  });
+
+  engine.selectedHandler = () => {};
+
+  const models = model.addAll(...nodes, ...links);
+
+  models.forEach(item => {
+    item.addListener({
+      selectionChanged: e => {
+        engine.selectedHandler(e.entity.type, e.entity.id, e.isSelected);
+      },
+    });
+  });
+
+  engine.setDiagramModel(model);
+
+  return engine;
+};
+
+export const LayoutReduxReducer = createReducer(
+  {},
+  {
+    [MalcolmMakeBlockVisibleType]: makeBlockVisible,
+  }
+);
+
 export default {
   processLayout,
   updateBlockPosition,
   selectBlock,
   shiftIsPressed,
   selectPortForLink,
+  buildLayoutEngine,
 };

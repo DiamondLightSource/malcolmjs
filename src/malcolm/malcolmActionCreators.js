@@ -161,10 +161,11 @@ export const malcolmLayoutUpdatePosition = translation => (
   }
 };
 
-export const malcolmSelectBlock = blockName => ({
+export const malcolmSelectBlock = (blockName, isSelected) => ({
   type: MalcolmSelectBlock,
   payload: {
     blockName,
+    isSelected,
   },
 });
 
