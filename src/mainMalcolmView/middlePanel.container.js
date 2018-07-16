@@ -137,7 +137,6 @@ const findAttributeComponent = props => {
       return (
         <div className={props.classes.plainBackground}>
           <div
-            className={props.classes.tablesContainer}
             style={{
               left: props.openParent ? 365 : 5,
               width: `calc(100% - ${(props.openChild ? 365 : 5) +

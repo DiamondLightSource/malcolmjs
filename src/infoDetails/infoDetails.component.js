@@ -42,7 +42,7 @@ const getValue = value => {
   return Object.values(value)[0];
 };
 
-export const InfoDetails = props => {
+export const infoDetails = props => {
   const infoElements = Object.keys(props.info).filter(
     a => props.info[a].inline || !(props.info[a] instanceof Object)
   );
@@ -122,8 +122,8 @@ const mapStateToProps = state => {
   };
 };
 
-InfoDetails.propTypes = {
+infoDetails.propTypes = {
   info: PropTypes.shape({}).isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(infoDetails);
