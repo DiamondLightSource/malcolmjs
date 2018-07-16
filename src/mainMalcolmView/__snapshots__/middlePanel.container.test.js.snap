@@ -120,7 +120,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       }
     >
       <WithTheme(AttributeAlarm)
-        alarmSeverity={-1}
+        alarmSeverity={0}
       />
     </div>
     <div
@@ -163,7 +163,7 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
       }
     >
       <WithTheme(AttributeAlarm)
-        alarmSeverity={-1}
+        alarmSeverity={0}
       />
     </div>
     <div
@@ -206,7 +206,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       }
     >
       <WithTheme(AttributeAlarm)
-        alarmSeverity={-1}
+        alarmSeverity={0}
       />
     </div>
     <div
@@ -253,9 +253,20 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
         blockName="test1"
         footerItems={
           Array [
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={-1}
-          />,
+            <WithStyles(Tooltip)
+              id="1"
+              placement="right"
+              title=""
+          >
+              <WithStyles(IconButton)
+                  className="MiddlePanelContainer-button-8"
+                  disableRipple={true}
+              >
+                  <WithTheme(AttributeAlarm)
+                      alarmSeverity={0}
+                  />
+              </WithStyles(IconButton)>
+          </WithStyles(Tooltip)>,
           ]
         }
       />

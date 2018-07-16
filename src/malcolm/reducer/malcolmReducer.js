@@ -211,6 +211,9 @@ function setFlag(state, path, flagType, flagState) {
     const attributes = [...state.blocks[blockName].attributes];
     const attributeCopy = {
       ...attributes[matchingAttribute],
+      calculated: {
+        ...attributes[matchingAttribute].calculated,
+      },
     };
     // #refactorDuplication
     // if (attributeCopy.calculated) {

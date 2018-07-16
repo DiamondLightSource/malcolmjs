@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
-  AlarmStates,
+  getAlarmState,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
@@ -47,11 +47,7 @@ const AttributeDetails = props => {
     }
   }
   if (widgetTagIndex !== null) {
-    let alarm = props.attribute.raw.alarm.severity;
-    alarm = props.attribute.calculated.errorState
-      ? AlarmStates.MAJOR_ALARM
-      : alarm;
-    alarm = props.attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+    const alarm = getAlarmState(props.attribute);
     const message = props.attribute.calculated.errorMessage
       ? props.attribute.calculated.errorMessage
       : '';
@@ -83,6 +79,7 @@ AttributeDetails.propTypes = {
       errorState: PropTypes.bool,
       errorMessage: PropTypes.string,
       unableToProcess: PropTypes.bool,
+      dirty: PropTypes.bool,
     }),
     raw: PropTypes.shape({
       meta: PropTypes.shape({
