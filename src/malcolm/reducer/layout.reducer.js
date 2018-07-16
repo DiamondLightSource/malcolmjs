@@ -61,7 +61,8 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
 
     updatedBlock.loading =
       matchingBlock.loading ||
-      matchingBlock.attributes.some(a => a.calculated.loading);
+      (matchingBlock.attributres &&
+        matchingBlock.attributes.some(a => a.calculated.loading));
 
     return updatedBlock;
   }

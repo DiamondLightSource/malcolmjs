@@ -23,6 +23,9 @@ describe('attribute reducer', () => {
     LayoutReducer.processLayout.mockClear();
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
+    LayoutReducer.processLayout.mockImplementation(() => ({
+      blocks: [{ loading: true }],
+    }));
 
     state = {
       messagesInFlight: {

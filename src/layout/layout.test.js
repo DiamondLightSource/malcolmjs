@@ -15,14 +15,10 @@ jest.mock('../malcolm/actions/navigation.actions');
 
 describe('Layout', () => {
   let shallow;
-
-  beforeEach(() => {
-    shallow = createShallow({ dive: true });
-    malcolmSelectBlock.mockClear();
-    malcolmLayoutUpdatePosition.mockClear();
-    malcolmLayoutShiftIsPressed.mockClear();
-    navigationActions.updateChildPanel.mockClear();
-  });
+  let mockStore;
+  let block;
+  let node;
+  let state;
 
   Toolkit.TESTING = true;
 
@@ -31,84 +27,75 @@ describe('Layout', () => {
     '<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />' +
     '</svg>';
 
-  const block = {
-    name: 'block 1',
-    mri: 'block1',
-    description: 'block 1 description',
-    icon,
-    ports: [
-      { label: 'in 1', input: true },
-      { label: 'out 1', input: false },
-      { label: 'out 2', input: false },
-    ],
-    position: {
-      x: 100,
-      y: 200,
-    },
-  };
+  beforeEach(() => {
+    shallow = createShallow({ dive: true });
+    malcolmSelectBlock.mockClear();
+    malcolmLayoutUpdatePosition.mockClear();
+    malcolmLayoutShiftIsPressed.mockClear();
+    navigationActions.updateChildPanel.mockClear();
 
-  const mockStore = configureStore();
+    block = {
+      name: 'block 1',
+      mri: 'block1',
+      description: 'block 1 description',
+      icon,
+      ports: [
+        { label: 'in 1', input: true },
+        { label: 'out 1', input: false },
+        { label: 'out 2', input: false },
+      ],
+      position: {
+        x: 100,
+        y: 200,
+      },
+    };
 
-  const node = {
-    x: 0,
-    y: 0,
-  };
+    mockStore = configureStore();
 
-  const state = {
-    malcolm: {
-      layout: {
-        blocks: [block],
+    node = {
+      x: 0,
+      y: 0,
+    };
+
+    state = {
+      malcolm: {
+        layout: {
+          blocks: [block],
+        },
+        layoutState: {
+          shiftIsPressed: false,
+          selectedBlocks: [],
+        },
+        layoutEngine: {
+          testEngine: true,
+        },
       },
-      layoutState: {
-        shiftIsPressed: false,
-        selectedBlocks: [],
+      router: {
+        location: {
+          pathname: '/gui/PANDA/layout/PANDA:SEQ1',
+        },
       },
-    },
-    router: {
-      location: {
-        pathname: '/gui/PANDA/layout/PANDA:SEQ1',
-      },
-    },
-  };
+    };
+  });
 
   it('renders correctly', () => {
     const wrapper = shallow(<Layout store={mockStore(state)} />);
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('mapDispatchToProps clickHandler selects a block when clicked', () => {
-    const props = mapDispatchToProps(() => {});
-    props.clickHandler('url', block, node, []);
-    expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
-
-    malcolmSelectBlock.mockClear();
-    props.clickHandler('url', block, node, ['block1']);
-    expect(malcolmSelectBlock).toHaveBeenCalledTimes(0);
-  });
-
   it('mapDispatchToProps clickHandler updates position when move is more than 3px', () => {
     const props = mapDispatchToProps(() => {});
-    props.clickHandler('url', block, node, []);
+    props.clickHandler(block, node);
     expect(malcolmLayoutUpdatePosition).toHaveBeenCalledTimes(1);
 
     malcolmLayoutUpdatePosition.mockClear();
-    props.clickHandler('url', block, { x: 101, y: 199 }, ['block1']);
+    props.clickHandler(block, { x: 101, y: 199 });
     expect(malcolmLayoutUpdatePosition).toHaveBeenCalledTimes(0);
   });
 
-  it('mapDispatchToProps clickHandler selects the block as the child panel if not in url', () => {
+  it('mapDispatchToProps clickHandler selects the block as the child panel', () => {
     const props = mapDispatchToProps(() => {});
-    props.clickHandler('/gui/PANDA/layout/PANDA:SEQ1', block, node, []);
+    props.clickHandler(block, node);
     expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(1);
-
-    navigationActions.updateChildPanel.mockClear();
-    props.clickHandler('/gui/PANDA/layout/block 1', block, node, []);
-    expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(0);
-  });
-
-  it('mapDispatchToProps shiftKeyHandler signals when shift is clicked', () => {
-    const props = mapDispatchToProps(() => {});
-    props.shiftKeyHandler(true);
-    expect(malcolmLayoutShiftIsPressed).toHaveBeenCalledTimes(1);
   });
 });

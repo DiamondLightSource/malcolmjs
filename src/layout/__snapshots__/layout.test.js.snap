@@ -1,144 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Layout renders correctly 1`] = `
-<DiagramWidget
-  allowCanvasTranslation={true}
-  allowCanvasZoom={true}
-  allowLooseLinks={true}
-  deleteKeys={
-    Array [
-      46,
-      8,
-    ]
-  }
-  diagramEngine={
-    DiagramEngine {
-      "calculateMatrixDimensions": [Function],
-      "canvas": null,
-      "canvasMatrix": Array [],
-      "diagramModel": DiagramModel {
-        "gridSize": 0,
-        "id": "7",
-        "links": Object {},
-        "listeners": Object {},
-        "locked": false,
-        "nodes": Object {
-          "block1": BlockNodeModel {
-            "addBlockPort": [Function],
-            "addClickHandler": [Function],
-            "addIcon": [Function],
-            "clickHandler": [Function],
-            "description": "block 1 description",
-            "extras": Object {},
-            "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
-            "id": "block1",
-            "label": "block 1",
-            "listeners": Object {
-              "9": Object {
-                "entityRemoved": [Function],
-              },
-            },
-            "locked": false,
-            "ports": Object {
-              "block1-in 1": MalcolmPortModel {
-                "addMouseDownHandler": [Function],
-                "id": "block1-in 1",
-                "in": true,
-                "label": "in 1",
-                "links": Object {},
-                "listeners": Object {},
-                "locked": false,
-                "maximumLinks": undefined,
-                "mouseDownHandler": [Function],
-                "name": "block1-in 1",
-                "parent": [Circular],
-                "selected": false,
-                "type": "default",
-              },
-              "block1-out 1": MalcolmPortModel {
-                "addMouseDownHandler": [Function],
-                "id": "block1-out 1",
-                "in": false,
-                "label": "out 1",
-                "links": Object {},
-                "listeners": Object {},
-                "locked": false,
-                "maximumLinks": undefined,
-                "mouseDownHandler": [Function],
-                "name": "block1-out 1",
-                "parent": [Circular],
-                "selected": false,
-                "type": "default",
-              },
-              "block1-out 2": MalcolmPortModel {
-                "addMouseDownHandler": [Function],
-                "id": "block1-out 2",
-                "in": false,
-                "label": "out 2",
-                "links": Object {},
-                "listeners": Object {},
-                "locked": false,
-                "maximumLinks": undefined,
-                "mouseDownHandler": [Function],
-                "name": "block1-out 2",
-                "parent": [Circular],
-                "selected": false,
-                "type": "default",
-              },
-            },
-            "selected": false,
-            "type": "malcolmjsblock",
-            "x": 100,
-            "y": 200,
-          },
-        },
-        "offsetX": 0,
-        "offsetY": 0,
-        "rendered": false,
-        "zoom": 100,
-      },
-      "hAdjustmentFactor": 0,
-      "id": "1",
-      "labelFactories": Object {
-        "default": DefaultLabelFactory {
-          "type": "default",
-        },
-      },
-      "linkFactories": Object {
-        "default": DefaultLinkFactory {
-          "type": "default",
-        },
-        "malcolmlink": MalcolmLinkFactory {
-          "type": "malcolmlink",
-        },
-      },
-      "linksThatHaveInitiallyRendered": Object {},
-      "listeners": Object {},
-      "locked": false,
-      "markMatrixPoint": [Function],
-      "markNodes": [Function],
-      "markPorts": [Function],
-      "nodeFactories": Object {
-        "default": DefaultNodeFactory {
-          "type": "default",
-        },
-        "malcolmjsblock": BlockNodeFactory {
-          "type": "malcolmjsblock",
-        },
-      },
-      "nodesRendered": false,
-      "paintableWidgets": null,
-      "portFactories": Object {
-        "default": DefaultPortFactory {
-          "type": "default",
-        },
-      },
-      "routingMatrix": Array [],
-      "vAdjustmentFactor": 0,
+<div
+  onDragOver={[Function]}
+  onDrop={[Function]}
+  style={
+    Object {
+      "display": "flex",
+      "height": "100%",
+      "position": "relative",
+      "width": "100%",
     }
   }
-  inverseZoom={false}
-  maxNumberPointsPerLink={0}
-  smartRouting={false}
-/>
+>
+  <DiagramWidget
+    allowCanvasTranslation={true}
+    allowCanvasZoom={true}
+    allowLooseLinks={true}
+    deleteKeys={
+      Array [
+        46,
+        8,
+      ]
+    }
+    diagramEngine={
+      Object {
+        "clickHandler": [Function],
+        "portMouseDown": [Function],
+        "selectedHandler": [Function],
+        "testEngine": true,
+      }
+    }
+    inverseZoom={false}
+    maxNumberPointsPerLink={0}
+    smartRouting={false}
+  />
+</div>
 `;

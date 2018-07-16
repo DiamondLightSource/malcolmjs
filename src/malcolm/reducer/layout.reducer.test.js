@@ -225,34 +225,6 @@ describe('Layout Reducer', () => {
     expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
   });
 
-  // it('selectBlock replaces the selection if shift is not pressed', () => {
-  //   const state = buildMalcolmState();
-  //   state.layoutState.selectedBlocks = ['block2'];
-  //   const layout = LayoutReducer.selectBlock(state, 'block1');
-
-  //   expect(layout.selectedBlocks).toEqual(['block1']);
-  // });
-
-  // it('selectBlock adds to the selection if shift is pressed', () => {
-  //   const state = buildMalcolmState();
-  //   state.layoutState.selectedBlocks = ['block2'];
-  //   state.layoutState.shiftIsPressed = true;
-
-  //   const layout = LayoutReducer.selectBlock(state, 'block1');
-
-  //   expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
-  // });
-
-  // it('selectBlock returns the same array if the block is already selected', () => {
-  //   const state = buildMalcolmState();
-  //   state.layoutState.selectedBlocks = ['block1'];
-  //   state.layoutState.shiftIsPressed = true;
-
-  //   const layout = LayoutReducer.selectBlock(state, 'block1');
-
-  //   expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
-  // });
-
   it('updateBlockPosition updates the positions of selected blocks', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block1'];

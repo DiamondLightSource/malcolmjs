@@ -252,7 +252,8 @@ export function updateAttribute(oldState, payload) {
         attributeName
       );
 
-      const layoutLoading = layout.blocks.some(b => b.loading);
+      const layoutLoading =
+        layout && layout.blocks ? layout.blocks.some(b => b.loading) : true;
       const layoutEngine = !layoutLoading
         ? LayoutReducer.buildLayoutEngine(
             layout,
