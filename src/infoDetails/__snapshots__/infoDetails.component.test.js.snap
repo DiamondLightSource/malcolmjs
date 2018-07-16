@@ -4,7 +4,6 @@ exports[`InfoDetails renders correctly 1`] = `
 <div>
   <WithStyles(InfoElement)
     alarm={null}
-    clickHandler={[Function]}
     key="simpleValue"
     label="simpleValue"
     tag="info:multiline"
@@ -12,7 +11,6 @@ exports[`InfoDetails renders correctly 1`] = `
   />
   <WithStyles(InfoElement)
     alarm={2}
-    clickHandler={[Function]}
     key="inlineValue"
     label="inline info"
     tag="info:multiline"
@@ -20,7 +18,6 @@ exports[`InfoDetails renders correctly 1`] = `
   />
   <WithStyles(InfoElement)
     alarm={null}
-    clickHandler={[Function]}
     key="inlineWithTag"
     label="inline input"
     tag="widget:textinput"

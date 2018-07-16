@@ -47,14 +47,14 @@ const InfoElement = props => (
         props.tag,
         [''],
         props.value,
-        () => {},
+        props.handlers.eventHandler,
         {},
-        () => {},
+        props.handlers.setFlag,
         props.theme.palette.primary.light,
         { choices: props.choices },
         false,
         false,
-        props.clickHandler
+        props.handlers.clickHandler
       )}
     </div>
   </div>
@@ -84,13 +84,17 @@ InfoElement.propTypes = {
       }),
     }),
   }).isRequired,
-  clickHandler: PropTypes.func,
+  handlers: PropTypes.shape({
+    eventHandler: PropTypes.func,
+    setFlag: PropTypes.func,
+    clickHandler: PropTypes.func,
+  }),
 };
 
 InfoElement.defaultProps = {
   choices: [],
   message: '',
-  clickHandler: () => {},
+  handlers: {},
 };
 
 export default withStyles(styles, { withTheme: true })(InfoElement);

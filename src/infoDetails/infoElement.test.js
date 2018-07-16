@@ -32,7 +32,7 @@ describe('InfoElement', () => {
         value={{ buttonLabel: 'test button', disabled: false }}
         alarm={null}
         tag="info:button"
-        clickHandler={clickHandler}
+        handlers={{ clickHandler }}
       />
     );
     wrapper

@@ -5,6 +5,7 @@ import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 import MiddlePanelContainer from './middlePanel.container';
 import Palette from '../layout/palette/palette.component';
+// eslint-disable-next-line import/no-named-as-default
 import InfoDetails from '../infoDetails/infoDetails.component';
 
 const blockDetailsUrl = (rootUrl, blockTitle) =>

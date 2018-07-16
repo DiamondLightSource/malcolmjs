@@ -1,7 +1,22 @@
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
 
-// eslint-disable-next-line import/prefer-default-export
+export const addHandlersToInfoItems = inputProps => {
+  const props = inputProps;
+  if (props.setFlag && props.eventHandler) {
+    if (props.info && props.info.localState) {
+      props.info.localState.functions = {
+        clickHandler: () => {
+          props.setFlag(props.path, 'forceUpdate', true);
+          props.setFlag(props.path, 'dirty', false);
+          props.eventHandler(props.path, props.value);
+        },
+      };
+    }
+  }
+  return props;
+};
+
 export const attributeInfo = (state, blockName, attributeName) => {
   let value;
   const info = {};

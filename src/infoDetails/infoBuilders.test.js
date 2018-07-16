@@ -1,7 +1,7 @@
 import { harderAttribute } from '../malcolmWidgets/table/table.stories';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
-import { attributeInfo } from './infoBuilders';
+import { attributeInfo, addHandlersToInfoItems } from './infoBuilders';
 
 describe('info builder', () => {
   const state = {
@@ -94,5 +94,75 @@ describe('info builder', () => {
       tag: 'info:button',
       value: { buttonLabel: 'Discard', disabled: false },
     });
+  });
+
+  it('addHandlers returns unmodified props if local state info isnt present', () => {
+    let testInfo = {
+      info: {
+        otherInfo: {
+          value: 'a test',
+        },
+      },
+      otherProps: {
+        blah: 'blah',
+        test: { is: true },
+      },
+      value: 3.141,
+      setFlag: 'test',
+      eventHandler: 'also test',
+    };
+    testInfo = addHandlersToInfoItems(testInfo);
+    expect(testInfo).toEqual({
+      info: {
+        otherInfo: {
+          value: 'a test',
+        },
+      },
+      otherProps: {
+        blah: 'blah',
+        test: { is: true },
+      },
+      value: 3.141,
+      setFlag: 'test',
+      eventHandler: 'also test',
+    });
+  });
+
+  it('addHandlers adds click handler to local state info element if it exists', () => {
+    let testInfo = {
+      info: {
+        localState: {},
+        otherInfo: {
+          value: 'a test',
+        },
+      },
+      otherProps: {
+        blah: 'blah',
+        test: { is: true },
+      },
+      value: 3.141,
+      path: ['block1', 'test'],
+      setFlag: jest.fn(),
+      eventHandler: jest.fn(),
+    };
+    testInfo = addHandlersToInfoItems(testInfo);
+    expect(testInfo.info.localState.functions).toBeDefined();
+    testInfo.info.localState.functions.clickHandler();
+    expect(testInfo.setFlag).toHaveBeenCalledTimes(2);
+    expect(testInfo.setFlag).toHaveBeenCalledWith(
+      ['block1', 'test'],
+      'dirty',
+      false
+    );
+    expect(testInfo.setFlag).toHaveBeenCalledWith(
+      ['block1', 'test'],
+      'forceUpdate',
+      true
+    );
+    expect(testInfo.eventHandler).toHaveBeenCalledTimes(1);
+    expect(testInfo.eventHandler).toHaveBeenCalledWith(
+      ['block1', 'test'],
+      3.141
+    );
   });
 });
