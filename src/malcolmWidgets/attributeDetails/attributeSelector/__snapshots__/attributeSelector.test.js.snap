@@ -2,6 +2,34 @@
 
 exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
 
+exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
+<div
+  className="ButtonAction-container-60"
+>
+  <WithStyles(Button)
+    className="ButtonAction-button-61"
+    color="primary"
+    disabled={true}
+    onClick={[Function]}
+    variant="raised"
+  >
+    testButton
+  </WithStyles(Button)>
+</div>
+`;
+
+exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
+<div
+  className="WidgetTextUpdate-divNoWrap-83"
+>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-textUpdateNoWrap-84"
+  >
+    test value
+  </WithStyles(Typography)>
+</div>
+`;
+
 exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
 <WithStyles(ButtonAction)
   clickAction={[Function]}

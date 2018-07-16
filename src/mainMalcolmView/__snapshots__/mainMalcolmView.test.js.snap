@@ -27,9 +27,7 @@ exports[`MainMalcolmView renders info if child block is .info 1`] = `
       parent={true}
     />
     <Connect(WithStyles(MiddlePanelContainer)) />
-    <div>
-      Info goes here
-    </div>
+    <Connect(InfoDetails) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;

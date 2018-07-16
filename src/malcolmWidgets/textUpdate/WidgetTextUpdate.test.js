@@ -14,6 +14,15 @@ describe('WidgetTextUpdate', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  it('displays multiline text', () => {
+    const longText =
+      'This is a slightly longer example of some text which should be split over multiple lines when the widget is in a normal sized div';
+    const wrapper = shallow(
+      <WidgetTextUpdate Text={longText} noWrap={false} />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
   it('displays with units', () => {
     const wrapper = shallow(<WidgetTextUpdate Text="1.21" Units="GW" />);
     expect(wrapper).toMatchSnapshot();

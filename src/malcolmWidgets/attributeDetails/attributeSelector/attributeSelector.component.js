@@ -105,6 +105,16 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'info:multiline':
+      return <TextUpdate Text={`${value}`} noWrap={false} />;
+    case 'info:button':
+      return (
+        <ButtonAction
+          text={value.buttonLabel}
+          clickAction={() => buttonClickHandler()}
+          disabled={value.disabled}
+        />
+      );
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return <BugReport styles={{ color: 'red' }} />;

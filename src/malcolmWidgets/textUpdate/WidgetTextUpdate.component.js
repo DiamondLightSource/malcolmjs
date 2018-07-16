@@ -9,6 +9,19 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
+  divNoWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
+    padding: 4,
+    paddingRight: 16,
+  },
+  textUpdateNoWrap: {
+    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
+    textAlign: 'Right',
+    width: '100%',
+    wordWrap: 'break-word',
+  },
   textUpdate80: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     padding: 4,
@@ -34,6 +47,15 @@ const styles = theme => ({
 
 const WidgetTextUpdate = props => {
   if (!props.Units) {
+    if (!props.noWrap) {
+      return (
+        <div className={props.classes.divNoWrap}>
+          <Typography className={props.classes.textUpdateNoWrap}>
+            {props.Text}
+          </Typography>
+        </div>
+      );
+    }
     return (
       <div className={props.classes.div}>
         <Typography className={props.classes.textUpdate100} noWrap>
@@ -62,11 +84,15 @@ WidgetTextUpdate.propTypes = {
     textUpdate80: PropTypes.string,
     unitBox: PropTypes.string,
     div: PropTypes.string,
+    divNoWrap: PropTypes.string,
+    textUpdateNoWrap: PropTypes.string,
   }).isRequired,
+  noWrap: PropTypes.bool,
 };
 
 WidgetTextUpdate.defaultProps = {
   Units: null,
+  noWrap: true,
 };
 
 export default withStyles(styles, { withTheme: true })(WidgetTextUpdate);

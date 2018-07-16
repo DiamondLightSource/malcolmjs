@@ -5,6 +5,7 @@ import DrawerContainer from '../drawerContainer/drawerContainer.component';
 import BlockDetails from '../blockDetails/blockDetails.component';
 import MiddlePanelContainer from './middlePanel.container';
 import Palette from '../layout/palette/palette.component';
+import InfoDetails from '../infoDetails/infoDetails.component';
 
 const blockDetailsUrl = (rootUrl, blockTitle) =>
   `${rootUrl}/details/${blockTitle}`;
@@ -20,7 +21,7 @@ const childPanelSelector = props => {
   if (props.showPalette) {
     return <Palette />;
   } else if (props.showInfo) {
-    return <div>Info goes here</div>;
+    return <InfoDetails />;
   }
   return <BlockDetails />;
 };
