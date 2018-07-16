@@ -202,7 +202,11 @@ export function updateAttribute(oldState, payload) {
         if (attribute.localState !== undefined) {
           const labels = Object.keys(attribute.raw.meta.elements);
           attribute = shouldClearDirtyFlag(attribute);
-          if (!attribute.localState.flags.table.dirty) {
+          if (
+            !attribute.localState.flags.table.dirty ||
+            attribute.calculated.forceUpdate
+          ) {
+            attribute.calculated.dirty = false;
             attribute.localState = {
               value: attribute.raw.value[labels[0]].map((value, row) => {
                 const dataRow = {};

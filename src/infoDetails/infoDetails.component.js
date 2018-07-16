@@ -42,7 +42,7 @@ const getValue = value => {
   return Object.values(value)[0];
 };
 
-const InfoDetails = props => {
+export const InfoDetails = props => {
   const infoElements = Object.keys(props.info).filter(
     a => props.info[a].inline || !(props.info[a] instanceof Object)
   );

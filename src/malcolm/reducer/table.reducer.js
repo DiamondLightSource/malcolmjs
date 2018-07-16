@@ -111,6 +111,7 @@ export const updateTableLocal = (state, payload) => {
     attribute.localState.flags.table.dirty = attribute.localState.flags.rows.some(
       row => row._dirty || row._isChanged
     );
+    attribute.calculated.dirty = attribute.localState.flags.table.dirty;
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
