@@ -26,15 +26,28 @@ export const attributeInfo = (state, blockName, attributeName) => {
     attributeName
   );
   if (attribute && attribute.raw && attribute.raw.meta) {
+    info.path = {
+      label: 'Attribute path',
+      value: `${blockName}, ${attributeName}`,
+      inline: true,
+    };
     info.meta = {
       label: 'Meta Data',
       malcolmType: {
         value: attribute.raw.meta.typeid,
         label: 'Malcolm Type',
+        inline: true,
       },
       description: {
         value: attribute.raw.meta.description,
         label: 'Description',
+        inline: true,
+      },
+      writeable: {
+        value: attribute.raw.meta.writeable,
+        label: 'Writeable?',
+        inline: true,
+        tag: 'widget:led',
       },
     };
     info.malcolmAlarm = {

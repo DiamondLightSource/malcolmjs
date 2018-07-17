@@ -67,7 +67,9 @@ const buildIOComponent = (input, props, isOutput) => {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    props.updateInput(props.methodPath, input[0], inputValue);
+    if (inputValue !== undefined) {
+      props.updateInput(props.methodPath, input[0], inputValue);
+    }
   }
   const submitHandler = (path, value) => {
     props.updateInput(path, input[0], value);
