@@ -236,6 +236,65 @@ describe('AttributeSelector', () => {
     );
   });
 
+  it('selector function returns info:button and renders correctly', () => {
+    const component = selectorFunction(
+      'info:button',
+      [''],
+      { buttonLabel: 'testButton', disabled: true },
+      () => {},
+      {},
+      () => {},
+      '#fff',
+      {},
+      false,
+      false,
+      () => {}
+    );
+    const wrapper = shallow(component);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('selector function returns info:multiline and renders correctly', () => {
+    const component = selectorFunction(
+      'info:multiline',
+      [''],
+      'test value',
+      () => {},
+      {},
+      () => {},
+      '#fff',
+      {},
+      false,
+      false,
+      () => {}
+    );
+    const wrapper = shallow(component);
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('info:button hooks up click handler correctly', () => {
+    const clickHandler = jest.fn();
+    const component = selectorFunction(
+      'info:button',
+      [''],
+      { buttonLabel: 'testButton', disabled: false },
+      () => {},
+      {},
+      () => {},
+      '#fff',
+      {},
+      false,
+      false,
+      clickHandler
+    );
+    const wrapper = mount(component);
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(clickHandler).toHaveBeenCalledTimes(1);
+  });
+
   it('getDefaultFromType returns correctly', () => {
     expect(
       getDefaultFromType({ typeid: 'malcolm:core/BooleanMeta:1.0' })

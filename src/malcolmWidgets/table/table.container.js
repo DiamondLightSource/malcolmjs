@@ -12,6 +12,7 @@ import {
   malcolmSetFlag,
   malcolmCopyValue,
   malcolmPutAction,
+  malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from './table.component';
 
@@ -33,7 +34,7 @@ const TableContainer = props => {
       </Typography>
     ),
     <ButtonAction
-      clickAction={() => props.copyTable(path)}
+      clickAction={() => props.revertHandler(path)}
       text="Discard changes"
     />,
     <ButtonAction
@@ -80,6 +81,9 @@ const mapDispatchToProps = dispatch => ({
   copyTable: path => {
     dispatch(malcolmCopyValue(path));
   },
+  revertHandler: path => {
+    dispatch(malcolmRevertAction(path));
+  },
   putTable: (path, tableState) => {
     const value = {};
     tableState.labels.forEach(label => {
@@ -116,6 +120,7 @@ TableContainer.propTypes = {
       }),
     }),
   }).isRequired,
+  revertHandler: PropTypes.func.isRequired,
   eventHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,

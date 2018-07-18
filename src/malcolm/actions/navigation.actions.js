@@ -40,6 +40,22 @@ const navigateToAttribute = (blockMri, attributeName) => (
   }
 };
 
+const navigateToInfo = (blockMri, attributeName) => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  const matchingBlockNav = navigationLists.findIndex(
+    nav => nav.navType === NavTypes.Block && nav.blockMri === blockMri
+  );
+  if (matchingBlockNav > -1) {
+    const newPath = `/gui/${navigationLists
+      .filter((nav, i) => i <= matchingBlockNav)
+      .map(nav => nav.path)
+      .join('/')}/${attributeName}/.info`;
+    dispatch(push(newPath));
+  }
+};
+
 const navigateToPalette = () => (dispatch, getState) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
@@ -94,6 +110,7 @@ const updateChildPanel = newChild => (dispatch, getState) => {
 export default {
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
+  navigateToInfo,
   navigateToPalette,
   updateChildPanel,
   closeChildPanel,
