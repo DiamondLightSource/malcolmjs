@@ -330,13 +330,13 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
         ] /*
         errorState,
         errorMessage,
-        isDirty: errorState,
+        dirty: errorState,
         forceUpdate: !errorState, */,
         calculated: {
           ...attributes[matchingAttributeIndex].calculated,
           errorState,
           errorMessage,
-          isDirty: errorState,
+          dirty: errorState,
           forceUpdate: !errorState,
         },
       };

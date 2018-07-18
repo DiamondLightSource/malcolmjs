@@ -10,6 +10,7 @@ import AttributeAlarm, {
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
 import blockUtils from '../../malcolm/blockUtils';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const styles = theme => ({
   div: {
@@ -48,14 +49,23 @@ const AttributeDetails = props => {
   }
   if (widgetTagIndex !== null) {
     const alarm = getAlarmState(props.attribute);
-    const message = props.attribute.calculated.errorMessage
-      ? props.attribute.calculated.errorMessage
+    let message = props.attribute.raw.meta.description
+      ? props.attribute.raw.meta.description
       : '';
+    message = props.attribute.calculated.errorMessage
+      ? props.attribute.calculated.errorMessage
+      : message;
 
     return (
       <div className={props.classes.div}>
         <Tooltip id="1" title={message} placement="bottom">
-          <IconButton className={props.classes.button} disableRipple>
+          <IconButton
+            className={props.classes.button}
+            disableRipple
+            onClick={() =>
+              props.buttonClickHandler([props.blockName, props.attributeName])
+            }
+          >
             <AttributeAlarm alarmSeverity={alarm} />
           </IconButton>
         </Tooltip>
@@ -72,6 +82,8 @@ const AttributeDetails = props => {
 };
 
 AttributeDetails.propTypes = {
+  attributeName: PropTypes.string.isRequired,
+  blockName: PropTypes.string.isRequired,
   attribute: PropTypes.shape({
     calculated: PropTypes.shape({
       name: PropTypes.string,
@@ -85,6 +97,7 @@ AttributeDetails.propTypes = {
       meta: PropTypes.shape({
         label: PropTypes.string,
         tags: PropTypes.arrayOf(PropTypes.string),
+        description: PropTypes.string,
       }),
       alarm: PropTypes.shape({
         severity: PropTypes.number,
@@ -97,6 +110,7 @@ AttributeDetails.propTypes = {
     controlContainer: PropTypes.string,
     button: PropTypes.string,
   }).isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -114,7 +128,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  buttonClickHandler: path => {
+    dispatch(navigationActions.navigateToInfo(path[0], path[1]));
+  },
+});
+
 export const AttributeDetailsComponent = AttributeDetails;
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(AttributeDetails)
 );

@@ -12,6 +12,7 @@ exports[`AttributeDetails renders correctly 1`] = `
     <WithStyles(IconButton)
       className="AttributeDetails-button-4"
       disableRipple={true}
+      onClick={[Function]}
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}
@@ -32,7 +33,7 @@ exports[`AttributeDetails renders correctly 1`] = `
       attribute={
         Object {
           "calculated": Object {
-            "name": "Attribute 1",
+            "name": "Attribute1",
           },
           "raw": Object {
             "alarm": Object {

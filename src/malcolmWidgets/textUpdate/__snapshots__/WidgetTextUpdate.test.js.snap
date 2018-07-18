@@ -1,11 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`WidgetTextUpdate displays multiline text 1`] = `
+<div
+  className="WidgetTextUpdate-divNoWrap-2"
+>
+  <WithStyles(Typography)
+    className="WidgetTextUpdate-textUpdateNoWrap-3"
+  >
+    This is a slightly longer example of some text which should be split over multiple lines when the widget is in a normal sized div
+  </WithStyles(Typography)>
+</div>
+`;
+
 exports[`WidgetTextUpdate displays text 1`] = `
 <div
   className="WidgetTextUpdate-div-1"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdate100-3"
+    className="WidgetTextUpdate-textUpdate100-5"
     noWrap={true}
   >
     Hello World
@@ -18,13 +30,13 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   className="WidgetTextUpdate-div-1"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdate80-2"
+    className="WidgetTextUpdate-textUpdate80-4"
     noWrap={true}
   >
     1.21
   </WithStyles(Typography)>
   <WithStyles(Typography)
-    className="WidgetTextUpdate-unitBox-4"
+    className="WidgetTextUpdate-unitBox-6"
     noWrap={true}
   >
     GW

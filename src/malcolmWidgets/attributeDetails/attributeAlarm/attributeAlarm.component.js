@@ -69,7 +69,7 @@ const AttributeAlarm = props => {
       return <EditError nativeColor={props.theme.palette.error.main} />;
 
     default:
-      return <div />;
+      return <div style={{ width: 24 }} />;
   }
 };
 

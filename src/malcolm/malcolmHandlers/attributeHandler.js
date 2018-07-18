@@ -69,6 +69,7 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
         isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
         inGroup,
         group,
+        id: request.id,
       },
     },
   };

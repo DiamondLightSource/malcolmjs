@@ -10,6 +10,7 @@ import navigationReducer, {
 import {
   MalcolmAttributeData,
   MalcolmMainAttributeUpdate,
+  MalcolmRevert,
 } from '../malcolm.types';
 
 jest.mock('./layout.reducer');
@@ -111,6 +112,33 @@ describe('attribute reducer', () => {
     );
 
     expect(updatedState).toBe(state);
+  });
+
+  it('sets flags, clears error and copies attribute on revert action', () => {
+    state.blocks.block1.attributes[0].raw.value = payload.raw.value;
+    state.blocks.block1.attributes[0].calculated.errorState = true;
+    state.blocks.block1.attributes[0].calculated.dirty = true;
+    state.blocks.block1.attributes[0].calculated.errorMessage = 'test error!';
+    const updatedState = AttributeReducer(
+      state,
+      buildAction(MalcolmRevert, { path: ['block1', 'layout'] })
+    );
+
+    expect(updatedState.blocks.block1.attributes[0]).not.toBe(
+      state.blocks.block1.attributes[0]
+    );
+    expect(
+      updatedState.blocks.block1.attributes[0].calculated.errorState
+    ).toBeFalsy();
+    expect(
+      updatedState.blocks.block1.attributes[0].calculated.errorMessage
+    ).not.toBeDefined();
+    expect(
+      updatedState.blocks.block1.attributes[0].calculated.dirty
+    ).toBeFalsy();
+    expect(
+      updatedState.blocks.block1.attributes[0].calculated.forceUpdate
+    ).toBeTruthy();
   });
 
   it('updates with a layout property if widget:layout', () => {

@@ -18,9 +18,7 @@ import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 
-const divBackground = 'rgb(48, 48, 48)';
-
-const styles = () => ({
+const styles = theme => ({
   container: {
     marginTop: 64,
     height: '100%',
@@ -31,7 +29,7 @@ const styles = () => ({
     position: 'relative',
     width: '100%',
     height: 'calc(100vh - 64px)',
-    backgroundColor: divBackground,
+    backgroundColor: theme.palette.background.default,
     backgroundImage:
       'linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent)',
     backgroundSize: '50px 50px',
@@ -58,7 +56,7 @@ const styles = () => ({
     display: 'flex',
     width: '100%',
     minHeight: 'calc(100vh - 64px)',
-    backgroundColor: divBackground,
+    backgroundColor: theme.palette.background.default,
     align: 'center',
   },
   button: {
@@ -141,7 +139,6 @@ const findAttributeComponent = props => {
       return (
         <div className={props.classes.plainBackground}>
           <div
-            className={props.classes.tablesContainer}
             style={{
               left: props.openParent ? 365 : 5,
               width: `calc(100% - ${(props.openChild ? 365 : 5) +
@@ -225,5 +222,5 @@ MiddlePanelContainer.propTypes = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles)(MiddlePanelContainer)
+  withStyles(styles, { withTheme: true })(MiddlePanelContainer)
 );

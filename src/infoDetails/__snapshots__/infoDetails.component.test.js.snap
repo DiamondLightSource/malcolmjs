@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfoDetails renders correctly 1`] = `
+<div>
+  <WithStyles(InfoElement)
+    alarm={null}
+    key="simpleValue"
+    label="simpleValue"
+    tag="info:multiline"
+    value={1}
+  />
+  <WithStyles(InfoElement)
+    alarm={2}
+    key="inlineValue"
+    label="inline info"
+    tag="info:multiline"
+    value="test"
+  />
+  <WithStyles(InfoElement)
+    alarm={null}
+    key="inlineWithTag"
+    label="inline input"
+    tag="widget:textinput"
+    value="test in"
+  />
+  <WithStyles(WidgetGroupExpander)
+    expanded={true}
+    groupName="groupValues"
+    key="groupValues"
+  >
+    <WithStyles(InfoElement)
+      alarm={null}
+      key="simpleInGroup"
+      label="simpleInGroup"
+      tag="info:multiline"
+      value="zap"
+    />
+    <WithStyles(InfoElement)
+      alarm={0}
+      key="arbitraryObject"
+      label="arbitraryObject"
+      tag="info:multiline"
+      value="b"
+    />
+  </WithStyles(WidgetGroupExpander)>
+</div>
+`;

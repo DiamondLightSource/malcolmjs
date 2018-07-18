@@ -1,6 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AttributeAlarm renders blank if no alarm severity specified 1`] = `<div />`;
+exports[`AttributeAlarm renders blank if no alarm severity specified 1`] = `
+<div
+  style={
+    Object {
+      "width": 24,
+    }
+  }
+/>
+`;
 
 exports[`AttributeAlarm renders dirty & error correctly 1`] = `
 <div>

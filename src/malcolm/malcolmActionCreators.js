@@ -14,6 +14,7 @@ import {
   MalcolmLocalCopy,
   MalcolmTableUpdate,
   MalcolmTableFlag,
+  MalcolmRevert,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -181,6 +182,11 @@ export const malcolmHailReturn = (payload, isErrorState) => ({
   payload,
 });
 
+export const malcolmRevertAction = path => ({
+  type: MalcolmRevert,
+  payload: { path },
+});
+
 export default {
   malcolmHailReturn,
   malcolmGetAction,
@@ -196,4 +202,5 @@ export default {
   malcolmSelectBlock,
   malcolmLayoutShiftIsPressed,
   malcolmPostAction,
+  malcolmRevertAction,
 };
