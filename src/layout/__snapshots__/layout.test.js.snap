@@ -26,6 +26,7 @@ exports[`Layout renders correctly 1`] = `
     diagramEngine={
       Object {
         "clickHandler": [Function],
+        "mouseDownHandler": [Function],
         "portMouseDown": [Function],
         "selectedHandler": [Function],
         "testEngine": true,

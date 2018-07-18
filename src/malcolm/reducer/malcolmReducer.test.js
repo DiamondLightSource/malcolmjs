@@ -80,6 +80,9 @@ describe('malcolm reducer', () => {
           children: [],
         },
       },
+      layoutState: {
+        selectedBlocks: [],
+      },
     };
   });
 

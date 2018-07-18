@@ -39,10 +39,14 @@ const buildMalcolmState = () => ({
             },
             value: 'icon 123',
           },
+          calculated: {
+            loading: true,
+          },
         },
         {
           calculated: {
             name: 'att1',
+            loading: true,
           },
           raw: {
             meta: {
@@ -56,6 +60,7 @@ const buildMalcolmState = () => ({
             layout: {
               blocks: [buildLayoutBlock()],
             },
+            loading: true,
           },
         },
       ],

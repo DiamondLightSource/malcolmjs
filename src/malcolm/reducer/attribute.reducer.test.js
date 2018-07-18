@@ -55,6 +55,9 @@ describe('attribute reducer', () => {
         navigationLists: [],
         rootNav: {},
       },
+      layoutState: {
+        selectedBlocks: [],
+      },
     };
 
     payload = {
@@ -190,7 +193,7 @@ describe('attribute reducer', () => {
     };
 
     updateLayout(state, updatedState, 'block1', 'port 1');
-    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(2);
   });
 
   it('updateLayout does not update the layout if the attribute is a port and the ports are the same', () => {

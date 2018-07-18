@@ -5,6 +5,8 @@ exports[`BlockWidget block renders correctly 1`] = `
   className="BlockWidget-block-1"
   elevation={8}
   onClick={[Function]}
+  onMouseDown={[Function]}
+  onMouseUp={[Function]}
 >
   <WithStyles(Typography)
     className="BlockWidget-title-2"
@@ -29,6 +31,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "addBlockPort": [Function],
             "addClickHandler": [Function],
             "addIcon": [Function],
+            "addMouseDownHandler": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
@@ -105,6 +108,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "addBlockPort": [Function],
               "addClickHandler": [Function],
               "addIcon": [Function],
+              "addMouseDownHandler": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
@@ -186,6 +190,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "addBlockPort": [Function],
             "addClickHandler": [Function],
             "addIcon": [Function],
+            "addMouseDownHandler": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
@@ -262,6 +267,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "addBlockPort": [Function],
               "addClickHandler": [Function],
               "addIcon": [Function],
+              "addMouseDownHandler": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
@@ -320,6 +326,7 @@ exports[`BlockWidget block renders correctly 1`] = `
             "addBlockPort": [Function],
             "addClickHandler": [Function],
             "addIcon": [Function],
+            "addMouseDownHandler": [Function],
             "description": "block 1 description",
             "extras": Object {},
             "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",
@@ -396,6 +403,7 @@ exports[`BlockWidget block renders correctly 1`] = `
               "addBlockPort": [Function],
               "addClickHandler": [Function],
               "addIcon": [Function],
+              "addMouseDownHandler": [Function],
               "description": "block 1 description",
               "extras": Object {},
               "icon": "<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>",

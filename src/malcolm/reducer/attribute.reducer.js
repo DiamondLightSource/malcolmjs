@@ -156,9 +156,13 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   }
 
   // need to update the loading state of other blocks here
+  const oldAttribute = blockUtils.findAttribute(
+    state.blocks,
+    blockName,
+    attributeName
+  );
   if (
-    blockUtils.findAttribute(state.blocks, blockName, attributeName).calculated
-      .loading &&
+    (oldAttribute ? oldAttribute.calculated.loading : true) &&
     !attribute.calculated.loading
   ) {
     layout = LayoutReducer.processLayout(updatedState);
