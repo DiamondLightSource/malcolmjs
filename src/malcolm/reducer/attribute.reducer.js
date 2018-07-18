@@ -216,7 +216,35 @@ export function updateAttribute(oldState, payload) {
             matchingAttributeIndex
           ] /*
           loading: false,
-          path,
+          path,ttribute = checkForFlowGraph(inputAttribute);
+  attribute = updateAttributeChildren(attribute);
+
+  if (attribute.localState !== undefined) {
+    const labels = Object.keys(attribute.raw.meta.elements);
+    attribute = shouldClearDirtyFlag(attribute);
+    if (!attribute.calculated.dirty || attribute.calculated.forceUpdate) {
+      attribute.calculated.dirty = false;
+      attribute.localState = {
+        value: attribute.raw.value[labels[0]].map((value, row) => {
+          const dataRow = {};
+          labels.forEach(label => {
+            dataRow[label] = attribute.raw.value[label][row];
+          });
+          return dataRow;
+        }),
+        meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+        labels,
+        flags: {
+          rows: [],
+          table: {
+            fresh: true,
+          },
+          timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
+        },
+      };
+    } else {
+      attribute.localState.flags.table.fresh = false;
+    }
           ...payload, */,
           raw: {
             ...attributes[matchingAttributeIndex].raw,

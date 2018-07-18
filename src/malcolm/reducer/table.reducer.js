@@ -137,7 +137,10 @@ const setTableFlag = (state, payload) => {
       ...attribute.localState.flags.rows[payload.row],
       ...payload.flags,
     };
-    if (payload.flagType === 'selected') {
+    if (
+      payload.flagType === 'selected' &&
+      attribute.localState.flags.table.selectedRow !== payload.row
+    ) {
       attribute.localState.flags.rows.forEach((row, index) => {
         attribute.localState.flags.rows[index].selected = index === payload.row;
       });

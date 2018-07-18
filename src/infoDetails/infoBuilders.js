@@ -15,7 +15,7 @@ export const addHandlersToInfoItems = inputProps => {
   return props;
 };
 
-export const attributeInfo = (state, blockName, attributeName) => {
+export const attributeInfo = (state, blockName, attributeName, subElement) => {
   let value;
   const info = {};
   const attribute = blockUtils.findAttribute(
@@ -23,7 +23,12 @@ export const attributeInfo = (state, blockName, attributeName) => {
     blockName,
     attributeName
   );
-  if (attribute && attribute.raw && attribute.raw.meta) {
+  if (
+    attribute &&
+    attribute.raw &&
+    attribute.raw.meta &&
+    subElement === undefined
+  ) {
     info.path = {
       label: 'Attribute path',
       value: `${blockName}, ${attributeName}`,

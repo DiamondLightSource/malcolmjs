@@ -124,6 +124,13 @@ function updateNavTypes(state) {
                 nav.label = nav.path;
               }
             }
+            if (
+              nav.navType === undefined &&
+              navigationLists[i + 1].path === '.info'
+            ) {
+              nav.navType = NavTypes.SubElement;
+              nav.label = `${matchingAttribute.calculated.name}:${nav.path}`;
+            }
           }
         }
       });
@@ -170,8 +177,11 @@ function updateNavTypes(state) {
     const indexOfLastAttribute = navigationLists.findIndex(
       nav => nav === lastAttribute
     );
+    const panelIndices = navigationLists
+      .filter(nav => [NavTypes.Info, NavTypes.Block].includes(nav.navType))
+      .map((nav, index) => index);
 
-    if (indexOfLastAttribute >= navigationLists.length - 2) {
+    if (indexOfLastAttribute >= panelIndices.slice(-2)[0]) {
       updatedState.mainAttribute = lastAttribute.path;
     }
   }

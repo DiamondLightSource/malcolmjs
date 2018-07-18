@@ -40,7 +40,10 @@ const navigateToAttribute = (blockMri, attributeName) => (
   }
 };
 
-const navigateToInfo = (blockMri, attributeName) => (dispatch, getState) => {
+const navigateToInfo = (blockMri, attributeName, subElement) => (
+  dispatch,
+  getState
+) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
 
@@ -48,11 +51,19 @@ const navigateToInfo = (blockMri, attributeName) => (dispatch, getState) => {
     nav => nav.navType === NavTypes.Block && nav.blockMri === blockMri
   );
   if (matchingBlockNav > -1) {
-    const newPath = `/gui/${navigationLists
-      .filter((nav, i) => i <= matchingBlockNav)
-      .map(nav => nav.path)
-      .join('/')}/${attributeName}/.info`;
-    dispatch(push(newPath));
+    if (subElement !== undefined) {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}/${subElement}/.info`;
+      dispatch(push(newPath));
+    } else {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}/.info`;
+      dispatch(push(newPath));
+    }
   }
 };
 
