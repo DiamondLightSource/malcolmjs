@@ -4,20 +4,9 @@ exports[`InfoElement renders correctly 1`] = `
 <div
   className="InfoElement-div-1"
 >
-  <WithStyles(Tooltip)
-    id="1"
-    placement="bottom"
-    title=""
-  >
-    <WithStyles(IconButton)
-      className="InfoElement-button-4"
-      disableRipple={true}
-    >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={null}
-      />
-    </WithStyles(IconButton)>
-  </WithStyles(Tooltip)>
+  <WithTheme(AttributeAlarm)
+    alarmSeverity={null}
+  />
   <WithStyles(Typography)
     className="InfoElement-textName-2"
   >

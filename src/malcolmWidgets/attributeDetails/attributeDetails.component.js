@@ -49,9 +49,12 @@ const AttributeDetails = props => {
   }
   if (widgetTagIndex !== null) {
     const alarm = getAlarmState(props.attribute);
-    const message = props.attribute.calculated.errorMessage
-      ? props.attribute.calculated.errorMessage
+    let message = props.attribute.raw.meta.description
+      ? props.attribute.raw.meta.description
       : '';
+    message = props.attribute.calculated.errorMessage
+      ? props.attribute.calculated.errorMessage
+      : message;
 
     return (
       <div className={props.classes.div}>
@@ -94,6 +97,7 @@ AttributeDetails.propTypes = {
       meta: PropTypes.shape({
         label: PropTypes.string,
         tags: PropTypes.arrayOf(PropTypes.string),
+        description: PropTypes.string,
       }),
       alarm: PropTypes.shape({
         severity: PropTypes.number,

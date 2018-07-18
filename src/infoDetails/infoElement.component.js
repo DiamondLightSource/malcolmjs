@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import AttributeAlarm from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import AttributeAlarm, {
+  AlarmStates,
+} from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { selectorFunction } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const styles = theme => ({
@@ -36,11 +37,13 @@ const styles = theme => ({
 
 const InfoElement = props => (
   <div className={props.classes.div}>
-    <Tooltip id="1" title={props.message} placement="bottom">
+    {props.alarm === AlarmStates.NO_ALARM ? (
       <IconButton className={props.classes.button} disableRipple>
         <AttributeAlarm alarmSeverity={props.alarm} />
       </IconButton>
-    </Tooltip>
+    ) : (
+      <AttributeAlarm alarmSeverity={props.alarm} />
+    )}
     <Typography className={props.classes.textName}>{props.label}: </Typography>
     <div className={props.classes.controlContainer}>
       {selectorFunction(
@@ -62,7 +65,6 @@ const InfoElement = props => (
 
 InfoElement.propTypes = {
   alarm: PropTypes.number.isRequired,
-  message: PropTypes.string,
   label: PropTypes.string.isRequired,
   tag: PropTypes.string.isRequired,
   value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.bool)
@@ -93,7 +95,6 @@ InfoElement.propTypes = {
 
 InfoElement.defaultProps = {
   choices: [],
-  message: '',
   handlers: {},
 };
 

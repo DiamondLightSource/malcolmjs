@@ -51,8 +51,17 @@ export const attributeInfo = (state, blockName, attributeName) => {
       },
     };
     info.malcolmAlarm = {
-      label: 'Malcolm Alarm',
+      label: 'Alarm',
       ...attribute.raw.alarm,
+      severity: {
+        label: 'severity',
+        inline: true,
+        value: attribute.raw.alarm.severity,
+        alarmState:
+          attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
+            ? attribute.raw.alarm.severity
+            : null,
+      },
       message: attribute.raw.alarm.message
         ? attribute.raw.alarm.message
         : 'n/a',
