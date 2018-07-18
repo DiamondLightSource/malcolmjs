@@ -3,13 +3,11 @@ import blockUtils from '../malcolm/blockUtils';
 
 export const addHandlersToInfoItems = inputProps => {
   const props = inputProps;
-  if (props.setFlag && props.eventHandler) {
+  if (props.revertHandler) {
     if (props.info && props.info.localState) {
       props.info.localState.functions = {
         clickHandler: () => {
-          props.setFlag(props.path, 'forceUpdate', true);
-          props.setFlag(props.path, 'dirty', false);
-          props.eventHandler(props.path, props.value);
+          props.revertHandler(props.path);
         },
       };
     }

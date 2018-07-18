@@ -7,6 +7,7 @@ import NavTypes from '../malcolm/NavTypes';
 import {
   malcolmPutAction,
   malcolmSetFlag,
+  malcolmRevertAction,
 } from '../malcolm/malcolmActionCreators';
 import { attributeInfo, addHandlersToInfoItems } from './infoBuilders';
 
@@ -96,6 +97,9 @@ export const InfoDetails = props => {
 const mapDispatchToProps = dispatch => ({
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetFlag(path, flag, state));
+  },
+  revertHandler: path => {
+    dispatch(malcolmRevertAction(path));
   },
   eventHandler: (path, value) => {
     dispatch(malcolmSetFlag(path, 'pending', true));

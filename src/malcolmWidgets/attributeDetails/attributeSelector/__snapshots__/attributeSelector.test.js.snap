@@ -96,10 +96,6 @@ exports[`AttributeSelector selects an textUpdate correctly 1`] = `
 
 exports[`AttributeSelector shows a bug icon if the widget is not handled 1`] = `
 <pure(BugReport)
-  styles={
-    Object {
-      "color": "red",
-    }
-  }
+  nativeColor="red"
 />
 `;

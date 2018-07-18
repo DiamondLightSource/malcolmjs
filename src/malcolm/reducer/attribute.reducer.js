@@ -8,6 +8,7 @@ import createReducer from './createReducer';
 import {
   MalcolmAttributeData,
   MalcolmMainAttributeUpdate,
+  MalcolmRevert,
 } from '../malcolm.types';
 import { shouldClearDirtyFlag } from './table.reducer';
 
@@ -158,6 +159,40 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
+const checkForSpecialCases = inputAttribute => {
+  let attribute = checkForFlowGraph(inputAttribute);
+  attribute = updateAttributeChildren(attribute);
+
+  if (attribute.localState !== undefined) {
+    const labels = Object.keys(attribute.raw.meta.elements);
+    attribute = shouldClearDirtyFlag(attribute);
+    if (!attribute.calculated.dirty || attribute.calculated.forceUpdate) {
+      attribute.calculated.dirty = false;
+      attribute.localState = {
+        value: attribute.raw.value[labels[0]].map((value, row) => {
+          const dataRow = {};
+          labels.forEach(label => {
+            dataRow[label] = attribute.raw.value[label][row];
+          });
+          return dataRow;
+        }),
+        meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+        labels,
+        flags: {
+          rows: [],
+          table: {
+            fresh: true,
+          },
+          timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
+        },
+      };
+    } else {
+      attribute.localState.flags.table.fresh = false;
+    }
+  }
+  return attribute;
+};
+
 export function updateAttribute(oldState, payload) {
   if (payload.delta) {
     const state = oldState;
@@ -176,7 +211,7 @@ export function updateAttribute(oldState, payload) {
       );
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
-        let attribute = {
+        const attribute = {
           ...attributes[
             matchingAttributeIndex
           ] /*
@@ -194,42 +229,7 @@ export function updateAttribute(oldState, payload) {
             path,
           },
         };
-
-        attribute = checkForFlowGraph(attribute);
-
-        attribute = updateAttributeChildren(attribute);
-
-        if (attribute.localState !== undefined) {
-          const labels = Object.keys(attribute.raw.meta.elements);
-          attribute = shouldClearDirtyFlag(attribute);
-          if (
-            !attribute.localState.flags.table.dirty ||
-            attribute.calculated.forceUpdate
-          ) {
-            attribute.calculated.dirty = false;
-            attribute.localState = {
-              value: attribute.raw.value[labels[0]].map((value, row) => {
-                const dataRow = {};
-                labels.forEach(label => {
-                  dataRow[label] = attribute.raw.value[label][row];
-                });
-                return dataRow;
-              }),
-              meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
-              labels,
-              flags: {
-                rows: [],
-                table: {
-                  fresh: true,
-                },
-                timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
-              },
-            };
-          } else {
-            attribute.localState.flags.table.fresh = false;
-          }
-        }
-        attributes[matchingAttributeIndex] = attribute;
+        attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
@@ -262,6 +262,61 @@ export function updateAttribute(oldState, payload) {
   return oldState;
 }
 
+export function revertLocalState(oldState, payload) {
+  const state = oldState;
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const attributes = [...state.blocks[blockName].attributes];
+
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
+      state.blocks,
+      blockName,
+      attributeName
+    );
+    if (matchingAttributeIndex >= 0) {
+      const attribute = {
+        ...attributes[matchingAttributeIndex],
+        raw: {
+          ...attributes[matchingAttributeIndex].raw,
+        },
+        calculated: {
+          ...attributes[matchingAttributeIndex].calculated,
+          errorState: false,
+          errorMessage: undefined,
+          dirty: false,
+          forceUpdate: true,
+          loading: false,
+          path: payload.path,
+        },
+      };
+      attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+    }
+    const blocks = { ...state.blocks };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+    let updatedState = {
+      ...state,
+      blocks,
+    };
+
+    // update the navigation if the attribute was part of the path
+    const navigation = updateNavigation(updatedState, attributeName);
+
+    const layout = updateLayout(state, updatedState, blockName, attributeName);
+
+    updatedState = {
+      ...updatedState,
+      layout,
+      navigation,
+    };
+
+    return navigationReducer.updateNavTypes(updatedState);
+  }
+  return oldState;
+}
+
 function setMainAttribute(state, payload) {
   return {
     ...state,
@@ -274,6 +329,7 @@ const AttributeReducer = createReducer(
   {
     [MalcolmAttributeData]: updateAttribute,
     [MalcolmMainAttributeUpdate]: setMainAttribute,
+    [MalcolmRevert]: revertLocalState,
   }
 );
 

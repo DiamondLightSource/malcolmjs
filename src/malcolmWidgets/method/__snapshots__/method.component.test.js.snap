@@ -68,7 +68,11 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
     </WithStyles(Tooltip)>
     <div
       className="MethodDetails-controlContainer-3"
-    />
+    >
+      <pure(BugReport)
+        nativeColor="red"
+      />
+    </div>
   </div>
   <div
     className="MethodDetails-div-1"

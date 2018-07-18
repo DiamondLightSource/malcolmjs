@@ -109,7 +109,7 @@ describe('info builder', () => {
       },
       value: 3.141,
       setFlag: 'test',
-      eventHandler: 'also test',
+      revertHandler: 'also test',
     };
     testInfo = addHandlersToInfoItems(testInfo);
     expect(testInfo).toEqual({
@@ -124,7 +124,7 @@ describe('info builder', () => {
       },
       value: 3.141,
       setFlag: 'test',
-      eventHandler: 'also test',
+      revertHandler: 'also test',
     });
   });
 
@@ -143,26 +143,12 @@ describe('info builder', () => {
       value: 3.141,
       path: ['block1', 'test'],
       setFlag: jest.fn(),
-      eventHandler: jest.fn(),
+      revertHandler: jest.fn(),
     };
     testInfo = addHandlersToInfoItems(testInfo);
     expect(testInfo.info.localState.functions).toBeDefined();
     testInfo.info.localState.functions.clickHandler();
-    expect(testInfo.setFlag).toHaveBeenCalledTimes(2);
-    expect(testInfo.setFlag).toHaveBeenCalledWith(
-      ['block1', 'test'],
-      'dirty',
-      false
-    );
-    expect(testInfo.setFlag).toHaveBeenCalledWith(
-      ['block1', 'test'],
-      'forceUpdate',
-      true
-    );
-    expect(testInfo.eventHandler).toHaveBeenCalledTimes(1);
-    expect(testInfo.eventHandler).toHaveBeenCalledWith(
-      ['block1', 'test'],
-      3.141
-    );
+    expect(testInfo.revertHandler).toHaveBeenCalledTimes(1);
+    expect(testInfo.revertHandler).toHaveBeenCalledWith(['block1', 'test']);
   });
 });

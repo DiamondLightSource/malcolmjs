@@ -117,7 +117,7 @@ export const selectorFunction = (
       );
     default:
       if (widgetTag.split(':')[0] === 'widget') {
-        return <BugReport styles={{ color: 'red' }} />;
+        return <BugReport nativeColor="red" />;
       }
       throw new Error('no widget tag supplied!');
   }

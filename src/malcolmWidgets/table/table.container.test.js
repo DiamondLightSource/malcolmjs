@@ -9,6 +9,7 @@ import {
   malcolmUpdateTable,
   malcolmCopyValue,
   malcolmPutAction,
+  malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
 
 // jest.mock('../../malcolm/malcolmActionCreators');
@@ -146,7 +147,7 @@ describe('Table container', () => {
     buttons.at(buttons.length - 2).simulate('click');
     expect(testStore.getActions().length).toEqual(1);
     expect(testStore.getActions()[0]).toEqual(
-      malcolmCopyValue(['test1', 'layout'])
+      malcolmRevertAction(['test1', 'layout'])
     );
   });
 

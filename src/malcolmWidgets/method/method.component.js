@@ -92,7 +92,7 @@ const buildIOComponent = (input, props, isOutput) => {
       updateStoreOnEveryValueChange
     );
   }
-  return null;
+  return selectorFunction('widget:undefined');
 };
 
 const MethodDetails = props => (
