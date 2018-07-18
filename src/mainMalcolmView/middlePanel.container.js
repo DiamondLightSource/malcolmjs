@@ -16,6 +16,7 @@ import blockUtils from '../malcolm/blockUtils';
 
 import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import LayoutBin from '../layout/layoutBin.component';
 
 const divBackground = 'rgb(48, 48, 48)';
 
@@ -94,13 +95,17 @@ const findAttributeComponent = props => {
             className={props.classes.paletteButton}
             style={{ right: props.openChild ? 360 + 29 : 29, bottom: 12 }}
           >
-            <Button
-              variant="fab"
-              color="secondary"
-              onClick={() => props.openPalette()}
-            >
-              <AddIcon />
-            </Button>
+            {props.showBin ? (
+              <LayoutBin />
+            ) : (
+              <Button
+                variant="fab"
+                color="secondary"
+                onClick={() => props.openPalette()}
+              >
+                <AddIcon />
+              </Button>
+            )}
           </div>
         </div>
       );
@@ -171,6 +176,10 @@ const mapStateToProps = state => {
   let errorMessage;
   if (attribute) {
     alarm = getAlarmState(attribute);
+    alarm =
+      state.malcolm.layout && state.malcolm.layout.blocks.some(b => b.loading)
+        ? AlarmStates.PENDING
+        : alarm;
     errorMessage = attribute.calculated.errorState
       ? attribute.calculated.errorMessage
       : '';
@@ -183,6 +192,7 @@ const mapStateToProps = state => {
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
+    showBin: state.malcolm.layoutState.showBin,
   };
 };
 

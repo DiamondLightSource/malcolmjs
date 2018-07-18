@@ -59,9 +59,9 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
       ...changedAttribute,
       id: request.id,
       /*
-      isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
-      inGroup,
-      group, */
+        isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
+        inGroup,
+        group, */
       typeid: changedAttribute.typeid,
       delta: true,
       raw: { ...changedAttribute },

@@ -52,6 +52,8 @@ const initialMalcolmState = {
     },
     startPortForLink: undefined,
     endPortForLink: undefined,
+    showBin: false,
+    inDeleteZone: false,
   },
 };
 
@@ -401,6 +403,7 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   updatedState = methodReducer(updatedState, action);
   updatedState = tableReducer(updatedState, action);
   updatedState = LayoutReduxReducer(updatedState, action);
+
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(updatedState, action);

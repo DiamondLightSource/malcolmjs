@@ -15,6 +15,7 @@ const Layout = props => {
   const updatedProps = props;
   updatedProps.layoutEngine.selectedHandler = props.selectHandler;
   updatedProps.layoutEngine.clickHandler = props.clickHandler;
+  updatedProps.layoutEngine.mouseDownHandler = props.mouseDownHandler;
   updatedProps.layoutEngine.portMouseDown = props.portMouseDown;
 
   return (
@@ -46,6 +47,7 @@ Layout.propTypes = {
   clickHandler: PropTypes.func.isRequired,
   portMouseDown: PropTypes.func.isRequired,
   makeBlockVisible: PropTypes.func.isRequired,
+  mouseDownHandler: PropTypes.func.isRequired,
 };
 
 Layout.defaultProps = {};
@@ -69,6 +71,9 @@ export const mapDispatchToProps = dispatch => ({
     }
 
     dispatch(navigationActions.updateChildPanel(block.name));
+  },
+  mouseDownHandler: show => {
+    dispatch(layoutAction.showLayoutBin(show));
   },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {

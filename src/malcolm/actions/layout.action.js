@@ -1,8 +1,14 @@
 import {
   MalcolmSelectPortType,
   MalcolmMakeBlockVisibleType,
+  MalcolmShowBinType,
+  MalcolmInLayoutDeleteZoneType,
 } from '../malcolm.types';
-import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
+import {
+  malcolmPutAction,
+  malcolmSetFlag,
+  malcolmSelectBlock,
+} from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
 
 const findPort = (blocks, id) => {
@@ -42,7 +48,10 @@ export const selectPort = (portId, start) => (dispatch, getState) => {
   }
 };
 
-const makeBlockVisible = (mri, position) => (dispatch, getState) => {
+const makeBlockVisible = (mri, position, visible = true) => (
+  dispatch,
+  getState
+) => {
   const state = getState().malcolm;
   const positionRelativeToCenter = {
     x: position.x - state.layoutState.layoutCenter.x,
@@ -54,6 +63,7 @@ const makeBlockVisible = (mri, position) => (dispatch, getState) => {
     payload: {
       mri,
       position: positionRelativeToCenter,
+      visible,
     },
   });
 
@@ -71,7 +81,7 @@ const makeBlockVisible = (mri, position) => (dispatch, getState) => {
     );
     const updateLayout = {
       name: [layoutAttribute.raw.value.name[visibleBlockIndex]],
-      visible: [true],
+      visible: [visible],
       mri: [mri],
       x: [positionRelativeToCenter.x],
       y: [positionRelativeToCenter.y],
@@ -84,7 +94,37 @@ const makeBlockVisible = (mri, position) => (dispatch, getState) => {
   }
 };
 
+const deleteBlocks = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { selectedBlocks } = state.layoutState;
+
+  selectedBlocks.forEach(b => {
+    makeBlockVisible(b, state.layoutState.layoutCenter, false)(
+      dispatch,
+      getState
+    );
+    dispatch(malcolmSelectBlock(b, false));
+  });
+};
+
+const showLayoutBin = show => ({
+  type: MalcolmShowBinType,
+  payload: {
+    visible: show,
+  },
+});
+
+const mouseInsideDeleteZone = insideZone => ({
+  type: MalcolmInLayoutDeleteZoneType,
+  payload: {
+    insideZone,
+  },
+});
+
 export default {
   selectPort,
   makeBlockVisible,
+  showLayoutBin,
+  mouseInsideDeleteZone,
+  deleteBlocks,
 };

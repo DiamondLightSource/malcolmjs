@@ -1,7 +1,11 @@
 import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
-import { MalcolmMakeBlockVisibleType } from '../malcolm.types';
+import {
+  MalcolmMakeBlockVisibleType,
+  MalcolmShowBinType,
+  MalcolmInLayoutDeleteZoneType,
+} from '../malcolm.types';
 import BlockNodeFactory from '../../layout/block/BlockNodeFactory';
 import BlockNodeModel from '../../layout/block/BlockNodeModel';
 import MalcolmLinkFactory from '../../layout/link/link.factory';
@@ -61,7 +65,7 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
 
     updatedBlock.loading =
       matchingBlock.loading ||
-      (matchingBlock.attributres &&
+      (matchingBlock.attributes &&
         matchingBlock.attributes.some(a => a.calculated.loading));
 
     return updatedBlock;
@@ -209,14 +213,15 @@ const makeBlockVisible = (state, payload) => {
     if (attribute && attribute.calculated && attribute.calculated.layout) {
       const layoutBlocks = [...attribute.calculated.layout.blocks];
       const matchingLayoutBlock = layoutBlocks.find(b => b.mri === payload.mri);
+
       if (matchingLayoutBlock) {
-        matchingLayoutBlock.visible = true;
+        matchingLayoutBlock.visible = payload.visible;
         matchingLayoutBlock.position = payload.position;
       } else {
         layoutBlocks.push({
           name: payload.mri,
           mri: payload.mri,
-          visible: true,
+          visible: payload.visible,
           position: payload.position,
         });
       }
@@ -229,12 +234,19 @@ const makeBlockVisible = (state, payload) => {
   return updatedState;
 };
 
-const buildBlockNode = (block, selectedBlocks, clickHandler, portMouseDown) => {
+const buildBlockNode = (
+  block,
+  selectedBlocks,
+  clickHandler,
+  mouseDownHandler,
+  portMouseDown
+) => {
   const node = new BlockNodeModel(block.name, block.description, block.mri);
   block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);
   node.addClickHandler(clickHandler);
+  node.addMouseDownHandler(mouseDownHandler);
   node.selected = selectedBlocks.some(b => b === block.mri);
   node.block = block;
 
@@ -251,15 +263,19 @@ const buildLayoutEngine = (layout, selectedBlocks) => {
 
   engine.portMouseDown = () => {};
   engine.clickHandler = () => {};
+  engine.mouseDownHandler = () => {};
 
-  const nodes = layout.blocks.map(b =>
-    buildBlockNode(
-      b,
-      selectedBlocks,
-      node => engine.clickHandler(b, node),
-      (portId, start) => engine.portMouseDown(portId, start)
-    )
-  );
+  const nodes = layout.blocks
+    .filter(b => b.loading === false)
+    .map(b =>
+      buildBlockNode(
+        b,
+        selectedBlocks,
+        node => engine.clickHandler(b, node),
+        show => engine.mouseDownHandler(show),
+        (portId, start) => engine.portMouseDown(portId, start)
+      )
+    );
 
   const links = [];
   layout.blocks.forEach(b => {
@@ -309,10 +325,41 @@ const buildLayoutEngine = (layout, selectedBlocks) => {
   return engine;
 };
 
+const showLayoutBin = (state, payload) => {
+  const layoutState = { ...state.layoutState };
+  layoutState.showBin = payload.visible;
+
+  return {
+    ...state,
+    layoutState,
+  };
+};
+
+const cursorInLayoutZone = (state, payload) => {
+  const layoutState = { ...state.layoutState };
+  layoutState.inDeleteZone = payload.insideZone;
+
+  return {
+    ...state,
+    layoutState,
+  };
+};
+
+const isRelevantAttribute = attribute =>
+  attribute &&
+  attribute.raw &&
+  attribute.raw.meta &&
+  attribute.raw.meta.tags &&
+  (attribute.raw.meta.tags.some(t => t.indexOf('inport:') > -1) ||
+    attribute.raw.meta.tags.some(t => t.indexOf('widget:icon') > -1) ||
+    attribute.raw.meta.tags.some(t => t.indexOf('widget:flowgraph') > -1));
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
     [MalcolmMakeBlockVisibleType]: makeBlockVisible,
+    [MalcolmShowBinType]: showLayoutBin,
+    [MalcolmInLayoutDeleteZoneType]: cursorInLayoutZone,
   }
 );
 
@@ -323,4 +370,5 @@ export default {
   shiftIsPressed,
   selectPortForLink,
   buildLayoutEngine,
+  isRelevantAttribute,
 };
