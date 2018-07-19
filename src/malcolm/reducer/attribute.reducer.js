@@ -99,7 +99,7 @@ export const updateNavigation = (state, attributeName) => {
   let { navigation } = state;
   if (
     navigation.navigationLists
-      .map(nav => nav.path)
+      .map(nav => nav.path.split('.')[0])
       .findIndex(navPath => navPath === attributeName) > -1
   ) {
     navigation = processNavigationLists(

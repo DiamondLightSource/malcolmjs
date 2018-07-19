@@ -23,85 +23,84 @@ export const attributeInfo = (state, blockName, attributeName, subElement) => {
     blockName,
     attributeName
   );
-  if (
-    attribute &&
-    attribute.raw &&
-    attribute.raw.meta &&
-    subElement === undefined
-  ) {
-    info.path = {
-      label: 'Attribute path',
-      value: `${blockName}, ${attributeName}`,
-      inline: true,
-    };
-    info.meta = {
-      label: 'Meta Data',
-      malcolmType: {
-        value: attribute.raw.meta.typeid,
-        label: 'Malcolm Type',
+  if (attribute && attribute.raw && attribute.raw.meta) {
+    if (subElement === undefined) {
+      info.path = {
+        label: 'Attribute path',
+        value: `${blockName}, ${attributeName}`,
         inline: true,
-      },
-      description: {
-        value: attribute.raw.meta.description,
-        label: 'Description',
-        inline: true,
-      },
-      writeable: {
-        value: attribute.raw.meta.writeable,
-        label: 'Writeable?',
-        inline: true,
-        tag: 'widget:led',
-      },
-    };
-    info.malcolmAlarm = {
-      label: 'Alarm',
-      ...attribute.raw.alarm,
-      severity: {
-        label: 'severity',
-        inline: true,
-        value: attribute.raw.alarm.severity,
-        alarmState:
-          attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
-            ? attribute.raw.alarm.severity
-            : null,
-      },
-      message: attribute.raw.alarm.message
-        ? attribute.raw.alarm.message
-        : 'n/a',
-    };
-    info.timeStamp = {
-      label: 'Time Stamp',
-      time: `${new Date(attribute.raw.timeStamp.secondsPastEpoch * 1000)}`,
-      ...attribute.raw.timeStamp,
-    };
-    info.errorState = {
-      label: 'Error State',
-      value: attribute.calculated.errorMessage
-        ? attribute.calculated.errorMessage
-        : 'n/a',
-      inline: true,
-      alarmState: attribute.calculated.errorState
-        ? AlarmStates.MAJOR_ALARM
-        : null,
-    };
-    if (
-      attribute.raw.meta.tags.some(a =>
-        ['widget:table', 'widget:textinput'].includes(a)
-      )
-    ) {
-      info.localState = {
-        label: 'Local State',
-        value: {
-          buttonLabel: 'Discard',
-          disabled: !attribute.calculated.dirty,
-        },
-        inline: true,
-        tag: 'info:button',
-        alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
       };
+      info.meta = {
+        label: 'Meta Data',
+        malcolmType: {
+          value: attribute.raw.meta.typeid,
+          label: 'Malcolm Type',
+          inline: true,
+        },
+        description: {
+          value: attribute.raw.meta.description,
+          label: 'Description',
+          inline: true,
+        },
+        writeable: {
+          value: attribute.raw.meta.writeable,
+          label: 'Writeable?',
+          inline: true,
+          tag: 'widget:led',
+        },
+      };
+      info.malcolmAlarm = {
+        label: 'Alarm',
+        ...attribute.raw.alarm,
+        severity: {
+          label: 'severity',
+          inline: true,
+          value: attribute.raw.alarm.severity,
+          alarmState:
+            attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
+              ? attribute.raw.alarm.severity
+              : null,
+        },
+        message: attribute.raw.alarm.message
+          ? attribute.raw.alarm.message
+          : 'n/a',
+      };
+      info.timeStamp = {
+        label: 'Time Stamp',
+        time: `${new Date(attribute.raw.timeStamp.secondsPastEpoch * 1000)}`,
+        ...attribute.raw.timeStamp,
+      };
+      info.errorState = {
+        label: 'Error State',
+        value: attribute.calculated.errorMessage
+          ? attribute.calculated.errorMessage
+          : 'n/a',
+        inline: true,
+        alarmState: attribute.calculated.errorState
+          ? AlarmStates.MAJOR_ALARM
+          : null,
+      };
+      if (
+        attribute.raw.meta.tags.some(a =>
+          ['widget:table', 'widget:textinput'].includes(a)
+        )
+      ) {
+        info.localState = {
+          label: 'Local State',
+          value: {
+            buttonLabel: 'Discard',
+            disabled: !attribute.calculated.dirty,
+          },
+          inline: true,
+          tag: 'info:button',
+          alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
+        };
+      }
+      // eslint-disable-next-line prefer-destructuring
+      value = attribute.raw.value;
+    } else {
+      info.subElement = `you want the info for sub-element ${subElement} of ${attributeName}...`;
     }
-    // eslint-disable-next-line prefer-destructuring
-    value = attribute.raw.value;
   }
   return { info, value };
 };

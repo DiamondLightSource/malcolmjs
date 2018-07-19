@@ -259,6 +259,7 @@ exports[`Table container renders correctly 1`] = `
     />,
     ]
   }
+  infoClickHandler={[Function]}
   localState={
     Object {
       "flags": Object {
@@ -376,6 +377,7 @@ exports[`Table container renders correctly 1`] = `
       ],
     }
   }
+  rowClickHandler={[Function]}
   setFlag={[Function]}
 />
 `;

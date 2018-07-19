@@ -62,6 +62,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="0"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -234,6 +235,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="1"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -406,6 +408,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="2"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -578,6 +581,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="3"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -851,6 +855,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="0"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -1023,6 +1028,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="1"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-blankCell-9"
@@ -1195,6 +1201,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="2"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"
@@ -1367,6 +1374,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         <WithStyles(TableRow)
           className="WidgetTable-rowFormat-6"
           key="3"
+          onClick={[Function]}
         >
           <WithStyles(TableCell)
             className="WidgetTable-textBody-10"

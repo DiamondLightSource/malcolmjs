@@ -160,7 +160,22 @@ const WidgetTable = props => {
         <Table className={props.classes.tableLayout}>
           <TableBody>
             {values.map((rowValue, row) => (
-              <TableRow className={props.classes.rowFormat} key={row}>
+              <TableRow
+                className={props.classes.rowFormat}
+                key={row}
+                onClick={() => {
+                  props.rowClickHandler(
+                    props.attribute.calculated.path,
+                    `row.${row}`
+                  );
+                  props.setFlag(
+                    props.attribute.calculated.path,
+                    row,
+                    'selected',
+                    { selected: true }
+                  );
+                }}
+              >
                 {[
                   <TableCell
                     className={
@@ -174,14 +189,18 @@ const WidgetTable = props => {
                     <IconButton
                       className={props.classes.button}
                       disableRipple
-                      onClick={() =>
+                      onClick={() => {
+                        props.infoClickHandler(
+                          props.attribute.calculated.path,
+                          `row.${row}`
+                        );
                         props.setFlag(
                           props.attribute.calculated.path,
                           row,
                           'selected',
                           { selected: true }
-                        )
-                      }
+                        );
+                      }}
                     >
                       <AttributeAlarm
                         alarmSeverity={
@@ -313,6 +332,8 @@ WidgetTable.propTypes = {
     incompleteRowFormat: PropTypes.string,
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  // infoClickHandler: PropTypes.func.isRequired,
+  // rowClickHandler: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,

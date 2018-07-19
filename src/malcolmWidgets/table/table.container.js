@@ -15,6 +15,7 @@ import {
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from './table.component';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const TableContainer = props => {
   const path = [props.blockName, props.attributeName];
@@ -50,6 +51,8 @@ const TableContainer = props => {
       setFlag={props.setFlag}
       footerItems={footerItems}
       addRow={props.addRow}
+      infoClickHandler={props.infoClickHandler}
+      rowClickHandler={props.rowClickHandler}
     />
   );
 };
@@ -69,6 +72,14 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  rowClickHandler: (path, subElement) => {
+    dispatch(
+      navigationActions.navigateToSubElement(path[0], path[1], subElement)
+    );
+  },
+  infoClickHandler: (path, subElement) => {
+    dispatch(navigationActions.navigateToInfo(path[0], path[1], subElement));
+  },
   eventHandler: (path, value, row) => {
     dispatch(malcolmUpdateTable(path, value, row));
   },
@@ -122,6 +133,8 @@ TableContainer.propTypes = {
   }).isRequired,
   revertHandler: PropTypes.func.isRequired,
   eventHandler: PropTypes.func.isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  rowClickHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,
   copyTable: PropTypes.func.isRequired,

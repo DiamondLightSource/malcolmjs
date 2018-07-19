@@ -111,20 +111,16 @@ const mapStateToProps = state => {
   let blockName;
   let attributeName;
   let subElement;
-  const navLists = state.malcolm.navigation.navigationLists.slice(-4);
-  if (navLists[3].navType === NavTypes.Info) {
-    if (navLists[2].navType === NavTypes.SubElement) {
-      blockName =
-        navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : '';
-      attributeName =
-        navLists[1].navType === NavTypes.Attribute ? navLists[1].path : '';
-      subElement = navLists[2].path;
-    } else {
-      blockName =
-        navLists[1].navType === NavTypes.Block ? navLists[1].blockMri : '';
-      attributeName =
-        navLists[2].navType === NavTypes.Attribute ? navLists[2].path : '';
-    }
+  const navLists = state.malcolm.navigation.navigationLists.slice(-3);
+  if (navLists[2].navType === NavTypes.Info) {
+    blockName =
+      navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : '';
+    attributeName =
+      navLists[1].navType === NavTypes.Attribute ? navLists[1].path : '';
+    subElement =
+      navLists[1].navType === NavTypes.Attribute && navLists[1].subElement
+        ? navLists[1].subElement
+        : undefined;
   }
 
   const builtInfo = attributeInfo(state, blockName, attributeName, subElement);
