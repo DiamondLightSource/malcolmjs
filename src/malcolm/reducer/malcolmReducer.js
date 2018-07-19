@@ -21,7 +21,7 @@ import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
 import AttributeReducer, { updateAttribute } from './attribute.reducer';
-import layoutReducer from './layout.reducer';
+import layoutReducer, { LayoutReduxReducer } from './layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
@@ -42,6 +42,7 @@ const initialMalcolmState = {
   layout: {
     blocks: [],
   },
+  layoutEngine: undefined,
   layoutState: {
     shiftIsPressed: false,
     selectedBlocks: [],
@@ -51,6 +52,8 @@ const initialMalcolmState = {
     },
     startPortForLink: undefined,
     endPortForLink: undefined,
+    showBin: false,
+    inDeleteZone: false,
   },
 };
 
@@ -399,6 +402,8 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
   updatedState = tableReducer(updatedState, action);
+  updatedState = LayoutReduxReducer(updatedState, action);
+
   switch (action.type) {
     case MalcolmNewBlock:
       return registerNewBlock(updatedState, action);
@@ -463,7 +468,8 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
         ...updatedState,
         layoutState: layoutReducer.selectBlock(
           updatedState,
-          action.payload.blockName
+          action.payload.blockName,
+          action.payload.isSelected
         ),
       };
 

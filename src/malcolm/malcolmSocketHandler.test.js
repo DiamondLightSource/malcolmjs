@@ -16,6 +16,8 @@ import { snackbar } from '../viewState/viewState.actions';
 jest.mock('./middleware/malcolmRouting');
 jest.useFakeTimers();
 
+const SOCKET_BUFFER_TIME = 51;
+
 describe('malcolm socket handler', () => {
   let dispatches = [];
   let connectionState = false;
@@ -66,7 +68,13 @@ describe('malcolm socket handler', () => {
   };
 
   const store = {
-    dispatch: action => dispatches.push(action),
+    dispatch: action => {
+      if (typeof action === 'function') {
+        action(a => dispatches.push(a), () => state);
+      } else {
+        dispatches.push(action);
+      }
+    },
     getState: () => state,
   };
 
@@ -156,6 +164,7 @@ describe('malcolm socket handler', () => {
   it('does nothing on receiving a non-malcolm message', () => {
     const message = JSON.stringify({ typeid: 'notAMalcolmMessage', id: 1 });
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
     expect(dispatches.length).toEqual(0);
   });
 
@@ -165,6 +174,7 @@ describe('malcolm socket handler', () => {
     });
 
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmBlockMeta);
@@ -181,6 +191,7 @@ describe('malcolm socket handler', () => {
     const message = buildMessage(typeid, 2, changes);
 
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -203,6 +214,7 @@ describe('malcolm socket handler', () => {
     const message = buildMessage('unknown type', 1, {});
 
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual('unprocessed_delta');
@@ -255,6 +267,9 @@ describe('malcolm socket handler', () => {
       message: 'Error: this is a test!',
     });
     socketContainer.socket.send(malcolmError);
+
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
@@ -270,6 +285,7 @@ describe('malcolm socket handler', () => {
       message: 'Error: this is a test!',
     });
     socketContainer.socket.send(malcolmError);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
     expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
@@ -297,6 +313,7 @@ describe('malcolm socket handler', () => {
       id: 3,
     });
     socketContainer.socket.send(malcolmReturnMessage);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
     expect(dispatches.length).toEqual(2);
     expect(dispatches[1]).toEqual(pendingAction);
     expect(dispatches[0].type).toEqual(MalcolmReturn);
@@ -311,6 +328,7 @@ describe('malcolm socket handler', () => {
     });
 
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual(MalcolmRootBlockMeta);
@@ -329,6 +347,7 @@ describe('malcolm socket handler', () => {
     });
 
     socketContainer.socket.send(message);
+    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches).toHaveLength(0);
   });

@@ -1,5 +1,6 @@
 import configureStore from 'redux-mock-store';
 import BlockUtils from './blockUtils';
+import { MalcolmAttributeFlag } from './malcolm.types';
 
 const buildAttribute = (name, tags = []) => ({
   name,
@@ -126,6 +127,13 @@ describe('Block Utilities', () => {
   it('sets 404 flag if error message for failed block load', () => {
     const originalRequest = { path: ['block1', 'meta'] };
     const store = configureStore()({ malcolm: { blocks: { block1: {} } } });
-    BlockUtils.didBlockLoadFail(originalRequest, store);
+    BlockUtils.didBlockLoadFail(
+      originalRequest,
+      store.dispatch,
+      store.getState
+    );
+
+    const actions = store.getActions();
+    expect(actions[0].type).toEqual(MalcolmAttributeFlag);
   });
 });

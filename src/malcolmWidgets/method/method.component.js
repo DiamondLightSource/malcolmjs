@@ -164,6 +164,9 @@ MethodDetails.propTypes = {
   }).isRequired,
 };
 
+const EMPTY = '';
+const EMPTY_ARRAY = [];
+const EMPTY_OBJECT = {};
 const mapStateToProps = (state, ownProps) => {
   let method;
   if (ownProps.attributeName && ownProps.blockName) {
@@ -187,15 +190,15 @@ const mapStateToProps = (state, ownProps) => {
     methodErrorMessage:
       method && method.calculated.errorMessage
         ? method.calculated.errorMessage
-        : '',
-    methodPath: method ? method.calculated.path : [],
-    inputs: method ? method.raw.takes.elements : {},
-    inputValues: (method && method.calculated.inputs) || {},
-    dirtyInputs: (method && method.calculated.dirtyInputs) || {},
-    outputs: method ? method.raw.returns.elements : {},
-    outputValues: (method && method.calculated.outputs) || {},
-    required: method ? method.raw.required : {},
-    defaultValues: method ? method.raw.defaults : {},
+        : EMPTY,
+    methodPath: method ? method.calculated.path : EMPTY_ARRAY,
+    inputs: method ? method.raw.takes.elements : EMPTY_OBJECT,
+    inputValues: (method && method.calculated.inputs) || EMPTY_OBJECT,
+    dirtyInputs: (method && method.calculated.dirtyInputs) || EMPTY_OBJECT,
+    outputs: method ? method.raw.returns.elements : EMPTY_OBJECT,
+    outputValues: (method && method.calculated.outputs) || EMPTY_OBJECT,
+    required: method ? method.raw.required : EMPTY_OBJECT,
+    defaultValues: method ? method.raw.defaults : EMPTY_OBJECT,
   };
 };
 

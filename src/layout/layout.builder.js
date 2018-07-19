@@ -17,9 +17,9 @@ const buildBlockNode = (block, selectedBlocks, clickHandler, portMouseDown) => {
 export const buildDiagramEngine = (
   blocks,
   selectedBlocks,
-  url,
   clickHandler,
-  portMouseDown
+  portMouseDown,
+  selectedHandler
 ) => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
@@ -32,7 +32,7 @@ export const buildDiagramEngine = (
     buildBlockNode(
       b,
       selectedBlocks,
-      node => clickHandler(url, b, node, selectedBlocks),
+      node => clickHandler(b, node),
       portMouseDown
     )
   );
@@ -68,7 +68,16 @@ export const buildDiagramEngine = (
     });
   });
 
-  model.addAll(...nodes, ...links);
+  const models = model.addAll(...nodes, ...links);
+  // add a selection listener to each
+  models.forEach(item => {
+    item.addListener({
+      selectionChanged: e => {
+        selectedHandler(e.entity.type, e.entity.id, e.isSelected);
+      },
+    });
+  });
+
   engine.setDiagramModel(model);
 
   return engine;

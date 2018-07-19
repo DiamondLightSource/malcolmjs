@@ -15,7 +15,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outa" ],
     index: 0,
-    interval: 1000,
+    interval: 100,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
@@ -59,7 +59,11 @@ function checkForActiveSubscription(request, response, socket) {
     }
 
     subscriptionTimers[response.id] = timer;
+
+    return subscription.update(response, subscription.index);
   }
+
+  return response;
 }
 
 function cancelAllSubscriptions() {

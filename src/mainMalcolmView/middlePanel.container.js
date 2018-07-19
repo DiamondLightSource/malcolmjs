@@ -8,7 +8,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
@@ -17,6 +16,7 @@ import blockUtils from '../malcolm/blockUtils';
 
 import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import LayoutBin from '../layout/layoutBin.component';
 
 const styles = theme => ({
   container: {
@@ -93,13 +93,17 @@ const findAttributeComponent = props => {
             className={props.classes.paletteButton}
             style={{ right: props.openChild ? 360 + 29 : 29, bottom: 12 }}
           >
-            <Button
-              variant="fab"
-              color="secondary"
-              onClick={() => props.openPalette()}
-            >
-              <AddIcon />
-            </Button>
+            {props.showBin ? (
+              <LayoutBin />
+            ) : (
+              <Button
+                variant="fab"
+                color="secondary"
+                onClick={() => props.openPalette()}
+              >
+                <AddIcon />
+              </Button>
+            )}
           </div>
         </div>
       );
@@ -152,16 +156,8 @@ const findAttributeComponent = props => {
   }
 };
 
-const resetSelection = dispatch => {
-  dispatch(malcolmSelectBlock(''));
-};
-
 const MiddlePanelContainer = props => (
-  <div
-    className={props.classes.container}
-    onClick={() => props.resetSelection()}
-    role="presentation"
-  >
+  <div className={props.classes.container} role="presentation">
     {findAttributeComponent(props)}
   </div>
 );
@@ -177,6 +173,10 @@ const mapStateToProps = state => {
   let errorMessage;
   if (attribute) {
     alarm = getAlarmState(attribute);
+    alarm =
+      state.malcolm.layout && state.malcolm.layout.blocks.some(b => b.loading)
+        ? AlarmStates.PENDING
+        : alarm;
     errorMessage = attribute.calculated.errorState
       ? attribute.calculated.errorMessage
       : '';
@@ -189,11 +189,11 @@ const mapStateToProps = state => {
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
+    showBin: state.malcolm.layoutState.showBin,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  resetSelection: () => resetSelection(dispatch),
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
 });
 
@@ -219,7 +219,6 @@ MiddlePanelContainer.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string,
   }).isRequired,
-  resetSelection: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(

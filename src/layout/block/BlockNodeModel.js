@@ -11,6 +11,7 @@ class BlockNodeModel extends NodeModel {
     this.addBlockPort = this.addBlockPort.bind(this);
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);
+    this.addMouseDownHandler = this.addMouseDownHandler.bind(this);
   }
 
   addBlockPort(port, portMouseDown) {
@@ -33,6 +34,12 @@ class BlockNodeModel extends NodeModel {
     this.clickHandler = e => {
       handler(this);
       e.stopPropagation();
+    };
+  }
+
+  addMouseDownHandler(handler) {
+    this.mouseDownHandler = show => {
+      handler(show);
     };
   }
 }

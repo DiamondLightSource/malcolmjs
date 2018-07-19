@@ -93,6 +93,10 @@ const updateChildPanel = newChild => (dispatch, getState) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
 
+  if (navigationLists.slice(-1)[0].path === newChild) {
+    return; // nothing to do as the child panel is already newChild
+  }
+
   let newPath;
   if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
     newPath = `/gui/${navigationLists

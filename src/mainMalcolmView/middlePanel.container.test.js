@@ -1,23 +1,17 @@
 import React from 'react';
-import { createShallow, createMount } from '@material-ui/core/test-utils';
+import { createShallow } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
-
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { malcolmSelectBlock } from '../malcolm/malcolmActionCreators';
-
 import MiddlePanel from './middlePanel.container';
 
 describe('MalcolmMiddlePanel', () => {
   let shallow;
-  let mount;
   let state;
   let mockStore;
 
   beforeEach(() => {
     mockStore = configureStore();
     shallow = createShallow({ dive: true });
-    mount = createMount();
     state = {
       malcolm: {
         parentBlock: 'test1',
@@ -118,20 +112,5 @@ describe('MalcolmMiddlePanel', () => {
 
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
-  });
-
-  it('calls deselect on click', () => {
-    const testStore = mockStore(state);
-    const wrapper = mount(
-      <Provider store={testStore}>
-        <MiddlePanel />
-      </Provider>
-    );
-    wrapper
-      .find('div')
-      .first()
-      .simulate('click');
-    expect(testStore.getActions().length).toEqual(1);
-    expect(testStore.getActions()[0]).toEqual(malcolmSelectBlock(''));
   });
 });
