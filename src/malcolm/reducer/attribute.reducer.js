@@ -156,6 +156,19 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
     layout = LayoutReducer.processLayout(updatedState);
   }
 
+  // need to update the loading state of other blocks here
+  const oldAttribute = blockUtils.findAttribute(
+    state.blocks,
+    blockName,
+    attributeName
+  );
+  if (
+    (oldAttribute ? oldAttribute.calculated.loading : true) &&
+    !attribute.calculated.loading
+  ) {
+    layout = LayoutReducer.processLayout(updatedState);
+  }
+
   return layout;
 };
 
@@ -277,13 +290,34 @@ export function updateAttribute(oldState, payload) {
         attributeName
       );
 
+      const layoutLoading =
+        layout && layout.blocks ? layout.blocks.some(b => b.loading) : true;
+
+      const numberOfBlocksLoading = layout.blocks.filter(b => b.loading).length;
+      const numberOfBlocksWereLoading = oldState.layout
+        ? oldState.layout.blocks.filter(b => b.loading).length
+        : 1000000;
+
+      const layoutEngine =
+        numberOfBlocksLoading < numberOfBlocksWereLoading ||
+        (!layoutLoading &&
+          LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
+          ? LayoutReducer.buildLayoutEngine(
+              layout,
+              updatedState.layoutState.selectedBlocks
+            )
+          : updatedState.layoutEngine;
+
       updatedState = {
         ...updatedState,
         layout,
+        layoutEngine,
         navigation,
       };
 
-      return navigationReducer.updateNavTypes(updatedState);
+      updatedState = navigationReducer.updateNavTypes(updatedState);
+
+      return updatedState;
     }
   }
 

@@ -3,7 +3,6 @@
 exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not one of allowed type 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -33,7 +32,6 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
 exports[`MalcolmMiddlePanel renders a container only if the no widget tag found for mainAttribute 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -63,7 +61,6 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
 exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -107,7 +104,6 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
 exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -151,7 +147,6 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
 exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -195,7 +190,6 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
 exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div
@@ -239,7 +233,6 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
 exports[`MalcolmMiddlePanel renders table correctly 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
-  onClick={[Function]}
   role="presentation"
 >
   <div

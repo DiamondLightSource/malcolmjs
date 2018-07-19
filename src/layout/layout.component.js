@@ -6,90 +6,62 @@ import navigationActions from '../malcolm/actions/navigation.actions';
 import {
   malcolmSelectBlock,
   malcolmLayoutUpdatePosition,
-  malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
-import { buildDiagramEngine } from './layout.builder';
-import { selectPort } from '../malcolm/actions/layout.action';
+import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
 
 require('storm-react-diagrams/dist/style.min.css');
 
-class Layout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
-  }
+const Layout = props => {
+  const updatedProps = props;
+  updatedProps.layoutEngine.selectedHandler = props.selectHandler;
+  updatedProps.layoutEngine.clickHandler = props.clickHandler;
+  updatedProps.layoutEngine.mouseDownHandler = props.mouseDownHandler;
+  updatedProps.layoutEngine.portMouseDown = props.portMouseDown;
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('keyup', this.handleKeyUp);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('keyup', this.handleKeyUp);
-  }
-
-  handleKeyPress(event) {
-    if (event.key === 'Shift' && !this.props.shiftPressed) {
-      this.props.shiftKeyHandler(true);
-    }
-  }
-
-  handleKeyUp(event) {
-    if (event.key === 'Shift' && this.props.shiftPressed) {
-      this.props.shiftKeyHandler(false);
-    }
-  }
-
-  render() {
-    const {
-      blocks,
-      selectedBlocks,
-      url,
-      clickHandler,
-      portMouseDown,
-    } = this.props;
-    const engine = buildDiagramEngine(
-      blocks,
-      selectedBlocks,
-      url,
-      clickHandler,
-      portMouseDown
-    );
-    return <DiagramWidget diagramEngine={engine} maxNumberPointsPerLink={0} />;
-  }
-}
+  return (
+    <div
+      onDrop={event => props.makeBlockVisible(event, props.layoutEngine)}
+      onDragOver={event => event.preventDefault()}
+      style={{
+        display: 'flex',
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <DiagramWidget
+        diagramEngine={props.layoutEngine}
+        maxNumberPointsPerLink={0}
+      />
+    </div>
+  );
+};
 
 Layout.propTypes = {
-  blocks: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  selectedBlocks: PropTypes.arrayOf(PropTypes.string).isRequired,
-  url: PropTypes.string.isRequired,
+  layoutEngine: PropTypes.shape({
+    selectedHandler: PropTypes.func,
+    clickHandler: PropTypes.func,
+    portMouseDown: PropTypes.func,
+  }).isRequired,
+  selectHandler: PropTypes.func.isRequired,
   clickHandler: PropTypes.func.isRequired,
-  shiftPressed: PropTypes.bool.isRequired,
-  shiftKeyHandler: PropTypes.func.isRequired,
   portMouseDown: PropTypes.func.isRequired,
+  makeBlockVisible: PropTypes.func.isRequired,
+  mouseDownHandler: PropTypes.func.isRequired,
 };
 
 Layout.defaultProps = {};
 
 export const mapStateToProps = state => ({
-  blocks: state.malcolm.layout.blocks,
-  url: state.router.location.pathname,
-  shiftPressed: state.malcolm.layoutState.shiftIsPressed,
-  selectedBlocks: state.malcolm.layoutState.selectedBlocks,
+  layoutEngine: state.malcolm.layoutEngine,
 });
 
 export const mapDispatchToProps = dispatch => ({
-  clickHandler: (url, block, node, selectedBlocks) => {
+  clickHandler: (block, node) => {
     const translation = {
       x: node.x - block.position.x,
       y: node.y - block.position.y,
     };
-
-    if (!selectedBlocks.some(b => b === block.mri)) {
-      dispatch(malcolmSelectBlock(block.mri));
-    }
 
     if (
       Math.abs(node.x - block.position.x) > 3 ||
@@ -98,19 +70,23 @@ export const mapDispatchToProps = dispatch => ({
       dispatch(malcolmLayoutUpdatePosition(translation));
     }
 
-    if (
-      url
-        .replace(/\/$/, '')
-        .split('/')
-        .slice(-1)[0] !== block.name
-    ) {
-      dispatch(navigationActions.updateChildPanel(block.name));
+    dispatch(navigationActions.updateChildPanel(block.name));
+  },
+  mouseDownHandler: show => {
+    dispatch(layoutAction.showLayoutBin(show));
+  },
+  selectHandler: (type, id, isSelected) => {
+    if (type === 'malcolmjsblock') {
+      dispatch(malcolmSelectBlock(id, isSelected));
     }
   },
-  shiftKeyHandler: shiftIsDown =>
-    dispatch(malcolmLayoutShiftIsPressed(shiftIsDown)),
   portMouseDown: (portId, start) => {
     dispatch(selectPort(portId, start));
+  },
+  makeBlockVisible: (event, engine) => {
+    const blockMri = event.dataTransfer.getData('storm-diagram-node');
+    const position = engine.getRelativeMousePoint(event);
+    dispatch(layoutAction.makeBlockVisible(blockMri, position));
   },
 });
 

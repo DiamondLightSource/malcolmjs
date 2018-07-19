@@ -1,11 +1,11 @@
 import { malcolmSetFlag } from './malcolmActionCreators';
 
-const didBlockLoadFail = (originalRequest, store) => {
+const didBlockLoadFail = (originalRequest, dispatch, getState) => {
   if (
     originalRequest.path.slice(-1)[0] === 'meta' &&
-    !store.getState().malcolm.blocks[originalRequest.path[0]].attributes
+    !getState().malcolm.blocks[originalRequest.path[0]].attributes
   ) {
-    store.dispatch(malcolmSetFlag([originalRequest.path[0]], 'loading', 404));
+    dispatch(malcolmSetFlag([originalRequest.path[0]], 'loading', 404));
   }
 };
 

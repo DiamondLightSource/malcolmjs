@@ -76,6 +76,8 @@ const BlockWidget = props => {
       className={props.classes.block}
       elevation={8}
       onClick={e => props.node.clickHandler(e)}
+      onMouseDown={() => props.node.mouseDownHandler(true)}
+      onMouseUp={() => props.node.mouseDownHandler(false)}
     >
       <Typography className={props.classes.title}>
         {props.node.label}
@@ -121,6 +123,7 @@ BlockWidget.propTypes = {
     ports: PropTypes.shape({}),
     description: PropTypes.string,
     clickHandler: PropTypes.func,
+    mouseDownHandler: PropTypes.func,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,

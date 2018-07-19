@@ -42,14 +42,14 @@ function handleMessage(socket, message) {
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
 
-  } else if (malcolmMessages.hasOwnProperty(JSON.stringify(simplifiedMessage))) {
-    let response = Object.assign({id: originalId}, malcolmMessages[JSON.stringify(simplifiedMessage)]);
+  } else if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+    let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);
 
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
       subscriptions.push(originalId.toString());
       subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
 
-      subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
+      response = subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
     }
 
     sendResponse(socket, response);

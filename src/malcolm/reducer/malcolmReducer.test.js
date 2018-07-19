@@ -15,9 +15,11 @@ import {
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
+import LayoutReducer, { LayoutReduxReducer } from './layout.reducer';
 
 jest.mock('./navigation.reducer');
 jest.mock('./method.reducer');
+jest.mock('./layout.reducer');
 
 const buildAction = (type, id, path = ['.', 'blocks']) => ({
   type,
@@ -63,6 +65,10 @@ describe('malcolm reducer', () => {
     MethodReducer.mockImplementation(s => s);
     NavigationReducer.updateNavTypes.mockImplementation(s => s);
     NavigationReducer.updateNavigationPath.mockImplementation(s => s);
+    LayoutReducer.processLayout.mockImplementation(() => ({
+      blocks: [{ loading: true }],
+    }));
+    LayoutReduxReducer.mockImplementation(s => s);
 
     state = {
       messagesInFlight: {},
@@ -73,6 +79,9 @@ describe('malcolm reducer', () => {
           path: '',
           children: [],
         },
+      },
+      layoutState: {
+        selectedBlocks: [],
       },
     };
   });
