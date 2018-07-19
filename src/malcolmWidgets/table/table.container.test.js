@@ -11,8 +11,9 @@ import {
   malcolmPutAction,
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
-// jest.mock('../../malcolm/malcolmActionCreators');
+jest.mock('../../malcolm/actions/navigation.actions');
 
 describe('Table container', () => {
   let shallow;
@@ -168,6 +169,36 @@ describe('Table container', () => {
     delete expectedSent.typeid;
     expect(testStore.getActions()[1]).toEqual(
       malcolmPutAction(['test1', 'layout'], expectedSent)
+    );
+  });
+
+  it('row and info click hook up correctly', () => {
+    const dispatch = [];
+    const testStore = {
+      getState: () => state,
+      dispatch: action => {
+        dispatch.push(action);
+      },
+      subscribe: () => {},
+    };
+    const wrapper = mount(
+      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      'row.0'
+    );
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      'row.0'
     );
   });
 });

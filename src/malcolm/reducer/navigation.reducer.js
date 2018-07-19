@@ -180,11 +180,16 @@ function updateNavTypes(state) {
       nav => nav === lastAttribute
     );
     const panelIndices = navigationLists
-      .filter(nav => [NavTypes.Info, NavTypes.Block].includes(nav.navType))
-      .map((nav, index) => index);
-
+      .map((nav, index) => index)
+      .filter(navIndex =>
+        [NavTypes.Info, NavTypes.Block].includes(
+          navigationLists[navIndex].navType
+        )
+      );
     if (indexOfLastAttribute >= panelIndices.slice(-2)[0]) {
       [updatedState.mainAttribute] = lastAttribute.path.split('.');
+    } else {
+      updatedState.mainAttribute = undefined;
     }
   }
   return updatedState;
