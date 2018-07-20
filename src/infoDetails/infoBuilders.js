@@ -1,33 +1,16 @@
+/* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import blockUtils from '../malcolm/blockUtils';
 
-export const addHandlersToInfoItems = inputProps => {
-  const props = inputProps;
-  if (props.revertHandler) {
-    if (props.info && props.info.localState) {
-      props.info.localState.functions = {
-        clickHandler: () => {
-          props.revertHandler(props.path);
-        },
-      };
-    }
-  }
-  return props;
-};
-
-export const attributeInfo = (state, blockName, attributeName, subElement) => {
+// eslint-disable-next-line import/prefer-default-export
+export const buildAttributeInfo = props => {
   let value;
   const info = {};
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    blockName,
-    attributeName
-  );
+  const { attribute } = props;
   if (attribute && attribute.raw && attribute.raw.meta) {
-    if (subElement === undefined) {
+    if (props.subElement === undefined) {
       info.path = {
         label: 'Attribute path',
-        value: `${blockName}, ${attributeName}`,
+        value: `${props.path[0]}, ${props.path[1]}`,
         inline: true,
       };
       info.meta = {
@@ -67,7 +50,9 @@ export const attributeInfo = (state, blockName, attributeName, subElement) => {
       };
       info.timeStamp = {
         label: 'Time Stamp',
-        time: `${new Date(attribute.raw.timeStamp.secondsPastEpoch * 1000)}`,
+        time: new Date(
+          attribute.raw.timeStamp.secondsPastEpoch * 1000
+        ).toISOString(),
         ...attribute.raw.timeStamp,
       };
       info.errorState = {
@@ -95,12 +80,102 @@ export const attributeInfo = (state, blockName, attributeName, subElement) => {
           tag: 'info:button',
           alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
         };
+        if (props.revertHandler) {
+          info.localState.functions = {
+            clickHandler: () => {
+              props.revertHandler(props.path);
+            },
+          };
+        }
       }
       // eslint-disable-next-line prefer-destructuring
       value = attribute.raw.value;
-    } else {
-      info.subElement = `you want the info for sub-element ${subElement} of ${attributeName}...`;
+    } else if (attribute.localState) {
+      const row = parseInt(props.subElement[1], 10);
+      const rowFlags = attribute.localState.flags.rows[row];
+      info.localState = {
+        label: 'Row local state',
+        value: {
+          buttonLabel: 'Discard',
+          disabled: !(rowFlags._dirty || rowFlags._isChanged),
+        },
+        inline: true,
+        tag: 'info:button',
+        alarmState:
+          rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
+      };
+      const dataRow = {};
+      attribute.localState.labels.forEach(label => {
+        dataRow[label] =
+          row < attribute.raw.value[label].length
+            ? attribute.raw.value[label][row]
+            : 'n/a';
+      });
+      info.rowValue = {
+        label: 'Row remote state',
+        ...dataRow,
+      };
+      info.addRowAbove = {
+        label: 'Insert row above',
+        value: {
+          buttonLabel: 'Add',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      info.addRowBelow = {
+        label: 'Insert row below',
+        value: {
+          buttonLabel: 'Add',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      info.deleteRow = {
+        label: 'Delete row',
+        value: {
+          buttonLabel: 'Delete',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      if (props.addRow) {
+        info.addRowAbove.functions = {
+          clickHandler: () => {
+            props.addRow(props.path, row);
+            props.changeInfoHandler(props.path, `row.${row + 1}`);
+          },
+        };
+        info.addRowBelow.functions = {
+          clickHandler: () => {
+            props.addRow(props.path, row, 'below');
+          },
+        };
+        info.deleteRow.functions = {
+          clickHandler: () => {
+            if (row >= props.attribute.localState.value.length - 1) {
+              if (row !== 0) {
+                props.changeInfoHandler(props.path, `row.${row - 1}`);
+              } else {
+                props.closeInfoHandler(props.path);
+              }
+            }
+            props.addRow(props.path, row, 'delete');
+          },
+        };
+      }
+      if (props.rowRevertHandler) {
+        info.localState.functions = {
+          clickHandler: () => {
+            props.rowRevertHandler(props.path, dataRow, row);
+          },
+        };
+      }
+      info.subElement = props.subElement;
     }
   }
-  return { info, value };
+  return { info, value, ...props };
 };

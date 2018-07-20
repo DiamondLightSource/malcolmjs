@@ -168,18 +168,12 @@ const WidgetTable = props => {
                     props.attribute.calculated.path,
                     `row.${row}`
                   );
-                  props.setFlag(
-                    props.attribute.calculated.path,
-                    row,
-                    'selected',
-                    { selected: true }
-                  );
                 }}
               >
                 {[
                   <TableCell
                     className={
-                      flags.table.selectedRow === row
+                      props.selectedRow === row
                         ? props.classes.blankCell
                         : props.classes.textBody
                     }
@@ -193,12 +187,6 @@ const WidgetTable = props => {
                         props.infoClickHandler(
                           props.attribute.calculated.path,
                           `row.${row}`
-                        );
-                        props.setFlag(
-                          props.attribute.calculated.path,
-                          row,
-                          'selected',
-                          { selected: true }
                         );
                       }}
                     >
@@ -215,7 +203,7 @@ const WidgetTable = props => {
                   ...columnLabels.map((label, column) => (
                     <TableCell
                       className={
-                        flags.table.selectedRow === row
+                        props.selectedRow === row
                           ? props.classes.blankCell
                           : props.classes.textBody
                       }
@@ -305,9 +293,6 @@ WidgetTable.propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
-      table: PropTypes.shape({
-        selectedRow: PropTypes.number,
-      }),
     }),
     hasIncompleteRow: PropTypes.bool,
     labels: PropTypes.arrayOf(PropTypes.string),
@@ -331,6 +316,7 @@ WidgetTable.propTypes = {
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
   }).isRequired,
+  selectedRow: PropTypes.number.isRequired,
   eventHandler: PropTypes.func.isRequired,
   // infoClickHandler: PropTypes.func.isRequired,
   // rowClickHandler: PropTypes.func.isRequired,

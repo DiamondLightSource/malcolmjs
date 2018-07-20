@@ -15,6 +15,20 @@ export const rowIsDifferent = (attribute, row) =>
       `${attribute.raw.value[label][row]}`
   );
 
+export const tableHasRow = (row, table) =>
+  table &&
+  ((table.localState && parseInt(row, 10) < table.localState.value.length) ||
+    (table.raw.meta &&
+      blockUtils.attributeHasTag(table, 'widget:table') &&
+      parseInt(row, 10) <
+        table.raw.value[Object.keys(table.raw.meta.elements)[0]].length));
+
+export const tableHasColumn = (column, table) =>
+  table &&
+  table.raw &&
+  table.meta.elements &&
+  table.raw.meta.elements.includes(column);
+
 export const shouldClearDirtyFlag = inputAttribute => {
   const attribute = inputAttribute;
   if (attribute.localState.flags.table.dirty) {
@@ -90,16 +104,23 @@ export const updateTableLocal = (state, payload) => {
   const attribute = { ...attributes[matchingAttributeIndex] };
   if (matchingAttributeIndex >= 0 && attribute.localState !== undefined) {
     if (payload.value.insertRow) {
-      const defaultRow = {};
-      attribute.localState.labels.forEach(label => {
-        defaultRow[label] = getDefaultFromType(
-          attribute.raw.meta.elements[label]
-        );
-      });
-      attribute.localState.value.splice(payload.row, 0, defaultRow);
-      attribute.localState.flags.rows.splice(payload.row, 0, {
-        _isChanged: true,
-      });
+      const insertAt =
+        payload.value.modifier === 'below' ? payload.row + 1 : payload.row;
+      if (payload.value.modifier === 'delete') {
+        attribute.localState.value.splice(insertAt, 1);
+        attribute.localState.flags.rows.splice(insertAt, 1);
+      } else {
+        const defaultRow = {};
+        attribute.localState.labels.forEach(label => {
+          defaultRow[label] = getDefaultFromType(
+            attribute.raw.meta.elements[label]
+          );
+        });
+        attribute.localState.value.splice(insertAt, 0, defaultRow);
+        attribute.localState.flags.rows.splice(insertAt, 0, {
+          _isChanged: true,
+        });
+      }
     } else {
       attribute.localState.value[payload.row] = payload.value;
 

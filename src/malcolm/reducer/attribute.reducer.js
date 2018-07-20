@@ -10,7 +10,11 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
 } from '../malcolm.types';
-import { shouldClearDirtyFlag } from './table.reducer';
+import {
+  shouldClearDirtyFlag,
+  tableHasColumn,
+  tableHasRow,
+} from './table.reducer';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -25,6 +29,22 @@ export const updateAttributeChildren = attribute => {
   }
 
   return updatedAttribute;
+};
+
+const hasSubElements = inputAttribute => {
+  const attribute = inputAttribute;
+  if (blockUtils.attributeHasTag(attribute, 'widget:table')) {
+    attribute.calculated.subElements = {
+      row: tableHasRow,
+      col: tableHasColumn,
+    };
+  } /* else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
+    attribute.calculated.subElements = {
+      takes: param => getMethodParam('takes', param),
+      returns: param => getMethodParam('returns', param),
+    };
+  } */
+  return attribute;
 };
 
 export const checkForFlowGraph = attribute => {
@@ -175,6 +195,7 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
 const checkForSpecialCases = inputAttribute => {
   let attribute = checkForFlowGraph(inputAttribute);
   attribute = updateAttributeChildren(attribute);
+  attribute = hasSubElements(attribute);
 
   if (attribute.localState !== undefined) {
     const labels = Object.keys(attribute.raw.meta.elements);
@@ -192,11 +213,12 @@ const checkForSpecialCases = inputAttribute => {
         meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
         labels,
         flags: {
-          rows: [],
+          rows: attribute.raw.value[labels[0]].map(() => ({})),
           table: {
+            dirty: false,
             fresh: true,
+            timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
           },
-          timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
         },
       };
     } else {

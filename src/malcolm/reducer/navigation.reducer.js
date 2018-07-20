@@ -105,13 +105,20 @@ function updateNavTypes(state) {
             nav.label = matchingAttribute.raw.meta
               ? matchingAttribute.raw.meta.label
               : nav.path;
-
-            nav.subElement =
-              nav.path.split('.').length > 1 &&
-              (blockUtils.attributeHasTag(matchingAttribute, 'widget:table') ||
-                matchingAttribute.raw.typeid === 'malcolm:core/Method:1.0')
-                ? nav.path.split('.').slice(1)
-                : undefined;
+            if (nav.path.split('.').length > 1) {
+              const subElements = nav.path.split('.').slice(1);
+              if (
+                blockUtils.validateAttributeSubElement(
+                  matchingAttribute,
+                  subElements
+                )
+              ) {
+                nav.subElements = subElements;
+              } else {
+                nav.subElements = undefined;
+                nav.navType = NavTypes.Error;
+              }
+            }
             [nav.path] = nav.path.split('.');
           }
         } else if (previousNavIsAttribute(i, navigationLists)) {

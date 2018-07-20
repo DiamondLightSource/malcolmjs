@@ -1031,7 +1031,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           onClick={[Function]}
         >
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,-1"
             padding="none"
           >
@@ -1046,7 +1046,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             </WithStyles(IconButton)>
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,0"
             padding="none"
           >
@@ -1076,7 +1076,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,1"
             padding="none"
           >
@@ -1106,7 +1106,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,2"
             padding="none"
           >
@@ -1137,7 +1137,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,3"
             padding="none"
           >
@@ -1168,7 +1168,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             />
           </WithStyles(TableCell)>
           <WithStyles(TableCell)
-            className="WidgetTable-blankCell-9"
+            className="WidgetTable-textBody-10"
             key="1,4"
             padding="none"
           >

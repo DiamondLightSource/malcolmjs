@@ -1,31 +1,25 @@
 import { harderAttribute } from '../malcolmWidgets/table/table.stories';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
-import { attributeInfo, addHandlersToInfoItems } from './infoBuilders';
+import { buildAttributeInfo } from './infoBuilders';
 
 describe('info builder', () => {
-  const state = {
-    malcolm: {
-      blocks: {
-        block1: {
-          attributes: [],
-        },
-      },
-    },
-  };
+  let props;
   beforeEach(() => {
-    state.malcolm.blocks.block1.attributes[0] = JSON.parse(
-      JSON.stringify(harderAttribute)
-    );
+    props = {
+      attribute: JSON.parse(JSON.stringify(harderAttribute)),
+      path: ['test1', 'layout'],
+    };
   });
 
-  it('attribute info builder returns empty object if attribute not found', () => {
-    const infoObject = attributeInfo(state, 'block1', 'invalidAttribute');
-    expect(infoObject).toEqual({ info: {}, value: undefined });
+  it('attribute info builder returns empty object if attribute.raw not found', () => {
+    props.attribute.raw = undefined;
+    const propsWithInfo = buildAttributeInfo(props);
+    expect(propsWithInfo).toEqual({ ...props, info: {}, value: undefined });
   });
 
   it('attribute info builder generates correct structure for basic attribute', () => {
-    const infoObject = attributeInfo(state, 'block1', 'layout');
+    const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.errorState).toBeDefined();
     expect(infoObject.info.malcolmAlarm).toBeDefined();
     expect(infoObject.info.meta).toBeDefined();
@@ -52,16 +46,15 @@ describe('info builder', () => {
   });
 
   it('attribute info builder returns correctly if state has no malcolm errors', () => {
-    const infoObject = attributeInfo(state, 'block1', 'layout');
+    const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.errorState.value).toEqual('n/a');
     expect(infoObject.info.errorState.alarmState).toEqual(null);
   });
 
   it('attribute info builder returns correctly if state has some malcolm error', () => {
-    state.malcolm.blocks.block1.attributes[0].calculated.errorMessage =
-      'test Error!';
-    state.malcolm.blocks.block1.attributes[0].calculated.errorState = true;
-    const infoObject = attributeInfo(state, 'block1', 'layout');
+    props.attribute.calculated.errorMessage = 'test Error!';
+    props.attribute.calculated.errorState = true;
+    const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.errorState.value).toEqual('test Error!');
     expect(infoObject.info.errorState.alarmState).toEqual(
       AlarmStates.MAJOR_ALARM
@@ -69,9 +62,9 @@ describe('info builder', () => {
   });
 
   it('attribute info builder generates correct structure for attribute with local state when clean', () => {
-    state.malcolm.blocks.block1.attributes[0].raw.meta.tags = ['widget:table'];
-    state.malcolm.blocks.block1.attributes[0].calculated.dirty = false;
-    const infoObject = attributeInfo(state, 'block1', 'layout');
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
     expect(infoObject.info.localState).toEqual({
       alarmState: null,
@@ -83,9 +76,9 @@ describe('info builder', () => {
   });
 
   it('attribute info builder generates correct structure for attribute with local state when dirty', () => {
-    state.malcolm.blocks.block1.attributes[0].raw.meta.tags = ['widget:table'];
-    state.malcolm.blocks.block1.attributes[0].calculated.dirty = true;
-    const infoObject = attributeInfo(state, 'block1', 'layout');
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = true;
+    const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
     expect(infoObject.info.localState).toEqual({
       alarmState: AlarmStates.DIRTY,
@@ -93,6 +86,41 @@ describe('info builder', () => {
       label: 'Local State',
       tag: 'info:button',
       value: { buttonLabel: 'Discard', disabled: false },
+    });
+  });
+
+  it('attribute info builder generates correct structure for attribute with sub-element defined', () => {
+    const labels = Object.keys(props.attribute.raw.meta.elements);
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    props.attribute.localState = {
+      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
+      value: props.attribute.raw.value[labels[0]].map((value, row) => {
+        const dataRow = {};
+        labels.forEach(label => {
+          dataRow[label] = props.attribute.raw.value[label][row];
+        });
+        return dataRow;
+      }),
+      labels,
+      flags: {
+        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
+        },
+      },
+    };
+    props.subElement = ['row', '1'];
+    const infoObject = buildAttributeInfo(props);
+    expect(infoObject.info.localState).toBeDefined();
+    expect(infoObject.info.localState).toEqual({
+      alarmState: null,
+      inline: true,
+      label: 'Row local state',
+      tag: 'info:button',
+      value: { buttonLabel: 'Discard', disabled: true },
     });
   });
 
@@ -111,7 +139,7 @@ describe('info builder', () => {
       setFlag: 'test',
       revertHandler: 'also test',
     };
-    testInfo = addHandlersToInfoItems(testInfo);
+    testInfo = buildAttributeInfo(testInfo);
     expect(testInfo).toEqual({
       info: {
         otherInfo: {
@@ -130,25 +158,76 @@ describe('info builder', () => {
 
   it('addHandlers adds click handler to local state info element if it exists', () => {
     let testInfo = {
-      info: {
-        localState: {},
-        otherInfo: {
-          value: 'a test',
+      attribute: {
+        raw: {
+          timeStamp: {
+            secondsPastEpoch: 2 ** 31,
+          },
+          alarm: {},
+          meta: {
+            tags: ['widget:table'],
+          },
         },
-      },
-      otherProps: {
-        blah: 'blah',
-        test: { is: true },
+        calculated: {},
       },
       value: 3.141,
       path: ['block1', 'test'],
       setFlag: jest.fn(),
       revertHandler: jest.fn(),
     };
-    testInfo = addHandlersToInfoItems(testInfo);
+    testInfo = buildAttributeInfo(testInfo);
     expect(testInfo.info.localState.functions).toBeDefined();
     testInfo.info.localState.functions.clickHandler();
     expect(testInfo.revertHandler).toHaveBeenCalledTimes(1);
     expect(testInfo.revertHandler).toHaveBeenCalledWith(['block1', 'test']);
+  });
+
+  it('add and delete row methods get hooked up', () => {
+    const labels = Object.keys(props.attribute.raw.meta.elements);
+    props.addRow = jest.fn();
+    props.changeInfoHandler = jest.fn();
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    props.attribute.localState = {
+      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
+      value: props.attribute.raw.value[labels[0]].map((value, row) => {
+        const dataRow = {};
+        labels.forEach(label => {
+          dataRow[label] = props.attribute.raw.value[label][row];
+        });
+        return dataRow;
+      }),
+      labels,
+      flags: {
+        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
+        },
+      },
+    };
+    props.subElement = ['row', '1'];
+    const infoObject = buildAttributeInfo(props);
+    expect(infoObject.info.addRowAbove).toBeDefined();
+    expect(infoObject.info.addRowBelow).toBeDefined();
+    expect(infoObject.info.deleteRow).toBeDefined();
+    infoObject.info.addRowBelow.functions.clickHandler();
+    expect(props.addRow).toHaveBeenCalledTimes(1);
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1, 'below');
+    props.addRow.mockClear();
+    infoObject.info.deleteRow.functions.clickHandler();
+    expect(props.addRow).toHaveBeenCalledTimes(1);
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1, 'delete');
+    expect(props.changeInfoHandler).toHaveBeenCalledTimes(0);
+    props.addRow.mockClear();
+    infoObject.info.addRowAbove.functions.clickHandler();
+    expect(props.addRow).toHaveBeenCalledTimes(1);
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 1);
+    expect(props.changeInfoHandler).toHaveBeenCalledTimes(1);
+    expect(props.changeInfoHandler).toHaveBeenCalledWith(
+      ['test1', 'layout'],
+      'row.2'
+    );
   });
 });
