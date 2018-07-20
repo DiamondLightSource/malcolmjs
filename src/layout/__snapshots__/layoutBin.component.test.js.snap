@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout Bin renders correctly 1`] = `
+<div
+  className="LayoutBin-container-1"
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+  onMouseUp={[Function]}
+  role="presentation"
+>
+  <pure(Delete)
+    className="LayoutBin-icon-2"
+  />
+</div>
+`;

@@ -186,6 +186,11 @@ const selectPortForLink = (malcolmState, portId, start) => {
     const startPort = findPort(layout.blocks, startPortForLink);
     const endPort = findPort(layout.blocks, endPortForLink);
 
+    // if both ports are inputs or both outputs then don't make the connection
+    if (startPort.input === endPort.input) {
+      return malcolmState;
+    }
+
     const inputPort = startPort.input ? startPort : endPort;
     const outputPort = startPort.input ? endPort : startPort;
     inputPort.value = outputPort.tag;
