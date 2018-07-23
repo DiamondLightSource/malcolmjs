@@ -14,6 +14,7 @@ import {
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
+import blockUtils from '../../../malcolm/blockUtils';
 
 export const getDefaultFromType = objectMeta => {
   switch (objectMeta.typeid) {
@@ -160,7 +161,17 @@ const AttributeSelector = props => {
   return null;
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, ownProps) => {
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    ownProps.blockName,
+    ownProps.attributeName
+  );
+
+  return {
+    attribute,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value) => {
