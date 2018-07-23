@@ -30,7 +30,7 @@ describe('Table container', () => {
       malcolm: {
         navigation: {
           navigationLists: [
-            { path: 'Test', navType: NavTypes.Block },
+            { path: 'Test', navType: NavTypes.Block, blockMri: 'test1' },
             { path: 'layout', navType: NavTypes.Attribute },
           ],
         },
@@ -220,5 +220,22 @@ describe('Table container', () => {
       'layout',
       'row.0'
     );
+  });
+
+  it('subelement in url selects row correctly', () => {
+    state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
+    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
+    const dispatch = [];
+    const testStore = {
+      getState: () => state,
+      dispatch: action => {
+        dispatch.push(action);
+      },
+      subscribe: () => {},
+    };
+    const wrapper = shallow(
+      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 });

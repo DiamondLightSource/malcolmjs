@@ -182,7 +182,7 @@ describe('info builder', () => {
     expect(testInfo.revertHandler).toHaveBeenCalledWith(['block1', 'test']);
   });
 
-  it('add and delete row methods get hooked up', () => {
+  it('table add and delete row methods get hooked up', () => {
     const labels = Object.keys(props.attribute.raw.meta.elements);
     props.addRow = jest.fn();
     props.changeInfoHandler = jest.fn();
@@ -228,6 +228,116 @@ describe('info builder', () => {
     expect(props.changeInfoHandler).toHaveBeenCalledWith(
       ['test1', 'layout'],
       'row.2'
+    );
+  });
+
+  it('table delete row methods fires info route change if bottom row selected', () => {
+    const labels = Object.keys(props.attribute.raw.meta.elements);
+    props.addRow = jest.fn();
+    props.changeInfoHandler = jest.fn();
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    props.attribute.localState = {
+      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
+      value: props.attribute.raw.value[labels[0]].map((value, row) => {
+        const dataRow = {};
+        labels.forEach(label => {
+          dataRow[label] = props.attribute.raw.value[label][row];
+        });
+        return dataRow;
+      }),
+      labels,
+      flags: {
+        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
+        },
+      },
+    };
+    props.subElement = [
+      'row',
+      (props.attribute.localState.value.length - 1).toString(),
+    ];
+    const infoObject = buildAttributeInfo(props);
+
+    props.addRow.mockClear();
+    infoObject.info.deleteRow.functions.clickHandler();
+    expect(props.addRow).toHaveBeenCalledTimes(1);
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 3, 'delete');
+    expect(props.changeInfoHandler).toHaveBeenCalledTimes(1);
+    expect(props.changeInfoHandler).toHaveBeenCalledWith(
+      ['test1', 'layout'],
+      'row.2'
+    );
+  });
+
+  it('table delete row methods fires info close if only remaining row selected', () => {
+    const labels = Object.keys(props.attribute.raw.meta.elements);
+    const dataRow = {};
+    labels.forEach(label => {
+      [, dataRow[label]] = props.attribute.raw.value[label];
+    });
+    props.addRow = jest.fn();
+    props.closeInfoHandler = jest.fn();
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    props.attribute.localState = {
+      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
+      value: [dataRow],
+      labels,
+      flags: {
+        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
+        },
+      },
+    };
+    props.subElement = ['row', '0'];
+    const infoObject = buildAttributeInfo(props);
+
+    props.addRow.mockClear();
+    infoObject.info.deleteRow.functions.clickHandler();
+    expect(props.addRow).toHaveBeenCalledTimes(1);
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 0, 'delete');
+    expect(props.closeInfoHandler).toHaveBeenCalledTimes(1);
+    expect(props.closeInfoHandler).toHaveBeenCalledWith(['test1', 'layout']);
+  });
+
+  it('addHandlers adds click handler to local state info element if it exists', () => {
+    const labels = Object.keys(props.attribute.raw.meta.elements);
+    const dataRow = {};
+    labels.forEach(label => {
+      [, dataRow[label]] = props.attribute.raw.value[label];
+    });
+    props.rowRevertHandler = jest.fn();
+    props.attribute.raw.meta.tags = ['widget:table'];
+    props.attribute.calculated.dirty = false;
+    props.attribute.localState = {
+      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
+      value: [dataRow],
+      labels,
+      flags: {
+        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
+        },
+      },
+    };
+    props.subElement = ['row', '0'];
+    const infoObject = buildAttributeInfo(props);
+    expect(infoObject.info.localState.functions).toBeDefined();
+    infoObject.info.localState.functions.clickHandler();
+    expect(infoObject.rowRevertHandler).toHaveBeenCalledTimes(1);
+    expect(infoObject.rowRevertHandler).toHaveBeenCalledWith(
+      ['test1', 'layout'],
+      { mri: 'PANDA:TTLIN1', name: 'TTLIN1', visible: false, x: 0, y: 0 },
+      0
     );
   });
 });
