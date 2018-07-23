@@ -9,7 +9,11 @@ import {
   malcolmSetFlag,
   malcolmRevertAction,
 } from '../malcolm/malcolmActionCreators';
-import { attributeInfo, addHandlersToInfoItems } from './infoBuilders';
+import {
+  attributeInfo,
+  addHandlersToInfoItems,
+  linkInfo,
+} from './infoBuilders';
 
 const getTag = element => {
   if (element && element.tag) {
@@ -61,6 +65,9 @@ export const InfoDetails = props => {
           alarm={infoAlarmState(updatedProps.info[a])}
           tag={getTag(updatedProps.info[a])}
           handlers={updatedProps.info[a].functions}
+          choices={updatedProps.info[a].choices}
+          path={updatedProps.info[a].path}
+          showLabel={updatedProps.info[a].showLabel}
         />
       ))}
       {infoGroups.map(group => (
@@ -118,7 +125,20 @@ const mapStateToProps = state => {
       navLists[1].navType === NavTypes.Attribute ? navLists[1].path : '';
   }
 
-  const builtInfo = attributeInfo(state, blockName, attributeName);
+  let builtInfo;
+  if (navLists[2].path.endsWith('.link')) {
+    console.log(navLists[2].linkInputBlock);
+    console.log(navLists[2].linkInputPort);
+
+    builtInfo = linkInfo(
+      state,
+      navLists[2].linkInputBlock,
+      navLists[2].linkInputPort
+    );
+  } else {
+    builtInfo = attributeInfo(state, blockName, attributeName);
+  }
+
   return {
     ...builtInfo,
     path: [blockName, attributeName],

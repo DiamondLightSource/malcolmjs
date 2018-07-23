@@ -169,7 +169,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         }
       });
     });
-  }, 50);
+  }, 90);
 
   socketContainer.socket.onmessage = event => {
     messages.push(event.data);

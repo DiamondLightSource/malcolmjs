@@ -7,6 +7,7 @@ import MiddlePanelContainer from './middlePanel.container';
 import Palette from '../layout/palette/palette.component';
 // eslint-disable-next-line import/no-named-as-default
 import InfoDetails from '../infoDetails/infoDetails.component';
+import NavTypes from '../malcolm/NavTypes';
 
 const blockDetailsUrl = (rootUrl, blockTitle) =>
   `${rootUrl}/details/${blockTitle}`;
@@ -50,8 +51,13 @@ const mapStateToProps = state => {
     ? state.malcolm.blocks[state.malcolm.childBlock]
     : undefined;
 
-  const showPalette = state.malcolm.childBlock === '.palette';
-  const showInfo = state.malcolm.childBlock === '.info';
+  const { navigationLists } = state.malcolm.navigation;
+  const matchingNavItem = navigationLists.find(
+    nav => nav.path === state.malcolm.childBlock
+  );
+  const navType = matchingNavItem ? matchingNavItem.navType : undefined;
+  const showPalette = navType === NavTypes.Palette;
+  const showInfo = navType === NavTypes.Info;
 
   let childBlockTitle = childBlock ? childBlock.name : '';
   if (showPalette) {

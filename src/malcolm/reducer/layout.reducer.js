@@ -75,6 +75,7 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
 };
 
 const processLayout = malcolmState => {
+  console.log('processing layout');
   const layout = {
     blocks: [],
   };

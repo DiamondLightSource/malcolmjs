@@ -12,6 +12,22 @@ export const addHandlersToInfoItems = inputProps => {
       };
     }
   }
+
+  if (props.info && props.info.sourcePort) {
+    props.info.sourcePort.functions.eventHandler = props.eventHandler;
+  }
+
+  if (props.info && props.info.deleteLink) {
+    props.info.deleteLink.functions.clickHandler = () => {
+      console.log('Delete key clicked');
+      console.log(props.info.deleteLink.nullValue);
+      props.eventHandler(
+        props.info.deleteLink.path,
+        props.info.deleteLink.nullValue
+      );
+    };
+  }
+
   return props;
 };
 
@@ -99,4 +115,73 @@ export const attributeInfo = (state, blockName, attributeName) => {
     value = attribute.raw.value;
   }
   return { info, value };
+};
+
+export const linkInfo = (state, blockName, portName) => {
+  const layoutAttribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    state.malcolm.parentBlock,
+    state.malcolm.mainAttribute
+  );
+
+  if (!layoutAttribute || !layoutAttribute.raw.value) {
+    return { info: {}, value: {} };
+  }
+
+  const blockNameIndex = layoutAttribute.raw.value.name.findIndex(
+    n => n === blockName
+  );
+  const blockMri = layoutAttribute.raw.value.mri[blockNameIndex];
+
+  console.log(blockMri);
+  const portAttribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    blockMri,
+    portName
+  );
+
+  if (!portAttribute || !portAttribute.raw.value) {
+    return { info: {}, value: {} };
+  }
+
+  const portNullValue = portAttribute.raw.meta.tags
+    .find(t => t.indexOf('inport:') > -1)
+    .split(':')
+    .slice(-1)[0];
+  console.log(portAttribute.raw.meta.tags);
+  console.log(`port null value: ${portNullValue}`);
+
+  const info = {
+    sourcePort: {
+      label: 'Source',
+      value: portAttribute.raw.value,
+      inline: true,
+      tag: 'widget:combo',
+      choices: portAttribute.raw.meta.choices,
+      functions: {},
+      path: [blockMri, portName, 'value'],
+    },
+    destinationPort: {
+      label: 'Destination',
+      value: `${blockName}.${portName}`,
+      inline: true,
+    },
+    deleteLink: {
+      label: '',
+      value: {
+        buttonLabel: 'Delete',
+      },
+      inline: true,
+      tag: 'info:button',
+      showLabel: false,
+      functions: {},
+      path: [blockMri, portName, 'value'],
+      nullValue: portNullValue,
+    },
+  };
+
+  return {
+    info,
+    value: {},
+  };
 };

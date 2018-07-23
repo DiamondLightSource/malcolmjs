@@ -39,6 +39,8 @@ const styles = theme => ({
   },
 });
 
+const EMPTY_STRING = '';
+
 const AttributeDetails = props => {
   let widgetTagIndex = null;
   if (props.attribute && props.attribute.raw && props.attribute.raw.meta) {
@@ -51,7 +53,7 @@ const AttributeDetails = props => {
     const alarm = getAlarmState(props.attribute);
     let message = props.attribute.raw.meta.description
       ? props.attribute.raw.meta.description
-      : '';
+      : EMPTY_STRING;
     message = props.attribute.calculated.errorMessage
       ? props.attribute.calculated.errorMessage
       : message;
@@ -63,7 +65,7 @@ const AttributeDetails = props => {
             className={props.classes.button}
             disableRipple
             onClick={() =>
-              props.buttonClickHandler([props.blockName, props.attributeName])
+              props.buttonClickHandler(props.blockName, props.attributeName)
             }
           >
             <AttributeAlarm alarmSeverity={alarm} />
@@ -129,8 +131,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  buttonClickHandler: path => {
-    dispatch(navigationActions.navigateToInfo(path[0], path[1]));
+  buttonClickHandler: (blockName, attributeName) => {
+    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },
 });
 
