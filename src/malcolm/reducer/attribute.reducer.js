@@ -259,6 +259,15 @@ export function updateAttribute(oldState, payload) {
             path,
           },
         };
+        if (attribute.archive.firstTime === -1) {
+          attribute.archive.firstTime = payload.raw.timeStamp.secondsPastEpoch;
+        }
+        attribute.archive.values.push(payload.raw.value ? 1 : 0);
+        attribute.archive.timeStamps.push(
+          payload.raw.timeStamp.secondsPastEpoch -
+            attribute.archive.firstTime +
+            10 ** -9 * payload.raw.timeStamp.nanoseconds
+        );
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
       }
       const blocks = { ...state.blocks };

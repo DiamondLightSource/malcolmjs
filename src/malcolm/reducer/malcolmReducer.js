@@ -134,6 +134,11 @@ function updateBlock(state, payload) {
             loading: true,
             children: [],
           },
+          archive: {
+            values: [],
+            timeStamps: [],
+            firstTime: -1,
+          },
         })),
         children: [...payload.fields],
       };

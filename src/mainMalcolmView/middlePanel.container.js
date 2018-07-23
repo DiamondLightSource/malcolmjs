@@ -8,13 +8,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import AttributePlot from '../attributePlot/attributePlot.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
 
-import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 
@@ -139,6 +139,7 @@ const findAttributeComponent = props => {
       return (
         <div className={props.classes.plainBackground}>
           <div
+            className={props.classes.tableContainer}
             style={{
               left: props.openParent ? 365 : 5,
               width: `calc(100% - ${(props.openChild ? 365 : 5) +
@@ -146,10 +147,10 @@ const findAttributeComponent = props => {
               transition: 'width 1s, left 1s',
             }}
           >
-            <br />
-            <br />
-            <br />
-            <img src={malcolmLogo} alt=" " />
+            <AttributePlot
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+            />
           </div>
         </div>
       );
