@@ -11,8 +11,10 @@ import {
   malcolmPutAction,
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
+import navigationActions from '../../malcolm/actions/navigation.actions';
+import NavTypes from '../../malcolm/NavTypes';
 
-// jest.mock('../../malcolm/malcolmActionCreators');
+jest.mock('../../malcolm/actions/navigation.actions');
 
 describe('Table container', () => {
   let shallow;
@@ -26,6 +28,12 @@ describe('Table container', () => {
     mockStore = configureStore();
     state = {
       malcolm: {
+        navigation: {
+          navigationLists: [
+            { path: 'Test', navType: NavTypes.Block, blockMri: 'test1' },
+            { path: 'layout', navType: NavTypes.Attribute },
+          ],
+        },
         blocks: {
           test1: {
             attributes: [{ ...harderAttribute, localState: {} }],
@@ -139,15 +147,27 @@ describe('Table container', () => {
   });
 
   it('revert button hooks up correctly', () => {
-    const testStore = mockStore(state);
+    navigationActions.navigateToInfo.mockClear();
+    const dispatch = [];
+    const testStore = {
+      getState: () => state,
+      dispatch: action => {
+        dispatch.push(action);
+      },
+      subscribe: () => {},
+    };
     const wrapper = mount(
       <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
     );
     const buttons = wrapper.find('button');
     buttons.at(buttons.length - 2).simulate('click');
-    expect(testStore.getActions().length).toEqual(1);
-    expect(testStore.getActions()[0]).toEqual(
-      malcolmRevertAction(['test1', 'layout'])
+    expect(dispatch.length).toEqual(2);
+    expect(dispatch[0]).toEqual(malcolmRevertAction(['test1', 'layout']));
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      undefined
     );
   });
 
@@ -169,5 +189,53 @@ describe('Table container', () => {
     expect(testStore.getActions()[1]).toEqual(
       malcolmPutAction(['test1', 'layout'], expectedSent)
     );
+  });
+
+  it('row and info click hook up correctly', () => {
+    navigationActions.navigateToInfo.mockClear();
+    const dispatch = [];
+    const testStore = {
+      getState: () => state,
+      dispatch: action => {
+        dispatch.push(action);
+      },
+      subscribe: () => {},
+    };
+    const wrapper = mount(
+      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      'row.0'
+    );
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      'row.0'
+    );
+  });
+
+  it('subelement in url selects row correctly', () => {
+    state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
+    state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
+    const dispatch = [];
+    const testStore = {
+      getState: () => state,
+      dispatch: action => {
+        dispatch.push(action);
+      },
+      subscribe: () => {},
+    };
+    const wrapper = shallow(
+      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 });

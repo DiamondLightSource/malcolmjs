@@ -160,11 +160,20 @@ const WidgetTable = props => {
         <Table className={props.classes.tableLayout}>
           <TableBody>
             {values.map((rowValue, row) => (
-              <TableRow className={props.classes.rowFormat} key={row}>
+              <TableRow
+                className={props.classes.rowFormat}
+                key={row}
+                onClick={() => {
+                  props.rowClickHandler(
+                    props.attribute.calculated.path,
+                    `row.${row}`
+                  );
+                }}
+              >
                 {[
                   <TableCell
                     className={
-                      flags.table.selectedRow === row
+                      props.selectedRow === row
                         ? props.classes.blankCell
                         : props.classes.textBody
                     }
@@ -174,14 +183,12 @@ const WidgetTable = props => {
                     <IconButton
                       className={props.classes.button}
                       disableRipple
-                      onClick={() =>
-                        props.setFlag(
+                      onClick={() => {
+                        props.infoClickHandler(
                           props.attribute.calculated.path,
-                          row,
-                          'selected',
-                          { selected: true }
-                        )
-                      }
+                          `row.${row}`
+                        );
+                      }}
                     >
                       <AttributeAlarm
                         alarmSeverity={
@@ -196,7 +203,7 @@ const WidgetTable = props => {
                   ...columnLabels.map((label, column) => (
                     <TableCell
                       className={
-                        flags.table.selectedRow === row
+                        props.selectedRow === row
                           ? props.classes.blankCell
                           : props.classes.textBody
                       }
@@ -286,9 +293,6 @@ WidgetTable.propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
-      table: PropTypes.shape({
-        selectedRow: PropTypes.number,
-      }),
     }),
     hasIncompleteRow: PropTypes.bool,
     labels: PropTypes.arrayOf(PropTypes.string),
@@ -312,7 +316,10 @@ WidgetTable.propTypes = {
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
   }).isRequired,
+  selectedRow: PropTypes.number.isRequired,
   eventHandler: PropTypes.func.isRequired,
+  // infoClickHandler: PropTypes.func.isRequired,
+  // rowClickHandler: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,

@@ -15,6 +15,8 @@ import {
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
 import WidgetTable from './table.component';
+import navigationActions from '../../malcolm/actions/navigation.actions';
+import NavTypes from '../../malcolm/NavTypes';
 
 const TableContainer = props => {
   const path = [props.blockName, props.attributeName];
@@ -30,11 +32,16 @@ const TableContainer = props => {
     ) : (
       <Typography>
         Update received @{' '}
-        {`${new Date(props.attribute.raw.timeStamp.secondsPastEpoch * 1000)}`}
+        {new Date(
+          props.attribute.raw.timeStamp.secondsPastEpoch * 1000
+        ).toISOString()}
       </Typography>
     ),
     <ButtonAction
-      clickAction={() => props.revertHandler(path)}
+      clickAction={() => {
+        props.revertHandler(path);
+        props.infoClickHandler(path);
+      }}
       text="Discard changes"
     />,
     <ButtonAction
@@ -50,6 +57,9 @@ const TableContainer = props => {
       setFlag={props.setFlag}
       footerItems={footerItems}
       addRow={props.addRow}
+      infoClickHandler={props.infoClickHandler}
+      rowClickHandler={props.rowClickHandler}
+      selectedRow={props.selectedRow}
     />
   );
 };
@@ -63,12 +73,40 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.attributeName
     );
   }
+  let subElement;
+  let selectedRow;
+  const navLists = state.malcolm.navigation.navigationLists.slice(-3);
+  const blockName =
+    navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : undefined;
+  const attributeName =
+    navLists[1].navType === NavTypes.Attribute ? navLists[1].path : undefined;
+  if (
+    attribute.calculated.path[0] === blockName &&
+    attribute.calculated.path[1] === attributeName
+  ) {
+    subElement =
+      navLists[1].navType === NavTypes.Attribute && navLists[1].subElements
+        ? navLists[1].subElements
+        : undefined;
+  }
+  if (subElement && subElement[0] === 'row') {
+    selectedRow = parseInt(subElement[1], 10);
+  }
   return {
     attribute,
+    selectedRow,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
+  rowClickHandler: (path, subElement) => {
+    dispatch(
+      navigationActions.navigateToSubElement(path[0], path[1], subElement)
+    );
+  },
+  infoClickHandler: (path, subElement) => {
+    dispatch(navigationActions.navigateToInfo(path[0], path[1], subElement));
+  },
   eventHandler: (path, value, row) => {
     dispatch(malcolmUpdateTable(path, value, row));
   },
@@ -109,19 +147,26 @@ TableContainer.propTypes = {
       isDirty: PropTypes.bool,
       flags: PropTypes.shape({
         table: PropTypes.shape({
+          selectedRow: PropTypes.number,
           dirty: PropTypes.bool,
           fresh: PropTypes.bool,
         }),
       }),
     }),
+    calculated: PropTypes.shape({
+      path: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,
     raw: PropTypes.shape({
       timeStamp: PropTypes.shape({
         secondsPastEpoch: PropTypes.string,
       }),
     }),
   }).isRequired,
+  selectedRow: PropTypes.number.isRequired,
   revertHandler: PropTypes.func.isRequired,
   eventHandler: PropTypes.func.isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  rowClickHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,
   copyTable: PropTypes.func.isRequired,

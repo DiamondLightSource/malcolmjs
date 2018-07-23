@@ -142,31 +142,28 @@ describe('WidgetTable', () => {
     expect(addRow.mock.calls[0]).toEqual([['test1', 'layout'], 4]);
   });
 
-  it('adds row on button click', () => {
+  it('selects row and opens info on click', () => {
     const setFlag = jest.fn();
+    const infoClick = jest.fn();
+    const rowClick = jest.fn();
     const wrapper = mount(
       <WidgetTable
         attribute={harderAttribute}
         eventHandler={() => {}}
         setFlag={setFlag}
         addRow={() => {}}
+        infoClickHandler={infoClick}
+        rowClickHandler={rowClick}
       />
     );
     const buttons = wrapper.find('button');
     buttons.at(0).simulate('click');
     buttons.at(3).simulate('click');
-    expect(setFlag.mock.calls.length).toEqual(2);
-    expect(setFlag.mock.calls[0]).toEqual([
-      ['test1', 'layout'],
-      0,
-      'selected',
-      { selected: true },
-    ]);
-    expect(setFlag.mock.calls[1]).toEqual([
-      ['test1', 'layout'],
-      3,
-      'selected',
-      { selected: true },
-    ]);
+    expect(infoClick.mock.calls.length).toEqual(2);
+    expect(rowClick.mock.calls.length).toEqual(2);
+    expect(infoClick.mock.calls[0]).toEqual([['test1', 'layout'], 'row.0']);
+    expect(infoClick.mock.calls[1]).toEqual([['test1', 'layout'], 'row.3']);
+    expect(rowClick.mock.calls[0]).toEqual([['test1', 'layout'], 'row.0']);
+    expect(rowClick.mock.calls[1]).toEqual([['test1', 'layout'], 'row.3']);
   });
 });

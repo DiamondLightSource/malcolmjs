@@ -1,102 +1,181 @@
+/* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import blockUtils from '../malcolm/blockUtils';
 
-export const addHandlersToInfoItems = inputProps => {
-  const props = inputProps;
-  if (props.revertHandler) {
-    if (props.info && props.info.localState) {
-      props.info.localState.functions = {
-        clickHandler: () => {
-          props.revertHandler(props.path);
-        },
-      };
-    }
-  }
-  return props;
-};
-
-export const attributeInfo = (state, blockName, attributeName) => {
+// eslint-disable-next-line import/prefer-default-export
+export const buildAttributeInfo = props => {
   let value;
   const info = {};
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    blockName,
-    attributeName
-  );
+  const { attribute } = props;
   if (attribute && attribute.raw && attribute.raw.meta) {
-    info.path = {
-      label: 'Attribute path',
-      value: `${blockName}, ${attributeName}`,
-      inline: true,
-    };
-    info.meta = {
-      label: 'Meta Data',
-      malcolmType: {
-        value: attribute.raw.meta.typeid,
-        label: 'Malcolm Type',
+    if (props.subElement === undefined) {
+      info.path = {
+        label: 'Attribute path',
+        value: `${props.path[0]}, ${props.path[1]}`,
         inline: true,
-      },
-      description: {
-        value: attribute.raw.meta.description,
-        label: 'Description',
+      };
+      info.meta = {
+        label: 'Meta Data',
+        malcolmType: {
+          value: attribute.raw.meta.typeid,
+          label: 'Malcolm Type',
+          inline: true,
+        },
+        description: {
+          value: attribute.raw.meta.description,
+          label: 'Description',
+          inline: true,
+        },
+        writeable: {
+          value: attribute.raw.meta.writeable,
+          label: 'Writeable?',
+          inline: true,
+          tag: 'widget:led',
+        },
+      };
+      info.malcolmAlarm = {
+        label: 'Alarm',
+        ...attribute.raw.alarm,
+        severity: {
+          label: 'severity',
+          inline: true,
+          value: attribute.raw.alarm.severity,
+          alarmState:
+            attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
+              ? attribute.raw.alarm.severity
+              : null,
+        },
+        message: attribute.raw.alarm.message
+          ? attribute.raw.alarm.message
+          : 'n/a',
+      };
+      info.timeStamp = {
+        label: 'Time Stamp',
+        time: new Date(
+          attribute.raw.timeStamp.secondsPastEpoch * 1000
+        ).toISOString(),
+        ...attribute.raw.timeStamp,
+      };
+      info.errorState = {
+        label: 'Error State',
+        value: attribute.calculated.errorMessage
+          ? attribute.calculated.errorMessage
+          : 'n/a',
         inline: true,
-      },
-      writeable: {
-        value: attribute.raw.meta.writeable,
-        label: 'Writeable?',
-        inline: true,
-        tag: 'widget:led',
-      },
-    };
-    info.malcolmAlarm = {
-      label: 'Alarm',
-      ...attribute.raw.alarm,
-      severity: {
-        label: 'severity',
-        inline: true,
-        value: attribute.raw.alarm.severity,
-        alarmState:
-          attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
-            ? attribute.raw.alarm.severity
-            : null,
-      },
-      message: attribute.raw.alarm.message
-        ? attribute.raw.alarm.message
-        : 'n/a',
-    };
-    info.timeStamp = {
-      label: 'Time Stamp',
-      time: `${new Date(attribute.raw.timeStamp.secondsPastEpoch * 1000)}`,
-      ...attribute.raw.timeStamp,
-    };
-    info.errorState = {
-      label: 'Error State',
-      value: attribute.calculated.errorMessage
-        ? attribute.calculated.errorMessage
-        : 'n/a',
-      inline: true,
-      alarmState: attribute.calculated.errorState
-        ? AlarmStates.MAJOR_ALARM
-        : null,
-    };
-    if (
-      attribute.raw.meta.tags.some(a =>
-        ['widget:table', 'widget:textinput'].includes(a)
-      )
-    ) {
+        alarmState: attribute.calculated.errorState
+          ? AlarmStates.MAJOR_ALARM
+          : null,
+      };
+      if (
+        attribute.raw.meta.tags.some(a =>
+          ['widget:table', 'widget:textinput'].includes(a)
+        )
+      ) {
+        info.localState = {
+          label: 'Local State',
+          value: {
+            buttonLabel: 'Discard',
+            disabled: !attribute.calculated.dirty,
+          },
+          inline: true,
+          tag: 'info:button',
+          alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
+        };
+        if (props.revertHandler) {
+          info.localState.functions = {
+            clickHandler: () => {
+              props.revertHandler(props.path);
+            },
+          };
+        }
+      }
+      // eslint-disable-next-line prefer-destructuring
+      value = attribute.raw.value;
+    } else if (attribute.localState) {
+      const row = parseInt(props.subElement[1], 10);
+      const rowFlags = attribute.localState.flags.rows[row];
       info.localState = {
-        label: 'Local State',
+        label: 'Row local state',
         value: {
           buttonLabel: 'Discard',
-          disabled: !attribute.calculated.dirty,
+          disabled: !(rowFlags._dirty || rowFlags._isChanged),
         },
         inline: true,
         tag: 'info:button',
-        alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
+        alarmState:
+          rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
       };
+      const dataRow = {};
+      attribute.localState.labels.forEach(label => {
+        dataRow[label] =
+          row < attribute.raw.value[label].length
+            ? attribute.raw.value[label][row]
+            : 'n/a';
+      });
+      info.rowValue = {
+        label: 'Row remote state',
+        ...dataRow,
+      };
+      info.addRowAbove = {
+        label: 'Insert row above',
+        value: {
+          buttonLabel: 'Add',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      info.addRowBelow = {
+        label: 'Insert row below',
+        value: {
+          buttonLabel: 'Add',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      info.deleteRow = {
+        label: 'Delete row',
+        value: {
+          buttonLabel: 'Delete',
+          disabled: false,
+        },
+        inline: true,
+        tag: 'info:button',
+      };
+      if (props.addRow) {
+        info.addRowAbove.functions = {
+          clickHandler: () => {
+            props.addRow(props.path, row);
+            props.changeInfoHandler(props.path, `row.${row + 1}`);
+          },
+        };
+        info.addRowBelow.functions = {
+          clickHandler: () => {
+            props.addRow(props.path, row, 'below');
+          },
+        };
+        info.deleteRow.functions = {
+          clickHandler: () => {
+            if (row >= props.attribute.localState.value.length - 1) {
+              if (row !== 0) {
+                props.changeInfoHandler(props.path, `row.${row - 1}`);
+              } else {
+                props.closeInfoHandler(props.path);
+              }
+            }
+            props.addRow(props.path, row, 'delete');
+          },
+        };
+      }
+      if (props.rowRevertHandler) {
+        info.localState.functions = {
+          clickHandler: () => {
+            props.rowRevertHandler(props.path, dataRow, row);
+          },
+        };
+      }
+      info.subElement = props.subElement;
     }
-    // eslint-disable-next-line prefer-destructuring
-    value = attribute.raw.value;
   }
-  return { info, value };
+  return { info, value, ...props };
 };
