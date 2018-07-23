@@ -19,8 +19,6 @@ export const addHandlersToInfoItems = inputProps => {
 
   if (props.info && props.info.deleteLink) {
     props.info.deleteLink.functions.clickHandler = () => {
-      console.log('Delete key clicked');
-      console.log(props.info.deleteLink.nullValue);
       props.eventHandler(
         props.info.deleteLink.path,
         props.info.deleteLink.nullValue
@@ -133,7 +131,6 @@ export const linkInfo = (state, blockName, portName) => {
   );
   const blockMri = layoutAttribute.raw.value.mri[blockNameIndex];
 
-  console.log(blockMri);
   const portAttribute = blockUtils.findAttribute(
     state.malcolm.blocks,
     blockMri,
@@ -148,8 +145,6 @@ export const linkInfo = (state, blockName, portName) => {
     .find(t => t.indexOf('inport:') > -1)
     .split(':')
     .slice(-1)[0];
-  console.log(portAttribute.raw.meta.tags);
-  console.log(`port null value: ${portNullValue}`);
 
   const info = {
     sourcePort: {

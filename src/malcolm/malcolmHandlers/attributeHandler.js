@@ -4,12 +4,11 @@ import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
-const processDeltaMessage = (changes, originalRequest, getState) => {
+const processDeltaMessage = (changes, originalRequest, blocks) => {
   const pathToAttr = originalRequest.path;
   const blockName = pathToAttr[0];
   const attributeName = pathToAttr[1];
   let attribute;
-  const { blocks } = getState().malcolm;
   const matchingAttribute = BlockUtils.findAttributeIndex(
     blocks,
     blockName,

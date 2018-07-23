@@ -127,9 +127,6 @@ const mapStateToProps = state => {
 
   let builtInfo;
   if (navLists[2].path.endsWith('.link')) {
-    console.log(navLists[2].linkInputBlock);
-    console.log(navLists[2].linkInputPort);
-
     builtInfo = linkInfo(
       state,
       navLists[2].linkInputBlock,

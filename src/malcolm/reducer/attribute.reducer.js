@@ -274,14 +274,6 @@ export function updateAttribute(oldState, payload) {
         ? oldState.layout.blocks.filter(b => b.loading).length
         : 1000000;
 
-      console.log(
-        `re-calculating engine: ${numberOfBlocksLoading <
-          numberOfBlocksWereLoading ||
-          (!layoutLoading &&
-            LayoutReducer.isRelevantAttribute(
-              attributes[matchingAttributeIndex]
-            ))}`
-      );
       const layoutEngine =
         numberOfBlocksLoading < numberOfBlocksWereLoading ||
         (!layoutLoading &&

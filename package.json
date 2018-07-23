@@ -38,7 +38,8 @@
     "socket.io-client": "^2.1.0",
     "storm-react-diagrams": "^5.2.1",
     "typeface-roboto": "0.0.54",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "why-did-you-update": "^0.1.1"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json}": [
@@ -61,12 +62,12 @@
     "precommit": "lint-staged",
     "server": "node ./server/test-malcolm-server.js",
     "server:dev": "nodemon ./server/test-malcolm-server.js",
-    "start": "npm run config:dev && concurrently \"npm run server:dev\" \"react-scripts start\"",
-    "ui-only": "npm run config:dev && react-scripts start",
-    "build:e2e": "npm run config:dev && cross-env REACT_APP_E2E=true react-scripts build",
-    "build": "react-scripts build && npm run config:prod",
-    "test": "react-scripts test --env=jsdom --coverage",
-    "test:watch": "react-scripts test --env=jsdom --watch",
+    "start": "npm run config:dev && concurrently \"npm run server:dev\" \"react-app-rewired start\"",
+    "ui-only": "npm run config:dev && react-app-rewired start",
+    "build:e2e": "npm run config:dev && cross-env REACT_APP_E2E=true react-app-rewired build",
+    "build": "react-app-rewired build && npm run config:prod",
+    "test": "react-app-rewired test --env=jsdom --coverage",
+    "test:watch": "react-app-rewired test --env=jsdom --watch",
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -105,6 +106,7 @@
     "nodemon": "^1.17.4",
     "prettier": "^1.12.1",
     "q-i": "^2.0.1",
+    "react-app-rewired": "^1.5.2",
     "react-test-renderer": "^16.3.2",
     "start-server-and-test": "^1.4.1",
     "storybook": "^1.0.0",
