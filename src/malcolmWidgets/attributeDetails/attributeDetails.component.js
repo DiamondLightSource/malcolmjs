@@ -115,12 +115,14 @@ const mapStateToProps = (state, ownProps) => {
   let message;
   if (widgetTagIndex !== null) {
     alarm = getAlarmState(attribute);
-    message = attribute.raw.meta.description
-      ? attribute.raw.meta.description
-      : EMPTY_STRING;
-    message = attribute.calculated.errorMessage
-      ? attribute.calculated.errorMessage
-      : message;
+    message =
+      attribute && attribute.raw && attribute.raw.meta.description
+        ? attribute.raw.meta.description
+        : EMPTY_STRING;
+    message =
+      attribute && attribute.calculated && attribute.calculated.errorMessage
+        ? attribute.calculated.errorMessage
+        : message;
   }
 
   return {
