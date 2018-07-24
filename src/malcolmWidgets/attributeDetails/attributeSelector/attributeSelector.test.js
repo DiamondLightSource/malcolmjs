@@ -42,6 +42,7 @@ describe('AttributeSelector', () => {
         },
         calculated: {
           path: ['test1', 'attr'],
+          name: 'attribute1',
         },
       };
     }
@@ -55,13 +56,27 @@ describe('AttributeSelector', () => {
       },
       calculated: {
         path: ['test1', 'attr'],
+        name: 'attribute1',
       },
     };
   };
 
   const runSelectorTest = attribute => {
+    const state = {
+      malcolm: {
+        blocks: {
+          PANDA1: {
+            attributes: [attribute],
+          },
+        },
+      },
+    };
     const wrapper = shallow(
-      <AttributeSelector attribute={attribute} store={mockStore({})} />
+      <AttributeSelector
+        blockName="PANDA1"
+        attributeName="attribute1"
+        store={mockStore(state)}
+      />
     );
     expect(wrapper.dive()).toMatchSnapshot();
   };

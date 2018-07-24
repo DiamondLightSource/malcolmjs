@@ -1,9 +1,8 @@
 /* global self */
 /* eslint no-restricted-globals: ["off", "self"] */
-import attributeHandler from './malcolmHandlers/attributeHandler';
+import attributeHandler from '../malcolmHandlers/attributeHandler';
 
-function processWebSocketMessage(event) {
-  const msg = event.data;
+export function processWebSocketMessage(msg) {
   const data = JSON.parse(msg.data);
   const originalRequest = msg.messagesInFlight[data.id];
 
@@ -17,11 +16,20 @@ function processWebSocketMessage(event) {
     );
   }
 
-  self.postMessage({
+  return {
     data,
     originalRequest,
     attributeDelta,
-  });
+  };
 }
 
-self.addEventListener('message', processWebSocketMessage);
+function handleMessage(event) {
+  const result = processWebSocketMessage(event.data);
+  self.postMessage(result);
+}
+
+self.addEventListener('message', handleMessage);
+
+export default {
+  processWebSocketMessage,
+};

@@ -14,7 +14,7 @@ import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
 import MalcolmReconnector from './malcolmReconnector';
 import handleLocationChange from './middleware/malcolmRouting';
-import MalcolmWorker from './malcolm.worker';
+import MalcolmWorkerBuilder from './worker/worker.builder';
 
 const handleMessage = (message, dispatch, getState) => {
   const { data, originalRequest } = message;
@@ -119,7 +119,7 @@ const copyBlocks = blocks => {
 
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
-  const worker = new MalcolmWorker();
+  const worker = MalcolmWorkerBuilder();
   worker.addEventListener('message', event =>
     handleMessage(event.data, store.dispatch, store.getState)
   );
