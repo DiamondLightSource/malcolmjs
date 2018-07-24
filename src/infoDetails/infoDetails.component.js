@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import InfoElement from './infoElement.component';
@@ -48,7 +49,7 @@ const getValue = value => {
 export const InfoDetails = props => {
   let updatedProps;
 
-  if (updatedProps.isLinkInfo) {
+  if (props.isLinkInfo) {
     updatedProps = linkInfo(props);
   } else {
     updatedProps = buildAttributeInfo(props);
@@ -105,6 +106,10 @@ export const InfoDetails = props => {
       ))}
     </div>
   );
+};
+
+InfoDetails.propTypes = {
+  isLinkInfo: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({

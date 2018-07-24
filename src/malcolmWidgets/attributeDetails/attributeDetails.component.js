@@ -129,7 +129,10 @@ const mapStateToProps = (state, ownProps) => {
     widgetTagIndex,
     alarm,
     message,
-    label: attribute.raw.meta ? attribute.raw.meta.label : EMPTY_STRING,
+    label:
+      attribute && attribute.raw && attribute.raw.meta
+        ? attribute.raw.meta.label
+        : EMPTY_STRING,
   };
 };
 
