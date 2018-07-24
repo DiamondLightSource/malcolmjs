@@ -259,6 +259,7 @@ exports[`Table container renders correctly 1`] = `
     />,
     ]
   }
+  infoClickHandler={[Function]}
   localState={
     Object {
       "flags": Object {
@@ -376,6 +377,389 @@ exports[`Table container renders correctly 1`] = `
       ],
     }
   }
+  rowClickHandler={[Function]}
+  setFlag={[Function]}
+/>
+`;
+
+exports[`Table container subelement in url selects row correctly 1`] = `
+<WithStyles(WidgetTable)
+  addRow={[Function]}
+  attribute={
+    Object {
+      "calculated": Object {
+        "dirty": false,
+        "name": "layout",
+        "path": Array [
+          "test1",
+          "layout",
+        ],
+      },
+      "localState": Object {
+        "flags": Object {
+          "rows": Array [
+            Object {},
+            Object {},
+            Object {},
+            Object {},
+          ],
+          "table": Object {
+            "dirty": false,
+            "fresh": true,
+            "timeStamp": Object {
+              "nanoseconds": 0,
+              "secondsPastEpoch": 0,
+              "typeid": "time_t",
+              "userTag": 0,
+            },
+          },
+        },
+        "labels": Array [
+          "name",
+          "mri",
+          "x",
+          "y",
+          "visible",
+        ],
+        "meta": Object {
+          "description": "Layout of child blocks",
+          "elements": Object {
+            "mri": Object {
+              "description": "Malcolm full names of child blocks",
+              "label": "MRI",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": false,
+            },
+            "name": Object {
+              "description": "Names of the layout parts",
+              "label": "Name",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": false,
+            },
+            "visible": Object {
+              "description": "Whether child blocks are visible",
+              "label": "Visible",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "x": Object {
+              "description": "X Coordinates of child blocks",
+              "dtype": "float64",
+              "label": "x",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "y": Object {
+              "description": "Y Coordinates of child blocks",
+              "dtype": "float64",
+              "label": "y",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+          "label": "Layout",
+          "tags": Array [
+            "widget:flowgraph",
+          ],
+          "typeid": "malcolm:core/TableMeta:1.0",
+          "writeable": true,
+        },
+        "value": Array [
+          Object {
+            "mri": "PANDA:TTLIN1",
+            "name": "TTLIN1",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:TTLIN2",
+            "name": "TTLIN2",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:INENC1",
+            "name": "INENC1",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+          Object {
+            "mri": "PANDA:INENC2",
+            "name": "INENC2",
+            "visible": false,
+            "x": 0,
+            "y": 0,
+          },
+        ],
+      },
+      "raw": Object {
+        "alarm": Object {
+          "message": "",
+          "severity": 0,
+          "status": 0,
+          "typeid": "alarm_t",
+        },
+        "labels": Array [
+          "name",
+          "mri",
+          "x",
+          "y",
+          "visible",
+        ],
+        "meta": Object {
+          "description": "Layout of child blocks",
+          "elements": Object {
+            "mri": Object {
+              "description": "Malcolm full names of child blocks",
+              "label": "MRI",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": false,
+            },
+            "name": Object {
+              "description": "Names of the layout parts",
+              "label": "Name",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": false,
+            },
+            "visible": Object {
+              "description": "Whether child blocks are visible",
+              "label": "Visible",
+              "tags": Array [
+                "widget:checkbox",
+              ],
+              "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+              "writeable": true,
+            },
+            "x": Object {
+              "description": "X Coordinates of child blocks",
+              "dtype": "float64",
+              "label": "x",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+            "y": Object {
+              "description": "Y Coordinates of child blocks",
+              "dtype": "float64",
+              "label": "y",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/NumberArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+          "label": "Layout",
+          "tags": Array [
+            "widget:table",
+          ],
+          "typeid": "malcolm:core/TableMeta:1.0",
+          "writeable": true,
+        },
+        "timeStamp": Object {
+          "nanoseconds": 0,
+          "secondsPastEpoch": 0,
+          "typeid": "time_t",
+          "userTag": 0,
+        },
+        "typeid": "epics:nt/NTTable:1.0",
+        "value": Object {
+          "mri": Array [
+            "PANDA:TTLIN1",
+            "PANDA:TTLIN2",
+            "PANDA:INENC1",
+            "PANDA:INENC2",
+          ],
+          "name": Array [
+            "TTLIN1",
+            "TTLIN2",
+            "INENC1",
+            "INENC2",
+          ],
+          "visible": Array [
+            false,
+            false,
+            false,
+            false,
+          ],
+          "x": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+          "y": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+        },
+      },
+    }
+  }
+  eventHandler={[Function]}
+  footerItems={
+    Array [
+      <WithStyles(Typography)>
+        Up to date!
+    </WithStyles(Typography)>,
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        text="Discard changes"
+    />,
+      <WithStyles(ButtonAction)
+        clickAction={[Function]}
+        text="Submit"
+    />,
+    ]
+  }
+  infoClickHandler={[Function]}
+  localState={
+    Object {
+      "flags": Object {
+        "rows": Array [
+          Object {},
+          Object {},
+          Object {},
+          Object {},
+        ],
+        "table": Object {
+          "dirty": false,
+          "fresh": true,
+          "timeStamp": Object {
+            "nanoseconds": 0,
+            "secondsPastEpoch": 0,
+            "typeid": "time_t",
+            "userTag": 0,
+          },
+        },
+      },
+      "labels": Array [
+        "name",
+        "mri",
+        "x",
+        "y",
+        "visible",
+      ],
+      "meta": Object {
+        "description": "Layout of child blocks",
+        "elements": Object {
+          "mri": Object {
+            "description": "Malcolm full names of child blocks",
+            "label": "MRI",
+            "tags": Array [
+              "widget:textupdate",
+            ],
+            "typeid": "malcolm:core/StringArrayMeta:1.0",
+            "writeable": false,
+          },
+          "name": Object {
+            "description": "Names of the layout parts",
+            "label": "Name",
+            "tags": Array [
+              "widget:textupdate",
+            ],
+            "typeid": "malcolm:core/StringArrayMeta:1.0",
+            "writeable": false,
+          },
+          "visible": Object {
+            "description": "Whether child blocks are visible",
+            "label": "Visible",
+            "tags": Array [
+              "widget:checkbox",
+            ],
+            "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+            "writeable": true,
+          },
+          "x": Object {
+            "description": "X Coordinates of child blocks",
+            "dtype": "float64",
+            "label": "x",
+            "tags": Array [
+              "widget:textinput",
+            ],
+            "typeid": "malcolm:core/NumberArrayMeta:1.0",
+            "writeable": true,
+          },
+          "y": Object {
+            "description": "Y Coordinates of child blocks",
+            "dtype": "float64",
+            "label": "y",
+            "tags": Array [
+              "widget:textinput",
+            ],
+            "typeid": "malcolm:core/NumberArrayMeta:1.0",
+            "writeable": true,
+          },
+        },
+        "label": "Layout",
+        "tags": Array [
+          "widget:flowgraph",
+        ],
+        "typeid": "malcolm:core/TableMeta:1.0",
+        "writeable": true,
+      },
+      "value": Array [
+        Object {
+          "mri": "PANDA:TTLIN1",
+          "name": "TTLIN1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:TTLIN2",
+          "name": "TTLIN2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC1",
+          "name": "INENC1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC2",
+          "name": "INENC2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+      ],
+    }
+  }
+  rowClickHandler={[Function]}
+  selectedRow={1}
   setFlag={[Function]}
 />
 `;

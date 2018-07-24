@@ -94,6 +94,29 @@ const handleMessage = (message, dispatch, getState) => {
   }
 };
 
+// Note that this copy is necessary because tables have functions on the calculated object.
+// Functions won't cross the web worker boundary
+// We should consider potentially remove these functions set in the table reducer.
+const copyBlocks = blocks => {
+  const keys = Object.keys(blocks);
+
+  const copy = {};
+  keys.forEach(k => {
+    copy[k] = {
+      attributes: blocks[k].attributes
+        ? blocks[k].attributes.map(a => ({
+            raw: a.raw,
+            calculated: {
+              name: a.calculated.name,
+            },
+          }))
+        : undefined,
+    };
+  });
+
+  return copy;
+};
+
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
   const worker = new MalcolmWorker();
@@ -145,7 +168,7 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     worker.postMessage({
       data: event.data,
       messagesInFlight: state.malcolm.messagesInFlight,
-      blocks: state.malcolm.blocks,
+      blocks: copyBlocks(state.malcolm.blocks),
     });
   };
 };

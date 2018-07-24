@@ -76,10 +76,11 @@ function updateNavTypes(state) {
     updatedState = { ...state };
 
     ({ navigationLists } = updatedState.navigation);
-    navigationLists
-      .filter(nav => nav.navType === undefined)
-      .forEach((originalNav, i) => {
-        const nav = originalNav;
+    const navIndices = navigationLists.map((nav, index) => index);
+    navIndices
+      .filter(navIndex => navigationLists[navIndex].navType === undefined)
+      .forEach((originalIndex, i) => {
+        const nav = navigationLists[originalIndex];
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
           nav.label = 'Info';
@@ -91,7 +92,7 @@ function updateNavTypes(state) {
         } else if (nav.path === '.palette') {
           nav.navType = NavTypes.Palette;
           nav.label = 'Palette';
-        } else if (isBlockMri(nav.path, state.blocks)) {
+        } else if (originalIndex === 0 && isBlockMri(nav.path, state.blocks)) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
           nav.label = nav.path;
@@ -99,7 +100,7 @@ function updateNavTypes(state) {
           const matchingAttribute = blockUtils.findAttribute(
             state.blocks,
             navigationLists[i - 1].blockMri,
-            nav.path
+            nav.path.split('.')[0]
           );
 
           if (matchingAttribute) {
@@ -109,12 +110,27 @@ function updateNavTypes(state) {
             nav.label = matchingAttribute.raw.meta
               ? matchingAttribute.raw.meta.label
               : nav.path;
+            if (nav.path.split('.').length > 1) {
+              const subElements = nav.path.split('.').slice(1);
+              if (
+                blockUtils.validateAttributeSubElement(
+                  matchingAttribute,
+                  subElements
+                )
+              ) {
+                nav.subElements = subElements;
+              } else {
+                nav.subElements = undefined;
+                nav.navType = NavTypes.Error;
+              }
+            }
+            [nav.path] = nav.path.split('.');
           }
         } else if (previousNavIsAttribute(i, navigationLists)) {
           const matchingAttribute = blockUtils.findAttribute(
             state.blocks,
             navigationLists[i - 2].blockMri,
-            navigationLists[i - 1].path
+            navigationLists[i - 1].path.split('.')[0]
           );
           if (matchingAttribute) {
             if (
@@ -175,12 +191,19 @@ function updateNavTypes(state) {
     const indexOfLastAttribute = navigationLists.findIndex(
       nav => nav === lastAttribute
     );
-
-    if (indexOfLastAttribute >= navigationLists.length - 2) {
-      updatedState.mainAttribute = lastAttribute.path;
+    const panelIndices = navigationLists
+      .map((nav, index) => index)
+      .filter(navIndex =>
+        [NavTypes.Info, NavTypes.Block].includes(
+          navigationLists[navIndex].navType
+        )
+      );
+    if (indexOfLastAttribute >= panelIndices.slice(-2)[0]) {
+      [updatedState.mainAttribute] = lastAttribute.path.split('.');
+    } else {
+      updatedState.mainAttribute = undefined;
     }
   }
-
   return updatedState;
 }
 

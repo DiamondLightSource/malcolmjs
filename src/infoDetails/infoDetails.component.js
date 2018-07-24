@@ -8,12 +8,11 @@ import {
   malcolmPutAction,
   malcolmSetFlag,
   malcolmRevertAction,
+  malcolmUpdateTable,
 } from '../malcolm/malcolmActionCreators';
-import {
-  attributeInfo,
-  addHandlersToInfoItems,
-  linkInfo,
-} from './infoBuilders';
+import { buildAttributeInfo, linkInfo } from './infoBuilders';
+import blockUtils from '../malcolm/blockUtils';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 const getTag = element => {
   if (element && element.tag) {
@@ -47,7 +46,14 @@ const getValue = value => {
 };
 
 export const InfoDetails = props => {
-  const updatedProps = addHandlersToInfoItems(props);
+  let updatedProps;
+
+  if (updatedProps.isLinkInfo) {
+    updatedProps = linkInfo(props);
+  } else {
+    updatedProps = buildAttributeInfo(props);
+  }
+
   const infoElements = Object.keys(updatedProps.info).filter(
     a =>
       updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
@@ -102,6 +108,17 @@ export const InfoDetails = props => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  changeInfoHandler: (path, subElement) => {
+    dispatch(
+      navigationActions.navigateToSubElement(path[0], path[1], subElement)
+    );
+  },
+  infoClickHandler: (path, subElement) => {
+    dispatch(navigationActions.navigateToInfo(path[0], path[1], subElement));
+  },
+  closeInfoHandler: path => {
+    dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
+  },
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetFlag(path, flag, state));
   },
@@ -112,33 +129,60 @@ const mapDispatchToProps = dispatch => ({
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmPutAction(path, value));
   },
+  rowRevertHandler: (path, value, row) => {
+    dispatch(malcolmUpdateTable(path, value, row));
+  },
+  addRow: (path, row, modifier) => {
+    dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
+  },
 });
 
 const mapStateToProps = state => {
   let blockName;
   let attributeName;
+  let subElement;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
   if (navLists[2].navType === NavTypes.Info) {
     blockName =
-      navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : '';
+      navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : undefined;
     attributeName =
-      navLists[1].navType === NavTypes.Attribute ? navLists[1].path : '';
+      navLists[1].navType === NavTypes.Attribute ? navLists[1].path : undefined;
+    subElement =
+      navLists[1].navType === NavTypes.Attribute && navLists[1].subElements
+        ? navLists[1].subElements
+        : undefined;
   }
 
-  let builtInfo;
-  if (navLists[2].path.endsWith('.link')) {
-    builtInfo = linkInfo(
-      state,
-      navLists[2].linkInputBlock,
-      navLists[2].linkInputPort
+  const showLinkInfo = navLists[2].path.endsWith('.link');
+  let linkBlockName;
+  if (showLinkInfo) {
+    const layoutAttribute = blockUtils.findAttribute(
+      state.malcolm.blocks,
+      state.malcolm.parentBlock,
+      state.malcolm.mainAttribute
     );
-  } else {
-    builtInfo = attributeInfo(state, blockName, attributeName);
+
+    if (layoutAttribute && layoutAttribute.raw.value) {
+      const blockNameIndex = layoutAttribute.raw.value.name.findIndex(
+        n => n === navLists[2].linkInputBlock
+      );
+
+      blockName = layoutAttribute.raw.value.mri[blockNameIndex];
+      attributeName = navLists[2].linkInputPort;
+      linkBlockName = navLists[2].linkInputBlock;
+    }
   }
 
   return {
-    ...builtInfo,
+    attribute: blockUtils.findAttribute(
+      state.malcolm.blocks,
+      blockName,
+      attributeName
+    ),
+    subElement,
     path: [blockName, attributeName],
+    isLinkInfo: showLinkInfo,
+    linkBlockName,
   };
 };
 

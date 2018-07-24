@@ -1,10 +1,20 @@
-import { push } from 'react-router-redux';
+import { replace, push } from 'react-router-redux';
 import NavTypes from '../NavTypes';
 import {
   malcolmNewBlockAction,
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
+
+const findBlockIndex = (navList, blockMri) => {
+  const navLength = navList.length;
+  const navListTrim =
+    navLength && !(navLength % 2) ? navList.slice(-2) : navList.slice(-3);
+  const index = navListTrim.findIndex(
+    nav => nav.navType === NavTypes.Block && nav.blockMri === blockMri
+  );
+  return index !== -1 ? navLength - navListTrim.length + index : -1;
+};
 
 const subscribeToNewBlocksInRoute = () => (dispatch, getState) => {
   const state = getState().malcolm;
@@ -29,9 +39,7 @@ const navigateToAttribute = (blockMri, attributeName) => (
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
 
-  const matchingBlockNav = navigationLists.findIndex(
-    nav => nav.navType === NavTypes.Block && nav.blockMri === blockMri
-  );
+  const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
   if (matchingBlockNav > -1) {
     const newPath = `/gui/${navigationLists
       .filter((nav, i) => i <= matchingBlockNav)
@@ -41,19 +49,50 @@ const navigateToAttribute = (blockMri, attributeName) => (
   }
 };
 
-const navigateToInfo = (blockMri, attributeName) => (dispatch, getState) => {
+const navigateToInfo = (blockMri, attributeName, subElement) => (
+  dispatch,
+  getState
+) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
 
-  const matchingBlockNav = navigationLists.findIndex(
-    nav => nav.navType === NavTypes.Block && nav.blockMri === blockMri
-  );
+  const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
+
+  if (matchingBlockNav > -1) {
+    if (subElement !== undefined) {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}.${subElement}/.info`;
+      dispatch(push(newPath));
+    } else {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}/.info`;
+      dispatch(push(newPath));
+    }
+  }
+};
+
+const navigateToSubElement = (blockMri, attributeName, subElement) => (
+  dispatch,
+  getState
+) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
+
   if (matchingBlockNav > -1) {
     const newPath = `/gui/${navigationLists
       .filter((nav, i) => i <= matchingBlockNav)
       .map(nav => nav.path)
-      .join('/')}/${attributeName}/.info`;
-    dispatch(push(newPath));
+      .join('/')}/${attributeName}.${subElement}/${navigationLists
+      .filter((nav, i) => i > matchingBlockNav + 1)
+      .map(nav => nav.path)
+      .join('/')}`;
+    dispatch(replace(newPath));
   }
 };
 
@@ -153,6 +192,7 @@ export default {
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
   navigateToInfo,
+  navigateToSubElement,
   navigateToPalette,
   updateChildPanel,
   closeChildPanel,

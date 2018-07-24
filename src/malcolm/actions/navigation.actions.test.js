@@ -82,6 +82,60 @@ describe('navigateToPalette', () => {
   });
 });
 
+describe('navigateToInfo', () => {
+  it('changes the url to show the info pane', () => {
+    const dispatches = [];
+    const state = buildNavState();
+
+    const navAction = navigationActions.navigateToInfo('PANDA', 'layout');
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/.info');
+  });
+  it('changes the url to show the info pane', () => {
+    const dispatches = [];
+    const state = buildNavState();
+
+    const navAction = navigationActions.navigateToInfo(
+      'PANDA',
+      'layout',
+      'block.1'
+    );
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual(
+      '/gui/PANDA/layout.block.1/.info'
+    );
+  });
+});
+
+describe('navigateToSubElement', () => {
+  it('changes the url to show the sub-element', () => {
+    const dispatches = [];
+    const state = buildNavState();
+
+    const navAction = navigationActions.navigateToSubElement(
+      'PANDA',
+      'layout',
+      'block.1'
+    );
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual(
+      '/gui/PANDA/layout.block.1/SEQ2'
+    );
+  });
+});
+
 describe('updateChildPanel', () => {
   let state;
   let dispatches;

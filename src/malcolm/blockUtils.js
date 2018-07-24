@@ -72,6 +72,14 @@ const attributeHasTag = (attribute, tag) =>
       attribute.raw.tags &&
       attribute.raw.tags.some(t => t.indexOf(tag) > -1)));
 
+const validateAttributeSubElement = (attribute, subElements) =>
+  attribute.calculated.subElements &&
+  Object.keys(attribute.calculated.subElements).includes(subElements[0]) &&
+  attribute.calculated.subElements[subElements[0]](
+    subElements.slice(1),
+    attribute
+  );
+
 export default {
   findBlock,
   findAttribute,
@@ -79,4 +87,5 @@ export default {
   findAttributesWithTag,
   attributeHasTag,
   didBlockLoadFail,
+  validateAttributeSubElement,
 };

@@ -3,6 +3,7 @@ const NavTypes = {
   Attribute: 'attribute',
   Info: 'info',
   Palette: 'palette',
+  Error: 'naverror',
 };
 
 export default NavTypes;
