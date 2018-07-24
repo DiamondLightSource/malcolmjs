@@ -125,7 +125,10 @@
       "!src/index.js",
       "!src/registerServiceWorker.js",
       "!src/AppReducer.js",
-      "!src/AppRouter.js"
+      "!src/AppRouter.js",
+      "!src/malcolm/worker/worker.builder.js",
+      "!src/setupTests.js",
+      "!src/userTimingMiddleware.js"
     ]
   }
 }

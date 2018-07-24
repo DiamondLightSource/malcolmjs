@@ -22,6 +22,7 @@ import {
   configureSocket,
   registerSocketAndConnect,
 } from './malcolm/actions/socket.actions';
+import ReduxTimingMiddleware from './userTimingMiddleware';
 
 require('typeface-roboto');
 
@@ -39,6 +40,8 @@ if (process.env.NODE_ENV === `development`) {
 
   // const {whyDidYouUpdate} = require('why-did-you-update');
   // whyDidYouUpdate(React);
+
+  middleware.push(ReduxTimingMiddleware);
 }
 
 /* eslint-disable no-underscore-dangle */
