@@ -3,7 +3,7 @@ import AttributeReducer, {
   updateNavigation,
   portsAreDifferent,
 } from './attribute.reducer';
-import LayoutReducer from './layout.reducer';
+import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';

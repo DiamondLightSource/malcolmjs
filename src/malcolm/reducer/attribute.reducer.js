@@ -2,7 +2,7 @@
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import LayoutReducer from './layout.reducer';
+import LayoutReducer from './layout/layout.reducer';
 import blockUtils from '../blockUtils';
 import createReducer from './createReducer';
 import {

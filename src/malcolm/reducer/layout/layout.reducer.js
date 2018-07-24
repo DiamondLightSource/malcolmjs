@@ -1,14 +1,14 @@
 import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
-import createReducer from './createReducer';
-import blockUtils from '../blockUtils';
+import createReducer from '../createReducer';
+import blockUtils from '../../blockUtils';
 import {
   MalcolmMakeBlockVisibleType,
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
-} from '../malcolm.types';
-import BlockNodeFactory from '../../layout/block/BlockNodeFactory';
-import BlockNodeModel from '../../layout/block/BlockNodeModel';
-import MalcolmLinkFactory from '../../layout/link/link.factory';
+} from '../../malcolm.types';
+import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
+import BlockNodeModel from '../../../layout/block/BlockNodeModel';
+import MalcolmLinkFactory from '../../../layout/link/link.factory';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, 'inport:');
