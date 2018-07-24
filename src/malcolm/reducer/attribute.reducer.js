@@ -85,6 +85,10 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
       return true;
     }
 
+    if (oldAttribute.raw.value !== newAttribute.raw.value) {
+      return true;
+    }
+
     if (oldMeta.label !== newMeta.label) {
       return true;
     }

@@ -42,6 +42,7 @@ describe('AttributeSelector', () => {
         },
         calculated: {
           path: ['test1', 'attr'],
+          name: 'attribute1',
         },
       };
     }
@@ -55,13 +56,28 @@ describe('AttributeSelector', () => {
       },
       calculated: {
         path: ['test1', 'attr'],
+        name: 'attribute1',
       },
     };
   };
 
+  const buildState = attribute => ({
+    malcolm: {
+      blocks: {
+        PANDA1: {
+          attributes: [attribute],
+        },
+      },
+    },
+  });
+
   const runSelectorTest = attribute => {
     const wrapper = shallow(
-      <AttributeSelector attribute={attribute} store={mockStore({})} />
+      <AttributeSelector
+        blockName="PANDA1"
+        attributeName="attribute1"
+        store={mockStore(buildState(attribute))}
+      />
     );
     expect(wrapper.dive()).toMatchSnapshot();
   };
@@ -112,10 +128,11 @@ describe('AttributeSelector', () => {
   });
 
   it('dispatches change and pending on click correctly for checkbox', () => {
-    const testStore = mockStore({});
+    const testStore = mockStore(buildState(buildAttribute('checkbox', true)));
     const wrapper = mount(
       <AttributeSelector
-        attribute={buildAttribute('checkbox', true)}
+        blockName="PANDA1"
+        attributeName="attribute1"
         store={testStore}
       />
     );
@@ -141,10 +158,13 @@ describe('AttributeSelector', () => {
   });
 
   it('dispatches change and pending on click correctly for combobox', () => {
-    const testStore = mockStore({});
+    const testStore = mockStore(
+      buildState(buildAttribute('combo', '2', ['1', '2', '3']))
+    );
     const wrapper = mount(
       <AttributeSelector
-        attribute={buildAttribute('combo', '2', ['1', '2', '3'])}
+        blockName="PANDA1"
+        attributeName="attribute1"
         store={testStore}
       />
     );
@@ -173,10 +193,11 @@ describe('AttributeSelector', () => {
   });
 
   it('dispatches path change on table button click', () => {
-    const testStore = mockStore({});
+    const testStore = mockStore(buildState(buildAttribute('table')));
     const wrapper = mount(
       <AttributeSelector
-        attribute={buildAttribute('table')}
+        blockName="PANDA1"
+        attributeName="attribute1"
         store={testStore}
       />
     );
@@ -192,10 +213,11 @@ describe('AttributeSelector', () => {
   });
 
   it('dispatches path change on flowgraph button click', () => {
-    const testStore = mockStore({});
+    const testStore = mockStore(buildState(buildAttribute('flowgraph')));
     const wrapper = mount(
       <AttributeSelector
-        attribute={buildAttribute('flowgraph')}
+        blockName="PANDA1"
+        attributeName="attribute1"
         store={testStore}
       />
     );
@@ -211,10 +233,11 @@ describe('AttributeSelector', () => {
   });
 
   it('dispatches dirty on focus for textipnut', () => {
-    const testStore = mockStore({});
+    const testStore = mockStore(buildState(buildAttribute('textinput', {})));
     const wrapper = mount(
       <AttributeSelector
-        attribute={buildAttribute('textinput', {})}
+        blockName="PANDA1"
+        attributeName="attribute1"
         store={testStore}
       />
     );

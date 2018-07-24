@@ -179,3 +179,61 @@ export const buildAttributeInfo = props => {
   }
   return { info, value, ...props };
 };
+
+export const linkInfo = props => {
+  const portAttribute = props.attribute;
+
+  if (!portAttribute || !portAttribute.raw.value) {
+    return { ...props, info: {}, value: {} };
+  }
+
+  const blockMri = props.path[0];
+  const blockName = props.linkBlockName;
+  const portName = props.path[1];
+
+  const portNullValue = portAttribute.raw.meta.tags
+    .find(t => t.indexOf('inport:') > -1)
+    .split(':')
+    .slice(-1)[0];
+
+  const info = {
+    sourcePort: {
+      label: 'Source',
+      value: portAttribute.raw.value,
+      inline: true,
+      tag: 'widget:combo',
+      choices: portAttribute.raw.meta.choices,
+      functions: {
+        eventHandler: props.eventHandler,
+      },
+      path: [blockMri, portName, 'value'],
+    },
+    destinationPort: {
+      label: 'Destination',
+      value: `${blockName}.${portName}`,
+      inline: true,
+    },
+    deleteLink: {
+      label: '',
+      value: {
+        buttonLabel: 'Delete',
+      },
+      inline: true,
+      tag: 'info:button',
+      showLabel: false,
+      functions: {
+        clickHandler: () => {
+          props.eventHandler([blockMri, portName, 'value'], portNullValue);
+        },
+      },
+      path: [blockMri, portName, 'value'],
+      nullValue: portNullValue,
+    },
+  };
+
+  return {
+    ...props,
+    info,
+    value: {},
+  };
+};

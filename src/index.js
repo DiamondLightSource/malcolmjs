@@ -36,6 +36,9 @@ const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
 const middleware = [router, thunk, malcolmReduxMiddleware];
 if (process.env.NODE_ENV === `development`) {
   middleware.push(logger);
+
+  // const {whyDidYouUpdate} = require('why-did-you-update');
+  // whyDidYouUpdate(React);
 }
 
 /* eslint-disable no-underscore-dangle */

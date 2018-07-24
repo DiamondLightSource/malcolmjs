@@ -2,21 +2,12 @@
 
 exports[`BlockPortWidget input port renders correctly 1`] = `
 <div
-  data-radium={true}
-  style={
-    Object {
-      "alignItems": "center",
-      "display": "flex",
-      "height": 20,
-    }
-  }
+  className="BlockPortWidget-container-1"
 >
   <div
-    className="port malcolm-port "
+    className="port BlockPortWidget-port-2 malcolm-port "
     data-name="val1"
-    data-nodeid="123456"
-    data-radium={true}
-    key=".0"
+    data-nodeid="node1"
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -25,20 +16,12 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     style={
       Object {
         "background": undefined,
-        "borderRadius": 6,
-        "height": 12,
         "marginRight": 3,
-        "width": 12,
       }
     }
   />
   <WithStyles(Typography)
-    key=".1"
-    style={
-      Object {
-        "fontSize": 12,
-      }
-    }
+    className="BlockPortWidget-portLabel-5"
   >
     val 1
   </WithStyles(Typography)>
@@ -47,31 +30,17 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
 
 exports[`BlockPortWidget output port renders correctly 1`] = `
 <div
-  data-radium={true}
-  style={
-    Object {
-      "alignItems": "center",
-      "display": "flex",
-      "height": 20,
-    }
-  }
+  className="BlockPortWidget-container-1"
 >
   <WithStyles(Typography)
-    key=".0"
-    style={
-      Object {
-        "fontSize": 12,
-      }
-    }
+    className="BlockPortWidget-portLabel-5"
   >
     val 1
   </WithStyles(Typography)>
   <div
-    className="port malcolm-port "
+    className="port BlockPortWidget-port-2 malcolm-port "
     data-name="val1"
-    data-nodeid="123456"
-    data-radium={true}
-    key=".1"
+    data-nodeid="node1"
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -80,10 +49,7 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     style={
       Object {
         "background": undefined,
-        "borderRadius": 6,
-        "height": 12,
         "marginLeft": 3,
-        "width": 12,
       }
     }
   />

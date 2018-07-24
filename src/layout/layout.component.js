@@ -78,6 +78,11 @@ export const mapDispatchToProps = dispatch => ({
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
+    } else if (type === 'malcolmlink' && isSelected) {
+      const idComponents = id.split('-');
+      const blockMri = idComponents[2];
+      const portName = idComponents[3];
+      dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
     }
   },
   portMouseDown: (portId, start) => {

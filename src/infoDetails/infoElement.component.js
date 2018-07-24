@@ -44,11 +44,13 @@ const InfoElement = props => (
     ) : (
       <AttributeAlarm alarmSeverity={props.alarm} />
     )}
-    <Typography className={props.classes.textName}>{props.label}: </Typography>
+    <Typography className={props.classes.textName}>
+      {props.showLabel ? `${props.label}:` : ''}
+    </Typography>
     <div className={props.classes.controlContainer}>
       {selectorFunction(
         props.tag,
-        [''],
+        props.path,
         props.value,
         props.handlers.eventHandler,
         {},
@@ -66,7 +68,9 @@ const InfoElement = props => (
 InfoElement.propTypes = {
   alarm: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
+  showLabel: PropTypes.bool,
   tag: PropTypes.string.isRequired,
+  path: PropTypes.arrayOf(PropTypes.string),
   value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.bool)
     .isRequired,
   choices: PropTypes.arrayOf(PropTypes.string),
@@ -96,6 +100,8 @@ InfoElement.propTypes = {
 InfoElement.defaultProps = {
   choices: [],
   handlers: {},
+  path: [''],
+  showLabel: true,
 };
 
 export default withStyles(styles, { withTheme: true })(InfoElement);

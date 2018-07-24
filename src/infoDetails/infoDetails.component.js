@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import InfoElement from './infoElement.component';
@@ -10,7 +11,7 @@ import {
   malcolmRevertAction,
   malcolmUpdateTable,
 } from '../malcolm/malcolmActionCreators';
-import { buildAttributeInfo } from './infoBuilders';
+import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
 
@@ -46,7 +47,14 @@ const getValue = value => {
 };
 
 export const InfoDetails = props => {
-  const updatedProps = buildAttributeInfo(props);
+  let updatedProps;
+
+  if (props.isLinkInfo) {
+    updatedProps = linkInfo(props);
+  } else {
+    updatedProps = buildAttributeInfo(props);
+  }
+
   const infoElements = Object.keys(updatedProps.info).filter(
     a =>
       updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
@@ -64,6 +72,9 @@ export const InfoDetails = props => {
           alarm={infoAlarmState(updatedProps.info[a])}
           tag={getTag(updatedProps.info[a])}
           handlers={updatedProps.info[a].functions}
+          choices={updatedProps.info[a].choices}
+          path={updatedProps.info[a].path}
+          showLabel={updatedProps.info[a].showLabel}
         />
       ))}
       {infoGroups.map(group => (
@@ -95,6 +106,10 @@ export const InfoDetails = props => {
       ))}
     </div>
   );
+};
+
+InfoDetails.propTypes = {
+  isLinkInfo: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -142,6 +157,27 @@ const mapStateToProps = state => {
         ? navLists[1].subElements
         : undefined;
   }
+
+  const showLinkInfo = navLists[2].path.endsWith('.link');
+  let linkBlockName;
+  if (showLinkInfo) {
+    const layoutAttribute = blockUtils.findAttribute(
+      state.malcolm.blocks,
+      state.malcolm.parentBlock,
+      state.malcolm.mainAttribute
+    );
+
+    if (layoutAttribute && layoutAttribute.raw.value) {
+      const blockNameIndex = layoutAttribute.raw.value.name.findIndex(
+        n => n === navLists[2].linkInputBlock
+      );
+
+      blockName = layoutAttribute.raw.value.mri[blockNameIndex];
+      attributeName = navLists[2].linkInputPort;
+      linkBlockName = navLists[2].linkInputBlock;
+    }
+  }
+
   return {
     attribute: blockUtils.findAttribute(
       state.malcolm.blocks,
@@ -150,6 +186,8 @@ const mapStateToProps = state => {
     ),
     subElement,
     path: [blockName, attributeName],
+    isLinkInfo: showLinkInfo,
+    linkBlockName,
   };
 };
 

@@ -33,7 +33,7 @@ describe('InfoDetails', () => {
     shallow = createShallow();
   });
   it('renders correctly', () => {
-    const wrapper = shallow(<InfoDetails info={testInfo} />);
+    const wrapper = shallow(<InfoDetails info={testInfo} isLinkInfo={false} />);
     expect(wrapper).toMatchSnapshot();
   });
 });
