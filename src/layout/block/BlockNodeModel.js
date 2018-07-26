@@ -12,6 +12,7 @@ class BlockNodeModel extends NodeModel {
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);
     this.addMouseDownHandler = this.addMouseDownHandler.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
 
   addBlockPort(port, portMouseDown) {
@@ -41,6 +42,16 @@ class BlockNodeModel extends NodeModel {
     this.mouseDownHandler = show => {
       handler(show);
     };
+  }
+
+  updateDimensions({ width, height }) {
+    console.log(`updating dimensions ${width},${height}`);
+    this.width = 160;
+    const maxPorts = Math.max(
+      Object.values(this.ports).filter(p => p.in).length,
+      Object.values(this.ports).filter(p => !p.in).length
+    );
+    this.height = maxPorts * 25 + 70;
   }
 }
 

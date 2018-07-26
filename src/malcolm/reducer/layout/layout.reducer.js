@@ -258,7 +258,7 @@ const buildBlockNode = (
   return node;
 };
 
-const buildLayoutEngine = (layout, selectedBlocks) => {
+const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
   engine.registerNodeFactory(new BlockNodeFactory());
@@ -326,6 +326,12 @@ const buildLayoutEngine = (layout, selectedBlocks) => {
   });
 
   engine.setDiagramModel(model);
+
+  if (layoutEngineView) {
+    engine.diagramModel.offsetX = layoutEngineView.offset.x;
+    engine.diagramModel.offsetY = layoutEngineView.offset.y;
+    engine.diagramModel.zoom = layoutEngineView.zoom;
+  }
 
   return engine;
 };
