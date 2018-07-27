@@ -209,7 +209,7 @@ describe('malcolm reducer', () => {
     });
   });
 
-  it('updates attribute data', () => {
+  it('updates attribute data and pushes to archive', () => {
     state.blocks.block1 = {
       name: 'block1',
       loading: true,
@@ -237,6 +237,13 @@ describe('malcolm reducer', () => {
         },
       ],
     };
+    // mock toarray method from circular-buffer
+    state.blockArchive.block1.attributes[0].value.toarray = () =>
+      state.blockArchive.block1.attributes[0].value;
+    state.blockArchive.block1.attributes[0].timeSinceConnect.toarray = () =>
+      state.blockArchive.block1.attributes[0].timeSinceConnect;
+    state.blockArchive.block1.attributes[0].timeStamp.toarray = () =>
+      state.blockArchive.block1.attributes[0].timeStamp;
 
     state.messagesInFlight[1] = {
       id: 1,
@@ -265,6 +272,11 @@ describe('malcolm reducer', () => {
       'health',
     ]);
     expect(state.blocks.block1.attributes[0].calculated.loading).toEqual(false);
+    expect(state.blockArchive.block1.attributes[0].value.length).toEqual(1);
+    expect(state.blockArchive.block1.attributes[0].timeStamp.length).toEqual(1);
+    expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
+      123456789
+    );
   });
 
   it('set flag sets attribute pending', () => {

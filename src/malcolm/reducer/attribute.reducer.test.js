@@ -76,6 +76,13 @@ describe('attribute reducer', () => {
         selectedBlocks: [],
       },
     };
+    // mock toarray method from circular-buffer
+    state.blockArchive.block1.attributes[0].value.toarray = () =>
+      state.blockArchive.block1.attributes[0].value;
+    state.blockArchive.block1.attributes[0].timeSinceConnect.toarray = () =>
+      state.blockArchive.block1.attributes[0].timeSinceConnect;
+    state.blockArchive.block1.attributes[0].timeStamp.toarray = () =>
+      state.blockArchive.block1.attributes[0].timeStamp;
 
     payload = {
       delta: true,

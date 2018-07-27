@@ -9,7 +9,7 @@ class AttributePlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data, layout } = state;
     if (props.attribute && layout.datarevision !== props.attribute.plotTime) {
-      data[0].x = props.attribute.timeSinceConnect;
+      data[0].x = props.attribute.timeSinceConnect.toarray();
       data[0].y = props.attribute.value;
       data[0].line = { shape: props.attribute.isBool ? 'hv' : 'linear' };
       layout.datarevision = props.attribute.plotTime;
@@ -71,8 +71,10 @@ const mapStateToProps = (state, ownProps) => {
         state.malcolm.blocks[ownProps.blockName].attributes[attributeIndex].raw
           .meta.typeid === 'malcolm:core/BooleanMeta:1.0'
       ) {
-        const boolToInt = attribute.value.map(a => (a ? 1 : 0));
+        const boolToInt = attribute.value.toarray().map(a => (a ? 1 : 0));
         attribute = { ...attribute, value: boolToInt, isBool: true };
+      } else {
+        attribute = { ...attribute, value: attribute.value.toarray() };
       }
     }
   }

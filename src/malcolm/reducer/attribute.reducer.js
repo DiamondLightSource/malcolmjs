@@ -266,11 +266,13 @@ export function updateAttribute(oldState, payload) {
         if (attributeArchive.connectTime === -1) {
           attributeArchive.connectTime = payload.raw.timeStamp.secondsPastEpoch;
         }
+        /*
         if (attributeArchive.counter > attributeArchive.maxLength) {
           attributeArchive.value.shift();
           attributeArchive.timeStamp.shift();
           attributeArchive.timeSinceConnect.shift();
         }
+        */
         attributeArchive.value.push(payload.raw.value);
         attributeArchive.timeStamp.push(payload.raw.timeStamp.secondsPastEpoch);
         attributeArchive.timeSinceConnect.push(
@@ -280,10 +282,10 @@ export function updateAttribute(oldState, payload) {
         );
         attributeArchive.counter += 1;
         attributeArchive.plotTime =
-          attributeArchive.timeSinceConnect.slice(-1)[0] -
+          attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
             attributeArchive.plotTime >
           0.2
-            ? attributeArchive.timeSinceConnect.slice(-1)[0]
+            ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
             : attributeArchive.plotTime;
         archive[matchingAttributeIndex] = attributeArchive;
       }

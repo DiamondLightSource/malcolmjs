@@ -1,3 +1,4 @@
+import CircularBuffer from 'circular-buffer';
 import {
   MalcolmNewBlock,
   MalcolmSend,
@@ -142,12 +143,12 @@ function updateBlock(state, payload) {
       blockArchive[blockName] = {
         attributes: payload.fields.map(f => ({
           name: f,
-          value: [],
-          timeStamp: [],
-          timeSinceConnect: [],
+          value: new CircularBuffer(20),
+          timeStamp: new CircularBuffer(20),
+          timeSinceConnect: new CircularBuffer(20),
           connectTime: -1,
           counter: 0,
-          maxLength: 200,
+          maxLength: 20,
           plotTime: 0,
         })),
       };
