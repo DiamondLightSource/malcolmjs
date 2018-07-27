@@ -36,6 +36,7 @@ const initialMalcolmState = {
     },
   },
   blocks: {},
+  blockArchive: {},
   parentBlock: undefined,
   childBlock: undefined,
   mainAttribute: undefined,
@@ -112,6 +113,7 @@ function registerNewBlock(state, action) {
 
 function updateBlock(state, payload) {
   const blocks = { ...state.blocks };
+  const blockArchive = { ...state.blockArchive };
   let { navigation, layout } = state;
 
   if (payload.delta) {
@@ -134,13 +136,20 @@ function updateBlock(state, payload) {
             loading: true,
             children: [],
           },
-          archive: {
-            values: [],
-            timeStamps: [],
-            firstTime: -1,
-          },
         })),
         children: [...payload.fields],
+      };
+      blockArchive[blockName] = {
+        attributes: payload.fields.map(f => ({
+          name: f,
+          value: [],
+          timeStamp: [],
+          timeSinceConnect: [],
+          connectTime: -1,
+          counter: 0,
+          maxLength: 200,
+          plotTime: 0,
+        })),
       };
     }
 
@@ -173,6 +182,7 @@ function updateBlock(state, payload) {
   return {
     ...state,
     blocks,
+    blockArchive,
     navigation,
     layout,
   };

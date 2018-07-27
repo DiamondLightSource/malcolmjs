@@ -52,6 +52,22 @@ describe('attribute reducer', () => {
           ],
         },
       },
+      blockArchive: {
+        block1: {
+          attributes: [
+            {
+              name: 'layout',
+              value: [],
+              timeStamp: [],
+              timeSinceConnect: [],
+              connectTime: -1,
+              counter: 0,
+              maxLength: 200,
+              plotTime: 0,
+            },
+          ],
+        },
+      },
       navigation: {
         navigationLists: [],
         rootNav: {},
@@ -78,6 +94,9 @@ describe('attribute reducer', () => {
           visible: [true, true, false],
           x: [0, 1, 2],
           y: [3, 4, 5],
+        },
+        timeStamp: {
+          secondsPastEpoch: 123456789,
         },
       },
     };

@@ -238,6 +238,7 @@ export function updateAttribute(oldState, payload) {
 
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
+      const archive = [...state.blockArchive[blockName].attributes];
 
       const matchingAttributeIndex = blockUtils.findAttributeIndex(
         state.blocks,
@@ -246,6 +247,7 @@ export function updateAttribute(oldState, payload) {
       );
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
+        const attributeArchive = { ...archive[matchingAttributeIndex] };
         const attribute = {
           ...attributes[matchingAttributeIndex],
           raw: {
@@ -259,23 +261,41 @@ export function updateAttribute(oldState, payload) {
             path,
           },
         };
-        if (attribute.archive.firstTime === -1) {
-          attribute.archive.firstTime = payload.raw.timeStamp.secondsPastEpoch;
+        attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+
+        if (attributeArchive.connectTime === -1) {
+          attributeArchive.connectTime = payload.raw.timeStamp.secondsPastEpoch;
         }
-        attribute.archive.values.push(payload.raw.value ? 1 : 0);
-        attribute.archive.timeStamps.push(
+        if (attributeArchive.counter > attributeArchive.maxLength) {
+          attributeArchive.value.shift();
+          attributeArchive.timeStamp.shift();
+          attributeArchive.timeSinceConnect.shift();
+        }
+        attributeArchive.value.push(payload.raw.value);
+        attributeArchive.timeStamp.push(payload.raw.timeStamp.secondsPastEpoch);
+        attributeArchive.timeSinceConnect.push(
           payload.raw.timeStamp.secondsPastEpoch -
-            attribute.archive.firstTime +
+            attributeArchive.connectTime +
             10 ** -9 * payload.raw.timeStamp.nanoseconds
         );
-        attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+        attributeArchive.counter += 1;
+        attributeArchive.plotTime =
+          attributeArchive.timeSinceConnect.slice(-1)[0] -
+            attributeArchive.plotTime >
+          0.2
+            ? attributeArchive.timeSinceConnect.slice(-1)[0]
+            : attributeArchive.plotTime;
+        archive[matchingAttributeIndex] = attributeArchive;
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
+      const blockArchive = { ...state.blockArchive };
+      blockArchive[blockName] = { attributes: archive };
 
       let updatedState = {
         ...state,
         blocks,
+        blockArchive,
       };
 
       // update the navigation if the attribute was part of the path

@@ -73,6 +73,7 @@ describe('malcolm reducer', () => {
     state = {
       messagesInFlight: {},
       blocks: {},
+      blockArchive: {},
       navigation: {
         navigationLists: [],
         rootNav: {
@@ -222,6 +223,21 @@ describe('malcolm reducer', () => {
       ],
     };
 
+    state.blockArchive.block1 = {
+      attributes: [
+        {
+          name: 'health',
+          value: [],
+          timeStamp: [],
+          timeSinceConnect: [],
+          connectTime: -1,
+          counter: 0,
+          maxLength: 200,
+          plotTime: 0,
+        },
+      ],
+    };
+
     state.messagesInFlight[1] = {
       id: 1,
       path: ['block1', 'health'],
@@ -232,6 +248,11 @@ describe('malcolm reducer', () => {
       payload: {
         id: 1,
         delta: true,
+        raw: {
+          timeStamp: {
+            secondsPastEpoch: 123456789,
+          },
+        },
       },
     };
 
