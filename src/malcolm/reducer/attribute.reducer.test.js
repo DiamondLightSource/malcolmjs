@@ -13,7 +13,7 @@ import {
   MalcolmRevert,
 } from '../malcolm.types';
 
-jest.mock('./layout.reducer');
+jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
 
 describe('attribute reducer', () => {
