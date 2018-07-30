@@ -3,7 +3,7 @@ import AttributeReducer, {
   updateNavigation,
   portsAreDifferent,
 } from './attribute.reducer';
-import LayoutReducer from './layout.reducer';
+import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
@@ -13,7 +13,7 @@ import {
   MalcolmRevert,
 } from '../malcolm.types';
 
-jest.mock('./layout.reducer');
+jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
 
 describe('attribute reducer', () => {

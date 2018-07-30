@@ -2,7 +2,7 @@
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import LayoutReducer from './layout.reducer';
+import LayoutReducer from './layout/layout.reducer';
 import blockUtils from '../blockUtils';
 import createReducer from './createReducer';
 import {
@@ -291,13 +291,24 @@ export function updateAttribute(oldState, payload) {
         ? oldState.layout.blocks.filter(b => b.loading).length
         : 1000000;
 
+      const layoutEngineView = updatedState.layoutEngine
+        ? {
+            offset: {
+              x: updatedState.layoutEngine.diagramModel.offsetX,
+              y: updatedState.layoutEngine.diagramModel.offsetY,
+            },
+            zoom: updatedState.layoutEngine.diagramModel.zoom,
+          }
+        : undefined;
+
       const layoutEngine =
         numberOfBlocksLoading < numberOfBlocksWereLoading ||
         (!layoutLoading &&
           LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
           ? LayoutReducer.buildLayoutEngine(
               layout,
-              updatedState.layoutState.selectedBlocks
+              updatedState.layoutState.selectedBlocks,
+              layoutEngineView
             )
           : updatedState.layoutEngine;
 

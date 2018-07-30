@@ -15,11 +15,11 @@ import {
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
-import LayoutReducer, { LayoutReduxReducer } from './layout.reducer';
+import LayoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 
 jest.mock('./navigation.reducer');
 jest.mock('./method.reducer');
-jest.mock('./layout.reducer');
+jest.mock('./layout/layout.reducer');
 
 const buildAction = (type, id, path = ['.', 'blocks']) => ({
   type,

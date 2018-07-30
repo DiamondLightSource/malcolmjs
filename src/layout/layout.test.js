@@ -9,9 +9,11 @@ import {
   malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import layoutActions from '../malcolm/actions/layout.action';
 
 jest.mock('../malcolm/malcolmActionCreators');
 jest.mock('../malcolm/actions/navigation.actions');
+jest.mock('../malcolm/actions/layout.action');
 
 describe('Layout', () => {
   let shallow;
@@ -33,6 +35,7 @@ describe('Layout', () => {
     malcolmLayoutUpdatePosition.mockClear();
     malcolmLayoutShiftIsPressed.mockClear();
     navigationActions.updateChildPanel.mockClear();
+    navigationActions.updateChildPanelWithLink.mockClear();
 
     block = {
       name: 'block 1',
@@ -97,5 +100,59 @@ describe('Layout', () => {
     const props = mapDispatchToProps(() => {});
     props.clickHandler(block, node);
     expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(1);
+  });
+
+  it('mapDispatchToProps mouseDownHandler shows bin', () => {
+    const props = mapDispatchToProps(() => {});
+    props.mouseDownHandler(true);
+    expect(layoutActions.showLayoutBin).toHaveBeenCalledTimes(1);
+  });
+
+  it('mapDispatchToProps selectHandler notifies when a block is selected', () => {
+    const props = mapDispatchToProps(() => {});
+    props.selectHandler('malcolmjsblock', 'PANDA:block1', true);
+    expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
+  });
+
+  it('mapDispatchToProps selectHandler notifies when a link is selected', () => {
+    const props = mapDispatchToProps(() => {});
+    props.selectHandler(
+      'malcolmlink',
+      'block1-output-PANDA:block1-input1',
+      true
+    );
+    expect(navigationActions.updateChildPanelWithLink).toBeCalledWith(
+      'PANDA:block1',
+      'input1'
+    );
+  });
+
+  it('mapDispatchToProps portMouseDown selects a port', () => {
+    const props = mapDispatchToProps(() => {});
+    props.portMouseDown('port1', true);
+    // eslint-disable-next-line import/no-named-as-default-member
+    expect(layoutActions.selectPort).toHaveBeenCalledTimes(1);
+  });
+
+  it('mapDispatchToProps makeBlockVisible dispatches updates to make a block visible', () => {
+    const props = mapDispatchToProps(() => {});
+    const event = {
+      dataTransfer: {
+        getData: () => 'PANDA:block1',
+      },
+    };
+
+    const engine = {
+      getRelativeMousePoint: () => ({
+        x: 100,
+        y: 200,
+      }),
+    };
+
+    props.makeBlockVisible(event, engine);
+    expect(layoutActions.makeBlockVisible).toBeCalledWith('PANDA:block1', {
+      x: 100,
+      y: 200,
+    });
   });
 });

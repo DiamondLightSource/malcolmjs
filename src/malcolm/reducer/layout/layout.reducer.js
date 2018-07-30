@@ -1,14 +1,14 @@
 import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
-import createReducer from './createReducer';
-import blockUtils from '../blockUtils';
+import createReducer from '../createReducer';
+import blockUtils from '../../blockUtils';
 import {
   MalcolmMakeBlockVisibleType,
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
-} from '../malcolm.types';
-import BlockNodeFactory from '../../layout/block/BlockNodeFactory';
-import BlockNodeModel from '../../layout/block/BlockNodeModel';
-import MalcolmLinkFactory from '../../layout/link/link.factory';
+} from '../../malcolm.types';
+import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
+import BlockNodeModel from '../../../layout/block/BlockNodeModel';
+import MalcolmLinkFactory from '../../../layout/link/link.factory';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, 'inport:');
@@ -258,7 +258,7 @@ const buildBlockNode = (
   return node;
 };
 
-const buildLayoutEngine = (layout, selectedBlocks) => {
+const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
   engine.registerNodeFactory(new BlockNodeFactory());
@@ -326,6 +326,12 @@ const buildLayoutEngine = (layout, selectedBlocks) => {
   });
 
   engine.setDiagramModel(model);
+
+  if (layoutEngineView) {
+    engine.diagramModel.offsetX = layoutEngineView.offset.x;
+    engine.diagramModel.offsetY = layoutEngineView.offset.y;
+    engine.diagramModel.zoom = layoutEngineView.zoom;
+  }
 
   return engine;
 };
