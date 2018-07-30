@@ -1,8 +1,21 @@
+import ELK from 'elkjs/lib/elk.bundled';
 import autoLayoutAction from './autoLayout.action';
 import { MalcolmSend, MalcolmAttributeFlag } from '../malcolm.types';
 
+jest.mock('elkjs/lib/elk.bundled');
+
 describe('auto layout actions', () => {
-  it('runAutoLayout updates block positions', done => {
+  it('runAutoLayout updates block positions', async () => {
+    ELK.mockImplementation(() => ({
+      layout: () =>
+        Promise.resolve({
+          children: [
+            { id: 'block1', x: -107, y: 0 },
+            { id: 'block2', x: 107, y: 0 },
+          ],
+        }),
+    }));
+
     const action = autoLayoutAction.runAutoLayout();
 
     const actions = [];
@@ -69,25 +82,23 @@ describe('auto layout actions', () => {
       },
     });
 
-    action(dispatch, getState).then(() => {
-      expect(actions).toHaveLength(2);
-      expect(actions[0].type).toEqual(MalcolmAttributeFlag);
-      expect(actions[0].payload.path).toEqual(['PANDA', 'layout']);
-      expect(actions[0].payload.flagType).toEqual('pending');
-      expect(actions[0].payload.flagState).toEqual(true);
+    await action(dispatch, getState);
 
-      expect(actions[1].type).toEqual(MalcolmSend);
-      expect(actions[1].payload.typeid).toEqual('malcolm:core/Put:1.0');
-      expect(actions[1].payload.path).toEqual(['PANDA', 'layout', 'value']);
-      expect(actions[1].payload.value).toEqual({
-        mri: ['block1', 'block2'],
-        name: ['block 1', 'block 2'],
-        visible: [true, true],
-        x: [-107, 107],
-        y: [0, 0],
-      });
+    expect(actions).toHaveLength(2);
+    expect(actions[0].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[0].payload.path).toEqual(['PANDA', 'layout']);
+    expect(actions[0].payload.flagType).toEqual('pending');
+    expect(actions[0].payload.flagState).toEqual(true);
 
-      done();
+    expect(actions[1].type).toEqual(MalcolmSend);
+    expect(actions[1].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[1].payload.path).toEqual(['PANDA', 'layout', 'value']);
+    expect(actions[1].payload.value).toEqual({
+      mri: ['block1', 'block2'],
+      name: ['block 1', 'block 2'],
+      visible: [true, true],
+      x: [-107, 107],
+      y: [0, 0],
     });
   });
 });
