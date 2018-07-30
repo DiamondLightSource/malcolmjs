@@ -93,11 +93,13 @@ export const buildAttributeInfo = props => {
     } else if (attribute.localState) {
       const row = parseInt(props.subElement[1], 10);
       const rowFlags = attribute.localState.flags.rows[row];
+      const isNewRow =
+        row >= attribute.raw.value[attribute.localState.labels[0]].length;
       info.localState = {
         label: 'Row local state',
         value: {
           buttonLabel: 'Discard',
-          disabled: !(rowFlags._dirty || rowFlags._isChanged),
+          disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
         },
         inline: true,
         tag: 'info:button',
@@ -109,7 +111,7 @@ export const buildAttributeInfo = props => {
         dataRow[label] =
           row < attribute.raw.value[label].length
             ? attribute.raw.value[label][row]
-            : 'n/a';
+            : 'undefined';
       });
       info.rowValue = {
         label: 'Row remote state',
