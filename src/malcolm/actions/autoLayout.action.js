@@ -58,7 +58,7 @@ const runAutoLayout = () => (dispatch, getState) => {
   );
 
   const elk = new ELK();
-  elk.layout(graph).then(graphLayout => {
+  return elk.layout(graph).then(graphLayout => {
     const centerX =
       graphLayout.children.reduce((prev, next) => prev + next.x, 0) /
       graphLayout.children.length;
