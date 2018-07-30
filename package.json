@@ -130,7 +130,8 @@
       "!src/AppRouter.js",
       "!src/malcolm/worker/worker.builder.js",
       "!src/setupTests.js",
-      "!src/userTimingMiddleware.js"
+      "!src/userTimingMiddleware.js",
+      "!src/layout/link/PathFinding.js"
     ]
   }
 }

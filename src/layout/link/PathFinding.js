@@ -1,3 +1,6 @@
+// a clone of https://github.com/projectstorm/react-diagrams/blob/master/src/routing/PathFinding.ts because the export didn't work properly
+// and we needed to customise the auto routing
+// ideally we want to get to the point we can just import this from react diagrams.
 import * as PF from 'pathfinding';
 
 /*

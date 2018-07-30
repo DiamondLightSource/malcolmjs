@@ -63,7 +63,7 @@ const buildTwoPointPath = points => {
     [pointRight, pointLeft] = points;
   }
 
-  return [Toolkit.generateCurvePath(pointLeft, pointRight, 50)];
+  return Toolkit.generateCurvePath(pointLeft, pointRight, 50);
 };
 
 // algorithm from here https://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-2D-Points-wit
