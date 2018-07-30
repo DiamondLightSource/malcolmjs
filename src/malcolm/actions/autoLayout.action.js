@@ -23,6 +23,7 @@ const runAutoLayout = () => (dispatch, getState) => {
       'spacing.componentComponent': 70,
       spacing: 100,
       'spacing.nodeNodeBetweenLayers': 70,
+      'elk.edgeRouting': 'SPLINES',
     },
     children: blocks.map(b => ({
       id: b.mri,
@@ -52,6 +53,9 @@ const runAutoLayout = () => (dispatch, getState) => {
 
   // The JSON graph can be visualised here https://rtsys.informatik.uni-kiel.de/elklive/json.html
   console.log(JSON.stringify(graph));
+  console.log(
+    `Graph can be visualised at https://rtsys.informatik.uni-kiel.de/elklive/json.html`
+  );
 
   const elk = new ELK();
   elk.layout(graph).then(graphLayout => {

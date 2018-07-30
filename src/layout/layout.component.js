@@ -31,7 +31,7 @@ const Layout = props => {
     >
       <DiagramWidget
         diagramEngine={props.layoutEngine}
-        smartRouting
+        // smartRouting
         maxNumberPointsPerLink={0}
       />
     </div>
