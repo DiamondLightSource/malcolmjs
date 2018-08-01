@@ -419,24 +419,22 @@ describe('malcolm reducer', () => {
   });
 
   it('updates socket on socket connect actions', () => {
-    const dummyReconnectorSocket = {
-      socket: {
-        url: '',
-        connect: jest.fn(),
-        send: () => {},
-        isConnected: false,
-      },
+    // const dummyReconnectorSocket = {
+    //   socket: {
+    //     url: '',
+    //     connect: jest.fn(),
+    //     send: () => {},
+    //     isConnected: false,
+    //   },
+    // };
+
+    const worker = {
+      postMessage: jest.fn(),
     };
-    const action = registerSocketAndConnect(
-      dummyReconnectorSocket,
-      'test:8008'
-    );
+
+    const action = registerSocketAndConnect(worker, 'test:8008');
     state = malcolmReducer(state, action);
-    expect(dummyReconnectorSocket.socket.url).toEqual('test:8008');
-    expect(dummyReconnectorSocket.socket.connect.mock.calls.length).toEqual(1);
-    expect(dummyReconnectorSocket.socket.connect.mock.calls[0]).toEqual([
-      dummyReconnectorSocket.socket,
-    ]);
+    expect(worker.postMessage).toBeCalledWith('connect::test:8008');
   });
 
   it('setErrorState returns state if message with id is not found', () => {
