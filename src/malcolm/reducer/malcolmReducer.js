@@ -388,13 +388,11 @@ const handleErrorMessage = (state, action) => {
 };
 
 const updateSocket = (state, payload) => {
-  const { socketContainer } = payload;
-  socketContainer.socket.url = payload.socketUrl;
-  socketContainer.socket.connect(socketContainer.socket);
+  const { worker } = payload;
+  worker.postMessage(`connect::${payload.socketUrl}`);
 
   return {
     ...state,
-    socketContainer,
   };
 };
 

@@ -2,15 +2,15 @@ import axios from 'axios';
 import { updateVersionNumber } from '../../viewState/viewState.actions';
 import { MalcolmSocketConnect } from '../malcolm.types';
 
-export const registerSocketAndConnect = (socketContainer, socketUrl) => ({
+export const registerSocketAndConnect = (worker, socketUrl) => ({
   type: MalcolmSocketConnect,
   payload: {
-    socketContainer,
+    worker,
     socketUrl,
   },
 });
 
-export const configureSocket = socketContainer => dispatch => {
+export const configureSocket = worker => dispatch => {
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
   return axios.get(`${baseUrl}/settings.json`).then(res => {
     const settings = res.data;
@@ -18,9 +18,7 @@ export const configureSocket = socketContainer => dispatch => {
 
     // in production no socket will be defined and it will default to ws://{{host}}/ws
     if (settings.malcolmSocket) {
-      dispatch(
-        registerSocketAndConnect(socketContainer, settings.malcolmSocket)
-      );
+      dispatch(registerSocketAndConnect(worker, settings.malcolmSocket));
     }
   });
 };

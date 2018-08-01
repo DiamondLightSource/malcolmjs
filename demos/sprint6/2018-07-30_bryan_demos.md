@@ -1,4 +1,4 @@
-1. navigate to localhost:3000/PANDA:SEQ1
+1. navigate to localhost:3000/gui/PANDA:SEQ1
 
 Dirty state in alarm icon
 -------------------------

@@ -1,24 +1,10 @@
 import { MalcolmAttributeData } from '../malcolm.types';
-import BlockUtils from '../blockUtils';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
-const processDeltaMessage = (changes, originalRequest, blocks) => {
-  const pathToAttr = originalRequest.path;
-  const blockName = pathToAttr[0];
-  const attributeName = pathToAttr[1];
-  let attribute;
-  const matchingAttribute = BlockUtils.findAttributeIndex(
-    blocks,
-    blockName,
-    attributeName
-  );
-  if (matchingAttribute >= 0) {
-    attribute = JSON.parse(
-      JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
-    );
-  }
+const processDeltaMessage = (changes, oldAttribute) => {
+  let attribute = oldAttribute;
   changes.forEach(change => {
     const pathWithinAttr = change[0];
     if (pathWithinAttr.length !== 0) {
