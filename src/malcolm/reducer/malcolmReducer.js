@@ -143,12 +143,12 @@ function updateBlock(state, payload) {
       blockArchive[blockName] = {
         attributes: payload.fields.map(f => ({
           name: f,
-          value: new CircularBuffer(20),
-          timeStamp: new CircularBuffer(20),
-          timeSinceConnect: new CircularBuffer(20),
+          value: new CircularBuffer(1000),
+          timeStamp: new CircularBuffer(1000),
+          timeSinceConnect: new CircularBuffer(1000),
           connectTime: -1,
           counter: 0,
-          maxLength: 20,
+          maxLength: 1000,
           plotTime: 0,
         })),
       };

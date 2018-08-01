@@ -28,8 +28,22 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
-    }
-  }
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "val" ],
+    index: 0,
+    interval: 20,
+    update: (response, index) => {
+      response.changes[0][1].value = 10 * Math.sin((2*Math.PI)*(index/50));
+      response.changes[0][1].timeStamp.nanoseconds += 2e7;
+      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+        response.changes[0][1].timeStamp.nanoseconds = 0;
+        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
+      }
+      return response;
+    },
+  },
 ]
 
 function pathsMatch(a, b) {

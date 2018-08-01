@@ -262,32 +262,29 @@ export function updateAttribute(oldState, payload) {
           },
         };
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
-
-        if (attributeArchive.connectTime === -1) {
-          attributeArchive.connectTime = payload.raw.timeStamp.secondsPastEpoch;
+        if (payload.raw.timeStamp) {
+          if (attributeArchive.connectTime === -1) {
+            attributeArchive.connectTime =
+              payload.raw.timeStamp.secondsPastEpoch;
+          }
+          attributeArchive.value.push(payload.raw.value);
+          attributeArchive.timeStamp.push(
+            payload.raw.timeStamp.secondsPastEpoch
+          );
+          attributeArchive.timeSinceConnect.push(
+            payload.raw.timeStamp.secondsPastEpoch -
+              attributeArchive.connectTime +
+              10 ** -9 * payload.raw.timeStamp.nanoseconds
+          );
+          attributeArchive.counter += 1;
+          attributeArchive.plotTime =
+            attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
+              attributeArchive.plotTime >
+            1.5
+              ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
+              : attributeArchive.plotTime;
+          archive[matchingAttributeIndex] = attributeArchive;
         }
-        /*
-        if (attributeArchive.counter > attributeArchive.maxLength) {
-          attributeArchive.value.shift();
-          attributeArchive.timeStamp.shift();
-          attributeArchive.timeSinceConnect.shift();
-        }
-        */
-        attributeArchive.value.push(payload.raw.value);
-        attributeArchive.timeStamp.push(payload.raw.timeStamp.secondsPastEpoch);
-        attributeArchive.timeSinceConnect.push(
-          payload.raw.timeStamp.secondsPastEpoch -
-            attributeArchive.connectTime +
-            10 ** -9 * payload.raw.timeStamp.nanoseconds
-        );
-        attributeArchive.counter += 1;
-        attributeArchive.plotTime =
-          attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
-            attributeArchive.plotTime >
-          0.2
-            ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
-            : attributeArchive.plotTime;
-        archive[matchingAttributeIndex] = attributeArchive;
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
