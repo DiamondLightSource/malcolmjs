@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import InfoElement from './infoElement.component';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -45,56 +46,98 @@ const getValue = value => {
   return Object.values(value)[0];
 };
 
-export const InfoDetails = props => {
-  const updatedProps = buildAttributeInfo(props);
-  const infoElements = Object.keys(updatedProps.info).filter(
-    a =>
-      updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
-  );
-  const infoGroups = Object.keys(updatedProps.info).filter(
-    a => updatedProps.info[a] instanceof Object && !updatedProps.info[a].inline
-  );
-  return (
-    <div>
-      {infoElements.map(a => (
-        <InfoElement
-          key={a}
-          label={updatedProps.info[a].label ? updatedProps.info[a].label : a}
-          value={getValue(updatedProps.info[a])}
-          alarm={infoAlarmState(updatedProps.info[a])}
-          tag={getTag(updatedProps.info[a])}
-          handlers={updatedProps.info[a].functions}
-        />
-      ))}
-      {infoGroups.map(group => (
-        <GroupExpander
-          key={group}
-          groupName={
-            updatedProps.info[group].label
-              ? updatedProps.info[group].label
-              : group
-          }
-          expanded
-        >
-          {Object.keys(updatedProps.info[group])
-            .filter(a => !['label', 'typeid'].includes(a))
-            .map(a => (
-              <InfoElement
-                key={a}
-                label={
-                  updatedProps.info[group][a].label
-                    ? updatedProps.info[group][a].label
-                    : a
-                }
-                value={getValue(updatedProps.info[group][a])}
-                alarm={infoAlarmState(updatedProps.info[group][a])}
-                tag={getTag(updatedProps.info[group][a])}
-              />
-            ))}
-        </GroupExpander>
-      ))}
-    </div>
-  );
+class InfoDetails extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (
+      props.attribute &&
+      props.attribute.raw &&
+      props.attribute.raw.timeStamp &&
+      props.attribute.raw.timeStamp.secondsPastEpoch !== state.lastUpdate
+    ) {
+      return {
+        lastUpdate: props.attribute.raw.timeStamp.secondsPastEpoch,
+      };
+    }
+    return state;
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = { lastUpdate: -1 };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.attribute &&
+      nextProps.attribute.raw &&
+      nextProps.attribute.raw.timeStamp &&
+      nextProps.attribute.raw.timeStamp.secondsPastEpoch !==
+        this.state.lastUpdate
+    );
+  }
+
+  render() {
+    const updatedProps = buildAttributeInfo(this.props);
+    const infoElements = Object.keys(updatedProps.info).filter(
+      a =>
+        updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
+    );
+    const infoGroups = Object.keys(updatedProps.info).filter(
+      a =>
+        updatedProps.info[a] instanceof Object && !updatedProps.info[a].inline
+    );
+    return (
+      <div>
+        {infoElements.map(a => (
+          <InfoElement
+            key={a}
+            label={updatedProps.info[a].label ? updatedProps.info[a].label : a}
+            value={getValue(updatedProps.info[a])}
+            alarm={infoAlarmState(updatedProps.info[a])}
+            tag={getTag(updatedProps.info[a])}
+            handlers={updatedProps.info[a].functions}
+          />
+        ))}
+        {infoGroups.map(group => (
+          <GroupExpander
+            key={group}
+            groupName={
+              updatedProps.info[group].label
+                ? updatedProps.info[group].label
+                : group
+            }
+            expanded
+          >
+            {Object.keys(updatedProps.info[group])
+              .filter(a => !['label', 'typeid'].includes(a))
+              .map(a => (
+                <InfoElement
+                  key={a}
+                  label={
+                    updatedProps.info[group][a].label
+                      ? updatedProps.info[group][a].label
+                      : a
+                  }
+                  value={getValue(updatedProps.info[group][a])}
+                  alarm={infoAlarmState(updatedProps.info[group][a])}
+                  tag={getTag(updatedProps.info[group][a])}
+                />
+              ))}
+          </GroupExpander>
+        ))}
+      </div>
+    );
+  }
+}
+
+InfoDetails.propTypes = {
+  attribute: PropTypes.shape({
+    raw: PropTypes.shape({
+      timeStamp: PropTypes.shape({
+        secondsPastEpoch: PropTypes.number,
+      }),
+    }),
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -149,7 +192,7 @@ const mapStateToProps = state => {
       attributeName
     ),
     subElement,
-    path: [blockName, attributeName],
+    // path: [blockName, attributeName],
   };
 };
 
