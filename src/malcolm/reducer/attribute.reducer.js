@@ -10,6 +10,7 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
 } from '../malcolm.types';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   shouldClearDirtyFlag,
   tableHasColumn,
@@ -228,6 +229,36 @@ const checkForSpecialCases = inputAttribute => {
   return attribute;
 };
 
+const pushToArchive = (oldAttributeArchive, payload) => {
+  const attributeArchive = oldAttributeArchive;
+  if (attributeArchive.connectTime === -1) {
+    attributeArchive.connectTime = payload.raw.timeStamp.secondsPastEpoch;
+  }
+  if (payload.raw.meta.typeid) {
+    attributeArchive.typeid = payload.raw.meta.typeid;
+  }
+  attributeArchive.value.push(payload.raw.value);
+  attributeArchive.timeStamp.push(payload.raw.timeStamp.secondsPastEpoch);
+  let plotValue = payload.raw.value;
+  if (attributeArchive.typeid === malcolmTypes.bool) {
+    plotValue = payload.raw.value ? 1 : 0;
+  }
+  attributeArchive.plotValue.push(plotValue);
+  attributeArchive.timeSinceConnect.push(
+    payload.raw.timeStamp.secondsPastEpoch -
+      attributeArchive.connectTime +
+      10 ** -9 * payload.raw.timeStamp.nanoseconds
+  );
+  attributeArchive.counter += 1;
+  attributeArchive.plotTime =
+    attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
+      attributeArchive.plotTime >
+    0.2
+      ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
+      : attributeArchive.plotTime;
+  return attributeArchive;
+};
+
 export function updateAttribute(oldState, payload) {
   if (payload.delta) {
     const state = oldState;
@@ -262,28 +293,21 @@ export function updateAttribute(oldState, payload) {
           },
         };
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+
         if (payload.raw.timeStamp) {
-          if (attributeArchive.connectTime === -1) {
-            attributeArchive.connectTime =
-              payload.raw.timeStamp.secondsPastEpoch;
-          }
-          attributeArchive.value.push(payload.raw.value);
-          attributeArchive.timeStamp.push(
-            payload.raw.timeStamp.secondsPastEpoch
+          /*
+          const nanoSeconds =
+            payload.raw.timeStamp.secondsPastEpoch +
+            10 ** -9 * payload.raw.timeStamp.nanoseconds;
+          localStorage.setItem(
+            `${path}:${nanoSeconds}`,
+            JSON.stringify(payload.raw.value)
           );
-          attributeArchive.timeSinceConnect.push(
-            payload.raw.timeStamp.secondsPastEpoch -
-              attributeArchive.connectTime +
-              10 ** -9 * payload.raw.timeStamp.nanoseconds
+          */
+          archive[matchingAttributeIndex] = pushToArchive(
+            attributeArchive,
+            payload
           );
-          attributeArchive.counter += 1;
-          attributeArchive.plotTime =
-            attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
-              attributeArchive.plotTime >
-            1.5
-              ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
-              : attributeArchive.plotTime;
-          archive[matchingAttributeIndex] = attributeArchive;
         }
       }
       const blocks = { ...state.blocks };

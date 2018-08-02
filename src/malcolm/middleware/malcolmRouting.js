@@ -20,7 +20,7 @@ const handleLocationChange = (path, blocks, dispatch, getState) => {
   } else {
     const { navigationLists } = getState().malcolm.navigation;
     const newBlocks = navigationLists.filter(
-      nav => nav.navType === NavTypes.Block && !blocks[nav.blockMri]
+      nav => nav.navType === NavTypes.Block // && !blocks[nav.blockMri]
     );
     newBlocks.forEach(nav => {
       dispatch(malcolmNewBlockAction(nav.blockMri, false, false));

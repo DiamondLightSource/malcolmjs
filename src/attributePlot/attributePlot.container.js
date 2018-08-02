@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
-import Plot from 'react-plotly.js';
+import PropTypes from 'prop-types';
+import { withTheme } from '@material-ui/core/styles';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
+import Plot from 'react-plotly.js';
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import blockUtils from '../malcolm/blockUtils';
 
 class AttributePlot extends React.Component {
@@ -10,8 +13,10 @@ class AttributePlot extends React.Component {
     const { data, layout } = state;
     if (props.attribute && layout.datarevision !== props.attribute.plotTime) {
       data[0].x = props.attribute.timeSinceConnect.toarray();
-      data[0].y = props.attribute.value;
-      data[0].line = { shape: props.attribute.isBool ? 'hv' : 'linear' };
+      data[0].y = props.attribute.plotValue.toarray();
+      data[0].line = {
+        shape: props.attribute.typeid === malcolmTypes.bool ? 'hv' : 'linear',
+      };
       layout.datarevision = props.attribute.plotTime;
       return { ...state, data: [...data], layout };
     }
@@ -27,15 +32,21 @@ class AttributePlot extends React.Component {
           y: [],
           type: 'scatter',
           mode: 'lines+points',
-          marker: { color: 'red' },
+          marker: { color: props.theme.palette.primary.light },
           line: { shape: 'linear' },
         },
       ],
       layout: {
         datarevision: -1,
         autosize: true,
-        // paper_bgcolor: '#4f4f4f',
-        // plot_bgcolor: '#4f4f4f'
+        paper_bgcolor: props.theme.palette.background.paper,
+        plot_bgcolor: props.theme.palette.background.paper,
+        xaxis: {
+          color: emphasize(props.theme.palette.background.paper, 0.8),
+        },
+        yaxis: {
+          color: emphasize(props.theme.palette.background.paper, 0.8),
+        },
       },
     };
   }
@@ -65,31 +76,32 @@ const mapStateToProps = (state, ownProps) => {
         state.malcolm.blockArchive[ownProps.blockName].attributes[
           attributeIndex
         ];
-      if (
-        state.malcolm.blocks[ownProps.blockName].attributes[attributeIndex].raw
-          .meta &&
-        state.malcolm.blocks[ownProps.blockName].attributes[attributeIndex].raw
-          .meta.typeid === 'malcolm:core/BooleanMeta:1.0'
-      ) {
-        const boolToInt = attribute.value.toarray().map(a => (a ? 1 : 0));
-        attribute = { ...attribute, value: boolToInt, isBool: true };
-      } else {
-        attribute = { ...attribute, value: attribute.value.toarray() };
-      }
     }
   }
   return {
     attribute,
   };
 };
-/*
+
 AttributePlot.propTypes = {
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      primary: PropTypes.shape({
+        light: PropTypes.string,
+      }),
+      background: PropTypes.shape({
+        paper: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
+  /*
   attribute: PropTypes.shape({
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,
     isBool: PropTypes.bool,
   }).isRequired,
+  */
 };
-*/
-export default connect(mapStateToProps)(AttributePlot);
+
+export default connect(mapStateToProps)(withTheme()(AttributePlot));

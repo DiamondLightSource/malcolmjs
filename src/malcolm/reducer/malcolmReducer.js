@@ -144,6 +144,7 @@ function updateBlock(state, payload) {
         attributes: payload.fields.map(f => ({
           name: f,
           value: new CircularBuffer(1000),
+          plotValue: new CircularBuffer(1000),
           timeStamp: new CircularBuffer(1000),
           timeSinceConnect: new CircularBuffer(1000),
           connectTime: -1,
