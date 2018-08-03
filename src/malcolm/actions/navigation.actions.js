@@ -84,14 +84,25 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
 
   if (matchingBlockNav > -1) {
-    const newPath = `/gui/${navigationLists
-      .filter((nav, i) => i <= matchingBlockNav)
-      .map(nav => nav.path)
-      .join('/')}/${attributeName}.${subElement}/${navigationLists
-      .filter((nav, i) => i > matchingBlockNav + 1)
-      .map(nav => nav.path)
-      .join('/')}`;
-    dispatch(replace(newPath));
+    if (subElement) {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}.${subElement}/${navigationLists
+        .filter((nav, i) => i > matchingBlockNav + 1)
+        .map(nav => nav.path)
+        .join('/')}`;
+      dispatch(replace(newPath));
+    } else {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}/${navigationLists
+        .filter((nav, i) => i > matchingBlockNav + 1)
+        .map(nav => nav.path)
+        .join('/')}`;
+      dispatch(replace(newPath));
+    }
   }
 };
 

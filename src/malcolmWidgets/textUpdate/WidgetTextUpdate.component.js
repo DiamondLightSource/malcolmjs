@@ -51,7 +51,7 @@ const WidgetTextUpdate = props => {
       return (
         <div className={props.classes.divNoWrap}>
           <Typography className={props.classes.textUpdateNoWrap}>
-            {props.Text}
+            {props.Text.toString()}
           </Typography>
         </div>
       );
@@ -59,7 +59,7 @@ const WidgetTextUpdate = props => {
     return (
       <div className={props.classes.div}>
         <Typography className={props.classes.textUpdate100} noWrap>
-          {props.Text}
+          {props.Text.toString()}
         </Typography>
       </div>
     );
@@ -67,7 +67,7 @@ const WidgetTextUpdate = props => {
   return (
     <div className={props.classes.div}>
       <Typography className={props.classes.textUpdate80} noWrap>
-        {props.Text}
+        {props.Text.toString()}
       </Typography>
       <Typography className={props.classes.unitBox} noWrap>
         {props.Units}

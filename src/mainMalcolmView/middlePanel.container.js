@@ -8,12 +8,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-import AttributePlot from '../attributePlot/attributePlot.container';
+import AttributeViewer from '../attributePlot/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import blockUtils from '../malcolm/blockUtils';
 
 import navigationActions from '../malcolm/actions/navigation.actions';
@@ -138,12 +137,9 @@ const findAttributeComponent = props => {
       );
     case 'widget:textupdate':
     case 'widget:textinput':
-      if (![malcolmTypes.bool, malcolmTypes.number].includes(props.typeId)) {
-        return <div className={props.classes.plainBackground} />;
-      }
-    // eslint-disable-next-line no-fallthrough
     case 'widget:led':
     case 'widget:checkbox':
+    case 'widget:combo':
       return (
         <div className={props.classes.plainBackground}>
           <div
@@ -155,9 +151,11 @@ const findAttributeComponent = props => {
               transition: 'width 1s, left 1s',
             }}
           >
-            <AttributePlot
+            <AttributeViewer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
+              widgetTag={widgetTag}
+              typeId={props.typeId}
             />
           </div>
         </div>

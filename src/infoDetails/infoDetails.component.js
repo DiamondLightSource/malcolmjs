@@ -52,10 +52,12 @@ export class InfoDetails extends React.Component {
       props.attribute &&
       props.attribute.raw &&
       props.attribute.raw.timeStamp &&
-      props.attribute.raw.timeStamp.secondsPastEpoch !== state.lastUpdate
+      (props.attribute.raw.timeStamp.secondsPastEpoch !== state.lastUpdate ||
+        props.subElement !== state.subElement)
     ) {
       return {
         lastUpdate: props.attribute.raw.timeStamp.secondsPastEpoch,
+        subElement: props.subElement,
       };
     }
     return state;
@@ -63,16 +65,17 @@ export class InfoDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { lastUpdate: -1 };
+    this.state = { lastUpdate: -1, subElement: undefined };
   }
 
   shouldComponentUpdate(nextProps) {
     return (
-      nextProps.attribute &&
-      nextProps.attribute.raw &&
-      nextProps.attribute.raw.timeStamp &&
-      nextProps.attribute.raw.timeStamp.secondsPastEpoch !==
-        this.state.lastUpdate
+      nextProps.subElement !== this.state.subElement ||
+      (nextProps.attribute &&
+        nextProps.attribute.raw &&
+        nextProps.attribute.raw.timeStamp &&
+        nextProps.attribute.raw.timeStamp.secondsPastEpoch !==
+          this.state.lastUpdate)
     );
   }
 
@@ -131,6 +134,7 @@ export class InfoDetails extends React.Component {
 }
 
 InfoDetails.propTypes = {
+  subElement: PropTypes.arrayOf(PropTypes.string).isRequired,
   attribute: PropTypes.shape({
     raw: PropTypes.shape({
       timeStamp: PropTypes.shape({

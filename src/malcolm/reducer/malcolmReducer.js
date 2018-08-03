@@ -27,7 +27,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
-export const ARCHIVE_REFRESH_INTERVAL = 0.2; // minimum time in seconds between updates of displayed archive data
+export const ARCHIVE_REFRESH_INTERVAL = 1.0; // minimum time in seconds between updates of displayed archive data
 
 const initialMalcolmState = {
   messagesInFlight: {},

@@ -1,12 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-
 import Plot from 'react-plotly.js';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
-import blockUtils from '../malcolm/blockUtils';
 
 class AttributePlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
@@ -63,26 +60,6 @@ class AttributePlot extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  let attribute;
-  if (ownProps.attributeName && ownProps.blockName) {
-    const attributeIndex = blockUtils.findAttributeIndex(
-      state.malcolm.blocks,
-      ownProps.blockName,
-      ownProps.attributeName
-    );
-    if (attributeIndex !== -1) {
-      attribute =
-        state.malcolm.blockArchive[ownProps.blockName].attributes[
-          attributeIndex
-        ];
-    }
-  }
-  return {
-    attribute,
-  };
-};
-
 AttributePlot.propTypes = {
   theme: PropTypes.shape({
     palette: PropTypes.shape({
@@ -104,4 +81,4 @@ AttributePlot.propTypes = {
   */
 };
 
-export default connect(mapStateToProps)(withTheme()(AttributePlot));
+export default withTheme()(AttributePlot);
