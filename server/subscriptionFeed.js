@@ -35,7 +35,7 @@ const activeSubscriptions = [
     index: 0,
     interval: 50,
     update: (response, index) => {
-      response.changes[0][1].value = 360*(((index%500)/250)-1);
+      response.changes[0][1].value = 180*(((index%500)/250)-1);
       response.changes[0][1].timeStamp.nanoseconds += 5e7;
       if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
         response.changes[0][1].timeStamp.nanoseconds = 0;

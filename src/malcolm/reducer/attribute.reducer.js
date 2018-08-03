@@ -229,31 +229,32 @@ const checkForSpecialCases = inputAttribute => {
   return attribute;
 };
 
-const pushToArchive = (oldAttributeArchive, payload) => {
+export const pushToArchive = (oldAttributeArchive, payload) => {
   const attributeArchive = oldAttributeArchive;
+  const nanoSeconds =
+    payload.raw.timeStamp.secondsPastEpoch +
+    10 ** -9 * payload.raw.timeStamp.nanoseconds;
   if (attributeArchive.connectTime === -1) {
-    attributeArchive.connectTime = payload.raw.timeStamp.secondsPastEpoch;
+    attributeArchive.connectTime = nanoSeconds;
   }
-  if (payload.raw.meta.typeid) {
+  if (payload.raw.meta && payload.raw.meta.typeid) {
     attributeArchive.typeid = payload.raw.meta.typeid;
   }
   attributeArchive.value.push(payload.raw.value);
-  attributeArchive.timeStamp.push(payload.raw.timeStamp.secondsPastEpoch);
+  attributeArchive.timeStamp.push(nanoSeconds);
   let plotValue = payload.raw.value;
   if (attributeArchive.typeid === malcolmTypes.bool) {
     plotValue = payload.raw.value ? 1 : 0;
   }
   attributeArchive.plotValue.push(plotValue);
   attributeArchive.timeSinceConnect.push(
-    payload.raw.timeStamp.secondsPastEpoch -
-      attributeArchive.connectTime +
-      10 ** -9 * payload.raw.timeStamp.nanoseconds
+    nanoSeconds - attributeArchive.connectTime
   );
   attributeArchive.counter += 1;
   attributeArchive.plotTime =
     attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
       attributeArchive.plotTime >
-    0.2
+    attributeArchive.refreshRate
       ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
       : attributeArchive.plotTime;
   return attributeArchive;

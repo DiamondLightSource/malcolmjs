@@ -46,7 +46,7 @@ const getValue = value => {
   return Object.values(value)[0];
 };
 
-class InfoDetails extends React.Component {
+export class InfoDetails extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (
       props.attribute &&

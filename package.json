@@ -120,6 +120,7 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
+      "!src/**/*.mocks.js",
       "!**/*.stories.*",
       "!**/stories/index.js",
       "!src/index.js",

@@ -16,6 +16,7 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
 import LayoutReducer, { LayoutReduxReducer } from './layout.reducer';
+import MockCircularBuffer from './attribute.reducer.mocks';
 
 jest.mock('./navigation.reducer');
 jest.mock('./method.reducer');
@@ -227,23 +228,17 @@ describe('malcolm reducer', () => {
       attributes: [
         {
           name: 'health',
-          value: [],
-          timeStamp: [],
-          timeSinceConnect: [],
+          value: new MockCircularBuffer(3),
+          plotValue: new MockCircularBuffer(3),
+          timeStamp: new MockCircularBuffer(3),
+          timeSinceConnect: new MockCircularBuffer(3),
           connectTime: -1,
           counter: 0,
-          maxLength: 200,
+          refreshRate: 0,
           plotTime: 0,
         },
       ],
     };
-    // mock toarray method from circular-buffer
-    state.blockArchive.block1.attributes[0].value.toarray = () =>
-      state.blockArchive.block1.attributes[0].value;
-    state.blockArchive.block1.attributes[0].timeSinceConnect.toarray = () =>
-      state.blockArchive.block1.attributes[0].timeSinceConnect;
-    state.blockArchive.block1.attributes[0].timeStamp.toarray = () =>
-      state.blockArchive.block1.attributes[0].timeStamp;
 
     state.messagesInFlight[1] = {
       id: 1,
@@ -258,6 +253,7 @@ describe('malcolm reducer', () => {
         raw: {
           timeStamp: {
             secondsPastEpoch: 123456789,
+            nanoseconds: 1230000,
           },
         },
       },
@@ -272,10 +268,12 @@ describe('malcolm reducer', () => {
       'health',
     ]);
     expect(state.blocks.block1.attributes[0].calculated.loading).toEqual(false);
-    expect(state.blockArchive.block1.attributes[0].value.length).toEqual(1);
-    expect(state.blockArchive.block1.attributes[0].timeStamp.length).toEqual(1);
+    expect(state.blockArchive.block1.attributes[0].value.counter).toEqual(1);
+    expect(state.blockArchive.block1.attributes[0].timeStamp.counter).toEqual(
+      1
+    );
     expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
-      123456789
+      123456789.00123
     );
   });
 
