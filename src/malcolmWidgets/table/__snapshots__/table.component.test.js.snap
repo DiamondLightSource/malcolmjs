@@ -1,7 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WidgetTable renders correctly with no selected row 1`] = `
-<div>
+<div
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+>
   <WithStyles(Table)
     className="WidgetTable-headerLayoutNoScroll-3"
   >
@@ -794,7 +800,13 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
 `;
 
 exports[`WidgetTable renders correctly with selected row 1`] = `
-<div>
+<div
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+>
   <WithStyles(Table)
     className="WidgetTable-headerLayoutNoScroll-3"
   >
