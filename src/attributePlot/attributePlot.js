@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import Plot from 'react-plotly.js';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
@@ -12,7 +11,8 @@ class AttributePlot extends React.Component {
       data[0].x = props.attribute.timeSinceConnect.toarray();
       data[0].y = props.attribute.plotValue.toarray();
       data[0].line = {
-        shape: props.attribute.typeid === malcolmTypes.bool ? 'hv' : 'linear',
+        shape:
+          props.attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
       };
       layout.datarevision = props.attribute.plotTime;
       return { ...state, data: [...data], layout };
@@ -36,16 +36,25 @@ class AttributePlot extends React.Component {
       layout: {
         datarevision: -1,
         autosize: true,
-        paper_bgcolor: props.theme.palette.background.paper,
-        plot_bgcolor: props.theme.palette.background.paper,
+        paper_bgcolor: props.theme.palette.background.default,
+        plot_bgcolor: props.theme.palette.background.default,
         xaxis: {
-          color: emphasize(props.theme.palette.background.paper, 0.8),
+          color: props.theme.palette.text.primary,
         },
         yaxis: {
-          color: emphasize(props.theme.palette.background.paper, 0.8),
+          color: props.theme.palette.text.primary,
         },
       },
     };
+    /* CODE FOR DISPLAYING POSSIBLE VALUES FOR ENUM ON Y AXIS (DISABLED)
+    if (props.attribute.meta.choices) {
+      this.state.layout.yaxis = {
+        ...this.state.layout.yaxis,
+        tickvals: props.attribute.meta.choices.map((val, index) => index),
+        ticktext: props.attribute.meta.choices,
+        range: [0, props.attribute.meta.choices.length - 1],
+      };
+    } */
   }
 
   render() {
@@ -63,22 +72,27 @@ class AttributePlot extends React.Component {
 AttributePlot.propTypes = {
   theme: PropTypes.shape({
     palette: PropTypes.shape({
+      text: PropTypes.shape({
+        primary: PropTypes.string,
+      }),
       primary: PropTypes.shape({
         light: PropTypes.string,
       }),
       background: PropTypes.shape({
-        paper: PropTypes.string,
+        default: PropTypes.string,
       }),
     }),
   }).isRequired,
   /*
   attribute: PropTypes.shape({
+    meta: PropTypes.shape({
+      choices: PropTypes.arrayOf(PropTypes.string),
+    }),
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,
     isBool: PropTypes.bool,
-  }).isRequired,
-  */
+  }).isRequired, */
 };
 
 export default withTheme()(AttributePlot);

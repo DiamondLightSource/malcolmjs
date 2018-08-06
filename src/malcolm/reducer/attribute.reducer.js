@@ -237,15 +237,21 @@ export const pushToArchive = (oldAttributeArchive, payload) => {
   if (attributeArchive.connectTime === -1) {
     attributeArchive.connectTime = nanoSeconds;
   }
-  if (payload.raw.meta && payload.raw.meta.typeid) {
-    attributeArchive.typeid = payload.raw.meta.typeid;
+  if (payload.raw.meta) {
+    attributeArchive.meta = { ...attributeArchive.meta, ...payload.raw.meta };
   }
   attributeArchive.value.push(payload.raw.value);
   attributeArchive.timeStamp.push(nanoSeconds);
   let plotValue = payload.raw.value;
-  if (attributeArchive.typeid === malcolmTypes.bool) {
+  if (attributeArchive.meta.typeid === malcolmTypes.bool) {
     plotValue = payload.raw.value ? 1 : 0;
   }
+  /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
+    else if (attributeArchive.meta.tags.includes('widget:combo')) {
+    plotValue = attributeArchive.meta.choices.findIndex(
+      val => val === payload.raw.value
+    );
+  } */
   attributeArchive.plotValue.push(plotValue);
   attributeArchive.timeSinceConnect.push(
     nanoSeconds - attributeArchive.connectTime

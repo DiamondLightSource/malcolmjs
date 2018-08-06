@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import AttributeViewer from '../attributePlot/attributeView.container';
@@ -56,7 +57,7 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
     minHeight: 'calc(100vh - 64px)',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     align: 'center',
   },
   button: {
@@ -77,6 +78,12 @@ const getWidgetType = tags => {
 };
 
 const findAttributeComponent = props => {
+  const transitionWithPanelStyle = {
+    left: props.openParent ? 360 : 0,
+    width: `calc(100% - ${(props.openChild ? 360 : 0) +
+      (props.openParent ? 360 : 0)}px)`,
+    transition: 'width 1s, left 1s',
+  };
   const widgetTag = getWidgetType(props.tags);
   switch (widgetTag) {
     case 'widget:flowgraph':
@@ -112,12 +119,7 @@ const findAttributeComponent = props => {
         <div className={props.classes.plainBackground}>
           <div
             className={props.classes.tableContainer}
-            style={{
-              left: props.openParent ? 365 : 5,
-              width: `calc(100% - ${(props.openChild ? 365 : 5) +
-                (props.openParent ? 365 : 5)}px)`,
-              transition: 'width 1s, left 1s',
-            }}
+            style={transitionWithPanelStyle}
           >
             <TableContainer
               attributeName={props.mainAttribute}
@@ -144,18 +146,29 @@ const findAttributeComponent = props => {
         <div className={props.classes.plainBackground}>
           <div
             className={props.classes.tableContainer}
-            style={{
-              left: props.openParent ? 365 : 5,
-              width: `calc(100% - ${(props.openChild ? 365 : 5) +
-                (props.openParent ? 365 : 5)}px)`,
-              transition: 'width 1s, left 1s',
-            }}
+            style={transitionWithPanelStyle}
           >
             <AttributeViewer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
               widgetTag={widgetTag}
               typeId={props.typeId}
+            />
+          </div>
+        </div>
+      );
+    case 'widget:tree':
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <JSONInput
+              id="somejson"
+              height="100%"
+              width="100%"
+              style={{ body: { fontSize: '150%' } }}
             />
           </div>
         </div>
