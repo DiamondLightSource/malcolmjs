@@ -82,6 +82,7 @@ export const selectorFunction = (
       );
     case 'widget:textupdate':
       return <TextUpdate Text={value} />;
+    case 'widget:title':
     case 'widget:textinput':
       return (
         <WidgetTextInput

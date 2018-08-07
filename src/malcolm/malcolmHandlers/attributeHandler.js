@@ -4,6 +4,28 @@ import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
+const applyChangesToObject = (changes, object) => {
+  let update = object;
+  changes.forEach(change => {
+    const pathWithinObj = change[0];
+    if (pathWithinObj.length !== 0) {
+      pathWithinObj.slice(0, -1).forEach(element => {
+        update = Object.prototype.hasOwnProperty.call(update, element)
+          ? update[element]
+          : {};
+      });
+      if (change.length === 1) {
+        delete update[pathWithinObj.slice(-1)[0]];
+      } else {
+        // eslint-disable-next-line prefer-destructuring
+        update[pathWithinObj.slice(-1)[0]] = change[1];
+      }
+    } else if (change.length === 2) {
+      update = { ...change[1] };
+    }
+  });
+};
+
 const processDeltaMessage = (changes, originalRequest, getState) => {
   const pathToAttr = originalRequest.path;
   const blockName = pathToAttr[0];
@@ -20,26 +42,7 @@ const processDeltaMessage = (changes, originalRequest, getState) => {
       JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
     );
   }
-  changes.forEach(change => {
-    const pathWithinAttr = change[0];
-    if (pathWithinAttr.length !== 0) {
-      let update = attribute;
-      pathWithinAttr.slice(0, -1).forEach(element => {
-        update = Object.prototype.hasOwnProperty.call(update, element)
-          ? update[element]
-          : {};
-      });
-      if (change.length === 1) {
-        delete update[pathWithinAttr.slice(-1)[0]];
-      } else {
-        // eslint-disable-next-line prefer-destructuring
-        update[pathWithinAttr.slice(-1)[0]] = change[1];
-      }
-    } else if (change.length === 2) {
-      attribute = { ...change[1] };
-    }
-  });
-  return attribute;
+  return applyChangesToObject(changes, attribute);
 };
 
 const processAttribute = (request, changedAttribute, getState, dispatch) => {
