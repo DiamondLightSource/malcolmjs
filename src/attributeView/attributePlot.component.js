@@ -7,14 +7,17 @@ import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelect
 class AttributePlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data, layout } = state;
-    if (props.attribute && layout.datarevision !== props.attribute.plotTime) {
+    const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
+      props.attribute.plotTime
+    }`;
+    if (props.attribute && layout.datarevision !== dataRevision) {
       data[0].x = props.attribute.timeStamp.toarray();
       data[0].y = props.attribute.plotValue.toarray();
       data[0].line = {
         shape:
           props.attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
       };
-      layout.datarevision = props.attribute.plotTime;
+      layout.datarevision = dataRevision;
       return { ...state, data: [...data], layout };
     }
     return state;

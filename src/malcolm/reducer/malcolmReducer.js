@@ -27,7 +27,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
-export const ARCHIVE_REFRESH_INTERVAL = 1.0; // minimum time in seconds between updates of displayed archive data
+export const ARCHIVE_REFRESH_INTERVAL = 5.0; // minimum time in seconds between updates of displayed archive data
 
 const initialMalcolmState = {
   messagesInFlight: {},
@@ -145,6 +145,7 @@ function updateBlock(state, payload) {
       };
       blockArchive[blockName] = {
         attributes: payload.fields.map(f => ({
+          parent: blockName,
           name: f,
           value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
           plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),

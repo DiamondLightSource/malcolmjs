@@ -16,7 +16,11 @@ class ArchiveTable extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.attribute.plotTime - this.state.renderTime > 5;
+    return (
+      nextProps.attribute.plotTime - this.state.renderTime > 5 ||
+      nextProps.attribute.parent !== this.props.attribute.parent ||
+      nextProps.attribute.name !== this.props.attribute.name
+    );
   }
   render() {
     const { attribute } = this.props;
@@ -59,6 +63,8 @@ class ArchiveTable extends React.Component {
 
 ArchiveTable.propTypes = {
   attribute: PropTypes.shape({
+    parent: PropTypes.string,
+    name: PropTypes.string,
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,

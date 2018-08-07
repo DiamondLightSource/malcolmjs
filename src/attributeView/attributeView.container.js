@@ -21,6 +21,15 @@ class AttributeViewer extends React.Component {
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextState.tabValue !== this.state.tabValue ||
+      nextProps.attribute.plotTime !== this.props.attribute.plotTime ||
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName
+    );
+  }
+
   handleChange(event, tabValue) {
     this.setState({ tabValue });
   }
@@ -109,6 +118,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 AttributeViewer.propTypes = {
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       primary: PropTypes.shape({
@@ -120,6 +131,7 @@ AttributeViewer.propTypes = {
     }),
   }).isRequired,
   attribute: PropTypes.shape({
+    refreshRate: PropTypes.number,
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,
