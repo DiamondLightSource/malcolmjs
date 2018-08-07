@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import blockUtils from '../malcolm/blockUtils';
 
-import ArchiveTable from '../malcolmWidgets/table/archiveTable.container';
+import ArchiveTable from './archiveTable.container';
 import AttributePlot from './attributePlot';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 

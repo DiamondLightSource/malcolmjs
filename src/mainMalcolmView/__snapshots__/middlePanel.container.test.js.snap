@@ -66,9 +66,9 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
       className="MiddlePanelContainer-tableContainer-6"
       style={
         Object {
-          "left": 365,
+          "left": 360,
           "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "width": "calc(100% - 360px)",
         }
       }
     >
@@ -224,9 +224,9 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
       className="MiddlePanelContainer-tableContainer-6"
       style={
         Object {
-          "left": 365,
+          "left": 360,
           "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "width": "calc(100% - 360px)",
         }
       }
     >

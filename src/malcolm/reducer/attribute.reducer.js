@@ -234,6 +234,10 @@ export const pushToArchive = (oldAttributeArchive, payload) => {
   const nanoSeconds =
     payload.raw.timeStamp.secondsPastEpoch +
     10 ** -9 * payload.raw.timeStamp.nanoseconds;
+  const dateObject = new Date(
+    payload.raw.timeStamp.secondsPastEpoch * 1000 +
+      payload.raw.timeStamp.nanoseconds / 1000000
+  );
   if (attributeArchive.connectTime === -1) {
     attributeArchive.connectTime = nanoSeconds;
   }
@@ -241,7 +245,7 @@ export const pushToArchive = (oldAttributeArchive, payload) => {
     attributeArchive.meta = { ...attributeArchive.meta, ...payload.raw.meta };
   }
   attributeArchive.value.push(payload.raw.value);
-  attributeArchive.timeStamp.push(nanoSeconds);
+  attributeArchive.timeStamp.push(dateObject);
   let plotValue = payload.raw.value;
   if (attributeArchive.meta.typeid === malcolmTypes.bool) {
     plotValue = payload.raw.value ? 1 : 0;

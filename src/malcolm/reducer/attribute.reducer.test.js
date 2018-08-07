@@ -61,6 +61,7 @@ describe('attribute reducer', () => {
           attributes: [
             {
               name: 'layout',
+              meta: {},
               value: new MockCircularBuffer(3),
               plotValue: new MockCircularBuffer(3),
               timeStamp: new MockCircularBuffer(3),
@@ -355,14 +356,14 @@ describe('attribute reducer', () => {
       },
     });
     expect(testArchive.connectTime).toEqual(100000000);
-    expect(testArchive.typeid).toEqual('test');
+    expect(testArchive.meta.typeid).toEqual('test');
     expect(testArchive.timeSinceConnect.counter).toEqual(1);
     expect(testArchive.timeSinceConnect[0]).toBeCloseTo(23456789.00123, 6);
   });
 
   it('pushToArchive sets plotValue if attribute is bool', () => {
     state.blockArchive.block1.attributes[0].connectTime = 100000000;
-    state.blockArchive.block1.attributes[0].typeid = malcolmTypes.bool;
+    state.blockArchive.block1.attributes[0].meta.typeid = malcolmTypes.bool;
     const testArchive1 = pushToArchive(
       state.blockArchive.block1.attributes[0],
       {

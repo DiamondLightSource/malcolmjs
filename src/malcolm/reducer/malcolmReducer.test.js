@@ -228,6 +228,7 @@ describe('malcolm reducer', () => {
       attributes: [
         {
           name: 'health',
+          meta: {},
           value: new MockCircularBuffer(3),
           plotValue: new MockCircularBuffer(3),
           timeStamp: new MockCircularBuffer(3),

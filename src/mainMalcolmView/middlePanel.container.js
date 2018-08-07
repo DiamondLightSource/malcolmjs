@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-import AttributeViewer from '../attributePlot/attributeView.container';
+import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,

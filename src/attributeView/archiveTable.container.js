@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WidgetTable from './table.component';
+import WidgetTable from '../malcolmWidgets/table/table.component';
 
 class ArchiveTable extends React.Component {
   static getDerivedStateFromProps(props, state) {

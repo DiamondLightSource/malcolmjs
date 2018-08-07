@@ -8,7 +8,7 @@ class AttributePlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data, layout } = state;
     if (props.attribute && layout.datarevision !== props.attribute.plotTime) {
-      data[0].x = props.attribute.timeSinceConnect.toarray();
+      data[0].x = props.attribute.timeStamp.toarray();
       data[0].y = props.attribute.plotValue.toarray();
       data[0].line = {
         shape:
