@@ -8,14 +8,14 @@ import SwipeableViews from 'react-swipeable-views';
 import blockUtils from '../malcolm/blockUtils';
 
 import ArchiveTable from './archiveTable.container';
-import AttributePlot from './attributePlot';
+import AttributePlot from './attributePlot.component';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 class AttributeViewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: 0,
+      tabValue: props.defaultTab,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
@@ -128,9 +128,11 @@ AttributeViewer.propTypes = {
   // widgetTag: PropTypes.string.isRequired,
   // typeId: PropTypes.string.isRequired,
   useSwipeable: PropTypes.bool,
+  defaultTab: PropTypes.number,
 };
 
 AttributeViewer.defaultProps = {
+  defaultTab: 0,
   useSwipeable: false,
 };
 

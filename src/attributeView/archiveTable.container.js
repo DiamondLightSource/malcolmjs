@@ -25,14 +25,17 @@ class ArchiveTable extends React.Component {
         attribute={{
           raw: {
             value: {
-              timeStamp: attribute.timeSinceConnect.toarray().slice(-100),
+              timeStamp: attribute.timeStamp
+                .toarray()
+                .slice(-100)
+                .map(date => date.toISOString()),
               value: attribute.value.toarray().slice(-100),
             },
             meta: {
               elements: {
                 timeStamp: {
                   tags: ['widget:textupdate'],
-                  label: 'Time received',
+                  label: 'Time set',
                 },
                 value: {
                   tags: ['widget:textupdate'],

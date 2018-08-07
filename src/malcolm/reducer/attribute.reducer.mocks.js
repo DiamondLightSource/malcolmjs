@@ -8,7 +8,7 @@ class MockCircularBuffer extends Array {
   }
   push(val) {
     this[this.counter] = val;
-    this.counter = (this.counter + 1) % 3;
+    this.counter = (this.counter + 1) % this.length;
   }
   toarray() {
     const copy = [...this];
