@@ -53,9 +53,14 @@ const mapStateToProps = state => {
   const showPalette = state.malcolm.childBlock === '.palette';
   const showInfo = state.malcolm.childBlock === '.info';
 
+  let parentBlockTitle = parentBlock ? parentBlock.name : '';
+  if (parentBlock && parentBlock.label) {
+    parentBlockTitle = parentBlock.label;
+  }
+
   let childBlockTitle = childBlock ? childBlock.name : '';
-  if (childBlock && childBlock.meta && childBlock.meta.label) {
-    childBlockTitle = childBlock.meta.label;
+  if (childBlock && childBlock.label) {
+    childBlockTitle = childBlock.label;
   }
   if (showPalette) {
     childBlockTitle = 'Palette';
@@ -64,7 +69,7 @@ const mapStateToProps = state => {
   }
 
   return {
-    parentBlockTitle: parentBlock ? parentBlock.name : '',
+    parentBlockTitle,
     childBlockTitle,
     showPalette,
     showInfo,

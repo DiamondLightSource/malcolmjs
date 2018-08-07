@@ -24,13 +24,14 @@ const applyChangesToObject = (changes, object) => {
       update = { ...change[1] };
     }
   });
+  return update;
 };
 
 const processDeltaMessage = (changes, originalRequest, getState) => {
   const pathToAttr = originalRequest.path;
   const blockName = pathToAttr[0];
   const attributeName = pathToAttr[1];
-  let attribute;
+  let object;
   const { blocks } = getState().malcolm;
   const matchingAttribute = BlockUtils.findAttributeIndex(
     blocks,
@@ -38,11 +39,16 @@ const processDeltaMessage = (changes, originalRequest, getState) => {
     attributeName
   );
   if (matchingAttribute >= 0) {
-    attribute = JSON.parse(
+    object = JSON.parse(
       JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
     );
+  } else if (
+    BlockUtils.findBlock(blocks, blockName) &&
+    attributeName === 'meta'
+  ) {
+    object = blocks[blockName];
   }
-  return applyChangesToObject(changes, attribute);
+  return applyChangesToObject(changes, object);
 };
 
 const processAttribute = (request, changedAttribute, getState, dispatch) => {
