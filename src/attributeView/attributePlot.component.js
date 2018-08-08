@@ -3,6 +3,33 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+
+const alarmStatesByIndex = [
+  AlarmStates.NO_ALARM,
+  AlarmStates.MINOR_ALARM,
+  AlarmStates.MAJOR_ALARM,
+  AlarmStates.UNDEFINED_ALARM,
+];
+
+const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
+  const dataElement = oldDataElement;
+  dataElement.x = attribute.timeStamp.toarray();
+  dataElement.y = attribute.plotValue
+    .toarray()
+    .map(
+      (value, valIndex) =>
+        attribute.alarmState.toarray()[valIndex] ===
+        alarmStatesByIndex[alarmIndex]
+          ? value
+          : null
+    );
+  dataElement.line = {
+    ...dataElement.line,
+    shape: attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
+  };
+  return dataElement;
+};
 
 class AttributePlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
@@ -11,14 +38,11 @@ class AttributePlot extends React.Component {
       props.attribute.plotTime
     }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     if (props.attribute && layout.datarevision !== dataRevision) {
-      data[0].x = props.attribute.timeStamp.toarray();
-      data[0].y = props.attribute.plotValue.toarray();
-      data[0].line = {
-        shape:
-          props.attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
-      };
+      const newData = data.map((dataElement, index) =>
+        updatePlotData(dataElement, index, props.attribute)
+      );
       layout.datarevision = dataRevision;
-      return { ...state, data: [...data], layout };
+      return { ...state, data: [...newData], layout };
     }
     return state;
   }
@@ -34,6 +58,38 @@ class AttributePlot extends React.Component {
           mode: 'lines+points',
           marker: { color: props.theme.palette.primary.light },
           line: { shape: 'linear' },
+          title: 'Normal',
+        },
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          mode: 'lines+points',
+          marker: {
+            color: props.theme.alarmState
+              ? props.theme.alarmState.warning
+              : '#fff',
+          },
+          line: { shape: 'linear' },
+          title: 'Minor',
+        },
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          mode: 'lines+points',
+          marker: { color: props.theme.palette.error.main },
+          line: { shape: 'linear' },
+          title: 'Major',
+        },
+        {
+          x: [],
+          y: [],
+          type: 'scatter',
+          mode: 'lines+points',
+          marker: { color: props.theme.palette.primary.dark },
+          line: { shape: 'linear', dash: 'dash' },
+          title: 'Disconnected',
         },
       ],
       layout: {
@@ -80,10 +136,17 @@ AttributePlot.propTypes = {
       }),
       primary: PropTypes.shape({
         light: PropTypes.string,
+        dark: PropTypes.string,
+      }),
+      error: PropTypes.shape({
+        main: PropTypes.string,
       }),
       background: PropTypes.shape({
         default: PropTypes.string,
       }),
+    }),
+    alarmState: PropTypes.shape({
+      warning: PropTypes.string,
     }),
   }).isRequired,
   /*

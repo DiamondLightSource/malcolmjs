@@ -22,11 +22,6 @@ class AttributeViewer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(
-      `--------------- ${nextProps.openPanels.child !==
-        this.props.openPanels.child ||
-        nextProps.openPanels.parent !== this.props.openPanels.parent}`
-    );
     return (
       nextState.tabValue !== this.state.tabValue ||
       nextProps.attribute.plotTime !== this.props.attribute.plotTime ||

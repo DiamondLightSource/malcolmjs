@@ -22,6 +22,7 @@ exports[`AttributeDetails renders correctly 1`] = `
   <WithStyles(Typography)
     className="AttributeDetails-textName-2"
     onClick={[Function]}
+    onMouseDown={[Function]}
     style={
       Object {
         "cursor": "pointer",

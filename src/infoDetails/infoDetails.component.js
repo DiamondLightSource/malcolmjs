@@ -70,6 +70,8 @@ export class InfoDetails extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return (
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName ||
       nextProps.subElement !== this.state.subElement ||
       (nextProps.attribute &&
         nextProps.attribute.raw &&
@@ -134,6 +136,8 @@ export class InfoDetails extends React.Component {
 }
 
 InfoDetails.propTypes = {
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
   subElement: PropTypes.arrayOf(PropTypes.string).isRequired,
   attribute: PropTypes.shape({
     raw: PropTypes.shape({
@@ -179,6 +183,7 @@ const mapStateToProps = state => {
   let attributeName;
   let subElement;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
+  console.log(navLists);
   if (navLists[2].navType === NavTypes.Info) {
     blockName =
       navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : undefined;
@@ -190,6 +195,8 @@ const mapStateToProps = state => {
         : undefined;
   }
   return {
+    blockName,
+    attributeName,
     attribute: blockUtils.findAttribute(
       state.malcolm.blocks,
       blockName,

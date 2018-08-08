@@ -16,6 +16,7 @@ import {
   tableHasColumn,
   tableHasRow,
 } from './table.reducer';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -229,7 +230,7 @@ const checkForSpecialCases = inputAttribute => {
   return attribute;
 };
 
-export const pushToArchive = (oldAttributeArchive, payload) => {
+export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
   const attributeArchive = oldAttributeArchive;
   const nanoSeconds =
     payload.raw.timeStamp.secondsPastEpoch +
@@ -245,6 +246,7 @@ export const pushToArchive = (oldAttributeArchive, payload) => {
     attributeArchive.meta = { ...attributeArchive.meta, ...payload.raw.meta };
   }
   attributeArchive.value.push(payload.raw.value);
+  attributeArchive.alarmState.push(alarmState);
   attributeArchive.timeStamp.push(dateObject);
   let plotValue = payload.raw.value;
   if (attributeArchive.meta.typeid === malcolmTypes.bool) {
@@ -306,6 +308,10 @@ export function updateAttribute(oldState, payload) {
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
 
         if (payload.raw.timeStamp) {
+          const alarmState =
+            attribute.raw.alarm && attribute.raw.alarm.severity
+              ? attribute.raw.alarm.severity
+              : AlarmStates.NO_ALARM;
           /*
           const nanoSeconds =
             payload.raw.timeStamp.secondsPastEpoch +
@@ -317,7 +323,8 @@ export function updateAttribute(oldState, payload) {
           */
           archive[matchingAttributeIndex] = pushToArchive(
             attributeArchive,
-            payload
+            payload,
+            alarmState
           );
         }
       }

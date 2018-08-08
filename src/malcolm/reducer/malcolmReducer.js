@@ -148,6 +148,7 @@ function updateBlock(state, payload) {
           parent: blockName,
           name: f,
           value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+          alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
           plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
           timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
           timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),

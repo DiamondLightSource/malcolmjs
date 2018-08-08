@@ -63,6 +63,7 @@ describe('attribute reducer', () => {
               name: 'layout',
               meta: {},
               value: new MockCircularBuffer(3),
+              alarmState: new MockCircularBuffer(3),
               plotValue: new MockCircularBuffer(3),
               timeStamp: new MockCircularBuffer(3),
               timeSinceConnect: new MockCircularBuffer(3),

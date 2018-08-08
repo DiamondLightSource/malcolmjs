@@ -39,6 +39,21 @@ const styles = theme => ({
   },
 });
 
+const copyPathToClipboard = (event, path) => {
+  if (event.button === 1) {
+    const dummyElement = document.createElement('textarea');
+    dummyElement.value = JSON.stringify(path);
+    dummyElement.setAttribute('readonly', '');
+    dummyElement.style.position = 'absolute';
+    dummyElement.style.left = `${event.pageX}px`;
+    dummyElement.style.top = `${event.pageY}px`;
+    document.body.appendChild(dummyElement);
+    dummyElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyElement);
+  }
+};
+
 const AttributeDetails = props => {
   let widgetTagIndex = null;
   if (props.attribute && props.attribute.raw && props.attribute.raw.meta) {
@@ -73,6 +88,9 @@ const AttributeDetails = props => {
           className={props.classes.textName}
           onClick={() =>
             props.nameClickHandler([props.blockName, props.attributeName])
+          }
+          onMouseDown={event =>
+            copyPathToClipboard(event, props.attribute.calculated.path)
           }
           style={{ cursor: 'pointer' }}
         >
