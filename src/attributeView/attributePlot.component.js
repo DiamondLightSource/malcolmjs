@@ -58,7 +58,7 @@ class AttributePlot extends React.Component {
           mode: 'lines+points',
           marker: { color: props.theme.palette.primary.light },
           line: { shape: 'linear' },
-          title: 'Normal',
+          name: 'Normal',
         },
         {
           x: [],
@@ -71,7 +71,7 @@ class AttributePlot extends React.Component {
               : '#fff',
           },
           line: { shape: 'linear' },
-          title: 'Minor',
+          name: 'Minor',
         },
         {
           x: [],
@@ -80,7 +80,7 @@ class AttributePlot extends React.Component {
           mode: 'lines+points',
           marker: { color: props.theme.palette.error.main },
           line: { shape: 'linear' },
-          title: 'Major',
+          name: 'Major',
         },
         {
           x: [],
@@ -89,10 +89,11 @@ class AttributePlot extends React.Component {
           mode: 'lines+points',
           marker: { color: props.theme.palette.primary.dark },
           line: { shape: 'linear', dash: 'dash' },
-          title: 'Disconnected',
+          name: 'Disconnected',
         },
       ],
       layout: {
+        legend: { font: { color: props.theme.palette.text.primary } },
         datarevision: -1,
         autosize: true,
         paper_bgcolor: props.theme.palette.background.default,

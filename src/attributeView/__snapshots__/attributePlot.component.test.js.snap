@@ -12,7 +12,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#7986cb",
         },
         "mode": "lines+points",
-        "title": "Normal",
+        "name": "Normal",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -33,7 +33,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "title": "Minor",
+        "name": "Minor",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -54,7 +54,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#f44336",
         },
         "mode": "lines+points",
-        "title": "Major",
+        "name": "Major",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -76,7 +76,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#303f9f",
         },
         "mode": "lines+points",
-        "title": "Disconnected",
+        "name": "Disconnected",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -96,6 +96,11 @@ exports[`attributePlot renders correctly for bool 1`] = `
     Object {
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "legend": Object {
+        "font": Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+        },
+      },
       "paper_bgcolor": "#fafafa",
       "plot_bgcolor": "#fafafa",
       "xaxis": Object {
@@ -128,7 +133,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#7986cb",
         },
         "mode": "lines+points",
-        "title": "Normal",
+        "name": "Normal",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -149,7 +154,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "title": "Minor",
+        "name": "Minor",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -170,7 +175,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#f44336",
         },
         "mode": "lines+points",
-        "title": "Major",
+        "name": "Major",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -192,7 +197,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#303f9f",
         },
         "mode": "lines+points",
-        "title": "Disconnected",
+        "name": "Disconnected",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -212,6 +217,11 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
     Object {
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "legend": Object {
+        "font": Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+        },
+      },
       "paper_bgcolor": "#fafafa",
       "plot_bgcolor": "#fafafa",
       "xaxis": Object {
@@ -244,7 +254,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#7986cb",
         },
         "mode": "lines+points",
-        "title": "Normal",
+        "name": "Normal",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -265,7 +275,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "title": "Minor",
+        "name": "Minor",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -286,7 +296,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#f44336",
         },
         "mode": "lines+points",
-        "title": "Major",
+        "name": "Major",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -308,7 +318,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#303f9f",
         },
         "mode": "lines+points",
-        "title": "Disconnected",
+        "name": "Disconnected",
         "type": "scatter",
         "x": Array [
           1970-01-01T00:00:01.000Z,
@@ -328,6 +338,11 @@ exports[`attributePlot renders correctly for number 1`] = `
     Object {
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "legend": Object {
+        "font": Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+        },
+      },
       "paper_bgcolor": "#fafafa",
       "plot_bgcolor": "#fafafa",
       "xaxis": Object {
