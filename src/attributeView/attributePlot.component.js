@@ -9,7 +9,7 @@ class AttributePlot extends React.Component {
     const { data, layout } = state;
     const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
       props.attribute.plotTime
-    }`;
+    }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     if (props.attribute && layout.datarevision !== dataRevision) {
       data[0].x = props.attribute.timeStamp.toarray();
       data[0].y = props.attribute.plotValue.toarray();
@@ -87,6 +87,10 @@ AttributePlot.propTypes = {
     }),
   }).isRequired,
   /*
+  openPanels: PropTypes.shape({
+    parent: PropTypes.bool,
+    child: PropTypes.bool,
+  }).isRequired,
   attribute: PropTypes.shape({
     meta: PropTypes.shape({
       choices: PropTypes.arrayOf(PropTypes.string),

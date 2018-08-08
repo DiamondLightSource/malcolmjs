@@ -22,11 +22,18 @@ class AttributeViewer extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log(
+      `--------------- ${nextProps.openPanels.child !==
+        this.props.openPanels.child ||
+        nextProps.openPanels.parent !== this.props.openPanels.parent}`
+    );
     return (
       nextState.tabValue !== this.state.tabValue ||
       nextProps.attribute.plotTime !== this.props.attribute.plotTime ||
       nextProps.blockName !== this.props.blockName ||
-      nextProps.attributeName !== this.props.attributeName
+      nextProps.attributeName !== this.props.attributeName ||
+      nextProps.openPanels.child !== this.props.openPanels.child ||
+      nextProps.openPanels.parent !== this.props.openPanels.parent
     );
   }
 
@@ -61,7 +68,10 @@ class AttributeViewer extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <ArchiveTable attribute={attribute} />
-          <AttributePlot attribute={attribute} />
+          <AttributePlot
+            attribute={attribute}
+            openPanels={this.props.openPanels}
+          />
         </SwipeableViews>
         <Tabs
           value={tabValue}
@@ -79,7 +89,12 @@ class AttributeViewer extends React.Component {
       <div style={{ width: '100%', height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>
           {tabValue === 1 && <ArchiveTable attribute={attribute} />}
-          {tabValue === 0 && <AttributePlot attribute={attribute} />}
+          {tabValue === 0 && (
+            <AttributePlot
+              attribute={attribute}
+              openPanels={this.props.openPanels}
+            />
+          )}
         </div>
         <Tabs
           value={tabValue}
@@ -141,6 +156,10 @@ AttributeViewer.propTypes = {
   // typeId: PropTypes.string.isRequired,
   useSwipeable: PropTypes.bool,
   defaultTab: PropTypes.number,
+  openPanels: PropTypes.shape({
+    parent: PropTypes.bool,
+    child: PropTypes.bool,
+  }).isRequired,
 };
 
 AttributeViewer.defaultProps = {

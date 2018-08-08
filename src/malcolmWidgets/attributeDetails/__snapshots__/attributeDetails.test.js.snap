@@ -21,6 +21,12 @@ exports[`AttributeDetails renders correctly 1`] = `
   </WithStyles(Tooltip)>
   <WithStyles(Typography)
     className="AttributeDetails-textName-2"
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+      }
+    }
   >
     Attribute 1
     :

@@ -69,7 +69,13 @@ const AttributeDetails = props => {
             <AttributeAlarm alarmSeverity={alarm} />
           </IconButton>
         </Tooltip>
-        <Typography className={props.classes.textName}>
+        <Typography
+          className={props.classes.textName}
+          onClick={() =>
+            props.nameClickHandler([props.blockName, props.attributeName])
+          }
+          style={{ cursor: 'pointer' }}
+        >
           {props.attribute.raw.meta.label}:{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
@@ -86,6 +92,7 @@ AttributeDetails.propTypes = {
   blockName: PropTypes.string.isRequired,
   attribute: PropTypes.shape({
     calculated: PropTypes.shape({
+      path: PropTypes.string,
       name: PropTypes.string,
       pending: PropTypes.bool,
       errorState: PropTypes.bool,
@@ -111,6 +118,7 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  nameClickHandler: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -131,6 +139,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   buttonClickHandler: path => {
     dispatch(navigationActions.navigateToInfo(path[0], path[1]));
+  },
+  nameClickHandler: path => {
+    dispatch(navigationActions.navigateToSubElement(path[0], path[1]));
   },
 });
 
