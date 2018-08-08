@@ -4,6 +4,15 @@ import MockCircularBuffer from '../malcolm/reducer/attribute.reducer.mocks';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import AttributePlot from './attributePlot.component';
 
+const mockTheme = {
+  palette: {
+    primary: { light: '#f0f0f0' },
+    text: { primary: '#000' },
+    background: { default: '#424242' },
+  },
+  alarmState: { warning: '#fff', error: '#ff0000', disconnected: '#0500ff' },
+};
+
 describe('attributePlot', () => {
   let shallow;
   let mockArchive;
@@ -31,7 +40,11 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot attribute={mockArchive} openPanels={{}} />
+      <AttributePlot
+        attribute={mockArchive}
+        openPanels={{}}
+        theme={mockTheme}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
@@ -49,7 +62,11 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot attribute={mockArchive} openPanels={{}} />
+      <AttributePlot
+        attribute={mockArchive}
+        openPanels={{}}
+        theme={mockTheme}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
@@ -67,7 +84,11 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot attribute={mockArchive} openPanels={{}} />
+      <AttributePlot
+        attribute={mockArchive}
+        openPanels={{}}
+        theme={mockTheme}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });

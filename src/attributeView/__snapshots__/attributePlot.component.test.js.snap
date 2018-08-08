@@ -9,7 +9,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "shape": "hv",
         },
         "marker": Object {
-          "color": "#7986cb",
+          "color": "#f0f0f0",
         },
         "mode": "lines+points",
         "name": "Normal",
@@ -27,6 +27,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
       Object {
         "line": Object {
+          "dash": "15px, 5px",
           "shape": "hv",
         },
         "marker": Object {
@@ -48,10 +49,11 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
       Object {
         "line": Object {
+          "dash": "10px, 10px",
           "shape": "hv",
         },
         "marker": Object {
-          "color": "#f44336",
+          "color": "#ff0000",
         },
         "mode": "lines+points",
         "name": "Major",
@@ -69,11 +71,11 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
       Object {
         "line": Object {
-          "dash": "dash",
+          "dash": "5px, 15px",
           "shape": "hv",
         },
         "marker": Object {
-          "color": "#303f9f",
+          "color": "#0500ff",
         },
         "mode": "lines+points",
         "name": "Disconnected",
@@ -98,16 +100,16 @@ exports[`attributePlot renders correctly for bool 1`] = `
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
-          "color": "rgba(0, 0, 0, 0.87)",
+          "color": "#000",
         },
       },
-      "paper_bgcolor": "#fafafa",
-      "plot_bgcolor": "#fafafa",
+      "paper_bgcolor": "#424242",
+      "plot_bgcolor": "#424242",
       "xaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
       "yaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
     }
   }
@@ -130,7 +132,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#7986cb",
+          "color": "#f0f0f0",
         },
         "mode": "lines+points",
         "name": "Normal",
@@ -142,12 +144,13 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
         ],
         "y": Array [
           1,
-          null,
+          -1,
           2,
         ],
       },
       Object {
         "line": Object {
+          "dash": "15px, 5px",
           "shape": "linear",
         },
         "marker": Object {
@@ -164,15 +167,16 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
         "y": Array [
           null,
           -1,
-          null,
+          2,
         ],
       },
       Object {
         "line": Object {
+          "dash": "10px, 10px",
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#f44336",
+          "color": "#ff0000",
         },
         "mode": "lines+points",
         "name": "Major",
@@ -190,11 +194,11 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       },
       Object {
         "line": Object {
-          "dash": "dash",
+          "dash": "5px, 15px",
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#303f9f",
+          "color": "#0500ff",
         },
         "mode": "lines+points",
         "name": "Disconnected",
@@ -219,16 +223,16 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
-          "color": "rgba(0, 0, 0, 0.87)",
+          "color": "#000",
         },
       },
-      "paper_bgcolor": "#fafafa",
-      "plot_bgcolor": "#fafafa",
+      "paper_bgcolor": "#424242",
+      "plot_bgcolor": "#424242",
       "xaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
       "yaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
     }
   }
@@ -251,7 +255,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#7986cb",
+          "color": "#f0f0f0",
         },
         "mode": "lines+points",
         "name": "Normal",
@@ -269,6 +273,7 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
       Object {
         "line": Object {
+          "dash": "15px, 5px",
           "shape": "linear",
         },
         "marker": Object {
@@ -290,10 +295,11 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
       Object {
         "line": Object {
+          "dash": "10px, 10px",
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#f44336",
+          "color": "#ff0000",
         },
         "mode": "lines+points",
         "name": "Major",
@@ -311,11 +317,11 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
       Object {
         "line": Object {
-          "dash": "dash",
+          "dash": "5px, 15px",
           "shape": "linear",
         },
         "marker": Object {
-          "color": "#303f9f",
+          "color": "#0500ff",
         },
         "mode": "lines+points",
         "name": "Disconnected",
@@ -340,16 +346,16 @@ exports[`attributePlot renders correctly for number 1`] = `
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
-          "color": "rgba(0, 0, 0, 0.87)",
+          "color": "#000",
         },
       },
-      "paper_bgcolor": "#fafafa",
-      "plot_bgcolor": "#fafafa",
+      "paper_bgcolor": "#424242",
+      "plot_bgcolor": "#424242",
       "xaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
       "yaxis": Object {
-        "color": "rgba(0, 0, 0, 0.87)",
+        "color": "#000",
       },
     }
   }

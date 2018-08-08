@@ -183,7 +183,6 @@ const mapStateToProps = state => {
   let attributeName;
   let subElement;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
-  console.log(navLists);
   if (navLists[2].navType === NavTypes.Info) {
     blockName =
       navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : undefined;

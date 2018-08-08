@@ -14,13 +14,14 @@ const alarmStatesByIndex = [
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
+  const alarms = attribute.alarmState.toarray();
   dataElement.x = attribute.timeStamp.toarray();
   dataElement.y = attribute.plotValue
     .toarray()
     .map(
       (value, valIndex) =>
-        attribute.alarmState.toarray()[valIndex] ===
-        alarmStatesByIndex[alarmIndex]
+        alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
+        alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex]
           ? value
           : null
     );
@@ -70,7 +71,7 @@ class AttributePlot extends React.Component {
               ? props.theme.alarmState.warning
               : '#fff',
           },
-          line: { shape: 'linear' },
+          line: { shape: 'linear', dash: '15px, 5px' },
           name: 'Minor',
         },
         {
@@ -78,8 +79,8 @@ class AttributePlot extends React.Component {
           y: [],
           type: 'scatter',
           mode: 'lines+points',
-          marker: { color: props.theme.palette.error.main },
-          line: { shape: 'linear' },
+          marker: { color: props.theme.alarmState.error },
+          line: { shape: 'linear', dash: '10px, 10px' },
           name: 'Major',
         },
         {
@@ -87,8 +88,8 @@ class AttributePlot extends React.Component {
           y: [],
           type: 'scatter',
           mode: 'lines+points',
-          marker: { color: props.theme.palette.primary.dark },
-          line: { shape: 'linear', dash: 'dash' },
+          marker: { color: props.theme.alarmState.disconnected },
+          line: { shape: 'linear', dash: '5px, 15px' },
           name: 'Disconnected',
         },
       ],
@@ -137,10 +138,6 @@ AttributePlot.propTypes = {
       }),
       primary: PropTypes.shape({
         light: PropTypes.string,
-        dark: PropTypes.string,
-      }),
-      error: PropTypes.shape({
-        main: PropTypes.string,
       }),
       background: PropTypes.shape({
         default: PropTypes.string,
@@ -148,6 +145,8 @@ AttributePlot.propTypes = {
     }),
     alarmState: PropTypes.shape({
       warning: PropTypes.string,
+      error: PropTypes.string,
+      disconnected: PropTypes.string,
     }),
   }).isRequired,
   /*
