@@ -16,6 +16,7 @@ const mockTheme = {
 describe('attributePlot', () => {
   let shallow;
   let mockArchive;
+  let mockStore;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
@@ -24,6 +25,10 @@ describe('attributePlot', () => {
       alarmState: new MockCircularBuffer(5),
       plotValue: new MockCircularBuffer(5),
       meta: {},
+    };
+    mockStore = {
+      getState: () => {},
+      subscribe: () => {},
     };
   });
 
@@ -41,12 +46,13 @@ describe('attributePlot', () => {
 
     const wrapper = shallow(
       <AttributePlot
+        store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders correctly for bool', () => {
@@ -63,12 +69,13 @@ describe('attributePlot', () => {
 
     const wrapper = shallow(
       <AttributePlot
+        store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders correctly for changing alarm state', () => {
@@ -85,11 +92,12 @@ describe('attributePlot', () => {
 
     const wrapper = shallow(
       <AttributePlot
+        store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 });

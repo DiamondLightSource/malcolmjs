@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { MalcolmTickArchive } from '../malcolm/malcolm.types';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
 
 const alarmStatesByIndex = [
@@ -44,17 +46,24 @@ class AttributePlot extends React.Component {
       props.attribute.plotTime
     }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     if (props.attribute && layout.datarevision !== dataRevision) {
-      const dataLength = props.attribute.timeStamp.toarray().length;
       const newData = data.map((dataElement, index) =>
         updatePlotData(dataElement, index, props.attribute)
       );
       layout.datarevision = dataRevision;
+      if (
+        props.attribute.parent !== layout.parent ||
+        props.attribute.name !== layout.attribute
+      ) {
+        layout.parent = props.attribute.parent;
+        layout.attribute = props.attribute.name;
+        layout.yaxis = {
+          color: props.theme.palette.text.primary,
+        };
+      }
       return {
         ...state,
         data: [...newData],
         layout,
-        lastPlot: new Date(),
-        dataLength,
       };
     }
     return state;
@@ -108,6 +117,8 @@ class AttributePlot extends React.Component {
         },
       ],
       layout: {
+        parent: '',
+        attribute: '',
         legend: { font: { color: props.theme.palette.text.primary } },
         datarevision: -1,
         autosize: true,
@@ -120,9 +131,6 @@ class AttributePlot extends React.Component {
           color: props.theme.palette.text.primary,
         },
       },
-      dataLength: 0,
-      lastPlot: new Date(),
-      // renderTimeout: setTimeout(() => {}, 4000),
     };
 
     this.renderTimeout = setTimeout(() => {}, 4000);
@@ -138,28 +146,13 @@ class AttributePlot extends React.Component {
     } */
   }
 
-  incrementData() {
-    const { state } = this;
-    // state.stopReactBeingStupid = false;
-    state.data = state.data.map(oldDataElement => {
-      const dataElement = { ...oldDataElement };
-      const newTime = new Date(
-        dataElement.x[this.state.dataLength - 1].getTime() +
-          (new Date() - this.state.lastPlot)
-      );
-
-      dataElement.x[this.state.dataLength] = newTime;
-      return dataElement;
-    });
-    state.layout.datarevision += `+`;
-    this.setState({ ...state });
-  }
-
   render() {
     clearTimeout(this.renderTimeout);
     this.renderTimeout = setTimeout(() => {
-      this.incrementData();
-      this.forceUpdate();
+      this.props.tickArchive([
+        this.props.attribute.parent,
+        this.props.attribute.name,
+      ]);
     }, 1100 * ARCHIVE_REFRESH_INTERVAL);
 
     return (
@@ -172,6 +165,17 @@ class AttributePlot extends React.Component {
     );
   }
 }
+
+const mapStateToProps = () => {};
+
+const mapDispatchToProps = dispatch => ({
+  tickArchive: path => {
+    dispatch({
+      type: MalcolmTickArchive,
+      payload: { path },
+    });
+  },
+});
 
 AttributePlot.propTypes = {
   theme: PropTypes.shape({
@@ -197,15 +201,21 @@ AttributePlot.propTypes = {
     parent: PropTypes.bool,
     child: PropTypes.bool,
   }).isRequired,
+  */
   attribute: PropTypes.shape({
+    parent: PropTypes.string,
+    name: PropTypes.string,
     meta: PropTypes.shape({
       choices: PropTypes.arrayOf(PropTypes.string),
     }),
     value: PropTypes.arrayOf(PropTypes.number),
-    timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
+    timeStamp: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,
     isBool: PropTypes.bool,
-  }).isRequired, */
+  }).isRequired,
+  tickArchive: PropTypes.func.isRequired,
 };
 
-export default withTheme()(AttributePlot);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withTheme()(AttributePlot)
+);

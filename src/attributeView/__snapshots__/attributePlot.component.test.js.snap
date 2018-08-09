@@ -108,6 +108,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
   debug={false}
   layout={
     Object {
+      "attribute": undefined,
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
@@ -116,6 +117,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
         },
       },
       "paper_bgcolor": "#424242",
+      "parent": undefined,
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
@@ -243,6 +245,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
   debug={false}
   layout={
     Object {
+      "attribute": undefined,
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
@@ -251,6 +254,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
         },
       },
       "paper_bgcolor": "#424242",
+      "parent": undefined,
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
@@ -378,6 +382,7 @@ exports[`attributePlot renders correctly for number 1`] = `
   debug={false}
   layout={
     Object {
+      "attribute": undefined,
       "autosize": true,
       "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
       "legend": Object {
@@ -386,6 +391,7 @@ exports[`attributePlot renders correctly for number 1`] = `
         },
       },
       "paper_bgcolor": "#424242",
+      "parent": undefined,
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
