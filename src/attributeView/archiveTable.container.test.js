@@ -12,6 +12,7 @@ describe('archiveTable', () => {
     mockArchive = {
       timeStamp: new MockCircularBuffer(5),
       value: new MockCircularBuffer(5),
+      alarmState: new MockCircularBuffer(5),
     };
   });
 
@@ -22,6 +23,9 @@ describe('archiveTable', () => {
     mockArchive.value.push(1);
     mockArchive.value.push(-1);
     mockArchive.value.push(false);
+    mockArchive.alarmState.push(0);
+    mockArchive.alarmState.push(1);
+    mockArchive.alarmState.push(0);
 
     const wrapper = shallow(<ArchiveTable attribute={mockArchive} />);
     expect(wrapper.dive()).toMatchSnapshot();

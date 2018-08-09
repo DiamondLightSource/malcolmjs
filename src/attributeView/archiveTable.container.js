@@ -34,9 +34,14 @@ class ArchiveTable extends React.Component {
                 .slice(-100)
                 .map(date => date.toISOString()),
               value: attribute.value.toarray().slice(-100),
+              alarm: attribute.alarmState.toarray().slice(-100),
             },
             meta: {
               elements: {
+                alarm: {
+                  tags: ['info:alarm'],
+                  label: 'Alarm state',
+                },
                 timeStamp: {
                   tags: ['widget:textupdate'],
                   label: 'Time set',

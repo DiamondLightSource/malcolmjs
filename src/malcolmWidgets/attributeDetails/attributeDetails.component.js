@@ -39,6 +39,7 @@ const styles = theme => ({
   },
 });
 
+/*
 const copyPathToClipboard = (event, path) => {
   if (event.button === 1) {
     const dummyElement = document.createElement('textarea');
@@ -53,6 +54,7 @@ const copyPathToClipboard = (event, path) => {
     document.body.removeChild(dummyElement);
   }
 };
+*/
 
 const AttributeDetails = props => {
   let widgetTagIndex = null;
@@ -89,8 +91,10 @@ const AttributeDetails = props => {
           onClick={() =>
             props.nameClickHandler([props.blockName, props.attributeName])
           }
-          onMouseDown={event =>
-            copyPathToClipboard(event, props.attribute.calculated.path)
+          onMouseDown={
+            /* event =>
+            copyPathToClipboard(event, props.attribute.calculated.path) */
+            () => {}
           }
           style={{ cursor: 'pointer' }}
         >

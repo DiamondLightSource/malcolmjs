@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+// import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
 
 const alarmStatesByIndex = [
   AlarmStates.NO_ALARM,
@@ -25,10 +26,14 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
           ? value
           : null
     );
+  dataElement.x.push(dataElement.x.slice(-1)[0]);
+  dataElement.y.push(dataElement.y.slice(-1)[0]);
+  dataElement.visible = dataElement.y.some(val => val !== null);
+  /*
   dataElement.line = {
     ...dataElement.line,
     shape: attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
-  };
+  }; */
   return dataElement;
 };
 
@@ -39,11 +44,19 @@ class AttributePlot extends React.Component {
       props.attribute.plotTime
     }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     if (props.attribute && layout.datarevision !== dataRevision) {
+      clearTimeout(state.renderTimeout);
+      const dataLength = props.attribute.timeStamp.toarray().length;
       const newData = data.map((dataElement, index) =>
         updatePlotData(dataElement, index, props.attribute)
       );
       layout.datarevision = dataRevision;
-      return { ...state, data: [...newData], layout };
+      return {
+        ...state,
+        data: [...newData],
+        layout,
+        lastPlot: new Date(),
+        dataLength,
+      };
     }
     return state;
   }
@@ -58,8 +71,9 @@ class AttributePlot extends React.Component {
           type: 'scatter',
           mode: 'lines+points',
           marker: { color: props.theme.palette.primary.light },
-          line: { shape: 'linear' },
+          line: { shape: 'hv' },
           name: 'Normal',
+          visible: false,
         },
         {
           x: [],
@@ -67,12 +81,11 @@ class AttributePlot extends React.Component {
           type: 'scatter',
           mode: 'lines+points',
           marker: {
-            color: props.theme.alarmState
-              ? props.theme.alarmState.warning
-              : '#fff',
+            color: props.theme.alarmState.warning,
           },
-          line: { shape: 'linear', dash: '15px, 5px' },
+          line: { shape: 'hv', dash: '15px, 5px' },
           name: 'Minor',
+          visible: false,
         },
         {
           x: [],
@@ -80,8 +93,9 @@ class AttributePlot extends React.Component {
           type: 'scatter',
           mode: 'lines+points',
           marker: { color: props.theme.alarmState.error },
-          line: { shape: 'linear', dash: '10px, 10px' },
+          line: { shape: 'hv', dash: '10px, 10px' },
           name: 'Major',
+          visible: false,
         },
         {
           x: [],
@@ -89,8 +103,9 @@ class AttributePlot extends React.Component {
           type: 'scatter',
           mode: 'lines+points',
           marker: { color: props.theme.alarmState.disconnected },
-          line: { shape: 'linear', dash: '5px, 15px' },
+          line: { shape: 'hv', dash: '5px, 15px' },
           name: 'Disconnected',
+          visible: false,
         },
       ],
       layout: {
@@ -106,6 +121,9 @@ class AttributePlot extends React.Component {
           color: props.theme.palette.text.primary,
         },
       },
+      dataLength: 0,
+      lastPlot: new Date(),
+      renderTimeout: setTimeout(() => {}, 4000),
     };
     /* CODE FOR DISPLAYING POSSIBLE VALUES FOR ENUM ON Y AXIS (DISABLED)
     if (props.attribute.meta.choices) {
@@ -118,7 +136,26 @@ class AttributePlot extends React.Component {
     } */
   }
 
+  incrementData() {
+    this.state.data = this.state.data.map(oldDataElement => {
+      const dataElement = { ...oldDataElement };
+      const newTime = new Date(
+        dataElement.x[this.state.dataLength - 1].getTime() +
+          (new Date() - this.state.lastPlot)
+      );
+
+      dataElement.x[this.state.dataLength] = newTime;
+      return dataElement;
+    });
+    this.state.layout.datarevision += `+`;
+    this.state.isIncrement = true;
+  }
+
   render() {
+    this.state.renderTimeout = setTimeout(() => {
+      this.incrementData();
+      this.forceUpdate();
+    }, 1100 * ARCHIVE_REFRESH_INTERVAL);
     return (
       <Plot
         data={this.state.data}
