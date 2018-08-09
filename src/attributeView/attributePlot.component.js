@@ -44,7 +44,6 @@ class AttributePlot extends React.Component {
       props.attribute.plotTime
     }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     if (props.attribute && layout.datarevision !== dataRevision) {
-      clearTimeout(state.renderTimeout);
       const dataLength = props.attribute.timeStamp.toarray().length;
       const newData = data.map((dataElement, index) =>
         updatePlotData(dataElement, index, props.attribute)
@@ -123,8 +122,11 @@ class AttributePlot extends React.Component {
       },
       dataLength: 0,
       lastPlot: new Date(),
-      renderTimeout: setTimeout(() => {}, 4000),
+      // renderTimeout: setTimeout(() => {}, 4000),
     };
+
+    this.renderTimeout = setTimeout(() => {}, 4000);
+
     /* CODE FOR DISPLAYING POSSIBLE VALUES FOR ENUM ON Y AXIS (DISABLED)
     if (props.attribute.meta.choices) {
       this.state.layout.yaxis = {
@@ -137,7 +139,9 @@ class AttributePlot extends React.Component {
   }
 
   incrementData() {
-    this.state.data = this.state.data.map(oldDataElement => {
+    const { state } = this;
+    // state.stopReactBeingStupid = false;
+    state.data = state.data.map(oldDataElement => {
       const dataElement = { ...oldDataElement };
       const newTime = new Date(
         dataElement.x[this.state.dataLength - 1].getTime() +
@@ -147,15 +151,17 @@ class AttributePlot extends React.Component {
       dataElement.x[this.state.dataLength] = newTime;
       return dataElement;
     });
-    this.state.layout.datarevision += `+`;
-    this.state.isIncrement = true;
+    state.layout.datarevision += `+`;
+    this.setState({ ...state });
   }
 
   render() {
-    this.state.renderTimeout = setTimeout(() => {
+    clearTimeout(this.renderTimeout);
+    this.renderTimeout = setTimeout(() => {
       this.incrementData();
       this.forceUpdate();
     }, 1100 * ARCHIVE_REFRESH_INTERVAL);
+
     return (
       <Plot
         data={this.state.data}
