@@ -7,8 +7,6 @@ import JSONInput from 'react-json-editor-ajrm';
 // import ButtonAction from '../buttonAction/buttonAction.component';
 
 import blockUtils from '../../malcolm/blockUtils';
-import NavTypes from '../../malcolm/NavTypes';
-
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 
 const MethodViewer = props => {
@@ -76,28 +74,29 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.attributeName
     );
   }
+  /*
   let subElement;
   let selectedParam;
   const navLists = state.malcolm.navigation.navigationLists.slice(-3);
+  const blockIndex = navLists.findIndex(nav => nav.navType === NavTypes.Block);
   const blockName =
-    navLists[0].navType === NavTypes.Block ? navLists[0].blockMri : undefined;
+    blockIndex !== -1 ? navLists[blockIndex].blockMri : undefined;
   const attributeName =
-    navLists[1].navType === NavTypes.Attribute ? navLists[1].path : undefined;
+    navLists[blockIndex+1].navType === NavTypes.Attribute ? navLists[blockIndex+1].path : undefined;
   if (
     attribute.calculated.path[0] === blockName &&
     attribute.calculated.path[1] === attributeName
   ) {
     subElement =
-      navLists[1].navType === NavTypes.Attribute && navLists[1].subElements
-        ? navLists[1].subElements
+      navLists[blockIndex+1].navType === NavTypes.Attribute && navLists[blockIndex+1].subElements
+        ? navLists[blockIndex+1].subElements
         : undefined;
   }
-  if (subElement && ['takes', 'returns'].includes(subElement[0])) {
-    selectedParam = subElement;
-  }
+  */
+  const { subElement } = ownProps;
   return {
     attribute,
-    selectedParam,
+    selectedParam: subElement,
   };
 };
 

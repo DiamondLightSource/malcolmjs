@@ -85,6 +85,7 @@ const findAttributeComponent = props => {
         <MethodViewer
           attributeName={props.mainAttribute}
           blockName={props.parentBlock}
+          subElement={props.mainAttributeSubElements}
           classes={props.classes}
           openParent={props.openParent}
           openChild={props.openChild}
@@ -138,6 +139,7 @@ const findAttributeComponent = props => {
             <TableContainer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
+              subElement={props.mainAttributeSubElements}
               footerItems={[
                 <Tooltip id="1" title={props.errorMessage} placement="right">
                   <IconButton className={props.classes.button} disableRipple>
@@ -172,7 +174,7 @@ const findAttributeComponent = props => {
             style={{ ...transitionWithPanelStyle, textAlign: 'left' }}
           >
             <JSONInput
-              id="somejson"
+              id={[props.parentBlock, props.mainAttribute]}
               height="100%"
               width="100%"
               style={{ body: { fontSize: '150%' } }}
@@ -215,6 +217,7 @@ const mapStateToProps = state => {
     parentBlock: state.malcolm.parentBlock,
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
+    mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
     isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
@@ -233,6 +236,7 @@ findAttributeComponent.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   typeId: PropTypes.string.isRequired,
   mainAttributeAlarmState: PropTypes.number.isRequired,
+  mainAttributeSubElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string.isRequired,
