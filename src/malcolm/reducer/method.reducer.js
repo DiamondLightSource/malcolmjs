@@ -3,7 +3,7 @@ import blockUtils from '../blockUtils';
 import { MalcolmUpdateMethodInputType, MalcolmReturn } from '../malcolm.types';
 
 export const getMethodParam = (type, param, method) =>
-  Object.keys(method.raw[type].elements).includes(param);
+  Object.keys(method.raw[type].elements).includes(`${param}`);
 
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
@@ -30,7 +30,7 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value.isDirty !== undefined) {
+    if (payload.value && payload.value.isDirty !== undefined) {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }

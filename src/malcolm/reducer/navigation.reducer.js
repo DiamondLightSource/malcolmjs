@@ -98,7 +98,7 @@ function updateNavTypes(state) {
             nav.path.split('.')[0]
           );
 
-          if (matchingAttribute) {
+          if (matchingAttribute && !matchingAttribute.calculated.loading) {
             nav.navType = NavTypes.Attribute;
             nav.children = matchingAttribute.calculated.children;
             nav.childrenLabels = matchingAttribute.calculated.children;
@@ -117,6 +117,7 @@ function updateNavTypes(state) {
               } else {
                 nav.subElements = undefined;
                 nav.navType = NavTypes.Error;
+                throw new Error('Bad URL (field has no such sub-element)!');
               }
             }
             [nav.path] = nav.path.split('.');

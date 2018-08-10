@@ -111,16 +111,10 @@ const displayAttributes = props => {
           </GroupExpander>
         ))}
         {props.methods.map(method => (
-          <GroupExpander
-            key={method.calculated.name}
-            groupName={method.raw.label}
-            expanded
-          >
-            <MethodDetails
-              blockName={props.blockName}
-              attributeName={method.calculated.name}
-            />
-          </GroupExpander>
+          <MethodDetails
+            blockName={props.blockName}
+            attributeName={method.calculated.name}
+          />
         ))}
       </div>
     );

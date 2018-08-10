@@ -387,6 +387,8 @@ const handleErrorMessage = (state, action) => {
     if (
       attribute &&
       attribute.raw &&
+      attribute.raw.meta &&
+      attribute.raw.meta.tags &&
       attribute.raw.meta.tags.some(t => t === 'widget:flowgraph')
     ) {
       // reset the layout

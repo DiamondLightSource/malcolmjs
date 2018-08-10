@@ -125,7 +125,10 @@ export const updateNavigation = (state, attributeName) => {
       .findIndex(navPath => navPath === attributeName) > -1
   ) {
     navigation = processNavigationLists(
-      state.navigation.navigationLists.map(nav => nav.path),
+      state.navigation.navigationLists.map(
+        nav =>
+          nav.subElements ? [nav.path, ...nav.subElements].join('.') : nav.path
+      ),
       state.blocks
     );
   }
