@@ -20,6 +20,7 @@ import {
   selectorFunction,
   getDefaultFromType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const styles = () => ({
   div: {
@@ -77,11 +78,11 @@ const buildIOComponent = (input, props, isOutput) => {
   const setFlag = (path, flagName, isDirty) => {
     props.updateInput(path, input[0], { isDirty });
   };
-
+  const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
       widgetTag,
-      props.methodPath,
+      [...props.methodPath, subElement],
       inputValue,
       submitHandler,
       flags,
@@ -89,7 +90,8 @@ const buildIOComponent = (input, props, isOutput) => {
       props.theme.palette.primary.light,
       parameterMeta,
       false,
-      updateStoreOnEveryValueChange
+      updateStoreOnEveryValueChange,
+      props.methodParamClickHandler
     );
   }
   return selectorFunction('widget:undefined');
@@ -209,6 +211,9 @@ export const mapDispatchToProps = dispatch => ({
   },
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
+  },
+  methodParamClickHandler: path => {
+    dispatch(navigationActions.navigateToSubElement(path[0], path[1], path[2]));
   },
 });
 

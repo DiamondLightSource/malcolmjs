@@ -16,6 +16,7 @@ import {
   tableHasColumn,
   tableHasRow,
 } from './table.reducer';
+import { getMethodParam } from './method.reducer';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -39,12 +40,12 @@ const hasSubElements = inputAttribute => {
       row: tableHasRow,
       col: tableHasColumn,
     };
-  } /* else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
+  } else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
     attribute.calculated.subElements = {
-      takes: param => getMethodParam('takes', param),
-      returns: param => getMethodParam('returns', param),
+      takes: (param, method) => getMethodParam('takes', param, method),
+      returns: (param, method) => getMethodParam('returns', param, method),
     };
-  } */
+  }
   return attribute;
 };
 

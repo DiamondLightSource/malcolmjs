@@ -2,6 +2,9 @@ import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
 import { MalcolmUpdateMethodInputType, MalcolmReturn } from '../malcolm.types';
 
+export const getMethodParam = (type, param, method) =>
+  Object.keys(method.raw[type].elements).includes(param);
+
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
