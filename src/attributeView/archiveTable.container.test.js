@@ -20,11 +20,14 @@ describe('archiveTable', () => {
     mockArchive.timeStamp.push(new Date(1000));
     mockArchive.timeStamp.push(new Date(2000));
     mockArchive.timeStamp.push(new Date(3000));
+    mockArchive.timeStamp.push(new Date(3000));
     mockArchive.value.push(1);
     mockArchive.value.push(-1);
     mockArchive.value.push(false);
+    mockArchive.value.push(false);
     mockArchive.alarmState.push(0);
     mockArchive.alarmState.push(1);
+    mockArchive.alarmState.push(0);
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(<ArchiveTable attribute={mockArchive} />);

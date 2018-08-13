@@ -312,7 +312,7 @@ const tickArchive = (state, payload) => {
         (new Date() - attributeArchive.tickingSince)
     );
     attributeArchive.timeStamp.push(newTime);
-    attributeArchive.plotTime = newTime.getTime();
+    attributeArchive.plotTime += 1;
     archive[matchingAttributeIndex] = attributeArchive;
     blockArchive[blockName] = { attributes: archive };
     return {

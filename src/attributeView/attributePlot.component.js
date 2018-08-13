@@ -146,6 +146,10 @@ class AttributePlot extends React.Component {
     } */
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.renderTimeout);
+  }
+
   render() {
     clearTimeout(this.renderTimeout);
     this.renderTimeout = setTimeout(() => {

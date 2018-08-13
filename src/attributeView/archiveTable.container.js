@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import WidgetTable from '../malcolmWidgets/table/table.component';
 
+const noOp = () => {};
+
 class ArchiveTable extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (props.attribute.plotTime - state.renderTime > 5) {
@@ -31,10 +33,10 @@ class ArchiveTable extends React.Component {
             value: {
               timeStamp: attribute.timeStamp
                 .toarray()
-                .slice(-100)
+                .slice(-100, -1)
                 .map(date => date.toISOString()),
-              value: attribute.value.toarray().slice(-100),
-              alarm: attribute.alarmState.toarray().slice(-100),
+              value: attribute.value.toarray().slice(-100, -1),
+              alarm: attribute.alarmState.toarray().slice(-100, -1),
             },
             meta: {
               elements: {
@@ -56,11 +58,11 @@ class ArchiveTable extends React.Component {
           calculated: {},
         }}
         hideInfo
-        eventHandler={() => {}}
-        setFlag={() => {}}
-        addRow={() => {}}
-        infoClickHandler={() => {}}
-        rowClickHandler={() => {}}
+        eventHandler={noOp}
+        setFlag={noOp}
+        addRow={noOp}
+        infoClickHandler={noOp}
+        rowClickHandler={noOp}
       />
     );
   }
