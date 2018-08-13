@@ -15,6 +15,7 @@ import {
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
+import blockUtils from '../../../malcolm/blockUtils';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -169,7 +170,17 @@ const AttributeSelector = props => {
   return null;
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, ownProps) => {
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    ownProps.blockName,
+    ownProps.attributeName
+  );
+
+  return {
+    attribute,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value) => {

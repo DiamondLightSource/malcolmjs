@@ -41,20 +41,6 @@ function handleMessage(socket, message) {
   delete simplifiedMessage.id;
   if (simplifiedMessage.typeid.indexOf('Unsubscribe') > -1) {
     handleUnsubscribe(socket, originalId);
-
-  } else if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
-    let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);
-
-    if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
-      subscriptions.push(originalId.toString());
-      subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
-
-      response = subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
-    }
-
-    sendResponse(socket, response);
-
-    
   } else if (simplifiedMessage.typeid.indexOf('Put') > -1) {
     let response;
     if (pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]) {
@@ -106,6 +92,19 @@ function handleMessage(socket, message) {
       response = buildErrorMessage(originalId, message);
     }
     sendResponse(socket, response);
+
+  } else if (pathIndexedMessages.hasOwnProperty(JSON.stringify(simplifiedMessage.path))) {
+    let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);
+
+    if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
+      subscriptions.push(originalId.toString());
+      subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
+
+      response = subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
+    }
+
+    sendResponse(socket, response);
+
   } else {
     sendResponse(socket, buildErrorMessage(originalId, message));
   }

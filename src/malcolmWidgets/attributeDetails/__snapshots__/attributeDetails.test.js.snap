@@ -37,24 +37,8 @@ exports[`AttributeDetails renders correctly 1`] = `
     className="AttributeDetails-controlContainer-3"
   >
     <Connect(WithTheme(AttributeSelector))
-      attribute={
-        Object {
-          "calculated": Object {
-            "name": "Attribute1",
-          },
-          "raw": Object {
-            "alarm": Object {
-              "severity": 0,
-            },
-            "meta": Object {
-              "label": "Attribute 1",
-              "tags": Array [
-                "widget:NOTAWIDGET",
-              ],
-            },
-          },
-        }
-      }
+      attributeName="Attribute1"
+      blockName="block1"
     />
   </div>
 </div>

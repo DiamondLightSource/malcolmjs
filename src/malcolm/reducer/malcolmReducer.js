@@ -22,7 +22,7 @@ import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
 import AttributeReducer, { updateAttribute } from './attribute.reducer';
-import layoutReducer, { LayoutReduxReducer } from './layout.reducer';
+import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 

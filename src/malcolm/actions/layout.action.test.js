@@ -1,8 +1,10 @@
-import { selectPort } from './layout.action';
+import LayoutActions, { selectPort } from './layout.action';
 import {
   MalcolmSelectPortType,
   MalcolmAttributeFlag,
   MalcolmSend,
+  MalcolmMakeBlockVisibleType,
+  MalcolmSelectBlock,
 } from '../malcolm.types';
 
 describe('layout actions', () => {
@@ -13,18 +15,48 @@ describe('layout actions', () => {
 
   beforeEach(() => {
     actions = [];
-    dispatch = action => actions.push(action);
+    dispatch = action => {
+      if (typeof action === 'function') {
+        action(dispatch, getState);
+      } else {
+        actions.push(action);
+      }
+    };
 
     state = {
       malcolm: {
+        parentBlock: 'PANDA',
+        mainAttribute: 'layout',
+        blocks: {
+          PANDA: {
+            attributes: [
+              {
+                raw: {
+                  value: {
+                    mri: ['PANDA'],
+                    name: ['PANDA 1'],
+                  },
+                },
+                calculated: {
+                  name: 'layout',
+                },
+              },
+            ],
+          },
+        },
         layoutState: {
           startPortForLink: undefined,
           endPortForLink: undefined,
+          layoutCenter: {
+            x: 0,
+            y: 0,
+          },
         },
         layout: {
           blocks: [
             {
               mri: 'PANDA',
+              visible: true,
               ports: [
                 {
                   label: 'start',
@@ -85,5 +117,28 @@ describe('layout actions', () => {
 
   it('selectPort handles ports being the wrong way round', () => {
     runPortTest('PANDA-enable', 'PANDA-start');
+  });
+
+  it('deleteBlocks makes the block invisible', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA'];
+
+    const action = LayoutActions.deleteBlocks();
+    action(dispatch, getState);
+
+    expect(actions).toHaveLength(4);
+    expect(actions[0].type).toEqual(MalcolmMakeBlockVisibleType);
+    expect(actions[1].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[2].type).toEqual(MalcolmSend);
+    expect(actions[2].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[2].payload.path).toEqual(['PANDA', 'layout', 'value']);
+    expect(actions[2].payload.value).toEqual({
+      mri: ['PANDA'],
+      name: ['PANDA 1'],
+      visible: [false],
+      x: [0],
+      y: [0],
+    });
+
+    expect(actions[3].type).toEqual(MalcolmSelectBlock);
   });
 });

@@ -25,3 +25,4 @@ export const MalcolmShowBinType = 'malcolm:showlayoutbin';
 export const MalcolmInLayoutDeleteZoneType = 'malcolm:insidelayoutdeletezone';
 export const MalcolmRevert = 'malcolm:revertattribute';
 export const MalcolmTickArchive = 'malcolm:tickarchiveattribute';
+export const MalcolmRunAutoLayoutType = 'malcolm:runautolayout';

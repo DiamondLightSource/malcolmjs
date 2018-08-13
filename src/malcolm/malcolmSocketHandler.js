@@ -14,11 +14,115 @@ import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
 import MalcolmReconnector from './malcolmReconnector';
 import handleLocationChange from './middleware/malcolmRouting';
+import MalcolmWorkerBuilder from './worker/worker.builder';
 
-let messages = [];
+const handleMessage = (message, dispatch, getState) => {
+  const { data, originalRequest } = message;
+  switch (data.typeid) {
+    case 'malcolm:core/Update:1.0': {
+      if (originalRequest.path.join('') === '.blocks') {
+        RootBlockHandler(originalRequest, data.value, dispatch, getState());
+      }
+
+      break;
+    }
+    case 'malcolm:core/Delta:1.0': {
+      const attribute = message.attributeDelta;
+      const typeid = attribute.typeid ? attribute.typeid : '';
+      if (typeid === 'malcolm:core/BlockMeta:1.0') {
+        BlockMetaHandler(originalRequest, attribute, dispatch);
+      } else if (typeid.slice(0, 8) === 'epics:nt') {
+        AttributeHandler.processAttribute(
+          originalRequest,
+          attribute,
+          getState,
+          dispatch
+        );
+      } else if (typeid === 'malcolm:core/Method:1.0') {
+        AttributeHandler.processMethod(originalRequest, attribute, dispatch);
+      } else {
+        dispatch({
+          type: 'unprocessed_delta',
+          payload: attribute,
+        });
+        dispatch({
+          type: MalcolmAttributeData,
+          payload: {
+            id: originalRequest.id,
+            delta: true,
+            unableToProcess: true,
+          },
+        });
+      }
+      break;
+    }
+    case 'malcolm:core/Return:1.0': {
+      dispatch(malcolmHailReturn(data, false));
+      dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+      break;
+    }
+
+    case 'malcolm:core/Error:1.0': {
+      console.log(data);
+      if (data.id !== -1) {
+        BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
+
+        dispatch(
+          snackbarState(
+            true,
+            `Error in attribute ${
+              originalRequest.path.slice(-1)[0]
+            } for block ${originalRequest.path.slice(0, -1)}`
+          )
+        );
+        dispatch(malcolmHailReturn(data, true));
+        dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+        break;
+      } else {
+        dispatch(
+          snackbarState(
+            true,
+            `Error reported by malcolm server: "${data.message}"`
+          )
+        );
+        break;
+      }
+    }
+    default: {
+      break;
+    }
+  }
+};
+
+// Note that this copy is necessary because tables have functions on the calculated object.
+// Functions won't cross the web worker boundary
+// We should consider potentially remove these functions set in the table reducer.
+const copyBlocks = blocks => {
+  const keys = Object.keys(blocks);
+
+  const copy = {};
+  keys.forEach(k => {
+    copy[k] = {
+      attributes: blocks[k].attributes
+        ? blocks[k].attributes.map(a => ({
+            raw: a.raw,
+            calculated: {
+              name: a.calculated.name,
+            },
+          }))
+        : undefined,
+    };
+  });
+
+  return copy;
+};
 
 const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
   const socketContainer = inputSocketContainer;
+  const worker = MalcolmWorkerBuilder();
+  worker.addEventListener('message', event =>
+    handleMessage(event.data, store.dispatch, store.getState)
+  );
 
   socketContainer.socket.onerror = error => {
     const errorString = JSON.stringify(error);
@@ -59,120 +163,13 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
     store.dispatch(malcolmSetDisconnected());
   };
 
-  setInterval(() => {
-    const messagesToProcess = [...messages];
-    messages = [];
-
-    messagesToProcess.forEach(msg => {
-      store.dispatch((dispatch, getState) => {
-        const data = JSON.parse(msg);
-        switch (data.typeid) {
-          case 'malcolm:core/Update:1.0': {
-            const originalRequest = getState().malcolm.messagesInFlight[
-              data.id
-            ];
-
-            if (originalRequest.path.join('') === '.blocks') {
-              RootBlockHandler(
-                originalRequest,
-                data.value,
-                dispatch,
-                getState()
-              );
-            }
-
-            break;
-          }
-          case 'malcolm:core/Delta:1.0': {
-            const { changes } = data;
-            const originalRequest = getState().malcolm.messagesInFlight[
-              data.id
-            ];
-            const attribute = AttributeHandler.processDeltaMessage(
-              changes,
-              originalRequest,
-              getState
-            );
-            const typeid = attribute.typeid ? attribute.typeid : '';
-            if (typeid === 'malcolm:core/BlockMeta:1.0') {
-              BlockMetaHandler(originalRequest, attribute, dispatch);
-            } else if (typeid.slice(0, 8) === 'epics:nt') {
-              AttributeHandler.processAttribute(
-                originalRequest,
-                attribute,
-                getState,
-                dispatch
-              );
-            } else if (typeid === 'malcolm:core/Method:1.0') {
-              AttributeHandler.processMethod(
-                originalRequest,
-                attribute,
-                dispatch
-              );
-            } else {
-              dispatch({
-                type: 'unprocessed_delta',
-                payload: attribute,
-              });
-              dispatch({
-                type: MalcolmAttributeData,
-                payload: {
-                  id: originalRequest.id,
-                  delta: true,
-                  unableToProcess: true,
-                },
-              });
-            }
-            break;
-          }
-          case 'malcolm:core/Return:1.0': {
-            const originalRequest = getState().malcolm.messagesInFlight[
-              data.id
-            ];
-            dispatch(malcolmHailReturn(data, false));
-            dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
-            break;
-          }
-
-          case 'malcolm:core/Error:1.0': {
-            console.log(data);
-            if (data.id !== -1) {
-              const originalRequest = getState().malcolm.messagesInFlight[
-                data.id
-              ];
-              BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-
-              dispatch(
-                snackbarState(
-                  true,
-                  `Error in attribute ${
-                    originalRequest.path.slice(-1)[0]
-                  } for block ${originalRequest.path.slice(0, -1)}`
-                )
-              );
-              dispatch(malcolmHailReturn(data, true));
-              dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
-              break;
-            } else {
-              dispatch(
-                snackbarState(
-                  true,
-                  `Error reported by malcolm server: "${data.message}"`
-                )
-              );
-              break;
-            }
-          }
-          default: {
-            break;
-          }
-        }
-      });
-    });
-  }, 50);
-
   socketContainer.socket.onmessage = event => {
-    messages.push(event.data);
+    const state = store.getState();
+    worker.postMessage({
+      data: event.data,
+      messagesInFlight: state.malcolm.messagesInFlight,
+      blocks: copyBlocks(state.malcolm.blocks),
+    });
   };
 };
 

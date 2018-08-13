@@ -18,6 +18,7 @@ import blockUtils from '../malcolm/blockUtils';
 
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
+import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 
 const styles = theme => ({
   container: {
@@ -44,6 +45,9 @@ const styles = theme => ({
     marginRight: 5,
   },
   paletteButton: {
+    position: 'absolute',
+  },
+  autoLayoutButton: {
     position: 'absolute',
   },
   tableContainer: {
@@ -111,6 +115,18 @@ const findAttributeComponent = props => {
                 <AddIcon />
               </Button>
             )}
+          </div>
+          <div
+            className={props.classes.autoLayoutButton}
+            style={{ right: props.openChild ? 360 + 29 : 29, top: 12 }}
+          >
+            <Button
+              color="secondary"
+              variant="raised"
+              onClick={() => props.runAutoLayout()}
+            >
+              Auto layout
+            </Button>
           </div>
         </div>
       );
@@ -219,6 +235,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
+  runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
 });
 
 findAttributeComponent.propTypes = {
