@@ -86,10 +86,10 @@ const BlockWidget = props => {
         <div className={props.classes.inputPortsContainer}>
           {inputPorts.map(p => (
             <BlockPortWidget
-              key={props.node.ports[p].name}
-              port={props.node.ports[p]}
+              key={props.node.ports[p].id}
               portColour={props.theme.palette.primary.main}
-              node={props.node}
+              nodeId={props.node.id}
+              portId={p}
             />
           ))}
         </div>
@@ -101,10 +101,10 @@ const BlockWidget = props => {
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (
             <BlockPortWidget
-              key={props.node.ports[p].name}
-              port={props.node.ports[p]}
+              key={props.node.ports[p].id}
               portColour={props.theme.palette.primary.main}
-              node={props.node}
+              nodeId={props.node.id}
+              portId={p}
             />
           ))}
         </div>
@@ -118,6 +118,7 @@ const BlockWidget = props => {
 
 BlockWidget.propTypes = {
   node: PropTypes.shape({
+    id: PropTypes.string,
     label: PropTypes.string,
     icon: PropTypes.string,
     ports: PropTypes.shape({}),

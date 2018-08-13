@@ -189,7 +189,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[0].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual(testDeltas[0].changes[0][1]);
   });
@@ -198,7 +198,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -212,7 +212,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(newStyleAttribute).toEqual(backupAttribute);
   });
@@ -221,7 +221,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -233,7 +233,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[3].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -245,7 +245,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[4].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       value: { isATest: true },
@@ -257,7 +257,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[5].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -270,7 +270,7 @@ describe('attribute handler', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[6].changes,
       subscription,
-      store.getState
+      store.getState().malcolm.blocks
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,

@@ -27,12 +27,11 @@ const applyChangesToObject = (changes, object) => {
   return update;
 };
 
-const processDeltaMessage = (changes, originalRequest, getState) => {
+const processDeltaMessage = (changes, originalRequest, blocks) => {
   const pathToAttr = originalRequest.path;
   const blockName = pathToAttr[0];
   const attributeName = pathToAttr[1];
   let object;
-  const { blocks } = getState().malcolm;
   const matchingAttribute = BlockUtils.findAttributeIndex(
     blocks,
     blockName,

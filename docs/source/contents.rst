@@ -24,6 +24,7 @@ Contents
     SMG/testing_strategy
     SMG/code_structure
     SMG/maintenance
+    SMG/performance
     SMG/deployment
     SMG/troubleshooting
     SMG/MUI_theming

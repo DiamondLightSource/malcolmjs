@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import GroupExpander from '../malcolmWidgets/groupExpander/groupExpander.component';
 import InfoElement from './infoElement.component';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -11,7 +11,7 @@ import {
   malcolmRevertAction,
   malcolmUpdateTable,
 } from '../malcolm/malcolmActionCreators';
-import { buildAttributeInfo } from './infoBuilders';
+import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
 
@@ -46,102 +46,70 @@ const getValue = value => {
   return Object.values(value)[0];
 };
 
-export class InfoDetails extends React.Component {
-  static getDerivedStateFromProps(props, state) {
-    if (
-      props.attribute &&
-      props.attribute.raw &&
-      props.attribute.raw.timeStamp &&
-      (props.attribute.raw.timeStamp.secondsPastEpoch !== state.lastUpdate ||
-        props.subElement !== state.subElement)
-    ) {
-      return {
-        lastUpdate: props.attribute.raw.timeStamp.secondsPastEpoch,
-        subElement: props.subElement,
-      };
-    }
-    return state;
+export const InfoDetails = props => {
+  let updatedProps;
+
+  if (props.isLinkInfo) {
+    updatedProps = linkInfo(props);
+  } else {
+    updatedProps = buildAttributeInfo(props);
   }
 
-  constructor(props) {
-    super(props);
-    this.state = { lastUpdate: -1, subElement: undefined };
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.subElement !== this.state.subElement ||
-      (nextProps.attribute &&
-        nextProps.attribute.raw &&
-        nextProps.attribute.raw.timeStamp &&
-        nextProps.attribute.raw.timeStamp.secondsPastEpoch !==
-          this.state.lastUpdate)
-    );
-  }
-
-  render() {
-    const updatedProps = buildAttributeInfo(this.props);
-    const infoElements = Object.keys(updatedProps.info).filter(
-      a =>
-        updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
-    );
-    const infoGroups = Object.keys(updatedProps.info).filter(
-      a =>
-        updatedProps.info[a] instanceof Object && !updatedProps.info[a].inline
-    );
-    return (
-      <div>
-        {infoElements.map(a => (
-          <InfoElement
-            key={a}
-            label={updatedProps.info[a].label ? updatedProps.info[a].label : a}
-            value={getValue(updatedProps.info[a])}
-            alarm={infoAlarmState(updatedProps.info[a])}
-            tag={getTag(updatedProps.info[a])}
-            handlers={updatedProps.info[a].functions}
-          />
-        ))}
-        {infoGroups.map(group => (
-          <GroupExpander
-            key={group}
-            groupName={
-              updatedProps.info[group].label
-                ? updatedProps.info[group].label
-                : group
-            }
-            expanded
-          >
-            {Object.keys(updatedProps.info[group])
-              .filter(a => !['label', 'typeid'].includes(a))
-              .map(a => (
-                <InfoElement
-                  key={a}
-                  label={
-                    updatedProps.info[group][a].label
-                      ? updatedProps.info[group][a].label
-                      : a
-                  }
-                  value={getValue(updatedProps.info[group][a])}
-                  alarm={infoAlarmState(updatedProps.info[group][a])}
-                  tag={getTag(updatedProps.info[group][a])}
-                />
-              ))}
-          </GroupExpander>
-        ))}
-      </div>
-    );
-  }
-}
+  const infoElements = Object.keys(updatedProps.info).filter(
+    a =>
+      updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
+  );
+  const infoGroups = Object.keys(updatedProps.info).filter(
+    a => updatedProps.info[a] instanceof Object && !updatedProps.info[a].inline
+  );
+  return (
+    <div>
+      {infoElements.map(a => (
+        <InfoElement
+          key={a}
+          label={updatedProps.info[a].label ? updatedProps.info[a].label : a}
+          value={getValue(updatedProps.info[a])}
+          alarm={infoAlarmState(updatedProps.info[a])}
+          tag={getTag(updatedProps.info[a])}
+          handlers={updatedProps.info[a].functions}
+          choices={updatedProps.info[a].choices}
+          path={updatedProps.info[a].path}
+          showLabel={updatedProps.info[a].showLabel}
+        />
+      ))}
+      {infoGroups.map(group => (
+        <GroupExpander
+          key={group}
+          groupName={
+            updatedProps.info[group].label
+              ? updatedProps.info[group].label
+              : group
+          }
+          expanded
+        >
+          {Object.keys(updatedProps.info[group])
+            .filter(a => !['label', 'typeid'].includes(a))
+            .map(a => (
+              <InfoElement
+                key={a}
+                label={
+                  updatedProps.info[group][a].label
+                    ? updatedProps.info[group][a].label
+                    : a
+                }
+                value={getValue(updatedProps.info[group][a])}
+                alarm={infoAlarmState(updatedProps.info[group][a])}
+                tag={getTag(updatedProps.info[group][a])}
+              />
+            ))}
+        </GroupExpander>
+      ))}
+    </div>
+  );
+};
 
 InfoDetails.propTypes = {
-  subElement: PropTypes.arrayOf(PropTypes.string).isRequired,
-  attribute: PropTypes.shape({
-    raw: PropTypes.shape({
-      timeStamp: PropTypes.shape({
-        secondsPastEpoch: PropTypes.number,
-      }),
-    }),
-  }).isRequired,
+  isLinkInfo: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -189,6 +157,27 @@ const mapStateToProps = state => {
         ? navLists[1].subElements
         : undefined;
   }
+
+  const showLinkInfo = navLists[2].path.endsWith('.link');
+  let linkBlockName;
+  if (showLinkInfo) {
+    const layoutAttribute = blockUtils.findAttribute(
+      state.malcolm.blocks,
+      state.malcolm.parentBlock,
+      state.malcolm.mainAttribute
+    );
+
+    if (layoutAttribute && layoutAttribute.raw.value) {
+      const blockNameIndex = layoutAttribute.raw.value.name.findIndex(
+        n => n === navLists[2].linkInputBlock
+      );
+
+      blockName = layoutAttribute.raw.value.mri[blockNameIndex];
+      attributeName = navLists[2].linkInputPort;
+      linkBlockName = navLists[2].linkInputBlock;
+    }
+  }
+
   return {
     attribute: blockUtils.findAttribute(
       state.malcolm.blocks,
@@ -196,7 +185,8 @@ const mapStateToProps = state => {
       attributeName
     ),
     subElement,
-    // path: [blockName, attributeName],
+    isLinkInfo: showLinkInfo,
+    linkBlockName,
   };
 };
 

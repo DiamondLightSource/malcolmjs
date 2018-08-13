@@ -6,7 +6,7 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-7"
+    className="MiddlePanelContainer-plainBackground-8"
   />
 </div>
 `;
@@ -50,6 +50,23 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
         <pure(Add) />
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "right": 29,
+          "top": 12,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Auto layout
+      </WithStyles(Button)>
+    </div>
   </div>
 </div>
 `;
@@ -60,15 +77,15 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-7"
+    className="MiddlePanelContainer-plainBackground-8"
   >
     <div
-      className="MiddlePanelContainer-tableContainer-6"
+      className="MiddlePanelContainer-tableContainer-7"
       style={
         Object {
-          "left": 365,
+          "left": 360,
           "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "width": "calc(100% - 360px)",
         }
       }
     >
@@ -122,6 +139,23 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
         <pure(Add) />
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "right": 29,
+          "top": 12,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Auto layout
+      </WithStyles(Button)>
+    </div>
   </div>
 </div>
 `;
@@ -163,6 +197,23 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
         variant="fab"
       >
         <pure(Add) />
+      </WithStyles(Button)>
+    </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "right": 29,
+          "top": 12,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Auto layout
       </WithStyles(Button)>
     </div>
   </div>
@@ -208,6 +259,23 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
         <pure(Add) />
       </WithStyles(Button)>
     </div>
+    <div
+      className="MiddlePanelContainer-autoLayoutButton-6"
+      style={
+        Object {
+          "right": 29,
+          "top": 12,
+        }
+      }
+    >
+      <WithStyles(Button)
+        color="secondary"
+        onClick={[Function]}
+        variant="raised"
+      >
+        Auto layout
+      </WithStyles(Button)>
+    </div>
   </div>
 </div>
 `;
@@ -218,15 +286,15 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
   role="presentation"
 >
   <div
-    className="MiddlePanelContainer-plainBackground-7"
+    className="MiddlePanelContainer-plainBackground-8"
   >
     <div
-      className="MiddlePanelContainer-tableContainer-6"
+      className="MiddlePanelContainer-tableContainer-7"
       style={
         Object {
-          "left": 365,
+          "left": 360,
           "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "width": "calc(100% - 360px)",
         }
       }
     >
@@ -241,7 +309,7 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
               title=""
           >
               <WithStyles(IconButton)
-                  className="MiddlePanelContainer-button-8"
+                  className="MiddlePanelContainer-button-9"
                   disableRipple={true}
               >
                   <WithTheme(AttributeAlarm)

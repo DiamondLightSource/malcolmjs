@@ -12,9 +12,12 @@ import {
   MalcolmError,
 } from './malcolm.types';
 import { snackbar } from '../viewState/viewState.actions';
+import MalcolmWorkerBuilder from './worker/worker.builder';
+import { processWebSocketMessage } from './worker/malcolm.worker';
 
 jest.mock('./middleware/malcolmRouting');
 jest.useFakeTimers();
+jest.mock('./worker/worker.builder');
 
 const SOCKET_BUFFER_TIME = 51;
 
@@ -54,9 +57,13 @@ describe('malcolm socket handler', () => {
         TestBlock: {
           attributes: [
             {
-              name: 'TestAttr',
-              value: 0,
               pending: true,
+              raw: {
+                value: 0,
+              },
+              calculated: {
+                name: 'TestAttr',
+              },
             },
           ],
         },
@@ -146,6 +153,17 @@ describe('malcolm socket handler', () => {
       inputSocket.mockConnect(inputSocket);
     socketContainer.queue = [];
     handleLocationChange.mockClear();
+
+    MalcolmWorkerBuilder.mockClear();
+    const listeners = [];
+    const malcolmWorker = {
+      addEventListener: (type, listener) => listeners.push(listener),
+      postMessage: event => {
+        listeners.forEach(l => l({ data: processWebSocketMessage(event) }));
+      },
+    };
+    MalcolmWorkerBuilder.mockImplementation(() => malcolmWorker);
+
     configureMalcolmSocketHandlers(socketContainer, store);
   });
 

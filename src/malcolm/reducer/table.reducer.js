@@ -121,6 +121,9 @@ export const updateTableLocal = (state, payload) => {
           _isChanged: true,
         });
       }
+      attribute.localState.flags.rows.slice(insertAt).forEach((row, index) => {
+        attribute.localState.flags.rows[index + insertAt]._isChanged = true;
+      });
     } else {
       attribute.localState.value[payload.row] = payload.value;
 

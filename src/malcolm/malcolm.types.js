@@ -24,3 +24,4 @@ export const MalcolmSelectPortType = 'malcolm:selectport';
 export const MalcolmShowBinType = 'malcolm:showlayoutbin';
 export const MalcolmInLayoutDeleteZoneType = 'malcolm:insidelayoutdeletezone';
 export const MalcolmRevert = 'malcolm:revertattribute';
+export const MalcolmRunAutoLayoutType = 'malcolm:runautolayout';
