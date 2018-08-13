@@ -4,11 +4,12 @@ import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
-const applyChangesToObject = (changes, object) => {
-  let update = object;
+const applyChangesToObject = (changes, oldObject) => {
+  let object = oldObject;
   changes.forEach(change => {
     const pathWithinObj = change[0];
     if (pathWithinObj.length !== 0) {
+      let update = object;
       pathWithinObj.slice(0, -1).forEach(element => {
         update = Object.prototype.hasOwnProperty.call(update, element)
           ? update[element]
@@ -21,7 +22,7 @@ const applyChangesToObject = (changes, object) => {
         update[pathWithinObj.slice(-1)[0]] = change[1];
       }
     } else if (change.length === 2) {
-      update = { ...change[1] };
+      object = { ...change[1] };
     }
   });
   return object;
