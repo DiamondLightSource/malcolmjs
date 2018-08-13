@@ -104,15 +104,9 @@ exports[`Block Details renders methods correctly 1`] = `
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <WithStyles(WidgetGroupExpander)
-      expanded={true}
-      groupName="save method"
-      key="save"
-    >
-      <Connect(WithStyles(MethodDetails))
-        attributeName="save"
-      />
-    </WithStyles(WidgetGroupExpander)>
+    <Connect(WithStyles(MethodDetails))
+      attributeName="save"
+    />
   </div>
 </div>
 `;

@@ -7,7 +7,17 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
 >
   <div
     className="MiddlePanelContainer-plainBackground-7"
-  />
+  >
+    <div
+      className="MiddlePanelContainer-tableContainer-6"
+      style={
+        Object {
+          "left": 360,
+          "width": "calc(100% - 360px)",
+        }
+      }
+    />
+  </div>
 </div>
 `;
 
@@ -206,9 +216,8 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
       className="MiddlePanelContainer-tableContainer-6"
       style={
         Object {
-          "left": 365,
-          "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "left": 360,
+          "width": "calc(100% - 360px)",
         }
       }
     >
