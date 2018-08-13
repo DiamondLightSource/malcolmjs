@@ -8,13 +8,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import AttributePlot from '../attributePlot/attributePlot.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import blockUtils from '../malcolm/blockUtils';
 
-import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
@@ -151,10 +152,18 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
-    default:
+    case 'widget:textupdate':
+    case 'widget:textinput':
+      if (![malcolmTypes.bool, malcolmTypes.number].includes(props.typeId)) {
+        return <div className={props.classes.plainBackground} />;
+      }
+    // eslint-disable-next-line no-fallthrough
+    case 'widget:led':
+    case 'widget:checkbox':
       return (
         <div className={props.classes.plainBackground}>
           <div
+            className={props.classes.tableContainer}
             style={{
               left: props.openParent ? 365 : 5,
               width: `calc(100% - ${(props.openChild ? 365 : 5) +
@@ -162,13 +171,15 @@ const findAttributeComponent = props => {
               transition: 'width 1s, left 1s',
             }}
           >
-            <br />
-            <br />
-            <br />
-            <img src={malcolmLogo} alt=" " />
+            <AttributePlot
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+            />
           </div>
         </div>
       );
+    default:
+      return <div className={props.classes.plainBackground} />;
   }
 };
 
@@ -205,6 +216,7 @@ const mapStateToProps = state => {
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
+    typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
   };
 };
@@ -217,6 +229,7 @@ const mapDispatchToProps = dispatch => ({
 findAttributeComponent.propTypes = {
   mainAttribute: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  typeId: PropTypes.string.isRequired,
   mainAttributeAlarmState: PropTypes.number.isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,

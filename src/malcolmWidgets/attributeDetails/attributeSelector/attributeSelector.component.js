@@ -16,19 +16,25 @@ import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
 
+export const malcolmTypes = {
+  bool: 'malcolm:core/BooleanMeta:1.0',
+  string: 'malcolm:core/StringMeta:1.0',
+  number: 'malcolm:core/NumberMeta:1.0',
+  boolArray: 'malcolm:core/BooleanArrayMeta:1.0',
+  stringArray: 'malcolm:core/StringArrayMeta:1.0',
+  numberArray: 'malcolm:core/NumberArrayMeta:1.0',
+};
+
 export const getDefaultFromType = objectMeta => {
   switch (objectMeta.typeid) {
-    case 'malcolm:core/BooleanMeta:1.0':
+    case malcolmTypes.bool:
+    case malcolmTypes.boolArray:
       return false;
-    case 'malcolm:core/StringMeta:1.0':
+    case malcolmTypes.string:
+    case malcolmTypes.stringArray:
       return '';
-    case 'malcolm:core/NumberMeta:1.0':
-      return 0;
-    case 'malcolm:core/BooleanArrayMeta:1.0':
-      return false;
-    case 'malcolm:core/StringArrayMeta:1.0':
-      return '';
-    case 'malcolm:core/NumberArrayMeta:1.0':
+    case malcolmTypes.number:
+    case malcolmTypes.numberArray:
       return 0;
     default:
       return undefined;

@@ -28,8 +28,50 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
-    }
-  }
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "val" ],
+    index: 0,
+    interval: 50,
+    update: (response, index) => {
+      response.changes[0][1].value = 180*(((index%500)/250)-1);
+      response.changes[0][1].timeStamp.nanoseconds += 5e7;
+      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+        response.changes[0][1].timeStamp.nanoseconds = 0;
+        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
+      }
+      return response;
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "a" ],
+    index: 0,
+    interval: 200,
+    update: (response, index) => {
+      response.changes[0][1].value = (index%4 < 2) ;
+      response.changes[0][1].timeStamp.nanoseconds += 2e8;
+      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+        response.changes[0][1].timeStamp.nanoseconds = 0;
+        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
+      }
+      return response;
+    },
+  },
+  {
+    path: [ "PANDA:INENC1", "b" ],
+    index: 0,
+    interval: 200,
+    update: (response, index) => {
+      response.changes[0][1].value = ((index+1)%4 < 2);
+      response.changes[0][1].timeStamp.nanoseconds += 2e8;
+      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+        response.changes[0][1].timeStamp.nanoseconds = 0;
+        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
+      }
+      return response;
+    },
+  },
 ]
 
 function pathsMatch(a, b) {

@@ -7,25 +7,7 @@ exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"
-  >
-    <div
-      style={
-        Object {
-          "left": 365,
-          "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
-        }
-      }
-    >
-      <br />
-      <br />
-      <br />
-      <img
-        alt=" "
-        src="malcolm-logo.png"
-      />
-    </div>
-  </div>
+  />
 </div>
 `;
 
@@ -36,25 +18,7 @@ exports[`MalcolmMiddlePanel renders a container only if the no widget tag found 
 >
   <div
     className="MiddlePanelContainer-plainBackground-8"
-  >
-    <div
-      style={
-        Object {
-          "left": 365,
-          "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
-        }
-      }
-    >
-      <br />
-      <br />
-      <br />
-      <img
-        alt=" "
-        src="malcolm-logo.png"
-      />
-    </div>
-  </div>
+  />
 </div>
 `;
 

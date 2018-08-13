@@ -15,6 +15,8 @@ import {
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
+
+import MockCircularBuffer from './attribute.reducer.mocks';
 import LayoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 
 jest.mock('./navigation.reducer');
@@ -73,6 +75,7 @@ describe('malcolm reducer', () => {
     state = {
       messagesInFlight: {},
       blocks: {},
+      blockArchive: {},
       navigation: {
         navigationLists: [],
         rootNav: {
@@ -208,7 +211,7 @@ describe('malcolm reducer', () => {
     });
   });
 
-  it('updates attribute data', () => {
+  it('updates attribute data and pushes to archive', () => {
     state.blocks.block1 = {
       name: 'block1',
       loading: true,
@@ -218,6 +221,22 @@ describe('malcolm reducer', () => {
             name: 'health',
             loading: true,
           },
+        },
+      ],
+    };
+
+    state.blockArchive.block1 = {
+      attributes: [
+        {
+          name: 'health',
+          value: new MockCircularBuffer(3),
+          plotValue: new MockCircularBuffer(3),
+          timeStamp: new MockCircularBuffer(3),
+          timeSinceConnect: new MockCircularBuffer(3),
+          connectTime: -1,
+          counter: 0,
+          refreshRate: 0,
+          plotTime: 0,
         },
       ],
     };
@@ -232,6 +251,12 @@ describe('malcolm reducer', () => {
       payload: {
         id: 1,
         delta: true,
+        raw: {
+          timeStamp: {
+            secondsPastEpoch: 123456789,
+            nanoseconds: 1230000,
+          },
+        },
       },
     };
 
@@ -244,6 +269,13 @@ describe('malcolm reducer', () => {
       'health',
     ]);
     expect(state.blocks.block1.attributes[0].calculated.loading).toEqual(false);
+    expect(state.blockArchive.block1.attributes[0].value.counter).toEqual(1);
+    expect(state.blockArchive.block1.attributes[0].timeStamp.counter).toEqual(
+      1
+    );
+    expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
+      123456789.00123
+    );
   });
 
   it('set flag sets attribute pending', () => {

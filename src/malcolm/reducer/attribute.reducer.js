@@ -10,6 +10,7 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
 } from '../malcolm.types';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   shouldClearDirtyFlag,
   tableHasColumn,
@@ -232,6 +233,37 @@ const checkForSpecialCases = inputAttribute => {
   return attribute;
 };
 
+export const pushToArchive = (oldAttributeArchive, payload) => {
+  const attributeArchive = oldAttributeArchive;
+  const nanoSeconds =
+    payload.raw.timeStamp.secondsPastEpoch +
+    10 ** -9 * payload.raw.timeStamp.nanoseconds;
+  if (attributeArchive.connectTime === -1) {
+    attributeArchive.connectTime = nanoSeconds;
+  }
+  if (payload.raw.meta && payload.raw.meta.typeid) {
+    attributeArchive.typeid = payload.raw.meta.typeid;
+  }
+  attributeArchive.value.push(payload.raw.value);
+  attributeArchive.timeStamp.push(nanoSeconds);
+  let plotValue = payload.raw.value;
+  if (attributeArchive.typeid === malcolmTypes.bool) {
+    plotValue = payload.raw.value ? 1 : 0;
+  }
+  attributeArchive.plotValue.push(plotValue);
+  attributeArchive.timeSinceConnect.push(
+    nanoSeconds - attributeArchive.connectTime
+  );
+  attributeArchive.counter += 1;
+  attributeArchive.plotTime =
+    attributeArchive.timeSinceConnect.toarray().slice(-1)[0] -
+      attributeArchive.plotTime >
+    attributeArchive.refreshRate
+      ? attributeArchive.timeSinceConnect.toarray().slice(-1)[0]
+      : attributeArchive.plotTime;
+  return attributeArchive;
+};
+
 export function updateAttribute(oldState, payload) {
   if (payload.delta) {
     const state = oldState;
@@ -242,6 +274,7 @@ export function updateAttribute(oldState, payload) {
 
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
+      const archive = [...state.blockArchive[blockName].attributes];
 
       const matchingAttributeIndex = blockUtils.findAttributeIndex(
         state.blocks,
@@ -250,6 +283,7 @@ export function updateAttribute(oldState, payload) {
       );
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
+        const attributeArchive = { ...archive[matchingAttributeIndex] };
         const attribute = {
           ...attributes[matchingAttributeIndex],
           raw: {
@@ -264,13 +298,32 @@ export function updateAttribute(oldState, payload) {
           },
         };
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+
+        if (payload.raw.timeStamp) {
+          /*
+          const nanoSeconds =
+            payload.raw.timeStamp.secondsPastEpoch +
+            10 ** -9 * payload.raw.timeStamp.nanoseconds;
+          localStorage.setItem(
+            `${path}:${nanoSeconds}`,
+            JSON.stringify(payload.raw.value)
+          );
+          */
+          archive[matchingAttributeIndex] = pushToArchive(
+            attributeArchive,
+            payload
+          );
+        }
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
+      const blockArchive = { ...state.blockArchive };
+      blockArchive[blockName] = { attributes: archive };
 
       let updatedState = {
         ...state,
         blocks,
+        blockArchive,
       };
 
       // update the navigation if the attribute was part of the path

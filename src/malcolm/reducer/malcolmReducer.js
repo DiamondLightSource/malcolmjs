@@ -1,3 +1,4 @@
+import CircularBuffer from 'circular-buffer';
 import {
   MalcolmNewBlock,
   MalcolmSend,
@@ -25,6 +26,9 @@ import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
+const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
+export const ARCHIVE_REFRESH_INTERVAL = 0.2; // minimum time in seconds between updates of displayed archive data
+
 const initialMalcolmState = {
   messagesInFlight: {},
   counter: 0,
@@ -36,6 +40,7 @@ const initialMalcolmState = {
     },
   },
   blocks: {},
+  blockArchive: {},
   parentBlock: undefined,
   childBlock: undefined,
   mainAttribute: undefined,
@@ -112,6 +117,7 @@ function registerNewBlock(state, action) {
 
 function updateBlock(state, payload) {
   const blocks = { ...state.blocks };
+  const blockArchive = { ...state.blockArchive };
   let { navigation, layout } = state;
 
   if (payload.delta) {
@@ -136,6 +142,19 @@ function updateBlock(state, payload) {
           },
         })),
         children: [...payload.fields],
+      };
+      blockArchive[blockName] = {
+        attributes: payload.fields.map(f => ({
+          name: f,
+          value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+          plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+          timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+          timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+          connectTime: -1,
+          counter: 0,
+          refreshRate: ARCHIVE_REFRESH_INTERVAL,
+          plotTime: 0,
+        })),
       };
     }
 
@@ -168,6 +187,7 @@ function updateBlock(state, payload) {
   return {
     ...state,
     blocks,
+    blockArchive,
     navigation,
     layout,
   };
