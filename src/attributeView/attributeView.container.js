@@ -7,18 +7,29 @@ import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import blockUtils from '../malcolm/blockUtils';
 
-import ArchiveTable from '../malcolmWidgets/table/archiveTable.container';
-import AttributePlot from './attributePlot';
+import ArchiveTable from './archiveTable.container';
+import AttributePlot from './attributePlot.component';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 class AttributeViewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: 0,
+      tabValue: props.defaultTab,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextState.tabValue !== this.state.tabValue ||
+      nextProps.attribute.plotTime !== this.props.attribute.plotTime ||
+      nextProps.blockName !== this.props.blockName ||
+      nextProps.attributeName !== this.props.attributeName ||
+      nextProps.openPanels.child !== this.props.openPanels.child ||
+      nextProps.openPanels.parent !== this.props.openPanels.parent
+    );
   }
 
   handleChange(event, tabValue) {
@@ -52,7 +63,10 @@ class AttributeViewer extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <ArchiveTable attribute={attribute} />
-          <AttributePlot attribute={attribute} />
+          <AttributePlot
+            attribute={attribute}
+            openPanels={this.props.openPanels}
+          />
         </SwipeableViews>
         <Tabs
           value={tabValue}
@@ -70,7 +84,12 @@ class AttributeViewer extends React.Component {
       <div style={{ width: '100%', height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>
           {tabValue === 1 && <ArchiveTable attribute={attribute} />}
-          {tabValue === 0 && <AttributePlot attribute={attribute} />}
+          {tabValue === 0 && (
+            <AttributePlot
+              attribute={attribute}
+              openPanels={this.props.openPanels}
+            />
+          )}
         </div>
         <Tabs
           value={tabValue}
@@ -109,6 +128,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 AttributeViewer.propTypes = {
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       primary: PropTypes.shape({
@@ -120,6 +141,7 @@ AttributeViewer.propTypes = {
     }),
   }).isRequired,
   attribute: PropTypes.shape({
+    refreshRate: PropTypes.number,
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,
@@ -128,9 +150,15 @@ AttributeViewer.propTypes = {
   // widgetTag: PropTypes.string.isRequired,
   // typeId: PropTypes.string.isRequired,
   useSwipeable: PropTypes.bool,
+  defaultTab: PropTypes.number,
+  openPanels: PropTypes.shape({
+    parent: PropTypes.bool,
+    child: PropTypes.bool,
+  }).isRequired,
 };
 
 AttributeViewer.defaultProps = {
+  defaultTab: 0,
   useSwipeable: false,
 };
 

@@ -84,7 +84,6 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
       style={
         Object {
           "left": 360,
-          "transition": "width 1s, left 1s",
           "width": "calc(100% - 360px)",
         }
       }
@@ -92,6 +91,12 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
       <Connect(WithTheme(AttributeViewer))
         attributeName="health"
         blockName="test1"
+        openPanels={
+          Object {
+            "child": false,
+            "parent": true,
+          }
+        }
         typeId="malcolm:core/StringMeta:1.0"
         widgetTag="widget:textupdate"
       />
@@ -293,7 +298,6 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
       style={
         Object {
           "left": 360,
-          "transition": "width 1s, left 1s",
           "width": "calc(100% - 360px)",
         }
       }

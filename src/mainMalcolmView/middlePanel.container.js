@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-import AttributeViewer from '../attributePlot/attributeView.container';
+import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
@@ -86,7 +86,7 @@ const findAttributeComponent = props => {
     left: props.openParent ? 360 : 0,
     width: `calc(100% - ${(props.openChild ? 360 : 0) +
       (props.openParent ? 360 : 0)}px)`,
-    transition: 'width 1s, left 1s',
+    // transition: 'width 1s, left 1s',
   };
   const widgetTag = getWidgetType(props.tags);
   switch (widgetTag) {
@@ -169,6 +169,7 @@ const findAttributeComponent = props => {
               blockName={props.parentBlock}
               widgetTag={widgetTag}
               typeId={props.typeId}
+              openPanels={{ parent: props.openParent, child: props.openChild }}
             />
           </div>
         </div>

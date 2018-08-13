@@ -39,6 +39,23 @@ const styles = theme => ({
   },
 });
 
+/*
+const copyPathToClipboard = (event, path) => {
+  if (event.button === 1) {
+    const dummyElement = document.createElement('textarea');
+    dummyElement.value = JSON.stringify(path);
+    dummyElement.setAttribute('readonly', '');
+    dummyElement.style.position = 'absolute';
+    dummyElement.style.left = `${event.pageX}px`;
+    dummyElement.style.top = `${event.pageY}px`;
+    document.body.appendChild(dummyElement);
+    dummyElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyElement);
+  }
+};
+*/
+
 const EMPTY_STRING = '';
 
 const AttributeDetails = props => {
@@ -56,7 +73,18 @@ const AttributeDetails = props => {
             <AttributeAlarm alarmSeverity={props.alarm} />
           </IconButton>
         </Tooltip>
-        <Typography className={props.classes.textName}>
+        <Typography
+          className={props.classes.textName}
+          onClick={() =>
+            props.nameClickHandler([props.blockName, props.attributeName])
+          }
+          onMouseDown={
+            /* event =>
+            copyPathToClipboard(event, props.attribute.calculated.path) */
+            () => {}
+          }
+          style={{ cursor: 'pointer' }}
+        >
           {props.label}:{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
@@ -74,6 +102,28 @@ const AttributeDetails = props => {
 AttributeDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   blockName: PropTypes.string.isRequired,
+  /*
+  attribute: PropTypes.shape({
+    calculated: PropTypes.shape({
+      path: PropTypes.string,
+      name: PropTypes.string,
+      pending: PropTypes.bool,
+      errorState: PropTypes.bool,
+      errorMessage: PropTypes.string,
+      unableToProcess: PropTypes.bool,
+      dirty: PropTypes.bool,
+    }),
+    raw: PropTypes.shape({
+      meta: PropTypes.shape({
+        label: PropTypes.string,
+        tags: PropTypes.arrayOf(PropTypes.string),
+        description: PropTypes.string,
+      }),
+      alarm: PropTypes.shape({
+        severity: PropTypes.number,
+      }),
+    }),
+  }).isRequired, */
   widgetTagIndex: PropTypes.number,
   alarm: PropTypes.number,
   message: PropTypes.string,
@@ -85,6 +135,7 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  nameClickHandler: PropTypes.func.isRequired,
 };
 
 AttributeDetails.defaultProps = {
@@ -139,6 +190,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   buttonClickHandler: (blockName, attributeName) => {
     dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+  },
+  nameClickHandler: path => {
+    dispatch(navigationActions.navigateToSubElement(path[0], path[1]));
   },
 });
 

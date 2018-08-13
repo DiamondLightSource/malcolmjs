@@ -24,7 +24,7 @@ const applyChangesToObject = (changes, object) => {
       update = { ...change[1] };
     }
   });
-  return update;
+  return object;
 };
 
 const processDeltaMessage = (changes, originalRequest, blocks) => {

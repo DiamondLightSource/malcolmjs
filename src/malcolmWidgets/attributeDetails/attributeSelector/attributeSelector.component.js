@@ -8,6 +8,7 @@ import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
 import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
+import AttributeAlarm from '../attributeAlarm/attributeAlarm.component';
 import {
   malcolmPutAction,
   malcolmSetFlag,
@@ -123,6 +124,8 @@ export const selectorFunction = (
           disabled={value.disabled}
         />
       );
+    case 'info:alarm':
+      return <AttributeAlarm alarmSeverity={value} />;
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return <BugReport nativeColor="red" />;

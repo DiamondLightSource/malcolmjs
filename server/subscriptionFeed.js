@@ -1,3 +1,7 @@
+const alarmStates = [
+
+]
+
 let subscriptionTimers = {};
 
 const activeSubscriptions = [
@@ -35,12 +39,24 @@ const activeSubscriptions = [
     index: 0,
     interval: 50,
     update: (response, index) => {
-      response.changes[0][1].value = 180*(((index%500)/250)-1);
+      const val = 180*(((index%500)/250)-1);
+      response.changes[0][1].value = val;
+      if (val > -120 && val < 120) {
+        response.changes[0][1].alarm.severity = 0;
+      } else if ((val > 120 && val < 160) || (val > -160 && val < -120)) {
+        response.changes[0][1].alarm.severity = 1;
+      } else {
+        response.changes[0][1].alarm.severity = 2;
+      }
+
+      //response.changes[0][1].timeStamp.secondsPastEpoch += 180;
+
       response.changes[0][1].timeStamp.nanoseconds += 5e7;
-      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
         response.changes[0][1].timeStamp.nanoseconds = 0;
         response.changes[0][1].timeStamp.secondsPastEpoch += 1;
       }
+
       return response;
     },
   },
@@ -51,7 +67,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = (index%4 < 2) ;
       response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
         response.changes[0][1].timeStamp.nanoseconds = 0;
         response.changes[0][1].timeStamp.secondsPastEpoch += 1;
       }
@@ -65,7 +81,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = ((index+1)%4 < 2);
       response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds > 1e9) {
+      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
         response.changes[0][1].timeStamp.nanoseconds = 0;
         response.changes[0][1].timeStamp.secondsPastEpoch += 1;
       }

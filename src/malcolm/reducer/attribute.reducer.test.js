@@ -61,10 +61,12 @@ describe('attribute reducer', () => {
           attributes: [
             {
               name: 'layout',
-              value: new MockCircularBuffer(3),
-              plotValue: new MockCircularBuffer(3),
-              timeStamp: new MockCircularBuffer(3),
-              timeSinceConnect: new MockCircularBuffer(3),
+              meta: {},
+              value: new MockCircularBuffer(5),
+              alarmState: new MockCircularBuffer(5),
+              plotValue: new MockCircularBuffer(5),
+              timeStamp: new MockCircularBuffer(5),
+              timeSinceConnect: new MockCircularBuffer(5),
               connectTime: -1,
               counter: 0,
               refreshRate: ARCHIVE_REFRESH_INTERVAL,
@@ -355,14 +357,14 @@ describe('attribute reducer', () => {
       },
     });
     expect(testArchive.connectTime).toEqual(100000000);
-    expect(testArchive.typeid).toEqual('test');
+    expect(testArchive.meta.typeid).toEqual('test');
     expect(testArchive.timeSinceConnect.counter).toEqual(1);
     expect(testArchive.timeSinceConnect[0]).toBeCloseTo(23456789.00123, 6);
   });
 
   it('pushToArchive sets plotValue if attribute is bool', () => {
     state.blockArchive.block1.attributes[0].connectTime = 100000000;
-    state.blockArchive.block1.attributes[0].typeid = malcolmTypes.bool;
+    state.blockArchive.block1.attributes[0].meta.typeid = malcolmTypes.bool;
     const testArchive1 = pushToArchive(
       state.blockArchive.block1.attributes[0],
       {
@@ -376,8 +378,9 @@ describe('attribute reducer', () => {
     expect(testArchive1.timeSinceConnect[0]).toBeCloseTo(23456789.00123, 6);
     expect(testArchive1.value.counter).toEqual(1);
     expect(testArchive1.value[0]).toEqual(true);
-    expect(testArchive1.plotValue.counter).toEqual(1);
+    expect(testArchive1.plotValue.counter).toEqual(2);
     expect(testArchive1.plotValue[0]).toEqual(1);
+    expect(testArchive1.plotValue[1]).toEqual(1);
     const testArchive2 = pushToArchive(
       state.blockArchive.block1.attributes[0],
       {
@@ -391,8 +394,9 @@ describe('attribute reducer', () => {
     expect(testArchive2.timeSinceConnect[1]).toBeCloseTo(23456789.00246, 6);
     expect(testArchive2.value.counter).toEqual(2);
     expect(testArchive2.value[1]).toEqual(false);
-    expect(testArchive2.plotValue.counter).toEqual(2);
+    expect(testArchive2.plotValue.counter).toEqual(3);
     expect(testArchive2.plotValue[1]).toEqual(0);
+    expect(testArchive2.plotValue[2]).toEqual(0);
   });
 
   it('pushToArchive doesnt increment plot time if timestep less than ARCHIVE_REFRESH_INTERVAL', () => {

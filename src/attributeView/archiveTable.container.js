@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WidgetTable from './table.component';
+import WidgetTable from '../malcolmWidgets/table/table.component';
+
+const noOp = () => {};
 
 class ArchiveTable extends React.Component {
   static getDerivedStateFromProps(props, state) {
@@ -16,7 +18,11 @@ class ArchiveTable extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.attribute.plotTime - this.state.renderTime > 5;
+    return (
+      nextProps.attribute.plotTime - this.state.renderTime > 5 ||
+      nextProps.attribute.parent !== this.props.attribute.parent ||
+      nextProps.attribute.name !== this.props.attribute.name
+    );
   }
   render() {
     const { attribute } = this.props;
@@ -25,14 +31,22 @@ class ArchiveTable extends React.Component {
         attribute={{
           raw: {
             value: {
-              timeStamp: attribute.timeSinceConnect.toarray().slice(-100),
-              value: attribute.value.toarray().slice(-100),
+              timeStamp: attribute.timeStamp
+                .toarray()
+                .slice(-100, -1)
+                .map(date => date.toISOString()),
+              value: attribute.value.toarray().slice(-100, -1),
+              alarm: attribute.alarmState.toarray().slice(-100, -1),
             },
             meta: {
               elements: {
+                alarm: {
+                  tags: ['info:alarm'],
+                  label: 'Alarm state',
+                },
                 timeStamp: {
                   tags: ['widget:textupdate'],
-                  label: 'Time received',
+                  label: 'Time set',
                 },
                 value: {
                   tags: ['widget:textupdate'],
@@ -44,11 +58,11 @@ class ArchiveTable extends React.Component {
           calculated: {},
         }}
         hideInfo
-        eventHandler={() => {}}
-        setFlag={() => {}}
-        addRow={() => {}}
-        infoClickHandler={() => {}}
-        rowClickHandler={() => {}}
+        eventHandler={noOp}
+        setFlag={noOp}
+        addRow={noOp}
+        infoClickHandler={noOp}
+        rowClickHandler={noOp}
       />
     );
   }
@@ -56,6 +70,8 @@ class ArchiveTable extends React.Component {
 
 ArchiveTable.propTypes = {
   attribute: PropTypes.shape({
+    parent: PropTypes.string,
+    name: PropTypes.string,
     value: PropTypes.arrayOf(PropTypes.number),
     timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
     plotTime: PropTypes.number,

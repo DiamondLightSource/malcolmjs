@@ -229,7 +229,9 @@ describe('malcolm reducer', () => {
       attributes: [
         {
           name: 'health',
+          meta: {},
           value: new MockCircularBuffer(3),
+          alarmState: new MockCircularBuffer(3),
           plotValue: new MockCircularBuffer(3),
           timeStamp: new MockCircularBuffer(3),
           timeSinceConnect: new MockCircularBuffer(3),
@@ -262,16 +264,9 @@ describe('malcolm reducer', () => {
 
     state = malcolmReducer(state, action);
 
-    expect(state.blocks.block1.attributes.length).toEqual(1);
-    expect(state.blocks.block1.attributes[0].calculated.name).toEqual('health');
-    expect(state.blocks.block1.attributes[0].calculated.path).toEqual([
-      'block1',
-      'health',
-    ]);
-    expect(state.blocks.block1.attributes[0].calculated.loading).toEqual(false);
     expect(state.blockArchive.block1.attributes[0].value.counter).toEqual(1);
     expect(state.blockArchive.block1.attributes[0].timeStamp.counter).toEqual(
-      1
+      2
     );
     expect(state.blockArchive.block1.attributes[0].connectTime).toEqual(
       123456789.00123

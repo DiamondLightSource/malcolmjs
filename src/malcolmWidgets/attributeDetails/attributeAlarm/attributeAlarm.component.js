@@ -46,13 +46,13 @@ const AttributeAlarm = props => {
       return <Warning nativeColor={props.theme.alarmState.warning} />;
 
     case AlarmStates.MAJOR_ALARM:
-      return <Error nativeColor={props.theme.palette.error.main} />;
+      return <Error nativeColor={props.theme.alarmState.error} />;
 
     case AlarmStates.INVALID_ALARM:
-      return <HighlightOff nativeColor={props.theme.palette.primary.dark} />;
+      return <HighlightOff nativeColor={props.theme.alarmState.disconnected} />;
 
     case AlarmStates.UNDEFINED_ALARM:
-      return <HighlightOff nativeColor={props.theme.palette.primary.dark} />;
+      return <HighlightOff nativeColor={props.theme.alarmState.disconnected} />;
 
     case AlarmStates.PENDING:
       return (
