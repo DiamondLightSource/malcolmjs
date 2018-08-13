@@ -167,13 +167,11 @@ function updateBlock(state, payload) {
       blockArchive[blockName] = {
         attributes: payload.fields
           ? payload.fields.map(f => {
-              if (blockArchive[blockName]) {
-                const matchingIndex = blockArchive[
-                  blockName
-                ].attributes.findIndex(a => a.name === f);
-                if (matchingIndex !== -1) {
-                  return blockArchive[blockName].attributes[matchingIndex];
-                }
+              const archiveAttribute = blockArchive[blockName].attributes.find(
+                a => a.name === f
+              );
+              if (archiveAttribute) {
+                return archiveAttribute;
               }
               return {
                 parent: blockName,
