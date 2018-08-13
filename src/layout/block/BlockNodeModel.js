@@ -12,6 +12,7 @@ class BlockNodeModel extends NodeModel {
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);
     this.addMouseDownHandler = this.addMouseDownHandler.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
 
   addBlockPort(port, portMouseDown) {

@@ -4,7 +4,7 @@ import AttributeReducer, {
   portsAreDifferent,
   pushToArchive,
 } from './attribute.reducer';
-import LayoutReducer from './layout.reducer';
+import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
@@ -17,7 +17,7 @@ import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSel
 import { ARCHIVE_REFRESH_INTERVAL } from './malcolmReducer';
 import MockCircularBuffer from './attribute.reducer.mocks';
 
-jest.mock('./layout.reducer');
+jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
 
 describe('attribute reducer', () => {

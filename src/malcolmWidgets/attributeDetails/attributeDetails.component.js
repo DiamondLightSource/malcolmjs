@@ -39,41 +39,31 @@ const styles = theme => ({
   },
 });
 
-const AttributeDetails = props => {
-  let widgetTagIndex = null;
-  if (props.attribute && props.attribute.raw && props.attribute.raw.meta) {
-    const { tags } = props.attribute.raw.meta;
-    if (tags !== null) {
-      widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
-    }
-  }
-  if (widgetTagIndex !== null) {
-    const alarm = getAlarmState(props.attribute);
-    let message = props.attribute.raw.meta.description
-      ? props.attribute.raw.meta.description
-      : '';
-    message = props.attribute.calculated.errorMessage
-      ? props.attribute.calculated.errorMessage
-      : message;
+const EMPTY_STRING = '';
 
+const AttributeDetails = props => {
+  if (props.widgetTagIndex !== null) {
     return (
       <div className={props.classes.div}>
-        <Tooltip id="1" title={message} placement="bottom">
+        <Tooltip id="1" title={props.message} placement="bottom">
           <IconButton
             className={props.classes.button}
             disableRipple
             onClick={() =>
-              props.buttonClickHandler([props.blockName, props.attributeName])
+              props.buttonClickHandler(props.blockName, props.attributeName)
             }
           >
-            <AttributeAlarm alarmSeverity={alarm} />
+            <AttributeAlarm alarmSeverity={props.alarm} />
           </IconButton>
         </Tooltip>
         <Typography className={props.classes.textName}>
-          {props.attribute.raw.meta.label}:{' '}
+          {props.label}:{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
-          <AttributeSelector attribute={props.attribute} />
+          <AttributeSelector
+            blockName={props.blockName}
+            attributeName={props.attributeName}
+          />
         </div>
       </div>
     );
@@ -84,26 +74,10 @@ const AttributeDetails = props => {
 AttributeDetails.propTypes = {
   attributeName: PropTypes.string.isRequired,
   blockName: PropTypes.string.isRequired,
-  attribute: PropTypes.shape({
-    calculated: PropTypes.shape({
-      name: PropTypes.string,
-      pending: PropTypes.bool,
-      errorState: PropTypes.bool,
-      errorMessage: PropTypes.string,
-      unableToProcess: PropTypes.bool,
-      dirty: PropTypes.bool,
-    }),
-    raw: PropTypes.shape({
-      meta: PropTypes.shape({
-        label: PropTypes.string,
-        tags: PropTypes.arrayOf(PropTypes.string),
-        description: PropTypes.string,
-      }),
-      alarm: PropTypes.shape({
-        severity: PropTypes.number,
-      }),
-    }),
-  }).isRequired,
+  widgetTagIndex: PropTypes.number,
+  alarm: PropTypes.number,
+  message: PropTypes.string,
+  label: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     div: PropTypes.string,
     textName: PropTypes.string,
@@ -111,6 +85,12 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+};
+
+AttributeDetails.defaultProps = {
+  widgetTagIndex: null,
+  message: undefined,
+  alarm: undefined,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -123,14 +103,42 @@ const mapStateToProps = (state, ownProps) => {
     );
   }
 
+  let widgetTagIndex = null;
+  if (attribute && attribute.raw && attribute.raw.meta) {
+    const { tags } = attribute.raw.meta;
+    if (tags !== null) {
+      widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+    }
+  }
+
+  let alarm;
+  let message;
+  if (widgetTagIndex !== null) {
+    alarm = getAlarmState(attribute);
+    message =
+      attribute && attribute.raw && attribute.raw.meta.description
+        ? attribute.raw.meta.description
+        : EMPTY_STRING;
+    message =
+      attribute && attribute.calculated && attribute.calculated.errorMessage
+        ? attribute.calculated.errorMessage
+        : message;
+  }
+
   return {
-    attribute,
+    widgetTagIndex,
+    alarm,
+    message,
+    label:
+      attribute && attribute.raw && attribute.raw.meta
+        ? attribute.raw.meta.label
+        : EMPTY_STRING,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  buttonClickHandler: path => {
-    dispatch(navigationActions.navigateToInfo(path[0], path[1]));
+  buttonClickHandler: (blockName, attributeName) => {
+    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },
 });
 

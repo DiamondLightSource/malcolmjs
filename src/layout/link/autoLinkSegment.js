@@ -1,8 +1,7 @@
 import React from 'react';
-import { BaseWidget, PointModel } from 'storm-react-diagrams';
-import SplineUtils from './splineUtils';
+import { BaseWidget } from 'storm-react-diagrams';
 
-class MalcolmLinkSegment extends BaseWidget {
+class MalcolmAutoLinkSegment extends BaseWidget {
   constructor(props) {
     super('srd-default-link', props);
 
@@ -11,24 +10,6 @@ class MalcolmLinkSegment extends BaseWidget {
     this.state = {
       selected: false,
     };
-  }
-
-  addPointToLink(event, index) {
-    if (
-      !event.shiftKey &&
-      !this.props.diagramEngine.isModelLocked(this.props.link) &&
-      this.props.link.points.length - 1 <=
-        this.props.diagramEngine.getMaxNumberPointsPerLink()
-    ) {
-      const point = new PointModel(
-        this.props.link,
-        this.props.diagramEngine.getRelativeMousePoint(event)
-      );
-      point.setSelected(true);
-      this.forceUpdate();
-      this.props.link.addPoint(point, index);
-      this.props.pointAdded(point, event);
-    }
   }
 
   generatePoint(pointIndex) {
@@ -111,36 +92,31 @@ class MalcolmLinkSegment extends BaseWidget {
       return null;
     }
 
-    // ensure id is present for all points on the path
     const { points } = this.props.link;
+    const pathSegments = this.props.link.getPathSegments(diagramEngine);
+
     const paths = [];
 
-    if (paths.length === 0) {
-      const pathSegments = SplineUtils.buildPath(points);
-      for (let j = 0; j < pathSegments.length; j += 1) {
-        paths.push(
-          this.generateLink(
-            pathSegments[j],
-            {
-              'data-linkid': this.props.link.id,
-              'data-point': j,
-              onMouseDown: event => {
-                this.addPointToLink(event, j + 1);
-              },
-            },
-            j
-          )
-        );
-      }
+    for (let j = 0; j < pathSegments.length; j += 1) {
+      paths.push(
+        this.generateLink(
+          pathSegments[j],
+          {
+            'data-linkid': this.props.link.id,
+            'data-point': j,
+          },
+          j
+        )
+      );
+    }
 
-      // render the circles
-      for (let i = 1; i < points.length - 1; i += 1) {
-        paths.push(this.generatePoint(i));
-      }
+    // render the circles
+    for (let i = 1; i < points.length - 1; i += 1) {
+      paths.push(this.generatePoint(i));
+    }
 
-      if (this.props.link.targetPort === null) {
-        paths.push(this.generatePoint(points.length - 1));
-      }
+    if (this.props.link.targetPort === null) {
+      paths.push(this.generatePoint(points.length - 1));
     }
 
     this.refPaths = [];
@@ -148,4 +124,4 @@ class MalcolmLinkSegment extends BaseWidget {
   }
 }
 
-export default MalcolmLinkSegment;
+export default MalcolmAutoLinkSegment;

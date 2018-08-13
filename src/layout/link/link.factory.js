@@ -1,7 +1,7 @@
 import React from 'react';
 import { DefaultLinkFactory } from 'storm-react-diagrams';
 import MalcolmLinkModel from './link.model';
-import MalcolmLinkSegment from './linkSegment';
+import MalcolmAutoLinkSegment from './autoLinkSegment';
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["generateReactWidget", "getNewInstance", "generateLinkSegment"] }] */
 class MalcolmLinkFactory extends DefaultLinkFactory {
@@ -11,7 +11,7 @@ class MalcolmLinkFactory extends DefaultLinkFactory {
   }
 
   generateReactWidget(diagramEngine, link) {
-    return React.createElement(MalcolmLinkSegment, {
+    return React.createElement(MalcolmAutoLinkSegment, {
       link,
       diagramEngine,
     });
