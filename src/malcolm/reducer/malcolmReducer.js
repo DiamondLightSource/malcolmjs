@@ -97,6 +97,7 @@ function registerNewBlock(state, action) {
 
   if (!Object.prototype.hasOwnProperty.call(blocks, action.payload.blockName)) {
     blocks[action.payload.blockName] = {
+      typeid: 'malcolm:core/BlockMeta:1.0',
       attributes: [],
       name: action.payload.blockName,
       loading: true,
@@ -137,44 +138,58 @@ function updateBlock(state, payload) {
         loading: false,
         label: payload.label,
         // #refactorDuplication
-        attributes: payload.fields.map(f => ({
-          /*
-          name: f,
-          loading: true,
-          children: [], */
-          raw: {},
-          calculated: {
+        attributes: payload.fields
+          ? payload.fields.map(f => {
+              const attribute = blocks[blockName].attributes.find(
+                attr => attr.calculated.name === f
+              );
+              if (attribute) {
+                return attribute;
+              }
+              return {
+                /*
             name: f,
             loading: true,
-            children: [],
-          },
-        })),
-        children: [...payload.fields],
+            children: [], */
+                raw: {},
+                calculated: {
+                  name: f,
+                  loading: true,
+                  children: [],
+                },
+              };
+            })
+          : blocks[blockName].attributes,
+        children: payload.fields
+          ? [...payload.fields]
+          : blocks[blockName].children,
       };
       blockArchive[blockName] = {
-        attributes: payload.fields.map(f => {
-          if (blockArchive[blockName]) {
-            const matchingIndex = blockArchive[blockName].attributes.findIndex(
-              a => a.name === f
-            );
-            if (matchingIndex !== -1) {
-              return blockArchive[blockName].attributes[matchingIndex];
-            }
-          }
-          return {
-            parent: blockName,
-            name: f,
-            value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-            alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-            plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-            timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-            timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-            connectTime: -1,
-            counter: 0,
-            refreshRate: ARCHIVE_REFRESH_INTERVAL,
-            plotTime: 0,
-          };
-        }),
+        attributes: payload.fields
+          ? payload.fields.map(f => {
+              if (blockArchive[blockName]) {
+                const matchingIndex = blockArchive[
+                  blockName
+                ].attributes.findIndex(a => a.name === f);
+                if (matchingIndex !== -1) {
+                  return blockArchive[blockName].attributes[matchingIndex];
+                }
+              }
+              return {
+                parent: blockName,
+                name: f,
+                value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                connectTime: -1,
+                counter: 0,
+                refreshRate: ARCHIVE_REFRESH_INTERVAL,
+                plotTime: 0,
+              };
+            })
+          : blockArchive[blockName].attributes,
       };
     }
 

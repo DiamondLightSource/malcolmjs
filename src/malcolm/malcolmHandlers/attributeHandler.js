@@ -46,7 +46,7 @@ const processDeltaMessage = (changes, originalRequest, blocks) => {
     BlockUtils.findBlock(blocks, blockName) &&
     attributeName === 'meta'
   ) {
-    object = blocks[blockName];
+    object = JSON.parse(JSON.stringify(blocks[blockName]));
   }
   return applyChangesToObject(changes, object);
 };
