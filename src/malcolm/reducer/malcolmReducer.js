@@ -27,7 +27,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
-export const ARCHIVE_REFRESH_INTERVAL = 0.2; // minimum time in seconds between updates of displayed archive data
+export const ARCHIVE_REFRESH_INTERVAL = 0.5; // minimum time in seconds between updates of displayed archive data
 
 const initialMalcolmState = {
   messagesInFlight: {},
@@ -93,6 +93,7 @@ function stopTrackingMessage(state, action) {
 
 function registerNewBlock(state, action) {
   const blocks = { ...state.blocks };
+  const blockArchive = { ...state.blockArchive };
 
   if (!Object.prototype.hasOwnProperty.call(blocks, action.payload.blockName)) {
     blocks[action.payload.blockName] = {
@@ -101,11 +102,18 @@ function registerNewBlock(state, action) {
       loading: true,
       children: [],
     };
+    if (!blockArchive[action.payload.blockName]) {
+      blockArchive[action.payload.blockName] = {
+        attributes: [],
+        name: action.payload.blockName,
+      };
+    }
   }
 
   return {
     ...state,
     blocks,
+    blockArchive,
     parentBlock: action.payload.parent
       ? action.payload.blockName
       : state.parentBlock,
@@ -144,17 +152,29 @@ function updateBlock(state, payload) {
         children: [...payload.fields],
       };
       blockArchive[blockName] = {
-        attributes: payload.fields.map(f => ({
-          name: f,
-          value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          connectTime: -1,
-          counter: 0,
-          refreshRate: ARCHIVE_REFRESH_INTERVAL,
-          plotTime: 0,
-        })),
+        attributes: payload.fields.map(f => {
+          if (blockArchive[blockName]) {
+            const matchingIndex = blockArchive[blockName].attributes.findIndex(
+              a => a.name === f
+            );
+            if (matchingIndex !== -1) {
+              return blockArchive[blockName].attributes[matchingIndex];
+            }
+          }
+          return {
+            parent: blockName,
+            name: f,
+            value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            connectTime: -1,
+            counter: 0,
+            refreshRate: ARCHIVE_REFRESH_INTERVAL,
+            plotTime: 0,
+          };
+        }),
       };
     }
 

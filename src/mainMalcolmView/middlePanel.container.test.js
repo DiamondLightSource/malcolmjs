@@ -102,7 +102,7 @@ describe('MalcolmMiddlePanel', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
-  it('renders a container only if the mainAttribute is not one of allowed type', () => {
+  it('renders an archive viewer pane if the mainAttribute is a "standard" attribute allowed type', () => {
     state.malcolm.mainAttribute = 'health';
 
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);

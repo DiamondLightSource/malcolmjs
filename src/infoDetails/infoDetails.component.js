@@ -185,7 +185,6 @@ const mapStateToProps = state => {
       attributeName
     ),
     subElement,
-    path: [blockName, attributeName],
     isLinkInfo: showLinkInfo,
     linkBlockName,
   };

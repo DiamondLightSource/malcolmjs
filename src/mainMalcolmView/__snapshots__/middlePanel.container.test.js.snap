@@ -1,16 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MalcolmMiddlePanel renders a container only if the mainAttribute is not one of allowed type 1`] = `
-<div
-  className="MiddlePanelContainer-container-1"
-  role="presentation"
->
-  <div
-    className="MiddlePanelContainer-plainBackground-8"
-  />
-</div>
-`;
-
 exports[`MalcolmMiddlePanel renders a container only if the no widget tag found for mainAttribute 1`] = `
 <div
   className="MiddlePanelContainer-container-1"
@@ -77,6 +66,40 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
       >
         Auto layout
       </WithStyles(Button)>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute is a "standard" attribute allowed type 1`] = `
+<div
+  className="MiddlePanelContainer-container-1"
+  role="presentation"
+>
+  <div
+    className="MiddlePanelContainer-plainBackground-8"
+  >
+    <div
+      className="MiddlePanelContainer-tableContainer-7"
+      style={
+        Object {
+          "left": 360,
+          "width": "calc(100% - 360px)",
+        }
+      }
+    >
+      <Connect(WithTheme(AttributeViewer))
+        attributeName="health"
+        blockName="test1"
+        openPanels={
+          Object {
+            "child": false,
+            "parent": true,
+          }
+        }
+        typeId="malcolm:core/StringMeta:1.0"
+        widgetTag="widget:textupdate"
+      />
     </div>
   </div>
 </div>
@@ -274,9 +297,8 @@ exports[`MalcolmMiddlePanel renders table correctly 1`] = `
       className="MiddlePanelContainer-tableContainer-7"
       style={
         Object {
-          "left": 365,
-          "transition": "width 1s, left 1s",
-          "width": "calc(100% - 370px)",
+          "left": 360,
+          "width": "calc(100% - 360px)",
         }
       }
     >

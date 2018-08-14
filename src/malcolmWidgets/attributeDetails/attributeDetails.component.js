@@ -39,6 +39,21 @@ const styles = theme => ({
   },
 });
 
+const copyPathToClipboard = (event, path) => {
+  if (event.button === 1) {
+    const dummyElement = document.createElement('textarea');
+    dummyElement.value = JSON.stringify(path);
+    dummyElement.setAttribute('readonly', '');
+    dummyElement.style.position = 'absolute';
+    dummyElement.style.left = `${event.pageX}px`;
+    dummyElement.style.top = `${event.pageY}px`;
+    document.body.appendChild(dummyElement);
+    dummyElement.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyElement);
+  }
+};
+
 const EMPTY_STRING = '';
 
 const AttributeDetails = props => {
@@ -56,7 +71,16 @@ const AttributeDetails = props => {
             <AttributeAlarm alarmSeverity={props.alarm} />
           </IconButton>
         </Tooltip>
-        <Typography className={props.classes.textName}>
+        <Typography
+          className={props.classes.textName}
+          onClick={() =>
+            props.nameClickHandler([props.blockName, props.attributeName])
+          }
+          onMouseDown={event =>
+            copyPathToClipboard(event, [props.blockName, props.attributeName])
+          }
+          style={{ cursor: 'pointer' }}
+        >
           {props.label}:{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
@@ -85,6 +109,7 @@ AttributeDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  nameClickHandler: PropTypes.func.isRequired,
 };
 
 AttributeDetails.defaultProps = {
@@ -139,6 +164,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   buttonClickHandler: (blockName, attributeName) => {
     dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+  },
+  nameClickHandler: path => {
+    dispatch(navigationActions.navigateToSubElement(path[0], path[1]));
   },
 });
 

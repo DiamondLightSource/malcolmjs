@@ -35,13 +35,13 @@ exports[`AttributeAlarm renders dirty correctly 1`] = `
 
 exports[`AttributeAlarm renders invalid_alarm correctly 1`] = `
 <pure(HighlightOff)
-  nativeColor="#303f9f"
+  nativeColor="#ac00ff"
 />
 `;
 
 exports[`AttributeAlarm renders major_alarm correctly 1`] = `
 <pure(Error)
-  nativeColor="#f44336"
+  nativeColor="#ff0f03"
 />
 `;
 
@@ -70,6 +70,6 @@ exports[`AttributeAlarm renders pending correctly 1`] = `
 
 exports[`AttributeAlarm renders undefined_alarm correctly 1`] = `
 <pure(HighlightOff)
-  nativeColor="#303f9f"
+  nativeColor="#ac00ff"
 />
 `;

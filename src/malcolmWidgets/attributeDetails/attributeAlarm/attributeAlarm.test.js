@@ -28,21 +28,30 @@ describe('AttributeAlarm', () => {
 
   it('renders major_alarm correctly', () => {
     const wrapper = shallow(
-      <AttributeAlarm alarmSeverity={AlarmStates.MAJOR_ALARM} />
+      <AttributeAlarm
+        alarmSeverity={AlarmStates.MAJOR_ALARM}
+        theme={{ alarmState: { error: '#ff0f03' } }}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
 
   it('renders invalid_alarm correctly', () => {
     const wrapper = shallow(
-      <AttributeAlarm alarmSeverity={AlarmStates.INVALID_ALARM} />
+      <AttributeAlarm
+        alarmSeverity={AlarmStates.INVALID_ALARM}
+        theme={{ alarmState: { disconnected: '#ac00ff' } }}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
 
   it('renders undefined_alarm correctly', () => {
     const wrapper = shallow(
-      <AttributeAlarm alarmSeverity={AlarmStates.UNDEFINED_ALARM} />
+      <AttributeAlarm
+        alarmSeverity={AlarmStates.UNDEFINED_ALARM}
+        theme={{ alarmState: { disconnected: '#ac00ff' } }}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });
