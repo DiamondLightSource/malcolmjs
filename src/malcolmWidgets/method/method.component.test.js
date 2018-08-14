@@ -177,12 +177,12 @@ describe('Method component', () => {
       .simulate('change', { target: { value: 'test' } });
     expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(2);
     expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
-      ['Test', 'Method'],
+      ['Test', 'Method', 'takes.first'],
       'first',
       'test'
     );
     expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
-      ['Test', 'Method'],
+      ['Test', 'Method', 'takes.first'],
       'first',
       { isDirty: true }
     );

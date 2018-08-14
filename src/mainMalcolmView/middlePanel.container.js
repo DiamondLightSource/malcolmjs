@@ -89,6 +89,13 @@ const findAttributeComponent = props => {
           classes={props.classes}
           openParent={props.openParent}
           openChild={props.openChild}
+          footerItems={[
+            <Tooltip id="1" title={props.errorMessage} placement="right">
+              <IconButton className={props.classes.button} disableRipple>
+                <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+              </IconButton>
+            </Tooltip>,
+          ]}
         />
       </div>
     );

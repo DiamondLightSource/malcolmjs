@@ -11,15 +11,11 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -51,15 +47,11 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -82,9 +74,15 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
     <div
       className="MethodDetails-div-1"
     >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
-      />
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <div>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </div>
+      </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       />
@@ -113,15 +111,11 @@ exports[`Method component renders correctly with default inputs 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -153,15 +147,11 @@ exports[`Method component renders correctly with default inputs 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -192,9 +182,15 @@ exports[`Method component renders correctly with default inputs 1`] = `
     <div
       className="MethodDetails-div-1"
     >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
-      />
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <div>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </div>
+      </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       />
@@ -223,15 +219,11 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -263,15 +255,11 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -302,9 +290,15 @@ exports[`Method component renders correctly with empty inputs 1`] = `
     <div
       className="MethodDetails-div-1"
     >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
-      />
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <div>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </div>
+      </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       />
@@ -333,15 +327,11 @@ exports[`Method component renders correctly with existing input values 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -373,15 +363,11 @@ exports[`Method component renders correctly with existing input values 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -412,9 +398,15 @@ exports[`Method component renders correctly with existing input values 1`] = `
     <div
       className="MethodDetails-div-1"
     >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
-      />
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <div>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </div>
+      </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       />
@@ -443,15 +435,11 @@ exports[`Method component renders correctly with return value 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -483,15 +471,11 @@ exports[`Method component renders correctly with return value 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <WithStyles(Tooltip)
-        title=""
-      >
-        <div>
-          <WithTheme(AttributeAlarm)
-            alarmSeverity={0}
-          />
-        </div>
-      </WithStyles(Tooltip)>
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
@@ -522,9 +506,15 @@ exports[`Method component renders correctly with return value 1`] = `
     <div
       className="MethodDetails-div-1"
     >
-      <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
-      />
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <div>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </div>
+      </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
       />

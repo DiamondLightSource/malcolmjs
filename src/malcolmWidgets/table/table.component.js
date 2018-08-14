@@ -131,7 +131,7 @@ const WidgetTable = props => {
       padding="none"
       key={column}
     >
-      {meta.elements[label].label}
+      {meta.elements[label].label ? meta.elements[label].label : label}
     </TableCell>
   ));
   return (

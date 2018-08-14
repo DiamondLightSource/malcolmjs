@@ -138,7 +138,7 @@ describe('navigateToSubElement', () => {
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
     expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout/SEQ2/table.row.1'
+      '/gui/PANDA/layout/SEQ2/table.row.1/'
     );
   });
 

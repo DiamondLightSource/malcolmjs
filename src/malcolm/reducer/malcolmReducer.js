@@ -379,11 +379,16 @@ const handleErrorMessage = (state, action) => {
   const matchingMessage = state.messagesInFlight[action.payload.id];
   let updatedState = { ...state };
   if (matchingMessage && matchingMessage.path) {
-    const attribute = blockUtils.findAttribute(
+    const blockName = matchingMessage.path[0];
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
       state.blocks,
-      matchingMessage.path[0],
+      blockName,
       matchingMessage.path[1]
     );
+    const attribute =
+      matchingAttributeIndex > -1
+        ? state.blocks[blockName].attributes[matchingAttributeIndex]
+        : undefined;
     if (
       attribute &&
       attribute.raw &&
@@ -397,6 +402,24 @@ const handleErrorMessage = (state, action) => {
         id,
         delta: true,
       });
+    } else if (
+      attribute &&
+      attribute.raw.typeid === 'malcolm:core/Method:1.0'
+    ) {
+      const attributes = [...state.blockArchive[blockName].attributes];
+      const archive = { ...attributes[matchingAttributeIndex] };
+      const runParams = archive.value.pop();
+      const localRunTime = archive.timeStamp.pop();
+      archive.value.push({
+        ...runParams,
+        returned: { error: action.payload.message },
+      });
+      archive.timeStamp.push({ ...localRunTime, localReturnTime: new Date() });
+      attributes[matchingAttributeIndex] = archive;
+      updatedState.blockArchive[blockName] = {
+        ...state.blockArchive[blockName],
+        attributes,
+      };
     }
   }
 

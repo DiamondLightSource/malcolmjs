@@ -33,6 +33,9 @@ export const getAlarmState = attribute => {
         ? AlarmStates.DIRTYANDERROR
         : alarm;
     alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
+  } else if (attribute && attribute.calculated) {
+    alarm = attribute.calculated.errorState ? AlarmStates.MAJOR_ALARM : alarm;
+    alarm = attribute.calculated.pending ? AlarmStates.PENDING : alarm;
   }
   return alarm;
 };

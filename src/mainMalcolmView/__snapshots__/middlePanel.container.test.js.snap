@@ -94,7 +94,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       }
     >
       <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
+        alarmSeverity={2}
       />
     </div>
     <div
@@ -180,7 +180,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       }
     >
       <WithTheme(AttributeAlarm)
-        alarmSeverity={0}
+        alarmSeverity={-1}
       />
     </div>
     <div

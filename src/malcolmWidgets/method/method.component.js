@@ -17,7 +17,10 @@ import {
   malcolmSetFlag,
   malcolmPostAction,
 } from '../../malcolm/malcolmActionCreators';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmArchivePost,
+} from '../../malcolm/actions/method.actions';
 
 import {
   selectorFunction,
@@ -255,6 +258,7 @@ const mapStateToProps = (state, ownProps) => {
 export const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
+    dispatch(malcolmArchivePost(path, inputs));
     dispatch(malcolmPostAction(path, inputs));
   },
   updateInput: (path, inputName, inputValue) => {
