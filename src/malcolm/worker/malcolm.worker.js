@@ -53,6 +53,10 @@ socketContainer.socket.onclose = () => {
   self.postMessage('socket disconnected');
 };
 
+socketContainer.socket.onerror = error => {
+  self.postMessage(`WebSocket Error: ${JSON.stringify(error)}`);
+};
+
 function handleMessage(event) {
   if (event.data.startsWith('connect::')) {
     const socketUrl = event.data.replace('connect::', '');

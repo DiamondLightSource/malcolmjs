@@ -4,7 +4,7 @@ import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
 const processDeltaMessage = (changes, oldAttribute) => {
-  let attribute = oldAttribute;
+  let attribute = { ...oldAttribute };
   changes.forEach(change => {
     const pathWithinAttr = change[0];
     if (pathWithinAttr.length !== 0) {

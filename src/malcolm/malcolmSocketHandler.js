@@ -61,7 +61,6 @@ const handleMessage = (message, dispatch, getState) => {
     }
 
     case 'malcolm:core/Error:1.0': {
-      console.log(data);
       if (data.id !== -1) {
         BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
 
@@ -113,6 +112,11 @@ const configureMalcolmSocketHandlers = (store, worker) => {
         )
       );
       store.dispatch(malcolmSetDisconnected());
+    } else if (
+      typeof event.data === 'string' &&
+      event.data.startsWith('WebSocket Error: ')
+    ) {
+      store.dispatch(snackbarState(true, event.data));
     } else {
       handleMessage(event.data, store.dispatch, store.getState);
     }

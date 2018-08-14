@@ -188,8 +188,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[0].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      {}
     );
     expect(testAttributeState).toEqual(testDeltas[0].changes[0][1]);
   });
@@ -197,8 +196,7 @@ describe('attribute handler', () => {
   it('applies delta to subset of block', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -211,8 +209,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(newStyleAttribute).toEqual(backupAttribute);
   });
@@ -220,8 +217,7 @@ describe('attribute handler', () => {
   it('applies delta to single value for single element path', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -232,8 +228,7 @@ describe('attribute handler', () => {
   it('applies delta to single value for multi element path', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[3].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -244,8 +239,7 @@ describe('attribute handler', () => {
   it('applies delta which deletes a field', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[4].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       value: { isATest: true },
@@ -256,8 +250,7 @@ describe('attribute handler', () => {
   it('applies delta with multiple changes', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[5].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -269,8 +262,7 @@ describe('attribute handler', () => {
   it('applies delta where 2nd change overwrites first', () => {
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[6].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,

@@ -12,67 +12,16 @@ import {
   MalcolmError,
 } from './malcolm.types';
 import { snackbar } from '../viewState/viewState.actions';
-import MalcolmWorkerBuilder from './worker/worker.builder';
-import { processWebSocketMessage } from './worker/malcolm.worker';
 
 jest.mock('./middleware/malcolmRouting');
 jest.useFakeTimers();
-jest.mock('./worker/worker.builder');
-
-const SOCKET_BUFFER_TIME = 51;
 
 describe('malcolm socket handler', () => {
   let dispatches = [];
   let connectionState = false;
   const drain = [];
 
-  const state = {
-    router: {
-      location: {
-        pathname: '',
-      },
-    },
-    malcolm: {
-      messagesInFlight: {
-        1: {
-          id: 1,
-          path: ['block1', 'meta'],
-        },
-        2: {
-          id: 2,
-          path: ['block1', 'health'],
-        },
-        3: {
-          typeid: 'malcolm:core/Put:1.0',
-          id: 3,
-          path: ['TestBlock', 'TestAttr'],
-          value: null,
-        },
-        4: {
-          id: 4,
-          path: ['.', 'blocks'],
-        },
-      },
-      blocks: {
-        TestBlock: {
-          attributes: [
-            {
-              pending: true,
-              raw: {
-                value: 0,
-              },
-              calculated: {
-                name: 'TestAttr',
-              },
-            },
-          ],
-        },
-      },
-      navigation: {
-        navigationLists: [],
-      },
-    },
-  };
+  let state = {};
 
   const store = {
     dispatch: action => {
@@ -125,8 +74,8 @@ describe('malcolm socket handler', () => {
     },
   };
 
-  const buildMessage = (typeid, id, payload) =>
-    JSON.stringify({
+  const buildMessage = (typeid, id, payload) => ({
+    data: {
       typeid: 'malcolm:core/Delta:1.0',
       id,
       changes: [
@@ -138,9 +87,65 @@ describe('malcolm socket handler', () => {
           },
         ],
       ],
-    });
+    },
+    originalRequest: state.malcolm.messagesInFlight[id],
+    attributeDelta: {
+      typeid,
+      ...payload,
+    },
+  });
+
+  let malcolmWorker = {};
 
   beforeEach(() => {
+    state = {
+      router: {
+        location: {
+          pathname: '',
+        },
+      },
+      malcolm: {
+        messagesInFlight: {
+          1: {
+            id: 1,
+            path: ['block1', 'meta'],
+          },
+          2: {
+            id: 2,
+            path: ['block1', 'health'],
+          },
+          3: {
+            typeid: 'malcolm:core/Put:1.0',
+            id: 3,
+            path: ['TestBlock', 'TestAttr'],
+            value: null,
+          },
+          4: {
+            id: 4,
+            path: ['.', 'blocks'],
+          },
+        },
+        blocks: {
+          TestBlock: {
+            attributes: [
+              {
+                pending: true,
+                raw: {
+                  value: 0,
+                },
+                calculated: {
+                  name: 'TestAttr',
+                },
+              },
+            ],
+          },
+        },
+        navigation: {
+          navigationLists: [],
+        },
+      },
+    };
+
     dispatches = [];
     socketContainer.socket = new DummySocketConstructor('');
     reconnectingSocketContainer.socket = new MalcolmReconnector(
@@ -154,24 +159,19 @@ describe('malcolm socket handler', () => {
     socketContainer.queue = [];
     handleLocationChange.mockClear();
 
-    MalcolmWorkerBuilder.mockClear();
     const listeners = [];
-    const malcolmWorker = {
+    malcolmWorker = {
       addEventListener: (type, listener) => listeners.push(listener),
       postMessage: event => {
-        listeners.forEach(l => l({ data: processWebSocketMessage(event) }));
+        listeners.forEach(l => l({ data: event }));
       },
     };
-    MalcolmWorkerBuilder.mockImplementation(() => malcolmWorker);
 
-    configureMalcolmSocketHandlers(socketContainer, store);
+    configureMalcolmSocketHandlers(store, malcolmWorker);
   });
 
   it('sets flag and flushes on open', () => {
-    socketContainer.queue.push('flushed test');
-    socketContainer.socket.onopen();
-    expect(socketContainer.isConnected()).toEqual(true);
-    expect(drain).toEqual(['flushed test']);
+    malcolmWorker.postMessage('socket connected');
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
     expect(dispatches[1].type).toEqual(snackbar);
@@ -180,9 +180,10 @@ describe('malcolm socket handler', () => {
   });
 
   it('does nothing on receiving a non-malcolm message', () => {
-    const message = JSON.stringify({ typeid: 'notAMalcolmMessage', id: 1 });
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+    malcolmWorker.postMessage({
+      data: { typeid: 'notAMalcolmMessage', id: 1 },
+      originalRequest: state.malcolm.messagesInFlight[1],
+    });
     expect(dispatches.length).toEqual(0);
   });
 
@@ -191,8 +192,7 @@ describe('malcolm socket handler', () => {
       label: 'Block 1',
     });
 
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+    malcolmWorker.postMessage(message);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmBlockMeta);
@@ -208,8 +208,7 @@ describe('malcolm socket handler', () => {
     };
     const message = buildMessage(typeid, 2, changes);
 
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+    malcolmWorker.postMessage(message);
 
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
     expect(dispatches[0].type).toEqual(MalcolmAttributeData);
@@ -231,8 +230,7 @@ describe('malcolm socket handler', () => {
   it('dispatches a message for unhandled deltas', () => {
     const message = buildMessage('unknown type', 1, {});
 
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+    malcolmWorker.postMessage(message);
 
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual('unprocessed_delta');
@@ -248,7 +246,9 @@ describe('malcolm socket handler', () => {
       message: 'This is a test',
     };
     const errorString = JSON.stringify(error);
-    socketContainer.socket.onerror(error);
+
+    malcolmWorker.postMessage(`WebSocket Error: ${errorString}`);
+
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
@@ -257,18 +257,8 @@ describe('malcolm socket handler', () => {
     );
   });
 
-  it('updates snackbar on socket close', () => {
-    socketContainer.socket.onclose();
-    expect(dispatches.length).toEqual(2);
-    expect(dispatches[0].type).toEqual(snackbar);
-    expect(dispatches[0].snackbar.open).toEqual(true);
-    expect(dispatches[0].snackbar.message).toEqual(`WebSocket disconnected`);
-    expect(dispatches[1].type).toEqual(MalcolmDisconnected);
-  });
-
   it('updates snackbar on reconnecting socket close', () => {
-    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
-    reconnectingSocketContainer.socket.onclose();
+    malcolmWorker.postMessage('socket disconnected');
     expect(dispatches.length).toEqual(2);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
@@ -279,14 +269,14 @@ describe('malcolm socket handler', () => {
   });
 
   it('updates snackbar on malcolm error (no matching request)', () => {
-    const malcolmError = JSON.stringify({
-      typeid: 'malcolm:core/Error:1.0',
-      id: -1,
-      message: 'Error: this is a test!',
+    malcolmWorker.postMessage({
+      data: {
+        typeid: 'malcolm:core/Error:1.0',
+        id: -1,
+        message: 'Error: this is a test!',
+      },
+      originalRequest: undefined,
     });
-    socketContainer.socket.send(malcolmError);
-
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches.length).toEqual(1);
     expect(dispatches[0].type).toEqual(snackbar);
@@ -297,13 +287,15 @@ describe('malcolm socket handler', () => {
   });
 
   it('updates snackbar on malcolm error (with matching request)', () => {
-    const malcolmError = JSON.stringify({
-      typeid: 'malcolm:core/Error:1.0',
-      id: 3,
-      message: 'Error: this is a test!',
+    malcolmWorker.postMessage({
+      data: {
+        typeid: 'malcolm:core/Error:1.0',
+        id: 3,
+        message: 'Error: this is a test!',
+      },
+      originalRequest: state.malcolm.messagesInFlight[3],
     });
-    socketContainer.socket.send(malcolmError);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+
     expect(dispatches.length).toEqual(3);
     expect(dispatches[0].type).toEqual(snackbar);
     expect(dispatches[0].snackbar.open).toEqual(true);
@@ -326,12 +318,15 @@ describe('malcolm socket handler', () => {
       },
       type: 'malcolm:attributeflag',
     };
-    const malcolmReturnMessage = JSON.stringify({
-      typeid: 'malcolm:core/Return:1.0',
-      id: 3,
+
+    malcolmWorker.postMessage({
+      data: {
+        typeid: 'malcolm:core/Return:1.0',
+        id: 3,
+      },
+      originalRequest: state.malcolm.messagesInFlight[3],
     });
-    socketContainer.socket.send(malcolmReturnMessage);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
+
     expect(dispatches.length).toEqual(2);
     expect(dispatches[1]).toEqual(pendingAction);
     expect(dispatches[0].type).toEqual(MalcolmReturn);
@@ -339,14 +334,14 @@ describe('malcolm socket handler', () => {
   });
 
   it('does process an update for the root .blocks item', () => {
-    const message = JSON.stringify({
-      typeid: 'malcolm:core/Update:1.0',
-      id: 4,
-      value: ['block1', 'block2', 'block3'],
+    malcolmWorker.postMessage({
+      data: {
+        typeid: 'malcolm:core/Update:1.0',
+        id: 4,
+        value: ['block1', 'block2', 'block3'],
+      },
+      originalRequest: state.malcolm.messagesInFlight[4],
     });
-
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual(MalcolmRootBlockMeta);
@@ -358,22 +353,20 @@ describe('malcolm socket handler', () => {
   });
 
   it('doesnt process an update for if request wasnt for .blocks', () => {
-    const message = JSON.stringify({
-      typeid: 'malcolm:core/Update:1.0',
-      id: 1,
-      value: ['block1', 'block2', 'block3'],
+    malcolmWorker.postMessage({
+      data: {
+        typeid: 'malcolm:core/Update:1.0',
+        id: 1,
+        value: ['block1', 'block2', 'block3'],
+      },
+      originalRequest: state.malcolm.messagesInFlight[1],
     });
-
-    socketContainer.socket.send(message);
-    jest.runTimersToTime(SOCKET_BUFFER_TIME);
 
     expect(dispatches).toHaveLength(0);
   });
 
   it('wipes state on reconnect', () => {
-    configureMalcolmSocketHandlers(reconnectingSocketContainer, store);
-    reconnectingSocketContainer.socket.isReconnection = true;
-    reconnectingSocketContainer.socket.onopen();
+    malcolmWorker.postMessage('socket connected');
     expect(state.malcolm.messagesInFlight).toEqual({});
     expect(handleLocationChange).toHaveBeenCalledTimes(1);
   });

@@ -27,10 +27,14 @@ describe('malcolm redux middleware', () => {
   const messagesInFlight = [];
   const next = () => 'next called';
 
+  const worker = {
+    postMessage: msg => socketMessages.push(msg),
+  };
+
   beforeEach(() => {
     socketMessages = [];
     dispatches = [];
-    middleware = buildMalcolmReduxMiddleware(socketContainer);
+    middleware = buildMalcolmReduxMiddleware(worker);
     malcolmState = {
       messagesInFlight,
       counter: 0,
@@ -74,8 +78,9 @@ describe('malcolm redux middleware', () => {
     middleware(store)(next)(action);
 
     expect(socketMessages.length).toEqual(1);
-    expect(socketMessages[0].typeid).toEqual('malcolm:core/Get:1.0');
-    expect(socketMessages[0].id).toEqual(1);
+    const originalMessage = JSON.parse(socketMessages[0]);
+    expect(originalMessage.typeid).toEqual('malcolm:core/Get:1.0');
+    expect(originalMessage.id).toEqual(1);
   });
 
   it('finds next id correctly', () => {
@@ -94,8 +99,9 @@ describe('malcolm redux middleware', () => {
     middleware(store)(next)(action);
 
     expect(socketMessages.length).toEqual(1);
-    expect(socketMessages[0].typeid).toEqual('malcolm:core/Get:1.0');
-    expect(socketMessages[0].id).toEqual(6);
+    const originalMessage = JSON.parse(socketMessages[0]);
+    expect(originalMessage.typeid).toEqual('malcolm:core/Get:1.0');
+    expect(originalMessage.id).toEqual(6);
   });
 
   it('does not subscribe again if the path is already being tracked', () => {
