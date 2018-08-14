@@ -136,7 +136,7 @@ function updateBlock(state, payload) {
       blocks[blockName] = {
         ...blocks[blockName],
         loading: false,
-        label: payload.label,
+        label: payload.label ? payload.label : blocks[blockName].label,
         // #refactorDuplication
         attributes: payload.fields
           ? payload.fields.map(f => {
