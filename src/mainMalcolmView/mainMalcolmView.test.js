@@ -2,6 +2,7 @@ import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import MainMalcolmView from './mainMalcolmView.container';
+import NavTypes from '../malcolm/NavTypes';
 
 describe('MainMalcolmView', () => {
   let shallow;
@@ -18,6 +19,18 @@ describe('MainMalcolmView', () => {
           test1: {
             name: 'Test main view',
           },
+        },
+        navigation: {
+          navigationLists: [
+            {
+              path: '.palette',
+              navType: NavTypes.Palette,
+            },
+            {
+              path: '.info',
+              navType: NavTypes.Info,
+            },
+          ],
         },
       },
     };

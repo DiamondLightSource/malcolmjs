@@ -4,42 +4,51 @@ import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
-const processDeltaMessage = (changes, originalRequest, getState) => {
+const applyChangesToObject = (changes, oldObject) => {
+  let object = oldObject;
+  changes.forEach(change => {
+    const pathWithinObj = change[0];
+    if (pathWithinObj.length !== 0) {
+      let update = object;
+      pathWithinObj.slice(0, -1).forEach(element => {
+        update = Object.prototype.hasOwnProperty.call(update, element)
+          ? update[element]
+          : {};
+      });
+      if (change.length === 1) {
+        delete update[pathWithinObj.slice(-1)[0]];
+      } else {
+        // eslint-disable-next-line prefer-destructuring
+        update[pathWithinObj.slice(-1)[0]] = change[1];
+      }
+    } else if (change.length === 2) {
+      object = { ...change[1] };
+    }
+  });
+  return object;
+};
+
+const processDeltaMessage = (changes, originalRequest, blocks) => {
   const pathToAttr = originalRequest.path;
   const blockName = pathToAttr[0];
   const attributeName = pathToAttr[1];
-  let attribute;
-  const { blocks } = getState().malcolm;
+  let object;
   const matchingAttribute = BlockUtils.findAttributeIndex(
     blocks,
     blockName,
     attributeName
   );
   if (matchingAttribute >= 0) {
-    attribute = JSON.parse(
+    object = JSON.parse(
       JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
     );
+  } else if (
+    BlockUtils.findBlock(blocks, blockName) &&
+    attributeName === 'meta'
+  ) {
+    object = JSON.parse(JSON.stringify(blocks[blockName]));
   }
-  changes.forEach(change => {
-    const pathWithinAttr = change[0];
-    if (pathWithinAttr.length !== 0) {
-      let update = attribute;
-      pathWithinAttr.slice(0, -1).forEach(element => {
-        update = Object.prototype.hasOwnProperty.call(update, element)
-          ? update[element]
-          : {};
-      });
-      if (change.length === 1) {
-        delete update[pathWithinAttr.slice(-1)[0]];
-      } else {
-        // eslint-disable-next-line prefer-destructuring
-        update[pathWithinAttr.slice(-1)[0]] = change[1];
-      }
-    } else if (change.length === 2) {
-      attribute = { ...change[1] };
-    }
-  });
-  return attribute;
+  return applyChangesToObject(changes, object);
 };
 
 const processAttribute = (request, changedAttribute, getState, dispatch) => {

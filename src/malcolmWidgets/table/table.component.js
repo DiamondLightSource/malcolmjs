@@ -135,7 +135,7 @@ const WidgetTable = props => {
     </TableCell>
   ));
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <Table
         className={
           values.length > 20
@@ -146,11 +146,13 @@ const WidgetTable = props => {
         <TableHead>
           <TableRow className={props.classes.rowFormat}>
             {[
-              <TableCell
-                className={props.classes.textHeadings}
-                padding="none"
-                key={-1}
-              />,
+              props.hideInfo ? null : (
+                <TableCell
+                  className={props.classes.textHeadings}
+                  padding="none"
+                  key={-1}
+                />
+              ),
               ...columnHeadings,
             ]}
           </TableRow>
@@ -171,35 +173,38 @@ const WidgetTable = props => {
                 }}
               >
                 {[
-                  <TableCell
-                    className={
-                      props.selectedRow === row
-                        ? props.classes.blankCell
-                        : props.classes.textBody
-                    }
-                    padding="none"
-                    key={[row, -1]}
-                  >
-                    <IconButton
-                      className={props.classes.button}
-                      disableRipple
-                      onClick={() => {
-                        props.infoClickHandler(
-                          props.attribute.calculated.path,
-                          `row.${row}`
-                        );
-                      }}
+                  props.hideInfo ? null : (
+                    <TableCell
+                      className={
+                        props.selectedRow === row
+                          ? props.classes.blankCell
+                          : props.classes.textBody
+                      }
+                      padding="none"
+                      key={[row, -1]}
                     >
-                      <AttributeAlarm
-                        alarmSeverity={
-                          flags.rows[row] &&
-                          (flags.rows[row]._dirty || flags.rows[row]._isChanged)
-                            ? AlarmStates.DIRTY
-                            : AlarmStates.NO_ALARM
-                        }
-                      />
-                    </IconButton>
-                  </TableCell>,
+                      <IconButton
+                        className={props.classes.button}
+                        disableRipple
+                        onClick={() => {
+                          props.infoClickHandler(
+                            props.attribute.calculated.path,
+                            `row.${row}`
+                          );
+                        }}
+                      >
+                        <AttributeAlarm
+                          alarmSeverity={
+                            flags.rows[row] &&
+                            (flags.rows[row]._dirty ||
+                              flags.rows[row]._isChanged)
+                              ? AlarmStates.DIRTY
+                              : AlarmStates.NO_ALARM
+                          }
+                        />
+                      </IconButton>
+                    </TableCell>
+                  ),
                   ...columnLabels.map((label, column) => (
                     <TableCell
                       className={
@@ -324,10 +329,12 @@ WidgetTable.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
+  hideInfo: PropTypes.bool,
 };
 
 WidgetTable.defaultProps = {
   localState: undefined,
   footerItems: [],
+  hideInfo: false,
 };
 export default withStyles(styles, { withTheme: true })(WidgetTable);

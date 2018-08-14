@@ -8,12 +8,14 @@ import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
 import WidgetTextInput from '../../textInput/WidgetTextInput.component';
 import TextUpdate from '../../textUpdate/WidgetTextUpdate.component';
+import AttributeAlarm from '../attributeAlarm/attributeAlarm.component';
 import {
   malcolmPutAction,
   malcolmSetFlag,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
+import blockUtils from '../../../malcolm/blockUtils';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -82,6 +84,7 @@ export const selectorFunction = (
       );
     case 'widget:textupdate':
       return <TextUpdate Text={value} />;
+    case 'widget:title':
     case 'widget:textinput':
       return (
         <WidgetTextInput
@@ -128,6 +131,8 @@ export const selectorFunction = (
           disabled={value.disabled}
         />
       );
+    case 'info:alarm':
+      return <AttributeAlarm alarmSeverity={value} />;
     default:
       if (widgetTag.split(':')[0] === 'widget') {
         return <BugReport nativeColor="red" />;
@@ -173,7 +178,17 @@ const AttributeSelector = props => {
   return null;
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, ownProps) => {
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    ownProps.blockName,
+    ownProps.attributeName
+  );
+
+  return {
+    attribute,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   eventHandler: (path, value) => {

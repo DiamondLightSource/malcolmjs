@@ -4,6 +4,7 @@ import {
   malcolmNewBlockAction,
   malcolmSubscribeAction,
 } from '../malcolmActionCreators';
+import blockUtils from '../blockUtils';
 
 const findBlockIndex = (navList, blockMri) => {
   const navLength = navList.length;
@@ -84,16 +85,27 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
 
   if (matchingBlockNav > -1) {
-    const newPath = `/gui/${navigationLists
-      .filter((nav, i) => i <= matchingBlockNav)
-      .map(nav => nav.path)
-      .join('/')}/${attributeName}.${subElement}/${navigationLists
-      .filter(
-        (nav, i) => i > matchingBlockNav + 1 && nav.navType === NavTypes.Info
-      )
-      .map(nav => nav.path)
-      .join('/')}`;
-    dispatch(replace(newPath));
+    if (subElement) {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}.${subElement}/${navigationLists
+        .filter(
+          (nav, i) => i > matchingBlockNav + 1 && nav.navType === NavTypes.Info
+        )
+        .map(nav => nav.path)
+        .join('/')}`;
+      dispatch(replace(newPath));
+    } else {
+      const newPath = `/gui/${navigationLists
+        .filter((nav, i) => i <= matchingBlockNav)
+        .map(nav => nav.path)
+        .join('/')}/${attributeName}/${navigationLists
+        .filter((nav, i) => i > matchingBlockNav + 1)
+        .map(nav => nav.path)
+        .join('/')}`;
+      dispatch(replace(newPath));
+    }
   }
 };
 
@@ -152,6 +164,43 @@ const updateChildPanel = newChild => (dispatch, getState) => {
   dispatch(push(newPath));
 };
 
+const updateChildPanelWithLink = (blockMri, portName) => (
+  dispatch,
+  getState
+) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  const layoutAttribute = blockUtils.findAttribute(
+    state.blocks,
+    state.parentBlock,
+    state.mainAttribute
+  );
+  const blockIndex = layoutAttribute.raw.value.mri.findIndex(
+    mri => mri === blockMri
+  );
+  const blockName =
+    blockIndex > -1 ? layoutAttribute.raw.value.name[blockIndex] : blockMri;
+  const newChild = `${blockName}.${portName}.link`;
+
+  if (navigationLists.slice(-1)[0].path === newChild) {
+    return; // nothing to do as the child panel is already newChild
+  }
+
+  let newPath;
+  if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
+    newPath = `/gui/${navigationLists
+      .slice(0, -1)
+      .map(nav => nav.path)
+      .join('/')}/${newChild}`;
+  } else {
+    newPath = `/gui/${navigationLists
+      .map(nav => nav.path)
+      .join('/')}/${newChild}`;
+  }
+  dispatch(push(newPath));
+};
+
 export default {
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
@@ -160,4 +209,5 @@ export default {
   navigateToPalette,
   updateChildPanel,
   closeChildPanel,
+  updateChildPanelWithLink,
 };

@@ -9,8 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-// import AttributeViewer from '../attributeView/attributeView.container';
+
 import MethodViewer from '../malcolmWidgets/method/methodViewer.component';
+import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
@@ -19,6 +20,7 @@ import blockUtils from '../malcolm/blockUtils';
 
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
+import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 
 const styles = theme => ({
   container: {
@@ -45,6 +47,9 @@ const styles = theme => ({
     marginRight: 5,
   },
   paletteButton: {
+    position: 'absolute',
+  },
+  autoLayoutButton: {
     position: 'absolute',
   },
   tableContainer: {
@@ -134,6 +139,18 @@ const findAttributeComponent = props => {
               </Button>
             )}
           </div>
+          <div
+            className={props.classes.autoLayoutButton}
+            style={{ right: props.openChild ? 360 + 29 : 29, top: 12 }}
+          >
+            <Button
+              color="secondary"
+              variant="raised"
+              onClick={() => props.runAutoLayout()}
+            >
+              Auto layout
+            </Button>
+          </div>
         </div>
       );
     case 'widget:table':
@@ -170,7 +187,15 @@ const findAttributeComponent = props => {
           <div
             className={props.classes.tableContainer}
             style={transitionWithPanelStyle}
-          />
+          >
+            <AttributeViewer
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+              widgetTag={widgetTag}
+              typeId={props.typeId}
+              openPanels={{ parent: props.openParent, child: props.openChild }}
+            />
+          </div>
         </div>
       );
     case 'widget:tree':
@@ -236,6 +261,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
+  runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
 });
 
 findAttributeComponent.propTypes = {

@@ -5,7 +5,9 @@ import { selectorFunction } from '../attributeDetails/attributeSelector/attribut
 export const getTableWidgetTags = attribute =>
   Object.keys(attribute.raw.meta.elements).map(label => {
     const { tags } = attribute.raw.meta.elements[label];
-    const widgetTagIndex = tags.findIndex(t => t.indexOf('widget:') !== -1);
+    const widgetTagIndex = tags.findIndex(
+      t => t.indexOf('widget:') !== -1 || t.indexOf('info:') !== -1
+    );
     if (widgetTagIndex !== -1) {
       return tags[widgetTagIndex];
     }

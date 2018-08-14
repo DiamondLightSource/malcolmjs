@@ -84,6 +84,11 @@ function updateNavTypes(state) {
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
           nav.label = 'Info';
+        } else if (nav.path.endsWith('.link')) {
+          nav.navType = NavTypes.Info;
+          nav.label = nav.path.replace(/\./g, ' ');
+          const linkParts = nav.path.split('.');
+          [nav.linkInputBlock, nav.linkInputPort] = linkParts;
         } else if (nav.path === '.palette') {
           nav.navType = NavTypes.Palette;
           nav.label = 'Palette';

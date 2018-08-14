@@ -172,6 +172,15 @@ describe('Table reducer', () => {
     expect(testState.blocks.block1.attributes[0].localState.value).toEqual(
       splicedValue
     );
+    expect(
+      testState.blocks.block1.attributes[0].localState.flags.rows
+        .slice(1)
+        .map(row => row._isChanged)
+    ).toEqual(
+      testState.blocks.block1.attributes[0].localState.flags.rows
+        .slice(1)
+        .map(() => true)
+    );
   });
 
   it('updates existing local state copy', () => {

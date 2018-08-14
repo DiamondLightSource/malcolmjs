@@ -10,8 +10,7 @@ exports[`InfoElement renders correctly 1`] = `
   <WithStyles(Typography)
     className="InfoElement-textName-2"
   >
-    Test element
-    : 
+    Test element:
   </WithStyles(Typography)>
   <div
     className="InfoElement-controlContainer-3"

@@ -23,6 +23,8 @@ describe('Table container', () => {
   let mount;
 
   beforeEach(() => {
+    navigationActions.navigateToInfo.mockClear();
+    navigationActions.navigateToSubElement.mockClear();
     shallow = createShallow({ dive: true });
     mount = createMount();
     mockStore = configureStore();
@@ -147,7 +149,6 @@ describe('Table container', () => {
   });
 
   it('revert button hooks up correctly', () => {
-    navigationActions.navigateToInfo.mockClear();
     const dispatch = [];
     const testStore = {
       getState: () => state,
@@ -163,8 +164,8 @@ describe('Table container', () => {
     buttons.at(buttons.length - 2).simulate('click');
     expect(dispatch.length).toEqual(2);
     expect(dispatch[0]).toEqual(malcolmRevertAction(['test1', 'layout']));
-    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
-    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
       'test1',
       'layout',
       undefined
@@ -192,7 +193,6 @@ describe('Table container', () => {
   });
 
   it('row and info click hook up correctly', () => {
-    navigationActions.navigateToInfo.mockClear();
     const dispatch = [];
     const testStore = {
       getState: () => state,

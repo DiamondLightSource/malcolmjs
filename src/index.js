@@ -22,6 +22,7 @@ import {
   configureSocket,
   registerSocketAndConnect,
 } from './malcolm/actions/socket.actions';
+import ReduxTimingMiddleware from './userTimingMiddleware';
 
 require('typeface-roboto');
 
@@ -36,6 +37,11 @@ const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
 const middleware = [router, thunk, malcolmReduxMiddleware];
 if (process.env.NODE_ENV === `development`) {
   middleware.push(logger);
+
+  // const {whyDidYouUpdate} = require('why-did-you-update');
+  // whyDidYouUpdate(React);
+
+  middleware.push(ReduxTimingMiddleware);
 }
 
 /* eslint-disable no-underscore-dangle */
@@ -64,6 +70,8 @@ const theme = createMuiTheme({
   },
   alarmState: {
     warning: '#e6c01c',
+    error: '#e8001f',
+    disconnected: '#9d07bb',
   },
 });
 

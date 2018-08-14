@@ -22,12 +22,12 @@ import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
 import AttributeReducer, { updateAttribute } from './attribute.reducer';
-import layoutReducer, { LayoutReduxReducer } from './layout.reducer';
+import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
-export const ARCHIVE_REFRESH_INTERVAL = 0.2; // minimum time in seconds between updates of displayed archive data
+export const ARCHIVE_REFRESH_INTERVAL = 0.5; // minimum time in seconds between updates of displayed archive data
 
 const initialMalcolmState = {
   messagesInFlight: {},
@@ -93,19 +93,28 @@ function stopTrackingMessage(state, action) {
 
 function registerNewBlock(state, action) {
   const blocks = { ...state.blocks };
+  const blockArchive = { ...state.blockArchive };
 
   if (!Object.prototype.hasOwnProperty.call(blocks, action.payload.blockName)) {
     blocks[action.payload.blockName] = {
+      typeid: 'malcolm:core/BlockMeta:1.0',
       attributes: [],
       name: action.payload.blockName,
       loading: true,
       children: [],
     };
+    if (!blockArchive[action.payload.blockName]) {
+      blockArchive[action.payload.blockName] = {
+        attributes: [],
+        name: action.payload.blockName,
+      };
+    }
   }
 
   return {
     ...state,
     blocks,
+    blockArchive,
     parentBlock: action.payload.parent
       ? action.payload.blockName
       : state.parentBlock,
@@ -127,34 +136,58 @@ function updateBlock(state, payload) {
       blocks[blockName] = {
         ...blocks[blockName],
         loading: false,
-        label: payload.label,
+        label: payload.label ? payload.label : blocks[blockName].label,
         // #refactorDuplication
-        attributes: payload.fields.map(f => ({
-          /*
-          name: f,
-          loading: true,
-          children: [], */
-          raw: {},
-          calculated: {
+        attributes: payload.fields
+          ? payload.fields.map(f => {
+              const attribute = blocks[blockName].attributes.find(
+                attr => attr.calculated.name === f
+              );
+              if (attribute) {
+                return attribute;
+              }
+              return {
+                /*
             name: f,
             loading: true,
-            children: [],
-          },
-        })),
-        children: [...payload.fields],
+            children: [], */
+                raw: {},
+                calculated: {
+                  name: f,
+                  loading: true,
+                  children: [],
+                },
+              };
+            })
+          : blocks[blockName].attributes,
+        children: payload.fields
+          ? [...payload.fields]
+          : blocks[blockName].children,
       };
       blockArchive[blockName] = {
-        attributes: payload.fields.map(f => ({
-          name: f,
-          value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-          connectTime: -1,
-          counter: 0,
-          refreshRate: ARCHIVE_REFRESH_INTERVAL,
-          plotTime: 0,
-        })),
+        attributes: payload.fields
+          ? payload.fields.map(f => {
+              const archiveAttribute = blockArchive[blockName].attributes.find(
+                a => a.name === f
+              );
+              if (archiveAttribute) {
+                return archiveAttribute;
+              }
+              return {
+                parent: blockName,
+                name: f,
+                value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+                connectTime: -1,
+                counter: 0,
+                refreshRate: ARCHIVE_REFRESH_INTERVAL,
+                plotTime: 0,
+              };
+            })
+          : blockArchive[blockName].attributes,
       };
     }
 
