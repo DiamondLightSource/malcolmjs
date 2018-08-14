@@ -27,23 +27,23 @@ const handleMessage = (message, dispatch, getState) => {
       break;
     }
     case 'malcolm:core/Delta:1.0': {
-      const attribute = message.attributeDelta;
-      const typeid = attribute.typeid ? attribute.typeid : '';
+      const object = message.attributeDelta;
+      const typeid = object.typeid ? object.typeid : '';
       if (typeid === 'malcolm:core/BlockMeta:1.0') {
-        BlockMetaHandler(originalRequest, attribute, dispatch);
+        BlockMetaHandler(originalRequest, object, dispatch);
       } else if (typeid.slice(0, 8) === 'epics:nt') {
         AttributeHandler.processAttribute(
           originalRequest,
-          attribute,
+          object,
           getState,
           dispatch
         );
       } else if (typeid === 'malcolm:core/Method:1.0') {
-        AttributeHandler.processMethod(originalRequest, attribute, dispatch);
+        AttributeHandler.processMethod(originalRequest, object, dispatch);
       } else {
         dispatch({
           type: 'unprocessed_delta',
-          payload: attribute,
+          payload: object,
         });
         dispatch({
           type: MalcolmAttributeData,
@@ -103,6 +103,7 @@ const copyBlocks = blocks => {
   const copy = {};
   keys.forEach(k => {
     copy[k] = {
+      ...blocks[k],
       attributes: blocks[k].attributes
         ? blocks[k].attributes.map(a => ({
             raw: a.raw,
