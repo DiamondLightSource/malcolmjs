@@ -176,8 +176,15 @@ describe('malcolm reducer', () => {
 
   it('updates block if it exists', () => {
     state.blocks.block1 = {
+      typeid: 'malcolm:core/BlockMeta:1.0',
       name: 'block1',
       loading: true,
+      attributes: [],
+      children: [],
+    };
+
+    state.blockArchive = {
+      block1: { attributes: [] },
     };
 
     state.messagesInFlight[1] = {
