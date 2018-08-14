@@ -117,7 +117,11 @@ const MethodDetails = props => {
         }}
       >
         <div className={props.classes.div}>
-          <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          <Tooltip title={props.methodErrorMessage}>
+            <div>
+              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            </div>
+          </Tooltip>
           <Typography className={props.classes.textName}>
             {props.methodName}
           </Typography>
@@ -139,11 +143,9 @@ const MethodDetails = props => {
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
-            <Tooltip title={props.methodErrorMessage}>
-              <div>
-                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
-              </div>
-            </Tooltip>
+            <div>
+              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+            </div>
             <Tooltip title={input[1].description}>
               <Typography className={props.classes.textName}>
                 {input[1].label}:{' '}
@@ -155,7 +157,11 @@ const MethodDetails = props => {
           </div>
         ))}
         <div className={props.classes.div}>
-          <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          <Tooltip title={props.methodErrorMessage}>
+            <div>
+              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            </div>
+          </Tooltip>
           <Typography className={props.classes.textName} />
           <div className={props.classes.controlContainer}>
             <ButtonAction
