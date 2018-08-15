@@ -59,7 +59,15 @@ const mapStateToProps = state => {
   const showPalette = navType === NavTypes.Palette;
   const showInfo = navType === NavTypes.Info;
 
+  let parentBlockTitle = parentBlock ? parentBlock.name : '';
+  if (parentBlock && parentBlock.label) {
+    parentBlockTitle = parentBlock.label;
+  }
+
   let childBlockTitle = childBlock ? childBlock.name : '';
+  if (childBlock && childBlock.label) {
+    childBlockTitle = childBlock.label;
+  }
   if (showPalette) {
     childBlockTitle = 'Palette';
   } else if (showInfo) {
@@ -67,7 +75,7 @@ const mapStateToProps = state => {
   }
 
   return {
-    parentBlockTitle: parentBlock ? parentBlock.name : '',
+    parentBlockTitle,
     childBlockTitle,
     showPalette,
     showInfo,

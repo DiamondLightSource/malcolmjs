@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 });
 
-const ignoredAttributes = ['widget:icon', 'widget:title'];
+const ignoredAttributes = ['widget:icon'];
 
 export const isBlockLoading = block => {
   if (block !== undefined && block.loading === 404) {
