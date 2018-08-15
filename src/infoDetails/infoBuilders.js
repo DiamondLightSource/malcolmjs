@@ -10,7 +10,9 @@ export const buildAttributeInfo = props => {
     if (props.subElement === undefined) {
       info.path = {
         label: 'Attribute path',
-        value: `${props.path[0]}, ${props.path[1]}`,
+        value: `${props.attribute.calculated.path[0]}, ${
+          props.attribute.calculated.path[1]
+        }`,
         inline: true,
       };
       info.meta = {
@@ -83,7 +85,7 @@ export const buildAttributeInfo = props => {
         if (props.revertHandler) {
           info.localState.functions = {
             clickHandler: () => {
-              props.revertHandler(props.path);
+              props.revertHandler(props.attribute.calculated.path);
             },
           };
         }
@@ -147,32 +149,42 @@ export const buildAttributeInfo = props => {
       if (props.addRow) {
         info.addRowAbove.functions = {
           clickHandler: () => {
-            props.addRow(props.path, row);
-            props.changeInfoHandler(props.path, `row.${row + 1}`);
+            props.addRow(props.attribute.calculated.path, row);
+            props.changeInfoHandler(
+              props.attribute.calculated.path,
+              `row.${row + 1}`
+            );
           },
         };
         info.addRowBelow.functions = {
           clickHandler: () => {
-            props.addRow(props.path, row, 'below');
+            props.addRow(props.attribute.calculated.path, row, 'below');
           },
         };
         info.deleteRow.functions = {
           clickHandler: () => {
             if (row >= props.attribute.localState.value.length - 1) {
               if (row !== 0) {
-                props.changeInfoHandler(props.path, `row.${row - 1}`);
+                props.changeInfoHandler(
+                  props.attribute.calculated.path,
+                  `row.${row - 1}`
+                );
               } else {
-                props.closeInfoHandler(props.path);
+                props.closeInfoHandler(props.attribute.calculated.path);
               }
             }
-            props.addRow(props.path, row, 'delete');
+            props.addRow(props.attribute.calculated.path, row, 'delete');
           },
         };
       }
       if (props.rowRevertHandler) {
         info.localState.functions = {
           clickHandler: () => {
-            props.rowRevertHandler(props.path, dataRow, row);
+            props.rowRevertHandler(
+              props.attribute.calculated.path,
+              dataRow,
+              row
+            );
           },
         };
       }

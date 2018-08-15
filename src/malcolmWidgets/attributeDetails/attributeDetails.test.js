@@ -95,6 +95,41 @@ describe('AttributeDetails', () => {
     );
   });
 
+  it('middle click hooks up correctly', () => {
+    const attribute = {
+      calculated: {
+        name: 'Attribute1',
+      },
+      raw: {
+        alarm: {
+          severity: 0,
+        },
+        meta: {
+          label: 'Attribute 1',
+          tags: ['widget:NOTAWIDGET'],
+        },
+      },
+    };
+
+    state.malcolm.blocks.block1.attributes.push(attribute);
+
+    const wrapper = mount(
+      <Provider store={mockStore}>
+        <AttributeDetails blockName="block1" attributeName="Attribute1" />
+      </Provider>
+    );
+
+    if (document.execCommand === undefined) {
+      Object.defineProperty(document, 'execCommand', { value: jest.fn() });
+    }
+    wrapper
+      .find('p')
+      .first()
+      .simulate('mouseDown', { button: 1 });
+    expect(document.execCommand).toHaveBeenCalledTimes(1);
+    expect(document.execCommand).toHaveBeenCalledWith('copy');
+  });
+
   it('shows that it is unable to render unprocessed attributes', () => {
     const attribute = {
       name: 'Attribute1',

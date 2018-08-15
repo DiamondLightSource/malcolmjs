@@ -66,6 +66,8 @@ const theme = createMuiTheme({
   },
   alarmState: {
     warning: '#e6c01c',
+    error: '#e8001f',
+    disconnected: '#9d07bb',
   },
 });
 

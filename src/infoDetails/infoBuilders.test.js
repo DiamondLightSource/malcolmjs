@@ -168,7 +168,9 @@ describe('info builder', () => {
             tags: ['widget:table'],
           },
         },
-        calculated: {},
+        calculated: {
+          path: ['block1', 'test'],
+        },
       },
       value: 3.141,
       path: ['block1', 'test'],

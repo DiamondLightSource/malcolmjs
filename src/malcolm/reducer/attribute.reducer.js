@@ -9,12 +9,15 @@ import {
   MalcolmAttributeData,
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
+  MalcolmTickArchive,
 } from '../malcolm.types';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
   shouldClearDirtyFlag,
   tableHasColumn,
   tableHasRow,
 } from './table.reducer';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -232,6 +235,94 @@ const checkForSpecialCases = inputAttribute => {
   return attribute;
 };
 
+const popAndPush = (buffer, value) => {
+  if (buffer.size() !== 0) {
+    buffer.pop();
+  }
+  buffer.push(value);
+  buffer.push(value);
+};
+
+export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
+  const attributeArchive = oldAttributeArchive;
+  const nanoSeconds =
+    payload.raw.timeStamp.secondsPastEpoch +
+    10 ** -9 * payload.raw.timeStamp.nanoseconds;
+  const dateObject = new Date(
+    payload.raw.timeStamp.secondsPastEpoch * 1000 +
+      payload.raw.timeStamp.nanoseconds / 1000000
+  );
+  if (attributeArchive.connectTime === -1) {
+    attributeArchive.connectTime = nanoSeconds;
+  }
+  if (payload.raw.meta) {
+    attributeArchive.meta = { ...attributeArchive.meta, ...payload.raw.meta };
+  }
+  attributeArchive.value.push(payload.raw.value);
+  attributeArchive.timeSinceConnect.push(
+    nanoSeconds - attributeArchive.connectTime
+  );
+  popAndPush(attributeArchive.alarmState, alarmState);
+  popAndPush(attributeArchive.timeStamp, dateObject);
+  let plotValue = payload.raw.value;
+  if (attributeArchive.meta.typeid === malcolmTypes.bool) {
+    plotValue = payload.raw.value ? 1 : 0;
+  }
+  /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
+    else if (attributeArchive.meta.tags.includes('widget:combo')) {
+    plotValue = attributeArchive.meta.choices.findIndex(
+      val => val === payload.raw.value
+    );
+  } */
+  popAndPush(attributeArchive.plotValue, plotValue);
+  attributeArchive.counter += 1;
+  attributeArchive.plotTime =
+    attributeArchive.timeSinceConnect.get(
+      attributeArchive.timeSinceConnect.size() - 1
+    ) -
+      attributeArchive.plotTime >
+    attributeArchive.refreshRate
+      ? attributeArchive.timeSinceConnect.get(
+          attributeArchive.timeSinceConnect.size() - 1
+        )
+      : attributeArchive.plotTime;
+  attributeArchive.tickingSince = new Date();
+  return attributeArchive;
+};
+
+const tickArchive = (state, payload) => {
+  const { path } = payload;
+  const blockName = path[0];
+  const attributeName = path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const blockArchive = { ...state.blockArchive };
+    const archive = [...state.blockArchive[blockName].attributes];
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
+      state.blocks,
+      blockName,
+      attributeName
+    );
+    const attributeArchive = { ...archive[matchingAttributeIndex] };
+    attributeArchive.timeStamp.pop();
+    const newTime = new Date(
+      attributeArchive.timeStamp
+        .get(attributeArchive.timeStamp.size() - 1)
+        .getTime() +
+        (new Date() - attributeArchive.tickingSince)
+    );
+    attributeArchive.timeStamp.push(newTime);
+    attributeArchive.plotTime += 1;
+    archive[matchingAttributeIndex] = attributeArchive;
+    blockArchive[blockName] = { attributes: archive };
+    return {
+      ...state,
+      blockArchive,
+    };
+  }
+  return state;
+};
+
 export function updateAttribute(oldState, payload) {
   if (payload.delta) {
     const state = oldState;
@@ -242,6 +333,7 @@ export function updateAttribute(oldState, payload) {
 
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
+      const archive = [...state.blockArchive[blockName].attributes];
 
       const matchingAttributeIndex = blockUtils.findAttributeIndex(
         state.blocks,
@@ -250,6 +342,7 @@ export function updateAttribute(oldState, payload) {
       );
       // #refactorDuplication
       if (matchingAttributeIndex >= 0) {
+        const attributeArchive = { ...archive[matchingAttributeIndex] };
         const attribute = {
           ...attributes[matchingAttributeIndex],
           raw: {
@@ -264,13 +357,37 @@ export function updateAttribute(oldState, payload) {
           },
         };
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
+
+        if (payload.raw.timeStamp) {
+          const alarmState =
+            attribute.raw.alarm && attribute.raw.alarm.severity
+              ? attribute.raw.alarm.severity
+              : AlarmStates.NO_ALARM;
+          /*
+          const nanoSeconds =
+            payload.raw.timeStamp.secondsPastEpoch +
+            10 ** -9 * payload.raw.timeStamp.nanoseconds;
+          localStorage.setItem(
+            `${path}:${nanoSeconds}`,
+            JSON.stringify(payload.raw.value)
+          );
+          */
+          archive[matchingAttributeIndex] = pushToArchive(
+            attributeArchive,
+            payload,
+            alarmState
+          );
+        }
       }
       const blocks = { ...state.blocks };
       blocks[blockName] = { ...state.blocks[blockName], attributes };
+      const blockArchive = { ...state.blockArchive };
+      blockArchive[blockName] = { attributes: archive };
 
       let updatedState = {
         ...state,
         blocks,
+        blockArchive,
       };
 
       // update the navigation if the attribute was part of the path
@@ -396,6 +513,7 @@ const AttributeReducer = createReducer(
     [MalcolmAttributeData]: updateAttribute,
     [MalcolmMainAttributeUpdate]: setMainAttribute,
     [MalcolmRevert]: revertLocalState,
+    [MalcolmTickArchive]: tickArchive,
   }
 );
 

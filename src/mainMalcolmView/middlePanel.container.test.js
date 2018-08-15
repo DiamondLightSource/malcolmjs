@@ -2,6 +2,7 @@ import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import configureStore from 'redux-mock-store';
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import MiddlePanel from './middlePanel.container';
 
 describe('MalcolmMiddlePanel', () => {
@@ -39,6 +40,7 @@ describe('MalcolmMiddlePanel', () => {
                 raw: {
                   meta: {
                     tags: ['widget:textupdate'],
+                    typeid: malcolmTypes.string,
                   },
                 },
               },
@@ -100,7 +102,7 @@ describe('MalcolmMiddlePanel', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
-  it('renders a container only if the mainAttribute is not one of allowed type', () => {
+  it('renders an archive viewer pane if the mainAttribute is a "standard" attribute allowed type', () => {
     state.malcolm.mainAttribute = 'health';
 
     const wrapper = shallow(<MiddlePanel store={mockStore(state)} />);

@@ -46,12 +46,14 @@ const styles = theme => ({
 });
 
 const WidgetTextUpdate = props => {
+  const valueString =
+    props.Text !== undefined ? props.Text.toString() : 'UNDEFINED';
   if (!props.Units) {
     if (!props.noWrap) {
       return (
         <div className={props.classes.divNoWrap}>
           <Typography className={props.classes.textUpdateNoWrap}>
-            {props.Text}
+            {valueString}
           </Typography>
         </div>
       );
@@ -59,7 +61,7 @@ const WidgetTextUpdate = props => {
     return (
       <div className={props.classes.div}>
         <Typography className={props.classes.textUpdate100} noWrap>
-          {props.Text}
+          {valueString}
         </Typography>
       </div>
     );
@@ -67,7 +69,7 @@ const WidgetTextUpdate = props => {
   return (
     <div className={props.classes.div}>
       <Typography className={props.classes.textUpdate80} noWrap>
-        {props.Text}
+        {valueString}
       </Typography>
       <Typography className={props.classes.unitBox} noWrap>
         {props.Units}

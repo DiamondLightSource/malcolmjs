@@ -6,15 +6,16 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import blockUtils from '../malcolm/blockUtils';
 
-import malcolmLogo from '../malcolm-logo.png';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
@@ -60,7 +61,7 @@ const styles = theme => ({
     display: 'flex',
     width: '100%',
     minHeight: 'calc(100vh - 64px)',
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     align: 'center',
   },
   button: {
@@ -81,6 +82,12 @@ const getWidgetType = tags => {
 };
 
 const findAttributeComponent = props => {
+  const transitionWithPanelStyle = {
+    left: props.openParent ? 360 : 0,
+    width: `calc(100% - ${(props.openChild ? 360 : 0) +
+      (props.openParent ? 360 : 0)}px)`,
+    // transition: 'width 1s, left 1s',
+  };
   const widgetTag = getWidgetType(props.tags);
   switch (widgetTag) {
     case 'widget:flowgraph':
@@ -128,12 +135,7 @@ const findAttributeComponent = props => {
         <div className={props.classes.plainBackground}>
           <div
             className={props.classes.tableContainer}
-            style={{
-              left: props.openParent ? 365 : 5,
-              width: `calc(100% - ${(props.openChild ? 365 : 5) +
-                (props.openParent ? 365 : 5)}px)`,
-              transition: 'width 1s, left 1s',
-            }}
+            style={transitionWithPanelStyle}
           >
             <TableContainer
               attributeName={props.mainAttribute}
@@ -151,24 +153,45 @@ const findAttributeComponent = props => {
           </div>
         </div>
       );
-    default:
+    case 'widget:textupdate':
+    case 'widget:textinput':
+    case 'widget:led':
+    case 'widget:checkbox':
+    case 'widget:combo':
       return (
         <div className={props.classes.plainBackground}>
           <div
-            style={{
-              left: props.openParent ? 365 : 5,
-              width: `calc(100% - ${(props.openChild ? 365 : 5) +
-                (props.openParent ? 365 : 5)}px)`,
-              transition: 'width 1s, left 1s',
-            }}
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
           >
-            <br />
-            <br />
-            <br />
-            <img src={malcolmLogo} alt=" " />
+            <AttributeViewer
+              attributeName={props.mainAttribute}
+              blockName={props.parentBlock}
+              widgetTag={widgetTag}
+              typeId={props.typeId}
+              openPanels={{ parent: props.openParent, child: props.openChild }}
+            />
           </div>
         </div>
       );
+    case 'widget:tree':
+      return (
+        <div className={props.classes.plainBackground}>
+          <div
+            className={props.classes.tableContainer}
+            style={transitionWithPanelStyle}
+          >
+            <JSONInput
+              id="somejson"
+              height="100%"
+              width="100%"
+              style={{ body: { fontSize: '150%' } }}
+            />
+          </div>
+        </div>
+      );
+    default:
+      return <div className={props.classes.plainBackground} />;
   }
 };
 
@@ -205,6 +228,7 @@ const mapStateToProps = state => {
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
+    typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
   };
 };
@@ -217,6 +241,7 @@ const mapDispatchToProps = dispatch => ({
 findAttributeComponent.propTypes = {
   mainAttribute: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  typeId: PropTypes.string.isRequired,
   mainAttributeAlarmState: PropTypes.number.isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
