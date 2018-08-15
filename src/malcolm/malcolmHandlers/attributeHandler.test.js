@@ -201,8 +201,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      { ...store.getState().malcolm.blocks.TestBlock }
     );
     expect(testAttributeState).toEqual({
       ...store.getState().malcolm.blocks.TestBlock,
