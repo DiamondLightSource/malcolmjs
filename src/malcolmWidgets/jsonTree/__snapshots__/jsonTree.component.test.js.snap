@@ -1,0 +1,124 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table container renders correctly 1`] = `
+<div>
+  <t
+    height="100%"
+    id="[test1, layout]"
+    locale={
+      Object {
+        "brace": Object {
+          "curly": Object {
+            "cannotWrap": "'{token}' token cannot be wrapped in '{}' curly braces",
+            "missingClose": "Open '{' curly brace is missing closing '}' curly brace",
+            "missingOpen": "Missing '{' open curly brace",
+          },
+          "square": Object {
+            "cannotWrap": "'{token}' token cannot be wrapped in '[]' square braces",
+            "missingClose": "Open '[' square brace is missing closing ']' square brace",
+            "missingOpen": "Missing '[' open square brace",
+          },
+        },
+        "format": "{reason} at line {line}",
+        "invalidToken": Object {
+          "double": "'{token}' token cannot be followed by another '{token}' token",
+          "sequence": "'{firstToken}' token cannot be followed by a '{secondToken}' token",
+          "unexpected": "Unexpected '{token}' token found",
+          "useInstead": "'{badToken}' token is not accepted. Use '{goodToken}' instead",
+          "whitelist": "'{firstToken}' token can only follow '{secondToken}' token",
+        },
+        "key": Object {
+          "numberAndLetterMissingQuotes": "Key beginning with number and containing letters must be wrapped by quotes",
+          "spaceMissingQuotes": "Key containing space must be wrapped by quotes",
+          "unexpectedString": "Unexpected string found at key position",
+        },
+        "noTrailingOrLeadingComma": "Trailing or leading commas in arrays and objects are not permitted",
+        "string": Object {
+          "missingClose": "Missing/invalid closing string '{quote}' token",
+          "missingOpen": "Missing/invalid opening string '{quote}' token",
+          "mustBeWrappedByQuotes": "Strings must be wrapped by quotes",
+          "nonAlphanumeric": "Non-alphanemeric token '{token}' is not allowed outside string notation",
+          "unexpectedKey": "Unexpected key found at string position",
+        },
+      }
+    }
+    placeholder={
+      Array [
+        Object {
+          "mri": "PANDA:TTLIN1",
+          "name": "TTLIN1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:TTLIN2",
+          "name": "TTLIN2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC1",
+          "name": "INENC1",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+        Object {
+          "mri": "PANDA:INENC2",
+          "name": "INENC2",
+          "visible": false,
+          "x": 0,
+          "y": 0,
+        },
+      ]
+    }
+    style={
+      Object {
+        "body": Object {
+          "fontSize": "150%",
+        },
+      }
+    }
+    width="100%"
+  />
+  <WithStyles(Table)>
+    <WithStyles(TableFooter)>
+      <WithStyles(TableRow)
+        style={
+          Object {
+            "height": "30px",
+          }
+        }
+      >
+        <WithStyles(TableCell)
+          key="0"
+        >
+          <WithStyles(Typography)>
+            Update received @
+             
+            1970-01-01T00:00:00.000Z
+          </WithStyles(Typography)>
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)
+          key="1"
+        >
+          <WithStyles(ButtonAction)
+            clickAction={[Function]}
+            text="Discard changes"
+          />
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)
+          key="2"
+        >
+          <WithStyles(ButtonAction)
+            clickAction={[Function]}
+            text="Submit"
+          />
+        </WithStyles(TableCell)>
+      </WithStyles(TableRow)>
+    </WithStyles(TableFooter)>
+  </WithStyles(Table)>
+</div>
+`;

@@ -6,10 +6,9 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
-
+import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
 import MethodViewer from '../malcolmWidgets/method/methodViewer.component';
 import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
@@ -204,14 +203,20 @@ const findAttributeComponent = props => {
           <div
             className={props.classes.tableContainer}
             style={{ ...transitionWithPanelStyle, textAlign: 'left' }}
-          >
-            <JSONInput
-              id={[props.parentBlock, props.mainAttribute]}
-              height="100%"
-              width="100%"
-              style={{ body: { fontSize: '150%' } }}
-            />
-          </div>
+          />
+          <JSONTree
+            attributeName={props.mainAttribute}
+            blockName={props.parentBlock}
+            footerItems={[
+              <Tooltip id="1" title={props.errorMessage} placement="right">
+                <IconButton className={props.classes.button} disableRipple>
+                  <AttributeAlarm
+                    alarmSeverity={props.mainAttributeAlarmState}
+                  />
+                </IconButton>
+              </Tooltip>,
+            ]}
+          />
         </div>
       );
     default:

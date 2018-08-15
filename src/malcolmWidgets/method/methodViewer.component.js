@@ -68,7 +68,7 @@ const MethodViewer = props => {
                 display: 'initial',
               }}
             >
-              <div style={{ height: 'calc(100% - 55px)' }}>
+              <div style={{ height: 'calc(100% - 56px)' }}>
                 <JSONInput
                   locale={locale}
                   placeholder={props.selectedParamValue}

@@ -159,23 +159,34 @@ const MethodDetails = props => {
             </div>
           </div>
         ))}
-        <div className={props.classes.div}>
-          <Tooltip title={props.methodErrorMessage}>
-            <div>
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+        <Paper
+          elevation={4}
+          style={{
+            paddingTop: '2px',
+            paddingBottom: '2px',
+            marginTop: '2px',
+            marginBottom: '2px',
+            backgroundColor: '#3B3B3B',
+          }}
+        >
+          <div className={props.classes.div}>
+            <Tooltip title={props.methodErrorMessage}>
+              <div>
+                <AttributeAlarm alarmSeverity={props.methodAlarm} />
+              </div>
+            </Tooltip>
+            <Typography className={props.classes.textName} />
+            <div className={props.classes.controlContainer}>
+              <ButtonAction
+                text={props.methodName}
+                disabled={props.methodAlarm === AlarmStates.PENDING}
+                clickAction={() =>
+                  props.runMethod(props.methodPath, props.inputValues)
+                }
+              />
             </div>
-          </Tooltip>
-          <Typography className={props.classes.textName} />
-          <div className={props.classes.controlContainer}>
-            <ButtonAction
-              text={props.methodName}
-              disabled={props.methodAlarm === AlarmStates.PENDING}
-              clickAction={() =>
-                props.runMethod(props.methodPath, props.inputValues)
-              }
-            />
           </div>
-        </div>
+        </Paper>
         {Object.keys(props.outputValues).length !== 0 ? (
           <div>
             <Typography className={props.classes.textName}>
