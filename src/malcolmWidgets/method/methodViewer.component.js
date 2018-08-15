@@ -43,11 +43,10 @@ const MethodViewer = props => {
       <ButtonAction
         text="Load from cookie"
         clickAction={() => {
-          const savedVal = JSON.parse(
-            localStorage.getItem(
-              `${props.blockName},${props.attributeName}.${props.selectedParam}`
-            )
+          const savedJSONString = localStorage.getItem(
+            `${props.blockName},${props.attributeName}.${props.selectedParam}`
           );
+          const savedVal = JSON.parse(savedJSONString);
           props.updateInput(
             props.method.calculated.path,
             props.selectedParam[1],
@@ -171,11 +170,15 @@ MethodViewer.propTypes = {
     plainBackground: PropTypes.string,
     tableContainer: PropTypes.string,
   }).isRequired,
-  footerItems: PropTypes.arrayOf(PropTypes.node).isRequired,
+  footerItems: PropTypes.arrayOf(PropTypes.node),
   selectedParam: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   updateInput: PropTypes.func.isRequired,
+};
+
+MethodViewer.defaultProps = {
+  footerItems: [],
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
