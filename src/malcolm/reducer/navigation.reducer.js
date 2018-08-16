@@ -191,7 +191,7 @@ function updateNavTypes(state) {
   // find main attribute
   updatedState.mainAttribute = undefined;
   let mainAttributeNav;
-  if (navigationLists.length !== 1) {
+  if (navigationLists.length >= 1) {
     const isOdd = !!(navigationLists.length % 2);
     const lastTwoNavs = navigationLists.slice(-2);
     if (isOdd && lastTwoNavs[0].navType === NavTypes.Attribute) {
