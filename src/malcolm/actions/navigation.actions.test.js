@@ -98,11 +98,15 @@ describe('navigateToInfo', () => {
   it('changes the url to show the info pane', () => {
     const dispatches = [];
     const state = buildNavState();
-
+    state.malcolm.navigation.navigationLists.push({
+      path: 'table',
+      navType: NavTypes.Attribute,
+      subElement: ['row', '1'],
+    });
     const navAction = navigationActions.navigateToInfo(
-      'PANDA',
-      'layout',
-      'block.1'
+      'PANDA:SEQ2',
+      'table',
+      'row.1'
     );
 
     navAction(action => dispatches.push(action), () => state);
@@ -110,20 +114,23 @@ describe('navigateToInfo', () => {
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
     expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout.block.1/.info'
+      '/gui/PANDA/layout/SEQ2/table.row.1/.info'
     );
   });
 });
 
 describe('navigateToSubElement', () => {
-  it('changes the url to show the sub-element', () => {
+  it('changes the url to show the sub-element with no info pane', () => {
     const dispatches = [];
     const state = buildNavState();
-
+    state.malcolm.navigation.navigationLists.push({
+      path: 'table',
+      navType: NavTypes.Attribute,
+    });
     const navAction = navigationActions.navigateToSubElement(
-      'PANDA',
-      'layout',
-      'block.1'
+      'PANDA:SEQ2',
+      'table',
+      'row.1'
     );
 
     navAction(action => dispatches.push(action), () => state);
@@ -131,7 +138,33 @@ describe('navigateToSubElement', () => {
     expect(dispatches).toHaveLength(1);
     expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
     expect(dispatches[0].payload.args[0]).toEqual(
-      '/gui/PANDA/layout.block.1/SEQ2'
+      '/gui/PANDA/layout/SEQ2/table.row.1/'
+    );
+  });
+
+  it('changes the url to show the sub-element with info pane', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    state.malcolm.navigation.navigationLists.push({
+      path: 'table',
+      navType: NavTypes.Attribute,
+    });
+    state.malcolm.navigation.navigationLists.push({
+      path: '.info',
+      navType: NavTypes.Info,
+    });
+    const navAction = navigationActions.navigateToSubElement(
+      'PANDA:SEQ2',
+      'table',
+      'row.1'
+    );
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual(
+      '/gui/PANDA/layout/SEQ2/table.row.1/.info'
     );
   });
 });

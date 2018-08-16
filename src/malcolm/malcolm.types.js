@@ -24,5 +24,6 @@ export const MalcolmSelectPortType = 'malcolm:selectport';
 export const MalcolmShowBinType = 'malcolm:showlayoutbin';
 export const MalcolmInLayoutDeleteZoneType = 'malcolm:insidelayoutdeletezone';
 export const MalcolmRevert = 'malcolm:revertattribute';
+export const MalcolmArchiveMethodRun = 'malcolm:archivemethod';
 export const MalcolmTickArchive = 'malcolm:tickarchiveattribute';
 export const MalcolmRunAutoLayoutType = 'malcolm:runautolayout';

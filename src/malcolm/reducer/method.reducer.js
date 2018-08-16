@@ -1,6 +1,13 @@
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
-import { MalcolmUpdateMethodInputType, MalcolmReturn } from '../malcolm.types';
+import {
+  MalcolmUpdateMethodInputType,
+  MalcolmReturn,
+  MalcolmArchiveMethodRun,
+} from '../malcolm.types';
+
+export const getMethodParam = (type, param, method) =>
+  Object.keys(method.raw[type].elements).includes(`${param}`);
 
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
@@ -15,6 +22,32 @@ const mapReturnValues = (returnKeys, payload) => {
   return valueMap;
 };
 
+const pushParamsToArchive = (state, payload) => {
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+  const matchingAttribute = blockUtils.findAttributeIndex(
+    state.blocks,
+    blockName,
+    attributeName
+  );
+  const blockArchive = { ...state.blockArchive };
+  if (matchingAttribute >= 0) {
+    const { attributes } = blockArchive[blockName];
+    const attribute = attributes[matchingAttribute];
+    attribute.value.push({ runParameters: payload.parameters });
+    attribute.timeStamp.push({ localRunTime: new Date() });
+    attributes[matchingAttribute] = attribute;
+    blockArchive[payload.path[0]] = {
+      ...state.blockArchive[payload.path[0]],
+      attributes,
+    };
+  }
+  return {
+    ...state,
+    blockArchive,
+  };
+};
+
 const updateMethodInput = (state, payload) => {
   const blockName = payload.path[0];
   const attributeName = payload.path[1];
@@ -27,7 +60,7 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value.isDirty !== undefined) {
+    if (payload.value && payload.value.isDirty !== undefined) {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
@@ -64,8 +97,10 @@ export const handleMethodReturn = (state, payload) => {
       attributeName
     );
     const blocks = { ...state.blocks };
+    const blockArchive = { ...state.blockArchive };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
+      const archive = blockArchive[blockName];
       let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
         attributes[matchingAttribute].raw.returns.elements
@@ -87,11 +122,28 @@ export const handleMethodReturn = (state, payload) => {
           ...valueMap,
         },
       };
+      if (archive && archive[matchingAttribute]) {
+        const runParams = archive[matchingAttribute].value.pop();
+        const localRunTime = archive[matchingAttribute].timeStamp.pop();
+        archive[matchingAttribute].value.push({
+          ...runParams,
+          returned: { ...valueMap },
+        });
+        archive[matchingAttribute].timeStamp.push({
+          ...localRunTime,
+          localReturnTime: new Date(),
+        });
+        blockArchive[blockName] = {
+          ...state.blockArchive[blockName],
+          attributes: archive,
+        };
+      }
       blocks[blockName] = { ...state.blocks[blockName], attributes };
     }
     return {
       ...state,
       blocks,
+      blockArchive,
     };
   }
   return state;
@@ -102,6 +154,7 @@ const MethodReducer = createReducer(
   {
     [MalcolmUpdateMethodInputType]: updateMethodInput,
     [MalcolmReturn]: handleMethodReturn,
+    [MalcolmArchiveMethodRun]: pushParamsToArchive,
   }
 );
 

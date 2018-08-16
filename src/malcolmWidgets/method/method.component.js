@@ -3,23 +3,30 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 import ButtonAction from '../buttonAction/buttonAction.component';
+
+import GroupExpander from '../groupExpander/groupExpander.component';
 import blockUtils from '../../malcolm/blockUtils';
 import {
   malcolmSetFlag,
   malcolmPostAction,
 } from '../../malcolm/malcolmActionCreators';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmArchivePost,
+} from '../../malcolm/actions/method.actions';
 
 import {
   selectorFunction,
   getDefaultFromType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const styles = () => ({
   div: {
@@ -52,7 +59,7 @@ const buildIOComponent = (input, props, isOutput) => {
   const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
-    isErrorState: props.methodErrored,
+    isErrorState: props.methodErrored && input[1].writeable,
     isDirty: props.dirtyInputs[input[0]],
   };
   const updateStoreOnEveryValueChange = true;
@@ -77,11 +84,11 @@ const buildIOComponent = (input, props, isOutput) => {
   const setFlag = (path, flagName, isDirty) => {
     props.updateInput(path, input[0], { isDirty });
   };
-
+  const subElement = isOutput ? `returns.${input[0]}` : `takes.${input[0]}`;
   if (widgetTag) {
     return selectorFunction(
       widgetTag,
-      props.methodPath,
+      [...props.methodPath, subElement],
       inputValue,
       submitHandler,
       flags,
@@ -89,63 +96,120 @@ const buildIOComponent = (input, props, isOutput) => {
       props.theme.palette.primary.light,
       parameterMeta,
       false,
-      updateStoreOnEveryValueChange
+      updateStoreOnEveryValueChange,
+      props.methodParamClickHandler
     );
   }
   return selectorFunction('widget:undefined');
 };
 
-const MethodDetails = props => (
-  <div>
-    {Object.entries(props.inputs).map(input => (
-      <div key={input[0]} className={props.classes.div}>
-        <Tooltip title={props.methodErrorMessage}>
-          <div>
-            <AttributeAlarm alarmSeverity={props.methodAlarm} />
-          </div>
-        </Tooltip>
-        <Tooltip title={input[1].description}>
+const MethodDetails = props => {
+  if (
+    (!props.inputs || !Object.keys(props.inputs).length) &&
+    (!props.outputs || !Object.keys(props.outputs).length)
+  ) {
+    return (
+      <Paper
+        elevation={4}
+        style={{
+          paddingTop: '2px',
+          paddingBottom: '2px',
+          marginTop: '2px',
+          marginBottom: '2px',
+          backgroundColor: '#3B3B3B',
+        }}
+      >
+        <div className={props.classes.div}>
+          <Tooltip title={props.methodErrorMessage}>
+            <div>
+              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            </div>
+          </Tooltip>
           <Typography className={props.classes.textName}>
-            {input[1].label}:{' '}
+            {props.methodName}
           </Typography>
-        </Tooltip>
-        <div className={props.classes.controlContainer}>
-          {buildIOComponent(input, props, false)}
+          <div className={props.classes.controlContainer}>
+            <ButtonAction
+              text={props.methodName}
+              disabled={props.methodAlarm === AlarmStates.PENDING}
+              clickAction={() =>
+                props.runMethod(props.methodPath, props.inputValues)
+              }
+            />
+          </div>
         </div>
-      </div>
-    ))}
-    <div className={props.classes.div}>
-      <AttributeAlarm alarmSeverity={props.methodAlarm} />
-      <Typography className={props.classes.textName} />
-      <div className={props.classes.controlContainer}>
-        <ButtonAction
-          text={props.methodName}
-          disabled={props.methodAlarm === AlarmStates.PENDING}
-          clickAction={() =>
-            props.runMethod(props.methodPath, props.inputValues)
-          }
-        />
-      </div>
-    </div>
-    {Object.keys(props.outputValues).length !== 0 ? (
+      </Paper>
+    );
+  }
+  return (
+    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
       <div>
-        <Typography className={props.classes.textName}>Last Return:</Typography>
-        <Divider />
-        {Object.entries(props.outputs).map(output => (
-          <div key={output[0]} className={props.classes.div}>
-            <AttributeAlarm alarmSeverity={0} />
-            <Typography className={props.classes.textName}>
-              {output[1].label}:{' '}
-            </Typography>
+        {Object.entries(props.inputs).map(input => (
+          <div key={input[0]} className={props.classes.div}>
+            <div>
+              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+            </div>
+            <Tooltip title={input[1].description}>
+              <Typography className={props.classes.textName}>
+                {input[1].label}:{' '}
+              </Typography>
+            </Tooltip>
             <div className={props.classes.controlContainer}>
-              {buildIOComponent(output, props, true)}
+              {buildIOComponent(input, props, false)}
             </div>
           </div>
         ))}
+        <Paper
+          elevation={4}
+          style={{
+            paddingTop: '2px',
+            paddingBottom: '2px',
+            marginTop: '2px',
+            marginBottom: '2px',
+            backgroundColor: '#3B3B3B',
+          }}
+        >
+          <div className={props.classes.div}>
+            <Tooltip title={props.methodErrorMessage}>
+              <div>
+                <AttributeAlarm alarmSeverity={props.methodAlarm} />
+              </div>
+            </Tooltip>
+            <Typography className={props.classes.textName} />
+            <div className={props.classes.controlContainer}>
+              <ButtonAction
+                text={props.methodName}
+                disabled={props.methodAlarm === AlarmStates.PENDING}
+                clickAction={() =>
+                  props.runMethod(props.methodPath, props.inputValues)
+                }
+              />
+            </div>
+          </div>
+        </Paper>
+        {Object.keys(props.outputValues).length !== 0 ? (
+          <div>
+            <Typography className={props.classes.textName}>
+              Last Return:
+            </Typography>
+            <Divider />
+            {Object.entries(props.outputs).map(output => (
+              <div key={output[0]} className={props.classes.div}>
+                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                <Typography className={props.classes.textName}>
+                  {output[1].label}:{' '}
+                </Typography>
+                <div className={props.classes.controlContainer}>
+                  {buildIOComponent(output, props, true)}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
-    ) : null}
-  </div>
-);
+    </GroupExpander>
+  );
+};
 
 MethodDetails.propTypes = {
   methodName: PropTypes.string.isRequired,
@@ -205,10 +269,14 @@ const mapStateToProps = (state, ownProps) => {
 export const mapDispatchToProps = dispatch => ({
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
+    dispatch(malcolmArchivePost(path, inputs));
     dispatch(malcolmPostAction(path, inputs));
   },
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
+  },
+  methodParamClickHandler: path => {
+    dispatch(navigationActions.navigateToSubElement(path[0], path[1], path[2]));
   },
 });
 

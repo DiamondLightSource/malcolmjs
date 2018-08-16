@@ -1,4 +1,5 @@
 import {
+  MalcolmArchiveMethodRun,
   MalcolmAttributeData,
   MalcolmUpdateMethodInputType,
 } from '../malcolm.types';
@@ -24,6 +25,14 @@ export const malcolmUpdateMethodInput = (path, name, value) => ({
     path,
     name,
     value,
+  },
+});
+
+export const malcolmArchivePost = (path, parameters) => ({
+  type: MalcolmArchiveMethodRun,
+  payload: {
+    path,
+    parameters,
   },
 });
 

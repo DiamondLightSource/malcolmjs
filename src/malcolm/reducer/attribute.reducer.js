@@ -17,6 +17,7 @@ import {
   tableHasColumn,
   tableHasRow,
 } from './table.reducer';
+import { getMethodParam } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 export const updateAttributeChildren = attribute => {
@@ -41,12 +42,12 @@ const hasSubElements = inputAttribute => {
       row: tableHasRow,
       col: tableHasColumn,
     };
-  } /* else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
+  } else if (attribute.raw.typeid === 'malcolm:core/Method:1.0') {
     attribute.calculated.subElements = {
-      takes: param => getMethodParam('takes', param),
-      returns: param => getMethodParam('returns', param),
+      takes: (param, method) => getMethodParam('takes', param, method),
+      returns: (param, method) => getMethodParam('returns', param, method),
     };
-  } */
+  }
   return attribute;
 };
 
@@ -130,7 +131,10 @@ export const updateNavigation = (state, attributeName) => {
     ) > -1
   ) {
     navigation = processNavigationLists(
-      state.navigation.navigationLists.map(nav => nav.path),
+      state.navigation.navigationLists.map(
+        nav =>
+          nav.subElements ? [nav.path, ...nav.subElements].join('.') : nav.path
+      ),
       state.blocks
     );
   }

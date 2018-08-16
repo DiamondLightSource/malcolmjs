@@ -6,9 +6,10 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import JSONInput from 'react-json-editor-ajrm';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
+import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
+import MethodViewer from '../malcolmWidgets/method/methodViewer.component';
 import AttributeViewer from '../attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
@@ -82,13 +83,34 @@ const getWidgetType = tags => {
 };
 
 const findAttributeComponent = props => {
+  if (props.isMethod) {
+    return (
+      <div className={props.classes.plainBackground}>
+        <MethodViewer
+          attributeName={props.mainAttribute}
+          blockName={props.parentBlock}
+          subElement={props.mainAttributeSubElements}
+          classes={props.classes}
+          openParent={props.openParent}
+          openChild={props.openChild}
+          footerItems={[
+            <Tooltip id="1" title={props.errorMessage} placement="right">
+              <IconButton className={props.classes.button} disableRipple>
+                <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
+              </IconButton>
+            </Tooltip>,
+          ]}
+        />
+      </div>
+    );
+  }
+  const widgetTag = getWidgetType(props.tags);
   const transitionWithPanelStyle = {
     left: props.openParent ? 360 : 0,
     width: `calc(100% - ${(props.openChild ? 360 : 0) +
       (props.openParent ? 360 : 0)}px)`,
     // transition: 'width 1s, left 1s',
   };
-  const widgetTag = getWidgetType(props.tags);
   switch (widgetTag) {
     case 'widget:flowgraph':
       return (
@@ -140,6 +162,7 @@ const findAttributeComponent = props => {
             <TableContainer
               attributeName={props.mainAttribute}
               blockName={props.parentBlock}
+              subElement={props.mainAttributeSubElements}
               footerItems={[
                 <Tooltip id="1" title={props.errorMessage} placement="right">
                   <IconButton className={props.classes.button} disableRipple>
@@ -179,15 +202,21 @@ const findAttributeComponent = props => {
         <div className={props.classes.plainBackground}>
           <div
             className={props.classes.tableContainer}
-            style={transitionWithPanelStyle}
-          >
-            <JSONInput
-              id="somejson"
-              height="100%"
-              width="100%"
-              style={{ body: { fontSize: '150%' } }}
-            />
-          </div>
+            style={{ ...transitionWithPanelStyle, textAlign: 'left' }}
+          />
+          <JSONTree
+            attributeName={props.mainAttribute}
+            blockName={props.parentBlock}
+            footerItems={[
+              <Tooltip id="1" title={props.errorMessage} placement="right">
+                <IconButton className={props.classes.button} disableRipple>
+                  <AttributeAlarm
+                    alarmSeverity={props.mainAttributeAlarmState}
+                  />
+                </IconButton>
+              </Tooltip>,
+            ]}
+          />
         </div>
       );
     default:
@@ -225,8 +254,10 @@ const mapStateToProps = state => {
     parentBlock: state.malcolm.parentBlock,
     mainAttribute: state.malcolm.mainAttribute,
     mainAttributeAlarmState: alarm,
+    mainAttributeSubElements: state.malcolm.mainAttributeSubElements,
     openParent: state.viewState.openParentPanel,
     openChild: state.malcolm.childBlock !== undefined,
+    isMethod: attribute && attribute.raw.typeid === 'malcolm:core/Method:1.0',
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
@@ -243,6 +274,7 @@ findAttributeComponent.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   typeId: PropTypes.string.isRequired,
   mainAttributeAlarmState: PropTypes.number.isRequired,
+  mainAttributeSubElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string.isRequired,

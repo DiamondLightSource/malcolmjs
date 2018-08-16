@@ -90,7 +90,9 @@ const navigateToSubElement = (blockMri, attributeName, subElement) => (
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}.${subElement}/${navigationLists
-        .filter((nav, i) => i > matchingBlockNav + 1)
+        .filter(
+          (nav, i) => i > matchingBlockNav + 1 && nav.navType === NavTypes.Info
+        )
         .map(nav => nav.path)
         .join('/')}`;
       dispatch(replace(newPath));

@@ -103,13 +103,10 @@ function updateNavTypes(state) {
             nav.path.split('.')[0]
           );
 
-          if (matchingAttribute) {
+          if (matchingAttribute && !matchingAttribute.calculated.loading) {
             nav.navType = NavTypes.Attribute;
             nav.children = matchingAttribute.calculated.children;
             nav.childrenLabels = matchingAttribute.calculated.children;
-            nav.label = matchingAttribute.raw.meta
-              ? matchingAttribute.raw.meta.label
-              : nav.path;
             if (nav.path.split('.').length > 1) {
               const subElements = nav.path.split('.').slice(1);
               if (
@@ -122,9 +119,18 @@ function updateNavTypes(state) {
               } else {
                 nav.subElements = undefined;
                 nav.navType = NavTypes.Error;
+                throw new Error('Bad URL (field has no such sub-element)!');
               }
             }
             [nav.path] = nav.path.split('.');
+            nav.label = nav.path;
+            if (matchingAttribute.raw) {
+              if (matchingAttribute.raw.meta) {
+                nav.label = matchingAttribute.raw.meta.label;
+              } else if (matchingAttribute.raw.label) {
+                nav.label = matchingAttribute.raw.label;
+              }
+            }
           }
         } else if (previousNavIsAttribute(i, navigationLists)) {
           const matchingAttribute = blockUtils.findAttribute(
@@ -182,7 +188,24 @@ function updateNavTypes(state) {
     }
   }
 
-  // find attributes
+  // find main attribute
+  updatedState.mainAttribute = undefined;
+  let mainAttributeNav;
+  if (navigationLists.length >= 1) {
+    const isOdd = !!(navigationLists.length % 2);
+    const lastTwoNavs = navigationLists.slice(-2);
+    if (isOdd && lastTwoNavs[0].navType === NavTypes.Attribute) {
+      [mainAttributeNav] = lastTwoNavs;
+    } else if (!isOdd && lastTwoNavs[1].navType === NavTypes.Attribute) {
+      [, mainAttributeNav] = lastTwoNavs;
+    }
+  }
+  if (mainAttributeNav) {
+    updatedState.mainAttributeSubElements = mainAttributeNav.subElements;
+    [updatedState.mainAttribute] = mainAttributeNav.path.split('.');
+  }
+
+  /*
   const attributes = navigationLists.filter(
     nav => nav.navType === NavTypes.Attribute
   );
@@ -194,16 +217,17 @@ function updateNavTypes(state) {
     const panelIndices = navigationLists
       .map((nav, index) => index)
       .filter(navIndex =>
-        [NavTypes.Info, NavTypes.Block].includes(
+        [NavTypes.Info, NavTypes.Palette, NavTypes.Block].includes(
           navigationLists[navIndex].navType
         )
       );
+
     if (indexOfLastAttribute >= panelIndices.slice(-2)[0]) {
       [updatedState.mainAttribute] = lastAttribute.path.split('.');
     } else {
       updatedState.mainAttribute = undefined;
     }
-  }
+  } */
   return updatedState;
 }
 

@@ -114,6 +114,13 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'widget:tree':
+      return (
+        <ButtonAction
+          text="Edit"
+          clickAction={() => buttonClickHandler(path)}
+        />
+      );
     case 'info:multiline':
       return <TextUpdate Text={`${value}`} noWrap={false} />;
     case 'info:button':
