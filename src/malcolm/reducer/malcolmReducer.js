@@ -492,9 +492,15 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
 
       updatedState = NavigationReducer.updateNavTypes(updatedState);
 
+      updatedState.layout = layoutReducer.processLayout(updatedState);
+
       return {
         ...updatedState,
-        layout: layoutReducer.processLayout(updatedState),
+        layoutEngine: layoutReducer.buildLayoutEngine(
+          updatedState.layout,
+          updatedState.layoutState.selectedBlocks,
+          undefined
+        ),
       };
 
     case MalcolmCleanBlocks:
