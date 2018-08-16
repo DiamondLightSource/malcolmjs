@@ -303,11 +303,14 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
           );
 
           const endNode = nodes.find(n => n.id === endBlock.mri);
-          const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
 
-          const newLink = endPort.link(startPort);
-          newLink.id = `${endPort.name}-${startPort.name}`;
-          links.push(newLink);
+          if (endNode) {
+            const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+
+            const newLink = endPort.link(startPort);
+            newLink.id = `${endPort.name}-${startPort.name}`;
+            links.push(newLink);
+          }
         }
       }
     });

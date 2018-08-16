@@ -191,8 +191,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[0].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      {}
     );
     expect(testAttributeState).toEqual(testDeltas[0].changes[0][1]);
   });
@@ -202,8 +201,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      { ...store.getState().malcolm.blocks.TestBlock }
     );
     expect(testAttributeState).toEqual({
       ...store.getState().malcolm.blocks.TestBlock,
@@ -215,8 +213,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -230,8 +227,7 @@ describe('attribute handler', () => {
     testAttributeState = {};
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[1].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(newStyleAttribute).toEqual(backupAttribute);
   });
@@ -240,8 +236,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[2].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -253,8 +248,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[3].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -266,8 +260,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[4].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       value: { isATest: true },
@@ -279,8 +272,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[5].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,
@@ -293,8 +285,7 @@ describe('attribute handler', () => {
     subscription.path[1] = 'NewTestAttr';
     testAttributeState = AttributeHandler.processDeltaMessage(
       testDeltas[6].changes,
-      subscription,
-      store.getState().malcolm.blocks
+      newStyleAttribute.raw
     );
     expect(testAttributeState).toEqual({
       ...newStyleAttribute.raw,

@@ -12,9 +12,7 @@ import {
 import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
-import MalcolmReconnector from './malcolmReconnector';
 import handleLocationChange from './middleware/malcolmRouting';
-import MalcolmWorkerBuilder from './worker/worker.builder';
 
 const handleMessage = (message, dispatch, getState) => {
   const { data, originalRequest } = message;
@@ -63,7 +61,6 @@ const handleMessage = (message, dispatch, getState) => {
     }
 
     case 'malcolm:core/Error:1.0': {
-      console.log(data);
       if (data.id !== -1) {
         BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
 
@@ -94,47 +91,10 @@ const handleMessage = (message, dispatch, getState) => {
   }
 };
 
-// Note that this copy is necessary because tables have functions on the calculated object.
-// Functions won't cross the web worker boundary
-// We should consider potentially remove these functions set in the table reducer.
-const copyBlocks = blocks => {
-  const keys = Object.keys(blocks);
-
-  const copy = {};
-  keys.forEach(k => {
-    copy[k] = {
-      ...blocks[k],
-      attributes: blocks[k].attributes
-        ? blocks[k].attributes.map(a => ({
-            raw: a.raw,
-            calculated: {
-              name: a.calculated.name,
-            },
-          }))
-        : undefined,
-    };
-  });
-
-  return copy;
-};
-
-const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
-  const socketContainer = inputSocketContainer;
-  const worker = MalcolmWorkerBuilder();
-  worker.addEventListener('message', event =>
-    handleMessage(event.data, store.dispatch, store.getState)
-  );
-
-  socketContainer.socket.onerror = error => {
-    const errorString = JSON.stringify(error);
-    store.dispatch(snackbarState(true, `WebSocket Error: ${errorString}`));
-    console.log(`WebSocket Error: ${errorString}`);
-  };
-
-  socketContainer.socket.onopen = () => {
-    console.log('connected to socket');
-    store.dispatch(malcolmCleanBlocks());
-    if (socketContainer.socket.isReconnection) {
+const configureMalcolmSocketHandlers = (store, worker) => {
+  worker.addEventListener('message', event => {
+    if (event.data === 'socket connected') {
+      store.dispatch(malcolmCleanBlocks());
       const malcolmState = store.getState().malcolm;
       malcolmState.messagesInFlight = {};
       handleLocationChange(
@@ -143,35 +103,24 @@ const configureMalcolmSocketHandlers = (inputSocketContainer, store) => {
         store.dispatch,
         store.getState
       );
-    }
-    store.dispatch(snackbarState(true, `Connected to WebSocket`));
-    socketContainer.setConnected(true);
-    socketContainer.flush();
-  };
-
-  socketContainer.socket.onclose = () => {
-    console.log('socket disconnected');
-    if (socketContainer.socket instanceof MalcolmReconnector) {
+      store.dispatch(snackbarState(true, `Connected to WebSocket`));
+    } else if (event.data === 'socket disconnected') {
       store.dispatch(
         snackbarState(
           true,
           `WebSocket disconnected; attempting to reconnect...`
         )
       );
+      store.dispatch(malcolmSetDisconnected());
+    } else if (
+      typeof event.data === 'string' &&
+      event.data.startsWith('WebSocket Error: ')
+    ) {
+      store.dispatch(snackbarState(true, event.data));
     } else {
-      store.dispatch(snackbarState(true, `WebSocket disconnected`));
+      handleMessage(event.data, store.dispatch, store.getState);
     }
-    store.dispatch(malcolmSetDisconnected());
-  };
-
-  socketContainer.socket.onmessage = event => {
-    const state = store.getState();
-    worker.postMessage({
-      data: event.data,
-      messagesInFlight: state.malcolm.messagesInFlight,
-      blocks: copyBlocks(state.malcolm.blocks),
-    });
-  };
+  });
 };
 
 export default configureMalcolmSocketHandlers;

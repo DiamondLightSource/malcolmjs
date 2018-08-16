@@ -19,7 +19,16 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outa" ],
     index: 0,
-    interval: 1000,
+    interval: 50,
+    update: (response, index) => {
+      response.changes[0][1].value = index%2 === 0;
+      return response;
+    }
+  },
+  {
+    path: [ "PANDA:SEQ1", "outb" ],
+    index: 0,
+    interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
@@ -28,7 +37,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outc" ],
     index: 0,
-    interval: 3000,
+    interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;

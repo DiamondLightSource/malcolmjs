@@ -57,6 +57,19 @@ function handleMessage(socket, message) {
           ],
         };
         sendResponse(socket, response);
+
+        // update the block meta as well if it is the label being modified
+        if (simplifiedMessage.path[simplifiedMessage.path.length - 1] === 'label') {
+          const blockMeta = pathIndexedMessages[JSON.stringify([simplifiedMessage.path[0], 'meta'])];
+          blockMeta.changes[0][1].label = simplifiedMessage.value;
+
+          response = {
+            ...blockMeta,
+            id: parseInt(subscribedPaths[JSON.stringify([simplifiedMessage.path[0], 'meta'])]),
+          }
+
+          sendResponse(socket, response);
+        }
       }
 
       response = { id: originalId, typeid: 'malcolm:core/Return:1.0' };

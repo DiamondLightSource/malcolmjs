@@ -1,11 +1,10 @@
 import { MalcolmAttributeData } from '../malcolm.types';
-import BlockUtils from '../blockUtils';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
 
-const applyChangesToObject = (changes, oldObject) => {
-  let object = oldObject;
+const processDeltaMessage = (changes, oldObject) => {
+  let object = { ...oldObject };
   changes.forEach(change => {
     const pathWithinObj = change[0];
     if (pathWithinObj.length !== 0) {
@@ -26,29 +25,6 @@ const applyChangesToObject = (changes, oldObject) => {
     }
   });
   return object;
-};
-
-const processDeltaMessage = (changes, originalRequest, blocks) => {
-  const pathToAttr = originalRequest.path;
-  const blockName = pathToAttr[0];
-  const attributeName = pathToAttr[1];
-  let object;
-  const matchingAttribute = BlockUtils.findAttributeIndex(
-    blocks,
-    blockName,
-    attributeName
-  );
-  if (matchingAttribute >= 0) {
-    object = JSON.parse(
-      JSON.stringify(blocks[blockName].attributes[matchingAttribute].raw)
-    );
-  } else if (
-    BlockUtils.findBlock(blocks, blockName) &&
-    attributeName === 'meta'
-  ) {
-    object = JSON.parse(JSON.stringify(blocks[blockName]));
-  }
-  return applyChangesToObject(changes, object);
 };
 
 const processAttribute = (request, changedAttribute, getState, dispatch) => {

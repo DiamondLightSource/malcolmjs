@@ -2,14 +2,14 @@ import mockAxios from 'axios';
 import { registerSocketAndConnect, configureSocket } from './socket.actions';
 
 describe('socket.actions', () => {
-  const socketContainer = {};
+  const worker = {};
   const url = 'test';
 
   it('registerSocketAndConnect sends a socket connect message', () => {
-    const action = registerSocketAndConnect(socketContainer, url);
+    const action = registerSocketAndConnect(worker, url);
 
     expect(action.type).toEqual('malcolm:socketconnect');
-    expect(action.payload.socketContainer).toBe(socketContainer);
+    expect(action.payload.worker).toBe(worker);
     expect(action.payload.socketUrl).toBe(url);
   });
 
@@ -20,7 +20,7 @@ describe('socket.actions', () => {
       })
     );
 
-    const asyncAction = configureSocket(socketContainer);
+    const asyncAction = configureSocket(worker);
 
     const actions = [];
     const dispatch = action => actions.push(action);
@@ -32,7 +32,7 @@ describe('socket.actions', () => {
     expect(actions[0].payload.version).toEqual('1.2.3');
 
     expect(actions[1].type).toEqual('malcolm:socketconnect');
-    expect(actions[1].payload.socketContainer).toBe(socketContainer);
+    expect(actions[1].payload.worker).toBe(worker);
     expect(actions[1].payload.socketUrl).toEqual(url);
   });
 
@@ -43,7 +43,7 @@ describe('socket.actions', () => {
       })
     );
 
-    const asyncAction = configureSocket(socketContainer);
+    const asyncAction = configureSocket(worker);
 
     const actions = [];
     const dispatch = action => actions.push(action);

@@ -1,3 +1,4 @@
+/* eslint no-console: ["error", { allow: ["info", "error"] }] */
 import ELK from 'elkjs/lib/elk.bundled';
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
 
@@ -52,8 +53,8 @@ const runAutoLayout = () => (dispatch, getState) => {
   };
 
   // The JSON graph can be visualised here https://rtsys.informatik.uni-kiel.de/elklive/json.html
-  console.log(JSON.stringify(graph));
-  console.log(
+  console.info(JSON.stringify(graph));
+  console.info(
     `Graph can be visualised at https://rtsys.informatik.uni-kiel.de/elklive/json.html`
   );
 
@@ -61,7 +62,6 @@ const runAutoLayout = () => (dispatch, getState) => {
   return elk
     .layout(graph)
     .then(graphLayout => {
-      console.log('completed auto layout');
       const centerX =
         graphLayout.children.reduce((prev, next) => prev + next.x, 0) /
         graphLayout.children.length;
@@ -88,8 +88,8 @@ const runAutoLayout = () => (dispatch, getState) => {
       );
     })
     .catch(err => {
-      console.log('error creating auto layout');
-      console.log(err);
+      console.error('error creating auto layout');
+      console.error(err);
     });
 };
 

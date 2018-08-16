@@ -1,13 +1,12 @@
 import { MalcolmSend } from '../malcolm.types';
 import handleLocationChange from './malcolmRouting';
 
-function sendMalcolmMessage(socketContainer, payload) {
+function sendMalcolmMessage(worker, payload) {
   const message = { ...payload };
   delete message.type;
   const msg = JSON.stringify(message);
 
-  socketContainer.queue.push(msg);
-  socketContainer.flush();
+  worker.postMessage(msg);
 }
 
 function getNextId(malcolmState) {
@@ -29,7 +28,7 @@ function subscriptionActive(path, messagesInFlight) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const buildMalcolmReduxMiddleware = socketContainer => store => next => action => {
+const buildMalcolmReduxMiddleware = worker => store => next => action => {
   const updatedAction = { ...action };
   const { messagesInFlight, blocks } = store.getState().malcolm;
 
@@ -41,7 +40,7 @@ const buildMalcolmReduxMiddleware = socketContainer => store => next => action =
         action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||
         !subscriptionActive(updatedAction.payload.path, messagesInFlight)
       ) {
-        sendMalcolmMessage(socketContainer, action.payload);
+        sendMalcolmMessage(worker, action.payload);
       }
 
       break;

@@ -15,9 +15,8 @@ import AppRouter from './AppRouter';
 import './App.css';
 import configureMalcolmSocketHandlers from './malcolm/malcolmSocketHandler';
 import buildMalcolmReduxMiddleware from './malcolm/middleware/malcolmReduxMiddleware';
-import MalcolmSocketContainer from './malcolm/malcolmSocket';
 import MessageSnackBar from './Snackbar/snackbar.component';
-import MalcolmReconnector from './malcolm/malcolmReconnector';
+import MalcolmWorkerBuilder from './malcolm/worker/malcolm.worker';
 import {
   configureSocket,
   registerSocketAndConnect,
@@ -29,18 +28,15 @@ require('typeface-roboto');
 const history = createHistory();
 const router = routerMiddleware(history);
 
-const webSocket = new MalcolmReconnector('', 5000, WebSocket);
-const socketContainer = new MalcolmSocketContainer(webSocket);
+const worker = MalcolmWorkerBuilder();
 
-const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(socketContainer);
+const malcolmReduxMiddleware = buildMalcolmReduxMiddleware(worker);
 
 const middleware = [router, thunk, malcolmReduxMiddleware];
 if (process.env.NODE_ENV === `development`) {
   middleware.push(logger);
-
   // const {whyDidYouUpdate} = require('why-did-you-update');
   // whyDidYouUpdate(React);
-
   middleware.push(ReduxTimingMiddleware);
 }
 
@@ -53,15 +49,15 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 );
 
-configureMalcolmSocketHandlers(socketContainer, store);
+configureMalcolmSocketHandlers(store, worker);
 if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
   // if production connect directly to ws://{{host}}/ws
   store.dispatch(
-    registerSocketAndConnect(socketContainer, `ws://${window.location.host}/ws`)
+    registerSocketAndConnect(worker, `ws://${window.location.host}/ws`)
   );
 }
 
-store.dispatch(configureSocket(socketContainer));
+store.dispatch(configureSocket(worker));
 
 const theme = createMuiTheme({
   palette: {
