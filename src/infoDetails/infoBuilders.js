@@ -217,7 +217,6 @@ export const linkInfo = props => {
         eventHandler: value =>
           props.eventHandler([blockMri, portName, 'value'], value),
       },
-      // path: [blockMri, portName, 'value'],
     },
     destinationPort: {
       label: 'Destination',
@@ -235,8 +234,6 @@ export const linkInfo = props => {
           props.eventHandler([blockMri, portName, 'value'], portNullValue);
         },
       },
-      // path: [blockMri, portName, 'value'],
-      // nullValue: portNullValue,
     },
   };
 

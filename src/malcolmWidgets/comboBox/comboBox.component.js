@@ -29,6 +29,9 @@ const WidgetComboBox = props => {
         onChange={props.selectEventHandler}
         className={props.classes.formControl}
       >
+        <option value={null} disabled={props.Value !== null}>
+          {' '}
+        </option>
         {options}
       </Select>
     </FormControl>

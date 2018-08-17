@@ -24,7 +24,7 @@ describe('WidgetComboBox', () => {
         selectEventHandler={() => {}}
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('calls change', () => {
@@ -39,10 +39,10 @@ describe('WidgetComboBox', () => {
     );
     wrapper
       .find('option')
-      .first()
+      .last()
       .simulate('change');
 
     expect(eventAction.mock.calls.length).toEqual(1);
-    expect(eventAction.mock.calls[0][0].target.value).toEqual('1');
+    expect(eventAction.mock.calls[0][0].target.value).toEqual('3');
   });
 });
