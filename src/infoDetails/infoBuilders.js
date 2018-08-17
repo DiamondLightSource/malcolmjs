@@ -197,9 +197,9 @@ export const linkInfo = props => {
     return { ...props, info: {}, value: {} };
   }
 
-  const blockMri = props.path[0];
+  const blockMri = props.attribute.calculated.path[0];
   const blockName = props.linkBlockName;
-  const portName = props.path[1];
+  const portName = props.attribute.calculated.path[1];
 
   const portNullValue = portAttribute.raw.meta.tags
     .find(t => t.indexOf('inport:') > -1)
@@ -211,12 +211,13 @@ export const linkInfo = props => {
       label: 'Source',
       value: portAttribute.raw.value,
       inline: true,
-      tag: 'widget:combo',
+      tag: portAttribute.raw.meta.choices ? 'widget:combo' : 'widget:textinput',
       choices: portAttribute.raw.meta.choices,
       functions: {
-        eventHandler: props.eventHandler,
+        eventHandler: value =>
+          props.eventHandler([blockMri, portName, 'value'], value),
       },
-      path: [blockMri, portName, 'value'],
+      // path: [blockMri, portName, 'value'],
     },
     destinationPort: {
       label: 'Destination',
@@ -234,8 +235,8 @@ export const linkInfo = props => {
           props.eventHandler([blockMri, portName, 'value'], portNullValue);
         },
       },
-      path: [blockMri, portName, 'value'],
-      nullValue: portNullValue,
+      // path: [blockMri, portName, 'value'],
+      // nullValue: portNullValue,
     },
   };
 

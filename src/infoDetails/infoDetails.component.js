@@ -38,9 +38,11 @@ const infoAlarmState = value => {
             'disabled',
             'disabledPath',
             'label',
+            'showLabel',
             'tag',
             'inline',
             'functions',
+            'choices',
           ].includes(a)
       )
     ) {
@@ -110,7 +112,8 @@ export class InfoDetails extends React.Component {
         nextProps.subElement !== this.state.subElement) ||
       (nextProps.subElement && nextProps.subElement[0] === 'row') ||
       (!!nextProps.linkBlockName &&
-        nextProps.linkBlockName !== this.state.subElement)
+        nextProps.linkBlockName !== this.state.subElement) ||
+      Object.keys(this.state.info).length === 0
     );
   }
 
