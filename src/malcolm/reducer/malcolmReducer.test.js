@@ -67,6 +67,8 @@ describe('malcolm reducer', () => {
     MethodReducer.mockImplementation(s => s);
     NavigationReducer.updateNavTypes.mockImplementation(s => s);
     NavigationReducer.updateNavigationPath.mockImplementation(s => s);
+    LayoutReducer.buildLayoutEngine.mockClear();
+    LayoutReducer.processLayout.mockClear();
     LayoutReducer.processLayout.mockImplementation(() => ({
       blocks: [{ loading: true }],
     }));
@@ -403,6 +405,8 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
 
     expect(NavigationReducer.updateNavigationPath).toHaveBeenCalledTimes(1);
+    expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(1);
+    expect(LayoutReducer.buildLayoutEngine).toHaveBeenCalledTimes(1);
   });
 
   it('does clean', () => {
