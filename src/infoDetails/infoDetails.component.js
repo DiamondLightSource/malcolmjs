@@ -145,7 +145,6 @@ export class InfoDetails extends React.Component {
             tag={getTag(this.state.info[a])}
             handlers={this.state.info[a].functions}
             choices={this.state.info[a].choices}
-            path={this.state.info[a].path}
             showLabel={this.state.info[a].showLabel}
             blockName={this.props.blockName}
             attributeName={this.props.attributeName}

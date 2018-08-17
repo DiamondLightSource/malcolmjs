@@ -209,12 +209,12 @@ export const linkInfo = props => {
   const info = {
     sourcePort: {
       label: 'Source',
-      value: portAttribute.raw.value,
+      valuePath: 'raw.value',
       inline: true,
       tag: portAttribute.raw.meta.choices ? 'widget:combo' : 'widget:textinput',
       choices: portAttribute.raw.meta.choices,
       functions: {
-        eventHandler: value =>
+        eventHandler: (nullPath, value) =>
           props.eventHandler([blockMri, portName, 'value'], value),
       },
     },
