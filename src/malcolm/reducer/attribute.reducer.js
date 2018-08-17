@@ -360,6 +360,21 @@ export function updateAttribute(oldState, payload) {
             path,
           },
         };
+        if (attribute.raw.alarm) {
+          attribute.calculated.alarms = {
+            ...attribute.calculated.alarms,
+            rawAlarm:
+              attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
+                ? attribute.raw.alarm.severity
+                : null,
+          };
+        }
+        if (payload.raw.timeStamp) {
+          attribute.calculated.timeStamp = new Date(
+            payload.raw.timeStamp.secondsPastEpoch * 1000 +
+              payload.raw.timeStamp.nanoseconds / 1000000
+          ).toISOString();
+        }
         attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
 
         if (payload.raw.timeStamp) {

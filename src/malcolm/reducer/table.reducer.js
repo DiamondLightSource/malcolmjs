@@ -6,6 +6,7 @@ import {
   MalcolmTableUpdate,
   MalcolmTableFlag,
 } from '../malcolm.types';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 export const rowIsDifferent = (attribute, row) =>
@@ -42,6 +43,9 @@ export const shouldClearDirtyFlag = inputAttribute => {
       row => row._dirty || row._isChanged
     );
     attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+    attribute.calculated.alarms.dirty = attribute.localState.flags.table.dirty
+      ? AlarmStates.DIRTY
+      : null;
   }
   return attribute;
 };
@@ -82,6 +86,7 @@ export const copyAttributeValue = (state, payload) => {
       },
     };
     attribute.calculated.dirty = false;
+    attribute.calculated.alarms.dirty = null;
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
@@ -136,6 +141,9 @@ export const updateTableLocal = (state, payload) => {
       row => row._dirty || row._isChanged
     );
     attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+    attribute.calculated.alarms.dirty = attribute.localState.flags.table.dirty
+      ? AlarmStates.DIRTY
+      : null;
     attributes[matchingAttributeIndex] = attribute;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
@@ -179,6 +187,10 @@ const setTableFlag = (state, payload) => {
       );
       if (payload.flagType === 'dirty') {
         attribute.calculated.dirty = attribute.localState.flags.table.dirty;
+        attribute.calculated.alarms.dirty = attribute.localState.flags.table
+          .dirty
+          ? AlarmStates.DIRTY
+          : null;
       }
     }
     attributes[matchingAttributeIndex] = attribute;

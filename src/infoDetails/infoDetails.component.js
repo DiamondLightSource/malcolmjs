@@ -1,3 +1,4 @@
+/* eslint react/no-array-index-key: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -28,7 +29,19 @@ const infoAlarmState = value => {
       return value.alarmState;
     } else if (
       Object.keys(value).some(
-        a => !['value', 'label', 'tag', 'inline', 'functions'].includes(a)
+        a =>
+          ![
+            'value',
+            'valuePath',
+            'alarmState',
+            'alarmStatePath',
+            'disabled',
+            'disabledPath',
+            'label',
+            'tag',
+            'inline',
+            'functions',
+          ].includes(a)
       )
     ) {
       return AlarmStates.NO_ALARM;
@@ -42,74 +55,159 @@ const getValue = value => {
     return value;
   } else if (value.value !== undefined) {
     return value.value;
+  } else if (value.valuePath !== undefined) {
+    return undefined;
   }
   return Object.values(value)[0];
 };
 
-export const InfoDetails = props => {
-  let updatedProps;
-
-  if (props.isLinkInfo) {
-    updatedProps = linkInfo(props);
-  } else {
-    updatedProps = buildAttributeInfo(props);
+export class InfoDetails extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (
+      props.blockName !== state.blockName ||
+      props.attributeName !== state.attributeName ||
+      (props.subElement && props.subElement !== state.subElement) ||
+      (props.subElement && props.subElement[0] === 'row') ||
+      (props.linkBlockName && props.linkBlockName !== state.subElement) ||
+      Object.keys(state.info).length === 0
+    ) {
+      let newState;
+      let subElement;
+      if (props.isLinkInfo) {
+        subElement = props.linkBlockName;
+        newState = linkInfo(props);
+      } else {
+        newState = buildAttributeInfo(props);
+        // eslint-disable-next-line prefer-destructuring
+        subElement = props.subElement;
+      }
+      return {
+        ...newState,
+        blockName: props.blockName,
+        attributeName: props.attributeName,
+        subElement,
+        isLinkInfo: !!props.isLinkInfo,
+      };
+    }
+    return state;
   }
 
-  const infoElements = Object.keys(updatedProps.info).filter(
-    a =>
-      updatedProps.info[a].inline || !(updatedProps.info[a] instanceof Object)
-  );
-  const infoGroups = Object.keys(updatedProps.info).filter(
-    a => updatedProps.info[a] instanceof Object && !updatedProps.info[a].inline
-  );
-  return (
-    <div>
-      {infoElements.map(a => (
-        <InfoElement
-          key={a}
-          label={updatedProps.info[a].label ? updatedProps.info[a].label : a}
-          value={getValue(updatedProps.info[a])}
-          alarm={infoAlarmState(updatedProps.info[a])}
-          tag={getTag(updatedProps.info[a])}
-          handlers={updatedProps.info[a].functions}
-          choices={updatedProps.info[a].choices}
-          path={updatedProps.info[a].path}
-          showLabel={updatedProps.info[a].showLabel}
-        />
-      ))}
-      {infoGroups.map(group => (
-        <GroupExpander
-          key={group}
-          groupName={
-            updatedProps.info[group].label
-              ? updatedProps.info[group].label
-              : group
-          }
-          expanded
-        >
-          {Object.keys(updatedProps.info[group])
-            .filter(a => !['label', 'typeid'].includes(a))
-            .map(a => (
-              <InfoElement
-                key={a}
-                label={
-                  updatedProps.info[group][a].label
-                    ? updatedProps.info[group][a].label
-                    : a
-                }
-                value={getValue(updatedProps.info[group][a])}
-                alarm={infoAlarmState(updatedProps.info[group][a])}
-                tag={getTag(updatedProps.info[group][a])}
-              />
-            ))}
-        </GroupExpander>
-      ))}
-    </div>
-  );
-};
+  constructor(props) {
+    super(props);
+    this.state = {
+      info: {},
+    };
+    if (props.info) {
+      this.state.info = { ...props.info };
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.blockName !== this.state.blockName ||
+      nextProps.attributeName !== this.state.attributeName ||
+      (!!nextProps.subElement &&
+        nextProps.subElement !== this.state.subElement) ||
+      (nextProps.subElement && nextProps.subElement[0] === 'row') ||
+      (!!nextProps.linkBlockName &&
+        nextProps.linkBlockName !== this.state.subElement)
+    );
+  }
+
+  render() {
+    const infoElements = Object.keys(this.state.info).filter(
+      a => this.state.info[a].inline || !(this.state.info[a] instanceof Object)
+    );
+    const infoGroups = Object.keys(this.state.info).filter(
+      a => this.state.info[a] instanceof Object && !this.state.info[a].inline
+    );
+    return (
+      <div>
+        {infoElements.map(a => (
+          <InfoElement
+            key={a}
+            label={this.state.info[a].label ? this.state.info[a].label : a}
+            value={getValue(this.state.info[a])}
+            valuePath={
+              this.state.info[a].valuePath
+                ? this.state.info[a].valuePath
+                : undefined
+            }
+            alarm={infoAlarmState(this.state.info[a])}
+            alarmPath={
+              this.state.info[a].alarmStatePath
+                ? this.state.info[a].alarmStatePath
+                : undefined
+            }
+            tag={getTag(this.state.info[a])}
+            handlers={this.state.info[a].functions}
+            choices={this.state.info[a].choices}
+            path={this.state.info[a].path}
+            showLabel={this.state.info[a].showLabel}
+            blockName={this.props.blockName}
+            attributeName={this.props.attributeName}
+            disabled={this.state.info[a].disabled}
+            disabledFlagPath={this.state.info[a].disabledPath}
+          />
+        ))}
+        {infoGroups.map((group, groupIndex) => (
+          <GroupExpander
+            key={groupIndex}
+            groupName={
+              this.state.info[group].label
+                ? this.state.info[group].label
+                : group
+            }
+            expanded
+          >
+            {Object.keys(this.state.info[group])
+              .filter(a => !['label', 'typeid'].includes(a))
+              .map((a, aIndex) => (
+                <InfoElement
+                  key={aIndex}
+                  label={
+                    this.state.info[group][a].label
+                      ? this.state.info[group][a].label
+                      : a
+                  }
+                  value={getValue(this.state.info[group][a])}
+                  valuePath={
+                    this.state.info[group][a].valuePath
+                      ? this.state.info[group][a].valuePath
+                      : undefined
+                  }
+                  alarm={infoAlarmState(this.state.info[group][a])}
+                  alarmPath={
+                    this.state.info[group][a].alarmStatePath
+                      ? this.state.info[group][a].alarmStatePath
+                      : undefined
+                  }
+                  tag={getTag(this.state.info[group][a])}
+                  blockName={this.props.blockName}
+                  attributeName={this.props.attributeName}
+                  disabled={this.state.info[group][a].disabled}
+                  disabledFlagPath={this.state.info[group][a].disabledPath}
+                />
+              ))}
+          </GroupExpander>
+        ))}
+      </div>
+    );
+  }
+}
 
 InfoDetails.propTypes = {
-  isLinkInfo: PropTypes.bool.isRequired,
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
+  subElement: PropTypes.arrayOf(PropTypes.string),
+  linkBlockName: PropTypes.string.isRequired,
+  info: PropTypes.shape({}),
+  // isLinkInfo: PropTypes.bool.isRequired,
+};
+
+InfoDetails.defaultProps = {
+  subElement: undefined,
+  info: undefined,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -184,6 +282,8 @@ const mapStateToProps = state => {
       blockName,
       attributeName
     ),
+    blockName,
+    attributeName,
     subElement,
     isLinkInfo: showLinkInfo,
     linkBlockName,

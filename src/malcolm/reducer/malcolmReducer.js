@@ -156,6 +156,7 @@ function updateBlock(state, payload) {
                   name: f,
                   loading: true,
                   children: [],
+                  alarms: {},
                 },
               };
             })
@@ -270,11 +271,13 @@ function setFlag(state, path, flagType, flagState) {
         ...attributes[matchingAttribute].calculated,
       },
     };
-    // #refactorDuplication
-    // if (attributeCopy.calculated) {
     attributeCopy.calculated[flagType] = flagState;
-    // }
-    // attributeCopy[flagType] = flagState;
+    if (flagType === 'dirty') {
+      attributeCopy.calculated.alarms = {
+        ...attributeCopy.calculated.alarms,
+        dirty: flagState ? AlarmStates.DIRTY : null,
+      };
+    }
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
@@ -391,6 +394,11 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
           errorMessage,
           dirty: errorState,
           forceUpdate: !errorState,
+          alarms: {
+            ...attributes[matchingAttributeIndex].calculated.alarms,
+            dirty: errorState ? AlarmStates.DIRTY : null,
+            errorState: errorState ? AlarmStates.MAJOR_ALARM : null,
+          },
         },
       };
       blocks[blockName] = { ...state.blocks[blockName], attributes };

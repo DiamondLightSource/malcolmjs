@@ -18,17 +18,17 @@ export const buildAttributeInfo = props => {
       info.meta = {
         label: 'Meta Data',
         malcolmType: {
-          value: attribute.raw.meta.typeid,
+          valuePath: 'raw.meta.typeid',
           label: 'Malcolm Type',
           inline: true,
         },
         description: {
-          value: attribute.raw.meta.description,
+          valuePath: 'raw.meta.description',
           label: 'Description',
           inline: true,
         },
         writeable: {
-          value: attribute.raw.meta.writeable,
+          valuePath: 'raw.meta.writeable',
           label: 'Writeable?',
           inline: true,
           tag: 'widget:led',
@@ -36,36 +36,45 @@ export const buildAttributeInfo = props => {
       };
       info.malcolmAlarm = {
         label: 'Alarm',
-        ...attribute.raw.alarm,
-        severity: {
-          label: 'severity',
-          inline: true,
-          value: attribute.raw.alarm.severity,
-          alarmState:
-            attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
-              ? attribute.raw.alarm.severity
-              : null,
-        },
-        message: attribute.raw.alarm.message
-          ? attribute.raw.alarm.message
-          : 'n/a',
       };
+      Object.keys(attribute.raw.alarm).forEach(key => {
+        info.malcolmAlarm[key] = {
+          label: key,
+          inline: true,
+          valuePath: `raw.alarm.${key}`,
+        };
+        if (key === 'severity') {
+          info.malcolmAlarm[key].alarmStatePath = 'calculated.alarms.rawAlarm';
+        }
+      });
+
+      info.malcolmAlarm.message = {
+        label: 'message',
+        inline: true,
+        valuePath: 'raw.alarm.message',
+      };
+
       info.timeStamp = {
         label: 'Time Stamp',
-        time: new Date(
-          attribute.raw.timeStamp.secondsPastEpoch * 1000
-        ).toISOString(),
-        ...attribute.raw.timeStamp,
+        time: {
+          label: 'time',
+          inline: true,
+          valuePath: 'calculated.timeStamp',
+        },
       };
+      Object.keys(attribute.raw.timeStamp).forEach(key => {
+        info.timeStamp[key] = {
+          label: key,
+          inline: true,
+          valuePath: `raw.timeStamp.${key}`,
+        };
+      });
+
       info.errorState = {
         label: 'Error State',
-        value: attribute.calculated.errorMessage
-          ? attribute.calculated.errorMessage
-          : 'n/a',
+        valuePath: 'calculated.errorMessage',
         inline: true,
-        alarmState: attribute.calculated.errorState
-          ? AlarmStates.MAJOR_ALARM
-          : null,
+        alarmStatePath: 'calculated.alarms.errorState',
       };
       if (
         attribute.raw.meta.tags.some(a =>
@@ -74,13 +83,11 @@ export const buildAttributeInfo = props => {
       ) {
         info.localState = {
           label: 'Local State',
-          value: {
-            buttonLabel: 'Discard',
-            disabled: !attribute.calculated.dirty,
-          },
+          value: 'Discard',
+          disabledPath: 'NOT.calculated.dirty',
           inline: true,
           tag: 'info:button',
-          alarmState: attribute.calculated.dirty ? AlarmStates.DIRTY : null,
+          alarmStatePath: 'calculated.alarms.dirty',
         };
         if (props.revertHandler) {
           info.localState.functions = {
@@ -99,10 +106,8 @@ export const buildAttributeInfo = props => {
         row >= attribute.raw.value[attribute.localState.labels[0]].length;
       info.localState = {
         label: 'Row local state',
-        value: {
-          buttonLabel: 'Discard',
-          disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
-        },
+        value: 'Discard',
+        disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
         inline: true,
         tag: 'info:button',
         alarmState:
@@ -121,28 +126,19 @@ export const buildAttributeInfo = props => {
       };
       info.addRowAbove = {
         label: 'Insert row above',
-        value: {
-          buttonLabel: 'Add',
-          disabled: false,
-        },
+        value: 'Add',
         inline: true,
         tag: 'info:button',
       };
       info.addRowBelow = {
         label: 'Insert row below',
-        value: {
-          buttonLabel: 'Add',
-          disabled: false,
-        },
+        value: 'Add',
         inline: true,
         tag: 'info:button',
       };
       info.deleteRow = {
         label: 'Delete row',
-        value: {
-          buttonLabel: 'Delete',
-          disabled: false,
-        },
+        value: 'Delete',
         inline: true,
         tag: 'info:button',
       };
@@ -191,7 +187,7 @@ export const buildAttributeInfo = props => {
       info.subElement = props.subElement;
     }
   }
-  return { info, value, ...props };
+  return { info, value };
 };
 
 export const linkInfo = props => {
@@ -229,9 +225,7 @@ export const linkInfo = props => {
     },
     deleteLink: {
       label: '',
-      value: {
-        buttonLabel: 'Delete',
-      },
+      value: 'Delete',
       inline: true,
       tag: 'info:button',
       showLabel: false,
@@ -246,7 +240,6 @@ export const linkInfo = props => {
   };
 
   return {
-    ...props,
     info,
     value: {},
   };

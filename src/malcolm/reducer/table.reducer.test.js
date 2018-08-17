@@ -69,6 +69,12 @@ describe('Table reducer', () => {
 
     expect(testState.blocks.block1.attributes[0]).toEqual({
       ...harderAttribute,
+      calculated: {
+        ...harderAttribute.calculated,
+        alarms: {
+          dirty: null,
+        },
+      },
       localState: expectedCopy,
     });
   });

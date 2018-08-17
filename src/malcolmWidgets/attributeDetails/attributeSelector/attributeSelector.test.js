@@ -263,9 +263,9 @@ describe('AttributeSelector', () => {
     const component = selectorFunction(
       'info:button',
       [''],
-      { buttonLabel: 'testButton', disabled: true },
+      'testButton',
       () => {},
-      {},
+      { isDisabled: true },
       () => {},
       '#fff',
       {},
@@ -300,9 +300,9 @@ describe('AttributeSelector', () => {
     const component = selectorFunction(
       'info:button',
       [''],
-      { buttonLabel: 'testButton', disabled: false },
+      'testButton',
       () => {},
-      {},
+      { isDisabled: false },
       () => {},
       '#fff',
       {},

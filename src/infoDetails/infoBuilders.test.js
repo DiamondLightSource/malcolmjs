@@ -1,5 +1,4 @@
 import { harderAttribute } from '../malcolmWidgets/table/table.stories';
-import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 import { buildAttributeInfo } from './infoBuilders';
 
@@ -15,77 +14,105 @@ describe('info builder', () => {
   it('attribute info builder returns empty object if attribute.raw not found', () => {
     props.attribute.raw = undefined;
     const propsWithInfo = buildAttributeInfo(props);
-    expect(propsWithInfo).toEqual({ ...props, info: {}, value: undefined });
+    expect(propsWithInfo).toEqual({ info: {}, value: undefined });
   });
 
   it('attribute info builder generates correct structure for basic attribute', () => {
     const infoObject = buildAttributeInfo(props);
-    expect(infoObject.info.errorState).toBeDefined();
-    expect(infoObject.info.malcolmAlarm).toBeDefined();
-    expect(infoObject.info.meta).toBeDefined();
-    expect(infoObject.info.timeStamp).toBeDefined();
-    expect(infoObject.info.localState).not.toBeDefined();
-
-    expect(Object.entries(infoObject.info.timeStamp)).toContainEqual(
-      ...Object.entries(harderAttribute.raw.timeStamp)
-    );
-    expect(infoObject.info.timeStamp.inline).toBeFalsy();
-    expect(Object.keys(infoObject.info.meta)).toContainEqual(
-      'description',
-      'label',
-      'malcolmType'
-    );
-    expect(infoObject.info.meta.description.value).toEqual(
-      harderAttribute.raw.meta.description
-    );
-    expect(infoObject.info.meta.malcolmType.value).toEqual(
-      harderAttribute.raw.meta.typeid
-    );
-    expect(infoObject.info.meta.inline).toBeFalsy();
-    expect(infoObject.value).toEqual(harderAttribute.raw.value);
+    expect(infoObject.info).toEqual({
+      errorState: {
+        alarmStatePath: 'calculated.alarms.errorState',
+        inline: true,
+        label: 'Error State',
+        valuePath: 'calculated.errorMessage',
+      },
+      malcolmAlarm: {
+        label: 'Alarm',
+        message: {
+          inline: true,
+          label: 'message',
+          valuePath: 'raw.alarm.message',
+        },
+        severity: {
+          alarmStatePath: 'calculated.alarms.rawAlarm',
+          inline: true,
+          label: 'severity',
+          valuePath: 'raw.alarm.severity',
+        },
+        status: {
+          inline: true,
+          label: 'status',
+          valuePath: 'raw.alarm.status',
+        },
+        typeid: {
+          inline: true,
+          label: 'typeid',
+          valuePath: 'raw.alarm.typeid',
+        },
+      },
+      meta: {
+        description: {
+          inline: true,
+          label: 'Description',
+          valuePath: 'raw.meta.description',
+        },
+        label: 'Meta Data',
+        malcolmType: {
+          inline: true,
+          label: 'Malcolm Type',
+          valuePath: 'raw.meta.typeid',
+        },
+        writeable: {
+          inline: true,
+          label: 'Writeable?',
+          tag: 'widget:led',
+          valuePath: 'raw.meta.writeable',
+        },
+      },
+      path: { inline: true, label: 'Attribute path', value: 'test1, layout' },
+      timeStamp: {
+        label: 'Time Stamp',
+        nanoseconds: {
+          inline: true,
+          label: 'nanoseconds',
+          valuePath: 'raw.timeStamp.nanoseconds',
+        },
+        secondsPastEpoch: {
+          inline: true,
+          label: 'secondsPastEpoch',
+          valuePath: 'raw.timeStamp.secondsPastEpoch',
+        },
+        time: {
+          inline: true,
+          label: 'time',
+          valuePath: 'calculated.timeStamp',
+        },
+        typeid: {
+          inline: true,
+          label: 'typeid',
+          valuePath: 'raw.timeStamp.typeid',
+        },
+        userTag: {
+          inline: true,
+          label: 'userTag',
+          valuePath: 'raw.timeStamp.userTag',
+        },
+      },
+    });
   });
 
-  it('attribute info builder returns correctly if state has no malcolm errors', () => {
-    const infoObject = buildAttributeInfo(props);
-    expect(infoObject.info.errorState.value).toEqual('n/a');
-    expect(infoObject.info.errorState.alarmState).toEqual(null);
-  });
-
-  it('attribute info builder returns correctly if state has some malcolm error', () => {
-    props.attribute.calculated.errorMessage = 'test Error!';
-    props.attribute.calculated.errorState = true;
-    const infoObject = buildAttributeInfo(props);
-    expect(infoObject.info.errorState.value).toEqual('test Error!');
-    expect(infoObject.info.errorState.alarmState).toEqual(
-      AlarmStates.MAJOR_ALARM
-    );
-  });
-
-  it('attribute info builder generates correct structure for attribute with local state when clean', () => {
+  it('attribute info builder generates correct structure for attribute with local state', () => {
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
     expect(infoObject.info.localState).toEqual({
-      alarmState: null,
+      alarmStatePath: 'calculated.alarms.dirty',
+      disabledPath: 'NOT.calculated.dirty',
       inline: true,
       label: 'Local State',
       tag: 'info:button',
-      value: { buttonLabel: 'Discard', disabled: true },
-    });
-  });
-
-  it('attribute info builder generates correct structure for attribute with local state when dirty', () => {
-    props.attribute.raw.meta.tags = ['widget:table'];
-    props.attribute.calculated.dirty = true;
-    const infoObject = buildAttributeInfo(props);
-    expect(infoObject.info.localState).toBeDefined();
-    expect(infoObject.info.localState).toEqual({
-      alarmState: AlarmStates.DIRTY,
-      inline: true,
-      label: 'Local State',
-      tag: 'info:button',
-      value: { buttonLabel: 'Discard', disabled: false },
+      value: 'Discard',
     });
   });
 
@@ -117,47 +144,16 @@ describe('info builder', () => {
     expect(infoObject.info.localState).toBeDefined();
     expect(infoObject.info.localState).toEqual({
       alarmState: null,
+      disabled: true,
       inline: true,
       label: 'Row local state',
       tag: 'info:button',
-      value: { buttonLabel: 'Discard', disabled: true },
+      value: 'Discard',
     });
   });
 
-  it('addHandlers returns unmodified props if local state info isnt present', () => {
-    let testInfo = {
-      info: {
-        otherInfo: {
-          value: 'a test',
-        },
-      },
-      otherProps: {
-        blah: 'blah',
-        test: { is: true },
-      },
-      value: 3.141,
-      setFlag: 'test',
-      revertHandler: 'also test',
-    };
-    testInfo = buildAttributeInfo(testInfo);
-    expect(testInfo).toEqual({
-      info: {
-        otherInfo: {
-          value: 'a test',
-        },
-      },
-      otherProps: {
-        blah: 'blah',
-        test: { is: true },
-      },
-      value: 3.141,
-      setFlag: 'test',
-      revertHandler: 'also test',
-    });
-  });
-
-  it('addHandlers adds click handler to local state info element if it exists', () => {
-    let testInfo = {
+  it('adds click handler to local state info element if it exists', () => {
+    const testProps = {
       attribute: {
         raw: {
           timeStamp: {
@@ -173,15 +169,14 @@ describe('info builder', () => {
         },
       },
       value: 3.141,
-      path: ['block1', 'test'],
       setFlag: jest.fn(),
       revertHandler: jest.fn(),
     };
-    testInfo = buildAttributeInfo(testInfo);
+    const testInfo = buildAttributeInfo(testProps);
     expect(testInfo.info.localState.functions).toBeDefined();
     testInfo.info.localState.functions.clickHandler();
-    expect(testInfo.revertHandler).toHaveBeenCalledTimes(1);
-    expect(testInfo.revertHandler).toHaveBeenCalledWith(['block1', 'test']);
+    expect(testProps.revertHandler).toHaveBeenCalledTimes(1);
+    expect(testProps.revertHandler).toHaveBeenCalledWith(['block1', 'test']);
   });
 
   it('table add and delete row methods get hooked up', () => {
@@ -309,7 +304,7 @@ describe('info builder', () => {
     expect(props.closeInfoHandler).toHaveBeenCalledWith(['test1', 'layout']);
   });
 
-  it('addHandlers adds click handler to local state info element if it exists', () => {
+  it('adds click handler to local state info element if it exists', () => {
     const labels = Object.keys(props.attribute.raw.meta.elements);
     const dataRow = {};
     labels.forEach(label => {
@@ -335,8 +330,8 @@ describe('info builder', () => {
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState.functions).toBeDefined();
     infoObject.info.localState.functions.clickHandler();
-    expect(infoObject.rowRevertHandler).toHaveBeenCalledTimes(1);
-    expect(infoObject.rowRevertHandler).toHaveBeenCalledWith(
+    expect(props.rowRevertHandler).toHaveBeenCalledTimes(1);
+    expect(props.rowRevertHandler).toHaveBeenCalledWith(
       ['test1', 'layout'],
       { mri: 'PANDA:TTLIN1', name: 'TTLIN1', visible: false, x: 0, y: 0 },
       0

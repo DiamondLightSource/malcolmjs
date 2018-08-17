@@ -6,6 +6,7 @@ exports[`WidgetTextUpdate displays multiline text 1`] = `
 >
   <WithStyles(Typography)
     className="WidgetTextUpdate-textUpdateNoWrap-3"
+    style={Object {}}
   >
     This is a slightly longer example of some text which should be split over multiple lines when the widget is in a normal sized div
   </WithStyles(Typography)>
@@ -19,6 +20,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
   <WithStyles(Typography)
     className="WidgetTextUpdate-textUpdate100-5"
     noWrap={true}
+    style={Object {}}
   >
     Hello World
   </WithStyles(Typography)>
@@ -32,6 +34,7 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   <WithStyles(Typography)
     className="WidgetTextUpdate-textUpdate80-4"
     noWrap={true}
+    style={Object {}}
   >
     1.21
   </WithStyles(Typography)>

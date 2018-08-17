@@ -12,6 +12,13 @@ describe('InfoDetails', () => {
       label: 'inline info',
       alarmState: 2,
     },
+    inlineWithPaths: {
+      valuePath: 'something.on.attribute',
+      inline: true,
+      label: 'inline info',
+      alarmStatePath: 'something.else.on.attribute',
+      disabledPath: 'some.flag.somewhere',
+    },
     inlineWithTag: {
       value: 'test in',
       inline: true,
@@ -20,6 +27,13 @@ describe('InfoDetails', () => {
     },
     groupValues: {
       simpleInGroup: 'zap',
+      inlineInGroupWithPaths: {
+        valuePath: 'something.on.attribute',
+        inline: true,
+        label: 'in-group info',
+        alarmStatePath: 'something.else.on.attribute',
+        disabledPath: 'some.flag.somewhere',
+      },
       arbitraryObject: {
         a: 'b',
         c: 'd',

@@ -6,6 +6,7 @@ exports[`Table container renders correctly 1`] = `
   attribute={
     Object {
       "calculated": Object {
+        "alarms": Object {},
         "dirty": false,
         "name": "layout",
         "path": Array [
@@ -388,6 +389,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
   attribute={
     Object {
       "calculated": Object {
+        "alarms": Object {},
         "dirty": false,
         "name": "layout",
         "path": Array [

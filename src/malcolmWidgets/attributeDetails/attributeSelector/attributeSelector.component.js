@@ -126,9 +126,9 @@ export const selectorFunction = (
     case 'info:button':
       return (
         <ButtonAction
-          text={value.buttonLabel}
+          text={value}
           clickAction={() => buttonClickHandler()}
-          disabled={value.disabled}
+          disabled={flags.isDisabled}
         />
       );
     case 'info:alarm':

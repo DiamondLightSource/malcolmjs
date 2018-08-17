@@ -11,6 +11,7 @@ export const harderAttribute = {
     name: 'layout',
     path: ['test1', 'layout'],
     dirty: false,
+    alarms: {},
   },
   raw: {
     typeid: 'epics:nt/NTTable:1.0',
