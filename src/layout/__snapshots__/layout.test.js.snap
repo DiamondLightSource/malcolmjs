@@ -4,6 +4,8 @@ exports[`Layout renders correctly 1`] = `
 <div
   onDragOver={[Function]}
   onDrop={[Function]}
+  onMouseUp={[Function]}
+  role="presentation"
   style={
     Object {
       "display": "flex",

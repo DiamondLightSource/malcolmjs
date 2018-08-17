@@ -3,6 +3,7 @@ import {
   MalcolmMakeBlockVisibleType,
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
+  MalcolmResetPortsType,
 } from '../malcolm.types';
 import {
   malcolmPutAction,
@@ -10,6 +11,7 @@ import {
   malcolmSelectBlock,
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
+import { snackbarState } from '../../viewState/viewState.actions';
 
 const findPort = (blocks, id) => {
   const path = id.split('-');
@@ -19,32 +21,54 @@ const findPort = (blocks, id) => {
   return port;
 };
 
+const selectPortInClient = (portId, start) => ({
+  type: MalcolmSelectPortType,
+  payload: {
+    portId,
+    start,
+  },
+});
+
 export const selectPort = (portId, start) => (dispatch, getState) => {
-  dispatch({
-    type: MalcolmSelectPortType,
-    payload: {
-      portId,
-      start,
-    },
-  });
+  const port = findPort(getState().malcolm.layout.blocks, portId);
 
-  const { layoutState, layout } = getState().malcolm;
-  const { startPortForLink, endPortForLink } = layoutState;
+  if (port && port.input && port.value !== port.tag) {
+    // Reset the ports
+    dispatch({
+      type: MalcolmResetPortsType,
+      payload: {},
+    });
 
-  if (startPortForLink && endPortForLink) {
-    const startPort = findPort(layout.blocks, startPortForLink);
-    const endPort = findPort(layout.blocks, endPortForLink);
+    // Display an error message
+    dispatch(
+      snackbarState(
+        true,
+        `Error: Existing link to input port ${
+          port.label
+        }, delete existing link first.`
+      )
+    );
+  } else {
+    dispatch(selectPortInClient(portId, start));
 
-    const outputPort = startPort.input ? endPort : startPort;
+    const { layoutState, layout } = getState().malcolm;
+    const { startPortForLink, endPortForLink } = layoutState;
 
-    // 2. update on the server
-    const path = [
-      ...(startPort.input ? startPortForLink : endPortForLink).split('-'),
-      'value',
-    ];
+    if (startPortForLink && endPortForLink) {
+      const startPort = findPort(layout.blocks, startPortForLink);
+      const endPort = findPort(layout.blocks, endPortForLink);
 
-    dispatch(malcolmSetFlag(path, 'pending', true));
-    dispatch(malcolmPutAction(path, outputPort.tag));
+      const outputPort = startPort.input ? endPort : startPort;
+
+      // 2. update on the server
+      const path = [
+        ...(startPort.input ? startPortForLink : endPortForLink).split('-'),
+        'value',
+      ];
+
+      dispatch(malcolmSetFlag(path, 'pending', true));
+      dispatch(malcolmPutAction(path, outputPort.tag));
+    }
   }
 };
 
