@@ -23,6 +23,9 @@ export const buildPorts = block => {
         .find(t => t.indexOf('inport:') > -1)
         .split(':')
         .slice(-1)[0],
+      portType: input.raw.meta.tags
+        .find(t => t.indexOf('inport:') > -1)
+        .split(':')[1],
       value: input.raw.value,
     })),
     ...outputs.map(output => ({
@@ -32,6 +35,9 @@ export const buildPorts = block => {
         .find(t => t.indexOf('outport:') > -1)
         .split(':')
         .slice(-1)[0],
+      portType: output.raw.meta.tags
+        .find(t => t.indexOf('outport:') > -1)
+        .split(':')[1],
     })),
   ];
 };

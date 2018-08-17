@@ -3,8 +3,9 @@ import MalcolmLinkModel from '../link/link.model';
 
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["createLinkModel"] }] */
 class MalcolmPortModel extends DefaultPortModel {
-  constructor(isInput, name, label, id) {
+  constructor(isInput, name, label, id, portType) {
     super(isInput, name, label, id);
+    this.portType = portType;
     this.addMouseDownHandler = this.addMouseDownHandler.bind(this);
   }
 

@@ -27,7 +27,6 @@ exports[`BlockWidget block renders correctly 1`] = `
       <Connect(WithStyles(BlockPortWidget))
         key="block1-in 1"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-in 1"
       />
     </div>
@@ -56,13 +55,11 @@ exports[`BlockWidget block renders correctly 1`] = `
       <Connect(WithStyles(BlockPortWidget))
         key="block1-out 1"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-out 1"
       />
       <Connect(WithStyles(BlockPortWidget))
         key="block1-out 2"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-out 2"
       />
     </div>
