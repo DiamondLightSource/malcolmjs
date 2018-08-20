@@ -9,6 +9,12 @@ describe('BlockPortWidget', () => {
   let port;
   let state;
 
+  const theme = {
+    portColours: {
+      bool: 'blue',
+    },
+  };
+
   beforeEach(() => {
     shallow = createShallow({ dive: true });
     mockStore = configureStore();
@@ -17,6 +23,7 @@ describe('BlockPortWidget', () => {
       name: 'val1',
       in: true,
       label: 'val 1',
+      portType: 'bool',
       getParent: () => ({
         getID: () => '123456',
       }),
@@ -43,7 +50,12 @@ describe('BlockPortWidget', () => {
     port.in = true;
 
     const wrapper = shallow(
-      <BlockPortWidget nodeId="node1" portId="val1" store={mockStore(state)} />
+      <BlockPortWidget
+        nodeId="node1"
+        portId="val1"
+        store={mockStore(state)}
+        theme={theme}
+      />
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });
@@ -52,7 +64,12 @@ describe('BlockPortWidget', () => {
     port.in = false;
 
     const wrapper = shallow(
-      <BlockPortWidget nodeId="node1" portId="val1" store={mockStore(state)} />
+      <BlockPortWidget
+        nodeId="node1"
+        portId="val1"
+        store={mockStore(state)}
+        theme={theme}
+      />
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });

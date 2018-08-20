@@ -87,7 +87,6 @@ const BlockWidget = props => {
           {inputPorts.map(p => (
             <BlockPortWidget
               key={props.node.ports[p].id}
-              portColour={props.theme.palette.primary.main}
               nodeId={props.node.id}
               portId={p}
             />
@@ -102,7 +101,6 @@ const BlockWidget = props => {
           {outputPorts.map(p => (
             <BlockPortWidget
               key={props.node.ports[p].id}
-              portColour={props.theme.palette.primary.main}
               nodeId={props.node.id}
               portId={p}
             />
@@ -136,13 +134,6 @@ BlockWidget.propTypes = {
     iconContents: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
-  theme: PropTypes.shape({
-    palette: PropTypes.shape({
-      primary: PropTypes.shape({
-        main: PropTypes.string,
-      }),
-    }),
-  }).isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(BlockWidget);
+export default withStyles(styles)(BlockWidget);

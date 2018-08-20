@@ -21,6 +21,7 @@ export const MalcolmLocalCopy = 'malcolm:localcopy';
 export const MalcolmTableUpdate = 'malcolm:updatetable';
 export const MalcolmTableFlag = 'malcolm:settableflag';
 export const MalcolmSelectPortType = 'malcolm:selectport';
+export const MalcolmResetPortsType = 'malcolm:resetports';
 export const MalcolmShowBinType = 'malcolm:showlayoutbin';
 export const MalcolmInLayoutDeleteZoneType = 'malcolm:insidelayoutdeletezone';
 export const MalcolmRevert = 'malcolm:revertattribute';
