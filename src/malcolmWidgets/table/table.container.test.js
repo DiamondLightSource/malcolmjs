@@ -163,7 +163,7 @@ describe('Table container', () => {
     const buttons = wrapper.find('button');
     buttons.at(buttons.length - 2).simulate('click');
     expect(dispatch.length).toEqual(2);
-    expect(dispatch[0]).toEqual(malcolmRevertAction(['test1', 'layout']));
+    expect(dispatch[1]).toEqual(malcolmRevertAction(['test1', 'layout']));
     expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
     expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
       'test1',

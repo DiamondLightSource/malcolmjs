@@ -39,8 +39,8 @@ const TableContainer = props => {
     ),
     <ButtonAction
       clickAction={() => {
-        props.revertHandler(path);
         props.rowClickHandler(path);
+        props.revertHandler(path);
       }}
       text="Discard changes"
     />,

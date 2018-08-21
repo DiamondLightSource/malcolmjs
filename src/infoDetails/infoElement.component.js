@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
 } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { selectorFunction } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+
+import blockUtils from '../malcolm/blockUtils';
 
 const styles = theme => ({
   div: {
@@ -53,7 +56,7 @@ const InfoElement = props => (
         props.path,
         props.value,
         props.handlers.eventHandler,
-        {},
+        { isDisabled: props.disabled },
         props.handlers.setFlag,
         props.theme.palette.primary.light,
         { choices: props.choices },
@@ -95,6 +98,7 @@ InfoElement.propTypes = {
     setFlag: PropTypes.func,
     clickHandler: PropTypes.func,
   }),
+  disabled: PropTypes.bool.isRequired,
 };
 
 InfoElement.defaultProps = {
@@ -104,4 +108,47 @@ InfoElement.defaultProps = {
   showLabel: true,
 };
 
-export default withStyles(styles, { withTheme: true })(InfoElement);
+const mapStateToProps = (state, ownProps) => {
+  let value;
+  let alarmState;
+  let disabled;
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    ownProps.blockName,
+    ownProps.attributeName
+  );
+  if (attribute) {
+    if (ownProps.valuePath) {
+      const path = ownProps.valuePath.split('.');
+      value = attribute;
+      path.forEach(pathElement => {
+        value = value[pathElement];
+      });
+    }
+    if (ownProps.alarmPath) {
+      const path = ownProps.alarmPath.split('.');
+      alarmState = attribute;
+      path.forEach(pathElement => {
+        alarmState = alarmState[pathElement];
+      });
+    }
+    if (ownProps.disabledFlagPath) {
+      const fullPath = ownProps.disabledFlagPath.split('.');
+      const path = fullPath[0] === 'NOT' ? fullPath.slice(1) : fullPath;
+      disabled = attribute;
+      path.forEach(pathElement => {
+        disabled = disabled[pathElement];
+      });
+      disabled = fullPath[0] === 'NOT' ? !disabled : !!disabled;
+    }
+  }
+  return {
+    alarm: alarmState !== undefined ? alarmState : ownProps.alarm,
+    value: value !== undefined ? value : ownProps.value,
+    disabled: disabled !== undefined ? disabled : ownProps.disabled,
+  };
+};
+
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(InfoElement)
+);

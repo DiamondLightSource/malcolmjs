@@ -170,7 +170,7 @@ describe('AttributeSelector', () => {
     );
     wrapper
       .find('option')
-      .first()
+      .last()
       .simulate('change');
     const pendingAction = {
       payload: {
@@ -184,7 +184,7 @@ describe('AttributeSelector', () => {
       payload: {
         path: ['test1', 'attr'],
         typeid: 'malcolm:core/Put:1.0',
-        value: '1',
+        value: '3',
       },
       type: 'malcolm:send',
     };
@@ -263,9 +263,9 @@ describe('AttributeSelector', () => {
     const component = selectorFunction(
       'info:button',
       [''],
-      { buttonLabel: 'testButton', disabled: true },
+      'testButton',
       () => {},
-      {},
+      { isDisabled: true },
       () => {},
       '#fff',
       {},
@@ -300,9 +300,9 @@ describe('AttributeSelector', () => {
     const component = selectorFunction(
       'info:button',
       [''],
-      { buttonLabel: 'testButton', disabled: false },
+      'testButton',
       () => {},
-      {},
+      { isDisabled: false },
       () => {},
       '#fff',
       {},

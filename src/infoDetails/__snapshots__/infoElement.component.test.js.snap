@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfoElement renders correctly with paths given 1`] = `
+<div
+  className="InfoElement-div-1"
+>
+  <WithTheme(AttributeAlarm)
+    alarmSeverity={1}
+  />
+  <WithStyles(Typography)
+    className="InfoElement-textName-2"
+  >
+    Test element:
+  </WithStyles(Typography)>
+  <div
+    className="InfoElement-controlContainer-3"
+  >
+    <WithStyles(WidgetTextUpdate)
+      Text="testing!"
+      noWrap={false}
+    />
+  </div>
+</div>
+`;
+
+exports[`InfoElement renders correctly with value given 1`] = `
+<div
+  className="InfoElement-div-1"
+>
+  <WithTheme(AttributeAlarm)
+    alarmSeverity={null}
+  />
+  <WithStyles(Typography)
+    className="InfoElement-textName-2"
+  >
+    Test element:
+  </WithStyles(Typography)>
+  <div
+    className="InfoElement-controlContainer-3"
+  >
+    <WithStyles(WidgetTextUpdate)
+      Text="testing..."
+      noWrap={false}
+    />
+  </div>
+</div>
+`;

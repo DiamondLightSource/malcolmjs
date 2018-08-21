@@ -104,6 +104,7 @@ describe('attribute reducer', () => {
         },
         timeStamp: {
           secondsPastEpoch: 123456789,
+          nanoseconds: 10111213,
         },
       },
     };

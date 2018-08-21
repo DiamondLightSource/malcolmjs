@@ -24,6 +24,7 @@ exports[`AttributeSelector selector function returns info:multiline and renders 
 >
   <WithStyles(Typography)
     className="WidgetTextUpdate-textUpdateNoWrap-84"
+    style={Object {}}
   >
     test value
   </WithStyles(Typography)>

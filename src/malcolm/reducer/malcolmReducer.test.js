@@ -212,11 +212,13 @@ describe('malcolm reducer', () => {
       name: 'health',
       loading: true,
       children: [],
+      alarms: {},
     });
     expect(state.blocks.block1.attributes[1].calculated).toEqual({
       name: 'icon',
       loading: true,
       children: [],
+      alarms: {},
     });
   });
 

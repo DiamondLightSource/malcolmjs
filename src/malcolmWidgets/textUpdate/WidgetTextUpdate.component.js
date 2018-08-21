@@ -28,6 +28,7 @@ const styles = theme => ({
     paddingRight: 9,
     textAlign: 'Right',
     width: '80%',
+    whiteSpace: 'pre',
   },
   textUpdate100: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
@@ -35,6 +36,7 @@ const styles = theme => ({
     paddingRight: 16,
     textAlign: 'Right',
     width: '100%',
+    whiteSpace: 'pre',
   },
   unitBox: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.1),
@@ -46,13 +48,18 @@ const styles = theme => ({
 });
 
 const WidgetTextUpdate = props => {
-  const valueString =
+  let valueString =
     props.Text !== undefined ? props.Text.toString() : 'UNDEFINED';
+  const whiteSpace = valueString !== '' ? {} : { whiteSpace: 'pre' };
+  valueString = valueString !== '' ? valueString : ' ';
   if (!props.Units) {
     if (!props.noWrap) {
       return (
         <div className={props.classes.divNoWrap}>
-          <Typography className={props.classes.textUpdateNoWrap}>
+          <Typography
+            className={props.classes.textUpdateNoWrap}
+            style={whiteSpace}
+          >
             {valueString}
           </Typography>
         </div>
@@ -60,7 +67,11 @@ const WidgetTextUpdate = props => {
     }
     return (
       <div className={props.classes.div}>
-        <Typography className={props.classes.textUpdate100} noWrap>
+        <Typography
+          className={props.classes.textUpdate100}
+          style={whiteSpace}
+          noWrap
+        >
           {valueString}
         </Typography>
       </div>
@@ -68,7 +79,11 @@ const WidgetTextUpdate = props => {
   }
   return (
     <div className={props.classes.div}>
-      <Typography className={props.classes.textUpdate80} noWrap>
+      <Typography
+        className={props.classes.textUpdate80}
+        style={whiteSpace}
+        noWrap
+      >
         {valueString}
       </Typography>
       <Typography className={props.classes.unitBox} noWrap>

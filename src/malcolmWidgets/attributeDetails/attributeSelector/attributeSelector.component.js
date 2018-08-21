@@ -21,9 +21,11 @@ export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
   string: 'malcolm:core/StringMeta:1.0',
   number: 'malcolm:core/NumberMeta:1.0',
+  choice: 'malcolm:core/ChoiceMeta:1.0',
   boolArray: 'malcolm:core/BooleanArrayMeta:1.0',
   stringArray: 'malcolm:core/StringArrayMeta:1.0',
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',
+  choiceArray: 'malcolm:core/ChoiceArrayMeta:1.0',
 };
 
 export const getDefaultFromType = objectMeta => {
@@ -37,6 +39,9 @@ export const getDefaultFromType = objectMeta => {
     case malcolmTypes.number:
     case malcolmTypes.numberArray:
       return 0;
+    case malcolmTypes.choice:
+    case malcolmTypes.choiceArray:
+      return null;
     default:
       return undefined;
   }
@@ -126,9 +131,9 @@ export const selectorFunction = (
     case 'info:button':
       return (
         <ButtonAction
-          text={value.buttonLabel}
+          text={value}
           clickAction={() => buttonClickHandler()}
-          disabled={value.disabled}
+          disabled={flags.isDisabled}
         />
       );
     case 'info:alarm':
