@@ -291,9 +291,8 @@ function cleanBlocks(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
     blocks[blockName] = {
-      name: blockName,
+      ...blocks[blockName],
       loading: true,
-      children: [],
     };
   });
   return {

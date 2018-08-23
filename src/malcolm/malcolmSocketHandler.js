@@ -4,7 +4,7 @@ import {
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
-  malcolmCleanBlocks,
+  malcolmResetBlocks,
   malcolmSetDisconnected,
   malcolmSetFlag,
   malcolmHailReturn,
@@ -12,7 +12,6 @@ import {
 import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
-import handleLocationChange from './middleware/malcolmRouting';
 
 const handleMessage = (message, dispatch, getState) => {
   const { data, originalRequest } = message;
@@ -94,7 +93,8 @@ const handleMessage = (message, dispatch, getState) => {
 const configureMalcolmSocketHandlers = (store, worker) => {
   worker.addEventListener('message', event => {
     if (event.data === 'socket connected') {
-      store.dispatch(malcolmCleanBlocks());
+      store.dispatch(malcolmResetBlocks());
+      /*
       const malcolmState = store.getState().malcolm;
       malcolmState.messagesInFlight = {};
       handleLocationChange(
@@ -103,6 +103,7 @@ const configureMalcolmSocketHandlers = (store, worker) => {
         store.dispatch,
         store.getState
       );
+      */
       store.dispatch(snackbarState(true, `Connected to WebSocket`));
     } else if (event.data === 'socket disconnected') {
       store.dispatch(
