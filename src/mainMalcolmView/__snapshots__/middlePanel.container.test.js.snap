@@ -37,8 +37,8 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
       className="MiddlePanelContainer-paletteButton-5"
       style={
         Object {
-          "bottom": 12,
-          "right": 29,
+          "bottom": 32,
+          "right": 32,
         }
       }
     >
@@ -62,7 +62,6 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
       <WithStyles(Button)
         color="secondary"
         onClick={[Function]}
-        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -131,8 +130,8 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       className="MiddlePanelContainer-paletteButton-5"
       style={
         Object {
-          "bottom": 12,
-          "right": 29,
+          "bottom": 32,
+          "right": 32,
         }
       }
     >
@@ -156,7 +155,6 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       <WithStyles(Button)
         color="secondary"
         onClick={[Function]}
-        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -191,8 +189,8 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
       className="MiddlePanelContainer-paletteButton-5"
       style={
         Object {
-          "bottom": 12,
-          "right": 29,
+          "bottom": 32,
+          "right": 32,
         }
       }
     >
@@ -216,7 +214,6 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
       <WithStyles(Button)
         color="secondary"
         onClick={[Function]}
-        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -251,8 +248,8 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       className="MiddlePanelContainer-paletteButton-5"
       style={
         Object {
-          "bottom": 12,
-          "right": 29,
+          "bottom": 32,
+          "right": 32,
         }
       }
     >
@@ -276,7 +273,6 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       <WithStyles(Button)
         color="secondary"
         onClick={[Function]}
-        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>

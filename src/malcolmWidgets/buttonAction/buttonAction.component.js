@@ -17,7 +17,6 @@ const styles = () => ({
 const ButtonAction = props => (
   <div className={props.classes.container}>
     <Button
-      variant="raised"
       color="primary"
       className={props.classes.button}
       onClick={props.clickAction}

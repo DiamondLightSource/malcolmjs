@@ -10,6 +10,7 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
   MalcolmTickArchive,
+  MalcolmMultipleAttributeData,
 } from '../malcolm.types';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
@@ -327,7 +328,11 @@ const tickArchive = (state, payload) => {
   return state;
 };
 
-export function updateAttribute(oldState, payload) {
+export function updateAttribute(
+  oldState,
+  payload,
+  ignoreSecondaryCalculations
+) {
   if (payload.delta) {
     const state = oldState;
 
@@ -394,9 +399,6 @@ export function updateAttribute(oldState, payload) {
         blockArchive,
       };
 
-      // update the navigation if the attribute was part of the path
-      const navigation = updateNavigation(updatedState, attributeName);
-
       const layout = updateLayout(
         state,
         updatedState,
@@ -437,16 +439,106 @@ export function updateAttribute(oldState, payload) {
         ...updatedState,
         layout,
         layoutEngine,
-        navigation,
+        // navigation,
       };
 
-      updatedState = navigationReducer.updateNavTypes(updatedState);
+      if (!ignoreSecondaryCalculations) {
+        const navigation = updateNavigation(updatedState, attributeName);
+        updatedState.navigation = navigation;
+
+        updatedState = navigationReducer.updateNavTypes(updatedState);
+      }
 
       return updatedState;
     }
   }
 
   return oldState;
+}
+
+export function updateMultipleAttributes(oldState, payload) {
+  let updatedState = oldState;
+  for (let i = 0; i < payload.actions.length; i += 1) {
+    const innerPayload = payload.actions[i].payload;
+
+    updatedState = updateAttribute(updatedState, innerPayload);
+  }
+
+  for (let i = 0; i < payload.actions.length; i += 1) {
+    const innerPayload = payload.actions[i].payload;
+    const { path } = updatedState.messagesInFlight[innerPayload.id];
+    const attributeName = path[1];
+
+    const navigation = updateNavigation(updatedState, attributeName);
+
+    if (navigation !== updatedState.navigation) {
+      updatedState.navigation = navigation;
+      break;
+    }
+  }
+
+  updatedState = navigationReducer.updateNavTypes(updatedState);
+
+  // const layoutEngineView = updatedState.layoutEngine
+  //       ? {
+  //           offset: {
+  //             x: updatedState.layoutEngine.diagramModel.offsetX,
+  //             y: updatedState.layoutEngine.diagramModel.offsetY,
+  //           },
+  //           zoom: updatedState.layoutEngine.diagramModel.zoom,
+  //         }
+  //       : undefined;
+
+  // for (let i = 0; i < payload.actions.length; i++) {
+  //   const innerPayload = payload.actions[i].payload;
+  //   const { path } = updatedState.messagesInFlight[innerPayload.id];
+  //   const blockName = path[0];
+  //   const attributeName = path[1];
+
+  //   const attributes = [...updatedState.blocks[blockName].attributes];
+
+  //   const matchingAttributeIndex = blockUtils.findAttributeIndex(
+  //     updatedState.blocks,
+  //     blockName,
+  //     attributeName
+  //   );
+
+  //   if (matchingAttributeIndex < 0) {
+  //     continue;
+  //   }
+
+  //   const layout = updateLayout(
+  //     oldState,
+  //     updatedState,
+  //     blockName,
+  //     attributeName
+  //   );
+
+  //   const layoutLoading = layout && layout.blocks ? layout.blocks.some(b => b.loading) : true;
+  //   const numberOfBlocksLoading = layout.blocks.filter(b => b.loading).length;
+  //   const numberOfBlocksWereLoading = oldState.layout
+  //     ? oldState.layout.blocks.filter(b => b.loading).length
+  //     : 1000000;
+
+  //   const layoutEngine =
+  //       numberOfBlocksLoading < numberOfBlocksWereLoading ||
+  //       (!layoutLoading &&
+  //         LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
+  //         ? LayoutReducer.buildLayoutEngine(
+  //             layout,
+  //             updatedState.layoutState.selectedBlocks,
+  //             layoutEngineView
+  //           )
+  //         : updatedState.layoutEngine;
+
+  //   if (layoutEngine !== updatedState.layoutEngine) {
+  //     updatedState.layout = layout;
+  //     updatedState.layoutEngine = layoutEngine;
+  //     break;
+  //   }
+  // }
+
+  return updatedState;
 }
 
 export function revertLocalState(oldState, payload) {
@@ -515,6 +607,7 @@ const AttributeReducer = createReducer(
   {},
   {
     [MalcolmAttributeData]: updateAttribute,
+    [MalcolmMultipleAttributeData]: updateMultipleAttributes,
     [MalcolmMainAttributeUpdate]: setMainAttribute,
     [MalcolmRevert]: revertLocalState,
     [MalcolmTickArchive]: tickArchive,

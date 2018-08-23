@@ -70,10 +70,10 @@ const theme = createMuiTheme({
     disconnected: '#9d07bb',
   },
   portColours: {
-    bool: blue[200],
-    int32: orange[300],
-    motor: green[300],
-    NDArray: purple[300],
+    bool: blue,
+    int32: orange,
+    motor: green,
+    NDArray: purple,
   },
 });
 
