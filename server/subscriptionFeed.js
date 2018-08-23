@@ -23,7 +23,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
@@ -35,7 +35,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
@@ -47,7 +47,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
@@ -67,7 +67,7 @@ const activeSubscriptions = [
         response.changes[0][1].alarm.severity = 2;
       }
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch =Math.floor(now.getTime()/1000);
       return response;
     },
@@ -79,7 +79,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = (index%4 < 2);
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
@@ -91,7 +91,7 @@ const activeSubscriptions = [
     update: (response, index) => {
       response.changes[0][1].value = ((index+1)%4 < 2);
       const now = (new Date());
-      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
       response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
