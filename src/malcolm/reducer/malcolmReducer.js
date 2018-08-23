@@ -195,12 +195,9 @@ function updateBlock(state, payload) {
 
         blockAttributes = [...payloadAttributes, ...orphanedAttributes];
         attributeArchive = [...payloadArchive, ...orphanedArchives];
-        orphans = blockAttributes.filter(
-          attribute =>
-            !blocks[blockName].children.some(
-              child => child === attribute.calculated.name
-            )
-        );
+        orphans = blockAttributes
+          .map(attribute => attribute.calculated.name)
+          .filter(name => !payload.fields.some(child => child === name));
       } else {
         blockAttributes = blocks[blockName].attributes;
       }
