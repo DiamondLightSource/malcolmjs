@@ -88,7 +88,7 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
   Object.values(state.malcolm.blocks).forEach(block => {
     dispatch(
       malcolmSubscribeAction(
-        block.name === '.blocks' ? [block.name] : [block.name, 'meta']
+        block.name === '.blocks' ? ['.', 'blocks'] : [block.name, 'meta']
       )
     );
   });
