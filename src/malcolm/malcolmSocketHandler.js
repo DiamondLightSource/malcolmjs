@@ -62,7 +62,6 @@ const handleMessage = (message, dispatch, getState) => {
     case 'malcolm:core/Error:1.0': {
       if (data.id !== -1) {
         BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-        console.log(`------- ${data.message}`);
         dispatch(
           snackbarState(
             true,
