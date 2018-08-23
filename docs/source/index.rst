@@ -16,6 +16,7 @@ How is the documentation structured?
 
 The documentation is structured into two main sections; one targeted at end users and the other at developers/power users.
 
+
 .. _installation_guide:
 
 Installation Guide
@@ -32,4 +33,5 @@ Installation Guide
 
 .. _jmalcolm:
     https://github.com/openGDA
+
 
