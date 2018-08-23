@@ -22,6 +22,9 @@ const activeSubscriptions = [
     interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
   },
@@ -31,6 +34,9 @@ const activeSubscriptions = [
     interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
   },
@@ -40,6 +46,9 @@ const activeSubscriptions = [
     interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -57,15 +66,9 @@ const activeSubscriptions = [
       } else {
         response.changes[0][1].alarm.severity = 2;
       }
-
-      //response.changes[0][1].timeStamp.secondsPastEpoch += 180;
-
-      response.changes[0][1].timeStamp.nanoseconds += 5e7;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
-
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch =Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -74,12 +77,10 @@ const activeSubscriptions = [
     index: 0,
     interval: 200,
     update: (response, index) => {
-      response.changes[0][1].value = (index%4 < 2) ;
-      response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
+      response.changes[0][1].value = (index%4 < 2);
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -89,11 +90,9 @@ const activeSubscriptions = [
     interval: 200,
     update: (response, index) => {
       response.changes[0][1].value = ((index+1)%4 < 2);
-      response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*100000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
