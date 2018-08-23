@@ -21,7 +21,10 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import AttributeReducer, { updateAttribute } from './attribute.reducer';
+import AttributeReducer, {
+  updateAttribute,
+  pushToArchive,
+} from './attribute.reducer';
 import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
@@ -330,6 +333,22 @@ function setDisconnected(state) {
                 severity: AlarmStates.UNDEFINED_ALARM,
               },
             };
+            if (
+              state.blockArchive[blockName] &&
+              state.blockArchive[blockName].attributes[attr]
+            ) {
+              const payload = {
+                raw: {
+                  value: attributes[attr].raw.value,
+                  timeStamp: attributes[attr].raw.timeStamp,
+                },
+              };
+              pushToArchive(
+                state.blockArchive[blockName].attributes[attr],
+                payload,
+                AlarmStates.UNDEFINED_ALARM
+              );
+            }
           }
         } else {
           /*
