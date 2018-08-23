@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "FMC 24V IO Module ", 
+        "value": "FMC Loopback Module ", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 
@@ -23,7 +23,7 @@
           "typeid": "malcolm:core/StringMeta:1.0", 
           "description": "Label for the block", 
           "tags": [
-            "widget:title", 
+            "widget:textinput", 
             "config:1"
           ], 
           "writeable": true, 

@@ -171,7 +171,10 @@ const mapStateToProps = (state, ownProps, memory) => {
     stateMemory.rootAttributes = block.attributes.filter(
       a =>
         isRootLevelAttribute(a) &&
-        !block.orphans.some(orphan => orphan === a.calculated.name)
+        !(
+          block.orphans &&
+          block.orphans.some(orphan => orphan === a.calculated.name)
+        )
     );
     stateMemory.groups = block.attributes
       .filter(a => a.calculated.isGroup)
@@ -180,7 +183,10 @@ const mapStateToProps = (state, ownProps, memory) => {
         children: block.attributes.filter(
           a =>
             a.calculated.group === group.calculated.name &&
-            !block.orphans.some(orphan => orphan === a.calculated.name)
+            !(
+              block.orphans &&
+              block.orphans.some(orphan => orphan === a.calculated.name)
+            )
         ),
       }));
 

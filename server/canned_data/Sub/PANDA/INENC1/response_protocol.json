@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "Quadrature", 
+        "value": "enDat", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 

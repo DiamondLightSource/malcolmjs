@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "LVDSIN1.VAL", 
+        "value": "ZERO", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 
@@ -50,14 +50,6 @@
             "DIV4.OUTD", 
             "DIV4.OUTN", 
             "FILTER.READY", 
-            "FMC.INP1", 
-            "FMC.INP2", 
-            "FMC.INP3", 
-            "FMC.INP4", 
-            "FMC.INP5", 
-            "FMC.INP6", 
-            "FMC.INP7", 
-            "FMC.INP8", 
             "INENC1.A", 
             "INENC1.B", 
             "INENC1.CONN", 
