@@ -412,9 +412,8 @@ describe('malcolm reducer', () => {
   it('does clean', () => {
     state.blocks = testBlock;
     const tidyBlock = {
-      name: 'testBlock',
+      ...state.blocks.testBlock,
       loading: true,
-      children: [],
     };
     const action = { type: MalcolmCleanBlocks };
     state = malcolmReducer(state, action);
