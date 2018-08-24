@@ -479,65 +479,6 @@ export function updateMultipleAttributes(oldState, payload) {
 
   updatedState = navigationReducer.updateNavTypes(updatedState);
 
-  // const layoutEngineView = updatedState.layoutEngine
-  //       ? {
-  //           offset: {
-  //             x: updatedState.layoutEngine.diagramModel.offsetX,
-  //             y: updatedState.layoutEngine.diagramModel.offsetY,
-  //           },
-  //           zoom: updatedState.layoutEngine.diagramModel.zoom,
-  //         }
-  //       : undefined;
-
-  // for (let i = 0; i < payload.actions.length; i++) {
-  //   const innerPayload = payload.actions[i].payload;
-  //   const { path } = updatedState.messagesInFlight[innerPayload.id];
-  //   const blockName = path[0];
-  //   const attributeName = path[1];
-
-  //   const attributes = [...updatedState.blocks[blockName].attributes];
-
-  //   const matchingAttributeIndex = blockUtils.findAttributeIndex(
-  //     updatedState.blocks,
-  //     blockName,
-  //     attributeName
-  //   );
-
-  //   if (matchingAttributeIndex < 0) {
-  //     continue;
-  //   }
-
-  //   const layout = updateLayout(
-  //     oldState,
-  //     updatedState,
-  //     blockName,
-  //     attributeName
-  //   );
-
-  //   const layoutLoading = layout && layout.blocks ? layout.blocks.some(b => b.loading) : true;
-  //   const numberOfBlocksLoading = layout.blocks.filter(b => b.loading).length;
-  //   const numberOfBlocksWereLoading = oldState.layout
-  //     ? oldState.layout.blocks.filter(b => b.loading).length
-  //     : 1000000;
-
-  //   const layoutEngine =
-  //       numberOfBlocksLoading < numberOfBlocksWereLoading ||
-  //       (!layoutLoading &&
-  //         LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
-  //         ? LayoutReducer.buildLayoutEngine(
-  //             layout,
-  //             updatedState.layoutState.selectedBlocks,
-  //             layoutEngineView
-  //           )
-  //         : updatedState.layoutEngine;
-
-  //   if (layoutEngine !== updatedState.layoutEngine) {
-  //     updatedState.layout = layout;
-  //     updatedState.layoutEngine = layoutEngine;
-  //     break;
-  //   }
-  // }
-
   return updatedState;
 }
 
