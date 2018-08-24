@@ -205,29 +205,6 @@ function updateNavTypes(state) {
     [updatedState.mainAttribute] = mainAttributeNav.path.split('.');
   }
 
-  /*
-  const attributes = navigationLists.filter(
-    nav => nav.navType === NavTypes.Attribute
-  );
-  if (attributes.length > 0) {
-    const lastAttribute = attributes[attributes.length - 1];
-    const indexOfLastAttribute = navigationLists.findIndex(
-      nav => nav === lastAttribute
-    );
-    const panelIndices = navigationLists
-      .map((nav, index) => index)
-      .filter(navIndex =>
-        [NavTypes.Info, NavTypes.Palette, NavTypes.Block].includes(
-          navigationLists[navIndex].navType
-        )
-      );
-
-    if (indexOfLastAttribute >= panelIndices.slice(-2)[0]) {
-      [updatedState.mainAttribute] = lastAttribute.path.split('.');
-    } else {
-      updatedState.mainAttribute = undefined;
-    }
-  } */
   return updatedState;
 }
 

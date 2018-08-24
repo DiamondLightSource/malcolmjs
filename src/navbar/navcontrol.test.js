@@ -47,7 +47,7 @@ describe('NavControl', () => {
       <NavControl nav={nav} navigateToChild={navigateFunction} />
     );
 
-    wrapper.find('p').simulate('click');
+    wrapper.find('Typography').simulate('click');
 
     expect(navigateFunction.mock.calls.length).toEqual(1);
   });

@@ -8,22 +8,20 @@ const styles = theme => ({
   div: {
     display: 'flex',
     alignItems: 'center',
+    borderLeft: '2px solid rgb(93,93,93)',
   },
   divNoWrap: {
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     padding: 4,
-    paddingRight: 16,
+    paddingRight: 4,
   },
   textUpdateNoWrap: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Right',
     width: '100%',
     wordWrap: 'break-word',
   },
   textUpdate80: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     padding: 4,
     paddingRight: 9,
     textAlign: 'Right',
@@ -31,15 +29,13 @@ const styles = theme => ({
     whiteSpace: 'pre',
   },
   textUpdate100: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     padding: 4,
-    paddingRight: 16,
+    paddingRight: 4,
     textAlign: 'Right',
     width: '100%',
     whiteSpace: 'pre',
   },
   unitBox: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     color: emphasize(theme.palette.primary.contrastText, 0.2),
     padding: 4,
     paddingRight: 2,

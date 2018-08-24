@@ -44,6 +44,7 @@ class NavControl extends Component {
       <div className={classes.container}>
         <Typography
           className={classes.currentLink}
+          variant="subheading"
           onClick={() => navigateToChild('')}
         >
           {nav.label}

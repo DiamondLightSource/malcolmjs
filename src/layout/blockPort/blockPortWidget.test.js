@@ -11,7 +11,9 @@ describe('BlockPortWidget', () => {
 
   const theme = {
     portColours: {
-      bool: 'blue',
+      bool: {
+        500: 'blue',
+      },
     },
   };
 

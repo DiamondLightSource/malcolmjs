@@ -14,80 +14,89 @@ import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
 import handleLocationChange from './middleware/malcolmRouting';
 
-const handleMessage = (message, dispatch, getState) => {
-  const { data, originalRequest } = message;
-  switch (data.typeid) {
-    case 'malcolm:core/Update:1.0': {
-      if (originalRequest.path.join('') === '.blocks') {
-        RootBlockHandler(originalRequest, data.value, dispatch, getState());
+const isAttributeDelta = msg =>
+  msg.data.typeid === 'malcolm:core/Delta:1.0' &&
+  msg.attributeDelta.typeid &&
+  msg.attributeDelta.typeid.slice(0, 8) === 'epics:nt';
+
+const handleMessages = (messages, dispatch, getState) => {
+  const attributeDeltas = messages.filter(msg => isAttributeDelta(msg));
+  const otherMessages = messages.filter(msg => !isAttributeDelta(msg));
+
+  otherMessages.forEach(message => {
+    const { data, originalRequest } = message;
+    switch (data.typeid) {
+      case 'malcolm:core/Update:1.0': {
+        if (originalRequest.path.join('') === '.blocks') {
+          RootBlockHandler(originalRequest, data.value, dispatch, getState());
+        }
+
+        break;
       }
-
-      break;
-    }
-    case 'malcolm:core/Delta:1.0': {
-      const object = message.attributeDelta;
-      const typeid = object.typeid ? object.typeid : '';
-      if (typeid === 'malcolm:core/BlockMeta:1.0') {
-        BlockMetaHandler(originalRequest, object, dispatch);
-      } else if (typeid.slice(0, 8) === 'epics:nt') {
-        AttributeHandler.processAttribute(
-          originalRequest,
-          object,
-          getState,
-          dispatch
-        );
-      } else if (typeid === 'malcolm:core/Method:1.0') {
-        AttributeHandler.processMethod(originalRequest, object, dispatch);
-      } else {
-        dispatch({
-          type: 'unprocessed_delta',
-          payload: object,
-        });
-        dispatch({
-          type: MalcolmAttributeData,
-          payload: {
-            id: originalRequest.id,
-            delta: true,
-            unableToProcess: true,
-          },
-        });
+      case 'malcolm:core/Delta:1.0': {
+        const object = message.attributeDelta;
+        const typeid = object.typeid ? object.typeid : '';
+        if (typeid === 'malcolm:core/BlockMeta:1.0') {
+          BlockMetaHandler(originalRequest, object, dispatch);
+        } else if (typeid.slice(0, 8) === 'epics:nt') {
+          // multiple attribute updates are now handled separately.
+        } else if (typeid === 'malcolm:core/Method:1.0') {
+          AttributeHandler.processMethod(originalRequest, object, dispatch);
+        } else {
+          dispatch({
+            type: 'unprocessed_delta',
+            payload: object,
+          });
+          dispatch({
+            type: MalcolmAttributeData,
+            payload: {
+              id: originalRequest.id,
+              delta: true,
+              unableToProcess: true,
+            },
+          });
+        }
+        break;
       }
-      break;
-    }
-    case 'malcolm:core/Return:1.0': {
-      dispatch(malcolmHailReturn(data, false));
-      dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
-      break;
-    }
-
-    case 'malcolm:core/Error:1.0': {
-      if (data.id !== -1) {
-        BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
-
-        dispatch(
-          snackbarState(
-            true,
-            `Error in attribute ${
-              originalRequest.path.slice(-1)[0]
-            } for block ${originalRequest.path.slice(0, -1)}`
-          )
-        );
-        dispatch(malcolmHailReturn(data, true));
+      case 'malcolm:core/Return:1.0': {
+        dispatch(malcolmHailReturn(data, false));
         dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
         break;
-      } else {
-        dispatch(
-          snackbarState(
-            true,
-            `Error reported by malcolm server: "${data.message}"`
-          )
-        );
+      }
+
+      case 'malcolm:core/Error:1.0': {
+        if (data.id !== -1) {
+          BlockUtils.didBlockLoadFail(originalRequest, dispatch, getState);
+
+          dispatch(
+            snackbarState(
+              true,
+              `Error in attribute ${
+                originalRequest.path.slice(-1)[0]
+              } for block ${originalRequest.path.slice(0, -1)}`
+            )
+          );
+          dispatch(malcolmHailReturn(data, true));
+          dispatch(malcolmSetFlag(originalRequest.path, 'pending', false));
+          break;
+        } else {
+          dispatch(
+            snackbarState(
+              true,
+              `Error reported by malcolm server: "${data.message}"`
+            )
+          );
+          break;
+        }
+      }
+      default: {
         break;
       }
     }
-    default: {
-      break;
-    }
+  });
+
+  if (attributeDeltas.length > 0) {
+    AttributeHandler.processAttributes(attributeDeltas, getState, dispatch);
   }
 };
 
@@ -118,7 +127,8 @@ const configureMalcolmSocketHandlers = (store, worker) => {
     ) {
       store.dispatch(snackbarState(true, event.data));
     } else {
-      handleMessage(event.data, store.dispatch, store.getState);
+      const messages = JSON.parse(event.data);
+      handleMessages(messages, store.dispatch, store.getState);
     }
   });
 };

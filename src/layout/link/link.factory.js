@@ -24,7 +24,7 @@ class MalcolmLinkFactory extends DefaultLinkFactory {
   generateLinkSegment(model, widget, selected, path) {
     return (
       <path
-        className={selected ? widget.bem('--path-selected') : ''}
+        className={selected ? widget.bem('--highlight-path') : ''}
         strokeWidth={model.width}
         stroke={model.color}
         d={path}

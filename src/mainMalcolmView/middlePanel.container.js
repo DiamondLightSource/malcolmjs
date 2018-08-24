@@ -111,6 +111,8 @@ const findAttributeComponent = props => {
       (props.openParent ? 360 : 0)}px)`,
     // transition: 'width 1s, left 1s',
   };
+  const palettePadding = props.showBin ? 4 : 32;
+
   switch (widgetTag) {
     case 'widget:flowgraph':
       return (
@@ -124,7 +126,10 @@ const findAttributeComponent = props => {
           </div>
           <div
             className={props.classes.paletteButton}
-            style={{ right: props.openChild ? 360 + 29 : 29, bottom: 12 }}
+            style={{
+              right: props.openChild ? 360 + palettePadding : palettePadding,
+              bottom: palettePadding,
+            }}
           >
             {props.showBin ? (
               <LayoutBin />
@@ -144,7 +149,7 @@ const findAttributeComponent = props => {
           >
             <Button
               color="secondary"
-              variant="raised"
+              // variant="raised"
               onClick={() => props.runAutoLayout()}
             >
               Auto layout

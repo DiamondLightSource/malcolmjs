@@ -43,11 +43,11 @@ class BlockPortWidget extends BaseWidget {
   render() {
     const portColour =
       this.props.theme.portColours[this.props.portType] ||
-      this.props.theme.palette.primary.main;
+      this.props.theme.palette.primary;
 
     const portStyle = {
       ...(this.props.inputPort ? styles().portIn : styles().portOut),
-      background: this.state.selected ? 'rgb(192,255,0)' : portColour,
+      background: this.state.selected ? portColour[100] : portColour[500],
     };
 
     const port = (

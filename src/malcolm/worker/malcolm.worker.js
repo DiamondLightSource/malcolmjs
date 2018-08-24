@@ -11,15 +11,16 @@ console.log('connecting to worker socket');
 const messagesInFlight = {};
 const existingAttributes = {};
 
+let bufferedMessages = [];
+
 export function processWebSocketMessage(msg) {
   const data = JSON.parse(msg.data);
   const originalRequest = messagesInFlight[data.id];
 
   let attributeDelta;
   if (data.typeid === 'malcolm:core/Delta:1.0') {
-    const { changes } = data;
     attributeDelta = attributeHandler.processDeltaMessage(
-      changes,
+      data.changes,
       existingAttributes[data.id]
     );
 
@@ -44,8 +45,7 @@ socketContainer.socket.onmessage = event => {
   const result = processWebSocketMessage({
     data: event.data,
   });
-
-  self.postMessage(result);
+  bufferedMessages.push(result);
 };
 
 socketContainer.socket.onclose = () => {
@@ -72,6 +72,13 @@ function handleMessage(event) {
 }
 
 self.addEventListener('message', handleMessage);
+
+setInterval(() => {
+  const messagesToSend = bufferedMessages;
+  bufferedMessages = [];
+
+  self.postMessage(JSON.stringify(messagesToSend));
+}, 50);
 
 export default {
   processWebSocketMessage,

@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { withStyles } from '@material-ui/core/styles';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const styles = theme => ({
+const styles = () => ({
   textInput: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.07),
     width: '100%',
   },
   inputStyle: {
-    padding: 5,
     fontSize: '11pt',
     textAlign: 'Right',
   },
   InputStyle: {
     paddingRight: 4,
+    paddingLeft: 4,
   },
   button: {
     width: '22px',
@@ -139,4 +137,4 @@ WidgetTextInput.defaultProps = {
   continuousSend: false,
 };
 
-export default withStyles(styles, { withTheme: true })(WidgetTextInput);
+export default withStyles(styles)(WidgetTextInput);

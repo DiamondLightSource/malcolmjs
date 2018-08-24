@@ -4,22 +4,13 @@ const alarmStates = [
 
 let subscriptionTimers = {};
 
+const intervalTimeInMs = 50;
+
 const activeSubscriptions = [
-  {
-    path: [ "PANDA:SEQ1", "inputs" ],
-    index: 0,
-    interval: 10000,
-    update: (response, index) => {
-      let updatedResponse = response;
-      updatedResponse.changes[0][1].value = index%2 === 0 ? 'expanded' : 'collapsed';
-      
-      return updatedResponse;
-    }
-  },
   {
     path: [ "PANDA:SEQ1", "outa" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
@@ -28,18 +19,18 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:SEQ1", "outb" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
       return response;
     }
   },
   {
-    path: [ "PANDA:SEQ1", "outc" ],
+    path: [ "PANDA:SEQ1", "repeats" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
-      response.changes[0][1].value = index%2 === 0;
+      response.changes[0][1].value = index;
       return response;
     },
   },
