@@ -95,7 +95,9 @@ const handleMessages = (messages, dispatch, getState) => {
     }
   });
 
-  AttributeHandler.processAttributes(attributeDeltas, getState, dispatch);
+  if (attributeDeltas.length > 0) {
+    AttributeHandler.processAttributes(attributeDeltas, getState, dispatch);
+  }
 };
 
 const configureMalcolmSocketHandlers = (store, worker) => {
