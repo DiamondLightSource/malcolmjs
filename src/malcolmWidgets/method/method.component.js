@@ -41,7 +41,7 @@ const styles = () => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: 150,
+    width: '100%',
     padding: 2,
   },
   runButton: {
@@ -123,11 +123,9 @@ const MethodDetails = props => {
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </div>
           </Tooltip>
-          <Typography className={props.classes.textName}>
-            {props.methodName}
-          </Typography>
           <div className={props.classes.controlContainer}>
             <ButtonAction
+              method
               text={props.methodName}
               disabled={props.methodAlarm === AlarmStates.PENDING}
               clickAction={() =>
@@ -172,9 +170,9 @@ const MethodDetails = props => {
                 <AttributeAlarm alarmSeverity={props.methodAlarm} />
               </div>
             </Tooltip>
-            <Typography className={props.classes.textName} />
             <div className={props.classes.controlContainer}>
               <ButtonAction
+                method
                 text={props.methodName}
                 disabled={props.methodAlarm === AlarmStates.PENDING}
                 clickAction={() =>

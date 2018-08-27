@@ -18,6 +18,7 @@ const ButtonAction = props => (
   <div className={props.classes.container}>
     <Button
       color="primary"
+      variant={props.method ? 'raised' : ''}
       className={props.classes.button}
       onClick={props.clickAction}
       disabled={props.disabled}
@@ -28,6 +29,7 @@ const ButtonAction = props => (
 );
 
 ButtonAction.propTypes = {
+  method: PropTypes.bool,
   text: PropTypes.string.isRequired,
   clickAction: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
@@ -38,6 +40,7 @@ ButtonAction.propTypes = {
 };
 
 ButtonAction.defaultProps = {
+  method: false,
   disabled: false,
 };
 

@@ -8,7 +8,9 @@ const styles = theme => ({
   div: {
     display: 'flex',
     alignItems: 'center',
-    borderLeft: '2px solid rgb(93,93,93)',
+    borderLeft: `2px solid ${
+      theme.widgetColours ? theme.widgetColours.textUpdateBar : 'grey'
+    }`,
   },
   divNoWrap: {
     display: 'flex',
