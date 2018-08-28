@@ -9,18 +9,19 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
-    backgroundColor: theme.palette.primary.main,
+    // backgroundColor: theme.palette.primary.main,
+    borderTop: `1px solid ${theme.palette.primary.contrastText}`,
     paddingTop: 0,
     paddingBottom: 0,
-    minHeight: 24,
+    minHeight: 32,
   },
   expanded: {
-    backgroundColor: theme.palette.primary.main,
+    // backgroundColor: theme.palette.primary.main,
     margin: '0px 0 !important',
     minHeight: '36px !important',
   },
   content: {
-    backgroundColor: theme.palette.primary.main,
+    // backgroundColor: theme.palette.primary.main,
     margin: '0px 0 !important',
     minHeight: '24px !important',
     display: 'flex',

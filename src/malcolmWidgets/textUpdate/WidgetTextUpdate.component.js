@@ -4,15 +4,28 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
+const baseDiv = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const textUpdateBase = {
+  padding: 4,
+  paddingRight: 9,
+  textAlign: 'Right',
+  width: '80%',
+  whiteSpace: 'pre',
+};
+
 const styles = theme => ({
   div: {
-    display: 'flex',
-    alignItems: 'center',
-    borderLeft: '2px solid rgb(93,93,93)',
+    ...baseDiv,
+    borderLeft: `2px solid ${
+      theme.widgetColours ? theme.widgetColours.textUpdateBar : 'grey'
+    }`,
   },
   divNoWrap: {
-    display: 'flex',
-    alignItems: 'center',
+    ...baseDiv,
     padding: 4,
     paddingRight: 4,
   },
@@ -21,19 +34,11 @@ const styles = theme => ({
     width: '100%',
     wordWrap: 'break-word',
   },
-  textUpdate80: {
-    padding: 4,
-    paddingRight: 9,
-    textAlign: 'Right',
-    width: '80%',
-    whiteSpace: 'pre',
-  },
+  textUpdate80: textUpdateBase,
   textUpdate100: {
-    padding: 4,
+    ...textUpdateBase,
     paddingRight: 4,
-    textAlign: 'Right',
     width: '100%',
-    whiteSpace: 'pre',
   },
   unitBox: {
     color: emphasize(theme.palette.primary.contrastText, 0.2),
