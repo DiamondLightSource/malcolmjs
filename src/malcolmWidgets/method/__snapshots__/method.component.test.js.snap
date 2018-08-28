@@ -95,7 +95,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           </div>
         </WithStyles(Tooltip)>
         <div
-          className="MethodDetails-controlContainer-3"
+          className="MethodDetails-runButton-4"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
@@ -213,7 +213,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           </div>
         </WithStyles(Tooltip)>
         <div
-          className="MethodDetails-controlContainer-3"
+          className="MethodDetails-runButton-4"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
@@ -331,7 +331,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           </div>
         </WithStyles(Tooltip)>
         <div
-          className="MethodDetails-controlContainer-3"
+          className="MethodDetails-runButton-4"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
@@ -449,7 +449,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           </div>
         </WithStyles(Tooltip)>
         <div
-          className="MethodDetails-controlContainer-3"
+          className="MethodDetails-runButton-4"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
@@ -567,7 +567,7 @@ exports[`Method component renders correctly with return value 1`] = `
           </div>
         </WithStyles(Tooltip)>
         <div
-          className="MethodDetails-controlContainer-3"
+          className="MethodDetails-runButton-4"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
