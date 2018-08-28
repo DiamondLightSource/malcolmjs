@@ -20,21 +20,33 @@ exports[`archiveTable renders correctly 1`] = `
           key="0"
           padding="none"
         >
-          Alarm state
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Alarm state
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="1"
           padding="none"
         >
-          Time set
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Time set
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="2"
           padding="none"
         >
-          Value
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Value
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
       </WithStyles(TableRow)>
     </WithStyles(TableHead)>
