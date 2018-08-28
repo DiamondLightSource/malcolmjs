@@ -41,7 +41,7 @@ const styles = () => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '100%',
+    width: 150,
     padding: 2,
   },
   runButton: {
@@ -123,7 +123,7 @@ const MethodDetails = props => {
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </div>
           </Tooltip>
-          <div className={props.classes.controlContainer}>
+          <div className={props.classes.runButton}>
             <ButtonAction
               method
               text={props.methodName}
@@ -170,7 +170,7 @@ const MethodDetails = props => {
                 <AttributeAlarm alarmSeverity={props.methodAlarm} />
               </div>
             </Tooltip>
-            <div className={props.classes.controlContainer}>
+            <div className={props.classes.runButton}>
               <ButtonAction
                 method
                 text={props.methodName}
@@ -219,6 +219,7 @@ MethodDetails.propTypes = {
   classes: PropTypes.shape({
     div: PropTypes.string,
     textName: PropTypes.string,
+    runButton: PropTypes.string,
     controlContainer: PropTypes.string,
   }).isRequired,
 };

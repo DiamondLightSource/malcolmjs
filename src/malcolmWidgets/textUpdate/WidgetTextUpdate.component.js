@@ -4,10 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const baseDiv = {
+const baseDiv = theme => ({
   display: 'flex',
   alignItems: 'center',
-};
+  borderLeft: `2px solid ${theme.palette.divider}`,
+});
 
 const textUpdateBase = {
   padding: 4,
@@ -19,15 +20,14 @@ const textUpdateBase = {
 
 const styles = theme => ({
   div: {
-    ...baseDiv,
-    borderLeft: `2px solid ${theme.palette.divider}`,
+    ...baseDiv(theme),
   },
-  divNoWrap: {
-    ...baseDiv,
+  divWrap: {
+    ...baseDiv(theme),
     padding: 4,
     paddingRight: 4,
   },
-  textUpdateNoWrap: {
+  textUpdateWrap: {
     textAlign: 'Right',
     width: '100%',
     wordWrap: 'break-word',
@@ -54,9 +54,9 @@ const WidgetTextUpdate = props => {
   if (!props.Units) {
     if (!props.noWrap) {
       return (
-        <div className={props.classes.divNoWrap}>
+        <div className={props.classes.divWrap}>
           <Typography
-            className={props.classes.textUpdateNoWrap}
+            className={props.classes.textUpdateWrap}
             style={whiteSpace}
           >
             {valueString}
@@ -100,8 +100,8 @@ WidgetTextUpdate.propTypes = {
     textUpdate80: PropTypes.string,
     unitBox: PropTypes.string,
     div: PropTypes.string,
-    divNoWrap: PropTypes.string,
-    textUpdateNoWrap: PropTypes.string,
+    divWrap: PropTypes.string,
+    textUpdateWrap: PropTypes.string,
   }).isRequired,
   noWrap: PropTypes.bool,
 };
