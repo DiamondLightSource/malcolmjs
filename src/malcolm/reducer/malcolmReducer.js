@@ -371,16 +371,6 @@ function setDisconnected(state) {
                 {
                   raw: {
                     timeStamp,
-                    value: undefined,
-                  },
-                },
-                AlarmStates.UNDEFINED_ALARM
-              );
-              pushToArchive(
-                state.blockArchive[blockName].attributes[attr],
-                {
-                  raw: {
-                    timeStamp,
                     value: attributes[attr].raw.value,
                   },
                 },

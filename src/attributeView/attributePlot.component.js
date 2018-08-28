@@ -24,7 +24,8 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
     .map(
       (value, valIndex) =>
         alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
-        alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex]
+        (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&
+          alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
           ? value
           : null
     );

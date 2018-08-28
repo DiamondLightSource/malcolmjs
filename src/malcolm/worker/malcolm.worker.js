@@ -13,6 +13,13 @@ const existingAttributes = {};
 
 let bufferedMessages = [];
 
+const flushBuffer = () => {
+  const messagesToSend = bufferedMessages;
+  bufferedMessages = [];
+
+  self.postMessage(JSON.stringify(messagesToSend));
+};
+
 export function processWebSocketMessage(msg) {
   const data = JSON.parse(msg.data);
   const originalRequest = messagesInFlight[data.id];
@@ -49,6 +56,7 @@ socketContainer.socket.onmessage = event => {
 };
 
 socketContainer.socket.onclose = () => {
+  flushBuffer();
   console.log('socket disconnected');
   self.postMessage('socket disconnected');
 };
@@ -74,10 +82,7 @@ function handleMessage(event) {
 self.addEventListener('message', handleMessage);
 
 setInterval(() => {
-  const messagesToSend = bufferedMessages;
-  bufferedMessages = [];
-
-  self.postMessage(JSON.stringify(messagesToSend));
+  flushBuffer();
 }, 50);
 
 export default {
