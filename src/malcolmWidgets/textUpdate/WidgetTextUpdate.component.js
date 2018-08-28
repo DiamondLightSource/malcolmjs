@@ -20,9 +20,7 @@ const textUpdateBase = {
 const styles = theme => ({
   div: {
     ...baseDiv,
-    borderLeft: `2px solid ${
-      theme.widgetColours ? theme.widgetColours.textUpdateBar : 'grey'
-    }`,
+    borderLeft: `2px solid ${theme.palette.divider}`,
   },
   divNoWrap: {
     ...baseDiv,

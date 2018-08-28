@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = () => ({
   textInput: {
     width: '100%',
+    maxHeight: 28,
   },
   inputStyle: {
     fontSize: '11pt',

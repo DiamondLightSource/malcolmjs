@@ -25,35 +25,55 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
           key="0"
           padding="none"
         >
-          Name
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Name
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="1"
           padding="none"
         >
-          MRI
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            MRI
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="2"
           padding="none"
         >
-          x
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            x
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="3"
           padding="none"
         >
-          y
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            y
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="4"
           padding="none"
         >
-          Visible
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Visible
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
       </WithStyles(TableRow)>
     </WithStyles(TableHead)>
@@ -824,35 +844,55 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           key="0"
           padding="none"
         >
-          Name
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Name
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="1"
           padding="none"
         >
-          MRI
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            MRI
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="2"
           padding="none"
         >
-          x
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            x
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="3"
           padding="none"
         >
-          y
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            y
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
           key="4"
           padding="none"
         >
-          Visible
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Visible
+          </WithStyles(Typography)>
         </WithStyles(TableCell)>
       </WithStyles(TableRow)>
     </WithStyles(TableHead)>

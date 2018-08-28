@@ -11,6 +11,10 @@ const styles = () => ({
   },
   button: {
     width: '100%',
+    paddingTop: 4,
+    paddingBottom: 4,
+    minHeight: 28,
+    maxHeight: 28,
   },
 });
 
