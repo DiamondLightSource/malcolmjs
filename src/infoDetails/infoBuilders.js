@@ -186,6 +186,68 @@ export const buildAttributeInfo = props => {
       }
       info.subElement = props.subElement;
     }
+  } else if (
+    attribute &&
+    attribute.calculated &&
+    attribute.calculated.isMethod
+  ) {
+    if (props.subElement === undefined) {
+      info.path = {
+        label: 'Attribute path',
+        value: `${attribute.calculated.path[0]}, ${
+          attribute.calculated.path[1]
+        }`,
+        inline: true,
+      };
+      info.meta = {
+        label: 'Meta Data',
+        malcolmType: {
+          value: attribute.raw.typeid,
+          label: 'Malcolm Type',
+          inline: true,
+        },
+        description: {
+          value: attribute.raw.description,
+          label: 'Description',
+          inline: true,
+        },
+        writeable: {
+          value: attribute.raw.writeable,
+          label: 'Writeable?',
+          inline: true,
+          tag: 'widget:led',
+        },
+      };
+      info.takes = { label: 'Input parameter types' };
+      Object.keys(attribute.raw.takes.elements).forEach(input => {
+        info.takes[input] = {
+          label: attribute.raw.takes.elements[input].label,
+          value: attribute.raw.takes.elements[input].typeid,
+          infoPath: {
+            root: attribute.calculated.path,
+            subElement: `takes.${input}`,
+          },
+        };
+      });
+
+      info.returns = { label: 'Output parameter types' };
+      Object.keys(attribute.raw.returns.elements).forEach(input => {
+        info.returns[input] = {
+          label: attribute.raw.returns.elements[input].label,
+          value: attribute.raw.returns.elements[input].typeid,
+          infoPath: {
+            root: attribute.calculated.path,
+            subElement: `returns.${input}`,
+          },
+        };
+      });
+    } else {
+      const rawInfo =
+        attribute.raw[props.subElement[0]].elements[props.subElement[1]];
+      Object.keys(rawInfo).forEach(key => {
+        info[key] = rawInfo[key];
+      });
+    }
   }
   return { info, value };
 };

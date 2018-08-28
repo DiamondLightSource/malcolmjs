@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -51,6 +52,13 @@ const styles = () => ({
   },
   missingAttribute: {
     color: 'red',
+  },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
 });
 
@@ -121,9 +129,15 @@ const MethodDetails = props => {
       >
         <div className={props.classes.div}>
           <Tooltip title={props.methodErrorMessage}>
-            <div>
+            <IconButton
+              className={props.classes.button}
+              disableRipple
+              onClick={() =>
+                props.buttonClickHandler(props.blockName, props.attributeName)
+              }
+            >
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
-            </div>
+            </IconButton>
           </Tooltip>
           <Typography className={props.classes.textName}>
             {props.methodName}
@@ -171,9 +185,15 @@ const MethodDetails = props => {
         >
           <div className={props.classes.div}>
             <Tooltip title={props.methodErrorMessage}>
-              <div>
+              <IconButton
+                className={props.classes.button}
+                disableRipple
+                onClick={() =>
+                  props.buttonClickHandler(props.blockName, props.attributeName)
+                }
+              >
                 <AttributeAlarm alarmSeverity={props.methodAlarm} />
-              </div>
+              </IconButton>
             </Tooltip>
             <Typography className={props.classes.textName} />
             <div className={props.classes.controlContainer}>
@@ -212,6 +232,8 @@ const MethodDetails = props => {
 };
 
 MethodDetails.propTypes = {
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
   methodErrorMessage: PropTypes.string.isRequired,
@@ -225,7 +247,9 @@ MethodDetails.propTypes = {
     div: PropTypes.string,
     textName: PropTypes.string,
     controlContainer: PropTypes.string,
+    button: PropTypes.string,
   }).isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
 };
 
 const EMPTY = '';
@@ -267,6 +291,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export const mapDispatchToProps = dispatch => ({
+  buttonClickHandler: (blockName, attributeName) => {
+    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+  },
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmArchivePost(path, inputs));

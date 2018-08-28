@@ -40,8 +40,14 @@ const styles = theme => ({
 
 const InfoElement = props => (
   <div className={props.classes.div}>
-    {props.alarm === AlarmStates.NO_ALARM ? (
-      <IconButton className={props.classes.button} disableRipple>
+    {props.alarm === AlarmStates.NO_ALARM && props.infoPath ? (
+      <IconButton
+        className={props.classes.button}
+        disableRipple
+        onClick={() =>
+          props.infoClickHandler(props.infoPath.root, props.infoPath.subElement)
+        }
+      >
         <AttributeAlarm alarmSeverity={props.alarm} />
       </IconButton>
     ) : (
@@ -99,6 +105,11 @@ InfoElement.propTypes = {
     clickHandler: PropTypes.func,
   }),
   disabled: PropTypes.bool.isRequired,
+  infoPath: PropTypes.shape({
+    root: PropTypes.string,
+    subElement: PropTypes.string,
+  }).isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
 };
 
 InfoElement.defaultProps = {
