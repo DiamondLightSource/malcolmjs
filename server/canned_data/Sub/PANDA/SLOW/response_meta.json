@@ -27,10 +27,7 @@
           "fmc15Vn", 
           "fmc15Vp", 
           "enc24V", 
-          "fmc12V", 
-          "parameters", 
-          "temp", 
-          "vccint"
+          "fmc12V"
         ]
       }
     ]

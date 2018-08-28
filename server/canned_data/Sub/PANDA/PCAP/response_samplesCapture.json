@@ -24,7 +24,7 @@
           "description": "Capture SAMPLES in PCAP?", 
           "choices": [
             "No", 
-            "Capture"
+            "Value"
           ], 
           "tags": [
             "group:outputs", 

@@ -21,7 +21,10 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
-import AttributeReducer, { updateAttribute } from './attribute.reducer';
+import AttributeReducer, {
+  updateAttribute,
+  pushToArchive,
+} from './attribute.reducer';
 import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
@@ -102,6 +105,7 @@ function registerNewBlock(state, action) {
       name: action.payload.blockName,
       loading: true,
       children: [],
+      orphans: [],
     };
     if (!blockArchive[action.payload.blockName]) {
       blockArchive[action.payload.blockName] = {
@@ -133,62 +137,84 @@ function updateBlock(state, payload) {
     const blockName = state.messagesInFlight[payload.id].path[0];
 
     if (Object.prototype.hasOwnProperty.call(blocks, blockName)) {
+      let orphans;
+      let blockAttributes;
+      let attributeArchive;
+      if (payload.fields) {
+        const payloadAttributes = payload.fields.map(f => {
+          const attribute = blocks[blockName].attributes.find(
+            attr => attr.calculated.name === f
+          );
+          if (attribute) {
+            return attribute;
+          }
+          return {
+            raw: {},
+            calculated: {
+              name: f,
+              loading: true,
+              children: [],
+              alarms: {},
+            },
+          };
+        });
+        const payloadArchive = payload.fields.map(f => {
+          const archiveAttribute = blockArchive[blockName].attributes.find(
+            a => a.name === f
+          );
+          if (archiveAttribute) {
+            return archiveAttribute;
+          }
+          return {
+            parent: blockName,
+            name: f,
+            value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
+            connectTime: -1,
+            counter: 0,
+            refreshRate: ARCHIVE_REFRESH_INTERVAL,
+            plotTime: 0,
+          };
+        });
+        const orphanedAttributes = blocks[blockName].attributes.filter(
+          attribute =>
+            !payloadAttributes.some(
+              payloadAttribute =>
+                payloadAttribute.calculated.name === attribute.calculated.name
+            )
+        );
+        const orphanedArchives = blockArchive[blockName].attributes.filter(
+          attribute =>
+            !payloadArchive.some(
+              payloadAttribute => payloadAttribute.name === attribute.name
+            )
+        );
+
+        blockAttributes = [...payloadAttributes, ...orphanedAttributes];
+        attributeArchive = [...payloadArchive, ...orphanedArchives];
+        orphans = blockAttributes
+          .map(attribute => attribute.calculated.name)
+          .filter(name => !payload.fields.some(child => child === name));
+      } else {
+        blockAttributes = blocks[blockName].attributes;
+      }
       blocks[blockName] = {
         ...blocks[blockName],
         loading: false,
         label: payload.label ? payload.label : blocks[blockName].label,
         // #refactorDuplication
-        attributes: payload.fields
-          ? payload.fields.map(f => {
-              const attribute = blocks[blockName].attributes.find(
-                attr => attr.calculated.name === f
-              );
-              if (attribute) {
-                return attribute;
-              }
-              return {
-                /*
-            name: f,
-            loading: true,
-            children: [], */
-                raw: {},
-                calculated: {
-                  name: f,
-                  loading: true,
-                  children: [],
-                  alarms: {},
-                },
-              };
-            })
-          : blocks[blockName].attributes,
+        attributes: blockAttributes,
         children: payload.fields
           ? [...payload.fields]
           : blocks[blockName].children,
+        orphans,
       };
+
       blockArchive[blockName] = {
-        attributes: payload.fields
-          ? payload.fields.map(f => {
-              const archiveAttribute = blockArchive[blockName].attributes.find(
-                a => a.name === f
-              );
-              if (archiveAttribute) {
-                return archiveAttribute;
-              }
-              return {
-                parent: blockName,
-                name: f,
-                value: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-                alarmState: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-                plotValue: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-                timeStamp: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-                timeSinceConnect: new CircularBuffer(ARCHIVE_BUFFER_LENGTH),
-                connectTime: -1,
-                counter: 0,
-                refreshRate: ARCHIVE_REFRESH_INTERVAL,
-                plotTime: 0,
-              };
-            })
-          : blockArchive[blockName].attributes,
+        attributes: attributeArchive,
       };
     }
 
@@ -291,9 +317,8 @@ function cleanBlocks(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
     blocks[blockName] = {
-      name: blockName,
+      ...blocks[blockName],
       loading: true,
-      children: [],
     };
   });
   return {
@@ -331,6 +356,27 @@ function setDisconnected(state) {
                 severity: AlarmStates.UNDEFINED_ALARM,
               },
             };
+            if (
+              state.blockArchive[blockName] &&
+              state.blockArchive[blockName].attributes[attr] &&
+              state.blockArchive[blockName].attributes[attr].alarmState.get(
+                state.blockArchive[blockName].attributes[
+                  attr
+                ].alarmState.size() - 1
+              ) !== AlarmStates.UNDEFINED_ALARM
+            ) {
+              const { timeStamp } = attributes[attr].raw;
+              pushToArchive(
+                state.blockArchive[blockName].attributes[attr],
+                {
+                  raw: {
+                    timeStamp,
+                    value: attributes[attr].raw.value,
+                  },
+                },
+                AlarmStates.UNDEFINED_ALARM
+              );
+            }
           }
         } else {
           /*
