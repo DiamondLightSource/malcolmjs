@@ -15,7 +15,7 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     role="presentation"
     style={
       Object {
-        "background": undefined,
+        "background": "blue",
         "marginRight": 3,
       }
     }
@@ -48,7 +48,7 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     role="presentation"
     style={
       Object {
-        "background": undefined,
+        "background": "blue",
         "marginLeft": 3,
       }
     }

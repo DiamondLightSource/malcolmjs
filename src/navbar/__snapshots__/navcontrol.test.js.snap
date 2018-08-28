@@ -7,6 +7,7 @@ exports[`NavControl disables menu item if children is empty 1`] = `
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
     onClick={[Function]}
+    variant="subheading"
   >
     PANDA
   </WithStyles(Typography)>
@@ -33,6 +34,7 @@ exports[`NavControl renders correctly 1`] = `
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
     onClick={[Function]}
+    variant="subheading"
   >
     PANDA
   </WithStyles(Typography)>

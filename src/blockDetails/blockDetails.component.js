@@ -95,6 +95,7 @@ const displayAttributes = props => {
             blockName={props.blockName}
           />
         ))}
+        <div style={{ marginTop: 4 }} />
         {props.groups.map(group => (
           <GroupExpander
             key={group.attribute.calculated.name}

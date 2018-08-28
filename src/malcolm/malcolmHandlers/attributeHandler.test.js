@@ -1,5 +1,8 @@
 import AttributeHandler from './attributeHandler';
-import { MalcolmAttributeData } from '../malcolm.types';
+import {
+  MalcolmAttributeData,
+  MalcolmMultipleAttributeData,
+} from '../malcolm.types';
 
 let oldStyleAttribute;
 let newStyleAttribute;
@@ -120,68 +123,82 @@ describe('attribute handler', () => {
     },
   });
 
+  const buildMessageList = (originalRequest, attributeDelta) => [
+    {
+      originalRequest,
+      attributeDelta,
+    },
+  ];
+
   it('processes and dispatches a scalar attribute update', () => {
-    AttributeHandler.processAttribute(
-      request,
-      changes([]),
+    AttributeHandler.processAttributes(
+      buildMessageList(request, changes([])),
       store.getState,
       dispatch
     );
 
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.id).toEqual(1);
-    expect(dispatches[0].payload.typeid).toEqual('NTScalar');
-    expect(dispatches[0].payload.delta).toEqual(true);
+    expect(dispatches[0].type).toEqual(MalcolmMultipleAttributeData);
+
+    expect(dispatches[0].payload.actions[0].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[0].payload.actions[0].payload.id).toEqual(1);
+    expect(dispatches[0].payload.actions[0].payload.typeid).toEqual('NTScalar');
+    expect(dispatches[0].payload.actions[0].payload.delta).toEqual(true);
   });
 
   it('detects group attributes', () => {
-    AttributeHandler.processAttribute(
-      request,
-      changes(['widget:group']),
+    AttributeHandler.processAttributes(
+      buildMessageList(request, changes(['widget:group'])),
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.calculated.isGroup).toEqual(true);
+    expect(dispatches[0].payload.actions[0].payload.calculated.isGroup).toEqual(
+      true
+    );
   });
 
   it('detects attributes in groups', () => {
-    AttributeHandler.processAttribute(
-      request,
-      changes(['group:outputs']),
+    AttributeHandler.processAttributes(
+      buildMessageList(request, changes(['group:outputs'])),
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.calculated.inGroup).toEqual(true);
-    expect(dispatches[0].payload.calculated.group).toEqual('outputs');
+    expect(dispatches[0].payload.actions[0].payload.calculated.inGroup).toEqual(
+      true
+    );
+    expect(dispatches[0].payload.actions[0].payload.calculated.group).toEqual(
+      'outputs'
+    );
   });
 
   it('detects root level attributes', () => {
-    AttributeHandler.processAttribute(
-      request,
-      changes(['widget:led']),
+    AttributeHandler.processAttributes(
+      buildMessageList(request, changes(['widget:led'])),
       store.getState,
       dispatch
     );
-    expect(dispatches[0].payload.calculated.inGroup).toEqual(false);
-    expect(dispatches[0].payload.calculated.isGroup).toEqual(false);
+    expect(dispatches[0].payload.actions[0].payload.calculated.inGroup).toEqual(
+      false
+    );
+    expect(dispatches[0].payload.actions[0].payload.calculated.isGroup).toEqual(
+      false
+    );
   });
 
   it('processes and dispatches a table attribute update', () => {
     const tableChanges = changes(['group:outputs']);
     tableChanges.typeid = 'NTTable';
-    AttributeHandler.processAttribute(
-      request,
-      tableChanges,
+    AttributeHandler.processAttributes(
+      buildMessageList(request, tableChanges),
       store.getState,
       dispatch
     );
 
     expect(dispatches.length).toBeGreaterThanOrEqual(1);
-    expect(dispatches[0].type).toEqual(MalcolmAttributeData);
-    expect(dispatches[0].payload.id).toEqual(1);
-    expect(dispatches[0].payload.typeid).toEqual('NTTable');
-    expect(dispatches[0].payload.delta).toEqual(true);
+    expect(dispatches[0].payload.actions[0].type).toEqual(MalcolmAttributeData);
+    expect(dispatches[0].payload.actions[0].payload.id).toEqual(1);
+    expect(dispatches[0].payload.actions[0].payload.typeid).toEqual('NTTable');
+    expect(dispatches[0].payload.actions[0].payload.delta).toEqual(true);
   });
 
   // delta tests will run against new style attribute structure

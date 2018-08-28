@@ -27,7 +27,7 @@ exports[`DrawerHeader renders correctly 1`] = `
             "flexGrow": 1,
           }
         }
-        variant="title"
+        variant="subheading"
       >
         TTLIN1
       </WithStyles(Typography)>

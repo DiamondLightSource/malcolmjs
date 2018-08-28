@@ -22,6 +22,8 @@ const Layout = props => {
     <div
       onDrop={event => props.makeBlockVisible(event, props.layoutEngine)}
       onDragOver={event => event.preventDefault()}
+      onMouseUp={() => props.mouseDownHandler(false)}
+      role="presentation"
       style={{
         display: 'flex',
         position: 'relative',

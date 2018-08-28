@@ -5,6 +5,7 @@ import {
   MalcolmMakeBlockVisibleType,
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
+  MalcolmResetPortsType,
 } from '../../malcolm.types';
 import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
 import BlockNodeModel from '../../../layout/block/BlockNodeModel';
@@ -22,6 +23,9 @@ export const buildPorts = block => {
         .find(t => t.indexOf('inport:') > -1)
         .split(':')
         .slice(-1)[0],
+      portType: input.raw.meta.tags
+        .find(t => t.indexOf('inport:') > -1)
+        .split(':')[1],
       value: input.raw.value,
     })),
     ...outputs.map(output => ({
@@ -31,6 +35,9 @@ export const buildPorts = block => {
         .find(t => t.indexOf('outport:') > -1)
         .split(':')
         .slice(-1)[0],
+      portType: output.raw.meta.tags
+        .find(t => t.indexOf('outport:') > -1)
+        .split(':')[1],
     })),
   ];
 };
@@ -368,12 +375,39 @@ const isRelevantAttribute = attribute =>
     attribute.raw.meta.tags.some(t => t.indexOf('widget:icon') > -1) ||
     attribute.raw.meta.tags.some(t => t.indexOf('widget:flowgraph') > -1));
 
+const resetPorts = state => {
+  let updatedState = selectPortForLink(state, undefined, true);
+  updatedState = selectPortForLink(updatedState, undefined, false);
+
+  const layoutEngineView = updatedState.layoutEngine
+    ? {
+        offset: {
+          x: updatedState.layoutEngine.diagramModel.offsetX,
+          y: updatedState.layoutEngine.diagramModel.offsetY,
+        },
+        zoom: updatedState.layoutEngine.diagramModel.zoom,
+      }
+    : undefined;
+
+  updatedState = showLayoutBin(updatedState, { visible: false });
+  const layoutEngine = buildLayoutEngine(
+    updatedState.layout,
+    updatedState.layoutState.selectedBlocks,
+    layoutEngineView
+  );
+  return {
+    ...updatedState,
+    layoutEngine,
+  };
+};
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
     [MalcolmMakeBlockVisibleType]: makeBlockVisible,
     [MalcolmShowBinType]: showLayoutBin,
     [MalcolmInLayoutDeleteZoneType]: cursorInLayoutZone,
+    [MalcolmResetPortsType]: resetPorts,
   }
 );
 

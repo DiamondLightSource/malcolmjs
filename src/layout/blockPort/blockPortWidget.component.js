@@ -41,11 +41,13 @@ class BlockPortWidget extends BaseWidget {
   }
 
   render() {
+    const portColour =
+      this.props.theme.portColours[this.props.portType] ||
+      this.props.theme.palette.primary;
+
     const portStyle = {
       ...(this.props.inputPort ? styles().portIn : styles().portOut),
-      background: this.state.selected
-        ? 'rgb(192,255,0)'
-        : this.props.portColour,
+      background: this.state.selected ? portColour[100] : portColour[500],
     };
 
     const port = (
@@ -88,8 +90,11 @@ export const mapStateToProps = (state, ownProps) => {
     inputPort: port.in,
     portName: port.name,
     portLabel: port.label,
+    portType: port.portType,
     mouseDownHandler: state.malcolm.layoutEngine.portMouseDown,
   };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(BlockPortWidget));
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(BlockPortWidget)
+);

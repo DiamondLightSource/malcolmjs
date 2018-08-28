@@ -9,12 +9,12 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseUp={[Function]}
 >
   <WithStyles(Typography)
-    className="BlockWidget-title-2"
+    className="BlockWidget-title-3"
   >
     block 1
   </WithStyles(Typography)>
   <div
-    className="BlockWidget-blockContents-3"
+    className="BlockWidget-blockContents-4"
     style={
       Object {
         "minHeight": 46,
@@ -22,17 +22,16 @@ exports[`BlockWidget block renders correctly 1`] = `
     }
   >
     <div
-      className="BlockWidget-inputPortsContainer-4"
+      className="BlockWidget-inputPortsContainer-5"
     >
       <Connect(WithStyles(BlockPortWidget))
         key="block1-in 1"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-in 1"
       />
     </div>
     <div
-      className="BlockWidget-iconContents-7"
+      className="BlockWidget-iconContents-8"
     >
       <svg
         height="100"
@@ -51,24 +50,22 @@ exports[`BlockWidget block renders correctly 1`] = `
       </svg>
     </div>
     <div
-      className="BlockWidget-outputPortsContainer-5"
+      className="BlockWidget-outputPortsContainer-6"
     >
       <Connect(WithStyles(BlockPortWidget))
         key="block1-out 1"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-out 1"
       />
       <Connect(WithStyles(BlockPortWidget))
         key="block1-out 2"
         nodeId="block1"
-        portColour="#3f51b5"
         portId="block1-out 2"
       />
     </div>
   </div>
   <WithStyles(Typography)
-    className="BlockWidget-description-8"
+    className="BlockWidget-description-9"
   >
     block 1 description
   </WithStyles(Typography)>

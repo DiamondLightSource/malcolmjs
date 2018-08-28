@@ -1,4 +1,7 @@
-import { MalcolmAttributeData } from '../malcolm.types';
+import {
+  MalcolmAttributeData,
+  MalcolmMultipleAttributeData,
+} from '../malcolm.types';
 import LayoutHandler from './layoutHandler';
 import { buildMethodUpdate } from '../actions/method.actions';
 import navigationActions from '../actions/navigation.actions';
@@ -27,7 +30,7 @@ const processDeltaMessage = (changes, oldObject) => {
   return object;
 };
 
-const processAttribute = (request, changedAttribute, getState, dispatch) => {
+const processAttribute = (request, changedAttribute) => {
   const inGroup = changedAttribute.meta.tags.some(
     t => t.indexOf('group:') > -1
   );
@@ -43,10 +46,6 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
     payload: {
       ...changedAttribute,
       id: request.id,
-      /*
-        isGroup: changedAttribute.meta.tags.some(t => t === 'widget:group'),
-        inGroup,
-        group, */
       typeid: changedAttribute.typeid,
       delta: true,
       raw: { ...changedAttribute },
@@ -59,11 +58,36 @@ const processAttribute = (request, changedAttribute, getState, dispatch) => {
     },
   };
 
-  dispatch(action);
+  return action;
+};
+
+const processAttributes = (messages, getState, dispatch) => {
+  const actions = messages.map(msg =>
+    processAttribute(
+      msg.originalRequest,
+      msg.attributeDelta,
+      getState,
+      dispatch
+    )
+  );
+  dispatch({
+    type: MalcolmMultipleAttributeData,
+    payload: {
+      actions,
+    },
+  });
+
   dispatch(navigationActions.subscribeToNewBlocksInRoute());
 
-  if (changedAttribute.meta.tags.some(t => t === 'widget:flowgraph')) {
-    LayoutHandler.layoutAttributeReceived(request.path, getState, dispatch);
+  const layoutMessages = messages.filter(msg =>
+    msg.attributeDelta.meta.tags.some(t => t === 'widget:flowgraph')
+  );
+  if (layoutMessages.length > 0) {
+    LayoutHandler.layoutAttributeReceived(
+      layoutMessages[0].originalRequest.path,
+      getState,
+      dispatch
+    );
   }
 };
 
@@ -78,6 +102,7 @@ const processMethod = (request, method, dispatch) => {
 
 export default {
   processAttribute,
+  processAttributes,
   processMethod,
   processDeltaMessage,
 };

@@ -5,13 +5,14 @@ exports[`BlockWidgetFactory generates react widget 1`] = `
   classes={
     Object {
       "block": "BlockWidget-block-1",
-      "blockContents": "BlockWidget-blockContents-3",
-      "description": "BlockWidget-description-8",
-      "iconContents": "BlockWidget-iconContents-7",
-      "inputPortsContainer": "BlockWidget-inputPortsContainer-4",
-      "outputPortsContainer": "BlockWidget-outputPortsContainer-5",
-      "portContainer": "BlockWidget-portContainer-6",
-      "title": "BlockWidget-title-2",
+      "blockContents": "BlockWidget-blockContents-4",
+      "description": "BlockWidget-description-9",
+      "iconContents": "BlockWidget-iconContents-8",
+      "inputPortsContainer": "BlockWidget-inputPortsContainer-5",
+      "outputPortsContainer": "BlockWidget-outputPortsContainer-6",
+      "portContainer": "BlockWidget-portContainer-7",
+      "selectedBlock": "BlockWidget-selectedBlock-2",
+      "title": "BlockWidget-title-3",
     }
   }
   node={Object {}}

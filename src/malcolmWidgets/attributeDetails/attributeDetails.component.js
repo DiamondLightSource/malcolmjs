@@ -81,7 +81,7 @@ const AttributeDetails = props => {
           }
           style={{ cursor: 'pointer' }}
         >
-          {props.label}:{' '}
+          {props.label}{' '}
         </Typography>
         <div className={props.classes.controlContainer}>
           <AttributeSelector

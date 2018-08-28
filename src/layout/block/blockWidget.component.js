@@ -4,13 +4,17 @@ import renderHTML from 'react-render-html';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import classNames from 'classnames';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
 
-const styles = {
+const styles = theme => ({
   block: {
     position: 'relative',
-    border: '1px solid rgba(0, 0, 0, 0)',
+    border: '2px solid rgba(0, 0, 0, 0)',
     borderRadius: 5,
+  },
+  selectedBlock: {
+    borderColor: `${theme.palette.secondary.main} !important`,
   },
   title: {
     textAlign: 'center',
@@ -47,7 +51,7 @@ const styles = {
     flexGrow: 1,
     height: '100%',
     width: 120,
-    opacity: 0.35,
+    opacity: 0.5,
     lineHeight: 0,
   },
   description: {
@@ -55,8 +59,10 @@ const styles = {
     wordWrap: 'normal',
     textAlign: 'center',
     fontSize: 11,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
-};
+});
 
 const portHeight = 23;
 
@@ -73,7 +79,9 @@ const BlockWidget = props => {
 
   return (
     <Paper
-      className={props.classes.block}
+      className={classNames(props.classes.block, {
+        [props.classes.selectedBlock]: props.node.selected,
+      })}
       elevation={8}
       onClick={e => props.node.clickHandler(e)}
       onMouseDown={() => props.node.mouseDownHandler(true)}
@@ -87,7 +95,6 @@ const BlockWidget = props => {
           {inputPorts.map(p => (
             <BlockPortWidget
               key={props.node.ports[p].id}
-              portColour={props.theme.palette.primary.main}
               nodeId={props.node.id}
               portId={p}
             />
@@ -102,7 +109,6 @@ const BlockWidget = props => {
           {outputPorts.map(p => (
             <BlockPortWidget
               key={props.node.ports[p].id}
-              portColour={props.theme.palette.primary.main}
               nodeId={props.node.id}
               portId={p}
             />
@@ -123,11 +129,13 @@ BlockWidget.propTypes = {
     icon: PropTypes.string,
     ports: PropTypes.shape({}),
     description: PropTypes.string,
+    selected: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
   }).isRequired,
   classes: PropTypes.shape({
     block: PropTypes.string,
+    selectedBlock: PropTypes.string,
     title: PropTypes.string,
     blockContents: PropTypes.string,
     inputPortsContainer: PropTypes.string,
@@ -135,13 +143,6 @@ BlockWidget.propTypes = {
     portContainer: PropTypes.string,
     iconContents: PropTypes.string,
     description: PropTypes.string,
-  }).isRequired,
-  theme: PropTypes.shape({
-    palette: PropTypes.shape({
-      primary: PropTypes.shape({
-        main: PropTypes.string,
-      }),
-    }),
   }).isRequired,
 };
 
