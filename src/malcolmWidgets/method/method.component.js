@@ -41,7 +41,7 @@ const styles = () => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '100%',
+    width: 150,
     padding: 2,
   },
   runButton: {
@@ -108,31 +108,21 @@ const MethodDetails = props => {
     (!props.outputs || !Object.keys(props.outputs).length)
   ) {
     return (
-      <div
-        elevation={4}
-        style={{
-          paddingTop: '2px',
-          paddingBottom: '2px',
-          marginTop: '2px',
-          marginBottom: '2px',
-        }}
-      >
-        <div className={props.classes.div}>
-          <Tooltip title={props.methodErrorMessage}>
-            <div>
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
-            </div>
-          </Tooltip>
-          <div className={props.classes.controlContainer}>
-            <ButtonAction
-              method
-              text={props.methodName}
-              disabled={props.methodAlarm === AlarmStates.PENDING}
-              clickAction={() =>
-                props.runMethod(props.methodPath, props.inputValues)
-              }
-            />
+      <div className={props.classes.div}>
+        <Tooltip title={props.methodErrorMessage}>
+          <div>
+            <AttributeAlarm alarmSeverity={props.methodAlarm} />
           </div>
+        </Tooltip>
+        <div className={props.classes.runButton}>
+          <ButtonAction
+            method
+            text={props.methodName}
+            disabled={props.methodAlarm === AlarmStates.PENDING}
+            clickAction={() =>
+              props.runMethod(props.methodPath, props.inputValues)
+            }
+          />
         </div>
       </div>
     );
@@ -155,31 +145,21 @@ const MethodDetails = props => {
             </div>
           </div>
         ))}
-        <div
-          elevation={4}
-          style={{
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            marginTop: '2px',
-            marginBottom: '2px',
-          }}
-        >
-          <div className={props.classes.div}>
-            <Tooltip title={props.methodErrorMessage}>
-              <div>
-                <AttributeAlarm alarmSeverity={props.methodAlarm} />
-              </div>
-            </Tooltip>
-            <div className={props.classes.controlContainer}>
-              <ButtonAction
-                method
-                text={props.methodName}
-                disabled={props.methodAlarm === AlarmStates.PENDING}
-                clickAction={() =>
-                  props.runMethod(props.methodPath, props.inputValues)
-                }
-              />
+        <div className={props.classes.div}>
+          <Tooltip title={props.methodErrorMessage}>
+            <div>
+              <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </div>
+          </Tooltip>
+          <div className={props.classes.runButton}>
+            <ButtonAction
+              method
+              text={props.methodName}
+              disabled={props.methodAlarm === AlarmStates.PENDING}
+              clickAction={() =>
+                props.runMethod(props.methodPath, props.inputValues)
+              }
+            />
           </div>
         </div>
         {Object.keys(props.outputValues).length !== 0 ? (
@@ -219,6 +199,7 @@ MethodDetails.propTypes = {
   classes: PropTypes.shape({
     div: PropTypes.string,
     textName: PropTypes.string,
+    runButton: PropTypes.string,
     controlContainer: PropTypes.string,
   }).isRequired,
 };

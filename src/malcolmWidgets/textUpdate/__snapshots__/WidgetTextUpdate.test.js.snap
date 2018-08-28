@@ -2,10 +2,10 @@
 
 exports[`WidgetTextUpdate displays multiline text 1`] = `
 <div
-  className="WidgetTextUpdate-divNoWrap-2"
+  className="WidgetTextUpdate-divWrap-2"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdateNoWrap-3"
+    className="WidgetTextUpdate-textUpdateWrap-3"
     style={Object {}}
   >
     This is a slightly longer example of some text which should be split over multiple lines when the widget is in a normal sized div
