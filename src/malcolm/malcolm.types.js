@@ -4,6 +4,7 @@ export const MalcolmNewBlock = 'malcolm:newblock';
 export const MalcolmBlockMeta = 'malcolm:blockmeta';
 export const MalcolmRootBlockMeta = 'malcolm:rootblock';
 export const MalcolmAttributeData = 'malcolm:attributedata';
+export const MalcolmMultipleAttributeData = 'malcolm:multipleattributedata';
 export const MalcolmAttributeFlag = 'malcolm:attributeflag';
 export const MalcolmNavigationPathUpdate = 'malcolm:navigationpaths';
 export const MalcolmCleanBlocks = 'malcolm:cleanblocks';

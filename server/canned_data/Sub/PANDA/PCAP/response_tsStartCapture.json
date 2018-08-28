@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "Capture", 
+        "value": "No", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 
@@ -24,7 +24,7 @@
           "description": "Capture TS_START in PCAP?", 
           "choices": [
             "No", 
-            "Capture"
+            "Value"
           ], 
           "tags": [
             "group:outputs", 

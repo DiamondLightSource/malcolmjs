@@ -4,42 +4,43 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
+const baseDiv = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const textUpdateBase = {
+  padding: 4,
+  paddingRight: 9,
+  textAlign: 'Right',
+  width: '80%',
+  whiteSpace: 'pre',
+};
+
 const styles = theme => ({
   div: {
-    display: 'flex',
-    alignItems: 'center',
+    ...baseDiv,
+    borderLeft: `2px solid ${
+      theme.widgetColours ? theme.widgetColours.textUpdateBar : 'grey'
+    }`,
   },
   divNoWrap: {
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
+    ...baseDiv,
     padding: 4,
-    paddingRight: 16,
+    paddingRight: 4,
   },
   textUpdateNoWrap: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     textAlign: 'Right',
     width: '100%',
     wordWrap: 'break-word',
   },
-  textUpdate80: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
-    padding: 4,
-    paddingRight: 9,
-    textAlign: 'Right',
-    width: '80%',
-    whiteSpace: 'pre',
-  },
+  textUpdate80: textUpdateBase,
   textUpdate100: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
-    padding: 4,
-    paddingRight: 16,
-    textAlign: 'Right',
+    ...textUpdateBase,
+    paddingRight: 4,
     width: '100%',
-    whiteSpace: 'pre',
   },
   unitBox: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
     color: emphasize(theme.palette.primary.contrastText, 0.2),
     padding: 4,
     paddingRight: 2,

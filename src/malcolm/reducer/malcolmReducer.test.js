@@ -222,6 +222,51 @@ describe('malcolm reducer', () => {
     });
   });
 
+  it('marks attribute as orphaned but doesnt remove from attributes if receives a delta to fields and it is missing', () => {
+    state.blocks.block1 = {
+      typeid: 'malcolm:core/BlockMeta:1.0',
+      name: 'block1',
+      loading: true,
+      attributes: [
+        { calculated: { name: 'health' } },
+        { calculated: { name: 'BruceWayne' } },
+      ],
+      children: [],
+      orphans: [],
+    };
+
+    state.blockArchive = {
+      block1: { attributes: [] },
+    };
+
+    state.messagesInFlight[1] = {
+      id: 1,
+      path: ['block1', 'meta'],
+    };
+
+    const action = {
+      type: MalcolmBlockMeta,
+      payload: {
+        id: 1,
+        delta: true,
+        label: 'Block 1',
+        fields: ['health', 'icon'],
+      },
+    };
+
+    state = malcolmReducer(state, action);
+
+    expect(state.blocks.block1.loading).toEqual(false);
+    expect(state.blocks.block1.label).toEqual('Block 1');
+    expect(state.blocks.block1.attributes[0].calculated.name).toEqual('health');
+    expect(state.blocks.block1.attributes[1].calculated.name).toEqual('icon');
+    expect(state.blocks.block1.attributes[2].calculated.name).toEqual(
+      'BruceWayne'
+    );
+    expect(state.blocks.block1.children).toEqual(['health', 'icon']);
+    expect(state.blocks.block1.orphans).toEqual(['BruceWayne']);
+  });
+
   it('updates attribute data and pushes to archive', () => {
     state.blocks.block1 = {
       name: 'block1',
@@ -412,9 +457,8 @@ describe('malcolm reducer', () => {
   it('does clean', () => {
     state.blocks = testBlock;
     const tidyBlock = {
-      name: 'testBlock',
+      ...state.blocks.testBlock,
       loading: true,
-      children: [],
     };
     const action = { type: MalcolmCleanBlocks };
     state = malcolmReducer(state, action);

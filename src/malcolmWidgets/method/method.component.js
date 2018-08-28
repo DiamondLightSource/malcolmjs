@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -43,7 +42,7 @@ const styles = () => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: 150,
+    width: '100%',
     padding: 2,
   },
   runButton: {
@@ -117,14 +116,13 @@ const MethodDetails = props => {
     (!props.outputs || !Object.keys(props.outputs).length)
   ) {
     return (
-      <Paper
+      <div
         elevation={4}
         style={{
           paddingTop: '2px',
           paddingBottom: '2px',
           marginTop: '2px',
           marginBottom: '2px',
-          backgroundColor: '#3B3B3B',
         }}
       >
         <div className={props.classes.div}>
@@ -139,11 +137,9 @@ const MethodDetails = props => {
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </IconButton>
           </Tooltip>
-          <Typography className={props.classes.textName}>
-            {props.methodName}
-          </Typography>
           <div className={props.classes.controlContainer}>
             <ButtonAction
+              method
               text={props.methodName}
               disabled={props.methodAlarm === AlarmStates.PENDING}
               clickAction={() =>
@@ -152,7 +148,7 @@ const MethodDetails = props => {
             />
           </div>
         </div>
-      </Paper>
+      </div>
     );
   }
   return (
@@ -173,14 +169,13 @@ const MethodDetails = props => {
             </div>
           </div>
         ))}
-        <Paper
+        <div
           elevation={4}
           style={{
             paddingTop: '2px',
             paddingBottom: '2px',
             marginTop: '2px',
             marginBottom: '2px',
-            backgroundColor: '#3B3B3B',
           }}
         >
           <div className={props.classes.div}>
@@ -195,9 +190,9 @@ const MethodDetails = props => {
                 <AttributeAlarm alarmSeverity={props.methodAlarm} />
               </IconButton>
             </Tooltip>
-            <Typography className={props.classes.textName} />
             <div className={props.classes.controlContainer}>
               <ButtonAction
+                method
                 text={props.methodName}
                 disabled={props.methodAlarm === AlarmStates.PENDING}
                 clickAction={() =>
@@ -206,7 +201,7 @@ const MethodDetails = props => {
               />
             </div>
           </div>
-        </Paper>
+        </div>
         {Object.keys(props.outputValues).length !== 0 ? (
           <div>
             <Typography className={props.classes.textName}>

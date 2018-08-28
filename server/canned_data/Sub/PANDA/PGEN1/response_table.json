@@ -39,7 +39,7 @@
             "value": {
               "typeid": "malcolm:core/NumberArrayMeta:1.0", 
               "dtype": "uint32", 
-              "description": "VALUE", 
+              "description": "The Value", 
               "tags": [
                 "widget:textinput"
               ], 

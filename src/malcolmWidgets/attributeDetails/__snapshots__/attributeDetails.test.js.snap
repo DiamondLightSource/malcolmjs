@@ -30,7 +30,6 @@ exports[`AttributeDetails renders correctly 1`] = `
     }
   >
     Attribute 1
-    :
      
   </WithStyles(Typography)>
   <div

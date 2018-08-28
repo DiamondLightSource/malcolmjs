@@ -71,11 +71,10 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         />
       </div>
     </div>
-    <WithStyles(Paper)
+    <div
       elevation={4}
       style={
         Object {
-          "backgroundColor": "#3B3B3B",
           "marginBottom": "2px",
           "marginTop": "2px",
           "paddingBottom": "2px",
@@ -95,20 +94,18 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
             />
           </div>
         </WithStyles(Tooltip)>
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
-        />
         <div
           className="MethodDetails-controlContainer-3"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
             disabled={false}
+            method={true}
             text="Test"
           />
         </div>
       </div>
-    </WithStyles(Paper)>
+    </div>
   </div>
 </WithStyles(WidgetGroupExpander)>
 `;
@@ -192,11 +189,10 @@ exports[`Method component renders correctly with default inputs 1`] = `
         />
       </div>
     </div>
-    <WithStyles(Paper)
+    <div
       elevation={4}
       style={
         Object {
-          "backgroundColor": "#3B3B3B",
           "marginBottom": "2px",
           "marginTop": "2px",
           "paddingBottom": "2px",
@@ -216,20 +212,18 @@ exports[`Method component renders correctly with default inputs 1`] = `
             />
           </div>
         </WithStyles(Tooltip)>
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
-        />
         <div
           className="MethodDetails-controlContainer-3"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
             disabled={false}
+            method={true}
             text="Test"
           />
         </div>
       </div>
-    </WithStyles(Paper)>
+    </div>
   </div>
 </WithStyles(WidgetGroupExpander)>
 `;
@@ -313,11 +307,10 @@ exports[`Method component renders correctly with empty inputs 1`] = `
         />
       </div>
     </div>
-    <WithStyles(Paper)
+    <div
       elevation={4}
       style={
         Object {
-          "backgroundColor": "#3B3B3B",
           "marginBottom": "2px",
           "marginTop": "2px",
           "paddingBottom": "2px",
@@ -337,20 +330,18 @@ exports[`Method component renders correctly with empty inputs 1`] = `
             />
           </div>
         </WithStyles(Tooltip)>
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
-        />
         <div
           className="MethodDetails-controlContainer-3"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
             disabled={false}
+            method={true}
             text="Test"
           />
         </div>
       </div>
-    </WithStyles(Paper)>
+    </div>
   </div>
 </WithStyles(WidgetGroupExpander)>
 `;
@@ -434,11 +425,10 @@ exports[`Method component renders correctly with existing input values 1`] = `
         />
       </div>
     </div>
-    <WithStyles(Paper)
+    <div
       elevation={4}
       style={
         Object {
-          "backgroundColor": "#3B3B3B",
           "marginBottom": "2px",
           "marginTop": "2px",
           "paddingBottom": "2px",
@@ -458,20 +448,18 @@ exports[`Method component renders correctly with existing input values 1`] = `
             />
           </div>
         </WithStyles(Tooltip)>
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
-        />
         <div
           className="MethodDetails-controlContainer-3"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
             disabled={false}
+            method={true}
             text="Test"
           />
         </div>
       </div>
-    </WithStyles(Paper)>
+    </div>
   </div>
 </WithStyles(WidgetGroupExpander)>
 `;
@@ -555,11 +543,10 @@ exports[`Method component renders correctly with return value 1`] = `
         />
       </div>
     </div>
-    <WithStyles(Paper)
+    <div
       elevation={4}
       style={
         Object {
-          "backgroundColor": "#3B3B3B",
           "marginBottom": "2px",
           "marginTop": "2px",
           "paddingBottom": "2px",
@@ -579,20 +566,18 @@ exports[`Method component renders correctly with return value 1`] = `
             />
           </div>
         </WithStyles(Tooltip)>
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
-        />
         <div
           className="MethodDetails-controlContainer-3"
         >
           <WithStyles(ButtonAction)
             clickAction={[Function]}
             disabled={false}
+            method={true}
             text="Test"
           />
         </div>
       </div>
-    </WithStyles(Paper)>
+    </div>
     <div>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"

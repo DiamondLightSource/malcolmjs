@@ -3,3 +3,19 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 24;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.srd-default-link--highlight-path {
+  stroke: #f50057 !important;
+  stroke-dasharray: 10, 2;
+  animation: dash 1s linear infinite;
+}

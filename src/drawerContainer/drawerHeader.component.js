@@ -25,7 +25,7 @@ const DrawerHeader = props => (
         <IconButton onClick={props.closeAction} data-cy="closedrawer">
           <NavigationClose />
         </IconButton>
-        <Typography variant="title" color="inherit" style={styles.title}>
+        <Typography variant="subheading" color="inherit" style={styles.title}>
           {props.title}
         </Typography>
         <IconButton onClick={props.popOutAction}>
