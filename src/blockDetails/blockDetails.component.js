@@ -169,15 +169,25 @@ const mapStateToProps = (state, ownProps, memory) => {
     block.attributes &&
     !areAttributesTheSame(stateMemory.oldAttributes, block.attributes)
   ) {
-    stateMemory.rootAttributes = block.attributes.filter(a =>
-      isRootLevelAttribute(a)
+    stateMemory.rootAttributes = block.attributes.filter(
+      a =>
+        isRootLevelAttribute(a) &&
+        !(
+          block.orphans &&
+          block.orphans.some(orphan => orphan === a.calculated.name)
+        )
     );
     stateMemory.groups = block.attributes
       .filter(a => a.calculated.isGroup)
       .map(group => ({
         attribute: group,
         children: block.attributes.filter(
-          a => a.calculated.group === group.calculated.name
+          a =>
+            a.calculated.group === group.calculated.name &&
+            !(
+              block.orphans &&
+              block.orphans.some(orphan => orphan === a.calculated.name)
+            )
         ),
       }));
 

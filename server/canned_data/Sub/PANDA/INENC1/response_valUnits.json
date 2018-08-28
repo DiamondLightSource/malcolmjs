@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": "deg", 
+        "value": "", 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 

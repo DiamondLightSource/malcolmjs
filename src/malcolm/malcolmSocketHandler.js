@@ -4,7 +4,7 @@ import {
 } from './malcolmHandlers/blockMetaHandler';
 import AttributeHandler from './malcolmHandlers/attributeHandler';
 import {
-  malcolmCleanBlocks,
+  malcolmResetBlocks,
   malcolmSetDisconnected,
   malcolmSetFlag,
   malcolmHailReturn,
@@ -12,7 +12,6 @@ import {
 import { snackbarState } from '../viewState/viewState.actions';
 import { MalcolmAttributeData } from './malcolm.types';
 import BlockUtils from './blockUtils';
-import handleLocationChange from './middleware/malcolmRouting';
 
 const isAttributeDelta = msg =>
   msg.data.typeid === 'malcolm:core/Delta:1.0' &&
@@ -22,7 +21,6 @@ const isAttributeDelta = msg =>
 const handleMessages = (messages, dispatch, getState) => {
   const attributeDeltas = messages.filter(msg => isAttributeDelta(msg));
   const otherMessages = messages.filter(msg => !isAttributeDelta(msg));
-
   otherMessages.forEach(message => {
     const { data, originalRequest } = message;
     switch (data.typeid) {
@@ -103,15 +101,7 @@ const handleMessages = (messages, dispatch, getState) => {
 const configureMalcolmSocketHandlers = (store, worker) => {
   worker.addEventListener('message', event => {
     if (event.data === 'socket connected') {
-      store.dispatch(malcolmCleanBlocks());
-      const malcolmState = store.getState().malcolm;
-      malcolmState.messagesInFlight = {};
-      handleLocationChange(
-        store.getState().router.location.pathname,
-        store.getState().malcolm.blocks,
-        store.dispatch,
-        store.getState
-      );
+      store.dispatch(malcolmResetBlocks());
       store.dispatch(snackbarState(true, `Connected to WebSocket`));
     } else if (event.data === 'socket disconnected') {
       store.dispatch(

@@ -131,6 +131,21 @@ describe('malcolm socket handler', () => {
         },
         blocks: {
           TestBlock: {
+            name: 'Test:TestBlock',
+            attributes: [
+              {
+                pending: true,
+                raw: {
+                  value: 0,
+                },
+                calculated: {
+                  name: 'TestAttr',
+                },
+              },
+            ],
+          },
+          TestBlock2: {
+            name: 'Test:TestBlock2',
             attributes: [
               {
                 pending: true,
@@ -174,13 +189,17 @@ describe('malcolm socket handler', () => {
     configureMalcolmSocketHandlers(store, malcolmWorker);
   });
 
-  it('sets flag and flushes on open', () => {
+  it('resets blocks on open or reconnect', () => {
     malcolmWorker.postMessage('socket connected');
-    expect(dispatches.length).toEqual(2);
+    expect(dispatches.length).toEqual(4);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
-    expect(dispatches[1].type).toEqual(snackbar);
-    expect(dispatches[1].snackbar.open).toEqual(true);
-    expect(dispatches[1].snackbar.message).toEqual(`Connected to WebSocket`);
+    expect(dispatches[3].type).toEqual(snackbar);
+    expect(dispatches[3].snackbar.open).toEqual(true);
+    expect(dispatches[3].snackbar.message).toEqual(`Connected to WebSocket`);
+    expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[1].payload.path).toEqual(['Test:TestBlock', 'meta']);
+    expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[2].payload.path).toEqual(['Test:TestBlock2', 'meta']);
   });
 
   it('does nothing on receiving a non-malcolm message', () => {
@@ -407,11 +426,5 @@ describe('malcolm socket handler', () => {
     );
 
     expect(dispatches).toHaveLength(0);
-  });
-
-  it('wipes state on reconnect', () => {
-    malcolmWorker.postMessage('socket connected');
-    expect(state.malcolm.messagesInFlight).toEqual({});
-    expect(handleLocationChange).toHaveBeenCalledTimes(1);
   });
 });

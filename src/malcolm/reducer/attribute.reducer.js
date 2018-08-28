@@ -272,6 +272,7 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
   let plotValue = payload.raw.value;
   if (attributeArchive.meta.typeid === malcolmTypes.bool) {
     plotValue = payload.raw.value ? 1 : 0;
+    plotValue = payload.raw.value === undefined ? undefined : plotValue;
   }
   /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
     else if (attributeArchive.meta.tags.includes('widget:combo')) {

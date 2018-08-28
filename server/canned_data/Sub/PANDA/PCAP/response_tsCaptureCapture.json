@@ -24,7 +24,7 @@
           "description": "Capture TS_CAPTURE in PCAP?", 
           "choices": [
             "No", 
-            "Capture"
+            "Value"
           ], 
           "tags": [
             "group:outputs", 
