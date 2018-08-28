@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 const styles = theme => ({
   root: {
     // backgroundColor: theme.palette.primary.main,
-    borderTop: `1px solid ${theme.palette.primary.contrastText}`,
+    borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: 0,
     paddingBottom: 0,
     minHeight: 32,
@@ -18,12 +18,12 @@ const styles = theme => ({
   expanded: {
     // backgroundColor: theme.palette.primary.main,
     margin: '0px 0 !important',
-    minHeight: '36px !important',
+    minHeight: '32px !important',
   },
   content: {
     // backgroundColor: theme.palette.primary.main,
     margin: '0px 0 !important',
-    minHeight: '24px !important',
+    minHeight: '32px !important',
     display: 'flex',
   },
   expandIcon: {
@@ -51,7 +51,7 @@ const WidgetGroupExpander = props => (
           expandIcon: props.classes.expandIcon,
         }}
       >
-        <Typography className={props.classes.heading}>
+        <Typography className={props.classes.heading} variant="subheading">
           {props.groupName}
         </Typography>
       </ExpansionPanelSummary>

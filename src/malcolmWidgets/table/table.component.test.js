@@ -9,12 +9,6 @@ describe('WidgetTable', () => {
   let mount;
   let localState;
 
-  const theme = {
-    widgetColours: {
-      textUpdateBar: 'grey',
-    },
-  };
-
   beforeEach(() => {
     shallow = createShallow({ dive: true });
     mount = createMount();
@@ -29,7 +23,6 @@ describe('WidgetTable', () => {
         eventHandler={() => {}}
         setFlag={() => {}}
         addRow={() => {}}
-        theme={theme}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -44,7 +37,6 @@ describe('WidgetTable', () => {
         eventHandler={() => {}}
         setFlag={() => {}}
         addRow={() => {}}
-        theme={theme}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -78,7 +70,6 @@ describe('WidgetTable', () => {
         eventHandler={() => {}}
         setFlag={setFlag}
         addRow={() => {}}
-        theme={theme}
       />
     );
     wrapper
@@ -102,7 +93,6 @@ describe('WidgetTable', () => {
         eventHandler={() => {}}
         setFlag={setFlag}
         addRow={() => {}}
-        theme={theme}
       />
     );
     wrapper
@@ -120,7 +110,6 @@ describe('WidgetTable', () => {
         eventHandler={setValue}
         setFlag={() => {}}
         addRow={() => {}}
-        theme={theme}
       />
     );
     wrapper
@@ -143,7 +132,6 @@ describe('WidgetTable', () => {
         eventHandler={() => {}}
         setFlag={() => {}}
         addRow={addRow}
-        theme={theme}
       />
     );
     wrapper
@@ -166,7 +154,6 @@ describe('WidgetTable', () => {
         addRow={() => {}}
         infoClickHandler={infoClick}
         rowClickHandler={rowClick}
-        theme={theme}
       />
     );
     const buttons = wrapper.find('button');

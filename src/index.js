@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import { blue, orange, green, purple, grey } from '@material-ui/core/colors';
+import { blue, orange, green, purple } from '@material-ui/core/colors';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
@@ -63,9 +63,6 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: blue,
-  },
-  widgetColours: {
-    textUpdateBar: grey[700],
   },
   alarmState: {
     warning: '#e6c01c',
