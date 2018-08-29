@@ -62,16 +62,14 @@ const styles = () => ({
 });
 
 const buildIOComponent = (input, props, isOutput) => {
-  const { tags } = input[1];
-  const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
+  const parameterMeta = input[1];
+  const widgetTag = parameterMeta.tags.find(t => t.indexOf('widget:') !== -1);
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
     isErrorState: props.methodErrored && input[1].writeable,
     isDirty: props.dirtyInputs[input[0]],
   };
   const updateStoreOnEveryValueChange = true;
-
-  const parameterMeta = {};
 
   const valueMap = isOutput ? props.outputValues : props.inputValues;
   let inputValue;
@@ -116,15 +114,51 @@ const MethodDetails = props => {
     (!props.outputs || !Object.keys(props.outputs).length)
   ) {
     return (
-      <div
-        elevation={4}
-        style={{
-          paddingTop: '2px',
-          paddingBottom: '2px',
-          marginTop: '2px',
-          marginBottom: '2px',
-        }}
-      >
+      <div className={props.classes.div}>
+        <Tooltip title={props.methodErrorMessage}>
+          <IconButton
+            className={props.classes.button}
+            disableRipple
+            onClick={() =>
+              props.buttonClickHandler(props.blockName, props.attributeName)
+            }
+          >
+            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          </IconButton>
+        </Tooltip>
+        <div className={props.classes.controlContainer}>
+          <ButtonAction
+            method
+            text={props.methodName}
+            disabled={
+              !props.writeable || props.methodAlarm === AlarmStates.PENDING
+            }
+            clickAction={() =>
+              props.runMethod(props.methodPath, props.inputValues)
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
+      <div>
+        {Object.entries(props.inputs).map(input => (
+          <div key={input[0]} className={props.classes.div}>
+            <div>
+              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+            </div>
+            <Tooltip title={input[1].description}>
+              <Typography className={props.classes.textName}>
+                {input[1].label}
+              </Typography>
+            </Tooltip>
+            <div className={props.classes.controlContainer}>
+              {buildIOComponent(input, props, false)}
+            </div>
+          </div>
+        ))}
         <div className={props.classes.div}>
           <Tooltip title={props.methodErrorMessage}>
             <IconButton
@@ -141,65 +175,13 @@ const MethodDetails = props => {
             <ButtonAction
               method
               text={props.methodName}
-              disabled={props.methodAlarm === AlarmStates.PENDING}
+              disabled={
+                !props.writeable || props.methodAlarm === AlarmStates.PENDING
+              }
               clickAction={() =>
                 props.runMethod(props.methodPath, props.inputValues)
               }
             />
-          </div>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <GroupExpander key={props.methodPath} groupName={props.methodName} expanded>
-      <div>
-        {Object.entries(props.inputs).map(input => (
-          <div key={input[0]} className={props.classes.div}>
-            <div>
-              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
-            </div>
-            <Tooltip title={input[1].description}>
-              <Typography className={props.classes.textName}>
-                {input[1].label}:{' '}
-              </Typography>
-            </Tooltip>
-            <div className={props.classes.controlContainer}>
-              {buildIOComponent(input, props, false)}
-            </div>
-          </div>
-        ))}
-        <div
-          elevation={4}
-          style={{
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            marginTop: '2px',
-            marginBottom: '2px',
-          }}
-        >
-          <div className={props.classes.div}>
-            <Tooltip title={props.methodErrorMessage}>
-              <IconButton
-                className={props.classes.button}
-                disableRipple
-                onClick={() =>
-                  props.buttonClickHandler(props.blockName, props.attributeName)
-                }
-              >
-                <AttributeAlarm alarmSeverity={props.methodAlarm} />
-              </IconButton>
-            </Tooltip>
-            <div className={props.classes.controlContainer}>
-              <ButtonAction
-                method
-                text={props.methodName}
-                disabled={props.methodAlarm === AlarmStates.PENDING}
-                clickAction={() =>
-                  props.runMethod(props.methodPath, props.inputValues)
-                }
-              />
-            </div>
           </div>
         </div>
         {Object.keys(props.outputValues).length !== 0 ? (
@@ -212,7 +194,7 @@ const MethodDetails = props => {
               <div key={output[0]} className={props.classes.div}>
                 <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
                 <Typography className={props.classes.textName}>
-                  {output[1].label}:{' '}
+                  {output[1].label}
                 </Typography>
                 <div className={props.classes.controlContainer}>
                   {buildIOComponent(output, props, true)}
@@ -245,6 +227,7 @@ MethodDetails.propTypes = {
     button: PropTypes.string,
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
+  writeable: PropTypes.bool.isRequired,
 };
 
 const EMPTY = '';
@@ -266,6 +249,7 @@ const mapStateToProps = (state, ownProps) => {
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
 
   return {
+    writeable: method ? method.raw.writeable : false,
     methodName: method ? method.raw.label : 'Not found',
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,

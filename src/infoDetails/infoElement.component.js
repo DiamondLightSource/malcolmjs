@@ -54,7 +54,7 @@ const InfoElement = props => (
       <AttributeAlarm alarmSeverity={props.alarm} />
     )}
     <Typography className={props.classes.textName}>
-      {props.showLabel ? `${props.label}:` : ''}
+      {props.showLabel ? `${props.label}` : ''}
     </Typography>
     <div className={props.classes.controlContainer}>
       {selectorFunction(

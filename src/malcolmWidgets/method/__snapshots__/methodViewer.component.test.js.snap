@@ -74,10 +74,11 @@ exports[`Method viewer renders correctly with initial value 1`] = `
         style={
           Object {
             "body": Object {
-              "fontSize": "150%",
+              "fontSize": "100%",
             },
           }
         }
+        viewOnly={true}
         width="100%"
       />
     </div>
@@ -175,10 +176,11 @@ exports[`Method viewer renders correctly with no initial value 1`] = `
         style={
           Object {
             "body": Object {
-              "fontSize": "150%",
+              "fontSize": "100%",
             },
           }
         }
+        viewOnly={true}
         width="100%"
       />
     </div>

@@ -23,8 +23,6 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-textName-2"
         >
           First input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -32,7 +30,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="-"
           blurHandler={[Function]}
           continuousSend={true}
@@ -59,8 +57,6 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-textName-2"
         >
           Second input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -72,38 +68,30 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </div>
     </div>
     <div
-      elevation={4}
-      style={
-        Object {
-          "marginBottom": "2px",
-          "marginTop": "2px",
-          "paddingBottom": "2px",
-          "paddingTop": "2px",
-        }
-      }
+      className="MethodDetails-div-1"
     >
-      <div
-        className="MethodDetails-div-1"
+      <WithStyles(Tooltip)
+        title=""
       >
-        <WithStyles(Tooltip)
-          title=""
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          <div>
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={0}
-            />
-          </div>
-        </WithStyles(Tooltip)>
-        <div
-          className="MethodDetails-controlContainer-3"
-        >
-          <WithStyles(ButtonAction)
-            clickAction={[Function]}
-            disabled={false}
-            method={true}
-            text="Test"
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
           />
-        </div>
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
   </div>
@@ -133,8 +121,6 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-textName-2"
         >
           First input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -142,7 +128,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="1"
           blurHandler={[Function]}
           continuousSend={true}
@@ -169,8 +155,6 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-textName-2"
         >
           Second input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -178,7 +162,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="two"
           blurHandler={[Function]}
           continuousSend={true}
@@ -190,38 +174,30 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </div>
     </div>
     <div
-      elevation={4}
-      style={
-        Object {
-          "marginBottom": "2px",
-          "marginTop": "2px",
-          "paddingBottom": "2px",
-          "paddingTop": "2px",
-        }
-      }
+      className="MethodDetails-div-1"
     >
-      <div
-        className="MethodDetails-div-1"
+      <WithStyles(Tooltip)
+        title=""
       >
-        <WithStyles(Tooltip)
-          title=""
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          <div>
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={0}
-            />
-          </div>
-        </WithStyles(Tooltip)>
-        <div
-          className="MethodDetails-controlContainer-3"
-        >
-          <WithStyles(ButtonAction)
-            clickAction={[Function]}
-            disabled={false}
-            method={true}
-            text="Test"
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
           />
-        </div>
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
   </div>
@@ -251,8 +227,6 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-textName-2"
         >
           First input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -260,7 +234,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="-"
           blurHandler={[Function]}
           continuousSend={true}
@@ -287,8 +261,6 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-textName-2"
         >
           Second input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -296,7 +268,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="-"
           blurHandler={[Function]}
           continuousSend={true}
@@ -308,38 +280,30 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </div>
     </div>
     <div
-      elevation={4}
-      style={
-        Object {
-          "marginBottom": "2px",
-          "marginTop": "2px",
-          "paddingBottom": "2px",
-          "paddingTop": "2px",
-        }
-      }
+      className="MethodDetails-div-1"
     >
-      <div
-        className="MethodDetails-div-1"
+      <WithStyles(Tooltip)
+        title=""
       >
-        <WithStyles(Tooltip)
-          title=""
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          <div>
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={0}
-            />
-          </div>
-        </WithStyles(Tooltip)>
-        <div
-          className="MethodDetails-controlContainer-3"
-        >
-          <WithStyles(ButtonAction)
-            clickAction={[Function]}
-            disabled={false}
-            method={true}
-            text="Test"
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
           />
-        </div>
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
   </div>
@@ -369,8 +333,6 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-textName-2"
         >
           First input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -378,7 +340,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="3"
           blurHandler={[Function]}
           continuousSend={true}
@@ -405,8 +367,6 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-textName-2"
         >
           Second input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -414,7 +374,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="four"
           blurHandler={[Function]}
           continuousSend={true}
@@ -426,42 +386,64 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </div>
     </div>
     <div
-      elevation={4}
-      style={
-        Object {
-          "marginBottom": "2px",
-          "marginTop": "2px",
-          "paddingBottom": "2px",
-          "paddingTop": "2px",
-        }
-      }
+      className="MethodDetails-div-1"
     >
-      <div
-        className="MethodDetails-div-1"
+      <WithStyles(Tooltip)
+        title=""
       >
-        <WithStyles(Tooltip)
-          title=""
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          <div>
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={0}
-            />
-          </div>
-        </WithStyles(Tooltip)>
-        <div
-          className="MethodDetails-controlContainer-3"
-        >
-          <WithStyles(ButtonAction)
-            clickAction={[Function]}
-            disabled={false}
-            method={true}
-            text="Test"
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
           />
-        </div>
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
   </div>
 </WithStyles(WidgetGroupExpander)>
+`;
+
+exports[`Method component renders correctly with no inputs or outputs 1`] = `
+<div
+  className="MethodDetails-div-1"
+>
+  <WithStyles(Tooltip)
+    title=""
+  >
+    <WithStyles(IconButton)
+      className="MethodDetails-button-6"
+      disableRipple={true}
+      onClick={[Function]}
+    >
+      <WithTheme(AttributeAlarm)
+        alarmSeverity={0}
+      />
+    </WithStyles(IconButton)>
+  </WithStyles(Tooltip)>
+  <div
+    className="MethodDetails-controlContainer-3"
+  >
+    <WithStyles(ButtonAction)
+      clickAction={[Function]}
+      disabled={false}
+      method={true}
+      text="Test"
+    />
+  </div>
+</div>
 `;
 
 exports[`Method component renders correctly with return value 1`] = `
@@ -487,8 +469,6 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-textName-2"
         >
           First input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -496,7 +476,7 @@ exports[`Method component renders correctly with return value 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="-"
           blurHandler={[Function]}
           continuousSend={true}
@@ -523,8 +503,6 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-textName-2"
         >
           Second input
-          :
-           
         </WithStyles(Typography)>
       </WithStyles(Tooltip)>
       <div
@@ -532,7 +510,7 @@ exports[`Method component renders correctly with return value 1`] = `
       >
         <WithStyles(WidgetTextInput)
           Error={false}
-          Pending={true}
+          Pending={false}
           Value="-"
           blurHandler={[Function]}
           continuousSend={true}
@@ -544,38 +522,30 @@ exports[`Method component renders correctly with return value 1`] = `
       </div>
     </div>
     <div
-      elevation={4}
-      style={
-        Object {
-          "marginBottom": "2px",
-          "marginTop": "2px",
-          "paddingBottom": "2px",
-          "paddingTop": "2px",
-        }
-      }
+      className="MethodDetails-div-1"
     >
-      <div
-        className="MethodDetails-div-1"
+      <WithStyles(Tooltip)
+        title=""
       >
-        <WithStyles(Tooltip)
-          title=""
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          <div>
-            <WithTheme(AttributeAlarm)
-              alarmSeverity={0}
-            />
-          </div>
-        </WithStyles(Tooltip)>
-        <div
-          className="MethodDetails-controlContainer-3"
-        >
-          <WithStyles(ButtonAction)
-            clickAction={[Function]}
-            disabled={false}
-            method={true}
-            text="Test"
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
           />
-        </div>
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
     <div>
@@ -596,8 +566,6 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-textName-2"
         >
           First output
-          :
-           
         </WithStyles(Typography)>
         <div
           className="MethodDetails-controlContainer-3"
@@ -620,8 +588,6 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-textName-2"
         >
           Second output
-          :
-           
         </WithStyles(Typography)>
         <div
           className="MethodDetails-controlContainer-3"
@@ -630,6 +596,112 @@ exports[`Method component renders correctly with return value 1`] = `
             Text="done"
           />
         </div>
+      </div>
+    </div>
+  </div>
+</WithStyles(WidgetGroupExpander)>
+`;
+
+exports[`Method component renders correctly without return value 1`] = `
+<WithStyles(WidgetGroupExpander)
+  expanded={true}
+  groupName="Test"
+  key="Test,Method"
+>
+  <div>
+    <div
+      className="MethodDetails-div-1"
+      key="first"
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+      <WithStyles(Tooltip)
+        title="a test input"
+      >
+        <WithStyles(Typography)
+          className="MethodDetails-textName-2"
+        >
+          First input
+        </WithStyles(Typography)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetTextInput)
+          Error={false}
+          Pending={false}
+          Value="3"
+          blurHandler={[Function]}
+          continuousSend={true}
+          focusHandler={[Function]}
+          forceUpdate={false}
+          setFlag={[Function]}
+          submitEventHandler={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="MethodDetails-div-1"
+      key="second"
+    >
+      <div>
+        <WithTheme(AttributeAlarm)
+          alarmSeverity={0}
+        />
+      </div>
+      <WithStyles(Tooltip)
+        title="a test input"
+      >
+        <WithStyles(Typography)
+          className="MethodDetails-textName-2"
+        >
+          Second input
+        </WithStyles(Typography)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(WidgetTextInput)
+          Error={false}
+          Pending={false}
+          Value="four"
+          blurHandler={[Function]}
+          continuousSend={true}
+          focusHandler={[Function]}
+          forceUpdate={false}
+          setFlag={[Function]}
+          submitEventHandler={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="MethodDetails-div-1"
+    >
+      <WithStyles(Tooltip)
+        title=""
+      >
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
+        >
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
+      </WithStyles(Tooltip)>
+      <div
+        className="MethodDetails-controlContainer-3"
+      >
+        <WithStyles(ButtonAction)
+          clickAction={[Function]}
+          disabled={false}
+          method={true}
+          text="Test"
+        />
       </div>
     </div>
   </div>

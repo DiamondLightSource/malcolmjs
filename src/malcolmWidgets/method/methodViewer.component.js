@@ -11,7 +11,7 @@ import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableCell from '@material-ui/core/TableCell';
-// import Typography from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import ButtonAction from '../buttonAction/buttonAction.component';
 
 import blockUtils from '../../malcolm/blockUtils';
@@ -55,51 +55,59 @@ const MethodViewer = props => {
         }}
       />,
     ];
-    switch (widgetTag) {
-      case 'widget:tree':
-        return (
-          <div className={props.classes.plainBackground}>
-            <div
-              className={props.classes.tableContainer}
-              style={{
-                ...transitionWithPanelStyle,
-                textAlign: 'left',
-                display: 'initial',
-              }}
-            >
-              <div style={{ height: 'calc(100% - 56px)' }}>
-                <JSONInput
-                  locale={locale}
-                  placeholder={props.selectedParamValue}
-                  onChange={val => {
-                    if (!val.error) {
-                      props.updateInput(
-                        props.method.calculated.path,
-                        props.selectedParam[1],
-                        val.jsObject
-                      );
-                    }
-                  }}
-                  id={props.selectedParam}
-                  height="100%"
-                  width="100%"
-                  style={{ body: { fontSize: '150%' } }}
-                />
+    if (
+      props.selectedParamValue !== undefined ||
+      props.selectedParam[0] === 'takes'
+    ) {
+      switch (widgetTag) {
+        case 'widget:tree':
+          return (
+            <div className={props.classes.plainBackground}>
+              <div
+                className={props.classes.tableContainer}
+                style={{
+                  ...transitionWithPanelStyle,
+                  textAlign: 'left',
+                  display: 'initial',
+                }}
+              >
+                <div style={{ height: 'calc(100% - 56px)' }}>
+                  <JSONInput
+                    locale={locale}
+                    placeholder={props.selectedParamValue}
+                    viewOnly={!props.selectedParamMeta.writeable}
+                    onChange={val => {
+                      if (!val.error) {
+                        props.updateInput(
+                          props.method.calculated.path,
+                          props.selectedParam[1],
+                          val.jsObject
+                        );
+                      }
+                    }}
+                    id={props.selectedParam}
+                    height="100%"
+                    width="100%"
+                    style={{ body: { fontSize: '100%' } }}
+                  />
+                </div>
+                <Table>
+                  <TableFooter>
+                    <TableRow>
+                      {footerItems.map((item, key) => (
+                        <TableCell key={key}>{item}</TableCell>
+                      ))}
+                    </TableRow>
+                  </TableFooter>
+                </Table>
               </div>
-              <Table>
-                <TableFooter>
-                  <TableRow>
-                    {footerItems.map((item, key) => (
-                      <TableCell key={key}>{item}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableFooter>
-              </Table>
             </div>
-          </div>
-        );
-      default:
-        return <div className={props.classes.plainBackground} />;
+          );
+        default:
+          return <div className={props.classes.plainBackground} />;
+      }
+    } else {
+      return <Typography>No results yet...run method first!</Typography>;
     }
   }
 
@@ -160,6 +168,7 @@ MethodViewer.propTypes = {
   }).isRequired,
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),
+    writeable: PropTypes.bool,
   }).isRequired,
   selectedParamValue: PropTypes.oneOf(
     PropTypes.string,

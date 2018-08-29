@@ -241,6 +241,16 @@ export const buildAttributeInfo = props => {
           },
         };
       });
+      info.errorState = {
+        label: 'Error State',
+        inline: true,
+        value: attribute.calculated.errorState
+          ? attribute.calculated.errorMessage
+          : 'n/a',
+        alarmState: attribute.calculated.errorState
+          ? AlarmStates.MAJOR_ALARM
+          : null,
+      };
     } else {
       const rawInfo =
         attribute.raw[props.subElement[0]].elements[props.subElement[1]];

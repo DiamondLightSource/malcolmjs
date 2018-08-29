@@ -10,7 +10,7 @@ exports[`InfoElement renders correctly with paths given 1`] = `
   <WithStyles(Typography)
     className="InfoElement-textName-2"
   >
-    Test element:
+    Test element
   </WithStyles(Typography)>
   <div
     className="InfoElement-controlContainer-3"
@@ -33,7 +33,7 @@ exports[`InfoElement renders correctly with value given 1`] = `
   <WithStyles(Typography)
     className="InfoElement-textName-2"
   >
-    Test element:
+    Test element
   </WithStyles(Typography)>
   <div
     className="InfoElement-controlContainer-3"
