@@ -24,6 +24,18 @@ const styles = () => ({
   portLabel: {
     fontSize: 12,
   },
+  hiddenLink: {
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingRight: 10,
+    borderBottom: '3px dashed rgba(255,255,255,0.5)',
+    right: '100%',
+    bottom: '40%',
+  },
+  hiddenLinkLine: {
+    width: '100%',
+  },
 });
 
 class BlockPortWidget extends BaseWidget {
@@ -50,6 +62,12 @@ class BlockPortWidget extends BaseWidget {
       background: this.state.selected ? portColour[100] : portColour[500],
     };
 
+    const hiddenLink = (
+      <div className={this.props.classes.hiddenLink}>
+        <Typography>{this.props.portValue}</Typography>
+        {/* <div className={this.props.classes.hiddenLinkLine}/> */}
+      </div>
+    );
     const port = (
       <div
         onMouseEnter={() => {
@@ -75,8 +93,10 @@ class BlockPortWidget extends BaseWidget {
 
     return (
       <div className={this.props.classes.container}>
+        {this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
         {this.props.inputPort ? port : label}
         {this.props.inputPort ? label : port}
+        {!this.props.inputPort && this.props.hiddenLink ? hiddenLink : null}
       </div>
     );
   }
@@ -91,6 +111,8 @@ export const mapStateToProps = (state, ownProps) => {
     portName: port.name,
     portLabel: port.label,
     portType: port.portType,
+    hiddenLink: port.hiddenLink,
+    portValue: port.value,
     mouseDownHandler: state.malcolm.layoutEngine.portMouseDown,
   };
 };
