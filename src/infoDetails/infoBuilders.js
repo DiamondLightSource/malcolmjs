@@ -217,29 +217,32 @@ export const buildAttributeInfo = props => {
           tag: 'widget:led',
         },
       };
-      info.takes = { label: 'Input parameter types' };
-      Object.keys(attribute.raw.takes.elements).forEach(input => {
-        info.takes[input] = {
-          label: attribute.raw.takes.elements[input].label,
-          value: attribute.raw.takes.elements[input].typeid,
-          infoPath: {
-            root: attribute.calculated.path,
-            subElement: `takes.${input}`,
-          },
-        };
-      });
-
-      info.returns = { label: 'Output parameter types' };
-      Object.keys(attribute.raw.returns.elements).forEach(input => {
-        info.returns[input] = {
-          label: attribute.raw.returns.elements[input].label,
-          value: attribute.raw.returns.elements[input].typeid,
-          infoPath: {
-            root: attribute.calculated.path,
-            subElement: `returns.${input}`,
-          },
-        };
-      });
+      if (Object.keys(attribute.raw.takes.elements).length > 0) {
+        info.takes = { label: 'Input parameter types' };
+        Object.keys(attribute.raw.takes.elements).forEach(input => {
+          info.takes[input] = {
+            label: attribute.raw.takes.elements[input].label,
+            value: attribute.raw.takes.elements[input].typeid,
+            infoPath: {
+              root: attribute.calculated.path,
+              subElement: `takes.${input}`,
+            },
+          };
+        });
+      }
+      if (Object.keys(attribute.raw.returns.elements).length > 0) {
+        info.returns = { label: 'Output parameter types' };
+        Object.keys(attribute.raw.returns.elements).forEach(input => {
+          info.returns[input] = {
+            label: attribute.raw.returns.elements[input].label,
+            value: attribute.raw.returns.elements[input].typeid,
+            infoPath: {
+              root: attribute.calculated.path,
+              subElement: `returns.${input}`,
+            },
+          };
+        });
+      }
       info.errorState = {
         label: 'Last Post Status',
         inline: true,
