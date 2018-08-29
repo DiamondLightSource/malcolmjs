@@ -54,7 +54,16 @@ describe('link model', () => {
     expect(pathSegments[0]).toEqual('test auto routing path');
   });
 
-  it('getPathSegments caches the result if the blocks are the same distance apart', () => {
+  it('getPathSegments caches the result if the ports havent moved', () => {
+    // this happens when the user pans round the view and causes a re-render even
+    // though the position of the blocks hasn't changed
+    const pathSegments = model.getPathSegments(diagramEngine);
+    const updatedPathSegments = model.getPathSegments(diagramEngine);
+
+    expect(updatedPathSegments).toBe(pathSegments);
+  });
+
+  it('getPathSegments does not cache the result if the blocks are the same distance apart', () => {
     const pathSegments = model.getPathSegments(diagramEngine);
 
     model.points = [{ x: 200, y: 200 }, { x: 300, y: 300 }];
@@ -70,7 +79,7 @@ describe('link model', () => {
 
     const updatedPathSegments = model.getPathSegments(diagramEngine);
 
-    expect(updatedPathSegments).toBe(pathSegments);
+    expect(updatedPathSegments).not.toBe(pathSegments);
   });
 
   it('getPathSegments does not cache the result if the blocks move in x', () => {

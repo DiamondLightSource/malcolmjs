@@ -42,7 +42,7 @@ const styles = () => ({
     marginRight: 4,
   },
   controlContainer: {
-    width: '100%',
+    width: 150,
     padding: 2,
   },
   runButton: {
@@ -247,6 +247,7 @@ MethodDetails.propTypes = {
   classes: PropTypes.shape({
     div: PropTypes.string,
     textName: PropTypes.string,
+    runButton: PropTypes.string,
     controlContainer: PropTypes.string,
     button: PropTypes.string,
   }).isRequired,

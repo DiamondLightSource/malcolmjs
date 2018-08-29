@@ -6,8 +6,10 @@ class MalcolmLinkModel extends DefaultLinkModel {
   constructor() {
     super('malcolmlink');
     this.width = 3;
-    this.differentInX = 10000000000;
-    this.differentInY = 10000000000;
+    this.sourceX = 10000000000;
+    this.sourceY = 10000000000;
+    this.targetX = 10000000000;
+    this.targetY = 10000000000;
     this.pathSegments = undefined;
   }
 
@@ -16,10 +18,10 @@ class MalcolmLinkModel extends DefaultLinkModel {
     if (
       this.sourcePort &&
       this.targetPort &&
-      Math.abs(this.differentInX - (this.targetPort.x - this.sourcePort.x)) <
-        0.1 &&
-      Math.abs(this.differentInY - (this.targetPort.y - this.sourcePort.y)) <
-        0.1
+      (Math.abs(this.sourceX - this.sourcePort.x) < 0.1 &&
+        Math.abs(this.sourceY - this.sourcePort.y) < 0.1) &&
+      (Math.abs(this.targetX - this.targetPort.x) < 0.1 &&
+        Math.abs(this.targetY - this.targetPort.y) < 0.1)
     ) {
       return this.pathSegments;
     }
@@ -90,6 +92,11 @@ class MalcolmLinkModel extends DefaultLinkModel {
     if (this.sourcePort && this.targetPort) {
       this.differentInX = this.targetPort.x - this.sourcePort.x;
       this.differentInY = this.targetPort.y - this.sourcePort.y;
+
+      this.sourceX = this.sourcePort.x;
+      this.sourceY = this.sourcePort.y;
+      this.targetX = this.targetPort.x;
+      this.targetY = this.targetPort.y;
     }
     return this.pathSegments;
   }
