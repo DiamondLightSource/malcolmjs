@@ -38,41 +38,45 @@ const styles = theme => ({
   },
 });
 
-const InfoElement = props => (
-  <div className={props.classes.div}>
-    {props.alarm === AlarmStates.NO_ALARM && props.infoPath ? (
-      <IconButton
-        className={props.classes.button}
-        disableRipple
-        onClick={() =>
-          props.infoClickHandler(props.infoPath.root, props.infoPath.subElement)
-        }
-      >
+const InfoElement = props =>
+  props.hidden ? null : (
+    <div className={props.classes.div}>
+      {props.alarm === AlarmStates.NO_ALARM && props.infoPath ? (
+        <IconButton
+          className={props.classes.button}
+          disableRipple
+          onClick={() =>
+            props.infoClickHandler(
+              props.infoPath.root,
+              props.infoPath.subElement
+            )
+          }
+        >
+          <AttributeAlarm alarmSeverity={props.alarm} />
+        </IconButton>
+      ) : (
         <AttributeAlarm alarmSeverity={props.alarm} />
-      </IconButton>
-    ) : (
-      <AttributeAlarm alarmSeverity={props.alarm} />
-    )}
-    <Typography className={props.classes.textName}>
-      {props.showLabel ? `${props.label}` : ''}
-    </Typography>
-    <div className={props.classes.controlContainer}>
-      {selectorFunction(
-        props.tag,
-        props.path,
-        props.value,
-        props.handlers.eventHandler,
-        { isDisabled: props.disabled },
-        props.handlers.setFlag,
-        props.theme.palette.primary.light,
-        { choices: props.choices },
-        false,
-        false,
-        props.handlers.clickHandler
       )}
+      <Typography className={props.classes.textName}>
+        {props.showLabel ? `${props.label}` : ''}
+      </Typography>
+      <div className={props.classes.controlContainer}>
+        {selectorFunction(
+          props.tag,
+          props.path,
+          props.value,
+          props.handlers.eventHandler,
+          { isDisabled: props.disabled },
+          props.handlers.setFlag,
+          props.theme.palette.primary.light,
+          { choices: props.choices },
+          false,
+          false,
+          props.handlers.clickHandler
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 
 InfoElement.propTypes = {
   alarm: PropTypes.number.isRequired,
@@ -110,9 +114,11 @@ InfoElement.propTypes = {
     subElement: PropTypes.string,
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
 };
 
 InfoElement.defaultProps = {
+  hidden: false,
   choices: [],
   handlers: {},
   path: [''],
@@ -154,6 +160,7 @@ const mapStateToProps = (state, ownProps) => {
     }
   }
   return {
+    hidden: value === undefined && ownProps.value === undefined,
     alarm: alarmState !== undefined ? alarmState : ownProps.alarm,
     value: value !== undefined ? value : ownProps.value,
     disabled: disabled !== undefined ? disabled : ownProps.disabled,

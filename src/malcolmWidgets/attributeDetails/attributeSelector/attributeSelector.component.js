@@ -131,6 +131,7 @@ export const selectorFunction = (
     case 'info:button':
       return (
         <ButtonAction
+          method
           text={value}
           clickAction={() => buttonClickHandler()}
           disabled={flags.isDisabled}

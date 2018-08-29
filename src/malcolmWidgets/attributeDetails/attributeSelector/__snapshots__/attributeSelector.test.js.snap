@@ -11,7 +11,7 @@ exports[`AttributeSelector selector function returns info:button and renders cor
     color="primary"
     disabled={true}
     onClick={[Function]}
-    variant=""
+    variant="raised"
   >
     testButton
   </WithStyles(Button)>

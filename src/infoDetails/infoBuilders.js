@@ -69,14 +69,12 @@ export const buildAttributeInfo = props => {
           valuePath: `raw.timeStamp.${key}`,
         };
       });
-      if (attribute.calculated.errorMessage) {
-        info.errorState = {
-          label: 'Last Put Status',
-          valuePath: 'calculated.errorMessage',
-          inline: true,
-          alarmStatePath: 'calculated.alarms.errorState',
-        };
-      }
+      info.errorState = {
+        label: 'Last Put Status',
+        valuePath: 'calculated.errorMessage',
+        inline: true,
+        alarmStatePath: 'calculated.alarms.errorState',
+      };
       if (
         attribute.raw.meta.tags.some(a =>
           ['widget:table', 'widget:textinput'].includes(a)
