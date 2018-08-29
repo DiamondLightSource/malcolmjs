@@ -65,7 +65,6 @@ class BlockPortWidget extends BaseWidget {
     const hiddenLink = (
       <div className={this.props.classes.hiddenLink}>
         <Typography>{this.props.portValue}</Typography>
-        {/* <div className={this.props.classes.hiddenLinkLine}/> */}
       </div>
     );
     const port = (
