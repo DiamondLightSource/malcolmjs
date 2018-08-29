@@ -20,6 +20,13 @@ export const AlarmStates = {
   PENDING: -1,
   DIRTY: -2,
   DIRTYANDERROR: -3,
+  Strings: [
+    'No Alarm',
+    'Minor Alarm',
+    'Major Alarm',
+    'Invalid Alarm',
+    'Undefined Alarm',
+  ],
 };
 
 export const getAlarmState = attribute => {

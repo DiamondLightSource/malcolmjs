@@ -20,12 +20,6 @@ describe('info builder', () => {
   it('attribute info builder generates correct structure for basic attribute', () => {
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info).toEqual({
-      errorState: {
-        alarmStatePath: 'calculated.alarms.errorState',
-        inline: true,
-        label: 'Error State',
-        valuePath: 'calculated.errorMessage',
-      },
       malcolmAlarm: {
         label: 'Alarm',
         message: {

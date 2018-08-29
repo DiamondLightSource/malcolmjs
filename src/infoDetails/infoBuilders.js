@@ -69,13 +69,14 @@ export const buildAttributeInfo = props => {
           valuePath: `raw.timeStamp.${key}`,
         };
       });
-
-      info.errorState = {
-        label: 'Error State',
-        valuePath: 'calculated.errorMessage',
-        inline: true,
-        alarmStatePath: 'calculated.alarms.errorState',
-      };
+      if (attribute.calculated.errorMessage) {
+        info.errorState = {
+          label: 'Last Put Status',
+          valuePath: 'calculated.errorMessage',
+          inline: true,
+          alarmStatePath: 'calculated.alarms.errorState',
+        };
+      }
       if (
         attribute.raw.meta.tags.some(a =>
           ['widget:table', 'widget:textinput'].includes(a)
@@ -242,21 +243,45 @@ export const buildAttributeInfo = props => {
         };
       });
       info.errorState = {
-        label: 'Error State',
+        label: 'Last Post Status',
         inline: true,
         value: attribute.calculated.errorState
           ? attribute.calculated.errorMessage
-          : 'n/a',
+          : 'Successful',
         alarmState: attribute.calculated.errorState
           ? AlarmStates.MAJOR_ALARM
           : null,
       };
     } else {
-      const rawInfo =
-        attribute.raw[props.subElement[0]].elements[props.subElement[1]];
-      Object.keys(rawInfo).forEach(key => {
-        info[key] = rawInfo[key];
-      });
+      info.parameterType = {
+        label: 'Parameter Type',
+        inline: true,
+        value: props.subElement[0],
+      };
+      info.typeid =
+        attribute.raw[props.subElement[0]].elements[props.subElement[1]].typeid;
+      info.description = {
+        label: 'Description',
+        inline: true,
+        value:
+          attribute.raw[props.subElement[0]].elements[props.subElement[1]]
+            .description,
+      };
+      if (props.subElement[0] === 'takes') {
+        info.required = {
+          label: 'Required?',
+          inline: true,
+          value: attribute.raw.takes.required.includes(props.subElement[1]),
+        };
+        info.defaultValue = {
+          label: 'Default Value',
+          inline: true,
+          value:
+            attribute.raw.defaults[props.subElement[1]] !== undefined
+              ? attribute.raw.defaults[props.subElement[1]]
+              : 'undefined',
+        };
+      }
     }
   }
   return { info, value };

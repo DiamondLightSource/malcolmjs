@@ -146,14 +146,24 @@ const MethodDetails = props => {
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
-            <div>
-              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
-            </div>
             <Tooltip title={input[1].description}>
-              <Typography className={props.classes.textName}>
-                {input[1].label}
-              </Typography>
+              <IconButton
+                className={props.classes.button}
+                disableRipple
+                onClick={() =>
+                  props.buttonClickHandler(
+                    props.blockName,
+                    props.attributeName,
+                    `takes.${input[0]}`
+                  )
+                }
+              >
+                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+              </IconButton>
             </Tooltip>
+            <Typography className={props.classes.textName}>
+              {input[1].label}
+            </Typography>
             <div className={props.classes.controlContainer}>
               {buildIOComponent(input, props, false)}
             </div>
@@ -192,7 +202,21 @@ const MethodDetails = props => {
             <Divider />
             {Object.entries(props.outputs).map(output => (
               <div key={output[0]} className={props.classes.div}>
-                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                <Tooltip title={output[1].description}>
+                  <IconButton
+                    className={props.classes.button}
+                    disableRipple
+                    onClick={() =>
+                      props.buttonClickHandler(
+                        props.blockName,
+                        props.attributeName,
+                        `returns.${output[0]}`
+                      )
+                    }
+                  >
+                    <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                  </IconButton>
+                </Tooltip>
                 <Typography className={props.classes.textName}>
                   {output[1].label}
                 </Typography>
@@ -270,8 +294,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export const mapDispatchToProps = dispatch => ({
-  buttonClickHandler: (blockName, attributeName) => {
-    dispatch(navigationActions.navigateToInfo(blockName, attributeName));
+  buttonClickHandler: (blockName, attributeName, subElement) => {
+    dispatch(
+      navigationActions.navigateToInfo(blockName, attributeName, subElement)
+    );
   },
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));

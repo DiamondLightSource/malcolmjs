@@ -11,20 +11,24 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -45,20 +49,24 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -109,20 +117,24 @@ exports[`Method component renders correctly with default inputs 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -143,20 +155,24 @@ exports[`Method component renders correctly with default inputs 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -215,20 +231,24 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -249,20 +269,24 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -321,20 +345,24 @@ exports[`Method component renders correctly with existing input values 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -355,20 +383,24 @@ exports[`Method component renders correctly with existing input values 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -457,20 +489,24 @@ exports[`Method component renders correctly with return value 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -491,20 +527,24 @@ exports[`Method component renders correctly with return value 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -559,9 +599,17 @@ exports[`Method component renders correctly with return value 1`] = `
         className="MethodDetails-div-1"
         key="first"
       >
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
+        <WithStyles(Tooltip)>
+          <WithStyles(IconButton)
+            className="MethodDetails-button-6"
+            disableRipple={true}
+            onClick={[Function]}
+          >
+            <WithTheme(AttributeAlarm)
+              alarmSeverity={0}
+            />
+          </WithStyles(IconButton)>
+        </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
         >
@@ -581,9 +629,17 @@ exports[`Method component renders correctly with return value 1`] = `
         className="MethodDetails-div-1"
         key="second"
       >
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
+        <WithStyles(Tooltip)>
+          <WithStyles(IconButton)
+            className="MethodDetails-button-6"
+            disableRipple={true}
+            onClick={[Function]}
+          >
+            <WithTheme(AttributeAlarm)
+              alarmSeverity={0}
+            />
+          </WithStyles(IconButton)>
+        </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
         >
@@ -613,20 +669,24 @@ exports[`Method component renders correctly without return value 1`] = `
       className="MethodDetails-div-1"
       key="first"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          First input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        First input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
@@ -647,20 +707,24 @@ exports[`Method component renders correctly without return value 1`] = `
       className="MethodDetails-div-1"
       key="second"
     >
-      <div>
-        <WithTheme(AttributeAlarm)
-          alarmSeverity={0}
-        />
-      </div>
       <WithStyles(Tooltip)
         title="a test input"
       >
-        <WithStyles(Typography)
-          className="MethodDetails-textName-2"
+        <WithStyles(IconButton)
+          className="MethodDetails-button-6"
+          disableRipple={true}
+          onClick={[Function]}
         >
-          Second input
-        </WithStyles(Typography)>
+          <WithTheme(AttributeAlarm)
+            alarmSeverity={0}
+          />
+        </WithStyles(IconButton)>
       </WithStyles(Tooltip)>
+      <WithStyles(Typography)
+        className="MethodDetails-textName-2"
+      >
+        Second input
+      </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
