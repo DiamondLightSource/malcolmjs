@@ -55,7 +55,7 @@ const infoAlarmState = value => {
 const getValue = value => {
   if (!(value instanceof Object)) {
     return value;
-  } else if (value.value !== undefined) {
+  } else if (Object.prototype.hasOwnProperty.call(value, 'value')) {
     return value.value;
   } else if (value.valuePath !== undefined) {
     return undefined;

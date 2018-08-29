@@ -243,9 +243,7 @@ export const buildAttributeInfo = props => {
       info.errorState = {
         label: 'Last Post Status',
         inline: true,
-        value: attribute.calculated.errorState
-          ? attribute.calculated.errorMessage
-          : 'Successful',
+        value: attribute.calculated.errorMessage,
         alarmState: attribute.calculated.errorState
           ? AlarmStates.MAJOR_ALARM
           : null,
