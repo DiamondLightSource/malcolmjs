@@ -264,12 +264,6 @@ const mapStateToProps = state => {
         : undefined;
   }
 
-  const attribute = blockUtils.findAttribute(
-    state.malcolm.blocks,
-    blockName,
-    attributeName
-  );
-
   const showLinkInfo = navLists[2].path.endsWith('.link');
   let linkBlockName;
   if (showLinkInfo) {
@@ -289,6 +283,12 @@ const mapStateToProps = state => {
       linkBlockName = navLists[2].linkInputBlock;
     }
   }
+
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    blockName,
+    attributeName
+  );
 
   return {
     attribute,

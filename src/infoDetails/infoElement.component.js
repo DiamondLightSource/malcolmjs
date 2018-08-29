@@ -57,10 +57,15 @@ const InfoElement = props =>
       ) : (
         <AttributeAlarm alarmSeverity={props.alarm} />
       )}
-      <Typography className={props.classes.textName}>
-        {props.showLabel ? `${props.label}` : ''}
-      </Typography>
-      <div className={props.classes.controlContainer}>
+      {props.showLabel ? (
+        <Typography className={props.classes.textName}>
+          {`${props.label}`}
+        </Typography>
+      ) : null}
+      <div
+        className={props.classes.controlContainer}
+        style={props.showLabel ? {} : { width: '100%' }}
+      >
         {selectorFunction(
           props.tag,
           props.path,
