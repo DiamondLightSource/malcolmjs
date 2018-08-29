@@ -126,7 +126,10 @@ const MethodDetails = props => {
             <AttributeAlarm alarmSeverity={props.methodAlarm} />
           </IconButton>
         </Tooltip>
-        <div className={props.classes.controlContainer}>
+        <div
+          className={props.classes.controlContainer}
+          style={{ width: '100%' }}
+        >
           <ButtonAction
             method
             text={props.methodName}
@@ -181,7 +184,10 @@ const MethodDetails = props => {
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </IconButton>
           </Tooltip>
-          <div className={props.classes.controlContainer}>
+          <div
+            className={props.classes.controlContainer}
+            style={{ width: '100%' }}
+          >
             <ButtonAction
               method
               text={props.methodName}
