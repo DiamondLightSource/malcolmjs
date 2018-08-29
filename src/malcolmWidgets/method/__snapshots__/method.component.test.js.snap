@@ -93,6 +93,11 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}
@@ -207,6 +212,11 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}
@@ -321,6 +331,11 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}
@@ -435,6 +450,11 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}
@@ -467,6 +487,11 @@ exports[`Method component renders correctly with no inputs or outputs 1`] = `
   </WithStyles(Tooltip)>
   <div
     className="MethodDetails-controlContainer-3"
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
   >
     <WithStyles(ButtonAction)
       clickAction={[Function]}
@@ -579,6 +604,11 @@ exports[`Method component renders correctly with return value 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}
@@ -759,6 +789,11 @@ exports[`Method component renders correctly without return value 1`] = `
       </WithStyles(Tooltip)>
       <div
         className="MethodDetails-controlContainer-3"
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
       >
         <WithStyles(ButtonAction)
           clickAction={[Function]}

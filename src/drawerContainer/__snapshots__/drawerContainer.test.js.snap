@@ -43,12 +43,6 @@ exports[`DrawerContainer renders correctly 1`] = `
   >
     <div
       className="DrawerContainer-drawerContents-2"
-      style={
-        Object {
-          "position": "sticky",
-          "top": 0,
-        }
-      }
     >
       <DrawerHeader
         closeAction={[Function]}

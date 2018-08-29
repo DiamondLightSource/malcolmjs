@@ -54,10 +54,7 @@ const DrawerContainer = props => (
       anchor="right"
       classes={{ paper: props.classes.drawer }}
     >
-      <div
-        className={props.classes.drawerContents}
-        style={{ position: 'sticky', top: 0 }}
-      >
+      <div className={props.classes.drawerContents}>
         <DrawerHeader
           closeAction={() => props.closeChild(props.urlPath)}
           title={props.childTitle}
