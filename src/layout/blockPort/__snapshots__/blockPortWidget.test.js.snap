@@ -28,6 +28,41 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
 </div>
 `;
 
+exports[`BlockPortWidget input port renders correctly with hidden link 1`] = `
+<div
+  className="BlockPortWidget-container-1"
+>
+  <div
+    className="BlockPortWidget-hiddenLink-6"
+  >
+    <WithStyles(Typography)>
+      HIDDEN_BLOCK.VAL
+    </WithStyles(Typography)>
+  </div>
+  <div
+    className="port BlockPortWidget-port-2 malcolm-port "
+    data-name="val1"
+    data-nodeid="node1"
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={
+      Object {
+        "background": "blue",
+        "marginRight": 3,
+      }
+    }
+  />
+  <WithStyles(Typography)
+    className="BlockPortWidget-portLabel-5"
+  >
+    val 1
+  </WithStyles(Typography)>
+</div>
+`;
+
 exports[`BlockPortWidget output port renders correctly 1`] = `
 <div
   className="BlockPortWidget-container-1"
@@ -53,5 +88,40 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
       }
     }
   />
+</div>
+`;
+
+exports[`BlockPortWidget output port renders correctly with hidden link 1`] = `
+<div
+  className="BlockPortWidget-container-1"
+>
+  <WithStyles(Typography)
+    className="BlockPortWidget-portLabel-5"
+  >
+    val 1
+  </WithStyles(Typography)>
+  <div
+    className="port BlockPortWidget-port-2 malcolm-port "
+    data-name="val1"
+    data-nodeid="node1"
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={
+      Object {
+        "background": "blue",
+        "marginLeft": 3,
+      }
+    }
+  />
+  <div
+    className="BlockPortWidget-hiddenLink-6"
+  >
+    <WithStyles(Typography)>
+      HIDDEN_BLOCK.VAL
+    </WithStyles(Typography)>
+  </div>
 </div>
 `;

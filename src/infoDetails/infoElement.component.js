@@ -89,7 +89,7 @@ InfoElement.propTypes = {
   showLabel: PropTypes.bool,
   tag: PropTypes.string.isRequired,
   path: PropTypes.arrayOf(PropTypes.string),
-  value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.bool)
+  value: PropTypes.oneOf([PropTypes.string, PropTypes.number, PropTypes.bool])
     .isRequired,
   choices: PropTypes.arrayOf(PropTypes.string),
   classes: PropTypes.shape({

@@ -170,11 +170,11 @@ MethodViewer.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string),
     writeable: PropTypes.bool,
   }).isRequired,
-  selectedParamValue: PropTypes.oneOf(
+  selectedParamValue: PropTypes.oneOf([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.object
-  ).isRequired,
+    PropTypes.object,
+  ]).isRequired,
   classes: PropTypes.shape({
     plainBackground: PropTypes.string,
     tableContainer: PropTypes.string,

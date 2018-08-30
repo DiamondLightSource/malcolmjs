@@ -21,7 +21,7 @@ class BlockNodeModel extends NodeModel {
       `${this.id}-${port.label}`,
       port.label,
       `${this.id}-${port.label}`,
-      port.portType
+      port
     );
 
     newPort.addMouseDownHandler(portMouseDown);
