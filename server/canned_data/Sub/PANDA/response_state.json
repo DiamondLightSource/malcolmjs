@@ -32,7 +32,7 @@
             "Disabled"
           ], 
           "tags": [
-            "widget:textupdate"
+            "widget:multilinetextupdate"
           ], 
           "writeable": false, 
           "label": "State"

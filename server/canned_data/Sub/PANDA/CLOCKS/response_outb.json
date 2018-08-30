@@ -6,7 +6,7 @@
       [], 
       {
         "typeid": "epics:nt/NTScalar:1.0", 
-        "value": true, 
+        "value": false, 
         "alarm": {
           "typeid": "alarm_t", 
           "severity": 0, 
@@ -24,7 +24,7 @@
           "description": "Clock B output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:CLOCKS.OUTB", 
+            "sourcePort:bool:CLOCKS.OUTB", 
             "widget:led"
           ], 
           "writeable": false, 

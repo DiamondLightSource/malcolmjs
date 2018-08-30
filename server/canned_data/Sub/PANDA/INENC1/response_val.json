@@ -25,7 +25,7 @@
           "description": "Current position", 
           "tags": [
             "group:outputs", 
-            "outport:int32:INENC1.VAL", 
+            "sourcePort:int32:INENC1.VAL", 
             "widget:textupdate"
           ], 
           "writeable": false, 

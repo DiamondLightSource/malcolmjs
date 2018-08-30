@@ -24,7 +24,7 @@
           "description": "Sequencer active flag", 
           "tags": [
             "group:outputs", 
-            "outport:bool:SEQ4.ACTIVE", 
+            "sourcePort:bool:SEQ4.ACTIVE", 
             "widget:led"
           ], 
           "writeable": false, 

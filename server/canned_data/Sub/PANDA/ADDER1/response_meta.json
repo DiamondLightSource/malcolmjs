@@ -35,8 +35,7 @@
           "outScale", 
           "outOffset", 
           "outScaled", 
-          "outCapture", 
-          "outDataDelay"
+          "outCapture"
         ]
       }
     ]

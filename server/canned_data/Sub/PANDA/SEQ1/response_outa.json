@@ -24,7 +24,7 @@
           "description": "Output A for phase outputs", 
           "tags": [
             "group:outputs", 
-            "outport:bool:SEQ1.OUTA", 
+            "sourcePort:bool:SEQ1.OUTA", 
             "widget:led"
           ], 
           "writeable": false, 

@@ -24,7 +24,7 @@
           "description": "Output B for phase outputs", 
           "tags": [
             "group:outputs", 
-            "outport:bool:SEQ4.OUTB", 
+            "sourcePort:bool:SEQ4.OUTB", 
             "widget:led"
           ], 
           "writeable": false, 
