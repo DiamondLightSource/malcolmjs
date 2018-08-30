@@ -84,24 +84,7 @@ exports[`Method viewer renders correctly with initial value 1`] = `
     </div>
     <WithStyles(Table)>
       <WithStyles(TableFooter)>
-        <WithStyles(TableRow)>
-          <WithStyles(TableCell)
-            key="0"
-          >
-            <WithStyles(ButtonAction)
-              clickAction={[Function]}
-              text="Save to cookie"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            key="1"
-          >
-            <WithStyles(ButtonAction)
-              clickAction={[Function]}
-              text="Load from cookie"
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
+        <WithStyles(TableRow) />
       </WithStyles(TableFooter)>
     </WithStyles(Table)>
   </div>
@@ -186,24 +169,7 @@ exports[`Method viewer renders correctly with no initial value 1`] = `
     </div>
     <WithStyles(Table)>
       <WithStyles(TableFooter)>
-        <WithStyles(TableRow)>
-          <WithStyles(TableCell)
-            key="0"
-          >
-            <WithStyles(ButtonAction)
-              clickAction={[Function]}
-              text="Save to cookie"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            key="1"
-          >
-            <WithStyles(ButtonAction)
-              clickAction={[Function]}
-              text="Load from cookie"
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
+        <WithStyles(TableRow) />
       </WithStyles(TableFooter)>
     </WithStyles(Table)>
   </div>

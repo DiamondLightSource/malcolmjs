@@ -37,7 +37,7 @@ const pushParamsToArchive = (state, payload) => {
     attribute.value.push({ runParameters: payload.parameters });
     attribute.timeStamp.push({ localRunTime: new Date() });
     attributes[matchingAttribute] = attribute;
-    blockArchive[payload.path[0]] = {
+    blockArchive[blockName] = {
       ...state.blockArchive[payload.path[0]],
       attributes,
     };
@@ -127,7 +127,7 @@ export const handleMethodReturn = (state, payload) => {
         const localRunTime = archive[matchingAttribute].timeStamp.pop();
         archive[matchingAttribute].value.push({
           ...runParams,
-          returned: { ...valueMap },
+          returned: { ...valueMap.outputs },
           returnStatus: 'Success',
         });
         archive[matchingAttribute].timeStamp.push({
