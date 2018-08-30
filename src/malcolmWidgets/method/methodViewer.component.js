@@ -161,11 +161,11 @@ MethodViewer.propTypes = {
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
-  selectedParamValue: PropTypes.oneOf(
+  selectedParamValue: PropTypes.oneOf([
     PropTypes.string,
     PropTypes.number,
-    PropTypes.object
-  ).isRequired,
+    PropTypes.object,
+  ]).isRequired,
   classes: PropTypes.shape({
     plainBackground: PropTypes.string,
     tableContainer: PropTypes.string,

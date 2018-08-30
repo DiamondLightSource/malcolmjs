@@ -81,6 +81,24 @@ export const updateLayoutBlock = (layoutBlock, malcolmState) => {
   return layoutBlock;
 };
 
+const findHiddenLinks = layoutBlocks =>
+  layoutBlocks.map(block => {
+    const updatedBlock = block;
+    const connectedInputPorts = updatedBlock.ports.filter(
+      p => p.input && p.value !== p.tag
+    );
+
+    connectedInputPorts.forEach(port => {
+      const updatedPort = port;
+      const isOutputPortVisible = layoutBlocks.some(b =>
+        b.ports.some(p => p.tag === updatedPort.value)
+      );
+      updatedPort.hiddenLink = !isOutputPortVisible;
+    });
+
+    return updatedBlock;
+  });
+
 const processLayout = malcolmState => {
   const layout = {
     blocks: [],
@@ -95,10 +113,12 @@ const processLayout = malcolmState => {
     );
 
     if (attribute && attribute.calculated.layout) {
-      const layoutBlocks = attribute.calculated.layout.blocks
+      let layoutBlocks = attribute.calculated.layout.blocks
         .filter(b => b.visible)
         .map(b => offSetPosition(b, malcolmState.layoutState.layoutCenter))
         .map(b => updateLayoutBlock(b, malcolmState));
+
+      layoutBlocks = findHiddenLinks(layoutBlocks);
       layout.blocks = layoutBlocks;
     }
   }
