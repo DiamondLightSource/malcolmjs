@@ -23,7 +23,10 @@ const TableWidgetSelector = props => {
   return selectorFunction(
     props.columnWidgetTag,
     props.rowPath,
-    props.value,
+    props.value instanceof Object &&
+    Object.prototype.hasOwnProperty.call(props.value, 'label')
+      ? props.value.label
+      : props.value,
     props.rowChangeHandler,
     {
       isDisabled,
@@ -34,7 +37,10 @@ const TableWidgetSelector = props => {
     props.theme.palette.primary.light,
     props.columnMeta,
     forceUpdate,
-    continuousSend
+    continuousSend,
+    props.value !== undefined && props.value.action instanceof Function
+      ? () => props.value.action(props.rowPath)
+      : undefined
   );
 };
 
@@ -43,6 +49,14 @@ TableWidgetSelector.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.bool,
+    PropTypes.shape({
+      label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+      ]),
+      action: PropTypes.func,
+    }),
   ]).isRequired,
   columnWidgetTag: PropTypes.string.isRequired,
   theme: PropTypes.shape({

@@ -108,6 +108,16 @@ const MethodViewer = props => {
   } else if (props.method && props.methodArchive) {
     const timeStamps = props.methodArchive.timeStamp.toarray();
     const values = props.methodArchive.value.toarray();
+    const copyRunParams = row => {
+      const params = values[row].runParameters;
+      Object.keys(params).forEach(paramName => {
+        props.updateInput(
+          props.method.calculated.path,
+          paramName,
+          params[paramName]
+        );
+      });
+    };
     return (
       <div className={props.classes.plainBackground}>
         <div
@@ -126,7 +136,12 @@ const MethodViewer = props => {
                   returnTime: timeStamps.map(stamp => stamp.localReturnTime),
                   returnStatus: values.map(value => value.returnStatus),
                   alarm: timeStamps.map(() => ''),
-                  copyParams: timeStamps.map(() => ''),
+                  copyParams: timeStamps.map(() => ({
+                    label: 'Copy',
+                    action: path => {
+                      copyRunParams(path.row);
+                    },
+                  })),
                 },
                 meta: {
                   elements: {
