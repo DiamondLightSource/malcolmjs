@@ -55,7 +55,7 @@ const infoAlarmState = value => {
 const getValue = value => {
   if (!(value instanceof Object)) {
     return value;
-  } else if (value.value !== undefined) {
+  } else if (Object.prototype.hasOwnProperty.call(value, 'value')) {
     return value.value;
   } else if (value.valuePath !== undefined) {
     return undefined;
@@ -71,6 +71,7 @@ export class InfoDetails extends React.Component {
       (props.subElement && props.subElement !== state.subElement) ||
       (props.subElement && props.subElement[0] === 'row') ||
       (props.linkBlockName && props.linkBlockName !== state.subElement) ||
+      props.isMethodInfo ||
       Object.keys(state.info).length === 0
     ) {
       let newState;
@@ -113,6 +114,7 @@ export class InfoDetails extends React.Component {
       (nextProps.subElement && nextProps.subElement[0] === 'row') ||
       (!!nextProps.linkBlockName &&
         nextProps.linkBlockName !== this.state.subElement) ||
+      nextProps.isMethodInfo ||
       Object.keys(this.state.info).length === 0
     );
   }
@@ -189,6 +191,8 @@ export class InfoDetails extends React.Component {
                   attributeName={this.props.attributeName}
                   disabled={this.state.info[group][a].disabled}
                   disabledFlagPath={this.state.info[group][a].disabledPath}
+                  infoPath={this.state.info[group][a].infoPath}
+                  infoClickHandler={this.props.infoClickHandler}
                 />
               ))}
           </GroupExpander>
@@ -204,6 +208,8 @@ InfoDetails.propTypes = {
   subElement: PropTypes.arrayOf(PropTypes.string),
   linkBlockName: PropTypes.string.isRequired,
   info: PropTypes.shape({}),
+  infoClickHandler: PropTypes.func.isRequired,
+  isMethodInfo: PropTypes.bool.isRequired,
   // isLinkInfo: PropTypes.bool.isRequired,
 };
 
@@ -278,16 +284,20 @@ const mapStateToProps = state => {
     }
   }
 
+  const attribute = blockUtils.findAttribute(
+    state.malcolm.blocks,
+    blockName,
+    attributeName
+  );
+
   return {
-    attribute: blockUtils.findAttribute(
-      state.malcolm.blocks,
-      blockName,
-      attributeName
-    ),
+    attribute,
     blockName,
     attributeName,
     subElement,
     isLinkInfo: showLinkInfo,
+    isMethodInfo:
+      attribute && attribute.calculated && attribute.calculated.isMethod,
     linkBlockName,
   };
 };

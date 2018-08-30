@@ -134,6 +134,7 @@ exports[`Block Details renders methods correctly 1`] = `
     />
     <Connect(WithStyles(MethodDetails))
       attributeName="save"
+      key="save"
     />
   </div>
 </div>

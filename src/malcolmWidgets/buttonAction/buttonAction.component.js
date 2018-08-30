@@ -22,7 +22,7 @@ const ButtonAction = props => (
   <div className={props.classes.container}>
     <Button
       color="primary"
-      variant={props.method ? 'raised' : ''}
+      variant={props.method ? 'raised' : 'flat'}
       className={props.classes.button}
       onClick={props.clickAction}
       disabled={props.disabled}

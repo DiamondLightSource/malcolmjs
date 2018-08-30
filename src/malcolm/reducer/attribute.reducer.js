@@ -521,12 +521,16 @@ export function revertLocalState(oldState, payload) {
           ...attributes[matchingAttributeIndex].calculated,
           errorState: false,
           errorMessage: undefined,
-          dirty: false,
           forceUpdate: true,
           loading: false,
           path: payload.path,
+          alarms: {
+            ...attributes[matchingAttributeIndex].calculated.alarms,
+            errorState: null,
+          },
         },
       };
+
       attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
     }
     const blocks = { ...state.blocks };

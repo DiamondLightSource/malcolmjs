@@ -122,7 +122,7 @@ export const selectorFunction = (
     case 'widget:tree':
       return (
         <ButtonAction
-          text="Edit"
+          text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
@@ -131,6 +131,7 @@ export const selectorFunction = (
     case 'info:button':
       return (
         <ButtonAction
+          method
           text={value}
           clickAction={() => buttonClickHandler()}
           disabled={flags.isDisabled}

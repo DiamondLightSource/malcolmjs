@@ -113,6 +113,7 @@ const displayAttributes = props => {
         ))}
         {props.methods.map(method => (
           <MethodDetails
+            key={method.calculated.name}
             blockName={props.blockName}
             attributeName={method.calculated.name}
           />

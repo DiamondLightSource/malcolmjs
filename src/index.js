@@ -59,6 +59,11 @@ if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
 
 store.dispatch(configureSocket(worker));
 
+// temporary logging whilst Tom measures performance on a real PANDA
+setInterval(() => {
+  console.log(Object.keys(store.getState().malcolm.blocks));
+}, 60000);
+
 const theme = createMuiTheme({
   palette: {
     type: 'dark',

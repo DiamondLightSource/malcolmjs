@@ -38,35 +38,50 @@ const styles = theme => ({
   },
 });
 
-const InfoElement = props => (
-  <div className={props.classes.div}>
-    {props.alarm === AlarmStates.NO_ALARM ? (
-      <IconButton className={props.classes.button} disableRipple>
+const InfoElement = props =>
+  props.hidden ? null : (
+    <div className={props.classes.div}>
+      {props.alarm === AlarmStates.NO_ALARM && props.infoPath ? (
+        <IconButton
+          className={props.classes.button}
+          disableRipple
+          onClick={() =>
+            props.infoClickHandler(
+              props.infoPath.root,
+              props.infoPath.subElement
+            )
+          }
+        >
+          <AttributeAlarm alarmSeverity={props.alarm} />
+        </IconButton>
+      ) : (
         <AttributeAlarm alarmSeverity={props.alarm} />
-      </IconButton>
-    ) : (
-      <AttributeAlarm alarmSeverity={props.alarm} />
-    )}
-    <Typography className={props.classes.textName}>
-      {props.showLabel ? `${props.label}:` : ''}
-    </Typography>
-    <div className={props.classes.controlContainer}>
-      {selectorFunction(
-        props.tag,
-        props.path,
-        props.value,
-        props.handlers.eventHandler,
-        { isDisabled: props.disabled },
-        props.handlers.setFlag,
-        props.theme.palette.primary.light,
-        { choices: props.choices },
-        false,
-        false,
-        props.handlers.clickHandler
       )}
+      {props.showLabel ? (
+        <Typography className={props.classes.textName}>
+          {`${props.label}`}
+        </Typography>
+      ) : null}
+      <div
+        className={props.classes.controlContainer}
+        style={props.showLabel ? {} : { width: '100%' }}
+      >
+        {selectorFunction(
+          props.tag,
+          props.path,
+          props.value,
+          props.handlers.eventHandler,
+          { isDisabled: props.disabled },
+          props.handlers.setFlag,
+          props.theme.palette.primary.light,
+          { choices: props.choices },
+          false,
+          false,
+          props.handlers.clickHandler
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 
 InfoElement.propTypes = {
   alarm: PropTypes.number.isRequired,
@@ -74,7 +89,7 @@ InfoElement.propTypes = {
   showLabel: PropTypes.bool,
   tag: PropTypes.string.isRequired,
   path: PropTypes.arrayOf(PropTypes.string),
-  value: PropTypes.oneOf(PropTypes.string, PropTypes.number, PropTypes.bool)
+  value: PropTypes.oneOf([PropTypes.string, PropTypes.number, PropTypes.bool])
     .isRequired,
   choices: PropTypes.arrayOf(PropTypes.string),
   classes: PropTypes.shape({
@@ -99,9 +114,16 @@ InfoElement.propTypes = {
     clickHandler: PropTypes.func,
   }),
   disabled: PropTypes.bool.isRequired,
+  infoPath: PropTypes.shape({
+    root: PropTypes.string,
+    subElement: PropTypes.string,
+  }).isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  hidden: PropTypes.bool,
 };
 
 InfoElement.defaultProps = {
+  hidden: false,
   choices: [],
   handlers: {},
   path: [''],
@@ -143,6 +165,7 @@ const mapStateToProps = (state, ownProps) => {
     }
   }
   return {
+    hidden: value === undefined && ownProps.value === undefined,
     alarm: alarmState !== undefined ? alarmState : ownProps.alarm,
     value: value !== undefined ? value : ownProps.value,
     disabled: disabled !== undefined ? disabled : ownProps.disabled,

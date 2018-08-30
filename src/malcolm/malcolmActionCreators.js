@@ -194,10 +194,13 @@ export const malcolmHailReturn = (payload, isErrorState) => ({
   payload,
 });
 
-export const malcolmRevertAction = path => ({
-  type: MalcolmRevert,
-  payload: { path },
-});
+export const malcolmRevertAction = path => dispatch => {
+  dispatch(malcolmSetFlag(path, 'dirty', false));
+  dispatch({
+    type: MalcolmRevert,
+    payload: { path },
+  });
+};
 
 export default {
   malcolmHailReturn,
