@@ -3,6 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
+import CircularBuffer from 'circular-buffer';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/dist/locale/en';
 // below is for updated version of json editor
@@ -12,25 +13,28 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableCell from '@material-ui/core/TableCell';
 // import Typography from '@material-ui/core/Typography';
-import ButtonAction from '../buttonAction/buttonAction.component';
+// import ButtonAction from '../buttonAction/buttonAction.component';
+import WidgetTable from '../table/table.component';
 
 import blockUtils from '../../malcolm/blockUtils';
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 
+const noOp = () => {};
+
 const MethodViewer = props => {
+  const transitionWithPanelStyle = {
+    left: props.openParent ? 360 : 0,
+    width: `calc(100% - ${(props.openChild ? 360 : 0) +
+      (props.openParent ? 360 : 0)}px)`,
+    // transition: 'width 1s, left 1s',
+  };
   if (props.method && props.selectedParam) {
     const widgetTag = props.selectedParamMeta.tags.find(
       t => t.indexOf('widget:') !== -1
     );
-    const transitionWithPanelStyle = {
-      left: props.openParent ? 360 : 0,
-      width: `calc(100% - ${(props.openChild ? 360 : 0) +
-        (props.openParent ? 360 : 0)}px)`,
-      // transition: 'width 1s, left 1s',
-    };
-    const { localStorage } = window;
+    // const { localStorage } = window;
     const footerItems = [
-      ...props.footerItems,
+      ...props.footerItems /*
       <ButtonAction
         text="Save to cookie"
         clickAction={() => {
@@ -53,7 +57,7 @@ const MethodViewer = props => {
             savedVal
           );
         }}
-      />,
+      />, */,
     ];
     switch (widgetTag) {
       case 'widget:tree':
@@ -101,24 +105,90 @@ const MethodViewer = props => {
       default:
         return <div className={props.classes.plainBackground} />;
     }
+  } else if (props.method && props.methodArchive) {
+    const timeStamps = props.methodArchive.timeStamp.toarray();
+    const values = props.methodArchive.value.toarray();
+    return (
+      <div className={props.classes.plainBackground}>
+        <div
+          className={props.classes.tableContainer}
+          style={{
+            ...transitionWithPanelStyle,
+            textAlign: 'left',
+            display: 'initial',
+          }}
+        >
+          <WidgetTable
+            attribute={{
+              raw: {
+                value: {
+                  postTime: timeStamps.map(stamp => stamp.localRunTime),
+                  returnTime: timeStamps.map(stamp => stamp.localReturnTime),
+                  returnStatus: values.map(value => value.returnStatus),
+                  alarm: timeStamps.map(() => ''),
+                  copyParams: timeStamps.map(() => ''),
+                },
+                meta: {
+                  elements: {
+                    alarm: {
+                      tags: ['info:alarm'],
+                      label: 'Alarm state',
+                    },
+                    postTime: {
+                      tags: ['widget:textupdate'],
+                      label: 'Time run',
+                    },
+                    returnTime: {
+                      tags: ['widget:textupdate'],
+                      label: 'Time results received',
+                    },
+                    returnStatus: {
+                      tags: ['widget:textupdate'],
+                      label: 'Return Status',
+                    },
+                    copyParams: {
+                      tags: ['info:button'],
+                      label: 'Reuse run params',
+                    },
+                  },
+                },
+              },
+              calculated: {},
+            }}
+            hideInfo
+            eventHandler={noOp}
+            setFlag={noOp}
+            addRow={noOp}
+            infoClickHandler={noOp}
+            rowClickHandler={noOp}
+          />
+        </div>
+      </div>
+    );
   }
 
   return <div>oops!</div>;
 };
 
 const mapStateToProps = (state, ownProps) => {
+  let methodIndex;
   let method;
+  let methodArchive;
   let selectedParamMeta;
   let selectedParamValue;
   if (ownProps.attributeName && ownProps.blockName) {
-    method = blockUtils.findAttribute(
+    methodIndex = blockUtils.findAttributeIndex(
       state.malcolm.blocks,
       ownProps.blockName,
       ownProps.attributeName
     );
   }
   const selectedParam = ownProps.subElement;
-
+  if (methodIndex > -1) {
+    method = state.malcolm.blocks[ownProps.blockName].attributes[methodIndex];
+    methodArchive =
+      state.malcolm.blockArchive[ownProps.blockName].attributes[methodIndex];
+  }
   if (method && selectedParam) {
     selectedParamMeta = method.raw[selectedParam[0]].elements[selectedParam[1]];
     let ioType;
@@ -133,6 +203,7 @@ const mapStateToProps = (state, ownProps) => {
   }
   return {
     method,
+    methodArchive,
     selectedParam,
     selectedParamMeta,
     selectedParamValue,
@@ -146,8 +217,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 MethodViewer.propTypes = {
-  blockName: PropTypes.string.isRequired,
-  attributeName: PropTypes.string.isRequired,
+  // blockName: PropTypes.string.isRequired,
+  // attributeName: PropTypes.string.isRequired,
   method: PropTypes.shape({
     calculated: PropTypes.shape({
       path: PropTypes.arrayOf(PropTypes.string),
@@ -157,6 +228,10 @@ MethodViewer.propTypes = {
         secondsPastEpoch: PropTypes.string,
       }),
     }),
+  }).isRequired,
+  methodArchive: PropTypes.shape({
+    timeStamp: PropTypes.instanceOf(CircularBuffer),
+    value: PropTypes.instanceOf(CircularBuffer),
   }).isRequired,
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),

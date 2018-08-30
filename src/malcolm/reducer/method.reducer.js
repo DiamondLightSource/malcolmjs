@@ -100,7 +100,7 @@ export const handleMethodReturn = (state, payload) => {
     const blockArchive = { ...state.blockArchive };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
-      const archive = blockArchive[blockName];
+      const archive = blockArchive[blockName].attributes;
       let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
         attributes[matchingAttribute].raw.returns.elements
@@ -128,6 +128,7 @@ export const handleMethodReturn = (state, payload) => {
         archive[matchingAttribute].value.push({
           ...runParams,
           returned: { ...valueMap },
+          returnStatus: 'Success',
         });
         archive[matchingAttribute].timeStamp.push({
           ...localRunTime,
