@@ -8,6 +8,8 @@ A Design forms the heart of your system implementation.  It provides an interact
 * The `attributes <attribute_>` associated with blocks and connectors.
 * The `methods <method_>` available to influence behaviour within blocks.
 
+A Design is created in the user interface `Design View <design_view_>`.
+
 
 .. _adding_a_block_to_a_design_:
 
@@ -117,13 +119,42 @@ While Block `attributes <attribute_>` define the *behaviour* of a Block, `Method
 
 A Method are represented in the user inferface as a button, labelled with the name of the action that will be performed.
 
-NEED MORE DETAIL HERE
+**NEED MORE DETAIL HERE**
 
 
 Saving a Design
 ---------------
 
+You can save your Design at any time during the creation or modification process, and we recommend you do so regularly.
 
+To save a Design:
+
+    #. Navigate to the `root_node_` representing the highest level of the Design you wish to save.
+    #. Navigate to the 'Save' Attribute Group at the bottom of the left-hand panel.  Expand it if necessary.
+    #. Enter a descriptive name for the Design in the 'Design' field.  Note this will be used later to identify existing Designs available for use.
+
+        * You must enter a name even if saving a modified existing Design.  To mimic traditional save functionality enter the same name as saved previously.
+    #. Select the 'Save' button.  The information icon to the left of the button will spin to denote the save is in progess, returning to the information icon when the Design is saved.
+
+        * If an error is detected during the save process a red warning icon is displayed next to the button.
+
+
+Opening an Existing Design
+--------------------------
+
+When a `root_node_` is opened a list of all `Designs <design_>` within it is available via the 'Design' Attribute displayed in the left-hand panel.  Selecting a pre-existing Design results in the Design being presented in the central Layout panel.
+
+To open an existing Design:
+
+    #. Navigate to the `root_node_` represening the hghest level of the system you wish to use.
+    #. Navigate to the 'Design' Attribute and select the dropdown arrow to display the list of available Designs.
+    #. Select the Design you wish to use.
+    #. Select the 'View' option associated with the 'Layout' Attribute.
+        **NB:** If no previously saved designs exist the 'Design' Attribute list will be empty.
+
+
+Working Collaboratively on a Design
+-----------------------------------
 
 
 

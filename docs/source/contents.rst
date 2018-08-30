@@ -11,6 +11,9 @@ Contents
     
     userguide/intro
     userguide/quick-start
+    userguide/user_interface_overview
+    userguide/creating_a_new_design
+    userguide/glossary
 
 .. toctree::
     :caption: System Maintenance Guide 
