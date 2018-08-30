@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import EditError from './EditError.component';
 
-export const AlarmStates = {
+const AlarmStateNumbers = {
   NO_ALARM: 0,
   MINOR_ALARM: 1,
   MAJOR_ALARM: 2,
@@ -20,14 +20,12 @@ export const AlarmStates = {
   PENDING: -1,
   DIRTY: -2,
   DIRTYANDERROR: -3,
-  Strings: [
-    'No Alarm',
-    'Minor Alarm',
-    'Major Alarm',
-    'Invalid Alarm',
-    'Undefined Alarm',
-  ],
 };
+
+Object.entries(AlarmStateNumbers).forEach(entry => {
+  [AlarmStateNumbers[entry[1]]] = entry;
+});
+export const AlarmStates = AlarmStateNumbers;
 
 export const getAlarmState = attribute => {
   let alarm = AlarmStates.NO_ALARM;
