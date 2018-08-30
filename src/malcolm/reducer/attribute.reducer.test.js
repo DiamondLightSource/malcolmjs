@@ -161,9 +161,6 @@ describe('attribute reducer', () => {
       updatedState.blocks.block1.attributes[0].calculated.errorMessage
     ).not.toBeDefined();
     expect(
-      updatedState.blocks.block1.attributes[0].calculated.dirty
-    ).toBeFalsy();
-    expect(
       updatedState.blocks.block1.attributes[0].calculated.forceUpdate
     ).toBeTruthy();
   });

@@ -150,11 +150,13 @@ describe('Table container', () => {
 
   it('revert button hooks up correctly', () => {
     const dispatch = [];
+    const thunkTest = [[], []];
+    const pushTo = queue => action => {
+      queue.push(action);
+    };
     const testStore = {
       getState: () => state,
-      dispatch: action => {
-        dispatch.push(action);
-      },
+      dispatch: pushTo(dispatch),
       subscribe: () => {},
     };
     const wrapper = mount(
@@ -163,7 +165,10 @@ describe('Table container', () => {
     const buttons = wrapper.find('button');
     buttons.at(buttons.length - 2).simulate('click');
     expect(dispatch.length).toEqual(2);
-    expect(dispatch[1]).toEqual(malcolmRevertAction(['test1', 'layout']));
+    expect(dispatch[1]).toBeInstanceOf(Function);
+    dispatch[1](pushTo(thunkTest[0]));
+    malcolmRevertAction(['test1', 'layout'])(pushTo(thunkTest[1]));
+    expect(thunkTest[0]).toEqual(thunkTest[1]);
     expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
     expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
       'test1',
