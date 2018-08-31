@@ -83,7 +83,9 @@ class MalcolmLinkModel extends DefaultLinkModel {
     }
 
     if (paths.length === 0) {
-      paths = SplineUtils.buildPath(this.points);
+      paths = SplineUtils.buildPath(
+        this.sourcePort.in ? [...this.points].reverse() : this.points
+      );
     }
 
     this.pathSegments = paths;

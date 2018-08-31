@@ -16,8 +16,11 @@ describe('LinkFactory', () => {
     const link = new LinkModel();
     link.points = [
       new PointModel(link, { x: 0, y: 0 }),
-      new PointModel(link, { x: 10, y: 0 }),
+      new PointModel(link, { x: 100, y: 0 }),
     ];
+    link.sourcePort = {
+      in: false,
+    };
 
     const engine = new DiagramEngine();
     engine.nodesRendered = true;
