@@ -37,6 +37,7 @@ describe('method reducer', () => {
               name: 'attr1',
               timeStamp: new MockCircularBuffer(5),
               value: new MockCircularBuffer(5),
+              alarmState: new MockCircularBuffer(5),
             },
           ],
         },
@@ -152,6 +153,7 @@ describe('method reducer', () => {
     expect(archive.value.toarray().length).toEqual(1);
     expect(archive.value.toarray()[0].returned).toEqual(payload.value);
     expect(archive.value.toarray()[0].returnStatus).toEqual('Success');
+    expect(archive.alarmState.toarray().length).toEqual(1);
   });
 
   it('handleMethodReturn should update the output on a method with return unpacked', () => {
