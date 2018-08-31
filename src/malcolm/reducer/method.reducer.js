@@ -1,5 +1,6 @@
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
@@ -134,6 +135,7 @@ export const handleMethodReturn = (state, payload) => {
           ...localRunTime,
           localReturnTime: new Date(),
         });
+        archive[matchingAttribute].alarmState.push(AlarmStates.NO_ALARM);
         blockArchive[blockName] = {
           ...state.blockArchive[blockName],
           attributes: archive,

@@ -108,6 +108,72 @@ const MethodViewer = props => {
               </div>
             </div>
           );
+        case 'widget:textinput':
+        case 'widget:textupdate':
+        case 'widget:combobox': {
+          const timeStamps = props.methodArchive.timeStamp.toarray();
+          const values = props.methodArchive.value.toarray();
+          const dummyAttribute = {
+            raw: {
+              value: {
+                postTime: timeStamps.map(stamp => stamp.localRunTime),
+                returnTime: timeStamps.map(stamp => stamp.localReturnTime),
+                returnStatus: values.map(value => value.returnStatus),
+                alarm: props.methodArchive.alarmState.toarray(),
+                value: values.map(
+                  value => value.runParameters[props.selectedParam[1]]
+                ),
+              },
+              meta: {
+                elements: {
+                  alarm: {
+                    tags: ['info:alarm'],
+                    label: 'Method Alarm state',
+                  },
+                  postTime: {
+                    tags: ['widget:textupdate'],
+                    label: 'Time run',
+                  },
+                  returnTime: {
+                    tags: ['widget:textupdate'],
+                    label: 'Time results received',
+                  },
+                  returnStatus: {
+                    tags: ['widget:textupdate'],
+                    label: 'Method Return Status',
+                  },
+                  value: {
+                    tags: ['widget:textupdate'],
+                    label: 'Parameter value',
+                  },
+                },
+              },
+            },
+            calculated: {},
+          };
+          return (
+            <div className={props.classes.plainBackground}>
+              <div
+                className={props.classes.tableContainer}
+                style={{
+                  ...transitionWithPanelStyle,
+                  textAlign: 'left',
+                  display: 'initial',
+                }}
+              >
+                <WidgetTable
+                  attribute={dummyAttribute}
+                  hideInfo
+                  eventHandler={noOp}
+                  setFlag={noOp}
+                  addRow={noOp}
+                  infoClickHandler={noOp}
+                  rowClickHandler={noOp}
+                />
+              </div>
+            </div>
+          );
+        }
         default:
           return <div className={props.classes.plainBackground} />;
       }
@@ -127,6 +193,47 @@ const MethodViewer = props => {
         );
       });
     };
+    const dummyAttribute = {
+      raw: {
+        value: {
+          postTime: timeStamps.map(stamp => stamp.localRunTime),
+          returnTime: timeStamps.map(stamp => stamp.localReturnTime),
+          returnStatus: values.map(value => value.returnStatus),
+          alarm: props.methodArchive.alarmState.toarray(),
+          copyParams: timeStamps.map(() => ({
+            label: 'Copy',
+            action: path => {
+              copyRunParams(path.row);
+            },
+          })),
+        },
+        meta: {
+          elements: {
+            alarm: {
+              tags: ['info:alarm'],
+              label: 'Alarm state',
+            },
+            postTime: {
+              tags: ['widget:textupdate'],
+              label: 'Time run',
+            },
+            returnTime: {
+              tags: ['widget:textupdate'],
+              label: 'Time results received',
+            },
+            returnStatus: {
+              tags: ['widget:textupdate'],
+              label: 'Return Status',
+            },
+            copyParams: {
+              tags: ['info:button'],
+              label: 'Reuse run params',
+            },
+          },
+        },
+      },
+      calculated: {},
+    };
     return (
       <div className={props.classes.plainBackground}>
         <div
@@ -138,47 +245,7 @@ const MethodViewer = props => {
           }}
         >
           <WidgetTable
-            attribute={{
-              raw: {
-                value: {
-                  postTime: timeStamps.map(stamp => stamp.localRunTime),
-                  returnTime: timeStamps.map(stamp => stamp.localReturnTime),
-                  returnStatus: values.map(value => value.returnStatus),
-                  alarm: timeStamps.map(() => ''),
-                  copyParams: timeStamps.map(() => ({
-                    label: 'Copy',
-                    action: path => {
-                      copyRunParams(path.row);
-                    },
-                  })),
-                },
-                meta: {
-                  elements: {
-                    alarm: {
-                      tags: ['info:alarm'],
-                      label: 'Alarm state',
-                    },
-                    postTime: {
-                      tags: ['widget:textupdate'],
-                      label: 'Time run',
-                    },
-                    returnTime: {
-                      tags: ['widget:textupdate'],
-                      label: 'Time results received',
-                    },
-                    returnStatus: {
-                      tags: ['widget:textupdate'],
-                      label: 'Return Status',
-                    },
-                    copyParams: {
-                      tags: ['info:button'],
-                      label: 'Reuse run params',
-                    },
-                  },
-                },
-              },
-              calculated: {},
-            }}
+            attribute={dummyAttribute}
             hideInfo
             eventHandler={noOp}
             setFlag={noOp}
@@ -256,6 +323,7 @@ MethodViewer.propTypes = {
   methodArchive: PropTypes.shape({
     timeStamp: PropTypes.instanceOf(CircularBuffer),
     value: PropTypes.instanceOf(CircularBuffer),
+    alarmState: PropTypes.instanceOf(CircularBuffer),
   }).isRequired,
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),

@@ -503,6 +503,7 @@ const handleErrorMessage = (state, action) => {
         returnStatus: `Failed: ${action.payload.message}`,
       });
       archive.timeStamp.push({ ...localRunTime, localReturnTime: new Date() });
+      archive.alarmState.push(AlarmStates.MAJOR_ALARM);
       attributes[matchingAttributeIndex] = archive;
       updatedState.blockArchive[blockName] = {
         ...state.blockArchive[blockName],
