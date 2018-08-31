@@ -458,7 +458,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
 };
 
 function handleReturnMessage(state, action) {
-  const newState = setErrorState(state, action.payload.id, false);
+  const newState = setErrorState(state, action.payload.id, false, 'Successful');
   return stopTrackingMessage(newState, action);
 }
 

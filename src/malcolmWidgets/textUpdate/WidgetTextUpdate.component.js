@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 const baseDiv = theme => ({
-  display: 'flex',
   alignItems: 'center',
   borderLeft: `2px solid ${theme.palette.divider}`,
 });
@@ -20,16 +19,19 @@ const textUpdateBase = {
 
 const styles = theme => ({
   div: {
+    display: 'flex',
     ...baseDiv(theme),
   },
   divWrap: {
     ...baseDiv(theme),
     padding: 4,
     paddingRight: 4,
+    maxHeight: 128,
+    overflowY: 'auto',
   },
   textUpdateWrap: {
     textAlign: 'Right',
-    width: '100%',
+    width: '95%',
     wordWrap: 'break-word',
   },
   textUpdate80: textUpdateBase,

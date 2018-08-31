@@ -23,7 +23,7 @@ describe('info builder', () => {
       errorState: {
         alarmStatePath: 'calculated.alarms.errorState',
         inline: true,
-        label: 'Error State',
+        label: 'Last Put Status',
         valuePath: 'calculated.errorMessage',
       },
       malcolmAlarm: {
