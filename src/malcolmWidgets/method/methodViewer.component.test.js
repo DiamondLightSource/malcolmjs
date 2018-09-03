@@ -2,6 +2,7 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import MethodViewer from './methodViewer.component';
 import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
 
 jest.mock('../../malcolm/actions/method.actions');
 
@@ -62,6 +63,14 @@ describe('Method viewer', () => {
     };
 
     state.malcolm.blocks.Test.attributes = [method];
+    state.malcolm.blockArchive.Test.attributes = [
+      {
+        name: 'Method',
+        timeStamp: new MockCircularBuffer(5),
+        value: new MockCircularBuffer(5),
+        alarmState: new MockCircularBuffer(5),
+      },
+    ];
 
     return (
       <MethodViewer
@@ -123,10 +132,15 @@ describe('Method viewer', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
-  it('renders empty div if selected parameter isnt a tree', () => {
+  it('renders method param archive if selected parameter isnt a tree', () => {
     const wrapper = shallow(
       testMethodViewer(testInputs, testOutputs, {}, ['takes', 'first'])
     );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders top-level method param archive if no selected parameter', () => {
+    const wrapper = shallow(testMethodViewer(testInputs, testOutputs, {}));
     expect(wrapper.dive()).toMatchSnapshot();
   });
 

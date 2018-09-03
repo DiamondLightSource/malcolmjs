@@ -176,4 +176,146 @@ exports[`Method viewer renders correctly with no initial value 1`] = `
 </div>
 `;
 
-exports[`Method viewer renders empty div if selected parameter isnt a tree 1`] = `<div />`;
+exports[`Method viewer renders method param archive if selected parameter isnt a tree 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "display": "initial",
+        "left": 0,
+        "textAlign": "left",
+        "width": "calc(100% - 0px)",
+      }
+    }
+  >
+    <WithStyles(WidgetTable)
+      addRow={[Function]}
+      attribute={
+        Object {
+          "calculated": Object {},
+          "raw": Object {
+            "meta": Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Method Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "postTime": Object {
+                  "label": "Time run",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "returnStatus": Object {
+                  "label": "Method Return Status",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "returnTime": Object {
+                  "label": "Time results received",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Parameter value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            },
+            "value": Object {
+              "alarm": Array [],
+              "postTime": Array [],
+              "returnStatus": Array [],
+              "returnTime": Array [],
+              "value": Array [],
+            },
+          },
+        }
+      }
+      eventHandler={[Function]}
+      hideInfo={true}
+      infoClickHandler={[Function]}
+      rowClickHandler={[Function]}
+      setFlag={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`Method viewer renders top-level method param archive if no selected parameter 1`] = `
+<div>
+  <div
+    style={
+      Object {
+        "display": "initial",
+        "left": 0,
+        "textAlign": "left",
+        "width": "calc(100% - 0px)",
+      }
+    }
+  >
+    <WithStyles(WidgetTable)
+      addRow={[Function]}
+      attribute={
+        Object {
+          "calculated": Object {},
+          "raw": Object {
+            "meta": Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "copyParams": Object {
+                  "label": "Reuse run params",
+                  "tags": Array [
+                    "info:button",
+                  ],
+                },
+                "postTime": Object {
+                  "label": "Time run",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "returnStatus": Object {
+                  "label": "Return Status",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "returnTime": Object {
+                  "label": "Time results received",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            },
+            "value": Object {
+              "alarm": Array [],
+              "copyParams": Array [],
+              "postTime": Array [],
+              "returnStatus": Array [],
+              "returnTime": Array [],
+            },
+          },
+        }
+      }
+      eventHandler={[Function]}
+      hideInfo={true}
+      infoClickHandler={[Function]}
+      rowClickHandler={[Function]}
+      setFlag={[Function]}
+    />
+  </div>
+</div>
+`;
