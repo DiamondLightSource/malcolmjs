@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Warning,
-  Error,
-  InfoOutline,
-  HighlightOff,
-  Edit,
-} from '@material-ui/icons';
+import Warning from '@material-ui/icons/Warning';
+import Error from '@material-ui/icons/Error';
+import InfoOutline from '@material-ui/icons/InfoOutline';
+import HighlightOff from '@material-ui/icons/HighlightOff';
+import Edit from '@material-ui/icons/Edit';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import EditError from './EditError.component';

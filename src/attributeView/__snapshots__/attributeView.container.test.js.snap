@@ -16,7 +16,7 @@ exports[`attributeView renders 1st tab correctly 1`] = `
       }
     }
   >
-    <Connect(WithTheme(AttributePlot))
+    <LoadableComponent
       attribute={Object {}}
     />
   </div>
