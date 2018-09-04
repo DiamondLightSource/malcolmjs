@@ -1,9 +1,9 @@
-An Introduction to the User Interface
-=====================================
+User Interface Overview
+=======================
 
 The user interface provides three principle views:
 
-    * A **'Design View'**, providing an interactive environment for designing and configuring the system through block, Attribute and Connection specification.
+    * A **'Design View'**, providing an interactive environment for designing and configuring your hardware system through `block_`, `attribute_` and `connector_` specification.
     * An **'Attribute View'**, providing details of a single Attribute, including the ability to view a graphical representation of the Attribute's value within the system over time.
     * A **'Table View'**, providing a text-based representation of Design and Attribute-based information.
 

@@ -16,12 +16,14 @@ Glossary
 Attribute
 ---------
 
-A property of a `block_` that influences behaviour within the purpose of that Block. 
+A property of a `block_`.  
 
-Attributes are further divided into:
+Attributes are divided into four categories based on their purpose:
 
-    * Those that can be modified dynamically during an execution process - a `writeable_attribute_`.
-    * Those that once configured in the `design_` cannot be changed during execution - an `immutable_attribute_`. 
+    * `Parameter <parameter_attribute_>`
+    * `Input <input_attribute_>`
+    * `Output <output_attribute_>`
+    * `Readback <readback_attribute_>`
 
 
 .. _attribute_group_:
@@ -83,31 +85,12 @@ The technical definition of the implemented system describing the `blocks <block
 
 Designs are presented graphically as a `layout_` within the 'Layout Panel' on the web interface allowing a user to build, configure and manage the system represented by that Design.
 
+.. _input_attribute_:
 
-.. _dynamic_attribute_:
+Input Attribute
+---------------
 
-Dynamic Attribute
--------------------
-
-*I PREFER THIS TERM TO 'WRITEABLE ATTRIBUTE' UNLESS THERE IS AN EXISTING NAMING CONVENTION*
-
-Synonym for `writeable_attribute_`.  cf. `immutable_attribute_`.
-
-
-.. _method_:
-
-Method
-------
-
-Defines an **action** that can be performed by a `block_` in support of the purpose of that block.
-
-
-.. _immutable_attribute_:
-
-Immutable Attribute
--------------------
-
-A `block_` attribute whose value, once set, *cannot* be modified during an execution process.  cf. `writeable_attribute_`.
+An Input Attribute identifies the value (or stream of values) that will be received into a `block_` via a `sink_port_` on the Block to which the attribute relates.  There is a 1:1 mapping between Input Attribute and Sink Port.
 
 
 .. _input_port_:
@@ -118,13 +101,28 @@ Input Port
 Synonym for `sink_port_`.
 
 
-
 .. _layout_:
 
 Layout
 ------
 
-The graphical representation of a `design_` within the web interface showing the `blocks <block_>` within the Design and the `connections <connector_>` between them based on the selected `root_node_`.
+The graphical representation of a `design_` within the web interface showing the `blocks <block_>` within the Design and the `connections <connector_>` between them based on the selected `root_block_`.
+
+
+.. _method_:
+
+Method
+------
+
+Defines an **action** that can be performed by a `block_` in support of the purpose of that block.
+
+
+.. _output_attribute_:
+
+Output Attribute
+----------------
+
+An Output Attribute identifies the value (or stream of values) that will be transmitted via a `source_port_` out of the `block_` to which the attribute relates.  There is a 1:1 mapping between Output Attribute and Source Port.
 
 
 .. _output_port_:
@@ -134,6 +132,13 @@ Output Port
 
 Synonym for `source_port_`.
 
+
+.. _parameter_attribute_:
+
+Parameter Attribute
+-------------------
+
+An attribute that supports configuration of its containing `block_` within the context of the `design_` and influencing behaviour of the Block once in an execution environment.
 
 
 .. _parent_block_:
@@ -145,13 +150,20 @@ A `block_` aggregating one-or-more `Child Blocks <child_block_>` each performing
 
 Parent blocks, together with their attributes and methods are always presented in the left-hand panel of the web interface when open in Layout View.
 
+.. _readback_attribute_:
 
-.. _root_node_:
+Readback Attributes
+-------------------
 
-Root Node
----------
+An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be specified manually via the User Interface.
 
-The outermost entity containing the `layout_` presented within the user inferface.  If the higest level Root Node is selected this encapulates the entire `design_`, otherwise the Root Node represents a configured `block_` within that Design.  The selected Block may itself be a `parent_block_` or a `child_block_`. 
+
+.. _root_block_:
+
+Root Block
+----------
+
+The outermost entity defining the `design_` presented within the user inferface.  If the higest level Root Block is selected this encapulates the entire `design_`, otherwise the Root Block represents a configured `block_` representing an entity within that Design.  The selected Block may itself be a `parent_block_` consisting of multiple `Child Blocks <child_block_>` or a `child_block_` in its own right of the wider Design. 
 
 
 .. _source_port_:
@@ -174,16 +186,5 @@ A port on a `block_` responsible for accepting data for utilisation within that 
 Every Sink Port within a Block has a pre-defined type as described in the Block specification.  For details of individual Blocks see `PandABlocks-FPGA`_.  
 
 
-**Top Level Block**
-
-blah
-
-
-.. _writeable_attribute_:
-
-Writable Attribute
-------------------
-
-A `block_` attribute whose value can be modified by the behaviour of the Block with which it is associated, or by pre-cursor activity within other blocks in the `design_`, during an execution process.  cf. `immutable_attribute_`.
 
 
