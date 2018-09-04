@@ -52,7 +52,23 @@ class WidgetTextInput extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.deFocus = this.deFocus.bind(this);
     this.inFocus = this.inFocus.bind(this);
-    this.didSubmit = this.didSubmit.bind(this);
+    this.handleSpecialKeys = this.handleSpecialKeys.bind(this);
+  }
+
+  handleSpecialKeys(event) {
+    switch (event.key) {
+      case 'Tab':
+      case 'Enter':
+        this.props.submitEventHandler(event);
+        break;
+      case 'Escape':
+        this.setState({
+          localValue: this.props.Value,
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   handleChange(event) {
@@ -63,12 +79,6 @@ class WidgetTextInput extends React.Component {
       localValue: event.target.value,
     });
     if (this.props.continuousSend) {
-      this.props.submitEventHandler(event);
-    }
-  }
-
-  didSubmit(event) {
-    if (event.key === 'Enter') {
       this.props.submitEventHandler(event);
     }
   }
@@ -96,7 +106,7 @@ class WidgetTextInput extends React.Component {
         disabled={this.props.Pending}
         value={this.state.localValue}
         onChange={this.handleChange}
-        onKeyPress={this.didSubmit}
+        onKeyDown={this.handleSpecialKeys}
         onBlur={this.deFocus}
         onFocus={this.inFocus}
         className={this.props.classes.textInput}

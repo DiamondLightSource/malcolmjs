@@ -251,11 +251,11 @@ MethodViewer.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string),
     writeable: PropTypes.bool,
   }).isRequired,
-  selectedParamValue: PropTypes.oneOf([
+  selectedParamValue: PropTypes.oneOf(
     PropTypes.string,
     PropTypes.number,
-    PropTypes.object,
-  ]).isRequired,
+    PropTypes.object
+  ).isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   selectedParam: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,
