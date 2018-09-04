@@ -11,6 +11,7 @@ describe('Method viewer', () => {
   let mockStore;
   let mount;
   let testInputs;
+  let freshArchive;
 
   const getItem = jest.fn();
   const setItem = jest.fn();
@@ -43,7 +44,8 @@ describe('Method viewer', () => {
     outputs,
     inputValues,
     selected,
-    errorMsg
+    errorMsg,
+    archiveContents
   ) => {
     const method = {
       calculated: {
@@ -63,14 +65,7 @@ describe('Method viewer', () => {
     };
 
     state.malcolm.blocks.Test.attributes = [method];
-    state.malcolm.blockArchive.Test.attributes = [
-      {
-        name: 'Method',
-        timeStamp: new MockCircularBuffer(5),
-        value: new MockCircularBuffer(5),
-        alarmState: new MockCircularBuffer(5),
-      },
-    ];
+    state.malcolm.blockArchive.Test.attributes = [archiveContents];
 
     return (
       <MethodViewer
@@ -109,6 +104,12 @@ describe('Method viewer', () => {
         tags: ['widget:tree'],
       },
     };
+    freshArchive = {
+      name: 'Method',
+      timeStamp: new MockCircularBuffer(5),
+      value: new MockCircularBuffer(5),
+      alarmState: new MockCircularBuffer(5),
+    };
   });
 
   afterEach(() => {
@@ -117,30 +118,57 @@ describe('Method viewer', () => {
 
   it('renders correctly with no initial value', () => {
     const wrapper = shallow(
-      testMethodViewer(testInputs, testOutputs, {}, ['takes', 'second'])
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        ['takes', 'second'],
+        undefined,
+        freshArchive
+      )
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders correctly with initial value', () => {
     const wrapper = shallow(
-      testMethodViewer(testInputs, testOutputs, testInputValues, [
-        'takes',
-        'second',
-      ])
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        ['takes', 'second'],
+        undefined,
+        freshArchive
+      )
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders method param archive if selected parameter isnt a tree', () => {
     const wrapper = shallow(
-      testMethodViewer(testInputs, testOutputs, {}, ['takes', 'first'])
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        ['takes', 'first'],
+        undefined,
+        freshArchive
+      )
     );
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
   it('renders top-level method param archive if no selected parameter', () => {
-    const wrapper = shallow(testMethodViewer(testInputs, testOutputs, {}));
+    const wrapper = shallow(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        undefined,
+        undefined,
+        freshArchive
+      )
+    );
     expect(wrapper.dive()).toMatchSnapshot();
   });
 

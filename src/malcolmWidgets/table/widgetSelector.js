@@ -38,7 +38,9 @@ const TableWidgetSelector = props => {
     props.columnMeta,
     forceUpdate,
     continuousSend,
-    props.value !== undefined && props.value.action instanceof Function
+    props.value !== undefined &&
+    props.value !== null &&
+    props.value.action instanceof Function
       ? () => props.value.action(props.rowPath)
       : undefined
   );
