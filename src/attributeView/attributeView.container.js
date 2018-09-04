@@ -14,9 +14,10 @@ const AttributeViewer = props => (
     defaultTab={props.defaultTab}
     plotTime={props.attribute.plotTime}
     openPanels={props.openPanels}
+    tabLabels={['Table', 'Plot']}
   >
-    <AttributePlot attribute={props.attribute} openPanels={props.openPanels} />
     <ArchiveTable attribute={props.attribute} />
+    <AttributePlot attribute={props.attribute} openPanels={props.openPanels} />
   </TabbedPanel>
 );
 

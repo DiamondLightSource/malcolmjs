@@ -22,7 +22,9 @@ class TabbedPanel extends React.Component {
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName ||
       nextProps.openPanels.child !== this.props.openPanels.child ||
-      nextProps.openPanels.parent !== this.props.openPanels.parent
+      nextProps.openPanels.parent !== this.props.openPanels.parent ||
+      this.props.alwaysUpdate ||
+      nextProps.alwaysUpdate
     );
   }
 
@@ -66,15 +68,15 @@ class TabbedPanel extends React.Component {
           centered
           fullWidth
         >
-          <Tab label="Plot" disabled={disablePlotView} />
-          <Tab label="Table" />
+          <Tab label={this.props.tabLabels[0]} />
+          <Tab label={this.props.tabLabels[1]} disabled={disablePlotView} />
         </Tabs>
       </div>
     ) : (
       <div style={{ width: '100%', height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>
-          {tabValue === 1 && this.props.children[1]}
           {tabValue === 0 && this.props.children[0]}
+          {tabValue === 1 && this.props.children[1]}
         </div>
         <Tabs
           value={tabValue}
@@ -84,8 +86,8 @@ class TabbedPanel extends React.Component {
           centered
           fullWidth
         >
-          <Tab label="Plot" disabled={disablePlotView} />
-          <Tab label="Table" />
+          <Tab label={this.props.tabLabels[0]} />
+          <Tab label={this.props.tabLabels[1]} disabled={disablePlotView} />
         </Tabs>
       </div>
     );
@@ -112,12 +114,16 @@ TabbedPanel.propTypes = {
     child: PropTypes.bool,
   }).isRequired,
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
-  plotTime: PropTypes.number.isRequired,
+  plotTime: PropTypes.number,
+  alwaysUpdate: PropTypes.bool,
+  tabLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 TabbedPanel.defaultProps = {
   defaultTab: 0,
   useSwipeable: false,
+  plotTime: 0,
+  alwaysUpdate: false,
 };
 
 export default withTheme()(TabbedPanel);

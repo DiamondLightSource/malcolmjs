@@ -255,7 +255,7 @@ export const buildAttributeInfo = props => {
       info.parameterType = {
         label: 'Parameter Type',
         inline: true,
-        value: props.subElement[0],
+        value: props.subElement[0] === 'takes' ? 'Input' : 'Output',
       };
       info.typeid =
         attribute.raw[props.subElement[0]].elements[props.subElement[1]].typeid;

@@ -2,21 +2,19 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import CircularBuffer from 'circular-buffer';
 import WidgetTable from '../table/table.component';
+import TabbedPanel from '../../attributeView/tabbedMiddlePanel.component';
 
 const noOp = () => {};
 
 const MethodArchive = props => {
-  const newProps = { ...props.parentProps, divStyle: props.divStyle };
-  const timeStamps = newProps.methodArchive.timeStamp.toarray();
-  const values = newProps.methodArchive.value.toarray();
+  const timeStamps = props.methodArchive.timeStamp.toarray();
+  const values = props.methodArchive.value.toarray();
   const dummyAttribute = {
     raw: {
       value: {
-        timeStamp: timeStamps.map(stamp => stamp.localRunTime),
-        alarm: newProps.methodArchive.alarmState.toarray(),
-        value: values.map(
-          value => value.runParameters[newProps.selectedParam[1]]
-        ),
+        timeStamp: timeStamps.map(stamp => stamp.localRunTime.toISOString()),
+        alarm: props.methodArchive.alarmState.toarray(),
+        value: values.map(value => value.runParameters[props.selectedParam[1]]),
       },
       meta: {
         elements: {
@@ -26,7 +24,10 @@ const MethodArchive = props => {
           },
           timeStamp: {
             tags: ['widget:textupdate'],
-            label: `Time sent`,
+            label:
+              props.selectedParam[0] === 'takes'
+                ? 'Time sent'
+                : 'Time received',
           },
           value: {
             tags: ['widget:textupdate'],
@@ -37,44 +38,54 @@ const MethodArchive = props => {
     },
     calculated: {},
   };
+  const dummyArchive = {
+    parent: props.methodArchive.parent,
+    name: props.methodArchive.name,
+    timeStamp: timeStamps.map(
+      stamp =>
+        props.selectedParam[0] === 'takes'
+          ? stamp.localRunTime
+          : stamp.localReturnTime
+    ),
+    alarmState: props.methodArchive.alarmState.toarray(),
+    value: values.map(value => value.runParameters[props.selectedParam[1]]),
+  };
   const table = (
-    <div className={newProps.classes.plainBackground}>
-      <div
-        className={newProps.classes.tableContainer}
-        style={{
-          ...newProps.divStyle,
-          textAlign: 'left',
-          display: 'initial',
-        }}
-      >
-        <WidgetTable
-          attribute={dummyAttribute}
-          hideInfo
-          eventHandler={noOp}
-          setFlag={noOp}
-          addRow={noOp}
-          infoClickHandler={noOp}
-          rowClickHandler={noOp}
-        />
-      </div>
-    </div>
+    <WidgetTable
+      attribute={dummyAttribute}
+      hideInfo
+      eventHandler={noOp}
+      setFlag={noOp}
+      addRow={noOp}
+      infoClickHandler={noOp}
+      rowClickHandler={noOp}
+    />
   );
-  return table;
+  return (
+    <TabbedPanel
+      alwaysUpdate
+      openPanels={props.openPanels}
+      tabLabels={['Table', 'Plot']}
+    >
+      {table}
+      {table}
+    </TabbedPanel>
+  );
 };
 
 MethodArchive.propTypes = {
-  parentProps: PropTypes.shape({
-    classes: PropTypes.shape({
-      plainBackground: PropTypes.string,
-      tableContainer: PropTypes.string,
-    }),
-    methodArchive: PropTypes.shape({
-      timeStamp: PropTypes.instanceOf(CircularBuffer),
-      value: PropTypes.instanceOf(CircularBuffer),
-      alarmState: PropTypes.instanceOf(CircularBuffer),
-    }),
+  selectedParam: PropTypes.arrayOf(PropTypes.string).isRequired,
+  methodArchive: PropTypes.shape({
+    parent: PropTypes.string,
+    name: PropTypes.string,
+    timeStamp: PropTypes.instanceOf(CircularBuffer),
+    value: PropTypes.instanceOf(CircularBuffer),
+    alarmState: PropTypes.instanceOf(CircularBuffer),
   }).isRequired,
-  divStyle: PropTypes.shape({}).isRequired,
+  openPanels: PropTypes.shape({
+    parent: PropTypes.bool,
+    child: PropTypes.bool,
+  }).isRequired,
 };
 
 export default MethodArchive;

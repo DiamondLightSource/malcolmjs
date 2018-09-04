@@ -134,11 +134,38 @@ const closeChildPanel = () => (dispatch, getState) => {
   const state = getState().malcolm;
   const { navigationLists } = state.navigation;
   if (isChildPanelNavType(navigationLists.slice(-1)[0].navType)) {
-    const newPath = `/gui/${navigationLists
-      .slice(0, -1)
-      .map(nav => nav.path)
-      .join('/')}`;
-    dispatch(push(newPath));
+    if (navigationLists.slice(-1)[0].navType === NavTypes.Info) {
+      const { blockMri } = navigationLists.slice(-3)[0];
+      const attributeName = state.mainAttribute;
+      const { subElements } = navigationLists.slice(-2)[0];
+      const { blocks } = getState().malcolm;
+      const attribute = blockUtils.findAttribute(
+        blocks,
+        blockMri,
+        attributeName
+      );
+      if (attribute && attribute.calculated && attribute.calculated.isMethod) {
+        const newPath = `/gui/${navigationLists
+          .slice(0, -2)
+          .map(nav => nav.path)
+          .join('/')}/${state.mainAttribute}${
+          subElements ? `.${subElements.join('.')}` : ''
+        }`;
+        dispatch(push(newPath));
+      } else {
+        const newPath = `/gui/${navigationLists
+          .slice(0, -1)
+          .map(nav => nav.path)
+          .join('/')}`;
+        dispatch(push(newPath));
+      }
+    } else {
+      const newPath = `/gui/${navigationLists
+        .slice(0, -1)
+        .map(nav => nav.path)
+        .join('/')}`;
+      dispatch(push(newPath));
+    }
   }
 };
 
@@ -201,6 +228,27 @@ const updateChildPanelWithLink = (blockMri, portName) => (
   dispatch(push(newPath));
 };
 
+const closeInfo = (blockMri, attributeName, subElement) => (
+  dispatch,
+  getState
+) => {
+  const { blocks, navigationLists, mainAttribute } = getState().malcolm;
+  const attribute = blockUtils.findAttribute(blocks, blockMri, attributeName);
+  if (attribute && attribute.calculated && attribute.calculated.isMethod) {
+    const newPath = `/gui/${navigationLists
+      .slice(0, -2)
+      .map(nav => nav.path)
+      .join('/')}/${mainAttribute}${subElement ? `.${subElement}` : ''}`;
+    dispatch(push(newPath));
+  } else {
+    const newPath = `/gui/${navigationLists
+      .slice(0, -1)
+      .map(nav => nav.path)
+      .join('/')}`;
+    dispatch(push(newPath));
+  }
+};
+
 export default {
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
@@ -210,4 +258,5 @@ export default {
   updateChildPanel,
   closeChildPanel,
   updateChildPanelWithLink,
+  closeInfo,
 };

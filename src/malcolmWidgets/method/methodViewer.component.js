@@ -24,12 +24,6 @@ import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
 const noOp = () => {};
 
 const MethodViewer = props => {
-  const transitionWithPanelStyle = {
-    left: props.openParent ? 360 : 0,
-    width: `calc(100% - ${(props.openChild ? 360 : 0) +
-      (props.openParent ? 360 : 0)}px)`,
-    // transition: 'width 1s, left 1s',
-  };
   if (props.method && props.selectedParam) {
     const widgetTag = props.selectedParamMeta.tags.find(
       t => t.indexOf('widget:') !== -1
@@ -68,45 +62,36 @@ const MethodViewer = props => {
       switch (widgetTag) {
         case 'widget:tree':
           return (
-            <div className={props.classes.plainBackground}>
-              <div
-                className={props.classes.tableContainer}
-                style={{
-                  ...transitionWithPanelStyle,
-                  textAlign: 'left',
-                  display: 'initial',
-                }}
-              >
-                <div style={{ height: 'calc(100% - 56px)' }}>
-                  <JSONInput
-                    locale={locale}
-                    placeholder={props.selectedParamValue}
-                    viewOnly={!props.selectedParamMeta.writeable}
-                    onChange={val => {
-                      if (!val.error) {
-                        props.updateInput(
-                          props.method.calculated.path,
-                          props.selectedParam[1],
-                          val.jsObject
-                        );
-                      }
-                    }}
-                    id={props.selectedParam}
-                    height="100%"
-                    width="100%"
-                    style={{ body: { fontSize: '100%' } }}
-                  />
-                </div>
-                <Table>
-                  <TableFooter>
-                    <TableRow>
-                      {footerItems.map((item, key) => (
-                        <TableCell key={key}>{item}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableFooter>
-                </Table>
+            <div style={{ width: '100%' }}>
+              <div style={{ height: 'calc(100% - 56px)' }}>
+                <JSONInput
+                  locale={locale}
+                  placeholder={props.selectedParamValue}
+                  viewOnly={!props.selectedParamMeta.writeable}
+                  onChange={val => {
+                    if (!val.error) {
+                      props.updateInput(
+                        props.method.calculated.path,
+                        props.selectedParam[1],
+                        val.jsObject
+                      );
+                    }
+                  }}
+                  id={props.selectedParam}
+                  height="100%"
+                  width="100%"
+                  style={{ body: { fontSize: '100%' } }}
+                />
               </div>
+              <Table>
+                <TableFooter>
+                  <TableRow>
+                    {footerItems.map((item, key) => (
+                      <TableCell key={key}>{item}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableFooter>
+              </Table>
             </div>
           );
         case 'widget:textinput':
@@ -116,13 +101,14 @@ const MethodViewer = props => {
         case 'widget:led': {
           return (
             <MethodArchive
-              parentProps={props}
-              divStyle={transitionWithPanelStyle}
+              methodArchive={props.methodArchive}
+              openPanels={{ parent: props.openParent, child: props.openChild }}
+              selectedParam={props.selectedParam}
             />
           );
         }
         default:
-          return <div className={props.classes.plainBackground} />;
+          return <div />;
       }
     } else {
       return <Typography>No results yet...run method first!</Typography>;
@@ -182,26 +168,15 @@ const MethodViewer = props => {
       calculated: {},
     };
     return (
-      <div className={props.classes.plainBackground}>
-        <div
-          className={props.classes.tableContainer}
-          style={{
-            ...transitionWithPanelStyle,
-            textAlign: 'left',
-            display: 'initial',
-          }}
-        >
-          <WidgetTable
-            attribute={dummyAttribute}
-            hideInfo
-            eventHandler={noOp}
-            setFlag={noOp}
-            addRow={noOp}
-            infoClickHandler={noOp}
-            rowClickHandler={noOp}
-          />
-        </div>
-      </div>
+      <WidgetTable
+        attribute={dummyAttribute}
+        hideInfo
+        eventHandler={noOp}
+        setFlag={noOp}
+        addRow={noOp}
+        infoClickHandler={noOp}
+        rowClickHandler={noOp}
+      />
     );
   }
 
@@ -281,10 +256,6 @@ MethodViewer.propTypes = {
     PropTypes.number,
     PropTypes.object,
   ]).isRequired,
-  classes: PropTypes.shape({
-    plainBackground: PropTypes.string,
-    tableContainer: PropTypes.string,
-  }).isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   selectedParam: PropTypes.arrayOf(PropTypes.string).isRequired,
   openParent: PropTypes.bool.isRequired,
