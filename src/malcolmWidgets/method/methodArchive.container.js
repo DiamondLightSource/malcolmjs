@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import CircularBuffer from 'circular-buffer';
 import WidgetTable from '../table/table.component';
+import MethodPlot from './methodPlot.component';
 import TabbedPanel from '../../attributeView/tabbedMiddlePanel.component';
 
 const noOp = () => {};
@@ -48,27 +49,24 @@ const MethodArchive = props => {
           : stamp.localReturnTime
     ),
     alarmState: props.methodArchive.alarmState.toarray(),
-    value: values.map(value => value.runParameters[props.selectedParam[1]]),
+    Value: values.map(value => value.runParameters[props.selectedParam[1]]),
   };
-  const table = (
-    <WidgetTable
-      attribute={dummyAttribute}
-      hideInfo
-      eventHandler={noOp}
-      setFlag={noOp}
-      addRow={noOp}
-      infoClickHandler={noOp}
-      rowClickHandler={noOp}
-    />
-  );
   return (
     <TabbedPanel
       alwaysUpdate
       openPanels={props.openPanels}
       tabLabels={['Table', 'Plot']}
     >
-      {table}
-      {table}
+      <WidgetTable
+        attribute={dummyAttribute}
+        hideInfo
+        eventHandler={noOp}
+        setFlag={noOp}
+        addRow={noOp}
+        infoClickHandler={noOp}
+        rowClickHandler={noOp}
+      />
+      <MethodPlot attribute={dummyArchive} />
     </TabbedPanel>
   );
 };

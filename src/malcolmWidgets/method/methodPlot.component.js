@@ -13,9 +13,9 @@ const alarmStatesByIndex = [
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
-  const alarms = attribute.alarmState.toarray();
-  dataElement.x = attribute.timeStamp.toarray();
-  dataElement.y = attribute.Value.toarray().map(
+  const alarms = attribute.alarmState;
+  dataElement.x = attribute.timeStamp;
+  dataElement.y = attribute.Value.map(
     (value, valIndex) =>
       alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
       (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&
@@ -32,13 +32,10 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
 class MethodPlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data, layout } = state;
-    const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
-      props.attribute.plotTime
-    }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
     const newData = data.map((dataElement, index) =>
       updatePlotData(dataElement, index, props.attribute)
     );
-    layout.datarevision = dataRevision;
+    layout.datarevision += 1;
     if (
       props.attribute.parent !== layout.parent ||
       props.attribute.name !== layout.attribute
