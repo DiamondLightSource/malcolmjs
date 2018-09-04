@@ -1,79 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`attributeView renders 1st tab correctly 1`] = `
-<div
-  style={
-    Object {
-      "height": "100%",
-      "width": "100%",
-    }
+<WithTheme(TabbedPanel)
+  defaultTab={0}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
   }
+  useSwipeable={false}
 >
-  <div
-    style={
-      Object {
-        "height": "calc(100% - 50px)",
-      }
-    }
-  >
-    <Connect(WithTheme(AttributePlot))
-      attribute={Object {}}
-    />
-  </div>
-  <WithStyles(Tabs)
-    centered={true}
-    fullWidth={true}
-    indicatorColor="primary"
-    onChange={[Function]}
-    textColor="primary"
-    value={0}
-  >
-    <WithStyles(Tab)
-      disabled={false}
-      label="Plot"
-    />
-    <WithStyles(Tab)
-      label="Table"
-    />
-  </WithStyles(Tabs)>
-</div>
+  <ArchiveTable
+    attribute={Object {}}
+  />
+  <Connect(WithTheme(AttributePlot))
+    attribute={Object {}}
+  />
+</WithTheme(TabbedPanel)>
 `;
 
 exports[`attributeView renders 2nd tab correctly 1`] = `
-<div
-  style={
-    Object {
-      "height": "100%",
-      "width": "100%",
-    }
+<WithTheme(TabbedPanel)
+  defaultTab={1}
+  tabLabels={
+    Array [
+      "Table",
+      "Plot",
+    ]
   }
+  useSwipeable={false}
 >
-  <div
-    style={
-      Object {
-        "height": "calc(100% - 50px)",
-      }
-    }
-  >
-    <ArchiveTable
-      attribute={Object {}}
-    />
-  </div>
-  <WithStyles(Tabs)
-    centered={true}
-    fullWidth={true}
-    indicatorColor="primary"
-    onChange={[Function]}
-    textColor="primary"
-    value={1}
-  >
-    <WithStyles(Tab)
-      disabled={false}
-      label="Plot"
-    />
-    <WithStyles(Tab)
-      label="Table"
-    />
-  </WithStyles(Tabs)>
-</div>
+  <ArchiveTable
+    attribute={Object {}}
+  />
+  <Connect(WithTheme(AttributePlot))
+    attribute={Object {}}
+  />
+</WithTheme(TabbedPanel)>
 `;
