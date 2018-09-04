@@ -49,13 +49,14 @@ const MethodArchive = props => {
           : stamp.localReturnTime
     ),
     alarmState: props.methodArchive.alarmState.toarray(),
-    Value: values.map(value => value.runParameters[props.selectedParam[1]]),
+    value: values.map(value => value.runParameters[props.selectedParam[1]]),
   };
   return (
     <TabbedPanel
       alwaysUpdate
       openPanels={props.openPanels}
       tabLabels={['Table', 'Plot']}
+      defaultTab={props.defaultTab}
     >
       <WidgetTable
         attribute={dummyAttribute}
@@ -66,7 +67,7 @@ const MethodArchive = props => {
         infoClickHandler={noOp}
         rowClickHandler={noOp}
       />
-      <MethodPlot attribute={dummyArchive} />
+      <MethodPlot attribute={dummyArchive} openPanels={props.openPanels} />
     </TabbedPanel>
   );
 };
@@ -84,6 +85,10 @@ MethodArchive.propTypes = {
     parent: PropTypes.bool,
     child: PropTypes.bool,
   }).isRequired,
+  defaultTab: PropTypes.number,
+};
+MethodArchive.defaultProps = {
+  defaultTab: 0,
 };
 
 export default MethodArchive;

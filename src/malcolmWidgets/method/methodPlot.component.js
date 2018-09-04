@@ -15,7 +15,7 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
   const alarms = attribute.alarmState;
   dataElement.x = attribute.timeStamp;
-  dataElement.y = attribute.Value.map(
+  dataElement.y = attribute.value.map(
     (value, valIndex) =>
       alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
       (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&

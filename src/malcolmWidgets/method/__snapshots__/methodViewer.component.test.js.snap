@@ -168,6 +168,7 @@ exports[`Method viewer renders correctly with no initial value 1`] = `
 
 exports[`Method viewer renders method param archive if selected parameter isnt a tree 1`] = `
 <MethodArchive
+  defaultTab={0}
   methodArchive={
     Object {
       "alarmState": MockCircularBuffer [
