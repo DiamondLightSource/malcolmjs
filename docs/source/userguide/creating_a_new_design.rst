@@ -264,6 +264,8 @@ To save a Design:
 Opening an Existing Design
 --------------------------
 
+A `root_block_` may facilitate multiple `designs <design_>`, each reflecting operation of that Block within different scenarios.  Only a single Design can be utilised at any given time.  By default this is the Design that is open at the time of system execution.
+
 When a `root_block_` is opened a list of all `Designs <design_>` within it is available via the 'Design' Attribute displayed in the left-hand panel.  Selecting a pre-existing Design results in the Design being presented in the central Layout panel.
 
 To open an existing Design:
@@ -282,6 +284,7 @@ Working Collaboratively on a Design
 Disabling a Design
 ------------------
 
+As a `root_block_` can facilitate multiple `designs <design_>`...
 
 
 

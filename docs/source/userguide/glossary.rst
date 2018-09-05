@@ -1,4 +1,4 @@
-.. _glossary:
+.. _glossary_:
 
 .. ##########
 .. links to external PandA related documentation
@@ -84,6 +84,24 @@ Design
 The technical definition of the implemented system describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `connections <connector_>` between them.
 
 Designs are presented graphically as a `layout_` within the 'Layout Panel' on the web interface allowing a user to build, configure and manage the system represented by that Design.
+
+
+.. _design_element_:
+
+Design Element
+--------------
+
+A generic term for any `block_`, `attribute_` or `connector_` currently forming the focus of interest within the `layout_` view of the PandABox User Interface.  
+
+
+.. _flowgraph_:
+
+Flowgraph 
+---------
+
+The graphical representation of a `design_` showing the `design_element_` within the Control System as presented within the user interface 'Layout View'.
+
+
 
 .. _input_attribute_:
 

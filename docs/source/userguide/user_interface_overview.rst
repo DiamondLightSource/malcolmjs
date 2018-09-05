@@ -1,34 +1,54 @@
+.. _user_interface_overview_:
+
 User Interface Overview
 =======================
 
-The user interface provides three principle views:
-
-    * A **'Design View'**, providing an interactive environment for designing and configuring your hardware system through `block_`, `attribute_` and `connector_` specification.
-    * An **'Attribute View'**, providing details of a single Attribute, including the ability to view a graphical representation of the Attribute's value within the system over time.
-    * A **'Table View'**, providing a text-based representation of Design and Attribute-based information.
-
-Each view utilises the same basic structure, with content changing dynamically to reflect the purpose of the requested view.  In summary:
-
-    * A 'navigation bar' at the top of the screen provides the ability to move through a Design, selecting elements at increasingly deep levels of implementation.  In doing so it provides a breadcrumb-like map of where you currently are within the Design.
-    * A 'left-hand panel' providing *general* information about the element currently forming the central focus of activity.  For example, in `Design View <design_view_>` this will be information about the overall design (name, state, modification status, etc.) whereas in `Attribute View <attribute_view_>` this will be information about the `block_` containing the Attribute of interest.
-    * A 'central panel' displaying ...
-    * A 'right-hand panel' providing *detailed* information about the element currently forming the central focus of activity.  For example, in `Design View <design_view_>` this will be information about a selected Block within the `layout_` (its attributes and methods) whereas in `Attribute View <attribute_view_>` this will be detailed information about the Attribute itself (name, type, description, status, alarm, etc.).
+The PandABox User Interface provides a fully interactive environment for designing, configuring and managing components and their connections that together define a PandABlock-FPGA Control System.
 
 
-.. _design_view_:
+.. _principle_ui_views_:
 
-The Design View
+Principle User Interface views
+------------------------------
+
+To support design, configuration and management activies the PandABox User Interface provides three principle views into the underlying Control System:
+
+    * A **Layout View**, providing an interactive environment for designing and configuring your Control System through `block_`, `attribute_` and `connector_` specification.  The resulting `flowgraph_` provides a visual representation of the formal Control System `design_`.
+    * An **Attribute View**, providing details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control System over time.
+    * A **Table View**, providing a text-based representation of Design and Attribute-based information.
+
+
+User Interface Components
+-------------------------
+
+Each of the views introduced in `principle_ui_views_` utilises the same basic structure, with content changing dynamically to reflect the purpose of the requested view.  In summary:
+
+    * A *'navigation bar'* at the top of the screen provides the ability to move through the currently open Design, selecting design elements at increasingly deep levels of implementation.  In doing so it provides a breadcrumb-like map of where you currently are within the Design.
+    * A *'left-hand panel'* providing **general** information about the `design_element_` currently forming the central focus of interest within the User Interface.  For example, in `Layout View <layout_view_>` the left-hand panel will contain information about the overall Control System Design (name, state, modification status, etc.) whereas in `Attribute View <attribute_view_>` the panel will display information about the containing `block_` of that Attribute.
+    * A *'central panel'* displaying information about an Attribute selected from the Block presented in the 'left-hand panel'.  In `Layout View <layout_view_>` an interactive graphical representation of the formal Control System Design is shown, in `Attribute View <attribute_view_>` a plot of Attribute data against time is displayed.  In `Table View <table_view_>` an appropriately formatted text-based representation of Attribute data is presented.
+    * A *'right-hand panel'* providing **detailed** information about the `design_element_` currently in focus within the 'left-hand panel'.  For example, if the 'left-hand panel' represents the `root_block_` then the 'right-hand panel' reflects a `block_` within the Control System Design, whereas if the 'left-hand panel' represents a `block_` the 'right-hand panel' reflects an `attribute_` within that Block.     
+
+
+.. _layout_view_:
+
+The Layout View
 ---------------
 
-The Design View is used to create, modify and manage the overall Design of your system.  A typical example of the view you may expect to see is shown below.
+Layout View is used to create, modify and manage the overall Design of your Control System.  
+
+Layout View is accessed via the **'View'** button associated with the *'Layout'* Attribute or a `root_block_` or `parent_block_`.   
+
+Once the `layout_` is displayed individual `blocks <block_>` within it can moved around the screen by clicking and dragging them to your desired location.  Any `connectors <connector_>` will be dynamically re-routed to accommodate the new location.  Note there is also the ability to automatically optimise the Layout via the **'Auto Layout'** button within the 'central panel'.
+
+A typical example of the view you may expect to see is shown below.
 
 .. figure:: screenshots/PANDA-layout-spread-out.png
       :align: center
 
 In this example we see:
 
-    * Summary information about the 'PANDA' system displayed in the 'left-hand' panel.
-    * The design of the 'PANDA' system presented in the central `layout_` panel.  Note the 'CLOCKS' `block_` is highlighted.
+    * Summary information about the 'PANDA' system displayed in the 'left-hand panel'.
+    * The Design of the PandABox Control System presented in the central `layout_` panel.  Note the 'CLOCKS' `block_` is highlighted.
     * Detailed information about the 'CLOCKS' Block in the 'right-hand' panel, including all of its pre-defined `attributes <attribute_>`.
     * The 'navigation bar' denoting that we are viewing the 'CLOCKS' Block via the layout of the 'PANDA' System.
 
@@ -38,12 +58,32 @@ In this example we see:
 The Attribute View
 ------------------
 
+The User Interface automatically transitions to Attribute View when the 'information' icon associated with an Attribute is selected from either the 'left-hand panel' or 'right-hand panel'.  
+
+    * If the Attribute is selected from the 'left-hand panel' more detailed information about that Attribute is displayed in the 'right-hand panel'.
+    * If the Attribute is selected from the 'right-hand panel' the `design_element_` represented in the 'right-hand panel' is transferred to the 'left-hand panel' as the new focus of interest, with more detailed information about the selected Attribute now presented on the right.
+
+In both cases the 'central panel' presents a view of the Attribute's value against time.  This may represent a constantly changing value, for example a calculated data value updated every 2ms, or a periodically changing boolean on/off status indicator that only changes every 10h.  Two representations of the Attribute value are available and can be selected by choosing the appropriate option at the bottom of the 'central panel' thus:
+
+    * Graph View - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view if interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use. 
+    * Table View - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.  Tables can be exported for offline analysis.
+    
+**THIS NEEDS AN IMAGE**
 
 
 .. _table_view_:
 
 The Table View
 --------------
+
+*To be discussed - is this different from the table attribute view?*
+
+.. _method_view_:
+
+The Method View
+---------------
+
+*Awaiting review of Bryan's work to see if this warrants its own section*
 
 
 
