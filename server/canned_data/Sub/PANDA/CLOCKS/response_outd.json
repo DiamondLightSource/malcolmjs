@@ -24,7 +24,7 @@
           "description": "Clock D output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:CLOCKS.OUTD", 
+            "sourcePort:bool:CLOCKS.OUTD", 
             "widget:led"
           ], 
           "writeable": false, 

@@ -24,7 +24,7 @@
           "description": "Quadrature A/Step output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:POSENC4.A", 
+            "sourcePort:bool:POSENC4.A", 
             "widget:led"
           ], 
           "writeable": false, 

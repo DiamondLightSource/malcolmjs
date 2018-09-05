@@ -24,7 +24,7 @@
           "description": "Data capture in progress", 
           "tags": [
             "group:outputs", 
-            "outport:bool:PCAP.ACTIVE", 
+            "sourcePort:bool:PCAP.ACTIVE", 
             "widget:led"
           ], 
           "writeable": false, 

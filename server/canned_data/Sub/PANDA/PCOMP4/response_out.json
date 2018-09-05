@@ -24,7 +24,7 @@
           "description": "Output pulse train", 
           "tags": [
             "group:outputs", 
-            "outport:bool:PCOMP4.OUT", 
+            "sourcePort:bool:PCOMP4.OUT", 
             "widget:led"
           ], 
           "writeable": false, 

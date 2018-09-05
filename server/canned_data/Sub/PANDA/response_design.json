@@ -23,7 +23,8 @@
           "typeid": "malcolm:core/ChoiceMeta:1.0", 
           "description": "Design name to load", 
           "choices": [
-            ""
+            "", 
+            "hello"
           ], 
           "tags": [
             "config:1", 

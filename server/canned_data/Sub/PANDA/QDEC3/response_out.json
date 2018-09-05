@@ -25,7 +25,7 @@
           "description": "Output position", 
           "tags": [
             "group:outputs", 
-            "outport:int32:QDEC3.OUT", 
+            "sourcePort:int32:QDEC3.OUT", 
             "widget:textupdate"
           ], 
           "writeable": false, 

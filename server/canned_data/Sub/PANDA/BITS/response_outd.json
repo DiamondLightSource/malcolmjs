@@ -24,7 +24,7 @@
           "description": "The value of D on the bit bus", 
           "tags": [
             "group:outputs", 
-            "outport:bool:BITS.OUTD", 
+            "sourcePort:bool:BITS.OUTD", 
             "widget:led"
           ], 
           "writeable": false, 

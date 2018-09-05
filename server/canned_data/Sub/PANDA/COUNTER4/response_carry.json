@@ -24,7 +24,7 @@
           "description": "Internal counter overflow status", 
           "tags": [
             "group:outputs", 
-            "outport:bool:COUNTER4.CARRY", 
+            "sourcePort:bool:COUNTER4.CARRY", 
             "widget:led"
           ], 
           "writeable": false, 
