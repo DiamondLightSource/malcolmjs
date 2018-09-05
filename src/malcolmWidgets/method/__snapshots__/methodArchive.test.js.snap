@@ -16,7 +16,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
       }
     }
   >
-    <WithTheme(MethodPlot)
+    <LoadableComponent
       attribute={
         Object {
           "alarmState": Array [

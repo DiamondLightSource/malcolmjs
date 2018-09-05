@@ -16,8 +16,6 @@ const styles = theme => ({
     flexWrap: 'nowrap',
   },
   snackbar: {
-    position: 'absolute',
-    bottom: '50px',
     margin: 2,
   },
 });

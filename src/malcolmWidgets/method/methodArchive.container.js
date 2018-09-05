@@ -1,11 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import CircularBuffer from 'circular-buffer';
+import Typography from '@material-ui/core/Typography';
+import Loadable from 'react-loadable';
 import WidgetTable from '../table/table.component';
-import MethodPlot from './methodPlot.component';
+// import MethodPlot from './methodPlot.component';
 import TabbedPanel from '../../attributeView/tabbedMiddlePanel.component';
 
 const noOp = () => {};
+
+const LoadableMethodPlot = Loadable({
+  loader: () => import('./methodPlot.component'),
+  loading: () => <Typography>Loading...</Typography>,
+});
 
 const MethodArchive = props => {
   const timeStamps = props.methodArchive.timeStamp.toarray();
@@ -67,7 +74,10 @@ const MethodArchive = props => {
         infoClickHandler={noOp}
         rowClickHandler={noOp}
       />
-      <MethodPlot attribute={dummyArchive} openPanels={props.openPanels} />
+      <LoadableMethodPlot
+        attribute={dummyArchive}
+        openPanels={props.openPanels}
+      />
     </TabbedPanel>
   );
 };
