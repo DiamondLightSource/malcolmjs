@@ -10,21 +10,22 @@ import {
 import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
 import BlockNodeModel from '../../../layout/block/BlockNodeModel';
 import MalcolmLinkFactory from '../../../layout/link/link.factory';
+import { sinkPort, sourcePort } from '../../malcolmConstants';
 
 export const buildPorts = block => {
-  const inputs = blockUtils.findAttributesWithTag(block, 'inport:');
-  const outputs = blockUtils.findAttributesWithTag(block, 'outport:');
+  const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
+  const outputs = blockUtils.findAttributesWithTag(block, sourcePort);
 
   return [
     ...inputs.map(input => ({
       label: input.calculated.name,
       input: true,
       tag: input.raw.meta.tags
-        .find(t => t.indexOf('inport:') > -1)
+        .find(t => t.indexOf(sinkPort) > -1)
         .split(':')
         .slice(-1)[0],
       portType: input.raw.meta.tags
-        .find(t => t.indexOf('inport:') > -1)
+        .find(t => t.indexOf(sinkPort) > -1)
         .split(':')[1],
       value: input.raw.value,
     })),
@@ -32,11 +33,11 @@ export const buildPorts = block => {
       label: output.calculated.name,
       input: false,
       tag: output.raw.meta.tags
-        .find(t => t.indexOf('outport:') > -1)
+        .find(t => t.indexOf(sourcePort) > -1)
         .split(':')
         .slice(-1)[0],
       portType: output.raw.meta.tags
-        .find(t => t.indexOf('outport:') > -1)
+        .find(t => t.indexOf(sourcePort) > -1)
         .split(':')[1],
     })),
   ];
@@ -314,33 +315,35 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
     const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
 
     const startNode = nodes.find(n => n.id === b.mri);
-    linkStarts.forEach(start => {
-      const startPort = startNode.ports[`${b.mri}-${start.label}`];
+    if (startNode) {
+      linkStarts.forEach(start => {
+        const startPort = startNode.ports[`${b.mri}-${start.label}`];
 
-      if (startPort !== undefined) {
-        // need to find the target port and link them together
-        const targetPortValue = start.value;
-        const endBlock = layout.blocks.find(block =>
-          block.ports.some(p => !p.input && p.tag === targetPortValue)
-        );
-
-        if (endBlock) {
-          const end = endBlock.ports.find(
-            p => !p.input && p.tag === targetPortValue
+        if (startPort !== undefined) {
+          // need to find the target port and link them together
+          const targetPortValue = start.value;
+          const endBlock = layout.blocks.find(block =>
+            block.ports.some(p => !p.input && p.tag === targetPortValue)
           );
 
-          const endNode = nodes.find(n => n.id === endBlock.mri);
+          if (endBlock) {
+            const end = endBlock.ports.find(
+              p => !p.input && p.tag === targetPortValue
+            );
 
-          if (endNode) {
-            const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+            const endNode = nodes.find(n => n.id === endBlock.mri);
 
-            const newLink = endPort.link(startPort);
-            newLink.id = `${endPort.name}-${startPort.name}`;
-            links.push(newLink);
+            if (endNode) {
+              const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+
+              const newLink = endPort.link(startPort);
+              newLink.id = `${endPort.name}-${startPort.name}`;
+              links.push(newLink);
+            }
           }
         }
-      }
-    });
+      });
+    }
   });
 
   engine.selectedHandler = () => {};
@@ -391,7 +394,7 @@ const isRelevantAttribute = attribute =>
   attribute.raw &&
   attribute.raw.meta &&
   attribute.raw.meta.tags &&
-  (attribute.raw.meta.tags.some(t => t.indexOf('inport:') > -1) ||
+  (attribute.raw.meta.tags.some(t => t.indexOf(sinkPort) > -1) ||
     attribute.raw.meta.tags.some(t => t.indexOf('widget:icon') > -1) ||
     attribute.raw.meta.tags.some(t => t.indexOf('widget:flowgraph') > -1));
 

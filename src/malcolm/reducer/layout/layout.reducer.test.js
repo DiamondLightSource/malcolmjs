@@ -50,7 +50,7 @@ const buildMalcolmState = () => ({
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: ['sourcePort:bool:ZERO'],
             },
           },
         },
@@ -78,7 +78,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: ['sinkPort:bool:ZERO'],
             },
           },
         },
@@ -88,7 +88,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['outport:bool:SEQ1'],
+              tags: ['sourcePort:bool:SEQ1'],
             },
           },
         },
@@ -98,7 +98,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: ['sinkPort:bool:ZERO'],
             },
           },
         },
@@ -272,7 +272,7 @@ describe('Layout Reducer', () => {
     expect(state.layout.blocks[0].ports[1].value).toEqual('START');
   });
 
-  it('isRelevantAttribute returns true if inport, icon or flowgraph', () => {
+  it('isRelevantAttribute returns true if sink port, icon or flowgraph', () => {
     const attribute = {};
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeFalsy();
     attribute.raw = {};
@@ -282,7 +282,7 @@ describe('Layout Reducer', () => {
     attribute.raw.meta.tags = [];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeFalsy();
 
-    attribute.raw.meta.tags = ['inport:ZERO'];
+    attribute.raw.meta.tags = ['sinkPort:ZERO'];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
     attribute.raw.meta.tags = ['widget:icon'];

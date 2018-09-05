@@ -235,7 +235,7 @@ describe('attribute reducer', () => {
               },
               raw: {
                 meta: {
-                  tags: ['inport:bool:ZERO'],
+                  tags: ['sinkPort:bool:ZERO'],
                 },
               },
             },
@@ -263,7 +263,7 @@ describe('attribute reducer', () => {
               },
               raw: {
                 meta: {
-                  tags: ['inport:bool:ZERO'],
+                  tags: ['sinkPort:bool:ZERO'],
                 },
               },
             },
@@ -306,18 +306,18 @@ describe('attribute reducer', () => {
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeFalsy();
   });
 
-  it('portsAreDifferent returns true if inports are different', () => {
+  it('portsAreDifferent returns true if source ports are different', () => {
     const oldAttribute = { raw: { meta: { label: 'label', tags: [] } } };
     const newAttribute = {
-      raw: { meta: { label: 'label', tags: ['inport:bool'] } },
+      raw: { meta: { label: 'label', tags: ['sourcePort:bool'] } },
     };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
 
-  it('portsAreDifferent returns true if outports are different', () => {
+  it('portsAreDifferent returns true if sink ports are different', () => {
     const oldAttribute = { raw: { meta: { label: 'label', tags: [] } } };
     const newAttribute = {
-      raw: { meta: { label: 'label', tags: ['outport:bool'] } },
+      raw: { meta: { label: 'label', tags: ['sinkPort:bool'] } },
     };
     expect(portsAreDifferent(oldAttribute, newAttribute)).toBeTruthy();
   });
