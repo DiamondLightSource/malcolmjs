@@ -6,6 +6,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import BlockDetails from '../blockDetails/blockDetails.component';
+// eslint-disable-next-line import/no-named-as-default
+import InfoDetails from '../infoDetails/infoDetails.component';
+import NavTypes from '../malcolm/NavTypes';
 
 const styles = theme => ({
   container: {
@@ -32,11 +35,11 @@ const MalcolmPopOut = props => (
           color="inherit"
           className={props.classes.title}
         >
-          {props.parentBlockTitle}
+          {props.paneTitle}
         </Typography>
       </Toolbar>
     </AppBar>
-    <BlockDetails parent />
+    {props.isInfo ? <InfoDetails /> : <BlockDetails parent />}
   </div>
 );
 
@@ -44,21 +47,39 @@ const mapStateToProps = state => {
   const parentBlock = state.malcolm.parentBlock
     ? state.malcolm.blocks[state.malcolm.parentBlock]
     : undefined;
+
+  const parentBlockName = parentBlock ? parentBlock.name : '';
+
+  const { mainAttribute } = state.malcolm;
+
+  const { navigationLists } = state.malcolm.navigation;
+  const matchingNavItem = navigationLists.find(
+    nav => nav.path === state.malcolm.childBlock
+  );
+  const navType = matchingNavItem ? matchingNavItem.navType : undefined;
+  const isInfo = navType === NavTypes.Info;
+
+  const paneTitle = isInfo
+    ? `${parentBlockName}.${mainAttribute}`
+    : parentBlockName;
+
   return {
     parentBlock,
-    parentBlockTitle: parentBlock ? parentBlock.name : '',
+    isInfo,
+    paneTitle,
   };
 };
 
 const mapDispatchToProps = () => ({});
 
 MalcolmPopOut.propTypes = {
-  parentBlockTitle: PropTypes.string.isRequired,
+  paneTitle: PropTypes.string.isRequired,
   classes: PropTypes.shape({
     container: PropTypes.string,
     toolbar: PropTypes.string,
     title: PropTypes.string,
   }).isRequired,
+  isInfo: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(

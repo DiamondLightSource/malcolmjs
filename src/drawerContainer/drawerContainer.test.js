@@ -5,6 +5,7 @@ import configureStore from 'redux-mock-store';
 import DrawerContainer from './drawerContainer.component';
 import { openParentPanelType } from '../viewState/viewState.actions';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import NavTypes from '../malcolm/NavTypes';
 
 jest.mock('../malcolm/actions/navigation.actions');
 const mockStore = configureStore();
@@ -26,7 +27,12 @@ describe('DrawerContainer', () => {
       malcolm: {
         blocks: {},
         childBlock: 'CHILD',
-        navigation: [{ path: 'PANDA', children: [] }],
+        navigation: {
+          navigationLists: [
+            { path: 'PANDA', navType: NavTypes.Block, children: [] },
+          ],
+          rootNav: { path: '', children: [] },
+        },
       },
       router: {
         location: {

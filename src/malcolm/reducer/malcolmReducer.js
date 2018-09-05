@@ -500,8 +500,10 @@ const handleErrorMessage = (state, action) => {
       archive.value.push({
         ...runParams,
         returned: { error: action.payload.message },
+        returnStatus: `Failed: ${action.payload.message}`,
       });
       archive.timeStamp.push({ ...localRunTime, localReturnTime: new Date() });
+      archive.alarmState.push(AlarmStates.MAJOR_ALARM);
       attributes[matchingAttributeIndex] = archive;
       updatedState.blockArchive[blockName] = {
         ...state.blockArchive[blockName],

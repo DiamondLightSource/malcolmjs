@@ -227,8 +227,8 @@ const mapDispatchToProps = dispatch => ({
   infoClickHandler: (path, subElement) => {
     dispatch(navigationActions.navigateToInfo(path[0], path[1], subElement));
   },
-  closeInfoHandler: path => {
-    dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
+  closeInfoHandler: (path, subElement) => {
+    dispatch(navigationActions.closeInfo(path[0], path[1], subElement));
   },
   setFlag: (path, flag, state) => {
     dispatch(malcolmSetFlag(path, flag, state));

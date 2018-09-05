@@ -18,6 +18,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -26,6 +27,12 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -56,6 +63,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -64,15 +72,25 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
       <div
         className="MethodDetails-controlContainer-3"
       >
-        <pure(BugReport)
-          nativeColor="red"
-        />
+        <WithStyles(Tooltip)
+          title="widget:undefined"
+        >
+          <pure(BugReport)
+            nativeColor="red"
+          />
+        </WithStyles(Tooltip)>
       </div>
     </div>
     <div
@@ -85,6 +103,12 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -129,6 +153,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -137,6 +162,12 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -167,6 +198,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -175,6 +207,12 @@ exports[`Method component renders correctly with default inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
@@ -204,6 +242,12 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -248,6 +292,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -256,6 +301,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -286,6 +337,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -294,6 +346,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
@@ -323,6 +381,12 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -367,6 +431,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -375,6 +440,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -405,6 +476,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -413,6 +485,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
@@ -442,6 +520,12 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -479,6 +563,7 @@ exports[`Method component renders correctly with no inputs or outputs 1`] = `
       className="MethodDetails-button-6"
       disableRipple={true}
       onClick={[Function]}
+      tabindex="-1"
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}
@@ -521,6 +606,7 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -529,6 +615,12 @@ exports[`Method component renders correctly with return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -559,6 +651,7 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -567,6 +660,12 @@ exports[`Method component renders correctly with return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
@@ -596,6 +695,12 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -634,6 +739,12 @@ exports[`Method component renders correctly with return value 1`] = `
             className="MethodDetails-button-6"
             disableRipple={true}
             onClick={[Function]}
+            style={
+              Object {
+                "cursor": "pointer",
+              }
+            }
+            tabindex="-1"
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
@@ -642,6 +753,12 @@ exports[`Method component renders correctly with return value 1`] = `
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
+          onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
         >
           First output
         </WithStyles(Typography)>
@@ -664,6 +781,12 @@ exports[`Method component renders correctly with return value 1`] = `
             className="MethodDetails-button-6"
             disableRipple={true}
             onClick={[Function]}
+            style={
+              Object {
+                "cursor": "pointer",
+              }
+            }
+            tabindex="-1"
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
@@ -672,6 +795,12 @@ exports[`Method component renders correctly with return value 1`] = `
         </WithStyles(Tooltip)>
         <WithStyles(Typography)
           className="MethodDetails-textName-2"
+          onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
         >
           Second output
         </WithStyles(Typography)>
@@ -706,6 +835,7 @@ exports[`Method component renders correctly without return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -714,6 +844,12 @@ exports[`Method component renders correctly without return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         First input
       </WithStyles(Typography)>
@@ -744,6 +880,7 @@ exports[`Method component renders correctly without return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -752,6 +889,12 @@ exports[`Method component renders correctly without return value 1`] = `
       </WithStyles(Tooltip)>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        onClick={[Function]}
+        style={
+          Object {
+            "cursor": "pointer",
+          }
+        }
       >
         Second input
       </WithStyles(Typography)>
@@ -781,6 +924,12 @@ exports[`Method component renders correctly without return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
+          style={
+            Object {
+              "cursor": "pointer",
+            }
+          }
+          tabindex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}

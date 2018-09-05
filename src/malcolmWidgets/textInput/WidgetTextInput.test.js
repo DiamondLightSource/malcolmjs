@@ -106,7 +106,23 @@ describe('WidgetTextUpdate', () => {
     wrapper
       .find('input')
       .first()
-      .simulate('keyPress', { key: 'Enter' });
+      .simulate('keyDown', { key: 'Enter' });
+    expect(mockData.mock.calls.length).toEqual(1);
+    expect(mockData.mock.calls[0]).toEqual('Hello World');
+  });
+
+  it('calls send on tab', () => {
+    const mockData = { mock: { calls: [] } };
+    const setValue = event => {
+      mockData.mock.calls.push(event.target.value);
+    };
+    const wrapper = mount(
+      textInput('Hello World', false, null, false, () => {}, setValue)
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('keyDown', { key: 'Tab' });
     expect(mockData.mock.calls.length).toEqual(1);
     expect(mockData.mock.calls[0]).toEqual('Hello World');
   });

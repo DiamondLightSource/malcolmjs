@@ -3,7 +3,9 @@
 exports[`MainMalcolmView renders correctly 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=""
     childTitle=""
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
@@ -19,7 +21,9 @@ exports[`MainMalcolmView renders correctly 1`] = `
 exports[`MainMalcolmView renders info if child block is .info 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=".info"
     childTitle="Info"
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
@@ -35,7 +39,9 @@ exports[`MainMalcolmView renders info if child block is .info 1`] = `
 exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=".palette"
     childTitle="Palette"
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >

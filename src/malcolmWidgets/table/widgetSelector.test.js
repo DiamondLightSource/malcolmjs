@@ -54,7 +54,8 @@ describe('table widget selector', () => {
       '#7986cb',
       { choices: 'an illusion' },
       false,
-      true
+      true,
+      undefined
     );
   });
 });
