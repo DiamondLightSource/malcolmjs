@@ -51,6 +51,13 @@ class AttributePlot extends React.Component {
         updatePlotData(dataElement, index, props.attribute)
       );
       layout.datarevision = dataRevision;
+      const USER_HAS_CHANGED_LAYOUT = false;
+      if (!USER_HAS_CHANGED_LAYOUT) {
+        layout.xaxis = {
+          ...layout.xaxis,
+          range: [newData[0].x.slice(-1)[0] - 30000, newData[0].x.slice(-1)[0]],
+        };
+      }
       if (
         props.attribute.parent !== layout.parent ||
         props.attribute.name !== layout.attribute
