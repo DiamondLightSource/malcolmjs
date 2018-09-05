@@ -1,6 +1,7 @@
 import stat
 import sys
 import os
+import errno
 
 
 def mkdir_p(path):

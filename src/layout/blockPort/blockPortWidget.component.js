@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = () => ({
   container: {
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     height: 20,

@@ -121,6 +121,10 @@ exports[`attributePlot renders correctly for bool 1`] = `
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
+        "range": Array [
+          1969-12-31T23:59:33.000Z,
+          1970-01-01T00:00:03.000Z,
+        ],
       },
       "yaxis": Object {
         "color": "#000",
@@ -258,6 +262,10 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
+        "range": Array [
+          1969-12-31T23:59:33.000Z,
+          1970-01-01T00:00:03.000Z,
+        ],
       },
       "yaxis": Object {
         "color": "#000",
@@ -395,6 +403,10 @@ exports[`attributePlot renders correctly for number 1`] = `
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
+        "range": Array [
+          1969-12-31T23:59:33.000Z,
+          1970-01-01T00:00:03.000Z,
+        ],
       },
       "yaxis": Object {
         "color": "#000",

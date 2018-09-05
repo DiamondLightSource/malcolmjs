@@ -24,7 +24,7 @@
           "description": "Output pulse train", 
           "tags": [
             "group:outputs", 
-            "outport:bool:PULSE2.OUT", 
+            "sourcePort:bool:PULSE2.OUT", 
             "widget:led"
           ], 
           "writeable": false, 

@@ -1,4 +1,5 @@
 module.exports = {
+  "parser": "babel-eslint",
   'env': {
     'browser': true,
     'jest': true,
@@ -25,6 +26,7 @@ module.exports = {
   'parserOptions': {
     'ecmaFeatures': {
       'jsx': true,
-    }
+    },
+    "allowImportExportEverywhere": true,
   }
 }

@@ -30,7 +30,6 @@
           "outOffset", 
           "outScaled", 
           "outCapture", 
-          "outDataDelay", 
           "table", 
           "readbacks", 
           "tableStatus"

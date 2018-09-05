@@ -146,7 +146,7 @@
           ], 
           "tags": [
             "group:inputs", 
-            "inport:bool:ZERO", 
+            "sinkPort:bool:ZERO", 
             "widget:combo", 
             "config:1"
           ], 

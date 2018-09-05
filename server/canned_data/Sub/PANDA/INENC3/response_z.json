@@ -24,7 +24,7 @@
           "description": "Z index channel if in incremental mode", 
           "tags": [
             "group:outputs", 
-            "outport:bool:INENC3.Z", 
+            "sourcePort:bool:INENC3.Z", 
             "widget:led"
           ], 
           "writeable": false, 

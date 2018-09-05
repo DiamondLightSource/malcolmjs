@@ -24,7 +24,7 @@
           "description": "Data input from slave encoder", 
           "tags": [
             "group:outputs", 
-            "outport:bool:INENC1.DATA", 
+            "sourcePort:bool:INENC1.DATA", 
             "widget:led"
           ], 
           "writeable": false, 

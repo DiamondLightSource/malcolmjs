@@ -25,7 +25,7 @@
           "description": "Current counter value", 
           "tags": [
             "group:outputs", 
-            "outport:int32:COUNTER1.OUT", 
+            "sourcePort:int32:COUNTER1.OUT", 
             "widget:textupdate"
           ], 
           "writeable": false, 

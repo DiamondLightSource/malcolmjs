@@ -24,7 +24,7 @@
           "description": "TTL input value", 
           "tags": [
             "group:outputs", 
-            "outport:bool:TTLIN5.VAL", 
+            "sourcePort:bool:TTLIN5.VAL", 
             "widget:led"
           ], 
           "writeable": false, 

@@ -55,7 +55,10 @@ class AttributePlot extends React.Component {
       if (!USER_HAS_CHANGED_LAYOUT) {
         layout.xaxis = {
           ...layout.xaxis,
-          range: [newData[0].x.slice(-1)[0] - 30000, newData[0].x.slice(-1)[0]],
+          range: [
+            new Date(newData[0].x.slice(-1)[0].getTime() - 30000),
+            newData[0].x.slice(-1)[0],
+          ],
         };
       }
       if (

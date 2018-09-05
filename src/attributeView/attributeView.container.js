@@ -2,11 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
+import Loadable from 'react-loadable';
 import blockUtils from '../malcolm/blockUtils';
 import TabbedPanel from './tabbedMiddlePanel.component';
 import ArchiveTable from './archiveTable.container';
-import AttributePlot from './attributePlot.component';
+// import AttributePlot from './attributePlot.component';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+
+const LoadableAttributePlot = Loadable({
+  loader: () => import('./attributePlot.component'),
+  loading: () => <Typography>Loading...</Typography>,
+});
 
 const AttributeViewer = props => (
   <TabbedPanel
@@ -17,7 +24,10 @@ const AttributeViewer = props => (
     tabLabels={['Table', 'Plot']}
   >
     <ArchiveTable attribute={props.attribute} />
-    <AttributePlot attribute={props.attribute} openPanels={props.openPanels} />
+    <LoadableAttributePlot
+      attribute={props.attribute}
+      openPanels={props.openPanels}
+    />
   </TabbedPanel>
 );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
-import { BugReport } from '@material-ui/icons';
+import BugReport from '@material-ui/icons/BugReport';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 

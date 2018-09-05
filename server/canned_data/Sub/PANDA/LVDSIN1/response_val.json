@@ -24,7 +24,7 @@
           "description": "LVDS input value", 
           "tags": [
             "group:outputs", 
-            "outport:bool:LVDSIN1.VAL", 
+            "sourcePort:bool:LVDSIN1.VAL", 
             "widget:led"
           ], 
           "writeable": false, 
