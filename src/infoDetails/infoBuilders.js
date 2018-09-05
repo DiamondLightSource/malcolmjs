@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { sinkPort } from '../malcolm/malcolmConstants';
 
 // eslint-disable-next-line import/prefer-default-export
 export const buildAttributeInfo = props => {
@@ -298,7 +299,7 @@ export const linkInfo = props => {
   const portName = props.attribute.calculated.path[1];
 
   const portNullValue = portAttribute.raw.meta.tags
-    .find(t => t.indexOf('inport:') > -1)
+    .find(t => t.indexOf(sinkPort) > -1)
     .split(':')
     .slice(-1)[0];
 
