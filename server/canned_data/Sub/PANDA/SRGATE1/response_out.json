@@ -24,7 +24,7 @@
           "description": "Output value", 
           "tags": [
             "group:outputs", 
-            "outport:bool:SRGATE1.OUT", 
+            "sourcePort:bool:SRGATE1.OUT", 
             "widget:led"
           ], 
           "writeable": false, 

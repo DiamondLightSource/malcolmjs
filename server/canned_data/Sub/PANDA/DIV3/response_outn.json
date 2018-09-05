@@ -24,7 +24,7 @@
           "description": "Non-divided pulse output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:DIV3.OUTN", 
+            "sourcePort:bool:DIV3.OUTN", 
             "widget:led"
           ], 
           "writeable": false, 

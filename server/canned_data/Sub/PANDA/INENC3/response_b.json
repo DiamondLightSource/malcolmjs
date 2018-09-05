@@ -24,7 +24,7 @@
           "description": "Quadrature B if in incremental mode", 
           "tags": [
             "group:outputs", 
-            "outport:bool:INENC3.B", 
+            "sourcePort:bool:INENC3.B", 
             "widget:led"
           ], 
           "writeable": false, 

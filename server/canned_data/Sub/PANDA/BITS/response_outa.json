@@ -24,7 +24,7 @@
           "description": "The value of A on the bit bus", 
           "tags": [
             "group:outputs", 
-            "outport:bool:BITS.OUTA", 
+            "sourcePort:bool:BITS.OUTA", 
             "widget:led"
           ], 
           "writeable": false, 

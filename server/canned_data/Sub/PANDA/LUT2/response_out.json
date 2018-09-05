@@ -24,7 +24,7 @@
           "description": "Lookup table output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:LUT2.OUT", 
+            "sourcePort:bool:LUT2.OUT", 
             "widget:led"
           ], 
           "writeable": false, 

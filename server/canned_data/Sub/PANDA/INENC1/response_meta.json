@@ -44,8 +44,7 @@
           "valScale", 
           "valOffset", 
           "valScaled", 
-          "valCapture", 
-          "valDataDelay"
+          "valCapture"
         ]
       }
     ]

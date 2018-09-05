@@ -24,7 +24,7 @@
           "description": "Divided pulse output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:DIV1.OUTD", 
+            "sourcePort:bool:DIV1.OUTD", 
             "widget:led"
           ], 
           "writeable": false, 
