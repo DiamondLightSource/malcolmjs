@@ -4,6 +4,9 @@ import LayoutReducer, {
   updateLayoutBlock,
 } from './layout.reducer';
 
+const sourcePort = 'sourcePort';
+const sinkPort = 'sinkPort';
+
 const buildLayoutBlock = () => ({
   mri: 'block1',
   position: {
@@ -50,7 +53,7 @@ const buildMalcolmState = () => ({
           },
           raw: {
             meta: {
-              tags: ['sourcePort:bool:ZERO'],
+              tags: [`${sourcePort}:bool:ZERO`],
             },
           },
         },
@@ -78,7 +81,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['sinkPort:bool:ZERO'],
+              tags: [`${sinkPort}:bool:ZERO`],
             },
           },
         },
@@ -88,7 +91,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['sourcePort:bool:SEQ1'],
+              tags: [`${sourcePort}:bool:SEQ1`],
             },
           },
         },
@@ -98,7 +101,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['sinkPort:bool:ZERO'],
+              tags: [`${sinkPort}:bool:ZERO`],
             },
           },
         },
@@ -282,7 +285,7 @@ describe('Layout Reducer', () => {
     attribute.raw.meta.tags = [];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeFalsy();
 
-    attribute.raw.meta.tags = ['sinkPort:ZERO'];
+    attribute.raw.meta.tags = [`${sinkPort}:ZERO`];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
     attribute.raw.meta.tags = ['widget:icon'];
