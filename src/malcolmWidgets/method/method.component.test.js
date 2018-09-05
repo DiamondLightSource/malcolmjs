@@ -50,7 +50,8 @@ describe('Method component', () => {
     defaults,
     inputValues,
     outputValues,
-    errorMsg
+    errorMsg,
+    writeable = true
   ) => {
     const method = {
       calculated: {
@@ -66,6 +67,7 @@ describe('Method component', () => {
         defaults,
         takes: { elements: { ...inputs } },
         returns: { elements: { ...outputs } },
+        writeable,
       },
     };
 
@@ -99,11 +101,13 @@ describe('Method component', () => {
         label: 'First input',
         description: 'a test input',
         tags: ['widget:textinput'],
+        writeable: true,
       },
       second: {
         label: 'Second input',
         description: 'a test input',
         tags: ['widget:textinput'],
+        writeable: true,
       },
     };
   });
@@ -114,6 +118,11 @@ describe('Method component', () => {
 
   it('renders correctly with empty inputs', () => {
     const wrapper = shallow(testMethod(testInputs, {}, {}, {}, {}, ''));
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly with no inputs or outputs', () => {
+    const wrapper = shallow(testMethod({}, {}, {}, {}, {}, ''));
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
@@ -138,6 +147,13 @@ describe('Method component', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('renders correctly without return value', () => {
+    const wrapper = shallow(
+      testMethod(testInputs, testOutputs, {}, testInputValues, {}, '')
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('mapDispatchToProps updateInput signals a method input needs updating', () => {
     const dispatch = () => {};
     const dispatchProps = mapDispatchToProps(dispatch);
@@ -152,7 +168,7 @@ describe('Method component', () => {
     );
     wrapper
       .find('button')
-      .first()
+      .last()
       .simulate('click');
     expect(malcolmSetFlag).toHaveBeenCalledTimes(1);
     expect(malcolmSetFlag).toHaveBeenCalledWith(
@@ -165,6 +181,18 @@ describe('Method component', () => {
       ['Test', 'Method'],
       testInputValues
     );
+  });
+
+  it('method run button disables if not writeable', () => {
+    const wrapper = mount(
+      testMethod(testInputs, testOutputs, {}, testInputValues, {}, '', false)
+    );
+    wrapper
+      .find('button')
+      .last()
+      .simulate('click');
+    expect(malcolmSetFlag).not.toHaveBeenCalled();
+    expect(malcolmPostAction).not.toHaveBeenCalled();
   });
 
   it('calls updateInput correctly on changed input', () => {

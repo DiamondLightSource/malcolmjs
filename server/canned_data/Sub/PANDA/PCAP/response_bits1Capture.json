@@ -24,7 +24,7 @@
           "description": "Capture BITS1 in PCAP?", 
           "choices": [
             "No", 
-            "Capture"
+            "Value"
           ], 
           "tags": [
             "group:outputs", 

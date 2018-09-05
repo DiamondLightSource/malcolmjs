@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -52,19 +52,24 @@ const styles = () => ({
   missingAttribute: {
     color: 'red',
   },
+  button: {
+    width: '22px',
+    height: '22px',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 const buildIOComponent = (input, props, isOutput) => {
-  const { tags } = input[1];
-  const widgetTag = tags.find(t => t.indexOf('widget:') !== -1);
+  const parameterMeta = input[1];
+  const widgetTag = parameterMeta.tags.find(t => t.indexOf('widget:') !== -1);
   const flags = {
     isDisabled: props.methodPending || !input[1].writeable,
     isErrorState: props.methodErrored && input[1].writeable,
     isDirty: props.dirtyInputs[input[0]],
   };
   const updateStoreOnEveryValueChange = true;
-
-  const parameterMeta = {};
 
   const valueMap = isOutput ? props.outputValues : props.inputValues;
   let inputValue;
@@ -109,36 +114,34 @@ const MethodDetails = props => {
     (!props.outputs || !Object.keys(props.outputs).length)
   ) {
     return (
-      <Paper
-        elevation={4}
-        style={{
-          paddingTop: '2px',
-          paddingBottom: '2px',
-          marginTop: '2px',
-          marginBottom: '2px',
-          backgroundColor: '#3B3B3B',
-        }}
-      >
-        <div className={props.classes.div}>
-          <Tooltip title={props.methodErrorMessage}>
-            <div>
-              <AttributeAlarm alarmSeverity={props.methodAlarm} />
-            </div>
-          </Tooltip>
-          <Typography className={props.classes.textName}>
-            {props.methodName}
-          </Typography>
-          <div className={props.classes.controlContainer}>
-            <ButtonAction
-              text={props.methodName}
-              disabled={props.methodAlarm === AlarmStates.PENDING}
-              clickAction={() =>
-                props.runMethod(props.methodPath, props.inputValues)
-              }
-            />
-          </div>
+      <div className={props.classes.div}>
+        <Tooltip title={props.methodErrorMessage}>
+          <IconButton
+            className={props.classes.button}
+            disableRipple
+            onClick={() =>
+              props.buttonClickHandler(props.blockName, props.attributeName)
+            }
+          >
+            <AttributeAlarm alarmSeverity={props.methodAlarm} />
+          </IconButton>
+        </Tooltip>
+        <div
+          className={props.classes.controlContainer}
+          style={{ width: '100%' }}
+        >
+          <ButtonAction
+            method
+            text={props.methodName}
+            disabled={
+              !props.writeable || props.methodAlarm === AlarmStates.PENDING
+            }
+            clickAction={() =>
+              props.runMethod(props.methodPath, props.inputValues)
+            }
+          />
         </div>
-      </Paper>
+      </div>
     );
   }
   return (
@@ -146,47 +149,57 @@ const MethodDetails = props => {
       <div>
         {Object.entries(props.inputs).map(input => (
           <div key={input[0]} className={props.classes.div}>
-            <div>
-              <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
-            </div>
             <Tooltip title={input[1].description}>
-              <Typography className={props.classes.textName}>
-                {input[1].label}:{' '}
-              </Typography>
+              <IconButton
+                className={props.classes.button}
+                disableRipple
+                onClick={() =>
+                  props.buttonClickHandler(
+                    props.blockName,
+                    props.attributeName,
+                    `takes.${input[0]}`
+                  )
+                }
+              >
+                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+              </IconButton>
             </Tooltip>
+            <Typography className={props.classes.textName}>
+              {input[1].label}
+            </Typography>
             <div className={props.classes.controlContainer}>
               {buildIOComponent(input, props, false)}
             </div>
           </div>
         ))}
-        <Paper
-          elevation={4}
-          style={{
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            marginTop: '2px',
-            marginBottom: '2px',
-            backgroundColor: '#3B3B3B',
-          }}
-        >
-          <div className={props.classes.div}>
-            <Tooltip title={props.methodErrorMessage}>
-              <div>
-                <AttributeAlarm alarmSeverity={props.methodAlarm} />
-              </div>
-            </Tooltip>
-            <Typography className={props.classes.textName} />
-            <div className={props.classes.controlContainer}>
-              <ButtonAction
-                text={props.methodName}
-                disabled={props.methodAlarm === AlarmStates.PENDING}
-                clickAction={() =>
-                  props.runMethod(props.methodPath, props.inputValues)
-                }
-              />
-            </div>
+        <div className={props.classes.div}>
+          <Tooltip title={props.methodErrorMessage}>
+            <IconButton
+              className={props.classes.button}
+              disableRipple
+              onClick={() =>
+                props.buttonClickHandler(props.blockName, props.attributeName)
+              }
+            >
+              <AttributeAlarm alarmSeverity={props.methodAlarm} />
+            </IconButton>
+          </Tooltip>
+          <div
+            className={props.classes.controlContainer}
+            style={{ width: '100%' }}
+          >
+            <ButtonAction
+              method
+              text={props.methodName}
+              disabled={
+                !props.writeable || props.methodAlarm === AlarmStates.PENDING
+              }
+              clickAction={() =>
+                props.runMethod(props.methodPath, props.inputValues)
+              }
+            />
           </div>
-        </Paper>
+        </div>
         {Object.keys(props.outputValues).length !== 0 ? (
           <div>
             <Typography className={props.classes.textName}>
@@ -195,9 +208,23 @@ const MethodDetails = props => {
             <Divider />
             {Object.entries(props.outputs).map(output => (
               <div key={output[0]} className={props.classes.div}>
-                <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                <Tooltip title={output[1].description}>
+                  <IconButton
+                    className={props.classes.button}
+                    disableRipple
+                    onClick={() =>
+                      props.buttonClickHandler(
+                        props.blockName,
+                        props.attributeName,
+                        `returns.${output[0]}`
+                      )
+                    }
+                  >
+                    <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
+                  </IconButton>
+                </Tooltip>
                 <Typography className={props.classes.textName}>
-                  {output[1].label}:{' '}
+                  {output[1].label}
                 </Typography>
                 <div className={props.classes.controlContainer}>
                   {buildIOComponent(output, props, true)}
@@ -212,6 +239,8 @@ const MethodDetails = props => {
 };
 
 MethodDetails.propTypes = {
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
   methodName: PropTypes.string.isRequired,
   methodAlarm: PropTypes.number.isRequired,
   methodErrorMessage: PropTypes.string.isRequired,
@@ -224,8 +253,12 @@ MethodDetails.propTypes = {
   classes: PropTypes.shape({
     div: PropTypes.string,
     textName: PropTypes.string,
+    runButton: PropTypes.string,
     controlContainer: PropTypes.string,
+    button: PropTypes.string,
   }).isRequired,
+  buttonClickHandler: PropTypes.func.isRequired,
+  writeable: PropTypes.bool.isRequired,
 };
 
 const EMPTY = '';
@@ -247,6 +280,7 @@ const mapStateToProps = (state, ownProps) => {
   alarm = method && method.calculated.pending ? AlarmStates.PENDING : alarm;
 
   return {
+    writeable: method ? method.raw.writeable : false,
     methodName: method ? method.raw.label : 'Not found',
     methodAlarm: alarm,
     methodPending: method ? method.calculated.pending : false,
@@ -267,6 +301,11 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export const mapDispatchToProps = dispatch => ({
+  buttonClickHandler: (blockName, attributeName, subElement) => {
+    dispatch(
+      navigationActions.navigateToInfo(blockName, attributeName, subElement)
+    );
+  },
   runMethod: (path, inputs) => {
     dispatch(malcolmSetFlag(path, 'pending', true));
     dispatch(malcolmArchivePost(path, inputs));

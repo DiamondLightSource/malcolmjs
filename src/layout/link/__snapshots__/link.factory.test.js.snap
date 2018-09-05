@@ -9,21 +9,13 @@ exports[`LinkFactory generates react widget 1`] = `
   >
     <path
       className=""
-      d={
-        Array [
-          "M 0,0 C -6.666666666666667,6.666666666666667 16.666666666666668,6.666666666666667 10,0",
-        ]
-      }
+      d="M 0,0 C 50,0 50,0 100,0"
       stroke="rgba(255,255,255,0.5)"
       strokeWidth={3}
     />
     <path
       className=""
-      d={
-        Array [
-          "M 0,0 C -6.666666666666667,6.666666666666667 16.666666666666668,6.666666666666667 10,0",
-        ]
-      }
+      d="M 0,0 C 50,0 50,0 100,0"
       data-linkid="1"
       data-point={0}
       onMouseEnter={[Function]}
@@ -39,13 +31,13 @@ exports[`LinkFactory generates react widget 1`] = `
   >
     <circle
       className="point srd-default-link__point "
-      cx={10}
+      cx={100}
       cy={0}
       r={5}
     />
     <circle
       className="point srd-default-link__point "
-      cx={10}
+      cx={100}
       cy={0}
       data-id="5"
       data-linkid="1"

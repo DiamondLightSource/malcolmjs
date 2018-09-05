@@ -10,6 +10,8 @@ const styles = theme => ({
   },
   formControl: {
     margin: 0,
+    marginTop: -2,
+    maxHeight: 28,
   },
 });
 

@@ -4,12 +4,19 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { Typography } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
+import Loadable from 'react-loadable';
 import blockUtils from '../malcolm/blockUtils';
 
 import ArchiveTable from './archiveTable.container';
-import AttributePlot from './attributePlot.component';
+// import AttributePlot from './attributePlot.component';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+
+const LoadableAttributePlot = Loadable({
+  loader: () => import('./attributePlot.component'),
+  loading: () => <Typography>Loading...</Typography>,
+});
 
 class AttributeViewer extends React.Component {
   constructor(props) {
@@ -63,7 +70,7 @@ class AttributeViewer extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <ArchiveTable attribute={attribute} />
-          <AttributePlot
+          <LoadableAttributePlot
             attribute={attribute}
             openPanels={this.props.openPanels}
           />
@@ -85,7 +92,7 @@ class AttributeViewer extends React.Component {
         <div style={{ height: 'calc(100% - 50px)' }}>
           {tabValue === 1 && <ArchiveTable attribute={attribute} />}
           {tabValue === 0 && (
-            <AttributePlot
+            <LoadableAttributePlot
               attribute={attribute}
               openPanels={this.props.openPanels}
             />

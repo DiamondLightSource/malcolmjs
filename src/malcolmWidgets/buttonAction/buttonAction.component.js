@@ -11,14 +11,18 @@ const styles = () => ({
   },
   button: {
     width: '100%',
+    paddingTop: 4,
+    paddingBottom: 4,
+    minHeight: 28,
+    maxHeight: 28,
   },
 });
 
 const ButtonAction = props => (
   <div className={props.classes.container}>
     <Button
-      variant="raised"
       color="primary"
+      variant={props.method ? 'raised' : 'flat'}
       className={props.classes.button}
       onClick={props.clickAction}
       disabled={props.disabled}
@@ -29,6 +33,7 @@ const ButtonAction = props => (
 );
 
 ButtonAction.propTypes = {
+  method: PropTypes.bool,
   text: PropTypes.string.isRequired,
   clickAction: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
@@ -39,6 +44,7 @@ ButtonAction.propTypes = {
 };
 
 ButtonAction.defaultProps = {
+  method: false,
   disabled: false,
 };
 

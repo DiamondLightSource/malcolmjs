@@ -11,7 +11,9 @@ describe('BlockPortWidget', () => {
 
   const theme = {
     portColours: {
-      bool: 'blue',
+      bool: {
+        500: 'blue',
+      },
     },
   };
 
@@ -60,8 +62,40 @@ describe('BlockPortWidget', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
+  it('input port renders correctly with hidden link', () => {
+    port.in = true;
+    port.hiddenLink = true;
+    port.value = 'HIDDEN_BLOCK.VAL';
+
+    const wrapper = shallow(
+      <BlockPortWidget
+        nodeId="node1"
+        portId="val1"
+        store={mockStore(state)}
+        theme={theme}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
   it('output port renders correctly', () => {
     port.in = false;
+
+    const wrapper = shallow(
+      <BlockPortWidget
+        nodeId="node1"
+        portId="val1"
+        store={mockStore(state)}
+        theme={theme}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('output port renders correctly with hidden link', () => {
+    port.in = false;
+    port.hiddenLink = true;
+    port.value = 'HIDDEN_BLOCK.VAL';
 
     const wrapper = shallow(
       <BlockPortWidget

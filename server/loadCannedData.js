@@ -25,6 +25,10 @@ function loadDatabyPath(dataFolder) {
     delete request.id;
 
     const response = JSON.parse(fs.readFileSync((file).replace('request_', 'response_')).toString());
+    if (response.changes && response.changes[0][1].timeStamp && response.changes[0][1].timeStamp.secondsPastEpoch !== undefined) {
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor((new Date()).getTime()/1000);
+
+    }
     delete response.id;
 
     malcolmMessages[JSON.stringify(request.path)] = response;

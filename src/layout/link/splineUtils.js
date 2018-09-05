@@ -1,4 +1,4 @@
-import { Toolkit } from 'storm-react-diagrams';
+import point from 'point-at-length';
 
 const getFirstControlPoints = rhs => {
   const n = rhs.length;
@@ -20,8 +20,8 @@ const getFirstControlPoints = rhs => {
   return x;
 };
 
+const interPortSpacing = 40;
 const buildTwoPointPath = points => {
-  const interPortSpacing = 40;
   if (points[1].x - interPortSpacing < points[0].x) {
     const curveFactor = (points[0].x - points[1].x) * interPortSpacing / 60;
 
@@ -37,11 +37,9 @@ const buildTwoPointPath = points => {
     } else {
       // Stick out some
       c1.x = points[0].x + curveFactor;
-      c1.y =
-        points[0].y + (points[1].y > points[0].y ? curveFactor : -curveFactor);
+      c1.y = points[0].y; // + (points[1].y > points[0].y ? curveFactor : -curveFactor);
       c2.x = points[1].x - curveFactor;
-      c2.y =
-        points[1].y + (points[1].y > points[0].y ? -curveFactor : curveFactor);
+      c2.y = points[1].y; // + (points[1].y > points[0].y ? -curveFactor : curveFactor);
     }
 
     const path = `M ${points[0].x},${points[0].y} C ${c1.x},${c1.y} ${c2.x},${
@@ -50,20 +48,12 @@ const buildTwoPointPath = points => {
 
     return [path];
   }
-  const isHorizontal =
-    Math.abs(points[0].x - points[1].x) > Math.abs(points[0].y - points[1].y);
-  const xOrY = isHorizontal ? 'x' : 'y';
 
-  let pointLeft = points[0];
-  let pointRight = points[1];
-
-  // some defensive programming to make sure the smoothing is
-  // always in the right direction
-  if (pointLeft[xOrY] > pointRight[xOrY]) {
-    [pointRight, pointLeft] = points;
-  }
-
-  return Toolkit.generateCurvePath(pointLeft, pointRight, 50);
+  return [
+    `M ${points[0].x},${points[0].y} C ${points[0].x + 50},${
+      points[0].y
+    } ${points[1].x - 50},${points[1].y} ${points[1].x},${points[1].y}`,
+  ];
 };
 
 // algorithm from here https://www.codeproject.com/Articles/31859/Draw-a-Smooth-Curve-through-a-Set-of-2D-Points-wit
@@ -73,7 +63,22 @@ const buildPath = knots => {
   let secondControl;
 
   if (n === 1) {
-    return [buildTwoPointPath(knots)];
+    let twoPointPath = buildTwoPointPath(knots);
+
+    if (
+      knots[1].x - interPortSpacing < knots[0].x &&
+      Math.abs(knots[1].y - knots[0].y) < interPortSpacing * 4
+    ) {
+      // it was a loop back so we need to break the path done so it's not one giant bounding box
+      const pts = point(twoPointPath[0]);
+      const lineLength = pts.length();
+      const numFinerPoints = 20; // N > 2 to avoid endless loop
+      const finerPts = [...Array(numFinerPoints)]
+        .map((element, i) => pts.at(i / (numFinerPoints - 1) * lineLength))
+        .map(pt => ({ x: pt[0], y: pt[1] }));
+      twoPointPath = [buildPath(finerPts)];
+    }
+    return twoPointPath;
   }
 
   const rhs = new Array(n).fill(0);

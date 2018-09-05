@@ -59,6 +59,11 @@ if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_E2E) {
 
 store.dispatch(configureSocket(worker));
 
+// temporary logging whilst Tom measures performance on a real PANDA
+setInterval(() => {
+  console.log(Object.keys(store.getState().malcolm.blocks));
+}, 60000);
+
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
@@ -69,11 +74,12 @@ const theme = createMuiTheme({
     error: '#e8001f',
     disconnected: '#9d07bb',
   },
+  // port colours should not use the themes secondary colour, it is used to highlight blocks and links
   portColours: {
-    bool: blue[200],
-    int32: orange[300],
-    motor: green[300],
-    NDArray: purple[300],
+    bool: blue,
+    int32: orange,
+    motor: green,
+    NDArray: purple,
   },
 });
 

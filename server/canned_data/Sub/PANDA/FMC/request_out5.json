@@ -1,9 +1,0 @@
-{
-  "typeid": "malcolm:core/Subscribe:1.0", 
-  "id": "CANNED", 
-  "path": [
-    "PANDA:FMC", 
-    "out5"
-  ], 
-  "delta": true
-}

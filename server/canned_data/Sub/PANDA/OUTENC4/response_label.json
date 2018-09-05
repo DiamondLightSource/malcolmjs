@@ -23,7 +23,7 @@
           "typeid": "malcolm:core/StringMeta:1.0", 
           "description": "Label for the block", 
           "tags": [
-            "widget:title", 
+            "widget:textinput", 
             "config:1"
           ], 
           "writeable": true, 

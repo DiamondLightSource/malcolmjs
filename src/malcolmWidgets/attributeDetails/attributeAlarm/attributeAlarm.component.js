@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Warning,
-  Error,
-  InfoOutline,
-  HighlightOff,
-  Edit,
-} from '@material-ui/icons';
+import Warning from '@material-ui/icons/Warning';
+import Error from '@material-ui/icons/Error';
+import InfoOutline from '@material-ui/icons/InfoOutline';
+import HighlightOff from '@material-ui/icons/HighlightOff';
+import Edit from '@material-ui/icons/Edit';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import EditError from './EditError.component';
 
-export const AlarmStates = {
+const AlarmStateNumbers = {
   NO_ALARM: 0,
   MINOR_ALARM: 1,
   MAJOR_ALARM: 2,
@@ -21,6 +20,11 @@ export const AlarmStates = {
   DIRTY: -2,
   DIRTYANDERROR: -3,
 };
+
+Object.entries(AlarmStateNumbers).forEach(entry => {
+  [AlarmStateNumbers[entry[1]]] = entry;
+});
+export const AlarmStates = AlarmStateNumbers;
 
 export const getAlarmState = attribute => {
   let alarm = AlarmStates.NO_ALARM;

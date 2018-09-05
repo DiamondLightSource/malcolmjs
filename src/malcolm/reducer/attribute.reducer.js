@@ -10,6 +10,7 @@ import {
   MalcolmMainAttributeUpdate,
   MalcolmRevert,
   MalcolmTickArchive,
+  MalcolmMultipleAttributeData,
 } from '../malcolm.types';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
@@ -271,6 +272,7 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
   let plotValue = payload.raw.value;
   if (attributeArchive.meta.typeid === malcolmTypes.bool) {
     plotValue = payload.raw.value ? 1 : 0;
+    plotValue = payload.raw.value === undefined ? undefined : plotValue;
   }
   /* CODE TO MAP ENUMS TO NUMERICAL VALUE FOR DEFINING ORDER IN PLOT (DISABLED)
     else if (attributeArchive.meta.tags.includes('widget:combo')) {
@@ -327,7 +329,11 @@ const tickArchive = (state, payload) => {
   return state;
 };
 
-export function updateAttribute(oldState, payload) {
+export function updateAttribute(
+  oldState,
+  payload,
+  ignoreSecondaryCalculations
+) {
   if (payload.delta) {
     const state = oldState;
 
@@ -409,9 +415,6 @@ export function updateAttribute(oldState, payload) {
         blockArchive,
       };
 
-      // update the navigation if the attribute was part of the path
-      const navigation = updateNavigation(updatedState, attributeName);
-
       const layout = updateLayout(
         state,
         updatedState,
@@ -452,16 +455,47 @@ export function updateAttribute(oldState, payload) {
         ...updatedState,
         layout,
         layoutEngine,
-        navigation,
+        // navigation,
       };
 
-      updatedState = navigationReducer.updateNavTypes(updatedState);
+      if (!ignoreSecondaryCalculations) {
+        const navigation = updateNavigation(updatedState, attributeName);
+        updatedState.navigation = navigation;
+
+        updatedState = navigationReducer.updateNavTypes(updatedState);
+      }
 
       return updatedState;
     }
   }
 
   return oldState;
+}
+
+export function updateMultipleAttributes(oldState, payload) {
+  let updatedState = oldState;
+  for (let i = 0; i < payload.actions.length; i += 1) {
+    const innerPayload = payload.actions[i].payload;
+
+    updatedState = updateAttribute(updatedState, innerPayload);
+  }
+
+  for (let i = 0; i < payload.actions.length; i += 1) {
+    const innerPayload = payload.actions[i].payload;
+    const { path } = updatedState.messagesInFlight[innerPayload.id];
+    const attributeName = path[1];
+
+    const navigation = updateNavigation(updatedState, attributeName);
+
+    if (navigation !== updatedState.navigation) {
+      updatedState.navigation = navigation;
+      break;
+    }
+  }
+
+  updatedState = navigationReducer.updateNavTypes(updatedState);
+
+  return updatedState;
 }
 
 export function revertLocalState(oldState, payload) {
@@ -487,12 +521,16 @@ export function revertLocalState(oldState, payload) {
           ...attributes[matchingAttributeIndex].calculated,
           errorState: false,
           errorMessage: undefined,
-          dirty: false,
           forceUpdate: true,
           loading: false,
           path: payload.path,
+          alarms: {
+            ...attributes[matchingAttributeIndex].calculated.alarms,
+            errorState: null,
+          },
         },
       };
+
       attributes[matchingAttributeIndex] = checkForSpecialCases(attribute);
     }
     const blocks = { ...state.blocks };
@@ -530,6 +568,7 @@ const AttributeReducer = createReducer(
   {},
   {
     [MalcolmAttributeData]: updateAttribute,
+    [MalcolmMultipleAttributeData]: updateMultipleAttributes,
     [MalcolmMainAttributeUpdate]: setMainAttribute,
     [MalcolmRevert]: revertLocalState,
     [MalcolmTickArchive]: tickArchive,

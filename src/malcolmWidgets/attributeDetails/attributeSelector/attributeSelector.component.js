@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
-import { BugReport } from '@material-ui/icons';
+import BugReport from '@material-ui/icons/BugReport';
 import { connect } from 'react-redux';
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
@@ -122,7 +122,7 @@ export const selectorFunction = (
     case 'widget:tree':
       return (
         <ButtonAction
-          text="Edit"
+          text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
@@ -131,6 +131,7 @@ export const selectorFunction = (
     case 'info:button':
       return (
         <ButtonAction
+          method
           text={value}
           clickAction={() => buttonClickHandler()}
           disabled={flags.isDisabled}

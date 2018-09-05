@@ -71,7 +71,7 @@
             "repeats": {
               "typeid": "malcolm:core/NumberArrayMeta:1.0", 
               "dtype": "uint16", 
-              "description": "REPEATS", 
+              "description": "Number of times the line will repeat", 
               "tags": [
                 "widget:textinput"
               ], 
@@ -79,11 +79,25 @@
               "label": "Repeats"
             }, 
             "trigger": {
-              "typeid": "malcolm:core/NumberArrayMeta:1.0", 
-              "dtype": "uint8", 
-              "description": "TRIGGER", 
+              "typeid": "malcolm:core/ChoiceArrayMeta:1.0", 
+              "description": "The trigger condition to start the phases", 
+              "choices": [
+                "Immediate", 
+                "BITA=0", 
+                "BITA=1", 
+                "BITB=0", 
+                "BITB=1", 
+                "BITC=0", 
+                "BITC=1", 
+                "POSA>=POSITION", 
+                "POSA<=POSITION", 
+                "POSB>=POSITION", 
+                "POSB<=POSITION", 
+                "POSC>=POSITION", 
+                "POSC<=POSITION"
+              ], 
               "tags": [
-                "widget:textinput"
+                "widget:combo"
               ], 
               "writeable": false, 
               "label": "Trigger"
@@ -91,7 +105,7 @@
             "position": {
               "typeid": "malcolm:core/NumberArrayMeta:1.0", 
               "dtype": "uint32", 
-              "description": "POSITION", 
+              "description": "The position that can be used in trigger condition", 
               "tags": [
                 "widget:textinput"
               ], 
@@ -101,7 +115,7 @@
             "time1": {
               "typeid": "malcolm:core/NumberArrayMeta:1.0", 
               "dtype": "uint32", 
-              "description": "TIME1", 
+              "description": "The time the optional phase 1 should take", 
               "tags": [
                 "widget:textinput"
               ], 
@@ -110,7 +124,7 @@
             }, 
             "outa1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTA1", 
+              "description": "Output A value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -119,7 +133,7 @@
             }, 
             "outb1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTB1", 
+              "description": "Output B value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -128,7 +142,7 @@
             }, 
             "outc1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTC1", 
+              "description": "Output C value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -137,7 +151,7 @@
             }, 
             "outd1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTD1", 
+              "description": "Output D value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -146,7 +160,7 @@
             }, 
             "oute1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTE1", 
+              "description": "Output E value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -155,7 +169,7 @@
             }, 
             "outf1": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTF1", 
+              "description": "Output F value during phase 1", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -165,7 +179,7 @@
             "time2": {
               "typeid": "malcolm:core/NumberArrayMeta:1.0", 
               "dtype": "uint32", 
-              "description": "TIME2", 
+              "description": "The time the mandatory phase 2 should take", 
               "tags": [
                 "widget:textinput"
               ], 
@@ -174,7 +188,7 @@
             }, 
             "outa2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTA2", 
+              "description": "Output A value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -183,7 +197,7 @@
             }, 
             "outb2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTB2", 
+              "description": "Output B value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -192,7 +206,7 @@
             }, 
             "outc2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTC2", 
+              "description": "Output C value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -201,7 +215,7 @@
             }, 
             "outd2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTD2", 
+              "description": "Output D value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -210,7 +224,7 @@
             }, 
             "oute2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTE2", 
+              "description": "Output E value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 
@@ -219,7 +233,7 @@
             }, 
             "outf2": {
               "typeid": "malcolm:core/BooleanArrayMeta:1.0", 
-              "description": "OUTF2", 
+              "description": "Output F value during phase 2", 
               "tags": [
                 "widget:checkbox"
               ], 

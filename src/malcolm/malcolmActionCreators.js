@@ -78,9 +78,21 @@ export const malcolmNavigationPath = blockPaths => ({
   },
 });
 
-export const malcolmCleanBlocks = () => ({
-  type: MalcolmCleanBlocks,
-});
+export const malcolmResetBlocks = () => (dispatch, getState) => {
+  dispatch({
+    type: MalcolmCleanBlocks,
+  });
+
+  const state = getState();
+  state.malcolm.messagesInFlight = {};
+  Object.values(state.malcolm.blocks).forEach(block => {
+    dispatch(
+      malcolmSubscribeAction(
+        block.name === '.blocks' ? ['.', 'blocks'] : [block.name, 'meta']
+      )
+    );
+  });
+};
 
 export const malcolmSetDisconnected = () => ({
   type: MalcolmDisconnected,
@@ -182,10 +194,13 @@ export const malcolmHailReturn = (payload, isErrorState) => ({
   payload,
 });
 
-export const malcolmRevertAction = path => ({
-  type: MalcolmRevert,
-  payload: { path },
-});
+export const malcolmRevertAction = path => dispatch => {
+  dispatch(malcolmSetFlag(path, 'dirty', false));
+  dispatch({
+    type: MalcolmRevert,
+    payload: { path },
+  });
+};
 
 export default {
   malcolmHailReturn,
@@ -195,7 +210,7 @@ export default {
   malcolmPutAction,
   malcolmSetFlag,
   malcolmNavigationPath,
-  malcolmCleanBlocks,
+  malcolmResetBlocks,
   malcolmSetDisconnected,
   malcolmMainAttribute,
   malcolmLayoutUpdatePosition,

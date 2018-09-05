@@ -4,42 +4,42 @@ const alarmStates = [
 
 let subscriptionTimers = {};
 
+const intervalTimeInMs = 50;
+
 const activeSubscriptions = [
-  {
-    path: [ "PANDA:SEQ1", "inputs" ],
-    index: 0,
-    interval: 10000,
-    update: (response, index) => {
-      let updatedResponse = response;
-      updatedResponse.changes[0][1].value = index%2 === 0 ? 'expanded' : 'collapsed';
-      
-      return updatedResponse;
-    }
-  },
   {
     path: [ "PANDA:SEQ1", "outa" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
   },
   {
     path: [ "PANDA:SEQ1", "outb" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     }
   },
   {
-    path: [ "PANDA:SEQ1", "outc" ],
+    path: [ "PANDA:SEQ1", "repeats" ],
     index: 0,
-    interval: 50,
+    interval: intervalTimeInMs,
     update: (response, index) => {
       response.changes[0][1].value = index%2 === 0;
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -57,15 +57,9 @@ const activeSubscriptions = [
       } else {
         response.changes[0][1].alarm.severity = 2;
       }
-
-      //response.changes[0][1].timeStamp.secondsPastEpoch += 180;
-
-      response.changes[0][1].timeStamp.nanoseconds += 5e7;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
-
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch =Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -74,12 +68,10 @@ const activeSubscriptions = [
     index: 0,
     interval: 200,
     update: (response, index) => {
-      response.changes[0][1].value = (index%4 < 2) ;
-      response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
+      response.changes[0][1].value = (index%4 < 2);
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },
@@ -89,11 +81,9 @@ const activeSubscriptions = [
     interval: 200,
     update: (response, index) => {
       response.changes[0][1].value = ((index+1)%4 < 2);
-      response.changes[0][1].timeStamp.nanoseconds += 2e8;
-      if (response.changes[0][1].timeStamp.nanoseconds >= 1e9) {
-        response.changes[0][1].timeStamp.nanoseconds = 0;
-        response.changes[0][1].timeStamp.secondsPastEpoch += 1;
-      }
+      const now = (new Date());
+      response.changes[0][1].timeStamp.nanoseconds = now.getMilliseconds()*1000000;
+      response.changes[0][1].timeStamp.secondsPastEpoch = Math.floor(now.getTime()/1000);
       return response;
     },
   },

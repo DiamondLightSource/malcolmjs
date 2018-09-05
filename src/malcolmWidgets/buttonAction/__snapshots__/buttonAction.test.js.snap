@@ -9,7 +9,7 @@ exports[`ButtonAction renders correctly 1`] = `
     color="primary"
     disabled={false}
     onClick={[Function]}
-    variant="raised"
+    variant="flat"
   >
     View
   </WithStyles(Button)>

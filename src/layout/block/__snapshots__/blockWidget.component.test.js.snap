@@ -9,12 +9,12 @@ exports[`BlockWidget block renders correctly 1`] = `
   onMouseUp={[Function]}
 >
   <WithStyles(Typography)
-    className="BlockWidget-title-2"
+    className="BlockWidget-title-3"
   >
     block 1
   </WithStyles(Typography)>
   <div
-    className="BlockWidget-blockContents-3"
+    className="BlockWidget-blockContents-4"
     style={
       Object {
         "minHeight": 46,
@@ -22,7 +22,7 @@ exports[`BlockWidget block renders correctly 1`] = `
     }
   >
     <div
-      className="BlockWidget-inputPortsContainer-4"
+      className="BlockWidget-inputPortsContainer-5"
     >
       <Connect(WithStyles(BlockPortWidget))
         key="block1-in 1"
@@ -31,26 +31,14 @@ exports[`BlockWidget block renders correctly 1`] = `
       />
     </div>
     <div
-      className="BlockWidget-iconContents-7"
+      className="BlockWidget-iconContents-8"
     >
-      <svg
-        height="100"
-        key="0"
-        width="100"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          fill="red"
-          key="0"
-          r="40"
-          stroke="black"
-          strokeWidth="3"
-        />
-      </svg>
+      <LoadableComponent
+        icon="<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>"
+      />
     </div>
     <div
-      className="BlockWidget-outputPortsContainer-5"
+      className="BlockWidget-outputPortsContainer-6"
     >
       <Connect(WithStyles(BlockPortWidget))
         key="block1-out 1"
@@ -65,7 +53,7 @@ exports[`BlockWidget block renders correctly 1`] = `
     </div>
   </div>
   <WithStyles(Typography)
-    className="BlockWidget-description-8"
+    className="BlockWidget-description-9"
   >
     block 1 description
   </WithStyles(Typography)>

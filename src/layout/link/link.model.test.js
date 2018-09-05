@@ -43,7 +43,7 @@ describe('link model', () => {
   it('getPathSegments uses splines without autorouting', () => {
     const pathSegments = model.getPathSegments(diagramEngine);
     expect(pathSegments).toHaveLength(1);
-    expect(pathSegments[0]).toEqual('M100,100 C 100,150\n    200,150 200,200');
+    expect(pathSegments[0]).toEqual('M 100,100 C 150,100 150,200 200,200');
   });
 
   it('getPathSegments uses smart routing with autorouting', () => {
@@ -54,7 +54,16 @@ describe('link model', () => {
     expect(pathSegments[0]).toEqual('test auto routing path');
   });
 
-  it('getPathSegments caches the result if the blocks are the same distance apart', () => {
+  it('getPathSegments caches the result if the ports havent moved', () => {
+    // this happens when the user pans round the view and causes a re-render even
+    // though the position of the blocks hasn't changed
+    const pathSegments = model.getPathSegments(diagramEngine);
+    const updatedPathSegments = model.getPathSegments(diagramEngine);
+
+    expect(updatedPathSegments).toBe(pathSegments);
+  });
+
+  it('getPathSegments does not cache the result if the blocks are the same distance apart', () => {
     const pathSegments = model.getPathSegments(diagramEngine);
 
     model.points = [{ x: 200, y: 200 }, { x: 300, y: 300 }];
@@ -66,11 +75,12 @@ describe('link model', () => {
     model.targetPort = {
       x: 300,
       y: 300,
+      in: true,
     };
 
     const updatedPathSegments = model.getPathSegments(diagramEngine);
 
-    expect(updatedPathSegments).toBe(pathSegments);
+    expect(updatedPathSegments).not.toBe(pathSegments);
   });
 
   it('getPathSegments does not cache the result if the blocks move in x', () => {

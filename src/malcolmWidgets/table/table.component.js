@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
-import { Add } from '@material-ui/icons';
+import Add from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
-
+import { Typography } from '@material-ui/core';
 import AttributeAlarm, {
   AlarmStates,
 } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
@@ -38,6 +38,7 @@ const styles = theme => ({
     overflowY: 'auto',
     height: 'calc(100% - 75px)',
     width: '100%',
+    backgroundColor: '#424242',
   },
   rowFormat: {
     height: '30px',
@@ -48,7 +49,7 @@ const styles = theme => ({
     padding: '2px',
   },
   textHeadings: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.3),
+    borderLeft: `2px solid ${theme.palette.divider}`,
     textAlign: 'Center',
   },
   blankCell: {
@@ -57,7 +58,7 @@ const styles = theme => ({
     padding: '2px',
   },
   textBody: {
-    backgroundColor: emphasize(theme.palette.background.paper, 0.1),
+    backgroundColor: theme.palette.background.default,
     textAlign: 'Center',
     padding: '2px',
   },
@@ -131,7 +132,9 @@ const WidgetTable = props => {
       padding="none"
       key={column}
     >
-      {meta.elements[label].label ? meta.elements[label].label : label}
+      <Typography variant="subheading">
+        {meta.elements[label].label ? meta.elements[label].label : label}
+      </Typography>
     </TableCell>
   ));
   return (
