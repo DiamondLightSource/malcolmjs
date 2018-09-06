@@ -9,8 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
-import MethodViewer from '../malcolmWidgets/method/methodViewer.component';
-import AttributeViewer from '../attributeView/attributeView.container';
+import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
+import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,

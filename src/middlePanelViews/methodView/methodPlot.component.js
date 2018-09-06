@@ -1,24 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
-import Plot from 'react-plotly.js';
-import { AlarmStates } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
-
-const alarmStatesByIndex = [
-  AlarmStates.NO_ALARM,
-  AlarmStates.MINOR_ALARM,
-  AlarmStates.MAJOR_ALARM,
-  AlarmStates.UNDEFINED_ALARM,
-];
+import Plot from 'react-plotly.js/react-plotly';
+import {
+  AlarmStates,
+  AlarmStatesByIndex,
+} from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
-  const alarms = attribute.alarmState;
-  dataElement.x = attribute.timeStamp;
+  const alarms = [...attribute.alarmState];
+  dataElement.x = [...attribute.timeStamp];
   dataElement.y = attribute.value.map(
     (value, valIndex) =>
-      alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
-      (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&
+      alarms[valIndex] === AlarmStatesByIndex[alarmIndex] ||
+      (alarms[valIndex - 1] === AlarmStatesByIndex[alarmIndex] &&
         alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
         ? value
         : null

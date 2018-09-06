@@ -15,7 +15,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
 
 // import ButtonAction from '../buttonAction/buttonAction.component';
-import WidgetTable from '../table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/table.component';
 import MethodArchive from './methodArchive.container';
 
 import blockUtils from '../../malcolm/blockUtils';

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
-import Plot from 'react-plotly.js';
+import Plot from 'react-plotly.js/react-plotly';
 // import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
-import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { MalcolmTickArchive } from '../malcolm/malcolm.types';
-import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { MalcolmTickArchive } from '../../malcolm/malcolm.types';
+import { ARCHIVE_REFRESH_INTERVAL } from '../../malcolm/reducer/malcolmReducer';
 
 const alarmStatesByIndex = [
   AlarmStates.NO_ALARM,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
-import MockCircularBuffer from '../malcolm/reducer/attribute.reducer.mocks';
-import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
+import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import AttributePlot from './attributePlot.component';
 
 const mockTheme = {

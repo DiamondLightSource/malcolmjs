@@ -24,7 +24,15 @@ const AlarmStateNumbers = {
 Object.entries(AlarmStateNumbers).forEach(entry => {
   [AlarmStateNumbers[entry[1]]] = entry;
 });
+
 export const AlarmStates = AlarmStateNumbers;
+
+export const AlarmStatesByIndex = [
+  AlarmStates.NO_ALARM,
+  AlarmStates.MINOR_ALARM,
+  AlarmStates.MAJOR_ALARM,
+  AlarmStates.UNDEFINED_ALARM,
+];
 
 export const getAlarmState = attribute => {
   let alarm = AlarmStates.NO_ALARM;
