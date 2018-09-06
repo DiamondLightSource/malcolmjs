@@ -9,9 +9,10 @@ describe('View State Actions', () => {
   });
 
   it('updateVersionNumber signals the version number', () => {
-    const action = updateVersionNumber('1.2.3');
+    const action = updateVersionNumber('1.2.3', 'App title');
 
     expect(action.type).toEqual('UPDATE_VERSION');
     expect(action.payload.version).toEqual('1.2.3');
+    expect(action.payload.title).toEqual('App title');
   });
 });

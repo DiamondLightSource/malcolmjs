@@ -16,7 +16,7 @@ describe('socket.actions', () => {
   it('configureSocket gets the settings and dispatches updates', async () => {
     mockAxios.get.mockImplementationOnce(() =>
       Promise.resolve({
-        data: { malcolmSocket: url, version: '1.2.3' },
+        data: { malcolmSocket: url, version: '1.2.3', title: 'App' },
       })
     );
 
@@ -30,6 +30,7 @@ describe('socket.actions', () => {
     expect(actions).toHaveLength(2);
     expect(actions[0].type).toEqual('UPDATE_VERSION');
     expect(actions[0].payload.version).toEqual('1.2.3');
+    expect(actions[0].payload.title).toEqual('App');
 
     expect(actions[1].type).toEqual('malcolm:socketconnect');
     expect(actions[1].payload.worker).toBe(worker);

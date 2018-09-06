@@ -31,7 +31,10 @@ describe('view state reducer', () => {
   });
 
   it('updateVersionNumerType messages updates the document title', () => {
-    const newState = ViewStateReducer(state, updateVersionNumber('1.2.3'));
+    const newState = ViewStateReducer(
+      state,
+      updateVersionNumber('1.2.3', 'MalcolmJS')
+    );
 
     expect(newState).toBe(state);
     expect(document.title).toEqual('MalcolmJS 1.2.3');

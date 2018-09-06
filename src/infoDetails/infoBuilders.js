@@ -20,7 +20,7 @@ export const buildAttributeInfo = props => {
         label: 'Meta Data',
         malcolmType: {
           valuePath: 'raw.meta.typeid',
-          label: 'Malcolm Type',
+          label: 'Type ID',
           inline: true,
         },
         description: {
@@ -203,7 +203,7 @@ export const buildAttributeInfo = props => {
         label: 'Meta Data',
         malcolmType: {
           value: attribute.raw.typeid,
-          label: 'Malcolm Type',
+          label: 'Type ID',
           inline: true,
         },
         description: {

@@ -15,10 +15,11 @@ export const snackbarState = (open, message) => ({
   },
 });
 
-export const updateVersionNumber = version => ({
+export const updateVersionNumber = (version, title) => ({
   type: updateVersionNumerType,
   payload: {
     version,
+    title,
   },
 });
 
