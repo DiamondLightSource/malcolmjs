@@ -117,10 +117,11 @@ const MethodDetails = props => {
       <div className={props.classes.div}>
         <Tooltip title={props.methodErrorMessage}>
           <IconButton
+            tabindex="-1"
             className={props.classes.button}
             disableRipple
             onClick={() =>
-              props.buttonClickHandler(props.blockName, props.attributeName)
+              props.infoClickHandler(props.blockName, props.attributeName)
             }
           >
             <AttributeAlarm alarmSeverity={props.methodAlarm} />
@@ -151,10 +152,11 @@ const MethodDetails = props => {
           <div key={input[0]} className={props.classes.div}>
             <Tooltip title={input[1].description}>
               <IconButton
+                tabindex="-1"
                 className={props.classes.button}
                 disableRipple
                 onClick={() =>
-                  props.buttonClickHandler(
+                  props.infoClickHandler(
                     props.blockName,
                     props.attributeName,
                     `takes.${input[0]}`
@@ -164,7 +166,17 @@ const MethodDetails = props => {
                 <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
               </IconButton>
             </Tooltip>
-            <Typography className={props.classes.textName}>
+            <Typography
+              className={props.classes.textName}
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                props.labelClickHandler(
+                  props.blockName,
+                  props.attributeName,
+                  `takes.${input[0]}`
+                )
+              }
+            >
               {input[1].label}
             </Typography>
             <div className={props.classes.controlContainer}>
@@ -175,11 +187,13 @@ const MethodDetails = props => {
         <div className={props.classes.div}>
           <Tooltip title={props.methodErrorMessage}>
             <IconButton
+              tabindex="-1"
               className={props.classes.button}
               disableRipple
               onClick={() =>
-                props.buttonClickHandler(props.blockName, props.attributeName)
+                props.infoClickHandler(props.blockName, props.attributeName)
               }
+              style={{ cursor: 'pointer' }}
             >
               <AttributeAlarm alarmSeverity={props.methodAlarm} />
             </IconButton>
@@ -210,10 +224,12 @@ const MethodDetails = props => {
               <div key={output[0]} className={props.classes.div}>
                 <Tooltip title={output[1].description}>
                   <IconButton
+                    tabindex="-1"
                     className={props.classes.button}
+                    style={{ cursor: 'pointer' }}
                     disableRipple
                     onClick={() =>
-                      props.buttonClickHandler(
+                      props.infoClickHandler(
                         props.blockName,
                         props.attributeName,
                         `returns.${output[0]}`
@@ -223,7 +239,17 @@ const MethodDetails = props => {
                     <AttributeAlarm alarmSeverity={AlarmStates.NO_ALARM} />
                   </IconButton>
                 </Tooltip>
-                <Typography className={props.classes.textName}>
+                <Typography
+                  className={props.classes.textName}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() =>
+                    props.labelClickHandler(
+                      props.blockName,
+                      props.attributeName,
+                      `returns.${output[0]}`
+                    )
+                  }
+                >
                   {output[1].label}
                 </Typography>
                 <div className={props.classes.controlContainer}>
@@ -257,7 +283,8 @@ MethodDetails.propTypes = {
     controlContainer: PropTypes.string,
     button: PropTypes.string,
   }).isRequired,
-  buttonClickHandler: PropTypes.func.isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  // labelClickHandler: PropTypes.func.isRequired,
   writeable: PropTypes.bool.isRequired,
 };
 
@@ -301,9 +328,18 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export const mapDispatchToProps = dispatch => ({
-  buttonClickHandler: (blockName, attributeName, subElement) => {
+  infoClickHandler: (blockName, attributeName, subElement) => {
     dispatch(
       navigationActions.navigateToInfo(blockName, attributeName, subElement)
+    );
+  },
+  labelClickHandler: (blockName, attributeName, subElement) => {
+    dispatch(
+      navigationActions.navigateToSubElement(
+        blockName,
+        attributeName,
+        subElement
+      )
     );
   },
   runMethod: (path, inputs) => {

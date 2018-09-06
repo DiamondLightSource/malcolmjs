@@ -1,5 +1,6 @@
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
@@ -37,7 +38,7 @@ const pushParamsToArchive = (state, payload) => {
     attribute.value.push({ runParameters: payload.parameters });
     attribute.timeStamp.push({ localRunTime: new Date() });
     attributes[matchingAttribute] = attribute;
-    blockArchive[payload.path[0]] = {
+    blockArchive[blockName] = {
       ...state.blockArchive[payload.path[0]],
       attributes,
     };
@@ -100,7 +101,7 @@ export const handleMethodReturn = (state, payload) => {
     const blockArchive = { ...state.blockArchive };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
-      const archive = blockArchive[blockName];
+      const archive = blockArchive[blockName].attributes;
       let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
         attributes[matchingAttribute].raw.returns.elements
@@ -127,12 +128,14 @@ export const handleMethodReturn = (state, payload) => {
         const localRunTime = archive[matchingAttribute].timeStamp.pop();
         archive[matchingAttribute].value.push({
           ...runParams,
-          returned: { ...valueMap },
+          returned: { ...valueMap.outputs },
+          returnStatus: 'Success',
         });
         archive[matchingAttribute].timeStamp.push({
           ...localRunTime,
           localReturnTime: new Date(),
         });
+        archive[matchingAttribute].alarmState.push(AlarmStates.NO_ALARM);
         blockArchive[blockName] = {
           ...state.blockArchive[blockName],
           attributes: archive,

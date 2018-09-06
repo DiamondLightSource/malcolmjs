@@ -83,34 +83,41 @@ const getWidgetType = tags => {
 };
 
 const findAttributeComponent = props => {
-  if (props.isMethod) {
-    return (
-      <div className={props.classes.plainBackground}>
-        <MethodViewer
-          attributeName={props.mainAttribute}
-          blockName={props.parentBlock}
-          subElement={props.mainAttributeSubElements}
-          classes={props.classes}
-          openParent={props.openParent}
-          openChild={props.openChild}
-          footerItems={[
-            <Tooltip id="1" title={props.errorMessage} placement="right">
-              <IconButton className={props.classes.button} disableRipple>
-                <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
-              </IconButton>
-            </Tooltip>,
-          ]}
-        />
-      </div>
-    );
-  }
-  const widgetTag = getWidgetType(props.tags);
   const transitionWithPanelStyle = {
     left: props.openParent ? 360 : 0,
     width: `calc(100% - ${(props.openChild ? 360 : 0) +
       (props.openParent ? 360 : 0)}px)`,
     // transition: 'width 1s, left 1s',
   };
+  if (props.isMethod) {
+    return (
+      <div className={props.classes.plainBackground}>
+        <div
+          className={props.classes.tableContainer}
+          style={transitionWithPanelStyle}
+        >
+          <MethodViewer
+            attributeName={props.mainAttribute}
+            blockName={props.parentBlock}
+            subElement={props.mainAttributeSubElements}
+            classes={props.classes}
+            openParent={props.openParent}
+            openChild={props.openChild}
+            footerItems={[
+              <Tooltip id="1" title={props.errorMessage} placement="right">
+                <IconButton className={props.classes.button} disableRipple>
+                  <AttributeAlarm
+                    alarmSeverity={props.mainAttributeAlarmState}
+                  />
+                </IconButton>
+              </Tooltip>,
+            ]}
+          />
+        </div>
+      </div>
+    );
+  }
+  const widgetTag = getWidgetType(props.tags);
   const palettePadding = props.showBin ? 4 : 32;
 
   switch (widgetTag) {

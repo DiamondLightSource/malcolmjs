@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js';
-// import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
-import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
-import { MalcolmTickArchive } from '../malcolm/malcolm.types';
-import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+import { AlarmStates } from '../attributeDetails/attributeAlarm/attributeAlarm.component';
 
 const alarmStatesByIndex = [
   AlarmStates.NO_ALARM,
@@ -17,67 +13,44 @@ const alarmStatesByIndex = [
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
-  const alarms = attribute.alarmState.toarray();
-  dataElement.x = attribute.timeStamp.toarray();
-  dataElement.y = attribute.plotValue
-    .toarray()
-    .map(
-      (value, valIndex) =>
-        alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
-        (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&
-          alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
-          ? value
-          : null
-    );
+  const alarms = attribute.alarmState;
+  dataElement.x = attribute.timeStamp;
+  dataElement.y = attribute.value.map(
+    (value, valIndex) =>
+      alarms[valIndex] === alarmStatesByIndex[alarmIndex] ||
+      (alarms[valIndex - 1] === alarmStatesByIndex[alarmIndex] &&
+        alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
+        ? value
+        : null
+  );
   dataElement.x.push(dataElement.x.slice(-1)[0]);
   dataElement.y.push(dataElement.y.slice(-1)[0]);
   dataElement.visible = dataElement.y.some(val => val !== null);
-  /*
-  dataElement.line = {
-    ...dataElement.line,
-    shape: attribute.meta.typeid === malcolmTypes.number ? 'linear' : 'hv',
-  }; */
   return dataElement;
 };
 
-class AttributePlot extends React.Component {
+class MethodPlot extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const { data, layout } = state;
-    const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
-      props.attribute.plotTime
-    }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
-    if (props.attribute && layout.datarevision !== dataRevision) {
-      const newData = data.map((dataElement, index) =>
-        updatePlotData(dataElement, index, props.attribute)
-      );
-      layout.datarevision = dataRevision;
-      const USER_HAS_CHANGED_LAYOUT = false;
-      if (!USER_HAS_CHANGED_LAYOUT) {
-        layout.xaxis = {
-          ...layout.xaxis,
-          range: [
-            new Date(newData[0].x.slice(-1)[0].getTime() - 30000),
-            newData[0].x.slice(-1)[0],
-          ],
-        };
-      }
-      if (
-        props.attribute.parent !== layout.parent ||
-        props.attribute.name !== layout.attribute
-      ) {
-        layout.parent = props.attribute.parent;
-        layout.attribute = props.attribute.name;
-        layout.yaxis = {
-          color: props.theme.palette.text.primary,
-        };
-      }
-      return {
-        ...state,
-        data: [...newData],
-        layout,
+    const newData = data.map((dataElement, index) =>
+      updatePlotData(dataElement, index, props.attribute)
+    );
+    layout.datarevision += 1;
+    if (
+      props.attribute.parent !== layout.parent ||
+      props.attribute.name !== layout.attribute
+    ) {
+      layout.parent = props.attribute.parent;
+      layout.attribute = props.attribute.name;
+      layout.yaxis = {
+        color: props.theme.palette.text.primary,
       };
     }
-    return state;
+    return {
+      ...state,
+      data: [...newData],
+      layout,
+    };
   }
 
   constructor(props) {
@@ -143,33 +116,9 @@ class AttributePlot extends React.Component {
         },
       },
     };
-
-    this.renderTimeout = setTimeout(() => {}, 4000);
-
-    /* CODE FOR DISPLAYING POSSIBLE VALUES FOR ENUM ON Y AXIS (DISABLED)
-    if (props.attribute.meta.choices) {
-      this.state.layout.yaxis = {
-        ...this.state.layout.yaxis,
-        tickvals: props.attribute.meta.choices.map((val, index) => index),
-        ticktext: props.attribute.meta.choices,
-        range: [0, props.attribute.meta.choices.length - 1],
-      };
-    } */
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.renderTimeout);
   }
 
   render() {
-    clearTimeout(this.renderTimeout);
-    this.renderTimeout = setTimeout(() => {
-      this.props.tickArchive([
-        this.props.attribute.parent,
-        this.props.attribute.name,
-      ]);
-    }, 1100 * ARCHIVE_REFRESH_INTERVAL);
-
     return (
       <Plot
         data={this.state.data}
@@ -181,18 +130,7 @@ class AttributePlot extends React.Component {
   }
 }
 
-const mapStateToProps = () => {};
-
-const mapDispatchToProps = dispatch => ({
-  tickArchive: path => {
-    dispatch({
-      type: MalcolmTickArchive,
-      payload: { path },
-    });
-  },
-});
-
-AttributePlot.propTypes = {
+MethodPlot.propTypes = {
   theme: PropTypes.shape({
     palette: PropTypes.shape({
       text: PropTypes.shape({
@@ -216,7 +154,6 @@ AttributePlot.propTypes = {
     parent: PropTypes.bool,
     child: PropTypes.bool,
   }).isRequired,
-  */
   attribute: PropTypes.shape({
     parent: PropTypes.string,
     name: PropTypes.string,
@@ -228,9 +165,7 @@ AttributePlot.propTypes = {
     plotTime: PropTypes.number,
     isBool: PropTypes.bool,
   }).isRequired,
-  tickArchive: PropTypes.func.isRequired,
+  */
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withTheme()(AttributePlot)
-);
+export default withTheme()(MethodPlot);

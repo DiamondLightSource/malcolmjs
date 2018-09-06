@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import BugReport from '@material-ui/icons/BugReport';
 import { connect } from 'react-redux';
+import Tooltip from '@material-ui/core/Tooltip';
+
 import WidgetLED from '../../led/widgetLED.component';
 import WidgetCheckbox from '../../checkbox/checkbox.component';
 import WidgetComboBox from '../../comboBox/comboBox.component';
@@ -126,6 +128,7 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'widget:multilinetextupdate':
     case 'info:multiline':
       return <TextUpdate Text={`${value}`} noWrap={false} />;
     case 'info:button':
@@ -141,7 +144,11 @@ export const selectorFunction = (
       return <AttributeAlarm alarmSeverity={value} />;
     default:
       if (widgetTag.split(':')[0] === 'widget') {
-        return <BugReport nativeColor="red" />;
+        return (
+          <Tooltip title={widgetTag}>
+            <BugReport nativeColor="red" />
+          </Tooltip>
+        );
       }
       throw new Error('no widget tag supplied!');
   }

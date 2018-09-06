@@ -13,6 +13,7 @@ exports[`AttributeDetails renders correctly 1`] = `
       className="AttributeDetails-button-4"
       disableRipple={true}
       onClick={[Function]}
+      tabindex="-1"
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}

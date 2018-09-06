@@ -62,6 +62,7 @@ const AttributeDetails = props => {
       <div className={props.classes.div}>
         <Tooltip id="1" title={props.message} placement="bottom">
           <IconButton
+            tabindex="-1"
             className={props.classes.button}
             disableRipple
             onClick={() =>
