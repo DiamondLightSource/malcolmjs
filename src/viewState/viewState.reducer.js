@@ -20,7 +20,7 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
 
     case updateVersionNumerType:
       if (document) {
-        document.title = `MalcolmJS ${action.payload.version}`;
+        document.title = `${action.payload.title} ${action.payload.version}`;
       }
       return state;
 
