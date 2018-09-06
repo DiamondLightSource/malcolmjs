@@ -6,6 +6,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -37,7 +38,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": false,
         "x": Array [
@@ -147,6 +148,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -178,7 +180,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": true,
         "x": Array [
@@ -288,6 +290,7 @@ exports[`attributePlot renders correctly for number 1`] = `
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -319,7 +322,7 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": false,
         "x": Array [

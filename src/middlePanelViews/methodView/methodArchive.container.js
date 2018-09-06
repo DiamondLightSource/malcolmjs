@@ -33,7 +33,7 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   return dataElement;
 };
 
-const deriveStateFromProps = (props, state) => {
+export const deriveStateFromProps = (props, state) => {
   const { data, layout } = state;
   const newData = data.map((dataElement, index) =>
     updatePlotData(dataElement, index, props.attribute)

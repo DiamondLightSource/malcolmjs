@@ -38,7 +38,7 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   return dataElement;
 };
 
-const deriveStateFromProps = (props, state) => {
+export const deriveStateFromProps = (props, state) => {
   const { data, layout } = state;
   const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
     props.attribute.plotTime
