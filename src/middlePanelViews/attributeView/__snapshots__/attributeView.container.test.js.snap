@@ -16,6 +16,8 @@ exports[`attributeView renders 1st tab correctly 1`] = `
   />
   <LoadableComponent
     attribute={Object {}}
+    deriveState={[Function]}
+    doTick={true}
   />
 </WithTheme(TabbedPanel)>
 `;
@@ -36,6 +38,8 @@ exports[`attributeView renders 2nd tab correctly 1`] = `
   />
   <LoadableComponent
     attribute={Object {}}
+    deriveState={[Function]}
+    doTick={true}
   />
 </WithTheme(TabbedPanel)>
 `;

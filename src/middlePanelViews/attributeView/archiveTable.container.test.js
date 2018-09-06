@@ -1,6 +1,6 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
-import MockCircularBuffer from '../malcolm/reducer/attribute.reducer.mocks';
+import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
 import ArchiveTable from './archiveTable.container';
 
 describe('archiveTable', () => {

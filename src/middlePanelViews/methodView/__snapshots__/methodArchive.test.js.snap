@@ -32,6 +32,7 @@ exports[`MethodArchive renders 2nd tab correctly 1`] = `
           ],
         }
       }
+      deriveState={[Function]}
       openPanels={Object {}}
     />
   </div>

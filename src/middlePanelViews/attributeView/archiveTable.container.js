@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WidgetTable from '../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/table.component';
 
 const noOp = () => {};
 

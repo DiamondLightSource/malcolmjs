@@ -1,8 +1,14 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import MockCircularBuffer from '../malcolm/reducer/attribute.reducer.mocks';
+import {
+  deriveStateFromProps as deriveMethodState,
+  dummyArchive,
+} from './methodView/methodArchive.container';
+import { deriveStateFromProps as deriveAttributeState } from './attributeView/attributeView.container';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
-import AttributePlot from './attributePlot.component';
+
+import Plotter from './plotter.component';
 
 const mockTheme = {
   palette: {
@@ -12,6 +18,79 @@ const mockTheme = {
   },
   alarmState: { warning: '#fff', error: '#ff0000', disconnected: '#0500ff' },
 };
+
+describe('MethodPlot', () => {
+  let shallow;
+  let testArchive;
+
+  beforeEach(() => {
+    shallow = createShallow({ dive: true });
+    testArchive = {
+      value: new MockCircularBuffer(5),
+      timeStamp: new MockCircularBuffer(5),
+      alarmState: new MockCircularBuffer(5),
+    };
+    testArchive.value.push({
+      runParameters: { test1: 0 },
+      returned: { test2: 1 },
+    });
+    testArchive.timeStamp.push({
+      localRunTime: new Date(0),
+      localReturnTime: new Date(4),
+    });
+    testArchive.alarmState.push(0);
+    testArchive.value.push({
+      runParameters: { test1: 0 },
+      returned: { test2: 1 },
+    });
+    testArchive.timeStamp.push({
+      localRunTime: new Date(2),
+      localReturnTime: new Date(5),
+    });
+    testArchive.alarmState.push(1);
+    testArchive.value.push({
+      runParameters: { test1: 0 },
+      returned: { test2: 1 },
+    });
+    testArchive.timeStamp.push({
+      localRunTime: new Date(3),
+      localReturnTime: new Date(6),
+    });
+    testArchive.alarmState.push(2);
+  });
+
+  it('renders correctly for takes', () => {
+    const wrapper = shallow(
+      <Plotter
+        store={{
+          getState: () => {},
+          subscribe: () => {},
+        }}
+        attribute={dummyArchive(testArchive, ['takes', 'test1'])}
+        openPanels={{}}
+        theme={mockTheme}
+        deriveState={deriveMethodState}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly for returns', () => {
+    const wrapper = shallow(
+      <Plotter
+        store={{
+          getState: () => {},
+          subscribe: () => {},
+        }}
+        attribute={dummyArchive(testArchive, ['returns', 'test2'])}
+        openPanels={{}}
+        theme={mockTheme}
+        deriveState={deriveMethodState}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+});
 
 describe('attributePlot', () => {
   let shallow;
@@ -45,11 +124,13 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot
+      <Plotter
         store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
+        deriveState={deriveAttributeState}
+        doTick
       />
     );
     expect(wrapper.dive()).toMatchSnapshot();
@@ -68,11 +149,13 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot
+      <Plotter
         store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
+        deriveState={deriveAttributeState}
+        doTick
       />
     );
     expect(wrapper.dive()).toMatchSnapshot();
@@ -91,11 +174,13 @@ describe('attributePlot', () => {
     mockArchive.alarmState.push(0);
 
     const wrapper = shallow(
-      <AttributePlot
+      <Plotter
         store={mockStore}
         attribute={mockArchive}
         openPanels={{}}
         theme={mockTheme}
+        deriveState={deriveAttributeState}
+        doTick
       />
     );
     expect(wrapper.dive()).toMatchSnapshot();

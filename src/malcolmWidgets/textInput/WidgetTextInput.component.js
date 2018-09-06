@@ -83,7 +83,8 @@ class WidgetTextInput extends React.Component {
     }
   }
 
-  inFocus() {
+  inFocus(event) {
+    event.target.select();
     this.props.setFlag('dirty', true);
     this.props.focusHandler();
   }

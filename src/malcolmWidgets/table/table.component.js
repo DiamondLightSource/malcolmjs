@@ -96,12 +96,16 @@ const WidgetTable = props => {
       ? props.attribute.raw.meta
       : props.localState.meta;
   const rowChangeHandler = (rowPath, newValue) => {
+    /* if (columnLabels === undefined) {
+      rowValue = newValue;
+    } else { */
     const rowValue = {};
     columnLabels.forEach(label => {
       rowValue[label] = values[rowPath.row][label];
       return 0;
     });
     rowValue[rowPath.label] = newValue;
+    // }
     props.eventHandler(props.attribute.calculated.path, rowValue, rowPath.row);
   };
   const rowFlagHandler = (rowPath, flagType, flagState) => {
@@ -125,18 +129,25 @@ const WidgetTable = props => {
       );
     }
   };
-  const columnWidgetTags = getTableWidgetTags(props.attribute);
-  const columnHeadings = columnLabels.map((label, column) => (
+  const headerCell = (columnTitle, column) => (
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
       key={column}
     >
-      <Typography variant="subheading">
-        {meta.elements[label].label ? meta.elements[label].label : label}
-      </Typography>
+      <Typography variant="subheading">{columnTitle}</Typography>
     </TableCell>
-  ));
+  );
+  const columnWidgetTags = getTableWidgetTags(props.attribute);
+  const columnHeadings =
+    columnLabels === undefined
+      ? headerCell(meta.label, 0)
+      : columnLabels.map((label, column) =>
+          headerCell(
+            meta.elements[label].label ? meta.elements[label].label : label,
+            column
+          )
+        );
   return (
     <div style={{ height: '100%' }}>
       <Table

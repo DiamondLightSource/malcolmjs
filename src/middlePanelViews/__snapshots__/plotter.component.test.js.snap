@@ -1,11 +1,280 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`MethodPlot renders correctly for returns 1`] = `
+<PlotlyComponent
+  data={
+    Array [
+      Object {
+        "line": Object {
+          "dash": undefined,
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#f0f0f0",
+        },
+        "mode": "lines+points",
+        "name": "Normal",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.004Z,
+          1970-01-01T00:00:00.005Z,
+          1970-01-01T00:00:00.006Z,
+        ],
+        "y": Array [
+          undefined,
+          undefined,
+          null,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "15px, 5px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#fff",
+        },
+        "mode": "lines+points",
+        "name": "Warning",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.004Z,
+          1970-01-01T00:00:00.005Z,
+          1970-01-01T00:00:00.006Z,
+        ],
+        "y": Array [
+          null,
+          undefined,
+          undefined,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "10px, 10px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#ff0000",
+        },
+        "mode": "lines+points",
+        "name": "Major",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.004Z,
+          1970-01-01T00:00:00.005Z,
+          1970-01-01T00:00:00.006Z,
+        ],
+        "y": Array [
+          null,
+          null,
+          undefined,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "5px, 15px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#0500ff",
+        },
+        "mode": "lines+points",
+        "name": "Disconnected",
+        "type": "scatter",
+        "visible": false,
+        "x": Array [
+          1970-01-01T00:00:00.004Z,
+          1970-01-01T00:00:00.005Z,
+          1970-01-01T00:00:00.006Z,
+        ],
+        "y": Array [
+          null,
+          null,
+          null,
+        ],
+      },
+    ]
+  }
+  debug={false}
+  layout={
+    Object {
+      "attribute": undefined,
+      "autosize": true,
+      "datarevision": 0,
+      "legend": Object {
+        "font": Object {
+          "color": "#000",
+        },
+      },
+      "paper_bgcolor": "#424242",
+      "parent": undefined,
+      "plot_bgcolor": "#424242",
+      "xaxis": Object {
+        "color": "#000",
+        "range": Array [
+          1969-12-31T23:59:30.006Z,
+          1970-01-01T00:00:00.006Z,
+        ],
+      },
+      "yaxis": Object {
+        "color": "#000",
+      },
+    }
+  }
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+  useResizeHandler={true}
+/>
+`;
+
+exports[`MethodPlot renders correctly for takes 1`] = `
+<PlotlyComponent
+  data={
+    Array [
+      Object {
+        "line": Object {
+          "dash": undefined,
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#f0f0f0",
+        },
+        "mode": "lines+points",
+        "name": "Normal",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.000Z,
+          1970-01-01T00:00:00.002Z,
+          1970-01-01T00:00:00.003Z,
+        ],
+        "y": Array [
+          0,
+          0,
+          null,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "15px, 5px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#fff",
+        },
+        "mode": "lines+points",
+        "name": "Warning",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.000Z,
+          1970-01-01T00:00:00.002Z,
+          1970-01-01T00:00:00.003Z,
+        ],
+        "y": Array [
+          null,
+          0,
+          0,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "10px, 10px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#ff0000",
+        },
+        "mode": "lines+points",
+        "name": "Major",
+        "type": "scatter",
+        "visible": true,
+        "x": Array [
+          1970-01-01T00:00:00.000Z,
+          1970-01-01T00:00:00.002Z,
+          1970-01-01T00:00:00.003Z,
+        ],
+        "y": Array [
+          null,
+          null,
+          0,
+        ],
+      },
+      Object {
+        "line": Object {
+          "dash": "5px, 15px",
+          "shape": "hv",
+        },
+        "marker": Object {
+          "color": "#0500ff",
+        },
+        "mode": "lines+points",
+        "name": "Disconnected",
+        "type": "scatter",
+        "visible": false,
+        "x": Array [
+          1970-01-01T00:00:00.000Z,
+          1970-01-01T00:00:00.002Z,
+          1970-01-01T00:00:00.003Z,
+        ],
+        "y": Array [
+          null,
+          null,
+          null,
+        ],
+      },
+    ]
+  }
+  debug={false}
+  layout={
+    Object {
+      "attribute": undefined,
+      "autosize": true,
+      "datarevision": 0,
+      "legend": Object {
+        "font": Object {
+          "color": "#000",
+        },
+      },
+      "paper_bgcolor": "#424242",
+      "parent": undefined,
+      "plot_bgcolor": "#424242",
+      "xaxis": Object {
+        "color": "#000",
+        "range": Array [
+          1969-12-31T23:59:30.003Z,
+          1970-01-01T00:00:00.003Z,
+        ],
+      },
+      "yaxis": Object {
+        "color": "#000",
+      },
+    }
+  }
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+  useResizeHandler={true}
+/>
+`;
+
 exports[`attributePlot renders correctly for bool 1`] = `
 <PlotlyComponent
   data={
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -19,12 +288,10 @@ exports[`attributePlot renders correctly for bool 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
           1,
           0,
-          1,
           1,
         ],
       },
@@ -37,17 +304,15 @@ exports[`attributePlot renders correctly for bool 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": false,
         "x": Array [
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -69,10 +334,8 @@ exports[`attributePlot renders correctly for bool 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -94,10 +357,8 @@ exports[`attributePlot renders correctly for bool 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -147,6 +408,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -160,12 +422,10 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
           1,
           -1,
-          2,
           2,
         ],
       },
@@ -178,19 +438,17 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": true,
         "x": Array [
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
           null,
           -1,
-          2,
           2,
         ],
       },
@@ -210,10 +468,8 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -235,10 +491,8 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -288,6 +542,7 @@ exports[`attributePlot renders correctly for number 1`] = `
     Array [
       Object {
         "line": Object {
+          "dash": undefined,
           "shape": "hv",
         },
         "marker": Object {
@@ -301,12 +556,10 @@ exports[`attributePlot renders correctly for number 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
           1,
           -1,
-          2,
           2,
         ],
       },
@@ -319,17 +572,15 @@ exports[`attributePlot renders correctly for number 1`] = `
           "color": "#fff",
         },
         "mode": "lines+points",
-        "name": "Minor",
+        "name": "Warning",
         "type": "scatter",
         "visible": false,
         "x": Array [
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -351,10 +602,8 @@ exports[`attributePlot renders correctly for number 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
@@ -376,10 +625,8 @@ exports[`attributePlot renders correctly for number 1`] = `
           1970-01-01T00:00:01.000Z,
           1970-01-01T00:00:02.000Z,
           1970-01-01T00:00:03.000Z,
-          1970-01-01T00:00:03.000Z,
         ],
         "y": Array [
-          null,
           null,
           null,
           null,
