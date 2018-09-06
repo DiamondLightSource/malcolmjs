@@ -20,7 +20,8 @@ const initialiseData = (color, name, dash) => ({
 class Plotter extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const newState = props.deriveState(props, state);
-    if (props.attribute && props.attribute.timeStamp.length !== 0) {
+    if (props.attribute) {
+      // && newState.data[0].x.slice(-1)[0] instanceof Date) {
       const USER_HAS_CHANGED_LAYOUT = false;
       if (!USER_HAS_CHANGED_LAYOUT) {
         newState.layout.xaxis = {

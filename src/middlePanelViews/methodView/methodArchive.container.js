@@ -87,7 +87,7 @@ const dummyAttribute = (methodArchive, selectedParam) => ({
   calculated: {},
 });
 
-const dummyArchive = (methodArchive, selectedParam) => ({
+export const dummyArchive = (methodArchive, selectedParam) => ({
   parent: methodArchive.parent,
   name: methodArchive.name,
   timeStamp: methodArchive.timeStamp

@@ -31,8 +31,6 @@ const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
           ? value
           : null
     );
-  dataElement.x.push(dataElement.x.slice(-1)[0]);
-  dataElement.y.push(dataElement.y.slice(-1)[0]);
   dataElement.visible = dataElement.y.some(val => val !== null);
 
   return dataElement;

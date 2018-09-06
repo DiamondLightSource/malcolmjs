@@ -1,7 +1,10 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import MockCircularBuffer from '../malcolm/reducer/attribute.reducer.mocks';
-import { deriveStateFromProps as deriveMethodState } from './methodView/methodArchive.container';
+import {
+  deriveStateFromProps as deriveMethodState,
+  dummyArchive,
+} from './methodView/methodArchive.container';
 import { deriveStateFromProps as deriveAttributeState } from './attributeView/attributeView.container';
 import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
@@ -56,16 +59,31 @@ describe('MethodPlot', () => {
     testArchive.alarmState.push(2);
   });
 
-  it('renders correctly', () => {
+  it('renders correctly for takes', () => {
     const wrapper = shallow(
       <Plotter
         store={{
           getState: () => {},
           subscribe: () => {},
         }}
-        attribute={testArchive}
+        attribute={dummyArchive(testArchive, ['takes', 'test1'])}
         openPanels={{}}
-        selectedParam={['takes', 'test1']}
+        theme={mockTheme}
+        deriveState={deriveMethodState}
+      />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly for returns', () => {
+    const wrapper = shallow(
+      <Plotter
+        store={{
+          getState: () => {},
+          subscribe: () => {},
+        }}
+        attribute={dummyArchive(testArchive, ['returns', 'test2'])}
+        openPanels={{}}
         theme={mockTheme}
         deriveState={deriveMethodState}
       />
