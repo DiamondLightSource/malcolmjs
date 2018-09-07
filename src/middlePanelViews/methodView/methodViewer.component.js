@@ -19,7 +19,11 @@ import WidgetTable from '../../malcolmWidgets/table/table.component';
 import MethodArchive from './methodArchive.container';
 
 import blockUtils from '../../malcolm/blockUtils';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmIntialiseMethodParam,
+} from '../../malcolm/actions/method.actions';
+import { isArrayType } from '../../malcolm/reducer/method.reducer';
 
 const noOp = () => {};
 
@@ -99,6 +103,24 @@ const MethodViewer = props => {
         case 'widget:combobox':
         case 'widget:checkbox':
         case 'widget:led': {
+          if (isArrayType(props.selectedParamMeta.typeid)) {
+            if (props.selectedParamValue === undefined) {
+              props.initialiseLocalState(
+                props.method.calculated.path,
+                props.selectedParam
+              );
+            }
+            return (
+              <WidgetTable
+                localState={props.selectedParamValue}
+                eventHandler={noOp}
+                setFlag={noOp}
+                addRow={noOp}
+                infoClickHandler={noOp}
+                rowClickHandler={noOp}
+              />
+            );
+          }
           return (
             <MethodArchive
               methodArchive={props.methodArchive}
@@ -227,6 +249,9 @@ const mapDispatchToProps = dispatch => ({
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
   },
+  initialiseLocalState: (path, selectedParam) => {
+    dispatch(malcolmIntialiseMethodParam(path, selectedParam));
+  },
 });
 
 MethodViewer.propTypes = {
@@ -250,6 +275,7 @@ MethodViewer.propTypes = {
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),
     writeable: PropTypes.bool,
+    typeid: PropTypes.string,
   }).isRequired,
   selectedParamValue: PropTypes.oneOf(
     PropTypes.string,
@@ -261,6 +287,7 @@ MethodViewer.propTypes = {
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   updateInput: PropTypes.func.isRequired,
+  initialiseLocalState: PropTypes.func.isRequired,
 };
 
 MethodViewer.defaultProps = {

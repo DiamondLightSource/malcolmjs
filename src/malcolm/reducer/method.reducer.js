@@ -10,6 +10,12 @@ import {
 export const getMethodParam = (type, param, method) =>
   Object.keys(method.raw[type].elements).includes(`${param}`);
 
+export const isArrayType = typeId =>
+  typeId
+    .split('/')[1]
+    .split(':')[0]
+    .slice(-9) === 'ArrayMeta';
+
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
@@ -61,7 +67,12 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value && payload.value.isDirty !== undefined) {
+    if (
+      payload.doInitialise &&
+      isArrayType(attributeCopy.raw.takes.elements[payload.name].typeid)
+    ) {
+      attributeCopy.calculated.inputs[payload.name] = {};
+    } else if (payload.value && payload.value.isDirty !== undefined) {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
