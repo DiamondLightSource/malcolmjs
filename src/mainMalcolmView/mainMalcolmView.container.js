@@ -38,7 +38,13 @@ const MainMalcolmView = props => (
       childMRI={props.childBlock}
     >
       <BlockDetails parent />
-      <MiddlePanelContainer />
+      <div
+        style={{
+          height: `calc(100vh - 64px - ${props.footerHeight}px)`,
+        }}
+      >
+        <MiddlePanelContainer />
+      </div>
       {childPanelSelector(props)}
     </DrawerContainer>
   </div>
@@ -83,6 +89,7 @@ const mapStateToProps = state => {
     childBlockTitle,
     showPalette,
     showInfo,
+    footerHeight: state.viewState.footerHeight,
   };
 };
 
@@ -93,6 +100,7 @@ MainMalcolmView.propTypes = {
   childBlockTitle: PropTypes.string,
   parentBlock: PropTypes.string,
   childBlock: PropTypes.string,
+  footerHeight: PropTypes.number.isRequired,
 };
 
 childPanelSelector.propTypes = {

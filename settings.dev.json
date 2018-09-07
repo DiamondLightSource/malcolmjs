@@ -1,5 +1,6 @@
 {
   "malcolmSocket": "ws://localhost:8000/ws",
   "version": "DEV",
-  "title": "PANDA"
+  "title": "PANDA",
+  "footerHeight": 45
 }

@@ -37,6 +37,11 @@ const DrawerContainer = props => (
       open={props.open}
       anchor="left"
       classes={{ paper: props.classes.drawer }}
+      PaperProps={{
+        style: {
+          height: `calc(100vh - ${props.footerHeight}px)`,
+        },
+      }}
     >
       <div className={props.classes.drawerContents}>
         <DrawerHeader
@@ -54,6 +59,11 @@ const DrawerContainer = props => (
       open={props.openSecondary}
       anchor="right"
       classes={{ paper: props.classes.drawer }}
+      PaperProps={{
+        style: {
+          height: `calc(100vh - ${props.footerHeight}px)`,
+        },
+      }}
     >
       <div className={props.classes.drawerContents}>
         <DrawerHeader
@@ -89,6 +99,7 @@ const mapStateToProps = state => {
     open: state.viewState.openParentPanel,
     openSecondary: state.malcolm.childBlock !== undefined,
     urlPath: state.router.location.pathname,
+    footerHeight: state.viewState.footerHeight,
   };
 };
 
@@ -115,6 +126,7 @@ DrawerContainer.propTypes = {
   children: PropTypes.node,
   childIsInfo: PropTypes.bool.isRequired,
   mainAttribute: PropTypes.string.isRequired,
+  footerHeight: PropTypes.number.isRequired,
 };
 
 DrawerContainer.defaultProps = {

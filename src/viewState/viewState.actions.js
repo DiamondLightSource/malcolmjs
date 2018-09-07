@@ -1,5 +1,6 @@
 export const openParentPanelType = 'OPEN_PARENT_PANEL';
 export const updateVersionNumerType = 'UPDATE_VERSION';
+export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
 
 export const openParentPanel = open => ({
@@ -20,6 +21,13 @@ export const updateVersionNumber = (version, title) => ({
   payload: {
     version,
     title,
+  },
+});
+
+export const showFooterAction = footerHeight => ({
+  type: showFooterType,
+  payload: {
+    footerHeight,
   },
 });
 

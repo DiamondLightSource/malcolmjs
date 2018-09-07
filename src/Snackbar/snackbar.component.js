@@ -27,6 +27,7 @@ const MessageSnackBar = props => (
     onClose={props.handleClose}
     autoHideDuration={props.timeout}
     className={props.classes.snackbar}
+    style={{ marginBottom: props.footerHeight + 2 }}
     ContentProps={{ className: props.classes.snackbarContent }}
     action={[
       <IconButton key="close" onClick={props.handleClose}>
@@ -40,6 +41,7 @@ MessageSnackBar.propTypes = {
   timeout: PropTypes.number,
   open: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
+  footerHeight: PropTypes.number.isRequired,
   handleClose: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     snackbar: PropTypes.string.isRequired,
@@ -54,6 +56,7 @@ MessageSnackBar.defaultProps = {
 const mapStateToProps = state => ({
   open: state.viewState.snackbar.open,
   message: state.viewState.snackbar.message,
+  footerHeight: state.viewState.footerHeight,
 });
 
 const mapDispatchToProps = dispatch => ({
