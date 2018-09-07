@@ -2,6 +2,7 @@ import {
   openParentPanelType,
   updateVersionNumerType,
   snackbar,
+  showFooterType,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -11,6 +12,7 @@ const initialViewState = {
     message: '',
     open: false,
   },
+  footerHeight: 0,
 };
 
 const viewStateReducer = (state = initialViewState, action = {}) => {
@@ -28,6 +30,12 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return {
         ...state,
         snackbar: { ...action.snackbar },
+      };
+
+    case showFooterType:
+      return {
+        ...state,
+        footerHeight: action.payload.footerHeight || 0,
       };
 
     default:
