@@ -281,10 +281,15 @@ To open an existing Design:
 Working Collaboratively on a Design
 -----------------------------------
 
-Disabling a Design
-------------------
+Needs to cover the eventuality where 2 people are potentially editing the same PandA configuration. 
+    What does each user see?
+    What happens if they both edit the same Attribute at the same time?
+    What happens if one updates an attribute, when does the second see it?
 
-As a `root_block_` can facilitate multiple `designs <design_>`...
+Disabling a Root Block
+----------------------
+
+**NEED TO EXPLORE THE USE CASE FOR THIS**
 
 
 

@@ -1,5 +1,5 @@
-MalcolmJS
-=========
+PandA
+=====
 
 MalcolmJS is a web application for interacting with Malcolm (typically inside
 a PANDA box), allowing a view on the resulting attributes as well as being 

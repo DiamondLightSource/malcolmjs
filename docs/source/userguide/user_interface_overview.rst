@@ -86,4 +86,13 @@ The Method View
 *Awaiting review of Bryan's work to see if this warrants its own section*
 
 
+Panel Popping
+-------------
+
+Under normal use the 'left-hand panel' contains summary information about the current `block_` in focus and the 'right-hand panel' detailed information relating to an `attribute_` or `method_` associated with that Block.  In complex systems it may be desireable to display information about a number of connected Blocks to track how each updates as data moves through the system they represent.  This can be achieved by *'popping'* the Block Information Panel via the icon in the top left-hand corner of the information panel.  This causes the Block Information Panel to open in its own independent window.  Multiple panels can be opened in the same way.  
+
+Connectivity to the underlying system is maintained meaning each independent window is updated in response to activity within the Control System.  Similarly, manual updates to any Attribute within an independent Information Panel is reflected back to the Control System in the same way as occurs when the Information Panel is integrated with the main user interface.
+
+**THIS NEEDS AN IMAGE OF MULTIPLE WINDOWS**
+
 
