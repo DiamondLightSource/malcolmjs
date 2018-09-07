@@ -17,9 +17,26 @@ const Layout = props => {
   updatedProps.layoutEngine.clickHandler = props.clickHandler;
   updatedProps.layoutEngine.mouseDownHandler = props.mouseDownHandler;
   updatedProps.layoutEngine.portMouseDown = props.portMouseDown;
-
+  const layoutDiv = document.getElementById('LayoutDiv');
+  if (layoutDiv !== null) {
+    layoutDiv.addEventListener('wheel', event => {
+      if (event.deltaMode === event.DOM_DELTA_LINE) {
+        event.stopPropagation();
+        const customScroll = new WheelEvent('wheel', {
+          bubbles: event.bubbles,
+          deltaMode: event.DOM_DELTA_PIXEL,
+          clientX: event.clientX,
+          clientY: event.clientY,
+          deltaX: event.deltaX,
+          deltaY: 20 * event.deltaY,
+        });
+        event.target.dispatchEvent(customScroll);
+      }
+    });
+  }
   return (
     <div
+      id="LayoutDiv"
       onDrop={event => props.makeBlockVisible(event, props.layoutEngine)}
       onDragOver={event => event.preventDefault()}
       onMouseUp={() => props.mouseDownHandler(false)}
@@ -35,6 +52,7 @@ const Layout = props => {
         diagramEngine={props.layoutEngine}
         // smartRouting
         maxNumberPointsPerLink={0}
+        inverseZoom
       />
     </div>
   );

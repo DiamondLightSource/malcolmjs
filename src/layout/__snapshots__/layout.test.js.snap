@@ -2,6 +2,7 @@
 
 exports[`Layout renders correctly 1`] = `
 <div
+  id="LayoutDiv"
   onDragOver={[Function]}
   onDrop={[Function]}
   onMouseUp={[Function]}
@@ -34,7 +35,7 @@ exports[`Layout renders correctly 1`] = `
         "testEngine": true,
       }
     }
-    inverseZoom={false}
+    inverseZoom={true}
     maxNumberPointsPerLink={0}
     smartRouting={false}
   />
