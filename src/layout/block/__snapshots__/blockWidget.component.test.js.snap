@@ -33,9 +33,21 @@ exports[`BlockWidget block renders correctly 1`] = `
     <div
       className="BlockWidget-iconContents-8"
     >
-      <LoadableComponent
-        icon="<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>"
-      />
+      <svg
+        height="100"
+        key="0"
+        width="100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          fill="red"
+          key="0"
+          r="40"
+          stroke="black"
+          strokeWidth="3"
+        />
+      </svg>
     </div>
     <div
       className="BlockWidget-outputPortsContainer-6"

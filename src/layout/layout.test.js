@@ -15,6 +15,8 @@ jest.mock('../malcolm/malcolmActionCreators');
 jest.mock('../malcolm/actions/navigation.actions');
 jest.mock('../malcolm/actions/layout.action');
 
+jest.useFakeTimers();
+
 describe('Layout', () => {
   let shallow;
   let mockStore;
@@ -105,6 +107,7 @@ describe('Layout', () => {
   it('mapDispatchToProps mouseDownHandler shows bin', () => {
     const props = mapDispatchToProps(() => {});
     props.mouseDownHandler(true);
+    jest.runAllTimers();
     expect(layoutActions.showLayoutBin).toHaveBeenCalledTimes(1);
   });
 

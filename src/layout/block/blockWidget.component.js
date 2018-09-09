@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loadable from 'react-loadable';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
+import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
 
 const styles = theme => ({
@@ -66,14 +66,6 @@ const styles = theme => ({
 
 const portHeight = 23;
 
-const LoadableBlockIcon = Loadable.Map({
-  loader: {
-    renderHTML: () => import('react-render-html'),
-  },
-  render: (loaded, props) => loaded.renderHTML(props.icon),
-  loading: () => <Typography>Loading...</Typography>,
-});
-
 const BlockWidget = props => {
   const inputPorts = Object.keys(props.node.ports).filter(
     p => props.node.ports[p].in
@@ -109,9 +101,9 @@ const BlockWidget = props => {
           ))}
         </div>
         <div className={props.classes.iconContents}>
-          {props.node.icon && props.node.icon !== '<svg/>' ? (
-            <LoadableBlockIcon icon={props.node.icon} />
-          ) : null}
+          {props.node.icon && props.node.icon !== '<svg/>'
+            ? renderHTML(props.node.icon)
+            : null}
         </div>
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (

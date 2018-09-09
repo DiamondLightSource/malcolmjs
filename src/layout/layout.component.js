@@ -77,6 +77,8 @@ export const mapStateToProps = state => ({
   layoutEngine: state.malcolm.layoutEngine,
 });
 
+let showBinTimeout = null;
+
 export const mapDispatchToProps = dispatch => ({
   clickHandler: (block, node) => {
     const translation = {
@@ -94,7 +96,18 @@ export const mapDispatchToProps = dispatch => ({
     dispatch(navigationActions.updateChildPanel(block.name));
   },
   mouseDownHandler: show => {
-    dispatch(layoutAction.showLayoutBin(show));
+    if (show) {
+      showBinTimeout = setTimeout(
+        () => dispatch(layoutAction.showLayoutBin(show)),
+        200
+      );
+    } else {
+      if (showBinTimeout) {
+        clearTimeout(showBinTimeout);
+        showBinTimeout = null;
+      }
+      dispatch(layoutAction.showLayoutBin(show));
+    }
   },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
