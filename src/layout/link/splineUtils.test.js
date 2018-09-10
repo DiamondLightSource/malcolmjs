@@ -25,8 +25,8 @@ describe('SplineUtils', () => {
     expect(spline).toHaveLength(1);
     pointsMatch(spline[0], [
       { x: 0, y: 0 },
-      { x: 50, y: 0 },
-      { x: 0, y: 0 },
+      { x: 40, y: 0 },
+      { x: 10, y: 0 },
       { x: 50, y: 0 },
     ]);
   });
@@ -38,8 +38,8 @@ describe('SplineUtils', () => {
     expect(spline).toHaveLength(1);
     pointsMatch(spline[0], [
       { x: 0, y: 0 },
-      { x: 133.33333333333, y: 0 },
-      { x: -333.3333333333, y: 200 },
+      { x: 150, y: 133.333333333 },
+      { x: -350, y: 66.666666666 },
       { x: -200, y: 200 },
     ]);
   });
@@ -48,8 +48,8 @@ describe('SplineUtils', () => {
     const points = [{ x: 0, y: 0 }, { x: -200, y: 0 }];
     const spline = splineUtils.buildPath(points);
 
-    expect(spline).toHaveLength(1);
-    pointsMatch(spline[0], [
+    expect(spline).toHaveLength(19);
+    const expectedPoints = [
       { x: 0, y: 0 },
       { x: 4.755089450508175, y: -5.13331147514406 },
       { x: 9.51017890101635, y: -10.26662295028812 },
@@ -126,7 +126,11 @@ describe('SplineUtils', () => {
       { x: -209.51017890101633, y: -10.266622950288186 },
       { x: -204.75508945050817, y: -5.133311475144093 },
       { x: -200, y: 0 },
-    ]);
+    ];
+
+    for (let i = 0; i < 19; i += 1) {
+      pointsMatch(spline[i], expectedPoints.slice(i * 4, (i + 1) * 4));
+    }
   });
 
   it('generates spline between three normal points', () => {
