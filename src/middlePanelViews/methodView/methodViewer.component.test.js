@@ -1,10 +1,54 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors/index';
 import MethodViewer from './methodViewer.component';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmIntialiseMethodParam,
+} from '../../malcolm/actions/method.actions';
 import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 jest.mock('../../malcolm/actions/method.actions');
+
+const mockTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: blue,
+  },
+  alarmState: {
+    warning: '#e6c01c',
+    error: '#e8001f',
+    disconnected: '#9d07bb',
+  },
+});
+
+const pushTestData = freshArchive => {
+  freshArchive.value.push({
+    runParameters: {
+      first: '0',
+      second: { someJSON: true },
+      third: ['anArray'],
+    },
+    returned: { first: false, second: 'someText' },
+  });
+  freshArchive.timeStamp.push({
+    localRunTime: new Date(0),
+    localReturnTime: new Date(1536583618205),
+  });
+  freshArchive.alarmState.push(0);
+  freshArchive.value.push({
+    runParameters: { first: 0 },
+    returned: {},
+  });
+  freshArchive.timeStamp.push({
+    localRunTime: new Date('July 20, 69 00:20:18'),
+    localReturnTime: new Date(123456789),
+  });
+  freshArchive.alarmState.push(4);
+  return freshArchive;
+};
 
 describe('Method viewer', () => {
   let shallow;
@@ -37,12 +81,27 @@ describe('Method viewer', () => {
   const testInputValues = {
     first: 3,
     second: { value: 'four', isAString: true },
+    third: {
+      value: ['SEVEN'],
+      flags: { rows: [] },
+      meta: {
+        typeid: malcolmTypes.stringArray,
+        tags: ['widget:textinput'],
+        writeable: true,
+      },
+    },
+  };
+
+  const testOutputValues = {
+    first: true,
+    second: 'done',
   };
 
   const testMethodViewer = (
     inputs,
     outputs,
     inputValues,
+    outputValues,
     selected,
     errorMsg,
     archiveContents
@@ -54,7 +113,7 @@ describe('Method viewer', () => {
         errorState: !!errorMsg,
         errorMessage: errorMsg,
         inputs: inputValues,
-        outputs: {},
+        outputs: outputValues,
       },
       raw: {
         label: 'Test',
@@ -68,13 +127,15 @@ describe('Method viewer', () => {
     state.malcolm.blockArchive.Test.attributes = [archiveContents];
 
     return (
-      <MethodViewer
-        store={mockStore(state)}
-        blockName="Test"
-        attributeName="Method"
-        subElement={selected}
-        classes={{}}
-      />
+      <MuiThemeProvider theme={mockTheme}>
+        <MethodViewer
+          store={mockStore(state)}
+          blockName="Test"
+          attributeName="Method"
+          subElement={selected}
+          classes={{}}
+        />
+      </MuiThemeProvider>
     );
   };
 
@@ -82,6 +143,7 @@ describe('Method viewer', () => {
     getItem.mockClear();
     setItem.mockClear();
     malcolmUpdateMethodInput.mockClear();
+    malcolmIntialiseMethodParam.mockClear();
 
     mockStore = myState => ({
       getState: () => myState,
@@ -103,7 +165,15 @@ describe('Method viewer', () => {
         description: 'a test input',
         tags: ['widget:tree'],
       },
+      third: {
+        label: 'Third input',
+        description: 'an array',
+        tags: ['widget:textinput'],
+        typeid: malcolmTypes.stringArray,
+        writeable: true,
+      },
     };
+
     freshArchive = {
       name: 'Method',
       timeStamp: new MockCircularBuffer(5),
@@ -116,13 +186,14 @@ describe('Method viewer', () => {
     mount.cleanUp();
   });
 
-  it('renders correctly with no initial value', () => {
+  it('renders input correctly with no initial value', () => {
     const wrapper = shallow(
       testMethodViewer(
         testInputs,
         testOutputs,
         {},
-        ['takes', 'second'],
+        {},
+        ['takes', 'first'],
         undefined,
         freshArchive
       )
@@ -130,13 +201,44 @@ describe('Method viewer', () => {
     expect(wrapper.dive()).toMatchSnapshot();
   });
 
-  it('renders correctly with initial value', () => {
+  it('renders input correctly with initial value', () => {
     const wrapper = shallow(
       testMethodViewer(
         testInputs,
         testOutputs,
         testInputValues,
-        ['takes', 'second'],
+        {},
+        ['takes', 'first'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders output correctly with no initial value', () => {
+    const wrapper = shallow(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        {},
+        ['returns', 'first'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders output correctly with initial value', () => {
+    const wrapper = shallow(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        testOutputValues,
+        ['returns', 'first'],
         undefined,
         freshArchive
       )
@@ -150,6 +252,7 @@ describe('Method viewer', () => {
         testInputs,
         testOutputs,
         {},
+        {},
         ['takes', 'first'],
         undefined,
         freshArchive
@@ -159,17 +262,74 @@ describe('Method viewer', () => {
   });
 
   it('renders top-level method param archive if no selected parameter', () => {
+    freshArchive.alarmState.push(0);
     const wrapper = shallow(
       testMethodViewer(
         testInputs,
         testOutputs,
         {},
+        {},
         undefined,
         undefined,
-        freshArchive
+        pushTestData(freshArchive)
       )
     );
     expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('copy params button hooks in correctly on top-level method param archive', () => {
+    const wrapper = mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        {},
+        undefined,
+        undefined,
+        pushTestData(freshArchive)
+      )
+    );
+    wrapper
+      .find('button')
+      .first()
+      .simulate('click');
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(3);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'third',
+      ['anArray']
+    );
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'second',
+      { someJSON: true }
+    );
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'first',
+      '0'
+    );
+    malcolmUpdateMethodInput.mockClear();
+    wrapper
+      .find('button')
+      .last()
+      .simulate('click');
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(3);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'third',
+      undefined
+    );
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'second',
+      undefined
+    );
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'first',
+      0
+    );
   });
 
   // it('updates method input after 1s inactivity', () => {});
@@ -219,4 +379,121 @@ describe('Method viewer', () => {
       }
     );
   }); */
+
+  it('fires action to initialise local state if input is an array', () => {
+    mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(malcolmIntialiseMethodParam).toHaveBeenCalledTimes(1);
+    expect(malcolmIntialiseMethodParam).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      ['takes', 'third']
+    );
+  });
+
+  it('doesnt fire action if array input local state is already initialised', () => {
+    mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(malcolmIntialiseMethodParam).not.toHaveBeenCalled();
+  });
+
+  it('renders correctly for array once local state is initialised', () => {
+    const wrapper = shallow(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('add row hooks up correctly for array', () => {
+    const wrapper = mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    wrapper
+      .find('button')
+      .last()
+      .simulate('click');
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(1);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'third',
+      ['SEVEN', '']
+    );
+  });
+
+  it('update input hooks up correctly for array', () => {
+    const wrapper = mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: '180' } });
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledTimes(1);
+    expect(malcolmUpdateMethodInput).toHaveBeenCalledWith(
+      ['Test', 'Method'],
+      'third',
+      ['180']
+    );
+  });
+
+  it('update input hooks up correctly for array if writeable is false', () => {
+    testInputs.third.writeable = false;
+    const wrapper = mount(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        testInputValues,
+        {},
+        ['takes', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: '180' } });
+    expect(malcolmUpdateMethodInput).not.toHaveBeenCalled();
+  });
 });

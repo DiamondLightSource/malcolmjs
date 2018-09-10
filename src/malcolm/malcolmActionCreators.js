@@ -53,14 +53,22 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmPostAction = (path, parameters) => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Post:1.0',
-    path,
-    parameters,
-  },
-});
+export const malcolmPostAction = (path, rawParameters) => dispatch => {
+  const parameters = {};
+  Object.keys(rawParameters).forEach(param => {
+    parameters[param] = rawParameters[param].meta
+      ? rawParameters[param].value
+      : rawParameters[param];
+  });
+  dispatch({
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Post:1.0',
+      path,
+      parameters,
+    },
+  });
+};
 
 export const malcolmSetFlag = (path, flagType, flagState) => ({
   type: MalcolmAttributeFlag,
