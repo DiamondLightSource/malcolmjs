@@ -67,7 +67,7 @@ const MethodViewer = props => {
       switch (widgetTag) {
         case 'widget:tree':
           return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', textAlign: 'left' }}>
               <div style={{ height: 'calc(100% - 56px)' }}>
                 <JSONInput
                   locale={locale}
