@@ -9,6 +9,13 @@ exports[`DrawerContainer renders correctly 1`] = `
     </div>
   </div>
   <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
     anchor="left"
     classes={
       Object {
@@ -32,6 +39,13 @@ exports[`DrawerContainer renders correctly 1`] = `
     </div>
   </WithStyles(Drawer)>
   <WithStyles(Drawer)
+    PaperProps={
+      Object {
+        "style": Object {
+          "height": "calc(100vh - 10px)",
+        },
+      }
+    }
     anchor="right"
     classes={
       Object {

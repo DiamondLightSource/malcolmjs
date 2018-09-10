@@ -13,6 +13,9 @@ describe('MainMalcolmView', () => {
     shallow = createShallow({ dive: true });
 
     state = {
+      viewState: {
+        footerHeight: 10,
+      },
       malcolm: {
         parentBlock: 'test1',
         blocks: {

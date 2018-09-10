@@ -22,7 +22,7 @@ const getFirstControlPoints = rhs => {
 
 const interPortSpacing = 40;
 const buildTwoPointPath = points => {
-  if (points[1].x - interPortSpacing < points[0].x) {
+  if (points[1].x + interPortSpacing < points[0].x) {
     const curveFactor = (points[0].x - points[1].x) * interPortSpacing / 60;
 
     const c1 = {};
@@ -36,10 +36,12 @@ const buildTwoPointPath = points => {
       c2.y = points[1].y - curveFactor;
     } else {
       // Stick out some
-      c1.x = points[0].x + curveFactor;
-      c1.y = points[0].y; // + (points[1].y > points[0].y ? curveFactor : -curveFactor);
-      c2.x = points[1].x - curveFactor;
-      c2.y = points[1].y; // + (points[1].y > points[0].y ? -curveFactor : curveFactor);
+      c1.x = points[0].x + Math.max(curveFactor, 150);
+      c1.y =
+        points[0].y + (points[1].y > points[0].y ? curveFactor : -curveFactor);
+      c2.x = points[1].x - Math.max(curveFactor, 150);
+      c2.y =
+        points[1].y + (points[1].y > points[0].y ? -curveFactor : curveFactor);
     }
 
     const path = `M ${points[0].x},${points[0].y} C ${c1.x},${c1.y} ${c2.x},${
@@ -49,10 +51,17 @@ const buildTwoPointPath = points => {
     return [path];
   }
 
+  const xInfluence = Math.max(
+    (points[1].x - points[0].x) / 2,
+    interPortSpacing
+  );
+  const yInfluence = Math.abs(points[1].y - points[0].y) * 0.4;
   return [
-    `M ${points[0].x},${points[0].y} C ${points[0].x + 50},${
-      points[0].y
-    } ${points[1].x - 50},${points[1].y} ${points[1].x},${points[1].y}`,
+    `M ${points[0].x},${points[0].y} C ${points[0].x +
+      xInfluence +
+      yInfluence},${points[0].y} ${points[1].x - xInfluence - yInfluence},${
+      points[1].y
+    } ${points[1].x},${points[1].y}`,
   ];
 };
 
@@ -76,7 +85,8 @@ const buildPath = knots => {
       const finerPts = [...Array(numFinerPoints)]
         .map((element, i) => pts.at(i / (numFinerPoints - 1) * lineLength))
         .map(pt => ({ x: pt[0], y: pt[1] }));
-      twoPointPath = [buildPath(finerPts)];
+
+      twoPointPath = buildPath(finerPts);
     }
     return twoPointPath;
   }
@@ -100,14 +110,14 @@ const buildPath = knots => {
   const paths = [];
   let path;
   for (let i = 0; i < n; i += 1) {
-    path = `M${knots[i].x},${knots[i].y} `;
+    path = `M ${knots[i].x},${knots[i].y} `;
 
     firstControl = {
       x: x[i],
       y: y[i],
     };
 
-    path += `C${firstControl.x},${firstControl.y} `;
+    path += `C ${firstControl.x},${firstControl.y} `;
     if (i < n - 1) {
       secondControl = {
         x: 2 * knots[i + 1].x - x[i + 1],

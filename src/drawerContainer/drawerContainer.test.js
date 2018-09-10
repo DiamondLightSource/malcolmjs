@@ -23,6 +23,7 @@ describe('DrawerContainer', () => {
       viewState: {
         openParentPanel: true,
         openChildPanel: true,
+        footerHeight: 10,
       },
       malcolm: {
         blocks: {},
