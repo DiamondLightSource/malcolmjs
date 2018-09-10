@@ -43,7 +43,7 @@ const pushTestData = freshArchive => {
     returned: {},
   });
   freshArchive.timeStamp.push({
-    localRunTime: new Date('July 20, 69 00:20:18'),
+    localRunTime: new Date(-14258382000),
     localReturnTime: new Date(123456789),
   });
   freshArchive.alarmState.push(4);
