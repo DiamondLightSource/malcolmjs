@@ -117,7 +117,7 @@ const MethodDetails = props => {
       <div className={props.classes.div}>
         <Tooltip title={props.methodErrorMessage}>
           <IconButton
-            tabindex="-1"
+            tabIndex="-1"
             className={props.classes.button}
             disableRipple
             onClick={() =>
@@ -152,7 +152,7 @@ const MethodDetails = props => {
           <div key={input[0]} className={props.classes.div}>
             <Tooltip title={input[1].description}>
               <IconButton
-                tabindex="-1"
+                tabIndex="-1"
                 className={props.classes.button}
                 disableRipple
                 onClick={() =>
@@ -187,7 +187,7 @@ const MethodDetails = props => {
         <div className={props.classes.div}>
           <Tooltip title={props.methodErrorMessage}>
             <IconButton
-              tabindex="-1"
+              tabIndex="-1"
               className={props.classes.button}
               disableRipple
               onClick={() =>
@@ -224,7 +224,7 @@ const MethodDetails = props => {
               <div key={output[0]} className={props.classes.div}>
                 <Tooltip title={output[1].description}>
                   <IconButton
-                    tabindex="-1"
+                    tabIndex="-1"
                     className={props.classes.button}
                     style={{ cursor: 'pointer' }}
                     disableRipple

@@ -68,6 +68,7 @@ export const checkForFlowGraph = attribute => {
         },
         ports: [],
         icon: undefined,
+        loading: true,
       })),
     };
 
@@ -442,7 +443,7 @@ export function updateAttribute(
         : undefined;
 
       const layoutEngine =
-        numberOfBlocksLoading < numberOfBlocksWereLoading ||
+        numberOfBlocksLoading !== numberOfBlocksWereLoading ||
         (!layoutLoading &&
           LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
           ? LayoutReducer.buildLayoutEngine(

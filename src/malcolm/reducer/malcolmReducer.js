@@ -289,6 +289,8 @@ function setFlag(state, path, flagType, flagState) {
     blockName,
     attributeName
   );
+  let recalculateLayout = false;
+
   if (matchingAttribute >= 0) {
     const attributes = [...state.blocks[blockName].attributes];
     const attributeCopy = {
@@ -303,13 +305,44 @@ function setFlag(state, path, flagType, flagState) {
         ...attributeCopy.calculated.alarms,
         dirty: flagState ? AlarmStates.DIRTY : null,
       };
+    } else if (flagType === 'pending' && flagState === true) {
+      if (!blockUtils.attributeHasTag(attributeCopy, 'widget:flowgraph')) {
+        attributeCopy.calculated.loading = true;
+        recalculateLayout = true;
+      }
     }
+
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
-  return {
+
+  // update layout here if it was a pending/true update
+  const updatedState = {
     ...state,
     blocks,
+  };
+
+  const layout = recalculateLayout
+    ? layoutReducer.processLayout(updatedState)
+    : state.layout;
+  const layoutEngine = recalculateLayout
+    ? layoutReducer.buildLayoutEngine(
+        layout,
+        updatedState.layoutState.selectedBlocks,
+        {
+          offset: {
+            x: updatedState.layoutEngine.diagramModel.offsetX,
+            y: updatedState.layoutEngine.diagramModel.offsetY,
+          },
+          zoom: updatedState.layoutEngine.diagramModel.zoom,
+        }
+      )
+    : updatedState.layoutEngine;
+
+  return {
+    ...updatedState,
+    layout,
+    layoutEngine,
   };
 }
 

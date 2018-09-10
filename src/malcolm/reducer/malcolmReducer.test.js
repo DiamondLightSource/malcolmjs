@@ -88,6 +88,13 @@ describe('malcolm reducer', () => {
       layoutState: {
         selectedBlocks: [],
       },
+      layoutEngine: {
+        diagramModel: {
+          offsetX: 10,
+          offsetY: 20,
+          zoom: 30,
+        },
+      },
     };
   });
 

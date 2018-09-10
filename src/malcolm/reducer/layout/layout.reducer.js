@@ -274,7 +274,12 @@ const buildBlockNode = (
   mouseDownHandler,
   portMouseDown
 ) => {
-  const node = new BlockNodeModel(block.name, block.description, block.mri);
+  const node = new BlockNodeModel(
+    block.name,
+    block.description,
+    block.mri,
+    block.loading
+  );
   block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);
@@ -298,23 +303,21 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
   engine.clickHandler = () => {};
   engine.mouseDownHandler = () => {};
 
-  const nodes = layout.blocks
-    .filter(b => b.loading === false)
-    .map(b =>
-      buildBlockNode(
-        b,
-        selectedBlocks,
-        node => engine.clickHandler(b, node),
-        show => engine.mouseDownHandler(show),
-        (portId, start) => engine.portMouseDown(portId, start)
-      )
-    );
+  const nodes = layout.blocks.map(b =>
+    buildBlockNode(
+      b,
+      selectedBlocks,
+      node => engine.clickHandler(b, node),
+      show => engine.mouseDownHandler(show),
+      (portId, start) => engine.portMouseDown(portId, start)
+    )
+  );
 
   const links = [];
   layout.blocks.forEach(b => {
     const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
 
-    const startNode = nodes.find(n => n.id === b.mri);
+    const startNode = nodes.find(n => n.id === b.mri && !b.loading);
     if (startNode) {
       linkStarts.forEach(start => {
         const startPort = startNode.ports[`${b.mri}-${start.label}`];
@@ -322,8 +325,10 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
         if (startPort !== undefined) {
           // need to find the target port and link them together
           const targetPortValue = start.value;
-          const endBlock = layout.blocks.find(block =>
-            block.ports.some(p => !p.input && p.tag === targetPortValue)
+          const endBlock = layout.blocks.find(
+            block =>
+              block.ports.some(p => !p.input && p.tag === targetPortValue) &&
+              !block.loading
           );
 
           if (endBlock) {
@@ -389,14 +394,25 @@ const cursorInLayoutZone = (state, payload) => {
   };
 };
 
+const isRelevantWidget = attribute => {
+  if (!attribute.raw || !attribute.raw.meta) {
+    return false;
+  }
+
+  const { tags } = attribute.raw.meta;
+  return (
+    tags &&
+    (tags.some(t => t.indexOf(sinkPort) > -1) ||
+      tags.some(t => t.indexOf('widget:icon') > -1) ||
+      tags.some(t => t.indexOf('widget:flowgraph') > -1))
+  );
+};
+
+const isLabelAttribute = attribute =>
+  attribute.calculated && attribute.calculated.name === 'label';
+
 const isRelevantAttribute = attribute =>
-  attribute &&
-  attribute.raw &&
-  attribute.raw.meta &&
-  attribute.raw.meta.tags &&
-  (attribute.raw.meta.tags.some(t => t.indexOf(sinkPort) > -1) ||
-    attribute.raw.meta.tags.some(t => t.indexOf('widget:icon') > -1) ||
-    attribute.raw.meta.tags.some(t => t.indexOf('widget:flowgraph') > -1));
+  attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute));
 
 const resetPorts = state => {
   let updatedState = selectPortForLink(state, undefined, true);
