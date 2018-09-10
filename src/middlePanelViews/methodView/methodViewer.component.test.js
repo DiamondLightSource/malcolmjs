@@ -76,6 +76,11 @@ describe('Method viewer', () => {
       label: 'Second output',
       tags: ['widget:textupdate'],
     },
+    third: {
+      label: 'Third output',
+      tags: ['widget:textupdate'],
+      typeid: malcolmTypes.stringArray,
+    },
   };
 
   const testInputValues = {
@@ -95,6 +100,7 @@ describe('Method viewer', () => {
   const testOutputValues = {
     first: true,
     second: 'done',
+    third: ['something finished'],
   };
 
   const testMethodViewer = (
@@ -198,7 +204,7 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders input correctly with initial value', () => {
@@ -213,7 +219,7 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders output correctly with no initial value', () => {
@@ -228,7 +234,7 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders output correctly with initial value', () => {
@@ -243,7 +249,22 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
+  });
+
+  it('renders output array correctly', () => {
+    const wrapper = shallow(
+      testMethodViewer(
+        testInputs,
+        testOutputs,
+        {},
+        testOutputValues,
+        ['returns', 'third'],
+        undefined,
+        freshArchive
+      )
+    );
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders method param archive if selected parameter isnt a tree', () => {
@@ -258,11 +279,10 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders top-level method param archive if no selected parameter', () => {
-    freshArchive.alarmState.push(0);
     const wrapper = shallow(
       testMethodViewer(
         testInputs,
@@ -274,7 +294,7 @@ describe('Method viewer', () => {
         pushTestData(freshArchive)
       )
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('copy params button hooks in correctly on top-level method param archive', () => {
@@ -426,7 +446,7 @@ describe('Method viewer', () => {
         freshArchive
       )
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('add row hooks up correctly for array', () => {

@@ -112,12 +112,20 @@ const MethodViewer = props => {
               );
               return <div>Loading...</div>;
             } else if (
-              props.selectedParamValue.meta &&
-              props.selectedParamValue.value
+              props.selectedParam[0] === 'returns' ||
+              (props.selectedParamValue.meta && props.selectedParamValue.value)
             ) {
               return (
                 <WidgetTable
-                  localState={props.selectedParamValue}
+                  localState={
+                    props.selectedParam[0] === 'returns'
+                      ? {
+                          value: props.selectedParamValue,
+                          meta: props.selectedParamMeta,
+                          flags: { rows: [] },
+                        }
+                      : props.selectedParamValue
+                  }
                   attribute={props.method}
                   eventHandler={
                     props.selectedParam[0] === 'takes' &&
@@ -212,6 +220,7 @@ const MethodViewer = props => {
             copyParams: {
               tags: ['info:button'],
               label: 'Reuse run params',
+              writeable: true,
             },
           },
         },

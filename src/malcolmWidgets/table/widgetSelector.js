@@ -27,7 +27,7 @@ export const getTableWidgetTags = meta => {
 };
 
 const TableWidgetSelector = props => {
-  const isDisabled = false;
+  const isDisabled = !props.columnMeta.writeable;
   const isErrorState = false;
   const isDirty = false;
   const forceUpdate = false;

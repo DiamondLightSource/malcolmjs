@@ -49,7 +49,7 @@ describe('table widget selector', () => {
       'test',
       0,
       'aFunction',
-      { isDirty: false, isDisabled: false, isErrorState: false },
+      { isDirty: false, isDisabled: true, isErrorState: false },
       'anotherFunction',
       '#7986cb',
       {
