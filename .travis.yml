@@ -3,33 +3,31 @@ matrix:
 language: node_js
 node_js:
 - '8.9'
+cache:
+  directories:
+  - node_modules
+  - "/home/travis/.cache/Cypress"
+addons:
+  apt:
+    packages:
+    - xvfb
+install:
+- npm install -g codecov
+- npm install
 
 jobs:
   include:
-    - stage: prepare cache
-      script: true
-      cache:
-        directories:
-        - node_modules
-        - "/home/travis/.cache/Cypress"
-      addons:
-        apt:
-          packages:
-          - xvfb
-      install:
-      - npm install -g codecov
-      - npm install
-    - stage: build
+    - stage: build and test
       script: npm run lint:css
-    - stage: build
+    - stage: build and test
       script: npm run lint:js
-    - stage: build
+    - stage: build and test
       script: npm run build
-    - stage: test
+    - stage: build and test
       script:
       - npm run test
       - codecov
-    - stage: test
+    - stage: build and test
       script: npm run e2e
     - stage: deploy
       script: true
