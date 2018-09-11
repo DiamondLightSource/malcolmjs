@@ -313,6 +313,7 @@ export const linkInfo = props => {
       functions: {
         eventHandler: (nullPath, value) =>
           props.eventHandler([blockMri, portName, 'value'], value),
+        setFlag: () => {},
       },
     },
     destinationPort: {

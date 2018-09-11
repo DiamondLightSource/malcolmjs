@@ -18,6 +18,7 @@ import {
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
 import blockUtils from '../../../malcolm/blockUtils';
+import { isArrayType } from '../../../malcolm/reducer/method.reducer';
 
 export const malcolmTypes = {
   bool: 'malcolm:core/BooleanMeta:1.0',
@@ -62,6 +63,14 @@ export const selectorFunction = (
   continuousSend = false,
   buttonClickHandler = () => {}
 ) => {
+  if (isArrayType(objectMeta) && !objectMeta.insideArray) {
+    return (
+      <ButtonAction
+        text={objectMeta.writeable ? 'Edit' : 'View'}
+        clickAction={() => buttonClickHandler(path)}
+      />
+    );
+  }
   switch (widgetTag) {
     case 'widget:led':
       return (

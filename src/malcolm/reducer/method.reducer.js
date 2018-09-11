@@ -10,6 +10,14 @@ import {
 export const getMethodParam = (type, param, method) =>
   Object.keys(method.raw[type].elements).includes(`${param}`);
 
+export const isArrayType = meta =>
+  meta &&
+  meta.typeid &&
+  meta.typeid
+    .split('/')[1]
+    .split(':')[0]
+    .slice(-9) === 'ArrayMeta';
+
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
   returnKeys.forEach(returnVar => {
@@ -61,7 +69,20 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value && payload.value.isDirty !== undefined) {
+    if (
+      payload.doInitialise &&
+      isArrayType(attributeCopy.raw.takes.elements[payload.name])
+    ) {
+      attributeCopy.calculated.inputs[payload.name] = {
+        meta: {
+          ...attributeCopy.raw.takes.elements[payload.name],
+        },
+        value: [],
+        flags: {
+          rows: [],
+        },
+      };
+    } else if (payload.value && payload.value.isDirty !== undefined) {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
@@ -74,7 +95,14 @@ const updateMethodInput = (state, payload) => {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,
       };
-      attributeCopy.calculated.inputs[payload.name] = payload.value;
+      if (isArrayType(attributeCopy.raw.takes.elements[payload.name])) {
+        attributeCopy.calculated.inputs[payload.name] = {
+          ...attributeCopy.calculated.inputs[payload.name],
+          value: payload.value,
+        };
+      } else {
+        attributeCopy.calculated.inputs[payload.name] = payload.value;
+      }
     }
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };

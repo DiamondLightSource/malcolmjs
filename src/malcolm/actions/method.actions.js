@@ -36,6 +36,15 @@ export const malcolmArchivePost = (path, parameters) => ({
   },
 });
 
+export const malcolmIntialiseMethodParam = (path, selectedParam) => ({
+  type: MalcolmUpdateMethodInputType,
+  payload: {
+    doInitialise: true,
+    path,
+    name: selectedParam[0] === 'takes' ? selectedParam[1] : undefined,
+  },
+});
+
 export default {
   buildMethodUpdate,
   malcolmUpdateMethodInput,

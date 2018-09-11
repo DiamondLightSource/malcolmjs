@@ -28,7 +28,7 @@ const Layout = props => {
           clientX: event.clientX,
           clientY: event.clientY,
           deltaX: event.deltaX,
-          deltaY: 20 * event.deltaY,
+          deltaY: 10 * event.deltaY,
         });
         event.target.dispatchEvent(customScroll);
       }

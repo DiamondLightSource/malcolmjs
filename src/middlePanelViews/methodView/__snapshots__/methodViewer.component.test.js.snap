@@ -1,169 +1,208 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Method viewer renders correctly with initial value 1`] = `
-<div
-  style={
+exports[`Method viewer renders correctly for array once local state is initialised 1`] = `
+<WithStyles(WidgetTable)
+  addRow={[Function]}
+  attribute={
     Object {
-      "width": "100%",
+      "calculated": Object {
+        "errorMessage": undefined,
+        "errorState": false,
+        "inputs": Object {
+          "first": 3,
+          "second": Object {
+            "isAString": true,
+            "value": "four",
+          },
+          "third": Object {
+            "flags": Object {
+              "rows": Array [],
+            },
+            "meta": Object {
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": true,
+            },
+            "value": Array [
+              "SEVEN",
+            ],
+          },
+        },
+        "name": "Method",
+        "outputs": Object {},
+        "path": Array [
+          "Test",
+          "Method",
+        ],
+      },
+      "raw": Object {
+        "defaults": Object {},
+        "label": "Test",
+        "returns": Object {
+          "elements": Object {
+            "first": Object {
+              "label": "First output",
+              "tags": Array [
+                "widget:led",
+              ],
+            },
+            "second": Object {
+              "label": "Second output",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+            },
+            "third": Object {
+              "label": "Third output",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+            },
+          },
+        },
+        "takes": Object {
+          "elements": Object {
+            "first": Object {
+              "description": "a test input",
+              "label": "First input",
+              "tags": Array [
+                "widget:textinput",
+              ],
+            },
+            "second": Object {
+              "description": "a test input",
+              "label": "Second input",
+              "tags": Array [
+                "widget:tree",
+              ],
+            },
+            "third": Object {
+              "description": "an array",
+              "label": "Third input",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+        },
+      },
     }
   }
->
-  <div
-    style={
-      Object {
-        "height": "calc(100% - 56px)",
-      }
+  eventHandler={[Function]}
+  infoClickHandler={[Function]}
+  localState={
+    Object {
+      "flags": Object {
+        "rows": Array [],
+      },
+      "meta": Object {
+        "tags": Array [
+          "widget:textinput",
+        ],
+        "typeid": "malcolm:core/StringArrayMeta:1.0",
+        "writeable": true,
+      },
+      "value": Array [
+        "SEVEN",
+      ],
     }
-  >
-    <t
-      height="100%"
-      id={
-        Array [
-          "takes",
-          "second",
-        ]
-      }
-      locale={
-        Object {
-          "brace": Object {
-            "curly": Object {
-              "cannotWrap": "'{token}' token cannot be wrapped in '{}' curly braces",
-              "missingClose": "Open '{' curly brace is missing closing '}' curly brace",
-              "missingOpen": "Missing '{' open curly brace",
-            },
-            "square": Object {
-              "cannotWrap": "'{token}' token cannot be wrapped in '[]' square braces",
-              "missingClose": "Open '[' square brace is missing closing ']' square brace",
-              "missingOpen": "Missing '[' open square brace",
-            },
-          },
-          "format": "{reason} at line {line}",
-          "invalidToken": Object {
-            "double": "'{token}' token cannot be followed by another '{token}' token",
-            "sequence": "'{firstToken}' token cannot be followed by a '{secondToken}' token",
-            "unexpected": "Unexpected '{token}' token found",
-            "useInstead": "'{badToken}' token is not accepted. Use '{goodToken}' instead",
-            "whitelist": "'{firstToken}' token can only follow '{secondToken}' token",
-          },
-          "key": Object {
-            "numberAndLetterMissingQuotes": "Key beginning with number and containing letters must be wrapped by quotes",
-            "spaceMissingQuotes": "Key containing space must be wrapped by quotes",
-            "unexpectedString": "Unexpected string found at key position",
-          },
-          "noTrailingOrLeadingComma": "Trailing or leading commas in arrays and objects are not permitted",
-          "string": Object {
-            "missingClose": "Missing/invalid closing string '{quote}' token",
-            "missingOpen": "Missing/invalid opening string '{quote}' token",
-            "mustBeWrappedByQuotes": "Strings must be wrapped by quotes",
-            "nonAlphanumeric": "Non-alphanemeric token '{token}' is not allowed outside string notation",
-            "unexpectedKey": "Unexpected key found at string position",
-          },
-        }
-      }
-      onChange={[Function]}
-      placeholder={
-        Object {
-          "isAString": true,
-          "value": "four",
-        }
-      }
-      style={
-        Object {
-          "body": Object {
-            "fontSize": "100%",
-          },
-        }
-      }
-      viewOnly={true}
-      width="100%"
-    />
-  </div>
-  <WithStyles(Table)>
-    <WithStyles(TableFooter)>
-      <WithStyles(TableRow) />
-    </WithStyles(TableFooter)>
-  </WithStyles(Table)>
-</div>
+  }
+  rowClickHandler={[Function]}
+  setFlag={[Function]}
+/>
 `;
 
-exports[`Method viewer renders correctly with no initial value 1`] = `
-<div
-  style={
+exports[`Method viewer renders input correctly with initial value 1`] = `
+<MethodArchive
+  defaultTab={0}
+  methodArchive={
     Object {
-      "width": "100%",
+      "alarmState": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "name": "Method",
+      "timeStamp": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "value": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
     }
   }
->
-  <div
-    style={
-      Object {
-        "height": "calc(100% - 56px)",
-      }
+  openPanels={
+    Object {
+      "child": undefined,
+      "parent": undefined,
     }
-  >
-    <t
-      height="100%"
-      id={
-        Array [
-          "takes",
-          "second",
-        ]
-      }
-      locale={
-        Object {
-          "brace": Object {
-            "curly": Object {
-              "cannotWrap": "'{token}' token cannot be wrapped in '{}' curly braces",
-              "missingClose": "Open '{' curly brace is missing closing '}' curly brace",
-              "missingOpen": "Missing '{' open curly brace",
-            },
-            "square": Object {
-              "cannotWrap": "'{token}' token cannot be wrapped in '[]' square braces",
-              "missingClose": "Open '[' square brace is missing closing ']' square brace",
-              "missingOpen": "Missing '[' open square brace",
-            },
-          },
-          "format": "{reason} at line {line}",
-          "invalidToken": Object {
-            "double": "'{token}' token cannot be followed by another '{token}' token",
-            "sequence": "'{firstToken}' token cannot be followed by a '{secondToken}' token",
-            "unexpected": "Unexpected '{token}' token found",
-            "useInstead": "'{badToken}' token is not accepted. Use '{goodToken}' instead",
-            "whitelist": "'{firstToken}' token can only follow '{secondToken}' token",
-          },
-          "key": Object {
-            "numberAndLetterMissingQuotes": "Key beginning with number and containing letters must be wrapped by quotes",
-            "spaceMissingQuotes": "Key containing space must be wrapped by quotes",
-            "unexpectedString": "Unexpected string found at key position",
-          },
-          "noTrailingOrLeadingComma": "Trailing or leading commas in arrays and objects are not permitted",
-          "string": Object {
-            "missingClose": "Missing/invalid closing string '{quote}' token",
-            "missingOpen": "Missing/invalid opening string '{quote}' token",
-            "mustBeWrappedByQuotes": "Strings must be wrapped by quotes",
-            "nonAlphanumeric": "Non-alphanemeric token '{token}' is not allowed outside string notation",
-            "unexpectedKey": "Unexpected key found at string position",
-          },
-        }
-      }
-      onChange={[Function]}
-      style={
-        Object {
-          "body": Object {
-            "fontSize": "100%",
-          },
-        }
-      }
-      viewOnly={true}
-      width="100%"
-    />
-  </div>
-  <WithStyles(Table)>
-    <WithStyles(TableFooter)>
-      <WithStyles(TableRow) />
-    </WithStyles(TableFooter)>
-  </WithStyles(Table)>
-</div>
+  }
+  selectedParam={
+    Array [
+      "takes",
+      "first",
+    ]
+  }
+/>
+`;
+
+exports[`Method viewer renders input correctly with no initial value 1`] = `
+<MethodArchive
+  defaultTab={0}
+  methodArchive={
+    Object {
+      "alarmState": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "name": "Method",
+      "timeStamp": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "value": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+    }
+  }
+  openPanels={
+    Object {
+      "child": undefined,
+      "parent": undefined,
+    }
+  }
+  selectedParam={
+    Array [
+      "takes",
+      "first",
+    ]
+  }
+/>
 `;
 
 exports[`Method viewer renders method param archive if selected parameter isnt a tree 1`] = `
@@ -210,6 +249,158 @@ exports[`Method viewer renders method param archive if selected parameter isnt a
 />
 `;
 
+exports[`Method viewer renders output array correctly 1`] = `
+<WithStyles(WidgetTable)
+  addRow={[Function]}
+  attribute={
+    Object {
+      "calculated": Object {
+        "errorMessage": undefined,
+        "errorState": false,
+        "inputs": Object {},
+        "name": "Method",
+        "outputs": Object {
+          "first": true,
+          "second": "done",
+          "third": Array [
+            "something finished",
+          ],
+        },
+        "path": Array [
+          "Test",
+          "Method",
+        ],
+      },
+      "raw": Object {
+        "defaults": Object {},
+        "label": "Test",
+        "returns": Object {
+          "elements": Object {
+            "first": Object {
+              "label": "First output",
+              "tags": Array [
+                "widget:led",
+              ],
+            },
+            "second": Object {
+              "label": "Second output",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+            },
+            "third": Object {
+              "label": "Third output",
+              "tags": Array [
+                "widget:textupdate",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+            },
+          },
+        },
+        "takes": Object {
+          "elements": Object {
+            "first": Object {
+              "description": "a test input",
+              "label": "First input",
+              "tags": Array [
+                "widget:textinput",
+              ],
+            },
+            "second": Object {
+              "description": "a test input",
+              "label": "Second input",
+              "tags": Array [
+                "widget:tree",
+              ],
+            },
+            "third": Object {
+              "description": "an array",
+              "label": "Third input",
+              "tags": Array [
+                "widget:textinput",
+              ],
+              "typeid": "malcolm:core/StringArrayMeta:1.0",
+              "writeable": true,
+            },
+          },
+        },
+      },
+    }
+  }
+  eventHandler={[Function]}
+  infoClickHandler={[Function]}
+  localState={
+    Object {
+      "flags": Object {
+        "rows": Array [],
+      },
+      "meta": Object {
+        "label": "Third output",
+        "tags": Array [
+          "widget:textupdate",
+        ],
+        "typeid": "malcolm:core/StringArrayMeta:1.0",
+      },
+      "value": Array [
+        "something finished",
+      ],
+    }
+  }
+  rowClickHandler={[Function]}
+  setFlag={[Function]}
+/>
+`;
+
+exports[`Method viewer renders output correctly with initial value 1`] = `
+<MethodArchive
+  defaultTab={0}
+  methodArchive={
+    Object {
+      "alarmState": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "name": "Method",
+      "timeStamp": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "value": MockCircularBuffer [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+    }
+  }
+  openPanels={
+    Object {
+      "child": undefined,
+      "parent": undefined,
+    }
+  }
+  selectedParam={
+    Array [
+      "returns",
+      "first",
+    ]
+  }
+/>
+`;
+
+exports[`Method viewer renders output correctly with no initial value 1`] = `
+<WithStyles(Typography)>
+  No results yet...run method first!
+</WithStyles(Typography)>
+`;
+
 exports[`Method viewer renders top-level method param archive if no selected parameter 1`] = `
 <WithStyles(WidgetTable)
   addRow={[Function]}
@@ -230,6 +421,7 @@ exports[`Method viewer renders top-level method param archive if no selected par
               "tags": Array [
                 "info:button",
               ],
+              "writeable": true,
             },
             "postTime": Object {
               "label": "Time run",
@@ -252,11 +444,32 @@ exports[`Method viewer renders top-level method param archive if no selected par
           },
         },
         "value": Object {
-          "alarm": Array [],
-          "copyParams": Array [],
-          "postTime": Array [],
-          "returnStatus": Array [],
-          "returnTime": Array [],
+          "alarm": Array [
+            0,
+            4,
+          ],
+          "copyParams": Array [
+            Object {
+              "action": [Function],
+              "label": "Copy",
+            },
+            Object {
+              "action": [Function],
+              "label": "Copy",
+            },
+          ],
+          "postTime": Array [
+            1970-01-01T00:00:00.000Z,
+            1969-07-19T23:20:18.000Z,
+          ],
+          "returnStatus": Array [
+            undefined,
+            undefined,
+          ],
+          "returnTime": Array [
+            2018-09-10T12:46:58.205Z,
+            1970-01-02T10:17:36.789Z,
+          ],
         },
       },
     }

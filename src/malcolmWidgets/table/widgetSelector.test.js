@@ -26,7 +26,7 @@ describe('table widget selector', () => {
         },
       },
     };
-    const tags = getTableWidgetTags(attribute);
+    const tags = getTableWidgetTags(attribute.raw.meta);
     expect(tags[0]).toEqual('widget:baz');
     expect(tags[1]).toEqual('widget:foo');
     expect(tags[2]).toEqual(-1);
@@ -49,10 +49,13 @@ describe('table widget selector', () => {
       'test',
       0,
       'aFunction',
-      { isDirty: false, isDisabled: false, isErrorState: false },
+      { isDirty: false, isDisabled: true, isErrorState: false },
       'anotherFunction',
       '#7986cb',
-      { choices: 'an illusion' },
+      {
+        choices: 'an illusion',
+        insideArray: true,
+      },
       false,
       true,
       undefined

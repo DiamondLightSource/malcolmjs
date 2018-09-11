@@ -19,7 +19,12 @@ import WidgetTable from '../../malcolmWidgets/table/table.component';
 import MethodArchive from './methodArchive.container';
 
 import blockUtils from '../../malcolm/blockUtils';
-import { malcolmUpdateMethodInput } from '../../malcolm/actions/method.actions';
+import {
+  malcolmUpdateMethodInput,
+  malcolmIntialiseMethodParam,
+} from '../../malcolm/actions/method.actions';
+import { isArrayType } from '../../malcolm/reducer/method.reducer';
+import { getDefaultFromType } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 const noOp = () => {};
 
@@ -62,7 +67,7 @@ const MethodViewer = props => {
       switch (widgetTag) {
         case 'widget:tree':
           return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', textAlign: 'left' }}>
               <div style={{ height: 'calc(100% - 56px)' }}>
                 <JSONInput
                   locale={locale}
@@ -99,6 +104,60 @@ const MethodViewer = props => {
         case 'widget:combobox':
         case 'widget:checkbox':
         case 'widget:led': {
+          if (isArrayType(props.selectedParamMeta)) {
+            if (props.selectedParamValue === undefined) {
+              props.initialiseLocalState(
+                props.method.calculated.path,
+                props.selectedParam
+              );
+              return <div>Loading...</div>;
+            } else if (
+              props.selectedParam[0] === 'returns' ||
+              (props.selectedParamValue.meta && props.selectedParamValue.value)
+            ) {
+              return (
+                <WidgetTable
+                  localState={
+                    props.selectedParam[0] === 'returns'
+                      ? {
+                          value: props.selectedParamValue,
+                          meta: props.selectedParamMeta,
+                          flags: { rows: [] },
+                        }
+                      : props.selectedParamValue
+                  }
+                  attribute={props.method}
+                  eventHandler={
+                    props.selectedParam[0] === 'takes' &&
+                    props.selectedParamMeta.writeable
+                      ? (path, value, row) => {
+                          const newValue = [...props.selectedParamValue.value];
+                          newValue[row] = value;
+                          props.updateInput(
+                            path,
+                            props.selectedParam[1],
+                            newValue
+                          );
+                        }
+                      : noOp
+                  }
+                  setFlag={() => {}}
+                  addRow={() => {
+                    props.updateInput(
+                      props.method.calculated.path,
+                      props.selectedParam[1],
+                      [
+                        ...props.selectedParamValue.value,
+                        getDefaultFromType(props.selectedParamMeta),
+                      ]
+                    );
+                  }}
+                  infoClickHandler={noOp}
+                  rowClickHandler={noOp}
+                />
+              );
+            }
+          }
           return (
             <MethodArchive
               methodArchive={props.methodArchive}
@@ -118,7 +177,7 @@ const MethodViewer = props => {
     const values = props.methodArchive.value.toarray();
     const copyRunParams = row => {
       const params = values[row].runParameters;
-      Object.keys(params).forEach(paramName => {
+      Object.keys(props.method.raw.takes.elements).forEach(paramName => {
         props.updateInput(
           props.method.calculated.path,
           paramName,
@@ -161,6 +220,7 @@ const MethodViewer = props => {
             copyParams: {
               tags: ['info:button'],
               label: 'Reuse run params',
+              writeable: true,
             },
           },
         },
@@ -227,6 +287,9 @@ const mapDispatchToProps = dispatch => ({
   updateInput: (path, inputName, inputValue) => {
     dispatch(malcolmUpdateMethodInput(path, inputName, inputValue));
   },
+  initialiseLocalState: (path, selectedParam) => {
+    dispatch(malcolmIntialiseMethodParam(path, selectedParam));
+  },
 });
 
 MethodViewer.propTypes = {
@@ -237,6 +300,9 @@ MethodViewer.propTypes = {
       path: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
     raw: PropTypes.shape({
+      takes: PropTypes.shape({
+        elements: PropTypes.shape({}),
+      }),
       timeStamp: PropTypes.shape({
         secondsPastEpoch: PropTypes.string,
       }),
@@ -250,6 +316,7 @@ MethodViewer.propTypes = {
   selectedParamMeta: PropTypes.shape({
     tags: PropTypes.arrayOf(PropTypes.string),
     writeable: PropTypes.bool,
+    typeid: PropTypes.string,
   }).isRequired,
   selectedParamValue: PropTypes.oneOf(
     PropTypes.string,
@@ -261,6 +328,7 @@ MethodViewer.propTypes = {
   openParent: PropTypes.bool.isRequired,
   openChild: PropTypes.bool.isRequired,
   updateInput: PropTypes.func.isRequired,
+  initialiseLocalState: PropTypes.func.isRequired,
 };
 
 MethodViewer.defaultProps = {

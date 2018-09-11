@@ -85,64 +85,66 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
       className="WidgetTable-tableLayout-4"
     >
       <WithStyles(TableBody)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="0"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value="TTLIN1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -150,29 +152,26 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:TTLIN1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -181,29 +180,8 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -212,110 +190,118 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="1"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value="TTLIN2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={0}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -323,29 +309,26 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:TTLIN2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -354,29 +337,8 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -385,110 +347,118 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="2"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value="INENC1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={1}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -496,29 +466,26 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:INENC1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -527,29 +494,8 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -558,110 +504,118 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="3"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value="INENC2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={2}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -669,29 +623,26 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:INENC2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -700,29 +651,8 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -731,52 +661,58 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={3}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
       </WithStyles(TableBody)>
     </WithStyles(Table)>
     <WithStyles(Table)>
@@ -904,64 +840,67 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
       className="WidgetTable-tableLayout-4"
     >
       <WithStyles(TableBody)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="0"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value="TTLIN1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "selectedRow": 1,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -969,29 +908,26 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:TTLIN1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -1000,29 +936,8 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -1031,110 +946,119 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="1"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value="TTLIN2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={0}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "selectedRow": 1,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -1142,29 +1066,26 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:TTLIN2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -1173,29 +1094,8 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -1204,110 +1104,119 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="2"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value="INENC1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={1}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "selectedRow": 1,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -1315,29 +1224,26 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:INENC1"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -1346,29 +1252,8 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -1377,110 +1262,119 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="3"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,-1"
-            padding="none"
-          >
-            <WithStyles(IconButton)
-              className="WidgetTable-button-11"
-              disableRipple={true}
-              onClick={[Function]}
-            >
-              <WithTheme(AttributeAlarm)
-                alarmSeverity={0}
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "name",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value="INENC2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={2}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "name",
+              "mri",
+              "x",
+              "y",
+              "visible",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "widget:textupdate",
+              "widget:textupdate",
+              "widget:textinput",
+              "widget:textinput",
+              "widget:checkbox",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [
+                Object {},
+                Object {},
+                Object {},
+                Object {},
+              ],
+              "table": Object {
+                "dirty": false,
+                "fresh": true,
+                "selectedRow": 1,
+                "timeStamp": Object {
+                  "nanoseconds": 0,
+                  "secondsPastEpoch": 0,
+                  "typeid": "time_t",
+                  "userTag": 0,
+                },
+              },
+            }
+          }
+          hideInfo={false}
+          meta={
+            Object {
+              "description": "Layout of child blocks",
+              "elements": Object {
+                "mri": Object {
                   "description": "Malcolm full names of child blocks",
                   "label": "MRI",
                   "tags": Array [
@@ -1488,29 +1382,26 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/StringArrayMeta:1.0",
                   "writeable": false,
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "mri",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value="PANDA:INENC2"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "name": Object {
+                  "description": "Names of the layout parts",
+                  "label": "Name",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                  "typeid": "malcolm:core/StringArrayMeta:1.0",
+                  "writeable": false,
+                },
+                "visible": Object {
+                  "description": "Whether child blocks are visible",
+                  "label": "Visible",
+                  "tags": Array [
+                    "widget:checkbox",
+                  ],
+                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                  "writeable": true,
+                },
+                "x": Object {
                   "description": "X Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "x",
@@ -1519,29 +1410,8 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "x",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,3"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "y": Object {
                   "description": "Y Coordinates of child blocks",
                   "dtype": "float64",
                   "label": "y",
@@ -1550,52 +1420,58 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
                   ],
                   "typeid": "malcolm:core/NumberArrayMeta:1.0",
                   "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:textinput"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 3,
-                  "label": "y",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="3,4"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                }
-              }
-              columnWidgetTag="widget:checkbox"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 4,
-                  "label": "visible",
-                  "row": 3,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
+                },
+              },
+              "label": "Layout",
+              "tags": Array [
+                "widget:flowgraph",
+              ],
+              "typeid": "malcolm:core/TableMeta:1.0",
+              "writeable": true,
+            }
+          }
+          path={
+            Array [
+              "test1",
+              "layout",
+            ]
+          }
+          row={3}
+          rowChangeHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "mri": "PANDA:TTLIN1",
+                "name": "TTLIN1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:TTLIN2",
+                "name": "TTLIN2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC1",
+                "name": "INENC1",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+              Object {
+                "mri": "PANDA:INENC2",
+                "name": "INENC2",
+                "visible": false,
+                "x": 0,
+                "y": 0,
+              },
+            ]
+          }
+        />
       </WithStyles(TableBody)>
     </WithStyles(Table)>
     <WithStyles(Table)>
