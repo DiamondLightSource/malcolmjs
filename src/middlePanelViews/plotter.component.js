@@ -19,21 +19,27 @@ const initialiseData = (color, name, dash) => ({
 
 class Plotter extends React.Component {
   static getDerivedStateFromProps(props, state) {
-    const newState = props.deriveState(props, state);
-    if (props.attribute) {
-      // && newState.data[0].x.slice(-1)[0] instanceof Date) {
-      const USER_HAS_CHANGED_LAYOUT = false;
-      if (!USER_HAS_CHANGED_LAYOUT) {
-        newState.layout.xaxis = {
-          ...newState.layout.xaxis,
-          range: [
-            new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
-            newState.data[0].x.slice(-1)[0],
-          ],
-        };
+    if (!state.userChangingViewState) {
+      const newState = props.deriveState(props, state);
+      if (props.attribute) {
+        // && newState.data[0].x.slice(-1)[0] instanceof Date) {
+        const USER_HAS_CHANGED_LAYOUT =
+          state.layout.xaxis.range &&
+          (!(state.layout.xaxis.range[0] instanceof Date) ||
+            !(state.layout.xaxis.range[1] instanceof Date));
+        if (!USER_HAS_CHANGED_LAYOUT) {
+          newState.layout.xaxis = {
+            ...newState.layout.xaxis,
+            range: [
+              new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
+              newState.data[0].x.slice(-1)[0],
+            ],
+          };
+        }
       }
+      return newState;
     }
-    return newState;
+    return state;
   }
 
   constructor(props) {
@@ -64,13 +70,39 @@ class Plotter extends React.Component {
           color: props.theme.palette.text.primary,
         },
       },
+      userChangingViewState: false,
     };
-
+    this.startChangingViewState = this.startChangingViewState.bind(this);
+    this.finishChangingViewState = this.finishChangingViewState.bind(this);
     this.renderTimeout = setTimeout(() => {}, 4000);
+  }
+
+  componentDidMount() {
+    const thisPlot = document.getElementById('plotComponent');
+    if (thisPlot !== null) {
+      thisPlot.addEventListener('mousedown', this.startChangingViewState);
+      thisPlot.addEventListener('mouseup', this.finishChangingViewState);
+    }
   }
 
   componentWillUnmount() {
     clearTimeout(this.renderTimeout);
+    const thisPlot = document.getElementById('plotComponent');
+    if (thisPlot !== null) {
+      thisPlot.removeEventListener('mousedown');
+      thisPlot.removeEventListener('mouseup');
+    }
+  }
+
+  startChangingViewState() {
+    this.setState({ userChangingViewState: true });
+  }
+
+  finishChangingViewState() {
+    this.setState({
+      ...this.props.deriveState(this.props, this.state),
+      userChangingViewState: false,
+    });
   }
 
   render() {
@@ -89,6 +121,8 @@ class Plotter extends React.Component {
         layout={this.state.layout}
         style={{ width: '100%', height: '100%' }}
         useResizeHandler
+        onRelayout={this.finishChangingViewState}
+        divId="plotComponent"
       />
     );
   }
@@ -143,7 +177,7 @@ Plotter.propTypes = {
   }).isRequired,
   tickArchive: PropTypes.func.isRequired,
   doTick: PropTypes.bool,
-  // deriveState: PropTypes.func.isRequired,
+  deriveState: PropTypes.func.isRequired,
 };
 
 Plotter.defaultProps = {
