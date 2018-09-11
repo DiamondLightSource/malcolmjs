@@ -235,38 +235,6 @@ const selectPortForLink = (malcolmState, portId, start) => {
   };
 };
 
-const makeBlockVisible = (state, payload) => {
-  const updatedState = state;
-  const parentBlock = state.blocks[state.parentBlock];
-  if (parentBlock && parentBlock.attributes) {
-    const attribute = state.blocks[state.parentBlock].attributes.find(
-      a => a.calculated && a.calculated.name === state.mainAttribute
-    );
-
-    if (attribute && attribute.calculated && attribute.calculated.layout) {
-      const layoutBlocks = [...attribute.calculated.layout.blocks];
-      const matchingLayoutBlock = layoutBlocks.find(b => b.mri === payload.mri);
-
-      if (matchingLayoutBlock) {
-        matchingLayoutBlock.visible = payload.visible;
-        matchingLayoutBlock.position = payload.position;
-      } else {
-        layoutBlocks.push({
-          name: payload.mri,
-          mri: payload.mri,
-          visible: payload.visible,
-          position: payload.position,
-        });
-      }
-
-      attribute.calculated.layout.blocks = layoutBlocks;
-      updatedState.layout = processLayout(state);
-    }
-  }
-
-  return updatedState;
-};
-
 const buildBlockNode = (
   block,
   selectedBlocks,
@@ -372,6 +340,53 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
   }
 
   return engine;
+};
+
+const makeBlockVisible = (state, payload) => {
+  const updatedState = state;
+  const parentBlock = state.blocks[state.parentBlock];
+  if (parentBlock && parentBlock.attributes) {
+    const attribute = state.blocks[state.parentBlock].attributes.find(
+      a => a.calculated && a.calculated.name === state.mainAttribute
+    );
+
+    if (attribute && attribute.calculated && attribute.calculated.layout) {
+      const layoutBlocks = [...attribute.calculated.layout.blocks];
+      const matchingLayoutBlock = layoutBlocks.find(b => b.mri === payload.mri);
+
+      if (matchingLayoutBlock) {
+        matchingLayoutBlock.visible = payload.visible;
+        matchingLayoutBlock.position = payload.position;
+      } else {
+        layoutBlocks.push({
+          name: payload.mri,
+          mri: payload.mri,
+          visible: payload.visible,
+          position: payload.position,
+        });
+      }
+
+      attribute.calculated.layout.blocks = layoutBlocks;
+      updatedState.layout = processLayout(state);
+
+      const layoutEngineView = updatedState.layoutEngine
+        ? {
+            offset: {
+              x: updatedState.layoutEngine.diagramModel.offsetX,
+              y: updatedState.layoutEngine.diagramModel.offsetY,
+            },
+            zoom: updatedState.layoutEngine.diagramModel.zoom,
+          }
+        : undefined;
+      updatedState.layoutEngine = buildLayoutEngine(
+        updatedState.layout,
+        updatedState.layoutState.selectedBlocks,
+        layoutEngineView
+      );
+    }
+  }
+
+  return updatedState;
 };
 
 const showLayoutBin = (state, payload) => {

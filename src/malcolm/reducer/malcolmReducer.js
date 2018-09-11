@@ -306,7 +306,9 @@ function setFlag(state, path, flagType, flagState) {
         dirty: flagState ? AlarmStates.DIRTY : null,
       };
     } else if (flagType === 'pending' && flagState === true) {
-      if (!blockUtils.attributeHasTag(attributeCopy, 'widget:flowgraph')) {
+      if (path[path.length - 1] === 'label') {
+        // only a PUT on the label attribute actually affects whether
+        // the layout should show the loading screen in blocks
         attributeCopy.calculated.loading = true;
         recalculateLayout = true;
       }
