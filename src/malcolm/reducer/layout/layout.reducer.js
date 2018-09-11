@@ -11,6 +11,7 @@ import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
 import BlockNodeModel from '../../../layout/block/BlockNodeModel';
 import MalcolmLinkFactory from '../../../layout/link/link.factory';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
+import { idSeparator } from '../../../layout/layout.component';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
@@ -189,7 +190,7 @@ const shiftIsPressed = (malcolmState, payload) => ({
 });
 
 const findPort = (blocks, id) => {
-  const path = id.split('-');
+  const path = id.split(idSeparator);
   const block = blocks.find(b => b.mri === path[0]);
   const port = block.ports.find(p => p.label === path[1]);
 
@@ -317,7 +318,8 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
     const startNode = nodes.find(n => n.id === b.mri);
     if (startNode) {
       linkStarts.forEach(start => {
-        const startPort = startNode.ports[`${b.mri}-${start.label}`];
+        const startPort =
+          startNode.ports[`${b.mri}${idSeparator}${start.label}`];
 
         if (startPort !== undefined) {
           // need to find the target port and link them together
@@ -334,10 +336,11 @@ const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
             const endNode = nodes.find(n => n.id === endBlock.mri);
 
             if (endNode) {
-              const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+              const endPort =
+                endNode.ports[`${endBlock.mri}${idSeparator}${end.label}`];
 
               const newLink = endPort.link(startPort);
-              newLink.id = `${endPort.name}-${startPort.name}`;
+              newLink.id = `${endPort.name}${idSeparator}${startPort.name}`;
               links.push(newLink);
             }
           }

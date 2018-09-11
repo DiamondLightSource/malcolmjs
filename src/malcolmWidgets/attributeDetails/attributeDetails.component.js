@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import AttributeAlarm, {
   getAlarmState,
 } from './attributeAlarm/attributeAlarm.component';
@@ -58,8 +59,11 @@ const EMPTY_STRING = '';
 
 const AttributeDetails = props => {
   if (props.widgetTagIndex !== null) {
+    const rowHighlight = props.isMainAttribute
+      ? { backgroundColor: fade(props.theme.palette.secondary.main, 0.25) }
+      : {};
     return (
-      <div className={props.classes.div}>
+      <div className={props.classes.div} style={rowHighlight}>
         <Tooltip id="1" title={props.message} placement="bottom">
           <IconButton
             tabindex="-1"
@@ -111,6 +115,14 @@ AttributeDetails.propTypes = {
   }).isRequired,
   buttonClickHandler: PropTypes.func.isRequired,
   nameClickHandler: PropTypes.func.isRequired,
+  isMainAttribute: PropTypes.bool.isRequired,
+  theme: PropTypes.shape({
+    palette: PropTypes.shape({
+      secondary: PropTypes.shape({
+        main: PropTypes.string,
+      }),
+    }),
+  }).isRequired,
 };
 
 AttributeDetails.defaultProps = {
@@ -159,6 +171,10 @@ const mapStateToProps = (state, ownProps) => {
       attribute && attribute.raw && attribute.raw.meta
         ? attribute.raw.meta.label
         : EMPTY_STRING,
+    isMainAttribute:
+      attribute &&
+      attribute.calculated &&
+      state.malcolm.mainAttribute === attribute.calculated.name,
   };
 };
 
