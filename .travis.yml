@@ -7,13 +7,9 @@ cache:
   directories:
   - node_modules
   - "/home/travis/.cache/Cypress"
-addons:
-  apt:
-    packages:
-    - xvfb
 install:
 - npm install -g codecov
-- npm ci
+- npm install
 
 jobs:
   include:
@@ -28,6 +24,10 @@ jobs:
       - npm run test
       - codecov
     - stage: build and test
+      addons:
+        apt:
+          packages:
+          - xvfb
       script: npm run e2e
     - stage: deploy
       script: true
