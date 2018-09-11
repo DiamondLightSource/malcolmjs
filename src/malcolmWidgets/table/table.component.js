@@ -71,13 +71,14 @@ const styles = theme => ({
   },
 });
 
+const isBlankCell = props =>
+  props.selectedRow === props.row
+    ? props.classes.blankCell
+    : props.classes.textBody;
+
 const AlarmCell = props => (
   <TableCell
-    className={
-      props.selectedRow === props.row
-        ? props.classes.blankCell
-        : props.classes.textBody
-    }
+    className={isBlankCell(props)}
     padding="none"
     key={[props.row, -1]}
   >
@@ -106,11 +107,7 @@ const RowData = props => {
   if (props.columnLabels === undefined) {
     valueCells = [
       <TableCell
-        className={
-          props.selectedRow === props.row
-            ? props.classes.blankCell
-            : props.classes.textBody
-        }
+        className={isBlankCell(props)}
         padding="none"
         key={[props.row, 0]}
       >
@@ -127,11 +124,7 @@ const RowData = props => {
   } else {
     valueCells = props.columnLabels.map((label, column) => (
       <TableCell
-        className={
-          props.selectedRow === props.row
-            ? props.classes.blankCell
-            : props.classes.textBody
-        }
+        className={isBlankCell(props)}
         padding="none"
         key={[props.row, column]}
       >
@@ -419,12 +412,7 @@ AlarmCell.propTypes = {
   flags: PropTypes.shape({
     rows: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  selectedRow: PropTypes.number,
   infoClickHandler: PropTypes.func.isRequired,
-};
-
-AlarmCell.defaultProps = {
-  selectedRow: undefined,
 };
 
 RowData.propTypes = {
@@ -439,7 +427,6 @@ RowData.propTypes = {
   flags: PropTypes.shape({
     rows: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
-  selectedRow: PropTypes.number,
   infoClickHandler: PropTypes.func.isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
@@ -452,10 +439,20 @@ RowData.propTypes = {
     PropTypes.shape({ elements: PropTypes.shape({}) })
   ).isRequired,
   hideInfo: PropTypes.bool.isRequired,
+  selectedRow: PropTypes.number,
 };
 
 RowData.defaultProps = {
   columnLabels: undefined,
+  selectedRow: undefined,
+};
+
+isBlankCell.propTypes = {
+  selectedRow: PropTypes.number,
+  row: PropTypes.number.isRequired,
+};
+
+isBlankCell.defaultProps = {
   selectedRow: undefined,
 };
 export default withStyles(styles, { withTheme: true })(WidgetTable);
