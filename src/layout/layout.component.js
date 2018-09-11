@@ -11,6 +11,8 @@ import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
 
 require('storm-react-diagrams/dist/style.min.css');
 
+export const idSeparator = '•';
+
 const Layout = props => {
   const updatedProps = props;
   updatedProps.layoutEngine.selectedHandler = props.selectHandler;
@@ -113,7 +115,7 @@ export const mapDispatchToProps = dispatch => ({
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
     } else if (type === 'malcolmlink' && isSelected) {
-      const idComponents = id.split('-');
+      const idComponents = id.split(idSeparator);
       const blockMri = idComponents[2];
       const portName = idComponents[3];
       dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
