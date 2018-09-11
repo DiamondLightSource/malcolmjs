@@ -2,7 +2,7 @@ matrix:
   fast_finish: true
 language: node_js
 node_js:
-- '8.9'
+- '8.12'
 cache:
   directories:
   - node_modules
@@ -13,7 +13,7 @@ addons:
     - xvfb
 install:
 - npm install -g codecov
-- npm install
+- npm ci
 
 jobs:
   include:
