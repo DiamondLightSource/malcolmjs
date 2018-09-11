@@ -14,29 +14,56 @@ addons:
 install:
 - npm install -g codecov
 - npm install
-script:
-- npm run lint:css
-- npm run lint:js
-- npm run build
-- npm run test
-- codecov
-- npm run e2e
-before_deploy:
-- npm run build
-- chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
-- "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
-deploy:
-  provider: releases
-  api_key:
-    secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
-  file_glob: true
-  file: "${TRAVIS_BUILD_DIR}/artifacts/*"
-  skip_cleanup: true
-  on:
-    all_branches: true
-    tags: true
-notifications:
-  slack:
-    on_success: never
-    on_failure: always
-    secure: bzzLHiGYj4EAGpbXoTHRh106+At4AiBej1c7byZOP0FWNYGj5x/yShmaQTlH2rdY91TEEyHgk3cyM+EJHGzvjWdyKnQO1Kec4EqztDhh88DKm88/bl8mO+DUIa4LuI8VrddWPzMiVHjBJCqUnMk9I2gjLO5ahCo1wjRq8/Urvd8221W5nBJwR8B6WAD/kORAn6ZXzpXQR/6/twKLz6Sm2OdXEcIXf0mcQIggeL/yQJUmWWLZ2jo0mPFqqFgrReLhZxYDuj86wHPyNGTEHN5SF2RihQd8ZB3dA3eybP3JZeeKNDtS1OLMmqtf/O1pXz4d3tBodd0xvZJ+kbTPf+RGUdzUodiLCsz6N6BqaWR8nK94eGyod2klZlRbpelzVxnSF57H+IYeHUZTB0yl/509wMqDw/xbmj/xpUuiRkERKw4jE4oVbJqbm1VnfQH1ZwQJ2aYdZ74JFgpuM41HqDPU/pvNc5UfLHUf9TtWdo4ZAfYRdCXNyVPNdEtcmBIJthc22A92m3BPtsKE2MYw/n4jMALSMTycFU25f1Cd1zWfScMrarEl6BsaSC0/168f7lUgoPzkuW+Re/nbt8sYcyqsCBiacNL658KgqaFKpdrmA5KMkKbJxsmebAHHwaYh4sVVf6RcRFShBd2vTugziE5dbpm3XM6d0N5hVJlr4lHAAk4=
+
+
+jobs:
+  include:
+    - stage: build
+      script: npm run lint:css
+    - stage: build
+      script: npm run lint:js
+    - stage: build
+      script: npm run build
+    - stage: test
+      script:
+      - npm run test
+      - codecov
+    - stage: test
+      script: npm run e2e
+    - stage: deploy
+      before_deploy:
+      - npm run build
+      - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+      - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
+      deploy:
+        provider: releases
+        api_key:
+          secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
+        file_glob: true
+        file: "${TRAVIS_BUILD_DIR}/artifacts/*"
+        skip_cleanup: true
+        on:
+          all_branches: true
+          tags: true
+
+# script:
+# - npm run lint:css
+# - npm run lint:js
+# - npm run build
+# - npm run test
+# - codecov
+# - npm run e2e
+# before_deploy:
+# - npm run build
+# - chmod +x $TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh
+# - "$TRAVIS_BUILD_DIR/continuous_integration/package_artifacts.sh $TRAVIS_BUILD_DIR"
+# deploy:
+#   provider: releases
+#   api_key:
+#     secure: ltKb5HFDyBSWpfzCddFnv69f4ERGyGFLYWwVKzqwEEFOsZtYDL2BHHAROGLuskidW6mRplZbT658LaIWJ8j6ssIpWmSFyUBHZ6EfsjtiVB1HkkZxeo37Z5RlqJnvSHOYnZHzP9lymKR+TiCmVwaINp6P1k8Mp/Gz3kpAhMxwn5optNPiN/hh7FYlo/bZpHRgDAtILCHcW8//Q9UpXvJH9lcYR8aX6wUjcPklO8CgN9Hhhb5eBFZa97UfJq9k5VcRMiQtLUGlf0xk5puMEV3YVb79eoWqIMnMOS4xbpXyo8jhWWi3EYKBHIR86rw8CnyT0FbKQj+QT6FnaqaNUf3otXyAlNZ917TnTH2bL8ETXG6E90XA2zCz/tJ0+nEEXZGxwSO3j1o3as/trvD6pz+vdT8PBKmyraHEwMOFbBgU5rWAbj5QVcDnMS8Pndc/c1d8lNQTa0mQ+t91N0nNn52rZpqULVJ2kBW9jnbWmrYdpzENg/oIoG3iDWnBisFbQOnPJMD0giNwg3Mjw4/QAkGL8mXUCh1B9O8PYG3Y9wwVtr3rn/IjLTAzHJadx5nPwI4M1AfX2287EO1Hjykwg3U0WjVV25ka+klVmNxCasMr34EfGlEqaVKesQO8T+dpSlaCsoAznRhFnTF2PVUChucUfJM8FCtDCM2F6cL8VTutHYA=
+#   file_glob: true
+#   file: "${TRAVIS_BUILD_DIR}/artifacts/*"
+#   skip_cleanup: true
+#   on:
+#     all_branches: true
+#     tags: true
