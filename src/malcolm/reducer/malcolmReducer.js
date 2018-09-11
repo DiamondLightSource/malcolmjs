@@ -318,34 +318,19 @@ function setFlag(state, path, flagType, flagState) {
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
 
-  // update layout here if it was a pending/true update
   const updatedState = {
     ...state,
     blocks,
   };
 
-  const layout = recalculateLayout
-    ? layoutReducer.processLayout(updatedState)
-    : state.layout;
-  const layoutEngine = recalculateLayout
-    ? layoutReducer.buildLayoutEngine(
-        layout,
-        updatedState.layoutState.selectedBlocks,
-        {
-          offset: {
-            x: updatedState.layoutEngine.diagramModel.offsetX,
-            y: updatedState.layoutEngine.diagramModel.offsetY,
-          },
-          zoom: updatedState.layoutEngine.diagramModel.zoom,
-        }
-      )
-    : updatedState.layoutEngine;
+  // update layout here if it was a pending/true update
+  if (recalculateLayout) {
+    const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+    updatedState.layout = layoutUpdates.layout;
+    updatedState.layoutEngine = layoutUpdates.layoutEngine;
+  }
 
-  return {
-    ...updatedState,
-    layout,
-    layoutEngine,
-  };
+  return updatedState;
 }
 
 function cleanBlocks(state) {
@@ -565,6 +550,15 @@ const updateSocket = (state, payload) => {
   };
 };
 
+const updateLayoutOnState = state => {
+  const updatedState = state;
+  const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+  updatedState.layout = layoutUpdates.layout;
+  updatedState.layoutEngine = layoutUpdates.layoutEngine;
+
+  return updatedState;
+};
+
 const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
@@ -607,17 +601,9 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       );
 
       updatedState = NavigationReducer.updateNavTypes(updatedState);
+      updatedState = updateLayoutOnState(updatedState);
 
-      updatedState.layout = layoutReducer.processLayout(updatedState);
-
-      return {
-        ...updatedState,
-        layoutEngine: layoutReducer.buildLayoutEngine(
-          updatedState.layout,
-          updatedState.layoutState.selectedBlocks,
-          undefined
-        ),
-      };
+      return updatedState;
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);
