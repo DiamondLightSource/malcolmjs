@@ -171,7 +171,10 @@ const mapStateToProps = (state, ownProps) => {
       attribute && attribute.raw && attribute.raw.meta
         ? attribute.raw.meta.label
         : EMPTY_STRING,
-    isMainAttribute: state.malcolm.mainAttribute === attribute.calculated.name,
+    isMainAttribute:
+      attribute &&
+      attribute.calculated &&
+      state.malcolm.mainAttribute === attribute.calculated.name,
   };
 };
 

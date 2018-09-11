@@ -3,6 +3,7 @@
 exports[`AttributeDetails renders correctly 1`] = `
 <div
   className="AttributeDetails-div-1"
+  style={Object {}}
 >
   <WithStyles(Tooltip)
     id="1"
