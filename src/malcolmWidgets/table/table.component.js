@@ -354,12 +354,12 @@ WidgetTable.propTypes = {
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.arrayOf(
-      PropTypes.oneOf(
+      PropTypes.oneOfType([
         PropTypes.shape({}),
         PropTypes.number,
         PropTypes.string,
-        PropTypes.bool
-      )
+        PropTypes.bool,
+      ])
     ),
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({

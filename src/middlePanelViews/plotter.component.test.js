@@ -14,8 +14,19 @@ import Plotter, {
 } from './plotter.component';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
 
+const plotlyDates = require('plotly.js/src/lib/dates');
+
 jest.useFakeTimers();
 
+/*
+const finishChangeMock = jest.fn();
+
+class MockPlot extends Plotter {
+  finishChangingViewState(event) {
+    finishChangeMock(event);
+  }
+}
+*/
 const mockTheme = {
   palette: {
     primary: { light: '#f0f0f0' },
@@ -240,7 +251,6 @@ describe('Generic Plotter', () => {
   let mockArchive;
   let mockStore;
   beforeEach(() => {
-    
     mount = createMount();
     mockArchive = {
       timeStamp: new MockCircularBuffer(5),
@@ -248,6 +258,16 @@ describe('Generic Plotter', () => {
       plotValue: new MockCircularBuffer(5),
       meta: {},
     };
+    mockArchive.meta.typeid = malcolmTypes.number;
+    mockArchive.timeStamp.push(new Date(1000));
+    mockArchive.timeStamp.push(new Date(2000));
+    mockArchive.timeStamp.push(new Date(3000));
+    mockArchive.plotValue.push(1);
+    mockArchive.plotValue.push(-1);
+    mockArchive.plotValue.push(2);
+    mockArchive.alarmState.push(0);
+    mockArchive.alarmState.push(0);
+    mockArchive.alarmState.push(0);
     mockStore = {
       getState: () => {},
       subscribe: () => {},
@@ -257,14 +277,13 @@ describe('Generic Plotter', () => {
 
   it('mouse down in plot area calls startChange function', () => {});
 
-  it('plotly date format function behaves as expected', () => {
-    const testDate = new Date(-14258381877);
-    expect(plotlyDateFormatter(testDate)).toEqual('1969-07-20 00:20:18.123');
-  });
-
   it('plotly date compare behaves as expected', () => {
-    expect(comparePlotlyDateString(new Date(-14258381877), '')).toBeFalsy();
-    expect(comparePlotlyDateString('', new Date(-14258381877))).toBeFalsy();
+    expect(
+      comparePlotlyDateString(new Date(-14258381877), '1969-07-20 00:20:18.123')
+    ).toBeFalsy();
+    expect(
+      comparePlotlyDateString('1969-07-20 00:20:18.123', new Date(-14258381877))
+    ).toBeFalsy();
 
     // identical strings are equal
     expect(
@@ -348,5 +367,12 @@ describe('Generic Plotter', () => {
         '1969-07-20 00:20:18.120'
       )
     ).toBeFalsy();
+  });
+
+  it('plotly date format function behaves as expected', () => {
+    const testDate = plotlyDateFormatter(new Date(-14258381877));
+    const plotlyDateString = plotlyDates.ms2DateTimeLocal(-14258381877);
+    expect(plotlyDateString).toEqual(testDate);
+    expect(comparePlotlyDateString(plotlyDateString, testDate)).toBeTruthy();
   });
 });

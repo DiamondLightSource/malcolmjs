@@ -17,8 +17,14 @@ export const comparePlotlyDateString = (date1, date2) => {
   }
   const date1Split = date1.split('.');
   const date2Split = date2.split('.');
-  const date1Millis = parseFloat(`0.${date1Split[1].slice(0, 3)}`);
-  const date2Millis = parseFloat(`0.${date2Split[1].slice(0, 3)}`);
+  const date1Millis =
+    date1Split[1] === undefined
+      ? 0
+      : parseFloat(`0.${date1Split[1].slice(0, 3)}`);
+  const date2Millis =
+    date2Split[1] === undefined
+      ? 0
+      : parseFloat(`0.${date2Split[1].slice(0, 3)}`);
   return date1Split[0] === date2Split[0] && date1Millis === date2Millis;
 };
 
