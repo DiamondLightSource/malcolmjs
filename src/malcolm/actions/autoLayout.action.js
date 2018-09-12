@@ -1,5 +1,6 @@
 /* eslint no-console: ["error", { allow: ["info", "error"] }] */
 import { malcolmPutAction, malcolmSetFlag } from '../malcolmActionCreators';
+import { idSeparator } from '../../layout/layout.component';
 
 const calculateHeight = (layoutEngine, mri) => {
   const zoomFactor = layoutEngine.diagramModel.zoom / 100;
@@ -35,7 +36,7 @@ const runAutoLayout = () => (dispatch, getState) => {
         portConstraints: 'FIXED_ORDER',
       },
       ports: b.ports.map((p, i) => ({
-        id: `${b.mri}-${p.label}`,
+        id: `${b.mri}${idSeparator}${p.label}`,
         properties: {
           side: p.input ? 'WEST' : 'EAST',
           index: p.input ? b.ports.length - i : i,

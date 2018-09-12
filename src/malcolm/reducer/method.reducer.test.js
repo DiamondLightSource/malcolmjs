@@ -6,6 +6,7 @@ import {
   MalcolmArchiveMethodRun,
 } from '../malcolm.types';
 import MockCircularBuffer from './attribute.reducer.mocks';
+import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 describe('method reducer', () => {
   const testMessage = {
@@ -25,7 +26,18 @@ describe('method reducer', () => {
                 name: 'attr1',
                 inputs: {},
               },
-              raw: {},
+              raw: {
+                takes: {
+                  elements: {
+                    input1: {
+                      typeid: malcolmTypes.string,
+                    },
+                    input2: {
+                      typeid: malcolmTypes.stringArray,
+                    },
+                  },
+                },
+              },
             },
           ],
         },
@@ -103,6 +115,40 @@ describe('method reducer', () => {
 
     const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
     expect(attribute.calculated.dirtyInputs.input1).toBeTruthy();
+  });
+
+  it('updateMethodInput should initialise an array input', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input2',
+      doInitialise: true,
+    };
+
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    expect(attribute.calculated.inputs.input2).toEqual({
+      flags: { rows: [] },
+      meta: { typeid: malcolmTypes.stringArray },
+      value: [],
+    });
+  });
+
+  it('updateMethodInput should overewrite value only on updating an array input', () => {
+    const payload = {
+      path: ['block1', 'attr1'],
+      name: 'input2',
+      value: [123],
+    };
+
+    state.blocks.block1.attributes[0].calculated.inputs.input2 = {
+      flags: { rows: [] },
+      meta: { typeid: 'malcolm:core/StringArrayMeta:1.0' },
+    };
+    const attribute = runReducer(MalcolmUpdateMethodInputType, payload);
+    expect(attribute.calculated.inputs.input2).toEqual({
+      flags: { rows: [] },
+      meta: { typeid: malcolmTypes.stringArray },
+      value: [123],
+    });
   });
 
   it('archiveMethodRun stores input parameters on post', () => {

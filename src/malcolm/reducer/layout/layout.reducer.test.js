@@ -257,7 +257,7 @@ describe('Layout Reducer', () => {
 
   it('selectPortForLink optimistically adds a link if the end port is being set', () => {
     let state = buildMalcolmState();
-    state.layoutState.startPortForLink = 'PANDA-start';
+    state.layoutState.startPortForLink = 'PANDA•start';
     state.layout.blocks = [
       {
         mri: 'PANDA',
@@ -268,10 +268,10 @@ describe('Layout Reducer', () => {
       },
     ];
 
-    state = LayoutReducer.selectPortForLink(state, 'PANDA-end', false);
+    state = LayoutReducer.selectPortForLink(state, 'PANDA•end', false);
 
-    expect(state.layoutState.startPortForLink).toEqual('PANDA-start');
-    expect(state.layoutState.endPortForLink).toEqual('PANDA-end');
+    expect(state.layoutState.startPortForLink).toEqual('PANDA•start');
+    expect(state.layoutState.endPortForLink).toEqual('PANDA•end');
     expect(state.layout.blocks[0].ports[1].value).toEqual('START');
   });
 

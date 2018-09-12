@@ -58,267 +58,264 @@ exports[`archiveTable renders correctly 1`] = `
       className="WidgetTable-tableLayout-4"
     >
       <WithStyles(TableBody)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="0"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
                   "label": "Alarm state",
                   "tags": Array [
                     "info:alarm",
                   ],
-                }
-              }
-              columnWidgetTag="info:alarm"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "alarm",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "timeStamp": Object {
                   "label": "Time set",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "timeStamp",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value="1970-01-01T00:00:01.000Z"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="0,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "value": Object {
                   "label": "Value",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "value",
-                  "row": 0,
-                }
-              }
-              setFlag={[Function]}
-              value={1}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="1"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+            }
+          }
+          row={0}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
                   "label": "Alarm state",
                   "tags": Array [
                     "info:alarm",
                   ],
-                }
-              }
-              columnWidgetTag="info:alarm"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "alarm",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={1}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "timeStamp": Object {
                   "label": "Time set",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "timeStamp",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value="1970-01-01T00:00:02.000Z"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="1,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "value": Object {
                   "label": "Value",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "value",
-                  "row": 1,
-                }
-              }
-              setFlag={[Function]}
-              value={-1}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="2"
-          onClick={[Function]}
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,0"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+              },
+            }
+          }
+          row={1}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
                   "label": "Alarm state",
                   "tags": Array [
                     "info:alarm",
                   ],
-                }
-              }
-              columnWidgetTag="info:alarm"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 0,
-                  "label": "alarm",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={0}
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,1"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "timeStamp": Object {
                   "label": "Time set",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 1,
-                  "label": "timeStamp",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value="1970-01-01T00:00:03.000Z"
-            />
-          </WithStyles(TableCell)>
-          <WithStyles(TableCell)
-            className="WidgetTable-textBody-10"
-            key="2,2"
-            padding="none"
-          >
-            <WithTheme(TableWidgetSelector)
-              columnMeta={
-                Object {
+                },
+                "value": Object {
                   "label": "Value",
                   "tags": Array [
                     "widget:textupdate",
                   ],
-                }
-              }
-              columnWidgetTag="widget:textupdate"
-              rowChangeHandler={[Function]}
-              rowPath={
-                Object {
-                  "column": 2,
-                  "label": "value",
-                  "row": 2,
-                }
-              }
-              setFlag={[Function]}
-              value={false}
-            />
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
+                },
+              },
+            }
+          }
+          row={2}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
       </WithStyles(TableBody)>
     </WithStyles(Table)>
     <WithStyles(Table)>

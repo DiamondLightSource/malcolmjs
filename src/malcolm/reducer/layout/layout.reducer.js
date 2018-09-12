@@ -8,6 +8,7 @@ import {
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
+import { idSeparator } from '../../../layout/layout.component';
 
 export const buildPorts = block => {
   const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
@@ -186,7 +187,7 @@ const shiftIsPressed = (malcolmState, payload) => ({
 });
 
 const findPort = (blocks, id) => {
-  const path = id.split('-');
+  const path = id.split(idSeparator);
   const block = blocks.find(b => b.mri === path[0]);
   const port = block.ports.find(p => p.label === path[1]);
 

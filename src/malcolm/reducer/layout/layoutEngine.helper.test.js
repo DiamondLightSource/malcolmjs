@@ -37,13 +37,13 @@ describe('LayoutBuilder', () => {
     expect(engine.diagramModel.nodes.block1.icon).toEqual('icon1');
 
     expect(Object.keys(engine.diagramModel.nodes.block1.ports)).toEqual([
-      'block1-in1',
+      'block1•in1',
     ]);
-    expect(engine.diagramModel.nodes.block1.ports['block1-in1'].label).toEqual(
+    expect(engine.diagramModel.nodes.block1.ports['block1•in1'].label).toEqual(
       'in1'
     );
     expect(
-      engine.diagramModel.nodes.block1.ports['block1-in1'].in
+      engine.diagramModel.nodes.block1.ports['block1•in1'].in
     ).toBeTruthy();
   });
 
@@ -58,13 +58,13 @@ describe('LayoutBuilder', () => {
 
     const engine = buildLayoutEngine({ blocks }, []);
     expect(Object.keys(engine.diagramModel.links)).toEqual([
-      'block1-out1-block2-in1',
+      'block1•out1•block2•in1',
     ]);
     expect(
-      engine.diagramModel.links['block1-out1-block2-in1'].sourcePort.id
-    ).toEqual('block1-out1');
+      engine.diagramModel.links['block1•out1•block2•in1'].sourcePort.id
+    ).toEqual('block1•out1');
     expect(
-      engine.diagramModel.links['block1-out1-block2-in1'].targetPort.id
-    ).toEqual('block2-in1');
+      engine.diagramModel.links['block1•out1•block2•in1'].targetPort.id
+    ).toEqual('block2•in1');
   });
 });

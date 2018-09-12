@@ -78,12 +78,12 @@ describe('layout actions', () => {
   });
 
   it('selectPort dispatches a select port notification', () => {
-    const action = selectPort('PANDA-enable', true);
+    const action = selectPort('PANDA•enable', true);
     action(dispatch, getState);
 
     expect(actions.length).toBeGreaterThanOrEqual(1);
     expect(actions[0].type).toEqual(MalcolmSelectPortType);
-    expect(actions[0].payload.portId).toEqual('PANDA-enable');
+    expect(actions[0].payload.portId).toEqual('PANDA•enable');
     expect(actions[0].payload.start).toBeTruthy();
   });
 
@@ -112,11 +112,11 @@ describe('layout actions', () => {
   };
 
   it('selectPort dispatches an update to the server when completing a link', () => {
-    runPortTest('PANDA-start', 'PANDA-enable');
+    runPortTest('PANDA•start', 'PANDA•enable');
   });
 
   it('selectPort handles ports being the wrong way round', () => {
-    runPortTest('PANDA-enable', 'PANDA-start');
+    runPortTest('PANDA•enable', 'PANDA•start');
   });
 
   it('deleteBlocks makes the block invisible', () => {

@@ -27,6 +27,7 @@ import {
   getDefaultFromType,
 } from '../attributeDetails/attributeSelector/attributeSelector.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
+import { isArrayType } from '../../malcolm/reducer/method.reducer';
 
 const styles = () => ({
   div: {
@@ -79,7 +80,7 @@ const buildIOComponent = (input, props, isOutput) => {
     inputValue = props.defaultValues[input[0]];
   } else {
     inputValue = getDefaultFromType(input[1]);
-    if (inputValue !== undefined) {
+    if (inputValue !== undefined && !isArrayType(input[1])) {
       props.updateInput(props.methodPath, input[0], inputValue);
     }
   }

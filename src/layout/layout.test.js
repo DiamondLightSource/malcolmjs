@@ -121,7 +121,7 @@ describe('Layout', () => {
     const props = mapDispatchToProps(() => {});
     props.selectHandler(
       'malcolmlink',
-      'block1-output-PANDA:block1-input1',
+      'block1•output•PANDA:block1•input1',
       true
     );
     expect(navigationActions.updateChildPanelWithLink).toBeCalledWith(

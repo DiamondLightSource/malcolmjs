@@ -2,6 +2,7 @@ import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
 import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
 import BlockNodeModel from '../../../layout/block/BlockNodeModel';
 import MalcolmLinkFactory from '../../../layout/link/link.factory';
+import { idSeparator } from '../../../layout/layout.component';
 
 const buildBlockNode = (
   block,
@@ -10,12 +11,7 @@ const buildBlockNode = (
   mouseDownHandler,
   portMouseDown
 ) => {
-  const node = new BlockNodeModel(
-    block.name,
-    block.description,
-    block.mri,
-    block.loading
-  );
+  const node = new BlockNodeModel(block.name, block.description, block.mri);
   block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
   node.addIcon(block.icon);
   node.setPosition(block.position.x, block.position.y);
@@ -39,32 +35,33 @@ export const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
   engine.clickHandler = () => {};
   engine.mouseDownHandler = () => {};
 
-  const nodes = layout.blocks.map(b =>
-    buildBlockNode(
-      b,
-      selectedBlocks,
-      node => engine.clickHandler(b, node),
-      show => engine.mouseDownHandler(show),
-      (portId, start) => engine.portMouseDown(portId, start)
-    )
-  );
+  const nodes = layout.blocks
+    .filter(b => b.loading === false)
+    .map(b =>
+      buildBlockNode(
+        b,
+        selectedBlocks,
+        node => engine.clickHandler(b, node),
+        show => engine.mouseDownHandler(show),
+        (portId, start) => engine.portMouseDown(portId, start)
+      )
+    );
 
   const links = [];
   layout.blocks.forEach(b => {
     const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
 
-    const startNode = nodes.find(n => n.id === b.mri && !b.loading);
+    const startNode = nodes.find(n => n.id === b.mri);
     if (startNode) {
       linkStarts.forEach(start => {
-        const startPort = startNode.ports[`${b.mri}-${start.label}`];
+        const startPort =
+          startNode.ports[`${b.mri}${idSeparator}${start.label}`];
 
         if (startPort !== undefined) {
           // need to find the target port and link them together
           const targetPortValue = start.value;
-          const endBlock = layout.blocks.find(
-            block =>
-              block.ports.some(p => !p.input && p.tag === targetPortValue) &&
-              !block.loading
+          const endBlock = layout.blocks.find(block =>
+            block.ports.some(p => !p.input && p.tag === targetPortValue)
           );
 
           if (endBlock) {
@@ -75,10 +72,11 @@ export const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
             const endNode = nodes.find(n => n.id === endBlock.mri);
 
             if (endNode) {
-              const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
+              const endPort =
+                endNode.ports[`${endBlock.mri}${idSeparator}${end.label}`];
 
               const newLink = endPort.link(startPort);
-              newLink.id = `${endPort.name}-${startPort.name}`;
+              newLink.id = `${endPort.name}${idSeparator}${startPort.name}`;
               links.push(newLink);
             }
           }

@@ -12,9 +12,10 @@ import {
 } from '../malcolmActionCreators';
 import blockUtils from '../blockUtils';
 import { snackbarState } from '../../viewState/viewState.actions';
+import { idSeparator } from '../../layout/layout.component';
 
 const findPort = (blocks, id) => {
-  const path = id.split('-');
+  const path = id.split(idSeparator);
   const block = blocks.find(b => b.mri === path[0]);
   const port = block.ports.find(p => p.label === path[1]);
 
@@ -62,7 +63,9 @@ export const selectPort = (portId, start) => (dispatch, getState) => {
 
       // 2. update on the server
       const path = [
-        ...(startPort.input ? startPortForLink : endPortForLink).split('-'),
+        ...(startPort.input ? startPortForLink : endPortForLink).split(
+          idSeparator
+        ),
         'value',
       ];
 
