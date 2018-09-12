@@ -14,11 +14,10 @@ install:
 jobs:
   include:
     - stage: build and test
-      script: npm run lint:css
-    - stage: build and test
-      script: npm run lint:js
-    - stage: build and test
-      script: npm run build
+      script:
+      - npm run lint:css
+      - npm run lint:js
+      - npm run build
     - stage: build and test
       script:
       - npm run test
