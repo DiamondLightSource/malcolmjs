@@ -3,12 +3,13 @@ import MalcolmPortModel from '../blockPort/MalcolmPortModel';
 import { idSeparator } from '../layout.component';
 
 class BlockNodeModel extends NodeModel {
-  constructor(label, description, mri) {
+  constructor(label, description, mri, loading) {
     super('malcolmjsblock');
 
     this.id = mri;
     this.label = label;
     this.description = description;
+    this.loading = loading;
     this.addBlockPort = this.addBlockPort.bind(this);
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);

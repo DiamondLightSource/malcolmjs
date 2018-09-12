@@ -26,6 +26,7 @@ const styles = () => ({
   },
 });
 
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["handleKeyUp"] }] */
 class WidgetTextInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if (!props.isDirty) {
@@ -53,6 +54,13 @@ class WidgetTextInput extends React.Component {
     this.deFocus = this.deFocus.bind(this);
     this.inFocus = this.inFocus.bind(this);
     this.handleSpecialKeys = this.handleSpecialKeys.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+  }
+
+  handleKeyUp(event) {
+    // need to stop propagation down to the layout component which
+    // then interprets DELETE to mean delete the block
+    event.stopPropagation();
   }
 
   handleSpecialKeys(event) {
@@ -108,6 +116,7 @@ class WidgetTextInput extends React.Component {
         value={this.state.localValue}
         onChange={this.handleChange}
         onKeyDown={this.handleSpecialKeys}
+        onKeyUp={this.handleKeyUp}
         onBlur={this.deFocus}
         onFocus={this.inFocus}
         className={this.props.classes.textInput}

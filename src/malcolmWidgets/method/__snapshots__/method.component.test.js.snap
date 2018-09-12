@@ -18,7 +18,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -63,7 +63,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -108,7 +108,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -153,7 +153,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -198,7 +198,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -247,7 +247,7 @@ exports[`Method component renders correctly with default inputs 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -292,7 +292,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -337,7 +337,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -386,7 +386,7 @@ exports[`Method component renders correctly with empty inputs 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -431,7 +431,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -476,7 +476,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -525,7 +525,7 @@ exports[`Method component renders correctly with existing input values 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -563,7 +563,7 @@ exports[`Method component renders correctly with no inputs or outputs 1`] = `
       className="MethodDetails-button-6"
       disableRipple={true}
       onClick={[Function]}
-      tabindex="-1"
+      tabIndex="-1"
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}
@@ -606,7 +606,7 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -651,7 +651,7 @@ exports[`Method component renders correctly with return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -700,7 +700,7 @@ exports[`Method component renders correctly with return value 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -744,7 +744,7 @@ exports[`Method component renders correctly with return value 1`] = `
                 "cursor": "pointer",
               }
             }
-            tabindex="-1"
+            tabIndex="-1"
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
@@ -786,7 +786,7 @@ exports[`Method component renders correctly with return value 1`] = `
                 "cursor": "pointer",
               }
             }
-            tabindex="-1"
+            tabIndex="-1"
           >
             <WithTheme(AttributeAlarm)
               alarmSeverity={0}
@@ -835,7 +835,7 @@ exports[`Method component renders correctly without return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -880,7 +880,7 @@ exports[`Method component renders correctly without return value 1`] = `
           className="MethodDetails-button-6"
           disableRipple={true}
           onClick={[Function]}
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}
@@ -929,7 +929,7 @@ exports[`Method component renders correctly without return value 1`] = `
               "cursor": "pointer",
             }
           }
-          tabindex="-1"
+          tabIndex="-1"
         >
           <WithTheme(AttributeAlarm)
             alarmSeverity={0}

@@ -289,6 +289,8 @@ function setFlag(state, path, flagType, flagState) {
     blockName,
     attributeName
   );
+  let recalculateLayout = false;
+
   if (matchingAttribute >= 0) {
     const attributes = [...state.blocks[blockName].attributes];
     const attributeCopy = {
@@ -303,14 +305,32 @@ function setFlag(state, path, flagType, flagState) {
         ...attributeCopy.calculated.alarms,
         dirty: flagState ? AlarmStates.DIRTY : null,
       };
+    } else if (flagType === 'pending' && flagState === true) {
+      if (path[path.length - 1] === 'label') {
+        // only a PUT on the label attribute actually affects whether
+        // the layout should show the loading screen in blocks
+        attributeCopy.calculated.loading = true;
+        recalculateLayout = true;
+      }
     }
+
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
-  return {
+
+  const updatedState = {
     ...state,
     blocks,
   };
+
+  // update layout here if it was a pending/true update
+  if (recalculateLayout) {
+    const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+    updatedState.layout = layoutUpdates.layout;
+    updatedState.layoutEngine = layoutUpdates.layoutEngine;
+  }
+
+  return updatedState;
 }
 
 function cleanBlocks(state) {
@@ -530,6 +550,15 @@ const updateSocket = (state, payload) => {
   };
 };
 
+const updateLayoutOnState = state => {
+  const updatedState = state;
+  const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+  updatedState.layout = layoutUpdates.layout;
+  updatedState.layoutEngine = layoutUpdates.layoutEngine;
+
+  return updatedState;
+};
+
 const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   let updatedState = AttributeReducer(state, action);
   updatedState = methodReducer(updatedState, action);
@@ -572,17 +601,9 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       );
 
       updatedState = NavigationReducer.updateNavTypes(updatedState);
+      updatedState = updateLayoutOnState(updatedState);
 
-      updatedState.layout = layoutReducer.processLayout(updatedState);
-
-      return {
-        ...updatedState,
-        layoutEngine: layoutReducer.buildLayoutEngine(
-          updatedState.layout,
-          updatedState.layoutState.selectedBlocks,
-          undefined
-        ),
-      };
+      return updatedState;
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);
