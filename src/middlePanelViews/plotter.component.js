@@ -3,8 +3,29 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js/react-plotly';
+import { timeFormat } from 'd3-time-format';
 import { MalcolmTickArchive } from '../malcolm/malcolm.types';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+
+const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
+
+const comparePlotlyDateString = (date1, date2) => {
+  if (date1 instanceof Date || date2 instanceof Date) {
+    return false;
+  }
+  const date1Split = date1.split('.');
+  const date2Split = date2.split('.');
+  const date1Millis = parseFloat(`0.${date1Split[1].slice(0, 3)}`);
+  const date2Millis = parseFloat(`0.${date2Split[1].slice(0, 3)}`);
+  return date1Split[0] === date2Split[0] && date1Millis === date2Millis;
+};
+
+const returnedToInitialXRange = state =>
+  comparePlotlyDateString(
+    state.layout.xaxis.range[0],
+    state.originalXRange[0]
+  ) &&
+  comparePlotlyDateString(state.layout.xaxis.range[1], state.originalXRange[1]);
 
 const initialiseData = (color, name, dash) => ({
   x: [],
@@ -35,6 +56,11 @@ class Plotter extends React.Component {
               newState.data[0].x.slice(-1)[0],
             ],
           };
+        }
+        if (!state.originalXRange) {
+          newState.originalXRange = newState.layout.xaxis.range.map(date =>
+            plotlyDateFormatter(date)
+          );
         }
       }
       return newState;
@@ -74,6 +100,7 @@ class Plotter extends React.Component {
     };
     this.startChangingViewState = this.startChangingViewState.bind(this);
     this.finishChangingViewState = this.finishChangingViewState.bind(this);
+    this.recalcRange = this.recalcRange.bind(this);
     this.renderTimeout = setTimeout(() => {}, 4000);
   }
 
@@ -95,13 +122,38 @@ class Plotter extends React.Component {
   }
 
   startChangingViewState() {
-    this.setState({ userChangingViewState: true });
+    this.setState({ ...this.state, userChangingViewState: true });
   }
 
   finishChangingViewState() {
+    if (returnedToInitialXRange(this.state)) {
+      this.recalcRange();
+    } else {
+      this.setState({
+        ...this.props.deriveState(this.props, this.state),
+        userChangingViewState: false,
+      });
+    }
+  }
+
+  recalcRange() {
     this.setState({
-      ...this.props.deriveState(this.props, this.state),
-      userChangingViewState: false,
+      ...this.state,
+      layout: {
+        ...this.state.layout,
+        datarevision: this.state.layout.datarevision + 1,
+        xaxis: {
+          color: this.props.theme.palette.text.primary,
+          range: [
+            new Date(this.state.data[0].x.slice(-1)[0].getTime() - 30000),
+            this.state.data[0].x.slice(-1)[0],
+          ],
+        },
+        yaxis: {
+          color: this.props.theme.palette.text.primary,
+          autorange: true,
+        },
+      },
     });
   }
 
@@ -121,7 +173,10 @@ class Plotter extends React.Component {
         layout={this.state.layout}
         style={{ width: '100%', height: '100%' }}
         useResizeHandler
-        onRelayout={this.finishChangingViewState}
+        onRelayout={event => {
+          console.log(event);
+          this.finishChangingViewState();
+        }}
         divId="plotComponent"
       />
     );

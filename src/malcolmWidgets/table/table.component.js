@@ -226,7 +226,7 @@ const WidgetTable = props => {
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
-      key={column}
+      key={[-1, column]}
     >
       <Typography variant="subheading">{columnTitle}</Typography>
     </TableCell>
@@ -252,13 +252,13 @@ const WidgetTable = props => {
         }
       >
         <TableHead>
-          <TableRow className={props.classes.rowFormat}>
+          <TableRow className={props.classes.rowFormat} key={-1}>
             {[
               props.hideInfo ? null : (
                 <TableCell
                   className={props.classes.textHeadings}
                   padding="none"
-                  key={-1}
+                  key={[-1, -1]}
                 />
               ),
               ...columnHeadings,
@@ -318,7 +318,7 @@ const WidgetTable = props => {
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
             {props.footerItems.map((item, key) => (
-              <TableCell key={key}>{item}</TableCell>
+              <TableCell key={[values.length + 1, key]}>{item}</TableCell>
             ))}
           </TableRow>
         </TableFooter>
