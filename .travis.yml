@@ -29,6 +29,7 @@ jobs:
           - xvfb
       script: npm run e2e
     - stage: deploy
+      if: tag IS present
       script: true
       before_deploy:
       - npm run build
