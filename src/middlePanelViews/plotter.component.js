@@ -7,9 +7,11 @@ import { timeFormat } from 'd3-time-format';
 import { MalcolmTickArchive } from '../malcolm/malcolm.types';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
 
-const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
+export const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
 
-const comparePlotlyDateString = (date1, date2) => {
+export const comparePlotlyDateString = (date1, date2) => {
+  // plotly seems to sometimes add or remove decimal places in the millisecond portion of its stringified date
+  // so we take that in to account when comparing two dates
   if (date1 instanceof Date || date2 instanceof Date) {
     return false;
   }
@@ -44,11 +46,11 @@ class Plotter extends React.Component {
       const newState = props.deriveState(props, state);
       if (props.attribute) {
         // && newState.data[0].x.slice(-1)[0] instanceof Date) {
-        const USER_HAS_CHANGED_LAYOUT =
+        const userHasChangedLayout =
           state.layout.xaxis.range &&
           (!(state.layout.xaxis.range[0] instanceof Date) ||
             !(state.layout.xaxis.range[1] instanceof Date));
-        if (!USER_HAS_CHANGED_LAYOUT) {
+        if (newState.data[0].x.length > 0 && !userHasChangedLayout) {
           newState.layout.xaxis = {
             ...newState.layout.xaxis,
             range: [
@@ -57,7 +59,7 @@ class Plotter extends React.Component {
             ],
           };
         }
-        if (!state.originalXRange) {
+        if (!state.originalXRange && newState.layout.xaxis.range) {
           newState.originalXRange = newState.layout.xaxis.range.map(date =>
             plotlyDateFormatter(date)
           );
@@ -173,10 +175,7 @@ class Plotter extends React.Component {
         layout={this.state.layout}
         style={{ width: '100%', height: '100%' }}
         useResizeHandler
-        onRelayout={event => {
-          console.log(event);
-          this.finishChangingViewState();
-        }}
+        onRelayout={this.finishChangingViewState}
         divId="plotComponent"
       />
     );

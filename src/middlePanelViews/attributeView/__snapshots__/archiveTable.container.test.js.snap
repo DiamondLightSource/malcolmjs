@@ -14,10 +14,11 @@ exports[`archiveTable renders correctly 1`] = `
     <WithStyles(TableHead)>
       <WithStyles(TableRow)
         className="WidgetTable-rowFormat-6"
+        key="-1"
       >
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="0"
+          key="-1,0"
           padding="none"
         >
           <WithStyles(Typography)
@@ -28,7 +29,7 @@ exports[`archiveTable renders correctly 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="1"
+          key="-1,1"
           padding="none"
         >
           <WithStyles(Typography)
@@ -39,7 +40,7 @@ exports[`archiveTable renders correctly 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="2"
+          key="-1,2"
           padding="none"
         >
           <WithStyles(Typography)
@@ -96,6 +97,7 @@ exports[`archiveTable renders correctly 1`] = `
           }
           hideInfo={true}
           infoClickHandler={[Function]}
+          key="row.0"
           meta={
             Object {
               "elements": Object {
@@ -182,6 +184,7 @@ exports[`archiveTable renders correctly 1`] = `
           }
           hideInfo={true}
           infoClickHandler={[Function]}
+          key="row.1"
           meta={
             Object {
               "elements": Object {
@@ -268,6 +271,7 @@ exports[`archiveTable renders correctly 1`] = `
           }
           hideInfo={true}
           infoClickHandler={[Function]}
+          key="row.2"
           meta={
             Object {
               "elements": Object {

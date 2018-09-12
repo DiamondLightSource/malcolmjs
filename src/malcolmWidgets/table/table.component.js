@@ -271,6 +271,7 @@ const WidgetTable = props => {
           <TableBody>
             {values.map((rowValue, row) => (
               <RowData
+                key={`row.${row}`}
                 row={row}
                 path={props.attribute.calculated.path}
                 classes={props.classes}
@@ -433,11 +434,13 @@ RowData.propTypes = {
   rowFlagHandler: PropTypes.func.isRequired,
   columnLabels: PropTypes.arrayOf(PropTypes.string),
   columnWidgetTags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  values: PropTypes.arrayOf().isRequired,
-  meta: PropTypes.oneOf(
-    PropTypes.shape({}),
-    PropTypes.shape({ elements: PropTypes.shape({}) })
+  values: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   ).isRequired,
+  meta: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.shape({ elements: PropTypes.shape({}) }),
+  ]).isRequired,
   hideInfo: PropTypes.bool.isRequired,
   selectedRow: PropTypes.number,
 };

@@ -99,6 +99,7 @@ exports[`MethodPlot renders correctly for returns 1`] = `
     ]
   }
   debug={false}
+  divId="plotComponent"
   layout={
     Object {
       "attribute": undefined,
@@ -124,6 +125,7 @@ exports[`MethodPlot renders correctly for returns 1`] = `
       },
     }
   }
+  onRelayout={[Function]}
   style={
     Object {
       "height": "100%",
@@ -233,6 +235,7 @@ exports[`MethodPlot renders correctly for takes 1`] = `
     ]
   }
   debug={false}
+  divId="plotComponent"
   layout={
     Object {
       "attribute": undefined,
@@ -258,6 +261,7 @@ exports[`MethodPlot renders correctly for takes 1`] = `
       },
     }
   }
+  onRelayout={[Function]}
   style={
     Object {
       "height": "100%",
@@ -367,18 +371,19 @@ exports[`attributePlot renders correctly for bool 1`] = `
     ]
   }
   debug={false}
+  divId="plotComponent"
   layout={
     Object {
-      "attribute": undefined,
+      "attribute": "attr1",
       "autosize": true,
-      "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
           "color": "#000",
         },
       },
       "paper_bgcolor": "#424242",
-      "parent": undefined,
+      "parent": "test1",
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
@@ -392,6 +397,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
       },
     }
   }
+  onRelayout={[Function]}
   style={
     Object {
       "height": "100%",
@@ -501,18 +507,19 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
     ]
   }
   debug={false}
+  divId="plotComponent"
   layout={
     Object {
-      "attribute": undefined,
+      "attribute": "attr1",
       "autosize": true,
-      "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
           "color": "#000",
         },
       },
       "paper_bgcolor": "#424242",
-      "parent": undefined,
+      "parent": "test1",
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
@@ -526,6 +533,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
       },
     }
   }
+  onRelayout={[Function]}
   style={
     Object {
       "height": "100%",
@@ -635,18 +643,19 @@ exports[`attributePlot renders correctly for number 1`] = `
     ]
   }
   debug={false}
+  divId="plotComponent"
   layout={
     Object {
-      "attribute": undefined,
+      "attribute": "attr1",
       "autosize": true,
-      "datarevision": "undefined#undefined#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
       "legend": Object {
         "font": Object {
           "color": "#000",
         },
       },
       "paper_bgcolor": "#424242",
-      "parent": undefined,
+      "parent": "test1",
       "plot_bgcolor": "#424242",
       "xaxis": Object {
         "color": "#000",
@@ -660,6 +669,7 @@ exports[`attributePlot renders correctly for number 1`] = `
       },
     }
   }
+  onRelayout={[Function]}
   style={
     Object {
       "height": "100%",
