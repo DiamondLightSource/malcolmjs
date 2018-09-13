@@ -226,7 +226,7 @@ const WidgetTable = props => {
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
-      key={column}
+      key={[-1, column]}
     >
       <Typography variant="subheading">{columnTitle}</Typography>
     </TableCell>
@@ -252,13 +252,13 @@ const WidgetTable = props => {
         }
       >
         <TableHead>
-          <TableRow className={props.classes.rowFormat}>
+          <TableRow className={props.classes.rowFormat} key={-1}>
             {[
               props.hideInfo ? null : (
                 <TableCell
                   className={props.classes.textHeadings}
                   padding="none"
-                  key={-1}
+                  key={[-1, -1]}
                 />
               ),
               ...columnHeadings,
@@ -271,6 +271,7 @@ const WidgetTable = props => {
           <TableBody>
             {values.map((rowValue, row) => (
               <RowData
+                key={`row.${row}`}
                 row={row}
                 path={props.attribute.calculated.path}
                 classes={props.classes}
@@ -318,7 +319,7 @@ const WidgetTable = props => {
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
             {props.footerItems.map((item, key) => (
-              <TableCell key={key}>{item}</TableCell>
+              <TableCell key={[values.length + 1, key]}>{item}</TableCell>
             ))}
           </TableRow>
         </TableFooter>
@@ -353,12 +354,12 @@ WidgetTable.propTypes = {
   }).isRequired,
   localState: PropTypes.shape({
     value: PropTypes.arrayOf(
-      PropTypes.oneOf(
+      PropTypes.oneOfType([
         PropTypes.shape({}),
         PropTypes.number,
         PropTypes.string,
-        PropTypes.bool
-      )
+        PropTypes.bool,
+      ])
     ),
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
@@ -433,11 +434,13 @@ RowData.propTypes = {
   rowFlagHandler: PropTypes.func.isRequired,
   columnLabels: PropTypes.arrayOf(PropTypes.string),
   columnWidgetTags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  values: PropTypes.arrayOf().isRequired,
-  meta: PropTypes.oneOf(
-    PropTypes.shape({}),
-    PropTypes.shape({ elements: PropTypes.shape({}) })
+  values: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   ).isRequired,
+  meta: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.shape({ elements: PropTypes.shape({}) }),
+  ]).isRequired,
   hideInfo: PropTypes.bool.isRequired,
   selectedRow: PropTypes.number,
 };

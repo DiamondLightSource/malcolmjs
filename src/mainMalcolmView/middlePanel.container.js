@@ -191,6 +191,7 @@ const findAttributeComponent = props => {
         </div>
       );
     case 'widget:textupdate':
+    case 'widget:multilinetextupdate':
     case 'widget:textinput':
     case 'widget:led':
     case 'widget:checkbox':
