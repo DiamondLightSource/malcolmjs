@@ -88,33 +88,49 @@ const NavBar = props => (
           [props.classes.titleShift]: props.open,
         })}
       >
-        <NavControl
-          key=".blocks"
-          nav={props.rootNav}
-          navigateToChild={child => props.navigateToChild('/', child)}
-        />
+        {props.navigation.length === 0 ? (
+          <Typography>Select a root block</Typography>
+        ) : null}
         {props.navigation.map(nav => (
           <NavControl
             key={nav.path}
             nav={nav}
             navigateToChild={child =>
-              props.navigateToChild(nav.basePath, child)
+              props.navigateToChild(nav.parent.basePath, child)
             }
           />
         ))}
-        {props.navigation.length === 0 ? (
-          <Typography>Select a root node</Typography>
+        {props.finalNavHasChildren ? (
+          <NavControl
+            key={`${props.finalNav.path}++`}
+            nav={props.finalNav}
+            navigateToChild={child =>
+              props.navigateToChild(
+                props.navigation.length === 0 ? '/' : props.finalNav.basePath,
+                child
+              )
+            }
+            isFinalNav
+          />
         ) : null}
       </div>
     </Toolbar>
   </AppBar>
 );
 
-const mapStateToProps = state => ({
-  open: state.viewState.openParentPanel,
-  navigation: state.malcolm.navigation.navigationLists,
-  rootNav: state.malcolm.navigation.rootNav,
-});
+const mapStateToProps = state => {
+  const finalNav =
+    state.malcolm.navigation.navigationLists.length === 0
+      ? state.malcolm.navigation.rootNav
+      : state.malcolm.navigation.navigationLists.slice(-1)[0];
+  return {
+    open: state.viewState.openParentPanel,
+    navigation: state.malcolm.navigation.navigationLists,
+    finalNav,
+    finalNavHasChildren:
+      finalNav && finalNav.children && finalNav.children.length !== 0,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
@@ -130,10 +146,12 @@ NavBar.propTypes = {
       children: PropTypes.arrayOf(PropTypes.string),
     })
   ),
-  rootNav: PropTypes.shape({
+  finalNav: PropTypes.shape({
     path: PropTypes.string,
     children: PropTypes.arrayOf(PropTypes.string),
+    basePath: PropTypes.string,
   }),
+  finalNavHasChildren: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
   navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
@@ -151,9 +169,10 @@ NavBar.propTypes = {
 
 NavBar.defaultProps = {
   navigation: [],
-  rootNav: {
+  finalNav: {
     path: '',
     children: [],
+    basePath: '/',
   },
 };
 

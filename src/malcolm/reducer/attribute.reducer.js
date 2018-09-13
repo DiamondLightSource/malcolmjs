@@ -68,6 +68,7 @@ export const checkForFlowGraph = attribute => {
         },
         ports: [],
         icon: undefined,
+        loading: true,
       })),
     };
 
@@ -431,33 +432,15 @@ export function updateAttribute(
         ? oldState.layout.blocks.filter(b => b.loading).length
         : 1000000;
 
-      const layoutEngineView = updatedState.layoutEngine
-        ? {
-            offset: {
-              x: updatedState.layoutEngine.diagramModel.offsetX,
-              y: updatedState.layoutEngine.diagramModel.offsetY,
-            },
-            zoom: updatedState.layoutEngine.diagramModel.zoom,
-          }
-        : undefined;
+      updatedState.layout = layout;
 
-      const layoutEngine =
-        numberOfBlocksLoading < numberOfBlocksWereLoading ||
+      updatedState.layoutEngine =
+        numberOfBlocksLoading !== numberOfBlocksWereLoading ||
         (!layoutLoading &&
           LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
-          ? LayoutReducer.buildLayoutEngine(
-              layout,
-              updatedState.layoutState.selectedBlocks,
-              layoutEngineView
-            )
+          ? LayoutReducer.updateLayoutAndEngine(updatedState, false)
+              .layoutEngine
           : updatedState.layoutEngine;
-
-      updatedState = {
-        ...updatedState,
-        layout,
-        layoutEngine,
-        // navigation,
-      };
 
       if (!ignoreSecondaryCalculations) {
         const navigation = updateNavigation(updatedState, attributeName);

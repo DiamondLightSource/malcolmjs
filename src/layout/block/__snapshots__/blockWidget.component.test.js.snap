@@ -25,9 +25,9 @@ exports[`BlockWidget block renders correctly 1`] = `
       className="BlockWidget-inputPortsContainer-5"
     >
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-in 1"
+        key="block1•in 1"
         nodeId="block1"
-        portId="block1-in 1"
+        portId="block1•in 1"
       />
     </div>
     <div
@@ -53,14 +53,14 @@ exports[`BlockWidget block renders correctly 1`] = `
       className="BlockWidget-outputPortsContainer-6"
     >
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-out 1"
+        key="block1•out 1"
         nodeId="block1"
-        portId="block1-out 1"
+        portId="block1•out 1"
       />
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-out 2"
+        key="block1•out 2"
         nodeId="block1"
-        portId="block1-out 2"
+        portId="block1•out 2"
       />
     </div>
   </div>

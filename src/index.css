@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  overflow-x: hidden;
 }
 
 @keyframes dash {
@@ -16,6 +17,4 @@ body {
 
 .srd-default-link--highlight-path {
   stroke: #f50057 !important;
-  stroke-dasharray: 10, 2;
-  animation: dash 1s linear infinite;
 }

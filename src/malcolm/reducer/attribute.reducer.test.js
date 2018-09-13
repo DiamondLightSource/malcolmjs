@@ -29,10 +29,24 @@ describe('attribute reducer', () => {
 
   beforeEach(() => {
     LayoutReducer.processLayout.mockClear();
+    LayoutReducer.updateLayoutAndEngine.mockClear();
     processNavigationLists.mockClear();
     navigationReducer.updateNavTypes.mockImplementation(s => s);
     LayoutReducer.processLayout.mockImplementation(() => ({
       blocks: [{ loading: true }],
+    }));
+
+    LayoutReducer.updateLayoutAndEngine.mockImplementation(() => ({
+      layout: {
+        blocks: [{ loading: true }],
+      },
+      layoutEngine: {
+        diagramModel: {
+          offsetX: 10,
+          offsetY: 20,
+          zoom: 30,
+        },
+      },
     }));
 
     state = {

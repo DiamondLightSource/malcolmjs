@@ -1,5 +1,138 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`NavBar hides more icon if last nav element has no children 1`] = `
+<WithStyles(AppBar)
+  className="Connect-NavBar--appBar-1 Connect-NavBar--appBarShift-2 Connect-NavBar--appBarShift-left-3"
+>
+  <WithStyles(Toolbar)
+    disableGutters={false}
+  >
+    <WithStyles(IconButton)
+      className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
+      onClick={[Function]}
+    >
+      <pure(Menu) />
+    </WithStyles(IconButton)>
+    <div
+      className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
+    >
+      <WithStyles(NavControl)
+        key="PANDA"
+        nav={
+          Object {
+            "basePath": "/PANDA/",
+            "children": Array [
+              "layout",
+            ],
+            "childrenLabels": Array [
+              "layout",
+            ],
+            "parent": Object {
+              "basePath": "/",
+              "children": Array [
+                "PANDA",
+                "PANDA:SEQ1",
+              ],
+              "childrenLabels": Array [
+                "PANDA",
+                "PANDA:SEQ1",
+              ],
+              "path": "",
+            },
+            "path": "PANDA",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+      <WithStyles(NavControl)
+        key="layout"
+        nav={
+          Object {
+            "basePath": "/PANDA/layout/",
+            "children": Array [
+              "SEQ1",
+            ],
+            "childrenLabels": Array [
+              "Test layout child #1",
+            ],
+            "parent": Object {
+              "basePath": "/PANDA/",
+              "children": Array [
+                "layout",
+              ],
+              "childrenLabels": Array [
+                "layout",
+              ],
+              "parent": Object {
+                "basePath": "/",
+                "children": Array [
+                  "PANDA",
+                  "PANDA:SEQ1",
+                ],
+                "childrenLabels": Array [
+                  "PANDA",
+                  "PANDA:SEQ1",
+                ],
+                "path": "",
+              },
+              "path": "PANDA",
+            },
+            "path": "layout",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+      <WithStyles(NavControl)
+        key="PANDA:SEQ1"
+        nav={
+          Object {
+            "basePath": "/PANDA/layout/SEQ1/",
+            "children": Array [],
+            "childrenLabels": Array [
+              "Value",
+            ],
+            "parent": Object {
+              "basePath": "/PANDA/layout/",
+              "children": Array [
+                "SEQ1",
+              ],
+              "childrenLabels": Array [
+                "Test layout child #1",
+              ],
+              "parent": Object {
+                "basePath": "/PANDA/",
+                "children": Array [
+                  "layout",
+                ],
+                "childrenLabels": Array [
+                  "layout",
+                ],
+                "parent": Object {
+                  "basePath": "/",
+                  "children": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "childrenLabels": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "path": "",
+                },
+                "path": "PANDA",
+              },
+              "path": "layout",
+            },
+            "path": "PANDA:SEQ1",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+    </div>
+  </WithStyles(Toolbar)>
+</WithStyles(AppBar)>
+`;
+
 exports[`NavBar renders correctly 1`] = `
 <WithStyles(AppBar)
   className="Connect-NavBar--appBar-1 Connect-NavBar--appBarShift-2 Connect-NavBar--appBarShift-left-3"
@@ -17,23 +150,6 @@ exports[`NavBar renders correctly 1`] = `
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
     >
       <WithStyles(NavControl)
-        key=".blocks"
-        nav={
-          Object {
-            "children": Array [
-              "PANDA",
-              "PANDA:SEQ1",
-            ],
-            "childrenLabels": Array [
-              "PANDA",
-              "PANDA:SEQ1",
-            ],
-            "path": "",
-          }
-        }
-        navigateToChild={[Function]}
-      />
-      <WithStyles(NavControl)
         key="PANDA"
         nav={
           Object {
@@ -44,6 +160,18 @@ exports[`NavBar renders correctly 1`] = `
             "childrenLabels": Array [
               "layout",
             ],
+            "parent": Object {
+              "basePath": "/",
+              "children": Array [
+                "PANDA",
+                "PANDA:SEQ1",
+              ],
+              "childrenLabels": Array [
+                "PANDA",
+                "PANDA:SEQ1",
+              ],
+              "path": "",
+            },
             "path": "PANDA",
           }
         }
@@ -53,8 +181,35 @@ exports[`NavBar renders correctly 1`] = `
         key="layout"
         nav={
           Object {
-            "children": Array [],
-            "childrenLabels": Array [],
+            "basePath": "/PANDA/layout/",
+            "children": Array [
+              "SEQ1",
+            ],
+            "childrenLabels": Array [
+              "Test layout child #1",
+            ],
+            "parent": Object {
+              "basePath": "/PANDA/",
+              "children": Array [
+                "layout",
+              ],
+              "childrenLabels": Array [
+                "layout",
+              ],
+              "parent": Object {
+                "basePath": "/",
+                "children": Array [
+                  "PANDA",
+                  "PANDA:SEQ1",
+                ],
+                "childrenLabels": Array [
+                  "PANDA",
+                  "PANDA:SEQ1",
+                ],
+                "path": "",
+              },
+              "path": "PANDA",
+            },
             "path": "layout",
           }
         }
@@ -64,8 +219,94 @@ exports[`NavBar renders correctly 1`] = `
         key="PANDA:SEQ1"
         nav={
           Object {
-            "children": Array [],
-            "childrenLabels": Array [],
+            "basePath": "/PANDA/layout/SEQ1/",
+            "children": Array [
+              "Val",
+            ],
+            "childrenLabels": Array [
+              "Value",
+            ],
+            "parent": Object {
+              "basePath": "/PANDA/layout/",
+              "children": Array [
+                "SEQ1",
+              ],
+              "childrenLabels": Array [
+                "Test layout child #1",
+              ],
+              "parent": Object {
+                "basePath": "/PANDA/",
+                "children": Array [
+                  "layout",
+                ],
+                "childrenLabels": Array [
+                  "layout",
+                ],
+                "parent": Object {
+                  "basePath": "/",
+                  "children": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "childrenLabels": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "path": "",
+                },
+                "path": "PANDA",
+              },
+              "path": "layout",
+            },
+            "path": "PANDA:SEQ1",
+          }
+        }
+        navigateToChild={[Function]}
+      />
+      <WithStyles(NavControl)
+        isFinalNav={true}
+        key="PANDA:SEQ1++"
+        nav={
+          Object {
+            "basePath": "/PANDA/layout/SEQ1/",
+            "children": Array [
+              "Val",
+            ],
+            "childrenLabels": Array [
+              "Value",
+            ],
+            "parent": Object {
+              "basePath": "/PANDA/layout/",
+              "children": Array [
+                "SEQ1",
+              ],
+              "childrenLabels": Array [
+                "Test layout child #1",
+              ],
+              "parent": Object {
+                "basePath": "/PANDA/",
+                "children": Array [
+                  "layout",
+                ],
+                "childrenLabels": Array [
+                  "layout",
+                ],
+                "parent": Object {
+                  "basePath": "/",
+                  "children": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "childrenLabels": Array [
+                    "PANDA",
+                    "PANDA:SEQ1",
+                  ],
+                  "path": "",
+                },
+                "path": "PANDA",
+              },
+              "path": "layout",
+            },
             "path": "PANDA:SEQ1",
           }
         }
@@ -92,10 +333,15 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
     <div
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
     >
+      <WithStyles(Typography)>
+        Select a root block
+      </WithStyles(Typography)>
       <WithStyles(NavControl)
-        key=".blocks"
+        isFinalNav={true}
+        key="++"
         nav={
           Object {
+            "basePath": "/",
             "children": Array [
               "PANDA",
               "PANDA:SEQ1",
@@ -109,9 +355,6 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
         }
         navigateToChild={[Function]}
       />
-      <WithStyles(Typography)>
-        Select a root node
-      </WithStyles(Typography)>
     </div>
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
