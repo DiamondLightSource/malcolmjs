@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import MoreHoriz from '@material-ui/icons/MoreHoriz';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -39,7 +40,23 @@ class NavControl extends Component {
   render() {
     const { classes, nav, navigateToChild } = this.props;
     const { anchorEl } = this.state;
-
+    const siblings = nav.parent ? nav.parent.children : [];
+    const siblingLabels = nav.parent ? nav.parent.childrenLabels : [];
+    if (this.props.isFinalNav) {
+      return (
+        <div className={classes.container}>
+          <NavSelector
+            handleClick={this.handleClick}
+            childElements={nav.children}
+            childElementLabels={nav.childrenLabels}
+            anchorEl={anchorEl}
+            handleClose={this.handleClose}
+            navigateToChild={navigateToChild}
+            icon={<MoreHoriz />}
+          />
+        </div>
+      );
+    }
     return (
       <div className={classes.container}>
         <Typography
@@ -49,35 +66,49 @@ class NavControl extends Component {
         >
           {nav.label}
         </Typography>
-        <IconButton
-          onClick={this.handleClick}
-          disabled={nav.children.length === 0}
-          data-cy="navmenu"
-        >
-          <KeyboardArrowDown />
-        </IconButton>
-        <Menu
-          id="simple-menu"
+        <NavSelector
+          handleClick={this.handleClick}
+          childElements={siblings}
+          childElementLabels={siblingLabels}
           anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          {nav.children.map((child, i) => (
-            <MenuItem
-              key={child}
-              onClick={() => {
-                this.handleClose();
-                navigateToChild(child);
-              }}
-            >
-              {nav.childrenLabels[i]}
-            </MenuItem>
-          ))}
-        </Menu>
+          handleClose={this.handleClose}
+          navigateToChild={navigateToChild}
+          icon={<KeyboardArrowDown />}
+        />
       </div>
     );
   }
 }
+
+export const NavSelector = props => (
+  <div>
+    <IconButton
+      onClick={props.handleClick}
+      disabled={props.childElements.length === 0}
+      data-cy="navmenu"
+    >
+      {props.icon}
+    </IconButton>
+    <Menu
+      id="simple-menu"
+      anchorEl={props.anchorEl}
+      open={Boolean(props.anchorEl)}
+      onClose={props.handleClose}
+    >
+      {props.childElements.map((child, i) => (
+        <MenuItem
+          key={child}
+          onClick={() => {
+            props.handleClose();
+            props.navigateToChild(child);
+          }}
+        >
+          {props.childElementLabels[i]}
+        </MenuItem>
+      ))}
+    </Menu>
+  </div>
+);
 
 NavControl.propTypes = {
   nav: PropTypes.shape({
@@ -89,6 +120,21 @@ NavControl.propTypes = {
     container: PropTypes.string,
     currentLink: PropTypes.string,
   }).isRequired,
+  isFinalNav: PropTypes.bool,
+};
+
+NavControl.defaultProps = {
+  isFinalNav: false,
+};
+
+NavSelector.propTypes = {
+  childElements: PropTypes.arrayOf(PropTypes.string).isRequired,
+  childElementLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleClick: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  anchorEl: PropTypes.string.isRequired,
+  // navigateToChild: PropTypes.func.isRequired,
+  icon: PropTypes.node.isRequired,
 };
 
 export default withStyles(styles, { withTheme: true })(NavControl);

@@ -13,6 +13,7 @@ export const processNavigationLists = (paths, blocks) => {
   const rootNav = {
     path: '',
     children: [],
+    basePath: '/',
   };
 
   if (blocks['.blocks']) {
@@ -71,6 +72,7 @@ const updateBlockChildren = (nav, blocks) => {
 function updateNavTypes(state) {
   let updatedState = state;
   let { navigationLists } = updatedState.navigation;
+  const { rootNav } = updatedState.navigation;
 
   if (navigationLists.filter(nav => nav.navType === undefined).length > 0) {
     updatedState = { ...state };
@@ -96,6 +98,7 @@ function updateNavTypes(state) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
           nav.label = nav.path;
+          nav.parent = rootNav;
         } else if (previousNavIsBlock(i, navigationLists, state.blocks)) {
           const matchingAttribute = blockUtils.findAttribute(
             state.blocks,
@@ -151,6 +154,12 @@ function updateNavTypes(state) {
                 nav.label = nav.path;
               }
             }
+          }
+        }
+        if (navigationLists[originalIndex - 1]) {
+          nav.parent = navigationLists[originalIndex - 1];
+          if (navigationLists[originalIndex - 1].children.length > 0) {
+            // nav.siblings = navigationLists[originalIndex - 1].children;
           }
         }
       });
