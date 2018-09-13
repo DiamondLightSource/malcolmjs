@@ -81,11 +81,12 @@ class NavControl extends Component {
 }
 
 export const NavSelector = props => (
-  <div>
+  <div style={{ paddingRight: '12px' }}>
     <IconButton
       onClick={props.handleClick}
       disabled={props.childElements.length === 0}
       data-cy="navmenu"
+      style={{ height: '32px', width: '32px' }}
     >
       {props.icon}
     </IconButton>

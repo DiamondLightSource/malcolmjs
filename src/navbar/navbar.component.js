@@ -100,30 +100,37 @@ const NavBar = props => (
             }
           />
         ))}
-        <NavControl
-          key={`${props.finalNav.path}++`}
-          nav={props.finalNav}
-          navigateToChild={child =>
-            props.navigateToChild(
-              props.navigation.length === 0 ? '/' : props.finalNav.basePath,
-              child
-            )
-          }
-          isFinalNav
-        />
+        {props.finalNavHasChildren ? (
+          <NavControl
+            key={`${props.finalNav.path}++`}
+            nav={props.finalNav}
+            navigateToChild={child =>
+              props.navigateToChild(
+                props.navigation.length === 0 ? '/' : props.finalNav.basePath,
+                child
+              )
+            }
+            isFinalNav
+          />
+        ) : null}
       </div>
     </Toolbar>
   </AppBar>
 );
 
-const mapStateToProps = state => ({
-  open: state.viewState.openParentPanel,
-  navigation: state.malcolm.navigation.navigationLists,
-  finalNav:
+const mapStateToProps = state => {
+  const finalNav =
     state.malcolm.navigation.navigationLists.length === 0
       ? state.malcolm.navigation.rootNav
-      : state.malcolm.navigation.navigationLists.slice(-1)[0],
-});
+      : state.malcolm.navigation.navigationLists.slice(-1)[0];
+  return {
+    open: state.viewState.openParentPanel,
+    navigation: state.malcolm.navigation.navigationLists,
+    finalNav,
+    finalNavHasChildren:
+      finalNav && finalNav.children && finalNav.children.length !== 0,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
@@ -144,6 +151,7 @@ NavBar.propTypes = {
     children: PropTypes.arrayOf(PropTypes.string),
     basePath: PropTypes.string,
   }),
+  finalNavHasChildren: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
   navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
