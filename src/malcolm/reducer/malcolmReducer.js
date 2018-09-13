@@ -40,6 +40,7 @@ const initialMalcolmState = {
     rootNav: {
       path: '',
       children: [],
+      basePath: '/',
     },
   },
   blocks: {},

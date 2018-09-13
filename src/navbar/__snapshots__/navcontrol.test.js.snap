@@ -2,24 +2,27 @@
 
 exports[`NavControl disables menu item if children is empty 1`] = `
 <div
-  className="NavControl-container-1"
+  style={
+    Object {
+      "paddingRight": "12px",
+    }
+  }
 >
-  <WithStyles(Typography)
-    className="NavControl-currentLink-2"
-    onClick={[Function]}
-    variant="subheading"
-  >
-    PANDA
-  </WithStyles(Typography)>
   <WithStyles(IconButton)
     data-cy="navmenu"
     disabled={true}
     onClick={[Function]}
+    style={
+      Object {
+        "height": "32px",
+        "width": "32px",
+      }
+    }
   >
-    <pure(KeyboardArrowDown) />
+    <div />
   </WithStyles(IconButton)>
   <WithStyles(Menu)
-    anchorEl={null}
+    anchorEl=""
     id="simple-menu"
     onClose={[Function]}
     open={false}
@@ -38,18 +41,78 @@ exports[`NavControl renders correctly 1`] = `
   >
     PANDA
   </WithStyles(Typography)>
+  <Component
+    anchorEl={null}
+    childElementLabels={
+      Array [
+        "PANDA",
+      ]
+    }
+    childElements={
+      Array [
+        "PANDA:mri",
+      ]
+    }
+    handleClick={[Function]}
+    handleClose={[Function]}
+    icon={<pure(KeyboardArrowDown) />}
+    navigateToChild={[Function]}
+  />
+</div>
+`;
+
+exports[`NavControl renders correctly for final 1`] = `
+<div
+  className="NavControl-container-1"
+>
+  <Component
+    anchorEl={null}
+    childElementLabels={
+      Array [
+        "layout",
+        "table",
+      ]
+    }
+    childElements={
+      Array [
+        "layout",
+        "table",
+      ]
+    }
+    handleClick={[Function]}
+    handleClose={[Function]}
+    icon={<pure(MoreHoriz) />}
+    navigateToChild={[Function]}
+  />
+</div>
+`;
+
+exports[`NavControl selector component renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "paddingRight": "12px",
+    }
+  }
+>
   <WithStyles(IconButton)
     data-cy="navmenu"
     disabled={false}
     onClick={[Function]}
+    style={
+      Object {
+        "height": "32px",
+        "width": "32px",
+      }
+    }
   >
-    <pure(KeyboardArrowDown) />
+    <div />
   </WithStyles(IconButton)>
   <WithStyles(Menu)
-    anchorEl={null}
+    anchorEl="⚓"
     id="simple-menu"
     onClose={[Function]}
-    open={false}
+    open={true}
   >
     <WithStyles(MenuItem)
       key="layout"
