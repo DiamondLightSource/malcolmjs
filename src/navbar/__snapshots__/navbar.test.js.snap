@@ -334,7 +334,7 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
     >
       <WithStyles(Typography)>
-        Select a root node
+        Select a root block
       </WithStyles(Typography)>
       <WithStyles(NavControl)
         isFinalNav={true}

@@ -89,7 +89,7 @@ const NavBar = props => (
         })}
       >
         {props.navigation.length === 0 ? (
-          <Typography>Select a root node</Typography>
+          <Typography>Select a root block</Typography>
         ) : null}
         {props.navigation.map(nav => (
           <NavControl
