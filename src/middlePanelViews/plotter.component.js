@@ -10,7 +10,7 @@ import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
 export const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
 
 export const comparePlotlyDateString = (date1, date2) => {
-  // plotly seems to sometimes add or remove decimal places in the millisecond portion of its stringified date
+  // plotly.js sometimes adds or removes decimal places in the millisecond portion of its stringified date
   // so we take that in to account when comparing two dates
   if (date1 instanceof Date || date2 instanceof Date) {
     return false;
@@ -51,8 +51,10 @@ class Plotter extends React.Component {
     if (!state.userChangingViewState) {
       const newState = props.deriveState(props, state);
       if (props.attribute) {
-        // && newState.data[0].x.slice(-1)[0] instanceof Date) {
         const userHasChangedLayout =
+          /* this relies on the fact that plotly.js accepts JS Date objects for axis range values,
+          but changes them to strings when it sets the range itself (i.e. when the user pans or zooms)
+           */
           state.layout.xaxis.range &&
           (!(state.layout.xaxis.range[0] instanceof Date) ||
             !(state.layout.xaxis.range[1] instanceof Date));
@@ -108,7 +110,7 @@ class Plotter extends React.Component {
     };
     this.startChangingViewState = this.startChangingViewState.bind(this);
     this.finishChangingViewState = this.finishChangingViewState.bind(this);
-    this.recalcRange = this.recalcRange.bind(this);
+    this.resetAxes = this.resetAxes.bind(this);
     this.renderTimeout = setTimeout(() => {}, 4000);
   }
 
@@ -135,8 +137,13 @@ class Plotter extends React.Component {
 
   finishChangingViewState() {
     if (returnedToInitialXRange(this.state)) {
-      this.recalcRange();
+      this.resetAxes();
+      /* Due to issues in overriding the plotly modebar buttons,
+       we instead check and relayout action to see if it was a reset axes action
+       (e.g. the range limits for the x axes are set to the stringified version of their original values)
+       */
     } else {
+      // remove flag and force data state to update from props
       this.setState({
         ...this.props.deriveState(this.props, this.state),
         userChangingViewState: false,
@@ -144,7 +151,7 @@ class Plotter extends React.Component {
     }
   }
 
-  recalcRange() {
+  resetAxes() {
     this.setState({
       ...this.state,
       layout: {
