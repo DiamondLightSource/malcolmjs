@@ -158,7 +158,10 @@ function updateNavTypes(state) {
         }
         if (navigationLists[originalIndex - 1]) {
           nav.parent = navigationLists[originalIndex - 1];
-          if (navigationLists[originalIndex - 1].children.length > 0) {
+          if (
+            navigationLists[originalIndex - 1].children &&
+            navigationLists[originalIndex - 1].children.length > 0
+          ) {
             // nav.siblings = navigationLists[originalIndex - 1].children;
           }
         }
