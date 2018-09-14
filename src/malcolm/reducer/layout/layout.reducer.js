@@ -5,6 +5,8 @@ import {
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
   MalcolmResetPortsType,
+  MalcolmSelectLinkType,
+  MalcolmSelectBlock,
 } from '../../malcolm.types';
 import { sinkPort, sourcePort } from '../../malcolmConstants';
 import { buildLayoutEngine } from './layoutEngine.helper';
@@ -162,22 +164,6 @@ const updateBlockPosition = (malcolmState, translation) => {
   }
 };
 
-const selectBlock = (malcolmState, blockName, isSelected) => {
-  const { selectedBlocks } = malcolmState.layoutState;
-
-  let updatedBlocks = selectedBlocks;
-  if (isSelected && !selectedBlocks.find(b => b === blockName)) {
-    updatedBlocks = [...selectedBlocks, blockName];
-  } else if (!isSelected) {
-    updatedBlocks = selectedBlocks.filter(b => b !== blockName);
-  }
-
-  return {
-    ...malcolmState.layoutState,
-    selectedBlocks: updatedBlocks,
-  };
-};
-
 const shiftIsPressed = (malcolmState, payload) => ({
   ...malcolmState,
   layoutState: {
@@ -249,6 +235,7 @@ const updateLayoutAndEngine = (state, updateLayout = true) => {
   const layoutEngine = buildLayoutEngine(
     layout,
     state.layoutState.selectedBlocks,
+    state.layoutState.selectedLinks,
     layoutEngineView
   );
 
@@ -350,6 +337,7 @@ const resetPorts = state => {
   const layoutEngine = buildLayoutEngine(
     updatedState.layout,
     updatedState.layoutState.selectedBlocks,
+    updatedState.layoutState.selectedLinks,
     layoutEngineView
   );
   return {
@@ -358,6 +346,41 @@ const resetPorts = state => {
   };
 };
 
+const selectLayoutItem = (currentSelectedItems, itemName, isSelected) => {
+  let updatedItems = currentSelectedItems;
+  if (isSelected && !currentSelectedItems.find(b => b === itemName)) {
+    updatedItems = [...currentSelectedItems, itemName];
+  } else if (!isSelected) {
+    updatedItems = currentSelectedItems.filter(b => b !== itemName);
+  }
+
+  return updatedItems;
+};
+
+const selectLink = (state, payload) => ({
+  ...state,
+  layoutState: {
+    ...state.layoutState,
+    selectedLinks: selectLayoutItem(
+      state.layoutState.selectedLinks,
+      payload.linkName,
+      payload.isSelected
+    ),
+  },
+});
+
+const selectBlock = (state, payload) => ({
+  ...state,
+  layoutState: {
+    ...state.layoutState,
+    selectedBlocks: selectLayoutItem(
+      state.layoutState.selectedBlocks,
+      payload.blockName,
+      payload.isSelected
+    ),
+  },
+});
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -365,6 +388,8 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmShowBinType]: showLayoutBin,
     [MalcolmInLayoutDeleteZoneType]: cursorInLayoutZone,
     [MalcolmResetPortsType]: resetPorts,
+    [MalcolmSelectLinkType]: selectLink,
+    [MalcolmSelectBlock]: selectBlock,
   }
 );
 
@@ -372,7 +397,6 @@ export default {
   processLayout,
   updateLayoutAndEngine,
   updateBlockPosition,
-  selectBlock,
   shiftIsPressed,
   selectPortForLink,
   isRelevantAttribute,

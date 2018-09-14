@@ -15,6 +15,7 @@ import {
   MalcolmTableUpdate,
   MalcolmTableFlag,
   MalcolmRevert,
+  MalcolmSelectLinkType,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -190,6 +191,14 @@ export const malcolmSelectBlock = (blockName, isSelected) => ({
   },
 });
 
+export const malcolmSelectLink = (linkName, isSelected) => ({
+  type: MalcolmSelectLinkType,
+  payload: {
+    linkName,
+    isSelected,
+  },
+});
+
 export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
   type: MalcolmShiftButton,
   payload: {
@@ -223,6 +232,7 @@ export default {
   malcolmMainAttribute,
   malcolmLayoutUpdatePosition,
   malcolmSelectBlock,
+  malcolmSelectLink,
   malcolmLayoutShiftIsPressed,
   malcolmPostAction,
   malcolmRevertAction,
