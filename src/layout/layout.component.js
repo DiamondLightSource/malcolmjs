@@ -173,6 +173,9 @@ export const mapDispatchToProps = dispatch => ({
         blockMriList.map(() => false)
       )
     );
+    blockMriList.forEach(mri => {
+      dispatch(malcolmSelectBlock(mri, false));
+    });
   },
 
   putValueHandler: (path, value) => {

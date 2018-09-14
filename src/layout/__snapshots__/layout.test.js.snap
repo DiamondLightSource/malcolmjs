@@ -27,12 +27,41 @@ exports[`Layout renders correctly 1`] = `
     allowLooseLinks={true}
     deleteKeys={Array []}
     diagramEngine={
-      Object {
+      DiagramEngine {
+        "calculateMatrixDimensions": [Function],
+        "canvas": null,
+        "canvasMatrix": Array [],
         "clickHandler": [Function],
+        "diagramModel": DiagramModel {
+          "gridSize": 0,
+          "id": "2",
+          "links": Object {},
+          "listeners": Object {},
+          "locked": false,
+          "nodes": Object {},
+          "offsetX": 0,
+          "offsetY": 0,
+          "rendered": false,
+          "zoom": 100,
+        },
+        "hAdjustmentFactor": 0,
+        "id": "1",
+        "labelFactories": Object {},
+        "linkFactories": Object {},
+        "linksThatHaveInitiallyRendered": Object {},
+        "listeners": Object {},
+        "locked": false,
+        "markMatrixPoint": [Function],
+        "markNodes": [Function],
+        "markPorts": [Function],
         "mouseDownHandler": [Function],
+        "nodeFactories": Object {},
+        "paintableWidgets": null,
+        "portFactories": Object {},
         "portMouseDown": [Function],
+        "routingMatrix": Array [],
         "selectedHandler": [Function],
-        "testEngine": true,
+        "vAdjustmentFactor": 0,
       }
     }
     inverseZoom={true}

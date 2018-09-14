@@ -1,7 +1,6 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
-import { Toolkit } from 'storm-react-diagrams';
-import configureStore from 'redux-mock-store';
+import { Toolkit, DiagramEngine } from 'storm-react-diagrams';
 import Layout, { mapDispatchToProps } from './layout.component';
 import {
   malcolmSelectBlock,
@@ -36,6 +35,7 @@ describe('Layout', () => {
     malcolmSelectBlock.mockClear();
     malcolmLayoutUpdatePosition.mockClear();
     malcolmLayoutShiftIsPressed.mockClear();
+    layoutActions.makeBlockVisible.mockClear();
     navigationActions.updateChildPanel.mockClear();
     navigationActions.updateChildPanelWithLink.mockClear();
 
@@ -55,7 +55,11 @@ describe('Layout', () => {
       },
     };
 
-    mockStore = configureStore();
+    mockStore = mockState => ({
+      getState: () => mockState,
+      dispatch: () => {},
+      subscribe: () => {},
+    });
 
     node = {
       x: 0,
@@ -71,9 +75,7 @@ describe('Layout', () => {
           shiftIsPressed: false,
           selectedBlocks: [],
         },
-        layoutEngine: {
-          testEngine: true,
-        },
+        layoutEngine: new DiagramEngine(),
       },
       router: {
         location: {
@@ -86,6 +88,71 @@ describe('Layout', () => {
   it('renders correctly', () => {
     const wrapper = shallow(<Layout store={mockStore(state)} />);
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('onFocus sets hasFocus state to true', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+    wrapper.find('#LayoutDiv').simulate('focus');
+    expect(wrapper.state()).toEqual({ hasFocus: true });
+  });
+
+  it('onBlur sets hasFocus state to false', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+    wrapper.setState({ hasFocus: true });
+    expect(wrapper.state()).toEqual({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('blur');
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+  });
+
+  it('delete key sends delete block action if layout has focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
+    expect(layoutActions.makeBlockVisible).toBeCalledWith(
+      ['PANDA:SEQ1'],
+      [
+        {
+          x: 0,
+          y: 0,
+        },
+      ],
+      [false]
+    );
+    expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:SEQ1', false);
+  });
+
+  it('backspace key sends delete block action if layout has focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Backspace' });
+    expect(layoutActions.makeBlockVisible).toBeCalledWith(
+      ['PANDA:SEQ1'],
+      [
+        {
+          x: 0,
+          y: 0,
+        },
+      ],
+      [false]
+    );
+    expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:SEQ1', false);
+  });
+
+  it('delete key doesnt send delete block action if layout doesnt have focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: false });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
+    expect(layoutActions.makeBlockVisible).not.toHaveBeenCalled();
+    expect(malcolmSelectBlock).not.toHaveBeenCalled();
   });
 
   it('mapDispatchToProps clickHandler updates position when move is more than 3px', () => {
@@ -157,5 +224,28 @@ describe('Layout', () => {
       x: 100,
       y: 200,
     });
+  });
+
+  it('mapDispatchToProps deleteBlocks dispatches updates to hide and deselect multiple blocks', () => {
+    const props = mapDispatchToProps(() => {});
+
+    props.deleteBlock(['PANDA:block1', 'PANDA:block2']);
+    expect(layoutActions.makeBlockVisible).toBeCalledWith(
+      ['PANDA:block1', 'PANDA:block2'],
+      [
+        {
+          x: 0,
+          y: 0,
+        },
+        {
+          x: 0,
+          y: 0,
+        },
+      ],
+      [false, false]
+    );
+    expect(malcolmSelectBlock).toHaveBeenCalledTimes(2);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:block1', false);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:block2', false);
   });
 });
