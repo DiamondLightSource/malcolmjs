@@ -6,8 +6,6 @@ import navigationActions from '../malcolm/actions/navigation.actions';
 import {
   malcolmSelectBlock,
   malcolmLayoutUpdatePosition,
-  malcolmPutAction,
-  malcolmSetFlag,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
 
@@ -63,7 +61,7 @@ class Layout extends React.Component {
             Object.keys(deleteKeys).includes(event.key) &&
             this.state.hasFocus
           ) {
-            this.props.deleteBlock(this.props.selectedBlocks);
+            this.props.deleteSelected();
           }
         }}
         onFocus={() => {
@@ -105,13 +103,11 @@ Layout.propTypes = {
   portMouseDown: PropTypes.func.isRequired,
   makeBlockVisible: PropTypes.func.isRequired,
   mouseDownHandler: PropTypes.func.isRequired,
-  deleteBlock: PropTypes.func.isRequired,
-  selectedBlocks: PropTypes.arrayOf(PropTypes.string).isRequired,
+  deleteSelected: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = state => ({
   layoutEngine: state.malcolm.layoutEngine,
-  selectedBlocks: state.malcolm.layoutState.selectedBlocks,
 });
 
 let showBinTimeout = null;
@@ -165,22 +161,10 @@ export const mapDispatchToProps = dispatch => ({
     dispatch(layoutAction.makeBlockVisible(blockMri, position));
   },
 
-  deleteBlock: blockMriList => {
-    dispatch(
-      layoutAction.makeBlockVisible(
-        blockMriList,
-        blockMriList.map(() => ({ x: 0, y: 0 })),
-        blockMriList.map(() => false)
-      )
-    );
-    blockMriList.forEach(mri => {
-      dispatch(malcolmSelectBlock(mri, false));
-    });
-  },
+  deleteSelected: () => {
+    dispatch(layoutAction.deleteBlocks());
 
-  putValueHandler: (path, value) => {
-    dispatch(malcolmSetFlag(path, 'pending', true));
-    dispatch(malcolmPutAction(path, value));
+    dispatch(layoutAction.deleteLinks());
   },
 });
 

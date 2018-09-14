@@ -13,6 +13,7 @@ import {
 import blockUtils from '../blockUtils';
 import { snackbarState } from '../../viewState/viewState.actions';
 import { idSeparator } from '../../layout/layout.component';
+import { sinkPort } from '../malcolmConstants';
 
 const findPort = (blocks, id) => {
   const path = id.split(idSeparator);
@@ -142,12 +143,32 @@ const deleteBlocks = () => (dispatch, getState) => {
   const state = getState().malcolm;
   const { selectedBlocks } = state.layoutState;
 
+  makeBlockVisible(
+    selectedBlocks,
+    selectedBlocks.map(() => state.layoutState.layoutCenter),
+    selectedBlocks.map(() => false)
+  )(dispatch, getState);
   selectedBlocks.forEach(b => {
-    makeBlockVisible(b, state.layoutState.layoutCenter, false)(
-      dispatch,
-      getState
-    );
     dispatch(malcolmSelectBlock(b, false));
+  });
+};
+
+const deleteLinks = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+
+  state.layoutState.selectedLinks.forEach(linkId => {
+    const [, , blockMri, linkAttr] = linkId.split(idSeparator);
+    const portAttribute = blockUtils.findAttribute(
+      state.blocks,
+      blockMri,
+      linkAttr
+    );
+    const portNullValue = portAttribute.raw.meta.tags
+      .find(t => t.indexOf(sinkPort) > -1)
+      .split(':')
+      .slice(-1)[0];
+    dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
+    dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
   });
 };
 
@@ -171,4 +192,5 @@ export default {
   showLayoutBin,
   mouseInsideDeleteZone,
   deleteBlocks,
+  deleteLinks,
 };
