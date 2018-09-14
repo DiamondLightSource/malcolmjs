@@ -3,29 +3,29 @@
 exports[`Layout renders correctly 1`] = `
 <div
   id="LayoutDiv"
+  onBlur={[Function]}
   onDragOver={[Function]}
   onDrop={[Function]}
+  onFocus={[Function]}
+  onKeyUp={[Function]}
   onMouseUp={[Function]}
   role="presentation"
   style={
     Object {
       "display": "flex",
       "height": "100%",
+      "opacity": 0.9,
       "position": "relative",
       "width": "100%",
     }
   }
+  tabIndex="-1"
 >
   <DiagramWidget
     allowCanvasTranslation={true}
     allowCanvasZoom={true}
     allowLooseLinks={true}
-    deleteKeys={
-      Array [
-        46,
-        8,
-      ]
-    }
+    deleteKeys={Array []}
     diagramEngine={
       Object {
         "clickHandler": [Function],
