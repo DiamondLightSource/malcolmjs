@@ -1,6 +1,6 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
-import NavControl from './navcontrol.component';
+import NavControl, { NavSelector } from './navcontrol.component';
 
 describe('NavControl', () => {
   let shallow;
@@ -9,7 +9,7 @@ describe('NavControl', () => {
   let nav;
 
   beforeEach(() => {
-    shallow = createShallow({ dive: true });
+    shallow = createShallow();
     mount = createMount();
 
     nav = {
@@ -17,6 +17,11 @@ describe('NavControl', () => {
       children: ['layout', 'table'],
       childrenLabels: ['layout', 'table'],
       label: 'PANDA',
+      parent: {
+        basePath: '/',
+        children: ['PANDA:mri'],
+        childrenLabels: ['PANDA'],
+      },
     };
   });
 
@@ -28,14 +33,44 @@ describe('NavControl', () => {
     const wrapper = shallow(
       <NavControl nav={nav} navigateToChild={() => {}} />
     );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly for final', () => {
+    const wrapper = shallow(
+      <NavControl nav={nav} navigateToChild={() => {}} isFinalNav />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('selector component renders correctly', () => {
+    const wrapper = shallow(
+      <NavSelector
+        handleClick={() => {}}
+        childElements={nav.children}
+        childElementLabels={nav.childrenLabels}
+        anchorEl="⚓"
+        handleClose={() => {}}
+        navigateToChild={() => {}}
+        icon={<div />}
+      />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 
   it('disables menu item if children is empty', () => {
-    nav.children = [];
+    nav.parent.children = [];
 
     const wrapper = shallow(
-      <NavControl nav={nav} navigateToChild={() => {}} />
+      <NavSelector
+        handleClick={() => {}}
+        childElements={[]}
+        childElementLabels={[]}
+        anchorEl=""
+        handleClose={() => {}}
+        navigateToChild={() => {}}
+        icon={<div />}
+      />
     );
     expect(wrapper).toMatchSnapshot();
   });

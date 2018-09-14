@@ -14,15 +14,16 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
     <WithStyles(TableHead)>
       <WithStyles(TableRow)
         className="WidgetTable-rowFormat-6"
+        key="-1"
       >
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="-1"
+          key="-1,-1"
           padding="none"
         />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="0"
+          key="-1,0"
           padding="none"
         >
           <WithStyles(Typography)
@@ -33,7 +34,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="1"
+          key="-1,1"
           padding="none"
         >
           <WithStyles(Typography)
@@ -44,7 +45,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="2"
+          key="-1,2"
           padding="none"
         >
           <WithStyles(Typography)
@@ -55,7 +56,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="3"
+          key="-1,3"
           padding="none"
         >
           <WithStyles(Typography)
@@ -66,7 +67,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="4"
+          key="-1,4"
           padding="none"
         >
           <WithStyles(Typography)
@@ -140,6 +141,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.0"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -297,6 +299,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.1"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -454,6 +457,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.2"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -611,6 +615,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.3"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -769,15 +774,16 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
     <WithStyles(TableHead)>
       <WithStyles(TableRow)
         className="WidgetTable-rowFormat-6"
+        key="-1"
       >
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="-1"
+          key="-1,-1"
           padding="none"
         />
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="0"
+          key="-1,0"
           padding="none"
         >
           <WithStyles(Typography)
@@ -788,7 +794,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="1"
+          key="-1,1"
           padding="none"
         >
           <WithStyles(Typography)
@@ -799,7 +805,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="2"
+          key="-1,2"
           padding="none"
         >
           <WithStyles(Typography)
@@ -810,7 +816,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="3"
+          key="-1,3"
           padding="none"
         >
           <WithStyles(Typography)
@@ -821,7 +827,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
         </WithStyles(TableCell)>
         <WithStyles(TableCell)
           className="WidgetTable-textHeadings-8"
-          key="4"
+          key="-1,4"
           padding="none"
         >
           <WithStyles(Typography)
@@ -896,6 +902,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.0"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -1054,6 +1061,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.1"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -1212,6 +1220,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.2"
           meta={
             Object {
               "description": "Layout of child blocks",
@@ -1370,6 +1379,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             }
           }
           hideInfo={false}
+          key="row.3"
           meta={
             Object {
               "description": "Layout of child blocks",

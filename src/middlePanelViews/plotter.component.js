@@ -3,8 +3,37 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTheme } from '@material-ui/core/styles';
 import Plot from 'react-plotly.js/react-plotly';
+import { timeFormat } from 'd3-time-format';
 import { MalcolmTickArchive } from '../malcolm/malcolm.types';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+
+export const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
+
+export const comparePlotlyDateString = (date1, date2) => {
+  // plotly.js sometimes adds or removes decimal places in the millisecond portion of its stringified date
+  // so we take that in to account when comparing two dates
+  if (date1 instanceof Date || date2 instanceof Date) {
+    return false;
+  }
+  const date1Split = date1.split('.');
+  const date2Split = date2.split('.');
+  const date1Millis =
+    date1Split[1] === undefined
+      ? 0
+      : parseFloat(`0.${date1Split[1].slice(0, 3)}`);
+  const date2Millis =
+    date2Split[1] === undefined
+      ? 0
+      : parseFloat(`0.${date2Split[1].slice(0, 3)}`);
+  return date1Split[0] === date2Split[0] && date1Millis === date2Millis;
+};
+
+const returnedToInitialXRange = state =>
+  comparePlotlyDateString(
+    state.layout.xaxis.range[0],
+    state.originalXRange[0]
+  ) &&
+  comparePlotlyDateString(state.layout.xaxis.range[1], state.originalXRange[1]);
 
 const initialiseData = (color, name, dash) => ({
   x: [],
@@ -19,21 +48,34 @@ const initialiseData = (color, name, dash) => ({
 
 class Plotter extends React.Component {
   static getDerivedStateFromProps(props, state) {
-    const newState = props.deriveState(props, state);
-    if (props.attribute) {
-      // && newState.data[0].x.slice(-1)[0] instanceof Date) {
-      const USER_HAS_CHANGED_LAYOUT = false;
-      if (!USER_HAS_CHANGED_LAYOUT) {
-        newState.layout.xaxis = {
-          ...newState.layout.xaxis,
-          range: [
-            new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
-            newState.data[0].x.slice(-1)[0],
-          ],
-        };
+    if (!state.userChangingViewState) {
+      const newState = props.deriveState(props, state);
+      if (props.attribute) {
+        const userHasChangedLayout =
+          /* this relies on the fact that plotly.js accepts JS Date objects for axis range values,
+          but changes them to strings when it sets the range itself (i.e. when the user pans or zooms)
+           */
+          state.layout.xaxis.range &&
+          (!(state.layout.xaxis.range[0] instanceof Date) ||
+            !(state.layout.xaxis.range[1] instanceof Date));
+        if (newState.data[0].x.length > 0 && !userHasChangedLayout) {
+          newState.layout.xaxis = {
+            ...newState.layout.xaxis,
+            range: [
+              new Date(newState.data[0].x.slice(-1)[0].getTime() - 30000),
+              newState.data[0].x.slice(-1)[0],
+            ],
+          };
+        }
+        if (!state.originalXRange && newState.layout.xaxis.range) {
+          newState.originalXRange = newState.layout.xaxis.range.map(date =>
+            plotlyDateFormatter(date)
+          );
+        }
       }
+      return newState;
     }
-    return newState;
+    return state;
   }
 
   constructor(props) {
@@ -64,13 +106,70 @@ class Plotter extends React.Component {
           color: props.theme.palette.text.primary,
         },
       },
+      userChangingViewState: false,
     };
-
+    this.startChangingViewState = this.startChangingViewState.bind(this);
+    this.finishChangingViewState = this.finishChangingViewState.bind(this);
+    this.resetAxes = this.resetAxes.bind(this);
     this.renderTimeout = setTimeout(() => {}, 4000);
+  }
+
+  componentDidMount() {
+    const thisPlot = document.getElementById('plotComponent');
+    if (thisPlot !== null) {
+      thisPlot.addEventListener('mousedown', this.startChangingViewState);
+      thisPlot.addEventListener('mouseup', this.finishChangingViewState);
+    }
   }
 
   componentWillUnmount() {
     clearTimeout(this.renderTimeout);
+    const thisPlot = document.getElementById('plotComponent');
+    if (thisPlot !== null) {
+      thisPlot.removeEventListener('mousedown');
+      thisPlot.removeEventListener('mouseup');
+    }
+  }
+
+  startChangingViewState() {
+    this.setState({ ...this.state, userChangingViewState: true });
+  }
+
+  finishChangingViewState() {
+    if (returnedToInitialXRange(this.state)) {
+      this.resetAxes();
+      /* Due to issues in overriding the plotly modebar buttons,
+       we instead check and relayout action to see if it was a reset axes action
+       (e.g. the range limits for the x axes are set to the stringified version of their original values)
+       */
+    } else {
+      // remove flag and force data state to update from props
+      this.setState({
+        ...this.props.deriveState(this.props, this.state),
+        userChangingViewState: false,
+      });
+    }
+  }
+
+  resetAxes() {
+    this.setState({
+      ...this.state,
+      layout: {
+        ...this.state.layout,
+        datarevision: this.state.layout.datarevision + 1,
+        xaxis: {
+          color: this.props.theme.palette.text.primary,
+          range: [
+            new Date(this.state.data[0].x.slice(-1)[0].getTime() - 30000),
+            this.state.data[0].x.slice(-1)[0],
+          ],
+        },
+        yaxis: {
+          color: this.props.theme.palette.text.primary,
+          autorange: true,
+        },
+      },
+    });
   }
 
   render() {
@@ -89,6 +188,8 @@ class Plotter extends React.Component {
         layout={this.state.layout}
         style={{ width: '100%', height: '100%' }}
         useResizeHandler
+        onRelayout={this.finishChangingViewState}
+        divId="plotComponent"
       />
     );
   }
@@ -143,7 +244,7 @@ Plotter.propTypes = {
   }).isRequired,
   tickArchive: PropTypes.func.isRequired,
   doTick: PropTypes.bool,
-  // deriveState: PropTypes.func.isRequired,
+  deriveState: PropTypes.func.isRequired,
 };
 
 Plotter.defaultProps = {
