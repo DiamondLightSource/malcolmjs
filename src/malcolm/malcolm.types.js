@@ -14,6 +14,7 @@ export const MalcolmReturn = 'malcolm:return';
 export const MalcolmUpdateBlockPosition = 'malcolm:updateblockposition';
 export const MalcolmMakeBlockVisibleType = 'malcolm:makeblockvisible';
 export const MalcolmSelectBlock = 'malcolm:selectblock';
+export const MalcolmSelectLinkType = 'malcolm:selectlink';
 export const MalcolmShiftButton = 'malcolm:shiftbutton';
 export const MalcolmSocketConnect = 'malcolm:socketconnect';
 export const MalcolmMethodUpdate = 'malcolm:methodupdate';

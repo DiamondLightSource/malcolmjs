@@ -26,7 +26,7 @@ describe('LayoutBuilder', () => {
   it('builds nodes correctly', () => {
     const blocks = [buildBlock(1, 1, 0)];
 
-    const engine = buildLayoutEngine({ blocks }, []);
+    const engine = buildLayoutEngine({ blocks }, [], []);
     expect(Object.keys(engine.diagramModel.nodes)).toEqual(['block1']);
     expect(engine.diagramModel.nodes.block1.label).toEqual('block 1');
     expect(engine.diagramModel.nodes.block1.description).toEqual(
@@ -56,7 +56,7 @@ describe('LayoutBuilder', () => {
     blocks[0].ports[0].tag = 'block2';
     blocks[0].ports[0].value = true;
 
-    const engine = buildLayoutEngine({ blocks }, []);
+    const engine = buildLayoutEngine({ blocks }, [], []);
     expect(Object.keys(engine.diagramModel.links)).toEqual([
       'block1•out1•block2•in1',
     ]);

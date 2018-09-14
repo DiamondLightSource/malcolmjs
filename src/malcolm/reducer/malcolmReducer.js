@@ -11,7 +11,6 @@ import {
   MalcolmRootBlockMeta,
   MalcolmReturn,
   MalcolmUpdateBlockPosition,
-  MalcolmSelectBlock,
   MalcolmShiftButton,
   MalcolmSocketConnect,
   MalcolmSelectPortType,
@@ -55,6 +54,7 @@ const initialMalcolmState = {
   layoutState: {
     shiftIsPressed: false,
     selectedBlocks: [],
+    selectedLinks: [],
     layoutCenter: {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2 - 64,
@@ -621,16 +621,6 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       return {
         ...updatedState,
         layout: layoutReducer.processLayout(updatedState),
-      };
-
-    case MalcolmSelectBlock:
-      return {
-        ...updatedState,
-        layoutState: layoutReducer.selectBlock(
-          updatedState,
-          action.payload.blockName,
-          action.payload.isSelected
-        ),
       };
 
     case MalcolmSelectPortType:

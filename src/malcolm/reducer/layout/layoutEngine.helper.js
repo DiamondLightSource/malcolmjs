@@ -23,7 +23,12 @@ const buildBlockNode = (
   return node;
 };
 
-export const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
+export const buildLayoutEngine = (
+  layout,
+  selectedBlocks,
+  selectedLinks,
+  layoutEngineView
+) => {
   const engine = new DiagramEngine();
   engine.installDefaultFactories();
   engine.registerNodeFactory(new BlockNodeFactory());
@@ -77,6 +82,9 @@ export const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
 
               const newLink = endPort.link(startPort);
               newLink.id = `${endPort.name}${idSeparator}${startPort.name}`;
+              newLink.selected = selectedLinks.some(
+                linkId => linkId === newLink.id
+              );
               links.push(newLink);
             }
           }
