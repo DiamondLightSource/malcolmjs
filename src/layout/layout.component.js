@@ -54,6 +54,7 @@ const Layout = props => {
         diagramEngine={props.layoutEngine}
         // smartRouting
         maxNumberPointsPerLink={0}
+        allowLooseLinks={false}
         inverseZoom
       />
     </div>
