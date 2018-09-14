@@ -163,12 +163,14 @@ const deleteLinks = () => (dispatch, getState) => {
       blockMri,
       linkAttr
     );
-    const portNullValue = portAttribute.raw.meta.tags
-      .find(t => t.indexOf(sinkPort) > -1)
-      .split(':')
-      .slice(-1)[0];
-    dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
-    dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
+    if (portAttribute) {
+      const portNullValue = portAttribute.raw.meta.tags
+        .find(t => t.indexOf(sinkPort) > -1)
+        .split(':')
+        .slice(-1)[0];
+      dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
+      dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
+    }
   });
 };
 
