@@ -22,6 +22,7 @@ describe('Layout', () => {
   let block;
   let node;
   let state;
+  let actions;
 
   Toolkit.TESTING = true;
 
@@ -55,9 +56,12 @@ describe('Layout', () => {
       },
     };
 
+    actions = [];
     mockStore = mockState => ({
       getState: () => mockState,
-      dispatch: () => {},
+      dispatch: action => {
+        actions.push(action);
+      },
       subscribe: () => {},
     });
 
@@ -113,6 +117,8 @@ describe('Layout', () => {
     const wrapper = shallow(<Layout store={mockStore(state)} />);
     wrapper.setState({ hasFocus: true });
     wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
+    expect(actions.length).toEqual(2);
+    console.log(actions);
     expect(layoutActions.makeBlockVisible).toBeCalledWith(
       ['PANDA:SEQ1'],
       [
@@ -226,10 +232,12 @@ describe('Layout', () => {
     });
   });
 
-  it('mapDispatchToProps deleteBlocks dispatches updates to hide and deselect multiple blocks', () => {
+  it('mapDispatchToProps deleteSelected dispatches updates to hide and deselect multiple blocks', () => {
     const props = mapDispatchToProps(() => {});
-
-    props.deleteBlock(['PANDA:block1', 'PANDA:block2']);
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:block1', 'PANDA:block2'];
+    props.deleteSelected();
+    console.log('--------');
+    console.log(actions);
     expect(layoutActions.makeBlockVisible).toBeCalledWith(
       ['PANDA:block1', 'PANDA:block2'],
       [

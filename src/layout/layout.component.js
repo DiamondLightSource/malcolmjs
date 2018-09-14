@@ -5,6 +5,7 @@ import { DiagramWidget } from 'storm-react-diagrams';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import {
   malcolmSelectBlock,
+  malcolmSelectLink,
   malcolmLayoutUpdatePosition,
 } from '../malcolm/malcolmActionCreators';
 import layoutAction, { selectPort } from '../malcolm/actions/layout.action';
@@ -76,13 +77,13 @@ class Layout extends React.Component {
           position: 'relative',
           width: '100%',
           height: '100%',
-          opacity: 0.9,
         }}
       >
         <DiagramWidget
           diagramEngine={this.props.layoutEngine}
           // smartRouting
           maxNumberPointsPerLink={0}
+          allowLooseLinks={false}
           inverseZoom
           deleteKeys={this.state.hasFocus ? Object.values(deleteKeys) : []}
         />
@@ -145,11 +146,17 @@ export const mapDispatchToProps = dispatch => ({
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
-    } else if (type === 'malcolmlink' && isSelected) {
-      const idComponents = id.split(idSeparator);
-      const blockMri = idComponents[2];
-      const portName = idComponents[3];
-      dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
+    } else if (type === 'malcolmlink') {
+      dispatch(malcolmSelectLink(id, isSelected));
+
+      if (isSelected) {
+        const idComponents = id.split(idSeparator);
+        const blockMri = idComponents[2];
+        const portName = idComponents[3];
+        dispatch(
+          navigationActions.updateChildPanelWithLink(blockMri, portName)
+        );
+      }
     }
   },
   portMouseDown: (portId, start) => {
@@ -163,7 +170,6 @@ export const mapDispatchToProps = dispatch => ({
 
   deleteSelected: () => {
     dispatch(layoutAction.deleteBlocks());
-
     dispatch(layoutAction.deleteLinks());
   },
 });

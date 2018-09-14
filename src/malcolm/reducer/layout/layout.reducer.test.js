@@ -2,7 +2,9 @@ import LayoutReducer, {
   buildPorts,
   offSetPosition,
   updateLayoutBlock,
+  LayoutReduxReducer,
 } from './layout.reducer';
+import { malcolmSelectBlock } from '../../malcolmActionCreators';
 
 const sourcePort = 'sourcePort';
 const sinkPort = 'sinkPort';
@@ -212,25 +214,36 @@ describe('Layout Reducer', () => {
   it('selectBlock adds to selection if isSelected is true', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block1', true);
 
-    expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
+    const action = malcolmSelectBlock('block1', true);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toEqual([
+      'block2',
+      'block1',
+    ]);
   });
 
   it('selectBlock removes from selection if isSelected is false', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block2', false);
 
-    expect(layout.selectedBlocks).toEqual([]);
+    const action = malcolmSelectBlock('block2', false);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toEqual([]);
   });
 
   it('selectBlock does not change selected if block is already selected', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block2', true);
 
-    expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
+    const action = malcolmSelectBlock('block2', true);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toBe(
+      state.layoutState.selectedBlocks
+    );
   });
 
   it('updateBlockPosition updates the positions of selected blocks', () => {
