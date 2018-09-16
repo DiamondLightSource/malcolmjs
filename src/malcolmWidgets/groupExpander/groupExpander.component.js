@@ -45,7 +45,7 @@ const styles = theme => ({
 
 const WidgetGroupExpander = props => (
   <div>
-    <ExpansionPanel defaultExpanded={props.expanded}>
+    <ExpansionPanel defaultExpanded={props.expanded} elevation={0}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         classes={{
