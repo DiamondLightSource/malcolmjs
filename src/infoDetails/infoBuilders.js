@@ -316,8 +316,8 @@ export const linkInfo = props => {
         setFlag: () => {},
       },
     },
-    destinationPort: {
-      label: 'Destination',
+    sinkPort: {
+      label: 'Sink',
       value: `${blockName}.${portName}`,
       inline: true,
     },

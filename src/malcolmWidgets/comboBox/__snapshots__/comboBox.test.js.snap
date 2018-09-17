@@ -2,12 +2,13 @@
 
 exports[`WidgetComboBox renders correctly 1`] = `
 <FormControl
+  className="WidgetComboBox-formControl-2"
   classes={
     Object {
-      "fullWidth": "MuiFormControl-fullWidth-6",
-      "marginDense": "MuiFormControl-marginDense-5",
-      "marginNormal": "MuiFormControl-marginNormal-4",
-      "root": "MuiFormControl-root-3",
+      "fullWidth": "MuiFormControl-fullWidth-7",
+      "marginDense": "MuiFormControl-marginDense-6",
+      "marginNormal": "MuiFormControl-marginNormal-5",
+      "root": "MuiFormControl-root-4",
     }
   }
   component="div"
@@ -18,7 +19,7 @@ exports[`WidgetComboBox renders correctly 1`] = `
   required={false}
 >
   <WithStyles(Select)
-    className="WidgetComboBox-formControl-2"
+    className="WidgetComboBox-select-3"
     native={true}
     onChange={[Function]}
     value="2"

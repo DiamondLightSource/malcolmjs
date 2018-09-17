@@ -21,6 +21,9 @@ const styles = theme => ({
     marginTop: 15,
     color: theme.palette.primary.contrastText,
   },
+  endDivider: {
+    borderTop: `1px solid ${theme.palette.divider}`,
+  },
 });
 
 const ignoredAttributes = ['widget:icon'];
@@ -84,6 +87,15 @@ export const areAttributesTheSame = (oldAttributes, newAttributes) =>
       isRootLevelAttribute(old) === isRootLevelAttribute(newAttributes[i])
   );
 
+const GroupDivider = props => <div className={props.classes.endDivider} />;
+
+const showDivider = (methods, index) =>
+  index < methods.length - 1 &&
+  (Object.keys(methods[index].raw.takes.elements).length > 0 ||
+    Object.keys(methods[index].raw.returns.elements).length > 0) &&
+  Object.keys(methods[index + 1].raw.takes.elements).length === 0 &&
+  Object.keys(methods[index + 1].raw.returns.elements).length === 0;
+
 const displayAttributes = props => {
   if (props.attributesAvailable) {
     return (
@@ -111,13 +123,19 @@ const displayAttributes = props => {
             ))}
           </GroupExpander>
         ))}
-        {props.methods.map(method => (
-          <MethodDetails
-            key={method.calculated.name}
-            blockName={props.blockName}
-            attributeName={method.calculated.name}
-          />
+        {props.methods.map((method, i) => (
+          <div>
+            <MethodDetails
+              key={method.calculated.name}
+              blockName={props.blockName}
+              attributeName={method.calculated.name}
+            />
+            {showDivider(props.methods, i) ? (
+              <GroupDivider classes={props.classes} />
+            ) : null}
+          </div>
         ))}
+        <GroupDivider classes={props.classes} />
       </div>
     );
   }
@@ -150,6 +168,13 @@ displayAttributes.propTypes = {
   rootAttributes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   groups: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   methods: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  classes: PropTypes.shape({}).isRequired,
+};
+
+GroupDivider.propTypes = {
+  classes: PropTypes.shape({
+    endDivider: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = (state, ownProps, memory) => {
