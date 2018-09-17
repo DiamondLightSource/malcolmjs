@@ -54,16 +54,7 @@ class WidgetTextInput extends React.Component {
     this.deFocus = this.deFocus.bind(this);
     this.inFocus = this.inFocus.bind(this);
     this.handleSpecialKeys = this.handleSpecialKeys.bind(this);
-    // this.handleKeyUp = this.handleKeyUp.bind(this);
   }
-
-  /*
-  handleKeyUp(event) {
-    // need to stop propagation down to the layout component which
-    // then interprets DELETE to mean delete the block
-    event.stopPropagation();
-  }
-  */
 
   handleSpecialKeys(event) {
     switch (event.key) {
