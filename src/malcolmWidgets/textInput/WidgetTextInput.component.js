@@ -118,7 +118,6 @@ class WidgetTextInput extends React.Component {
         value={this.state.localValue}
         onChange={this.handleChange}
         onKeyDown={this.handleSpecialKeys}
-        onKeyUp={this.handleKeyUp}
         onBlur={this.deFocus}
         onFocus={this.inFocus}
         className={this.props.classes.textInput}
