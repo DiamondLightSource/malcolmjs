@@ -4,6 +4,7 @@ import { Toolkit, DiagramEngine } from 'storm-react-diagrams';
 import Layout, { mapDispatchToProps } from './layout.component';
 import {
   malcolmSelectBlock,
+  malcolmSelectLink,
   malcolmLayoutUpdatePosition,
   malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
@@ -34,6 +35,7 @@ describe('Layout', () => {
   beforeEach(() => {
     shallow = createShallow({ dive: true });
     malcolmSelectBlock.mockClear();
+    malcolmSelectLink.mockClear();
     malcolmLayoutUpdatePosition.mockClear();
     malcolmLayoutShiftIsPressed.mockClear();
     layoutActions.deleteBlocks.mockClear();
@@ -168,6 +170,7 @@ describe('Layout', () => {
     const props = mapDispatchToProps(() => {});
     props.selectHandler('malcolmjsblock', 'PANDA:block1', true);
     expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:block1', true);
   });
 
   it('mapDispatchToProps selectHandler notifies when a link is selected', () => {
@@ -177,9 +180,10 @@ describe('Layout', () => {
       'block1•output•PANDA:block1•input1',
       true
     );
-    expect(navigationActions.updateChildPanelWithLink).toBeCalledWith(
-      'PANDA:block1',
-      'input1'
+    expect(malcolmSelectLink).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectLink).toHaveBeenCalledWith(
+      'block1•output•PANDA:block1•input1',
+      true
     );
   });
 

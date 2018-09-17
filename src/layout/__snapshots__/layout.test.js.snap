@@ -46,6 +46,7 @@ exports[`Layout renders correctly 1`] = `
         "hAdjustmentFactor": 0,
         "id": "1",
         "labelFactories": Object {},
+        "linkClickHandler": [Function],
         "linkFactories": Object {},
         "linksThatHaveInitiallyRendered": Object {},
         "listeners": Object {},

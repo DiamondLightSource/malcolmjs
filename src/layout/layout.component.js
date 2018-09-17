@@ -48,6 +48,7 @@ class Layout extends React.Component {
     this.props.layoutEngine.clickHandler = this.props.clickHandler;
     this.props.layoutEngine.mouseDownHandler = this.props.mouseDownHandler;
     this.props.layoutEngine.portMouseDown = this.props.portMouseDown;
+    this.props.layoutEngine.linkClickHandler = this.props.linkClickHandler;
     return (
       <div
         id="LayoutDiv"
@@ -98,6 +99,7 @@ Layout.propTypes = {
     clickHandler: PropTypes.func,
     portMouseDown: PropTypes.func,
     mouseDownHandler: PropTypes.func,
+    linkClickHandler: PropTypes.func,
   }).isRequired,
   selectHandler: PropTypes.func.isRequired,
   clickHandler: PropTypes.func.isRequired,
@@ -105,6 +107,7 @@ Layout.propTypes = {
   makeBlockVisible: PropTypes.func.isRequired,
   mouseDownHandler: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
+  linkClickHandler: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = state => ({
@@ -143,20 +146,19 @@ export const mapDispatchToProps = dispatch => ({
       dispatch(layoutAction.showLayoutBin(show));
     }
   },
+
+  linkClickHandler: id => {
+    const idComponents = id.split(idSeparator);
+    const blockMri = idComponents[2];
+    const portName = idComponents[3];
+    dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
+  },
+
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
     } else if (type === 'malcolmlink') {
       dispatch(malcolmSelectLink(id, isSelected));
-
-      if (isSelected) {
-        const idComponents = id.split(idSeparator);
-        const blockMri = idComponents[2];
-        const portName = idComponents[3];
-        dispatch(
-          navigationActions.updateChildPanelWithLink(blockMri, portName)
-        );
-      }
     }
   },
   portMouseDown: (portId, start) => {
