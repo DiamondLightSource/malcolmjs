@@ -39,6 +39,7 @@ export const buildLayoutEngine = (
   engine.portMouseDown = () => {};
   engine.clickHandler = () => {};
   engine.mouseDownHandler = () => {};
+  engine.linkClickHandler = () => {};
 
   const nodes = layout.blocks
     .filter(b => b.loading === false)
@@ -85,6 +86,9 @@ export const buildLayoutEngine = (
               newLink.selected = selectedLinks.some(
                 linkId => linkId === newLink.id
               );
+              newLink.clickHandler = linkId => {
+                engine.linkClickHandler(linkId);
+              };
               links.push(newLink);
             }
           }

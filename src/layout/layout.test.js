@@ -1,10 +1,10 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
-import { Toolkit } from 'storm-react-diagrams';
-import configureStore from 'redux-mock-store';
+import { Toolkit, DiagramEngine } from 'storm-react-diagrams';
 import Layout, { mapDispatchToProps } from './layout.component';
 import {
   malcolmSelectBlock,
+  malcolmSelectLink,
   malcolmLayoutUpdatePosition,
   malcolmLayoutShiftIsPressed,
 } from '../malcolm/malcolmActionCreators';
@@ -23,6 +23,7 @@ describe('Layout', () => {
   let block;
   let node;
   let state;
+  let actions;
 
   Toolkit.TESTING = true;
 
@@ -34,8 +35,11 @@ describe('Layout', () => {
   beforeEach(() => {
     shallow = createShallow({ dive: true });
     malcolmSelectBlock.mockClear();
+    malcolmSelectLink.mockClear();
     malcolmLayoutUpdatePosition.mockClear();
     malcolmLayoutShiftIsPressed.mockClear();
+    layoutActions.deleteBlocks.mockClear();
+    layoutActions.deleteLinks.mockClear();
     navigationActions.updateChildPanel.mockClear();
     navigationActions.updateChildPanelWithLink.mockClear();
 
@@ -55,7 +59,14 @@ describe('Layout', () => {
       },
     };
 
-    mockStore = configureStore();
+    actions = [];
+    mockStore = mockState => ({
+      getState: () => mockState,
+      dispatch: action => {
+        actions.push(action);
+      },
+      subscribe: () => {},
+    });
 
     node = {
       x: 0,
@@ -71,9 +82,7 @@ describe('Layout', () => {
           shiftIsPressed: false,
           selectedBlocks: [],
         },
-        layoutEngine: {
-          testEngine: true,
-        },
+        layoutEngine: new DiagramEngine(),
       },
       router: {
         location: {
@@ -86,6 +95,52 @@ describe('Layout', () => {
   it('renders correctly', () => {
     const wrapper = shallow(<Layout store={mockStore(state)} />);
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('onFocus sets hasFocus state to true', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+    wrapper.find('#LayoutDiv').simulate('focus');
+    expect(wrapper.state()).toEqual({ hasFocus: true });
+  });
+
+  it('onBlur sets hasFocus state to false', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+    wrapper.setState({ hasFocus: true });
+    expect(wrapper.state()).toEqual({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('blur');
+    expect(wrapper.state()).toEqual({ hasFocus: false });
+  });
+
+  it('delete key sends delete block action if layout has focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
+    expect(layoutActions.deleteBlocks).toHaveBeenCalled();
+    expect(layoutActions.deleteLinks).toHaveBeenCalled();
+  });
+
+  it('backspace key sends delete block action if layout has focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: true });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Backspace' });
+
+    expect(layoutActions.deleteBlocks).toHaveBeenCalled();
+    expect(layoutActions.deleteLinks).toHaveBeenCalled();
+  });
+
+  it('delete key doesnt send delete block action if layout doesnt have focus', () => {
+    state.malcolm.layoutState.selectedBlocks = ['PANDA:SEQ1'];
+    const wrapper = shallow(<Layout store={mockStore(state)} />);
+    wrapper.setState({ hasFocus: false });
+    wrapper.find('#LayoutDiv').simulate('keyup', { key: 'Delete' });
+    expect(layoutActions.deleteBlocks).not.toHaveBeenCalled();
+    expect(layoutActions.deleteLinks).not.toHaveBeenCalled();
   });
 
   it('mapDispatchToProps clickHandler updates position when move is more than 3px', () => {
@@ -115,6 +170,7 @@ describe('Layout', () => {
     const props = mapDispatchToProps(() => {});
     props.selectHandler('malcolmjsblock', 'PANDA:block1', true);
     expect(malcolmSelectBlock).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectBlock).toHaveBeenCalledWith('PANDA:block1', true);
   });
 
   it('mapDispatchToProps selectHandler notifies when a link is selected', () => {
@@ -124,9 +180,10 @@ describe('Layout', () => {
       'block1•output•PANDA:block1•input1',
       true
     );
-    expect(navigationActions.updateChildPanelWithLink).toBeCalledWith(
-      'PANDA:block1',
-      'input1'
+    expect(malcolmSelectLink).toHaveBeenCalledTimes(1);
+    expect(malcolmSelectLink).toHaveBeenCalledWith(
+      'block1•output•PANDA:block1•input1',
+      true
     );
   });
 

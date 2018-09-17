@@ -6,6 +6,8 @@ import {
   MalcolmMakeBlockVisibleType,
   MalcolmSelectBlock,
 } from '../malcolm.types';
+import { idSeparator } from '../../layout/layout.component';
+import { sinkPort, sourcePort } from '../malcolmConstants';
 
 describe('layout actions', () => {
   let actions = [];
@@ -33,12 +35,56 @@ describe('layout actions', () => {
               {
                 raw: {
                   value: {
-                    mri: ['PANDA'],
-                    name: ['PANDA 1'],
+                    mri: ['PANDA', 'PANDA:INENC1'],
+                    name: ['PANDA 1', 'Test Encoder'],
                   },
                 },
                 calculated: {
                   name: 'layout',
+                },
+              },
+              {
+                raw: {
+                  meta: {
+                    tags: [`${sourcePort}bool:PANDA.test`],
+                  },
+                },
+                calculated: {
+                  name: 'testOut1',
+                },
+              },
+              {
+                raw: {
+                  meta: {
+                    tags: [`${sinkPort}bool:ONE`],
+                  },
+                },
+                calculated: {
+                  name: 'testIn1',
+                },
+              },
+            ],
+          },
+          'PANDA:INENC1': {
+            attributes: [
+              {
+                raw: {
+                  meta: {
+                    tags: [`${sinkPort}bool:ZERO`],
+                  },
+                },
+                calculated: {
+                  name: 'testIn2',
+                },
+              },
+              {
+                raw: {
+                  meta: {
+                    tags: [`${sourcePort}bool:INENC1.test`],
+                  },
+                },
+                calculated: {
+                  name: 'testOut2',
                 },
               },
             ],
@@ -120,25 +166,49 @@ describe('layout actions', () => {
   });
 
   it('deleteBlocks makes the block invisible', () => {
-    state.malcolm.layoutState.selectedBlocks = ['PANDA'];
+    state.malcolm.layoutState.selectedBlocks = ['PANDA', 'PANDA:INENC1'];
 
     const action = LayoutActions.deleteBlocks();
     action(dispatch, getState);
 
-    expect(actions).toHaveLength(4);
+    expect(actions).toHaveLength(6);
     expect(actions[0].type).toEqual(MalcolmMakeBlockVisibleType);
-    expect(actions[1].type).toEqual(MalcolmAttributeFlag);
-    expect(actions[2].type).toEqual(MalcolmSend);
-    expect(actions[2].payload.typeid).toEqual('malcolm:core/Put:1.0');
-    expect(actions[2].payload.path).toEqual(['PANDA', 'layout', 'value']);
-    expect(actions[2].payload.value).toEqual({
-      mri: ['PANDA'],
-      name: ['PANDA 1'],
-      visible: [false],
-      x: [0],
-      y: [0],
+    expect(actions[1].type).toEqual(MalcolmMakeBlockVisibleType);
+    expect(actions[2].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[3].type).toEqual(MalcolmSend);
+    expect(actions[3].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[3].payload.path).toEqual(['PANDA', 'layout', 'value']);
+    expect(actions[3].payload.value).toEqual({
+      mri: ['PANDA', 'PANDA:INENC1'],
+      name: ['PANDA 1', 'Test Encoder'],
+      visible: [false, false],
+      x: [0, 0],
+      y: [0, 0],
     });
 
-    expect(actions[3].type).toEqual(MalcolmSelectBlock);
+    expect(actions[4].type).toEqual(MalcolmSelectBlock);
+    expect(actions[5].type).toEqual(MalcolmSelectBlock);
+  });
+
+  it('deleteLinks puts null port value to selected link attribute', () => {
+    state.malcolm.layoutState.selectedLinks = [
+      `PANDA${idSeparator}testOut1${idSeparator}PANDA:INENC1${idSeparator}testIn2`,
+      `PANDA:INENC1${idSeparator}testOut2${idSeparator}PANDA${idSeparator}testIn1`,
+    ];
+
+    const action = LayoutActions.deleteLinks();
+    action(dispatch, getState);
+
+    expect(actions).toHaveLength(4);
+    expect(actions[0].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[2].type).toEqual(MalcolmAttributeFlag);
+    expect(actions[1].type).toEqual(MalcolmSend);
+    expect(actions[1].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[1].payload.path).toEqual(['PANDA:INENC1', 'testIn2']);
+    expect(actions[1].payload.value).toEqual('ZERO');
+    expect(actions[3].type).toEqual(MalcolmSend);
+    expect(actions[3].payload.typeid).toEqual('malcolm:core/Put:1.0');
+    expect(actions[3].payload.path).toEqual(['PANDA', 'testIn1']);
+    expect(actions[3].payload.value).toEqual('ONE');
   });
 });
