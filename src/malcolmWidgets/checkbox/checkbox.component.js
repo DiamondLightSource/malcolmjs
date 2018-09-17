@@ -9,7 +9,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   checkBoxRoot: {
-    height: 'auto',
+    height: 28,
     color: lighten(theme.palette.primary.light, 0.1),
     '&$checkBoxChecked': {
       color: theme.palette.primary.light,
