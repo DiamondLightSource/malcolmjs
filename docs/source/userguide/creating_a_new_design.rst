@@ -82,7 +82,7 @@ Four types of `attribute_` are available, and a `block_` may support zero or mor
 
     * `Parameter <parameter_attribute_>` - an Attribute supporting configuration of the Block within the context of the `design_`, ultimately influencing its behaviour once in an execution environment.  
     * `Input <input_attribute_>` - an Attribute identifying the source of data that will be received into a `block_` via a `sink_port_` with the same name. 
-    * `Output <output_attribute_>` - anan Attribute identifying the value (or stream of values) that will be transmitted out of a `block_` via a `source_port_` with the same name.
+    * `Output <output_attribute_>` - an Attribute identifying the value (or stream of values) that will be transmitted out of a `block_` via a `source_port_` with the same name.
     * `Readback <readback_attribute_>` - an Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be specified manually via the User Interface.
 
 Attributes whose value can be specified at design-time are denoted by a highlight below the attribute value field.
@@ -188,13 +188,9 @@ To create a connection between two blocks:
 
         * If an error occurs during the creation process details are displayed at the bottom of the Layout panel.
 
-For convenience during the Design process it is also possible to create a Connector with only one terminus until such time that its other terminus has been specified.  To create a single terminus Connector:
-
-    #. Select the `source_port_` or `sink_port_` representing one terminus of the link you wish to make by hovering over the Port on the Block.  The Port will be temporarily highlighted.
-    #. Click the left mouse button and while holding it down drag the Connector away from the Block.
-    #. Release the mouse button.  The new Connector is displayed within the Design Layout.  Note that the un-linked terminus of the Connector is represented by a grey circle.
       
-To confirm the Connection has been created as expected hover over the Connector.  The Connector changes from a solid line to a dashed line, animated to denote the direction of information flow between its `source_port_` and `sink_port_`.
+To confirm the Connection has been created correctly select the Connector by clicking on it.  The Connector is highlighted to denote selection and the connector information panel opens in the 'right hand panel' displaying the name of the `source_port_` and `sink_port_` associated with the Connector.
+
 
 Interrogating Connector Attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -203,7 +199,7 @@ As with a `block_` a `connector_` also possesses `attributes <attribute_>`.  Unl
 
 To interrogate the attributes associated with the Connector you have created:
 
-    #. Hover over the Connector of interest.  The Connector changes to a dashed line showing the direction of information flow.
+    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
     #. Click the left mouse button to select the Connector.  A Connector Information Panel open in the 'right-hand panel' of the user interface.
 
 The Connector Information Panel contains details of the `source_port_` and `sink_port_` of the Connector.  
@@ -218,14 +214,14 @@ If a `connector_` has been added to a `design_` erroneously, or is no longer req
 
 #. *Hitting the 'Delete' or backspace key:*
 
-    #. Hover over the Connector of interest.  The Connector changes to a dashed line showing the direction of information flow.
+    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
     #. Click the left mouse button to select the Connector. The Connector is highlighted.
     #. Hit the 'Delete' or backspace key on your keyboard.  The Connector is removed from the Design Layout.
 
 
 #. *Via the Connector Information Panel:*
 
-    #. Hover over the Connector of interest.  The Connector changes to a dashed line showing the direction of information flow.
+    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
     #. Click the left mouse button to select the Connector.  A Connector Information Panel open in the 'right-hand panel' of the user interface.
     #. Select the 'Delete' button in the Connector Information Panel.  The Connector is removed from the Design Layout.
 
