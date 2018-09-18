@@ -4,7 +4,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
 import Add from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
@@ -38,7 +38,7 @@ const styles = theme => ({
     overflowY: 'auto',
     height: 'calc(100% - 75px)',
     width: '100%',
-    backgroundColor: '#424242',
+    backgroundColor: theme.palette.background.paper,
   },
   rowFormat: {
     height: '32px',
@@ -52,8 +52,8 @@ const styles = theme => ({
     borderLeft: `2px solid ${theme.palette.divider}`,
     textAlign: 'Center',
   },
-  blankCell: {
-    backgroundColor: 'rgb(48, 48, 48)',
+  selectedRow: {
+    backgroundColor: fade(theme.palette.secondary.main, 0.25),
     textAlign: 'Center',
     padding: '2px',
   },
@@ -71,14 +71,14 @@ const styles = theme => ({
   },
 });
 
-const isBlankCell = props =>
+const isSelectedRow = props =>
   props.selectedRow === props.row
-    ? props.classes.blankCell
+    ? props.classes.selectedRow
     : props.classes.textBody;
 
 const AlarmCell = props => (
   <TableCell
-    className={isBlankCell(props)}
+    className={isSelectedRow(props)}
     padding="none"
     key={[props.row, -1]}
   >
@@ -107,7 +107,7 @@ const RowData = props => {
   if (props.columnLabels === undefined) {
     valueCells = [
       <TableCell
-        className={isBlankCell(props)}
+        className={isSelectedRow(props)}
         padding="none"
         key={[props.row, 0]}
       >
@@ -124,7 +124,7 @@ const RowData = props => {
   } else {
     valueCells = props.columnLabels.map((label, column) => (
       <TableCell
-        className={isBlankCell(props)}
+        className={isSelectedRow(props)}
         padding="none"
         key={[props.row, column]}
       >
@@ -275,6 +275,7 @@ const WidgetTable = props => {
                       classes={props.classes}
                       path={props.attribute.calculated.path}
                       infoClickHandler={props.infoClickHandler}
+                      selectedRow={props.selectedRow}
                     />
                   </TableRow>
                 ))}
@@ -300,6 +301,7 @@ const WidgetTable = props => {
                     values={values}
                     meta={meta}
                     hideInfo={props.hideInfo}
+                    selectedRow={props.selectedRow}
                   />
                 ))}
               </TableBody>
@@ -403,7 +405,7 @@ WidgetTable.propTypes = {
     footerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
@@ -415,12 +417,14 @@ WidgetTable.propTypes = {
   setFlag: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   hideInfo: PropTypes.bool,
+  selectedRow: PropTypes.number,
 };
 
 WidgetTable.defaultProps = {
   localState: undefined,
   footerItems: [],
   hideInfo: false,
+  selectedRow: undefined,
 };
 
 AlarmCell.propTypes = {
@@ -428,13 +432,14 @@ AlarmCell.propTypes = {
   path: PropTypes.arrayOf(PropTypes.string).isRequired,
   classes: PropTypes.shape({
     button: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
   }).isRequired,
   flags: PropTypes.shape({
     rows: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
+  // selectedRow: PropTypes.number,
 };
 
 RowData.propTypes = {
@@ -442,7 +447,7 @@ RowData.propTypes = {
   path: PropTypes.arrayOf(PropTypes.string).isRequired,
   classes: PropTypes.shape({
     button: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
   }).isRequired,
@@ -471,12 +476,12 @@ RowData.defaultProps = {
   selectedRow: undefined,
 };
 
-isBlankCell.propTypes = {
+isSelectedRow.propTypes = {
   selectedRow: PropTypes.number,
   row: PropTypes.number.isRequired,
 };
 
-isBlankCell.defaultProps = {
+isSelectedRow.defaultProps = {
   selectedRow: undefined,
 };
 export default withStyles(styles, { withTheme: true })(WidgetTable);

@@ -60,8 +60,9 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
       }
     >
       <WithStyles(Button)
-        color="secondary"
+        color="primary"
         onClick={[Function]}
+        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -153,8 +154,9 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
       }
     >
       <WithStyles(Button)
-        color="secondary"
+        color="primary"
         onClick={[Function]}
+        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -212,8 +214,9 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
       }
     >
       <WithStyles(Button)
-        color="secondary"
+        color="primary"
         onClick={[Function]}
+        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>
@@ -271,8 +274,9 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
       }
     >
       <WithStyles(Button)
-        color="secondary"
+        color="primary"
         onClick={[Function]}
+        variant="raised"
       >
         Auto layout
       </WithStyles(Button)>

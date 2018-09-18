@@ -160,10 +160,7 @@ describe('WidgetTable', () => {
     buttons.at(0).simulate('click');
     buttons.at(3).simulate('click');
     expect(infoClick.mock.calls.length).toEqual(2);
-    expect(rowClick.mock.calls.length).toEqual(2);
     expect(infoClick.mock.calls[0]).toEqual([['test1', 'layout'], 'row.0']);
     expect(infoClick.mock.calls[1]).toEqual([['test1', 'layout'], 'row.3']);
-    expect(rowClick.mock.calls[0]).toEqual([['test1', 'layout'], 'row.0']);
-    expect(rowClick.mock.calls[1]).toEqual([['test1', 'layout'], 'row.3']);
   });
 });

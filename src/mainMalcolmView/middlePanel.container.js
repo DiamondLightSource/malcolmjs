@@ -157,8 +157,8 @@ const findAttributeComponent = props => {
             style={{ right: props.openChild ? 360 + 29 : 29, top: 12 }}
           >
             <Button
-              color="secondary"
-              // variant="raised"
+              color="primary"
+              variant="raised"
               onClick={() => props.runAutoLayout()}
             >
               Auto layout

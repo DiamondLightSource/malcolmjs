@@ -8,745 +8,1001 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
     }
   }
 >
-  <WithStyles(Table)
-    className="WidgetTable-headerLayoutNoScroll-3"
+  <div
+    style={
+      Object {
+        "display": "flex",
+      }
+    }
   >
-    <WithStyles(TableHead)>
-      <WithStyles(TableRow)
-        className="WidgetTable-rowFormat-6"
-        key="-1"
-      >
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,-1"
-          padding="none"
-        />
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,0"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+    <div
+      style={
+        Object {
+          "width": "32px",
+        }
+      }
+    >
+      <WithStyles(Table)>
+        <WithStyles(TableHead)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
           >
-            Name
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,1"
-          padding="none"
+            <WithStyles(TableCell)
+              className="WidgetTable-textHeadings-8"
+              key="-1,-1"
+              padding="none"
+            />
+          </WithStyles(TableRow)>
+        </WithStyles(TableHead)>
+      </WithStyles(Table)>
+    </div>
+    <WithStyles(Table)
+      className="WidgetTable-headerLayoutNoScroll-3"
+    >
+      <WithStyles(TableHead)>
+        <WithStyles(TableRow)
+          className="WidgetTable-rowFormat-6"
+          key="-1"
         >
-          <WithStyles(Typography)
-            variant="subheading"
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,0"
+            padding="none"
           >
-            MRI
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,2"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              Name
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,1"
+            padding="none"
           >
-            x
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,3"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              MRI
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,2"
+            padding="none"
           >
-            y
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,4"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              x
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,3"
+            padding="none"
           >
-            Visible
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-      </WithStyles(TableRow)>
-    </WithStyles(TableHead)>
-  </WithStyles(Table)>
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              y
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,4"
+            padding="none"
+          >
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              Visible
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+        </WithStyles(TableRow)>
+      </WithStyles(TableHead)>
+    </WithStyles(Table)>
+  </div>
   <div
     className="WidgetTable-tableBody-5"
   >
-    <WithStyles(Table)
-      className="WidgetTable-tableLayout-4"
+    <div
+      style={
+        Object {
+          "display": "flex",
+        }
+      }
     >
-      <WithStyles(TableBody)>
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
+      <div
+        style={
+          Object {
+            "height": "inherit",
+            "width": "32px",
           }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.0"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={0}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.1"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={1}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.2"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={2}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.3"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={3}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-      </WithStyles(TableBody)>
-    </WithStyles(Table)>
-    <WithStyles(Table)>
-      <WithStyles(TableFooter)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="4"
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-incompleteRowFormat-7"
-            key="4,0"
-            padding="none"
+        }
+      >
+        <WithStyles(Table)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="0"
           >
-            <WithStyles(IconButton)
-              onClick={[Function]}
-            >
-              <pure(Add)
-                style={
-                  Object {
-                    "height": "30px",
-                    "width": "30px",
-                  }
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
                 }
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-      </WithStyles(TableFooter)>
-    </WithStyles(Table)>
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={0}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="1"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={1}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="2"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={2}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="3"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={3}
+            />
+          </WithStyles(TableRow)>
+        </WithStyles(Table)>
+      </div>
+      <div
+        style={
+          Object {
+            "height": "inherit",
+            "width": "calc(100% - 32px)",
+          }
+        }
+      >
+        <WithStyles(Table)
+          className="WidgetTable-tableLayout-4"
+        >
+          <WithStyles(TableBody)>
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.0"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={0}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.1"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={1}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.2"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={2}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.3"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={3}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+          </WithStyles(TableBody)>
+        </WithStyles(Table)>
+      </div>
+    </div>
+    <div
+      style={
+        Object {
+          "width": "100%",
+        }
+      }
+    >
+      <WithStyles(Table)>
+        <WithStyles(TableFooter)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="4"
+          >
+            <WithStyles(TableCell)
+              className="WidgetTable-incompleteRowFormat-7"
+              key="4,0"
+              padding="none"
+            >
+              <WithStyles(IconButton)
+                onClick={[Function]}
+              >
+                <pure(Add)
+                  style={
+                    Object {
+                      "height": "32px",
+                      "width": "32px",
+                    }
+                  }
+                />
+              </WithStyles(IconButton)>
+            </WithStyles(TableCell)>
+          </WithStyles(TableRow)>
+        </WithStyles(TableFooter)>
+      </WithStyles(Table)>
+    </div>
   </div>
   <WithStyles(Table)
     className="WidgetTable-footerLayout-2"
@@ -768,749 +1024,1009 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
     }
   }
 >
-  <WithStyles(Table)
-    className="WidgetTable-headerLayoutNoScroll-3"
+  <div
+    style={
+      Object {
+        "display": "flex",
+      }
+    }
   >
-    <WithStyles(TableHead)>
-      <WithStyles(TableRow)
-        className="WidgetTable-rowFormat-6"
-        key="-1"
-      >
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,-1"
-          padding="none"
-        />
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,0"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+    <div
+      style={
+        Object {
+          "width": "32px",
+        }
+      }
+    >
+      <WithStyles(Table)>
+        <WithStyles(TableHead)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
           >
-            Name
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,1"
-          padding="none"
+            <WithStyles(TableCell)
+              className="WidgetTable-textHeadings-8"
+              key="-1,-1"
+              padding="none"
+            />
+          </WithStyles(TableRow)>
+        </WithStyles(TableHead)>
+      </WithStyles(Table)>
+    </div>
+    <WithStyles(Table)
+      className="WidgetTable-headerLayoutNoScroll-3"
+    >
+      <WithStyles(TableHead)>
+        <WithStyles(TableRow)
+          className="WidgetTable-rowFormat-6"
+          key="-1"
         >
-          <WithStyles(Typography)
-            variant="subheading"
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,0"
+            padding="none"
           >
-            MRI
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,2"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              Name
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,1"
+            padding="none"
           >
-            x
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,3"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              MRI
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,2"
+            padding="none"
           >
-            y
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-        <WithStyles(TableCell)
-          className="WidgetTable-textHeadings-8"
-          key="-1,4"
-          padding="none"
-        >
-          <WithStyles(Typography)
-            variant="subheading"
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              x
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,3"
+            padding="none"
           >
-            Visible
-          </WithStyles(Typography)>
-        </WithStyles(TableCell)>
-      </WithStyles(TableRow)>
-    </WithStyles(TableHead)>
-  </WithStyles(Table)>
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              y
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+          <WithStyles(TableCell)
+            className="WidgetTable-textHeadings-8"
+            key="-1,4"
+            padding="none"
+          >
+            <WithStyles(Typography)
+              variant="subheading"
+            >
+              Visible
+            </WithStyles(Typography)>
+          </WithStyles(TableCell)>
+        </WithStyles(TableRow)>
+      </WithStyles(TableHead)>
+    </WithStyles(Table)>
+  </div>
   <div
     className="WidgetTable-tableBody-5"
   >
-    <WithStyles(Table)
-      className="WidgetTable-tableLayout-4"
+    <div
+      style={
+        Object {
+          "display": "flex",
+        }
+      }
     >
-      <WithStyles(TableBody)>
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
+      <div
+        style={
+          Object {
+            "height": "inherit",
+            "width": "32px",
           }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "selectedRow": 1,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.0"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={0}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "selectedRow": 1,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.1"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={1}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "selectedRow": 1,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.2"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={2}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-        <RowData
-          classes={
-            Object {
-              "blankCell": "WidgetTable-blankCell-9",
-              "button": "WidgetTable-button-11",
-              "footerLayout": "WidgetTable-footerLayout-2",
-              "headerLayout": "WidgetTable-headerLayout-1",
-              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
-              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
-              "rowFormat": "WidgetTable-rowFormat-6",
-              "tableBody": "WidgetTable-tableBody-5",
-              "tableLayout": "WidgetTable-tableLayout-4",
-              "textBody": "WidgetTable-textBody-10",
-              "textHeadings": "WidgetTable-textHeadings-8",
-            }
-          }
-          columnLabels={
-            Array [
-              "name",
-              "mri",
-              "x",
-              "y",
-              "visible",
-            ]
-          }
-          columnWidgetTags={
-            Array [
-              "widget:textupdate",
-              "widget:textupdate",
-              "widget:textinput",
-              "widget:textinput",
-              "widget:checkbox",
-            ]
-          }
-          flags={
-            Object {
-              "rows": Array [
-                Object {},
-                Object {},
-                Object {},
-                Object {},
-              ],
-              "table": Object {
-                "dirty": false,
-                "fresh": true,
-                "selectedRow": 1,
-                "timeStamp": Object {
-                  "nanoseconds": 0,
-                  "secondsPastEpoch": 0,
-                  "typeid": "time_t",
-                  "userTag": 0,
-                },
-              },
-            }
-          }
-          hideInfo={false}
-          key="row.3"
-          meta={
-            Object {
-              "description": "Layout of child blocks",
-              "elements": Object {
-                "mri": Object {
-                  "description": "Malcolm full names of child blocks",
-                  "label": "MRI",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "name": Object {
-                  "description": "Names of the layout parts",
-                  "label": "Name",
-                  "tags": Array [
-                    "widget:textupdate",
-                  ],
-                  "typeid": "malcolm:core/StringArrayMeta:1.0",
-                  "writeable": false,
-                },
-                "visible": Object {
-                  "description": "Whether child blocks are visible",
-                  "label": "Visible",
-                  "tags": Array [
-                    "widget:checkbox",
-                  ],
-                  "typeid": "malcolm:core/BooleanArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "x": Object {
-                  "description": "X Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "x",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-                "y": Object {
-                  "description": "Y Coordinates of child blocks",
-                  "dtype": "float64",
-                  "label": "y",
-                  "tags": Array [
-                    "widget:textinput",
-                  ],
-                  "typeid": "malcolm:core/NumberArrayMeta:1.0",
-                  "writeable": true,
-                },
-              },
-              "label": "Layout",
-              "tags": Array [
-                "widget:flowgraph",
-              ],
-              "typeid": "malcolm:core/TableMeta:1.0",
-              "writeable": true,
-            }
-          }
-          path={
-            Array [
-              "test1",
-              "layout",
-            ]
-          }
-          row={3}
-          rowChangeHandler={[Function]}
-          rowFlagHandler={[Function]}
-          values={
-            Array [
-              Object {
-                "mri": "PANDA:TTLIN1",
-                "name": "TTLIN1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:TTLIN2",
-                "name": "TTLIN2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC1",
-                "name": "INENC1",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-              Object {
-                "mri": "PANDA:INENC2",
-                "name": "INENC2",
-                "visible": false,
-                "x": 0,
-                "y": 0,
-              },
-            ]
-          }
-        />
-      </WithStyles(TableBody)>
-    </WithStyles(Table)>
-    <WithStyles(Table)>
-      <WithStyles(TableFooter)>
-        <WithStyles(TableRow)
-          className="WidgetTable-rowFormat-6"
-          key="4"
-        >
-          <WithStyles(TableCell)
-            className="WidgetTable-incompleteRowFormat-7"
-            key="4,0"
-            padding="none"
+        }
+      >
+        <WithStyles(Table)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="0"
           >
-            <WithStyles(IconButton)
-              onClick={[Function]}
-            >
-              <pure(Add)
-                style={
-                  Object {
-                    "height": "30px",
-                    "width": "30px",
-                  }
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
                 }
-              />
-            </WithStyles(IconButton)>
-          </WithStyles(TableCell)>
-        </WithStyles(TableRow)>
-      </WithStyles(TableFooter)>
-    </WithStyles(Table)>
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={0}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="1"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={1}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="2"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={2}
+            />
+          </WithStyles(TableRow)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="3"
+          >
+            <AlarmCell
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={3}
+            />
+          </WithStyles(TableRow)>
+        </WithStyles(Table)>
+      </div>
+      <div
+        style={
+          Object {
+            "height": "inherit",
+            "width": "calc(100% - 32px)",
+          }
+        }
+      >
+        <WithStyles(Table)
+          className="WidgetTable-tableLayout-4"
+        >
+          <WithStyles(TableBody)>
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.0"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={0}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.1"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={1}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.2"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={2}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+            <RowData
+              classes={
+                Object {
+                  "blankCell": "WidgetTable-blankCell-9",
+                  "button": "WidgetTable-button-11",
+                  "footerLayout": "WidgetTable-footerLayout-2",
+                  "headerLayout": "WidgetTable-headerLayout-1",
+                  "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+                  "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+                  "rowFormat": "WidgetTable-rowFormat-6",
+                  "tableBody": "WidgetTable-tableBody-5",
+                  "tableLayout": "WidgetTable-tableLayout-4",
+                  "textBody": "WidgetTable-textBody-10",
+                  "textHeadings": "WidgetTable-textHeadings-8",
+                }
+              }
+              columnLabels={
+                Array [
+                  "name",
+                  "mri",
+                  "x",
+                  "y",
+                  "visible",
+                ]
+              }
+              columnWidgetTags={
+                Array [
+                  "widget:textupdate",
+                  "widget:textupdate",
+                  "widget:textinput",
+                  "widget:textinput",
+                  "widget:checkbox",
+                ]
+              }
+              flags={
+                Object {
+                  "rows": Array [
+                    Object {},
+                    Object {},
+                    Object {},
+                    Object {},
+                  ],
+                  "table": Object {
+                    "dirty": false,
+                    "fresh": true,
+                    "selectedRow": 1,
+                    "timeStamp": Object {
+                      "nanoseconds": 0,
+                      "secondsPastEpoch": 0,
+                      "typeid": "time_t",
+                      "userTag": 0,
+                    },
+                  },
+                }
+              }
+              hideInfo={false}
+              key="row.3"
+              meta={
+                Object {
+                  "description": "Layout of child blocks",
+                  "elements": Object {
+                    "mri": Object {
+                      "description": "Malcolm full names of child blocks",
+                      "label": "MRI",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "name": Object {
+                      "description": "Names of the layout parts",
+                      "label": "Name",
+                      "tags": Array [
+                        "widget:textupdate",
+                      ],
+                      "typeid": "malcolm:core/StringArrayMeta:1.0",
+                      "writeable": false,
+                    },
+                    "visible": Object {
+                      "description": "Whether child blocks are visible",
+                      "label": "Visible",
+                      "tags": Array [
+                        "widget:checkbox",
+                      ],
+                      "typeid": "malcolm:core/BooleanArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "x": Object {
+                      "description": "X Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "x",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                    "y": Object {
+                      "description": "Y Coordinates of child blocks",
+                      "dtype": "float64",
+                      "label": "y",
+                      "tags": Array [
+                        "widget:textinput",
+                      ],
+                      "typeid": "malcolm:core/NumberArrayMeta:1.0",
+                      "writeable": true,
+                    },
+                  },
+                  "label": "Layout",
+                  "tags": Array [
+                    "widget:flowgraph",
+                  ],
+                  "typeid": "malcolm:core/TableMeta:1.0",
+                  "writeable": true,
+                }
+              }
+              path={
+                Array [
+                  "test1",
+                  "layout",
+                ]
+              }
+              row={3}
+              rowChangeHandler={[Function]}
+              rowFlagHandler={[Function]}
+              values={
+                Array [
+                  Object {
+                    "mri": "PANDA:TTLIN1",
+                    "name": "TTLIN1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:TTLIN2",
+                    "name": "TTLIN2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC1",
+                    "name": "INENC1",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                  Object {
+                    "mri": "PANDA:INENC2",
+                    "name": "INENC2",
+                    "visible": false,
+                    "x": 0,
+                    "y": 0,
+                  },
+                ]
+              }
+            />
+          </WithStyles(TableBody)>
+        </WithStyles(Table)>
+      </div>
+    </div>
+    <div
+      style={
+        Object {
+          "width": "100%",
+        }
+      }
+    >
+      <WithStyles(Table)>
+        <WithStyles(TableFooter)>
+          <WithStyles(TableRow)
+            className="WidgetTable-rowFormat-6"
+            key="4"
+          >
+            <WithStyles(TableCell)
+              className="WidgetTable-incompleteRowFormat-7"
+              key="4,0"
+              padding="none"
+            >
+              <WithStyles(IconButton)
+                onClick={[Function]}
+              >
+                <pure(Add)
+                  style={
+                    Object {
+                      "height": "32px",
+                      "width": "32px",
+                    }
+                  }
+                />
+              </WithStyles(IconButton)>
+            </WithStyles(TableCell)>
+          </WithStyles(TableRow)>
+        </WithStyles(TableFooter)>
+      </WithStyles(Table)>
+    </div>
   </div>
   <WithStyles(Table)
     className="WidgetTable-footerLayout-2"
