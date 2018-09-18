@@ -459,7 +459,7 @@
           "tags": [
             "widget:flowgraph"
           ], 
-          "writeable": false, 
+          "writeable": true, 
           "label": "Layout", 
           "elements": {
             "name": {

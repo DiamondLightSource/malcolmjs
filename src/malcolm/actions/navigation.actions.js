@@ -37,8 +37,27 @@ const navigateToAttribute = (blockMri, attributeName) => (
   getState
 ) => {
   const state = getState().malcolm;
-  const { navigationLists } = state.navigation;
 
+  const attribute = blockUtils.findAttribute(
+    state.blocks,
+    blockMri,
+    attributeName
+  );
+
+  // subscribe to layout blocks
+  if (blockUtils.attributeHasTag(attribute, 'widget:flowgraph')) {
+    attribute.raw.value.visible.forEach((visible, i) => {
+      if (visible) {
+        const blockName = attribute.raw.value.mri[i];
+        if (!state.blocks[blockName]) {
+          dispatch(malcolmNewBlockAction(blockName, false, false));
+          dispatch(malcolmSubscribeAction([blockName, 'meta']));
+        }
+      }
+    });
+  }
+
+  const { navigationLists } = state.navigation;
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
   if (matchingBlockNav > -1) {
     const newPath = `/gui/${navigationLists
