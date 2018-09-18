@@ -13,6 +13,7 @@ import {
 import blockUtils from '../blockUtils';
 import { snackbarState } from '../../viewState/viewState.actions';
 import { idSeparator } from '../../layout/layout.component';
+import { sinkPort } from '../malcolmConstants';
 
 const findPort = (blocks, id) => {
   const path = id.split(idSeparator);
@@ -75,23 +76,38 @@ export const selectPort = (portId, start) => (dispatch, getState) => {
   }
 };
 
-const makeBlockVisible = (mri, position, visible = true) => (
+const makeBlockVisible = (mriList, positionList, visibleList) => (
   dispatch,
   getState
 ) => {
-  const state = getState().malcolm;
-  const positionRelativeToCenter = {
-    x: position.x - state.layoutState.layoutCenter.x,
-    y: position.y - state.layoutState.layoutCenter.y,
-  };
+  let mri;
+  let position;
+  let visible;
+  if (!(mriList instanceof Array)) {
+    mri = [mriList];
+    position = [positionList];
+    visible = [visibleList === undefined ? true : visibleList];
+  } else {
+    mri = [...mriList];
+    position = [...positionList];
+    visible = [...visibleList];
+  }
 
-  dispatch({
-    type: MalcolmMakeBlockVisibleType,
-    payload: {
-      mri,
-      position: positionRelativeToCenter,
-      visible,
-    },
+  const state = getState().malcolm;
+  const positionRelativeToCenter = position.map(pos => ({
+    x: pos.x - state.layoutState.layoutCenter.x,
+    y: pos.y - state.layoutState.layoutCenter.y,
+  }));
+
+  mri.forEach((blockMri, index) => {
+    dispatch({
+      type: MalcolmMakeBlockVisibleType,
+      payload: {
+        mri: blockMri,
+        position: positionRelativeToCenter[index],
+        visible: visible[index],
+      },
+    });
   });
 
   const blockName = state.parentBlock;
@@ -103,15 +119,17 @@ const makeBlockVisible = (mri, position, visible = true) => (
   );
 
   if (layoutAttribute) {
-    const visibleBlockIndex = layoutAttribute.raw.value.mri.findIndex(
-      val => val === mri
+    const visibleBlockIndices = mri.map(blockMri =>
+      layoutAttribute.raw.value.mri.findIndex(val => val === blockMri)
     );
     const updateLayout = {
-      name: [layoutAttribute.raw.value.name[visibleBlockIndex]],
-      visible: [visible],
-      mri: [mri],
-      x: [positionRelativeToCenter.x],
-      y: [positionRelativeToCenter.y],
+      name: visibleBlockIndices.map(
+        index => layoutAttribute.raw.value.name[index]
+      ),
+      visible,
+      mri,
+      x: positionRelativeToCenter.map(pos => pos.x),
+      y: positionRelativeToCenter.map(pos => pos.y),
     };
 
     dispatch(malcolmSetFlag([blockName, attributeName], 'pending', true));
@@ -125,12 +143,34 @@ const deleteBlocks = () => (dispatch, getState) => {
   const state = getState().malcolm;
   const { selectedBlocks } = state.layoutState;
 
+  makeBlockVisible(
+    selectedBlocks,
+    selectedBlocks.map(() => state.layoutState.layoutCenter),
+    selectedBlocks.map(() => false)
+  )(dispatch, getState);
   selectedBlocks.forEach(b => {
-    makeBlockVisible(b, state.layoutState.layoutCenter, false)(
-      dispatch,
-      getState
-    );
     dispatch(malcolmSelectBlock(b, false));
+  });
+};
+
+const deleteLinks = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+
+  state.layoutState.selectedLinks.forEach(linkId => {
+    const [, , blockMri, linkAttr] = linkId.split(idSeparator);
+    const portAttribute = blockUtils.findAttribute(
+      state.blocks,
+      blockMri,
+      linkAttr
+    );
+    if (portAttribute) {
+      const portNullValue = portAttribute.raw.meta.tags
+        .find(t => t.indexOf(sinkPort) > -1)
+        .split(':')
+        .slice(-1)[0];
+      dispatch(malcolmSetFlag([blockMri, linkAttr], 'pending', true));
+      dispatch(malcolmPutAction([blockMri, linkAttr], portNullValue));
+    }
   });
 };
 
@@ -154,4 +194,5 @@ export default {
   showLayoutBin,
   mouseInsideDeleteZone,
   deleteBlocks,
+  deleteLinks,
 };

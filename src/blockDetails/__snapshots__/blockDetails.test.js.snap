@@ -65,6 +65,14 @@ exports[`Block Details renders correctly when metadata loaded and attributes loa
         }
       }
     />
+    <GroupDivider
+      classes={
+        Object {
+          "endDivider": "BlockDetails-endDivider-2",
+          "progressContainer": "BlockDetails-progressContainer-1",
+        }
+      }
+    />
   </div>
 </div>
 `;
@@ -86,6 +94,14 @@ exports[`Block Details renders correctly when metadata loaded and waiting for at
       style={
         Object {
           "marginTop": 4,
+        }
+      }
+    />
+    <GroupDivider
+      classes={
+        Object {
+          "endDivider": "BlockDetails-endDivider-2",
+          "progressContainer": "BlockDetails-progressContainer-1",
         }
       }
     />
@@ -116,6 +132,14 @@ exports[`Block Details renders groups correctly 1`] = `
       groupName="health 1"
       key="parameters"
     />
+    <GroupDivider
+      classes={
+        Object {
+          "endDivider": "BlockDetails-endDivider-2",
+          "progressContainer": "BlockDetails-progressContainer-1",
+        }
+      }
+    />
   </div>
 </div>
 `;
@@ -132,9 +156,19 @@ exports[`Block Details renders methods correctly 1`] = `
         }
       }
     />
-    <Connect(WithStyles(MethodDetails))
-      attributeName="save"
-      key="save"
+    <div>
+      <Connect(WithStyles(MethodDetails))
+        attributeName="save"
+        key="save"
+      />
+    </div>
+    <GroupDivider
+      classes={
+        Object {
+          "endDivider": "BlockDetails-endDivider-2",
+          "progressContainer": "BlockDetails-progressContainer-1",
+        }
+      }
     />
   </div>
 </div>

@@ -13,6 +13,8 @@ const styles = theme => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: 0,
     paddingBottom: 0,
+    paddingLeft: 16,
+    paddingRight: 16,
     minHeight: 32,
   },
   expanded: {
@@ -36,12 +38,14 @@ const styles = theme => ({
   detailsRoot: {
     paddingLeft: 0,
     paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 8,
   },
 });
 
 const WidgetGroupExpander = props => (
   <div>
-    <ExpansionPanel defaultExpanded={props.expanded}>
+    <ExpansionPanel defaultExpanded={props.expanded} elevation={0}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         classes={{

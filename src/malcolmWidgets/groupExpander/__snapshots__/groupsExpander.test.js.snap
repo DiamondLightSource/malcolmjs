@@ -4,6 +4,7 @@ exports[`GroupExpander renders when default expanded is false 1`] = `
 <div>
   <WithStyles(ExpansionPanel)
     defaultExpanded={false}
+    elevation={0}
   >
     <WithStyles(ExpansionPanelSummary)
       classes={
@@ -56,6 +57,7 @@ exports[`GroupExpander renders when default expanded is true 1`] = `
 <div>
   <WithStyles(ExpansionPanel)
     defaultExpanded={true}
+    elevation={0}
   >
     <WithStyles(ExpansionPanelSummary)
       classes={
