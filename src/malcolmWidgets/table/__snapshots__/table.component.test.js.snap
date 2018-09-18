@@ -125,17 +125,18 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="0"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -174,17 +175,18 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="1"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -223,17 +225,18 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="2"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -272,17 +275,18 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="3"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -335,13 +339,13 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -493,13 +497,13 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -651,13 +655,13 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -809,13 +813,13 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1141,17 +1145,18 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="0"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1191,17 +1196,18 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="1"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1241,17 +1247,18 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="2"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1291,17 +1298,18 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
           <WithStyles(TableRow)
             className="WidgetTable-rowFormat-6"
             key="3"
+            onClick={[Function]}
           >
             <AlarmCell
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1355,13 +1363,13 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1514,13 +1522,13 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1673,13 +1681,13 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -1832,13 +1840,13 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",

@@ -108,13 +108,13 @@ exports[`archiveTable renders correctly 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -195,13 +195,13 @@ exports[`archiveTable renders correctly 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",
@@ -282,13 +282,13 @@ exports[`archiveTable renders correctly 1`] = `
             <RowData
               classes={
                 Object {
-                  "blankCell": "WidgetTable-blankCell-9",
                   "button": "WidgetTable-button-11",
                   "footerLayout": "WidgetTable-footerLayout-2",
                   "headerLayout": "WidgetTable-headerLayout-1",
                   "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
                   "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
                   "rowFormat": "WidgetTable-rowFormat-6",
+                  "selectedRow": "WidgetTable-selectedRow-9",
                   "tableBody": "WidgetTable-tableBody-5",
                   "tableLayout": "WidgetTable-tableLayout-4",
                   "textBody": "WidgetTable-textBody-10",

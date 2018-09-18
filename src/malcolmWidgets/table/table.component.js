@@ -268,7 +268,16 @@ const WidgetTable = props => {
             {!props.hideInfo ? (
               <Table>
                 {values.map((rowValue, row) => (
-                  <TableRow className={props.classes.rowFormat} key={row}>
+                  <TableRow
+                    className={props.classes.rowFormat}
+                    key={row}
+                    onClick={() => {
+                      props.rowClickHandler(
+                        props.attribute.calculated.path,
+                        `row.${row}`
+                      );
+                    }}
+                  >
                     <AlarmCell
                       flags={flags}
                       row={row}
