@@ -22,14 +22,14 @@ import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 const styles = theme => ({
   headerLayout: {
     tableLayout: 'fixed',
-    width: 'calc(100% - 15px)',
+    width: 'calc(100% - 15px - 32px)',
   },
   footerLayout: {
     width: '100%',
   },
   headerLayoutNoScroll: {
     tableLayout: 'fixed',
-    width: '100%',
+    width: 'calc(100% - 32px)',
   },
   tableLayout: {
     tableLayout: 'fixed',
@@ -63,8 +63,8 @@ const styles = theme => ({
     padding: '2px',
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -232,28 +232,36 @@ const WidgetTable = props => {
 
   return (
     <div style={{ height: '100%' }}>
-      <Table
-        className={
-          values.length > 20
-            ? props.classes.headerLayout
-            : props.classes.headerLayoutNoScroll
-        }
-      >
-        <TableHead>
-          <TableRow className={props.classes.rowFormat} key={-1}>
-            {[
-              props.hideInfo ? null : (
-                <TableCell
-                  className={props.classes.textHeadings}
-                  padding="none"
-                  key={[-1, -1]}
-                />
-              ),
-              ...columnHeadings,
-            ]}
-          </TableRow>
-        </TableHead>
-      </Table>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '32px' }}>
+          <Table>
+            <TableHead>
+              <TableRow className={props.classes.rowFormat}>
+                {props.hideInfo ? null : (
+                  <TableCell
+                    className={props.classes.textHeadings}
+                    padding="none"
+                    key={[-1, -1]}
+                  />
+                )}
+              </TableRow>
+            </TableHead>
+          </Table>
+        </div>
+        <Table
+          className={
+            values.length > 20
+              ? props.classes.headerLayout
+              : props.classes.headerLayoutNoScroll
+          }
+        >
+          <TableHead>
+            <TableRow className={props.classes.rowFormat} key={-1}>
+              {columnHeadings}
+            </TableRow>
+          </TableHead>
+        </Table>
+      </div>
       <div className={props.classes.tableBody}>
         <div style={{ display: 'flex' }}>
           <div style={{ height: 'inherit', width: '32px' }}>
@@ -265,8 +273,7 @@ const WidgetTable = props => {
                       flags={flags}
                       row={row}
                       classes={props.classes}
-                      path={props.path}
-                      selectedRow={props.selectedRow}
+                      path={props.attribute.calculated.path}
                       infoClickHandler={props.infoClickHandler}
                     />
                   </TableRow>
@@ -439,10 +446,10 @@ RowData.propTypes = {
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
   }).isRequired,
-  flags: PropTypes.shape({
-    rows: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
-  infoClickHandler: PropTypes.func.isRequired,
+  // flags: PropTypes.shape({
+  //  rows: PropTypes.arrayOf(PropTypes.shape({})),
+  // }).isRequired,
+  // infoClickHandler: PropTypes.func.isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
   rowFlagHandler: PropTypes.func.isRequired,
@@ -455,8 +462,8 @@ RowData.propTypes = {
     PropTypes.shape({}),
     PropTypes.shape({ elements: PropTypes.shape({}) }),
   ]).isRequired,
-  hideInfo: PropTypes.bool.isRequired,
-  selectedRow: PropTypes.number,
+  // hideInfo: PropTypes.bool.isRequired,
+  // selectedRow: PropTypes.number,
 };
 
 RowData.defaultProps = {

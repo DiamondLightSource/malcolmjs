@@ -17,8 +17,8 @@ const styles = theme => ({
   div: {
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 4,
+    paddingRight: 4,
     alignItems: 'center',
   },
   textName: {
@@ -32,8 +32,8 @@ const styles = theme => ({
     padding: 2,
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -183,7 +183,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(navigationActions.navigateToInfo(blockName, attributeName));
   },
   nameClickHandler: path => {
-    dispatch(navigationActions.navigateToSubElement(path[0], path[1]));
+    dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
   },
 });
 
