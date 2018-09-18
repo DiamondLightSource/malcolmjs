@@ -41,7 +41,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   rowFormat: {
-    height: '32px',
+    height: '36px',
   },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
