@@ -24,7 +24,7 @@
           "description": "Quadrature B/Direction output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:POSENC1.B", 
+            "sourcePort:bool:POSENC1.B", 
             "widget:led"
           ], 
           "writeable": false, 

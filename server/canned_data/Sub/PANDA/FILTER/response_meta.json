@@ -32,7 +32,6 @@
           "outOffset", 
           "outScaled", 
           "outCapture", 
-          "outDataDelay", 
           "ready", 
           "readbacks", 
           "err"

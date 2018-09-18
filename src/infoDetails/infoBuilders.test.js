@@ -59,7 +59,7 @@ describe('info builder', () => {
         label: 'Meta Data',
         malcolmType: {
           inline: true,
-          label: 'Malcolm Type',
+          label: 'Type ID',
           valuePath: 'raw.meta.typeid',
         },
         writeable: {

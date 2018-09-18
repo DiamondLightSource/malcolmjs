@@ -48,7 +48,7 @@
           ], 
           "tags": [
             "group:inputs", 
-            "inport:int32:ZERO", 
+            "sinkPort:int32:ZERO", 
             "widget:combo", 
             "config:1"
           ], 

@@ -30,17 +30,34 @@ describe('NavBar', () => {
               children: ['layout'],
               childrenLabels: ['layout'],
             },
-            { path: 'layout', children: [], childrenLabels: [] },
-            { path: 'PANDA:SEQ1', children: [], childrenLabels: [] },
+            {
+              path: 'layout',
+              children: ['SEQ1'],
+              childrenLabels: ['Test layout child #1'],
+              basePath: '/PANDA/layout/',
+            },
+            {
+              path: 'PANDA:SEQ1',
+              children: ['Val'],
+              childrenLabels: ['Value'],
+              basePath: '/PANDA/layout/SEQ1/',
+            },
           ],
           rootNav: {
             path: '',
             children: ['PANDA', 'PANDA:SEQ1'],
             childrenLabels: ['PANDA', 'PANDA:SEQ1'],
+            basePath: '/',
           },
         },
       },
     };
+    state.malcolm.navigation.navigationLists[0].parent =
+      state.malcolm.navigation.rootNav;
+    state.malcolm.navigation.navigationLists.slice(1).forEach((nav, index) => {
+      const navCopy = nav;
+      navCopy.parent = state.malcolm.navigation.navigationLists[index];
+    });
   });
 
   afterEach(() => {
@@ -48,6 +65,12 @@ describe('NavBar', () => {
   });
 
   it('renders correctly', () => {
+    const wrapper = shallow(<NavBar store={mockStore(state)} />);
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('hides more icon if last nav element has no children', () => {
+    state.malcolm.navigation.navigationLists.slice(-1)[0].children = [];
     const wrapper = shallow(<NavBar store={mockStore(state)} />);
     expect(wrapper.dive()).toMatchSnapshot();
   });
@@ -115,5 +138,26 @@ describe('NavBar', () => {
     expect(actions.length).toEqual(1);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout']);
+  });
+
+  it('navigating to new root item changes the route', () => {
+    const store = mockStore(state);
+    const wrapper = mount(<NavBar store={store} />);
+
+    // PANDA drop down
+    wrapper
+      .find('IconButton')
+      .last()
+      .simulate('click');
+    // click on PANDA:SEQ1 in the list of blocks
+    wrapper
+      .find('MenuItem')
+      .at(0)
+      .simulate('click');
+
+    const actions = store.getActions();
+    expect(actions.length).toEqual(1);
+    expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
+    expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout/SEQ1/Val']);
   });
 });

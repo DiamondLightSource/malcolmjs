@@ -24,7 +24,7 @@
           "description": "Active output is high while block is in operation", 
           "tags": [
             "group:outputs", 
-            "outport:bool:PCOMP2.ACTIVE", 
+            "sourcePort:bool:PCOMP2.ACTIVE", 
             "widget:led"
           ], 
           "writeable": false, 

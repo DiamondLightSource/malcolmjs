@@ -25,30 +25,42 @@ exports[`BlockWidget block renders correctly 1`] = `
       className="BlockWidget-inputPortsContainer-5"
     >
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-in 1"
+        key="block1•in 1"
         nodeId="block1"
-        portId="block1-in 1"
+        portId="block1•in 1"
       />
     </div>
     <div
       className="BlockWidget-iconContents-8"
     >
-      <LoadableComponent
-        icon="<svg height=\\"100\\" width=\\"100\\"><circle cx=\\"50\\" cy=\\"50\\" r=\\"40\\" stroke=\\"black\\" stroke-width=\\"3\\" fill=\\"red\\" /></svg>"
-      />
+      <svg
+        height="100"
+        key="0"
+        width="100"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          fill="red"
+          key="0"
+          r="40"
+          stroke="black"
+          strokeWidth="3"
+        />
+      </svg>
     </div>
     <div
       className="BlockWidget-outputPortsContainer-6"
     >
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-out 1"
+        key="block1•out 1"
         nodeId="block1"
-        portId="block1-out 1"
+        portId="block1•out 1"
       />
       <Connect(WithStyles(BlockPortWidget))
-        key="block1-out 2"
+        key="block1•out 2"
         nodeId="block1"
-        portId="block1-out 2"
+        portId="block1•out 2"
       />
     </div>
   </div>

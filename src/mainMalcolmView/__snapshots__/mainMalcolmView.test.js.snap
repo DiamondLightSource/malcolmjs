@@ -3,14 +3,24 @@
 exports[`MainMalcolmView renders correctly 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=""
     childTitle=""
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
     <Connect(WithStyles(BlockDetails))
       parent={true}
     />
-    <Connect(WithStyles(MiddlePanelContainer)) />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
     <Connect(WithStyles(BlockDetails)) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
@@ -19,14 +29,24 @@ exports[`MainMalcolmView renders correctly 1`] = `
 exports[`MainMalcolmView renders info if child block is .info 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=".info"
     childTitle="Info"
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
     <Connect(WithStyles(BlockDetails))
       parent={true}
     />
-    <Connect(WithStyles(MiddlePanelContainer)) />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
     <Connect(InfoDetails) />
   </Connect(WithStyles(DrawerContainer))>
 </div>
@@ -35,14 +55,24 @@ exports[`MainMalcolmView renders info if child block is .info 1`] = `
 exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
 <div>
   <Connect(WithStyles(DrawerContainer))
+    childMRI=".palette"
     childTitle="Palette"
+    parentMRI="test1"
     parentTitle="Test main view"
     popOutAction={[Function]}
   >
     <Connect(WithStyles(BlockDetails))
       parent={true}
     />
-    <Connect(WithStyles(MiddlePanelContainer)) />
+    <div
+      style={
+        Object {
+          "height": "calc(100vh - 64px - 10px)",
+        }
+      }
+    >
+      <Connect(WithStyles(MiddlePanelContainer)) />
+    </div>
     <Connect(WithStyles(Palette)) />
   </Connect(WithStyles(DrawerContainer))>
 </div>

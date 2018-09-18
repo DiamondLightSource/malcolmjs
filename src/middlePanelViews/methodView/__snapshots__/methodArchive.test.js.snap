@@ -1,0 +1,224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MethodArchive renders 2nd tab correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "calc(100% - 50px)",
+      }
+    }
+  >
+    <LoadableComponent
+      attribute={
+        Object {
+          "alarmState": Array [
+            0,
+          ],
+          "name": undefined,
+          "parent": undefined,
+          "timeStamp": Array [
+            1970-01-01T00:00:00.000Z,
+          ],
+          "value": Array [
+            0,
+          ],
+        }
+      }
+      deriveState={[Function]}
+      openPanels={Object {}}
+    />
+  </div>
+  <WithStyles(Tabs)
+    centered={true}
+    fullWidth={true}
+    indicatorColor="primary"
+    onChange={[Function]}
+    textColor="primary"
+    value={1}
+  >
+    <WithStyles(Tab)
+      label="Table"
+    />
+    <WithStyles(Tab)
+      disabled={false}
+      label="Plot"
+    />
+  </WithStyles(Tabs)>
+</div>
+`;
+
+exports[`MethodArchive renders table correctly for input param 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "calc(100% - 50px)",
+      }
+    }
+  >
+    <WithStyles(WidgetTable)
+      addRow={[Function]}
+      attribute={
+        Object {
+          "calculated": Object {},
+          "raw": Object {
+            "meta": Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Method Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "timeStamp": Object {
+                  "label": "Time sent",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Parameter value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            },
+            "value": Object {
+              "alarm": Array [
+                0,
+              ],
+              "timeStamp": Array [
+                "1970-01-01T00:00:00.000Z",
+              ],
+              "value": Array [
+                0,
+              ],
+            },
+          },
+        }
+      }
+      eventHandler={[Function]}
+      hideInfo={true}
+      infoClickHandler={[Function]}
+      rowClickHandler={[Function]}
+      setFlag={[Function]}
+    />
+  </div>
+  <WithStyles(Tabs)
+    centered={true}
+    fullWidth={true}
+    indicatorColor="primary"
+    onChange={[Function]}
+    textColor="primary"
+    value={0}
+  >
+    <WithStyles(Tab)
+      label="Table"
+    />
+    <WithStyles(Tab)
+      disabled={false}
+      label="Plot"
+    />
+  </WithStyles(Tabs)>
+</div>
+`;
+
+exports[`MethodArchive renders table correctly for return param 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+      "width": "100%",
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "height": "calc(100% - 50px)",
+      }
+    }
+  >
+    <WithStyles(WidgetTable)
+      addRow={[Function]}
+      attribute={
+        Object {
+          "calculated": Object {},
+          "raw": Object {
+            "meta": Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Method Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "timeStamp": Object {
+                  "label": "Time received",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Parameter value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            },
+            "value": Object {
+              "alarm": Array [
+                0,
+              ],
+              "timeStamp": Array [
+                "1970-01-01T00:00:00.000Z",
+              ],
+              "value": Array [
+                undefined,
+              ],
+            },
+          },
+        }
+      }
+      eventHandler={[Function]}
+      hideInfo={true}
+      infoClickHandler={[Function]}
+      rowClickHandler={[Function]}
+      setFlag={[Function]}
+    />
+  </div>
+  <WithStyles(Tabs)
+    centered={true}
+    fullWidth={true}
+    indicatorColor="primary"
+    onChange={[Function]}
+    textColor="primary"
+    value={0}
+  >
+    <WithStyles(Tab)
+      label="Table"
+    />
+    <WithStyles(Tab)
+      disabled={false}
+      label="Plot"
+    />
+  </WithStyles(Tabs)>
+</div>
+`;

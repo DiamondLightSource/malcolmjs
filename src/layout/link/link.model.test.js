@@ -43,7 +43,7 @@ describe('link model', () => {
   it('getPathSegments uses splines without autorouting', () => {
     const pathSegments = model.getPathSegments(diagramEngine);
     expect(pathSegments).toHaveLength(1);
-    expect(pathSegments[0]).toEqual('M 100,100 C 150,100 150,200 200,200');
+    expect(pathSegments[0]).toEqual('M 100,100 C 190,100 110,200 200,200');
   });
 
   it('getPathSegments uses smart routing with autorouting', () => {

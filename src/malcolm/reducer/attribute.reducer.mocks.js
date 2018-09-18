@@ -12,7 +12,7 @@ class MockCircularBuffer extends Array {
   }
   pop() {
     if (this.counter !== 0) {
-      const val = this[this.counter];
+      const val = this[this.counter - 1];
       this[this.counter] = undefined;
       this.counter = (this.counter - 1) % this.length;
       return val;

@@ -3,6 +3,7 @@ import {
   openParentPanel,
   updateVersionNumber,
   snackbarState,
+  showFooterAction,
 } from './viewState.actions';
 
 describe('view state reducer', () => {
@@ -16,6 +17,7 @@ describe('view state reducer', () => {
         open: false,
         message: '',
       },
+      footerHeight: 0,
     };
   });
 
@@ -31,10 +33,19 @@ describe('view state reducer', () => {
   });
 
   it('updateVersionNumerType messages updates the document title', () => {
-    const newState = ViewStateReducer(state, updateVersionNumber('1.2.3'));
+    const newState = ViewStateReducer(
+      state,
+      updateVersionNumber('1.2.3', 'MalcolmJS')
+    );
 
     expect(newState).toBe(state);
     expect(document.title).toEqual('MalcolmJS 1.2.3');
+  });
+
+  it('showFooterType messages updates the footer height', () => {
+    const newState = ViewStateReducer(state, showFooterAction(10));
+
+    expect(newState.footerHeight).toBe(10);
   });
 
   it('updates snackbar', () => {

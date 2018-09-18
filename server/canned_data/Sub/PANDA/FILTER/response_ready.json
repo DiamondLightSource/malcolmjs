@@ -24,7 +24,7 @@
           "description": "Output Ready", 
           "tags": [
             "group:outputs", 
-            "outport:bool:FILTER.READY", 
+            "sourcePort:bool:FILTER.READY", 
             "widget:led"
           ], 
           "writeable": false, 

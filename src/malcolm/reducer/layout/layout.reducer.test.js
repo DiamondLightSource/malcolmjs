@@ -2,7 +2,12 @@ import LayoutReducer, {
   buildPorts,
   offSetPosition,
   updateLayoutBlock,
+  LayoutReduxReducer,
 } from './layout.reducer';
+import { malcolmSelectBlock } from '../../malcolmActionCreators';
+
+const sourcePort = 'sourcePort';
+const sinkPort = 'sinkPort';
 
 const buildLayoutBlock = () => ({
   mri: 'block1',
@@ -50,7 +55,7 @@ const buildMalcolmState = () => ({
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: [`${sourcePort}:bool:ZERO`],
             },
           },
         },
@@ -78,7 +83,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: [`${sinkPort}:bool:ZERO`],
             },
           },
         },
@@ -88,7 +93,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['outport:bool:SEQ1'],
+              tags: [`${sourcePort}:bool:SEQ1`],
             },
           },
         },
@@ -98,7 +103,7 @@ describe('Layout Reducer', () => {
           },
           raw: {
             meta: {
-              tags: ['inport:bool:ZERO'],
+              tags: [`${sinkPort}:bool:ZERO`],
             },
           },
         },
@@ -209,25 +214,36 @@ describe('Layout Reducer', () => {
   it('selectBlock adds to selection if isSelected is true', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block1', true);
 
-    expect(layout.selectedBlocks).toEqual(['block2', 'block1']);
+    const action = malcolmSelectBlock('block1', true);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toEqual([
+      'block2',
+      'block1',
+    ]);
   });
 
   it('selectBlock removes from selection if isSelected is false', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block2', false);
 
-    expect(layout.selectedBlocks).toEqual([]);
+    const action = malcolmSelectBlock('block2', false);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toEqual([]);
   });
 
   it('selectBlock does not change selected if block is already selected', () => {
     const state = buildMalcolmState();
     state.layoutState.selectedBlocks = ['block2'];
-    const layout = LayoutReducer.selectBlock(state, 'block2', true);
 
-    expect(layout.selectedBlocks).toBe(state.layoutState.selectedBlocks);
+    const action = malcolmSelectBlock('block2', true);
+    const updatedState = LayoutReduxReducer(state, action);
+
+    expect(updatedState.layoutState.selectedBlocks).toBe(
+      state.layoutState.selectedBlocks
+    );
   });
 
   it('updateBlockPosition updates the positions of selected blocks', () => {
@@ -254,7 +270,7 @@ describe('Layout Reducer', () => {
 
   it('selectPortForLink optimistically adds a link if the end port is being set', () => {
     let state = buildMalcolmState();
-    state.layoutState.startPortForLink = 'PANDA-start';
+    state.layoutState.startPortForLink = 'PANDA•start';
     state.layout.blocks = [
       {
         mri: 'PANDA',
@@ -265,14 +281,14 @@ describe('Layout Reducer', () => {
       },
     ];
 
-    state = LayoutReducer.selectPortForLink(state, 'PANDA-end', false);
+    state = LayoutReducer.selectPortForLink(state, 'PANDA•end', false);
 
-    expect(state.layoutState.startPortForLink).toEqual('PANDA-start');
-    expect(state.layoutState.endPortForLink).toEqual('PANDA-end');
+    expect(state.layoutState.startPortForLink).toEqual('PANDA•start');
+    expect(state.layoutState.endPortForLink).toEqual('PANDA•end');
     expect(state.layout.blocks[0].ports[1].value).toEqual('START');
   });
 
-  it('isRelevantAttribute returns true if inport, icon or flowgraph', () => {
+  it('isRelevantAttribute returns true if sink port, icon or flowgraph', () => {
     const attribute = {};
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeFalsy();
     attribute.raw = {};
@@ -282,7 +298,7 @@ describe('Layout Reducer', () => {
     attribute.raw.meta.tags = [];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeFalsy();
 
-    attribute.raw.meta.tags = ['inport:ZERO'];
+    attribute.raw.meta.tags = [`${sinkPort}:ZERO`];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
 
     attribute.raw.meta.tags = ['widget:icon'];
@@ -293,74 +309,5 @@ describe('Layout Reducer', () => {
 
     attribute.raw.meta.tags = ['something else', 'widget:icon'];
     expect(LayoutReducer.isRelevantAttribute(attribute)).toBeTruthy();
-  });
-});
-
-const buildBlock = (index, numInputs, numOutputs) => ({
-  name: `block ${index}`,
-  description: `description ${index}`,
-  mri: `block${index}`,
-  icon: `icon${index}`,
-  loading: false,
-  ports: [
-    ...[...Array(numInputs).keys()].map(v => ({
-      label: `in${v + 1}`,
-      input: true,
-    })),
-    ...[...Array(numOutputs).keys()].map(v => ({
-      label: `out${v + 1}`,
-      input: false,
-    })),
-  ],
-  position: {
-    x: 10,
-    y: 20,
-  },
-});
-
-describe('LayoutBuilder', () => {
-  it('builds nodes correctly', () => {
-    const blocks = [buildBlock(1, 1, 0)];
-
-    const engine = LayoutReducer.buildLayoutEngine({ blocks }, []);
-    expect(Object.keys(engine.diagramModel.nodes)).toEqual(['block1']);
-    expect(engine.diagramModel.nodes.block1.label).toEqual('block 1');
-    expect(engine.diagramModel.nodes.block1.description).toEqual(
-      'description 1'
-    );
-    expect(engine.diagramModel.nodes.block1.id).toEqual('block1');
-    expect(engine.diagramModel.nodes.block1.selected).toBeFalsy();
-    expect(engine.diagramModel.nodes.block1.icon).toEqual('icon1');
-
-    expect(Object.keys(engine.diagramModel.nodes.block1.ports)).toEqual([
-      'block1-in1',
-    ]);
-    expect(engine.diagramModel.nodes.block1.ports['block1-in1'].label).toEqual(
-      'in1'
-    );
-    expect(
-      engine.diagramModel.nodes.block1.ports['block1-in1'].in
-    ).toBeTruthy();
-  });
-
-  it('builds links correctly', () => {
-    const blocks = [buildBlock(1, 0, 1), buildBlock(2, 1, 0)];
-
-    blocks[1].ports[0].tag = 'ZERO';
-    blocks[1].ports[0].value = 'block2';
-
-    blocks[0].ports[0].tag = 'block2';
-    blocks[0].ports[0].value = true;
-
-    const engine = LayoutReducer.buildLayoutEngine({ blocks }, []);
-    expect(Object.keys(engine.diagramModel.links)).toEqual([
-      'block1-out1-block2-in1',
-    ]);
-    expect(
-      engine.diagramModel.links['block1-out1-block2-in1'].sourcePort.id
-    ).toEqual('block1-out1');
-    expect(
-      engine.diagramModel.links['block1-out1-block2-in1'].targetPort.id
-    ).toEqual('block2-in1');
   });
 });

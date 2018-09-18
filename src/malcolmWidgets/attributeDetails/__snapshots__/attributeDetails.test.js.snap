@@ -3,6 +3,7 @@
 exports[`AttributeDetails renders correctly 1`] = `
 <div
   className="AttributeDetails-div-1"
+  style={Object {}}
 >
   <WithStyles(Tooltip)
     id="1"
@@ -13,6 +14,7 @@ exports[`AttributeDetails renders correctly 1`] = `
       className="AttributeDetails-button-4"
       disableRipple={true}
       onClick={[Function]}
+      tabIndex="-1"
     >
       <WithTheme(AttributeAlarm)
         alarmSeverity={0}

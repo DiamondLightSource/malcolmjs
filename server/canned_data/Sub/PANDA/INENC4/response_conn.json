@@ -24,7 +24,7 @@
           "description": "Signal detected", 
           "tags": [
             "group:outputs", 
-            "outport:bool:INENC4.CONN", 
+            "sourcePort:bool:INENC4.CONN", 
             "widget:led"
           ], 
           "writeable": false, 

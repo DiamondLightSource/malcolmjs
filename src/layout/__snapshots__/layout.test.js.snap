@@ -2,8 +2,12 @@
 
 exports[`Layout renders correctly 1`] = `
 <div
+  id="LayoutDiv"
+  onBlur={[Function]}
   onDragOver={[Function]}
   onDrop={[Function]}
+  onFocus={[Function]}
+  onKeyUp={[Function]}
   onMouseUp={[Function]}
   role="presentation"
   style={
@@ -14,27 +18,53 @@ exports[`Layout renders correctly 1`] = `
       "width": "100%",
     }
   }
+  tabIndex="-1"
 >
   <DiagramWidget
     allowCanvasTranslation={true}
     allowCanvasZoom={true}
-    allowLooseLinks={true}
-    deleteKeys={
-      Array [
-        46,
-        8,
-      ]
-    }
+    allowLooseLinks={false}
+    deleteKeys={Array []}
     diagramEngine={
-      Object {
+      DiagramEngine {
+        "calculateMatrixDimensions": [Function],
+        "canvas": null,
+        "canvasMatrix": Array [],
         "clickHandler": [Function],
+        "diagramModel": DiagramModel {
+          "gridSize": 0,
+          "id": "2",
+          "links": Object {},
+          "listeners": Object {},
+          "locked": false,
+          "nodes": Object {},
+          "offsetX": 0,
+          "offsetY": 0,
+          "rendered": false,
+          "zoom": 100,
+        },
+        "hAdjustmentFactor": 0,
+        "id": "1",
+        "labelFactories": Object {},
+        "linkClickHandler": [Function],
+        "linkFactories": Object {},
+        "linksThatHaveInitiallyRendered": Object {},
+        "listeners": Object {},
+        "locked": false,
+        "markMatrixPoint": [Function],
+        "markNodes": [Function],
+        "markPorts": [Function],
         "mouseDownHandler": [Function],
+        "nodeFactories": Object {},
+        "paintableWidgets": null,
+        "portFactories": Object {},
         "portMouseDown": [Function],
+        "routingMatrix": Array [],
         "selectedHandler": [Function],
-        "testEngine": true,
+        "vAdjustmentFactor": 0,
       }
     }
-    inverseZoom={false}
+    inverseZoom={true}
     maxNumberPointsPerLink={0}
     smartRouting={false}
   />

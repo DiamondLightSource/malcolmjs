@@ -1,5 +1,6 @@
 import createReducer from './createReducer';
 import blockUtils from '../blockUtils';
+import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import {
   MalcolmUpdateMethodInputType,
   MalcolmReturn,
@@ -8,6 +9,14 @@ import {
 
 export const getMethodParam = (type, param, method) =>
   Object.keys(method.raw[type].elements).includes(`${param}`);
+
+export const isArrayType = meta =>
+  meta &&
+  meta.typeid &&
+  meta.typeid
+    .split('/')[1]
+    .split(':')[0]
+    .slice(-9) === 'ArrayMeta';
 
 const mapReturnValues = (returnKeys, payload) => {
   const valueMap = { outputs: {} };
@@ -37,7 +46,7 @@ const pushParamsToArchive = (state, payload) => {
     attribute.value.push({ runParameters: payload.parameters });
     attribute.timeStamp.push({ localRunTime: new Date() });
     attributes[matchingAttribute] = attribute;
-    blockArchive[payload.path[0]] = {
+    blockArchive[blockName] = {
       ...state.blockArchive[payload.path[0]],
       attributes,
     };
@@ -60,7 +69,20 @@ const updateMethodInput = (state, payload) => {
   if (matchingAttribute >= 0) {
     const { attributes } = blocks[blockName];
     const attributeCopy = attributes[matchingAttribute];
-    if (payload.value && payload.value.isDirty !== undefined) {
+    if (
+      payload.doInitialise &&
+      isArrayType(attributeCopy.raw.takes.elements[payload.name])
+    ) {
+      attributeCopy.calculated.inputs[payload.name] = {
+        meta: {
+          ...attributeCopy.raw.takes.elements[payload.name],
+        },
+        value: [],
+        flags: {
+          rows: [],
+        },
+      };
+    } else if (payload.value && payload.value.isDirty !== undefined) {
       if (!attributeCopy.calculated.dirtyInputs) {
         attributeCopy.calculated.dirtyInputs = {};
       }
@@ -73,7 +95,14 @@ const updateMethodInput = (state, payload) => {
       attributeCopy.calculated.inputs = {
         ...attributeCopy.calculated.inputs,
       };
-      attributeCopy.calculated.inputs[payload.name] = payload.value;
+      if (isArrayType(attributeCopy.raw.takes.elements[payload.name])) {
+        attributeCopy.calculated.inputs[payload.name] = {
+          ...attributeCopy.calculated.inputs[payload.name],
+          value: payload.value,
+        };
+      } else {
+        attributeCopy.calculated.inputs[payload.name] = payload.value;
+      }
     }
     attributes[matchingAttribute] = attributeCopy;
     blocks[payload.path[0]] = { ...state.blocks[payload.path[0]], attributes };
@@ -100,7 +129,7 @@ export const handleMethodReturn = (state, payload) => {
     const blockArchive = { ...state.blockArchive };
     if (matchingAttribute >= 0) {
       const { attributes } = blocks[blockName];
-      const archive = blockArchive[blockName];
+      const archive = blockArchive[blockName].attributes;
       let valueMap = { outputs: {} };
       const returnKeys = Object.keys(
         attributes[matchingAttribute].raw.returns.elements
@@ -127,12 +156,14 @@ export const handleMethodReturn = (state, payload) => {
         const localRunTime = archive[matchingAttribute].timeStamp.pop();
         archive[matchingAttribute].value.push({
           ...runParams,
-          returned: { ...valueMap },
+          returned: { ...valueMap.outputs },
+          returnStatus: 'Success',
         });
         archive[matchingAttribute].timeStamp.push({
           ...localRunTime,
           localReturnTime: new Date(),
         });
+        archive[matchingAttribute].alarmState.push(AlarmStates.NO_ALARM);
         blockArchive[blockName] = {
           ...state.blockArchive[blockName],
           attributes: archive,

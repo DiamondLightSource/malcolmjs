@@ -9,8 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Layout from '../layout/layout.component';
 import TableContainer from '../malcolmWidgets/table/table.container';
 import JSONTree from '../malcolmWidgets/jsonTree/jsonTree.component';
-import MethodViewer from '../malcolmWidgets/method/methodViewer.component';
-import AttributeViewer from '../attributeView/attributeView.container';
+import MethodViewer from '../middlePanelViews/methodView/methodViewer.component';
+import AttributeViewer from '../middlePanelViews/attributeView/attributeView.container';
 import AttributeAlarm, {
   getAlarmState,
   AlarmStates,
@@ -31,7 +31,7 @@ const styles = theme => ({
     display: 'flex',
     position: 'relative',
     width: '100%',
-    height: 'calc(100vh - 64px)',
+    height: '100%',
     backgroundColor: theme.palette.background.default,
     backgroundImage:
       'linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent)',
@@ -53,15 +53,17 @@ const styles = theme => ({
   },
   tableContainer: {
     display: 'flex',
-    position: 'absolute',
-    height: 'calc(100vh - 64px)',
-    align: 'center',
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
     verticalAlign: 'middle',
   },
   plainBackground: {
     display: 'flex',
     width: '100%',
-    minHeight: 'calc(100vh - 64px)',
+    minHeight: '100%',
+    height: '100%',
     backgroundColor: theme.palette.background.paper,
     align: 'center',
   },
@@ -83,34 +85,41 @@ const getWidgetType = tags => {
 };
 
 const findAttributeComponent = props => {
-  if (props.isMethod) {
-    return (
-      <div className={props.classes.plainBackground}>
-        <MethodViewer
-          attributeName={props.mainAttribute}
-          blockName={props.parentBlock}
-          subElement={props.mainAttributeSubElements}
-          classes={props.classes}
-          openParent={props.openParent}
-          openChild={props.openChild}
-          footerItems={[
-            <Tooltip id="1" title={props.errorMessage} placement="right">
-              <IconButton className={props.classes.button} disableRipple>
-                <AttributeAlarm alarmSeverity={props.mainAttributeAlarmState} />
-              </IconButton>
-            </Tooltip>,
-          ]}
-        />
-      </div>
-    );
-  }
-  const widgetTag = getWidgetType(props.tags);
   const transitionWithPanelStyle = {
     left: props.openParent ? 360 : 0,
     width: `calc(100% - ${(props.openChild ? 360 : 0) +
       (props.openParent ? 360 : 0)}px)`,
     // transition: 'width 1s, left 1s',
   };
+  if (props.isMethod) {
+    return (
+      <div className={props.classes.plainBackground}>
+        <div
+          className={props.classes.tableContainer}
+          style={transitionWithPanelStyle}
+        >
+          <MethodViewer
+            attributeName={props.mainAttribute}
+            blockName={props.parentBlock}
+            subElement={props.mainAttributeSubElements}
+            classes={props.classes}
+            openParent={props.openParent}
+            openChild={props.openChild}
+            footerItems={[
+              <Tooltip id="1" title={props.errorMessage} placement="right">
+                <IconButton className={props.classes.button} disableRipple>
+                  <AttributeAlarm
+                    alarmSeverity={props.mainAttributeAlarmState}
+                  />
+                </IconButton>
+              </Tooltip>,
+            ]}
+          />
+        </div>
+      </div>
+    );
+  }
+  const widgetTag = getWidgetType(props.tags);
   const palettePadding = props.showBin ? 4 : 32;
 
   switch (widgetTag) {
@@ -182,6 +191,7 @@ const findAttributeComponent = props => {
         </div>
       );
     case 'widget:textupdate':
+    case 'widget:multilinetextupdate':
     case 'widget:textinput':
     case 'widget:led':
     case 'widget:checkbox':

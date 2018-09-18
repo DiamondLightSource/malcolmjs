@@ -9,13 +9,13 @@ import Palette from '../layout/palette/palette.component';
 import InfoDetails from '../infoDetails/infoDetails.component';
 import NavTypes from '../malcolm/NavTypes';
 
-const blockDetailsUrl = (rootUrl, blockTitle) =>
-  `${rootUrl}/details/${blockTitle}`;
+const blockDetailsUrl = (rootUrl, blockPath) =>
+  `${rootUrl}/details/${blockPath}`;
 
-const popOutFunction = (rootUrl, width, blockTitle) =>
+const popOutFunction = (rootUrl, width, blockPath) =>
   window.open(
-    blockDetailsUrl(rootUrl, blockTitle),
-    blockTitle,
+    blockDetailsUrl(rootUrl, blockPath),
+    blockPath,
     `width=${width},height=${window.innerHeight}`
   );
 
@@ -32,11 +32,19 @@ const MainMalcolmView = props => (
   <div>
     <DrawerContainer
       parentTitle={props.parentBlockTitle}
+      parentMRI={props.parentBlock}
       popOutAction={popOutFunction}
       childTitle={props.childBlockTitle}
+      childMRI={props.childBlock}
     >
       <BlockDetails parent />
-      <MiddlePanelContainer />
+      <div
+        style={{
+          height: `calc(100vh - 64px - ${props.footerHeight}px)`,
+        }}
+      >
+        <MiddlePanelContainer />
+      </div>
       {childPanelSelector(props)}
     </DrawerContainer>
   </div>
@@ -75,10 +83,13 @@ const mapStateToProps = state => {
   }
 
   return {
+    parentBlock: state.malcolm.parentBlock,
     parentBlockTitle,
+    childBlock: state.malcolm.childBlock,
     childBlockTitle,
     showPalette,
     showInfo,
+    footerHeight: state.viewState.footerHeight,
   };
 };
 
@@ -87,6 +98,9 @@ const mapDispatchToProps = () => ({});
 MainMalcolmView.propTypes = {
   parentBlockTitle: PropTypes.string,
   childBlockTitle: PropTypes.string,
+  parentBlock: PropTypes.string,
+  childBlock: PropTypes.string,
+  footerHeight: PropTypes.number.isRequired,
 };
 
 childPanelSelector.propTypes = {
@@ -97,6 +111,8 @@ childPanelSelector.propTypes = {
 MainMalcolmView.defaultProps = {
   parentBlockTitle: '',
   childBlockTitle: '',
+  parentBlock: '',
+  childBlock: '',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMalcolmView);

@@ -25,7 +25,7 @@
           "description": "Position output", 
           "tags": [
             "group:outputs", 
-            "outport:int32:ADDER1.OUT", 
+            "sourcePort:int32:ADDER1.OUT", 
             "widget:textupdate"
           ], 
           "writeable": false, 

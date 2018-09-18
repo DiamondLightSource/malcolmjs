@@ -20,6 +20,7 @@ import {
 } from './table.reducer';
 import { getMethodParam } from './method.reducer';
 import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { sinkPort, sourcePort } from '../malcolmConstants';
 
 export const updateAttributeChildren = attribute => {
   const updatedAttribute = { ...attribute };
@@ -67,6 +68,7 @@ export const checkForFlowGraph = attribute => {
         },
         ports: [],
         icon: undefined,
+        loading: true,
       })),
     };
 
@@ -99,8 +101,8 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
     }
 
     if (oldMeta.tags) {
-      // find inport and compare
-      const inPortTag = newMeta.tags.find(t => t.indexOf('inport:') > -1);
+      // find source port and compare
+      const inPortTag = newMeta.tags.find(t => t.indexOf(sinkPort) > -1);
       if (
         inPortTag !== undefined &&
         oldMeta.tags.findIndex(t => t === inPortTag) === -1
@@ -108,11 +110,11 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
         return true;
       }
 
-      // find outport and compare
-      const outPortTag = newMeta.tags.find(t => t.indexOf('outport:') > -1);
+      // find sink port and compare
+      const sinkPortTag = newMeta.tags.find(t => t.indexOf(sourcePort) > -1);
       if (
-        outPortTag !== undefined &&
-        oldMeta.tags.findIndex(t => t === outPortTag) === -1
+        sinkPortTag !== undefined &&
+        oldMeta.tags.findIndex(t => t === sinkPortTag) === -1
       ) {
         return true;
       }
@@ -144,8 +146,8 @@ export const updateNavigation = (state, attributeName) => {
 };
 
 export const isPort = attribute =>
-  blockUtils.attributeHasTag(attribute, 'inport:') ||
-  blockUtils.attributeHasTag(attribute, 'outport:');
+  blockUtils.attributeHasTag(attribute, sinkPort) ||
+  blockUtils.attributeHasTag(attribute, sourcePort);
 
 export const updateLayout = (state, updatedState, blockName, attributeName) => {
   let { layout } = state;
@@ -430,33 +432,15 @@ export function updateAttribute(
         ? oldState.layout.blocks.filter(b => b.loading).length
         : 1000000;
 
-      const layoutEngineView = updatedState.layoutEngine
-        ? {
-            offset: {
-              x: updatedState.layoutEngine.diagramModel.offsetX,
-              y: updatedState.layoutEngine.diagramModel.offsetY,
-            },
-            zoom: updatedState.layoutEngine.diagramModel.zoom,
-          }
-        : undefined;
+      updatedState.layout = layout;
 
-      const layoutEngine =
-        numberOfBlocksLoading < numberOfBlocksWereLoading ||
+      updatedState.layoutEngine =
+        numberOfBlocksLoading !== numberOfBlocksWereLoading ||
         (!layoutLoading &&
           LayoutReducer.isRelevantAttribute(attributes[matchingAttributeIndex]))
-          ? LayoutReducer.buildLayoutEngine(
-              layout,
-              updatedState.layoutState.selectedBlocks,
-              layoutEngineView
-            )
+          ? LayoutReducer.updateLayoutAndEngine(updatedState, false)
+              .layoutEngine
           : updatedState.layoutEngine;
-
-      updatedState = {
-        ...updatedState,
-        layout,
-        layoutEngine,
-        // navigation,
-      };
 
       if (!ignoreSecondaryCalculations) {
         const navigation = updateNavigation(updatedState, attributeName);

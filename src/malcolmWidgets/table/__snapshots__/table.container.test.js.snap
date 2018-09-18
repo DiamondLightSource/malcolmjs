@@ -252,10 +252,12 @@ exports[`Table container renders correctly 1`] = `
     </WithStyles(Typography)>,
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        method={true}
         text="Discard changes"
     />,
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        method={true}
         text="Submit"
     />,
     ]
@@ -634,10 +636,12 @@ exports[`Table container subelement in url selects row correctly 1`] = `
     </WithStyles(Typography)>,
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        method={true}
         text="Discard changes"
     />,
       <WithStyles(ButtonAction)
         clickAction={[Function]}
+        method={true}
         text="Submit"
     />,
     ]

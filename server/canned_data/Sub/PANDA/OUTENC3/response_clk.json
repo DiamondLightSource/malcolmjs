@@ -24,7 +24,7 @@
           "description": "Clock input from master encoder", 
           "tags": [
             "group:outputs", 
-            "outport:bool:OUTENC3.CLK", 
+            "sourcePort:bool:OUTENC3.CLK", 
             "widget:led"
           ], 
           "writeable": false, 

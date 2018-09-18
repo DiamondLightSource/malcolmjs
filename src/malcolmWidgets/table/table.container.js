@@ -43,10 +43,12 @@ const TableContainer = props => {
         props.revertHandler(path);
       }}
       text="Discard changes"
+      method
     />,
     <ButtonAction
       clickAction={() => props.putTable(path, props.attribute.localState)}
       text="Submit"
+      method
     />,
   ];
   return (

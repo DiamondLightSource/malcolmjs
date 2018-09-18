@@ -15,6 +15,7 @@ import {
   MalcolmTableUpdate,
   MalcolmTableFlag,
   MalcolmRevert,
+  MalcolmSelectLinkType,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -53,14 +54,22 @@ export const malcolmPutAction = (path, value) => ({
   },
 });
 
-export const malcolmPostAction = (path, parameters) => ({
-  type: MalcolmSend,
-  payload: {
-    typeid: 'malcolm:core/Post:1.0',
-    path,
-    parameters,
-  },
-});
+export const malcolmPostAction = (path, rawParameters) => dispatch => {
+  const parameters = {};
+  Object.keys(rawParameters).forEach(param => {
+    parameters[param] = rawParameters[param].meta
+      ? rawParameters[param].value
+      : rawParameters[param];
+  });
+  dispatch({
+    type: MalcolmSend,
+    payload: {
+      typeid: 'malcolm:core/Post:1.0',
+      path,
+      parameters,
+    },
+  });
+};
 
 export const malcolmSetFlag = (path, flagType, flagState) => ({
   type: MalcolmAttributeFlag,
@@ -182,6 +191,14 @@ export const malcolmSelectBlock = (blockName, isSelected) => ({
   },
 });
 
+export const malcolmSelectLink = (linkName, isSelected) => ({
+  type: MalcolmSelectLinkType,
+  payload: {
+    linkName,
+    isSelected,
+  },
+});
+
 export const malcolmLayoutShiftIsPressed = shiftIsPressed => ({
   type: MalcolmShiftButton,
   payload: {
@@ -215,6 +232,7 @@ export default {
   malcolmMainAttribute,
   malcolmLayoutUpdatePosition,
   malcolmSelectBlock,
+  malcolmSelectLink,
   malcolmLayoutShiftIsPressed,
   malcolmPostAction,
   malcolmRevertAction,

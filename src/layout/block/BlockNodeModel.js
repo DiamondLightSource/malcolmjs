@@ -1,13 +1,15 @@
 import { NodeModel } from 'storm-react-diagrams';
 import MalcolmPortModel from '../blockPort/MalcolmPortModel';
+import { idSeparator } from '../layout.component';
 
 class BlockNodeModel extends NodeModel {
-  constructor(label, description, mri) {
+  constructor(label, description, mri, loading) {
     super('malcolmjsblock');
 
     this.id = mri;
     this.label = label;
     this.description = description;
+    this.loading = loading;
     this.addBlockPort = this.addBlockPort.bind(this);
     this.addIcon = this.addIcon.bind(this);
     this.addClickHandler = this.addClickHandler.bind(this);
@@ -18,9 +20,9 @@ class BlockNodeModel extends NodeModel {
   addBlockPort(port, portMouseDown) {
     const newPort = new MalcolmPortModel(
       port.input,
-      `${this.id}-${port.label}`,
+      `${this.id}${idSeparator}${port.label}`,
       port.label,
-      `${this.id}-${port.label}`,
+      `${this.id}${idSeparator}${port.label}`,
       port
     );
 

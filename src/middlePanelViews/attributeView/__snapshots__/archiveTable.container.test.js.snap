@@ -1,0 +1,339 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`archiveTable renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+>
+  <WithStyles(Table)
+    className="WidgetTable-headerLayoutNoScroll-3"
+  >
+    <WithStyles(TableHead)>
+      <WithStyles(TableRow)
+        className="WidgetTable-rowFormat-6"
+        key="-1"
+      >
+        <WithStyles(TableCell)
+          className="WidgetTable-textHeadings-8"
+          key="-1,0"
+          padding="none"
+        >
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Alarm state
+          </WithStyles(Typography)>
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)
+          className="WidgetTable-textHeadings-8"
+          key="-1,1"
+          padding="none"
+        >
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Time set
+          </WithStyles(Typography)>
+        </WithStyles(TableCell)>
+        <WithStyles(TableCell)
+          className="WidgetTable-textHeadings-8"
+          key="-1,2"
+          padding="none"
+        >
+          <WithStyles(Typography)
+            variant="subheading"
+          >
+            Value
+          </WithStyles(Typography)>
+        </WithStyles(TableCell)>
+      </WithStyles(TableRow)>
+    </WithStyles(TableHead)>
+  </WithStyles(Table)>
+  <div
+    className="WidgetTable-tableBody-5"
+  >
+    <WithStyles(Table)
+      className="WidgetTable-tableLayout-4"
+    >
+      <WithStyles(TableBody)>
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          key="row.0"
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "timeStamp": Object {
+                  "label": "Time set",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            }
+          }
+          row={0}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          key="row.1"
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "timeStamp": Object {
+                  "label": "Time set",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            }
+          }
+          row={1}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
+        <RowData
+          classes={
+            Object {
+              "blankCell": "WidgetTable-blankCell-9",
+              "button": "WidgetTable-button-11",
+              "footerLayout": "WidgetTable-footerLayout-2",
+              "headerLayout": "WidgetTable-headerLayout-1",
+              "headerLayoutNoScroll": "WidgetTable-headerLayoutNoScroll-3",
+              "incompleteRowFormat": "WidgetTable-incompleteRowFormat-7",
+              "rowFormat": "WidgetTable-rowFormat-6",
+              "tableBody": "WidgetTable-tableBody-5",
+              "tableLayout": "WidgetTable-tableLayout-4",
+              "textBody": "WidgetTable-textBody-10",
+              "textHeadings": "WidgetTable-textHeadings-8",
+            }
+          }
+          columnLabels={
+            Array [
+              "alarm",
+              "timeStamp",
+              "value",
+            ]
+          }
+          columnWidgetTags={
+            Array [
+              "info:alarm",
+              "widget:textupdate",
+              "widget:textupdate",
+            ]
+          }
+          flags={
+            Object {
+              "rows": Array [],
+              "table": Object {},
+            }
+          }
+          hideInfo={true}
+          infoClickHandler={[Function]}
+          key="row.2"
+          meta={
+            Object {
+              "elements": Object {
+                "alarm": Object {
+                  "label": "Alarm state",
+                  "tags": Array [
+                    "info:alarm",
+                  ],
+                },
+                "timeStamp": Object {
+                  "label": "Time set",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+                "value": Object {
+                  "label": "Value",
+                  "tags": Array [
+                    "widget:textupdate",
+                  ],
+                },
+              },
+            }
+          }
+          row={2}
+          rowChangeHandler={[Function]}
+          rowClickHandler={[Function]}
+          rowFlagHandler={[Function]}
+          values={
+            Array [
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:01.000Z",
+                "value": 1,
+              },
+              Object {
+                "alarm": 1,
+                "timeStamp": "1970-01-01T00:00:02.000Z",
+                "value": -1,
+              },
+              Object {
+                "alarm": 0,
+                "timeStamp": "1970-01-01T00:00:03.000Z",
+                "value": false,
+              },
+            ]
+          }
+        />
+      </WithStyles(TableBody)>
+    </WithStyles(Table)>
+    <WithStyles(Table)>
+      <WithStyles(TableFooter) />
+    </WithStyles(Table)>
+  </div>
+  <WithStyles(Table)
+    className="WidgetTable-footerLayout-2"
+  >
+    <WithStyles(TableFooter)>
+      <WithStyles(TableRow)
+        className="WidgetTable-rowFormat-6"
+      />
+    </WithStyles(TableFooter)>
+  </WithStyles(Table)>
+</div>
+`;

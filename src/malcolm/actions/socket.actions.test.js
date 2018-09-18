@@ -16,7 +16,12 @@ describe('socket.actions', () => {
   it('configureSocket gets the settings and dispatches updates', async () => {
     mockAxios.get.mockImplementationOnce(() =>
       Promise.resolve({
-        data: { malcolmSocket: url, version: '1.2.3' },
+        data: {
+          malcolmSocket: url,
+          version: '1.2.3',
+          title: 'App',
+          footerHeight: 10,
+        },
       })
     );
 
@@ -27,13 +32,17 @@ describe('socket.actions', () => {
 
     await asyncAction(dispatch);
 
-    expect(actions).toHaveLength(2);
+    expect(actions).toHaveLength(3);
     expect(actions[0].type).toEqual('UPDATE_VERSION');
     expect(actions[0].payload.version).toEqual('1.2.3');
+    expect(actions[0].payload.title).toEqual('App');
 
-    expect(actions[1].type).toEqual('malcolm:socketconnect');
-    expect(actions[1].payload.worker).toBe(worker);
-    expect(actions[1].payload.socketUrl).toEqual(url);
+    expect(actions[1].type).toEqual('SHOW_FOOTER_TYPE');
+    expect(actions[1].payload.footerHeight).toEqual(10);
+
+    expect(actions[2].type).toEqual('malcolm:socketconnect');
+    expect(actions[2].payload.worker).toBe(worker);
+    expect(actions[2].payload.socketUrl).toEqual(url);
   });
 
   it('configureSocket does not dispatch socket update if no url', async () => {

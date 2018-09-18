@@ -71,12 +71,104 @@ const styles = theme => ({
   },
 });
 
+const isBlankCell = props =>
+  props.selectedRow === props.row
+    ? props.classes.blankCell
+    : props.classes.textBody;
+
+const AlarmCell = props => (
+  <TableCell
+    className={isBlankCell(props)}
+    padding="none"
+    key={[props.row, -1]}
+  >
+    <IconButton
+      className={props.classes.button}
+      disableRipple
+      onClick={() => {
+        props.infoClickHandler(props.path, `row.${props.row}`);
+      }}
+    >
+      <AttributeAlarm
+        alarmSeverity={
+          props.flags.rows[props.row] &&
+          (props.flags.rows[props.row]._dirty ||
+            props.flags.rows[props.row]._isChanged)
+            ? AlarmStates.DIRTY
+            : AlarmStates.NO_ALARM
+        }
+      />
+    </IconButton>
+  </TableCell>
+);
+
+const RowData = props => {
+  let valueCells;
+  if (props.columnLabels === undefined) {
+    valueCells = [
+      <TableCell
+        className={isBlankCell(props)}
+        padding="none"
+        key={[props.row, 0]}
+      >
+        <TableWidgetSelector
+          columnWidgetTag={props.columnWidgetTags[0]}
+          value={props.values[props.row]}
+          rowPath={{ row: props.row, column: 0 }}
+          rowChangeHandler={props.rowChangeHandler}
+          columnMeta={props.meta}
+          setFlag={props.rowFlagHandler}
+        />
+      </TableCell>,
+    ];
+  } else {
+    valueCells = props.columnLabels.map((label, column) => (
+      <TableCell
+        className={isBlankCell(props)}
+        padding="none"
+        key={[props.row, column]}
+      >
+        <TableWidgetSelector
+          columnWidgetTag={props.columnWidgetTags[column]}
+          value={props.values[props.row][label]}
+          rowPath={{ label, row: props.row, column }}
+          rowChangeHandler={props.rowChangeHandler}
+          columnMeta={props.meta.elements[label]}
+          setFlag={props.rowFlagHandler}
+        />
+      </TableCell>
+    ));
+  }
+  return (
+    <TableRow
+      className={props.classes.rowFormat}
+      key={props.row}
+      onClick={() => {
+        props.rowClickHandler(props.path, `row.${props.row}`);
+      }}
+    >
+      {[
+        props.hideInfo ? null : (
+          <AlarmCell
+            flags={props.flags}
+            row={props.row}
+            classes={props.classes}
+            path={props.path}
+            selectedRow={props.selectedRow}
+            infoClickHandler={props.infoClickHandler}
+          />
+        ),
+        ...valueCells,
+      ]}
+    </TableRow>
+  );
+};
+
 const WidgetTable = props => {
   const columnLabels =
     props.localState === undefined
       ? Object.keys(props.attribute.raw.meta.elements)
       : props.localState.labels;
-
   const values =
     props.localState === undefined
       ? props.attribute.raw.value[columnLabels[0]].map((val, row) => {
@@ -96,12 +188,17 @@ const WidgetTable = props => {
       ? props.attribute.raw.meta
       : props.localState.meta;
   const rowChangeHandler = (rowPath, newValue) => {
-    const rowValue = {};
-    columnLabels.forEach(label => {
-      rowValue[label] = values[rowPath.row][label];
-      return 0;
-    });
-    rowValue[rowPath.label] = newValue;
+    let rowValue;
+    if (columnLabels === undefined) {
+      rowValue = newValue;
+    } else {
+      rowValue = {};
+      columnLabels.forEach(label => {
+        rowValue[label] = values[rowPath.row][label];
+        return 0;
+      });
+      rowValue[rowPath.label] = newValue;
+    }
     props.eventHandler(props.attribute.calculated.path, rowValue, rowPath.row);
   };
   const rowFlagHandler = (rowPath, flagType, flagState) => {
@@ -125,18 +222,26 @@ const WidgetTable = props => {
       );
     }
   };
-  const columnWidgetTags = getTableWidgetTags(props.attribute);
-  const columnHeadings = columnLabels.map((label, column) => (
+  const headerCell = (columnTitle, column) => (
     <TableCell
       className={props.classes.textHeadings}
       padding="none"
-      key={column}
+      key={[-1, column]}
     >
-      <Typography variant="subheading">
-        {meta.elements[label].label ? meta.elements[label].label : label}
-      </Typography>
+      <Typography variant="subheading">{columnTitle}</Typography>
     </TableCell>
-  ));
+  );
+  const columnWidgetTags = getTableWidgetTags(meta);
+  const columnHeadings =
+    columnLabels === undefined
+      ? [headerCell(meta.label, 0)]
+      : columnLabels.map((label, column) =>
+          headerCell(
+            meta.elements[label].label ? meta.elements[label].label : label,
+            column
+          )
+        );
+
   return (
     <div style={{ height: '100%' }}>
       <Table
@@ -147,13 +252,13 @@ const WidgetTable = props => {
         }
       >
         <TableHead>
-          <TableRow className={props.classes.rowFormat}>
+          <TableRow className={props.classes.rowFormat} key={-1}>
             {[
               props.hideInfo ? null : (
                 <TableCell
                   className={props.classes.textHeadings}
                   padding="none"
-                  key={-1}
+                  key={[-1, -1]}
                 />
               ),
               ...columnHeadings,
@@ -165,71 +270,22 @@ const WidgetTable = props => {
         <Table className={props.classes.tableLayout}>
           <TableBody>
             {values.map((rowValue, row) => (
-              <TableRow
-                className={props.classes.rowFormat}
-                key={row}
-                onClick={() => {
-                  props.rowClickHandler(
-                    props.attribute.calculated.path,
-                    `row.${row}`
-                  );
-                }}
-              >
-                {[
-                  props.hideInfo ? null : (
-                    <TableCell
-                      className={
-                        props.selectedRow === row
-                          ? props.classes.blankCell
-                          : props.classes.textBody
-                      }
-                      padding="none"
-                      key={[row, -1]}
-                    >
-                      <IconButton
-                        className={props.classes.button}
-                        disableRipple
-                        onClick={() => {
-                          props.infoClickHandler(
-                            props.attribute.calculated.path,
-                            `row.${row}`
-                          );
-                        }}
-                      >
-                        <AttributeAlarm
-                          alarmSeverity={
-                            flags.rows[row] &&
-                            (flags.rows[row]._dirty ||
-                              flags.rows[row]._isChanged)
-                              ? AlarmStates.DIRTY
-                              : AlarmStates.NO_ALARM
-                          }
-                        />
-                      </IconButton>
-                    </TableCell>
-                  ),
-                  ...columnLabels.map((label, column) => (
-                    <TableCell
-                      className={
-                        props.selectedRow === row
-                          ? props.classes.blankCell
-                          : props.classes.textBody
-                      }
-                      padding="none"
-                      key={[row, column]}
-                    >
-                      <TableWidgetSelector
-                        columnWidgetTag={columnWidgetTags[column]}
-                        value={values[row][label]}
-                        rowPath={{ label, row, column }}
-                        rowChangeHandler={rowChangeHandler}
-                        columnMeta={meta.elements[label]}
-                        setFlag={rowFlagHandler}
-                      />
-                    </TableCell>
-                  )),
-                ]}
-              </TableRow>
+              <RowData
+                key={`row.${row}`}
+                row={row}
+                path={props.attribute.calculated.path}
+                classes={props.classes}
+                flags={flags}
+                infoClickHandler={props.infoClickHandler}
+                rowClickHandler={props.rowClickHandler}
+                rowChangeHandler={rowChangeHandler}
+                rowFlagHandler={rowFlagHandler}
+                columnWidgetTags={columnWidgetTags}
+                columnLabels={columnLabels}
+                values={values}
+                meta={meta}
+                hideInfo={props.hideInfo}
+              />
             ))}
           </TableBody>
         </Table>
@@ -263,7 +319,7 @@ const WidgetTable = props => {
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
             {props.footerItems.map((item, key) => (
-              <TableCell key={key}>{item}</TableCell>
+              <TableCell key={[values.length + 1, key]}>{item}</TableCell>
             ))}
           </TableRow>
         </TableFooter>
@@ -297,7 +353,14 @@ WidgetTable.propTypes = {
     }),
   }).isRequired,
   localState: PropTypes.shape({
-    value: PropTypes.arrayOf(PropTypes.shape({})),
+    value: PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.shape({}),
+        PropTypes.number,
+        PropTypes.string,
+        PropTypes.bool,
+      ])
+    ),
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     flags: PropTypes.shape({
       rows: PropTypes.shape({}),
@@ -324,12 +387,10 @@ WidgetTable.propTypes = {
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
   }).isRequired,
-  selectedRow: PropTypes.number.isRequired,
   eventHandler: PropTypes.func.isRequired,
-  // infoClickHandler: PropTypes.func.isRequired,
-  // rowClickHandler: PropTypes.func.isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  rowClickHandler: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
   setFlag: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   hideInfo: PropTypes.bool,
@@ -339,5 +400,62 @@ WidgetTable.defaultProps = {
   localState: undefined,
   footerItems: [],
   hideInfo: false,
+};
+
+AlarmCell.propTypes = {
+  row: PropTypes.number.isRequired,
+  path: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.shape({
+    button: PropTypes.string,
+    blankCell: PropTypes.string,
+    textBody: PropTypes.string,
+  }).isRequired,
+  flags: PropTypes.shape({
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+};
+
+RowData.propTypes = {
+  row: PropTypes.number.isRequired,
+  path: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.shape({
+    button: PropTypes.string,
+    blankCell: PropTypes.string,
+    textBody: PropTypes.string,
+    rowFormat: PropTypes.string,
+  }).isRequired,
+  flags: PropTypes.shape({
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  rowChangeHandler: PropTypes.func.isRequired,
+  rowClickHandler: PropTypes.func.isRequired,
+  rowFlagHandler: PropTypes.func.isRequired,
+  columnLabels: PropTypes.arrayOf(PropTypes.string),
+  columnWidgetTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  values: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  ).isRequired,
+  meta: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.shape({ elements: PropTypes.shape({}) }),
+  ]).isRequired,
+  hideInfo: PropTypes.bool.isRequired,
+  selectedRow: PropTypes.number,
+};
+
+RowData.defaultProps = {
+  columnLabels: undefined,
+  selectedRow: undefined,
+};
+
+isBlankCell.propTypes = {
+  selectedRow: PropTypes.number,
+  row: PropTypes.number.isRequired,
+};
+
+isBlankCell.defaultProps = {
+  selectedRow: undefined,
 };
 export default withStyles(styles, { withTheme: true })(WidgetTable);

@@ -9,6 +9,10 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   formControl: {
+    minHeight: 28,
+    maxHeight: 28,
+  },
+  select: {
     margin: 0,
     marginTop: -2,
     maxHeight: 28,
@@ -24,12 +28,16 @@ const WidgetComboBox = props => {
     </option>
   ));
   return (
-    <FormControl disabled={props.Pending} fullWidth>
+    <FormControl
+      disabled={props.Pending}
+      fullWidth
+      className={props.classes.formControl}
+    >
       <Select
         native
         value={props.Value}
         onChange={props.selectEventHandler}
-        className={props.classes.formControl}
+        className={props.classes.select}
       >
         <option value={null} disabled={props.Value !== null}>
           {' '}
@@ -47,6 +55,7 @@ WidgetComboBox.propTypes = {
   Pending: PropTypes.bool,
   classes: PropTypes.shape({
     formControl: PropTypes.string,
+    select: PropTypes.string,
   }).isRequired,
 };
 

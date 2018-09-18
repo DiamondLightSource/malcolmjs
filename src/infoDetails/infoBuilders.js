@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
+import { sinkPort } from '../malcolm/malcolmConstants';
 
 // eslint-disable-next-line import/prefer-default-export
 export const buildAttributeInfo = props => {
@@ -19,7 +20,7 @@ export const buildAttributeInfo = props => {
         label: 'Meta Data',
         malcolmType: {
           valuePath: 'raw.meta.typeid',
-          label: 'Malcolm Type',
+          label: 'Type ID',
           inline: true,
         },
         description: {
@@ -202,7 +203,7 @@ export const buildAttributeInfo = props => {
         label: 'Meta Data',
         malcolmType: {
           value: attribute.raw.typeid,
-          label: 'Malcolm Type',
+          label: 'Type ID',
           inline: true,
         },
         description: {
@@ -255,7 +256,7 @@ export const buildAttributeInfo = props => {
       info.parameterType = {
         label: 'Parameter Type',
         inline: true,
-        value: props.subElement[0],
+        value: props.subElement[0] === 'takes' ? 'Input' : 'Output',
       };
       info.typeid =
         attribute.raw[props.subElement[0]].elements[props.subElement[1]].typeid;
@@ -298,7 +299,7 @@ export const linkInfo = props => {
   const portName = props.attribute.calculated.path[1];
 
   const portNullValue = portAttribute.raw.meta.tags
-    .find(t => t.indexOf('inport:') > -1)
+    .find(t => t.indexOf(sinkPort) > -1)
     .split(':')
     .slice(-1)[0];
 
@@ -312,10 +313,11 @@ export const linkInfo = props => {
       functions: {
         eventHandler: (nullPath, value) =>
           props.eventHandler([blockMri, portName, 'value'], value),
+        setFlag: () => {},
       },
     },
-    destinationPort: {
-      label: 'Destination',
+    sinkPort: {
+      label: 'Sink',
       value: `${blockName}.${portName}`,
       inline: true,
     },

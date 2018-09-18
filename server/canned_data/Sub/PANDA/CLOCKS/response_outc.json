@@ -24,7 +24,7 @@
           "description": "Clock C output", 
           "tags": [
             "group:outputs", 
-            "outport:bool:CLOCKS.OUTC", 
+            "sourcePort:bool:CLOCKS.OUTC", 
             "widget:led"
           ], 
           "writeable": false, 

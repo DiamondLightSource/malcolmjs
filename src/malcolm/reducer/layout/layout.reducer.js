@@ -1,4 +1,3 @@
-import { DiagramEngine, DiagramModel } from 'storm-react-diagrams';
 import createReducer from '../createReducer';
 import blockUtils from '../../blockUtils';
 import {
@@ -6,25 +5,27 @@ import {
   MalcolmShowBinType,
   MalcolmInLayoutDeleteZoneType,
   MalcolmResetPortsType,
+  MalcolmSelectLinkType,
+  MalcolmSelectBlock,
 } from '../../malcolm.types';
-import BlockNodeFactory from '../../../layout/block/BlockNodeFactory';
-import BlockNodeModel from '../../../layout/block/BlockNodeModel';
-import MalcolmLinkFactory from '../../../layout/link/link.factory';
+import { sinkPort, sourcePort } from '../../malcolmConstants';
+import { buildLayoutEngine } from './layoutEngine.helper';
+import { idSeparator } from '../../../layout/layout.component';
 
 export const buildPorts = block => {
-  const inputs = blockUtils.findAttributesWithTag(block, 'inport:');
-  const outputs = blockUtils.findAttributesWithTag(block, 'outport:');
+  const inputs = blockUtils.findAttributesWithTag(block, sinkPort);
+  const outputs = blockUtils.findAttributesWithTag(block, sourcePort);
 
   return [
     ...inputs.map(input => ({
       label: input.calculated.name,
       input: true,
       tag: input.raw.meta.tags
-        .find(t => t.indexOf('inport:') > -1)
+        .find(t => t.indexOf(sinkPort) > -1)
         .split(':')
         .slice(-1)[0],
       portType: input.raw.meta.tags
-        .find(t => t.indexOf('inport:') > -1)
+        .find(t => t.indexOf(sinkPort) > -1)
         .split(':')[1],
       value: input.raw.value,
     })),
@@ -32,11 +33,11 @@ export const buildPorts = block => {
       label: output.calculated.name,
       input: false,
       tag: output.raw.meta.tags
-        .find(t => t.indexOf('outport:') > -1)
+        .find(t => t.indexOf(sourcePort) > -1)
         .split(':')
         .slice(-1)[0],
       portType: output.raw.meta.tags
-        .find(t => t.indexOf('outport:') > -1)
+        .find(t => t.indexOf(sourcePort) > -1)
         .split(':')[1],
     })),
   ];
@@ -163,22 +164,6 @@ const updateBlockPosition = (malcolmState, translation) => {
   }
 };
 
-const selectBlock = (malcolmState, blockName, isSelected) => {
-  const { selectedBlocks } = malcolmState.layoutState;
-
-  let updatedBlocks = selectedBlocks;
-  if (isSelected && !selectedBlocks.find(b => b === blockName)) {
-    updatedBlocks = [...selectedBlocks, blockName];
-  } else if (!isSelected) {
-    updatedBlocks = selectedBlocks.filter(b => b !== blockName);
-  }
-
-  return {
-    ...malcolmState.layoutState,
-    selectedBlocks: updatedBlocks,
-  };
-};
-
 const shiftIsPressed = (malcolmState, payload) => ({
   ...malcolmState,
   layoutState: {
@@ -188,7 +173,7 @@ const shiftIsPressed = (malcolmState, payload) => ({
 });
 
 const findPort = (blocks, id) => {
-  const path = id.split('-');
+  const path = id.split(idSeparator);
   const block = blocks.find(b => b.mri === path[0]);
   const port = block.ports.find(p => p.label === path[1]);
 
@@ -234,6 +219,32 @@ const selectPortForLink = (malcolmState, portId, start) => {
   };
 };
 
+const updateLayoutAndEngine = (state, updateLayout = true) => {
+  const layout = updateLayout ? processLayout(state) : state.layout;
+
+  const layoutEngineView = state.layoutEngine
+    ? {
+        offset: {
+          x: state.layoutEngine.diagramModel.offsetX,
+          y: state.layoutEngine.diagramModel.offsetY,
+        },
+        zoom: state.layoutEngine.diagramModel.zoom,
+      }
+    : undefined;
+
+  const layoutEngine = buildLayoutEngine(
+    layout,
+    state.layoutState.selectedBlocks,
+    state.layoutState.selectedLinks,
+    layoutEngineView
+  );
+
+  return {
+    layout,
+    layoutEngine,
+  };
+};
+
 const makeBlockVisible = (state, payload) => {
   const updatedState = state;
   const parentBlock = state.blocks[state.parentBlock];
@@ -259,111 +270,13 @@ const makeBlockVisible = (state, payload) => {
       }
 
       attribute.calculated.layout.blocks = layoutBlocks;
-      updatedState.layout = processLayout(state);
+      const layoutUpdates = updateLayoutAndEngine(updatedState);
+      updatedState.layout = layoutUpdates.layout;
+      updatedState.layoutEngine = layoutUpdates.layoutEngine;
     }
   }
 
   return updatedState;
-};
-
-const buildBlockNode = (
-  block,
-  selectedBlocks,
-  clickHandler,
-  mouseDownHandler,
-  portMouseDown
-) => {
-  const node = new BlockNodeModel(block.name, block.description, block.mri);
-  block.ports.forEach(p => node.addBlockPort(p, portMouseDown));
-  node.addIcon(block.icon);
-  node.setPosition(block.position.x, block.position.y);
-  node.addClickHandler(clickHandler);
-  node.addMouseDownHandler(mouseDownHandler);
-  node.selected = selectedBlocks.some(b => b === block.mri);
-  node.block = block;
-
-  return node;
-};
-
-const buildLayoutEngine = (layout, selectedBlocks, layoutEngineView) => {
-  const engine = new DiagramEngine();
-  engine.installDefaultFactories();
-  engine.registerNodeFactory(new BlockNodeFactory());
-  engine.registerLinkFactory(new MalcolmLinkFactory());
-
-  const model = new DiagramModel();
-
-  engine.portMouseDown = () => {};
-  engine.clickHandler = () => {};
-  engine.mouseDownHandler = () => {};
-
-  const nodes = layout.blocks
-    .filter(b => b.loading === false)
-    .map(b =>
-      buildBlockNode(
-        b,
-        selectedBlocks,
-        node => engine.clickHandler(b, node),
-        show => engine.mouseDownHandler(show),
-        (portId, start) => engine.portMouseDown(portId, start)
-      )
-    );
-
-  const links = [];
-  layout.blocks.forEach(b => {
-    const linkStarts = b.ports.filter(p => p.input && p.tag !== p.value);
-
-    const startNode = nodes.find(n => n.id === b.mri);
-    linkStarts.forEach(start => {
-      const startPort = startNode.ports[`${b.mri}-${start.label}`];
-
-      if (startPort !== undefined) {
-        // need to find the target port and link them together
-        const targetPortValue = start.value;
-        const endBlock = layout.blocks.find(block =>
-          block.ports.some(p => !p.input && p.tag === targetPortValue)
-        );
-
-        if (endBlock) {
-          const end = endBlock.ports.find(
-            p => !p.input && p.tag === targetPortValue
-          );
-
-          const endNode = nodes.find(n => n.id === endBlock.mri);
-
-          if (endNode) {
-            const endPort = endNode.ports[`${endBlock.mri}-${end.label}`];
-
-            const newLink = endPort.link(startPort);
-            newLink.id = `${endPort.name}-${startPort.name}`;
-            links.push(newLink);
-          }
-        }
-      }
-    });
-  });
-
-  engine.selectedHandler = () => {};
-
-  const models = model.addAll(...nodes, ...links);
-
-  models.forEach(item => {
-    item.addListener({
-      selectionChanged: e => {
-        engine.selectedHandler(e.entity.type, e.entity.id, e.isSelected);
-      },
-    });
-  });
-
-  engine.setDiagramModel(model);
-
-  if (layoutEngineView) {
-    engine.diagramModel.offsetX = layoutEngineView.offset.x;
-    engine.diagramModel.offsetY = layoutEngineView.offset.y;
-    engine.diagramModel.zoom = layoutEngineView.zoom;
-  }
-
-  return engine;
 };
 
 const showLayoutBin = (state, payload) => {
@@ -386,14 +299,25 @@ const cursorInLayoutZone = (state, payload) => {
   };
 };
 
+const isRelevantWidget = attribute => {
+  if (!attribute.raw || !attribute.raw.meta) {
+    return false;
+  }
+
+  const { tags } = attribute.raw.meta;
+  return (
+    tags &&
+    (tags.some(t => t.indexOf(sinkPort) > -1) ||
+      tags.some(t => t.indexOf('widget:icon') > -1) ||
+      tags.some(t => t.indexOf('widget:flowgraph') > -1))
+  );
+};
+
+const isLabelAttribute = attribute =>
+  attribute.calculated && attribute.calculated.name === 'label';
+
 const isRelevantAttribute = attribute =>
-  attribute &&
-  attribute.raw &&
-  attribute.raw.meta &&
-  attribute.raw.meta.tags &&
-  (attribute.raw.meta.tags.some(t => t.indexOf('inport:') > -1) ||
-    attribute.raw.meta.tags.some(t => t.indexOf('widget:icon') > -1) ||
-    attribute.raw.meta.tags.some(t => t.indexOf('widget:flowgraph') > -1));
+  attribute && (isRelevantWidget(attribute) || isLabelAttribute(attribute));
 
 const resetPorts = state => {
   let updatedState = selectPortForLink(state, undefined, true);
@@ -413,6 +337,7 @@ const resetPorts = state => {
   const layoutEngine = buildLayoutEngine(
     updatedState.layout,
     updatedState.layoutState.selectedBlocks,
+    updatedState.layoutState.selectedLinks,
     layoutEngineView
   );
   return {
@@ -421,6 +346,41 @@ const resetPorts = state => {
   };
 };
 
+const selectLayoutItem = (currentSelectedItems, itemName, isSelected) => {
+  let updatedItems = currentSelectedItems;
+  if (isSelected && !currentSelectedItems.find(b => b === itemName)) {
+    updatedItems = [...currentSelectedItems, itemName];
+  } else if (!isSelected) {
+    updatedItems = currentSelectedItems.filter(b => b !== itemName);
+  }
+
+  return updatedItems;
+};
+
+const selectLink = (state, payload) => ({
+  ...state,
+  layoutState: {
+    ...state.layoutState,
+    selectedLinks: selectLayoutItem(
+      state.layoutState.selectedLinks,
+      payload.linkName,
+      payload.isSelected
+    ),
+  },
+});
+
+const selectBlock = (state, payload) => ({
+  ...state,
+  layoutState: {
+    ...state.layoutState,
+    selectedBlocks: selectLayoutItem(
+      state.layoutState.selectedBlocks,
+      payload.blockName,
+      payload.isSelected
+    ),
+  },
+});
+
 export const LayoutReduxReducer = createReducer(
   {},
   {
@@ -428,15 +388,16 @@ export const LayoutReduxReducer = createReducer(
     [MalcolmShowBinType]: showLayoutBin,
     [MalcolmInLayoutDeleteZoneType]: cursorInLayoutZone,
     [MalcolmResetPortsType]: resetPorts,
+    [MalcolmSelectLinkType]: selectLink,
+    [MalcolmSelectBlock]: selectBlock,
   }
 );
 
 export default {
   processLayout,
+  updateLayoutAndEngine,
   updateBlockPosition,
-  selectBlock,
   shiftIsPressed,
   selectPortForLink,
-  buildLayoutEngine,
   isRelevantAttribute,
 };

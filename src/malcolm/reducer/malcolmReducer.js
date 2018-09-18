@@ -11,7 +11,6 @@ import {
   MalcolmRootBlockMeta,
   MalcolmReturn,
   MalcolmUpdateBlockPosition,
-  MalcolmSelectBlock,
   MalcolmShiftButton,
   MalcolmSocketConnect,
   MalcolmSelectPortType,
@@ -30,7 +29,7 @@ import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
 
 const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
-export const ARCHIVE_REFRESH_INTERVAL = 0.5; // minimum time in seconds between updates of displayed archive data
+export const ARCHIVE_REFRESH_INTERVAL = 2.0; // minimum time in seconds between updates of displayed archive data
 
 const initialMalcolmState = {
   messagesInFlight: {},
@@ -40,6 +39,7 @@ const initialMalcolmState = {
     rootNav: {
       path: '',
       children: [],
+      basePath: '/',
     },
   },
   blocks: {},
@@ -54,6 +54,7 @@ const initialMalcolmState = {
   layoutState: {
     shiftIsPressed: false,
     selectedBlocks: [],
+    selectedLinks: [],
     layoutCenter: {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2 - 64,
@@ -289,6 +290,8 @@ function setFlag(state, path, flagType, flagState) {
     blockName,
     attributeName
   );
+  let recalculateLayout = false;
+
   if (matchingAttribute >= 0) {
     const attributes = [...state.blocks[blockName].attributes];
     const attributeCopy = {
@@ -303,14 +306,32 @@ function setFlag(state, path, flagType, flagState) {
         ...attributeCopy.calculated.alarms,
         dirty: flagState ? AlarmStates.DIRTY : null,
       };
+    } else if (flagType === 'pending' && flagState === true) {
+      if (path[path.length - 1] === 'label') {
+        // only a PUT on the label attribute actually affects whether
+        // the layout should show the loading screen in blocks
+        attributeCopy.calculated.loading = true;
+        recalculateLayout = true;
+      }
     }
+
     attributes[matchingAttribute] = attributeCopy;
     blocks[blockName] = { ...state.blocks[blockName], attributes };
   }
-  return {
+
+  const updatedState = {
     ...state,
     blocks,
   };
+
+  // update layout here if it was a pending/true update
+  if (recalculateLayout) {
+    const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+    updatedState.layout = layoutUpdates.layout;
+    updatedState.layoutEngine = layoutUpdates.layoutEngine;
+  }
+
+  return updatedState;
 }
 
 function cleanBlocks(state) {
@@ -500,8 +521,10 @@ const handleErrorMessage = (state, action) => {
       archive.value.push({
         ...runParams,
         returned: { error: action.payload.message },
+        returnStatus: `Failed: ${action.payload.message}`,
       });
       archive.timeStamp.push({ ...localRunTime, localReturnTime: new Date() });
+      archive.alarmState.push(AlarmStates.MAJOR_ALARM);
       attributes[matchingAttributeIndex] = archive;
       updatedState.blockArchive[blockName] = {
         ...state.blockArchive[blockName],
@@ -526,6 +549,15 @@ const updateSocket = (state, payload) => {
   return {
     ...state,
   };
+};
+
+const updateLayoutOnState = state => {
+  const updatedState = state;
+  const layoutUpdates = layoutReducer.updateLayoutAndEngine(updatedState);
+  updatedState.layout = layoutUpdates.layout;
+  updatedState.layoutEngine = layoutUpdates.layoutEngine;
+
+  return updatedState;
 };
 
 const malcolmReducer = (state = initialMalcolmState, action = {}) => {
@@ -570,17 +602,9 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       );
 
       updatedState = NavigationReducer.updateNavTypes(updatedState);
+      updatedState = updateLayoutOnState(updatedState);
 
-      updatedState.layout = layoutReducer.processLayout(updatedState);
-
-      return {
-        ...updatedState,
-        layoutEngine: layoutReducer.buildLayoutEngine(
-          updatedState.layout,
-          updatedState.layoutState.selectedBlocks,
-          undefined
-        ),
-      };
+      return updatedState;
 
     case MalcolmCleanBlocks:
       return cleanBlocks(updatedState);
@@ -597,16 +621,6 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       return {
         ...updatedState,
         layout: layoutReducer.processLayout(updatedState),
-      };
-
-    case MalcolmSelectBlock:
-      return {
-        ...updatedState,
-        layoutState: layoutReducer.selectBlock(
-          updatedState,
-          action.payload.blockName,
-          action.payload.isSelected
-        ),
       };
 
     case MalcolmSelectPortType:

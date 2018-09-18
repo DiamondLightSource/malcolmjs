@@ -24,7 +24,7 @@
           "description": "Output D for phase outputs", 
           "tags": [
             "group:outputs", 
-            "outport:bool:SEQ2.OUTD", 
+            "sourcePort:bool:SEQ2.OUTD", 
             "widget:led"
           ], 
           "writeable": false, 

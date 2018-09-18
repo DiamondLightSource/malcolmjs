@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loadable from 'react-loadable';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import classNames from 'classnames';
+import renderHTML from 'react-render-html';
 import BlockPortWidget from '../blockPort/blockPortWidget.component';
 
 const styles = theme => ({
@@ -62,17 +63,30 @@ const styles = theme => ({
     paddingLeft: 4,
     paddingRight: 4,
   },
+  loadingContainer: {
+    width: 120,
+    height: 80,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 const portHeight = 23;
 
-const LoadableBlockIcon = Loadable.Map({
-  loader: {
-    renderHTML: () => import('react-render-html'),
-  },
-  render: (loaded, props) => loaded.renderHTML(props.icon),
-  loading: () => <Typography>Loading...</Typography>,
-});
+const LoadingBlock = props => (
+  <Paper
+    className={classNames(props.classes.block, {
+      [props.classes.selectedBlock]: props.node.selected,
+    })}
+    elevation={8}
+  >
+    <Typography className={props.classes.title}>{props.node.label}</Typography>
+    <div className={props.classes.loadingContainer}>
+      <CircularProgress size={30} />
+    </div>
+  </Paper>
+);
 
 const BlockWidget = props => {
   const inputPorts = Object.keys(props.node.ports).filter(
@@ -85,7 +99,9 @@ const BlockWidget = props => {
   const minHeight =
     Math.max(inputPorts.length, outputPorts.length) * portHeight;
 
-  return (
+  return props.node.loading ? (
+    <LoadingBlock classes={props.classes} node={props.node} />
+  ) : (
     <Paper
       className={classNames(props.classes.block, {
         [props.classes.selectedBlock]: props.node.selected,
@@ -98,6 +114,7 @@ const BlockWidget = props => {
       <Typography className={props.classes.title}>
         {props.node.label}
       </Typography>
+
       <div className={props.classes.blockContents} style={{ minHeight }}>
         <div className={props.classes.inputPortsContainer}>
           {inputPorts.map(p => (
@@ -109,9 +126,9 @@ const BlockWidget = props => {
           ))}
         </div>
         <div className={props.classes.iconContents}>
-          {props.node.icon && props.node.icon !== '<svg/>' ? (
-            <LoadableBlockIcon icon={props.node.icon} />
-          ) : null}
+          {props.node.icon && props.node.icon !== '<svg/>'
+            ? renderHTML(props.node.icon)
+            : null}
         </div>
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (
@@ -138,6 +155,7 @@ BlockWidget.propTypes = {
     ports: PropTypes.shape({}),
     description: PropTypes.string,
     selected: PropTypes.bool,
+    loading: PropTypes.bool,
     clickHandler: PropTypes.func,
     mouseDownHandler: PropTypes.func,
   }).isRequired,
@@ -151,6 +169,19 @@ BlockWidget.propTypes = {
     portContainer: PropTypes.string,
     iconContents: PropTypes.string,
     description: PropTypes.string,
+  }).isRequired,
+};
+
+LoadingBlock.propTypes = {
+  node: PropTypes.shape({
+    label: PropTypes.string,
+    selected: PropTypes.bool,
+  }).isRequired,
+  classes: PropTypes.shape({
+    block: PropTypes.string,
+    selectedBlock: PropTypes.string,
+    title: PropTypes.string,
+    loadingContainer: PropTypes.string,
   }).isRequired,
 };
 

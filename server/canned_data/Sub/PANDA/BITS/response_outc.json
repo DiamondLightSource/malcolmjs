@@ -24,7 +24,7 @@
           "description": "The value of C on the bit bus", 
           "tags": [
             "group:outputs", 
-            "outport:bool:BITS.OUTC", 
+            "sourcePort:bool:BITS.OUTC", 
             "widget:led"
           ], 
           "writeable": false, 
