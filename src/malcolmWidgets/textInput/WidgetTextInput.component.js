@@ -7,15 +7,18 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = () => ({
   textInput: {
     width: '100%',
-    maxHeight: 28,
+    maxHeight: '28px',
+    verticalAlign: 'bottom',
   },
   inputStyle: {
-    fontSize: '11pt',
+    fontSize: '12pt',
     textAlign: 'Right',
+    padding: '4px',
   },
   InputStyle: {
-    paddingRight: 4,
-    paddingLeft: 4,
+    paddingTop: '6px',
+    padding: '4px',
+    maxHeight: '28px',
   },
   button: {
     width: '24px',

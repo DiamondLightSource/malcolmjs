@@ -10,8 +10,9 @@ const baseDiv = theme => ({
 });
 
 const textUpdateBase = {
+  fontSize: '12pt',
   padding: 4,
-  paddingRight: 9,
+  paddingRight: 8,
   textAlign: 'Right',
   width: '80%',
   whiteSpace: 'pre',
@@ -30,6 +31,7 @@ const styles = theme => ({
     overflowY: 'auto',
   },
   textUpdateWrap: {
+    fontSize: '12pt',
     textAlign: 'Right',
     width: '100%',
     wordWrap: 'break-word',

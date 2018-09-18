@@ -14,8 +14,8 @@ const styles = theme => ({
   },
   select: {
     margin: 0,
-    marginTop: -2,
     maxHeight: 28,
+    paddingBottom: '4px',
   },
 });
 
