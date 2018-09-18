@@ -109,6 +109,10 @@ export const buildLayoutEngine = (
     });
   });
 
+  if (layout.locked) {
+    model.setLocked(true);
+  }
+
   engine.setDiagramModel(model);
 
   if (layoutEngineView) {

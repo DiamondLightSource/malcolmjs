@@ -82,12 +82,28 @@ const processAttributes = (messages, getState, dispatch) => {
   const layoutMessages = messages.filter(msg =>
     msg.attributeDelta.meta.tags.some(t => t === 'widget:flowgraph')
   );
+
   if (layoutMessages.length > 0) {
-    LayoutHandler.layoutAttributeReceived(
-      layoutMessages[0].originalRequest.path,
-      getState,
-      dispatch
-    );
+    layoutMessages.forEach(msg => {
+      const { navigationLists } = getState().malcolm.navigation;
+      const { path } = msg.originalRequest;
+      const matchingNavComponentIndex = navigationLists.findIndex(
+        nav => nav.blockMri === path[0]
+      );
+
+      if (
+        matchingNavComponentIndex > -1 &&
+        navigationLists.length > matchingNavComponentIndex + 1 &&
+        navigationLists[matchingNavComponentIndex + 1].path ===
+          msg.originalRequest.path[1]
+      ) {
+        LayoutHandler.layoutAttributeReceived(
+          msg.originalRequest.path,
+          getState,
+          dispatch
+        );
+      }
+    });
   }
 };
 

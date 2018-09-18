@@ -72,7 +72,8 @@ export class InfoDetails extends React.Component {
       (props.subElement && props.subElement[0] === 'row') ||
       (props.linkBlockName && props.linkBlockName !== state.subElement) ||
       props.isMethodInfo ||
-      Object.keys(state.info).length === 0
+      Object.keys(state.info).length === 0 ||
+      props.isLayoutLocked !== state.isLayoutLocked
     ) {
       let newState;
       let subElement;
@@ -90,6 +91,7 @@ export class InfoDetails extends React.Component {
         attributeName: props.attributeName,
         subElement,
         isLinkInfo: !!props.isLinkInfo,
+        isLayoutLocked: props.isLayoutLocked,
       };
     }
     return state;
@@ -115,7 +117,8 @@ export class InfoDetails extends React.Component {
       (!!nextProps.linkBlockName &&
         nextProps.linkBlockName !== this.state.subElement) ||
       nextProps.isMethodInfo ||
-      Object.keys(this.state.info).length === 0
+      Object.keys(this.state.info).length === 0 ||
+      nextProps.isLayoutLocked !== this.props.isLayoutLocked
     );
   }
 
@@ -211,6 +214,7 @@ InfoDetails.propTypes = {
   infoClickHandler: PropTypes.func.isRequired,
   isMethodInfo: PropTypes.bool.isRequired,
   // isLinkInfo: PropTypes.bool.isRequired,
+  isLayoutLocked: PropTypes.bool.isRequired,
 };
 
 InfoDetails.defaultProps = {
@@ -299,6 +303,7 @@ const mapStateToProps = state => {
     isMethodInfo:
       attribute && attribute.calculated && attribute.calculated.isMethod,
     linkBlockName,
+    isLayoutLocked: state.malcolm.layout && state.malcolm.layout.locked,
   };
 };
 
