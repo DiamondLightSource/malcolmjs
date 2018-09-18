@@ -147,6 +147,7 @@ const findAttributeComponent = props => {
                 variant="fab"
                 color="secondary"
                 onClick={() => props.openPalette()}
+                disabled={props.layoutLocked}
               >
                 <AddIcon />
               </Button>
@@ -160,6 +161,7 @@ const findAttributeComponent = props => {
               color="primary"
               variant="raised"
               onClick={() => props.runAutoLayout()}
+              disabled={props.layoutLocked}
             >
               Auto layout
             </Button>
@@ -276,6 +278,7 @@ const mapStateToProps = state => {
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
+    layoutLocked: state.malcolm.layout && state.malcolm.layout.locked,
   };
 };
 

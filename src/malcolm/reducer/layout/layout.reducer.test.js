@@ -60,6 +60,12 @@ const buildMalcolmState = () => ({
           },
         },
         {
+          raw: {
+            meta: {
+              writeable: true,
+              tags: [],
+            },
+          },
           calculated: {
             name: 'layout',
             layout: {

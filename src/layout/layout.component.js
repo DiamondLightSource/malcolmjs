@@ -60,6 +60,7 @@ class Layout extends React.Component {
         onMouseUp={() => this.props.mouseDownHandler(false)}
         onKeyUp={event => {
           if (
+            !this.props.locked &&
             Object.keys(deleteKeys).includes(event.key) &&
             this.state.hasFocus
           ) {
@@ -86,7 +87,11 @@ class Layout extends React.Component {
           maxNumberPointsPerLink={0}
           allowLooseLinks={false}
           inverseZoom
-          deleteKeys={this.state.hasFocus ? Object.values(deleteKeys) : []}
+          deleteKeys={
+            !this.props.locked && this.state.hasFocus
+              ? Object.values(deleteKeys)
+              : []
+          }
         />
       </div>
     );
@@ -108,10 +113,12 @@ Layout.propTypes = {
   mouseDownHandler: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
   linkClickHandler: PropTypes.func.isRequired,
+  locked: PropTypes.bool.isRequired,
 };
 
 export const mapStateToProps = state => ({
   layoutEngine: state.malcolm.layoutEngine,
+  locked: state.malcolm.layout && state.malcolm.layout.locked,
 });
 
 let showBinTimeout = null;

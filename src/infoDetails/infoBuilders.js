@@ -327,6 +327,7 @@ export const linkInfo = props => {
       inline: true,
       tag: 'info:button',
       showLabel: false,
+      disabled: props.isLayoutLocked,
       functions: {
         clickHandler: () => {
           props.eventHandler([blockMri, portName, 'value'], portNullValue);
