@@ -121,6 +121,8 @@ const processLayout = malcolmState => {
 
       layoutBlocks = findHiddenLinks(layoutBlocks);
       layout.blocks = layoutBlocks;
+
+      layout.locked = !attribute.raw.meta.writeable;
     }
   }
 
@@ -281,7 +283,7 @@ const makeBlockVisible = (state, payload) => {
 
 const showLayoutBin = (state, payload) => {
   const layoutState = { ...state.layoutState };
-  layoutState.showBin = payload.visible;
+  layoutState.showBin = !state.layout.locked && payload.visible;
 
   return {
     ...state,
