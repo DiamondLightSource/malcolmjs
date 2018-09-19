@@ -68,8 +68,8 @@ const styles = theme => ({
     align: 'center',
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -158,8 +158,8 @@ const findAttributeComponent = props => {
             style={{ right: props.openChild ? 360 + 29 : 29, top: 12 }}
           >
             <Button
-              color="secondary"
-              // variant="raised"
+              color="primary"
+              variant="raised"
               onClick={() => props.runAutoLayout()}
               disabled={props.layoutLocked}
             >

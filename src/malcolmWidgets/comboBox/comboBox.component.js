@@ -11,10 +11,10 @@ const styles = theme => ({
   formControl: {
     minHeight: 28,
     maxHeight: 28,
+    marginBottom: '2px',
   },
   select: {
     margin: 0,
-    marginTop: -2,
     maxHeight: 28,
   },
 });

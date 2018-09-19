@@ -126,8 +126,8 @@ class Plotter extends React.Component {
     clearTimeout(this.renderTimeout);
     const thisPlot = document.getElementById('plotComponent');
     if (thisPlot !== null) {
-      thisPlot.removeEventListener('mousedown');
-      thisPlot.removeEventListener('mouseup');
+      thisPlot.removeEventListener('mousedown', this.startChangingViewState);
+      thisPlot.removeEventListener('mouseup', this.finishChangingViewState);
     }
   }
 

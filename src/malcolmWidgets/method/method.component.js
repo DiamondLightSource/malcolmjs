@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -32,8 +31,8 @@ import { isArrayType } from '../../malcolm/reducer/method.reducer';
 const styles = () => ({
   div: {
     display: 'flex',
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 4,
+    paddingRight: 4,
     alignItems: 'center',
   },
   textName: {
@@ -54,8 +53,8 @@ const styles = () => ({
     color: 'red',
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -217,10 +216,13 @@ const MethodDetails = props => {
         </div>
         {Object.keys(props.outputValues).length !== 0 ? (
           <div>
-            <Typography className={props.classes.textName}>
+            <Typography
+              className={props.classes.textName}
+              variant="subheading"
+              style={{ paddingLeft: '20px', paddingTop: '4px' }}
+            >
               Last Return:
             </Typography>
-            <Divider />
             {Object.entries(props.outputs).map(output => (
               <div key={output[0]} className={props.classes.div}>
                 <Tooltip title={output[1].description}>
