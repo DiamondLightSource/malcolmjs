@@ -310,6 +310,7 @@ export const linkInfo = props => {
       inline: true,
       tag: portAttribute.raw.meta.choices ? 'widget:combo' : 'widget:textinput',
       choices: portAttribute.raw.meta.choices,
+      disabled: props.isLayoutLocked || !portAttribute.raw.meta.writeable,
       functions: {
         eventHandler: (nullPath, value) =>
           props.eventHandler([blockMri, portName, 'value'], value),
@@ -327,10 +328,14 @@ export const linkInfo = props => {
       inline: true,
       tag: 'info:button',
       showLabel: false,
-      disabled: props.isLayoutLocked,
+      disabled:
+        props.isLayoutLocked ||
+        !portAttribute.raw.meta.writeable ||
+        portAttribute.raw.value === portNullValue,
       functions: {
         clickHandler: () => {
           props.eventHandler([blockMri, portName, 'value'], portNullValue);
+          props.unselectLink([blockMri, portName]);
         },
       },
     },

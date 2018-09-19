@@ -11,10 +11,12 @@ import {
   malcolmSetFlag,
   malcolmRevertAction,
   malcolmUpdateTable,
+  malcolmSelectLink,
 } from '../malcolm/malcolmActionCreators';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import { idSeparator } from '../layout/layout.component';
 
 const getTag = element => {
   if (element && element.tag) {
@@ -72,6 +74,7 @@ export class InfoDetails extends React.Component {
       (props.subElement && props.subElement[0] === 'row') ||
       (props.linkBlockName && props.linkBlockName !== state.subElement) ||
       props.isMethodInfo ||
+      props.isLinkInfo ||
       Object.keys(state.info).length === 0 ||
       props.isLayoutLocked !== state.isLayoutLocked
     ) {
@@ -117,6 +120,7 @@ export class InfoDetails extends React.Component {
       (!!nextProps.linkBlockName &&
         nextProps.linkBlockName !== this.state.subElement) ||
       nextProps.isMethodInfo ||
+      nextProps.isLinkInfo ||
       Object.keys(this.state.info).length === 0 ||
       nextProps.isLayoutLocked !== this.props.isLayoutLocked
     );
@@ -213,6 +217,7 @@ InfoDetails.propTypes = {
   info: PropTypes.shape({}),
   infoClickHandler: PropTypes.func.isRequired,
   isMethodInfo: PropTypes.bool.isRequired,
+  isLinkInfo: PropTypes.bool.isRequired,
   // isLinkInfo: PropTypes.bool.isRequired,
   isLayoutLocked: PropTypes.bool.isRequired,
 };
@@ -220,6 +225,17 @@ InfoDetails.propTypes = {
 InfoDetails.defaultProps = {
   subElement: undefined,
   info: undefined,
+};
+
+const deselectLinkAction = path => (dispatch, getState) => {
+  const { selectedLinks } = getState().malcolm.layoutState;
+  const matchingSelectedLink = selectedLinks.find(l =>
+    l.endsWith(path[0] + idSeparator + path[1])
+  );
+
+  if (matchingSelectedLink) {
+    dispatch(malcolmSelectLink(matchingSelectedLink, false));
+  }
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -249,6 +265,9 @@ const mapDispatchToProps = dispatch => ({
   },
   addRow: (path, row, modifier) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
+  },
+  unselectLink: path => {
+    dispatch(deselectLinkAction(path));
   },
 });
 

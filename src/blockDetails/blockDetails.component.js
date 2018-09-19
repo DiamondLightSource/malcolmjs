@@ -89,12 +89,15 @@ export const areAttributesTheSame = (oldAttributes, newAttributes) =>
 
 const GroupDivider = props => <div className={props.classes.endDivider} />;
 
+const methodHasParameters = method =>
+  Object.keys(method.takes.elements).length > 0 ||
+  Object.keys(method.returns.elements).length > 0;
+
 const showDivider = (methods, index) =>
-  index < methods.length - 1 &&
-  (Object.keys(methods[index].raw.takes.elements).length > 0 ||
-    Object.keys(methods[index].raw.returns.elements).length > 0) &&
-  Object.keys(methods[index + 1].raw.takes.elements).length === 0 &&
-  Object.keys(methods[index + 1].raw.returns.elements).length === 0;
+  methodHasParameters(methods[index].raw) &&
+  ((index < methods.length - 1 &&
+    methodHasParameters(methods[index + 1].raw)) ||
+    index === methods.length - 1);
 
 const displayAttributes = props => {
   if (props.attributesAvailable) {
@@ -107,7 +110,6 @@ const displayAttributes = props => {
             blockName={props.blockName}
           />
         ))}
-        <div style={{ marginTop: 4 }} />
         {props.groups.map(group => (
           <GroupExpander
             key={group.attribute.calculated.name}
@@ -135,7 +137,6 @@ const displayAttributes = props => {
             ) : null}
           </div>
         ))}
-        <GroupDivider classes={props.classes} />
       </div>
     );
   }

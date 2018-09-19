@@ -61,6 +61,7 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
     >
       <WithStyles(Button)
         color="primary"
+        disabled={true}
         onClick={[Function]}
         variant="raised"
       >
@@ -155,6 +156,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
     >
       <WithStyles(Button)
         color="primary"
+        disabled={true}
         onClick={[Function]}
         variant="raised"
       >
@@ -215,6 +217,7 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
     >
       <WithStyles(Button)
         color="primary"
+        disabled={true}
         onClick={[Function]}
         variant="raised"
       >
@@ -275,6 +278,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
     >
       <WithStyles(Button)
         color="primary"
+        disabled={true}
         onClick={[Function]}
         variant="raised"
       >
