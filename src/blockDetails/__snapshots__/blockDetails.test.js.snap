@@ -58,21 +58,6 @@ exports[`Block Details renders correctly when metadata loaded and attributes loa
       attributeName="icon"
       key="icon"
     />
-    <div
-      style={
-        Object {
-          "marginTop": 4,
-        }
-      }
-    />
-    <GroupDivider
-      classes={
-        Object {
-          "endDivider": "BlockDetails-endDivider-2",
-          "progressContainer": "BlockDetails-progressContainer-1",
-        }
-      }
-    />
   </div>
 </div>
 `;
@@ -90,21 +75,6 @@ exports[`Block Details renders correctly when metadata loaded and waiting for at
       attributeName="icon"
       key="icon"
     />
-    <div
-      style={
-        Object {
-          "marginTop": 4,
-        }
-      }
-    />
-    <GroupDivider
-      classes={
-        Object {
-          "endDivider": "BlockDetails-endDivider-2",
-          "progressContainer": "BlockDetails-progressContainer-1",
-        }
-      }
-    />
   </div>
 </div>
 `;
@@ -120,25 +90,10 @@ exports[`Block Details renders groups correctly 1`] = `
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <div
-      style={
-        Object {
-          "marginTop": 4,
-        }
-      }
-    />
     <WithStyles(WidgetGroupExpander)
       expanded={false}
       groupName="health 1"
       key="parameters"
-    />
-    <GroupDivider
-      classes={
-        Object {
-          "endDivider": "BlockDetails-endDivider-2",
-          "progressContainer": "BlockDetails-progressContainer-1",
-        }
-      }
     />
   </div>
 </div>
@@ -149,27 +104,12 @@ exports[`Block Details renders methods correctly 1`] = `
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <div
-      style={
-        Object {
-          "marginTop": 4,
-        }
-      }
-    />
     <div>
       <Connect(WithStyles(MethodDetails))
         attributeName="save"
         key="save"
       />
     </div>
-    <GroupDivider
-      classes={
-        Object {
-          "endDivider": "BlockDetails-endDivider-2",
-          "progressContainer": "BlockDetails-progressContainer-1",
-        }
-      }
-    />
   </div>
 </div>
 `;

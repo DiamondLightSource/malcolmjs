@@ -72,6 +72,7 @@ export class InfoDetails extends React.Component {
       (props.subElement && props.subElement[0] === 'row') ||
       (props.linkBlockName && props.linkBlockName !== state.subElement) ||
       props.isMethodInfo ||
+      props.isLinkInfo ||
       Object.keys(state.info).length === 0 ||
       props.isLayoutLocked !== state.isLayoutLocked
     ) {
@@ -117,6 +118,7 @@ export class InfoDetails extends React.Component {
       (!!nextProps.linkBlockName &&
         nextProps.linkBlockName !== this.state.subElement) ||
       nextProps.isMethodInfo ||
+      nextProps.isLinkInfo ||
       Object.keys(this.state.info).length === 0 ||
       nextProps.isLayoutLocked !== this.props.isLayoutLocked
     );
@@ -213,6 +215,7 @@ InfoDetails.propTypes = {
   info: PropTypes.shape({}),
   infoClickHandler: PropTypes.func.isRequired,
   isMethodInfo: PropTypes.bool.isRequired,
+  isLinkInfo: PropTypes.bool.isRequired,
   // isLinkInfo: PropTypes.bool.isRequired,
   isLayoutLocked: PropTypes.bool.isRequired,
 };

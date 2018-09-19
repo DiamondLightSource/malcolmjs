@@ -165,6 +165,12 @@ describe('Block Details', () => {
           raw: {
             alarm: { severity: 0 },
             label: 'save method',
+            takes: {
+              elements: {},
+            },
+            returns: {
+              elements: {},
+            },
           },
         },
       ],
