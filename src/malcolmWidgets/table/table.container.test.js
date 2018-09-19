@@ -213,18 +213,20 @@ describe('Table container', () => {
       .find('button')
       .first()
       .simulate('click');
-    expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
-    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
-      'test1',
-      'layout',
-      'row.0'
-    );
     expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
     expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
       'test1',
       'layout',
       'row.0'
     );
+    /*
+     expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
+    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
+      'test1',
+      'layout',
+      'row.0'
+    );
+     */
   });
 
   it('subelement in url selects row correctly', () => {

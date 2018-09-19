@@ -726,10 +726,16 @@ exports[`Method component renders correctly with return value 1`] = `
     <div>
       <WithStyles(Typography)
         className="MethodDetails-textName-2"
+        style={
+          Object {
+            "paddingLeft": "20px",
+            "paddingTop": "4px",
+          }
+        }
+        variant="subheading"
       >
         Last Return:
       </WithStyles(Typography)>
-      <WithStyles(Divider) />
       <div
         className="MethodDetails-div-1"
         key="first"

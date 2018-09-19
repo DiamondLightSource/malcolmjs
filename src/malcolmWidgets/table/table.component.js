@@ -4,7 +4,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
 import Add from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
@@ -22,14 +22,14 @@ import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 const styles = theme => ({
   headerLayout: {
     tableLayout: 'fixed',
-    width: 'calc(100% - 15px)',
+    width: 'calc(100% - 15px - 32px)',
   },
   footerLayout: {
     width: '100%',
   },
   headerLayoutNoScroll: {
     tableLayout: 'fixed',
-    width: '100%',
+    width: 'calc(100% - 32px)',
   },
   tableLayout: {
     tableLayout: 'fixed',
@@ -38,10 +38,10 @@ const styles = theme => ({
     overflowY: 'auto',
     height: 'calc(100% - 75px)',
     width: '100%',
-    backgroundColor: '#424242',
+    backgroundColor: theme.palette.background.paper,
   },
   rowFormat: {
-    height: '30px',
+    height: '36px',
   },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
@@ -52,8 +52,8 @@ const styles = theme => ({
     borderLeft: `2px solid ${theme.palette.divider}`,
     textAlign: 'Center',
   },
-  blankCell: {
-    backgroundColor: 'rgb(48, 48, 48)',
+  selectedRow: {
+    backgroundColor: fade(theme.palette.secondary.main, 0.25),
     textAlign: 'Center',
     padding: '2px',
   },
@@ -63,22 +63,22 @@ const styles = theme => ({
     padding: '2px',
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },
   },
 });
 
-const isBlankCell = props =>
+const isSelectedRow = props =>
   props.selectedRow === props.row
-    ? props.classes.blankCell
+    ? props.classes.selectedRow
     : props.classes.textBody;
 
 const AlarmCell = props => (
   <TableCell
-    className={isBlankCell(props)}
+    className={isSelectedRow(props)}
     padding="none"
     key={[props.row, -1]}
   >
@@ -107,7 +107,7 @@ const RowData = props => {
   if (props.columnLabels === undefined) {
     valueCells = [
       <TableCell
-        className={isBlankCell(props)}
+        className={isSelectedRow(props)}
         padding="none"
         key={[props.row, 0]}
       >
@@ -124,7 +124,7 @@ const RowData = props => {
   } else {
     valueCells = props.columnLabels.map((label, column) => (
       <TableCell
-        className={isBlankCell(props)}
+        className={isSelectedRow(props)}
         padding="none"
         key={[props.row, column]}
       >
@@ -147,19 +147,7 @@ const RowData = props => {
         props.rowClickHandler(props.path, `row.${props.row}`);
       }}
     >
-      {[
-        props.hideInfo ? null : (
-          <AlarmCell
-            flags={props.flags}
-            row={props.row}
-            classes={props.classes}
-            path={props.path}
-            selectedRow={props.selectedRow}
-            infoClickHandler={props.infoClickHandler}
-          />
-        ),
-        ...valueCells,
-      ]}
+      {valueCells}
     </TableRow>
   );
 };
@@ -244,77 +232,121 @@ const WidgetTable = props => {
 
   return (
     <div style={{ height: '100%' }}>
-      <Table
-        className={
-          values.length > 20
-            ? props.classes.headerLayout
-            : props.classes.headerLayoutNoScroll
-        }
-      >
-        <TableHead>
-          <TableRow className={props.classes.rowFormat} key={-1}>
-            {[
-              props.hideInfo ? null : (
-                <TableCell
-                  className={props.classes.textHeadings}
-                  padding="none"
-                  key={[-1, -1]}
-                />
-              ),
-              ...columnHeadings,
-            ]}
-          </TableRow>
-        </TableHead>
-      </Table>
-      <div className={props.classes.tableBody}>
-        <Table className={props.classes.tableLayout}>
-          <TableBody>
-            {values.map((rowValue, row) => (
-              <RowData
-                key={`row.${row}`}
-                row={row}
-                path={props.attribute.calculated.path}
-                classes={props.classes}
-                flags={flags}
-                infoClickHandler={props.infoClickHandler}
-                rowClickHandler={props.rowClickHandler}
-                rowChangeHandler={rowChangeHandler}
-                rowFlagHandler={rowFlagHandler}
-                columnWidgetTags={columnWidgetTags}
-                columnLabels={columnLabels}
-                values={values}
-                meta={meta}
-                hideInfo={props.hideInfo}
-              />
-            ))}
-          </TableBody>
-        </Table>
-        <Table>
-          <TableFooter>
-            {meta.writeable ? (
-              <TableRow className={props.classes.rowFormat} key={values.length}>
-                <TableCell
-                  className={props.classes.incompleteRowFormat}
-                  padding="none"
-                  key={[values.length, 0]}
-                >
-                  <IconButton
-                    onClick={() =>
-                      props.addRow(
-                        props.attribute.calculated.path,
-                        values.length
-                      )
-                    }
-                  >
-                    <Add style={{ width: '30px', height: '30px' }} />
-                  </IconButton>
-                </TableCell>
+      <div style={{ display: 'flex' }}>
+        <div style={{ width: '32px' }}>
+          <Table>
+            <TableHead>
+              <TableRow className={props.classes.rowFormat}>
+                {props.hideInfo ? null : (
+                  <TableCell
+                    className={props.classes.textHeadings}
+                    padding="none"
+                    key={[-1, -1]}
+                  />
+                )}
               </TableRow>
-            ) : null}
-          </TableFooter>
+            </TableHead>
+          </Table>
+        </div>
+        <Table
+          className={
+            values.length > 20
+              ? props.classes.headerLayout
+              : props.classes.headerLayoutNoScroll
+          }
+        >
+          <TableHead>
+            <TableRow className={props.classes.rowFormat} key={-1}>
+              {columnHeadings}
+            </TableRow>
+          </TableHead>
         </Table>
       </div>
-
+      <div className={props.classes.tableBody}>
+        <div style={{ display: 'flex' }}>
+          <div style={{ height: 'inherit', width: '32px' }}>
+            {!props.hideInfo ? (
+              <Table>
+                {values.map((rowValue, row) => (
+                  <TableRow
+                    className={props.classes.rowFormat}
+                    key={row}
+                    onClick={() => {
+                      props.rowClickHandler(
+                        props.attribute.calculated.path,
+                        `row.${row}`
+                      );
+                    }}
+                  >
+                    <AlarmCell
+                      flags={flags}
+                      row={row}
+                      classes={props.classes}
+                      path={props.attribute.calculated.path}
+                      infoClickHandler={props.infoClickHandler}
+                      selectedRow={props.selectedRow}
+                    />
+                  </TableRow>
+                ))}
+              </Table>
+            ) : null}
+          </div>
+          <div style={{ height: 'inherit', width: 'calc(100% - 32px)' }}>
+            <Table className={props.classes.tableLayout}>
+              <TableBody>
+                {values.map((rowValue, row) => (
+                  <RowData
+                    key={`row.${row}`}
+                    row={row}
+                    path={props.attribute.calculated.path}
+                    classes={props.classes}
+                    flags={flags}
+                    infoClickHandler={props.infoClickHandler}
+                    rowClickHandler={props.rowClickHandler}
+                    rowChangeHandler={rowChangeHandler}
+                    rowFlagHandler={rowFlagHandler}
+                    columnWidgetTags={columnWidgetTags}
+                    columnLabels={columnLabels}
+                    values={values}
+                    meta={meta}
+                    hideInfo={props.hideInfo}
+                    selectedRow={props.selectedRow}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+        <div style={{ width: '100%' }}>
+          <Table>
+            <TableFooter>
+              {meta.writeable ? (
+                <TableRow
+                  className={props.classes.rowFormat}
+                  key={values.length}
+                >
+                  <TableCell
+                    className={props.classes.incompleteRowFormat}
+                    padding="none"
+                    key={[values.length, 0]}
+                  >
+                    <IconButton
+                      onClick={() =>
+                        props.addRow(
+                          props.attribute.calculated.path,
+                          values.length
+                        )
+                      }
+                    >
+                      <Add style={{ width: '32px', height: '32px' }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableFooter>
+          </Table>
+        </div>
+      </div>
       <Table className={props.classes.footerLayout}>
         <TableFooter>
           <TableRow className={props.classes.rowFormat}>
@@ -382,7 +414,7 @@ WidgetTable.propTypes = {
     footerLayout: PropTypes.string,
     tableLayout: PropTypes.string,
     textHeadings: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
     incompleteRowFormat: PropTypes.string,
@@ -394,12 +426,14 @@ WidgetTable.propTypes = {
   setFlag: PropTypes.func.isRequired,
   footerItems: PropTypes.arrayOf(PropTypes.node),
   hideInfo: PropTypes.bool,
+  selectedRow: PropTypes.number,
 };
 
 WidgetTable.defaultProps = {
   localState: undefined,
   footerItems: [],
   hideInfo: false,
+  selectedRow: undefined,
 };
 
 AlarmCell.propTypes = {
@@ -407,13 +441,14 @@ AlarmCell.propTypes = {
   path: PropTypes.arrayOf(PropTypes.string).isRequired,
   classes: PropTypes.shape({
     button: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
   }).isRequired,
   flags: PropTypes.shape({
     rows: PropTypes.arrayOf(PropTypes.shape({})),
   }).isRequired,
   infoClickHandler: PropTypes.func.isRequired,
+  // selectedRow: PropTypes.number,
 };
 
 RowData.propTypes = {
@@ -421,14 +456,14 @@ RowData.propTypes = {
   path: PropTypes.arrayOf(PropTypes.string).isRequired,
   classes: PropTypes.shape({
     button: PropTypes.string,
-    blankCell: PropTypes.string,
+    selectedRow: PropTypes.string,
     textBody: PropTypes.string,
     rowFormat: PropTypes.string,
   }).isRequired,
-  flags: PropTypes.shape({
-    rows: PropTypes.arrayOf(PropTypes.shape({})),
-  }).isRequired,
-  infoClickHandler: PropTypes.func.isRequired,
+  // flags: PropTypes.shape({
+  //  rows: PropTypes.arrayOf(PropTypes.shape({})),
+  // }).isRequired,
+  // infoClickHandler: PropTypes.func.isRequired,
   rowChangeHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
   rowFlagHandler: PropTypes.func.isRequired,
@@ -441,8 +476,8 @@ RowData.propTypes = {
     PropTypes.shape({}),
     PropTypes.shape({ elements: PropTypes.shape({}) }),
   ]).isRequired,
-  hideInfo: PropTypes.bool.isRequired,
-  selectedRow: PropTypes.number,
+  // hideInfo: PropTypes.bool.isRequired,
+  // selectedRow: PropTypes.number,
 };
 
 RowData.defaultProps = {
@@ -450,12 +485,12 @@ RowData.defaultProps = {
   selectedRow: undefined,
 };
 
-isBlankCell.propTypes = {
+isSelectedRow.propTypes = {
   selectedRow: PropTypes.number,
   row: PropTypes.number.isRequired,
 };
 
-isBlankCell.defaultProps = {
+isSelectedRow.defaultProps = {
   selectedRow: undefined,
 };
 export default withStyles(styles, { withTheme: true })(WidgetTable);

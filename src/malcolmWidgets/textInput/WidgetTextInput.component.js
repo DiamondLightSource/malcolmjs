@@ -7,19 +7,21 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = () => ({
   textInput: {
     width: '100%',
-    maxHeight: 28,
+    maxHeight: '28px',
+    verticalAlign: 'bottom',
   },
   inputStyle: {
-    fontSize: '11pt',
+    // fontSize: '12pt',
     textAlign: 'Right',
+    padding: '2px',
   },
   InputStyle: {
-    paddingRight: 4,
-    paddingLeft: 4,
+    padding: '2px',
+    maxHeight: '28px',
   },
   button: {
-    width: '22px',
-    height: '22px',
+    width: '24px',
+    height: '24px',
     '&:hover': {
       backgroundColor: 'transparent',
     },

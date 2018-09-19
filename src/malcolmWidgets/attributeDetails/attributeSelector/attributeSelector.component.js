@@ -119,14 +119,14 @@ export const selectorFunction = (
     case 'widget:flowgraph':
       return (
         <ButtonAction
-          text="View"
+          text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );
     case 'widget:table':
       return (
         <ButtonAction
-          text="View"
+          text={objectMeta.writeable ? 'Edit' : 'View'}
           clickAction={() => buttonClickHandler(path)}
         />
       );

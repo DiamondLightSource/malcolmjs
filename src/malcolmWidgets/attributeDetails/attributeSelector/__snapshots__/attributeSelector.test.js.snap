@@ -34,14 +34,14 @@ exports[`AttributeSelector selector function returns info:multiline and renders 
 exports[`AttributeSelector selects a buttonAction correctly for layout 1`] = `
 <WithStyles(ButtonAction)
   clickAction={[Function]}
-  text="View"
+  text="Edit"
 />
 `;
 
 exports[`AttributeSelector selects a buttonAction correctly for table 1`] = `
 <WithStyles(ButtonAction)
   clickAction={[Function]}
-  text="View"
+  text="Edit"
 />
 `;
 
