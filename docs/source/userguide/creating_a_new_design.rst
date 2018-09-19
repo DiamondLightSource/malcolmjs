@@ -87,6 +87,22 @@ Four types of `attribute_` are available, and a `block_` may support zero or mor
 
 Attributes whose value can be specified at design-time are denoted by a highlight below the attribute value field.
 
+
+Obtaining Information About an Attribute
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Information about an individual Attribute can be obtained by selecting the 'information icon' associated with it from the Block Information Panel.  This opens the Attribute Information Panel within the right-hand panel of the User Interface.
+
+For each Attribute the following information is displayed:
+
+    * The fully qualified path to the Attribute allowing it to be uniquely identified within the PandA Design.
+    * Basic meta-data about the Attribute including it's type, a brief description of its purpose and whether it is a writeable Attribute.
+    * Details of the `alarm state <working_with_alarms_>` associated with the Attribute, including severity and any corresponding message.
+    * Timestamp details showing when the Attribute was last updated.
+
+Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying `PandABlocks-FPGA`_ specification.
+
+
 Manually Setting or Modifying a Block Attribute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

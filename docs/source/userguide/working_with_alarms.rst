@@ -1,3 +1,5 @@
+.. _working_with_alarms_:
+
 Working With Alarms
 ===================
 
