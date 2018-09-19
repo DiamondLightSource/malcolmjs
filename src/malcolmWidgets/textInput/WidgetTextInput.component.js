@@ -11,13 +11,12 @@ const styles = () => ({
     verticalAlign: 'bottom',
   },
   inputStyle: {
-    fontSize: '12pt',
+    // fontSize: '12pt',
     textAlign: 'Right',
-    padding: '4px',
+    padding: '2px',
   },
   InputStyle: {
-    paddingTop: '6px',
-    padding: '4px',
+    padding: '2px',
     maxHeight: '28px',
   },
   button: {
