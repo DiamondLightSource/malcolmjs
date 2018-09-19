@@ -27,18 +27,20 @@ class Layout extends React.Component {
     const layoutDiv = document.getElementById('LayoutDiv');
     if (layoutDiv !== null) {
       layoutDiv.addEventListener('wheel', event => {
+        console.log('#############');
+        console.log(event);
         if (event.deltaMode === event.DOM_DELTA_LINE) {
           event.stopPropagation();
+          console.log('altering wheel event');
           const customScroll = new WheelEvent('wheel', {
             bubbles: event.bubbles,
             deltaMode: event.DOM_DELTA_PIXEL,
             clientX: event.clientX,
             clientY: event.clientY,
             deltaX: event.deltaX,
-            deltaY: 10 * event.deltaY,
+            deltaY: 100 * Math.sign(event.deltaY),
           });
-          console.log('#############');
-          console.log(event);
+
           event.target.dispatchEvent(customScroll);
         }
       });

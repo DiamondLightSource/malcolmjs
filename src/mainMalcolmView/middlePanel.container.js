@@ -161,7 +161,7 @@ const findAttributeComponent = props => {
               color="primary"
               variant="raised"
               onClick={() => props.runAutoLayout()}
-              disabled={props.layoutLocked}
+              disabled={props.layoutLocked || props.disableAutoLayout}
             >
               Auto layout
             </Button>
@@ -278,6 +278,8 @@ const mapStateToProps = state => {
     tags: attribute && attribute.raw.meta ? attribute.raw.meta.tags : [],
     typeId: attribute && attribute.raw.meta ? attribute.raw.meta.typeid : '',
     showBin: state.malcolm.layoutState.showBin,
+    disableAutoLayout:
+      state.malcolm.layout && state.malcolm.layout.blocks.length === 0,
     layoutLocked: state.malcolm.layout && state.malcolm.layout.locked,
   };
 };
