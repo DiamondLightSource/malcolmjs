@@ -335,6 +335,7 @@ export const linkInfo = props => {
       functions: {
         clickHandler: () => {
           props.eventHandler([blockMri, portName, 'value'], portNullValue);
+          props.unselectLink([blockMri, portName]);
         },
       },
     },

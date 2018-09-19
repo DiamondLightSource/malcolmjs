@@ -11,10 +11,12 @@ import {
   malcolmSetFlag,
   malcolmRevertAction,
   malcolmUpdateTable,
+  malcolmSelectLink,
 } from '../malcolm/malcolmActionCreators';
 import { buildAttributeInfo, linkInfo } from './infoBuilders';
 import blockUtils from '../malcolm/blockUtils';
 import navigationActions from '../malcolm/actions/navigation.actions';
+import { idSeparator } from '../layout/layout.component';
 
 const getTag = element => {
   if (element && element.tag) {
@@ -225,6 +227,17 @@ InfoDetails.defaultProps = {
   info: undefined,
 };
 
+const deselectLinkAction = path => (dispatch, getState) => {
+  const { selectedLinks } = getState().malcolm.layoutState;
+  const matchingSelectedLink = selectedLinks.find(l =>
+    l.endsWith(path[0] + idSeparator + path[1])
+  );
+
+  if (matchingSelectedLink) {
+    dispatch(malcolmSelectLink(matchingSelectedLink, false));
+  }
+};
+
 const mapDispatchToProps = dispatch => ({
   changeInfoHandler: (path, subElement) => {
     dispatch(
@@ -252,6 +265,9 @@ const mapDispatchToProps = dispatch => ({
   },
   addRow: (path, row, modifier) => {
     dispatch(malcolmUpdateTable(path, { insertRow: true, modifier }, row));
+  },
+  unselectLink: path => {
+    dispatch(deselectLinkAction(path));
   },
 });
 
