@@ -58,15 +58,15 @@ In this example we see:
 The Attribute View
 ------------------
 
-The User Interface automatically transitions to Attribute View when the 'information' icon associated with an Attribute is selected from either the 'left-hand panel' or 'right-hand panel'.  
+The User Interface automatically transitions to Attribute View when an Attribute is selected from either the 'left-hand panel' or 'right-hand panel'.  
 
     * If the Attribute is selected from the 'left-hand panel' more detailed information about that Attribute is displayed in the 'right-hand panel'.
     * If the Attribute is selected from the 'right-hand panel' the `design_element_` represented in the 'right-hand panel' is transferred to the 'left-hand panel' as the new focus of interest, with more detailed information about the selected Attribute now presented on the right.
 
 In both cases the 'central panel' presents a view of the Attribute's value against time.  This may represent a constantly changing value, for example a calculated data value updated every 2ms, or a periodically changing boolean on/off status indicator that only changes every 10h.  Two representations of the Attribute value are available and can be selected by choosing the appropriate option at the bottom of the 'central panel' thus:
 
-    * Graph View - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view if interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use. 
-    * Table View - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.  Tables can be exported for offline analysis.
+    * Plot View - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `working_with_charts_` for further information.
+    * Table View - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.  Tables can be exported for offline analysis.  See `working_with_tables_` for further information.
     
 **THIS NEEDS AN IMAGE**
 

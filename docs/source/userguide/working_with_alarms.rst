@@ -26,6 +26,9 @@ The PandA User Inferface reflects the three tiered alarm classification utilised
     | Major            | Attribute data is deemed to be outside acceptable operating         |
     |                  | conditions and immediate action is recommended.                     |
     +------------------+---------------------------------------------------------------------+
+    | Disconnected     | The Block hosting the Attribute is not currently connected and      |
+    |                  | data is therefore not available.                                    |
+    +------------------+---------------------------------------------------------------------+
 
 **DEFINITIONS TO BE CONFIRMED**
 
@@ -58,6 +61,14 @@ Alarms are presented via the PandA User Inferface using a combination of colour 
     +------------------+---------------------------------+
     | Major            | Red           | Filled circle   |
     +------------------+---------------------------------+
+    | Disconnected     | Purple        | N/A             |
+    +------------------+---------------------------------+
 
 **?potential to use image here?**
+
+Within Block Information Panels (presented in either the left-hand or right-hand panels) alarm states are displayed to the left of each Attribute, the default 'blue information icon' representing a 'normal' alarm state.  
+
+When presenting Attribute data via the `Attribute Table <working_with_tables_>` view corresponding icons are displayed against each row of data.
+
+When presenting Attribute data via the `Attribute Chart <working_with_charts_>` view the line colour denotes the alarm state.
 

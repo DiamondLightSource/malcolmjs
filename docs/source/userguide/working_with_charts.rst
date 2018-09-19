@@ -1,3 +1,5 @@
+.. _working_With_Charts_:
+
 Working With Charts
 ===================
 
