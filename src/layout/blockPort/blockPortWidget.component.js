@@ -11,16 +11,27 @@ const styles = () => ({
     alignItems: 'center',
     height: 20,
   },
+  portDropZone: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    // backgroundColor: 'yellow',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+    border: 'dashed 2px rgba(0,0,0,0)',
+  },
   port: {
     width: 12,
     height: 12,
     borderRadius: 6,
   },
   portIn: {
-    marginRight: 3,
+    marginRight: 0,
   },
   portOut: {
-    marginLeft: 3,
+    marginLeft: 0,
   },
   portLabel: {
     fontSize: 12,
@@ -48,7 +59,7 @@ class BlockPortWidget extends BaseWidget {
   }
 
   getClassName() {
-    return `port ${this.props.classes.port} ${super.getClassName()}${
+    return `port ${this.props.classes.portDropZone} ${super.getClassName()}${
       this.state.selected ? this.bem('--selected') : ''
     }`;
   }
@@ -60,7 +71,12 @@ class BlockPortWidget extends BaseWidget {
 
     const portStyle = {
       ...(this.props.inputPort ? styles().portIn : styles().portOut),
-      background: this.state.selected ? portColour[100] : portColour[500],
+      borderColor:
+        this.props.linkInProgress &&
+        this.props.canConnectToStartPort &&
+        this.state.selected
+          ? this.props.theme.palette.secondary.main
+          : 'rgba(0,0,0,0)',
     };
 
     const hiddenLink = (
@@ -70,20 +86,35 @@ class BlockPortWidget extends BaseWidget {
     );
     const port = (
       <div
+        className={this.props.classes.portDropZone}
+        style={portStyle}
         onMouseEnter={() => {
           this.setState({ selected: true });
         }}
         onMouseLeave={() => {
           this.setState({ selected: false });
         }}
-        style={portStyle}
+        role="presentation"
         {...this.getProps()}
         data-name={this.props.portName}
         data-nodeid={this.props.nodeId}
-        role="presentation"
         onMouseDown={() => this.props.mouseDownHandler(this.props.portId, true)}
         onMouseUp={() => this.props.mouseDownHandler(this.props.portId, false)}
-      />
+      >
+        <div
+          className={this.props.classes.port}
+          style={{
+            background:
+              this.state.selected &&
+              ((this.props.linkInProgress &&
+                this.props.canConnectToStartPort) ||
+                !this.props.linkInProgress)
+                ? portColour[100]
+                : portColour[500],
+          }}
+          role="presentation"
+        />
+      </div>
     );
     const label = (
       <Typography className={this.props.classes.portLabel}>
@@ -103,8 +134,23 @@ class BlockPortWidget extends BaseWidget {
 }
 
 export const mapStateToProps = (state, ownProps) => {
-  const node = state.malcolm.layoutEngine.diagramModel.nodes[ownProps.nodeId];
+  const allNodes = state.malcolm.layoutEngine.diagramModel.nodes;
+  const node = allNodes[ownProps.nodeId];
   const port = node ? node.ports[ownProps.portId] : undefined;
+
+  let canConnectToStartPort = false;
+  if (state.malcolm.layoutState.startPortForLink) {
+    const matchingNode = Object.values(allNodes).find(
+      n => n.ports[state.malcolm.layoutState.startPortForLink]
+    );
+    if (matchingNode) {
+      const startPort =
+        matchingNode.ports[state.malcolm.layoutState.startPortForLink];
+      canConnectToStartPort = !(
+        startPort.in === port.in || startPort.portType !== port.portType
+      );
+    }
+  }
 
   return {
     inputPort: port.in,
@@ -113,6 +159,10 @@ export const mapStateToProps = (state, ownProps) => {
     portType: port.portType,
     hiddenLink: port.hiddenLink,
     portValue: port.value,
+    linkInProgress:
+      state.malcolm.layoutState.startPortForLink !== undefined &&
+      state.malcolm.layoutState.endPortForLink === undefined,
+    canConnectToStartPort,
     mouseDownHandler: state.malcolm.layoutEngine.portMouseDown,
   };
 };
