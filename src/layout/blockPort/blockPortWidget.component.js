@@ -133,10 +133,19 @@ class BlockPortWidget extends BaseWidget {
   }
 }
 
+const defaultPort = {
+  in: false,
+  portName: '',
+  portLabel: '',
+  portType: '',
+  hiddenLink: false,
+  value: '',
+};
+
 export const mapStateToProps = (state, ownProps) => {
   const allNodes = state.malcolm.layoutEngine.diagramModel.nodes;
   const node = allNodes[ownProps.nodeId];
-  const port = node ? node.ports[ownProps.portId] : undefined;
+  const port = node ? node.ports[ownProps.portId] : defaultPort;
 
   let canConnectToStartPort = false;
   if (state.malcolm.layoutState.startPortForLink) {
