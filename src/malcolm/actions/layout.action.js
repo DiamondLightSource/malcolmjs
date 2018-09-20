@@ -33,10 +33,12 @@ const selectPortInClient = (portId, start) => ({
 
 export const selectPort = (portId, start) => (dispatch, getState) => {
   if (!portId) {
-    dispatch({
-      type: MalcolmResetPortsType,
-      payload: {},
-    });
+    if (getState().malcolm.layoutState.startPortForLink) {
+      dispatch({
+        type: MalcolmResetPortsType,
+        payload: {},
+      });
+    }
     return;
   }
 
