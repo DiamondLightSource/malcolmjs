@@ -32,6 +32,16 @@ const selectPortInClient = (portId, start) => ({
 });
 
 export const selectPort = (portId, start) => (dispatch, getState) => {
+  if (!portId) {
+    if (getState().malcolm.layoutState.startPortForLink) {
+      dispatch({
+        type: MalcolmResetPortsType,
+        payload: {},
+      });
+    }
+    return;
+  }
+
   const port = findPort(getState().malcolm.layout.blocks, portId);
 
   if (port && port.input && port.value !== port.tag) {

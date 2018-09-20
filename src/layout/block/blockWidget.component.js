@@ -33,13 +33,13 @@ const styles = theme => ({
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    left: -8,
+    left: -12,
   },
   outputPortsContainer: {
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    right: -8,
+    right: -12,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
@@ -116,6 +116,11 @@ const BlockWidget = props => {
       </Typography>
 
       <div className={props.classes.blockContents} style={{ minHeight }}>
+        <div className={props.classes.iconContents}>
+          {props.node.icon && props.node.icon !== '<svg/>'
+            ? renderHTML(props.node.icon)
+            : null}
+        </div>
         <div className={props.classes.inputPortsContainer}>
           {inputPorts.map(p => (
             <BlockPortWidget
@@ -124,11 +129,6 @@ const BlockWidget = props => {
               portId={p}
             />
           ))}
-        </div>
-        <div className={props.classes.iconContents}>
-          {props.node.icon && props.node.icon !== '<svg/>'
-            ? renderHTML(props.node.icon)
-            : null}
         </div>
         <div className={props.classes.outputPortsContainer}>
           {outputPorts.map(p => (

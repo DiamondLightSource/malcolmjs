@@ -5,7 +5,7 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
   className="BlockPortWidget-container-1"
 >
   <div
-    className="port BlockPortWidget-port-2 malcolm-port "
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
     data-name="val1"
     data-nodeid="node1"
     onMouseDown={[Function]}
@@ -15,13 +15,23 @@ exports[`BlockPortWidget input port renders correctly 1`] = `
     role="presentation"
     style={
       Object {
-        "background": "blue",
-        "marginRight": 3,
+        "borderColor": "rgba(0,0,0,0)",
+        "marginRight": 0,
       }
     }
-  />
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
   <WithStyles(Typography)
-    className="BlockPortWidget-portLabel-5"
+    className="BlockPortWidget-portLabel-6"
   >
     val 1
   </WithStyles(Typography)>
@@ -33,14 +43,14 @@ exports[`BlockPortWidget input port renders correctly with hidden link 1`] = `
   className="BlockPortWidget-container-1"
 >
   <div
-    className="BlockPortWidget-hiddenLink-6"
+    className="BlockPortWidget-hiddenLink-7"
   >
     <WithStyles(Typography)>
       HIDDEN_BLOCK.VAL
     </WithStyles(Typography)>
   </div>
   <div
-    className="port BlockPortWidget-port-2 malcolm-port "
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
     data-name="val1"
     data-nodeid="node1"
     onMouseDown={[Function]}
@@ -50,13 +60,23 @@ exports[`BlockPortWidget input port renders correctly with hidden link 1`] = `
     role="presentation"
     style={
       Object {
-        "background": "blue",
-        "marginRight": 3,
+        "borderColor": "rgba(0,0,0,0)",
+        "marginRight": 0,
       }
     }
-  />
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
   <WithStyles(Typography)
-    className="BlockPortWidget-portLabel-5"
+    className="BlockPortWidget-portLabel-6"
   >
     val 1
   </WithStyles(Typography)>
@@ -68,12 +88,12 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
   className="BlockPortWidget-container-1"
 >
   <WithStyles(Typography)
-    className="BlockPortWidget-portLabel-5"
+    className="BlockPortWidget-portLabel-6"
   >
     val 1
   </WithStyles(Typography)>
   <div
-    className="port BlockPortWidget-port-2 malcolm-port "
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
     data-name="val1"
     data-nodeid="node1"
     onMouseDown={[Function]}
@@ -83,11 +103,21 @@ exports[`BlockPortWidget output port renders correctly 1`] = `
     role="presentation"
     style={
       Object {
-        "background": "blue",
-        "marginLeft": 3,
+        "borderColor": "rgba(0,0,0,0)",
+        "marginLeft": 0,
       }
     }
-  />
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
 </div>
 `;
 
@@ -96,12 +126,12 @@ exports[`BlockPortWidget output port renders correctly with hidden link 1`] = `
   className="BlockPortWidget-container-1"
 >
   <WithStyles(Typography)
-    className="BlockPortWidget-portLabel-5"
+    className="BlockPortWidget-portLabel-6"
   >
     val 1
   </WithStyles(Typography)>
   <div
-    className="port BlockPortWidget-port-2 malcolm-port "
+    className="port BlockPortWidget-portDropZone-2 malcolm-port "
     data-name="val1"
     data-nodeid="node1"
     onMouseDown={[Function]}
@@ -111,13 +141,23 @@ exports[`BlockPortWidget output port renders correctly with hidden link 1`] = `
     role="presentation"
     style={
       Object {
-        "background": "blue",
-        "marginLeft": 3,
+        "borderColor": "rgba(0,0,0,0)",
+        "marginLeft": 0,
       }
     }
-  />
+  >
+    <div
+      className="BlockPortWidget-port-3"
+      role="presentation"
+      style={
+        Object {
+          "background": "blue",
+        }
+      }
+    />
+  </div>
   <div
-    className="BlockPortWidget-hiddenLink-6"
+    className="BlockPortWidget-hiddenLink-7"
   >
     <WithStyles(Typography)>
       HIDDEN_BLOCK.VAL
