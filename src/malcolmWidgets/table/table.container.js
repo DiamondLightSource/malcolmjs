@@ -14,7 +14,9 @@ import {
   malcolmPutAction,
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
-import WidgetTable from './table.component';
+// import WidgetTable from './table.component';
+// import NewWidgetTable from './dataGridTable.component';
+import NewWidgetTable from './virtualizedTable.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
 
@@ -23,36 +25,41 @@ const TableContainer = props => {
   if (props.attribute.localState === undefined) {
     props.copyTable(path);
   }
-
+  const pad = child => (
+    <div style={{ padding: '4px', flexGrow: 1 }}>{child}</div>
+  );
   const footerItems = [
     ...props.footerItems,
-    props.attribute.localState &&
-    props.attribute.localState.flags.table.fresh ? (
-      <Typography>Up to date!</Typography>
-    ) : (
-      <Typography>
-        Update received @{' '}
-        {new Date(
-          props.attribute.raw.timeStamp.secondsPastEpoch * 1000
-        ).toISOString()}
-      </Typography>
+    props.attribute.localState && props.attribute.localState.flags.table.fresh
+      ? pad(<Typography>Up to date!</Typography>)
+      : pad(
+          <Typography>
+            Update received @{' '}
+          {new Date(
+              props.attribute.raw.timeStamp.secondsPastEpoch * 1000
+            ).toISOString()}
+        </Typography>
+        ),
+    pad(
+      <ButtonAction
+        clickAction={() => {
+          props.rowClickHandler(path);
+          props.revertHandler(path);
+        }}
+        text="Discard changes"
+        method
+      />
     ),
-    <ButtonAction
-      clickAction={() => {
-        props.rowClickHandler(path);
-        props.revertHandler(path);
-      }}
-      text="Discard changes"
-      method
-    />,
-    <ButtonAction
-      clickAction={() => props.putTable(path, props.attribute.localState)}
-      text="Submit"
-      method
-    />,
+    pad(
+      <ButtonAction
+        clickAction={() => props.putTable(path, props.attribute.localState)}
+        text="Submit"
+        method
+      />
+    ),
   ];
   return (
-    <WidgetTable
+    <NewWidgetTable
       attribute={props.attribute}
       localState={props.attribute.localState}
       eventHandler={props.eventHandler}
