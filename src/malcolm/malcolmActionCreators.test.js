@@ -37,7 +37,7 @@ describe('Malcolm Action Creators', () => {
     expect(action.payload.child).toEqual(false);
   });
 
-  it('malcolmLayoutUpdatePosition updates position locally and then on the server', () => {
+  const runLayoutPositionUpdateTest = selectedBlocks => {
     const translation = { x: 10, y: 20 };
     const asyncAction = malcolmLayoutUpdatePosition(translation);
 
@@ -69,7 +69,7 @@ describe('Malcolm Action Creators', () => {
           'PANDA:CLOCKS': {},
         },
         layoutState: {
-          selectedBlocks: ['PANDA:CLOCKS'],
+          selectedBlocks,
         },
       },
     };
@@ -96,5 +96,13 @@ describe('Malcolm Action Creators', () => {
       x: [10],
       y: [20],
     });
+  };
+
+  it('malcolmLayoutUpdatePosition updates position locally and then on the server', () => {
+    runLayoutPositionUpdateTest(['PANDA:CLOCKS']);
+  });
+
+  it('malcolmLayoutUpdatePosition strips out nulls and undefined from selected blocks', () => {
+    runLayoutPositionUpdateTest(['PANDA:CLOCKS', null, undefined]);
   });
 });
