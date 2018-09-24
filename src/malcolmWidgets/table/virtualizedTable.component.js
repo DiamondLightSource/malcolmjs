@@ -82,6 +82,23 @@ const widgetWidths = {
 
 const getWidgetWidth = tag => widgetWidths[tag];
 
+const getColumnWidths = (divWidth, columnWidgetTags) => {
+  const fixedWidths = columnWidgetTags.map(tag => getWidgetWidth(tag));
+  const usedWidth = fixedWidths
+    .filter(val => val !== undefined)
+    .reduce((total, val) => total + val);
+  const numVariableWidth = fixedWidths.filter(val => val === undefined)
+    .length;
+  return ((divWidth - usedWidth) > numVariableWidth*50) ? fixedWidths.map(
+    val =>
+      val !== undefined ? val : (divWidth - usedWidth) / numVariableWidth
+  ) : fixedWidths.map(
+    val =>
+      val !== undefined ? val : 150
+  );
+
+};
+
 const isSelectedRow = props =>
   props.selectedRow === props.row
     ? props.classes.selectedRow
@@ -185,10 +202,17 @@ class NewWidgetTable extends React.Component {
         ];
       } else {
         const fixedWidths = columnWidgetTags.map(tag => getWidgetWidth(tag));
-        const usedWidth = fixedWidths.filter(val => val !== undefined).reduce((total, val) => total + val);
-        const numVariableWidth = fixedWidths.filter(val => val === undefined).length;
-        const widths = fixedWidths.map(
-          val => (val !== undefined ? val : (width - usedWidth) / numVariableWidth)
+        const usedWidth = fixedWidths
+          .filter(val => val !== undefined)
+          .reduce((total, val) => total + val);
+        const numVariableWidth = fixedWidths.filter(val => val === undefined)
+          .length;
+        const widths = ((width - usedWidth) > numVariableWidth*40) ? fixedWidths.map(
+          val =>
+            val !== undefined ? val : (width - usedWidth) / numVariableWidth
+        ) : fixedWidths.map(
+          val =>
+            val !== undefined ? val : 150
         );
         console.log('------------');
         console.log(fixedWidths);
@@ -268,7 +292,11 @@ class NewWidgetTable extends React.Component {
     return (
       <div style={{ width: '100%', height: '100%' }}>
         <AutoSizer>
-          {({ width, height }) => (
+          {(autoSize) => {
+            const columnWidths = getColumnWidths(autoSize.width, columnWidgetTags);
+            const { height } = autoSize;
+            const width = columnWidths.reduce((total, val) => total + val);
+            return (
             <div>
               <Table
                 height={height - 84}
@@ -279,6 +307,8 @@ class NewWidgetTable extends React.Component {
                 rowGetter={({ index }) =>
                   getRowData(index, columnWidgetTags, this.props)
                 }
+                scrollToIndex={this.props.selectedRow}
+                onScroll={event => {console.log('~~~~~~~~ did scroll!'); console.log(event);}}
               >
                 {columns(width)}
               </Table>
@@ -326,7 +356,7 @@ class NewWidgetTable extends React.Component {
                 {this.props.footerItems}
               </div>
             </div>
-          )}
+          )}}
         </AutoSizer>
       </div>
     );
