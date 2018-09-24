@@ -18,3 +18,7 @@ body {
 .srd-default-link--highlight-path {
   stroke: #f50057 !important;
 }
+
+:-moz-focusring {
+  color: white !important;
+}
