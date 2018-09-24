@@ -192,8 +192,8 @@ describe('AttributeSelector', () => {
     expect(testStore.getActions()[1]).toEqual(putAction);
   });
 
-  it('dispatches path change on table button click', () => {
-    const testStore = mockStore(buildState(buildAttribute('table')));
+  const runButtonActionTest = attributeType => {
+    const testStore = mockStore(buildState(buildAttribute(attributeType)));
     const wrapper = mount(
       <AttributeSelector
         blockName="PANDA1"
@@ -210,26 +210,14 @@ describe('AttributeSelector', () => {
     expect(actions[0].type).toEqual('TEST');
     expect(actions[0].blockName).toEqual('test1');
     expect(actions[0].attribute).toEqual('attr');
+  };
+
+  it('dispatches path change on table button click', () => {
+    runButtonActionTest('table');
   });
 
   it('dispatches path change on flowgraph button click', () => {
-    const testStore = mockStore(buildState(buildAttribute('flowgraph')));
-    const wrapper = mount(
-      <AttributeSelector
-        blockName="PANDA1"
-        attributeName="attribute1"
-        store={testStore}
-      />
-    );
-    wrapper
-      .find('button')
-      .first()
-      .simulate('click');
-
-    const actions = testStore.getActions();
-    expect(actions[0].type).toEqual('TEST');
-    expect(actions[0].blockName).toEqual('test1');
-    expect(actions[0].attribute).toEqual('attr');
+    runButtonActionTest('flowgraph');
   });
 
   it('dispatches dirty on focus for textipnut', () => {

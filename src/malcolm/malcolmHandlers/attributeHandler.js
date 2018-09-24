@@ -63,12 +63,7 @@ const processAttribute = (request, changedAttribute) => {
 
 const processAttributes = (messages, getState, dispatch) => {
   const actions = messages.map(msg =>
-    processAttribute(
-      msg.originalRequest,
-      msg.attributeDelta,
-      getState,
-      dispatch
-    )
+    processAttribute(msg.originalRequest, msg.attributeDelta)
   );
   dispatch({
     type: MalcolmMultipleAttributeData,

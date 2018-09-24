@@ -196,15 +196,7 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.children).toEqual(['block2']);
   });
 
-  it('updates block if it exists', () => {
-    state.blocks.block1 = {
-      typeid: 'malcolm:core/BlockMeta:1.0',
-      name: 'block1',
-      loading: true,
-      attributes: [],
-      children: [],
-    };
-
+  const buildEmptyAttributeAndFireBlockMeta = () => {
     state.blockArchive = {
       block1: { attributes: [] },
     };
@@ -224,7 +216,19 @@ describe('malcolm reducer', () => {
       },
     };
 
-    state = malcolmReducer(state, action);
+    return malcolmReducer(state, action);
+  };
+
+  it('updates block if it exists', () => {
+    state.blocks.block1 = {
+      typeid: 'malcolm:core/BlockMeta:1.0',
+      name: 'block1',
+      loading: true,
+      attributes: [],
+      children: [],
+    };
+
+    state = buildEmptyAttributeAndFireBlockMeta();
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
@@ -255,26 +259,7 @@ describe('malcolm reducer', () => {
       orphans: [],
     };
 
-    state.blockArchive = {
-      block1: { attributes: [] },
-    };
-
-    state.messagesInFlight[1] = {
-      id: 1,
-      path: ['block1', 'meta'],
-    };
-
-    const action = {
-      type: MalcolmBlockMeta,
-      payload: {
-        id: 1,
-        delta: true,
-        label: 'Block 1',
-        fields: ['health', 'icon'],
-      },
-    };
-
-    state = malcolmReducer(state, action);
+    state = buildEmptyAttributeAndFireBlockMeta();
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');

@@ -414,43 +414,30 @@ describe('attribute reducer', () => {
     expect(testArchive2.plotValue[2]).toEqual(0);
   });
 
+  const runPushToArchiveTest = (timestep, expectedPlotTime) => {
+    state.blockArchive.block1.attributes[0].connectTime = 100000000;
+    state.blockArchive.block1.attributes[0].value.push(1);
+    state.blockArchive.block1.attributes[0].timeSinceConnect.push(
+      23456789.00123
+    );
+    state.blockArchive.block1.attributes[0].plotTime = 23456789.00123;
+    const testArchive = pushToArchive(state.blockArchive.block1.attributes[0], {
+      raw: {
+        timeStamp: {
+          secondsPastEpoch: 123456789 + timestep * ARCHIVE_REFRESH_INTERVAL,
+          nanoseconds: 1230000,
+        },
+        value: 2,
+      },
+    });
+    expect(testArchive.plotTime).toBeCloseTo(expectedPlotTime, 6);
+  };
+
   it('pushToArchive doesnt increment plot time if timestep less than ARCHIVE_REFRESH_INTERVAL', () => {
-    state.blockArchive.block1.attributes[0].connectTime = 100000000;
-    state.blockArchive.block1.attributes[0].value.push(1);
-    state.blockArchive.block1.attributes[0].timeSinceConnect.push(
-      23456789.00123
-    );
-    state.blockArchive.block1.attributes[0].plotTime = 23456789.00123;
-    const testArchive = pushToArchive(state.blockArchive.block1.attributes[0], {
-      raw: {
-        timeStamp: {
-          secondsPastEpoch: 123456789 + 0.5 * ARCHIVE_REFRESH_INTERVAL,
-          nanoseconds: 1230000,
-        },
-        value: 2,
-      },
-    });
-    expect(testArchive.plotTime).toBeCloseTo(23456789.00123, 6);
+    runPushToArchiveTest(0.5, 23456789.00123);
   });
+
   it('pushToArchive does increment plot time if timestep greater than ARCHIVE_REFRESH_INTERVAL', () => {
-    state.blockArchive.block1.attributes[0].connectTime = 100000000;
-    state.blockArchive.block1.attributes[0].value.push(1);
-    state.blockArchive.block1.attributes[0].timeSinceConnect.push(
-      23456789.00123
-    );
-    state.blockArchive.block1.attributes[0].plotTime = 23456789.00123;
-    const testArchive = pushToArchive(state.blockArchive.block1.attributes[0], {
-      raw: {
-        timeStamp: {
-          secondsPastEpoch: 123456789 + 2.0 * ARCHIVE_REFRESH_INTERVAL,
-          nanoseconds: 1230000,
-        },
-        value: 2,
-      },
-    });
-    expect(testArchive.plotTime).toBeCloseTo(
-      23456789.00123 + 2.0 * ARCHIVE_REFRESH_INTERVAL,
-      6
-    );
+    runPushToArchiveTest(2.0, 23456789.00123 + 2.0 * ARCHIVE_REFRESH_INTERVAL);
   });
 });

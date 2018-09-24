@@ -153,12 +153,12 @@ const mapStateToProps = (state, ownProps) => {
   let message;
   if (widgetTagIndex !== null) {
     alarm = getAlarmState(attribute);
+    // note: we don't need to check attribute exists here as the only
+    // way widgetTagIndex !== null is if attribute.raw.meta exists
+    // (see line 148 and 145 above)
+    message = attribute.raw.meta.description || EMPTY_STRING;
     message =
-      attribute && attribute.raw && attribute.raw.meta.description
-        ? attribute.raw.meta.description
-        : EMPTY_STRING;
-    message =
-      attribute && attribute.calculated && attribute.calculated.errorMessage
+      attribute.calculated && attribute.calculated.errorMessage
         ? attribute.calculated.errorMessage
         : message;
   }

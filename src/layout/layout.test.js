@@ -23,7 +23,6 @@ describe('Layout', () => {
   let block;
   let node;
   let state;
-  let actions;
 
   Toolkit.TESTING = true;
 
@@ -59,12 +58,9 @@ describe('Layout', () => {
       },
     };
 
-    actions = [];
     mockStore = mockState => ({
       getState: () => mockState,
-      dispatch: action => {
-        actions.push(action);
-      },
+      dispatch: () => {},
       subscribe: () => {},
     });
 

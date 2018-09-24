@@ -116,13 +116,6 @@ export const selectorFunction = (
           continuousSend={continuousSend}
         />
       );
-    case 'widget:flowgraph':
-      return (
-        <ButtonAction
-          text={objectMeta.writeable ? 'Edit' : 'View'}
-          clickAction={() => buttonClickHandler(path)}
-        />
-      );
     case 'widget:table':
       return (
         <ButtonAction
@@ -130,6 +123,7 @@ export const selectorFunction = (
           clickAction={() => buttonClickHandler(path)}
         />
       );
+    case 'widget:flowgraph':
     case 'widget:tree':
       return (
         <ButtonAction
