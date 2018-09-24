@@ -79,18 +79,20 @@ describe('InfoElement', () => {
     expect(clickHandler).toHaveBeenCalledTimes(1);
   });
 
-  it('button disables correctly', () => {
+  const runDisabledButtonTest = extraProps => {
     const clickHandler = jest.fn();
     const wrapper = mount(
       <InfoElement
         key={1}
+        blockName="test1"
+        attributeName="layout"
         label="Test element"
         value="test button"
-        disabled
         alarm={null}
         tag="info:button"
         handlers={{ clickHandler }}
         store={mockStore(state)}
+        {...extraProps}
       />
     );
     wrapper
@@ -98,51 +100,23 @@ describe('InfoElement', () => {
       .last()
       .simulate('click');
     expect(clickHandler).toHaveBeenCalledTimes(0);
+  };
+
+  it('button disables correctly', () => {
+    runDisabledButtonTest({
+      disabled: true,
+    });
   });
 
   it('button disables correctly with flag path', () => {
-    const clickHandler = jest.fn();
-    const wrapper = mount(
-      <InfoElement
-        key={1}
-        blockName="test1"
-        attributeName="layout"
-        label="Test element"
-        value="test button"
-        disabledFlagPath="calculated.testStuff.somethingTrue"
-        alarm={null}
-        tag="info:button"
-        handlers={{ clickHandler }}
-        store={mockStore(state)}
-      />
-    );
-    wrapper
-      .find('button')
-      .last()
-      .simulate('click');
-    expect(clickHandler).toHaveBeenCalledTimes(0);
+    runDisabledButtonTest({
+      disabledFlagPath: 'calculated.testStuff.somethingTrue',
+    });
   });
 
   it('button disables correctly with flag path with NOT', () => {
-    const clickHandler = jest.fn();
-    const wrapper = mount(
-      <InfoElement
-        key={1}
-        blockName="test1"
-        attributeName="layout"
-        label="Test element"
-        value="test button"
-        disabledFlagPath="NOT.calculated.testStuff.somethingFalse"
-        alarm={null}
-        tag="info:button"
-        handlers={{ clickHandler }}
-        store={mockStore(state)}
-      />
-    );
-    wrapper
-      .find('button')
-      .last()
-      .simulate('click');
-    expect(clickHandler).toHaveBeenCalledTimes(0);
+    runDisabledButtonTest({
+      disabledFlagPath: 'NOT.calculated.testStuff.somethingFalse',
+    });
   });
 });
