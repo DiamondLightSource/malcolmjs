@@ -17,7 +17,7 @@ How to link UI components to backend actions/reducers
 
 In order to understand how the state and business logic links to the UI components we first need to revisit how data flows in a React-Redux system.
 
-The main data contruct of a Redux system is the Store that contains a state, the state defines the UI and what is visible. A user then interacts with the UI and triggers actions which are sent to reducers, these reducers then update the state in the store.
+The main data contruct of a Redux system is the Store that contains a state (see :code:`src/testState.utilities.js` for the store structure), the state defines the UI and what is visible. A user then interacts with the UI and triggers actions which are sent to reducers, these reducers then update the state in the store.
 
 
 .. figure:: images/redux-cycle.png
