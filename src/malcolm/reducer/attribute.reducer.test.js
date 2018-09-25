@@ -15,7 +15,15 @@ import {
 } from '../malcolm.types';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import { ARCHIVE_REFRESH_INTERVAL } from './malcolmReducer';
-import MockCircularBuffer from './attribute.reducer.mocks';
+import {
+  buildTestState,
+  addMessageInFlight,
+  addBlock,
+  buildAttribute,
+  addBlockArchive,
+  buildBlockArchiveAttribute,
+  buildMeta,
+} from '../../testState.utilities';
 
 jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
@@ -49,57 +57,22 @@ describe('attribute reducer', () => {
       },
     }));
 
-    state = {
-      messagesInFlight: {
-        1: {
-          id: 1,
-          path: ['block1', 'layout'],
-        },
-      },
-      blocks: {
-        block1: {
-          attributes: [
-            {
-              calculated: {
-                name: 'layout',
-                children: [],
-              },
-              raw: {
-                meta: {
-                  tags: ['widget:flowgraph'],
-                },
-              },
-            },
-          ],
-        },
-      },
-      blockArchive: {
-        block1: {
-          attributes: [
-            {
-              name: 'layout',
-              meta: {},
-              value: new MockCircularBuffer(5),
-              alarmState: new MockCircularBuffer(5),
-              plotValue: new MockCircularBuffer(5),
-              timeStamp: new MockCircularBuffer(5),
-              timeSinceConnect: new MockCircularBuffer(5),
-              connectTime: -1,
-              counter: 0,
-              refreshRate: ARCHIVE_REFRESH_INTERVAL,
-              plotTime: 0,
-            },
-          ],
-        },
-      },
-      navigation: {
-        navigationLists: [],
-        rootNav: {},
-      },
-      layoutState: {
-        selectedBlocks: [],
-      },
-    };
+    state = buildTestState().malcolm;
+    addMessageInFlight(1, ['block1', 'layout'], state);
+    addBlock(
+      'block1',
+      [
+        buildAttribute(
+          'layout',
+          ['block1', 'layout'],
+          undefined,
+          0,
+          buildMeta(['widget:flowgraph'])
+        ),
+      ],
+      state
+    );
+    addBlockArchive('block1', [buildBlockArchiveAttribute('layout', 5)], state);
 
     payload = {
       delta: true,
