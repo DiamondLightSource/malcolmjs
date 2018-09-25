@@ -16,6 +16,11 @@ describe('MessageSnackBar', () => {
     mount = createMount();
     shallow = createShallow({ dive: true });
     initialState = {
+      router: {
+        location: {
+          pathname: '/gui/PANDA',
+        },
+      },
       viewState: {
         snackbar: {
           open: true,

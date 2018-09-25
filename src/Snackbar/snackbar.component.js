@@ -53,11 +53,15 @@ MessageSnackBar.defaultProps = {
   timeout: null,
 };
 
-const mapStateToProps = state => ({
-  open: state.viewState.snackbar.open,
-  message: state.viewState.snackbar.message,
-  footerHeight: state.viewState.footerHeight,
-});
+const mapStateToProps = state => {
+  const isDetailsRoute = state.router.location.pathname.startsWith('/details/');
+
+  return {
+    open: state.viewState.snackbar.open,
+    message: state.viewState.snackbar.message,
+    footerHeight: isDetailsRoute ? 0 : state.viewState.footerHeight,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   handleClose: () => dispatch(snackbarState(false, '')),

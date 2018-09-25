@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
+import PaletteIcon from '@material-ui/icons/Palette';
 import { connect } from 'react-redux';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -149,7 +149,7 @@ const findAttributeComponent = props => {
                 onClick={() => props.openPalette()}
                 disabled={props.layoutLocked}
               >
-                <AddIcon />
+                <PaletteIcon />
               </Button>
             )}
           </div>

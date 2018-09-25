@@ -13,7 +13,8 @@ import NavTypes from '../malcolm/NavTypes';
 const styles = theme => ({
   container: {
     backgroundColor: theme.palette.background.paper,
-    height: '100vh',
+    height: '100%',
+    minHeight: '100vh',
     paddingTop: 1,
   },
   toolbar: {
