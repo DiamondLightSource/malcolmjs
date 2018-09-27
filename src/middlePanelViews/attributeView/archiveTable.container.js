@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import WidgetTable from '../../malcolmWidgets/table/table.component';
-import NewWidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import { ARCHIVE_REFRESH_INTERVAL } from '../../malcolm/reducer/malcolmReducer';
 
 const noOp = () => {};
@@ -33,7 +32,7 @@ class ArchiveTable extends React.Component {
   render() {
     const { attribute } = this.props;
     return (
-      <NewWidgetTable
+      <WidgetTable
         attribute={{
           raw: {
             value: {

@@ -7,7 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
 import Add from '@material-ui/icons/Add';
-import { Typography } from '@material-ui/core';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import AttributeAlarm, {
@@ -16,37 +15,11 @@ import AttributeAlarm, {
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
-  headerLayout: {
-    tableLayout: 'fixed',
-    width: 'calc(100% - 15px - 32px)',
-  },
-  footerLayout: {
-    width: '100%',
-  },
-  headerLayoutNoScroll: {
-    tableLayout: 'fixed',
-    width: 'calc(100% - 32px)',
-  },
-  tableLayout: {
-    tableLayout: 'fixed',
-  },
-  tableBody: {
-    overflowY: 'auto',
-    height: 'calc(100% - 75px)',
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
-  rowFormat: {
-    height: '36px',
-  },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
     textAlign: 'Center',
+    verticalAlign: 'middle',
     padding: '2px',
-  },
-  textHeadings: {
-    borderLeft: `2px solid ${theme.palette.divider}`,
-    textAlign: 'Center',
   },
   selectedRow: {
     backgroundColor: fade(theme.palette.secondary.main, 0.25),
@@ -65,13 +38,6 @@ const styles = theme => ({
       backgroundColor: 'transparent',
     },
   },
-  '.ReactVirtualized__Table__row': {
-    backgroundColor: theme.palette.background.default,
-  },
-  '.ReactVirtualized__Table__headerRow': {
-    fontFamily: 'roboto',
-    fontColor: theme.palette.primary.text,
-  },
 });
 
 const widgetWidths = {
@@ -80,30 +46,67 @@ const widgetWidths = {
   'info:alarm': 36,
 };
 
+const getTableState = props => {
+  const tableState = {};
+  tableState.columnLabels =
+    props.localState === undefined
+      ? Object.keys(props.attribute.raw.meta.elements)
+      : props.localState.labels;
+  tableState.values =
+    props.localState === undefined
+      ? props.attribute.raw.value[tableState.columnLabels[0]].map(
+          (val, row) => {
+            const rowData = {};
+            tableState.columnLabels.forEach(label => {
+              rowData[label] = props.attribute.raw.value[label][row];
+            });
+            return rowData;
+          }
+        )
+      : props.localState.value;
+  tableState.flags =
+    props.localState === undefined
+      ? { rows: [], table: {} }
+      : props.localState.flags;
+  tableState.meta =
+    props.localState === undefined
+      ? props.attribute.raw.meta
+      : props.localState.meta;
+  return tableState;
+};
+
 const getWidgetWidth = tag => widgetWidths[tag];
 
-const getColumnWidths = (divWidth, columnWidgetTags) => {
-  const fixedWidths = columnWidgetTags.map(tag => getWidgetWidth(tag));
+const getColumnWidths = (
+  divWidth,
+  columnWidgetTags,
+  columnLabels,
+  hideInfo
+) => {
+  const fixedWidths = columnWidgetTags.map(
+    (tag, index) =>
+      getWidgetWidth(tag) !== undefined
+        ? Math.max(getWidgetWidth(tag), 11 * columnLabels[index].length + 4)
+        : undefined
+  );
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
     .reduce((total, val) => total + val);
-  const numVariableWidth = fixedWidths.filter(val => val === undefined)
-    .length;
-  return ((divWidth - usedWidth) > numVariableWidth*50) ? fixedWidths.map(
-    val =>
-      val !== undefined ? val : (divWidth - usedWidth) / numVariableWidth
-  ) : fixedWidths.map(
-    val =>
-      val !== undefined ? val : 150
-  );
-
+  const numVariableWidth = fixedWidths.filter(val => val === undefined).length;
+  return divWidth - usedWidth - 36 * !hideInfo > numVariableWidth * 180
+    ? fixedWidths.map(
+        val =>
+          val !== undefined
+            ? val
+            : (divWidth - usedWidth - 36 * !hideInfo) / numVariableWidth
+      )
+    : fixedWidths.map(val => (val !== undefined ? val : 180));
 };
 
-const isSelectedRow = props =>
-  props.selectedRow === props.row
-    ? props.classes.selectedRow
-    : props.classes.textBody;
-
+const isSelectedRow = (row, props) => {
+  const classes = styles(props.theme);
+  return props.selectedRow === row ? classes.selectedRow : classes.textBody;
+};
 const AlarmCell = props => (
   <IconButton
     className={props.classes.button}
@@ -124,217 +127,194 @@ const AlarmCell = props => (
   </IconButton>
 );
 
-class NewWidgetTable extends React.Component {
-  render() {
-    const columnLabels =
-      this.props.localState === undefined
-        ? Object.keys(this.props.attribute.raw.meta.elements)
-        : this.props.localState.labels;
-    const values =
-      this.props.localState === undefined
-        ? this.props.attribute.raw.value[columnLabels[0]].map((val, row) => {
-            const rowData = {};
-            columnLabels.forEach(label => {
-              rowData[label] = this.props.attribute.raw.value[label][row];
-            });
-            return rowData;
-          })
-        : this.props.localState.value;
-    const flags =
-      this.props.localState === undefined
-        ? { rows: [], table: {} }
-        : this.props.localState.flags;
-    const meta =
-      this.props.localState === undefined
-        ? this.props.attribute.raw.meta
-        : this.props.localState.meta;
-    const rowChangeHandler = (rowPath, newValue) => {
-      let rowValue;
-      if (columnLabels === undefined) {
-        rowValue = newValue;
-      } else {
-        rowValue = {};
-        columnLabels.forEach(label => {
-          rowValue[label] = values[rowPath.row][label];
-          return 0;
-        });
-        rowValue[rowPath.label] = newValue;
-      }
-      this.props.eventHandler(
-        this.props.attribute.calculated.path,
-        rowValue,
-        rowPath.row
+const getRowData = (row, widgetTags, props, tableState, handlers) => {
+  let valueCells;
+  if (tableState.columnLabels === undefined) {
+    valueCells = {
+      value:
+        row >= tableState.values.length ? null : (
+          <TableWidgetSelector
+            columnWidgetTag={widgetTags[0]}
+            value={tableState.values[row]}
+            rowPath={{ row, column: 0 }}
+            rowChangeHandler={handlers.rowChangeHandler}
+            columnMeta={tableState.meta}
+            setFlag={handlers.rowFlagHandler}
+          />
+        ),
+    };
+  } else {
+    valueCells = {};
+    tableState.columnLabels.forEach((label, column) => {
+      valueCells[label] =
+        row >= tableState.values.length ? null : (
+          <TableWidgetSelector
+            columnWidgetTag={widgetTags[column]}
+            value={tableState.values[row][label]}
+            rowPath={{ label, row, column }}
+            rowChangeHandler={handlers.rowChangeHandler}
+            columnMeta={tableState.meta.elements[label]}
+            setFlag={handlers.rowFlagHandler}
+          />
+        );
+    });
+  }
+  if (!props.hideInfo) {
+    valueCells.alarmState =
+      row >= tableState.values.length ? null : (
+        <AlarmCell
+          flags={tableState.flags}
+          row={row}
+          classes={props.classes}
+          path={props.attribute.calculated.path}
+          infoClickHandler={props.infoClickHandler}
+          selectedRow={props.selectedRow}
+        />
       );
-    };
-    const rowFlagHandler = (rowPath, flagType, flagState) => {
-      if (this.props.localState !== undefined) {
-        const rowFlags =
-          this.props.localState.flags.rows[rowPath.row] === undefined
-            ? {}
-            : this.props.localState.flags.rows[rowPath.row];
-        if (rowFlags[flagType] === undefined) {
-          rowFlags[flagType] = {};
-        }
-        rowFlags[flagType][rowPath.label] = flagState;
-        rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
-          val => val
-        );
-        this.props.setFlag(
-          this.props.attribute.calculated.path,
-          rowPath.row,
-          flagType,
-          rowFlags
-        );
-      }
-    };
-    const columnWidgetTags = getTableWidgetTags(meta);
-    const columnCellRenderer = event => event.cellData; // event.isScrolling ? '.' : event.cellData;
-    const columns = width => {
-      let columnHeadings;
-      if (columnLabels === undefined) {
-        columnHeadings = [
-          <Column
-            dataKey="value"
-            label={meta.label}
-            width={width - 36 * !this.props.hideInfo}
-            cellRenderer={columnCellRenderer}
-          />,
-        ];
-      } else {
-        const fixedWidths = columnWidgetTags.map(tag => getWidgetWidth(tag));
-        const usedWidth = fixedWidths
-          .filter(val => val !== undefined)
-          .reduce((total, val) => total + val);
-        const numVariableWidth = fixedWidths.filter(val => val === undefined)
-          .length;
-        const widths = ((width - usedWidth) > numVariableWidth*40) ? fixedWidths.map(
-          val =>
-            val !== undefined ? val : (width - usedWidth) / numVariableWidth
-        ) : fixedWidths.map(
-          val =>
-            val !== undefined ? val : 150
-        );
-        console.log('------------');
-        console.log(fixedWidths);
-        console.log(usedWidth);
-        console.log(numVariableWidth);
-        console.log(widths);
-        columnHeadings = columnLabels.map((label, column) => (
-          <Column
-            dataKey={label}
-            label={
-              meta.elements[label].label ? meta.elements[label].label : label
-            }
-            width={widths[column]}
-            cellRenderer={columnCellRenderer}
-          />
-        ));
-      }
-      if (!this.props.hideInfo) {
-        columnHeadings.splice(
-          0,
-          0,
-          <Column
-            dataKey="alarmState"
-            label="Alarm"
-            width={36}
-            cellRenderer={columnCellRenderer}
-          />
-        );
-      }
-      return columnHeadings;
-    };
-    const getRowData = (row, columnWidgetTags, props) => {
-      let valueCells;
-      if (columnLabels === undefined) {
-        valueCells = {
-          value: (
-            <TableWidgetSelector
-              columnWidgetTag={columnWidgetTags[0]}
-              value={values[row]}
-              rowPath={{ row, column: 0 }}
-              rowChangeHandler={rowChangeHandler}
-              columnMeta={meta}
-              setFlag={rowFlagHandler}
-            />
-          ),
-        };
-      } else {
-        valueCells = {};
-        columnLabels.forEach((label, column) => {
-          valueCells[label] = (
-            <TableWidgetSelector
-              columnWidgetTag={columnWidgetTags[column]}
-              value={values[row][label]}
-              rowPath={{ label, row, column }}
-              rowChangeHandler={rowChangeHandler}
-              columnMeta={meta.elements[label]}
-              setFlag={rowFlagHandler}
-            />
-          );
-        });
-      }
-      if (!props.hideInfo) {
-        valueCells.alarmState = (
-          <AlarmCell
-            flags={flags}
-            row={row}
-            classes={props.classes}
-            path={props.attribute.calculated.path}
-            infoClickHandler={props.infoClickHandler}
-            selectedRow={props.selectedRow}
-          />
-        );
-      }
-      return valueCells;
-    };
+  }
+  return valueCells;
+};
 
-    return (
-      <div style={{ width: '100%', height: '100%' }}>
-        <AutoSizer>
-          {(autoSize) => {
-            const columnWidths = getColumnWidths(autoSize.width, columnWidgetTags);
-            const { height } = autoSize;
-            const width = columnWidths.reduce((total, val) => total + val);
-            return (
+const columnCellRenderer = event => event.cellData; // event.isScrolling ? '.' : event.cellData;
+const columns = (widths, tableState, hideInfo) => {
+  let columnHeadings;
+  if (tableState.columnLabels === undefined) {
+    columnHeadings = [
+      <Column
+        dataKey="value"
+        label={tableState.meta.label}
+        width={widths[0]}
+        cellRenderer={columnCellRenderer}
+      />,
+    ];
+  } else {
+    columnHeadings = tableState.columnLabels.map((label, column) => (
+      <Column
+        dataKey={label}
+        label={
+          tableState.meta.elements[label].label
+            ? tableState.meta.elements[label].label
+            : label
+        }
+        width={widths[column]}
+        cellRenderer={columnCellRenderer}
+      />
+    ));
+  }
+  if (!hideInfo) {
+    columnHeadings.splice(
+      0,
+      0,
+      <Column
+        dataKey="alarmState"
+        label=""
+        width={36}
+        cellRenderer={columnCellRenderer}
+      />
+    );
+  }
+  return columnHeadings;
+};
+
+const WidgetTable = props => {
+  const tableState = getTableState(props);
+
+  const rowChangeHandler = (rowPath, newValue) => {
+    let rowValue;
+    if (tableState.columnLabels === undefined) {
+      rowValue = newValue;
+    } else {
+      rowValue = {};
+      tableState.columnLabels.forEach(label => {
+        rowValue[label] = tableState.values[rowPath.row][label];
+        return 0;
+      });
+      rowValue[rowPath.label] = newValue;
+    }
+    props.eventHandler(props.attribute.calculated.path, rowValue, rowPath.row);
+  };
+  const rowFlagHandler = (rowPath, flagType, flagState) => {
+    if (props.localState !== undefined) {
+      const rowFlags =
+        props.localState.flags.rows[rowPath.row] === undefined
+          ? {}
+          : props.localState.flags.rows[rowPath.row];
+      if (rowFlags[flagType] === undefined) {
+        rowFlags[flagType] = {};
+      }
+      rowFlags[flagType][rowPath.label] = flagState;
+      rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
+        val => val
+      );
+      props.setFlag(
+        props.attribute.calculated.path,
+        rowPath.row,
+        flagType,
+        rowFlags
+      );
+    }
+  };
+  const handlers = { rowChangeHandler, rowFlagHandler };
+  const columnWidgetTags = getTableWidgetTags(tableState.meta);
+  return (
+    <div
+      style={{
+        width: '100%',
+        height: props.showFooter ? 'calc(100% - 48px)' : '100%',
+        overflowX: 'auto',
+      }}
+    >
+      <AutoSizer>
+        {autoSize => {
+          const columnWidths = getColumnWidths(
+            autoSize.width,
+            columnWidgetTags,
+            tableState.columnLabels,
+            props.hideInfo
+          );
+          const { height } = autoSize;
+          const width =
+            columnWidths.reduce((total, val) => total + val) +
+            36 * !props.hideInfo;
+          return (
             <div>
               <Table
+                rowStyle={({ index }) => isSelectedRow(index, props)}
                 height={height - 84}
                 width={width}
                 headerHeight={36}
                 rowHeight={36}
-                rowCount={values.length}
+                rowCount={tableState.values.length + 2}
                 rowGetter={({ index }) =>
-                  getRowData(index, columnWidgetTags, this.props)
+                  getRowData(
+                    index,
+                    columnWidgetTags,
+                    props,
+                    tableState,
+                    handlers
+                  )
                 }
-                scrollToIndex={this.props.selectedRow}
-                onScroll={event => {console.log('~~~~~~~~ did scroll!'); console.log(event);}}
               >
-                {columns(width)}
+                {columns(columnWidths, tableState, props.hideInfo)}
               </Table>
-              {meta.writeable ? (
+              {tableState.meta.writeable ? (
                 <div
-                  className={this.props.incompleteRowFormat}
+                  className={props.classes.incompleteRowFormat}
                   style={{
-                    verticalAlign: 'middle',
-                    backgroundColor: emphasize(
-                      this.props.theme.palette.background.paper,
-                      0.5
-                    ),
                     width,
                     height: '36px',
                     position: 'absolute',
                     top:
-                      36 * (values.length + 1) < height - 84
-                        ? `${36 * (values.length + 1)}px`
+                      36 * (tableState.values.length + 3) < height - 84
+                        ? `${36 * (tableState.values.length + 3)}px`
                         : `${height - 84}px`,
                   }}
                 >
                   <IconButton
                     onClick={() =>
-                      this.props.addRow(
-                        this.props.attribute.calculated.path,
-                        values.length
+                      props.addRow(
+                        props.attribute.calculated.path,
+                        tableState.values.length
                       )
                     }
                     style={{ height: '36px', width: '36px' }}
@@ -343,23 +323,52 @@ class NewWidgetTable extends React.Component {
                   </IconButton>
                 </div>
               ) : null}{' '}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '0px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: '48px',
-                  width,
-                }}
-              >
-                {this.props.footerItems}
-              </div>
             </div>
-          )}}
-        </AutoSizer>
-      </div>
-    );
-  }
-}
-export default withStyles(styles, { withTheme: true })(NewWidgetTable);
+          );
+        }}
+      </AutoSizer>
+    </div>
+  );
+};
+
+WidgetTable.propTypes = {
+  classes: PropTypes.shape({
+    incompleteRowFormat: PropTypes.string,
+  }).isRequired,
+  localState: PropTypes.shape({
+    flags: PropTypes.shape({
+      rows: PropTypes.arrayOf(PropTypes.shape({})),
+    }),
+  }),
+  attribute: PropTypes.shape({
+    calculated: PropTypes.shape({
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+  eventHandler: PropTypes.func.isRequired,
+  setFlag: PropTypes.func.isRequired,
+  addRow: PropTypes.func,
+  hideInfo: PropTypes.bool,
+  showFooter: PropTypes.bool,
+};
+
+WidgetTable.defaultProps = {
+  localState: undefined,
+  hideInfo: false,
+  showFooter: false,
+  addRow: () => {},
+};
+
+AlarmCell.propTypes = {
+  classes: PropTypes.shape({
+    button: PropTypes.string,
+  }).isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
+  flags: PropTypes.shape({
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+  path: PropTypes.string.isRequired,
+  row: PropTypes.number.isRequired,
+};
+
+export default withStyles(styles, { withTheme: true })(WidgetTable);

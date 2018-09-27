@@ -14,9 +14,7 @@ import {
   malcolmPutAction,
   malcolmRevertAction,
 } from '../../malcolm/malcolmActionCreators';
-// import WidgetTable from './table.component';
-// import NewWidgetTable from './dataGridTable.component';
-import NewWidgetTable from './virtualizedTable.component';
+import WidgetTable from './virtualizedTable.component';
 import navigationActions from '../../malcolm/actions/navigation.actions';
 import NavTypes from '../../malcolm/NavTypes';
 
@@ -28,18 +26,14 @@ const TableContainer = props => {
   const pad = child => (
     <div style={{ padding: '4px', flexGrow: 1 }}>{child}</div>
   );
+  const updateTime = `Update received @   ${new Date(
+    props.attribute.raw.timeStamp.secondsPastEpoch * 1000
+  ).toISOString()}`;
   const footerItems = [
     ...props.footerItems,
     props.attribute.localState && props.attribute.localState.flags.table.fresh
       ? pad(<Typography>Up to date!</Typography>)
-      : pad(
-          <Typography>
-            Update received @{' '}
-          {new Date(
-              props.attribute.raw.timeStamp.secondsPastEpoch * 1000
-            ).toISOString()}
-        </Typography>
-        ),
+      : pad(<Typography>{updateTime}</Typography>),
     pad(
       <ButtonAction
         clickAction={() => {
@@ -59,17 +53,22 @@ const TableContainer = props => {
     ),
   ];
   return (
-    <NewWidgetTable
-      attribute={props.attribute}
-      localState={props.attribute.localState}
-      eventHandler={props.eventHandler}
-      setFlag={props.setFlag}
-      footerItems={footerItems}
-      addRow={props.addRow}
-      infoClickHandler={props.infoClickHandler}
-      rowClickHandler={props.rowClickHandler}
-      selectedRow={props.selectedRow}
-    />
+    <div style={{ width: '100%', height: '100%' }}>
+      <WidgetTable
+        attribute={props.attribute}
+        localState={props.attribute.localState}
+        eventHandler={props.eventHandler}
+        setFlag={props.setFlag}
+        showFooter
+        addRow={props.addRow}
+        infoClickHandler={props.infoClickHandler}
+        rowClickHandler={props.rowClickHandler}
+        selectedRow={props.selectedRow}
+      />
+      <div style={{ display: 'flex', position: 'bottom', padding: '4px' }}>
+        {footerItems}
+      </div>
+    </div>
   );
 };
 

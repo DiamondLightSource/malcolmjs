@@ -1,5 +1,4 @@
-/* eslint react/no-array-index-key: 0 */
-/* eslint no-underscore-dangle: 0 */
+/* eslint-disable */
 
 import * as React from 'react';
 import PropTypes from 'prop-types';

@@ -19,25 +19,12 @@ body {
   stroke: #f50057 !important;
 }
 
-.react-grid-Cell__value {
-  padding-left: 2px;
-  padding-right: 0;
-}
-
-.react-grid-Cell {
-  padding-left: 0 !important;
-  padding-right: 2px !important;
-  background-color: transparent !important;
-  border-bottom-width: 0 !important;
-  border-right-width: 0 !important;
-}
-
 .ReactVirtualized__Table__headerRow {
-  font-family: Roboto;
+  font-family: Roboto, sans-serif;
   font-weight: 400 !important;
-  color: #fff;
+  color: #fff; /* theme.palette.primary.text */
 }
 
 .ReactVirtualized__Table__row {
-  background-color: #303030;
+  background-color: #303030; /* theme.palette.background.default */
 }
