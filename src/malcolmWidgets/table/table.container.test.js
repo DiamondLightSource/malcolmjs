@@ -198,12 +198,9 @@ describe('Table container', () => {
   });
 
   it('row and info click hook up correctly', () => {
-    const dispatch = [];
     const testStore = {
       getState: () => state,
-      dispatch: action => {
-        dispatch.push(action);
-      },
+      dispatch: () => {},
       subscribe: () => {},
     };
     const wrapper = mount(
@@ -219,25 +216,14 @@ describe('Table container', () => {
       'layout',
       'row.0'
     );
-    /*
-     expect(navigationActions.navigateToSubElement).toHaveBeenCalledTimes(1);
-    expect(navigationActions.navigateToSubElement).toHaveBeenCalledWith(
-      'test1',
-      'layout',
-      'row.0'
-    );
-     */
   });
 
   it('subelement in url selects row correctly', () => {
     state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
     state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];
-    const dispatch = [];
     const testStore = {
       getState: () => state,
-      dispatch: action => {
-        dispatch.push(action);
-      },
+      dispatch: () => {},
       subscribe: () => {},
     };
     const wrapper = shallow(

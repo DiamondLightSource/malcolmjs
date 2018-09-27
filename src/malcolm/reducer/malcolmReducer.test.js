@@ -16,8 +16,16 @@ import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlar
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
 
-import MockCircularBuffer from './attribute.reducer.mocks';
 import LayoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
+import {
+  buildTestState,
+  addMessageInFlight,
+  addBlockArchive,
+  addBlock,
+  buildAttribute,
+  buildBlockArchiveAttribute,
+  buildMeta,
+} from '../../testState.utilities';
 
 jest.mock('./navigation.reducer');
 jest.mock('./method.reducer');
@@ -32,32 +40,10 @@ const buildAction = (type, id, path = ['.', 'blocks']) => ({
   },
 });
 
-const testBlock = {
-  testBlock: {
-    attributes: [
-      {
-        calculated: {
-          name: 'foo',
-        },
-        raw: {
-          value: 1,
-          alarm: { severity: 0 },
-          meta: { tags: {}, writeable: false },
-        },
-      },
-      {
-        calculated: {
-          name: 'bar',
-        },
-        raw: {
-          value: 2,
-          alarm: { severity: 2 },
-          meta: { tags: {}, writeable: true },
-        },
-      },
-    ],
-  },
-};
+const testBlockAttributes = [
+  buildAttribute('foo', ['testBlock', 'foo'], 1, 0, buildMeta([], false)),
+  buildAttribute('bar', ['testBlock', 'bar'], 2, 2, buildMeta([], true)),
+];
 
 describe('malcolm reducer', () => {
   let state = {};
@@ -87,28 +73,7 @@ describe('malcolm reducer', () => {
 
     LayoutReduxReducer.mockImplementation(s => s);
 
-    state = {
-      messagesInFlight: {},
-      blocks: {},
-      blockArchive: {},
-      navigation: {
-        navigationLists: [],
-        rootNav: {
-          path: '',
-          children: [],
-        },
-      },
-      layoutState: {
-        selectedBlocks: [],
-      },
-      layoutEngine: {
-        diagramModel: {
-          offsetX: 10,
-          offsetY: 20,
-          zoom: 30,
-        },
-      },
-    };
+    state = buildTestState().malcolm;
   });
 
   it("doesn't affect state for non-malcolm messages", () => {
@@ -196,23 +161,9 @@ describe('malcolm reducer', () => {
     expect(state.blocks.block1.children).toEqual(['block2']);
   });
 
-  it('updates block if it exists', () => {
-    state.blocks.block1 = {
-      typeid: 'malcolm:core/BlockMeta:1.0',
-      name: 'block1',
-      loading: true,
-      attributes: [],
-      children: [],
-    };
-
-    state.blockArchive = {
-      block1: { attributes: [] },
-    };
-
-    state.messagesInFlight[1] = {
-      id: 1,
-      path: ['block1', 'meta'],
-    };
+  const buildEmptyAttributeAndFireBlockMeta = () => {
+    addBlockArchive('block1', [], state);
+    addMessageInFlight(1, ['block1', 'meta'], state);
 
     const action = {
       type: MalcolmBlockMeta,
@@ -224,7 +175,13 @@ describe('malcolm reducer', () => {
       },
     };
 
-    state = malcolmReducer(state, action);
+    return malcolmReducer(state, action);
+  };
+
+  it('updates block if it exists', () => {
+    addBlock('block1', [], state);
+
+    state = buildEmptyAttributeAndFireBlockMeta();
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
@@ -243,38 +200,12 @@ describe('malcolm reducer', () => {
   });
 
   it('marks attribute as orphaned but doesnt remove from attributes if receives a delta to fields and it is missing', () => {
-    state.blocks.block1 = {
-      typeid: 'malcolm:core/BlockMeta:1.0',
-      name: 'block1',
-      loading: true,
-      attributes: [
-        { calculated: { name: 'health' } },
-        { calculated: { name: 'BruceWayne' } },
-      ],
-      children: [],
-      orphans: [],
-    };
-
-    state.blockArchive = {
-      block1: { attributes: [] },
-    };
-
-    state.messagesInFlight[1] = {
-      id: 1,
-      path: ['block1', 'meta'],
-    };
-
-    const action = {
-      type: MalcolmBlockMeta,
-      payload: {
-        id: 1,
-        delta: true,
-        label: 'Block 1',
-        fields: ['health', 'icon'],
-      },
-    };
-
-    state = malcolmReducer(state, action);
+    addBlock(
+      'block1',
+      [buildAttribute('health'), buildAttribute('BruceWayne')],
+      state
+    );
+    state = buildEmptyAttributeAndFireBlockMeta();
 
     expect(state.blocks.block1.loading).toEqual(false);
     expect(state.blocks.block1.label).toEqual('Block 1');
@@ -288,41 +219,9 @@ describe('malcolm reducer', () => {
   });
 
   it('updates attribute data and pushes to archive', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-      attributes: [
-        {
-          calculated: {
-            name: 'health',
-            loading: true,
-          },
-        },
-      ],
-    };
-
-    state.blockArchive.block1 = {
-      attributes: [
-        {
-          name: 'health',
-          meta: {},
-          value: new MockCircularBuffer(3),
-          alarmState: new MockCircularBuffer(3),
-          plotValue: new MockCircularBuffer(3),
-          timeStamp: new MockCircularBuffer(3),
-          timeSinceConnect: new MockCircularBuffer(3),
-          connectTime: -1,
-          counter: 0,
-          refreshRate: 0,
-          plotTime: 0,
-        },
-      ],
-    };
-
-    state.messagesInFlight[1] = {
-      id: 1,
-      path: ['block1', 'health'],
-    };
+    addBlock('block1', [buildAttribute('health')], state);
+    addBlockArchive('block1', [buildBlockArchiveAttribute('health', 3)], state);
+    addMessageInFlight(1, ['block1', 'health'], state);
 
     const action = {
       type: MalcolmAttributeData,
@@ -350,20 +249,7 @@ describe('malcolm reducer', () => {
   });
 
   it('set flag sets attribute pending', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-      attributes: [
-        {
-          calculated: {
-            name: 'health',
-            loading: true,
-            path: ['block1', 'health'],
-            pending: false,
-          },
-        },
-      ],
-    };
+    addBlock('block1', [buildAttribute('health', ['block1', 'health'])], state);
 
     const action = {
       type: MalcolmAttributeFlag,
@@ -397,10 +283,7 @@ describe('malcolm reducer', () => {
   });
 
   it('set flag does nothing if block has no attributes yet', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-    };
+    addBlock('block1', undefined, state);
 
     const action = {
       type: MalcolmAttributeFlag,
@@ -416,18 +299,7 @@ describe('malcolm reducer', () => {
   });
 
   it('set flag does nothing if block has attributes but not specified one', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-      attributes: [
-        {
-          name: 'health',
-          loading: true,
-          path: ['block1', 'health'],
-          pending: false,
-        },
-      ],
-    };
+    addBlock('block1', [buildAttribute('health', ['block1', 'health'])], state);
 
     const action = {
       type: MalcolmAttributeFlag,
@@ -443,10 +315,7 @@ describe('malcolm reducer', () => {
   });
 
   it('sets flag on block if path is single element array', () => {
-    state.blocks.block1 = {
-      name: 'block1',
-      loading: true,
-    };
+    addBlock('block1', undefined, state);
 
     const action = {
       type: MalcolmAttributeFlag,
@@ -474,7 +343,8 @@ describe('malcolm reducer', () => {
   });
 
   it('does clean', () => {
-    state.blocks = testBlock;
+    addBlock('testBlock', testBlockAttributes, state);
+
     const tidyBlock = {
       ...state.blocks.testBlock,
       loading: true,
@@ -485,7 +355,7 @@ describe('malcolm reducer', () => {
   });
 
   it('does disconnect', () => {
-    state.blocks = testBlock;
+    addBlock('testBlock', testBlockAttributes, state);
     const action = { type: MalcolmDisconnected };
     state = malcolmReducer(state, action);
     expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
@@ -512,9 +382,7 @@ describe('malcolm reducer', () => {
       },
     };
 
-    state.blocks['.blocks'] = {
-      children: [],
-    };
+    addBlock('.blocks', undefined, state);
 
     state = malcolmReducer(state, action);
 
@@ -541,11 +409,8 @@ describe('malcolm reducer', () => {
   });
 
   it('setErrorState updates the error state on the matching attribute', () => {
-    state.blocks = testBlock;
-    state.messagesInFlight[1] = {
-      id: 1,
-      path: ['testBlock', 'foo'],
-    };
+    addBlock('testBlock', testBlockAttributes, state);
+    addMessageInFlight(1, ['testBlock', 'foo'], state);
 
     const updatedState = setErrorState(state, 1, 123);
 

@@ -33,21 +33,23 @@ describe('AttributeDetails', () => {
     };
   });
 
+  const buildAttribute = () => ({
+    calculated: {
+      name: 'Attribute1',
+    },
+    raw: {
+      alarm: {
+        severity: 0,
+      },
+      meta: {
+        label: 'Attribute 1',
+        tags: ['widget:NOTAWIDGET'],
+      },
+    },
+  });
+
   it('renders correctly', () => {
-    const attribute = {
-      calculated: {
-        name: 'Attribute1',
-      },
-      raw: {
-        alarm: {
-          severity: 0,
-        },
-        meta: {
-          label: 'Attribute 1',
-          tags: ['widget:NOTAWIDGET'],
-        },
-      },
-    };
+    const attribute = buildAttribute();
 
     state.malcolm.blocks.block1.attributes.push(attribute);
 
@@ -62,21 +64,7 @@ describe('AttributeDetails', () => {
   });
 
   it('info button hooks up correctly', () => {
-    const attribute = {
-      calculated: {
-        name: 'Attribute1',
-      },
-      raw: {
-        alarm: {
-          severity: 0,
-        },
-        meta: {
-          label: 'Attribute 1',
-          tags: ['widget:NOTAWIDGET'],
-        },
-      },
-    };
-
+    const attribute = buildAttribute();
     state.malcolm.blocks.block1.attributes.push(attribute);
 
     const wrapper = mount(
@@ -96,21 +84,7 @@ describe('AttributeDetails', () => {
   });
 
   it('middle click hooks up correctly', () => {
-    const attribute = {
-      calculated: {
-        name: 'Attribute1',
-      },
-      raw: {
-        alarm: {
-          severity: 0,
-        },
-        meta: {
-          label: 'Attribute 1',
-          tags: ['widget:NOTAWIDGET'],
-        },
-      },
-    };
-
+    const attribute = buildAttribute();
     state.malcolm.blocks.block1.attributes.push(attribute);
 
     const wrapper = mount(

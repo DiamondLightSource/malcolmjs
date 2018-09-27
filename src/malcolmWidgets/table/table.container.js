@@ -92,6 +92,9 @@ const mapStateToProps = (state, ownProps) => {
       ? navLists[blockIndex + 1].path
       : undefined;
   if (
+    attribute &&
+    attribute.calculated &&
+    attribute.calculated.path &&
     attribute.calculated.path[0] === blockName &&
     attribute.calculated.path[1] === attributeName
   ) {

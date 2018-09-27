@@ -20,7 +20,6 @@ jest.useFakeTimers();
 describe('malcolm socket handler', () => {
   let dispatches = [];
   let connectionState = false;
-  const drain = [];
 
   let state = {};
 
@@ -58,9 +57,7 @@ describe('malcolm socket handler', () => {
       connectionState = connected;
     },
     queue: [],
-    flush: () => {
-      drain.push(socketContainer.queue.shift());
-    },
+    flush: () => {},
   };
 
   const reconnectingSocketContainer = {
@@ -70,9 +67,7 @@ describe('malcolm socket handler', () => {
       connectionState = connected;
     },
     queue: [],
-    flush: () => {
-      drain.push(socketContainer.queue.shift());
-    },
+    flush: () => {},
   };
 
   const buildMessage = (typeid, id, payload) =>

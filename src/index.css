@@ -28,3 +28,7 @@ body {
 .ReactVirtualized__Table__row {
   background-color: #303030; /* theme.palette.background.default */
 }
+
+:-moz-focusring {
+  color: white !important;
+}

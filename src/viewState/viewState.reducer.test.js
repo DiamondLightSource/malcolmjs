@@ -5,20 +5,13 @@ import {
   snackbarState,
   showFooterAction,
 } from './viewState.actions';
+import { buildTestState } from '../testState.utilities';
 
 describe('view state reducer', () => {
   let state = {};
 
   beforeEach(() => {
-    state = {
-      openParentPanel: true,
-      openChildPanel: true,
-      snackbar: {
-        open: false,
-        message: '',
-      },
-      footerHeight: 0,
-    };
+    state = buildTestState().viewState;
   });
 
   it('returns state if not a recognised type', () => {

@@ -56,6 +56,7 @@ describe('Method viewer', () => {
   let mount;
   let testInputs;
   let freshArchive;
+  let testInputValues;
 
   const getItem = jest.fn();
   const setItem = jest.fn();
@@ -83,20 +84,6 @@ describe('Method viewer', () => {
     },
   };
 
-  const testInputValues = {
-    first: 3,
-    second: { value: 'four', isAString: true },
-    third: {
-      value: ['SEVEN'],
-      flags: { rows: [] },
-      meta: {
-        typeid: malcolmTypes.stringArray,
-        tags: ['widget:textinput'],
-        writeable: true,
-      },
-    },
-  };
-
   const testOutputValues = {
     first: true,
     second: 'done',
@@ -104,9 +91,6 @@ describe('Method viewer', () => {
   };
 
   const testMethodViewer = (
-    inputs,
-    outputs,
-    inputValues,
     outputValues,
     selected,
     errorMsg,
@@ -118,14 +102,14 @@ describe('Method viewer', () => {
         path: ['Test', 'Method'],
         errorState: !!errorMsg,
         errorMessage: errorMsg,
-        inputs: inputValues,
+        inputs: testInputValues,
         outputs: outputValues,
       },
       raw: {
         label: 'Test',
         defaults: {},
-        takes: { elements: { ...inputs } },
-        returns: { elements: { ...outputs } },
+        takes: { elements: { ...testInputs } },
+        returns: { elements: { ...testOutputs } },
       },
     };
 
@@ -160,6 +144,20 @@ describe('Method viewer', () => {
     shallow = createShallow({ dive: true });
     mount = createMount();
 
+    testInputValues = {
+      first: 3,
+      second: { value: 'four', isAString: true },
+      third: {
+        value: ['SEVEN'],
+        flags: { rows: [] },
+        meta: {
+          typeid: malcolmTypes.stringArray,
+          tags: ['widget:textinput'],
+          writeable: true,
+        },
+      },
+    };
+
     testInputs = {
       first: {
         label: 'First input',
@@ -193,56 +191,32 @@ describe('Method viewer', () => {
   });
 
   it('renders input correctly with no initial value', () => {
+    testInputValues = {};
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        ['takes', 'first'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'first'], undefined, freshArchive)
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders input correctly with initial value', () => {
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'first'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'first'], undefined, freshArchive)
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders output correctly with no initial value', () => {
+    testInputValues = {};
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        ['returns', 'first'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['returns', 'first'], undefined, freshArchive)
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders output correctly with initial value', () => {
+    testInputValues = {};
     const wrapper = shallow(
       testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
         testOutputValues,
         ['returns', 'first'],
         undefined,
@@ -253,11 +227,9 @@ describe('Method viewer', () => {
   });
 
   it('renders output array correctly', () => {
+    testInputValues = {};
     const wrapper = shallow(
       testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
         testOutputValues,
         ['returns', 'third'],
         undefined,
@@ -268,46 +240,25 @@ describe('Method viewer', () => {
   });
 
   it('renders method param archive if selected parameter isnt a tree', () => {
+    testInputValues = {};
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        ['takes', 'first'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'first'], undefined, freshArchive)
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('renders top-level method param archive if no selected parameter', () => {
+    testInputValues = {};
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        undefined,
-        undefined,
-        pushTestData(freshArchive)
-      )
+      testMethodViewer({}, undefined, undefined, pushTestData(freshArchive))
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('copy params button hooks in correctly on top-level method param archive', () => {
+    testInputValues = {};
     const wrapper = mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        undefined,
-        undefined,
-        pushTestData(freshArchive)
-      )
+      testMethodViewer({}, undefined, undefined, pushTestData(freshArchive))
     );
     wrapper
       .find('button')
@@ -401,17 +352,8 @@ describe('Method viewer', () => {
   }); */
 
   it('fires action to initialise local state if input is an array', () => {
-    mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        {},
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
-    );
+    testInputValues = {};
+    mount(testMethodViewer({}, ['takes', 'third'], undefined, freshArchive));
     expect(malcolmIntialiseMethodParam).toHaveBeenCalledTimes(1);
     expect(malcolmIntialiseMethodParam).toHaveBeenCalledWith(
       ['Test', 'Method'],
@@ -420,46 +362,20 @@ describe('Method viewer', () => {
   });
 
   it('doesnt fire action if array input local state is already initialised', () => {
-    mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
-    );
+    mount(testMethodViewer({}, ['takes', 'third'], undefined, freshArchive));
     expect(malcolmIntialiseMethodParam).not.toHaveBeenCalled();
   });
 
   it('renders correctly for array once local state is initialised', () => {
     const wrapper = shallow(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'third'], undefined, freshArchive)
     );
     expect(wrapper.dive().dive()).toMatchSnapshot();
   });
 
   it('add row hooks up correctly for array', () => {
     const wrapper = mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'third'], undefined, freshArchive)
     );
     wrapper
       .find('button')
@@ -475,15 +391,7 @@ describe('Method viewer', () => {
 
   it('update input hooks up correctly for array', () => {
     const wrapper = mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'third'], undefined, freshArchive)
     );
     wrapper
       .find('input')
@@ -500,15 +408,7 @@ describe('Method viewer', () => {
   it('update input hooks up correctly for array if writeable is false', () => {
     testInputs.third.writeable = false;
     const wrapper = mount(
-      testMethodViewer(
-        testInputs,
-        testOutputs,
-        testInputValues,
-        {},
-        ['takes', 'third'],
-        undefined,
-        freshArchive
-      )
+      testMethodViewer({}, ['takes', 'third'], undefined, freshArchive)
     );
     wrapper
       .find('input')

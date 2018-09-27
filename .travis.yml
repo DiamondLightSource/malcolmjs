@@ -42,6 +42,7 @@ jobs:
         file_glob: true
         file: "${TRAVIS_BUILD_DIR}/artifacts/*"
         skip_cleanup: true
+        name: $TRAVIS_TAG
         on:
           all_branches: true
           tags: true

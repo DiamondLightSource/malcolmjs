@@ -11,6 +11,29 @@ describe('info builder', () => {
     };
   });
 
+  const buildLocalState = rawAttribute => {
+    const labels = Object.keys(rawAttribute.meta.elements);
+    return {
+      meta: JSON.parse(JSON.stringify(rawAttribute.meta)),
+      value: rawAttribute.value[labels[0]].map((value, row) => {
+        const dataRow = {};
+        labels.forEach(label => {
+          dataRow[label] = rawAttribute.value[label][row];
+        });
+        return dataRow;
+      }),
+      labels,
+      flags: {
+        rows: rawAttribute.value[labels[0]].map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp: JSON.parse(JSON.stringify(rawAttribute.timeStamp)),
+        },
+      },
+    };
+  };
+
   it('attribute info builder returns empty object if attribute.raw not found', () => {
     props.attribute.raw = undefined;
     const propsWithInfo = buildAttributeInfo(props);
@@ -117,28 +140,9 @@ describe('info builder', () => {
   });
 
   it('attribute info builder generates correct structure for attribute with sub-element defined', () => {
-    const labels = Object.keys(props.attribute.raw.meta.elements);
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = {
-      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
-      value: props.attribute.raw.value[labels[0]].map((value, row) => {
-        const dataRow = {};
-        labels.forEach(label => {
-          dataRow[label] = props.attribute.raw.value[label][row];
-        });
-        return dataRow;
-      }),
-      labels,
-      flags: {
-        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
-        },
-      },
-    };
+    props.attribute.localState = buildLocalState(props.attribute.raw);
     props.subElement = ['row', '1'];
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState).toBeDefined();
@@ -180,30 +184,12 @@ describe('info builder', () => {
   });
 
   it('table add and delete row methods get hooked up', () => {
-    const labels = Object.keys(props.attribute.raw.meta.elements);
     props.addRow = jest.fn();
     props.changeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = {
-      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
-      value: props.attribute.raw.value[labels[0]].map((value, row) => {
-        const dataRow = {};
-        labels.forEach(label => {
-          dataRow[label] = props.attribute.raw.value[label][row];
-        });
-        return dataRow;
-      }),
-      labels,
-      flags: {
-        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
-        },
-      },
-    };
+    props.attribute.localState = buildLocalState(props.attribute.raw);
+
     props.subElement = ['row', '1'];
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.addRowAbove).toBeDefined();
@@ -229,30 +215,12 @@ describe('info builder', () => {
   });
 
   it('table delete row methods fires info route change if bottom row selected', () => {
-    const labels = Object.keys(props.attribute.raw.meta.elements);
     props.addRow = jest.fn();
     props.changeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = {
-      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
-      value: props.attribute.raw.value[labels[0]].map((value, row) => {
-        const dataRow = {};
-        labels.forEach(label => {
-          dataRow[label] = props.attribute.raw.value[label][row];
-        });
-        return dataRow;
-      }),
-      labels,
-      flags: {
-        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
-        },
-      },
-    };
+    props.attribute.localState = buildLocalState(props.attribute.raw);
+
     props.subElement = [
       'row',
       (props.attribute.localState.value.length - 1).toString(),
@@ -280,19 +248,9 @@ describe('info builder', () => {
     props.closeInfoHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = {
-      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
-      value: [dataRow],
-      labels,
-      flags: {
-        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
-        },
-      },
-    };
+    props.attribute.localState = buildLocalState(props.attribute.raw);
+    props.attribute.localState.value = [dataRow];
+
     props.subElement = ['row', '0'];
     const infoObject = buildAttributeInfo(props);
 
@@ -313,19 +271,8 @@ describe('info builder', () => {
     props.rowRevertHandler = jest.fn();
     props.attribute.raw.meta.tags = ['widget:table'];
     props.attribute.calculated.dirty = false;
-    props.attribute.localState = {
-      meta: JSON.parse(JSON.stringify(props.attribute.raw.meta)),
-      value: [dataRow],
-      labels,
-      flags: {
-        rows: props.attribute.raw.value[labels[0]].map(() => ({})),
-        table: {
-          dirty: false,
-          fresh: true,
-          timeStamp: JSON.parse(JSON.stringify(props.attribute.raw.timeStamp)),
-        },
-      },
-    };
+    props.attribute.localState = buildLocalState(props.attribute.raw);
+
     props.subElement = ['row', '0'];
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info.localState.functions).toBeDefined();

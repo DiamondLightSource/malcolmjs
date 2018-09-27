@@ -2,12 +2,18 @@ import NavigationReducer, {
   processNavigationLists,
 } from './navigation.reducer';
 import NavTypes from '../NavTypes';
+import {
+  buildTestState,
+  updatePanels,
+  addBlock,
+  buildAttribute,
+  addNavigationLists,
+  buildMeta,
+} from '../../testState.utilities';
 
 describe('navigation reducer', () => {
   it('updateNavigationPath set navigation on state', () => {
-    let state = {
-      blocks: {},
-    };
+    let state = buildTestState().malcolm;
     const blockPaths = ['PANDA', 'layout', 'PANDA:TTLIN1'];
     const payload = {
       blockPaths,
@@ -28,11 +34,8 @@ describe('navigation reducer', () => {
   });
 
   it('resets the parent and child blocks when navigating to a different route', () => {
-    let state = {
-      parentBlock: 'parent',
-      childBlock: 'child',
-      blocks: {},
-    };
+    let state = buildTestState().malcolm;
+    updatePanels('parent', 'child', state);
 
     state = NavigationReducer.updateNavigationPath(state, { blockPaths: [] });
 
@@ -45,42 +48,29 @@ describe('NavigationReducer.updateNavTypes', () => {
   let state;
 
   beforeEach(() => {
-    state = {
-      blocks: {
-        '.blocks': {
-          children: ['PANDA', 'PANDA:SEQ2'],
-        },
-        PANDA: {
-          attributes: [
-            {
-              calculated: {
-                name: 'layout',
-                children: ['SEQ1', 'SEQ2'],
-              },
-              raw: {
-                meta: {
-                  label: 'Layout',
-                  tags: ['widget:flowgraph'],
-                },
-                value: {
-                  name: ['SEQ1', 'SEQ2'],
-                  mri: ['PANDA:SEQ1', 'PANDA:SEQ2'],
-                },
-              },
-            },
-          ],
-          children: ['layout', 'health'],
-        },
-      },
-      navigation: {
-        navigationLists: [
-          { path: 'PANDA' },
-          { path: 'layout' },
-          { path: 'SEQ2' },
-          { path: '.info' },
-        ],
-      },
-    };
+    state = buildTestState().malcolm;
+    addBlock('.blocks', undefined, state, ['PANDA', 'PANDA:SEQ2']);
+    addBlock(
+      'PANDA',
+      [
+        buildAttribute(
+          'layout',
+          ['PANDA', 'layout'],
+          {
+            name: ['SEQ1', 'SEQ2'],
+            mri: ['PANDA:SEQ1', 'PANDA:SEQ2'],
+          },
+          0,
+          buildMeta(['widget:flowgraph'], true, 'Layout'),
+          ['SEQ1', 'SEQ2'],
+          false
+        ),
+      ],
+      state,
+      ['layout', 'health']
+    );
+
+    addNavigationLists(['PANDA', 'layout', 'SEQ2', '.info'], state);
   });
 
   it('updateNavTypes adds the nav type for each url element', () => {
@@ -95,11 +85,7 @@ describe('NavigationReducer.updateNavTypes', () => {
   });
 
   it('updateNavTypes adds the nav type for palette', () => {
-    state.navigation.navigationLists = [
-      { path: 'PANDA' },
-      { path: 'layout' },
-      { path: '.palette' },
-    ];
+    addNavigationLists(['PANDA', 'layout', '.palette'], state);
     state = NavigationReducer.updateNavTypes(state);
 
     expect(state.navigation.navigationLists[2].navType).toEqual(
@@ -144,23 +130,14 @@ describe('NavigationReducer.updateNavTypes', () => {
   });
 
   it('updateNavTypes sets parent/child blocks if palette', () => {
-    state.navigation.navigationLists = [
-      { path: 'PANDA' },
-      { path: 'layout' },
-      { path: '.palette' },
-    ];
+    addNavigationLists(['PANDA', 'layout', '.palette'], state);
     state = NavigationReducer.updateNavTypes(state);
 
     expect(state.childBlock).toEqual('.palette');
   });
 
   it('updateNavTypes sets main attribute', () => {
-    state.navigation.navigationLists = [
-      { path: 'PANDA' },
-      { path: 'layout' },
-      { path: 'SEQ2' },
-    ];
-
+    addNavigationLists(['PANDA', 'layout', 'SEQ2'], state);
     state = NavigationReducer.updateNavTypes(state);
 
     expect(state.parentBlock).toEqual('PANDA');
@@ -169,32 +146,15 @@ describe('NavigationReducer.updateNavTypes', () => {
   });
 
   it('updateNavTypes sets the parent to the block element if it is the only one', () => {
-    state.navigation.navigationLists = [{ path: 'PANDA' }];
-
+    addNavigationLists(['PANDA'], state);
     state = NavigationReducer.updateNavTypes(state);
 
     expect(state.parentBlock).toEqual('PANDA');
   });
 
   it('updateNavTypes sets the parent to the last block element if there is an attribute at the end', () => {
-    state.navigation.navigationLists = [
-      { path: 'PANDA' },
-      { path: 'layout' },
-      { path: 'SEQ2' },
-      { path: 'table' },
-    ];
-
-    state.blocks['PANDA:SEQ2'] = {
-      attributes: [
-        {
-          calculated: {
-            name: 'table',
-          },
-          raw: {},
-        },
-      ],
-      children: ['table'],
-    };
+    addNavigationLists(['PANDA', 'layout', 'SEQ2', 'table'], state);
+    addBlock('PANDA:SEQ2', [buildAttribute('table')], state, ['table']);
 
     state = NavigationReducer.updateNavTypes(state);
 
@@ -207,29 +167,17 @@ describe('processNavigationLists', () => {
   let blocks;
 
   beforeEach(() => {
-    blocks = {
-      '.blocks': {
-        children: ['block1', 'block2'],
-      },
-      block1: {
-        label: 'block 1',
-        attributes: [
-          {
-            name: 'layout',
-            children: ['block5', 'block6'],
-            value: {
-              mri: ['block5', 'block6'],
-              name: ['block5 display name', 'block6 display name'],
-            },
-          },
-        ],
-        children: ['block2'],
-      },
-      block2: {
-        label: 'block 2',
-        children: ['block3', 'block4'],
-      },
-    };
+    const state = buildTestState().malcolm;
+    addBlock('.blocks', undefined, state, ['block1', 'block2']);
+    const attribute = buildAttribute('layout', ['block1', 'layout'], {
+      mri: ['block5', 'block6'],
+      name: ['block5 display name', 'block6 display name'],
+    });
+    attribute.children = ['block5', 'block6'];
+    addBlock('block1', [attribute], state, ['block2']);
+    addBlock('block2', [], state, ['block3', 'block4']);
+
+    ({ blocks } = state);
   });
 
   it('returns the .block blocks in the rootNav', () => {

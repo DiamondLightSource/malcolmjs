@@ -138,17 +138,17 @@ describe('attributePlot', () => {
     };
   });
 
-  it('renders correctly for number', () => {
-    mockArchive.meta.typeid = malcolmTypes.number;
+  const buildMockArchive = (values, alarms) => {
     mockArchive.timeStamp.push(new Date(1000));
     mockArchive.timeStamp.push(new Date(2000));
     mockArchive.timeStamp.push(new Date(3000));
-    mockArchive.plotValue.push(1);
-    mockArchive.plotValue.push(-1);
-    mockArchive.plotValue.push(2);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
+    values.forEach(v => mockArchive.plotValue.push(v));
+    alarms.forEach(v => mockArchive.alarmState.push(v));
+  };
+
+  it('renders correctly for number', () => {
+    mockArchive.meta.typeid = malcolmTypes.number;
+    buildMockArchive([1, -1, 2], [0, 0, 0]);
 
     const wrapper = shallow(
       <Plotter
@@ -165,15 +165,7 @@ describe('attributePlot', () => {
 
   it('renders correctly for bool', () => {
     mockArchive.meta.typeid = malcolmTypes.bool;
-    mockArchive.timeStamp.push(new Date(1000));
-    mockArchive.timeStamp.push(new Date(2000));
-    mockArchive.timeStamp.push(new Date(3000));
-    mockArchive.plotValue.push(1);
-    mockArchive.plotValue.push(0);
-    mockArchive.plotValue.push(1);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
+    buildMockArchive([1, 0, 1], [0, 0, 0]);
 
     const wrapper = shallow(
       <Plotter
@@ -190,15 +182,7 @@ describe('attributePlot', () => {
 
   it('renders correctly for changing alarm state', () => {
     mockArchive.meta.typeid = malcolmTypes.number;
-    mockArchive.timeStamp.push(new Date(1000));
-    mockArchive.timeStamp.push(new Date(2000));
-    mockArchive.timeStamp.push(new Date(3000));
-    mockArchive.plotValue.push(1);
-    mockArchive.plotValue.push(-1);
-    mockArchive.plotValue.push(2);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(1);
-    mockArchive.alarmState.push(0);
+    buildMockArchive([1, -1, 2], [0, 1, 0]);
 
     const wrapper = shallow(
       <Plotter
@@ -215,15 +199,7 @@ describe('attributePlot', () => {
 
   it('dispatches tick action after timeout', () => {
     mockArchive.meta.typeid = malcolmTypes.number;
-    mockArchive.timeStamp.push(new Date(1000));
-    mockArchive.timeStamp.push(new Date(2000));
-    mockArchive.timeStamp.push(new Date(3000));
-    mockArchive.plotValue.push(1);
-    mockArchive.plotValue.push(-1);
-    mockArchive.plotValue.push(2);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
+    buildMockArchive([1, -1, 2], [0, 0, 0]);
 
     mount(
       <Plotter
@@ -246,35 +222,6 @@ describe('attributePlot', () => {
 });
 
 describe('Generic Plotter', () => {
-  /*
-  let mount;
-  let mockArchive;
-  let mockStore;
-  beforeEach(() => {
-    mount = createMount();
-    mockArchive = {
-      timeStamp: new MockCircularBuffer(5),
-      alarmState: new MockCircularBuffer(5),
-      plotValue: new MockCircularBuffer(5),
-      meta: {},
-    };
-    mockArchive.meta.typeid = malcolmTypes.number;
-    mockArchive.timeStamp.push(new Date(1000));
-    mockArchive.timeStamp.push(new Date(2000));
-    mockArchive.timeStamp.push(new Date(3000));
-    mockArchive.plotValue.push(1);
-    mockArchive.plotValue.push(-1);
-    mockArchive.plotValue.push(2);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
-    mockArchive.alarmState.push(0);
-    mockStore = {
-      getState: () => {},
-      subscribe: () => {},
-    };
-  });
-  */
-
   it('mouse down in plot area calls startChange function', () => {});
 
   it('plotly date compare behaves as expected', () => {
