@@ -148,6 +148,7 @@ const findAttributeComponent = props => {
                 color="secondary"
                 onClick={() => props.openPalette()}
                 disabled={props.layoutLocked}
+                data-cy="palettebutton"
               >
                 <PaletteIcon />
               </Button>

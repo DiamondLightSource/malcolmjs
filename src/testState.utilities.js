@@ -140,6 +140,23 @@ export const addNavigationLists = (navList, malcolmState) => {
   updatedState.navigation.navigationLists = navList.map(n => ({ path: n }));
 };
 
+export const buildMockDispatch = getState => {
+  const actions = [];
+  const dispatch = action => {
+    if (typeof action === 'function') {
+      action(dispatch, getState);
+    } else {
+      actions.push(action);
+    }
+  };
+
+  return {
+    actions,
+    dispatch,
+    getState,
+  };
+};
+
 export default {
   buildTestState,
   addMessageInFlight,
@@ -150,4 +167,5 @@ export default {
   buildBlockArchiveAttribute,
   updatePanels,
   addNavigationLists,
+  buildMockDispatch,
 };
