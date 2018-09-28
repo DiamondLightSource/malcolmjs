@@ -43,9 +43,9 @@ describe('Table reducer', () => {
   };
 
   const expectedValue = JSON.parse(JSON.stringify(rowValues));
-  expectedValue[1].x = 10;
-  expectedValue[1].y = 15;
-  expectedValue[1].visible = true;
+  expectedValue[0].outa1 = false;
+  expectedValue[0].outf2 = true;
+  expectedValue[0].repeats = 10;
 
   let state;
 
@@ -83,13 +83,25 @@ describe('Table reducer', () => {
     const payload = {
       path: ['block1', 'layout'],
       value: {
-        name: 'TTLIN2',
-        mri: 'PANDA:TTLIN2',
-        x: 10.0,
-        y: 15.0,
-        visible: true,
+        outa1: false,
+        outa2: false,
+        outb1: false,
+        outb2: false,
+        outc1: false,
+        outc2: false,
+        outd1: false,
+        outd2: false,
+        oute1: false,
+        oute2: false,
+        outf1: false,
+        outf2: true,
+        position: 0,
+        repeats: 10,
+        time1: 0,
+        time2: 0,
+        trigger: 'POSC>=POSITION',
       },
-      row: 1,
+      row: 0,
     };
     const action = {
       type: MalcolmTableUpdate,
@@ -333,16 +345,15 @@ describe('Table reducer', () => {
     ).toBeTruthy();
   });
 
-  it('should clear dirty clears dirty does nothing if dirty flag not true', () => {
+  it('shouldClearDirty does nothing if dirty flag not true', () => {
     let testAttr = shouldClearDirtyFlag(testState.blocks.block1.attributes[0]);
     expect(testAttr.localState.flags.table.dirty).toBeFalsy();
-    testState.blocks.block1.attributes[0].raw.value.visible[0] = !testState
-      .blocks.block1.attributes[0].raw.value.visible[0];
+    testState.blocks.block1.attributes[0].raw.value.repeats[0] += 1;
     testAttr = shouldClearDirtyFlag(testState.blocks.block1.attributes[0]);
     expect(testAttr.localState.flags.table.dirty).toBeFalsy();
   });
 
-  it('should clear dirty clears dirty if all rows match', () => {
+  it('shouldClearDirty clears dirty if all rows match', () => {
     testState.blocks.block1.attributes[0].localState.flags.table.dirty = true;
     const testAttr = shouldClearDirtyFlag(
       testState.blocks.block1.attributes[0]
@@ -350,10 +361,9 @@ describe('Table reducer', () => {
     expect(testAttr.localState.flags.table.dirty).toBeFalsy();
   });
 
-  it('should clear dirty doesnt clear dirty if not all rows match', () => {
+  it('shouldClearDirty doesnt clear dirty if not all rows match', () => {
     testState.blocks.block1.attributes[0].localState.flags.table.dirty = true;
-    testState.blocks.block1.attributes[0].raw.value.visible[0] = !testState
-      .blocks.block1.attributes[0].raw.value.visible[0];
+    testState.blocks.block1.attributes[0].raw.value.repeats[0] += 1;
     const testAttr = shouldClearDirtyFlag(
       testState.blocks.block1.attributes[0]
     );

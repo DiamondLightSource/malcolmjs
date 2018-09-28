@@ -78,62 +78,6 @@ describe('Table container', () => {
       malcolmCopyValue(['test1', 'layout'])
     );
   });
-  /*
-  it('dispatches submit action on change', () => {
-    const testStore = mockStore(state);
-    const wrapper = mount(
-      <WidgetTable
-        blockName="test1"
-        attributeName="layout"
-        eventHandler={() => {}}
-        setFlag={() => {}}
-        store={testStore}
-      />
-    );
-    wrapper
-      .find('input')
-      .first()
-      .simulate('change', { target: { value: 'test' } });
-    expect(testStore.getActions().length).toEqual(2);
-    expect(testStore.getActions()[1]).toEqual(
-      malcolmUpdateTable(
-        ['test1', 'layout'],
-        {
-          mri: 'PANDA:TTLIN1',
-          name: 'TTLIN1',
-          visible: false,
-          x: 'test',
-          y: 0,
-        },
-        0
-      )
-    );
-  });
-  it('dispatches set flag on textinput focus', () => {
-    const testStore = mockStore(state);
-    const wrapper = mount(
-      <WidgetTable
-        blockName="test1"
-        attributeName="layout"
-        eventHandler={() => {}}
-        setFlag={() => {}}
-        store={testStore}
-      />
-    );
-    wrapper
-      .find('input')
-      .first()
-      .simulate('focus');
-
-    expect(testStore.getActions().length).toEqual(1);
-    expect(testStore.getActions()[0]).toEqual(
-      malcolmSetTableFlag(['test1', 'layout'], 0, 'dirty', {
-        _dirty: true,
-        dirty: { x: true },
-      })
-    );
-  });
-  */
   it('add row button hooks up correctly', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
@@ -143,7 +87,11 @@ describe('Table container', () => {
     buttons.at(buttons.length - 3).simulate('click');
     expect(testStore.getActions().length).toEqual(1);
     expect(testStore.getActions()[0]).toEqual(
-      malcolmUpdateTable(['test1', 'layout'], { insertRow: true }, 4)
+      malcolmUpdateTable(
+        ['test1', 'layout'],
+        { insertRow: true },
+        expectedCopy.value.length
+      )
     );
   });
 
@@ -195,28 +143,6 @@ describe('Table container', () => {
       malcolmPutAction(['test1', 'layout'], expectedSent)
     );
   });
-  /*
-  it('row and info click hook up correctly', () => {
-    const testStore = {
-      getState: () => state,
-      dispatch: () => {},
-      subscribe: () => {},
-    };
-    const wrapper = mount(
-      <WidgetTable blockName="test1" attributeName="layout" store={testStore} />
-    );
-    wrapper
-      .find('button')
-      .first()
-      .simulate('click');
-    expect(navigationActions.navigateToInfo).toHaveBeenCalledTimes(1);
-    expect(navigationActions.navigateToInfo).toHaveBeenCalledWith(
-      'test1',
-      'layout',
-      'row.0'
-    );
-  });
-  */
   it('subelement in url selects row correctly', () => {
     state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
     state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];

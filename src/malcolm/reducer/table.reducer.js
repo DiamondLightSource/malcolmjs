@@ -27,8 +27,8 @@ export const tableHasRow = (row, table) =>
 export const tableHasColumn = (column, table) =>
   table &&
   table.raw &&
-  table.meta.elements &&
-  table.raw.meta.elements.includes(column);
+  table.raw.meta.elements &&
+  Object.keys(table.raw.meta.elements).includes(column[0]);
 
 export const shouldClearDirtyFlag = inputAttribute => {
   const attribute = inputAttribute;

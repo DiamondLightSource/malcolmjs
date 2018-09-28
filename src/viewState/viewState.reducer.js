@@ -1,8 +1,10 @@
+import { theme } from '../mainMalcolmView/connectedThemeProvider';
 import {
   openParentPanelType,
   updateVersionNumerType,
   snackbar,
   showFooterType,
+  newTheme,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -36,6 +38,12 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
       return {
         ...state,
         footerHeight: action.payload.footerHeight || 0,
+      };
+
+    case newTheme:
+      return {
+        ...state,
+        theme: theme(action.payload.color, action.payload.type),
       };
 
     default:
