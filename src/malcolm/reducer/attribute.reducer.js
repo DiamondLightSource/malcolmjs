@@ -11,6 +11,7 @@ import {
   MalcolmRevert,
   MalcolmTickArchive,
   MalcolmMultipleAttributeData,
+  MalcolmSimpleLocalState,
 } from '../malcolm.types';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
@@ -211,7 +212,10 @@ const checkForSpecialCases = inputAttribute => {
   attribute = updateAttributeChildren(attribute);
   attribute = hasSubElements(attribute);
 
-  if (attribute.localState !== undefined) {
+  if (
+    attribute.localState !== undefined &&
+    attribute.localState instanceof Object
+  ) {
     const labels = Object.keys(attribute.raw.meta.elements);
     attribute = shouldClearDirtyFlag(attribute);
     if (!attribute.calculated.dirty || attribute.calculated.forceUpdate) {
@@ -368,6 +372,14 @@ export function updateAttribute(
             path,
           },
         };
+        if (
+          attribute.raw.meta &&
+          attribute.raw.meta.tags &&
+          attribute.raw.meta.tags.includes('widget:textinput') &&
+          !attribute.calculated.dirty
+        ) {
+          attribute.localState = attribute.raw.value;
+        }
         if (attribute.raw.alarm) {
           attribute.calculated.alarms = {
             ...attribute.calculated.alarms,
@@ -541,6 +553,36 @@ export function revertLocalState(oldState, payload) {
   return oldState;
 }
 
+function writeSimpleLocalState(oldState, payload) {
+  const state = oldState;
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const attributes = [...state.blocks[blockName].attributes];
+
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
+      state.blocks,
+      blockName,
+      attributeName
+    );
+    if (matchingAttributeIndex >= 0) {
+      attributes[matchingAttributeIndex] = {
+        ...attributes[matchingAttributeIndex],
+        localState: payload.value,
+      };
+    }
+    const blocks = { ...state.blocks };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+    return {
+      ...state,
+      blocks,
+    };
+  }
+  return oldState;
+}
+
 function setMainAttribute(state, payload) {
   return {
     ...state,
@@ -556,6 +598,7 @@ const AttributeReducer = createReducer(
     [MalcolmMainAttributeUpdate]: setMainAttribute,
     [MalcolmRevert]: revertLocalState,
     [MalcolmTickArchive]: tickArchive,
+    [MalcolmSimpleLocalState]: writeSimpleLocalState,
   }
 );
 

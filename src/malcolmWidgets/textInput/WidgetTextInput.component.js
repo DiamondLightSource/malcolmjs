@@ -50,7 +50,10 @@ class WidgetTextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      localValue: props.Value,
+      localValue:
+        props.localState.value && props.localState.value !== props.Value
+          ? props.localState.value
+          : props.Value,
     };
     this.handleChange = this.handleChange.bind(this);
     this.deFocus = this.deFocus.bind(this);
@@ -81,6 +84,7 @@ class WidgetTextInput extends React.Component {
     this.setState({
       localValue: event.target.value,
     });
+    this.props.localState.set(event);
     if (this.props.continuousSend) {
       this.props.submitEventHandler(event);
     }
@@ -128,6 +132,14 @@ class WidgetTextInput extends React.Component {
 WidgetTextInput.propTypes = {
   Value: PropTypes.string.isRequired,
   submitEventHandler: PropTypes.func.isRequired,
+  localState: PropTypes.shape({
+    set: PropTypes.func,
+    value: PropTypes.oneOfType(
+      PropTypes.string,
+      PropTypes.bool,
+      PropTypes.number
+    ),
+  }),
   setFlag: PropTypes.func.isRequired,
   blurHandler: PropTypes.func.isRequired,
   focusHandler: PropTypes.func.isRequired,
@@ -150,6 +162,7 @@ WidgetTextInput.defaultProps = {
   Units: '',
   Error: false,
   continuousSend: false,
+  localState: { set: () => {} },
 };
 
 export default withStyles(styles)(WidgetTextInput);

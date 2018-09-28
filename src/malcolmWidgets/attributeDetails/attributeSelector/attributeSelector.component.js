@@ -14,6 +14,7 @@ import AttributeAlarm from '../attributeAlarm/attributeAlarm.component';
 import {
   malcolmPutAction,
   malcolmSetFlag,
+  writeLocalState,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
@@ -61,7 +62,8 @@ export const selectorFunction = (
   objectMeta,
   forceUpdate,
   continuousSend = false,
-  buttonClickHandler = () => {}
+  buttonClickHandler = () => {},
+  localState
 ) => {
   if (isArrayType(objectMeta) && !objectMeta.insideArray) {
     return (
@@ -108,6 +110,7 @@ export const selectorFunction = (
           Value={value !== undefined ? value.toString() : '-'}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
+          localState={localState}
           isDirty={flags.isDirty}
           setFlag={(flag, state) => flagHandler(path, flag, state)}
           focusHandler={() => {}}
@@ -187,7 +190,15 @@ const AttributeSelector = props => {
         props.attribute.raw.meta,
         props.attribute.calculated.forceUpdate,
         continuousSend,
-        props.buttonClickHandler
+        props.buttonClickHandler,
+        {
+          value: props.attribute.localState,
+          set: event =>
+            props.setLocalState(
+              props.attribute.calculated.path,
+              event.target.value
+            ),
+        }
       );
     }
   }
@@ -217,6 +228,9 @@ const mapDispatchToProps = dispatch => ({
   buttonClickHandler: path => {
     dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
     // dispatch(push(`/gui/${path[0]}/${path[1]}`));
+  },
+  setLocalState: (path, value) => {
+    dispatch(writeLocalState(path, value));
   },
 });
 
