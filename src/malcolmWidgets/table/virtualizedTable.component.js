@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Add from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import AttributeAlarm, {
@@ -324,13 +325,24 @@ const WidgetTable = props => {
             return (
               <div>
                 <Table
+                  noRowsRenderer={() => (
+                    <div className={props.classes.textBody}>
+                      <Typography style={{ fontSize: '14pt' }}>
+                        No rows in table!
+                      </Typography>
+                    </div>
+                  )}
                   headerClassName={props.classes.header}
                   rowClassName={({ index }) => isSelectedRow(index, props)}
                   height={height}
                   width={width}
                   headerHeight={iconWidth}
                   rowHeight={iconWidth}
-                  rowCount={tableState.values.length + 2}
+                  rowCount={
+                    tableState.values.length !== 0
+                      ? tableState.values.length + 2
+                      : 0
+                  }
                   rowGetter={({ index }) =>
                     getRowData(
                       index,
@@ -374,6 +386,7 @@ WidgetTable.propTypes = {
     incompleteRowFormat: PropTypes.string,
     header: PropTypes.string,
     addRowButton: PropTypes.string,
+    textBody: PropTypes.string,
   }).isRequired,
   localState: PropTypes.shape({
     flags: PropTypes.shape({
