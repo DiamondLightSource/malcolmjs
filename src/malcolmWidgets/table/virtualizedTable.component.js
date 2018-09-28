@@ -114,7 +114,7 @@ const getColumnWidths = (divWidth, columnWidgetTags, tableState, hideInfo) => {
   });
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
-    .reduce((total, val) => total + val);
+    .reduce((total, val) => total + val, 0);
   const numVariableWidth = fixedWidths.filter(val => val === undefined).length;
   return divWidth - usedWidth - iconWidth * !hideInfo >
     numVariableWidth * variableWidgetMinWidth
