@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WidgetTable from '../../malcolmWidgets/table/table.component';
+import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
+import { ARCHIVE_REFRESH_INTERVAL } from '../../malcolm/reducer/malcolmReducer';
 
 const noOp = () => {};
 
 class ArchiveTable extends React.Component {
   static getDerivedStateFromProps(props, state) {
-    if (props.attribute.plotTime - state.renderTime > 5) {
+    if (
+      props.attribute.plotTime - state.renderTime >
+      ARCHIVE_REFRESH_INTERVAL
+    ) {
       return { renderTime: props.attribute.plotTime };
     }
     return state;
@@ -19,7 +23,8 @@ class ArchiveTable extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     return (
-      nextProps.attribute.plotTime - this.state.renderTime > 5 ||
+      nextProps.attribute.plotTime - this.state.renderTime >
+        ARCHIVE_REFRESH_INTERVAL ||
       nextProps.attribute.parent !== this.props.attribute.parent ||
       nextProps.attribute.name !== this.props.attribute.name
     );
@@ -33,10 +38,10 @@ class ArchiveTable extends React.Component {
             value: {
               timeStamp: attribute.timeStamp
                 .toarray()
-                .slice(-100, -1)
+                .slice(0, -1)
                 .map(date => date.toISOString()),
-              value: attribute.value.toarray().slice(-100),
-              alarm: attribute.alarmState.toarray().slice(-100, -1),
+              value: attribute.value.toarray(), // .slice(-100),
+              alarm: attribute.alarmState.toarray().slice(0, -1),
             },
             meta: {
               elements: {

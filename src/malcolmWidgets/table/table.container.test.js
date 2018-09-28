@@ -5,7 +5,7 @@ import WidgetTable from './table.container';
 import { harderAttribute, expectedCopy } from './table.stories';
 import {
   malcolmSetFlag,
-  malcolmSetTableFlag,
+  // malcolmSetTableFlag,
   malcolmUpdateTable,
   malcolmCopyValue,
   malcolmPutAction,
@@ -78,7 +78,7 @@ describe('Table container', () => {
       malcolmCopyValue(['test1', 'layout'])
     );
   });
-
+  /*
   it('dispatches submit action on change', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
@@ -109,7 +109,6 @@ describe('Table container', () => {
       )
     );
   });
-
   it('dispatches set flag on textinput focus', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
@@ -134,7 +133,7 @@ describe('Table container', () => {
       })
     );
   });
-
+  */
   it('add row button hooks up correctly', () => {
     const testStore = mockStore(state);
     const wrapper = mount(
@@ -196,7 +195,7 @@ describe('Table container', () => {
       malcolmPutAction(['test1', 'layout'], expectedSent)
     );
   });
-
+  /*
   it('row and info click hook up correctly', () => {
     const testStore = {
       getState: () => state,
@@ -217,7 +216,7 @@ describe('Table container', () => {
       'row.0'
     );
   });
-
+  */
   it('subelement in url selects row correctly', () => {
     state.malcolm.navigation.navigationLists[1].subElements = ['row', '1'];
     state.malcolm.blocks.test1.attributes[0].raw.meta.tags = ['widget:table'];

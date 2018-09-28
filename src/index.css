@@ -19,6 +19,16 @@ body {
   stroke: #f50057 !important;
 }
 
+.ReactVirtualized__Table__headerRow {
+  font-family: Roboto, sans-serif;
+  font-weight: 400 !important;
+  color: #fff; /* theme.palette.primary.text */
+}
+
+.ReactVirtualized__Table__row {
+  background-color: #303030; /* theme.palette.background.default */
+}
+
 :-moz-focusring {
   color: white !important;
 }
