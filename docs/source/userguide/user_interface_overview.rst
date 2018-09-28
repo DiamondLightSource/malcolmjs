@@ -3,7 +3,7 @@
 User Interface Overview
 =======================
 
-The PandABox User Interface provides a fully interactive environment for designing, configuring and managing components and their connections that together define a PandABlock-FPGA Control System.
+The User Interface provides a fully interactive environment for designing, configuring and managing components and their connections that together define the underlying Control System.
 
 
 .. _principle_ui_views_:
@@ -11,12 +11,19 @@ The PandABox User Interface provides a fully interactive environment for designi
 Principle User Interface views
 ------------------------------
 
-To support design, configuration and management activies the PandABox User Interface provides three principle views into the underlying Control System:
+To support design, configuration and management activies the User Interface provides three principle views into the underlying Control System:
 
-    * A **Layout View**, providing an interactive environment for designing and configuring your Control System through `block_`, `attribute_` and `connector_` specification.  The resulting `flowgraph_` provides a visual representation of the formal Control System `design_`.
-    * An **Attribute View**, providing details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control System over time.
-    * A **Table View**, providing a text-based representation of Design and Attribute-based information.
+.. list-table::
+    :widths: 20, 80
+    :align: center
+    :header-rows: 1
 
+    * - View
+      - Content
+    * - Layout View
+      - Provides an interactive environment for designing and configuring your Control System through `block_`, `attribute_` and `connector_` specification.  The resulting `flowgraph_` provides a visual representation of the formal Control System `design_`.
+    * - Attribute View
+      - Provides details of a single Attribute, including the ability to view graphical representation of the Attribute's value within the control System over time.
 
 User Interface Components
 -------------------------
@@ -65,26 +72,10 @@ The User Interface automatically transitions to Attribute View when an Attribute
 
 In both cases the 'central panel' presents a view of the Attribute's value against time.  This may represent a constantly changing value, for example a calculated data value updated every 2ms, or a periodically changing boolean on/off status indicator that only changes every 10h.  Two representations of the Attribute value are available and can be selected by choosing the appropriate option at the bottom of the 'central panel' thus:
 
-    * Plot View - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `working_with_charts_` for further information.
-    * Table View - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.  Tables can be exported for offline analysis.  See `working_with_tables_` for further information.
+    * Plot - presents the Attribute Value as a line chart, displaying value against time on the pre-defined timing interval (potentially specified via a second Attribute within the same `block_`.  This graphical view is interactive and as a user you have the ability to undertake basic activities within the chart including panning, zooming and exporting for offline use.  See `working_with_charts_` for further information.
+    * Table - presents the Attribute Value as a series of rows in a table.  Each row represents the value at a different time point.  See `working_with_tables_` for further information.
     
 **THIS NEEDS AN IMAGE**
-
-
-.. _table_view_:
-
-The Table View
---------------
-
-*To be discussed - is this different from the table attribute view?*
-
-.. _method_view_:
-
-The Method View
----------------
-
-*Awaiting review of Bryan's work to see if this warrants its own section*
-
 
 Panel Popping
 -------------

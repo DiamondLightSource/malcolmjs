@@ -68,20 +68,12 @@ A `block_` within an assemblage of connected blocks that when aggregated deliver
 A Child Block may itself represent a Parent Block if its own functionality can be further decomposed. 
 
 
-.. _connector_:
-
-Connector
----------
-
-The mechanism of transferring content from a `source_port_` in one `block_` to a `sink_port_` in a second Block.  Connections can only be made between ports of the same logical type (e.g. Boolean -> Boolean, int32 -> int32). 
-
-
 .. _design_:
 
 Design
 ------
 
-The technical definition of the implemented system describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `connections <connector_>` between them.
+The technical definition of the implemented system describing the `blocks <block_>` it contains, their `attributes <attribute_>` and the `links <link_>` between them.
 
 Designs are presented graphically as a `layout_` within the 'Layout Panel' on the web interface allowing a user to build, configure and manage the system represented by that Design.
 
@@ -91,7 +83,7 @@ Designs are presented graphically as a `layout_` within the 'Layout Panel' on th
 Design Element
 --------------
 
-A generic term for any `block_`, `attribute_` or `connector_` currently forming the focus of interest within the `layout_` view of the PandABox User Interface.  
+A generic term for any `block_`, `attribute_` or `link_` currently forming the focus of interest within the `layout_` view of the PandABox User Interface.  
 
 
 .. _flowgraph_:
@@ -100,7 +92,6 @@ Flowgraph
 ---------
 
 The graphical representation of a `design_` showing the `design_element_` within the Control System as presented within the user interface 'Layout View'.
-
 
 
 .. _input_attribute_:
@@ -124,7 +115,15 @@ Synonym for `sink_port_`.
 Layout
 ------
 
-The graphical representation of a `design_` within the web interface showing the `blocks <block_>` within the Design and the `connections <connector_>` between them based on the selected `root_block_`.
+The graphical representation of a `design_` within the web interface showing the `blocks <block_>` within the Design and the `links <link_>` between them based on the selected `root_block_`.
+
+
+.. _link_:
+
+Link
+----
+
+The mechanism of transferring content from a `source_port_` in one `block_` to a `sink_port_` in a second Block.  Links can only be made between ports of the same logical type (e.g. Boolean -> Boolean, int32 -> int32). 
 
 
 .. _method_:
@@ -156,7 +155,7 @@ Synonym for `source_port_`.
 Parameter Attribute
 -------------------
 
-An attribute that supports configuration of its containing `block_` within the context of the `design_` and influencing behaviour of the Block once in an execution environment.
+An attribute whose value can be set by a User in configuring a `block_` within the context of a `design_`.  The Parameter Attribute value influences behaviour of the Block once in an execution environment.
 
 
 .. _parent_block_:
@@ -173,7 +172,7 @@ Parent blocks, together with their attributes and methods are always presented i
 Readback Attributes
 -------------------
 
-An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be specified manually via the User Interface.
+An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be set manually via the User Interface.
 
 
 .. _root_block_:
@@ -191,7 +190,7 @@ Source Port
 
 A port on a `block_` responsible for transmitting data generated within that Block.  
 
-Every Source Port within a Block has a pre-defined type as described in the Block specification.  For details of individual Blocks see `PandABlocks-FPGA`_.  
+Every Source Port within a Block has a pre-defined type as described in the Block specification.  
 
 
 .. _sink_port_:
@@ -201,8 +200,7 @@ Sink Port
 
 A port on a `block_` responsible for accepting data for utilisation within that Block.  
 
-Every Sink Port within a Block has a pre-defined type as described in the Block specification.  For details of individual Blocks see `PandABlocks-FPGA`_.  
-
+Every Sink Port within a Block has a pre-defined type as described in the Block specification.
 
 
 

@@ -1,9 +1,3 @@
-.. ##########
-.. links to external PandA related documentation
-.. ##########
-
-.. _PandABlocks-FPGA: https://pandablocks-fpga.readthedocs.io/en/autogen/index.html
-
 
 Creating a New Design
 =====================
@@ -11,11 +5,11 @@ Creating a New Design
 A Design forms the heart of your system implementation.  It provides an interactive graphical representation of your system, helping you build and manage:
 
 * `Blocks <block_>` representing hardware components, logic gates, etc.
-* The `connectivity <connector_>` between blocks, in terms of input (target) ports and output (source) ports.
-* The `attributes <attribute_>` associated with blocks and connectors.
+* The `connectivity <link_>` between blocks, in terms of input (sink) ports and output (source) ports.
+* The `attributes <attribute_>` associated with blocks and links.
 * The `methods <method_>` available to influence behaviour within blocks.
 
-A Design is created in the user interface `Design View <design_view_>`.
+A Design is created in the user interface `Layout View <layout_view_>`.
 
 
 .. _adding_a_block_to_a_design_:
@@ -58,7 +52,7 @@ If a `block_` has been added to a `design_` erroneously, or is no longer require
     #. Select the Block to be removed by hovering over it and clicking the left mouse button.  The selected Block is highlighted.
     #. Hit the 'Delete' key or backspace key on your keyboard.
 
-Upon removing a Block from your Design all `source_port_` and `sink_port_` connectors associated with it are automatically removed.
+Upon removing a Block from your Design all `source_port_` and `sink_port_` links associated with it are automatically removed.
 
 Working with the Block Palette
 ------------------------------
@@ -73,17 +67,28 @@ If a Block is `removed <removing_a_block_from_a_design_>` from a Design it is im
 Specifying Block Attributes
 ---------------------------
 
-The behaviour of a `block_` is defined via its `attributes <attribute_>`.  Attributes are pre-defined based on the function of the Block and may include default values providing a starting point for later implementation-time customisation.  A full list of the attributes associated with each Block available from the Block Palette can be found in the `PandABlocks-FPGA`_ documentation.
+The behaviour of a `block_` is defined via its `attributes <attribute_>`.  Attributes are pre-defined based on the function of the Block and may include default values providing a starting point for later implementation-time customisation.  A full list of the attributes associated with each Block available from the Block Palette can be found in the documentation associated with that Block.
 
 Types of Attributes
 ^^^^^^^^^^^^^^^^^^^
 
 Four types of `attribute_` are available, and a `block_` may support zero or more of these depending on its purpose.  These are summarised as follows:
 
-    * `Parameter <parameter_attribute_>` - an Attribute supporting configuration of the Block within the context of the `design_`, ultimately influencing its behaviour once in an execution environment.  
-    * `Input <input_attribute_>` - an Attribute identifying the source of data that will be received into a `block_` via a `sink_port_` with the same name. 
-    * `Output <output_attribute_>` - an Attribute identifying the value (or stream of values) that will be transmitted out of a `block_` via a `source_port_` with the same name.
-    * `Readback <readback_attribute_>` - an Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be specified manually via the User Interface.
+.. list-table::
+    :widths: auto
+    :align: center
+    :header-rows: 1
+
+    * - Type
+      - Description
+    * - `Parameter <parameter_attribute_>`
+      - An Attribute supporting configuration of the Block within the context of the `design_`, ultimately influencing its behaviour once in an execution environment. 
+    * - `Input <input_attribute_>`
+      - An Attribute identifying the source of data that will be received into a `block_` via a `sink_port_` with the same name. 
+    * - `Output <output_attribute_>`
+      - An Attribute identifying the value (or stream of values) that will be transmitted out of a `block_` via a `source_port_` with the same name.
+    * - `Readback <readback_attribute_>`
+      - An Attribute whose value is set automatically by a process within the execution environment.  Readback attributes cannot be specified manually via the User Interface.
 
 Attributes whose value can be specified at design-time are denoted by a highlight below the attribute value field.
 
@@ -100,7 +105,7 @@ For each Attribute the following information is displayed:
     * Details of the `alarm state <working_with_alarms_>` associated with the Attribute, including severity and any corresponding message.
     * Timestamp details showing when the Attribute was last updated.
 
-Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying `PandABlocks-FPGA`_ specification.
+Attribute meta-data and alarm state information is derived from pre-configured content provided within the underlying Block specification.
 
 
 Manually Setting or Modifying a Block Attribute
@@ -118,13 +123,61 @@ To configure an attribute:
         * If the Attribute represents a boolean switch option select the checkbox to enable (switch on) or disable (switch off) the attribute.  If the checkbox is empty the Attribute is *disabled*.  When *enabled* a tick is displayed within the checkbox.  
         * If the Attribute requires manually entered input (e.g. a numerical value or text string) select the Attribute value field by clicking within it.  Delete any pre-existing content and enter your desired value.  Press the *enter* key for the value to be submitted and saved.  Values that have been edited but not yet submitted are denoted with a 'pencil' icon.  Upon successful submission the pencil is replaced by the default information symbol.
 
-         **NB:** No data type validation is performed on manually entered values.
+         .. NOTE::
+            No data type validation is performed on manually entered values.
 
 During the process of submitting a new Attribute value to the `design_` a spinning icon is displayed to the left of the modified Attribute.  For more information on the process this represents see `attribute_change_lifecycle_`.
 
 Upon successful submission the icon associated with the modified Attribute reverts to an information icon.
 
 In case of submission failure a red error icon is displayed next to the modified Attribute.
+
+
+Exporting Attributes
+^^^^^^^^^^^^^^^^^^^^
+
+If your `design_` consists of multiple `Layouts <layout_>` each Layout is represented by a `parent_block_`.  While Parent Blocks can be linked together logically via `Source Ports <source_port_>` and `Sink Ports <sink_port_>` representing the *interface* between the Layouts they define it may be an underlying attribute within a Child Block of a layout that influences the overall behaviour of a Block to which its own Parent Block is linked.  
+
+The User Interface view presents a heirarchical view of the overall System Design and where such relationships exist it is not possible to monitor this relationship by default, meaning the influence of the underlying Attribute on a linked Parent Block cannot be monitored.  To mitigate this scenario every Parent Block provides the option to **Export** one or more Attributes from its underlying Layout for direct monitoring within the Parent Block itself even if the Parent Block does not natively support that Attribute.  In doing so it becomes possible to monitor, and potentially utilise, crucial Attributes implemented deep within a Design at increasingly abstracted levels of detail.
+
+To specify an Attribute for export:
+
+    #. Identify the Attribute you wish to monitor outside the current layout level within the overall Deisgn.  Note its source (in the format ``BlockName.Attribute``).
+    #. Within the Parent Block describing the Layout select the 'View' option associated with the 'Exports' Attribute.
+    #. When the Export Table is displayed select the first available blank row.  If no blank rows are available select the option to add a new row.
+    #. In the 'Source' column select the drop-down menu option and find the Attribute you wish to export ni the list of Attributes available.
+    #. In the 'Export' column enter the name of the Attribute as you would like it to appear when exported to its Parent Block.
+
+Previously specified Attributes can be edited at any time within the Export Table following a similar process.
+
+Any number of Attributes can be exported from Child Blocks to their overall Parent Block.
+
+The order in which exported Attributes appear within their Parent Block mirrors the order in which they were added to the export specification.  If you require a specific order to be displayed in the User Interface:
+
+    #. With the Export Table displayed select the edit icon associated with an existing Attribute or information icon associated with a new Attribute.  The information panel associated with the Attribute is displayed on the right-hand side.
+    #. To insert a new Attribute *above* the current one select the 'Add' option associated with the 'Insert row above' field.
+    #. To insert a new Attribute *below* the current one select the 'Add' option associated with the 'Insert row below' field.
+    #. On selecting the appropriate insert option a new row is added to the Export Table.
+
+Attributes that have previously been exported can be removed from the Parent Block by deleting them from the Parent Block's export table.  To remove an exported Attribute:
+
+    #. Identify the attribute to be removed.
+    #. Within the Parent Block containing the Attribute select the 'View' option associated with the 'Export' Attribute.
+    #. Identify the line in the export table representing the Attribute to be removed.
+    #. Select the information icon assoicated with the Attribute.  It's information panel is displayed on the right-hand side.
+    #. Select the 'Delete' option associated with the 'Delete row' field.
+    #. Refresh the Parent Block in the left-hand panel and confirm the Attribute is no longer displayed.
+
+**THIS IS CONJECTURE BECAUSE I CAN'T RUN THE FULL EXPORT LIFECYCLE IN LOCAL INSTALL MODE**
+
+To complete the export process the export specification defined within the Export Table must be submitted for processing and recording within the overall system Design.  To submit your export specification:
+    
+    #. Select the 'Submit' option at the bottom of the Export Table.
+    #. Refresh the Parent Block in the left-hand panel and confirm that the exported Attribute(s) have been promoted to the Parent Block.
+
+Changes to the export specification can be discarded at any time throughout the modification process without impacting the currently recorded specification.  To discard changes:
+
+    #. Select the 'Discard Changes' option at the bottom of the Export Table.
 
 
 .. _attribute_change_lifecycle_:
@@ -140,7 +193,8 @@ The round-trip from submission of a value via the user interface to its utilisat
 
 Within the user interface the duration of this round-trip is represented by a spinning icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default information icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
 
-Note that the value of a manually specified Attribute is not *saved* permanently until the overall `design_` has been `saved <saving_a_design_>`.
+.. NOTE::
+    The value of a manually specified Attribute is not *saved* permanently until the overall `design_` has been `saved <saving_a_design_>`.
 
 
 Working with Block Methods
@@ -150,10 +204,7 @@ While Block `attributes <attribute_>` define the *behaviour* of a Block, `Method
 
 A Method in represented in the user inferface as a button, labelled with the name of the action that will be performed.
 
-A full list of the Methods available within each Block can be found in the `PandABlocks-FPGA`_ documentation. 
-
-
-**MORE HERE** 
+A full list of the Methods available within each Block can be found in the documentation defining that Block. 
 
 
 Block Ports
@@ -161,97 +212,98 @@ Block Ports
 
 If their purpose demands it Blocks are capable of *receiving* input information via one or more `Sink Ports <sink_port_>` and *transmitting* information via one or more `Source Ports <source_port_>`.
 
-A list of the Source ports and Sink ports associated with each Block can be found in the `PandABlocks-FPGA`_ documentation. 
+A list of the Source ports and Sink ports associated with a Block can be found in the documentation for that Block. 
 
 To aid the design process ports are colour coded to denote the type of information they transmit (`Source Ports <source_port_>`) or receive (`Sink Port <sink_port_>`).  These are summarised below:
 
-.. table::
+.. list-table::
     :widths: auto
     :align: center
+    :header-rows: 1
 
-    +-------------+------------+
-    | Port Type   | Key        | 
-    +=============+============+
-    | Boolean     | Blue       |
-    +-------------+------------+
-    | Int32       | Yellow     |
-    +-------------+------------+
-    | Motor       | Green      |
-    +-------------+------------+
-    | NDArray     | Purple     |
-    +-------------+------------+
+    * - Port Type
+      - Key
+    * - Boolean
+      - Blue
+    * - Int32
+      - Orange
+    * - Motor 
+      - Green
+    * - NDArray
+      - Purple
 
-Transmission of information between a Source Port on one Block to a Sink Port on a second Block is achieved via a `connector_`.  For further information about working with Connectors see `connecting_blocks_`. 
+Transmission of information between a Source Port on one Block to a Sink Port on a second Block is achieved via a `link_`.  For further information about working with links see `linking_blocks_`. 
 
+.. _linking_blocks_:
 
-.. _connecting_blocks_ :
+Linking Blocks
+--------------
 
-Connecting Blocks
------------------
-
-Blocks are linked to one another via `Connectors <connector_>`.  A Connector joins a `source_port_` from one Block to a `sink_port_` on another.  Both ports must be of the same type.  The ports available to a Block and their specification are defined in the `PandABlocks-FPGA`_ documentation.  
-
+Blocks are connected to one another via `Links <link_>`.  A Link joins a `source_port_` from one Block to a `sink_port_` on another.  Both ports must be of the same type.  The ports available to a Block and their specification are defined in the documentation for that Block.  
 
 
-Creating a Block Connector
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creating a Block Link
+^^^^^^^^^^^^^^^^^^^^^
 
-To create a connection between two blocks:
+To create a Link between two blocks:
 
     #. Select the `source_port_` or `sink_port_` representing one terminus of the link you wish to make by hovering over the Port on the Block.  The Port will be temporarily highlighted.
-    #. Click the left mouse button and while holding it down drag the Connector to the Port representing the other terminus of the link you wish to make.  The target port will be temporarily highlighted.
-    #. Release the mouse button.  If the `Connector constraints <constraints_when_using_connectors_>` defined below have been respected the Connector is displayed within the Design Layout.
+    #. Click the left mouse button and while holding it down drag the Link to the Port representing the other terminus of the link you wish to make.  The target port will be temporarily highlighted.
+    #. Release the mouse button.  If the `Link constraints <constraints_when_using_links_>` defined below have been respected the Link is displayed within the Design Layout.
 
-        * If an error occurs during the creation process details are displayed at the bottom of the Layout panel.
+    .. NOTE::
+       If an error occurs during the creation process details are displayed at the bottom of the Layout panel.
 
       
-To confirm the Connection has been created correctly select the Connector by clicking on it.  The Connector is highlighted to denote selection and the connector information panel opens in the 'right hand panel' displaying the name of the `source_port_` and `sink_port_` associated with the Connector.
+.. TIP::
+    To confirm the Connection has been created correctly select the Link by clicking on it.  The Link is highlighted to denote selection and the Link information panel opens in the 'right hand panel' displaying the name of the `source_port_` and `sink_port_` associated with the Link.
 
 
-Interrogating Connector Attributes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Interrogating Link Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As with a `block_` a `connector_` also possesses `attributes <attribute_>`.  Unlike Block attributes however Connector attributes cannot be pre-defined, so there is no default specification to guide your configuration.
+As with a `block_` a `link_` also possesses `attributes <attribute_>`.  Unlike Block attributes however Link attributes cannot be pre-defined, so there is no default specification to guide your configuration.
 
-To interrogate the attributes associated with the Connector you have created:
+To interrogate the attributes associated with the Link you have created:
 
-    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
-    #. Click the left mouse button to select the Connector.  A Connector Information Panel open in the 'right-hand panel' of the user interface.
+    #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
+    #. Click the left mouse button to select the Link.  A Link Information Panel open in the 'right-hand panel' of the user interface.
 
-The Connector Information Panel contains details of the `source_port_` and `sink_port_` of the Connector.  
+The Link Information Panel contains details of the `source_port_` and `sink_port_` at each end of the Link.  
 
-Note that it is possible to modify the Source and Sink associated with the Connector from the Connector Information Panel.  Do so cautiously as this will impact your overall system Design, and may invalidate pre-existing design decisions.
+.. CAUTION::
+    It is possible to modify the Source and Sink associated with the Link from the Link Information Panel.  Do so cautiously as this will impact your overall system Design, and may invalidate pre-existing design decisions.
 
 
-Removing a Connector
-^^^^^^^^^^^^^^^^^^^^
+Removing a Link
+^^^^^^^^^^^^^^^
 
-If a `connector_` has been added to a `design_` erroneously, or is no longer required within the current Design it can be removed in one of two ways:
+If a `link_` has been added to a `design_` erroneously, or is no longer required within the current Design it can be removed in one of two ways:
 
 #. *Hitting the 'Delete' or backspace key:*
 
-    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
-    #. Click the left mouse button to select the Connector. The Connector is highlighted.
-    #. Hit the 'Delete' or backspace key on your keyboard.  The Connector is removed from the Design Layout.
+    #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
+    #. Click the left mouse button to select the Link. The Link is highlighted.
+    #. Hit the 'Delete' or backspace key on your keyboard.  The Link is removed from the Design Layout.
 
 
-#. *Via the Connector Information Panel:*
+#. *Via the Link Information Panel:*
 
-    #. Hover over the Connector of interest.  The Connector changes colour to denote that it may be selected.
-    #. Click the left mouse button to select the Connector.  A Connector Information Panel open in the 'right-hand panel' of the user interface.
-    #. Select the 'Delete' button in the Connector Information Panel.  The Connector is removed from the Design Layout.
+    #. Hover over the Link of interest.  The Link changes colour to denote that it may be selected.
+    #. Click the left mouse button to select the Link.  A Link Information Panel open in the 'right-hand panel' of the user interface.
+    #. Select the 'Delete' button in the Link Information Panel.  The Link is removed from the Design Layout.
 
 
-.. _constraints_when_using_connectors_:
+.. _constraints_when_using_links_:
 
-Constraints When Using Connectors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Constraints When Using Links
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Connectors are subject to the following constraints:
+Links are subject to the following constraints:
 
-    * A `sink_port_` can only accept a single Connector.
-    * Multiple Connectors can originate from a `source_port_`, connecting multiple Blocks to that Source Port.
-    * Connectors can only be used to link a `source_port_` and a `sink_port_` of the same logical type (e.g. boolean, int32).  Port types are specified in the `PandABlocks-FPGA`_ documentation, and colour coded within the Design Layout to aid identification of similarly typed ports.
+    * A `sink_port_` can only accept a single Link.
+    * Multiple links can originate from a `source_port_`, connecting multiple Blocks to that Source Port.
+    * Links can only be used to connect a `source_port_` and a `sink_port_` of the same logical type (e.g. boolean, int32).  Port types are specified in the documentation associated with the Block of interest, and colour coded within the Design Layout to aid identification of similarly typed ports.
 
 
 .. _saving_a_design_:
@@ -287,21 +339,22 @@ To open an existing Design:
     #. Select the Design you wish to use.
     #. Select the 'View' option associated with the 'Layout' Attribute.
 
-        **NB:** If no previously saved designs exist the 'Design' Attribute list will be empty.
+.. TIP::
+     If no previously saved designs exist the 'Design' Attribute list will be empty.
 
+..
+    Working Collaboratively on a Design
+    -----------------------------------
 
-Working Collaboratively on a Design
------------------------------------
+    Needs to cover the eventuality where 2 people are potentially editing the same PandA configuration. 
+        What does each user see?
+        What happens if they both edit the same Attribute at the same time?
+        What happens if one updates an attribute, when does the second see it?
 
-Needs to cover the eventuality where 2 people are potentially editing the same PandA configuration. 
-    What does each user see?
-    What happens if they both edit the same Attribute at the same time?
-    What happens if one updates an attribute, when does the second see it?
+    Disabling a Root Block
+    ----------------------
 
-Disabling a Root Block
-----------------------
-
-**NEED TO EXPLORE THE USE CASE FOR THIS**
+    **NEED TO EXPLORE THE USE CASE FOR THIS**
 
 
 
