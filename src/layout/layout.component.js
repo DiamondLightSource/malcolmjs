@@ -54,6 +54,7 @@ class Layout extends React.Component {
       <div
         id="LayoutDiv"
         tabIndex="-1"
+        onClick={() => this.props.layoutClickHandler()}
         onDrop={event =>
           this.props.makeBlockVisible(event, this.props.layoutEngine)
         }
@@ -114,6 +115,7 @@ Layout.propTypes = {
   mouseDownHandler: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
   linkClickHandler: PropTypes.func.isRequired,
+  layoutClickHandler: PropTypes.func.isRequired,
   locked: PropTypes.bool.isRequired,
 };
 
@@ -140,8 +142,16 @@ export const mapDispatchToProps = dispatch => ({
     }
 
     dispatch((innerDispatch, getState) => {
-      const childPanelIsOpen = getState().malcolm.childBlock !== undefined;
-      if (!movedInXOrY(node, block, 3) || childPanelIsOpen) {
+      const state = getState().malcolm;
+      const childPanelIsOpen = state.childBlock !== undefined;
+      const multipleBlocksSelected =
+        state.layoutState.selectedBlocks.length > 1;
+      if (multipleBlocksSelected && childPanelIsOpen) {
+        innerDispatch(navigationActions.updateChildPanel(''));
+      } else if (
+        !multipleBlocksSelected &&
+        (!movedInXOrY(node, block, 3) || childPanelIsOpen)
+      ) {
         innerDispatch(navigationActions.updateChildPanel(block.name));
       }
     });
@@ -169,7 +179,9 @@ export const mapDispatchToProps = dispatch => ({
     const portName = idComponents[3];
     dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
   },
-
+  layoutClickHandler: () => {
+    dispatch(navigationActions.updateChildPanel(''));
+  },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
