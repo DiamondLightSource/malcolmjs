@@ -47,7 +47,7 @@ class ArchiveTable extends React.Component {
               elements: {
                 alarm: {
                   tags: ['info:alarm'],
-                  label: '',
+                  label: ' ',
                 },
                 timeStamp: {
                   tags: ['widget:textupdate'],

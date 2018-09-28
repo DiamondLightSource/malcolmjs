@@ -3,6 +3,7 @@ export const updateVersionNumerType = 'UPDATE_VERSION';
 export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
 export const newTheme = 'CREATE_NEW_THEME';
+export const editTheme = 'EDIT_THEME';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -37,6 +38,13 @@ export const newThemeAction = (type, color) => ({
   payload: {
     type,
     color,
+  },
+});
+
+export const editThemeAction = open => ({
+  type: editTheme,
+  payload: {
+    open,
   },
 });
 

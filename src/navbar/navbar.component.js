@@ -1,3 +1,4 @@
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -9,7 +10,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import { openParentPanel } from '../viewState/viewState.actions';
+import {
+  openParentPanel,
+  editThemeAction,
+} from '../viewState/viewState.actions';
 import NavControl from './navcontrol.component';
 
 const drawerWidth = 320;
@@ -114,6 +118,10 @@ const NavBar = props => (
           />
         ) : null}
       </div>
+      <div
+        style={{ height: 48, width: 3, cursor: 'pointer' }}
+        onClick={props.openThemeEditor}
+      />
     </Toolbar>
   </AppBar>
 );
@@ -136,6 +144,7 @@ const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
   navigateToChild: (basePath, child) =>
     dispatch(push(`/gui${basePath}${child}`)),
+  openThemeEditor: () => dispatch(editThemeAction(true)),
 });
 
 NavBar.propTypes = {
@@ -153,6 +162,7 @@ NavBar.propTypes = {
   }),
   finalNavHasChildren: PropTypes.bool.isRequired,
   openParent: PropTypes.func.isRequired,
+  openThemeEditor: PropTypes.func.isRequired,
   navigateToChild: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     appBar: PropTypes.string,

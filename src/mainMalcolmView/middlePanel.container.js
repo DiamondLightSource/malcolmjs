@@ -19,7 +19,12 @@ import blockUtils from '../malcolm/blockUtils';
 
 import navigationActions from '../malcolm/actions/navigation.actions';
 import LayoutBin from '../layout/layoutBin.component';
+import ThemeEditor from './themeEditor';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
+import {
+  editThemeAction,
+  newThemeAction,
+} from '../viewState/viewState.actions';
 
 const styles = theme => ({
   container: {
@@ -60,6 +65,7 @@ const styles = theme => ({
     verticalAlign: 'middle',
   },
   plainBackground: {
+    position: 'relative',
     display: 'flex',
     width: '100%',
     minHeight: '100%',
@@ -114,6 +120,21 @@ const findAttributeComponent = props => {
                 </IconButton>
               </Tooltip>,
             ]}
+          />
+        </div>
+      </div>
+    );
+  } else if (props.themeEditor) {
+    return (
+      <div className={props.classes.plainBackground}>
+        <div
+          className={props.classes.tableContainer}
+          style={transitionWithPanelStyle}
+        >
+          <ThemeEditor
+            setThemeColor={props.setThemeColor}
+            openParent={props.openParent}
+            finishEdit={props.closeThemeEditor}
           />
         </div>
       </div>
@@ -281,12 +302,15 @@ const mapStateToProps = state => {
     disableAutoLayout:
       state.malcolm.layout && state.malcolm.layout.blocks.length === 0,
     layoutLocked: state.malcolm.layout && state.malcolm.layout.locked,
+    themeEditor: state.viewState.themeEditor,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
+  setThemeColor: color => dispatch(newThemeAction('dark', color)),
+  closeThemeEditor: () => dispatch(editThemeAction(false)),
 });
 
 findAttributeComponent.propTypes = {

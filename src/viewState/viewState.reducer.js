@@ -5,6 +5,7 @@ import {
   snackbar,
   showFooterType,
   newTheme,
+  editTheme,
 } from './viewState.actions';
 
 const initialViewState = {
@@ -45,7 +46,11 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
         ...state,
         theme: theme(action.payload.color, action.payload.type),
       };
-
+    case editTheme:
+      return {
+        ...state,
+        themeEditor: action.payload.open,
+      };
     default:
       return state;
   }
