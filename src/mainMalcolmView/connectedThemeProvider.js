@@ -7,12 +7,11 @@ import {
   createMuiTheme,
 } from '@material-ui/core/styles/index';
 
-export const theme = (primary, type) =>
-  createMuiTheme({
-    palette: {
-      type,
-      primary,
-    },
+export const theme = (primary, secondary, type) => {
+  const palette =
+    secondary !== undefined ? { type, primary, secondary } : { type, primary };
+  return createMuiTheme({
+    palette,
     alarmState: {
       warning: '#e6c01c',
       error: '#e8001f',
@@ -26,7 +25,7 @@ export const theme = (primary, type) =>
       NDArray: purple,
     },
   });
-
+};
 const ConnectedThemeProvider = props => (
   <MuiThemeProvider theme={props.theme}>{props.children}</MuiThemeProvider>
 );
@@ -42,7 +41,7 @@ ConnectedThemeProvider.defaultProps = {
 
 const mapDispatchToProps = () => ({});
 
-const mapStateToProps = state => ({ theme: state.viewState.theme });
+const mapStateToProps = state => ({ theme: state.viewState.theme.muiTheme });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   ConnectedThemeProvider

@@ -4,7 +4,8 @@ import {
   updateVersionNumerType,
   snackbar,
   showFooterType,
-  newTheme,
+  updateTheme,
+  setTheme,
   editTheme,
 } from './viewState.actions';
 
@@ -15,6 +16,7 @@ const initialViewState = {
     message: '',
     open: false,
   },
+  theme: {},
   footerHeight: 0,
 };
 
@@ -41,10 +43,25 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
         footerHeight: action.payload.footerHeight || 0,
       };
 
-    case newTheme:
+    case setTheme: {
+      const newTheme = state.theme;
+      newTheme[action.payload.property] = action.payload.value;
       return {
         ...state,
-        theme: theme(action.payload.color, action.payload.type),
+        theme: newTheme,
+      };
+    }
+    case updateTheme:
+      return {
+        ...state,
+        theme: {
+          ...state.theme,
+          muiTheme: theme(
+            state.theme.primary,
+            state.theme.secondary,
+            state.theme.type
+          ),
+        },
       };
     case editTheme:
       return {

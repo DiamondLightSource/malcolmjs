@@ -22,7 +22,10 @@ import {
 } from './malcolm/actions/socket.actions';
 import ReduxTimingMiddleware from './userTimingMiddleware';
 import ConnectedThemeProvider from './mainMalcolmView/connectedThemeProvider';
-import { newThemeAction } from './viewState/viewState.actions';
+import {
+  setThemeAction,
+  updateThemeAction,
+} from './viewState/viewState.actions';
 
 require('typeface-roboto');
 
@@ -65,7 +68,9 @@ setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
 
-store.dispatch(newThemeAction('dark', blue));
+store.dispatch(setThemeAction('primary', blue));
+store.dispatch(setThemeAction('type', 'dark'));
+store.dispatch(updateThemeAction());
 
 ReactDOM.render(
   <Provider store={store}>

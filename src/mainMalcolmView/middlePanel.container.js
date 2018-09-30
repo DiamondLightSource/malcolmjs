@@ -23,7 +23,8 @@ import ThemeEditor from './themeEditor';
 import autoLayoutAction from '../malcolm/actions/autoLayout.action';
 import {
   editThemeAction,
-  newThemeAction,
+  setThemeAction,
+  updateThemeAction,
 } from '../viewState/viewState.actions';
 
 const styles = theme => ({
@@ -132,7 +133,8 @@ const findAttributeComponent = props => {
           style={transitionWithPanelStyle}
         >
           <ThemeEditor
-            setThemeColor={props.setThemeColor}
+            setThemeProp={props.setThemeProp}
+            updateTheme={props.updateTheme}
             openParent={props.openParent}
             finishEdit={props.closeThemeEditor}
           />
@@ -309,7 +311,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   openPalette: () => dispatch(navigationActions.navigateToPalette()),
   runAutoLayout: () => dispatch(autoLayoutAction.runAutoLayout()),
-  setThemeColor: color => dispatch(newThemeAction('dark', color)),
+  setThemeProp: (property, value) => {
+    dispatch(setThemeAction(property, value));
+    dispatch(updateThemeAction());
+  },
   closeThemeEditor: () => dispatch(editThemeAction(false)),
 });
 
