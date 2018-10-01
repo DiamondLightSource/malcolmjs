@@ -63,6 +63,7 @@ const TableContainer = props => {
         addRow={props.addRow}
         infoClickHandler={props.infoClickHandler}
         rowClickHandler={props.rowClickHandler}
+        closePanelHandler={props.closePanelHandler}
         selectedRow={props.selectedRow}
       />
       <div style={{ display: 'flex', position: 'bottom', padding: '4px' }}>
@@ -121,6 +122,9 @@ const mapDispatchToProps = dispatch => ({
   },
   infoClickHandler: (path, subElement) => {
     dispatch(navigationActions.navigateToInfo(path[0], path[1], subElement));
+  },
+  closePanelHandler: () => {
+    dispatch(navigationActions.updateChildPanel(''));
   },
   eventHandler: (path, value, row) => {
     dispatch(malcolmUpdateTable(path, value, row));
@@ -181,6 +185,7 @@ TableContainer.propTypes = {
   revertHandler: PropTypes.func.isRequired,
   eventHandler: PropTypes.func.isRequired,
   infoClickHandler: PropTypes.func.isRequired,
+  closePanelHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func.isRequired,

@@ -113,4 +113,48 @@ describe('Child panel', () => {
       cy.contains('Type ID').should('be.visible');
     });
   });
+
+  describe.only('table interactions', () => {
+    beforeEach(() => {
+      cy.request('/reset');
+      cy.visit('/gui/PANDA/exports');
+      cy.waitForDetailsToLoad();
+
+      // add two rows to the table
+      cy
+        .get('[data-cy=addrowbutton]')
+        .click()
+        .click();
+
+      cy.get(childPanel).should('not.be.visible');
+    });
+
+    it('clicking on row alarm should open panel', () => {
+      // click the row alarm button
+      cy
+        .get('[data-cy=table]')
+        .find('button')
+        .first()
+        .click();
+      cy.get(childPanel).should('be.visible');
+
+      // confirm info element is present
+      cy.contains('Row local state').should('be.visible');
+    });
+
+    it('clicking the table background should close the info panel', () => {
+      // make sure the panel is open
+      cy
+        .get('[data-cy=table]')
+        .find('button')
+        .first()
+        .click();
+      cy.get(childPanel).should('be.visible');
+
+      // click in the background area
+      cy.get('[data-cy=table]').click(100, 400);
+
+      cy.get(childPanel).should('not.be.visible');
+    });
+  });
 });

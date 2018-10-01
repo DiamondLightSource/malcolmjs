@@ -91,7 +91,7 @@ const getColumnWidths = (
   );
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
-    .reduce((total, val) => total + val);
+    .reduce((total, val) => total + val, 0);
   const numVariableWidth = fixedWidths.filter(val => val === undefined).length;
   return divWidth - usedWidth - 36 * !hideInfo > numVariableWidth * 180
     ? fixedWidths.map(
@@ -258,10 +258,15 @@ const WidgetTable = props => {
   const columnWidgetTags = getTableWidgetTags(tableState.meta);
   return (
     <div
+      role="presentation"
       style={{
         width: '100%',
         height: props.showFooter ? 'calc(100% - 48px)' : '100%',
         overflowX: 'auto',
+      }}
+      data-cy="table"
+      onClick={() => {
+        props.closePanelHandler();
       }}
     >
       <AutoSizer>
@@ -282,6 +287,10 @@ const WidgetTable = props => {
                 rowStyle={({ index }) => isSelectedRow(index, props)}
                 height={height - 84}
                 width={width}
+                onRowClick={e => {
+                  // dispatch a row selection event here
+                  e.event.stopPropagation();
+                }}
                 headerHeight={36}
                 rowHeight={36}
                 rowCount={tableState.values.length + 2}
@@ -311,13 +320,15 @@ const WidgetTable = props => {
                   }}
                 >
                   <IconButton
-                    onClick={() =>
+                    onClick={e => {
                       props.addRow(
                         props.attribute.calculated.path,
                         tableState.values.length
-                      )
-                    }
+                      );
+                      e.stopPropagation();
+                    }}
                     style={{ height: '36px', width: '36px' }}
+                    data-cy="addrowbutton"
                   >
                     <Add style={{ width: '32px', height: '32px' }} />
                   </IconButton>
@@ -346,6 +357,7 @@ WidgetTable.propTypes = {
     }),
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
+  closePanelHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func,
   hideInfo: PropTypes.bool,

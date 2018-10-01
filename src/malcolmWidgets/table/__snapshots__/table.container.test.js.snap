@@ -252,6 +252,7 @@ exports[`Table container renders correctly 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     infoClickHandler={[Function]}
     localState={
@@ -679,6 +680,7 @@ exports[`Table container subelement in url selects row correctly 1`] = `
         },
       }
     }
+    closePanelHandler={[Function]}
     eventHandler={[Function]}
     infoClickHandler={[Function]}
     localState={
