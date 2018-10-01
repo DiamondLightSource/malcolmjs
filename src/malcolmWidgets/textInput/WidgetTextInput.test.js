@@ -145,7 +145,7 @@ describe('WidgetTextUpdate', () => {
     expect(mockData.mock.calls.length).toEqual(1);
     expect(mockData.mock.calls[0]).toEqual('Hello World');
   });
-  /*
+
   it('calls revert on esc', () => {
     const mockData = { mock: { calls: [] } };
     const revertValue = event => {
@@ -171,7 +171,7 @@ describe('WidgetTextUpdate', () => {
     expect(mockData.mock.calls.length).toEqual(1);
     expect(mockData.mock.calls[0]).toEqual('Hello World');
   });
-  */
+
   it('updates and calls unset flag if forceUpdate is true and is dirty', () => {
     const setFlag = jest.fn();
     mount(textInput('Hello World', false, null, true, setFlag, () => {}, true));

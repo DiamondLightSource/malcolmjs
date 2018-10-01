@@ -495,7 +495,7 @@ describe('attribute reducer', () => {
 
   it('doesnt update local state for dirty textInput', () => {
     state = addSimpleLocalState(state, 'block1', 'testInput', 'testing');
-    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', 'true');
+    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', true);
     state = AttributeReducer(
       state,
       buildAction(MalcolmAttributeData, payload2)
@@ -510,7 +510,7 @@ describe('attribute reducer', () => {
   });
 
   it('does update local state for dirty textInput if forceUpdate is true', () => {
-    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', 'true');
+    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', true);
     state = setAttributeFlag(
       state,
       'block1',
