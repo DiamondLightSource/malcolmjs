@@ -30,6 +30,7 @@ export const malcolmTypes = {
   stringArray: 'malcolm:core/StringArrayMeta:1.0',
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',
   choiceArray: 'malcolm:core/ChoiceArrayMeta:1.0',
+  table: 'malcolm:core/TableMeta:1.0',
 };
 
 export const getDefaultFromType = objectMeta => {
