@@ -156,5 +156,35 @@ describe('Child panel', () => {
 
       cy.get(childPanel).should('not.be.visible');
     });
+
+    it('clicking a row control should not open child panel if not already open', () => {
+      cy
+        .get('[data-cy=table]')
+        .find('input')
+        .first()
+        .click();
+      cy.get(childPanel).should('not.be.visible');
+    });
+
+    it('clicking a row control should update child panel if already open', () => {
+      cy
+        .get('[data-cy=table]')
+        .find('button')
+        .first()
+        .click();
+      cy.get(childPanel).should('be.visible');
+      // ensure info for row 0
+      cy.get('p:contains(0)').should('have.length', 2);
+
+      cy
+        .get('[data-cy=table]')
+        .find('input')
+        .last()
+        .click({ force: true });
+      cy.get(childPanel).should('be.visible');
+      // ensure info for row 1
+      cy.wait(2000, { log: false });
+      cy.get('p:contains(1)').should('have.length', 2);
+    });
   });
 });

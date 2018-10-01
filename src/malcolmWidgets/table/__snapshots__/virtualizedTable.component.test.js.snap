@@ -2130,6 +2130,9 @@ exports[`virtualized table widget table renders correctly with no selected row 1
     }
   >
     <div
+      data-cy="table"
+      onClick={[Function]}
+      role="presentation"
       style={
         Object {
           "height": "100%",
@@ -2173,6 +2176,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 headerStyle={Object {}}
                 height={0}
                 noRowsRenderer={[Function]}
+                onRowClick={[Function]}
                 onRowsRendered={[Function]}
                 onScroll={[Function]}
                 overscanIndicesGetter={[Function]}
@@ -2589,6 +2593,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     isScrollingOptOut={false}
                     noContentRenderer={[Function]}
                     noRowsRenderer={[Function]}
+                    onRowClick={[Function]}
                     onRowsRendered={[Function]}
                     onScroll={[Function]}
                     onScrollbarPresenceChange={[Function]}
@@ -2941,6 +2946,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   aria-describedby="1"
                   className="WidgetTable-addRowButton-6"
                   color="secondary"
+                  data-cy="addrowbutton"
                   onBlur={[Function]}
                   onClick={[Function]}
                   onFocus={[Function]}
@@ -2974,6 +2980,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       }
                     }
                     color="secondary"
+                    data-cy="addrowbutton"
                     disableFocusRipple={false}
                     disabled={false}
                     fullWidth={false}
@@ -2992,6 +2999,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     <WithStyles(ButtonBase)
                       aria-describedby="1"
                       className="MuiButton-root-15 MuiButton-raised-21 MuiButton-fab-26 MuiButton-raisedSecondary-23 WidgetTable-addRowButton-6"
+                      data-cy="addrowbutton"
                       disabled={false}
                       focusRipple={true}
                       focusVisibleClassName="MuiButton-focusVisible-24"
@@ -3015,6 +3023,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                             "root": "MuiButtonBase-root-31",
                           }
                         }
+                        data-cy="addrowbutton"
                         disableRipple={false}
                         disabled={false}
                         focusRipple={true}
@@ -3032,6 +3041,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                         <button
                           aria-describedby="1"
                           className="MuiButtonBase-root-31 MuiButton-root-15 MuiButton-raised-21 MuiButton-fab-26 MuiButton-raisedSecondary-23 WidgetTable-addRowButton-6"
+                          data-cy="addrowbutton"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}

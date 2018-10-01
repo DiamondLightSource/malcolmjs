@@ -343,6 +343,14 @@ const WidgetTable = props => {
                   width={width}
                   headerHeight={iconWidth}
                   rowHeight={iconWidth}
+                  onRowClick={e => {
+                    // dispatch a row selection event here
+                    props.rowClickHandler(
+                      props.attribute.calculated.path,
+                      `row.${e.index}`
+                    );
+                    e.event.stopPropagation();
+                  }}
                   rowCount={
                     tableState.values.length !== 0
                       ? tableState.values.length + 2
@@ -370,13 +378,15 @@ const WidgetTable = props => {
           <Button
             variant="fab"
             color="secondary"
-            onClick={() =>
+            onClick={e => {
               props.addRow(
                 props.attribute.calculated.path,
                 tableState.values.length
-              )
-            }
+              );
+              e.stopPropagation();
+            }}
             className={props.classes.addRowButton}
+            data-cy="addrowbutton"
           >
             <Add style={{ width: '32px', height: '32px' }} />
           </Button>
@@ -405,6 +415,7 @@ WidgetTable.propTypes = {
   }).isRequired,
   eventHandler: PropTypes.func.isRequired,
   closePanelHandler: PropTypes.func.isRequired,
+  rowClickHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func,
   hideInfo: PropTypes.bool,
