@@ -41,6 +41,7 @@ describe('info builder', () => {
   });
 
   it('attribute info builder generates correct structure for basic attribute', () => {
+    props.attribute.raw.meta.tags = ['widget:test'];
     const infoObject = buildAttributeInfo(props);
     expect(infoObject.info).toEqual({
       errorState: {
@@ -230,11 +231,11 @@ describe('info builder', () => {
     props.addRow.mockClear();
     infoObject.info.deleteRow.functions.clickHandler();
     expect(props.addRow).toHaveBeenCalledTimes(1);
-    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 3, 'delete');
+    expect(props.addRow).toHaveBeenCalledWith(['test1', 'layout'], 4, 'delete');
     expect(props.changeInfoHandler).toHaveBeenCalledTimes(1);
     expect(props.changeInfoHandler).toHaveBeenCalledWith(
       ['test1', 'layout'],
-      'row.2'
+      'row.3'
     );
   });
 
@@ -280,7 +281,25 @@ describe('info builder', () => {
     expect(props.rowRevertHandler).toHaveBeenCalledTimes(1);
     expect(props.rowRevertHandler).toHaveBeenCalledWith(
       ['test1', 'layout'],
-      { mri: 'PANDA:TTLIN1', name: 'TTLIN1', visible: false, x: 0, y: 0 },
+      {
+        outa1: true,
+        outa2: false,
+        outb1: false,
+        outb2: false,
+        outc1: false,
+        outc2: false,
+        outd1: false,
+        outd2: false,
+        oute1: false,
+        oute2: false,
+        outf1: false,
+        outf2: false,
+        position: 0,
+        repeats: 0,
+        time1: 0,
+        time2: 0,
+        trigger: 'POSC>=POSITION',
+      },
       0
     );
   });
