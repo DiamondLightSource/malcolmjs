@@ -65,7 +65,14 @@ const TableContainer = props => {
         rowClickHandler={props.rowClickHandler}
         selectedRow={props.selectedRow}
       />
-      <div style={{ display: 'flex', position: 'bottom', padding: '4px' }}>
+      <div
+        style={{
+          display: 'flex',
+          position: 'bottom',
+          padding: '4px',
+          alignItems: 'center',
+        }}
+      >
         {footerItems}
       </div>
     </div>
