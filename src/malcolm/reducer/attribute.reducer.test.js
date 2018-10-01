@@ -23,10 +23,17 @@ import {
   addBlockArchive,
   buildBlockArchiveAttribute,
   buildMeta,
+  addSimpleLocalState,
+  addTableLocalState,
+  setAttributeFlag,
+  setTableFlag,
 } from '../../testState.utilities';
+import blockUtils from '../blockUtils';
+import { shouldClearDirtyFlag } from './table.reducer';
 
 jest.mock('./layout/layout.reducer');
 jest.mock('./navigation.reducer');
+jest.mock('./table.reducer');
 
 const sourcePort = 'sourcePort';
 const sinkPort = 'sinkPort';
@@ -34,8 +41,12 @@ const sinkPort = 'sinkPort';
 describe('attribute reducer', () => {
   let state = {};
   let payload = {};
+  let payload2 = {};
+  let payload3 = {};
 
   beforeEach(() => {
+    shouldClearDirtyFlag.mockImplementation(attribute => attribute);
+
     LayoutReducer.processLayout.mockClear();
     LayoutReducer.updateLayoutAndEngine.mockClear();
     processNavigationLists.mockClear();
@@ -59,6 +70,8 @@ describe('attribute reducer', () => {
 
     state = buildTestState().malcolm;
     addMessageInFlight(1, ['block1', 'layout'], state);
+    addMessageInFlight(2, ['block1', 'testInput'], state);
+    addMessageInFlight(3, ['block1', 'table'], state);
     addBlock(
       'block1',
       [
@@ -68,6 +81,20 @@ describe('attribute reducer', () => {
           undefined,
           0,
           buildMeta(['widget:flowgraph'])
+        ),
+        buildAttribute(
+          'testInput',
+          ['block1', 'testInput'],
+          'testing',
+          0,
+          buildMeta(['widget:textinput'])
+        ),
+        buildAttribute(
+          'table',
+          ['block1', 'table'],
+          undefined,
+          0,
+          buildMeta(['widget:table'], true, '', malcolmTypes.table)
         ),
       ],
       state
@@ -96,6 +123,29 @@ describe('attribute reducer', () => {
           secondsPastEpoch: 123456789,
           nanoseconds: 10111213,
         },
+      },
+    };
+    payload2 = {
+      delta: true,
+      id: 2,
+      raw: { meta: { tags: ['widget:textinput'] }, value: 'testing#123' },
+    };
+    payload3 = {
+      id: 3,
+      delta: true,
+      raw: {
+        meta: {
+          typeid: malcolmTypes.table,
+          tags: ['widget:table'],
+          elements: {
+            mri: {},
+            name: {},
+            visible: {},
+            x: {},
+            y: {},
+          },
+        },
+        value: JSON.parse(JSON.stringify(payload.raw.value)),
       },
     };
   });
@@ -412,5 +462,181 @@ describe('attribute reducer', () => {
 
   it('pushToArchive does increment plot time if timestep greater than ARCHIVE_REFRESH_INTERVAL', () => {
     runPushToArchiveTest(2.0, 23456789.00123 + 2.0 * ARCHIVE_REFRESH_INTERVAL);
+  });
+
+  it('creates local state for textInput', () => {
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload2)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'testInput'
+    );
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState).toEqual('testing#123');
+  });
+
+  it('updates local state for clean textInput', () => {
+    state = addSimpleLocalState(state, 'block1', 'testInput', 'testing#0');
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload2)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'testInput'
+    );
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState).toEqual('testing#123');
+  });
+
+  it('doesnt update local state for dirty textInput', () => {
+    state = addSimpleLocalState(state, 'block1', 'testInput', 'testing');
+    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', 'true');
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload2)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'testInput'
+    );
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState).toEqual('testing');
+  });
+
+  it('does update local state for dirty textInput if forceUpdate is true', () => {
+    state = setAttributeFlag(state, 'block1', 'testInput', 'dirty', 'true');
+    state = setAttributeFlag(
+      state,
+      'block1',
+      'testInput',
+      'forceUpdate',
+      'true'
+    );
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload2)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'testInput'
+    );
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState).toEqual('testing#123');
+  });
+
+  it('updates table local state if dirty is false', () => {
+    const labels = Object.keys(payload.raw.value);
+    state = addTableLocalState(state, 'block1', 'table', labels, 3);
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload3)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'table'
+    );
+    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
+      const row = {};
+      labels.forEach(label => {
+        row[label] = payload.raw.value[label][index];
+      });
+      return row;
+    });
+
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState.value).toEqual(expectedState);
+  });
+
+  it('doesnt update table local state if dirty flag is true', () => {
+    const labels = Object.keys(payload.raw.value);
+    state = addTableLocalState(state, 'block1', 'table', labels, 3);
+    state = setTableFlag(state, 'block1', 'table', 'dirty', true);
+    state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload3)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'table'
+    );
+    const expectedState = [];
+    for (let i = 0; i < 3; i += 1) {
+      const row = {};
+      labels.forEach(label => {
+        row[label] = '';
+      });
+      expectedState[i] = row;
+    }
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState.value).toEqual(expectedState);
+  });
+
+  it('updates table local state if dirty flag is true but shouldClearDirtyFlag clears', () => {
+    shouldClearDirtyFlag.mockImplementation(attribute => {
+      const updatedAttribute = attribute;
+      updatedAttribute.localState.flags.table.dirty = false;
+      updatedAttribute.calculated.dirty = false;
+      return updatedAttribute;
+    });
+    const labels = Object.keys(payload.raw.value);
+    state = addTableLocalState(state, 'block1', 'table', labels, 3);
+    state = setTableFlag(state, 'block1', 'table', 'dirty', true);
+    state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload3)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'table'
+    );
+    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
+      const row = {};
+      labels.forEach(label => {
+        row[label] = payload.raw.value[label][index];
+      });
+      return row;
+    });
+
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState.value).toEqual(expectedState);
+  });
+
+  it('updates table local state if dirty flag is true but forceUpdate is true', () => {
+    const labels = Object.keys(payload.raw.value);
+    state = addTableLocalState(state, 'block1', 'table', labels, 3);
+    state = setTableFlag(state, 'block1', 'table', 'dirty', true);
+    state = setAttributeFlag(state, 'block1', 'table', 'dirty', true);
+    state = setAttributeFlag(state, 'block1', 'table', 'forceUpdate', true);
+    state = AttributeReducer(
+      state,
+      buildAction(MalcolmAttributeData, payload3)
+    );
+    const testAttribute = blockUtils.findAttribute(
+      state.blocks,
+      'block1',
+      'table'
+    );
+    const expectedState = payload.raw.value[labels[0]].map((val, index) => {
+      const row = {};
+      labels.forEach(label => {
+        row[label] = payload.raw.value[label][index];
+      });
+      return row;
+    });
+
+    expect(testAttribute.localState).toBeDefined();
+    expect(testAttribute.localState.value).toEqual(expectedState);
   });
 });
