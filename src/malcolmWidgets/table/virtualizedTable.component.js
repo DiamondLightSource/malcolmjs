@@ -6,7 +6,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Add from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import AttributeAlarm, {
@@ -15,6 +18,13 @@ import AttributeAlarm, {
 import TableWidgetSelector, { getTableWidgetTags } from './widgetSelector';
 
 const styles = theme => ({
+  header: {
+    backgroundColor: theme.palette.background.paper,
+    fontSize: '11pt',
+    fontFamily: 'Roboto',
+    fontWeight: 'normal',
+    color: theme.palette.text.primary,
+  },
   incompleteRowFormat: {
     backgroundColor: emphasize(theme.palette.background.paper, 0.5),
     textAlign: 'Center',
@@ -25,11 +35,13 @@ const styles = theme => ({
     backgroundColor: fade(theme.palette.secondary.main, 0.25),
     textAlign: 'Center',
     padding: '2px',
+    paddingRight: '15px',
   },
   textBody: {
     backgroundColor: theme.palette.background.default,
     textAlign: 'Center',
     padding: '2px',
+    paddingRight: '15px',
   },
   button: {
     width: '24px',
@@ -38,15 +50,23 @@ const styles = theme => ({
       backgroundColor: 'transparent',
     },
   },
+  addRowButton: {
+    position: 'absolute',
+    right: '16px',
+    bottom: '16px',
+  },
 });
 
 const widgetWidths = {
-  'widget:checkbox': 48,
+  'widget:checkbox': 36,
   'widget:led': 36,
   'info:alarm': 36,
 };
 
-const getTableState = props => {
+const variableWidgetMinWidth = 180;
+const iconWidth = 36;
+
+export const getTableState = props => {
   const tableState = {};
   tableState.columnLabels =
     props.localState === undefined
@@ -77,35 +97,46 @@ const getTableState = props => {
 
 const getWidgetWidth = tag => widgetWidths[tag];
 
-const getColumnWidths = (
-  divWidth,
-  columnWidgetTags,
-  columnLabels,
-  hideInfo
-) => {
-  const fixedWidths = columnWidgetTags.map(
-    (tag, index) =>
-      getWidgetWidth(tag) !== undefined
-        ? Math.max(getWidgetWidth(tag), 11 * columnLabels[index].length + 4)
-        : undefined
-  );
+const getColumnWidths = (divWidth, columnWidgetTags, tableState, hideInfo) => {
+  const fixedWidths = tableState.columnLabels.map((label, index) => {
+    const widgetWidth = getWidgetWidth(columnWidgetTags[index]);
+    if (widgetWidth !== undefined) {
+      return Math.max(
+        getWidgetWidth(columnWidgetTags[index]),
+        11 *
+          (tableState.meta.elements[label].label
+            ? tableState.meta.elements[label].label
+            : label
+          ).length +
+          4
+      );
+    }
+    return undefined;
+  });
   const usedWidth = fixedWidths
     .filter(val => val !== undefined)
     .reduce((total, val) => total + val, 0);
   const numVariableWidth = fixedWidths.filter(val => val === undefined).length;
-  return divWidth - usedWidth - 36 * !hideInfo > numVariableWidth * 180
+  return divWidth - usedWidth - iconWidth * !hideInfo >
+    numVariableWidth * variableWidgetMinWidth
     ? fixedWidths.map(
         val =>
           val !== undefined
             ? val
-            : (divWidth - usedWidth - 36 * !hideInfo) / numVariableWidth
+            : (divWidth - usedWidth - iconWidth * !hideInfo) / numVariableWidth
       )
-    : fixedWidths.map(val => (val !== undefined ? val : 180));
+    : fixedWidths.map(
+        val => (val !== undefined ? val : variableWidgetMinWidth)
+      );
 };
 
 const isSelectedRow = (row, props) => {
-  const classes = styles(props.theme);
-  return props.selectedRow === row ? classes.selectedRow : classes.textBody;
+  if (row === -1) {
+    return props.classes.header;
+  }
+  return props.selectedRow === row
+    ? props.classes.selectedRow
+    : props.classes.textBody;
 };
 const AlarmCell = props => (
   <IconButton
@@ -127,8 +158,9 @@ const AlarmCell = props => (
   </IconButton>
 );
 
-const getRowData = (row, widgetTags, props, tableState, handlers) => {
+export const getRowData = (row, widgetTags, props, tableState, handlers) => {
   let valueCells;
+  const attributePath = props.attribute.calculated.path;
   if (tableState.columnLabels === undefined) {
     valueCells = {
       value:
@@ -136,7 +168,7 @@ const getRowData = (row, widgetTags, props, tableState, handlers) => {
           <TableWidgetSelector
             columnWidgetTag={widgetTags[0]}
             value={tableState.values[row]}
-            rowPath={{ row, column: 0 }}
+            rowPath={{ row, column: 0, attributePath }}
             rowChangeHandler={handlers.rowChangeHandler}
             columnMeta={tableState.meta}
             setFlag={handlers.rowFlagHandler}
@@ -151,7 +183,7 @@ const getRowData = (row, widgetTags, props, tableState, handlers) => {
           <TableWidgetSelector
             columnWidgetTag={widgetTags[column]}
             value={tableState.values[row][label]}
-            rowPath={{ label, row, column }}
+            rowPath={{ label, row, column, attributePath }}
             rowChangeHandler={handlers.rowChangeHandler}
             columnMeta={tableState.meta.elements[label]}
             setFlag={handlers.rowFlagHandler}
@@ -208,7 +240,7 @@ const columns = (widths, tableState, hideInfo) => {
       <Column
         dataKey="alarmState"
         label=""
-        width={36}
+        width={iconWidth}
         cellRenderer={columnCellRenderer}
       />
     );
@@ -216,45 +248,51 @@ const columns = (widths, tableState, hideInfo) => {
   return columnHeadings;
 };
 
+export const mapRowChangeHandler = (tableState, eventHandler) => (
+  rowPath,
+  newValue
+) => {
+  let rowValue;
+  if (tableState.columnLabels === undefined) {
+    rowValue = newValue;
+  } else {
+    rowValue = {};
+    tableState.columnLabels.forEach(label => {
+      rowValue[label] = tableState.values[rowPath.row][label];
+      return 0;
+    });
+    rowValue[rowPath.label] = newValue;
+  }
+  eventHandler(rowPath.attributePath, rowValue, rowPath.row);
+};
+
+export const mapRowFlagHandler = (localState, setFlag) => (
+  rowPath,
+  flagType,
+  flagState
+) => {
+  if (localState !== undefined) {
+    const rowFlags =
+      localState.flags.rows[rowPath.row] === undefined
+        ? {}
+        : localState.flags.rows[rowPath.row];
+    if (rowFlags[flagType] === undefined) {
+      rowFlags[flagType] = {};
+    }
+    rowFlags[flagType][rowPath.label] = flagState;
+    rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
+      val => val
+    );
+    setFlag(rowPath.attributePath, rowPath.row, flagType, rowFlags);
+  }
+};
+
 const WidgetTable = props => {
   const tableState = getTableState(props);
-
-  const rowChangeHandler = (rowPath, newValue) => {
-    let rowValue;
-    if (tableState.columnLabels === undefined) {
-      rowValue = newValue;
-    } else {
-      rowValue = {};
-      tableState.columnLabels.forEach(label => {
-        rowValue[label] = tableState.values[rowPath.row][label];
-        return 0;
-      });
-      rowValue[rowPath.label] = newValue;
-    }
-    props.eventHandler(props.attribute.calculated.path, rowValue, rowPath.row);
+  const handlers = {
+    rowChangeHandler: mapRowChangeHandler(tableState, props.eventHandler),
+    rowFlagHandler: mapRowFlagHandler(props.localState, props.setFlag),
   };
-  const rowFlagHandler = (rowPath, flagType, flagState) => {
-    if (props.localState !== undefined) {
-      const rowFlags =
-        props.localState.flags.rows[rowPath.row] === undefined
-          ? {}
-          : props.localState.flags.rows[rowPath.row];
-      if (rowFlags[flagType] === undefined) {
-        rowFlags[flagType] = {};
-      }
-      rowFlags[flagType][rowPath.label] = flagState;
-      rowFlags[`_${flagType}`] = Object.values(rowFlags[flagType]).some(
-        val => val
-      );
-      props.setFlag(
-        props.attribute.calculated.path,
-        rowPath.row,
-        flagType,
-        rowFlags
-      );
-    }
-  };
-  const handlers = { rowChangeHandler, rowFlagHandler };
   const columnWidgetTags = getTableWidgetTags(tableState.meta);
   return (
     <div
@@ -262,82 +300,88 @@ const WidgetTable = props => {
       style={{
         width: '100%',
         height: props.showFooter ? 'calc(100% - 48px)' : '100%',
-        overflowX: 'auto',
+        position: 'relative',
       }}
       data-cy="table"
       onClick={() => {
         props.closePanelHandler();
       }}
     >
-      <AutoSizer>
-        {autoSize => {
-          const columnWidths = getColumnWidths(
-            autoSize.width,
-            columnWidgetTags,
-            tableState.columnLabels,
-            props.hideInfo
-          );
-          const { height } = autoSize;
-          const width =
-            columnWidths.reduce((total, val) => total + val) +
-            36 * !props.hideInfo;
-          return (
-            <div>
-              <Table
-                rowStyle={({ index }) => isSelectedRow(index, props)}
-                height={height - 84}
-                width={width}
-                onRowClick={e => {
-                  // dispatch a row selection event here
-                  e.event.stopPropagation();
-                }}
-                headerHeight={36}
-                rowHeight={36}
-                rowCount={tableState.values.length + 2}
-                rowGetter={({ index }) =>
-                  getRowData(
-                    index,
-                    columnWidgetTags,
-                    props,
-                    tableState,
-                    handlers
-                  )
-                }
-              >
-                {columns(columnWidths, tableState, props.hideInfo)}
-              </Table>
-              {tableState.meta.writeable ? (
-                <div
-                  className={props.classes.incompleteRowFormat}
-                  style={{
-                    width,
-                    height: '36px',
-                    position: 'absolute',
-                    top:
-                      36 * (tableState.values.length + 3) < height - 84
-                        ? `${36 * (tableState.values.length + 3)}px`
-                        : `${height - 84}px`,
-                  }}
-                >
-                  <IconButton
-                    onClick={e => {
-                      props.addRow(
-                        props.attribute.calculated.path,
-                        tableState.values.length
-                      );
-                      e.stopPropagation();
-                    }}
-                    style={{ height: '36px', width: '36px' }}
-                    data-cy="addrowbutton"
-                  >
-                    <Add style={{ width: '32px', height: '32px' }} />
-                  </IconButton>
-                </div>
-              ) : null}{' '}
-            </div>
-          );
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          overflowX: 'auto',
+          overflowY: 'hidden',
         }}
-      </AutoSizer>
+      >
+        <AutoSizer>
+          {autoSize => {
+            const columnWidths = getColumnWidths(
+              autoSize.width,
+              columnWidgetTags,
+              tableState,
+              props.hideInfo
+            );
+            const { height } = autoSize;
+            const width =
+              columnWidths.reduce((total, val) => total + val) +
+              iconWidth * !props.hideInfo;
+            return (
+              <div>
+                <Table
+                  noRowsRenderer={() => (
+                    <div className={props.classes.textBody}>
+                      <Typography style={{ fontSize: '14pt' }}>
+                        No rows in table!
+                      </Typography>
+                    </div>
+                  )}
+                  headerClassName={props.classes.header}
+                  rowClassName={({ index }) => isSelectedRow(index, props)}
+                  height={height}
+                  width={width}
+                  headerHeight={iconWidth}
+                  rowHeight={iconWidth}
+                  rowCount={
+                    tableState.values.length !== 0
+                      ? tableState.values.length + 2
+                      : 0
+                  }
+                  rowGetter={({ index }) =>
+                    getRowData(
+                      index,
+                      columnWidgetTags,
+                      props,
+                      tableState,
+                      handlers
+                    )
+                  }
+                >
+                  {columns(columnWidths, tableState, props.hideInfo)}
+                </Table>
+              </div>
+            );
+          }}
+        </AutoSizer>
+      </div>
+      {tableState.meta.writeable ? (
+        <Tooltip id="1" title="Add row to bottom of table" placement="center">
+          <Button
+            variant="fab"
+            color="secondary"
+            onClick={() =>
+              props.addRow(
+                props.attribute.calculated.path,
+                tableState.values.length
+              )
+            }
+            className={props.classes.addRowButton}
+          >
+            <Add style={{ width: '32px', height: '32px' }} />
+          </Button>
+        </Tooltip>
+      ) : null}
     </div>
   );
 };
@@ -345,6 +389,9 @@ const WidgetTable = props => {
 WidgetTable.propTypes = {
   classes: PropTypes.shape({
     incompleteRowFormat: PropTypes.string,
+    header: PropTypes.string,
+    addRowButton: PropTypes.string,
+    textBody: PropTypes.string,
   }).isRequired,
   localState: PropTypes.shape({
     flags: PropTypes.shape({

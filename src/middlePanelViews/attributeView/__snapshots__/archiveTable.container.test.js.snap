@@ -8,16 +8,27 @@ exports[`archiveTable renders correctly 1`] = `
   style={
     Object {
       "height": "100%",
-      "overflowX": "auto",
+      "position": "relative",
       "width": "100%",
     }
   }
 >
-  <AutoSizer
-    disableHeight={false}
-    disableWidth={false}
-    onResize={[Function]}
-    style={Object {}}
-  />
+  <div
+    style={
+      Object {
+        "height": "100%",
+        "overflowX": "auto",
+        "overflowY": "hidden",
+        "width": "100%",
+      }
+    }
+  >
+    <AutoSizer
+      disableHeight={false}
+      disableWidth={false}
+      onResize={[Function]}
+      style={Object {}}
+    />
+  </div>
 </div>
 `;

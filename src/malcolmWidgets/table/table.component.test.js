@@ -81,7 +81,7 @@ describe('WidgetTable', () => {
       ['test1', 'layout'],
       0,
       'dirty',
-      { _dirty: true, dirty: { x: true } },
+      { _dirty: true, dirty: { repeats: true } },
     ]);
   });
 
@@ -102,7 +102,7 @@ describe('WidgetTable', () => {
     expect(setFlag.mock.calls.length).toEqual(0);
   });
 
-  it('calls set value on checkbox click', () => {
+  it('calls set value on textinput change', () => {
     const setValue = jest.fn();
     const wrapper = mount(
       <WidgetTable
@@ -112,15 +112,34 @@ describe('WidgetTable', () => {
         addRow={() => {}}
       />
     );
+
     wrapper
       .find('input')
-      .last()
-      .simulate('change');
+      .at(1)
+      .simulate('change', { target: { value: 'fish' } });
     expect(setValue.mock.calls.length).toEqual(1);
     expect(setValue.mock.calls[0]).toEqual([
       ['test1', 'layout'],
-      { mri: 'PANDA:INENC2', name: 'INENC2', visible: false, x: 0, y: 0 },
-      3,
+      {
+        outa1: true,
+        outa2: false,
+        outb1: false,
+        outb2: false,
+        outc1: false,
+        outc2: false,
+        outd1: false,
+        outd2: false,
+        oute1: false,
+        oute2: false,
+        outf1: false,
+        outf2: false,
+        position: 'fish',
+        repeats: 0,
+        time1: 0,
+        time2: 0,
+        trigger: 'POSC>=POSITION',
+      },
+      0,
     ]);
   });
 
@@ -139,7 +158,10 @@ describe('WidgetTable', () => {
       .last()
       .simulate('click');
     expect(addRow.mock.calls.length).toEqual(1);
-    expect(addRow.mock.calls[0]).toEqual([['test1', 'layout'], 4]);
+    expect(addRow.mock.calls[0]).toEqual([
+      ['test1', 'layout'],
+      expectedCopy.value.length,
+    ]);
   });
 
   it('selects row and opens info on click', () => {
