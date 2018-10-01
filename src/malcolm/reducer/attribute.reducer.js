@@ -207,9 +207,6 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
-const deepCopy = value =>
-  value !== undefined ? JSON.parse(JSON.stringify(value)) : undefined;
-
 const updateLocalState = attribute => {
   let updatedAttribute = { ...attribute };
   if (updatedAttribute && updatedAttribute.raw.meta) {
@@ -239,14 +236,16 @@ const updateLocalState = attribute => {
             });
             return dataRow;
           }),
-          meta: deepCopy(updatedAttribute.raw.meta),
+          meta: JSON.parse(JSON.stringify(updatedAttribute.raw.meta)),
           labels,
           flags: {
             rows: updatedAttribute.raw.value[labels[0]].map(() => ({})),
             table: {
               dirty: false,
               fresh: true,
-              timeStamp: deepCopy(updatedAttribute.raw.timeStamp),
+              timeStamp: JSON.parse(
+                JSON.stringify(updatedAttribute.raw.timeStamp)
+              ),
             },
           },
         };
@@ -371,6 +370,7 @@ export function updateAttribute(
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
       const archive = [...state.blockArchive[blockName].attributes];
+
       const matchingAttributeIndex = blockUtils.findAttributeIndex(
         state.blocks,
         blockName,

@@ -71,7 +71,6 @@ class WidgetTextInput extends React.Component {
         this.setState({
           localValue: this.props.Value,
         });
-        this.props.localState.set({ target: { value: this.props.Value } });
         break;
       default:
         break;

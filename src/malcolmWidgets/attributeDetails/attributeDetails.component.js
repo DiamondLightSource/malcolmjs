@@ -158,7 +158,7 @@ const mapStateToProps = (state, ownProps) => {
     // (see line 148 and 145 above)
     message = attribute.raw.meta.description || EMPTY_STRING;
     message =
-      attribute.calculated && attribute.calculated.errorState
+      attribute.calculated && attribute.calculated.errorMessage
         ? attribute.calculated.errorMessage
         : message;
   }

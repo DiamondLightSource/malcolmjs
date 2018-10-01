@@ -52,32 +52,6 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
 />
 `;
 
-exports[`WidgetTextUpdate displays localState if different to given value 1`] = `
-<TextField
-  InputProps={
-    Object {
-      "className": "WidgetTextInput-InputStyle-3",
-      "endAdornment": null,
-    }
-  }
-  className="WidgetTextInput-textInput-1"
-  disabled={false}
-  error={false}
-  inputProps={
-    Object {
-      "className": "WidgetTextInput-inputStyle-2",
-    }
-  }
-  onBlur={[Function]}
-  onChange={[Function]}
-  onFocus={[Function]}
-  onKeyDown={[Function]}
-  required={false}
-  select={false}
-  value="Hello World"
-/>
-`;
-
 exports[`WidgetTextUpdate displays text 1`] = `
 <TextField
   InputProps={
