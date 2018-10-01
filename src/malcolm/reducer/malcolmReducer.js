@@ -349,7 +349,6 @@ function cleanBlocks(state) {
 }
 
 function setDisconnected(state) {
-  // #refactorDuplication
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
     if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
@@ -399,26 +398,6 @@ function setDisconnected(state) {
               );
             }
           }
-        } else {
-          /*
-          if (Object.prototype.hasOwnProperty.call(attributes[attr], 'meta')) {
-            attributes[attr] = {
-              ...attributes[attr],
-              meta: {
-                ...attributes[attr].meta,
-                writeable: false,
-              },
-            };
-          }
-          if (Object.prototype.hasOwnProperty.call(attributes[attr], 'alarm')) {
-            attributes[attr] = {
-              ...attributes[attr],
-              alarm: {
-                ...attributes[attr].alarm,
-                severity: AlarmStates.UNDEFINED_ALARM,
-              },
-            };
-          } */
         }
       }
       blocks[blockName] = { ...state.blocks[blockName], attributes };
