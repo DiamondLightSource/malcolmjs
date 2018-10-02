@@ -1,13 +1,9 @@
 import {
-  MalcolmNewBlock,
   MalcolmSend,
   MalcolmError,
-  MalcolmBlockMeta,
   MalcolmAttributeFlag,
   MalcolmNavigationPathUpdate,
-  MalcolmCleanBlocks,
   MalcolmDisconnected,
-  MalcolmRootBlockMeta,
   MalcolmReturn,
   MalcolmUpdateBlockPosition,
   MalcolmShiftButton,
@@ -24,11 +20,7 @@ import AttributeReducer, {
 import layoutReducer, { LayoutReduxReducer } from './layout/layout.reducer';
 import methodReducer from './method.reducer';
 import tableReducer from './table.reducer';
-import {
-  updateBlock,
-  registerNewBlock,
-  updateRootBlock,
-} from './block.reducer';
+import BlockReducer from './block.reducer';
 
 export const ARCHIVE_BUFFER_LENGTH = 1000; // length of circular buffer used for archiving
 export const ARCHIVE_REFRESH_INTERVAL = 2.0; // minimum time in seconds between updates of displayed archive data
@@ -161,20 +153,6 @@ function setFlag(state, path, flagType, flagState) {
   return updatedState;
 }
 
-function cleanBlocks(state) {
-  const blocks = { ...state.blocks };
-  Object.keys(blocks).forEach(blockName => {
-    blocks[blockName] = {
-      ...blocks[blockName],
-      loading: true,
-    };
-  });
-  return {
-    ...state,
-    blocks,
-  };
-}
-
 function setDisconnected(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
@@ -201,6 +179,7 @@ function setDisconnected(state) {
               alarm: {
                 ...attributes[attr].raw.alarm,
                 severity: AlarmStates.UNDEFINED_ALARM,
+                message: 'Websocket connection to Malcolm lost!',
               },
             };
             if (
@@ -238,7 +217,6 @@ function setDisconnected(state) {
 }
 
 export const setErrorState = (state, id, errorState, errorMessage) => {
-  // #refactorDuplication
   const matchingMessage = state.messagesInFlight[id];
   const path = matchingMessage ? matchingMessage.path : undefined;
   if (path) {
@@ -254,13 +232,7 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
     if (matchingAttributeIndex >= 0) {
       const { attributes } = state.blocks[blockName];
       attributes[matchingAttributeIndex] = {
-        ...attributes[
-          matchingAttributeIndex
-        ] /*
-        errorState,
-        errorMessage,
-        dirty: errorState,
-        forceUpdate: !errorState, */,
+        ...attributes[matchingAttributeIndex],
         calculated: {
           ...attributes[matchingAttributeIndex].calculated,
           errorState,
@@ -371,11 +343,9 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
   updatedState = methodReducer(updatedState, action);
   updatedState = tableReducer(updatedState, action);
   updatedState = LayoutReduxReducer(updatedState, action);
+  updatedState = BlockReducer(updatedState, action);
 
   switch (action.type) {
-    case MalcolmNewBlock:
-      return registerNewBlock(updatedState, action);
-
     case MalcolmAttributeFlag:
       return setFlag(
         state,
@@ -384,6 +354,7 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
         action.payload.flagState
       );
 
+    // <message reducer>
     case MalcolmSend:
       return updateMessagesInFlight(updatedState, action);
 
@@ -393,13 +364,13 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
     case MalcolmReturn:
       return handleReturnMessage(updatedState, action);
 
-    case MalcolmBlockMeta:
-      updatedState = updateBlock(updatedState, action.payload);
-      return NavigationReducer.updateNavTypes(updatedState);
+    case MalcolmSocketConnect:
+      return updateSocket(updatedState, action.payload);
 
-    case MalcolmRootBlockMeta:
-      updatedState = updateRootBlock(updatedState, action.payload);
-      return NavigationReducer.updateNavTypes(updatedState);
+    case MalcolmDisconnected:
+      return setDisconnected(updatedState);
+
+    // </message reducer>
 
     case MalcolmNavigationPathUpdate:
       updatedState = NavigationReducer.updateNavigationPath(
@@ -411,12 +382,6 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
       updatedState = updateLayoutOnState(updatedState);
 
       return updatedState;
-
-    case MalcolmCleanBlocks:
-      return cleanBlocks(updatedState);
-
-    case MalcolmDisconnected:
-      return setDisconnected(updatedState);
 
     case MalcolmUpdateBlockPosition:
       layoutReducer.updateBlockPosition(
@@ -438,9 +403,6 @@ const malcolmReducer = (state = initialMalcolmState, action = {}) => {
 
     case MalcolmShiftButton:
       return layoutReducer.shiftIsPressed(updatedState, action.payload);
-
-    case MalcolmSocketConnect:
-      return updateSocket(updatedState, action.payload);
 
     default:
       return updatedState;
