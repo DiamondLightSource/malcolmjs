@@ -208,6 +208,7 @@ export const getRowData = (row, widgetTags, props, tableState, handlers) => {
 };
 
 const columnCellRenderer = event => event.cellData; // event.isScrolling ? '.' : event.cellData;
+
 const columns = (widths, tableState, hideInfo) => {
   let columnHeadings;
   if (tableState.columnLabels === undefined) {
@@ -220,6 +221,7 @@ const columns = (widths, tableState, hideInfo) => {
       />,
     ];
   } else {
+    console.log('building columns');
     columnHeadings = tableState.columnLabels.map((label, column) => (
       <Column
         dataKey={label}
@@ -351,6 +353,22 @@ const WidgetTable = props => {
                     );
                     e.event.stopPropagation();
                   }}
+                  onHeaderClick={e => {
+                    console.log('column clicked');
+                    console.log(e);
+
+                    const colIndex = tableState.columnLabels.findIndex(
+                      c => e.dataKey === c
+                    );
+                    if (colIndex > -1) {
+                      props.infoClickHandler(
+                        props.attribute.calculated.path,
+                        `col.${e.dataKey}`
+                      );
+                    }
+
+                    e.event.stopPropagation();
+                  }}
                   rowCount={
                     tableState.values.length !== 0
                       ? tableState.values.length + 2
@@ -416,6 +434,7 @@ WidgetTable.propTypes = {
   eventHandler: PropTypes.func.isRequired,
   closePanelHandler: PropTypes.func.isRequired,
   rowClickHandler: PropTypes.func.isRequired,
+  infoClickHandler: PropTypes.func.isRequired,
   setFlag: PropTypes.func.isRequired,
   addRow: PropTypes.func,
   hideInfo: PropTypes.bool,
