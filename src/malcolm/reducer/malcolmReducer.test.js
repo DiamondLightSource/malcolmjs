@@ -1,4 +1,5 @@
-import malcolmReducer, { setErrorState } from './malcolmReducer';
+import malcolmReducer from './malcolmReducer';
+import { setErrorState } from './socket.reducer';
 import {
   malcolmNewBlockAction,
   malcolmNavigationPath,
