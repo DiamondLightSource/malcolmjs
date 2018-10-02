@@ -11,6 +11,7 @@ import {
   MalcolmRevert,
   MalcolmTickArchive,
   MalcolmMultipleAttributeData,
+  MalcolmSimpleLocalState,
 } from '../malcolm.types';
 import { malcolmTypes } from '../../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 import {
@@ -206,39 +207,63 @@ export const updateLayout = (state, updatedState, blockName, attributeName) => {
   return layout;
 };
 
+const deepCopy = value =>
+  value !== undefined ? JSON.parse(JSON.stringify(value)) : undefined;
+
+const updateLocalState = attribute => {
+  let updatedAttribute = { ...attribute };
+  if (updatedAttribute && updatedAttribute.raw.meta) {
+    if (
+      updatedAttribute.raw.meta.tags &&
+      updatedAttribute.raw.meta.tags.includes('widget:textinput') &&
+      (!updatedAttribute.calculated.dirty ||
+        updatedAttribute.calculated.forceUpdate)
+    ) {
+      updatedAttribute.localState = updatedAttribute.raw.value;
+    } else if (
+      updatedAttribute.raw.meta.typeid === malcolmTypes.table &&
+      updatedAttribute.localState !== undefined
+    ) {
+      const labels = Object.keys(updatedAttribute.raw.meta.elements);
+      updatedAttribute = shouldClearDirtyFlag(updatedAttribute);
+      if (
+        !updatedAttribute.calculated.dirty ||
+        updatedAttribute.calculated.forceUpdate
+      ) {
+        updatedAttribute.calculated.dirty = false;
+        updatedAttribute.localState = {
+          value: updatedAttribute.raw.value[labels[0]].map((value, row) => {
+            const dataRow = {};
+            labels.forEach(label => {
+              dataRow[label] = updatedAttribute.raw.value[label][row];
+            });
+            return dataRow;
+          }),
+          meta: deepCopy(updatedAttribute.raw.meta),
+          labels,
+          flags: {
+            rows: updatedAttribute.raw.value[labels[0]].map(() => ({})),
+            table: {
+              dirty: false,
+              fresh: true,
+              timeStamp: deepCopy(updatedAttribute.raw.timeStamp),
+            },
+          },
+        };
+      } else {
+        updatedAttribute.localState.flags.table.fresh = false;
+      }
+    }
+  }
+  return updatedAttribute;
+};
+
 const checkForSpecialCases = inputAttribute => {
   let attribute = checkForFlowGraph(inputAttribute);
   attribute = updateAttributeChildren(attribute);
   attribute = hasSubElements(attribute);
+  attribute = updateLocalState(attribute);
 
-  if (attribute.localState !== undefined) {
-    const labels = Object.keys(attribute.raw.meta.elements);
-    attribute = shouldClearDirtyFlag(attribute);
-    if (!attribute.calculated.dirty || attribute.calculated.forceUpdate) {
-      attribute.calculated.dirty = false;
-      attribute.localState = {
-        value: attribute.raw.value[labels[0]].map((value, row) => {
-          const dataRow = {};
-          labels.forEach(label => {
-            dataRow[label] = attribute.raw.value[label][row];
-          });
-          return dataRow;
-        }),
-        meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
-        labels,
-        flags: {
-          rows: attribute.raw.value[labels[0]].map(() => ({})),
-          table: {
-            dirty: false,
-            fresh: true,
-            timeStamp: JSON.parse(JSON.stringify(attribute.raw.timeStamp)),
-          },
-        },
-      };
-    } else {
-      attribute.localState.flags.table.fresh = false;
-    }
-  }
   return attribute;
 };
 
@@ -346,7 +371,6 @@ export function updateAttribute(
     if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
       const attributes = [...state.blocks[blockName].attributes];
       const archive = [...state.blockArchive[blockName].attributes];
-
       const matchingAttributeIndex = blockUtils.findAttributeIndex(
         state.blocks,
         blockName,
@@ -541,6 +565,36 @@ export function revertLocalState(oldState, payload) {
   return oldState;
 }
 
+function writeSimpleLocalState(oldState, payload) {
+  const state = oldState;
+  const blockName = payload.path[0];
+  const attributeName = payload.path[1];
+
+  if (Object.prototype.hasOwnProperty.call(state.blocks, blockName)) {
+    const attributes = [...state.blocks[blockName].attributes];
+
+    const matchingAttributeIndex = blockUtils.findAttributeIndex(
+      state.blocks,
+      blockName,
+      attributeName
+    );
+    if (matchingAttributeIndex >= 0) {
+      attributes[matchingAttributeIndex] = {
+        ...attributes[matchingAttributeIndex],
+        localState: payload.value,
+      };
+    }
+    const blocks = { ...state.blocks };
+    blocks[blockName] = { ...state.blocks[blockName], attributes };
+
+    return {
+      ...state,
+      blocks,
+    };
+  }
+  return oldState;
+}
+
 function setMainAttribute(state, payload) {
   return {
     ...state,
@@ -556,6 +610,7 @@ const AttributeReducer = createReducer(
     [MalcolmMainAttributeUpdate]: setMainAttribute,
     [MalcolmRevert]: revertLocalState,
     [MalcolmTickArchive]: tickArchive,
+    [MalcolmSimpleLocalState]: writeSimpleLocalState,
   }
 );
 

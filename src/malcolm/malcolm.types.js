@@ -30,3 +30,4 @@ export const MalcolmRevert = 'malcolm:revertattribute';
 export const MalcolmArchiveMethodRun = 'malcolm:archivemethod';
 export const MalcolmTickArchive = 'malcolm:tickarchiveattribute';
 export const MalcolmRunAutoLayoutType = 'malcolm:runautolayout';
+export const MalcolmSimpleLocalState = 'malcolm:simplelocalstate';
