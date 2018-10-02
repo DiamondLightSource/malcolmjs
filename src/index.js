@@ -6,7 +6,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
-import { blue } from '@material-ui/core/colors';
+import { blue, orange, green, purple } from '@material-ui/core/colors';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AppReducer from './AppReducer';
@@ -21,8 +22,6 @@ import {
   registerSocketAndConnect,
 } from './malcolm/actions/socket.actions';
 import ReduxTimingMiddleware from './userTimingMiddleware';
-import ConnectedThemeProvider from './mainMalcolmView/connectedThemeProvider';
-import { newThemeAction } from './viewState/viewState.actions';
 
 require('typeface-roboto');
 
@@ -65,16 +64,33 @@ setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
 
-store.dispatch(newThemeAction('dark', blue));
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: blue,
+  },
+  alarmState: {
+    warning: '#e6c01c',
+    error: '#e8001f',
+    disconnected: '#9d07bb',
+  },
+  // port colours should not use the themes secondary colour, it is used to highlight blocks and links
+  portColours: {
+    bool: blue,
+    int32: orange,
+    motor: green,
+    NDArray: purple,
+  },
+});
 
 ReactDOM.render(
   <Provider store={store}>
-    <div className="App" style={{ width: '100%', height: '100%' }}>
+    <div className="App">
       <ConnectedRouter history={history}>
-        <ConnectedThemeProvider>
+        <MuiThemeProvider theme={theme}>
           <AppRouter />
           <MessageSnackBar timeout={5000} />
-        </ConnectedThemeProvider>
+        </MuiThemeProvider>
       </ConnectedRouter>
     </div>
   </Provider>,

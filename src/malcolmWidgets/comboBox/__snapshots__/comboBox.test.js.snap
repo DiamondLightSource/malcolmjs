@@ -17,6 +17,7 @@ exports[`WidgetComboBox renders correctly 1`] = `
   fullWidth={true}
   margin="none"
   required={false}
+  variant="standard"
 >
   <WithStyles(Select)
     className="WidgetComboBox-select-3"

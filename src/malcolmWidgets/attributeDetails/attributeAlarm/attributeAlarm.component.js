@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Warning from '@material-ui/icons/Warning';
 import Error from '@material-ui/icons/Error';
-import InfoOutline from '@material-ui/icons/InfoOutline';
+import InfoOutline from '@material-ui/icons/InfoOutlined';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import Edit from '@material-ui/icons/Edit';
-
+import PowerOff from '@material-ui/icons/PowerOff';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withTheme } from '@material-ui/core/styles/index';
 import EditError from './EditError.component';
@@ -67,7 +67,7 @@ const AttributeAlarm = props => {
       return <HighlightOff nativeColor={props.theme.alarmState.disconnected} />;
 
     case AlarmStates.UNDEFINED_ALARM:
-      return <HighlightOff nativeColor={props.theme.alarmState.disconnected} />;
+      return <PowerOff nativeColor={props.theme.alarmState.disconnected} />;
 
     case AlarmStates.PENDING:
       return (

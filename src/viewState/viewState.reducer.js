@@ -1,4 +1,3 @@
-import { theme } from '../mainMalcolmView/connectedThemeProvider';
 import {
   openParentPanelType,
   updateVersionNumerType,
