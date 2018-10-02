@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import AttributeAlarm, {
+  AlarmStates,
   getAlarmState,
 } from './attributeAlarm/attributeAlarm.component';
 import AttributeSelector from './attributeSelector/attributeSelector.component';
@@ -157,6 +158,11 @@ const mapStateToProps = (state, ownProps) => {
     // way widgetTagIndex !== null is if attribute.raw.meta exists
     // (see line 148 and 145 above)
     message = attribute.raw.meta.description || EMPTY_STRING;
+    message =
+      attribute.raw.alarm &&
+      attribute.raw.alarm.severity !== AlarmStates.NO_ALARM
+        ? attribute.raw.alarm.message
+        : message;
     message =
       attribute.calculated && attribute.calculated.errorState
         ? attribute.calculated.errorMessage

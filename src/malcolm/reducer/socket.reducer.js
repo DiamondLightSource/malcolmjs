@@ -39,7 +39,7 @@ function stopTrackingMessage(state, payload) {
   };
 }
 
-function setDisconnected(state) {
+export function setDisconnected(state) {
   const blocks = { ...state.blocks };
   Object.keys(blocks).forEach(blockName => {
     if (Object.prototype.hasOwnProperty.call(blocks[blockName], 'attributes')) {
@@ -65,7 +65,7 @@ function setDisconnected(state) {
               alarm: {
                 ...attributes[attr].raw.alarm,
                 severity: AlarmStates.UNDEFINED_ALARM,
-                message: 'Websocket connection lost',
+                message: 'Websocket connection to server lost',
               },
             };
             if (
@@ -142,12 +142,12 @@ export const setErrorState = (state, id, errorState, errorMessage) => {
   return state;
 };
 
-function handleReturnMessage(state, payload) {
+export function handleReturnMessage(state, payload) {
   const newState = setErrorState(state, payload.id, false, 'Successful');
   return stopTrackingMessage(newState, payload);
 }
 
-const handleErrorMessage = (state, payload) => {
+export function handleErrorMessage(state, payload) {
   const matchingMessage = state.messagesInFlight[payload.id];
   let updatedState = { ...state };
   if (matchingMessage && matchingMessage.path) {
@@ -199,7 +199,7 @@ const handleErrorMessage = (state, payload) => {
 
   updatedState = setErrorState(updatedState, payload.id, true, payload.message);
   return stopTrackingMessage(updatedState, payload);
-};
+}
 
 const updateSocket = (state, payload) => {
   const { worker } = payload;
