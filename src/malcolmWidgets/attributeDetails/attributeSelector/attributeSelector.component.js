@@ -25,6 +25,7 @@ export const malcolmTypes = {
   string: 'malcolm:core/StringMeta:1.0',
   number: 'malcolm:core/NumberMeta:1.0',
   choice: 'malcolm:core/ChoiceMeta:1.0',
+  table: 'malcolm:core/TableMeta:1.0',
   boolArray: 'malcolm:core/BooleanArrayMeta:1.0',
   stringArray: 'malcolm:core/StringArrayMeta:1.0',
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',

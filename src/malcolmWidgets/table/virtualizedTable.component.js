@@ -221,7 +221,6 @@ const columns = (widths, tableState, hideInfo) => {
       />,
     ];
   } else {
-    console.log('building columns');
     columnHeadings = tableState.columnLabels.map((label, column) => (
       <Column
         dataKey={label}
@@ -354,9 +353,6 @@ const WidgetTable = props => {
                     e.event.stopPropagation();
                   }}
                   onHeaderClick={e => {
-                    console.log('column clicked');
-                    console.log(e);
-
                     const colIndex = tableState.columnLabels.findIndex(
                       c => e.dataKey === c
                     );

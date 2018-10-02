@@ -76,21 +76,18 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
   const { navigationLists } = state.navigation;
 
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
-  console.log(matchingBlockNav);
   if (matchingBlockNav > -1) {
     if (subElement !== undefined) {
       const newPath = `/gui/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}.${subElement}/.info`;
-      console.log(newPath);
       dispatch(push(newPath));
     } else {
       const newPath = `/gui/${navigationLists
         .filter((nav, i) => i <= matchingBlockNav)
         .map(nav => nav.path)
         .join('/')}/${attributeName}/.info`;
-      console.log(newPath);
       dispatch(push(newPath));
     }
   }
