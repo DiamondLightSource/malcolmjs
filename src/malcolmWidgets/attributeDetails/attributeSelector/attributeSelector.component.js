@@ -14,6 +14,7 @@ import AttributeAlarm from '../attributeAlarm/attributeAlarm.component';
 import {
   malcolmPutAction,
   malcolmSetFlag,
+  writeLocalState,
 } from '../../../malcolm/malcolmActionCreators';
 import ButtonAction from '../../buttonAction/buttonAction.component';
 import navigationActions from '../../../malcolm/actions/navigation.actions';
@@ -25,11 +26,11 @@ export const malcolmTypes = {
   string: 'malcolm:core/StringMeta:1.0',
   number: 'malcolm:core/NumberMeta:1.0',
   choice: 'malcolm:core/ChoiceMeta:1.0',
-  table: 'malcolm:core/TableMeta:1.0',
   boolArray: 'malcolm:core/BooleanArrayMeta:1.0',
   stringArray: 'malcolm:core/StringArrayMeta:1.0',
   numberArray: 'malcolm:core/NumberArrayMeta:1.0',
   choiceArray: 'malcolm:core/ChoiceArrayMeta:1.0',
+  table: 'malcolm:core/TableMeta:1.0',
 };
 
 export const getDefaultFromType = objectMeta => {
@@ -62,7 +63,8 @@ export const selectorFunction = (
   objectMeta,
   forceUpdate,
   continuousSend = false,
-  buttonClickHandler = () => {}
+  buttonClickHandler = () => {},
+  localState
 ) => {
   if (isArrayType(objectMeta) && !objectMeta.insideArray) {
     return (
@@ -109,6 +111,7 @@ export const selectorFunction = (
           Value={value !== undefined ? value.toString() : '-'}
           Pending={flags.isDisabled}
           submitEventHandler={event => valueHandler(path, event.target.value)}
+          localState={localState}
           isDirty={flags.isDirty}
           setFlag={(flag, state) => flagHandler(path, flag, state)}
           focusHandler={() => {}}
@@ -188,7 +191,15 @@ const AttributeSelector = props => {
         props.attribute.raw.meta,
         props.attribute.calculated.forceUpdate,
         continuousSend,
-        props.buttonClickHandler
+        props.buttonClickHandler,
+        {
+          value: props.attribute.localState,
+          set: event =>
+            props.setLocalState(
+              props.attribute.calculated.path,
+              event.target.value
+            ),
+        }
       );
     }
   }
@@ -218,6 +229,9 @@ const mapDispatchToProps = dispatch => ({
   buttonClickHandler: path => {
     dispatch(navigationActions.navigateToAttribute(path[0], path[1]));
     // dispatch(push(`/gui/${path[0]}/${path[1]}`));
+  },
+  setLocalState: (path, value) => {
+    dispatch(writeLocalState(path, value));
   },
 });
 

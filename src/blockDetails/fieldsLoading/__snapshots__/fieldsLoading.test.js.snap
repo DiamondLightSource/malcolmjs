@@ -11,7 +11,7 @@ exports[`Fields Loading renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-33 MuiCircularProgress-indeterminate-31 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-31 MuiCircularProgress-colorSecondary-35 MuiCircularProgress-indeterminate-33 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -21,15 +21,15 @@ exports[`Fields Loading renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-34"
-        viewBox="0 0 50 50"
+        className="MuiCircularProgress-svg-36"
+        viewBox="22 22 44 44"
       >
         <circle
-          className="MuiCircularProgress-circle-35 MuiCircularProgress-circleIndeterminate-37"
-          cx={25}
-          cy={25}
+          className="MuiCircularProgress-circle-37 MuiCircularProgress-circleIndeterminate-39"
+          cx={44}
+          cy={44}
           fill="none"
-          r={20}
+          r={20.2}
           strokeWidth={3.6}
           style={Object {}}
         />
@@ -46,16 +46,19 @@ exports[`Fields Loading renders correctly 1`] = `
   >
     <svg
       aria-hidden="true"
-      className="MuiSvgIcon-root-38 FieldsLoading-success-4"
+      className="MuiSvgIcon-root-40 FieldsLoading-success-4"
       color={undefined}
       focusable="false"
+      role="presentation"
       viewBox="0 0 24 24"
     >
-      <g>
-        <path
-          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-        />
-      </g>
+      <path
+        d="M0 0h24v24H0z"
+        fill="none"
+      />
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+      />
     </svg>
     <p
       className="MuiTypography-root-5 MuiTypography-body1-14 FieldsLoading-fieldName-2"
@@ -67,7 +70,7 @@ exports[`Fields Loading renders correctly 1`] = `
     className="FieldsLoading-loadingRow-1"
   >
     <div
-      className="MuiCircularProgress-root-29 MuiCircularProgress-colorSecondary-33 MuiCircularProgress-indeterminate-31 FieldsLoading-progress-3"
+      className="MuiCircularProgress-root-31 MuiCircularProgress-colorSecondary-35 MuiCircularProgress-indeterminate-33 FieldsLoading-progress-3"
       role="progressbar"
       style={
         Object {
@@ -77,15 +80,15 @@ exports[`Fields Loading renders correctly 1`] = `
       }
     >
       <svg
-        className="MuiCircularProgress-svg-34"
-        viewBox="0 0 50 50"
+        className="MuiCircularProgress-svg-36"
+        viewBox="22 22 44 44"
       >
         <circle
-          className="MuiCircularProgress-circle-35 MuiCircularProgress-circleIndeterminate-37"
-          cx={25}
-          cy={25}
+          className="MuiCircularProgress-circle-37 MuiCircularProgress-circleIndeterminate-39"
+          cx={44}
+          cy={44}
           fill="none"
-          r={20}
+          r={20.2}
           strokeWidth={3.6}
           style={Object {}}
         />

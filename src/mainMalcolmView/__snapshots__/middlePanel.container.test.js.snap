@@ -48,7 +48,7 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(Palette) />
+        <pure(PaletteIcon) />
       </WithStyles(Button)>
     </div>
     <div
@@ -144,7 +144,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(Palette) />
+        <pure(PaletteIcon) />
       </WithStyles(Button)>
     </div>
     <div
@@ -206,7 +206,7 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(Palette) />
+        <pure(PaletteIcon) />
       </WithStyles(Button)>
     </div>
     <div
@@ -268,7 +268,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
         onClick={[Function]}
         variant="fab"
       >
-        <pure(Palette) />
+        <pure(PaletteIcon) />
       </WithStyles(Button)>
     </div>
     <div

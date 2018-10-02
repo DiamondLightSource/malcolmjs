@@ -2433,7 +2433,7 @@ exports[`WidgetTable renders correctly with no selected row 1`] = `
               <WithStyles(IconButton)
                 onClick={[Function]}
               >
-                <pure(Add)
+                <pure(AddIcon)
                   style={
                     Object {
                       "height": "32px",
@@ -4903,7 +4903,7 @@ exports[`WidgetTable renders correctly with selected row 1`] = `
               <WithStyles(IconButton)
                 onClick={[Function]}
               >
-                <pure(Add)
+                <pure(AddIcon)
                   style={
                     Object {
                       "height": "32px",

@@ -1,4 +1,5 @@
 import MockCircularBuffer from './malcolm/reducer/attribute.reducer.mocks';
+import blockUtils from './malcolm/blockUtils';
 import { ARCHIVE_REFRESH_INTERVAL } from './malcolm/reducer/malcolmReducer';
 
 const buildDefaultLayoutEngine = () => ({
@@ -82,10 +83,16 @@ export const addBlock = (name, attributes, malcolmState, children = []) => {
   };
 };
 
-export const buildMeta = (tags = [], writeable = true, label = '') => ({
+export const buildMeta = (
+  tags = [],
+  writeable = true,
+  label = '',
+  typeid = ''
+) => ({
   tags,
   writeable,
   label,
+  typeid,
 });
 
 export const buildAttribute = (
@@ -138,6 +145,115 @@ export const updatePanels = (parent, child, malcolmState) => {
 export const addNavigationLists = (navList, malcolmState) => {
   const updatedState = malcolmState;
   updatedState.navigation.navigationLists = navList.map(n => ({ path: n }));
+};
+
+export const addSimpleLocalState = (
+  malcolmState,
+  blockName,
+  attributeName,
+  value
+) => {
+  const updatedState = malcolmState;
+  const attributeIndex = blockUtils.findAttributeIndex(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
+  if (attributeIndex > -1) {
+    updatedState.blocks[blockName].attributes[
+      attributeIndex
+    ].localState = value;
+  }
+  return updatedState;
+};
+
+export const addTableLocalState = (
+  malcolmState,
+  blockName,
+  attributeName,
+  labels,
+  length
+) => {
+  const updatedState = malcolmState;
+  const attributeIndex = blockUtils.findAttributeIndex(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
+  const attribute = blockUtils.findAttribute(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
+  const dummy = [];
+  for (let i = 0; i < length; i += 1) {
+    dummy[i] = '';
+  }
+  const dummyRow = {};
+  labels.forEach(label => {
+    dummyRow[label] = '';
+  });
+  if (attributeIndex > -1) {
+    updatedState.blocks[blockName].attributes[attributeIndex].localState = {
+      value: dummy.map(() => dummyRow),
+      meta: JSON.parse(JSON.stringify(attribute.raw.meta)),
+      labels,
+      flags: {
+        rows: dummy.map(() => ({})),
+        table: {
+          dirty: false,
+          fresh: true,
+          timeStamp:
+            attribute.raw.timeStamp !== undefined
+              ? JSON.parse(JSON.stringify(attribute.raw.timeStamp))
+              : undefined,
+        },
+      },
+    };
+  }
+  return updatedState;
+};
+
+export const setAttributeFlag = (
+  malcolmState,
+  blockName,
+  attributeName,
+  flagType,
+  flagValue
+) => {
+  const updatedState = malcolmState;
+  const attributeIndex = blockUtils.findAttributeIndex(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
+  if (attributeIndex > -1) {
+    updatedState.blocks[blockName].attributes[attributeIndex].calculated[
+      flagType
+    ] = flagValue;
+  }
+  return updatedState;
+};
+
+export const setTableFlag = (
+  malcolmState,
+  blockName,
+  attributeName,
+  flagType,
+  flagValue
+) => {
+  const updatedState = malcolmState;
+  const attributeIndex = blockUtils.findAttributeIndex(
+    updatedState.blocks,
+    blockName,
+    attributeName
+  );
+  if (attributeIndex > -1) {
+    updatedState.blocks[blockName].attributes[
+      attributeIndex
+    ].localState.flags.table[flagType] = flagValue;
+  }
+  return updatedState;
 };
 
 export const buildMockDispatch = getState => {
