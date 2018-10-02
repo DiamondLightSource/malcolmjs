@@ -76,6 +76,12 @@ exports[`AttributeSelector selects a textInput correctly 1`] = `
   blurHandler={[Function]}
   continuousSend={false}
   focusHandler={[Function]}
+  localState={
+    Object {
+      "set": [Function],
+      "value": undefined,
+    }
+  }
   setFlag={[Function]}
   submitEventHandler={[Function]}
 />
