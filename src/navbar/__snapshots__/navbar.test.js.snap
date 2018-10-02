@@ -11,7 +11,7 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
       className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
       onClick={[Function]}
     >
-      <pure(Menu) />
+      <pure(MenuIcon) />
     </WithStyles(IconButton)>
     <div
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
@@ -144,7 +144,7 @@ exports[`NavBar renders correctly 1`] = `
       className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
       onClick={[Function]}
     >
-      <pure(Menu) />
+      <pure(MenuIcon) />
     </WithStyles(IconButton)>
     <div
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
@@ -328,7 +328,7 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
       className="Connect-NavBar--menuButton-5 Connect-NavBar--hide-6"
       onClick={[Function]}
     >
-      <pure(Menu) />
+      <pure(MenuIcon) />
     </WithStyles(IconButton)>
     <div
       className="Connect-NavBar--title-7 Connect-NavBar--titleShift-8"
