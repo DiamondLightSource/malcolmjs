@@ -16,6 +16,7 @@ import {
   MalcolmTableFlag,
   MalcolmRevert,
   MalcolmSelectLinkType,
+  MalcolmSimpleLocalState,
 } from './malcolm.types';
 import blockUtils from './blockUtils';
 
@@ -218,6 +219,14 @@ export const malcolmRevertAction = path => dispatch => {
     payload: { path },
   });
 };
+
+export const writeLocalState = (path, value) => ({
+  type: MalcolmSimpleLocalState,
+  payload: {
+    path,
+    value,
+  },
+});
 
 export default {
   malcolmHailReturn,

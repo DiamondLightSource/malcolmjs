@@ -10,7 +10,8 @@ const textInput = (
   setFlag = () => {},
   setValue = () => {},
   forceUpdate = false,
-  error = false
+  error = false,
+  localState = undefined
 ) => (
   <WidgetTextInput
     Value={value}
@@ -23,6 +24,7 @@ const textInput = (
     setFlag={setFlag}
     forceUpdate={forceUpdate}
     Error={error}
+    localState={localState}
   />
 );
 
@@ -52,6 +54,23 @@ describe('WidgetTextUpdate', () => {
 
   it('displays dirty', () => {
     const wrapper = shallow(textInput('Goodbye World', true, null, true));
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('displays localState if different to given value', () => {
+    const wrapper = shallow(
+      textInput(
+        'Hello World',
+        false,
+        null,
+        false,
+        () => {},
+        () => {},
+        false,
+        false,
+        { set: () => {}, value: 'goodbye' }
+      )
+    );
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -123,6 +142,32 @@ describe('WidgetTextUpdate', () => {
       .find('input')
       .first()
       .simulate('keyDown', { key: 'Tab' });
+    expect(mockData.mock.calls.length).toEqual(1);
+    expect(mockData.mock.calls[0]).toEqual('Hello World');
+  });
+
+  it('calls revert on esc', () => {
+    const mockData = { mock: { calls: [] } };
+    const revertValue = event => {
+      mockData.mock.calls.push(event.target.value);
+    };
+    const wrapper = mount(
+      textInput(
+        'Hello World',
+        false,
+        null,
+        false,
+        () => {},
+        () => {},
+        false,
+        false,
+        { set: revertValue, value: 'goodbye' }
+      )
+    );
+    wrapper
+      .find('input')
+      .first()
+      .simulate('keyDown', { key: 'Escape' });
     expect(mockData.mock.calls.length).toEqual(1);
     expect(mockData.mock.calls[0]).toEqual('Hello World');
   });
