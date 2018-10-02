@@ -23,6 +23,7 @@ exports[`WidgetTextUpdate displays dirty 1`] = `
   required={false}
   select={false}
   value="Goodbye World"
+  variant="standard"
 />
 `;
 
@@ -49,6 +50,7 @@ exports[`WidgetTextUpdate displays disabled 1`] = `
   required={false}
   select={false}
   value="Goodbye World"
+  variant="standard"
 />
 `;
 
@@ -75,6 +77,7 @@ exports[`WidgetTextUpdate displays localState if different to given value 1`] = 
   required={false}
   select={false}
   value="Hello World"
+  variant="standard"
 />
 `;
 
@@ -101,6 +104,7 @@ exports[`WidgetTextUpdate displays text 1`] = `
   required={false}
   select={false}
   value="Hello World"
+  variant="standard"
 />
 `;
 
@@ -131,5 +135,6 @@ exports[`WidgetTextUpdate displays with units 1`] = `
   required={false}
   select={false}
   value="1.21"
+  variant="standard"
 />
 `;

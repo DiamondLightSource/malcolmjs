@@ -18,7 +18,7 @@ exports[`DrawerHeader renders correctly 1`] = `
         data-cy="closedrawer"
         onClick={[Function]}
       >
-        <pure(Close) />
+        <pure(CloseIcon) />
       </WithStyles(IconButton)>
       <WithStyles(Typography)
         color="inherit"
@@ -34,7 +34,7 @@ exports[`DrawerHeader renders correctly 1`] = `
       <WithStyles(IconButton)
         onClick={[Function]}
       >
-        <pure(OpenInNew) />
+        <pure(OpenInNewIcon) />
       </WithStyles(IconButton)>
     </WithStyles(Toolbar)>
   </WithStyles(AppBar)>

@@ -15,7 +15,7 @@ exports[`GroupExpander renders when default expanded is false 1`] = `
           "root": "WidgetGroupExpander-root-1",
         }
       }
-      expandIcon={<pure(ExpandMore) />}
+      expandIcon={<pure(ExpandMoreIcon) />}
     >
       <WithStyles(Typography)
         className="WidgetGroupExpander-heading-5"
@@ -68,7 +68,7 @@ exports[`GroupExpander renders when default expanded is true 1`] = `
           "root": "WidgetGroupExpander-root-1",
         }
       }
-      expandIcon={<pure(ExpandMore) />}
+      expandIcon={<pure(ExpandMoreIcon) />}
     >
       <WithStyles(Typography)
         className="WidgetGroupExpander-heading-5"

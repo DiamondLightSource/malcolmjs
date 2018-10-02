@@ -87,7 +87,7 @@ exports[`Method component buildIOcomponent returns null if no widget tag 1`] = `
         <WithStyles(Tooltip)
           title="widget:undefined"
         >
-          <pure(BugReport)
+          <pure(BugReportIcon)
             nativeColor="red"
           />
         </WithStyles(Tooltip)>
