@@ -8,7 +8,7 @@ exports[`Layout Bin renders correctly 1`] = `
   onMouseUp={[Function]}
   role="presentation"
 >
-  <pure(Delete)
+  <pure(DeleteIcon)
     className="LayoutBin-icon-2"
   />
 </div>

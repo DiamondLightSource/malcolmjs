@@ -4,10 +4,10 @@ exports[`AttributeSelector renders empty on no widget tag 1`] = `""`;
 
 exports[`AttributeSelector selector function returns info:button and renders correctly 1`] = `
 <div
-  className="ButtonAction-container-61"
+  className="ButtonAction-container-84"
 >
   <WithStyles(Button)
-    className="ButtonAction-button-62"
+    className="ButtonAction-button-85"
     color="primary"
     disabled={true}
     onClick={[Function]}
@@ -20,10 +20,10 @@ exports[`AttributeSelector selector function returns info:button and renders cor
 
 exports[`AttributeSelector selector function returns info:multiline and renders correctly 1`] = `
 <div
-  className="WidgetTextUpdate-divWrap-84"
+  className="WidgetTextUpdate-divWrap-117"
 >
   <WithStyles(Typography)
-    className="WidgetTextUpdate-textUpdateWrap-85"
+    className="WidgetTextUpdate-textUpdateWrap-118"
     style={Object {}}
   >
     test value
@@ -99,7 +99,7 @@ exports[`AttributeSelector shows a bug icon if the widget is not handled 1`] = `
 <WithStyles(Tooltip)
   title="widget:unknown"
 >
-  <pure(BugReport)
+  <pure(BugReportIcon)
     nativeColor="red"
   />
 </WithStyles(Tooltip)>

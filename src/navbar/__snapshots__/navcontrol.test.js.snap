@@ -55,7 +55,7 @@ exports[`NavControl renders correctly 1`] = `
     }
     handleClick={[Function]}
     handleClose={[Function]}
-    icon={<pure(KeyboardArrowDown) />}
+    icon={<pure(KeyboardArrowDownIcon) />}
     navigateToChild={[Function]}
   />
 </div>
@@ -81,7 +81,7 @@ exports[`NavControl renders correctly for final 1`] = `
     }
     handleClick={[Function]}
     handleClose={[Function]}
-    icon={<pure(MoreHoriz) />}
+    icon={<pure(MoreHorizIcon) />}
     navigateToChild={[Function]}
   />
 </div>
