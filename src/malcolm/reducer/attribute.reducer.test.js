@@ -3,6 +3,7 @@ import AttributeReducer, {
   updateNavigation,
   portsAreDifferent,
   pushToArchive,
+  tickArchive,
 } from './attribute.reducer';
 import LayoutReducer from './layout/layout.reducer';
 import navigationReducer, {
@@ -38,6 +39,28 @@ jest.mock('./table.reducer');
 const sourcePort = 'sourcePort';
 const sinkPort = 'sinkPort';
 
+const mockStartTime = -957312000000;
+const mockNow = -806952600000;
+const mockDataTime = -14159025000;
+
+const vanillaDate = Date;
+
+function injectMockDate(mockDateValue) {
+  global.Date = class extends vanillaDate {
+    constructor(setDate) {
+      if (setDate === undefined) {
+        super(mockDateValue);
+      } else {
+        super(setDate);
+      }
+    }
+  };
+}
+
+function restoreDate() {
+  global.Date = vanillaDate;
+}
+
 describe('attribute reducer', () => {
   let state = {};
   let payload = {};
@@ -45,6 +68,7 @@ describe('attribute reducer', () => {
   let payload3 = {};
 
   beforeEach(() => {
+    injectMockDate(mockNow);
     shouldClearDirtyFlag.mockImplementation(attribute => attribute);
 
     LayoutReducer.processLayout.mockClear();
@@ -67,6 +91,10 @@ describe('attribute reducer', () => {
         },
       },
     }));
+
+    afterEach(() => {
+      restoreDate();
+    });
 
     state = buildTestState().malcolm;
     addMessageInFlight(1, ['block1', 'layout'], state);
@@ -638,5 +666,26 @@ describe('attribute reducer', () => {
 
     expect(testAttribute.localState).toBeDefined();
     expect(testAttribute.localState.value).toEqual(expectedState);
+  });
+
+  it('tickArchive does tick', () => {
+    const archive = state.blockArchive.block1.attributes[0];
+    archive.tickingSince = new Date(mockStartTime);
+    archive.plotTime = 7;
+    archive.value.push('ticker test!');
+    archive.value.push('ticker test!');
+    archive.timeStamp.push(new Date(mockDataTime));
+    archive.timeStamp.push(new Date(mockDataTime));
+
+    const updatedState = tickArchive(state, { path: ['block1', 'layout'] });
+    const updatedArchive = updatedState.blockArchive.block1.attributes[0];
+    expect(updatedArchive.timeStamp.size()).toEqual(2);
+    expect(updatedArchive.value.size()).toEqual(2);
+
+    expect(updatedArchive.timeStamp.get(1)).toEqual(
+      new Date(mockNow - mockStartTime + mockDataTime)
+    );
+    expect(updatedArchive.value.get(1)).toEqual('ticker test!');
+    expect(updatedArchive.plotTime).toEqual(8);
   });
 });

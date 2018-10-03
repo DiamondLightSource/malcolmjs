@@ -323,7 +323,7 @@ export const pushToArchive = (oldAttributeArchive, payload, alarmState) => {
   return attributeArchive;
 };
 
-const tickArchive = (state, payload) => {
+export const tickArchive = (state, payload) => {
   const { path } = payload;
   const blockName = path[0];
   const attributeName = path[1];
