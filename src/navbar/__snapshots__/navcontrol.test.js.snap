@@ -15,6 +15,7 @@ exports[`NavControl disables menu item if children is empty 1`] = `
     style={
       Object {
         "height": "32px",
+        "padding": 0,
         "width": "32px",
       }
     }
@@ -102,6 +103,7 @@ exports[`NavControl selector component renders correctly 1`] = `
     style={
       Object {
         "height": "32px",
+        "padding": 0,
         "width": "32px",
       }
     }

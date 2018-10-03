@@ -190,9 +190,14 @@ export const buildAttributeInfo = props => {
           };
         }
         info.subElement = props.subElement;
+      } else {
+        // column info will go here eventually
+        info.columnHeading = {
+          label: 'Column',
+          value: props.subElement[1],
+          inline: true,
+        };
       }
-    } else {
-      // column info will go here eventually
     }
   } else if (
     attribute &&

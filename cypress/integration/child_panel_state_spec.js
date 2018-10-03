@@ -114,7 +114,7 @@ describe('Child panel', () => {
     });
   });
 
-  describe.only('table interactions', () => {
+  describe('table interactions', () => {
     beforeEach(() => {
       cy.request('/reset');
       cy.visit('/gui/PANDA/exports');
@@ -185,6 +185,15 @@ describe('Child panel', () => {
       // ensure info for row 1
       cy.wait(2000, { log: false });
       cy.get('p:contains(1)').should('have.length', 2);
+    });
+
+    it('clicking on a column heading should open panel', () => {
+      // click the column heading
+      cy
+        .get('[data-cy=table]')
+        .contains('source')
+        .click();
+      cy.get(childPanel).should('be.visible');
     });
   });
 });
