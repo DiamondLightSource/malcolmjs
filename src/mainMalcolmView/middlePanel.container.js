@@ -70,6 +70,7 @@ const styles = theme => ({
   button: {
     width: '24px',
     height: '24px',
+    padding: 0,
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -148,6 +149,7 @@ const findAttributeComponent = props => {
                 color="secondary"
                 onClick={() => props.openPalette()}
                 disabled={props.layoutLocked}
+                data-cy="palettebutton"
               >
                 <PaletteIcon />
               </Button>

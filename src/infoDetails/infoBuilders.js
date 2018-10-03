@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { AlarmStates } from '../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import { sinkPort } from '../malcolm/malcolmConstants';
+import { malcolmTypes } from '../malcolmWidgets/attributeDetails/attributeSelector/attributeSelector.component';
 
 // eslint-disable-next-line import/prefer-default-export
 export const buildAttributeInfo = props => {
@@ -99,92 +100,104 @@ export const buildAttributeInfo = props => {
       }
       // eslint-disable-next-line prefer-destructuring
       value = attribute.raw.value;
-    } else if (attribute.localState) {
-      const row = parseInt(props.subElement[1], 10);
-      const rowFlags = attribute.localState.flags.rows[row];
-      const isNewRow =
-        row >= attribute.raw.value[attribute.localState.labels[0]].length;
-      info.localState = {
-        label: 'Row local state',
-        value: 'Discard',
-        disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
-        inline: true,
-        tag: 'info:button',
-        alarmState:
-          rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
-      };
-      const dataRow = {};
-      attribute.localState.labels.forEach(label => {
-        dataRow[label] =
-          row < attribute.raw.value[label].length
-            ? attribute.raw.value[label][row]
-            : 'undefined';
-      });
-      info.rowValue = {
-        label: 'Row remote state',
-        ...dataRow,
-      };
-      info.addRowAbove = {
-        label: 'Insert row above',
-        value: 'Add',
-        inline: true,
-        tag: 'info:button',
-      };
-      info.addRowBelow = {
-        label: 'Insert row below',
-        value: 'Add',
-        inline: true,
-        tag: 'info:button',
-      };
-      info.deleteRow = {
-        label: 'Delete row',
-        value: 'Delete',
-        inline: true,
-        tag: 'info:button',
-      };
-      if (props.addRow) {
-        info.addRowAbove.functions = {
-          clickHandler: () => {
-            props.addRow(props.attribute.calculated.path, row);
-            props.changeInfoHandler(
-              props.attribute.calculated.path,
-              `row.${row + 1}`
-            );
-          },
+    } else if (
+      attribute.raw.meta.typeid === malcolmTypes.table &&
+      attribute.localState
+    ) {
+      if (props.subElement[0] === 'row') {
+        const row = parseInt(props.subElement[1], 10);
+        const rowFlags = attribute.localState.flags.rows[row];
+        const isNewRow =
+          row >= attribute.raw.value[attribute.localState.labels[0]].length;
+        info.localState = {
+          label: 'Row local state',
+          value: 'Discard',
+          disabled: !(rowFlags._dirty || rowFlags._isChanged) || isNewRow,
+          inline: true,
+          tag: 'info:button',
+          alarmState:
+            rowFlags._dirty || rowFlags._isChanged ? AlarmStates.DIRTY : null,
         };
-        info.addRowBelow.functions = {
-          clickHandler: () => {
-            props.addRow(props.attribute.calculated.path, row, 'below');
-          },
+        const dataRow = {};
+        attribute.localState.labels.forEach(label => {
+          dataRow[label] =
+            row < attribute.raw.value[label].length
+              ? attribute.raw.value[label][row]
+              : 'undefined';
+        });
+        info.rowValue = {
+          label: 'Row remote state',
+          ...dataRow,
         };
-        info.deleteRow.functions = {
-          clickHandler: () => {
-            if (row >= props.attribute.localState.value.length - 1) {
-              if (row !== 0) {
-                props.changeInfoHandler(
-                  props.attribute.calculated.path,
-                  `row.${row - 1}`
-                );
-              } else {
-                props.closeInfoHandler(props.attribute.calculated.path);
+        info.addRowAbove = {
+          label: 'Insert row above',
+          value: 'Add',
+          inline: true,
+          tag: 'info:button',
+        };
+        info.addRowBelow = {
+          label: 'Insert row below',
+          value: 'Add',
+          inline: true,
+          tag: 'info:button',
+        };
+        info.deleteRow = {
+          label: 'Delete row',
+          value: 'Delete',
+          inline: true,
+          tag: 'info:button',
+        };
+        if (props.addRow) {
+          info.addRowAbove.functions = {
+            clickHandler: () => {
+              props.addRow(props.attribute.calculated.path, row);
+              props.changeInfoHandler(
+                props.attribute.calculated.path,
+                `row.${row + 1}`
+              );
+            },
+          };
+          info.addRowBelow.functions = {
+            clickHandler: () => {
+              props.addRow(props.attribute.calculated.path, row, 'below');
+            },
+          };
+          info.deleteRow.functions = {
+            clickHandler: () => {
+              if (row >= props.attribute.localState.value.length - 1) {
+                if (row !== 0) {
+                  props.changeInfoHandler(
+                    props.attribute.calculated.path,
+                    `row.${row - 1}`
+                  );
+                } else {
+                  props.closeInfoHandler(props.attribute.calculated.path);
+                }
               }
-            }
-            props.addRow(props.attribute.calculated.path, row, 'delete');
-          },
+              props.addRow(props.attribute.calculated.path, row, 'delete');
+            },
+          };
+        }
+        if (props.rowRevertHandler) {
+          info.localState.functions = {
+            clickHandler: () => {
+              props.rowRevertHandler(
+                props.attribute.calculated.path,
+                dataRow,
+                row
+              );
+            },
+          };
+        }
+        info.subElement = props.subElement;
+      } else {
+        // column info will go here eventually
+        info.columnHeading = {
+          label: 'Column',
+          value: props.subElement[1],
+          inline: true,
         };
       }
-      if (props.rowRevertHandler) {
-        info.localState.functions = {
-          clickHandler: () => {
-            props.rowRevertHandler(
-              props.attribute.calculated.path,
-              dataRow,
-              row
-            );
-          },
-        };
-      }
-      info.subElement = props.subElement;
     }
   } else if (
     attribute &&

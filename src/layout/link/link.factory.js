@@ -28,7 +28,10 @@ class MalcolmLinkFactory extends DefaultLinkFactory {
         strokeWidth={model.width}
         stroke={model.color}
         d={path}
-        onClick={() => model.clickHandler(model.id)}
+        onClick={e => {
+          model.clickHandler(model.id);
+          e.stopPropagation();
+        }}
       />
     );
   }
