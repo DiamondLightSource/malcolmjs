@@ -2,6 +2,9 @@
 
 exports[`archiveTable renders correctly 1`] = `
 <div
+  data-cy="table"
+  onClick={[Function]}
+  role="presentation"
   style={
     Object {
       "height": "100%",

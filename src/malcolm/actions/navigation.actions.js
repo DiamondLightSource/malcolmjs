@@ -76,7 +76,6 @@ const navigateToInfo = (blockMri, attributeName, subElement) => (
   const { navigationLists } = state.navigation;
 
   const matchingBlockNav = findBlockIndex(navigationLists, blockMri);
-
   if (matchingBlockNav > -1) {
     if (subElement !== undefined) {
       const newPath = `/gui/${navigationLists
