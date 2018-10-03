@@ -1,7 +1,7 @@
 describe('User guide screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
-    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.visit('/gui/PANDA/layout/CLOCKS');
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
@@ -10,7 +10,7 @@ describe('User guide screenshots', () => {
   it('quick start', () => {
     cy.viewport(1200, 675);
     cy.visit('/gui/');
-    cy.contains('Select a root node').should('be.visible');
+    cy.contains('Select a root block').should('be.visible');
     cy
       .get('[data-cy=navmenu]')
       .first()
@@ -37,10 +37,8 @@ describe('User guide screenshots', () => {
     cy.waitForSnackbarToDisappear();
     cy.screenshot('PANDA-layout');
 
-    cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
-    cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
-    cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
-    cy.moveBlock('LVDS output', { x: 850, y: 280 });
+    cy.contains('Auto layout').click();
+    cy.wait(3000, { log: false });
 
     cy.contains('Configurable clocks').click();
 
