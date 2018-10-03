@@ -5,7 +5,6 @@ const subscriptionFeed = require('./subscriptionFeed');
 
 let settings = JSON.parse(fs.readFileSync('./server/server-settings.json'));
 
-let malcolmMessages = dataLoader.loadData('./server/canned_data/');
 let pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
 let subscriptions = [];
 let subscribedPaths = {};
@@ -34,6 +33,12 @@ io.on('connection', function (socket) {
 
 
 console.log('listening on port ', port);
+
+function resetServer() {
+  pathIndexedMessages = dataLoader.loadDatabyPath('./server/canned_data/');
+  subscriptions = [];
+  subscribedPaths = {};
+}
 
 function handleMessage(socket, message) {
   let simplifiedMessage = message;
@@ -185,4 +190,8 @@ function handleUnsubscribe(socket, id) {
         message: 'The id: ' + id + ' is not currently being subscribed' 
       });
     }
+}
+
+module.exports = {
+  resetServer
 }

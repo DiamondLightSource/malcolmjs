@@ -21,7 +21,11 @@ exports[`MainMalcolmView renders correctly 1`] = `
     >
       <Connect(WithStyles(MiddlePanelContainer)) />
     </div>
-    <Connect(WithStyles(BlockDetails)) />
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(WithStyles(BlockDetails)) />
+    </div>
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;
@@ -47,7 +51,11 @@ exports[`MainMalcolmView renders info if child block is .info 1`] = `
     >
       <Connect(WithStyles(MiddlePanelContainer)) />
     </div>
-    <Connect(InfoDetails) />
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(InfoDetails) />
+    </div>
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;
@@ -73,7 +81,11 @@ exports[`MainMalcolmView renders palette if child block is .palette 1`] = `
     >
       <Connect(WithStyles(MiddlePanelContainer)) />
     </div>
-    <Connect(WithStyles(Palette)) />
+    <div
+      data-cy="childpanel"
+    >
+      <Connect(WithStyles(Palette)) />
+    </div>
   </Connect(WithStyles(DrawerContainer))>
 </div>
 `;

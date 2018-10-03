@@ -2133,6 +2133,9 @@ exports[`virtualized table widget table renders correctly with no selected row 1
     }
   >
     <div
+      data-cy="table"
+      onClick={[Function]}
+      role="presentation"
       style={
         Object {
           "height": "100%",
@@ -2176,6 +2179,8 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 headerStyle={Object {}}
                 height={0}
                 noRowsRenderer={[Function]}
+                onHeaderClick={[Function]}
+                onRowClick={[Function]}
                 onRowsRendered={[Function]}
                 onScroll={[Function]}
                 overscanIndicesGetter={[Function]}
@@ -2209,8 +2214,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     }
                   >
                     <div
+                      aria-label="alarmState"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col0"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2219,6 +2227,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 36px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2227,8 +2236,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       />
                     </div>
                     <div
+                      aria-label="Repeats"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col1"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2237,6 +2249,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 180px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2247,8 +2260,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Trigger"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col2"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2257,6 +2273,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 180px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2267,8 +2284,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Position"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col3"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2277,6 +2297,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 180px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2287,8 +2308,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Time1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col4"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2297,6 +2321,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 180px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2307,8 +2332,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outa1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col5"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2317,6 +2345,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2327,8 +2356,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outb1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col6"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2337,6 +2369,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2347,8 +2380,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outc1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col7"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2357,6 +2393,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2367,8 +2404,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outd1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col8"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2377,6 +2417,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2387,8 +2428,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Oute1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col9"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2397,6 +2441,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2407,8 +2452,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outf1"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col10"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2417,6 +2465,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2427,8 +2476,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Time2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col11"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2437,6 +2489,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 180px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2447,8 +2500,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outa2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col12"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2457,6 +2513,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2467,8 +2524,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outb2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col13"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2477,6 +2537,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2487,8 +2548,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outc2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col14"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2497,6 +2561,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2507,8 +2572,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outd2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col15"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2517,6 +2585,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2527,8 +2596,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Oute2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col16"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2537,6 +2609,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2547,8 +2620,11 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       </span>
                     </div>
                     <div
+                      aria-label="Outf2"
                       className="ReactVirtualized__Table__headerColumn WidgetTable-header-1"
                       key="Header-Col17"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
                       role="columnheader"
                       style={
                         Object {
@@ -2557,6 +2633,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                           "msFlex": "0 1 59px",
                         }
                       }
+                      tabIndex={0}
                     >
                       <span
                         className="ReactVirtualized__Table__headerTruncatedText"
@@ -2592,6 +2669,8 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     isScrollingOptOut={false}
                     noContentRenderer={[Function]}
                     noRowsRenderer={[Function]}
+                    onHeaderClick={[Function]}
+                    onRowClick={[Function]}
                     onRowsRendered={[Function]}
                     onScroll={[Function]}
                     onScrollbarPresenceChange={[Function]}
@@ -2939,6 +3018,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
               aria-describedby={null}
               className="WidgetTable-addRowButton-6"
               color="secondary"
+              data-cy="addrowbutton"
               onBlur={[Function]}
               onClick={[Function]}
               onFocus={[Function]}
@@ -2984,6 +3064,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                 }
                 color="secondary"
                 component="button"
+                data-cy="addrowbutton"
                 disableFocusRipple={false}
                 disabled={false}
                 fullWidth={false}
@@ -3004,6 +3085,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                   aria-describedby={null}
                   className="MuiButton-root-14 MuiButton-fab-31 MuiButton-contained-25 MuiButton-containedSecondary-27 MuiButton-raised-28 MuiButton-raisedSecondary-30 WidgetTable-addRowButton-6"
                   component="button"
+                  data-cy="addrowbutton"
                   disabled={false}
                   focusRipple={true}
                   focusVisibleClassName="MuiButton-focusVisible-33"
@@ -3029,6 +3111,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                       }
                     }
                     component="button"
+                    data-cy="addrowbutton"
                     disableRipple={false}
                     disableTouchRipple={false}
                     disabled={false}
@@ -3048,6 +3131,7 @@ exports[`virtualized table widget table renders correctly with no selected row 1
                     <button
                       aria-describedby={null}
                       className="MuiButtonBase-root-40 MuiButton-root-14 MuiButton-fab-31 MuiButton-contained-25 MuiButton-containedSecondary-27 MuiButton-raised-28 MuiButton-raisedSecondary-30 WidgetTable-addRowButton-6"
+                      data-cy="addrowbutton"
                       disabled={false}
                       onBlur={[Function]}
                       onClick={[Function]}

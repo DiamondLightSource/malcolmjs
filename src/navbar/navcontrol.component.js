@@ -86,7 +86,7 @@ export const NavSelector = props => (
       onClick={props.handleClick}
       disabled={props.childElements.length === 0}
       data-cy="navmenu"
-      style={{ height: '32px', width: '32px' }}
+      style={{ height: '32px', width: '32px', padding: 0 }}
     >
       {props.icon}
     </IconButton>

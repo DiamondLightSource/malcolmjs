@@ -10,6 +10,7 @@ import {
 } from '../malcolm/malcolmActionCreators';
 import navigationActions from '../malcolm/actions/navigation.actions';
 import layoutActions from '../malcolm/actions/layout.action';
+import { buildMockDispatch } from '../testState.utilities';
 
 jest.mock('../malcolm/malcolmActionCreators');
 jest.mock('../malcolm/actions/navigation.actions');
@@ -149,10 +150,36 @@ describe('Layout', () => {
     expect(malcolmLayoutUpdatePosition).toHaveBeenCalledTimes(0);
   });
 
-  it('mapDispatchToProps clickHandler selects the block as the child panel', () => {
-    const props = mapDispatchToProps(() => {});
+  const runClickHandlerTest = expectedCallsToUpdateChildPanel => {
+    const testStore = buildMockDispatch(() => state);
+    const props = mapDispatchToProps(testStore.dispatch);
     props.clickHandler(block, node);
-    expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(1);
+    expect(navigationActions.updateChildPanel).toHaveBeenCalledTimes(
+      expectedCallsToUpdateChildPanel
+    );
+  };
+
+  it('mapDispatchToProps clickHandler selects the block as the child panel if the child panel is open', () => {
+    state.malcolm.childBlock = 'PANDA';
+    runClickHandlerTest(1);
+  });
+
+  it('mapDispatchToProps clickHandler does not open the child panel if it is closed and the block was dragged', () => {
+    state.malcolm.childBlock = undefined;
+    node = {
+      x: block.position.x + 50,
+      y: block.position.y + 50,
+    };
+    runClickHandlerTest(0);
+  });
+
+  it('mapDispatchToProps clickHandler does open the child panel if the block is clicked', () => {
+    state.malcolm.childBlock = undefined;
+    node = {
+      x: block.position.x,
+      y: block.position.y,
+    };
+    runClickHandlerTest(1);
   });
 
   it('mapDispatchToProps mouseDownHandler shows bin', () => {
@@ -210,5 +237,8 @@ describe('Layout', () => {
       x: 100,
       y: 200,
     });
+
+    // closes the palette after making the block visible
+    expect(navigationActions.updateChildPanel).toBeCalledWith('');
   });
 });
