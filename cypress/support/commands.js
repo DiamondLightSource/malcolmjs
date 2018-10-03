@@ -45,7 +45,7 @@ Cypress.Commands.add('waitForSnackbarToDisappear', () => {
   cy.log('Waiting for snackbar to disappear');
   cy.wait(1000, { log: false });
   cy
-    .contains('Connected to WebSocket', { timeout: 15000, log: false })
+    .contains('Connected to WebSocket', { timeout: 20000, log: false })
     .should('have.length', 0);
 });
 

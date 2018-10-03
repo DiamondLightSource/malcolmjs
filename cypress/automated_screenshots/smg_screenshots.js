@@ -53,11 +53,6 @@ describe('SMG screenshots', () => {
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
 
-    // cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
-    // cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
-    // cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
-    // cy.moveBlock('LVDS output', { x: 850, y: 280 });
-
     cy.contains('Auto layout').click();
 
     cy
