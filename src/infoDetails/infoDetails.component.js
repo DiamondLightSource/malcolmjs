@@ -115,9 +115,9 @@ export class InfoDetails extends React.Component {
       nextProps.blockName !== this.state.blockName ||
       nextProps.attributeName !== this.state.attributeName ||
       (!!nextProps.subElement &&
-        nextProps.subElement !== this.state.subElement) ||
-      ((nextProps.subElement && nextProps.subElement[0] === 'row') ||
-        nextProps.subElement[0] === 'col') ||
+        (nextProps.subElement !== this.state.subElement ||
+          nextProps.subElement[0] === 'row' ||
+          nextProps.subElement[0] === 'col')) ||
       (!!nextProps.linkBlockName &&
         nextProps.linkBlockName !== this.state.subElement) ||
       nextProps.isMethodInfo ||
