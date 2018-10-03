@@ -1,4 +1,4 @@
-import malcolmReducer, { setErrorState } from './malcolmReducer';
+import malcolmReducer from './malcolmReducer';
 import {
   malcolmNewBlockAction,
   malcolmNavigationPath,
@@ -9,10 +9,8 @@ import {
   MalcolmAttributeData,
   MalcolmAttributeFlag,
   MalcolmCleanBlocks,
-  MalcolmDisconnected,
   MalcolmRootBlockMeta,
 } from '../malcolm.types';
-import { AlarmStates } from '../../malcolmWidgets/attributeDetails/attributeAlarm/attributeAlarm.component';
 import NavigationReducer from './navigation.reducer';
 import MethodReducer from './method.reducer';
 
@@ -116,28 +114,6 @@ describe('malcolm reducer', () => {
     malcolmGetAction.payload.typeid = 'malcolm:core/Get:1.0';
     state = malcolmReducer(state, malcolmGetAction);
     expect(Object.keys(state.messagesInFlight).length).toEqual(2);
-  });
-
-  it('stops tracking a message once an error response is received', () => {
-    state = {
-      messagesInFlight: { 1: { id: 1 }, 123: { id: 123 } },
-    };
-
-    const newState = malcolmReducer(state, buildAction('malcolm:error', 1));
-
-    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
-    expect(newState.messagesInFlight[123].id).toEqual(123);
-  });
-
-  it('stops tracking a message once an return response is received', () => {
-    state = {
-      messagesInFlight: { 1: { id: 1 }, 123: { id: 123 } },
-    };
-
-    const newState = malcolmReducer(state, buildAction('malcolm:return', 1));
-
-    expect(Object.keys(newState.messagesInFlight).length).toEqual(1);
-    expect(newState.messagesInFlight[123].id).toEqual(123);
   });
 
   it('registers a new block when one is requested', () => {
@@ -354,24 +330,6 @@ describe('malcolm reducer', () => {
     expect(state.blocks.testBlock).toEqual(tidyBlock);
   });
 
-  it('does disconnect', () => {
-    addBlock('testBlock', testBlockAttributes, state);
-    const action = { type: MalcolmDisconnected };
-    state = malcolmReducer(state, action);
-    expect(state.blocks.testBlock.attributes[0].raw.meta.writeable).toEqual(
-      false
-    );
-    expect(state.blocks.testBlock.attributes[1].raw.meta.writeable).toEqual(
-      false
-    );
-    expect(state.blocks.testBlock.attributes[0].raw.alarm.severity).toEqual(
-      AlarmStates.UNDEFINED_ALARM
-    );
-    expect(state.blocks.testBlock.attributes[1].raw.alarm.severity).toEqual(
-      AlarmStates.UNDEFINED_ALARM
-    );
-  });
-
   it('updates the root block', () => {
     const blocks = ['block1', 'block2'];
     const action = {
@@ -398,38 +356,4 @@ describe('malcolm reducer', () => {
     state = malcolmReducer(state, action);
     expect(worker.postMessage).toBeCalledWith('connect::test:8008');
   });
-
-  it('setErrorState returns state if message with id is not found', () => {
-    let updatedState = setErrorState(state, 1234567, 1);
-    expect(updatedState).toBe(state);
-
-    state.messagesInFlight[1] = { id: 1 };
-    updatedState = setErrorState(state, 1234567, 1);
-    expect(updatedState).toBe(state);
-  });
-
-  it('setErrorState updates the error state on the matching attribute', () => {
-    addBlock('testBlock', testBlockAttributes, state);
-    addMessageInFlight(1, ['testBlock', 'foo'], state);
-
-    const updatedState = setErrorState(state, 1, 123);
-
-    const attribute = updatedState.blocks.testBlock.attributes.find(
-      a => a.calculated.name === 'foo'
-    );
-    expect(attribute.calculated.errorState).toEqual(123);
-  });
-
-  /* TODO: this needs to be fixed in the malcolm reducer
-  it('setErrorState resets layout if its PUT returns an error', () => {
-    jest.mock('./attribute.reducer');
-    state.messagesInFlight.push({
-      id: 1,
-      path: ['testBlock', 'layout'],
-    });
-
-    setErrorState(state, 1, 123);
-    expect(updateAttribute).toHaveBeenCalledWith(state, { id: 1, delta: true });
-  });
-  */
 });
