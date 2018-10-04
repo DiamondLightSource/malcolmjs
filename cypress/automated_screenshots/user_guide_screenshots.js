@@ -1,16 +1,17 @@
 describe('User guide screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
-    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.visit('/gui/PANDA/layout/CLOCKS');
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
   });
 
   it('quick start', () => {
+    cy.request('/reset');
     cy.viewport(1200, 675);
     cy.visit('/gui/');
-    cy.contains('Select a root node').should('be.visible');
+    cy.contains('Select a root block').should('be.visible');
     cy
       .get('[data-cy=navmenu]')
       .first()
@@ -37,32 +38,22 @@ describe('User guide screenshots', () => {
     cy.waitForSnackbarToDisappear();
     cy.screenshot('PANDA-layout');
 
-    cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
-    cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
-    cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
-    cy.moveBlock('LVDS output', { x: 850, y: 280 });
+    cy.moveBlock('Position adder 2', { x: 450, y: 480 });
+    cy.moveBlock('TTL output 1', { x: 750, y: 280 });
+    cy.moveBlock('Input encoder 1', { x: 450, y: 280 });
 
-    cy.contains('Configurable clocks').click();
+    cy.contains('Input encoder 1').click();
 
     cy.screenshot('PANDA-layout-spread-out');
 
     cy
-      .get('.port')
-      .last()
+      .contains('conn')
+      .parent()
+      .find('.port')
       .trigger('mousedown', { force: true })
       .trigger('mousemove', { clientX: 700, clientY: 150, force: true });
 
-    cy
-      .get('.srd-default-link')
-      .last()
-      .highlightLink({ x: 695, y: 150 });
-
     cy.wait(1000);
     cy.screenshot('PANDA-new-link');
-
-    cy
-      .get('.port')
-      .last()
-      .trigger('mouseup', { force: true });
   });
 });

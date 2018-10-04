@@ -54,6 +54,7 @@ class Layout extends React.Component {
       <div
         id="LayoutDiv"
         tabIndex="-1"
+        onClick={() => this.props.layoutClickHandler()}
         onDrop={event =>
           this.props.makeBlockVisible(event, this.props.layoutEngine)
         }
@@ -114,6 +115,7 @@ Layout.propTypes = {
   mouseDownHandler: PropTypes.func.isRequired,
   deleteSelected: PropTypes.func.isRequired,
   linkClickHandler: PropTypes.func.isRequired,
+  layoutClickHandler: PropTypes.func.isRequired,
   locked: PropTypes.bool.isRequired,
 };
 
@@ -124,6 +126,10 @@ export const mapStateToProps = state => ({
 
 let showBinTimeout = null;
 
+const movedInXOrY = (node, block, limit) =>
+  Math.abs(node.x - block.position.x) > limit ||
+  Math.abs(node.y - block.position.y) > limit;
+
 export const mapDispatchToProps = dispatch => ({
   clickHandler: (block, node) => {
     const translation = {
@@ -131,14 +137,24 @@ export const mapDispatchToProps = dispatch => ({
       y: node.y - block.position.y,
     };
 
-    if (
-      Math.abs(node.x - block.position.x) > 3 ||
-      Math.abs(node.y - block.position.y) > 3
-    ) {
+    if (movedInXOrY(node, block, 3)) {
       dispatch(malcolmLayoutUpdatePosition(translation));
     }
 
-    dispatch(navigationActions.updateChildPanel(block.name));
+    dispatch((innerDispatch, getState) => {
+      const state = getState().malcolm;
+      const childPanelIsOpen = state.childBlock !== undefined;
+      const multipleBlocksSelected =
+        state.layoutState.selectedBlocks.length > 1;
+      if (multipleBlocksSelected && childPanelIsOpen) {
+        innerDispatch(navigationActions.updateChildPanel(''));
+      } else if (
+        !multipleBlocksSelected &&
+        (!movedInXOrY(node, block, 3) || childPanelIsOpen)
+      ) {
+        innerDispatch(navigationActions.updateChildPanel(block.name));
+      }
+    });
   },
   mouseDownHandler: show => {
     if (show) {
@@ -163,7 +179,9 @@ export const mapDispatchToProps = dispatch => ({
     const portName = idComponents[3];
     dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
   },
-
+  layoutClickHandler: () => {
+    dispatch(navigationActions.updateChildPanel(''));
+  },
   selectHandler: (type, id, isSelected) => {
     if (type === 'malcolmjsblock') {
       dispatch(malcolmSelectBlock(id, isSelected));
@@ -178,6 +196,9 @@ export const mapDispatchToProps = dispatch => ({
     const blockMri = event.dataTransfer.getData('storm-diagram-node');
     const position = engine.getRelativeMousePoint(event);
     dispatch(layoutAction.makeBlockVisible(blockMri, position));
+
+    // close the palette after an item is dropped on to the layout
+    dispatch(navigationActions.updateChildPanel(''));
   },
 
   deleteSelected: () => {

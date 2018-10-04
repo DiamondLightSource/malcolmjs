@@ -44,6 +44,7 @@ exports[`MalcolmMiddlePanel renders alarmed correctly 1`] = `
     >
       <WithStyles(Button)
         color="secondary"
+        data-cy="palettebutton"
         onClick={[Function]}
         variant="fab"
       >
@@ -139,6 +140,7 @@ exports[`MalcolmMiddlePanel renders errored correctly 1`] = `
     >
       <WithStyles(Button)
         color="secondary"
+        data-cy="palettebutton"
         onClick={[Function]}
         variant="fab"
       >
@@ -200,6 +202,7 @@ exports[`MalcolmMiddlePanel renders layout correctly 1`] = `
     >
       <WithStyles(Button)
         color="secondary"
+        data-cy="palettebutton"
         onClick={[Function]}
         variant="fab"
       >
@@ -261,6 +264,7 @@ exports[`MalcolmMiddlePanel renders pending correctly 1`] = `
     >
       <WithStyles(Button)
         color="secondary"
+        data-cy="palettebutton"
         onClick={[Function]}
         variant="fab"
       >

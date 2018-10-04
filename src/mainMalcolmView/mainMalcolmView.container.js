@@ -45,7 +45,7 @@ const MainMalcolmView = props => (
       >
         <MiddlePanelContainer />
       </div>
-      {childPanelSelector(props)}
+      <div data-cy="childpanel">{childPanelSelector(props)}</div>
     </DrawerContainer>
   </div>
 );

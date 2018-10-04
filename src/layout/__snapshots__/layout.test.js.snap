@@ -4,6 +4,7 @@ exports[`Layout renders correctly 1`] = `
 <div
   id="LayoutDiv"
   onBlur={[Function]}
+  onClick={[Function]}
   onDragOver={[Function]}
   onDrop={[Function]}
   onFocus={[Function]}
