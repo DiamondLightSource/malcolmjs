@@ -256,13 +256,15 @@ const mapStateToProps = (state, ownProps) => {
       ownProps.attributeName
     );
   }
-  const selectedParam = ownProps.subElement;
+  let selectedParam = ownProps.subElement;
   if (methodIndex > -1) {
     method = state.malcolm.blocks[ownProps.blockName].attributes[methodIndex];
     methodArchive =
       state.malcolm.blockArchive[ownProps.blockName].attributes[methodIndex];
   }
-  if (method && selectedParam) {
+  if (selectedParam && selectedParam[0] === undefined) {
+    selectedParam = undefined;
+  } else if (method && selectedParam && selectedParam[0]) {
     selectedParamMeta = method.raw[selectedParam[0]].elements[selectedParam[1]];
     let ioType;
     if (selectedParam[0] === 'takes') {
