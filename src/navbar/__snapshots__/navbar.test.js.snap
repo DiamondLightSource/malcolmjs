@@ -129,6 +129,16 @@ exports[`NavBar hides more icon if last nav element has no children 1`] = `
         navigateToChild={[Function]}
       />
     </div>
+    <div
+      onClick={[Function]}
+      style={
+        Object {
+          "cursor": "pointer",
+          "height": 48,
+          "width": 3,
+        }
+      }
+    />
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;
@@ -313,6 +323,16 @@ exports[`NavBar renders correctly 1`] = `
         navigateToChild={[Function]}
       />
     </div>
+    <div
+      onClick={[Function]}
+      style={
+        Object {
+          "cursor": "pointer",
+          "height": 48,
+          "width": 3,
+        }
+      }
+    />
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;
@@ -356,6 +376,16 @@ exports[`NavBar shows a select root node message if there is no parent block 1`]
         navigateToChild={[Function]}
       />
     </div>
+    <div
+      onClick={[Function]}
+      style={
+        Object {
+          "cursor": "pointer",
+          "height": 48,
+          "width": 3,
+        }
+      }
+    />
   </WithStyles(Toolbar)>
 </WithStyles(AppBar)>
 `;
