@@ -1,44 +1,45 @@
 .. _welcome_to_your_pandabox_:
 
-Welcome to Your PandA
-========================
+Getting Started
+===============
 
 Introduction
 ------------
 
-Welcome to your PandA...
+This user guide introduces the web-based environment, toolkit and processes available to you as you develop and manage your Control System through our integrated solution.  These utilise the `Malcolm middleware <https://pymalcolm.readthedocs.io/en/latest/>`_ library to provide a visual environment allowing you to:
 
-What is it?
-**GET DEFINITION FROM TOM THAT IS ALLIGNED WITH HIS OWN 2 PAGE INTRO**
+    * Design and configure the building blocks and linkages between them as a *virtual model* of you control system.
+    * Optimise your design through interaction with the physical hardware of your control system implementation.
+    * Utilise and manage your design in in real-world operational scenarios through monitoring and basic analysis tools.
+    * Export your design for re-use in analogous scenarios.
 
 
-Main Components
----------------
+Technical Summary
+-----------------
 
-Your PandA consists of a fully featured XXX-based FPGA...
+The interactive environment we provide is a visual representation of the underlying functionality provided by the `Malcolm middleware <https://pymalcolm.readthedocs.io/en/latest/>`_ library, which itself provides a common interface to a range of control system and data management technologies.  Our user environment does not provide direct access to hardware components.  Information about the hardware components themselves, and the data they generate, is shared with our user environment via Malcolm.  This allows you to generate a *virtual model* of your control system before providing design and configuration information about it to Malcolm via a dedicated service.  Malcolm takes this information and uses it to interface with the underlying physical hardware.  We can consider this schematically as:
 
-Functions and activity within the FPGA are designed, configured and managed via the PandA User Interface.  
+**IMAGE**
 
-The user interface reflects the content and behavior of the underlying MalcolmJS server...
-Further information on the user interface are available in the `User Interface Overview <user_interface_overview_>` section of this manual.
+The Malcolm Server provides three key services:
 
-A server is used to...
+    * Details of the building blocks available to the user environment, allowing a System Designer or Implementors to construct and model the control system realistically using a library of defined building blocks together with their attributes and methods, and linking them together to create larger control system designs.  During this process design decisions can be validated against parameters to ensure validity of the design.
+    * Once deployed into an operational environment the service monitors attribute status and data as it moves through the system, providing near real-time monitoring of key components and raising alarms when pre-defined operating parameters are exceeded.
+    * Ongoing persistance of design information and results during operation, providing assurances that designs are documented (and can be interrogated in the future), and can be re-used if required in analogous exploitation scenarios in the future.
 
-Further information on the overall technical implementation of your PandA is available from the 
-`Technical Overview <technical_overview_>` section of this manual.
-
-**NEEDS MORE INFORMATION FROM TOM**
+.. NOTE::   
+    On intially creating a new design each component is configured according to its pre-defined default specification as defined within the underlying hardware definion accessed by Malcolm.
 
 
 How is the Documentation Structured
 -----------------------------------
 
-PandA documentation is divided into several main sections.  It begins with a general overview of what a PandA is and a `Quick Start <quick_start_guide_>` for those already familiar with its concepts.  For those requiring more detailed information on implementation we provide details of the PandA`technical implementation <technical_overview_>`.  
+This User Guide is divided into several sections:
 
-We then provide a general tour to the `user interface <user_interface_overview_>`.
+    * For those wanting a brief high-level introduction to web interface functionality allowing them to quickly understand the key capabilities it provides see the `Quick Start <quick_start_guide_>`.
+    * For those requiring a more detailed description of the User Interface see the 'user_interface_overview_` section.
+    * Details of how to create and manage designs representing your underlying hardware are covered in `working_with_a_design_`.
+    * Once familiar with the concepts of the User Interface and Design-focussed approach detailed support documentation is provided covering specific aspects of the Web Interface and your interaction with it.
 
-**TO FINISH**
-
-A range of common technical terms and PandA-specific introduced and used throughout the documentation.  To aid consistency, readability and accuracy, specific definition of these are included in the `Glossary <glossary_>`.   
 
 

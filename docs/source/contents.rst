@@ -11,11 +11,9 @@ Contents
     
     userguide/what_is_a_pandabox
     userguide/quick-start
-    userguide/technical_overview
     userguide/user_interface_overview
     userguide/creating_a_new_design
     userguide/working_with_charts
-    userguide/working_with_tables
     userguide/working_with_alarms
     userguide/glossary
 

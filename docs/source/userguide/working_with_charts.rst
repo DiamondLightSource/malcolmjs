@@ -1,11 +1,11 @@
 .. _working_With_Charts_:
 
-Working With Charts
-===================
+Monitoring Attribute Values
+===========================
 
-The PandA User Interface provides a near-realtime graphical representation of values associated with an `attribute_` against time.  Plotting begins at the time the Attribute was selected (via the 'information' icon associated with it in its `block_`).  The data displayed is a 'for information only' representation of the Attribute's characteristics for the duration over which the plot remains open.
+The User Interface provides a near-realtime graphical representation of values associated with an `attribute_` against time.  Plotting begins at the time the Attribute was selected (via the 'information' icon associated with it in its `block_`).  The data displayed is a 'for information only' representation of the Attribute's characteristics for the duration over which the plot remains open.
 
-PandA attempts to render every attribute as a chart.  In doing so it handles the different Attribute formats available in different ways.  In all cases the X axis represents time.
+The User Interface renders every attribute as a chart.  In doing so it handles the different Attribute formats available in different ways.  In all cases the X axis represents time.
 
 .. list-table::
     :widths: 30, 70
