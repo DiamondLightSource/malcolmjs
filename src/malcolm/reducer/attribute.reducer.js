@@ -135,10 +135,14 @@ export const updateNavigation = (state, attributeName) => {
     ) > -1
   ) {
     navigation = processNavigationLists(
-      state.navigation.navigationLists.map(
-        nav =>
-          nav.subElements ? [nav.path, ...nav.subElements].join('.') : nav.path
-      ),
+      state.navigation.navigationLists.map(nav => {
+        if (nav.subElements && nav.subElements[0] !== undefined) {
+          return [nav.path, ...nav.subElements].join('.');
+        } else if (nav.badUrlPart) {
+          return [nav.path, ...nav.badUrlPart].join('.');
+        }
+        return nav.path;
+      }),
       state.blocks
     );
   }

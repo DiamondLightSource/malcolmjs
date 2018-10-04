@@ -126,4 +126,22 @@ describe('NavControl', () => {
     ).toBeNull();
     expect(navigateFunction.mock.calls.length).toEqual(1);
   });
+
+  it('renders correctly when nav element is errored but has valid siblings', () => {
+    nav.label = 'NotPANDA';
+    const wrapper = shallow(
+      <NavControl nav={nav} navigateToChild={() => {}} />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
+
+  it('renders correctly when nav element is errored and has no siblings', () => {
+    nav.label = 'NotPANDA';
+    nav.parent.children = undefined;
+    nav.parent.childrenLabels = undefined;
+    const wrapper = shallow(
+      <NavControl nav={nav} navigateToChild={() => {}} />
+    );
+    expect(wrapper.dive()).toMatchSnapshot();
+  });
 });
