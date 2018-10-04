@@ -78,9 +78,8 @@ function updateNavTypes(state) {
     updatedState = { ...state };
 
     ({ navigationLists } = updatedState.navigation);
-    const navIndices = navigationLists.map((nav, index) => index);
-    navIndices.forEach((originalIndex, i) => {
-      const nav = navigationLists[originalIndex];
+    navigationLists.forEach((originalNav, i) => {
+      const nav = originalNav;
       if (nav.navType === undefined) {
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
@@ -93,7 +92,7 @@ function updateNavTypes(state) {
         } else if (nav.path === '.palette') {
           nav.navType = NavTypes.Palette;
           nav.label = 'Palette';
-        } else if (originalIndex === 0 && isBlockMri(nav.path, state.blocks)) {
+        } else if (i === 0 && isBlockMri(nav.path, state.blocks)) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
           nav.label = nav.path;
@@ -133,15 +132,13 @@ function updateNavTypes(state) {
                 nav.badUrlPart = subElements;
                 nav.label = [nav.label, ...subElements].join('.');
                 if (
-                  navigationLists[originalIndex + 1] &&
-                  navigationLists[originalIndex + 1].path !== '.info'
+                  navigationLists[i + 1] &&
+                  navigationLists[i + 1].path !== '.info'
                 ) {
-                  navigationLists
-                    .slice(originalIndex + 1)
-                    .forEach(navElement => {
-                      const erroredNav = navElement;
-                      erroredNav.navType = NavTypes.Error;
-                    });
+                  navigationLists.slice(i + 1).forEach(navElement => {
+                    const erroredNav = navElement;
+                    erroredNav.navType = NavTypes.Error;
+                  });
                 }
               }
             }
@@ -169,20 +166,20 @@ function updateNavTypes(state) {
               nav.navType === undefined &&
               !matchingAttribute.calculated.loading
             ) {
-              navigationLists.slice(originalIndex).forEach(navElement => {
+              navigationLists.slice(i).forEach(navElement => {
                 const erroredNav = navElement;
                 erroredNav.navType = NavTypes.Error;
               });
             }
           }
         }
-        if (navigationLists[originalIndex - 1]) {
-          nav.parent = navigationLists[originalIndex - 1];
+        if (navigationLists[i - 1]) {
+          nav.parent = navigationLists[i - 1];
           if (
-            navigationLists[originalIndex - 1].children &&
-            navigationLists[originalIndex - 1].children.length > 0
+            navigationLists[i - 1].children &&
+            navigationLists[i - 1].children.length > 0
           ) {
-            // nav.siblings = navigationLists[originalIndex - 1].children;
+            // nav.siblings = navigationLists[i - 1].children;
           }
         }
       }
