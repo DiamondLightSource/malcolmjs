@@ -132,7 +132,10 @@ function updateNavTypes(state) {
                 nav.subElements = [undefined];
                 nav.badUrlPart = subElements;
                 nav.label = [nav.label, ...subElements].join('.');
-                if (navigationLists[originalIndex + 1].path !== '.info') {
+                if (
+                  navigationLists[originalIndex + 1] &&
+                  navigationLists[originalIndex + 1].path !== '.info'
+                ) {
                   navigationLists
                     .slice(originalIndex + 1)
                     .forEach(navElement => {

@@ -89,6 +89,60 @@ exports[`NavControl renders correctly for final 1`] = `
 </div>
 `;
 
+exports[`NavControl renders correctly when nav element is errored and has no siblings 1`] = `
+<div
+  className="NavControl-container-1"
+>
+  <WithStyles(Typography)
+    className="NavControl-currentLink-2"
+    color="error"
+    onClick={[Function]}
+    variant="subheading"
+  >
+    NotPANDA
+  </WithStyles(Typography)>
+  <Component
+    anchorEl={null}
+    handleClick={[Function]}
+    handleClose={[Function]}
+    icon={<pure(KeyboardArrowDownIcon) />}
+    navigateToChild={[Function]}
+  />
+</div>
+`;
+
+exports[`NavControl renders correctly when nav element is errored but has valid siblings 1`] = `
+<div
+  className="NavControl-container-1"
+>
+  <WithStyles(Typography)
+    className="NavControl-currentLink-2"
+    color="error"
+    onClick={[Function]}
+    variant="subheading"
+  >
+    NotPANDA
+  </WithStyles(Typography)>
+  <Component
+    anchorEl={null}
+    childElementLabels={
+      Array [
+        "PANDA",
+      ]
+    }
+    childElements={
+      Array [
+        "PANDA:mri",
+      ]
+    }
+    handleClick={[Function]}
+    handleClose={[Function]}
+    icon={<pure(KeyboardArrowDownIcon) />}
+    navigateToChild={[Function]}
+  />
+</div>
+`;
+
 exports[`NavControl selector component renders correctly 1`] = `
 <div
   style={
