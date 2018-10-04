@@ -68,8 +68,13 @@ setInterval(() => {
   console.log(Object.keys(store.getState().malcolm.blocks));
 }, 60000);
 
-store.dispatch(setThemeAction('primary', blue));
-store.dispatch(setThemeAction('type', 'dark'));
+const savedTheme = JSON.parse(window.localStorage.getItem(`MalcolmJsMuiTheme`));
+const { primary, secondary, type } = savedTheme || {};
+store.dispatch(setThemeAction('primary', primary || blue));
+store.dispatch(setThemeAction('type', type || 'dark'));
+if (secondary) {
+  store.dispatch(setThemeAction('secondary', secondary));
+}
 store.dispatch(updateThemeAction());
 
 ReactDOM.render(

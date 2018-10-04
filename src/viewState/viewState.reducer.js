@@ -51,7 +51,12 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
         theme: newTheme,
       };
     }
-    case updateTheme:
+    case updateTheme: {
+      const { primary, secondary, type } = state.theme;
+      window.localStorage.setItem(
+        `MalcolmJsMuiTheme`,
+        JSON.stringify({ primary, secondary, type })
+      );
       return {
         ...state,
         theme: {
@@ -63,6 +68,7 @@ const viewStateReducer = (state = initialViewState, action = {}) => {
           ),
         },
       };
+    }
     case editTheme:
       return {
         ...state,
