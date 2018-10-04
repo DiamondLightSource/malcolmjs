@@ -262,7 +262,7 @@ const mapStateToProps = (state, ownProps) => {
     methodArchive =
       state.malcolm.blockArchive[ownProps.blockName].attributes[methodIndex];
   }
-  if (selectedParam[0] === undefined) {
+  if (selectedParam && selectedParam[0] === undefined) {
     selectedParam = undefined;
   } else if (method && selectedParam && selectedParam[0]) {
     selectedParamMeta = method.raw[selectedParam[0]].elements[selectedParam[1]];
