@@ -21,7 +21,16 @@ describe('Block Details', () => {
         childBlock: 'test1',
         blocks: {
           test1: {},
+          '.blocks': {
+            children: ['test1'],
+          },
         },
+        navigation: {
+          navigationLists: [],
+        },
+      },
+      viewState: {
+        openParentPanel: true,
       },
     };
   });

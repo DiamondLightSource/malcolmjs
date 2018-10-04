@@ -120,9 +120,13 @@ function updateNavTypes(state) {
               ) {
                 nav.subElements = subElements;
               } else {
-                nav.subElements = undefined;
-                nav.navType = NavTypes.Error;
-                throw new Error('Bad URL (field has no such sub-element)!');
+                nav.subElements = [undefined];
+                nav.badUrlPart = subElements;
+                navigationLists.slice(originalIndex + 1).forEach(navElement => {
+                  const erroredNav = navElement;
+                  erroredNav.navType = NavTypes.Error;
+                });
+                // throw new Error('Bad URL (field has no such sub-element)!');
               }
             }
             [nav.path] = nav.path.split('.');
@@ -153,6 +157,15 @@ function updateNavTypes(state) {
                 nav.blockMri = matchingAttribute.raw.value.mri[nameIndex];
                 nav.label = nav.path;
               }
+            }
+            if (
+              nav.navType === undefined &&
+              !matchingAttribute.calculated.loading
+            ) {
+              navigationLists.slice(originalIndex).forEach(navElement => {
+                const erroredNav = navElement;
+                erroredNav.navType = NavTypes.Error;
+              });
             }
           }
         }
@@ -203,9 +216,12 @@ function updateNavTypes(state) {
   // find main attribute
   updatedState.mainAttribute = undefined;
   let mainAttributeNav;
-  if (navigationLists.length >= 1) {
-    const isOdd = !!(navigationLists.length % 2);
-    const lastTwoNavs = navigationLists.slice(-2);
+  const validNavList = navigationLists.filter(
+    nav => nav.navType !== NavTypes.Error
+  );
+  if (validNavList.length >= 1) {
+    const isOdd = !!(validNavList.length % 2);
+    const lastTwoNavs = validNavList.slice(-2);
     if (isOdd && lastTwoNavs[0].navType === NavTypes.Attribute) {
       [mainAttributeNav] = lastTwoNavs;
     } else if (!isOdd && lastTwoNavs[1].navType === NavTypes.Attribute) {

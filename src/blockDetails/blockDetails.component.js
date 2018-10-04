@@ -9,12 +9,12 @@ import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetail
 import MethodDetails from '../malcolmWidgets/method/method.component';
 
 const ascii404 =
-  '              __     __      _____     __    __ \n' +
-  '             |\\  \\  |\\  \\   |\\   __  \\  |\\  \\  |\\  \\ \n' +
-  '             \\ \\  \\\\_\\  \\ \\ \\  \\|\\  \\ \\ \\  \\\\_\\  \\ \n' +
-  '               \\ \\___     \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
-  '                 \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
-  '                         \\|__|   \\|______|        \\|__| \n';
+  '                __     __      _____      __     __ \n' +
+  '               |\\  \\  |\\  \\   |\\   __  \\  |\\  \\  |\\  \\ \n' +
+  '               \\ \\  \\\\_\\  \\ \\ \\  \\|\\  \\ \\ \\ \\\\_\\  \\ \n' +
+  '                 \\ \\___     \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
+  '                   \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
+  '                           \\|__|   \\|______|         \\|__| \n';
 
 const styles = theme => ({
   progressContainer: {
@@ -28,17 +28,28 @@ const styles = theme => ({
 
 const ignoredAttributes = ['widget:icon'];
 
-export const isBlockLoading = (block, blockName, blockList) => {
+export const isBlockLoading = (
+  block,
+  blockName,
+  blockList,
+  navList,
+  shouldExist
+) => {
   if (blockList.length > 0) {
+    if (!shouldExist) {
+      return false;
+    }
     if (
       (block !== undefined && block.loading === 404) ||
-      (block === undefined && !blockList.includes(blockName))
+      (navList.length > 0 &&
+        block === undefined &&
+        !blockList.includes(blockName))
     ) {
       return 404;
     }
     return (
       block !== undefined &&
-      (block.loading || block.attributes.some(a => a.loading))
+      (block.loading || block.attributes.some(a => a.calculated.loading))
     );
   }
   return true;
@@ -200,10 +211,15 @@ const mapStateToProps = (state, ownProps, memory) => {
       ? state.malcolm.blocks[state.malcolm.childBlock]
       : undefined;
   }
+  const panelIsOpen = ownProps.parent
+    ? state.viewState.openParentPanel
+    : state.malcolm.childBlock !== undefined;
   const blockLoading = isBlockLoading(
     block,
     ownProps.parent ? state.malcolm.parentBlock : state.malcolm.childBlock,
-    blockList
+    blockList,
+    state.malcolm.navigation.navigationLists,
+    panelIsOpen
   );
   if (
     block &&

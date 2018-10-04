@@ -37,6 +37,7 @@ exports[`NavControl renders correctly 1`] = `
 >
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
+    color="default"
     onClick={[Function]}
     variant="subheading"
   >
