@@ -64,7 +64,7 @@ class NavControl extends Component {
           color={
             (siblingLabels && siblingLabels.includes(nav.label)) ||
             ['Info', 'Palette'].includes(nav.label)
-              ? 'default'
+              ? 'inherit'
               : 'error'
           }
           variant="subheading"

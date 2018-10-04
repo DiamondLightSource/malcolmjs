@@ -15,17 +15,22 @@ const ThemeEditor = props => (
         padding: '16px',
       }}
     >
-      {Object.keys(colors).map(color => (
-        <IconButton
-          style={{
-            margin: '2px',
-            width: 32,
-            height: 32,
-            backgroundColor: colors[color][400],
-          }}
-          onClick={() => props.setThemeProp('primary', colors[color])}
-        />
-      ))}
+      {Object.keys(colors)
+        .filter(
+          color =>
+            colors[color].main !== undefined || colors[color].A400 !== undefined
+        )
+        .map(color => (
+          <IconButton
+            style={{
+              margin: '2px',
+              width: 32,
+              height: 32,
+              backgroundColor: colors[color][400],
+            }}
+            onClick={() => props.setThemeProp('primary', colors[color])}
+          />
+        ))}
     </div>
     <Typography>Secondary color:</Typography>
     <div
@@ -35,17 +40,22 @@ const ThemeEditor = props => (
         padding: '16px',
       }}
     >
-      {Object.keys(colors).map(color => (
-        <IconButton
-          style={{
-            margin: '2px',
-            width: 32,
-            height: 32,
-            backgroundColor: colors[color][400],
-          }}
-          onClick={() => props.setThemeProp('secondary', colors[color])}
-        />
-      ))}
+      {Object.keys(colors)
+        .filter(
+          color =>
+            colors[color].main !== undefined || colors[color].A400 !== undefined
+        )
+        .map(color => (
+          <IconButton
+            style={{
+              margin: '2px',
+              width: 32,
+              height: 32,
+              backgroundColor: colors[color][400],
+            }}
+            onClick={() => props.setThemeProp('secondary', colors[color])}
+          />
+        ))}
     </div>
     <div>
       <Button
