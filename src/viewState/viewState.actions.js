@@ -2,8 +2,9 @@ export const openParentPanelType = 'OPEN_PARENT_PANEL';
 export const updateVersionNumerType = 'UPDATE_VERSION';
 export const showFooterType = 'SHOW_FOOTER_TYPE';
 export const snackbar = 'PUSH_SNACKBAR';
-export const newTheme = 'CREATE_NEW_THEME';
+export const updateTheme = 'CREATE_NEW_THEME';
 export const editTheme = 'EDIT_THEME';
+export const setTheme = 'SET_THEME_PROPS';
 
 export const openParentPanel = open => ({
   type: openParentPanelType,
@@ -33,11 +34,15 @@ export const showFooterAction = footerHeight => ({
   },
 });
 
-export const newThemeAction = (type, color) => ({
-  type: newTheme,
+export const updateThemeAction = () => ({
+  type: updateTheme,
+});
+
+export const setThemeAction = (property, value) => ({
+  type: setTheme,
   payload: {
-    type,
-    color,
+    property,
+    value,
   },
 });
 

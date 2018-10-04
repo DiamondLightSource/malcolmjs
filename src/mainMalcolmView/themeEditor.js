@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import * as colors from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 const ThemeEditor = props => (
-  <div>
+  <div style={{ padding: '16px' }}>
+    <Typography>Primary color:</Typography>
     <div
       style={{
         display: 'flex',
@@ -16,14 +18,52 @@ const ThemeEditor = props => (
       {Object.keys(colors).map(color => (
         <IconButton
           style={{
-            padding: 4,
+            margin: '2px',
             width: 32,
             height: 32,
             backgroundColor: colors[color][400],
           }}
-          onClick={() => props.setThemeColor(colors[color])}
+          onClick={() => props.setThemeProp('primary', colors[color])}
         />
       ))}
+    </div>
+    <Typography>Secondary color:</Typography>
+    <div
+      style={{
+        display: 'flex',
+        left: props.openParentPanel ? 360 : 0,
+        padding: '16px',
+      }}
+    >
+      {Object.keys(colors).map(color => (
+        <IconButton
+          style={{
+            margin: '2px',
+            width: 32,
+            height: 32,
+            backgroundColor: colors[color][400],
+          }}
+          onClick={() => props.setThemeProp('secondary', colors[color])}
+        />
+      ))}
+    </div>
+    <div>
+      <Button
+        style={{ margin: '8px' }}
+        onClick={() => props.setThemeProp('type', 'light')}
+        variant="raised"
+        color="primary"
+      >
+        Light
+      </Button>
+      <Button
+        style={{ margin: '8px' }}
+        onClick={() => props.setThemeProp('type', 'dark')}
+        variant="raised"
+        color="primary"
+      >
+        Dark
+      </Button>
     </div>
     <Button onClick={props.finishEdit}>Done!</Button>
   </div>
@@ -31,8 +71,8 @@ const ThemeEditor = props => (
 
 ThemeEditor.propTypes = {
   openParentPanel: PropTypes.bool,
-  // setThemeColor: PropTypes.func.isRequired,
   finishEdit: PropTypes.func.isRequired,
+  setThemeProp: PropTypes.func.isRequired,
 };
 
 ThemeEditor.defaultProps = {
