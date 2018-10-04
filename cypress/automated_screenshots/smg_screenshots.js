@@ -1,7 +1,7 @@
 describe('SMG screenshots', () => {
   it('example UI', () => {
     cy.viewport(1200, 675);
-    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.visit('/gui/PANDA/layout/CLOCKS');
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
     cy.screenshot('example-ui');
@@ -21,13 +21,13 @@ describe('SMG screenshots', () => {
     });
 
     cy.screenshot('methods', {
-      clip: { x: 0, y: 540, width: 360, height: 145 },
+      clip: { x: 0, y: 340, width: 360, height: 110 },
     });
   });
 
   it('navbar', () => {
     cy.viewport(1200, 675);
-    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.visit('/gui/PANDA/layout/CLOCKS');
     cy.waitForDetailsToLoad();
 
     cy.screenshot('navbar', {
@@ -49,14 +49,11 @@ describe('SMG screenshots', () => {
 
   it('layout', () => {
     cy.viewport(1200, 675);
-    cy.visit('/gui/PANDA/layout/PANDA:CLOCKS');
+    cy.visit('/gui/PANDA/layout/CLOCKS');
     cy.waitForDetailsToLoad();
     cy.waitForSnackbarToDisappear();
 
-    cy.moveBlock('Soft inputs and constant bits', { x: 450, y: 280 });
-    cy.moveBlock('Configurable clocks', { x: 450, y: 460 });
-    cy.moveBlock('Up/Down pulse counter', { x: 850, y: 460 });
-    cy.moveBlock('LVDS output', { x: 850, y: 280 });
+    cy.contains('Auto layout').click();
 
     cy
       .get('[data-cy=closedrawer]')
