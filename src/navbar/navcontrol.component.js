@@ -61,6 +61,12 @@ class NavControl extends Component {
       <div className={classes.container}>
         <Typography
           className={classes.currentLink}
+          color={
+            (siblingLabels && siblingLabels.includes(nav.label)) ||
+            ['Info', 'Palette'].includes(nav.label)
+              ? 'default'
+              : 'error'
+          }
           variant="subheading"
           onClick={() => navigateToChild(nav.path)}
         >

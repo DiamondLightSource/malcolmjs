@@ -9,23 +9,30 @@ exports[`Block Details renders correctly when block not found 1`] = `
       align="left"
       style={
         Object {
+          "fontFamily": "Roboto",
           "whiteSpace": "pre",
         }
       }
     >
-                   __   __    _____     __   __ 
-                  |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\ 
-                  \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\ 
-                   \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ 
-                    \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ 
-                           \\|__|  \\|_____|        \\|__| 
+                      __     __      _____      __     __ 
+                     |\\  \\  |\\  \\   |\\   __  \\  |\\  \\  |\\  \\ 
+                     \\ \\  \\\\_\\  \\ \\ \\  \\|\\  \\ \\ \\ \\\\_\\  \\ 
+                       \\ \\___     \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ 
+                         \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ 
+                                 \\|__|   \\|______|         \\|__| 
       
     </div>
     <br />
     <br />
-    Block not found! 
-    <br />
-    (hint: URLs are case sensitive)
+    <WithStyles(Typography)>
+      Block not found....yet
+    </WithStyles(Typography)>
+    <WithStyles(Typography)>
+      it may still be loading and appear later
+    </WithStyles(Typography)>
+    <WithStyles(Typography)>
+      (hint: URLs are case sensitive)
+    </WithStyles(Typography)>
   </div>
 </div>
 `;
@@ -67,14 +74,12 @@ exports[`Block Details renders correctly when metadata loaded and waiting for at
   className="BlockDetails-progressContainer-1"
 >
   <div>
-    <Connect(WithStyles(AttributeDetails))
-      attributeName="health"
-      key="health"
+    <WithStyles(CircularProgress)
+      color="secondary"
     />
-    <Connect(WithStyles(AttributeDetails))
-      attributeName="icon"
-      key="icon"
-    />
+    <WithStyles(Typography)>
+      Loading...
+    </WithStyles(Typography)>
   </div>
 </div>
 `;

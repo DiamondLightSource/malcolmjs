@@ -78,11 +78,9 @@ function updateNavTypes(state) {
     updatedState = { ...state };
 
     ({ navigationLists } = updatedState.navigation);
-    const navIndices = navigationLists.map((nav, index) => index);
-    navIndices
-      .filter(navIndex => navigationLists[navIndex].navType === undefined)
-      .forEach((originalIndex, i) => {
-        const nav = navigationLists[originalIndex];
+    navigationLists.forEach((originalNav, i) => {
+      const nav = originalNav;
+      if (nav.navType === undefined) {
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
           nav.label = 'Info';
@@ -94,7 +92,7 @@ function updateNavTypes(state) {
         } else if (nav.path === '.palette') {
           nav.navType = NavTypes.Palette;
           nav.label = 'Palette';
-        } else if (originalIndex === 0 && isBlockMri(nav.path, state.blocks)) {
+        } else if (i === 0 && isBlockMri(nav.path, state.blocks)) {
           nav.navType = NavTypes.Block;
           nav.blockMri = nav.path;
           nav.label = nav.path;
@@ -110,8 +108,18 @@ function updateNavTypes(state) {
             nav.navType = NavTypes.Attribute;
             nav.children = matchingAttribute.calculated.children;
             nav.childrenLabels = matchingAttribute.calculated.children;
-            if (nav.path.split('.').length > 1) {
-              const subElements = nav.path.split('.').slice(1);
+            const rawPath = nav.path.split('.');
+            [nav.path] = nav.path.split('.');
+            nav.label = nav.path;
+            if (matchingAttribute.raw) {
+              if (matchingAttribute.raw.meta) {
+                nav.label = matchingAttribute.raw.meta.label;
+              } else if (matchingAttribute.raw.label) {
+                nav.label = matchingAttribute.raw.label;
+              }
+            }
+            if (rawPath.length > 1) {
+              const subElements = rawPath.slice(1);
               if (
                 blockUtils.validateAttributeSubElement(
                   matchingAttribute,
@@ -120,18 +128,18 @@ function updateNavTypes(state) {
               ) {
                 nav.subElements = subElements;
               } else {
-                nav.subElements = undefined;
-                nav.navType = NavTypes.Error;
-                throw new Error('Bad URL (field has no such sub-element)!');
-              }
-            }
-            [nav.path] = nav.path.split('.');
-            nav.label = nav.path;
-            if (matchingAttribute.raw) {
-              if (matchingAttribute.raw.meta) {
-                nav.label = matchingAttribute.raw.meta.label;
-              } else if (matchingAttribute.raw.label) {
-                nav.label = matchingAttribute.raw.label;
+                nav.subElements = [undefined];
+                nav.badUrlPart = subElements;
+                nav.label = [nav.label, ...subElements].join('.');
+                if (
+                  navigationLists[i + 1] &&
+                  navigationLists[i + 1].path !== '.info'
+                ) {
+                  navigationLists.slice(i + 1).forEach(navElement => {
+                    const erroredNav = navElement;
+                    erroredNav.navType = NavTypes.Error;
+                  });
+                }
               }
             }
           }
@@ -154,18 +162,28 @@ function updateNavTypes(state) {
                 nav.label = nav.path;
               }
             }
+            if (
+              nav.navType === undefined &&
+              !matchingAttribute.calculated.loading
+            ) {
+              navigationLists.slice(i).forEach(navElement => {
+                const erroredNav = navElement;
+                erroredNav.navType = NavTypes.Error;
+              });
+            }
           }
         }
-        if (navigationLists[originalIndex - 1]) {
-          nav.parent = navigationLists[originalIndex - 1];
+        if (navigationLists[i - 1]) {
+          nav.parent = navigationLists[i - 1];
           if (
-            navigationLists[originalIndex - 1].children &&
-            navigationLists[originalIndex - 1].children.length > 0
+            navigationLists[i - 1].children &&
+            navigationLists[i - 1].children.length > 0
           ) {
-            // nav.siblings = navigationLists[originalIndex - 1].children;
+            // nav.siblings = navigationLists[i - 1].children;
           }
         }
-      });
+      }
+    });
   }
 
   navigationLists.forEach(nav => {
@@ -203,9 +221,12 @@ function updateNavTypes(state) {
   // find main attribute
   updatedState.mainAttribute = undefined;
   let mainAttributeNav;
-  if (navigationLists.length >= 1) {
-    const isOdd = !!(navigationLists.length % 2);
-    const lastTwoNavs = navigationLists.slice(-2);
+  const validNavList = navigationLists.filter(
+    nav => nav.navType !== NavTypes.Error
+  );
+  if (validNavList.length >= 1) {
+    const isOdd = !!(validNavList.length % 2);
+    const lastTwoNavs = validNavList.slice(-2);
     if (isOdd && lastTwoNavs[0].navType === NavTypes.Attribute) {
       [mainAttributeNav] = lastTwoNavs;
     } else if (!isOdd && lastTwoNavs[1].navType === NavTypes.Attribute) {

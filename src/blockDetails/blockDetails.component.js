@@ -9,12 +9,12 @@ import AttributeDetails from '../malcolmWidgets/attributeDetails/attributeDetail
 import MethodDetails from '../malcolmWidgets/method/method.component';
 
 const ascii404 =
-  '             __   __    _____     __   __ \n' +
-  '            |\\  \\ |\\  \\  |\\   __  \\  |\\  \\  |\\  \\ \n' +
-  '            \\ \\  \\\\_\\  \\ \\ \\  \\|\\   \\ \\ \\  \\\\_\\  \\ \n' +
-  '             \\ \\___    \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
-  '              \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
-  '                     \\|__|  \\|_____|        \\|__| \n';
+  '                __     __      _____      __     __ \n' +
+  '               |\\  \\  |\\  \\   |\\   __  \\  |\\  \\  |\\  \\ \n' +
+  '               \\ \\  \\\\_\\  \\ \\ \\  \\|\\  \\ \\ \\ \\\\_\\  \\ \n' +
+  '                 \\ \\___     \\ \\ \\  \\_\\  \\ \\ \\ ___   \\ \n' +
+  '                   \\|___|\\__\\ \\ \\_____\\ \\|___|\\__\\ \n' +
+  '                           \\|__|   \\|______|         \\|__| \n';
 
 const styles = theme => ({
   progressContainer: {
@@ -28,14 +28,31 @@ const styles = theme => ({
 
 const ignoredAttributes = ['widget:icon'];
 
-export const isBlockLoading = block => {
-  if (block !== undefined && block.loading === 404) {
-    return 404;
+export const isBlockLoading = (
+  block,
+  blockName,
+  blockList,
+  navList,
+  shouldExist
+) => {
+  if (blockList.length > 0) {
+    if (!shouldExist) {
+      return false;
+    }
+    if (
+      (block !== undefined && block.loading === 404) ||
+      (navList.length > 0 &&
+        block === undefined &&
+        !blockList.includes(blockName))
+    ) {
+      return 404;
+    }
+    return (
+      block !== undefined &&
+      (block.loading || block.attributes.some(a => a.calculated.loading))
+    );
   }
-  return (
-    block !== undefined &&
-    (block.loading || block.attributes.some(a => a.loading))
-  );
+  return true;
 };
 export const isRootLevelAttribute = a =>
   !a.calculated.inGroup &&
@@ -50,16 +67,17 @@ export const isRootLevelAttribute = a =>
   );
 export const areAttributesAvailable = block => block && block.attributes;
 
-const blockLoading = notFound =>
+const blockLoadingSpinner = notFound =>
   notFound ? (
     <div>
-      <div align="left" style={{ whiteSpace: 'pre' }}>
+      <div align="left" style={{ fontFamily: 'Roboto', whiteSpace: 'pre' }}>
         {ascii404}
       </div>
       <br />
       <br />
-      Block not found! <br />
-      (hint: URLs are case sensitive)
+      <Typography>Block not found....yet</Typography>
+      <Typography>it may still be loading and appear later</Typography>
+      <Typography>(hint: URLs are case sensitive)</Typography>
     </div>
   ) : (
     <div>
@@ -146,7 +164,7 @@ const displayAttributes = props => {
 const BlockDetails = props => (
   <div className={props.classes.progressContainer}>
     {props.blockLoading
-      ? blockLoading(props.blockLoading === 404)
+      ? blockLoadingSpinner(props.blockLoading === 404)
       : displayAttributes(props)}
   </div>
 );
@@ -181,6 +199,9 @@ GroupDivider.propTypes = {
 const mapStateToProps = (state, ownProps, memory) => {
   const stateMemory = memory;
   let block;
+  const blockList = state.malcolm.blocks['.blocks']
+    ? state.malcolm.blocks['.blocks'].children
+    : [];
   if (ownProps.parent) {
     block = state.malcolm.parentBlock
       ? state.malcolm.blocks[state.malcolm.parentBlock]
@@ -190,7 +211,16 @@ const mapStateToProps = (state, ownProps, memory) => {
       ? state.malcolm.blocks[state.malcolm.childBlock]
       : undefined;
   }
-
+  const panelIsOpen = ownProps.parent
+    ? state.viewState.openParentPanel
+    : state.malcolm.childBlock !== undefined;
+  const blockLoading = isBlockLoading(
+    block,
+    ownProps.parent ? state.malcolm.parentBlock : state.malcolm.childBlock,
+    blockList,
+    state.malcolm.navigation.navigationLists,
+    panelIsOpen
+  );
   if (
     block &&
     block.attributes &&
@@ -222,10 +252,9 @@ const mapStateToProps = (state, ownProps, memory) => {
 
     stateMemory.oldAttributes = block.attributes;
   }
-
   return {
     blockName: block ? block.name : '',
-    blockLoading: isBlockLoading(block),
+    blockLoading,
     attributesAvailable: areAttributesAvailable(block) !== undefined,
     rootAttributes: stateMemory.rootAttributes,
     groups: stateMemory.groups,

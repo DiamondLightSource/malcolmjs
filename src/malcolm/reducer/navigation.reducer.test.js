@@ -11,6 +11,8 @@ import {
   buildMeta,
 } from '../../testState.utilities';
 
+import blockUtils from '../blockUtils';
+
 describe('navigation reducer', () => {
   it('updateNavigationPath set navigation on state', () => {
     let state = buildTestState().malcolm;
@@ -160,6 +162,70 @@ describe('NavigationReducer.updateNavTypes', () => {
 
     expect(state.parentBlock).toEqual('PANDA:SEQ2');
     expect(state.mainAttribute).toEqual('table');
+  });
+
+  it('handles valid sub element on nav element', () => {
+    addNavigationLists(['PANDA', 'layout', 'SEQ2', 'table.row.2'], state);
+    addBlock('PANDA:SEQ2', [buildAttribute('table')], state, ['table']);
+    const attribute = blockUtils.findAttribute(
+      state.blocks,
+      'PANDA:SEQ2',
+      'table'
+    );
+    const mockValidator = jest.fn(() => true);
+    attribute.calculated.subElements = { row: mockValidator };
+
+    state = NavigationReducer.updateNavTypes(state);
+
+    expect(mockValidator).toHaveBeenCalledTimes(1);
+    expect(mockValidator).toHaveBeenCalledWith(['2'], attribute);
+    expect(state.navigation.navigationLists[3].subElements).toBeDefined();
+    expect(state.navigation.navigationLists[3].subElements).toEqual([
+      'row',
+      '2',
+    ]);
+    expect(state.navigation.navigationLists[3].badUrlPart).not.toBeDefined();
+    expect(state.navigation.navigationLists[3].navType).toEqual(
+      NavTypes.Attribute
+    );
+  });
+
+  it('handles invalid sub element on nav element', () => {
+    addNavigationLists(['PANDA', 'layout', 'SEQ2', 'table.row.2'], state);
+    addBlock('PANDA:SEQ2', [buildAttribute('table')], state, ['table']);
+    const attribute = blockUtils.findAttribute(
+      state.blocks,
+      'PANDA:SEQ2',
+      'table'
+    );
+    const mockValidator = jest.fn(() => false);
+    attribute.calculated.subElements = { row: mockValidator };
+
+    state = NavigationReducer.updateNavTypes(state);
+
+    expect(mockValidator).toHaveBeenCalledTimes(1);
+    expect(mockValidator).toHaveBeenCalledWith(['2'], attribute);
+    expect(state.navigation.navigationLists[3].subElements).toBeDefined();
+    expect(state.navigation.navigationLists[3].subElements).toEqual([
+      undefined,
+    ]);
+    expect(state.navigation.navigationLists[3].badUrlPart).toBeDefined();
+    expect(state.navigation.navigationLists[3].badUrlPart).toEqual([
+      'row',
+      '2',
+    ]);
+    expect(state.navigation.navigationLists[3].navType).toEqual(
+      NavTypes.Attribute
+    );
+  });
+
+  it('handles elements which arent child of the last attribute', () => {
+    addNavigationLists(['PANDA', 'layout', 'SEQ5', 'table.row.2'], state);
+    addBlock('PANDA:SEQ2', [buildAttribute('table')], state, ['table']);
+    state = NavigationReducer.updateNavTypes(state);
+    expect(state.navigation.navigationLists[2].navType).toEqual(NavTypes.Error);
+    expect(state.navigation.navigationLists[3].navType).toEqual(NavTypes.Error);
+    expect(state.navigation.navigationLists[3].subElements).not.toBeDefined();
   });
 });
 
