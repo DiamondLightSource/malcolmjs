@@ -181,6 +181,7 @@ const mapStateToProps = (state, ownProps) => {
     isMainAttribute:
       attribute &&
       attribute.calculated &&
+      ownProps.blockName === state.malcolm.parentBlock &&
       state.malcolm.mainAttribute === attribute.calculated.name,
   };
 };
