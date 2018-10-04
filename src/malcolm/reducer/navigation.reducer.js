@@ -79,10 +79,9 @@ function updateNavTypes(state) {
 
     ({ navigationLists } = updatedState.navigation);
     const navIndices = navigationLists.map((nav, index) => index);
-    navIndices
-      .filter(navIndex => navigationLists[navIndex].navType === undefined)
-      .forEach((originalIndex, i) => {
-        const nav = navigationLists[originalIndex];
+    navIndices.forEach((originalIndex, i) => {
+      const nav = navigationLists[originalIndex];
+      if (nav.navType === undefined) {
         if (nav.path === '.info') {
           nav.navType = NavTypes.Info;
           nav.label = 'Info';
@@ -110,8 +109,18 @@ function updateNavTypes(state) {
             nav.navType = NavTypes.Attribute;
             nav.children = matchingAttribute.calculated.children;
             nav.childrenLabels = matchingAttribute.calculated.children;
-            if (nav.path.split('.').length > 1) {
-              const subElements = nav.path.split('.').slice(1);
+            const rawPath = nav.path.split('.');
+            [nav.path] = nav.path.split('.');
+            nav.label = nav.path;
+            if (matchingAttribute.raw) {
+              if (matchingAttribute.raw.meta) {
+                nav.label = matchingAttribute.raw.meta.label;
+              } else if (matchingAttribute.raw.label) {
+                nav.label = matchingAttribute.raw.label;
+              }
+            }
+            if (rawPath.length > 1) {
+              const subElements = rawPath.slice(1);
               if (
                 blockUtils.validateAttributeSubElement(
                   matchingAttribute,
@@ -122,20 +131,15 @@ function updateNavTypes(state) {
               } else {
                 nav.subElements = [undefined];
                 nav.badUrlPart = subElements;
-                navigationLists.slice(originalIndex + 1).forEach(navElement => {
-                  const erroredNav = navElement;
-                  erroredNav.navType = NavTypes.Error;
-                });
-                // throw new Error('Bad URL (field has no such sub-element)!');
-              }
-            }
-            [nav.path] = nav.path.split('.');
-            nav.label = nav.path;
-            if (matchingAttribute.raw) {
-              if (matchingAttribute.raw.meta) {
-                nav.label = matchingAttribute.raw.meta.label;
-              } else if (matchingAttribute.raw.label) {
-                nav.label = matchingAttribute.raw.label;
+                nav.label = [nav.label, ...subElements].join('.');
+                if (navigationLists[originalIndex + 1].path !== '.info') {
+                  navigationLists
+                    .slice(originalIndex + 1)
+                    .forEach(navElement => {
+                      const erroredNav = navElement;
+                      erroredNav.navType = NavTypes.Error;
+                    });
+                }
               }
             }
           }
@@ -178,7 +182,8 @@ function updateNavTypes(state) {
             // nav.siblings = navigationLists[originalIndex - 1].children;
           }
         }
-      });
+      }
+    });
   }
 
   navigationLists.forEach(nav => {
