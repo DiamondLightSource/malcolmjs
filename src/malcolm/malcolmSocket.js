@@ -31,6 +31,9 @@ class MalcolmSocketContainer {
     }
     return 0;
   }
+  purge() {
+    this.queue = [];
+  }
 }
 
 export default MalcolmSocketContainer;

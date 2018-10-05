@@ -3,6 +3,7 @@ import {
   MalcolmNewBlock,
   MalcolmSend,
   MalcolmNavigationPathUpdate,
+  MalcolmIncrementMessageCount,
 } from '../malcolm.types';
 
 describe('malcolm redux middleware', () => {
@@ -42,7 +43,13 @@ describe('malcolm redux middleware', () => {
     };
     store = {
       getState: () => ({ malcolm: malcolmState }),
-      dispatch: action => dispatches.push(action),
+      dispatch: action => {
+        dispatches.push(action);
+        malcolmState.counter =
+          action.type === MalcolmIncrementMessageCount
+            ? malcolmState.counter + 1
+            : malcolmState.counter;
+      },
     };
   });
 
