@@ -1,45 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`attributeView renders 1st tab correctly 1`] = `
-<WithTheme(TabbedPanel)
-  defaultTab={0}
+<Connect(WithTheme(TabbedPanel))
   tabLabels={
     Array [
       "Table",
       "Plot",
     ]
   }
-  useSwipeable={false}
 >
-  <ArchiveTable
-    attribute={Object {}}
+  <Connect(ArchiveTable)
+    attributeName="health"
+    blockName="test1"
   />
   <LoadableComponent
-    attribute={Object {}}
+    attributeName="health"
+    blockName="test1"
     deriveState={[Function]}
     doTick={true}
   />
-</WithTheme(TabbedPanel)>
+</Connect(WithTheme(TabbedPanel))>
 `;
 
 exports[`attributeView renders 2nd tab correctly 1`] = `
-<WithTheme(TabbedPanel)
-  defaultTab={1}
+<Connect(WithTheme(TabbedPanel))
   tabLabels={
     Array [
       "Table",
       "Plot",
     ]
   }
-  useSwipeable={false}
 >
-  <ArchiveTable
-    attribute={Object {}}
+  <Connect(ArchiveTable)
+    attributeName="health"
+    blockName="test1"
   />
   <LoadableComponent
-    attribute={Object {}}
+    attributeName="health"
+    blockName="test1"
     deriveState={[Function]}
     doTick={true}
   />
-</WithTheme(TabbedPanel)>
+</Connect(WithTheme(TabbedPanel))>
 `;

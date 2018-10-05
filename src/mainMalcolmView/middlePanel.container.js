@@ -211,7 +211,7 @@ const findAttributeComponent = props => {
               blockName={props.parentBlock}
               widgetTag={widgetTag}
               typeId={props.typeId}
-              openPanels={{ parent: props.openParent, child: props.openChild }}
+              // openPanels={{ parent: props.openParent, child: props.openChild }}
             />
           </div>
         </div>

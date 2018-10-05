@@ -270,6 +270,7 @@ export const buildMockDispatch = getState => {
     actions,
     dispatch,
     getState,
+    subscribe: () => {},
   };
 };
 

@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import WidgetTable from '../../malcolmWidgets/table/virtualizedTable.component';
 import { ARCHIVE_REFRESH_INTERVAL } from '../../malcolm/reducer/malcolmReducer';
+import blockUtils from '../../malcolm/blockUtils';
 
 const noOp = () => {};
 
@@ -73,6 +75,26 @@ class ArchiveTable extends React.Component {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  let attribute;
+  if (ownProps.attributeName && ownProps.blockName) {
+    const attributeIndex = blockUtils.findAttributeIndex(
+      state.malcolm.blocks,
+      ownProps.blockName,
+      ownProps.attributeName
+    );
+    if (attributeIndex !== -1) {
+      attribute =
+        state.malcolm.blockArchive[ownProps.blockName].attributes[
+          attributeIndex
+        ];
+    }
+  }
+  return {
+    attribute,
+  };
+};
+
 ArchiveTable.propTypes = {
   attribute: PropTypes.shape({
     parent: PropTypes.string,
@@ -84,4 +106,4 @@ ArchiveTable.propTypes = {
   }).isRequired,
 };
 
-export default ArchiveTable;
+export default connect(mapStateToProps)(ArchiveTable);

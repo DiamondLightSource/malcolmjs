@@ -66,7 +66,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:INENC1", "a" ],
     index: 0,
-    interval: 200,
+    interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = (index%4 < 2);
       const now = (new Date());
@@ -78,7 +78,7 @@ const activeSubscriptions = [
   {
     path: [ "PANDA:INENC1", "b" ],
     index: 0,
-    interval: 200,
+    interval: 50,
     update: (response, index) => {
       response.changes[0][1].value = ((index+1)%4 < 2);
       const now = (new Date());
