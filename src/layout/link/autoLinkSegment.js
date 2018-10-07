@@ -9,6 +9,7 @@ class MalcolmAutoLinkSegment extends BaseWidget {
     this.refPaths = [];
     this.state = {
       selected: false,
+      hovering: false,
     };
   }
 
@@ -29,10 +30,10 @@ class MalcolmAutoLinkSegment extends BaseWidget {
         />
         <circle
           onMouseLeave={() => {
-            this.setState({ selected: false });
+            this.setState({ ...this.state, hovering: false });
           }}
           onMouseEnter={() => {
-            this.setState({ selected: true });
+            this.setState({ ...this.state, hovering: true });
           }}
           data-id={this.props.link.points[pointIndex].id}
           data-linkid={this.props.link.id}
@@ -56,6 +57,7 @@ class MalcolmAutoLinkSegment extends BaseWidget {
           this.props.link,
           this,
           this.state.selected || this.props.link.isSelected(),
+          this.state.hovering,
           path
         ),
       {
@@ -67,14 +69,14 @@ class MalcolmAutoLinkSegment extends BaseWidget {
       ...extraProps,
       strokeLinecap: 'round',
       onMouseLeave: () => {
-        this.setState({ selected: false });
+        this.setState({ ...this.state, hovering: false });
       },
       onMouseEnter: () => {
-        this.setState({ selected: true });
+        this.setState({ ...this.state, hovering: true });
       },
       ref: null,
       'data-linkid': this.props.link.getID(),
-      strokeOpacity: this.state.selected ? 0.1 : 0,
+      strokeOpacity: this.state.hovering ? 0.1 : 0,
       strokeWidth: 20,
     });
 
