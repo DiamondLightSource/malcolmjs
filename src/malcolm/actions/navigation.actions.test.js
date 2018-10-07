@@ -71,6 +71,23 @@ describe('navigateToPalette', () => {
   it('changes the url to show the palette', () => {
     const dispatches = [];
     const state = buildNavState();
+    state.malcolm.navigation.navigationLists.push({
+      navType: NavTypes.Palette,
+      path: '.palette',
+    });
+
+    const navAction = navigationActions.navigateToPalette();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(1);
+    expect(dispatches[0].type).toEqual('@@router/CALL_HISTORY_METHOD');
+    expect(dispatches[0].payload.args[0]).toEqual('/gui/PANDA/layout/');
+  });
+
+  it('closes the palette if it is already open', () => {
+    const dispatches = [];
+    const state = buildNavState();
 
     const navAction = navigationActions.navigateToPalette();
 
