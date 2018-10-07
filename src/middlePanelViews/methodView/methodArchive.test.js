@@ -1,7 +1,6 @@
 import React from 'react';
 import { createShallow } from '@material-ui/core/test-utils';
 import MockCircularBuffer from '../../malcolm/reducer/attribute.reducer.mocks';
-
 import MethodArchive from './methodArchive.container';
 
 describe('MethodArchive', () => {
@@ -9,7 +8,7 @@ describe('MethodArchive', () => {
   let testArchive;
 
   beforeEach(() => {
-    shallow = createShallow({ dive: true });
+    shallow = createShallow();
     testArchive = {
       value: new MockCircularBuffer(5),
       timeStamp: new MockCircularBuffer(5),
@@ -21,7 +20,7 @@ describe('MethodArchive', () => {
     });
     testArchive.timeStamp.push({
       localRunTime: new Date(0),
-      localReturnTime: new Date(),
+      localReturnTime: new Date(1000),
     });
     testArchive.alarmState.push(0);
   });
@@ -34,7 +33,7 @@ describe('MethodArchive', () => {
         selectedParam={['takes', 'test1']}
       />
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('renders table correctly for return param', () => {
@@ -45,7 +44,7 @@ describe('MethodArchive', () => {
         selectedParam={['returns', 'test2']}
       />
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('renders 2nd tab correctly', () => {
@@ -57,6 +56,6 @@ describe('MethodArchive', () => {
         selectedParam={['takes', 'test1']}
       />
     );
-    expect(wrapper.dive()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

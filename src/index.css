@@ -15,6 +15,10 @@ body {
   }
 }
 
+.srd-default-link--hover-path {
+  stroke: #ffffffa6 !important;
+}
+
 .srd-default-link--highlight-path {
   stroke: #f50057 !important;
 }

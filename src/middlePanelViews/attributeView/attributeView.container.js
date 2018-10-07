@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Loadable from 'react-loadable';
-import blockUtils from '../../malcolm/blockUtils';
 import TabbedPanel from '../tabbedMiddlePanel.component';
 import ArchiveTable from './archiveTable.container';
 import {
@@ -40,7 +39,7 @@ export const deriveStateFromProps = (props, state) => {
   const { data, layout } = state;
   const dataRevision = `${props.attribute.parent}#${props.attribute.name}#${
     props.attribute.plotTime
-  }#p:${props.openPanels.parent}#c:${props.openPanels.child}`;
+  }#p:${props.parentPanelOpen}#c:${props.childPanelOpen}`;
   if (props.attribute && layout.datarevision !== dataRevision) {
     const newData = data.map((dataElement, index) =>
       updatePlotData(dataElement, index, props.attribute)
@@ -65,65 +64,28 @@ export const deriveStateFromProps = (props, state) => {
   return state;
 };
 
+const TAB_LABELS = ['Table', 'Plot'];
+
 const AttributeViewer = props => (
-  <TabbedPanel
-    useSwipeable={props.useSwipeable}
-    defaultTab={props.defaultTab}
-    plotTime={props.attribute.plotTime}
-    openPanels={props.openPanels}
-    tabLabels={['Table', 'Plot']}
-  >
-    <ArchiveTable attribute={props.attribute} />
+  <TabbedPanel tabLabels={TAB_LABELS}>
+    <ArchiveTable
+      blockName={props.blockName}
+      attributeName={props.attributeName}
+    />
     <LoadablePlotter
-      attribute={props.attribute}
-      openPanels={props.openPanels}
+      blockName={props.blockName}
+      attributeName={props.attributeName}
       deriveState={deriveStateFromProps}
       doTick
     />
   </TabbedPanel>
 );
 
-const mapStateToProps = (state, ownProps) => {
-  let attribute;
-  if (ownProps.attributeName && ownProps.blockName) {
-    const attributeIndex = blockUtils.findAttributeIndex(
-      state.malcolm.blocks,
-      ownProps.blockName,
-      ownProps.attributeName
-    );
-    if (attributeIndex !== -1) {
-      attribute =
-        state.malcolm.blockArchive[ownProps.blockName].attributes[
-          attributeIndex
-        ];
-    }
-  }
-  return {
-    attribute,
-  };
-};
+const mapStateToProps = () => ({});
 
 AttributeViewer.propTypes = {
-  attribute: PropTypes.shape({
-    refreshRate: PropTypes.number,
-    value: PropTypes.arrayOf(PropTypes.number),
-    timeSinceConnect: PropTypes.arrayOf(PropTypes.number),
-    plotTime: PropTypes.number,
-    isBool: PropTypes.bool,
-  }).isRequired,
-  // widgetTag: PropTypes.string.isRequired,
-  // typeId: PropTypes.string.isRequired,
-  useSwipeable: PropTypes.bool,
-  defaultTab: PropTypes.number,
-  openPanels: PropTypes.shape({
-    parent: PropTypes.bool,
-    child: PropTypes.bool,
-  }).isRequired,
-};
-
-AttributeViewer.defaultProps = {
-  defaultTab: 0,
-  useSwipeable: false,
+  blockName: PropTypes.string.isRequired,
+  attributeName: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps)(withTheme()(AttributeViewer));

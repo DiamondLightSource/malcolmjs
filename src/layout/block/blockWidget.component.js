@@ -108,7 +108,11 @@ const BlockWidget = props => {
       })}
       elevation={8}
       onClick={e => props.node.clickHandler(e)}
-      onMouseDown={() => props.node.mouseDownHandler(true)}
+      onMouseDown={e => {
+        if (!e.isPortClick) {
+          props.node.mouseDownHandler(true);
+        }
+      }}
       onMouseUp={() => props.node.mouseDownHandler(false)}
     >
       <Typography className={props.classes.title}>

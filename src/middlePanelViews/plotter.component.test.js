@@ -13,6 +13,13 @@ import Plotter, {
   plotlyDateFormatter,
 } from './plotter.component';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+import {
+  buildTestState,
+  buildMockDispatch,
+  addBlock,
+  buildAttribute,
+  addBlockArchive,
+} from '../testState.utilities';
 
 const plotlyDates = require('plotly.js/src/lib/dates');
 
@@ -39,6 +46,9 @@ const mockTheme = {
 describe('MethodPlot', () => {
   let shallow;
   let testArchive;
+
+  let state;
+  let mockStore;
 
   beforeEach(() => {
     shallow = createShallow({ dive: true });
@@ -74,17 +84,30 @@ describe('MethodPlot', () => {
       localReturnTime: new Date(6),
     });
     testArchive.alarmState.push(2);
+
+    state = buildTestState();
+    addBlock(
+      'block1',
+      [buildAttribute('attr1', ['block1', 'attr1'], 0)],
+      state.malcolm
+    );
+    mockStore = buildMockDispatch(() => state);
   });
 
   it('renders correctly for takes', () => {
+    addBlockArchive(
+      'block1',
+      [dummyArchive(testArchive, ['takes', 'test1'])],
+      state.malcolm
+    );
+
     const wrapper = shallow(
       <Plotter
-        store={{
-          getState: () => {},
-          subscribe: () => {},
-        }}
-        attribute={dummyArchive(testArchive, ['takes', 'test1'])}
-        openPanels={{}}
+        store={mockStore}
+        blockName="block1"
+        attributeName="attr1"
+        // attribute={dummyArchive(testArchive, ['takes', 'test1'])}
+        // openPanels={{}}
         theme={mockTheme}
         deriveState={deriveMethodState}
       />
@@ -93,14 +116,17 @@ describe('MethodPlot', () => {
   });
 
   it('renders correctly for returns', () => {
+    addBlockArchive(
+      'block1',
+      [dummyArchive(testArchive, ['returns', 'test2'])],
+      state.malcolm
+    );
+
     const wrapper = shallow(
       <Plotter
-        store={{
-          getState: () => {},
-          subscribe: () => {},
-        }}
-        attribute={dummyArchive(testArchive, ['returns', 'test2'])}
-        openPanels={{}}
+        store={mockStore}
+        blockName="block1"
+        attributeName="attr1"
         theme={mockTheme}
         deriveState={deriveMethodState}
       />
@@ -112,13 +138,14 @@ describe('MethodPlot', () => {
 describe('attributePlot', () => {
   let shallow;
   let mount;
-  let actions;
+  // let actions;
   let mockArchive;
+  let state;
   let mockStore;
 
   beforeEach(() => {
     jest.runAllTimers();
-    actions = [];
+    // actions = [];
     shallow = createShallow({ dive: true });
     mount = createMount();
     mockArchive = {
@@ -129,13 +156,21 @@ describe('attributePlot', () => {
       plotValue: new MockCircularBuffer(5),
       meta: {},
     };
-    mockStore = {
-      getState: () => {},
-      subscribe: () => {},
-      dispatch: action => {
-        actions.push(action);
-      },
-    };
+    // mockStore = {
+    //   getState: () => {},
+    //   subscribe: () => {},
+    //   dispatch: action => {
+    //     actions.push(action);
+    //   },
+    // };
+
+    state = buildTestState();
+    addBlock(
+      'block1',
+      [buildAttribute('attr1', ['block1', 'attr1'], 0)],
+      state.malcolm
+    );
+    mockStore = buildMockDispatch(() => state);
   });
 
   const buildMockArchive = (values, alarms) => {
@@ -150,11 +185,13 @@ describe('attributePlot', () => {
     mockArchive.meta.typeid = malcolmTypes.number;
     buildMockArchive([1, -1, 2], [0, 0, 0]);
 
+    addBlockArchive('block1', [mockArchive], state.malcolm);
+
     const wrapper = shallow(
       <Plotter
         store={mockStore}
-        attribute={mockArchive}
-        openPanels={{}}
+        blockName="block1"
+        attributeName="attr1"
         theme={mockTheme}
         deriveState={deriveAttributeState}
         doTick
@@ -167,11 +204,13 @@ describe('attributePlot', () => {
     mockArchive.meta.typeid = malcolmTypes.bool;
     buildMockArchive([1, 0, 1], [0, 0, 0]);
 
+    addBlockArchive('block1', [mockArchive], state.malcolm);
+
     const wrapper = shallow(
       <Plotter
         store={mockStore}
-        attribute={mockArchive}
-        openPanels={{}}
+        blockName="block1"
+        attributeName="attr1"
         theme={mockTheme}
         deriveState={deriveAttributeState}
         doTick
@@ -184,11 +223,13 @@ describe('attributePlot', () => {
     mockArchive.meta.typeid = malcolmTypes.number;
     buildMockArchive([1, -1, 2], [0, 1, 0]);
 
+    addBlockArchive('block1', [mockArchive], state.malcolm);
+
     const wrapper = shallow(
       <Plotter
         store={mockStore}
-        attribute={mockArchive}
-        openPanels={{}}
+        blockName="block1"
+        attributeName="attr1"
         theme={mockTheme}
         deriveState={deriveAttributeState}
         doTick
@@ -201,21 +242,23 @@ describe('attributePlot', () => {
     mockArchive.meta.typeid = malcolmTypes.number;
     buildMockArchive([1, -1, 2], [0, 0, 0]);
 
+    addBlockArchive('block1', [mockArchive], state.malcolm);
+
     mount(
       <Plotter
         store={mockStore}
-        attribute={mockArchive}
-        openPanels={{}}
+        blockName="block1"
+        attributeName="attr1"
         theme={mockTheme}
         deriveState={deriveAttributeState}
         doTick
       />
     );
     jest.runTimersToTime(1000 * ARCHIVE_REFRESH_INTERVAL);
-    expect(actions.length).toEqual(0);
+    expect(mockStore.actions.length).toEqual(0);
     jest.runTimersToTime(100 * ARCHIVE_REFRESH_INTERVAL);
-    expect(actions.length).toEqual(1);
-    expect(actions).toEqual([
+    expect(mockStore.actions.length).toEqual(1);
+    expect(mockStore.actions).toEqual([
       { payload: { path: ['test1', 'attr1'] }, type: MalcolmTickArchive },
     ]);
   });

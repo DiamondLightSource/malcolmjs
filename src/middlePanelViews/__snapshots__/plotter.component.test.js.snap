@@ -376,7 +376,7 @@ exports[`attributePlot renders correctly for bool 1`] = `
     Object {
       "attribute": "attr1",
       "autosize": true,
-      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:true#c:false",
       "legend": Object {
         "font": Object {
           "color": "#000",
@@ -512,7 +512,7 @@ exports[`attributePlot renders correctly for changing alarm state 1`] = `
     Object {
       "attribute": "attr1",
       "autosize": true,
-      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:true#c:false",
       "legend": Object {
         "font": Object {
           "color": "#000",
@@ -648,7 +648,7 @@ exports[`attributePlot renders correctly for number 1`] = `
     Object {
       "attribute": "attr1",
       "autosize": true,
-      "datarevision": "test1#attr1#undefined#p:undefined#c:undefined",
+      "datarevision": "test1#attr1#undefined#p:true#c:false",
       "legend": Object {
         "font": Object {
           "color": "#000",

@@ -135,10 +135,15 @@ const navigateToPalette = () => (dispatch, getState) => {
     .reverse()
     .findIndex(nav => nav.navType === NavTypes.Attribute);
   if (lastAttributeNav > -1) {
+    const routeEnding =
+      navigationLists[navigationLists.length - 1].navType === NavTypes.Palette
+        ? ''
+        : '.palette';
+
     const newPath = `/gui/${navigationLists
       .filter((nav, i) => i <= navigationLists.length - 1 - lastAttributeNav)
       .map(nav => nav.path)
-      .join('/')}/.palette`;
+      .join('/')}/${routeEnding}`;
     dispatch(push(newPath));
   }
 };

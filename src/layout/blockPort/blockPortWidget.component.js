@@ -98,7 +98,10 @@ class BlockPortWidget extends BaseWidget {
         {...this.getProps()}
         data-name={this.props.portName}
         data-nodeid={this.props.nodeId}
-        onMouseDown={() => this.props.mouseDownHandler(this.props.portId, true)}
+        onMouseDown={e => {
+          e.isPortClick = true;
+          this.props.mouseDownHandler(this.props.portId, true);
+        }}
         onMouseUp={() => this.props.mouseDownHandler(this.props.portId, false)}
       >
         <div

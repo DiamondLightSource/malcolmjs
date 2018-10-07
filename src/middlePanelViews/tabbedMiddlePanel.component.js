@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -21,8 +22,8 @@ class TabbedPanel extends React.Component {
       nextState.tabValue !== this.state.tabValue ||
       nextProps.blockName !== this.props.blockName ||
       nextProps.attributeName !== this.props.attributeName ||
-      nextProps.openPanels.child !== this.props.openPanels.child ||
-      nextProps.openPanels.parent !== this.props.openPanels.parent ||
+      nextProps.childPanelOpen !== this.props.childPanelOpen ||
+      nextProps.parentPanelOpen !== this.props.parentPanelOpen ||
       this.props.alwaysUpdate ||
       nextProps.alwaysUpdate
     );
@@ -94,6 +95,13 @@ class TabbedPanel extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  defaultTab: 1,
+  useSwipeable: false,
+  parentPanelOpen: state.viewState.openParentPanel,
+  childPanelOpen: state.malcolm.childBlock !== undefined,
+});
+
 TabbedPanel.propTypes = {
   blockName: PropTypes.string.isRequired,
   attributeName: PropTypes.string.isRequired,
@@ -109,10 +117,8 @@ TabbedPanel.propTypes = {
   }).isRequired,
   useSwipeable: PropTypes.bool,
   defaultTab: PropTypes.number,
-  openPanels: PropTypes.shape({
-    parent: PropTypes.bool,
-    child: PropTypes.bool,
-  }).isRequired,
+  childPanelOpen: PropTypes.bool.isRequired,
+  parentPanelOpen: PropTypes.bool.isRequired,
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
   plotTime: PropTypes.number,
   alwaysUpdate: PropTypes.bool,
@@ -126,4 +132,4 @@ TabbedPanel.defaultProps = {
   alwaysUpdate: false,
 };
 
-export default withTheme()(TabbedPanel);
+export default connect(mapStateToProps)(withTheme()(TabbedPanel));

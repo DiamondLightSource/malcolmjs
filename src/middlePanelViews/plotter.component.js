@@ -6,6 +6,7 @@ import Plot from 'react-plotly.js/react-plotly';
 import { timeFormat } from 'd3-time-format';
 import { MalcolmTickArchive } from '../malcolm/malcolm.types';
 import { ARCHIVE_REFRESH_INTERVAL } from '../malcolm/reducer/malcolmReducer';
+import blockUtils from '../malcolm/blockUtils';
 
 export const plotlyDateFormatter = timeFormat('%Y-%m-%d %H:%M:%S.%L');
 
@@ -195,7 +196,36 @@ class Plotter extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state, ownProps, memory) => {
+  const plotterMemory = memory;
+  let attribute;
+  if (ownProps.attributeName && ownProps.blockName) {
+    const attributeIndex = blockUtils.findAttributeIndex(
+      state.malcolm.blocks,
+      ownProps.blockName,
+      ownProps.attributeName
+    );
+    if (attributeIndex !== -1) {
+      attribute =
+        state.malcolm.blockArchive[ownProps.blockName].attributes[
+          attributeIndex
+        ];
+    }
+  }
+
+  if (
+    !plotterMemory.currentPlotAttribute ||
+    attribute.plotTime !== plotterMemory.currentPlotAttribute.plotTime
+  ) {
+    plotterMemory.currentPlotAttribute = attribute;
+  }
+
+  return {
+    attribute: plotterMemory.currentPlotAttribute,
+    parentPanelOpen: state.viewState.openParentPanel,
+    childPanelOpen: state.malcolm.childBlock !== undefined,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   tickArchive: path => {
@@ -251,6 +281,14 @@ Plotter.defaultProps = {
   doTick: false,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+const memoizedMapStateToProps = () => {
+  const plotterMemory = {
+    currentPlotAttribute: undefined,
+  };
+
+  return (state, ownProps) => mapStateToProps(state, ownProps, plotterMemory);
+};
+
+export default connect(memoizedMapStateToProps, mapDispatchToProps)(
   withTheme()(Plotter)
 );

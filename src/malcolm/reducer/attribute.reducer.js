@@ -127,12 +127,15 @@ export const portsAreDifferent = (oldAttribute, newAttribute) => {
   return true;
 };
 
-export const updateNavigation = (state, attributeName) => {
+export const updateNavigation = (state, attributeName, attribute) => {
   let { navigation } = state;
+  const matchingNav = navigation.navigationLists.find(
+    nav => nav.path.split('.')[0] === attributeName
+  );
   if (
-    navigation.navigationLists.findIndex(
-      nav => nav.path.split('.')[0] === attributeName
-    ) > -1
+    matchingNav &&
+    (matchingNav.children !== attribute.calculated.children ||
+      matchingNav.label !== attribute.raw.meta.label)
   ) {
     navigation = processNavigationLists(
       state.navigation.navigationLists.map(nav => {
@@ -471,9 +474,12 @@ export function updateAttribute(
           : updatedState.layoutEngine;
 
       if (!ignoreSecondaryCalculations) {
-        const navigation = updateNavigation(updatedState, attributeName);
+        const navigation = updateNavigation(
+          updatedState,
+          attributeName,
+          attributes[matchingAttributeIndex]
+        );
         updatedState.navigation = navigation;
-
         updatedState = navigationReducer.updateNavTypes(updatedState);
       }
 
@@ -490,19 +496,6 @@ export function updateMultipleAttributes(oldState, payload) {
     const innerPayload = payload.actions[i].payload;
 
     updatedState = updateAttribute(updatedState, innerPayload);
-  }
-
-  for (let i = 0; i < payload.actions.length; i += 1) {
-    const innerPayload = payload.actions[i].payload;
-    const { path } = updatedState.messagesInFlight[innerPayload.id];
-    const attributeName = path[1];
-
-    const navigation = updateNavigation(updatedState, attributeName);
-
-    if (navigation !== updatedState.navigation) {
-      updatedState.navigation = navigation;
-      break;
-    }
   }
 
   updatedState = navigationReducer.updateNavTypes(updatedState);
@@ -548,23 +541,12 @@ export function revertLocalState(oldState, payload) {
     const blocks = { ...state.blocks };
     blocks[blockName] = { ...state.blocks[blockName], attributes };
 
-    let updatedState = {
+    const updatedState = {
       ...state,
       blocks,
     };
 
-    // update the navigation if the attribute was part of the path
-    const navigation = updateNavigation(updatedState, attributeName);
-
-    const layout = updateLayout(state, updatedState, blockName, attributeName);
-
-    updatedState = {
-      ...updatedState,
-      layout,
-      navigation,
-    };
-
-    return navigationReducer.updateNavTypes(updatedState);
+    return updatedState;
   }
   return oldState;
 }

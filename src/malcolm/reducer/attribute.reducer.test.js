@@ -1,6 +1,5 @@
 import AttributeReducer, {
   updateLayout,
-  updateNavigation,
   portsAreDifferent,
   pushToArchive,
   tickArchive,
@@ -342,17 +341,6 @@ describe('attribute reducer', () => {
 
     updateLayout(updatedState, updatedState, 'block1', 'port 1');
     expect(LayoutReducer.processLayout).toHaveBeenCalledTimes(0);
-  });
-
-  it('updateNavigation only updates navigation if the attribute is in the path', () => {
-    state.navigation.navigationLists = [{ path: 'PANDA' }, { path: 'layout' }];
-
-    updateNavigation(state, 'layout');
-    expect(processNavigationLists).toHaveBeenCalledTimes(1);
-
-    processNavigationLists.mockClear();
-    updateNavigation(state, 'not in path');
-    expect(processNavigationLists).toHaveBeenCalledTimes(0);
   });
 
   it('portsAreDifferent returns true without metadata', () => {

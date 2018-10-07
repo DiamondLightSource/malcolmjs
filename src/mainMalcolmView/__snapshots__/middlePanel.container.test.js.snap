@@ -93,12 +93,6 @@ exports[`MalcolmMiddlePanel renders an archive viewer pane if the mainAttribute 
       <Connect(WithTheme(AttributeViewer))
         attributeName="health"
         blockName="test1"
-        openPanels={
-          Object {
-            "child": false,
-            "parent": true,
-          }
-        }
         typeId="malcolm:core/StringMeta:1.0"
         widgetTag="widget:textupdate"
       />
