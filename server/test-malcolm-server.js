@@ -115,10 +115,13 @@ function handleMessage(socket, message) {
     let response = Object.assign({id: originalId}, pathIndexedMessages[JSON.stringify(simplifiedMessage.path)]);
 
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
-      subscriptions.push(originalId.toString());
-      subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
-
-      response = subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
+      if (Object.keys(subscribedPaths).some(path => subscribedPaths[path] === originalId.toString())) {
+        response = buildErrorMessage(originalId, 'duplicate subscription ID on client')
+      } else {
+        subscriptions.push(originalId.toString());
+        subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
+        response = subscriptionFeed.checkForActiveSubscription(simplifiedMessage, response, socket);
+      }
     }
 
     sendResponse(socket, response);
