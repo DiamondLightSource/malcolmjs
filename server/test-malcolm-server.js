@@ -21,7 +21,7 @@ io.on('connection', function (socket) {
       console.log(error);
     }
   });
-  socket.on('disconnect', () => handleDisconnect());
+  socket.on('close', () => handleDisconnect());
   socket.on('error', (err) => {
     subscriptionFeed.cancelAllSubscriptions();
     subscriptions = [];
