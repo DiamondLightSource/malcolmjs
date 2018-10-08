@@ -117,6 +117,7 @@ function handleMessage(socket, message) {
     if (simplifiedMessage.typeid.indexOf('Subscribe') > -1) {
       if (Object.keys(subscribedPaths).some(path => subscribedPaths[path] === originalId.toString())) {
         response = buildErrorMessage(originalId, 'duplicate subscription ID on client')
+        console.log(`duplicate subscription ID on client (id=${originalId})`)
       } else {
         subscriptions.push(originalId.toString());
         subscribedPaths[JSON.stringify(simplifiedMessage.path)] = originalId.toString();
