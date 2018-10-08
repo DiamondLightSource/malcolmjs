@@ -70,6 +70,7 @@ class ArchiveTable extends React.Component {
         addRow={noOp}
         infoClickHandler={noOp}
         rowClickHandler={noOp}
+        closePanelHandler={noOp}
       />
     );
   }

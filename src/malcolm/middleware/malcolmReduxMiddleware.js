@@ -1,4 +1,4 @@
-import { MalcolmSend } from '../malcolm.types';
+import { MalcolmIncrementMessageCount, MalcolmSend } from '../malcolm.types';
 import handleLocationChange from './malcolmRouting';
 
 function sendMalcolmMessage(worker, payload) {
@@ -7,16 +7,6 @@ function sendMalcolmMessage(worker, payload) {
   const msg = JSON.stringify(message);
 
   worker.postMessage(msg);
-}
-
-function getNextId(malcolmState) {
-  const copiedState = malcolmState;
-  if (copiedState.counter) {
-    copiedState.counter += 1;
-  } else {
-    copiedState.counter = 1;
-  }
-  return copiedState.counter;
 }
 
 function subscriptionActive(path, messagesInFlight) {
@@ -34,7 +24,8 @@ const buildMalcolmReduxMiddleware = worker => store => next => action => {
 
   switch (action.type) {
     case MalcolmSend:
-      updatedAction.payload.id = getNextId(store.getState().malcolm);
+      store.dispatch({ type: MalcolmIncrementMessageCount });
+      updatedAction.payload.id = store.getState().malcolm.counter;
 
       if (
         action.payload.typeid !== 'malcolm:core/Subscribe:1.0' ||

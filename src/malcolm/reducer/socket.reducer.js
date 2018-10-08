@@ -98,7 +98,6 @@ export function setDisconnected(state) {
   return {
     ...state,
     blocks,
-    counter: 0,
   };
 }
 

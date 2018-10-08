@@ -186,15 +186,17 @@ describe('malcolm socket handler', () => {
 
   it('resets blocks on open or reconnect', () => {
     malcolmWorker.postMessage('socket connected');
-    expect(dispatches.length).toEqual(4);
+    expect(dispatches.length).toEqual(5);
     expect(dispatches[0].type).toEqual(MalcolmCleanBlocks);
-    expect(dispatches[3].type).toEqual(snackbar);
-    expect(dispatches[3].snackbar.open).toEqual(true);
-    expect(dispatches[3].snackbar.message).toEqual(`Connected to WebSocket`);
-    expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[1].payload.path).toEqual(['Test:TestBlock', 'meta']);
+    expect(dispatches[4].type).toEqual(snackbar);
+    expect(dispatches[4].snackbar.open).toEqual(true);
+    expect(dispatches[4].snackbar.message).toEqual(`Connected to WebSocket`);
+    expect(dispatches[3].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[3].payload.path).toEqual(['Test:TestBlock2', 'meta']);
     expect(dispatches[2].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
-    expect(dispatches[2].payload.path).toEqual(['Test:TestBlock2', 'meta']);
+    expect(dispatches[2].payload.path).toEqual(['Test:TestBlock', 'meta']);
+    expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
+    expect(dispatches[1].payload.path).toEqual(['.', 'blocks']);
   });
 
   it('does nothing on receiving a non-malcolm message', () => {

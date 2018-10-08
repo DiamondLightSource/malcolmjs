@@ -8,8 +8,8 @@ const webSocket = new MalcolmReconnector('', 5000, WebSocket);
 const socketContainer = new MalcolmSocketContainer(webSocket);
 console.log('connecting to worker socket');
 
-const messagesInFlight = {};
-const existingAttributes = {};
+let messagesInFlight = {};
+let existingAttributes = {};
 
 let bufferedMessages = [];
 
@@ -57,6 +57,9 @@ socketContainer.socket.onmessage = event => {
 
 socketContainer.socket.onclose = () => {
   flushBuffer();
+  socketContainer.purge();
+  messagesInFlight = {};
+  existingAttributes = {};
   console.log('socket disconnected');
   self.postMessage('socket disconnected');
 };

@@ -95,13 +95,12 @@ export const malcolmResetBlocks = () => (dispatch, getState) => {
 
   const state = getState();
   state.malcolm.messagesInFlight = {};
-  Object.values(state.malcolm.blocks).forEach(block => {
-    dispatch(
-      malcolmSubscribeAction(
-        block.name === '.blocks' ? ['.', 'blocks'] : [block.name, 'meta']
-      )
-    );
-  });
+  dispatch(malcolmSubscribeAction(['.', 'blocks'], false));
+  Object.values(state.malcolm.blocks)
+    .filter(block => block.name !== '.blocks')
+    .forEach(block => {
+      dispatch(malcolmSubscribeAction([block.name, 'meta']));
+    });
 };
 
 export const malcolmSetDisconnected = () => ({
