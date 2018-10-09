@@ -32,6 +32,27 @@ const subscribeToNewBlocksInRoute = () => (dispatch, getState) => {
   });
 };
 
+const subscribeToChildren = () => (dispatch, getState) => {
+  const state = getState().malcolm;
+  const { navigationLists } = state.navigation;
+
+  const lastNav = navigationLists.slice(-1)[0];
+  if (lastNav.navType === NavTypes.Attribute) {
+    const attribute = blockUtils.findAttribute(
+      state.blocks,
+      lastNav.parent.blockMri,
+      lastNav.path
+    );
+    attribute.raw.value.visible.forEach((visible, i) => {
+      const child = attribute.raw.value.mri[i];
+      if (visible && !state.blocks[child]) {
+        dispatch(malcolmNewBlockAction(child, false, false));
+        dispatch(malcolmSubscribeAction([child, 'meta']));
+      }
+    });
+  }
+};
+
 const navigateToAttribute = (blockMri, attributeName) => (
   dispatch,
   getState
@@ -273,6 +294,7 @@ const closeInfo = (blockMri, attributeName, subElement) => (
 };
 
 export default {
+  subscribeToChildren,
   subscribeToNewBlocksInRoute,
   navigateToAttribute,
   navigateToInfo,
