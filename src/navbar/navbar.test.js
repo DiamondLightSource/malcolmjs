@@ -1,10 +1,17 @@
 import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
-import configureStore from 'redux-mock-store';
 import NavBar from './navbar.component';
 import { openParentPanelType } from '../viewState/viewState.actions';
 
-const mockStore = configureStore();
+const mockStore = state => {
+  const actions = [];
+  return {
+    getState: () => state,
+    dispatch: action => actions.push(action),
+    subscribe: () => {},
+    getActions: () => actions,
+  };
+};
 
 describe('NavBar', () => {
   let shallow;
@@ -114,7 +121,7 @@ describe('NavBar', () => {
       .simulate('click');
 
     const actions = store.getActions();
-    expect(actions.length).toEqual(1);
+    expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA:SEQ1']);
   });
@@ -135,7 +142,7 @@ describe('NavBar', () => {
       .simulate('click');
 
     const actions = store.getActions();
-    expect(actions.length).toEqual(1);
+    expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout']);
   });
@@ -156,7 +163,7 @@ describe('NavBar', () => {
       .simulate('click');
 
     const actions = store.getActions();
-    expect(actions.length).toEqual(1);
+    expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout/SEQ1/Val']);
   });
