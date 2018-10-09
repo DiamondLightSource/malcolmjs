@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { BaseWidget } from 'storm-react-diagrams';
 import Typography from '@material-ui/core/Typography';
+import { idSeparator } from '../layout.component';
+import { malcolmSelectLink } from '../../malcolm/malcolmActionCreators';
+import navigationActions from '../../malcolm/actions/navigation.actions';
 
 const styles = () => ({
   container: {
@@ -80,7 +83,34 @@ class BlockPortWidget extends BaseWidget {
     };
 
     const hiddenLink = (
-      <div className={this.props.classes.hiddenLink}>
+      <div
+        className={this.props.classes.hiddenLink}
+        style={
+          this.props.isSelected
+            ? {
+                borderBottom: `3px dashed ${
+                  this.props.theme.palette.secondary.main
+                }`,
+              }
+            : {}
+        }
+        role="presentation"
+        onMouseDown={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseUp={e => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onClick={e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const fakeId = idSeparator + idSeparator + this.props.portId;
+          this.props.selectHandler(fakeId, true);
+          this.props.linkClickHandler(fakeId);
+        }}
+      >
         <Typography>{this.props.portValue}</Typography>
       </div>
     );
@@ -145,6 +175,18 @@ const defaultPort = {
   value: '',
 };
 
+const mapDispatchToProps = dispatch => ({
+  linkClickHandler: id => {
+    const idComponents = id.split(idSeparator);
+    const blockMri = idComponents[2];
+    const portName = idComponents[3];
+    dispatch(navigationActions.updateChildPanelWithLink(blockMri, portName));
+  },
+  selectHandler: (id, isSelected) => {
+    dispatch(malcolmSelectLink(id, isSelected));
+  },
+});
+
 export const mapStateToProps = (state, ownProps) => {
   const allNodes = state.malcolm.layoutEngine.diagramModel.nodes;
   const node = allNodes[ownProps.nodeId];
@@ -170,6 +212,11 @@ export const mapStateToProps = (state, ownProps) => {
     portLabel: port.label,
     portType: port.portType,
     hiddenLink: port.hiddenLink,
+    isSelected: state.malcolm.layoutState.selectedLinks.some(
+      a =>
+        a.split(idSeparator)[2] === ownProps.portId.split(idSeparator)[0] &&
+        a.split(idSeparator)[3] === ownProps.portId.split(idSeparator)[1]
+    ),
     portValue: port.value,
     linkInProgress:
       state.malcolm.layoutState.startPortForLink !== undefined &&
@@ -179,6 +226,6 @@ export const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(BlockPortWidget)
 );

@@ -227,6 +227,15 @@ export const writeLocalState = (path, value) => ({
   },
 });
 
+export const malcolmClearLayoutSelect = () => (dispatch, getState) => {
+  getState().malcolm.layoutState.selectedLinks.forEach(link =>
+    dispatch(malcolmSelectLink(link, false))
+  );
+  getState().malcolm.layoutState.selectedBlocks.forEach(block =>
+    dispatch(malcolmSelectBlock(block, false))
+  );
+};
+
 export default {
   malcolmHailReturn,
   malcolmGetAction,
