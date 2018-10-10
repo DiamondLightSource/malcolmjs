@@ -11,7 +11,7 @@ The blocks and details will all depend on your particular instance of Malcolm bu
 Technical Summary
 -----------------
 
-The interactive environment we provide is a visual representation of the underlying functionality provided by the `Malcolm middleware <https://pymalcolm.readthedocs.io/en/latest/>`_ library, which itself provides a common interface to a range of control system and data management technologies.  Our user environment does not provide direct access to hardware components.  Information about the hardware components themselves, and the data they generate, is shared with our user environment via Malcolm.  This allows you to generate a *virtual model* of your control system before providing design and configuration information about it to Malcolm via a dedicated service.  Malcolm takes this information and uses it to interface with the underlying physical hardware.  We can consider this schematically as:
+The interactive environment we provide is a visual representation of the underlying functionality provided by the `Malcolm middleware <https://pymalcolm.readthedocs.io/en/latest/>`_ library, which itself provides a common interface to a range of control system and data management technologies.  Our user environment does not provide direct access to hardware components.  Information about the hardware components themselves, and the data they generate, is shared with our user environment via Malcolm.  This allows you to generate a virtual representation of your control system before providing design and configuration information about it to Malcolm via a dedicated service.  Malcolm takes this information and uses it to interface with the underlying physical hardware.  We can consider this schematically as:
 
 **IMAGE**
 
