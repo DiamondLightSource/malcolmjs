@@ -190,11 +190,15 @@ Local vs. Server Parameter Attribute State
 
 The underlying hardware infrastructure described by your virtual representation is defined and configured based on the content of the Design specification saved behind the graphical representation you interact with on screen.  Only when modified content is submitted and recorded to the Design specification is the change effected in underlying hardware.  It is therefore crucial to understand the difference betwwen 'local' attribute state and 'server' attribute state, particularly for `Parameter Attributes <parameter_attribute_>` that can be modified directly within the User Interface.
 
-Local Attribute state represents the staus of a Parameter Attribute that has been modified within the User Inferface but not yet submitted for inclusion in the underlying Design specification.  As such the modified value has no effect on the currently implemented hardware solution.  Locally modified attributes are denoted by the 'edit' status icon next to the Attribute name within their Block information panel.  A Parameter Attribute enters the 'local' state as soon as its incumbent value is changed in any way (including adding content to a previously empty Attibute value field) and will remain so until the 'Enter' key is pressed, triggering submission of content to the server.  Details of the mechanism of submitting modified content is described in the `Attribute Change Lifecycle <attribute_change_lifecycle_>` section below.
+Local Attribute state represents the staus of a Parameter Attribute that has been modified within the User Inferface but not yet submitted for inclusion in the underlying Design specification.  As such the modified value has no effect on the currently implemented hardware solution.  Locally modified attributes are denoted by the 'edit' status icon next to the Attribute name within their Block information panel.  A Parameter Attribute enters the 'local' state as soon as its incumbent value is changed in any way (including adding content to a previously empty Attibute value field) and will remain so until the 'Enter' key is pressed, triggering submission of content to the server.  If the server detects an error in the variable content or format it will return an error and the variable will remain in 'local' state until the issue is resolved.  Details of the mechanism of submitting modified content is described in the `Attribute Change Lifecycle <attribute_change_lifecycle_>` section below.
 
 Once a Parameter Attribute has been successfully recorded it is said to be in the 'server' attribute state, denoting that it has been saved to an underlying information server used to host the Design specification.  Attributes in 'server' state are reflected in the underlying hardware implementation and will be utilised by the system during exection of the hardware design.  'Server' state attributes are denoted by the 'information' status icon.
 
-**THIS NEEDS A DIAGRAM**
+The following diagram shows the process involved in modifying a Parameter Attribute, mapping 'local' and 'server' states to the activities within it.  Note also the inclusion of Attribute state icons as displayed in the User Interface to denote the state of the Parameter Attribute as activities are completed.
+
+.. figure:: images/attribute_lifecycle.svg
+    :align: center
+
 
 .. TIP::
     Do not confuse 'local' and 'server' Attribute state with a 'saved' Design.  `saving_a_design_` via a Parent Block 'Save' method does not result in all locally modified Attribute fields being saved to that Design.  Only Attributes already in the 'server' state will be included when the overall Design is saved.  Similarly, modified Attributes now in the 'server' state will not be stored permenantly until the overall Design has been saved.
@@ -208,13 +212,17 @@ The Attribute Change Lifecycle
 
 Attributes values modified via a Block Information Panel are recorded as part of the overall `design_`.  We refer to the combined submission and recording processes as a *'put'* action (as in 'we are putting the value in the attribute').  
 
-Once the 'put' is complete the Attribute value takes immediate effect, influencing any executing processes as appropriate from that point forward.
+Once the 'put' is complete the Attribute value takes immediate effect, influencing any executing processes as appropriate from that point forward.  If an error is detected during the 'put' process it is immediately abandonded and the nature of the error reflected back to the User Interface.
 
 The round-trip from submission of a value via the user interface to its utilisation in the execution environment takes a small but non-deterministic period of time while data is transferred, validated and ultimately recorded in the Design.  Attribute modification cannot therefore be considered an atomic process. 
 
 Within the user interface the duration of this round-trip is represented by a spinning icon in place of the default information icon upon submission of the Attribute value.  Once the change process is complete the spinning icon reverts to the default information icon.  This reversion is the only reliable indication that a value has been recorded and is now being utilised.
 
-**THIS NEEDS A DIAGRAM**
+The following diagram shows the scope of the 'put' process within the wider context of an Attribute change request.
+
+.. figure:: images/put_process.svg
+    :align: center
+
 
 .. NOTE::
     The value of a manually specified Attribute is not *saved* permanently until the overall `design_` has been `saved <saving_a_design_>`.
