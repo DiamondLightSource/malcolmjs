@@ -1,6 +1,11 @@
 import navigationActions from './navigation.actions';
 import NavTypes from '../NavTypes';
 import { MalcolmNewBlock, MalcolmSend } from '../malcolm.types';
+import { buildAttribute } from '../../testState.utilities';
+import {
+  malcolmNewBlockAction,
+  malcolmSubscribeAction,
+} from '../malcolmActionCreators';
 
 const buildNavState = () => ({
   malcolm: {
@@ -44,6 +49,78 @@ describe('subscribeToNewBlocksInRoute', () => {
     expect(dispatches[1].type).toEqual(MalcolmSend);
     expect(dispatches[1].payload.typeid).toEqual('malcolm:core/Subscribe:1.0');
     expect(dispatches[1].payload.path).toEqual(['PANDA:SEQ2', 'meta']);
+  });
+});
+
+describe('subscribeToChildren', () => {
+  it('fires subscription for child blocks', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[1].parent =
+      state.malcolm.navigation.navigationLists[0];
+    state.malcolm.navigation.navigationLists.pop();
+    state.malcolm.blocks.PANDA.attributes = [
+      buildAttribute(
+        'layout',
+        ['PANDA', 'layout'],
+        {
+          mri: ['PANDA:Test1', 'PANDA:Test2', 'PANDA:Test3'],
+          visible: [true, false, true],
+        },
+        undefined,
+        undefined,
+        ['Test1', 'Test2', 'Test3']
+      ),
+    ];
+
+    const navAction = navigationActions.subscribeToChildren();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(4);
+    expect(dispatches[0]).toEqual(
+      malcolmNewBlockAction('PANDA:Test1', false, false)
+    );
+    expect(dispatches[2]).toEqual(
+      malcolmNewBlockAction('PANDA:Test3', false, false)
+    );
+    expect(dispatches[1]).toEqual(
+      malcolmSubscribeAction(['PANDA:Test1', 'meta'])
+    );
+    expect(dispatches[3]).toEqual(
+      malcolmSubscribeAction(['PANDA:Test3', 'meta'])
+    );
+  });
+
+  it('does nothing if last nav element is not an attribute', () => {
+    const dispatches = [];
+    const state = buildNavState();
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[1].parent =
+      state.malcolm.navigation.navigationLists[0];
+    // eslint-disable-next-line prefer-destructuring
+    state.malcolm.navigation.navigationLists[2].parent =
+      state.malcolm.navigation.navigationLists[1];
+    state.malcolm.blocks.PANDA.attributes = [
+      buildAttribute(
+        'layout',
+        ['PANDA', 'layout'],
+        {
+          mri: ['PANDA:Test1', 'PANDA:Test2', 'PANDA:Test3'],
+          visible: [true, false, true],
+        },
+        undefined,
+        undefined,
+        ['Test1', 'Test2', 'Test3']
+      ),
+    ];
+
+    const navAction = navigationActions.subscribeToChildren();
+
+    navAction(action => dispatches.push(action), () => state);
+
+    expect(dispatches).toHaveLength(0);
   });
 });
 

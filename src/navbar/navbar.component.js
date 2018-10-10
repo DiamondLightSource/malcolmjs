@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { openParentPanel } from '../viewState/viewState.actions';
 import NavControl from './navcontrol.component';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 const drawerWidth = 320;
 
@@ -134,8 +135,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   openParent: () => dispatch(openParentPanel(true)),
-  navigateToChild: (basePath, child) =>
-    dispatch(push(`/gui${basePath}${child}`)),
+  navigateToChild: (basePath, child) => {
+    dispatch(push(`/gui${basePath}${child}`));
+    dispatch(navigationActions.subscribeToChildren());
+  },
 });
 
 NavBar.propTypes = {
