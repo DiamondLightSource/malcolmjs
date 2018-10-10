@@ -2,6 +2,7 @@ import React from 'react';
 import { createShallow, createMount } from '@material-ui/core/test-utils';
 import NavBar from './navbar.component';
 import { openParentPanelType } from '../viewState/viewState.actions';
+import navigationActions from '../malcolm/actions/navigation.actions';
 
 const mockStore = state => {
   const actions = [];
@@ -124,6 +125,11 @@ describe('NavBar', () => {
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA:SEQ1']);
+    expect(actions[1]).toBeInstanceOf(Function);
+    const thunkResult = actions[1](store.dispatch, store.getState);
+    expect(thunkResult).toEqual(
+      navigationActions.subscribeToChildren()(store.dispatch, store.getState)
+    );
   });
 
   it('navigating to nav item changes the route', () => {
@@ -145,6 +151,11 @@ describe('NavBar', () => {
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout']);
+    expect(actions[1]).toBeInstanceOf(Function);
+    const thunkResult = actions[1](store.dispatch, store.getState);
+    expect(thunkResult).toEqual(
+      navigationActions.subscribeToChildren()(store.dispatch, store.getState)
+    );
   });
 
   it('navigating to new root item changes the route', () => {
@@ -166,5 +177,10 @@ describe('NavBar', () => {
     expect(actions.length).toEqual(2);
     expect(actions[0].type).toBe('@@router/CALL_HISTORY_METHOD');
     expect(actions[0].payload.args).toEqual(['/gui/PANDA/layout/SEQ1/Val']);
+    expect(actions[1]).toBeInstanceOf(Function);
+    const thunkResult = actions[1](store.dispatch, store.getState);
+    expect(thunkResult).toEqual(
+      navigationActions.subscribeToChildren()(store.dispatch, store.getState)
+    );
   });
 });
