@@ -278,7 +278,8 @@ const closeInfo = (blockMri, attributeName, subElement) => (
   dispatch,
   getState
 ) => {
-  const { blocks, navigationLists, mainAttribute } = getState().malcolm;
+  const { blocks, mainAttribute, navigation } = getState().malcolm;
+  const { navigationLists } = navigation;
   const attribute = blockUtils.findAttribute(blocks, blockMri, attributeName);
   if (attribute && attribute.calculated && attribute.calculated.isMethod) {
     const newPath = `/gui/${navigationLists

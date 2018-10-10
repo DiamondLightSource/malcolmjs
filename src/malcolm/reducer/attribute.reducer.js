@@ -135,7 +135,9 @@ export const updateNavigation = (state, attributeName, attribute) => {
   if (
     matchingNav &&
     (matchingNav.children !== attribute.calculated.children ||
-      matchingNav.label !== attribute.raw.meta.label)
+      (attribute.raw.meta && matchingNav.label !== attribute.raw.meta.label) ||
+      (attribute.calculated.isMethod &&
+        matchingNav.label !== attribute.raw.label))
   ) {
     navigation = processNavigationLists(
       state.navigation.navigationLists.map(nav => {

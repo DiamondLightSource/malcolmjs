@@ -30,6 +30,7 @@ export const comparePlotlyDateString = (date1, date2) => {
 };
 
 const returnedToInitialXRange = state =>
+  state.layout.xaxis.range &&
   comparePlotlyDateString(
     state.layout.xaxis.range[0],
     state.originalXRange[0]

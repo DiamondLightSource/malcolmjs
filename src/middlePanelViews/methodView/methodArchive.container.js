@@ -19,16 +19,18 @@ const LoadablePlotter = Loadable({
 
 const updatePlotData = (oldDataElement, alarmIndex, attribute) => {
   const dataElement = oldDataElement;
-  const alarms = [...attribute.alarmState];
-  dataElement.x = [...attribute.timeStamp];
-  dataElement.y = attribute.value.map(
-    (value, valIndex) =>
-      alarms[valIndex] === AlarmStatesByIndex[alarmIndex] ||
-      (alarms[valIndex - 1] === AlarmStatesByIndex[alarmIndex] &&
-        alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
-        ? value
-        : null
-  );
+  if (attribute) {
+    const alarms = [...attribute.alarmState];
+    dataElement.x = [...attribute.timeStamp];
+    dataElement.y = attribute.value.map(
+      (value, valIndex) =>
+        alarms[valIndex] === AlarmStatesByIndex[alarmIndex] ||
+        (alarms[valIndex - 1] === AlarmStatesByIndex[alarmIndex] &&
+          alarms[valIndex] !== AlarmStates.UNDEFINED_ALARM)
+          ? value
+          : null
+    );
+  }
   dataElement.visible = dataElement.y.some(val => val !== null);
   return dataElement;
 };
@@ -40,8 +42,9 @@ export const deriveStateFromProps = (props, state) => {
   );
   layout.datarevision += 1;
   if (
-    props.attribute.parent !== layout.parent ||
-    props.attribute.name !== layout.attribute
+    props.attribute &&
+    (props.attribute.parent !== layout.parent ||
+      props.attribute.name !== layout.attribute)
   ) {
     layout.parent = props.attribute.parent;
     layout.attribute = props.attribute.name;
@@ -144,7 +147,7 @@ MethodArchive.propTypes = {
   defaultTab: PropTypes.number,
 };
 MethodArchive.defaultProps = {
-  defaultTab: 0,
+  defaultTab: 1,
 };
 
 export default MethodArchive;
