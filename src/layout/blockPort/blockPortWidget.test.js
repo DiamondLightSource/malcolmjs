@@ -33,7 +33,10 @@ describe('BlockPortWidget', () => {
 
     state = {
       malcolm: {
-        layoutState: {},
+        layoutState: {
+          selectedBlocks: [],
+          selectedLinks: [],
+        },
         layoutEngine: {
           diagramModel: {
             nodes: {

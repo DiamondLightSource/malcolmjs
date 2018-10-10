@@ -95,7 +95,7 @@ exports[`NavControl renders correctly when nav element is errored and has no sib
 >
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
-    color="error"
+    color="default"
     onClick={[Function]}
     variant="subheading"
   >
@@ -117,7 +117,7 @@ exports[`NavControl renders correctly when nav element is errored but has valid 
 >
   <WithStyles(Typography)
     className="NavControl-currentLink-2"
-    color="error"
+    color="default"
     onClick={[Function]}
     variant="subheading"
   >

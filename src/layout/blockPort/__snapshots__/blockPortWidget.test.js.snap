@@ -44,6 +44,11 @@ exports[`BlockPortWidget input port renders correctly with hidden link 1`] = `
 >
   <div
     className="BlockPortWidget-hiddenLink-7"
+    onClick={[Function]}
+    onMouseDown={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={Object {}}
   >
     <WithStyles(Typography)>
       HIDDEN_BLOCK.VAL
@@ -158,6 +163,11 @@ exports[`BlockPortWidget output port renders correctly with hidden link 1`] = `
   </div>
   <div
     className="BlockPortWidget-hiddenLink-7"
+    onClick={[Function]}
+    onMouseDown={[Function]}
+    onMouseUp={[Function]}
+    role="presentation"
+    style={Object {}}
   >
     <WithStyles(Typography)>
       HIDDEN_BLOCK.VAL
