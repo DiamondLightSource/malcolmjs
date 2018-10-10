@@ -4,7 +4,8 @@ Contents
 .. toctree::
     :caption: Introduction
 
-    Introduction <index>
+    userguide/intro
+.. Introduction <index>
 
 .. toctree::
     :caption: User Guide
